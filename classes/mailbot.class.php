@@ -79,7 +79,7 @@ class MailBot {
         $sql = "SELECT count(*) FROM mailbot WHERE mail_status = 'fehler'";
         $result = db::readdb($sql);
         $result = mysqli_fetch_assoc($result);
-        if ($result > 0){
+        if ($result['count(*)'] > 0){
             Form::attention("Der Mailbot kann manche Mails nicht versenden - siehe Datenbank.");
         }
     }
