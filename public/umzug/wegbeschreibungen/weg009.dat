@@ -1,0 +1,18 @@
+.ADRESSE=_
+Hackenberger Str. 111
+.PLZ=_
+42897
+.BAHN=_
+Mit dem Zug bis zum Bahnhof Remscheid-Lennep. Von dort aus mit dem Bus 655 Richtung Hackenberg (H2O).
+.OWNER=_
+37
+.STADT=_
+Remscheid
+.AUTO=_
+Auf der A1 bis zur Abfahrt Remscheid-Lennep (Nr. 95A). 
+Dort rechts Richtung Remscheid Lennep. Der Starsse folgen Richtung Badeparadies H2O. 
+.ORT=_
+Sporthalle Hackenberg
+.GRAFIK=_
+rem_grob.jpg
+rem_fein.jpg

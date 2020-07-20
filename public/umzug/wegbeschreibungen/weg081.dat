@@ -1,0 +1,21 @@
+.ADRESSE=_
+Wallburgstraße 23
+.PLZ=_
+42857
+.BAHN=_
+- Zug: RB 47 bis Remscheid Güldenwerth von dort eine Station mit dem Bus oder ca.1km zu Fuß
+- Bus: 654 Haltestelle Ohler/ Stadion, dann in Wallburgstr. gehen (s.Auto)
+.OWNER=_
+2
+.STADT=_
+Remscheid
+.AUTO=_
+von der A1 kommend:
+- die Autobahn an der Anschlussstelle Remscheid (95 b) verlassen und rechts auf die B229 fahren
+- der B229 für ca. 5,7km in Richtung Solingen, Reinshagen folgen
+- dann nach links in Richtung Reinshagen, Stadion abbiegen (Straße "Vieringhausen") und der Straße für ca. 1,5 km folgen
+- nach rechts in die Wallburgstr. (Schild "Stadion") abbiegen und nach 350m liegt die Halle und Parkplätze auf der linken Seite
+.ORT=_
+Halle West
+.GRAFIK=_
+

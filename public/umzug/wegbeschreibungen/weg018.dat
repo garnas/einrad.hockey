@@ -1,0 +1,28 @@
+.GRAFIK=_
+
+.BAHN=_
+Mit der S-Bahn oder RB nach Mörfelden fahren (rmv.de). Den Bahnhof zur Seite hin verlassen, auf der der REWE Einkaufsmarkt ist. Dann direkt links auf den Rad/Fußweg am Bahndamm entlang etwa 400m laufen. Dann lauft Ihr direkt zur Halle, die auf der rechten Seite kommt.
+.OWNER=_
+16
+.AUTO=_
+a) von der A5 kommend:
+1. Abfahrt Langen/Mörfelden, Richtung Mörfelden abfahren
+2. Auf der Bundesstraße B486 nach Mörfelden reinfahren und immer weiter gerade aus (zunächst "Langener Str.", später "Westendstr.", Achtung: Radar!).
+3. Wenn Ihr immer gerade aus gefahren seid, trefft Ihr kurz vor der Bahnlinie auf einen Kreisel. Hier fahrt Ihr unter der Bahn durch und die nächste Straße rechts (in die Mozartstr.).
+4. Dann gleich wieder rechts, in die Sudetenstr., diese wird nach 100m zur Feststr.
+5. Der Feststr. folgen, bis auf der linken Seite ein großer Platz erscheint, hier steht die Halle.
+
+b) von der A67 kommend:
+1. Abfahrt Rüsselsheim/Ost, Richtung Mörfelden abfahren.
+2. Auf der Bundesstraße B486 nach Mörfelden reinfahren und immer weiter gerade aus (Rüsselsheimer Str.)
+3. Links in die Mozartstr. abbiegen (nicht unter der Bahn durchfahren, dann seid Ihr zu weit).
+4. Dann gleich wieder rechts, in die Sudetenstr., diese wird nach 100m zur Feststr.
+5. Der Feststr. folgen, bis auf der linken Seite ein großer Platz erscheint, hier steht die Halle.
+.STADT=_
+Mörfelden
+.PLZ=_
+64546
+.ADRESSE=_
+Festplatz / Feststraße
+.ORT=_
+Kurt-Bachmann-Halle

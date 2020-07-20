@@ -1,0 +1,25 @@
+.ORT=_
+Sporthalle Marie-Curie-Gymnasium
+.ADRESSE=_
+Zirkusstraße 7
+.AUTO=_
+Die Sporthalle liegt direkt im Dresdner Zentrum!
+
+Von Norden kommend Autobahn bis Dresden Hellerau. Dann immer geradeaus Richtung Zentrum bis zum Bahnhof Dresden-Neustadt. Dort geradeaus weiter in die Hainstraße, dann links in die "Große Meißner Straße". Am Carolaplatz rechts abbiegen auf die Carolabrücke, welche auf die St.-Petersburger-Straße führt. auf der anderen Elbseite biegt man dann direkt links in die Pillnitzer Straße ab. Die nächste Straße rechts ist die Zirkusstraße.
+Auf dem Schulgelände gibt es keine Parkmöglichkeiten.
+Nächstgelegene Parkplätze sind die vom Lidl (Zufahrt nur von St.-Petersburger-Straße in Richtung Norden) oder vom Netto an der Pillnitzer Straße.
+
+von Westen kommend Autbahn bis Dresden-Altstadt
+
+.BAHN=_
+Zug bis Dresden-Neustadt.
+Von dort fährt man mit der Straßenbahnlinie 3 in Richtung "Coschütz" bis zur Haltestelle "Pirnaischer Platz". Jetzt noch die große Kreuzung überqueren, hinter dem Hochhaus mit dem Lidl unten dran ist die Halle. Zugang zur Sporthalle ist nur über die Zirkusstraße möglich.
+
+.GRAFIK=_
+mcg_anfahrt.gif
+.STADT=_
+Dresden
+.PLZ=_
+01069
+.OWNER=_
+27

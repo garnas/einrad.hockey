@@ -1,0 +1,86 @@
+<?php
+$neuigkeiten_id = $_GET['neuigkeiten_id'];
+$neuigkeiten = Neuigkeit::get_neuigkeiten($neuigkeiten_id);
+$error = false;
+if (!isset($neuigkeiten[$neuigkeiten_id])){
+    Form::error("Der Neuigkeiteneintrag wurde nicht gefunden");
+    header ("Location: ../liga/neues.php");
+    die();
+}else{
+    $neuigkeit = $neuigkeiten[$neuigkeiten_id];
+}
+
+if (isset($_POST['delete_neuigkeit'])){
+    Neuigkeit::delete_neuigkeit($neuigkeiten_id,$neuigkeit['link_jpg'],$neuigkeit['link_pdf']);
+    Form::affirm("Neuigkeit wurde gelöscht");
+    header('Location: ../liga/neues.php');
+    die();
+}elseif (isset($_POST['titel'])){
+
+    if (!empty($_POST['titel']) && !empty($_POST['text'])){
+        
+        /////Fileupload//////
+        //image
+        if (!empty($_FILES["jpgupload"]["tmp_name"])){
+            
+            //Bild wird hochgeladen, target_file_jpg = false, falls fehlgeschlagen.
+            $target_file_jpg = Neuigkeit::upload_image($_FILES["jpgupload"]);
+        
+            if($target_file_jpg === false){
+                $error = true;
+            }
+            
+        }else{
+            //Wert aus der Datenbank wird übernommen
+            $target_file_jpg=$neuigkeit['link_jpg'];
+        }
+        //pdf
+        if (!empty($_FILES["pdfupload"]["tmp_name"])){
+            
+            //Bild wird hochgeladen, target_file_jpg = false, falls fehlgeschlagen.
+            $target_file_pdf = Neuigkeit::upload_pdf($_FILES["pdfupload"]);
+            if($target_file_pdf === false){
+                $error = true;
+            }
+
+        }else{
+            $target_file_pdf=$neuigkeit['link_pdf'];
+        }
+
+        //////Titel, Text und Verlinkungen werden in die Datenbank eingetragen//////
+        $titel = $_POST['titel'];
+        $text = $_POST['text'];
+        //$text = preg_replace("/[\r\n]+/", "\n", $text); //Entfernt doppelte Newline-Characters (Absätze) - ansonsten wäre es möglich einen Neuigkeiteseintrag mit 200 neuen Zeilen zu erstellen
+        if (!$error) {
+
+            //Bisheriges Bild bzw PDF löschen, wenn dies ausgewählt wurde.
+            //Bild
+            if ($_POST['delete_jpg'] == 'Ja' && !empty($neuigkeit['link_jpg'])){
+                unlink ($neuigkeit['link_jpg']);
+                Form::affirm("Bild wurde gelöscht.");
+                if ($neuigkeit['link_jpg'] == $target_file_jpg){$target_file_jpg = '';}
+            }
+            //PDF
+            if ($_POST['delete_pdf'] == 'Ja' && !empty($neuigkeit['link_pdf'])){
+                unlink ($neuigkeit['link_pdf']);
+                Form::affirm("PDF wurde gelöscht.");
+                if ($neuigkeit['link_pdf'] == $target_file_pdf){$target_file_pdf = '';}
+            }
+
+            Neuigkeit::update_neuigkeit($neuigkeiten_id,$titel,$text,$target_file_jpg,$target_file_pdf);
+            //Alte Bilder löschen
+            if ($neuigkeit['link_jpg'] != $target_file_jpg && !empty($neuigkeit['link_jpg'])){
+                if (file_exists($neuigkeit['link_jpg'])){unlink ($neuigkeit['link_jpg']);}
+            }
+            //Alte PDFS löschen
+            if ($neuigkeit['link_pdf'] != $target_file_pdf && !empty($neuigkeit['link_pdf'])){
+                if (file_exists($neuigkeit['link_pdf'])){unlink ($neuigkeit['link_pdf']);}
+            }
+            Form::affirm("Die Neuigkeit wurde bearbeitet.");
+            header('Location: ../liga/neues.php');
+            die();
+        }else{
+            Form::error("Fehler: Es wurden keine Änderungen vorgenommen.");
+        }//Fehler bei JPG oder PDF Upload
+    }//Formulardaten leer
+}//Formular abgesendet

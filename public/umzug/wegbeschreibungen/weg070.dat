@@ -1,0 +1,26 @@
+.ADRESSE=_
+Steinbachstraße 13
+.PLZ=_
+01445
+.BAHN=_
+Deutsche Bahn AG	Fernverkehr bis Dresden-Neustadt, Regionalverkehr bis Radebeul-Ost, weiter mit S-Bahn bis Radebeul-Weintraube 
+
+S-Bahn	Linie S1 aus Dresden oder Meißen bis Radebeul-Weintraube
+
+Straßenbahn	Linie 4 aus Richtung Dresden oder Coswig / Weinböhla bis Haltestelle Landesbühnen Sachsen
+
+Bus	Linien 327, 400 und 425, bis Haltestelle Landesbühnen Sachsen
+
+Fahrrad	Elbradweg Abfahrt Radebeul-Mitte
+.OWNER=_
+27
+.STADT=_
+Radebeul
+.AUTO=_
+Abfahrt Dresden-Neustadt / Radebeul
+
+http://www.baden-in-radebeul.de/loehalle.html
+.ORT=_
+Lößnitzhalle 
+.GRAFIK=_
+

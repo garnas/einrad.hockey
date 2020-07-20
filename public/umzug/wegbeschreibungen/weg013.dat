@@ -1,0 +1,27 @@
+.ORT=_
+Dieter-Forte-Gesamtschule
+.ADRESSE=_
+Heidelberger Str. 75
+.PLZ=_
+40229
+.BAHN=_
+vor der Schule liegt die Bushaltestelle "In der Elb",
+Buslinien 730, 731 und 815;
+die nächste Straßenbahnhaltestelle:
+Vennhauser Allee U:
+U-Bahn 75, Straßenbahn 715;
+die nächsten S-Bahn-Haltestellen:
+Düsseldorf-Eller-Mitte: S 1
+Düsseldorf-Eller-Süd: S 6 und S 68
+.STADT=_
+Düsseldorf
+.AUTO=_
+- aus Richtung Norden bzw. Süden: A 3 bis zum Autobahnkreuz Hilden, dort auf A 46
+- aus Richtung Osten oder Westen: A 46
+- A 46: Ausfahrt Düsseldorf-Eller
+- rechts Richtung Eller und Innenstadt, dann nur noch geradeaus die Deutzer Straße entlang
+- zwischen der Bushaltestelle "In der Elb" und einem alleinstehenden Haus der "Lebenshilfe" und direkt hinter eine Ampel RECHTS in die Einfahrt zum Parkplatz der Dieter-Forte-Gesamtschule
+.GRAFIK=_
+kikweg.jpg
+.OWNER=_
+32

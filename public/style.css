@@ -1,0 +1,90 @@
+html {
+  /* Die Schriftgrößen insbesondere in mobilen Browsern sollen nicht angepasst werden*/ 
+	-webkit-text-size-adjust: none; 
+	-moz-text-size-adjust: none; 
+	-ms-text-size-adjust: none; 
+  text-size-adjust: none;
+}
+
+/*Positionierung von Footer und Nav*/
+nav {
+  margin-top: 0px;
+}
+footer {
+  margin-bottom: 0;
+}
+.content {
+  /*Hiermit lässt sich der Footer richtig postionieren!
+  min-height: 100vh; minus höhe des Footers
+  Damit der Footer am ende der Seite steht.
+  Der Footer steht hinter einem content div.*/
+  min-height: calc(100vh - 96px);
+}
+
+.no { /*Keine unterstrichene Links*/
+  text-decoration: none;
+}
+
+th { /*Keine fetten Tableheads*/
+  font-weight: normal;
+}
+
+/*Positionierung der eingepflegten Icons von Google*/
+.material-icons {vertical-align:-27.5%}
+
+/*Für die Auswahlquadrate auf der Startseite des Team- und Ligacenters*/
+.centerpanels {
+  height: 160px;
+  width: 160px;
+  border: 8px solid white;
+  /*Nur falls Javascript deaktiviert ist*/
+  margin: 16px;
+}
+
+/*Zum Einbinden von iframes (Youtube etc)*/
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.video-container iframe,
+.video-container object,
+.video-container embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/*Veränderungen der w3.css*/
+
+h1{
+  font-size:30px;
+}
+
+/*Grauer Text
+.w3-text-grey,.w3-hover-text-grey:hover,.w3-text-gray,.w3-hover-text-gray:hover{color:#949393!important}*/
+
+/*Links*/
+.w3-blue,.w3-hover-primary:hover{color:#ffffff!important;background-color:#6c7fbe!important}
+.w3-text-blue,.w3-hover-text-primary:hover{color:#6c7fbe!important}
+.w3-border-blue,.w3-hover-border-primary:hover{border-color:#6c7fbe!important}
+
+/*Primärfarbe*/
+.w3-primary,.w3-hover-primary:hover{color:#ffffff!important;background-color:#6c7fbe!important}
+.w3-text-primary,.w3-hover-text-primary:hover{color:#6c7fbe!important}
+.w3-border-primary,.w3-hover-border-primary:hover{border-color:#6c7fbe!important}
+
+/*Sekundärfarbe*/
+.w3-secondary,.w3-hover-secondary:hover{color:#000000!important;background-color:#FB775C!important}
+.w3-text-secondary,.w3-hover-text-secondary:hover{color:#FB775C!important}
+.w3-border-secondary,.w3-hover-border-secondary:hover{border-color:#FB775C!important}
+
+/*Tertiärfarbe*/
+.w3-tertiary,.w3-hover-tertiary:hover{color:#000000!important;background-color:#EAB42E!important}
+.w3-text-tertiary,.w3-hover-text-tertiary:hover{color:#EAB42E!important}
+.w3-border-tertiary,.w3-hover-border-tertiary:hover{border-color:#EAB42E!important}
