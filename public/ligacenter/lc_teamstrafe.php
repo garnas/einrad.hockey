@@ -88,7 +88,7 @@ include '../../templates/header.tmp.php';
     </p>
     <p>
         <label class="w3-text-primary" for="teamname">Team</label>
-        <input required type="text" class="w3-input w3-border w3-border-primary" placeholder="Team wählen..." list="teams" id="teamname" name="teamname">
+        <input required type="text" class="w3-input w3-border w3-border-primary" placeholder="Team eingeben" list="teams" id="teamname" name="teamname">
             <?=Form::datalist_teams();?>
     </p>
     <p>

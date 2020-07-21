@@ -36,7 +36,7 @@ include '../../templates/header.tmp.php';
     <ul class="w3-ul w3-leftbar w3-border-tertiary">
         <li><a href="ligakarte.php" class="no w3-text-blue w3-hover-text-secondary">Deutschlandkarte aller Ligateams</a></li>
         <li><a href="teams.php" class="no w3-text-blue w3-hover-text-secondary">Kontaktliste aller Ligateams</a></li>
-        <li><a href="<?=Config::LINK_REGELN_KURZ?>" class="no w3-text-blue w3-hover-text-secondary">Die wichtigsten Regeln</a></li>
+        <li><?=Form::link(Config::LINK_REGELN_KURZ, 'Die wichtigsten Regeln')?></li>
     </ul>
 </div>
 
@@ -56,8 +56,9 @@ include '../../templates/header.tmp.php';
 
 <div class="w3-container">
     <ul class="w3-ul w3-leftbar w3-border-tertiary">
-        <li><a href="dokumente.php" class="no w3-text-blue w3-hover-text-secondary">Modus & Regeln</a></li>
-        <li><a href="ligaleitung.php" class="no w3-text-blue w3-hover-text-secondary">Ligaleitung</a></li>
+        <li><?=Form::link(Config::LINK_FORUM, 'Forum')?></li>
+        <li><?=Form::link('dokumente.php', 'Modus & Regeln')?></li>
+        <li><?=Form::link('ligaleitung.php', 'Ligaleitung')?></li>
     </ul>
 </div>
 

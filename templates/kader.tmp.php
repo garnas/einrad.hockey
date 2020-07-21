@@ -97,9 +97,9 @@
                 <label class="w3-text-primary" for="geschlecht">Geschlecht</labeL>
                 <select style="height:40px" class='w3-input w3-border w3-border-primary' name='geschlecht'>
                     <option <?=$_POST['geschlecht'] ?? 'selected'?> disabled></option>
-                    <option <?php if (($_POST['geschlecht'] ?? '') == 'm'){?>selected<?php } ?>> value='m'>m</option>
-                    <option <?php if (($_POST['geschlecht'] ?? '') == 'w'){?>selected<?php } ?>> value='w'>w</option>
-                    <option <?php if (($_POST['geschlecht'] ?? '') == 'd'){?>selected<?php } ?>> value='d'>d</option>
+                    <option <?php if (($_POST['geschlecht'] ?? '') == 'm'){?>selected<?php } ?> value='m'>m</option>
+                    <option <?php if (($_POST['geschlecht'] ?? '') == 'w'){?>selected<?php } ?> value='w'>w</option>
+                    <option <?php if (($_POST['geschlecht'] ?? '') == 'd'){?>selected<?php } ?> value='d'>d</option>
                 </select>
             </p>
             <p>

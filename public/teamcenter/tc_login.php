@@ -63,7 +63,7 @@ include '../../templates/header.tmp.php';
             <i class="material-icons">clear</i>
         </a>
         <label for="teamname"><i class="material-icons">group</i> Team:</label>
-        <input class="w3-input w3-border-primary" value="<?=$_POST['teamname'] ?? ''?>" autocomplete="new-password" type="text" list="teams" id="teamname" name="teamname" required>
+        <input class="w3-input w3-border-primary" value="<?=$_POST['teamname'] ?? ''?>" placeholder="Team eingeben..." type="text" list="teams" id="teamname" name="teamname" required>
             <?=Form::datalist_teams()?>
     <p>
         <label for="passwort"><i class="material-icons">lock</i> Passwort:</label>

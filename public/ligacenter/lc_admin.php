@@ -76,7 +76,7 @@ include '../../templates/header.tmp.php';?>
 <h4 class="w3-bottombar w3-text-primary">Als Ligateam anmelden</h4>
 <form method='post'>
     <label class="w3-text-primary" for="teamname">Team wählen</label>
-    <input type="text" class="w3-input w3-border w3-border-primary" placeholder="Bitte Team wählen" list="teams" id="teamname" name="teamname">
+    <input type="text" class="w3-input w3-border w3-border-primary" placeholder="Team eingeben" list="teams" id="teamname" name="teamname">
         <?=Form::datalist_teams();?>
     <p>
         <input type='submit' name='anmelden' value='Als Ligateam anmelden' class="w3-button w3-secondary">
@@ -86,7 +86,7 @@ include '../../templates/header.tmp.php';?>
 <h4 class="w3-bottombar w3-text-primary">Team deaktivieren</h4>
 <form method='post' onsubmit="return confirm('Soll das ausgewählte Team wirklich deaktiviert werden?')">
     <label class="w3-text-primary" for="teamname">Team wählen</label>
-    <input type="text" class="w3-input w3-border w3-border-primary" placeholder="Bitte Team wählen" list="teams" id="teamname" name="teamname">
+    <input type="text" class="w3-input w3-border w3-border-primary" placeholder="Team eingeben" list="teams" id="teamname" name="teamname">
         <?=Form::datalist_teams();?>
     <p>
         <input type='submit' name='deaktivieren' value='Team deaktivieren' class="w3-button w3-secondary">

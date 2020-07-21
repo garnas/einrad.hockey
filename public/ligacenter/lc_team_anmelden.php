@@ -217,7 +217,7 @@ include '../../templates/header.tmp.php';
         <h3>Team anmelden</h3> 
         <p>
         <label for="teamname" class='w3-text-primary'>Team wählen:</label><br>
-        <input required type="text" style="max-width:400px" class="w3-input w3-border w3-border-primary" list="teams" id="teamname" name="teamname">
+        <input required type="text" style="max-width:400px" placeholder="Team eingeben" class="w3-input w3-border w3-border-primary" list="teams" id="teamname" name="teamname">
         <?=Form::datalist_teams()?>
         </p>
         <p>

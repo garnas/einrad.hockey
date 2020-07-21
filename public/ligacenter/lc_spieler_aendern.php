@@ -103,7 +103,7 @@ include '../../templates/header.tmp.php';
     <form method="post">
         <p>
             <label for="spieler"><h3 class="w3-text-primary">Spieler wählen</h3 ></label>
-            <input onchange="this.form.submit();" type="text" style="max-width:400px" class="w3-input w3-border w3-border-primary" list="spielerliste" id="spieler" name="spieler_auswahl">
+            <input onchange="this.form.submit();" type="text" placeholder="Spieler eingeben" style="max-width:400px" class="w3-input w3-border w3-border-primary" list="spielerliste" id="spieler" name="spieler_auswahl">
                 <datalist id="spielerliste">
                     <?php
                     foreach ($spieler_liste as $spieler_id => $name){ ?>
