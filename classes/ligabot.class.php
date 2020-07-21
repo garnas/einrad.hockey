@@ -4,7 +4,6 @@ class LigaBot {
     ///////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////LIGABOT/////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////
-
     public static function liga_bot()
     {
         //db sichern:
@@ -56,11 +55,18 @@ class LigaBot {
                 self::losen($akt_turnier);
                 //füllt die Spielenliste auf
                 $akt_turnier->spieleliste_auffuellen();
+                //Info-Mails versenden
+                 MailBot::mail_gelost($akt_turnier);
+                //Freie Plätze versenden
+                MailBot::mail_plaetze_frei($akt_turnier);
             }
         } //end foreach
         unset($_SESSION['ligabot']);
         Form::affirm("Ligabot erfolgreich ausgeführt");
     }
+    ///////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////LIGABOT Ende//////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////
 
     ///////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////HILFSFUNKTIONEN////////////////////////////////////
@@ -149,7 +155,7 @@ class LigaBot {
 
     //Regelt den Übergang von offen zu melden bezüglich der Teamlisten
     //$akt_turnier ist ein Objekt des Typs Turnier
-    function losen($akt_turnier)
+    public static function losen($akt_turnier)
     {  
         //Falsche Freilosanmeldungen beim Übergang in die Meldephase abmelden
         //TODO Nicht abmelden, sondern auf warteliste!
@@ -163,7 +169,7 @@ class LigaBot {
                 $akt_turnier->schreibe_log(
                     "Falscher Freilos-Block: " . $team['teamname'] . "\r\n Teamblock: " . Tabelle::get_team_block($team['team_id']) . " Turnierblock: " . $akt_turnier->daten['tblock'] . 
                     "\r\nTeam wurde auf die Warteliste gesetzt, Freilos wurde erstattet", "Ligabot");
-                
+                MailBot::mail_freilos_abmeldung($akt_turnier, $team['team_id']);
                 //Anmeldeliste aktualisieren
                 $liste = $akt_turnier->get_anmeldungen();
 
@@ -185,7 +191,11 @@ class LigaBot {
         $anz_melde = count($liste['melde']);
 
         //Anzahl der zu losenden Teams
-        $anz_los = $anz_warte + $anz_melde + $anz_spiele - $akt_turnier->daten['plaetze'];           
+        $anz_los = $anz_warte + $anz_melde + $anz_spiele - $akt_turnier->daten['plaetze'];
+        if ($anz_los < 0){
+            $gelost = true;
+        }
+
         $los_nl = $los_rblock = $los_fblock = array(); // 3 Lostöpfe für nichtliga, richtiger block und falscher block
         //Aufteilung der Teams in die Lostöpfe
         //Teams mit falschem Freilos wurden schon abgemeldet
@@ -229,6 +239,7 @@ class LigaBot {
             }
         }
         //NACH Zusammenstellen der Warteliste via losen, muss die Spielenliste über spieleliste_auffuellen aufgefuellt werden!!
+        return $gelost ?? false;
     }
     
     //Alle I,II,III Turniere werden in die offene Phase geschickt

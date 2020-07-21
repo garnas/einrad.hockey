@@ -185,6 +185,7 @@ if (isset($_POST['change_turnier'])) {
                 $akt_turnier->schreibe_log("Hallenname: " . $akt_turnier->daten['hallenname'] . " -> " . $hallenname, $autor);
             }
         }
+        MailBot::mail_turnierdaten_geaendert($akt_turnier);
         Form::affirm("Turnierdaten wurden geändert");
         header ('Location: ../liga/turnier_details.php?turnier_id=' . $akt_turnier->daten['turnier_id']);
         die();

@@ -68,6 +68,11 @@ if (isset($_POST['sichern'])){
     db::db_sichern();
 }
 
+//Datenbank sichern
+if (isset($_POST['mailbot'])){
+    MailBot::mail_bot();
+}
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -107,19 +112,25 @@ include '../../templates/header.tmp.php';?>
         <input type='submit' name='reaktivieren' value='Team reaktiveren' class="w3-button w3-secondary">
     </p>
 </form>
-
+<!-- Mailbot -->
 <form method='post'>
-    <h4 class="w3-bottombar w3-text-primary">Ligabot ausführen</h4>
+    <h4 class="w3-bottombar w3-text-primary">Automatische Mails rausenden</h4>
     <p>
-        <input type='submit' name='ligabot' value='Ligabot ausführen' class="w3-button w3-secondary">
+        <input type='submit' name='mailbot' value='Mailbot starten' class="w3-button w3-secondary">
     </p>
 </form>
-
+<!-- DB sichern -->
 <form method='post'>
     <h4 class="w3-bottombar w3-text-primary">Datenbank sichern</h4>
     <p>
         <input type='submit' name='sichern' value='Datenbank sichern' class="w3-button w3-secondary">
     </p>
 </form>
-
+<!-- Ligabot -->
+<form method='post'>
+    <h4 class="w3-bottombar w3-text-primary">Ligabot ausführen</h4>
+    <p>
+        <input type='submit' name='ligabot' value='Ligabot ausführen' class="w3-button w3-secondary">
+    </p>
+</form>
 <?php include '../../templates/footer.tmp.php';

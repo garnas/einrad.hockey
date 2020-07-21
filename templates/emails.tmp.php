@@ -1,6 +1,6 @@
 <!-- Auswahl der Emailadressen -->
 <h1 class="w3-text-primary">Kontaktcenter</h1>
-<p class="w3-text-grey">Das Kontaktcenter kann dazu verwendet werden, um andere Teams anzuschreiben. Dabei werden nicht nur die öffentlichen Email-Adressen der Teams angezeigt.</p>
+<p class="w3-text-grey">Das Kontaktcenter kann dazu verwendet werden, um andere Teams Emails zu senden.</p>
 
 <!-- Javascript für die Tabs zu finden in script.js -->
 <?php if (empty($emails)){?>
@@ -51,8 +51,8 @@
         <div class="w3-row">
             <?php foreach ($teams as $team){?>
                 <div class="w3-col s12 m6">
-                <input style="cursor: pointer;" class="w3-check" type="checkbox" id="email<?=$team['team_id']?>" name="team[]" value="<?=$team['team_id']?>">
-                <label style="cursor: pointer; color: red;" class="w3-text-primary w3-hover-text-secondary" for="email<?=$team['team_id']?>"><?=$team['teamname']?> (<?=Tabelle::get_team_block($team['team_id'], $akt_spieltag - 1)?>)</label>
+                    <input style="cursor: pointer;" class="w3-check" type="checkbox" id="email<?=$team['team_id']?>" name="team[]" value="<?=$team['team_id']?>">
+                    <label style="cursor: pointer; color: red;" class="w3-text-primary w3-hover-text-secondary" for="email<?=$team['team_id']?>"><?=$team['teamname']?> (<?=Tabelle::get_team_block($team['team_id'], $akt_spieltag - 1)?>)</label>
                 </div>
             <?php } //end foreach?>
         </div>

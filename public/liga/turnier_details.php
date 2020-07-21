@@ -159,7 +159,7 @@ include '../../templates/header.tmp.php';
 </div>
 
 <!--Anmeldungen / Listen -->
-<?php if ($daten['art'] != 'spass'){?>
+<?php if ($daten['art'] != '<i>Spaßturnier</i>'){?>
     <p class="w3-text-grey w3-border-bottom w3-border-grey">Spielen-Liste</p> 
     <p><i>
         <?php if (!empty($liste['spiele'])){?>
@@ -187,7 +187,7 @@ include '../../templates/header.tmp.php';
         <?php }else{?><i>leer</i><?php } //endif?> 
     </i></p>
     <p>Freie Plätze: <?=$daten['plaetze'] - count(($liste['spiele'] ?? array()))?> von <?=$daten['plaetze']?></p>
-<?php } //end if spass ?>
+<?php }else{?><p class="w3-text-grey">Anmeldung erfolgt beim Ausrichter<?php } //end if spass ?>
 
 <!-- Anzeigen der Ligaspezifischen Infos -->
 <p class="w3-text-grey w3-margin-top w3-border-bottom w3-border-grey">Ligaspezifische Infos</p> 

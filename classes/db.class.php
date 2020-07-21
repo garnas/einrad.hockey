@@ -101,6 +101,7 @@ class db {
         $error = 'Fehlgeschlagen: '.self::$link->error;
         fwrite($log_sql, "\n" . $error);
         Form::error("SQL: " . $error);
+        Form::error($sql);
         die();
     }
 

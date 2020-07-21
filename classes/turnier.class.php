@@ -328,7 +328,7 @@ class Turnier {
     }
 
     //Findet die Anzahl der freien Plätze auf dem Turnier
-    function anzahl_freie_plaetze ()
+    function anzahl_freie_plaetze()
     {
         $turnier_id = $this->turnier_id;
         $sql=
@@ -371,7 +371,8 @@ class Turnier {
         FROM turniere_liste
         INNER JOIN turniere_liga
         ON turniere_liste.turnier_id = turniere_liga.turnier_id
-        WHERE team_id='$team_id' AND datum='$datum' AND liste='spiele'";
+        WHERE team_id='$team_id' AND datum='$datum' AND liste='spiele'
+        AND (turniere_liga.art='I' OR turniere_liga.art='II' OR turniere_liga.art='III')";
         $result = db::readdb($sql);
         if (mysqli_num_rows($result) > 0){
             return true;
@@ -429,7 +430,7 @@ class Turnier {
     }
 
     //statische check team block freilos ohne auf die db zugreifen
-    function check_team_block_freilos_static ($team_block, $turnier_block)
+    public static function check_team_block_freilos_static ($team_block, $turnier_block)
     {
         //Check ob es sich um einen Block-Turnier handelt (nicht spass, finale, oder fix)
         if (in_array($turnier_block, Config::BLOCK_ALL)){
