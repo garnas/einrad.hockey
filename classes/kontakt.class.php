@@ -117,7 +117,7 @@ class Kontakt {
         $team_id = $this->team_id;
         $sql = "SELECT *  FROM teams_kontakt WHERE team_id='$team_id'";
         $result = db::readdb($sql);
-        $return=array();
+        $return = array();
         while ($x = mysqli_fetch_assoc($result)){
             array_push($return,$x);
         }

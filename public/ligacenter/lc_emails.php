@@ -39,22 +39,20 @@ if (isset($_POST['send_mail'])){
             foreach ($emails as $email){
                 $mailer->addAddress($email);
             }
-            $mailer->addCC(Config::LAMAIL, 'Ligaausschuss');
         }
         $mailer->addBCC(Config::LAMAIL_ANTWORT);
         $mailer->Subject = $betreff; // Betreff der Email
-        $mailer->Body = $text . "\r\nVersendet mit dem Kontaktformular";
+        $mailer->Body = $text . "\r\n\r\nVersendet via einrad.hockey";
         db::debug($mailer);
         /*if ($mailer->send()){
             Form::affirm("Email wurde versendet");
+            header('Location: lc_emails.php');
+            die();
         }else{
             Form::error("Es ist ein Fehler aufgetreten: Email wurde nicht versendet!");
         }*/
     }
-    Form::affirm(htmlentities($text));
 }
-
-Form::affirm("Die Mails werden noch nicht tatsächlich versendet.");
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////

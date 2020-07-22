@@ -5,10 +5,11 @@
         <p>
             <label class="w3-text-primary" for="startzeit">Startzeit</label>
             <input required type="time" class="w3-input w3-border w3-border-primary" value="<?=$daten['startzeit'];?>" style="max-width: 320px" id="startzeit" name="startzeit">
-            <i class="w3-text-primary">Turniere dürfen frühestens um 9:00&nbsp;Uhr beginnen und müssen um 20:00&nbsp;Uhr beendet sein</i>
+            <i class="w3-text-grey">Turniere dürfen frühestens um 9:00&nbsp;Uhr beginnen und müssen um 20:00&nbsp;Uhr beendet sein</i>
         </p>
         <p>
-            <input class="w3-check" type="checkbox" id="besprechung" name="besprechung" <?php if ($daten['besprechung'] == "Ja"){?> checked <?php } //endif?> value="Ja"><label for="besprechung"> Gemeinsame Besprechung aller Teams 15 min vor Turnierbeginn</label>
+            <input class="w3-check" type="checkbox" id="besprechung" name="besprechung" <?php if ($daten['besprechung'] == "Ja"){?> checked <?php } //endif?> value="Ja">
+            <label style="cursor: pointer;" class="w3-hover-text-secondary w3-text-primary" for="besprechung"> Gemeinsame Besprechung aller Teams 15 min vor Turnierbeginn</label>
         </p>
     </div>
     <div class="w3-panel w3-card-4">
@@ -25,7 +26,7 @@
         <label class="" for="block_frei">Turnierblock erweitern auf ABCDEF</label>
         </p>
         <?php } //endif?>
-        <?php if (!$blockhoch && !$blockfrei){?> Turnierblock kann nicht erweitert werden. <?php if ($daten['phase'] == 'offen'){?> <i class="w3-text-primary">(Turniere können ab der Meldephase erweitert werden)</i><?php }/*Phase*/ }/*$block*/?>
+        <?php if (!$blockhoch && !$blockfrei){?> Turnierblock kann nicht erweitert werden. <?php if ($daten['phase'] == 'offen'){?> <i class="w3-text-grey">(Turniere können ab der Meldephase erweitert werden)</i><?php }/*Phase*/ }/*$block*/?>
         <p>
             <label class="w3-text-primary" for="plaetze">Plaetze</label>
             <select required class="w3-select w3-border w3-border-primary" id="plaetze" name="plaetze">

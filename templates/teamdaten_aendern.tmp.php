@@ -48,8 +48,8 @@
                 <thead>
                     <tr class="w3-primary">
                         <td class="" style="vertical-align:bottom">Email</td>
-                        <td class="w3-center" style="vertical-align:bottom">Öffentlich?</td>
-                        <td class="w3-center" style="vertical-align:bottom">Infomails?</td>
+                        <td class="w3-center" style="vertical-align:bottom">Öffentlich?*</td>
+                        <td class="w3-center" style="vertical-align:bottom">Infomails?**</td>
                         <td class="w3-center" style="vertical-align:bottom">Löschen?</td>
                     </tr>
                 </thead>
@@ -98,7 +98,7 @@
         </P>
 
         <p>
-            <label for='public' class="w3-text-primary">Email auf der öffentlichen Webseite anzeigen?</label>
+            <label for='public' class="w3-text-primary">Email auf der öffentlichen Webseite anzeigen?*</label>
             <select  style='' class='w3-input w3-border w3-border-primary' id='public' name='public'>
                 <option value='Ja' selected>Ja</option>
                 <option value='Nein'>Nein</option>
@@ -106,15 +106,16 @@
         </p>
 
         <p>
-            <label for='get_info_mail' class="w3-text-primary">Automatische Infomails erhalten?</label>
+            <label for='get_info_mail' class="w3-text-primary">Automatische Infomails erhalten?**</label>
             <select  style='' class='w3-input w3-border w3-border-primary' id='get_info_mail' name='get_info_mail'>
                 <option value='Ja' selected>Ja</option>
                 <option value='Nein'>Nein</option>
             </select>
         </p>
-
         <p>
-        <input class='w3-button w3-secondary' name='neue_email' type='submit' value='Email eintragen'>
+            <input class='w3-button w3-secondary' name='neue_email' type='submit' value='Email eintragen'>
         </p>
     </div>
+    <p class=""><b>Öffentlich*</b>: Deine Email-Adresse wird in der Teamsliste <?=Form::link('../liga/teams.php','hier')?> angezeigt. Andere Ligateams können auch nicht-öffentliche Emails einsehen und kontaktieren.</p>
+    <p class=""><b>Infomails**</b>: Du bekommst automatische Infomails, z. B. wenn ein für dein Team relevantes Turnier eingestellt wird.</p>
 </form>

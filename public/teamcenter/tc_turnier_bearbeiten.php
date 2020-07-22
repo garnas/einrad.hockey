@@ -16,6 +16,7 @@ require_once '../../logic/turnier_bearbeiten_first.logic.php';
 //Formularauswertung
 require_once '../../logic/turnier_bearbeiten_teams.logic.php';
 
+Form::attention("Achtung - die Teams und der Ligaausschuss müssen angeschrieben werden, sollten wichtige Turnierdaten geändert werden.");
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -27,7 +28,7 @@ include '../../templates/header.tmp.php';
     <?=$daten['ort']?> (<?=$daten['tblock']?>), <?=date("d.m.Y", strtotime($daten['datum']))?>
 </h2>
 
-<p><a class="w3-text-hover-secondary w3-text-blue no" href='../liga/turnier_details.php?turnier_id=<?=$daten['turnier_id']?>'>Zu den Turnierdetails</a></p>
+<p><?=Form::link('../liga/turnier_details.php?turnier_id='. $daten['turnier_id'], '<i class="material-icons">info</i> Alle Turnierdetails')?></p>
 
 <?php
 include '../../templates/turnier_bearbeiten_teams.tmp.php';

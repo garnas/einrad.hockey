@@ -155,6 +155,7 @@ class LigaBot {
 
     //Regelt den Übergang von offen zu melden bezüglich der Teamlisten
     //$akt_turnier ist ein Objekt des Typs Turnier
+    //setzt die Teams in geloster Reihenfolge auf die Warteliste, also danach: Spielen-Liste auffuellen!
     public static function losen($akt_turnier)
     {  
         //Falsche Freilosanmeldungen beim Übergang in die Meldephase abmelden
@@ -183,9 +184,6 @@ class LigaBot {
             }
         }
 
-        $liste['warte'] = $liste['warte'] ?? array();
-        $liste['melde'] = $liste['melde'] ?? array();
-        $liste['spiele'] = $liste['spiele'] ?? array();
         $anz_spiele = count($liste['spiele']);
         $anz_warte = count($liste['warte']);
         $anz_melde = count($liste['melde']);
@@ -242,7 +240,7 @@ class LigaBot {
         return $gelost ?? false;
     }
     
-    //Alle I,II,III Turniere werden in die offene Phase geschickt
+    //Alle I,II,III Turniere werden in die Offene Phase geschickt
     public static function zuruecksetzen()
     {
         $liste = self::get_turnier_ids();

@@ -71,7 +71,7 @@ if (isset($_POST['team_anmelden'])){
 
     if (!$error){
         $akt_turnier->team_anmelden($team_id, $liste, $pos);
-        $akt_turnier->schreibe_log("Anmeldung: $teamname\r\nTeamblock: " . (Tabelle::get_team_block($team_id) ?: 'NL') . " Turnierblock: " . $daten['tblock'] ."\r\nListe: $liste (<i>WartePos: $pos</i>)", "Ligaausschuss");
+        $akt_turnier->schreibe_log("Anmeldung: $teamname\r\nTeamblock: " . (Tabelle::get_team_block($team_id) ?: 'NL') . " Turnierblock: " . $daten['tblock'] ."\r\nListe: $liste (WartePos: $pos)", "Ligaausschuss");
         Form::affirm ("$teamname wurde angemeldet");
         header('Location: ../ligacenter/lc_team_anmelden.php?turnier_id=' . $daten['turnier_id']);
         die();
@@ -94,7 +94,7 @@ if (isset($_POST['nl_anmelden'])){
     $team_id = Team::teamname_to_teamid($teamname . '*');
     if (!$akt_turnier->check_team_angemeldet($team_id)){
         $akt_turnier->nl_anmelden($teamname, $liste, $pos);
-        $akt_turnier->schreibe_log("Anmeldung: $teamname*\r\nTeamblock: " . (Tabelle::get_team_block($team_id) ?: 'NL') . "\r\nListe:  $liste (<i>WartePos: $pos </i>)", "Ligaausschuss");
+        $akt_turnier->schreibe_log("Anmeldung: $teamname*\r\nTeamblock: " . (Tabelle::get_team_block($team_id) ?: 'NL') . "\r\nListe:  $liste (WartePos: $pos)", "Ligaausschuss");
         Form::affirm("$teamname wurde angemeldet auf Liste: $liste");
         header('Location: ../ligacenter/lc_team_anmelden.php?turnier_id=' . $daten['turnier_id']);
         die();

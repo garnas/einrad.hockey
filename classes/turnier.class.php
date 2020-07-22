@@ -305,13 +305,12 @@ class Turnier {
     //wenn das Turnier noch freie Plätze hat
     function spieleliste_auffuellen ($autor = 'automatisch')
     {
-        $turnier_id = $this->turnier_id;
         $daten = $this->daten;
         $freie_plaetze = $this->anzahl_freie_plaetze();
         if ($daten['phase'] != 'offen' && $freie_plaetze > 0){
             $liste = $this->get_anmeldungen(); //Order by Warteliste weshalb die Teams in der foreach schleife in der Richtigen reihenfolge behandelt werden
-            foreach (($liste['warte'] ?? array()) as $team){
-                if ($this->check_team_block($team['team_id']) && $freie_plaetze  > 0){ //Das Team wird abgemeldet, wenn es schon am Turnierdatum auf einer Spielenliste steht
+            foreach ($liste['warte'] as $team){
+                if ($this->check_team_block($team['team_id']) && $freie_plaetze > 0){ //Das Team wird abgemeldet, wenn es schon am Turnierdatum auf einer Spielenliste steht
                     if (!$this->check_doppel_anmeldung($team['team_id'])){
                         $this->liste_wechsel($team['team_id'], 'spiele'); //von Warteliste abmelden
                         $this->schreibe_log("Spielenliste auffüllen: \r\n" . $team['teamname'] . " warte -> spiele", $autor);
@@ -320,7 +319,6 @@ class Turnier {
                         $this->abmelden($team['team_id']);
                         $this->schreibe_log("Abgemeldet: \r\n" . $team['teamname'] . "Doppelanmeldung", $autor);
                     }
-                    
                 }
             }
             $this->warteliste_aktualisieren();
@@ -393,7 +391,10 @@ class Turnier {
     //True, wenn der Teamblock in das Turnier passt.
     //Um die DB zu schonen, können teamblock und turnierblock auch manuell übergeben werden
     function check_team_block ($team_id)
-    {
+    {   
+        if (!in_array($this->daten['art'],array('I','II','III'))){
+            return false;
+        }
         $team_block = Tabelle::get_team_block($team_id);
         $turnier_block = $this->daten['tblock'];
         return self::check_team_block_static($team_block, $turnier_block);

@@ -28,7 +28,7 @@ if (isset($_POST['send_mail'])){
         }
         $mailer->addBCC(Config::LAMAIL_ANTWORT);
         $mailer->Subject = $betreff; // Betreff der Email
-        $mailer->Body = $text . "\r\nVersendet mit dem Kontaktformular";
+        $mailer->Body = $text . "\r\n\r\nVersendet via einrad.hockey";
         db::debug($mailer);
         /*if ($mailer->send()){
             Form::affirm("Email wurde versendet");
