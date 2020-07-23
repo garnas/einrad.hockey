@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/team_session.logic.php'; //auth
+require_once '../../logic/session_team.logic.php'; //auth
 
 $centerpanels = array(
   array("name" => "Turnier-anmeldung", "link" => "tc_turnierliste_anmelden.php", "farbe" => "w3-primary"),

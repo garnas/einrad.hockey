@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/la_session.logic.php'; //auth
+require_once '../../logic/session_la.logic.php'; //auth
 
 $centerpanels = array(
   array("name" => "Turniere verwalten", "link" => "lc_turnierliste.php", "farbe" => "w3-primary"),

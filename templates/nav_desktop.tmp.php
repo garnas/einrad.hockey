@@ -2,7 +2,7 @@
 <div class="w3-display-container w3-hide-small" style="width: 100%;">
     
     <!-- Hintergrundbild -->
-    <img src="<?=$_SESSION['hintergrund']?>" class="w3-card" alt="Hintergrundbild" style="width:100%; opacity: 0.3;">
+    <img src="<?=$_SESSION['hintergrund']?>" class="<?php if (!isset($_SESSION['la_id']) && !isset($_SESSION['team_id'])){?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.3;">
     
     <!-- oben links -->
     <div class="w3-display-topleft w3-margin w3-padding-large">

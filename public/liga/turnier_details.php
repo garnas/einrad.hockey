@@ -134,7 +134,7 @@ include '../../templates/header.tmp.php';
                 </a>
                 <?=$daten['teamname']?>
             </p> 
-            <p><i>Organisator:</i><br><?=$daten['organisator']?></p>
+            <p><i>Verantwortlicher:</i><br><?=$daten['organisator']?></p>
             <p><i>Handy:</i><br><a class="no w3-hover-text-secondary w3-text-blue" href="tel:<?=str_replace(' ', '', $daten['handy'])?>"><?=$daten['handy']?></a></p>
             </td>
         </tr>

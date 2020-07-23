@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/la_session.logic.php'; //Auth
+require_once '../../logic/session_la.logic.php'; //Auth
 
 $spieler_liste = Spieler::get_spielerliste(); //Liste aller Spielernamen und IDs [0] => vorname nachname [1] => spieler_id
 $idliste = array();

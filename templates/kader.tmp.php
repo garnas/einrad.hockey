@@ -13,7 +13,7 @@
         <?php foreach($kader as $eintrag){?>
             <tr>
                 <td><?=$eintrag['spieler_id']?></td>
-                <?php if ($ligacenter){ //Direktverlinkung zum Bearbeiten eines Spielers $ligacenter wird definiert in la_session.logic.php?>
+                <?php if ($ligacenter){ //Direktverlinkung zum Bearbeiten eines Spielers $ligacenter wird definiert in session_la.logic.php?>
                     <td><a class="no w3-text-blue w3-hover-text-secondary" href='lc_spieler_aendern.php?spieler_id=<?=$eintrag['spieler_id']?>'> <?=$eintrag['vorname'] . " " . $eintrag['nachname']?></a></td>
                 <?php }else{?>
                     <td><?=$eintrag['vorname']." ".$eintrag['nachname']?></td>
@@ -45,7 +45,7 @@
                 <?php foreach($kader_vorsaison as $eintrag){?>
                     <tr style="vertical-align: middle">
                         <td class=""><?=$eintrag['spieler_id']?></td>
-                        <?php if ($ligacenter){ //Direktverlinkung zum Bearbeiten eines Spielers $ligacenter wird definiert in la_session.logic.php?>
+                        <?php if ($ligacenter){ //Direktverlinkung zum Bearbeiten eines Spielers $ligacenter wird definiert in session_la.logic.php?>
                             <td class=""><a class="no w3-text-blue w3-hover-text-secondary" href='lc_spieler_aendern.php?spieler_id=<?=$eintrag['spieler_id']?>'> <?=$eintrag['vorname'] . " " . $eintrag['nachname']?></a></td>
                         <?php }else{?>
                             <td class=""><?=$eintrag['vorname']." ".$eintrag['nachname']?></td>

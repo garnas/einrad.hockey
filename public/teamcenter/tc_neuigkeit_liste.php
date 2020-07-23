@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/team_session.logic.php'; //Auth
+require_once '../../logic/session_team.logic.php'; //Auth
 
 Form::attention('Klicke bei deiner Neuigkeit auf den Button "bearbeiten", um deine Neuigkeit zu verändern.');
 header("Location: ../liga/neues.php");

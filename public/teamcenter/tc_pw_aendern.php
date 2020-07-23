@@ -5,7 +5,7 @@
 require_once '../../logic/first.logic.php'; //autoloader und Session
 
 $no_redirect = true; //Verhindert die Endlosschleife, bei der Überprüfung, ob das Passwort geändert wurde
-require_once '../../logic/team_session.logic.php'; //Auth
+require_once '../../logic/session_team.logic.php'; //Auth
 
 $akt_team = new Team ($_SESSION['team_id']);
 

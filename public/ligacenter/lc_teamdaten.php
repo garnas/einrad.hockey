@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/la_session.logic.php'; //Auth
+require_once '../../logic/session_la.logic.php'; //Auth
 
 //speichert die teamid des ausgewählten Teamnamens in der Session ab, wenn ein Teamname ausgewählt wurde
 //Formularauswertung Teamauswahl

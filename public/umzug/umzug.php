@@ -1,7 +1,7 @@
 <?php
 
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/la_session.logic.php'; //Auth
+require_once '../../logic/session_la.logic.php'; //Auth
 
 ////////////////////////////////Verbindung mit alter Datenbank////////////////////////////////
 unset($verbindung_zur_datenbank);
@@ -348,6 +348,9 @@ foreach ($return_liste as $turnier_id => $liste){
 
 //Ergebnisse der abgebrochenen Saison der Vorsaison zuordnen
 //db::writedb("UPDATE turniere_liga SET saison='2019' WHERE saison='2020' AND phase='ergebnis'");
+
+//Freilose auf 1 setzen
+//db::writedb("UPDATE `teams_liga` SET `freilose`='1' AND ligateam='Ja'");
 
 //Saisonzählung umstellen!
 /*

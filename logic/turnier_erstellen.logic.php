@@ -140,7 +140,7 @@ if (isset($_POST['create_turnier'])) {
             $akt_turnier->schreibe_log( "Turniername: $tname\r\nAusrichter: $ausrichter_name\r\nStartzeit: $startzeit\r\nBesprechung: $besprechung\r\nArt: $art\r\nBlock: $tblock\r\n" .
                                         "Fixiert: $fixed\r\nDatum: $datum \r\nPlätze: $plaetze\r\nSpielplan: $spielplan\r\nHallenname: $hallenname\r\n". 
                                         "Straße: $strasse\r\nPlz: $plz\r\nOrt: $ort\r\nHaltestellen: $haltestellen\r\nHinweis: $hinweis\r\nStartgebühr: $startgebuehr\r\n".
-                                        "Organisator: $organisator\r\nHandy: $handy", $autor);
+                                        "Verantwortlicher: $organisator\r\nHandy: $handy", $autor);
             $akt_turnier->schreibe_log("Anmeldung als Ausrichter:\r\n" . $ausrichter_name . " -> Liste: spiele", $autor);
             //Mailbot
             MailBot::mail_neues_turnier($akt_turnier);

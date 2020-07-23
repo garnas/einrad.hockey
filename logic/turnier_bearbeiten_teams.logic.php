@@ -174,7 +174,7 @@ if (isset($_POST['change_turnier'])) {
                 $akt_turnier->schreibe_log("Ort: " . $akt_turnier->daten['ort'] . " -> " . $ort, $autor);
             }
             if ($akt_turnier->daten['organisator'] != $organisator){
-                $akt_turnier->schreibe_log("Organisator: " . $akt_turnier->daten['organisator'] . " -> " . $startzeit, $autor);
+                $akt_turnier->schreibe_log("Verantwortlicher: " . $akt_turnier->daten['organisator'] . " -> " . $startzeit, $autor);
             }
             if ($akt_turnier->daten['handy'] != $handy){
                 $akt_turnier->schreibe_log("Handy: " . $akt_turnier->daten['handy'] . " -> " . $handy, $autor);

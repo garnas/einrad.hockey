@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/la_session.logic.php'; //Auth
+require_once '../../logic/session_la.logic.php'; //Auth
 require_once '../../logic/turnier_bearbeiten_first.logic.php'; //Turnier und $daten-Array erstellen + Sanitizing + Berechtigung Prüfen + Existiert das Turnier?
 require_once '../../logic/turnier_bearbeiten_la.logic.php'; //Formularauswertung für Ligaausschuss
 require_once '../../logic/turnier_bearbeiten_teams.logic.php'; //Formularauswertung für Turnierdetails

@@ -91,7 +91,7 @@
         </p>
     </div>
     <div class="w3-panel w3-card-4">
-        <h3>Organisator</h3>
+        <h3>Verantwortlicher</h3>
         <p>
             <label class="w3-text-primary" for="organisator">Name</label>
             <input required value="<?=$daten['organisator']?>" type="text" class="w3-input w3-border w3-border-primary" id="organisator" name="organisator">

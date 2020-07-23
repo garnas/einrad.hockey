@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/team_session.logic.php'; //Auth
+require_once '../../logic/session_team.logic.php'; //Auth
 
 $turnier_id = $_GET['turnier_id'];
 $akt_turnier = new Turnier($turnier_id);

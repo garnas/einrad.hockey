@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/team_session.logic.php'; //Auth
+require_once '../../logic/session_team.logic.php'; //Auth
 
 //Check ob das Team über fünf Spieler verfügt
 if (count(Spieler::get_teamkader($_SESSION['team_id'])) < 5){
