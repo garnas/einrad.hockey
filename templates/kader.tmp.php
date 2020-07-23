@@ -104,7 +104,7 @@
             </p>
             <p>
                 <input type="checkbox" class="w3-check" value="zugestimmt" name="dsgvo" id="dsgvo">
-                <label for="dsgvo" class="">Der Spieler hat die <a class="w3-text-primary" href="../dokumente/einradhockeyliga_dsgvo.pdf">DSGVO-Hinweise</a> gelesen und der Verwendung seiner Daten zugestimmt.</label>
+                <label for="dsgvo" class="w3-text-grey">Der Spieler hat die <?=Form::link(Config::LINK_DSGVO, "DSGVO-Hinweise")?> gelesen und der Verwendung seiner Daten zugestimmt.</label>
             </p>
             <p>
                 <input class="w3-button w3-tertiary" type='submit' name='neuer_eintrag' value='Spieler eintragen'>

@@ -281,25 +281,25 @@ include '../../templates/header.tmp.php';
     <?php if ($akt_turnier->daten['art'] == 'final'){?>
         <form class="" method="post">
             <p>
-    <input type='submit' class='w3-button w3-margin-bottom w3-block w3-tertiary <?php if ($team_angemeldet){?>w3-opacity<?php } //end if?>' name='bewerben' value='Wir wollen auf dem Abschlussturnier spielen bzw. wir wären bereit nachzurücken.'>
+                <input type='submit' class='w3-button w3-margin-bottom w3-block w3-tertiary <?php if ($team_angemeldet){?>w3-opacity<?php } //end if?>' name='bewerben' value='Bewerben'>
+                <span class="w3-text-grey"><i class="material-icons">info</i>Wir wollen auf dem Abschlussturnier spielen bzw. wir wären bereit nachzurücken.</span>
             </p>
         </form>
     <?php }else{?>
         <form class="" method="post">
             <p>
-            <input type='submit' class='<?php if (!$akt_turnier->check_team_block($_SESSION['team_id']) or $team_angemeldet){?>w3-opacity<?php } //endif?> w3-button w3-margin-bottom w3-block w3-tertiary w3-right' name='anmelden' value='Anmelden'>
+                <input type='submit' class='<?php if ($team_angemeldet){?>w3-opacity<?php } //endif?> w3-button w3-margin-bottom w3-block w3-tertiary w3-right' name='anmelden' value='Anmelden <?php if (!$akt_turnier->check_team_block($_SESSION['team_id']) && $akt_turnier->daten['phase'] == 'melde'){?>(Warteliste)<?php } //endif?>'>
             </p>
         </form>
         <form method="post" onsubmit="return confirm('Freilose setzen dein Team direkt auf die Spielen-Liste. Beim Übergang in die Meldephase wirst du auf die Warteliste gesetzt, wenn dein Teamblock höher ist als der Turnierblock. Das Freilos wird euch dann erstattet.');">
             <p>
-            <input type='submit' 
-                class='w3-button w3-margin-bottom w3-block w3-tertiary  
-                <?php if (($akt_turnier->get_team_liste($_SESSION['team_id']) == 'spiele') or 
-                            !$akt_turnier->check_team_block_freilos($_SESSION['team_id']) or 
-                            $akt_team->get_freilose() <= 0){?>w3-opacity
-                            <?php }//endif?>' 
-            
-            name='freilos' value='Freilos setzen (<?=$akt_team->get_freilose()?> vorhanden)'>
+                <input type='submit' 
+                    class='w3-button w3-margin-bottom w3-block w3-tertiary  
+                    <?php if (($akt_turnier->get_team_liste($_SESSION['team_id']) == 'spiele') or 
+                                !$akt_turnier->check_team_block_freilos($_SESSION['team_id']) or 
+                                $akt_team->get_freilose() <= 0){?>w3-opacity
+                                <?php }//endif?>'   
+                    name='freilos' value='Freilos setzen (<?=$akt_team->get_freilose()?> vorhanden)'>
             </p>
         </form>
     <?php } //endif?>

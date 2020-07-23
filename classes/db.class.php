@@ -94,10 +94,7 @@ class db {
       die('<h2>Verbindung zum MySQL Server fehlgeschlagen: '.mysqli_connect_error().'<br><br>Bitte schicke einen Screenshot an <span style="color:red;">' . Config::TECHNIKMAIL . '</span></h2>');
     }
 
-    if (self::$link->query($sql) === TRUE) {
-        //echo "New record created successfully<br>";
-    } else {
-        //echo "Error: " . $sql . "<br>" . self::$link->error;
+    if (!self::$link->query($sql) === TRUE) {
         $error = 'Fehlgeschlagen: '.self::$link->error;
         fwrite($log_sql, "\n" . $error);
         Form::error("SQL: " . $error);

@@ -16,6 +16,12 @@ if (!isset($no_redirect) && $daten['passwort_geaendert'] == 'Nein'){
   die();
 }
 
+if (!isset($no_redirect) && $daten['ligavertreter'] == ''){
+  Form::affirm("Bitte trage einen Ligavertreter ein. Beachte bitte, dass jedes Team nur einen Ligavertreter haben kann.");
+  header('Location: tc_teamdaten_aendern.php');
+  die();
+}
+
 $titel = $_SESSION['teamname'];
 $ligacenter = false; //Man kann sich gleichzeitig im Liga- und Teamcenter anmelden
 $teamcenter = true; //Hiermit erkennt man, ob man sich gerade im Team- oder Ligacenter befindet, da Session-Variablen seitenübergreifend existieren

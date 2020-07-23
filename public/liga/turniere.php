@@ -47,15 +47,29 @@ foreach ($all_anmeldungen as $turnier_id => $liste){
     $freie_plaetze = $daten[$turnier_id]['plaetze'] - $anz_spieleliste[$turnier_id] - $anz_meldeliste[$turnier_id] - $anz_warteliste[$turnier_id];
 
     //Oben rechts Plätze frei
-    if ($freie_plaetze > 0 && $daten[$turnier_id]['phase'] != 'spielplan'){
+    if ($freie_plaetze > 0){
         $daten[$turnier_id]['plaetze_frei'] = '<span class="w3-text-green">frei</span>';
     }elseif ($freie_plaetze < 0 && $daten[$turnier_id]['phase'] == 'offen'){
         $daten[$turnier_id]['plaetze_frei'] = '<span class="w3-text-yellow">losen</span>';
     }elseif (($daten[$turnier_id]['plaetze'] - $anz_spieleliste[$turnier_id]) <= 0){
         $daten[$turnier_id]['plaetze_frei'] = '<span class="w3-text-red">voll</span>';
-    }else{
-        $daten[$turnier_id]['plaetze_frei'] = '<span class="w3-text-blue">Spielplan</span>';
     }
+
+    if ($daten[$turnier_id]['art'] == 'final'){
+        $daten[$turnier_id]['phase'] = 'Finale';
+    }
+    if ($daten[$turnier_id]['art'] == 'spass'){
+        $daten[$turnier_id]['phase'] = 'Nichtligaturnier';
+    }
+
+    if ($daten[$turnier_id]['phase'] == 'spielplan'){
+        if (!empty($daten[$turnier_id]['link_spielplan'])){
+            $daten[$turnier_id]['phase'] = Form::link($daten[$turnier_id]['link_spielplan'],'Spielplan');
+        }else{
+            $daten[$turnier_id]['phase'] = '<span class="w3-text-grey">Spielplan</span>';
+        }
+    }
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -111,7 +125,7 @@ function modal(turnier_id){
                     <h4 class=''><?=$turnier['datum']?> <span class="w3-text-primary"><?=$turnier['ort']?></span> (<?=$turnier['tblock']?>)</h4> 
                     <p class='w3-text-grey'><?=$turnier['tname']?></p>
                 </div>
-                <div class="w3-small w3-text-grey">
+                <div style="font-size: 13px;" class="w3-text-grey">
                     <i class='w3-display-topleft w3-padding'><?=$turnier['plaetze_frei'] ?? '<span class="w3-text-green">frei</span>'?></i>
                     <i class='w3-display-bottomleft w3-padding'><?=$turnier['phase']?></i>
                     <i class='w3-display-topright w3-padding'><?=($anz_spieleliste[$turnier['turnier_id']] ?? 0) ."(". (($anz_warteliste[$turnier['turnier_id']] ?? 0)+($anz_meldeliste[$turnier['turnier_id']] ?? 0)) .")"?> von <?=$turnier['plaetze']?></i>
@@ -156,31 +170,31 @@ function modal(turnier_id){
                                     <?php }//end if?>
                                 </div>
                             </div>
-                        <?php }else{?><p class="w3-text-grey">Anmeldung erfolgt beim Ausrichter<?php } //end if spass?>
+                        <?php }else{?><p class="w3-text-green">Anmeldung erfolgt beim Ausrichter<?php } //end if spass?>
                     
                     <!-- Turnierdetails -->
                     <p class="w3-text-grey w3-border-bottom w3-border-grey">Details</p>
                     <div class="w3-responsive">
                         <table class="w3-table">
                             <tr>
-                                <td class="" style="width: 100px">Tag</td>
-                                <td><?=$turnier['wochentag']?></td>
-                            </tr>
-                            <tr>
-                                <td class="" style="width: 100px">Plätze</td>
+                                <td class="" style="width: 100px">Plätze:</td>
                                 <td><?=$turnier['plaetze']?> (<?=$turnier['spielplan']?>)</td>
                             </tr>
                             <tr>
-                                <td class="">Startzeit</td>
+                                <td class="">Startzeit:</td>
                                 <td><?=$turnier['startzeit']?>&nbsp;Uhr<?php if (!empty($turnier['besprechung'])){?> <i>(<?=$turnier['besprechung']?>)</i><?php } //endif?></td>
                             </tr>
                             <tr>
-                                <td style="vertical-align: middle" class="">Hinweis</td>
+                                <td class="" style="width: 100px">Wochentag:</td>
+                                <td><?=$turnier['wochentag']?></td>
+                            </tr>
+                            <tr>
+                                <td style="vertical-align: middle" class="">Hinweis:</td>
                                 <td><?=$turnier['hinweis']?></td>
                             </tr>
                             <?php if($turnier['phase'] == 'spielplan'){?>
                             <tr>
-                                <td>Spielplan</td>
+                                <td>Spielplan:</td>
                                 <td>
                                 <?php if(!empty($turnier['link_spielplan'])){?>
                                     <a href="<?=$turnier['link_spielplan']?>" class="no w3-text-blue w3-hover-text-secondary">Download Spielplan</a>

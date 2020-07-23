@@ -62,16 +62,15 @@ $(document).ready(function(){
         <!-- Icons -->
         <td style='vertical-align: middle; text-align: right; white-space: nowrap;'>
           <?php if (!empty($team['homepage'])) {?>
-            <a class="w3-hover-text-secondary w3-text-blue" href='<?=$team['homepage']?>'>
-            <i style='vertical-align: middle;' class='material-icons'>home</i></a>
+            <?=Form::Link($team['homepage'], "<i style='vertical-align: middle;' class='material-icons'>home</i>", true)?>
           <?php } //endif?>
           <?php if (!empty($team['teamfoto'])) {?>
-            <a class="w3-hover-text-secondary w3-text-primary" href='<?=$team['teamfoto']?>'>
-              <i style='vertical-align: middle;' class='material-icons'>group</i></a>
+            <?=Form::Link($team['teamfoto'], "<i style='vertical-align: middle;' class='material-icons'>group</i>", true)?>
           <?php } //endif?>
-          <?php if (!empty($emails[$team['team_id']])){?> 
+          <?php if (!empty($emails[$team['team_id']])){?>
             <a class="w3-hover-text-secondary w3-text-blue" href='mailto:<?=$emails[$team['team_id']]?>'> 
-              <i style='vertical-align: middle;' class='material-icons'>mail</i></a>
+              <i style='vertical-align: middle;' class='material-icons'>mail</i>
+            </a>
           <?php } //endif?>
         </td>
         <!-- Text -->

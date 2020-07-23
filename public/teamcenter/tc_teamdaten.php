@@ -22,7 +22,7 @@ include '../../templates/teamdaten.tmp.php';
 
 <!--Navigation-->
 <p>
-  <a class="no w3-text-primary w3-hover-text-secondary" href='tc_teamdaten_aendern.php'><i class="material-icons">create</i> Teamdaten ändern</a>
+  <?=Form::link('tc_teamdaten_aendern.php', '<i class="material-icons">create</i> Teamdaten ändern')?>
 </p>
 
 <?php include '../../templates/footer.tmp.php';

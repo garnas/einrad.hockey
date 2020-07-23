@@ -3,7 +3,7 @@ class Tabelle {
     
     public static function get_aktuellen_spieltag($saison = Config::SAISON)
     {
-        $sql = "SELECT * FROM turniere_liga WHERE saison = '$saison' ORDER BY spieltag ASC";
+        $sql = "SELECT * FROM turniere_liga WHERE saison = '$saison' AND (art='I' OR art = 'II' OR art='III') ORDER BY spieltag ASC";
         $result = db::readdb($sql);
         while ($turnier =  mysqli_fetch_assoc($result)){
             if ($turnier['phase'] != 'ergebnis'){
@@ -90,7 +90,7 @@ class Tabelle {
     }
 
     //Weist dem Platz in der Rangtabelle einen Block zu
-    public function platz_to_block($platz)
+    public static function platz_to_block($platz)
     {
         if (empty($platz)){
             return '';
@@ -114,7 +114,7 @@ class Tabelle {
     }
 
     //Weist dem Platz in der Rangtabelle eine Wertigkeit zu
-    public function platz_to_wertigkeit($platz)
+    public static function platz_to_wertigkeit($platz)
     {
         if (empty($platz)){
             return '';
@@ -196,7 +196,7 @@ class Tabelle {
             foreach($list_of_teamids as $team_id){
                 if (!array_key_exists($team_id, $return)){
                     $return[$team_id] = array();
-                    $return[$team_id]['teamname'] = Team::teamid_to_teamname($team_id);
+                    $return[$team_id]['teamname'] = htmlspecialchars_decode(Team::teamid_to_teamname($team_id)); //Ansonsten doppel db::escape --> fehler in der Darstellung
                     $return[$team_id]['team_id'] = $team_id;
                     $return[$team_id]['string'] = '';
                     $return[$team_id]['summe'] = 0;
@@ -320,7 +320,7 @@ class Tabelle {
             foreach($list_of_teamids as $team_id){
                 if (!array_key_exists($team_id, $return)){
                     $return[$team_id] = array();
-                    $return[$team_id]['teamname'] = Team::teamid_to_teamname($team_id);
+                    $return[$team_id]['teamname'] = htmlspecialchars_decode(Team::teamid_to_teamname($team_id)); //Ansonsten doppel db::escape --> fehler in der Darstellung
                     $return[$team_id]['team_id'] = $team_id;
                     $return[$team_id]['string'] = '';
                     $return[$team_id]['summe'] = 0;
@@ -337,7 +337,7 @@ class Tabelle {
         //Teams mit gleicher Summe und gleichem höchsten Einzelergebnis bekommen den selben Platz
         $platz = 1;
         $zeile_vorher['platz'] = 1;
-        $zeile_vorher['summe'] = 0; 
+        $zeile_vorher['summe'] = 0;
         foreach ($return as $key => $zeile){
             
             $zeile['max_einzel'] = max($zeile['einzel_ergebnisse']);
@@ -376,7 +376,7 @@ class Tabelle {
                 $return = 0;
             }
         }
-        return db::escape($return);
+        return $return;
     }
 
     //individuelle Sortierfunktion für die Meisterschaftstabelle
@@ -401,6 +401,6 @@ class Tabelle {
                 $return = 0;
             }
         }
-        return db::escape($return);
+        return $return;
     }
 }

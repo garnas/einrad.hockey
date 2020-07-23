@@ -59,7 +59,7 @@
             <?php } //end foreach?>
         </div>
         <p>
-            <a style="cursor: pointer;" class="w3-text-primary w3-hover-text-secondary" onclick="invert('team[]')"><i class="material-icons">invert_colors</i> Auswahl umkehren</a>
+            <div style="cursor: pointer;" class="no w3-text-primary w3-hover-text-secondary" onclick="invert('team[]')"><i class="material-icons">invert_colors</i> Auswahl umkehren</div>
         </p>
         <p>
             <input type="submit" class="w3-button w3-tertiary" style="cursor: pointer;" value="Teams auswählen" name="teams_emails">

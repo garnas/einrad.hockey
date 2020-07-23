@@ -42,7 +42,7 @@
             </tr>
             <tr>
                 <th class="w3-primary">Homepage</th>
-                <td><a href="<?=$daten['homepage']?>" class="w3-text-blue no w3-hover-text-tertiary"><?=$daten['homepage']?></a></td>
+                <td><?=Form::link($daten['homepage'], $daten['homepage'], true)?></td>
             </tr>
         </table>
     </div>

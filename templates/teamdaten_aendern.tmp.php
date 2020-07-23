@@ -17,7 +17,7 @@
                 <input type="submit" name="delete_teamfoto" class="w3-button w3-tertiary" value="Neues Teamfoto / Teamfoto löschen">
             </p>
         <?php }  //end if?>
-        <p class="w3-text-grey">Das Teamfoto wird öffentlich <?=Form::link('../liga/teams.php#' . $daten['team_id'], 'auf der Teams-Seite')?> angezeigt.</p>
+        <p class="w3-text-grey">Das Teamfoto kann öffentlich <?=Form::link('../liga/teams.php#' . $daten['team_id'], 'auf der Teams-Seite')?> eingesehen werden.</p>
 </form>
 
 <form method='post'>
@@ -26,6 +26,11 @@
         <p>
             <label for='ligavertreter' class="w3-text-primary">Ligavertreter</label>
             <input class='w3-input w3-border w3-border-primary' type='text' id='ligavertreter' name='ligavertreter' required value='<?=$daten['ligavertreter']?>'>
+            <span class="w3-text-grey"><i>Nur eine Person kann als Ligavertreter angegeben werden</i></span>
+        </p>
+        <p>
+            <input type="checkbox" <?php if (!empty($daten['ligavertreter'])){ ?>checked<?php } //endif?> class="w3-check" value="zugestimmt" name="dsgvo" id="dsgvo">
+            <label for="dsgvo" class="" style="cursor: pointer">Der Ligavertreter hat die <?=Form::link(Config::LINK_DSGVO, "Datenschutz-Hinweise")?> gelesen und ihnen zugestimmt.</label>
         </p>
         <p>
             <label for='plz' class="w3-text-primary">PLZ</label>
@@ -99,7 +104,7 @@
 
         <p>
             <label for='public' class="w3-text-primary">Email auf der öffentlichen Webseite anzeigen?*</label>
-            <select  style='' class='w3-input w3-border w3-border-primary' id='public' name='public'>
+            <select class='w3-input w3-border w3-border-primary' id='public' name='public'>
                 <option value='Ja' selected>Ja</option>
                 <option value='Nein'>Nein</option>
             </select>
@@ -107,7 +112,7 @@
 
         <p>
             <label for='get_info_mail' class="w3-text-primary">Automatische Infomails erhalten?**</label>
-            <select  style='' class='w3-input w3-border w3-border-primary' id='get_info_mail' name='get_info_mail'>
+            <select class='w3-input w3-border w3-border-primary' id='get_info_mail' name='get_info_mail'>
                 <option value='Ja' selected>Ja</option>
                 <option value='Nein'>Nein</option>
             </select>

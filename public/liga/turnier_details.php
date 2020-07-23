@@ -108,7 +108,7 @@ include '../../templates/header.tmp.php';
                 <?=$daten['hallenname']?><br>
                 <?=$daten['strasse']?><br>
                 <?=$daten['plz'].' '.$daten['ort']?><br>
-                <?=Form::link(str_replace(' ', '%20', 'https://www.google.de/maps/search/' . $daten['hallenname'] ."+". $daten['strasse'] ."+" . $daten['plz'] ."+". $daten['ort'] .'/'), 'Google Maps');?>
+                <?=Form::link(str_replace(' ', '%20', 'https://www.google.de/maps/search/' . $daten['hallenname'] ."+". $daten['strasse'] ."+" . $daten['plz'] ."+". $daten['ort'] .'/'), 'Google Maps', true);?>
                 <?php if (!empty($daten['haltestellen'])){?><p><i>Haltestellen: <?=$daten['haltestellen']?></i></p> <?php } // endif?>
             </td>
         </tr>
@@ -116,7 +116,7 @@ include '../../templates/header.tmp.php';
             <td class="w3-primary" style="vertical-align: middle">Beginn</td>
             <td>
                 <?=$daten['startzeit']?>&nbsp;Uhr
-                <?php if($daten['besprechung'] == 'Ja'){?><p><i>Alle Teams sollen sich 15min vor Turnierbeginn zu einer gemeinsamen Turnierbesprechung einfinden.</i></p><?php } //end if?>
+                <?php if($daten['besprechung'] == 'Ja'){?><p><i>Alle Teams sollen sich 15&nbsp;min vor Turnierbeginn zu einer gemeinsamen Turnierbesprechung einfinden.</i></p><?php } //end if?>
             </td>
         </tr>
         <tr>
