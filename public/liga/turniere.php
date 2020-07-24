@@ -110,8 +110,8 @@ function modal(turnier_id){
 <h1 class="w3-text-primary">Ausstehende Turniere</h1>
 
 <!-- Turnier suchen -->
-<div class="w3-section w3-text-grey w3-border-bottom" style="width: 260px;">
-    <i class="material-icons">search</i><input id="myInput" class='w3-padding w3-border-0' type="text" placeholder="Turnier suchen">
+<div class="w3-section w3-text-grey w3-border-bottom" style="width: 250px;" >
+    <i class="material-icons">search</i><input id="myInput" class='w3-padding w3-border-0' style="width: 225px;" type="text" placeholder="Turnier suchen">
 </div>
 
 <div id="myDIV"><!-- zu durchsuchendes div -->

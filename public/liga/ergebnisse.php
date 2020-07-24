@@ -45,8 +45,8 @@ $(document).ready(function(){
 <h1 class="w3-text-primary">Turnierergebnisse<br><span class="w3-text-grey">Saison <?=Form::get_saison_string($saison)?></span></h1>
 
 <!-- Ergebnis suchen -->
-<div class="w3-section w3-text-grey w3-border-bottom" style="width: 260px;">
-    <i class="material-icons">search</i><input id="myInput" class='w3-padding w3-border-0' type="text" placeholder="Ergebnis suchen">
+<div class="w3-section w3-text-grey w3-border-bottom" style="width: 250px;" >
+    <i class="material-icons">search</i><input id="myInput" class='w3-padding w3-border-0' style="width: 225px;" type="text" placeholder="Ergebnis suchen">
 </div>
 
 <!--Turnierergebnisse-->

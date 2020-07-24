@@ -27,7 +27,7 @@
     <!-- oben rechts -->
     <div class="w3-display-topright w3-margin w3-padding-large w3-large">
 
-        <!--Sonstiges -->
+        <!-- Sonstiges -->
         <div class="w3-dropdown-hover w3-right w3-text-primary" style="background-color: transparent;">
             <a class="w3-button w3-hover-primary">
                 <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">format_list_bulleted</i>
@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <!--Teamcenter -->
+        <!-- Teamcenter -->
         <div class="w3-dropdown-hover w3-right w3-text-primary">
             <a class="w3-button w3-hover-primary">
                 <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">group</i>
@@ -70,7 +70,7 @@
             </div>
         </div>
 
-        <!--Liga -->
+        <!-- Modus -->
         <div class="w3-dropdown-hover w3-right w3-text-primary">
             <a class=" w3-button w3-hover-primary">
                 <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">settings</i>
@@ -82,7 +82,7 @@
             </div>
         </div>
 
-        <!--Liga -->
+        <!-- Liga -->
         <div class="w3-dropdown-hover w3-right w3-text-primary">
             <a class=" w3-button w3-hover-primary">
                 <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">emoji_events</i>

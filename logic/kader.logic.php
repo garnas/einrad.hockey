@@ -11,7 +11,7 @@ if(isset($_POST['neuer_eintrag'])) {
 
     if(($_POST['dsgvo'] ?? '') != 'zugestimmt'){
         $error = true;
-        Form::error("Den DSGVO-Hiweisen muss zugestimmt werden, um in einem Ligateam spielen zu können");
+        Form::error("Den Datenschutz-Hiweisen muss zugestimmt werden, um in einem Ligateam spielen zu können");
     }
     if(empty($vorname) or empty($nachname) or empty($jahrgang) or empty($geschlecht)){
         $error = true;
@@ -40,7 +40,7 @@ if(isset($_POST['neuer_eintrag'])) {
 //Spieler aus der Vorsaison übernehmen
 if(isset($_POST['submit_takeover'])) {
     if(($_POST['dsgvo'] ?? '') != 'zugestimmt'){
-        Form::error("Den DSGVO-Hiweisen muss zugestimmt werden, um in einem Ligateam spielen zu können");
+        Form::error("Den Datenschutz-Hiweisen muss zugestimmt werden, um in einem Ligateam spielen zu können");
     }else{
         foreach(($_POST['takeover'] ?? array()) as $spieler_id){
             if (!empty($kader_vorsaison[$spieler_id])){ //Validation //Schutz gegen Html-Manipulation

@@ -66,15 +66,15 @@
         </div>
         <p>
             <input type="checkbox" class="w3-check" value="zugestimmt" name="dsgvo" id="dsgvo">
-            <label for="dsgvo" style="cursor: pointer;" class="w3-text-black">Alle ausgewählten Spieler haben die <?=Form::link(Config::LINK_DSGVO, 'Datenschutz-Hinweise')?> gelesen und ihnen zugestimmt.</label>
+            <label for="dsgvo" style="cursor: pointer;" class="w3-text-black">Alle ausgewählten Spieler haben die aktuellen <?=Form::link(Config::LINK_DSGVO, 'Datenschutz-Hinweise')?> gelesen und ihnen zugestimmt.</label>
         </p>
-        <input type="submit" name="submit_takeover" value="Ausgewählte Spieler übernehmen" class="w3-button w3-tertiary">
+        <input type="submit" name="submit_takeover" value="Ausgewählte Spieler übernehmen" class="w3-button w3-primary">
     </form>
 <?php } //end if?>
 
 <!-- Form zum Eintragen eines neuen Spielers -->
 <div class="w3-section">
-    <p class="w3-text-grey">Neue Spieler können bis zum <?=Config::SAISON_ENDE?> 23:59:59&nbsp;Uhr hinzugefügt werden.</p>
+    <!--<p class="w3-text-grey">Neue Spieler können bis zum <?=Config::SAISON_ENDE?> 23:59:59&nbsp;Uhr hinzugefügt werden.</p>-->
     <p class="w3-text-grey">Um einen neuen Spieler aus einem anderen Team zu übernehmen, bitte den Spieler neu eintragen. Die Übernahme geschieht dann automatisch, wenn die Daten identisch sind und dieser Spieler noch nicht in einem aktuellen Kader steht. Der Schiedsrichterstatus wird dann ebenfalls übernommen.</p>
     <button class="w3-button w3-tertiary" onclick="document.getElementById('spieler_eintragen').style.display='block'">Neuen Spieler eintragen</button>
     <div class="w3-modal" id="spieler_eintragen" style="display: none;">
@@ -103,8 +103,8 @@
                 </select>
             </p>
             <p>
-                <input type="checkbox" class="w3-check" value="zugestimmt" name="dsgvo" id="dsgvo">
-                <label for="dsgvo" class="w3-text-grey">Der Spieler hat die <?=Form::link(Config::LINK_DSGVO, "DSGVO-Hinweise")?> gelesen und der Verwendung seiner Daten zugestimmt.</label>
+                <input type="checkbox" class="w3-check" value="zugestimmt" name="dsgvo" id="dsgvo_neu">
+                <label for="dsgvo_neu" style="cursor: pointer;" class="">Der Spieler hat die aktuellen <?=Form::link(Config::LINK_DSGVO, "Datenschutz-Hinweise")?> gelesen und der Verwendung seiner Daten zugestimmt.</label>
             </p>
             <p>
                 <input class="w3-button w3-tertiary" type='submit' name='neuer_eintrag' value='Spieler eintragen'>
