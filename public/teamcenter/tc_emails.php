@@ -76,38 +76,42 @@ include '../../templates/emails.tmp.php';
 <!-- Anzeige des Formulars für den Emailversand -->
 <?php if (!empty($emails)){ ?>
     <div class="w3-card-4 w3-panel">
-        <h3>Kontaktformular</h3>
+        <h2 class="w3-text-primary">Kontaktformular</h2>
         <form method="post" onsubmit="return confirm('Soll die Email wirklich abgeschickt werden?')">
-            <p><b>Absender:</b></p>
+            <p class="w3-text-grey"><b>Absender</b></p>
             <p><?=$_SESSION['teamname']?></p>
-            <p>
+            <p class="w3-text-grey">
                 <b>
                     <?php if (isset($_POST['rundmail']) or count($emails) > 12){?>
                         BCC <input type="hidden" name="all_bcc" value="all_bcc">
                     <?php }else{?> 
                         Empfänger
                     <?php } //end if?>
-                    (<?=count($teamnamen ?? array())?>):
+                    (<?=count($teamnamen ?? array())?>)
                 </b>
             </p>
                 <?php foreach (($emails ?? array()) as $email){?>
                     <input type="hidden" name="chosen_mails[]" value="<?=$email?>">
                 <?php } //end if?>
             <p>
-                <?php foreach (($teamnamen ?? array()) as $teamname){?>
-                    <?=$teamname?><br>
-                <?php } //end if?>
+                <div class="w3-row">
+                    <?php foreach (($teamnamen ?? array()) as $teamname){?>
+                        <div class="w3-third">
+                            <?=$teamname?><br>
+                        </div>
+                    <?php } //end if?>
+                </div>
             </p>
             <p>
-                <label class="w3-text-primary" for="betreff">Betreff</label>
+                <label class="w3-text-grey" for="betreff"><b><i class="material-icons">label_outline</i> Betreff</b></label>
                 <input class="w3-input w3-border w3-border-primary" type="text" id="betreff" name="betreff" value="<?=$_POST['betreff'] ?? ''?>" required>
             </p>
             <p>
-                <label class="w3-text-primary" for="text">Text</label>
+                <label class="w3-text-grey" for="text"><b><i class="material-icons">subject</i> Text</b></label>
                 <textarea class="w3-input w3-border w3-border-primary" rows="10" type="text" id="text" name="text" required><?=stripcslashes($_POST['text'] ?? '')?></textarea>
             </p>
             <p>
-                <input type="submit" class="w3-secondary w3-block w3-button" name="send_mail" value="Senden">
+                <input type="submit" class="w3-secondary w3-round w3-ripple w3-button" name="send_mail" value="Senden">
             </p>
         </form>
     </div>

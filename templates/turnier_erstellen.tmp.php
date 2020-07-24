@@ -9,12 +9,12 @@
         <p>
             <label class="w3-text-primary" for="datum">Datum</label>
             <input required type="date" value="<?=$_POST['datum'] ?? date("Y-m-d", (Config::time_offset()+4*7*24*60*60))?>" class="w3-input w3-border w3-border-primary" style="max-width: 320px" id="datum" name="datum">
-            <i class="w3-small w3-text-grey"> Ligaturniere müssen spätestens vier Wochen vorher eingetragen werden<br>nur Samstage, Sonntage und bundesweite Feiertage<br>Saison: <?=Config::SAISON_ANFANG;?> - <?=Config::SAISON_ENDE;?></i>
+            <i class="w3-text-grey"> Ligaturniere müssen spätestens vier Wochen vorher eingetragen werden<br>nur Samstage, Sonntage und bundesweite Feiertage<br>Saison: <?=Config::SAISON_ANFANG;?> - <?=Config::SAISON_ENDE;?></i>
         </p>
         <p>
             <label class="w3-text-primary" for="startzeit">Startzeit</label>
             <input required type="time" class="w3-input w3-border w3-border-primary" value="<?=$_POST['startzeit'] ?? '10:00'?>" style="max-width: 320px" id="startzeit" name="startzeit">
-            <i class="w3-small w3-text-grey">Ligaturniere müssen zwischen 9:00&nbsp;Uhr und 20:00&nbsp;Uhr stattfinden</i>
+            <i class="w3-text-grey">Ligaturniere müssen zwischen 9:00&nbsp;Uhr und 20:00&nbsp;Uhr stattfinden</i>
         </p>
         <p>
         <input class="w3-check" type="checkbox" id="besprechung" name="besprechung" <?php if(($_POST['besprechung'] ?? '') == "Ja"){?> checked <?php }//endif?> value="Ja">
@@ -56,7 +56,7 @@
             <?php foreach (Config::BLOCK as $block_fixed) {?>
             <option <?php if (($_POST['block_fixed'] ?? '') == $block_fixed){?> selected <?php } //endif?> value='<?=$block_fixed?>'><?=$block_fixed?></option>
             <?php } //end foreach?>
-            </select><i class="w3-small w3-text-primary">Fixierte Turnierblöcke verändern sich nicht mehr</i>
+            </select><i class="w3-small w3-text-grey">Fixierte Turnierblöcke verändern sich nicht mehr</i>
             </p>
         </div>
         <?php } //endif?>
@@ -94,8 +94,9 @@
             <input required type="text" class="w3-input w3-border w3-border-primary" value="<?=$_POST['ort'] ?? ''?>" id="ort" name="ort">
         </div>
         <div class="w3-section">
-            <label class="w3-text-primary" for="haltestellen">Haltestellen <span class="w3-text.grey">(für öffentliche Verkehrsmittel)</span></label>
+            <label class="w3-text-primary" for="haltestellen">Haltestellen</label>
             <input type="text" class="w3-input w3-border w3-border-primary" value="<?=$_POST['haltestellen'] ?? ''?>" id="haltestellen" name="haltestellen">
+            <i class="w3-text-grey">Für die Anfahrt mit öffentlichen Verkehrsmitteln</i>
         </div>  
     </div>
     
@@ -143,7 +144,7 @@
         <p>
             <label class="w3-text-primary" for="handy">Handy</label>
             <input required value="<?=$_POST['handy'] ?? ''?>" type="text" class="w3-input w3-border w3-border-primary" id="handy" name="handy">
-            <i class="w3-small w3-text-primary">Das Handy muss während des Turniertages erreichbar sein</i>
+            <i class="w3-text-grey">Das Handy muss während des Turniertages erreichbar sein</i>
         </p>
     </div>
 

@@ -155,7 +155,7 @@ function initMap() {
     });
     
     //Bild welches der Marker haben soll
-    var image = '../bilder/tennisball.gif';
+    var image = '../bilder/ligakarte/tennisball.gif';
 
     var smarker<?=$gesuch['gesuch_id']?> = new google.maps.Marker({
     position: {<?='lat: ' . $gesuch['LAT'] . ', lng: ' . $gesuch['Lon'] ?>},

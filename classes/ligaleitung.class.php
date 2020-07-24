@@ -2,7 +2,7 @@
 class Ligaleitung {
     public static function get_all_la()
     {
-        $sql="SELECT r_name, team_id, email FROM ausschuss_liga";
+        $sql="SELECT r_name, team_id, email FROM ausschuss_liga ORDER BY RAND()";
         $result = db::readdb($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)){
@@ -23,7 +23,7 @@ class Ligaleitung {
     }
     public static function get_all_ausbilder()
     {
-        $sql="SELECT vorname, nachname, team_id FROM spieler WHERE schiri='Ausbilder/in'";
+        $sql="SELECT vorname, nachname, team_id FROM spieler WHERE schiri = 'Ausbilder/in'";
         $result = db::readdb($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)){

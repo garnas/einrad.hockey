@@ -34,9 +34,9 @@ include '../../templates/header.tmp.php';
 
 <div class="w3-container">
     <ul class="w3-ul w3-leftbar w3-border-tertiary">
+        <li><?=Form::link(Config::LINK_REGELN_KURZ, 'Die wichtigsten Regeln')?></li>
         <li><a href="ligakarte.php" class="no w3-text-blue w3-hover-text-secondary">Deutschlandkarte aller Ligateams</a></li>
         <li><a href="teams.php" class="no w3-text-blue w3-hover-text-secondary">Kontaktliste aller Ligateams</a></li>
-        <li><?=Form::link(Config::LINK_REGELN_KURZ, 'Die wichtigsten Regeln')?></li>
     </ul>
 </div>
 

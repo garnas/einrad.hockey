@@ -66,7 +66,7 @@
         </div>
         <p>
             <input type="checkbox" class="w3-check" value="zugestimmt" name="dsgvo" id="dsgvo">
-            <label for="dsgvo" class="w3-text-black w3-hover-text-secondary">Alle ausgewählten Spieler haben die <a class="w3-text-primary w3-hover-text-secondary" href="../dokumente/einradhockeyliga_dsgvo.pdf">DSGVO-Hinweise</a> gelesen und der Verwendung ihrer Daten zugestimmt.</label>
+            <label for="dsgvo" style="cursor: pointer;" class="w3-text-black">Alle ausgewählten Spieler haben die <?=Form::link(Config::LINK_DSGVO, 'Datenschutz-Hinweise')?> gelesen und ihnen zugestimmt.</label>
         </p>
         <input type="submit" name="submit_takeover" value="Ausgewählte Spieler übernehmen" class="w3-button w3-tertiary">
     </form>

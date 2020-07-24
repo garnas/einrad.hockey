@@ -38,11 +38,11 @@ $(document).ready(function(){
   </span>
 </p>
 <br class="w3-hide-large w3-hide-medium">
-<p><a href="ligakarte.php" class="no w3-text-blue w3-hover-text-secondary"><i class="material-icons">keyboard_arrow_right</i>Ligakarte aller Teams</a></p>
+<p><a href="ligakarte.php" class="no w3-text-blue w3-hover-text-secondary"><i class="material-icons">place</i> Ligakarte aller Teams</a></p>
 
 <!-- Team suchen -->
-<div class="w3-section" style="max-width: 280px;">
-  <input id="myInput" style='' class='w3-input w3-border-grey' type="text" placeholder="Team suchen">
+<div class="w3-section w3-text-grey w3-border-bottom" style="width: 260px;">
+    <i class="material-icons">search</i><input id="myInput" class='w3-padding w3-border-0' type="text" placeholder="Team suchen">
 </div>
 
 <!-- Teams Tabelle -->

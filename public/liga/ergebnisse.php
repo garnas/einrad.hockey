@@ -44,16 +44,20 @@ $(document).ready(function(){
 <!--Überschrift-->
 <h1 class="w3-text-primary">Turnierergebnisse<br><span class="w3-text-grey">Saison <?=Form::get_saison_string($saison)?></span></h1>
 
-<!-- Team suchen -->
-<div class="w3-section" style="max-width: 280px;">
-    <input id="myInput" class='w3-input w3-border-grey' type="text" placeholder="Ergebnis suchen">
+<!-- Ergebnis suchen -->
+<div class="w3-section w3-text-grey w3-border-bottom" style="width: 260px;">
+    <i class="material-icons">search</i><input id="myInput" class='w3-padding w3-border-0' type="text" placeholder="Ergebnis suchen">
 </div>
 
 <!--Turnierergebnisse-->
 <div id="myDIV">
     <?php foreach($data_ergebnisse as $turnier_id => $ergebnisse){?>
         <section class="w3-card w3-panel" id="<?=$turnier_id?>">
-            <h3><?=date("d.m.Y", strtotime($data_turniere[$turnier_id]['datum']))?> <span class="w3-text-primary"> <?=$data_turniere[$turnier_id]['tname'] ?? ''?> <?=$data_turniere[$turnier_id]['ort']?></span> <i>(<?=$data_turniere[$turnier_id]['tblock']?>)</i></h3>  
+            <h3>
+                <?=date("d.m.Y", strtotime($data_turniere[$turnier_id]['datum']))?> <span class="w3-text-primary"><?=$data_turniere[$turnier_id]['ort']?></span> <i>(<?=$data_turniere[$turnier_id]['tblock']?>)</i>
+                <br>
+                <span class="<?php if($data_turniere[$turnier_id]['art'] == 'final'){?>w3-text-secondary<?php }else{ ?>w3-text-grey<?php } //endif?>"> <?=$data_turniere[$turnier_id]['tname'] ?? ''?></span> 
+            </h3>  
             <div class="w3-responsive w3-margin-left">
                 <table class="w3-table w3-striped w3-leftbar w3-border-tertiary" style="max-width: 600px">
                 <!--<thead class="">

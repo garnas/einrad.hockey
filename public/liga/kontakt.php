@@ -9,6 +9,14 @@ use PHPMailer\PHPMailer\Exception;
 require_once '../../frameworks/phpmailer/src/Exception.php';
 require_once '../../frameworks/phpmailer/src/PHPMailer.php';
 
+
+//Honeypot
+if (!empty($_POST['cc'] ?? '')){
+    Form::error("Email konnte wegen Spamverdacht nicht versendet werden. Schreib uns bitte an via " . Form::mailto(Config::LAMAIL));
+    header("Location: kontakt.php");
+    die();
+}
+
 //Formularauswertung
 $error = false;
 $send = false;
@@ -50,7 +58,7 @@ if(isset($_POST['absender'])) {
             db::debug($mailer);
             /*if ($mailer->send()) {
                 Form::affirm("Es wurde eine Kopie an $absender gesendet.");
-                header('Location: ../liga/ligaleitung.php');
+                header('Location: ../liga/neues.php');
                 die();
             } else {
                 Form::error("Es ist ein Fehler aufgetreten: Eine Kopie wurde nicht an dich versendet! Stimmt \"$absender\"?");
@@ -68,23 +76,25 @@ include '../../templates/header.tmp.php';
 ?>
 
 <div class="w3-card w3-panel">
-    <h1 class="w3-text-primary">Kontaktformular</h1>
-    <p><span class="w3-text-grey">Empfänger</span><br><?=Form::mailto(Config::LAMAIL)?></p>
+    <h1 class="w3-text-primary">Kontaktformular </h1>
+    <p><span class="w3-text-grey"><i class="material-icons">info_outline</i> Empfänger</span><br><?=Form::mailto(Config::LAMAIL)?></p>
     <form method="post">
+        <input type="text" style="opacity: 0; position: absolute;top: 0; left: 0;height: 0; width: 0;z-index: -1;" name='cc'>
         <p>
-            <label class="w3-text-grey" for="name">Dein Name</label>
+            <label class="w3-text-grey" for="name"><i class="material-icons">perm_identity</i> Name</label>
             <input class="w3-input w3-border w3-border-primary" type="text" id="name" name="name" value="<?=$_POST['name'] ?? ''?>" required>
         </p><p>
-            <label class="w3-text-grey" for="absender">Deine Email</label>
+            <label class="w3-text-grey" for="absender"><i class="material-icons">alternate_email</i> Email</label>
+
             <input class="w3-input w3-border w3-border-primary" type="email" id="absender" name="absender" value="<?=$_POST['absender'] ?? ''?>" required>
         </p><p>
-            <label class="w3-text-grey" for="betreff">Betreff</label>
+            <label class="w3-text-grey" for="betreff"><i class="material-icons">label_outline</i> Betreff</label>
             <input class="w3-input w3-border w3-border-primary" type="text" id="betreff" name="betreff" value="<?=$_POST['betreff'] ?? ''?>" required>
         </p><p>
-            <label class="w3-text-grey" for="text">Text</label>
+            <label class="w3-text-grey" for="text"><i class="material-icons">subject</i> Text</label>
             <textarea class="w3-input w3-border w3-border-primary" rows="10" id="text" name="text" required><?=stripcslashes($_POST['text'] ?? '')?></textarea>
         </p><p>
-            <input type="submit" class="w3-tertiary w3-button" value="Senden">
+            <input type="submit" class="w3-tertiary w3-ripple w3-round w3-button" value="Senden">
         </p>
     </form>
 </div>

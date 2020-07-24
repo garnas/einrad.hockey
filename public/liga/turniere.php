@@ -109,14 +109,16 @@ function modal(turnier_id){
 
 <h1 class="w3-text-primary">Ausstehende Turniere</h1>
 
-<!-- Suchfeld fürs Filtern der Turniere -->
-<input id="myInput" style='max-width: 280px;' class='w3-input w3-border w3-border-grey' type="text" placeholder="Suche..">
+<!-- Turnier suchen -->
+<div class="w3-section w3-text-grey w3-border-bottom" style="width: 260px;">
+    <i class="material-icons">search</i><input id="myInput" class='w3-padding w3-border-0' type="text" placeholder="Turnier suchen">
+</div>
 
 <div id="myDIV"><!-- zu durchsuchendes div -->
     <!--Turnierpanels -->
     <?php foreach ($daten as $turnier){?>
         <section onclick="modal('modal<?=$turnier['turnier_id']?>')"
-            class='w3-display-container w3-panel <?php if ($turnier['art']=='final'){?>w3-palered<?php }?> w3-card'
+            class='w3-display-container w3-panel <?php if ($turnier['art']=='final'){?>w3-pale-red<?php }?> w3-card'
             style='cursor: pointer'
             id='<?=$turnier['turnier_id']?>'>
             <!-- Angezeigtes Turnierpanel -->
@@ -139,7 +141,7 @@ function modal(turnier_id){
                             <p class="w3-text-grey w3-border-bottom w3-border-grey">Listen</p>                       
                             <div class='w3-row'>
                                 <div class='w3-third'>
-                                    <h4 class='w3-text-primary'><span>Spielen-Liste:</span></h4>
+                                    <h4 class='w3-text-primary'><span>Spielen-Liste</span></h4>
                                     <?php if(!empty($all_anmeldungen[$turnier['turnier_id']]['spiele'])){?>
                                     <!-- Ausklappbarer Content -->
                                         <p><i>
@@ -151,7 +153,7 @@ function modal(turnier_id){
                                 </div>
                                 <div class='w3-third'>
                                     <?php if(!empty($all_anmeldungen[$turnier['turnier_id']]['melde'])){?>
-                                        <h4 class='w3-text-primary'><span>Meldeliste:</span></h4>
+                                        <h4 class='w3-text-primary'><span>Meldeliste</span></h4>
                                         <p><i>
                                             <?php foreach (($all_anmeldungen[$turnier['turnier_id']]['melde']) as $team){?>
                                                 <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?? 'NL'?>)</span><br>
@@ -161,7 +163,7 @@ function modal(turnier_id){
                                 </div>
                                 <div class='w3-third'>
                                     <?php if(!empty($all_anmeldungen[$turnier['turnier_id']]['warte'])){?>
-                                        <h4 class='w3-text-primary'><span>Warteliste:</span></h4>
+                                        <h4 class='w3-text-primary'><span>Warteliste</span></h4>
                                         <p><i>
                                             <?php foreach (($all_anmeldungen[$turnier['turnier_id']]['warte']) as $team){?>
                                                 <?=$team['position_warteliste'] . ". " . $team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?? 'NL'?>)</span><br>
@@ -177,31 +179,31 @@ function modal(turnier_id){
                     <div class="w3-responsive">
                         <table class="w3-table">
                             <tr>
-                                <td class="" style="width: 100px">Plätze:</td>
+                                <td class="" style="width: 150px"><i class="material-icons">pending</i> Plätze</td>
                                 <td><?=$turnier['plaetze']?> (<?=$turnier['spielplan']?>)</td>
                             </tr>
                             <tr>
-                                <td class="">Startzeit:</td>
+                                <td class=""><i class="material-icons">schedule</i> Startzeit</td>
                                 <td><?=$turnier['startzeit']?>&nbsp;Uhr<?php if (!empty($turnier['besprechung'])){?> <i>(<?=$turnier['besprechung']?>)</i><?php } //endif?></td>
                             </tr>
                             <tr>
-                                <td class="" style="width: 100px">Wochentag:</td>
+                                <td class="" style=""><i class="material-icons">event</i> Wochentag</td>
                                 <td><?=$turnier['wochentag']?></td>
                             </tr>
                             <tr>
-                                <td style="vertical-align: middle" class="">Hinweis:</td>
+                                <td style="vertical-align: middle" class=""><i class="material-icons">announcement</i> Hinweis</td>
                                 <td><?=$turnier['hinweis']?></td>
                             </tr>
                             <?php if($turnier['phase'] == 'spielplan'){?>
-                            <tr>
-                                <td>Spielplan:</td>
-                                <td>
-                                <?php if(!empty($turnier['link_spielplan'])){?>
-                                    <a href="<?=$turnier['link_spielplan']?>" class="no w3-text-blue w3-hover-text-secondary">Download Spielplan</a>
-                                <?php }//end if?>
-                                </td>
-                            </tr>
-                                <?php }//end if?>
+                                <tr>
+                                    <td><i class="material-icons">format_align_center</i> Spielplan:</td>
+                                    <td>
+                                        <?php if(!empty($turnier['link_spielplan'])){?>
+                                            <a href="<?=$turnier['link_spielplan']?>" class="no w3-text-blue w3-hover-text-secondary">Download Spielplan</a>
+                                        <?php }//end if?>
+                                    </td>
+                                </tr>
+                            <?php }//end if?>
                         </table>
                     </div>          
                         

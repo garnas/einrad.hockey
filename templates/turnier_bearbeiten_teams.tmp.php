@@ -58,8 +58,9 @@
                 <input required type="text" class="w3-input w3-border w3-border-primary" value="<?=$daten['ort']?>" id="ort" name="ort">
             </div>
             <div class="w3-section">
-                <label class="w3-text-primary" for="haltestellen">Haltestellen <span class="w3-text-grey">(für öffentliche Verkehrsmittel)</span></label>
+                <label class="w3-text-primary" for="haltestellen">Haltestellen</label>
                 <input type="text" class="w3-input w3-border w3-border-primary" value="<?=$daten['haltestellen']?>" id="haltestellen" name="haltestellen">
+                <i class="w3-text-grey">Für die Anfahrt mit öffentlichen Verkehrsmitteln</i>
             </div>
     </div>
     <div class="w3-panel w3-card-4">
@@ -99,7 +100,7 @@
         <p>
             <label class="w3-text-primary" for="handy">Handy</label>
             <input required value="<?=$daten['handy']?>" type="text" class="w3-input w3-border w3-border-primary" id="handy" name="handy">
-            <i class="w3-text-primary">Das Handy muss am Turniertag erreichbar sein</i>
+            <i class="w3-text-grey">Das Handy muss am Turniertag erreichbar sein</i>
         </p>
     </div>
     <div class="w3-panel w3-card-4">

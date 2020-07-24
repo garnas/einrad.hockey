@@ -159,8 +159,9 @@ include '../../templates/header.tmp.php';
                 <?=Form::datalist_teams()?>
         </p>
         <p>
-            <label class="w3-text-primary" for="letzte_saison">Letzte aktive Saison (<span class="w3-text-grey">Saison Nr. <?=$daten['letzte_saison']?> entspricht Saison <?=Form::get_saison_string($daten['letzte_saison'])?>)</span></label>
+            <label class="w3-text-primary" for="letzte_saison">Letzte aktive Saison</label>
             <input class="w3-input w3-border w3-border-primary" type="number" id="letzte_saison" name="letzte_saison" value="<?=$daten['letzte_saison']?>" autocomplete="off" required>
+            <span class="w3-text-grey">(Saison Nr. <?=$daten['letzte_saison']?> entspricht Saison <?=Form::get_saison_string($daten['letzte_saison'])?>)</span>
         </p>
         <p>
             <input class="w3-button w3-tertiary w3-block" type="submit" name="spieler_aendern" value="Spieler ändern">

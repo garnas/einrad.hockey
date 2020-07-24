@@ -1,9 +1,9 @@
 Alle Uploads müssen in den Ordner s.
 
-Alle Uploads werden aus Sicherheitsgründen nach ihrem Zeitstempel Namen umbenannt.
+Alle Uploads werden aus Sicherheitsgründen nach ihrem Zeitstempel umbenannt.
 
 Die .htaccess soll die Ausführung von serverseitigen Skripten im Ordner uploads verhindern (Python, PHP und Perl werden verhindert).
 
 Die .htaccess darf nicht im selben Ordner wie die Uploads sein, damit sie nicht überschrieben werden kann.
 
-In lib_neues.php sind weitere Sicherheitsfunktionen (zB Test auf Dateityp) für die Uploads einsehbar.
+In neuigkeiten.class.php sind weitere Sicherheitsfunktionen (zB Test auf Dateityp) für die Uploads einsehbar.

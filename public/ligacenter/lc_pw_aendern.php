@@ -38,7 +38,7 @@ include '../../templates/header.tmp.php';
     <input required class="w3-input w3-border w3-border-primary" type="password" id="passwort_alt" name="passwort_alt">
     <p>
     <label class="w3-text-primary" for="passwort_neu">Neues Passwort:</label>
-    <input required class="w3-input w3-border w3-border-primary" type="password" id="passwort_neu" name="passwort_neu">
+    <input required class="w3-input w3-border w3-border-primary" type="password" id="passwort_neu" autocomplete="new-password" name="passwort_neu">
     <p>
     <input class="w3-button w3-tertiary" type="submit" name="change" value="Passwort ändern">
     </p>

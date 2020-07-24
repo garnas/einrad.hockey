@@ -38,7 +38,7 @@ class Tabelle {
     {
         $spieltag = $akt_turnier->daten['spieltag'];
         $saison = $akt_turnier->daten['saison'];
-        if (!in_array($akt_turnier->daten['art'],['I','II','III'])){
+        if (!in_array($akt_turnier->daten['art'],['I','II','III', 'final'])){
             Form::error("Für diesen Turniertyp können keine Ergebnisse eingetragen werden.");
             return false;
         }

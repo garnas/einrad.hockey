@@ -17,7 +17,7 @@ if (!isset($no_redirect) && $daten['passwort_geaendert'] == 'Nein'){
 }
 
 if (!isset($no_redirect) && $daten['ligavertreter'] == ''){
-  Form::affirm("Bitte trage einen Ligavertreter ein. Beachte bitte, dass jedes Team nur einen Ligavertreter haben kann.");
+  Form::affirm("Bitte tragt vor der Nutzung des Teamcenters erneut einen Ligavertreter ein, welcher unsere aktualisierten " . Form::link(Config::LINK_DSGVO,"Datenschutz-Hinweise") . " gelesen und akzeptiert hat. Beachtet bitte, dass jedes Team in der Saison " . Form::get_saison_string() . " nur noch einen Ligavertreter haben kann.");
   header('Location: tc_teamdaten_aendern.php');
   die();
 }

@@ -58,14 +58,18 @@ if (isset($_POST['anmelden'])){
         Form::error ("Anmeldungen zu Turnieren dieses Typs sind im Teamcenter nicht möglich.");
         $error = true;
     }
-    //Test Spielplanphase
-    if ($akt_turnier->daten['phase'] == 'spielplan' or $akt_turnier->daten['phase'] == 'ergebnis'){
-        Form::error ("Das Turnier war schon in der Spielplanphase. Anmeldungen nur noch über " . Form::mailto(Config::LAMAIL) . " möglich.");
-        $error = true;
-    }
     //Test schon angemeldet
     if ($team_angemeldet){
         Form::error ("Dein Team ist schon zum Turnier angemeldet");
+        $error = true;
+    }
+    //Richtige Phase
+    if ($akt_turnier->daten['phase'] == 'spielplan'){
+        Form::error ("Das Turnier befindet sich bereits in der Spielplanphase. Anmeldung nur noch über den Ligaausschuss: " . Form::mailto(Config::LAMAIL));
+        $error = true;
+    }
+    if ($akt_turnier->daten['phase'] == 'ergebnis'){
+        Form::error ("Das Turnier ist schon in der Ergebnisphase. Melde dich bei " .Form::mailto(Config::LAMAIL));
         $error = true;
     }
     //Test Teamblock

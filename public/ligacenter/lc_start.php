@@ -7,8 +7,9 @@ require_once '../../logic/session_la.logic.php'; //auth
 
 $centerpanels = array(
   array("name" => "Turniere verwalten", "link" => "lc_turnierliste.php", "farbe" => "w3-primary"),
-  array("name" => "Neuigkeit eintragen", "link" => "lc_neuigkeit_eintragen.php", "farbe" => "w3-primary"),
   array("name" => "Turnier erstellen", "link" => "lc_turnier_erstellen.php", "farbe" => "w3-primary"),
+  array("name" => "Neuigkeit eintragen", "link" => "lc_neuigkeit_eintragen.php", "farbe" => "w3-primary"),
+  array("name" => "Neuigkeit bearbeiten", "link" => "../liga/neues.php", "farbe" => "w3-primary"),
   array("name" => "Team erstellen", "link" => "lc_team_erstellen.php", "farbe" => "w3-tertiary"),
   array("name" => "Teamdaten verwalten", "link" => "lc_teamdaten.php", "farbe" => "w3-tertiary"),
   array("name" => "Teamstrafen", "link" => "lc_teamstrafe.php", "farbe" => "w3-tertiary"),
