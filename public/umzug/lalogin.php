@@ -25,7 +25,7 @@ $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
 foreach ($las as $la){
     $password = substr(str_shuffle($permitted_chars), 0, 7);
     
-    LigaLeitung::create_new_la($la[0],$la[1],$password,$la[2], $la[3]);
+    //LigaLeitung::create_new_la($la[0],$la[1],$password,$la[2], $la[3]);
     
     $wort = explode(" ", $la[1]);
     $la[1] = $wort[0];
