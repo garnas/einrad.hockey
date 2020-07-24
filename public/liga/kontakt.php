@@ -54,7 +54,7 @@ if(isset($_POST['absender'])) {
             $mailer->setFrom(Config::LAMAIL); // Absenderemail und -name setzen
             $mailer->addAddress($_POST['absender'],$_POST['name']); // Empfängeradresse
             $mailer->Subject = 'Kontaktformular: ' . $_POST['betreff']; // Betreff der Email
-            $mailer->Body = "Danke für deine Mail! Du hast uns folgendes gesendet:\r\n\r\n" . $_POST['text'];
+            $mailer->Body = "Danke für deine Mail! Du hast uns folgendes gesendet:\r\n\r\n" . $text;
             db::debug($mailer);
             /*if ($mailer->send()) {
                 Form::affirm("Es wurde eine Kopie an $absender gesendet.");
