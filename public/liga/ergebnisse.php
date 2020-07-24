@@ -12,7 +12,7 @@ if (isset($_GET['saison']) && is_numeric($_GET['saison'])){
 $data_ergebnisse = Tabelle::get_all_ergebnisse($saison);
 
 if (empty($data_ergebnisse)){
-    Form::affirm("Es wurden noch keine Turnierergebnisse der Saison $saison eingetragen");
+    Form::affirm("Es wurden noch keine Turnierergebnisse der Saison " . Form::get_saison_string($saison) . " eingetragen");
 }
 $data_turniere = Turnier::get_all_turniere("WHERE saison='$saison'");
 $color[0] = "w3-text-tertiary";
