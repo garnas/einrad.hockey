@@ -75,7 +75,7 @@
 <!-- Form zum Eintragen eines neuen Spielers -->
 <div class="w3-section">
     <p class="w3-text-grey">Neue Spieler können bis zum <?=Config::SAISON_ENDE?> 23:59:59&nbsp;Uhr hinzugefügt werden.</p>
-    <p class="w3-text-grey">Um einen neuen Spieler aus einem anderen Team zu übernehmen, bitte den Spieler neu eintragen. Die Übernahme geschieht dann automatisch, wenn dieser Spieler noch nicht in einem aktuellen Kader steht.</p>
+    <p class="w3-text-grey">Um einen neuen Spieler aus einem anderen Team zu übernehmen, bitte den Spieler neu eintragen. Die Übernahme geschieht dann automatisch, wenn die Daten identisch sind und dieser Spieler noch nicht in einem aktuellen Kader steht. Der Schiedsrichterstatus wird dann ebenfalls übernommen.</p>
     <button class="w3-button w3-tertiary" onclick="document.getElementById('spieler_eintragen').style.display='block'">Neuen Spieler eintragen</button>
     <div class="w3-modal" id="spieler_eintragen" style="display: none;">
         <form class="w3-card-4 w3-modal-content w3-panel" style="max-width: 400px;" method='POST'>
