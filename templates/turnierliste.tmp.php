@@ -17,7 +17,7 @@
             
                 <!--Aktionen für Teams-->
                 <?php if ($teamcenter) {?> 
-                    <td style='vertical-align: middle;'>
+                    <td style='vertical-align: middle; white-space: nowrap'>
                         <?php if (isset($turnier['link_anmelden'])){?>
                         <a class="no w3-text-blue w3-hover-text-secondary" href='<?=$turnier['link_anmelden']?>'><i class="material-icons">how_to_reg</i> An-/Abmeldung</a>
                         <br>
@@ -30,7 +30,7 @@
                 
                 <!--Aktionen für Ligaausschuss-->
                 <?php if ($ligacenter) {?> 
-                    <td style='vertical-align: middle;'>
+                    <td style='vertical-align: middle; white-space: nowrap'>
                         <a class="no w3-large w3-text-blue w3-hover-text-secondary" href='<?=$turnier['link_bearbeiten']?>'>Turnier&nbsp;bearbeiten</a>
                         <br>
                         <a class="no w3-large w3-text-blue w3-hover-text-secondary" href='<?=$turnier['link_log']?>'>Log&nbsp;einsehen</a>

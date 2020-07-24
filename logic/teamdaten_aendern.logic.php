@@ -1,22 +1,31 @@
 <?php
+if ($ligacenter){
+    $get_var = '?team_id=' . $daten['team_id'];
+}else{
+    $get_var = '';
+}
+
 if(isset($_POST['change'])) {
-    $array = array('plz','ort','verein','homepage');
+    $array = array('plz','ort','verein','homepage', 'ligavertreter');
 
     if (empty($_POST['ligavertreter'])) {
         Form::error('Es muss ein Ligavertreter angegeben werden');
-    }else{
-        array_push($array, 'ligavertreter'); //Ligavertreter wird zum Array für set_team_detail hinzugefügt
+        $error = true;
+    }
+    if (empty($_POST['dsgvo'])){
+        Form::error('Der Ligavertreter muss den Datenschutz-Hinweisen zustimmen.');
+        $error = true;
     }
     
     //teamdetails
-    foreach ($array as $entry) {
-        if ($daten[$entry] != $_POST[$entry]) {
-            $akt_team->set_team_detail($entry, $_POST[$entry]);
-            $change = true;
-            $aff = true;
+    if (!$error){
+        foreach ($array as $entry) {
+            if ($daten[$entry] != $_POST[$entry]) {
+                $akt_team->set_team_detail($entry, $_POST[$entry]);
+                $change = true;
+            }
         }
     }
-    if(($aff ?? false) == true){Form::affirm("Teamdaten wurden verändert");}
 
     //emails
     foreach($akt_team_kontakte->get_all_emails() as $email){
@@ -37,6 +46,11 @@ if(isset($_POST['change'])) {
             }   
         }
     }
+    if ($change ?? false){
+        Form::affirm("Teamdaten wurden geändert.");
+        header('Location: ' . db::escape($_SERVER['PHP_SELF']) . $get_var);
+        die();
+    }
 }
 
 //Verarbeitung des Formulars zum Eintragen einer Email
@@ -48,24 +62,10 @@ if(isset($_POST['neue_email'])) {
     if(filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($email)) {
         $akt_team_kontakte->create_new_team_kontakt ($email,$public,$infomail);
         Form::affirm("Email wurde hinzugefügt");
-        $change = true;
+        header('Location: ' . db::escape($_SERVER['PHP_SELF']) . $get_var);
+        die();
     }else{
         Form::error("E-Mail-Adresse wurde nicht akzeptiert");
-    }
-}
-
-//Weiterleitung, falls etwas geändert wurde
-if (isset($_POST['neue_email']) or isset($_POST['change'])){
-    if ($change ?? false){
-        if ($ligacenter){
-            header('Location: lc_teamdaten.php?team_id=' . $team_id);
-            die();
-        }elseif($teamcenter){
-            header('Location: tc_teamdaten.php');
-            die();
-        }
-    }else{
-        Form::error('Es wurden keine Daten verändert');
     }
 }
 
@@ -76,12 +76,10 @@ if (isset($_POST['teamfoto'])){
         $target_file_jpg = Neuigkeit::upload_image($_FILES["jpgupload"]);
         if($target_file_jpg === false){
             Form::error("Fehler beim Fotoupload");
-            header('Location: ' . db::escape($_SERVER['PHP_SELF']));
-            die();
         }else{
             $akt_team->teamfoto($target_file_jpg);
             Form::affirm("Teamfoto wurde hochgeladen");
-            header('Location: ' . db::escape($_SERVER['PHP_SELF']));
+            header('Location: ' . db::escape($_SERVER['PHP_SELF']) . $get_var);
             die();
         }
     }
@@ -91,6 +89,6 @@ if (isset($_POST['teamfoto'])){
 if (isset($_POST['delete_teamfoto'])){
     $akt_team->delete_teamfoto($daten['teamfoto']);
     Form::affirm("Teamfoto wurde gelöscht");
-    header('Location: ' . db::escape($_SERVER['PHP_SELF']));
+    header('Location: ' . db::escape($_SERVER['PHP_SELF']) . $get_var);
     die();
 }

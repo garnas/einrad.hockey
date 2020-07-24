@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/team_session.logic.php'; //Auth
+require_once '../../logic/session_team.logic.php'; //Auth
 
 $akt_team = new Team ($_SESSION['team_id']);
 $akt_team_kontakte = new Kontakt ($_SESSION['team_id']);
@@ -22,7 +22,7 @@ include '../../templates/teamdaten.tmp.php';
 
 <!--Navigation-->
 <p>
-  <a class="no w3-text-primary w3-hover-text-secondary" href='tc_teamdaten_aendern.php'><i class="material-icons">create</i> Teamdaten ändern</a>
+  <?=Form::link('tc_teamdaten_aendern.php', '<i class="material-icons">create</i> Teamdaten ändern')?>
 </p>
 
 <?php include '../../templates/footer.tmp.php';

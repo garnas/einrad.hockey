@@ -14,7 +14,7 @@ setlocale (LC_ALL, 'de_DE@euro', 'de_DE', 'de', 'ge');
 spl_autoload_register(function ($class) {
     if ($class != 'PHPMailer'){ //Der PHPMailer muss als externes Framework manuell über phpmailer.logic.php geladen werden
         $class = strtolower($class);
-        include __dir__ . '../../classes/' . $class . '.class.php';
+        include __DIR__ . '/../classes/' . $class . '.class.php';
     }        
 });
 

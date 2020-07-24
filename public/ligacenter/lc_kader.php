@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/la_session.logic.php'; //Auth
+require_once '../../logic/session_la.logic.php'; //Auth
 require_once '../../logic/la_team_waehlen.logic.php'; //Auswahlfeld für ein Team
 
 if (isset($_GET['team_id'])){

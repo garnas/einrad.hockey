@@ -118,7 +118,7 @@ function initMap() {
         '<h5 class="w3-text-primary"><?=$team['teamname']?></h5>'+
         '<div class="w3-bottombar"></div>'+
             '<p><?=$team['plz'] . " " .  $team['ort']?></p>'+
-            '<a href="teams.php" class="no w3-text-blue w3-hover-text-tertiary">Zur Kontaktliste</a>'+
+            '<?=str_replace("'",'"',Form::link("teams.php#".$team['team_id'], 'Zur Kontaktliste'))?>'+
         '</div>';
 
     var infowindow<?=$team['team_id']?> = new google.maps.InfoWindow({
@@ -155,7 +155,7 @@ function initMap() {
     });
     
     //Bild welches der Marker haben soll
-    var image = '../bilder/tennisball.gif';
+    var image = '../bilder/ligakarte/tennisball.gif';
 
     var smarker<?=$gesuch['gesuch_id']?> = new google.maps.Marker({
     position: {<?='lat: ' . $gesuch['LAT'] . ', lng: ' . $gesuch['Lon'] ?>},
@@ -170,6 +170,56 @@ function initMap() {
     });
 
   <?php } //endforeach?>
+
+  //Ausländische Teams
+
+  //Uners Litoměřice
+  var contentString435 = 
+    '<div id="content">'+
+        '<div id="siteNotice">'+
+        '</div>'+
+        '<h5 class="w3-text-primary"><?=Team::teamid_to_teamname(435)?></h5>'+
+        '<div class="w3-bottombar"></div>'+
+            '<p>412 01 Litoměřice, Tschechien</p>'+
+            '<a href="teams.php#435" class="no w3-text-blue w3-hover-text-secondary">Zur Kontaktliste</a>'+
+        '</div>';
+
+    var infowindow435 = new google.maps.InfoWindow({
+    content: contentString435    });
+
+    var marker435 = new google.maps.Marker({
+    position: {lat: 50.5420635, lng: 14.0679789},
+    map: map,
+    title: 'Litoměřice'
+    });
+
+    marker435.addListener('click', function() {
+    infowindow435.open(map, marker435);
+    });
+
+    //Prague Unicycle Hockey Team
+    var contentString262 = 
+    '<div id="content">'+
+        '<div id="siteNotice">'+
+        '</div>'+
+        '<h5 class="w3-text-primary"><?=Team::teamid_to_teamname(262)?></h5>'+
+        '<div class="w3-bottombar"></div>'+
+            '<p>Prag, Tschechien</p>'+
+            '<a href="teams.php#435" class="no w3-text-blue w3-hover-text-secondary">Zur Kontaktliste</a>'+
+        '</div>';
+
+    var infowindow262 = new google.maps.InfoWindow({
+    content: contentString262    });
+
+    var marker262 = new google.maps.Marker({
+    position: {lat: 50.0595854, lng: 14.3255387},
+    map: map,
+    title: 'Prag'
+    });
+
+    marker262.addListener('click', function() {
+    infowindow262.open(map, marker262);
+    });
 
 } //Javascript
 </script>

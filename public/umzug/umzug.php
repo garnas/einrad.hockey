@@ -1,7 +1,7 @@
 <?php
 
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/la_session.logic.php'; //Auth
+require_once '../../logic/session_la.logic.php'; //Auth
 
 ////////////////////////////////Verbindung mit alter Datenbank////////////////////////////////
 unset($verbindung_zur_datenbank);
@@ -349,6 +349,9 @@ foreach ($return_liste as $turnier_id => $liste){
 //Ergebnisse der abgebrochenen Saison der Vorsaison zuordnen
 //db::writedb("UPDATE turniere_liga SET saison='2019' WHERE saison='2020' AND phase='ergebnis'");
 
+//Freilose auf 1 setzen
+//db::writedb("UPDATE `teams_liga` SET `freilose`='1' AND ligateam='Ja'");
+
 //Saisonzählung umstellen!
 /*
 db::writedb("UPDATE `spieler` SET `letzte_saison`='25'");
@@ -362,7 +365,6 @@ db::writedb("UPDATE `spieler` SET `schiri`='28' WHERE schiri = '2022'");
 db::writedb("UPDATE `turniere_ergebnisse` SET `ergebnis`='0' WHERE turnier_id = '827'");
 */
 
-
 //...Querrad:
 /*
 $team_id = db::get_auto_increment('teams_liga');
@@ -372,8 +374,10 @@ db::writedb("UPDATE turniere_ergebnisse
         INNER JOIN turniere_liga 
         ON turniere_liga.turnier_id = turniere_ergebnisse.turnier_id 
         SET turniere_ergebnisse.team_id = '$team_id' WHERE turniere_ergebnisse.team_id = '20' AND turniere_liga.saison = '24'");
+
 //Überflüssige Teams löschen
 db::writedb("DELETE FROM teams_liga WHERE teams_liga.aktiv = 'Nein' AND teams_liga.team_id NOT IN (SELECT turniere_ergebnisse.team_id FROM turniere_ergebnisse)");
+
 //Ligabot Spieltage setzen und Datenbank sichern:
 LigaBot::liga_bot();
 */
@@ -383,6 +387,4 @@ LigaBot::liga_bot();
 /////////////////////////////////////////////////////////////////////////////
 
 include '../../templates/header.tmp.php';
-?>
-
-<?php include '../../templates/footer.tmp.php';
+include '../../templates/footer.tmp.php';

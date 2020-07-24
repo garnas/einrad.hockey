@@ -1,0 +1,101 @@
+<?php
+/////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////LOGIK////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../logic/session_la.logic.php'; //Auth
+
+$teams = Team::get_all_teamdata();
+$max_schiris = $max_spieler = $teams_mit_zwei_schiris = 0;
+foreach ($teams as $team_id => $team){
+    $genug_schiris = false;
+    $kader = Spieler::get_teamkader($team_id);
+    $kader_alt = Spieler::get_teamkader_vorsaison($team_id);
+    $teams[$team_id]['kader'] = count($kader);
+    $teams[$team_id]['kader_alt'] = count($kader_alt);
+
+    $teams[$team_id]['schiris'] = $teams[$team_id]['schiris_alt'] = 0;
+    //Schiris zählen:
+    foreach ($kader as $spieler){
+        if ($spieler['schiri'] >= Config::SAISON or $spieler['schiri'] == 'Ausbilder/in'){
+            $teams[$team_id]['schiris'] += 1;
+            if ($teams[$team_id]['schiris'] >= 2){ $genug_schiris = true;}
+        }
+    }
+    foreach ($kader_alt as $spieler){
+        if ($spieler['schiri'] >= Config::SAISON or $spieler['schiri'] == 'Ausbilder/in'){
+            $teams[$team_id]['schiris_alt'] += 1;
+        }
+    }
+    $max_schiris += $teams[$team_id]['schiris'];
+    $max_spieler += $teams[$team_id]['kader'];
+    if ($genug_schiris){$teams_mit_zwei_schiris += 1;}
+}
+
+if (isset($_POST['zweites_freilos'])){
+    foreach ($teams as $team_id => $team){
+        if ($team['schiris'] >= 2){
+            //Team::add_freilos($team_id);
+            $betreff = 'Zweites Freilos';
+            $text = 
+                "Hallo " . $team['teamname']
+                ."\r\n\r\nda ihr zwei ausgebildete Schiedsrichter im Kader eingetragen habt, wurde euch euer zweites Freilos gutgeschrieben."
+                ."\r\n\r\nWir wünschen euch eine schöne Saison " . Form::get_saison_string() . "!"
+                ."\r\n\r\nEuer MailBot";
+            $akt_kontakt = new Kontakt ($team_id);
+            $adressaten = $akt_kontakt->get_emails();
+            //MailBot::add_mail($betreff, $text, $adressaten);
+        }
+    }
+    Form::affirm("Freilose vergeben");
+    header('Location: lc_teams.php');
+    die();
+}
+/////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////LAYOUT///////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+include '../../templates/header.tmp.php';
+?>
+<h1 class="w3-text-primary">Übersicht Ligateams</h1>
+<span class="w3-text-grey">Saison <?=Form::get_saison_string()?></span>
+
+<!-- Infobox -->
+<b>
+    <p>&sum; Spieler: <span class="w3-text-green"><?=$max_spieler?></span></p>
+    <p>&sum; Schiris: <span class="w3-text-green"><?=$max_schiris?></span></p>
+    <p>&sum; Teams: <span class="w3-text-green"><?=count($teams)?></span></p>
+    <p>&sum; Teams mit zwei oder mehr Schiris: <span class="w3-text-green"><?=$teams_mit_zwei_schiris?></span></p>
+</b>
+
+<!-- Button 2. Freilos -->
+<form class="w3-section">
+    <input type="submit" name="zweites_freilos" class="w3-button w3-secondary" disabled value="Zweites Freilos vergeben">
+    <span class="w3-text-grey">Es werden Mails an die betroffenen Teams versendet</span>
+</form>
+
+<!-- Tabelle -->
+<div class="w3-responsive w3-card">
+    <table style="white-space: nowrap" class="w3-table w3-striped w3-centered">
+        <tr class=w3-primary>
+            <th>Team ID</th>
+            <th>Teamname</th>
+            <th>Freilose</th>
+            <th>Kader</th>
+            <th>Schiris</th>
+            <th>Kader (alt)</th>
+            <th>Schiris (alt)</th>
+        </tr>
+        <?php foreach ($teams as $team_id => $team){?>
+            <tr class="w3-center <?php if($team['schiris'] >= 2){?>w3-pale-green<?php }//endif ?>">
+                <td><?=$team['team_id']?></td>
+                <td><?=Form::link('lc_kader.php?team_id='. $team_id, $team['teamname'])?></td>
+                <td><?=$team['freilose']?></td>
+                <td><?=$team['kader']?></td>
+                <td><?=$team['schiris']?></td>
+                <td class="w3-text-grey"><?=$team['kader_alt']?></td>
+                <td class="w3-text-grey"><?=$team['schiris_alt']?></td>
+            </tr>
+        <?php }//end foreach?>
+    </table>
+</div>
+<?php include '../../templates/footer.tmp.php';

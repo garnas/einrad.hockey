@@ -1,5 +1,5 @@
 <?php
-//Autor festlegen - $ligacenter und $teamcenter werden als boolean in la_session.logic.php bzw team_session.logic.php festgelegt
+//Autor festlegen - $ligacenter und $teamcenter werden als boolean in session_la.logic.php bzw session_team.logic.php festgelegt
 //Dadurch weiß man, ob vom Teamcenter oder vom Ligacenter auf dieses Skript zugegriffen wird
 //Dies ermöglicht den gleichzeitgen Login von Ligaausschuss und Ligateams in einem Browser
 if ($ligacenter){

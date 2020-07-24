@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/team_session.logic.php'; //Auth
+require_once '../../logic/session_team.logic.php'; //Auth
 
 //$turnierID= $_SESSION['turnier_ID'];//TODO
 $turnierID=910;

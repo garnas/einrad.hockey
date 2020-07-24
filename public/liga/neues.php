@@ -67,15 +67,17 @@ include '../../templates/header.tmp.php';
 
 <!-- Links (u. a zum Ein- und Ausblenden der Infobar bei Mobils) -->
 <a class="w3-tiny w3-hide-large w3-hide-medium w3-button w3-text-blue" href="ueber_uns.php">Erfahre mehr über uns</a>
-<a id="einblenden" class="w3-right w3-tiny w3-hide-large w3-hide-medium w3-button w3-text-blue" onclick="einblenden()">Infobar anzeigen</a>
-<a id="ausblenden" class="w3-right w3-tiny w3-hide w3-hide-large w3-hide-medium w3-button w3-text-blue" onclick="ausblenden()">Infobar ausblenden</a>
+<button id="einblenden" class="w3-right w3-tiny w3-hide-large w3-hide-medium w3-button w3-text-blue" onclick="einblenden()">Infobar anzeigen</button>
+<button id="ausblenden" class="w3-right w3-tiny w3-hide w3-hide-large w3-hide-medium w3-button w3-text-blue" onclick="ausblenden()">Infobar ausblenden</button>
 
 <!-- Responsive Container -->
 <div class="w3-row-padding w3-stretch">
     <!-- Infobar -->
     <div class="w3-col l4 m5 w3-hide-small" id="infobar">
         <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
-            <h1 class="w3-text-primary">Interesse?</h1>
+            <a href='ueber_uns.php' class="no">
+                <h1 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">help_outline</i> Interesse</h1>
+            </a>
             <p class="w3-text-grey w3-small w3-border-top w3-border-grey"></p>
             <p>Die Einradhockeyliga steht jedem Einradhockeybegeisterten offen!</p>
             <p>
@@ -84,7 +86,9 @@ include '../../templates/header.tmp.php';
 
         <!-- Anstehende Turniere -->
         <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
-            <h1 class="w3-text-primary">Turniere</h1>
+            <a href='turniere.php' class="no">
+                <h1 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">event</i> Turniere</h1>
+            </a>
             <p class="w3-text-grey w3-border-top w3-border-grey"></p>
             <?php $i=0; foreach ($next_turniere as $turnier){  $i++;?>
                 <p>
@@ -100,7 +104,9 @@ include '../../templates/header.tmp.php';
         
         <!-- Ergebnisse -->
         <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
-            <h1 class="w3-text-primary">Ergebnisse</h1>
+            <a href='ergebnisse.php' class="no">
+                <h1 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">sports_hockey</i> Ergebnisse</h1>
+            </a>
             <p class="w3-text-grey w3-border-top w3-border-grey"></p>
             <?php if (empty($last_turniere)){?><p class="w3-text-grey">Es liegen keine Ergebnisse vor</p><?php } //end if?>
             <?php $i=0; foreach ($last_turniere as $turnier){ $i++;?>
@@ -117,7 +123,7 @@ include '../../templates/header.tmp.php';
         
         <!-- Statistik -->
         <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
-        <h1 class="w3-text-primary">Statistik</h1>
+        <h1 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">insert_chart_outlined</i> Statistik</h1>
         <p class="w3-text-grey w3-border-top w3-border-grey"></p>
             <p><a class="w3-text-blue no w3-hover-text-secondary" href="ergebnisse.php"><?=$anz_last_turniere ?: '0'?> Turniere</a> gespielt</p>
             <p><a class="w3-text-blue no w3-hover-text-secondary" href="turniere.php"><?=$anz_next_turniere ?: '0'?> Turniere</a> ausstehend</p>
@@ -125,7 +131,7 @@ include '../../templates/header.tmp.php';
             <p>Die meisten Tore: <br> Nicht implementiert</p>
             -->
             <?php if (!empty($statistik['max_turniere'])) {?>
-                <span>Die meisten gespielte Turniere:
+                <span>Die meisten gespielten Turniere:
                 <table class="w3-table">
                     <?php foreach ($statistik['max_turniere'] as $team){?>
                         <tr class="<?=$team['color']?>">
@@ -153,10 +159,13 @@ include '../../templates/header.tmp.php';
     <div class="w3-col l8 m7">
         <?php foreach($neuigkeiten as $neuigkeit){ //Schleife für jede Neuigkeit?>
             <div class='w3-card w3-panel w3-responsive'>
+                
                 <!-- Überschrift -->
                 <h1 class="w3-text-primary"><?=$neuigkeit['titel']?></h1>
+                
                 <!-- Autor -->
-                <p class="w3-text-grey w3-border-top w3-border-grey"><?=($neuigkeit['eingetragen_von'])?></p>
+                <p class="w3-text-grey w3-border-top w3-border-grey"><i style="font-size: 22px; vertical-align: -26%" class='material-icons'>create</i> <?=($neuigkeit['eingetragen_von'])?></p>
+                
                 <!-- Bild -->
                 <?php if ($neuigkeit['link_jpg'] != ''){?>
                     <div class='w3-center w3-card'> 
@@ -165,7 +174,7 @@ include '../../templates/header.tmp.php';
                         </a>
                     </div>
                 <?php } //end if?>
-                    
+
                 <!-- Text -->
                 <div class="">
                     <p style="" class=""><?=nl2br($neuigkeit['inhalt']) //nl2br --> new line to <br>?></p> 
@@ -174,12 +183,12 @@ include '../../templates/header.tmp.php';
                 <!-- PDF -->
                 <?php if ($neuigkeit['link_pdf'] != ''){?>
                     <a class='no w3-hover-text-secondary w3-text-primary' href='<?=$neuigkeit['link_pdf'];?>'>
-                        <p class=""><i class='w3-xxlarge material-icons'>insert_drive_file</i>Mehr Infos</p>
+                        <p class=""><i class='w3-xxlarge material-icons'>insert_drive_file</i> Dokument</p>
                     </a>
                 <?php } //end if?>
 
                 <!--Zeitstempel -->
-                <p class='w3-text-grey w3-border-bottom w3-border-grey' style="text-align: right;"><?=$neuigkeit['zeit']?></p>
+                <p class='w3-text-grey w3-border-bottom w3-border-grey' style="text-align: right;"><i style="font-size: 22px; vertical-align: -26%" class='material-icons'>schedule</i> <?=$neuigkeit['zeit']?></p>
 
                 <!-- Link zum Bearbeiten falls man im Ligacenter oder Teamcenter eingeloggt ist -->
                 <?php if (isset($_SESSION['la_id'])) {?>
@@ -197,4 +206,3 @@ include '../../templates/header.tmp.php';
 </div>
 
 <?php include '../../templates/footer.tmp.php';
-

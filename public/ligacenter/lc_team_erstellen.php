@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/la_session.logic.php'; //Auth
+require_once '../../logic/session_la.logic.php'; //Auth
 
 //Formularauswertung
 if(isset($_POST['team_erstellen'])) {
@@ -34,7 +34,7 @@ if(isset($_POST['team_erstellen'])) {
     if(!$error) {
         $team_id = db::get_auto_increment("teams_liga");
         Team::create_new_team($teamname,$passwort,$email);
-        Form::affirm("Das Team \"$teamname\" wurde erfolgreich erstellt.<br> Email: $email<br> Passwort: $passwort");
+        Form::affirm("Das Team \"" . db::escape($teamname) . "\" wurde erfolgreich erstellt.<br> Email:" . db::escape($email) . "<br> Passwort: $passwort");
         header ("Location: lc_teamdaten.php?team_id=" . $team_id);
         die();
     }

@@ -3,7 +3,8 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/team_session.logic.php'; //Auth
+$no_redirect = true;
+require_once '../../logic/session_team.logic.php'; //Auth
 
 $akt_team = new Team ($_SESSION['team_id']);
 $akt_team_kontakte = new Kontakt ($_SESSION['team_id']);

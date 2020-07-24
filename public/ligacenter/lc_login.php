@@ -56,9 +56,9 @@ include '../../templates/header.tmp.php';
 <form method="post" class="w3-card-4 w3-panel">
     <h1 class="w3-text-primary">Ligacenter</h1>
     <p class="w3-text-grey">Im Ligacenter kann der Ligaausschuss die Liga verwalten. Nur Mitglieder des Ligaausschusses haben einen Login.</p>
-    <a onclick='document.getElementById("login").value = "";document.getElementById("passwort").value = "";' class="no w3-right w3-text-red w3-hover-text-secondary" style="cursor: pointer;">
+    <div onclick='document.getElementById("login").value = "";document.getElementById("passwort").value = "";' class="no w3-right w3-text-red w3-hover-text-secondary" style="cursor: pointer;">
         <i class="material-icons">clear</i>
-    </a>
+    </div>
         <label for="login"><i class="material-icons">account_circle</i> Login:</label>
         <input class="w3-input w3-border-primary" value="<?=$_POST['loginname'] ?? ''?>" type="text" id="login" name="loginname" required>
     <p>

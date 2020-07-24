@@ -3,8 +3,9 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/la_session.logic.php'; //Auth
+require_once '../../logic/session_la.logic.php'; //Auth
 
+//Turnierklasse erstellen
 $turnier_id = $_GET['turnier_id'];
 $akt_turnier = new Turnier($turnier_id);
 
@@ -15,12 +16,15 @@ if (empty($akt_turnier->daten)){
     die();
 }
 
+//Vorhandenes Ergebnis anzeigen
 $teamliste = $akt_turnier->get_liste_spielplan();
 if ($akt_turnier->daten['phase'] == "ergebnis"){
     $turnier_ergebnis = $akt_turnier->get_ergebnis();
 }
 
 //Formularauswertung
+
+//Ergebnis löschen
 if (isset($_POST['ergebnis_loeschen'])){
     $akt_turnier->delete_ergebnis();
     $akt_turnier->set_phase('spielplan');
@@ -45,8 +49,14 @@ if (isset($_POST['ergebnis_eintragen'])){
         }
     }
     $akt_turnier->delete_ergebnis();
-    foreach ($teamliste as $index => $team){
-        $akt_turnier->set_ergebnis($_POST['team' . $index], $_POST['ergebnis' . $index],$_POST['platz' . $index]);
+    if ($akt_turnier->daten['art'] == 'final'){
+        foreach ($teamliste as $index => $team){
+            $akt_turnier->set_ergebnis($_POST['team' . $index], '0',$_POST['platz' . $index]);
+        } 
+    }else{
+        foreach ($teamliste as $index => $team){
+            $akt_turnier->set_ergebnis($_POST['team' . $index], $_POST['ergebnis' . $index],$_POST['platz' . $index]);
+        }
     }
     $akt_turnier->set_phase('ergebnis');
     $akt_turnier->schreibe_log("Ergebnisse manuell eingetragen. Phase -> Ergebnis","Ligaausschuss");
@@ -82,6 +92,8 @@ if (isset($_POST['spielplan_hochladen'])){
         Form::error("Es wurde kein Spielplan gefunden");
     }
 }
+
+//Spielplan löschen
 if (isset($_POST['spielplan_delete'])){
     unlink($akt_turnier->daten['link_spielplan']);
     $akt_turnier->set_link_spielplan('');
@@ -90,6 +102,10 @@ if (isset($_POST['spielplan_delete'])){
     Form::attention("Achtung die Phase muss manuell angepasst werden!");
 }
 
+//Hinweis Finalturniere-Ergebnis
+if ($akt_turnier->daten['art'] == 'final'){
+    Form::attention("Beim Eintragen von Finalturnieren kann eine beliebige Punktzahl eingeben werden.");
+}
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////

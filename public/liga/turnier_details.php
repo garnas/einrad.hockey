@@ -94,7 +94,7 @@ include '../../templates/header.tmp.php';
 
 <!-- Überschrift -->
 <h1 class="w3-text-primary">
-    <span class="w3-text-grey">Turnierinfos:</span>
+    <span class="w3-text-grey"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">info</i> Turnierinfos:</span>
     <br><?=$daten['tname']?> <?=$daten['ort']?> (<?=$daten['tblock']?>), <?=$daten['datum']?>
 </h1>
 
@@ -102,44 +102,41 @@ include '../../templates/header.tmp.php';
 <p class="w3-text-grey w3-border-bottom w3-border-grey">Allgemeine Infos</p>  
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-striped">
-        <tr>
-            <td class="w3-primary" style="vertical-align: middle; width: 30px;">Adresse</td>
-            <td style="white-space: nowrap;">
+        <tr style="white-space: nowrap;">
+            <td class="w3-primary" style="vertical-align: middle; max-width: 100px;"><i class="material-icons">map</i> Adresse</td>
+            <td>
                 <?=$daten['hallenname']?><br>
                 <?=$daten['strasse']?><br>
                 <?=$daten['plz'].' '.$daten['ort']?><br>
-                <?=Form::link(str_replace(' ', '%20', 'https://www.google.de/maps/search/' . $daten['hallenname'] ."+". $daten['strasse'] ."+" . $daten['plz'] ."+". $daten['ort'] .'/'), 'Google Maps');?>
+                <?=Form::link(str_replace(' ', '%20', 'https://www.google.de/maps/search/' . $daten['hallenname'] ."+". $daten['strasse'] ."+" . $daten['plz'] ."+". $daten['ort'] .'/'), 'Google Maps', true);?>
                 <?php if (!empty($daten['haltestellen'])){?><p><i>Haltestellen: <?=$daten['haltestellen']?></i></p> <?php } // endif?>
             </td>
         </tr>
         <tr>
-            <td class="w3-primary" style="vertical-align: middle">Beginn</td>
+            <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;"><i class="material-icons">schedule</i> Beginn</td>
             <td>
                 <?=$daten['startzeit']?>&nbsp;Uhr
-                <?php if($daten['besprechung'] == 'Ja'){?><p><i>Alle Teams sollen sich 15min vor Turnierbeginn zu einer gemeinsamen Turnierbesprechung einfinden.</i></p><?php } //end if?>
+                <?php if($daten['besprechung'] == 'Ja'){?><p><i>Alle Teams sollen sich 15&nbsp;min vor Turnierbeginn zu einer gemeinsamen Turnierbesprechung einfinden.</i></p><?php } //end if?>
             </td>
         </tr>
         <tr>
-            <td class="w3-primary" style="vertical-align: middle">Startgebühr</td>
+            <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;"><i class="material-icons">mail</i> Kontakt</td>
+            <td>
+                <p>
+                    <i>Ausrichter:</i>
+                    <br>
+                    <?=Form::mailto($daten['email'], $daten['teamname'])?>
+                </p> 
+                <p><i>Verantwortlicher:</i><br><?=$daten['organisator']?></p>
+                <p><i>Handy:</i><br><?=Form::link('tel:' . str_replace(' ', '', $daten['handy']), "<i class='material-icons'>smartphone</i>" . $daten['handy'])?></a></p>
+            </td>
+        </tr>
+        <tr>
+            <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;"><i class="material-icons">payments</i> Startgebühr</td>
             <td><?=$daten['startgebuehr']?></td>
         </tr>
         <tr>
-            <td class="w3-primary" style="vertical-align: middle">Kontakt</td>
-            <td>
-            <p>
-                <i>Ausrichter:</i>
-                <br>
-                <a href='mailto:<?=$daten['email']?>' class="w3-text-primary w3-hover-text-secondary no">
-                    <i class="material-icons">mail</i>
-                </a>
-                <?=$daten['teamname']?>
-            </p> 
-            <p><i>Organisator:</i><br><?=$daten['organisator']?></p>
-            <p><i>Handy:</i><br><a class="no w3-hover-text-secondary w3-text-blue" href="tel:<?=str_replace(' ', '', $daten['handy'])?>"><?=$daten['handy']?></a></p>
-            </td>
-        </tr>
-        <tr>
-            <td class="w3-primary" style="vertical-align: middle">Spielplan</td>
+            <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;"><i class="material-icons">format_align_center</i> Spielplan</td>
             <td>
                 <?=$daten['plaetze'] . ' ' . $daten['spielplan']?>
                 <?php if(!empty($daten['link_spielplan'])){?>
@@ -152,14 +149,14 @@ include '../../templates/header.tmp.php';
             </td>
         </tr>
         <tr>
-            <td class="w3-primary" style="vertical-align: middle">Hinweis</td>
+            <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;"><i class="material-icons">announcement</i> Hinweis</td>
             <td><?=$daten['hinweis']?></td>
         </tr>
     </table>
 </div>
 
 <!--Anmeldungen / Listen -->
-<?php if ($daten['art'] != 'spass'){?>
+<?php if ($daten['art'] != '<i>Spaßturnier</i>'){?>
     <p class="w3-text-grey w3-border-bottom w3-border-grey">Spielen-Liste</p> 
     <p><i>
         <?php if (!empty($liste['spiele'])){?>
@@ -187,7 +184,7 @@ include '../../templates/header.tmp.php';
         <?php }else{?><i>leer</i><?php } //endif?> 
     </i></p>
     <p>Freie Plätze: <?=$daten['plaetze'] - count(($liste['spiele'] ?? array()))?> von <?=$daten['plaetze']?></p>
-<?php } //end if spass ?>
+<?php }else{?><p class="w3-text-grey">Anmeldung erfolgt beim Ausrichter<?php } //end if spass ?>
 
 <!-- Anzeigen der Ligaspezifischen Infos -->
 <p class="w3-text-grey w3-margin-top w3-border-bottom w3-border-grey">Ligaspezifische Infos</p> 

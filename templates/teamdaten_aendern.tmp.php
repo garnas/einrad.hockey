@@ -17,7 +17,7 @@
                 <input type="submit" name="delete_teamfoto" class="w3-button w3-tertiary" value="Neues Teamfoto / Teamfoto löschen">
             </p>
         <?php }  //end if?>
-        <p class="w3-text-grey">Das Teamfoto wird öffentlich <?=Form::link('../liga/teams.php#' . $daten['team_id'], 'auf der Teams-Seite')?> angezeigt.</p>
+        <p class="w3-text-grey">Das Teamfoto kann öffentlich <?=Form::link('../liga/teams.php#' . $daten['team_id'], 'auf der Teams-Seite')?> eingesehen werden.</p>
 </form>
 
 <form method='post'>
@@ -26,6 +26,11 @@
         <p>
             <label for='ligavertreter' class="w3-text-primary">Ligavertreter</label>
             <input class='w3-input w3-border w3-border-primary' type='text' id='ligavertreter' name='ligavertreter' required value='<?=$daten['ligavertreter']?>'>
+            <span class="w3-text-grey"><i>Nur eine Person kann als Ligavertreter angegeben werden</i></span>
+        </p>
+        <p>
+            <input type="checkbox" <?php if (!empty($daten['ligavertreter'])){ ?>checked<?php } //endif?> class="w3-check" value="zugestimmt" name="dsgvo" id="dsgvo">
+            <label for="dsgvo" class="" style="cursor: pointer">Der Ligavertreter hat die <?=Form::link(Config::LINK_DSGVO, "Datenschutz-Hinweise")?> gelesen und ihnen zugestimmt.</label>
         </p>
         <p>
             <label for='plz' class="w3-text-primary">PLZ</label>
@@ -48,8 +53,8 @@
                 <thead>
                     <tr class="w3-primary">
                         <td class="" style="vertical-align:bottom">Email</td>
-                        <td class="w3-center" style="vertical-align:bottom">Öffentlich?</td>
-                        <td class="w3-center" style="vertical-align:bottom">Infomails?</td>
+                        <td class="w3-center" style="vertical-align:bottom">Öffentlich?*</td>
+                        <td class="w3-center" style="vertical-align:bottom">Infomails?**</td>
                         <td class="w3-center" style="vertical-align:bottom">Löschen?</td>
                     </tr>
                 </thead>
@@ -98,23 +103,24 @@
         </P>
 
         <p>
-            <label for='public' class="w3-text-primary">Email auf der öffentlichen Webseite anzeigen?</label>
-            <select  style='' class='w3-input w3-border w3-border-primary' id='public' name='public'>
+            <label for='public' class="w3-text-primary">Email auf der öffentlichen Webseite anzeigen?*</label>
+            <select class='w3-input w3-border w3-border-primary' id='public' name='public'>
                 <option value='Ja' selected>Ja</option>
                 <option value='Nein'>Nein</option>
             </select>
         </p>
 
         <p>
-            <label for='get_info_mail' class="w3-text-primary">Automatische Infomails erhalten?</label>
-            <select  style='' class='w3-input w3-border w3-border-primary' id='get_info_mail' name='get_info_mail'>
+            <label for='get_info_mail' class="w3-text-primary">Automatische Infomails erhalten?**</label>
+            <select class='w3-input w3-border w3-border-primary' id='get_info_mail' name='get_info_mail'>
                 <option value='Ja' selected>Ja</option>
                 <option value='Nein'>Nein</option>
             </select>
         </p>
-
         <p>
-        <input class='w3-button w3-secondary' name='neue_email' type='submit' value='Email eintragen'>
+            <input class='w3-button w3-secondary' name='neue_email' type='submit' value='Email eintragen'>
         </p>
     </div>
+    <p class=""><b>Öffentlich*</b>: Deine Email-Adresse wird in der Teamsliste <?=Form::link('../liga/teams.php','hier')?> angezeigt. Andere Ligateams können auch nicht-öffentliche Emails einsehen und kontaktieren.</p>
+    <p class=""><b>Infomails**</b>: Du bekommst automatische Infomails, z. B. wenn ein für dein Team relevantes Turnier eingestellt wird.</p>
 </form>

@@ -75,12 +75,16 @@ if (isset($_POST['change_turnier'])) {
 
     //Keine Änderung der Plätze in der Spielplanphase
     if ($akt_turnier->daten['phase'] == 'spielplan'){
-        if ($akt_turnier->daten['plaetze'] != $plaetze or $akt_turnier->daten['plaetze'] != $spielplan){
-        $error = true;
-        Form::error("Die Anzahl der Plätze kann in der Spielplanphase nicht mehr geändert werden. Bitte wende dich unter ".Config::LAMAIL." an den Ligaaussschuss.");
+        if ($akt_turnier->daten['plaetze'] != $plaetze && $teamcenter){
+            $error = true;
+            Form::error("Die Anzahl der Plätze kann in der Spielplanphase nicht mehr geändert werden. Bitte wende dich unter ".Config::LAMAIL." an den Ligaaussschuss.");
         }
     }
-
+    //Keine Änderung der Plätze in der Spielplanphase
+    if ($akt_turnier->daten['phase'] == 'ergebnis' && $teamcenter){
+        $error = true;
+        Form::error("Turniere können in der Ergebnisphase nicht mehr geändert werden. Bitte wende dich unter ".Config::LAMAIL." an den Ligaaussschuss.");
+    }
     //////////////////Block erweitern//////////////////
 
     //Es wurden beide Häckchen gesetzt
@@ -170,7 +174,7 @@ if (isset($_POST['change_turnier'])) {
                 $akt_turnier->schreibe_log("Ort: " . $akt_turnier->daten['ort'] . " -> " . $ort, $autor);
             }
             if ($akt_turnier->daten['organisator'] != $organisator){
-                $akt_turnier->schreibe_log("Organisator: " . $akt_turnier->daten['organisator'] . " -> " . $startzeit, $autor);
+                $akt_turnier->schreibe_log("Verantwortlicher: " . $akt_turnier->daten['organisator'] . " -> " . $startzeit, $autor);
             }
             if ($akt_turnier->daten['handy'] != $handy){
                 $akt_turnier->schreibe_log("Handy: " . $akt_turnier->daten['handy'] . " -> " . $handy, $autor);
@@ -185,6 +189,7 @@ if (isset($_POST['change_turnier'])) {
                 $akt_turnier->schreibe_log("Hallenname: " . $akt_turnier->daten['hallenname'] . " -> " . $hallenname, $autor);
             }
         }
+        MailBot::mail_turnierdaten_geaendert($akt_turnier);
         Form::affirm("Turnierdaten wurden geändert");
         header ('Location: ../liga/turnier_details.php?turnier_id=' . $akt_turnier->daten['turnier_id']);
         die();

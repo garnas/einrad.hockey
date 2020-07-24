@@ -58,7 +58,7 @@ class db {
 
   /*auto_increment wert einer Sql-Tabelle erkennen. Alle IDs werden über auto_increment erstellt
   $tabelle ist der name der Tabelle in der SQL datenbank*/
-  function get_auto_increment ($tabelle)
+  public static function get_auto_increment ($tabelle)
   {
     $sql="  SELECT AUTO_INCREMENT
             FROM  INFORMATION_SCHEMA.TABLES
@@ -72,7 +72,7 @@ class db {
 
   //funktion zum lesen der sql datenbank, sie gibt ein mysqli-objekt zurück
   //dieses mysqli-objekt muss immer in assoziatives array umgewandelt werden
-  function readdb($sql)
+  public static function readdb($sql)
   {
     if (mysqli_connect_errno()) {
       die('<h2>Verbindung zum MySQL Server fehlgeschlagen: '.mysqli_connect_error().'<br><br>Bitte schicke einen Screenshot an <span style="color:red;">' . Config::TECHNIKMAIL . '</span></h2>');
@@ -81,7 +81,7 @@ class db {
   }
 
   //funktion zum schreiben in die sql datenbank
-  function writedb($sql)
+  public static function writedb($sql)
   {
     //SQL-Logdatei erstellen/beschreiben
     $log_sql = fopen('../../system/logs/log_db.txt', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
@@ -94,13 +94,12 @@ class db {
       die('<h2>Verbindung zum MySQL Server fehlgeschlagen: '.mysqli_connect_error().'<br><br>Bitte schicke einen Screenshot an <span style="color:red;">' . Config::TECHNIKMAIL . '</span></h2>');
     }
 
-    if (self::$link->query($sql) === TRUE) {
-        //echo "New record created successfully<br>";
-    } else {
-        //echo "Error: " . $sql . "<br>" . self::$link->error;
+    if (!self::$link->query($sql) === TRUE) {
         $error = 'Fehlgeschlagen: '.self::$link->error;
         fwrite($log_sql, "\n" . $error);
         Form::error("SQL: " . $error);
+        Form::error($sql);
+        die();
     }
 
     fwrite($log_sql, "\n -------------");

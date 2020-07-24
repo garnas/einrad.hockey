@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/team_session.logic.php'; //Auth
+require_once '../../logic/session_team.logic.php'; //Auth
 
 $team_id = $_SESSION['team_id']; //wird an Template und kader.logic übergeben
 $kader = Spieler::get_teamkader($team_id); //wird an Template übergeben

@@ -65,7 +65,7 @@
 <!--Navigation für Smartphones -->
 <div class="w3-display-container w3-hide-large w3-hide-medium">
     <!-- Hintergrundbild -->
-    <img src="<?=$_SESSION['hintergrund']?>" class="w3-card" alt="Hintergrundbild" style="width:100%; opacity: 0.4;">
+    <img src="<?=$_SESSION['hintergrund']?>" class="<?php if (!isset($_SESSION['la_id']) && !isset($_SESSION['team_id'])){?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.4;">
     <div class="w3-display-left w3-margin-left">
         <!-- <a href="../liga/neues.php"> -->
             <img src="../bilder/logo_lang_small.png" onclick="open_sidebar()" class="w3-image" alt="langes Logo" style="max-width: 80%; vertical-align: 22%; cursor: pointer">

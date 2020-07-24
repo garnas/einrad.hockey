@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/team_session.logic.php'; //auth
+require_once '../../logic/session_team.logic.php'; //auth
 
 $centerpanels = array(
   array("name" => "Turnier-anmeldung", "link" => "tc_turnierliste_anmelden.php", "farbe" => "w3-primary"),
@@ -25,7 +25,7 @@ $page_width = '580px';
 include '../../templates/header.tmp.php';
 ?>
 
-<h2 class='w3-center w3-text-primary'>Hallo <?=$_SESSION['teamname']?>!</h2>
+<h1 class='w3-center w3-text-primary'>Hallo <?=$_SESSION['teamname']?>!</h1>
 <div id="messen" class=""> <!-- Misst die Fensterbreite des Browsers, um die Centerpanels gleichmäßig verteilen zu können -->
   <div id="apps" class="w3-content">
     <div class="w3-row">

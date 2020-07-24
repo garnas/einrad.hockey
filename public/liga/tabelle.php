@@ -109,7 +109,7 @@ include '../../templates/header.tmp.php';
             <ul class="w3-ul w3-leftbar w3-border-tertiary">
             <li>In der Meisterschaftstabelle werden die besten fünf Turnierergebnisse deines Teams in der aktuellen Saison aufaddiert.</li>
             <li>Der Platz in der Meisterschaftstabelle bestimmt, für welche Meisterschaft sich dein Team qualifizieren kann.</li>
-            <li>Meisterschaften:<br>Deutsche Meisterschaft (Plätze <span class="w3-text-tertiary">1-4</span>)<br>Quali zur Deutschen (<span class="w3-text-grey">5-10</span>)<br>B-Meisterschaft (<span class="w3-text-brown">11-16</span>)<br>C-Meisterschaft (<span class="w3-text-blue">17-22</span>)<br>D-Meisterschaft (<span class="w3-text-green">23-28</span>)</li>
+            <li><b>Meisterschaften</b> <i>(Plätze)</i><br>Deutsche Meisterschaft (<span class="w3-text-tertiary">1-4</span>)<br>Quali zur Deutschen (<span class="w3-text-grey">5-10</span>)<br>B-Meisterschaft (<span class="w3-text-brown">11-16</span>)<br>C-Meisterschaft (<span class="w3-text-blue">17-22</span>)<br>D-Meisterschaft (<span class="w3-text-green">23-28</span>)</li>
             </ul>
         </div>
     </div>

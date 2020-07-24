@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/la_session.logic.php'; //Auth
+require_once '../../logic/session_la.logic.php'; //Auth
 
 //Turnierobjekt erstellen
 $turnier_id = $_GET['turnier_id'];
@@ -71,7 +71,7 @@ if (isset($_POST['team_anmelden'])){
 
     if (!$error){
         $akt_turnier->team_anmelden($team_id, $liste, $pos);
-        $akt_turnier->schreibe_log("Anmeldung: $teamname\r\nTeamblock: " . (Tabelle::get_team_block($team_id) ?: 'NL') . " Turnierblock: " . $daten['tblock'] ."\r\nListe: $liste (<i>WartePos: $pos</i>)", "Ligaausschuss");
+        $akt_turnier->schreibe_log("Anmeldung: $teamname\r\nTeamblock: " . (Tabelle::get_team_block($team_id) ?: 'NL') . " Turnierblock: " . $daten['tblock'] ."\r\nListe: $liste (WartePos: $pos)", "Ligaausschuss");
         Form::affirm ("$teamname wurde angemeldet");
         header('Location: ../ligacenter/lc_team_anmelden.php?turnier_id=' . $daten['turnier_id']);
         die();
@@ -94,7 +94,7 @@ if (isset($_POST['nl_anmelden'])){
     $team_id = Team::teamname_to_teamid($teamname . '*');
     if (!$akt_turnier->check_team_angemeldet($team_id)){
         $akt_turnier->nl_anmelden($teamname, $liste, $pos);
-        $akt_turnier->schreibe_log("Anmeldung: $teamname*\r\nTeamblock: " . (Tabelle::get_team_block($team_id) ?: 'NL') . "\r\nListe:  $liste (<i>WartePos: $pos </i>)", "Ligaausschuss");
+        $akt_turnier->schreibe_log("Anmeldung: $teamname*\r\nTeamblock: " . (Tabelle::get_team_block($team_id) ?: 'NL') . "\r\nListe:  $liste (WartePos: $pos)", "Ligaausschuss");
         Form::affirm("$teamname wurde angemeldet auf Liste: $liste");
         header('Location: ../ligacenter/lc_team_anmelden.php?turnier_id=' . $daten['turnier_id']);
         die();
@@ -217,7 +217,7 @@ include '../../templates/header.tmp.php';
         <h3>Team anmelden</h3> 
         <p>
         <label for="teamname" class='w3-text-primary'>Team wählen:</label><br>
-        <input required type="text" style="max-width:400px" class="w3-input w3-border w3-border-primary" list="teams" id="teamname" name="teamname">
+        <input required type="text" style="max-width:400px" placeholder="Team eingeben" class="w3-input w3-border w3-border-primary" list="teams" id="teamname" name="teamname">
         <?=Form::datalist_teams()?>
         </p>
         <p>

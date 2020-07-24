@@ -9,16 +9,16 @@
         <p>
             <label class="w3-text-primary" for="datum">Datum</label>
             <input required type="date" value="<?=$_POST['datum'] ?? date("Y-m-d", (Config::time_offset()+4*7*24*60*60))?>" class="w3-input w3-border w3-border-primary" style="max-width: 320px" id="datum" name="datum">
-            <i class="w3-small w3-text-primary"> Ligaturniere müssen spätestens vier Wochen vorher eingetragen werden<br>nur Samstage, Sonntage und bundesweite Feiertage<br>Saison: <?=Config::SAISON_ANFANG;?> - <?=Config::SAISON_ENDE;?></i>
+            <i class="w3-text-grey"> Ligaturniere müssen spätestens vier Wochen vorher eingetragen werden<br>nur Samstage, Sonntage und bundesweite Feiertage<br>Saison: <?=Config::SAISON_ANFANG;?> - <?=Config::SAISON_ENDE;?></i>
         </p>
         <p>
             <label class="w3-text-primary" for="startzeit">Startzeit</label>
             <input required type="time" class="w3-input w3-border w3-border-primary" value="<?=$_POST['startzeit'] ?? '10:00'?>" style="max-width: 320px" id="startzeit" name="startzeit">
-            <i class="w3-small w3-text-primary">Ligaturniere müssen zwischen 9:00&nbsp;Uhr und 20:00&nbsp;Uhr stattfinden</i>
+            <i class="w3-text-grey">Ligaturniere müssen zwischen 9:00&nbsp;Uhr und 20:00&nbsp;Uhr stattfinden</i>
         </p>
         <p>
         <input class="w3-check" type="checkbox" id="besprechung" name="besprechung" <?php if(($_POST['besprechung'] ?? '') == "Ja"){?> checked <?php }//endif?> value="Ja">
-        <label for="besprechung" class="w3-hover-text-secondary" style="cursor: pointer"> Gemeinsame Besprechung aller Teams 15 min vor Turnierbeginn</label>
+        <label for="besprechung" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer"> Gemeinsame Besprechung aller Teams 15 min vor Turnierbeginn</label>
         </p>
     </div>
 
@@ -56,7 +56,7 @@
             <?php foreach (Config::BLOCK as $block_fixed) {?>
             <option <?php if (($_POST['block_fixed'] ?? '') == $block_fixed){?> selected <?php } //endif?> value='<?=$block_fixed?>'><?=$block_fixed?></option>
             <?php } //end foreach?>
-            </select><i class="w3-small w3-text-primary">Fixierte Turnierblöcke verändern sich nicht mehr</i>
+            </select><i class="w3-small w3-text-grey">Fixierte Turnierblöcke verändern sich nicht mehr</i>
             </p>
         </div>
         <?php } //endif?>
@@ -94,8 +94,9 @@
             <input required type="text" class="w3-input w3-border w3-border-primary" value="<?=$_POST['ort'] ?? ''?>" id="ort" name="ort">
         </div>
         <div class="w3-section">
-            <label class="w3-text-primary" for="haltestellen">Haltestellen <span class="w3-text.grey">(für öffentliche Verkehrsmittel)</span></label>
+            <label class="w3-text-primary" for="haltestellen">Haltestellen</label>
             <input type="text" class="w3-input w3-border w3-border-primary" value="<?=$_POST['haltestellen'] ?? ''?>" id="haltestellen" name="haltestellen">
+            <i class="w3-text-grey">Für die Anfahrt mit öffentlichen Verkehrsmitteln</i>
         </div>  
     </div>
     
@@ -112,21 +113,30 @@
         </p>      
         <p>
             <label class="w3-text-primary" for="startgebuehr">Startgebühr</label>
-            <select class="w3-input w3-border w3-border-primary" id="startgebuehr" name="startgebuehr">
-            <option <?php if (($_POST['startgebuehr'] ?? '') == 'keine'){?> selected <?php } //endif?> value="keine">keine</option>
-            <option <?php if (($_POST['startgebuehr'] ?? '') == '5 Euro'){?> selected <?php } //endif?> value="5 Euro">5 Euro</option>
-            <option <?php if (($_POST['startgebuehr'] ?? '') == '6 Euro'){?> selected <?php } //endif?> value="6 Euro">6 Euro</option>
-            <option <?php if (($_POST['startgebuehr'] ?? '') == '7 Euro'){?> selected <?php } //endif?> value="7 Euro">7 Euro</option>
-            <option <?php if (($_POST['startgebuehr'] ?? '') == '8 Euro'){?> selected <?php } //endif?> value="8 Euro">8 Euro</option>
-            <option <?php if (($_POST['startgebuehr'] ?? '') == '9 Euro'){?> selected <?php } //endif?> value="9 Euro">9 Euro</option>
-            <option <?php if (($_POST['startgebuehr'] ?? '') == '10 Euro'){?> selected <?php } //endif?> value="10 Euro">10 Euro</option>
-        </select>
+            <?php if($ligacenter){?>
+                <input type="text" class="w3-input w3-border w3-border-primary" placeholder="z. B. 5 Euro" id="startgebuehr" name="startgebuehr">
+            <?php }else{ ?>
+                <select class="w3-input w3-border w3-border-primary" id="startgebuehr" name="startgebuehr">
+                    <option <?php if(($daten['startgebuehr'] ?? '') == 'keine'){?> selected <?php }?> value="keine">keine</option>
+                    <option <?php if(($daten['startgebuehr'] ?? '') == '5 Euro'){?> selected <?php }?> value="5 Euro">5 Euro</option>
+                    <option <?php if(($daten['startgebuehr'] ?? '') == '6 Euro'){?> selected <?php }?> value="6 Euro">6 Euro</option>
+                    <option <?php if(($daten['startgebuehr'] ?? '') == '7 Euro'){?> selected <?php }?> value="7 Euro">7 Euro</option>
+                    <option <?php if(($daten['startgebuehr'] ?? '') == '8 Euro'){?> selected <?php }?> value="8 Euro">8 Euro</option>
+                    <option <?php if(($daten['startgebuehr'] ?? '') == '9 Euro'){?>  selected <?php }?> value="9 Euro">9 Euro</option>
+                    <option <?php if(($daten['startgebuehr'] ?? '') == '10 Euro'){?>  selected <?php }?> value="10 Euro">10 Euro</option>
+                    <option <?php if(($daten['startgebuehr'] ?? '') == '11 Euro'){?> selected <?php }?> value="11 Euro">11 Euro</option>
+                    <option <?php if(($daten['startgebuehr'] ?? '') == '12 Euro'){?> selected <?php }?> value="12 Euro">12 Euro</option>
+                    <option <?php if(($daten['startgebuehr'] ?? '') == '13 Euro'){?> selected <?php }?> value="13 Euro">13 Euro</option>
+                    <option <?php if(($daten['startgebuehr'] ?? '') == '14 Euro'){?>  selected <?php }?> value="14 Euro">14 Euro</option>
+                    <option <?php if(($daten['startgebuehr'] ?? '') == '15 Euro'){?>  selected <?php }?> value="15 Euro">15 Euro</option>
+                </select>
+            <?php } //end if?>
         </p>
     </div>
 
     <!-- Organisator -->
     <div class="w3-panel w3-card-4">
-        <h3>Organisator</h3>
+        <h3>Verantwortlicher</h3>
         <p>
             <label class="w3-text-primary" for="organisator">Name</label>
             <input required value="<?=$_POST['organisator'] ?? ''?>" type="text" class="w3-input w3-border w3-border-primary" id="organisator" name="organisator">
@@ -134,7 +144,7 @@
         <p>
             <label class="w3-text-primary" for="handy">Handy</label>
             <input required value="<?=$_POST['handy'] ?? ''?>" type="text" class="w3-input w3-border w3-border-primary" id="handy" name="handy">
-            <i class="w3-small w3-text-primary">Das Handy muss während des Turniertages erreichbar sein</i>
+            <i class="w3-text-grey">Das Handy muss während des Turniertages erreichbar sein</i>
         </p>
     </div>
 

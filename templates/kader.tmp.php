@@ -13,7 +13,7 @@
         <?php foreach($kader as $eintrag){?>
             <tr>
                 <td><?=$eintrag['spieler_id']?></td>
-                <?php if ($ligacenter){ //Direktverlinkung zum Bearbeiten eines Spielers $ligacenter wird definiert in la_session.logic.php?>
+                <?php if ($ligacenter){ //Direktverlinkung zum Bearbeiten eines Spielers $ligacenter wird definiert in session_la.logic.php?>
                     <td><a class="no w3-text-blue w3-hover-text-secondary" href='lc_spieler_aendern.php?spieler_id=<?=$eintrag['spieler_id']?>'> <?=$eintrag['vorname'] . " " . $eintrag['nachname']?></a></td>
                 <?php }else{?>
                     <td><?=$eintrag['vorname']." ".$eintrag['nachname']?></td>
@@ -45,7 +45,7 @@
                 <?php foreach($kader_vorsaison as $eintrag){?>
                     <tr style="vertical-align: middle">
                         <td class=""><?=$eintrag['spieler_id']?></td>
-                        <?php if ($ligacenter){ //Direktverlinkung zum Bearbeiten eines Spielers $ligacenter wird definiert in la_session.logic.php?>
+                        <?php if ($ligacenter){ //Direktverlinkung zum Bearbeiten eines Spielers $ligacenter wird definiert in session_la.logic.php?>
                             <td class=""><a class="no w3-text-blue w3-hover-text-secondary" href='lc_spieler_aendern.php?spieler_id=<?=$eintrag['spieler_id']?>'> <?=$eintrag['vorname'] . " " . $eintrag['nachname']?></a></td>
                         <?php }else{?>
                             <td class=""><?=$eintrag['vorname']." ".$eintrag['nachname']?></td>
@@ -66,7 +66,7 @@
         </div>
         <p>
             <input type="checkbox" class="w3-check" value="zugestimmt" name="dsgvo" id="dsgvo">
-            <label for="dsgvo" class="w3-text-black w3-hover-text-secondary">Alle ausgewählten Spieler haben die <a class="w3-text-primary w3-hover-text-secondary" href="../dokumente/einradhockeyliga_dsgvo.pdf">DSGVO-Hinweise</a> gelesen und der Verwendung ihrer Daten zugestimmt.</label>
+            <label for="dsgvo" style="cursor: pointer;" class="w3-text-black">Alle ausgewählten Spieler haben die <?=Form::link(Config::LINK_DSGVO, 'Datenschutz-Hinweise')?> gelesen und ihnen zugestimmt.</label>
         </p>
         <input type="submit" name="submit_takeover" value="Ausgewählte Spieler übernehmen" class="w3-button w3-tertiary">
     </form>
@@ -75,7 +75,7 @@
 <!-- Form zum Eintragen eines neuen Spielers -->
 <div class="w3-section">
     <p class="w3-text-grey">Neue Spieler können bis zum <?=Config::SAISON_ENDE?> 23:59:59&nbsp;Uhr hinzugefügt werden.</p>
-    <p class="w3-text-grey">Um einen neuen Spieler aus einem anderen Team zu übernehmen, bitte den Spieler neu eintragen. Die Übernahme geschieht dann automatisch, wenn dieser Spieler noch nicht in einem aktuellen Kader steht.</p>
+    <p class="w3-text-grey">Um einen neuen Spieler aus einem anderen Team zu übernehmen, bitte den Spieler neu eintragen. Die Übernahme geschieht dann automatisch, wenn die Daten identisch sind und dieser Spieler noch nicht in einem aktuellen Kader steht. Der Schiedsrichterstatus wird dann ebenfalls übernommen.</p>
     <button class="w3-button w3-tertiary" onclick="document.getElementById('spieler_eintragen').style.display='block'">Neuen Spieler eintragen</button>
     <div class="w3-modal" id="spieler_eintragen" style="display: none;">
         <form class="w3-card-4 w3-modal-content w3-panel" style="max-width: 400px;" method='POST'>
@@ -97,14 +97,14 @@
                 <label class="w3-text-primary" for="geschlecht">Geschlecht</labeL>
                 <select style="height:40px" class='w3-input w3-border w3-border-primary' name='geschlecht'>
                     <option <?=$_POST['geschlecht'] ?? 'selected'?> disabled></option>
-                    <option <?php if (($_POST['geschlecht'] ?? '') == 'm'){?>selected<?php } ?>> value='m'>m</option>
-                    <option <?php if (($_POST['geschlecht'] ?? '') == 'w'){?>selected<?php } ?>> value='w'>w</option>
-                    <option <?php if (($_POST['geschlecht'] ?? '') == 'd'){?>selected<?php } ?>> value='d'>d</option>
+                    <option <?php if (($_POST['geschlecht'] ?? '') == 'm'){?>selected<?php } ?> value='m'>m</option>
+                    <option <?php if (($_POST['geschlecht'] ?? '') == 'w'){?>selected<?php } ?> value='w'>w</option>
+                    <option <?php if (($_POST['geschlecht'] ?? '') == 'd'){?>selected<?php } ?> value='d'>d</option>
                 </select>
             </p>
             <p>
                 <input type="checkbox" class="w3-check" value="zugestimmt" name="dsgvo" id="dsgvo">
-                <label for="dsgvo" class="">Der Spieler hat die <a class="w3-text-primary" href="../dokumente/einradhockeyliga_dsgvo.pdf">DSGVO-Hinweise</a> gelesen und der Verwendung seiner Daten zugestimmt.</label>
+                <label for="dsgvo" class="w3-text-grey">Der Spieler hat die <?=Form::link(Config::LINK_DSGVO, "DSGVO-Hinweise")?> gelesen und der Verwendung seiner Daten zugestimmt.</label>
             </p>
             <p>
                 <input class="w3-button w3-tertiary" type='submit' name='neuer_eintrag' value='Spieler eintragen'>

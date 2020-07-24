@@ -38,11 +38,11 @@ $(document).ready(function(){
   </span>
 </p>
 <br class="w3-hide-large w3-hide-medium">
-<p><a href="ligakarte.php" class="no w3-text-blue w3-hover-text-secondary"><i class="material-icons">keyboard_arrow_right</i>Ligakarte aller Teams</a></p>
+<p><a href="ligakarte.php" class="no w3-text-blue w3-hover-text-secondary"><i class="material-icons">place</i> Ligakarte aller Teams</a></p>
 
 <!-- Team suchen -->
-<div class="w3-section" style="max-width: 280px;">
-  <input id="myInput" style='' class='w3-input w3-border-grey' type="text" placeholder="Team suchen">
+<div class="w3-section w3-text-grey w3-border-bottom" style="width: 260px;">
+    <i class="material-icons">search</i><input id="myInput" class='w3-padding w3-border-0' type="text" placeholder="Team suchen">
 </div>
 
 <!-- Teams Tabelle -->
@@ -62,16 +62,15 @@ $(document).ready(function(){
         <!-- Icons -->
         <td style='vertical-align: middle; text-align: right; white-space: nowrap;'>
           <?php if (!empty($team['homepage'])) {?>
-            <a class="w3-hover-text-secondary w3-text-blue" href='<?=$team['homepage']?>'>
-            <i style='vertical-align: middle;' class='material-icons'>home</i></a>
+            <?=Form::Link($team['homepage'], "<i style='vertical-align: middle;' class='material-icons'>home</i>", true)?>
           <?php } //endif?>
           <?php if (!empty($team['teamfoto'])) {?>
-            <a class="w3-hover-text-secondary w3-text-primary" href='<?=$team['teamfoto']?>'>
-              <i style='vertical-align: middle;' class='material-icons'>group</i></a>
+            <?=Form::Link($team['teamfoto'], "<i style='vertical-align: middle;' class='material-icons'>group</i>", true)?>
           <?php } //endif?>
-          <?php if (!empty($emails[$team['team_id']])){?> 
+          <?php if (!empty($emails[$team['team_id']])){?>
             <a class="w3-hover-text-secondary w3-text-blue" href='mailto:<?=$emails[$team['team_id']]?>'> 
-              <i style='vertical-align: middle;' class='material-icons'>mail</i></a>
+              <i style='vertical-align: middle;' class='material-icons'>mail</i>
+            </a>
           <?php } //endif?>
         </td>
         <!-- Text -->

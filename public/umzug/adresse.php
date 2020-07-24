@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/la_session.logic.php'; //Auth
+require_once '../../logic/session_la.logic.php'; //Auth
 //$myfile = fopen("wegbeschreibungen/weg004.dat", "r") or die("Unable to open file!");
 //$string = readfile("wegbeschreibungen/weg004.dat");
 //$string = fread($myfile,filesize("wegbeschreibungen/weg004.dat"));

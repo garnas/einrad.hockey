@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/la_session.logic.php'; //Auth
+require_once '../../logic/session_la.logic.php'; //Auth
 
 $deaktivierte_teams = Team::get_deactive_teams();
 
@@ -68,6 +68,11 @@ if (isset($_POST['sichern'])){
     db::db_sichern();
 }
 
+//Datenbank sichern
+if (isset($_POST['mailbot'])){
+    MailBot::mail_bot();
+}
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -76,7 +81,7 @@ include '../../templates/header.tmp.php';?>
 <h4 class="w3-bottombar w3-text-primary">Als Ligateam anmelden</h4>
 <form method='post'>
     <label class="w3-text-primary" for="teamname">Team wählen</label>
-    <input type="text" class="w3-input w3-border w3-border-primary" placeholder="Bitte Team wählen" list="teams" id="teamname" name="teamname">
+    <input type="text" class="w3-input w3-border w3-border-primary" placeholder="Team eingeben" list="teams" id="teamname" name="teamname">
         <?=Form::datalist_teams();?>
     <p>
         <input type='submit' name='anmelden' value='Als Ligateam anmelden' class="w3-button w3-secondary">
@@ -86,7 +91,7 @@ include '../../templates/header.tmp.php';?>
 <h4 class="w3-bottombar w3-text-primary">Team deaktivieren</h4>
 <form method='post' onsubmit="return confirm('Soll das ausgewählte Team wirklich deaktiviert werden?')">
     <label class="w3-text-primary" for="teamname">Team wählen</label>
-    <input type="text" class="w3-input w3-border w3-border-primary" placeholder="Bitte Team wählen" list="teams" id="teamname" name="teamname">
+    <input type="text" class="w3-input w3-border w3-border-primary" placeholder="Team eingeben" list="teams" id="teamname" name="teamname">
         <?=Form::datalist_teams();?>
     <p>
         <input type='submit' name='deaktivieren' value='Team deaktivieren' class="w3-button w3-secondary">
@@ -107,19 +112,25 @@ include '../../templates/header.tmp.php';?>
         <input type='submit' name='reaktivieren' value='Team reaktiveren' class="w3-button w3-secondary">
     </p>
 </form>
-
+<!-- Mailbot -->
 <form method='post'>
-    <h4 class="w3-bottombar w3-text-primary">Ligabot ausführen</h4>
+    <h4 class="w3-bottombar w3-text-primary">Automatische Mails rausenden</h4>
     <p>
-        <input type='submit' name='ligabot' value='Ligabot ausführen' class="w3-button w3-secondary">
+        <input type='submit' name='mailbot' value='Mailbot starten' class="w3-button w3-secondary">
     </p>
 </form>
-
+<!-- DB sichern -->
 <form method='post'>
     <h4 class="w3-bottombar w3-text-primary">Datenbank sichern</h4>
     <p>
         <input type='submit' name='sichern' value='Datenbank sichern' class="w3-button w3-secondary">
     </p>
 </form>
-
+<!-- Ligabot -->
+<form method='post'>
+    <h4 class="w3-bottombar w3-text-primary">Ligabot ausführen</h4>
+    <p>
+        <input type='submit' name='ligabot' value='Ligabot ausführen' class="w3-button w3-secondary">
+    </p>
+</form>
 <?php include '../../templates/footer.tmp.php';
