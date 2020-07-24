@@ -7,3 +7,11 @@ RewriteRule ^ https://einrad.hockey/%1 [R=301]
 # https erzwingen
 RewriteCond %{SERVER_PORT} !=443
 RewriteRule ^(.*)$ https://einrad.hockey/$1 [R=301]
+
+# gzip aktivieren
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/plain
+AddOutputFilterByType DEFLATE text/html
+AddOutputFilterByType DEFLATE text/css
+AddOutputFilterByType DEFLATE application/javascript
+</IfModule> 
