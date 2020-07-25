@@ -71,7 +71,6 @@ class Spieler {
             AND (letzte_saison = '$vorsaison' OR letzte_saison = '$vorvorsaison')
             ORDER BY letzte_saison DESC, vorname ASC";
         $result = db::readdb($sql);
-        db::debug($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)){
             $return[$x['spieler_id']] = $x;
