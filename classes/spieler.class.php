@@ -22,7 +22,7 @@ class Spieler {
                 Form::affirm ("Der Spieler wurde vom Team ".Team::teamid_to_teamname($result['team_id'])." übernommen.");
                 return true;
             }else{
-                Form::error ("Der Spieler steht bereits im Kader für folgendes Team: " . Team::teamid_to_teamname($result['team_id']) . "<br> Bitte wende dich an den Ligaausschuss (" . Config::LAMAIL . ")");
+                Form::error ("Der Spieler steht bereits im Kader für folgendes Team: " . Team::teamid_to_teamname($result['team_id']) . "<br> Bitte wende dich an den Ligaausschuss (" . Form::mailto(Config::LAMAIL) . ")");
                 return false;
             }
         }else{
