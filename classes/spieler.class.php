@@ -62,14 +62,16 @@ class Spieler {
     }
 
     public static function get_teamkader_vorsaison($team_id)
-    {
+    {   
         $vorsaison = Config::SAISON - 1;
+        $vorvorsaison = Config::SAISON - 2;
         $sql = "SELECT *  
             FROM spieler 
-            WHERE team_id='$team_id' 
-            AND letzte_saison = '$vorsaison'
+            WHERE team_id = '$team_id' 
+            AND (letzte_saison = '$vorsaison' OR letzte_saison = '$vorvorsaison')
             ORDER BY letzte_saison DESC, vorname ASC";
         $result = db::readdb($sql);
+        db::debug($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)){
             $return[$x['spieler_id']] = $x;

@@ -256,14 +256,14 @@ include '../../templates/header.tmp.php';
         </p>
         <!--Meldeliste-->
         <p>
-        <?php if (!empty($anmeldungen['melde'])){?>
-            <p class="w3-text-grey w3-border-bottom w3-border-grey">Meldeliste</p> 
-                <?php foreach ($anmeldungen['melde'] as $team){?>
-                    <?php if ($team['teamname'] == $_SESSION['teamname']) {$team['teamname'] = "<span class='w3-text-yellow'><b>".$team['teamname']."</b></span>";}?>
-                    <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span>
-                    <br>
-                <?php }//end foreach?>
-        <?php } //endif?>
+            <?php if (!empty($anmeldungen['melde'])){?>
+                <p class="w3-text-grey w3-border-bottom w3-border-grey">Meldeliste</p> 
+                    <?php foreach ($anmeldungen['melde'] as $team){?>
+                        <?php if ($team['teamname'] == $_SESSION['teamname']) {$team['teamname'] = "<span class='w3-text-yellow'><b>".$team['teamname']."</b></span>";}?>
+                        <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span>
+                        <br>
+                    <?php }//end foreach?>
+            <?php } //endif?>
         </p>
         
         <!--Warteliste-->
