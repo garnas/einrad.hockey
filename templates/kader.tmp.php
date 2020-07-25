@@ -91,7 +91,7 @@
             </p>
             <p>
             <label class="w3-text-primary" for="jahrgang">Jahrgang</labeL>
-            <input class="w3-input w3-border w3-border-primary" value="<?=$_POST['jahrgang'] ?? ''?>" type="number" name="jahrgang" autocomplete="off" required>
+            <input class="w3-input w3-border w3-border-primary" value="<?=$_POST['jahrgang'] ?? ''?>" placeholder="vierstellig" type="number" name="jahrgang" autocomplete="off" required>
             </p>
             <p>
                 <label class="w3-text-primary" for="geschlecht">Geschlecht</labeL>
