@@ -52,7 +52,7 @@ include '../../templates/header.tmp.php';
 </div>
 
 <h2 class="w3-text-primary">Fragen?</h2>
-<p>Bei Interesse an einer Teilnahme am Spiebetrieb sowie für alle weiteren Fragen steht der Ligaausschuss jederzeit zur Verfügung.</p>
+<p>Bei Interesse an einer Teilnahme am Spielbetrieb sowie für alle weiteren Fragen steht der Ligaausschuss jederzeit zur Verfügung.</p>
 
 <div class="w3-container">
     <ul class="w3-ul w3-leftbar w3-border-tertiary">
