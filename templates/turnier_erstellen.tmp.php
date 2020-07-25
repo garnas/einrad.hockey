@@ -143,7 +143,7 @@
         </p>
         <p>
             <label class="w3-text-primary" for="handy">Handy</label>
-            <input required value="<?=$_POST['handy'] ?? ''?>" type="text" class="w3-input w3-border w3-border-primary" id="handy" name="handy">
+            <input required value="<?=$_POST['handy'] ?? ''?>" type="number" class="w3-input w3-border w3-border-primary" id="handy" name="handy">
             <i class="w3-text-grey">Das Handy muss während des Turniertages erreichbar sein</i>
         </p>
     </div>
