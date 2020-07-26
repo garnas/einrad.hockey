@@ -59,7 +59,7 @@ include '../../templates/header.tmp.php';
 ?>
 
 <h1 class='w3-border-bottom w3-text-primary'>Karte der Ligateams<span class="w3-right w3-hide-small"><?=Form::get_saison_string()?></span></h1>
-<p>Es spielen zurzeit <?=count(Team::list_of_all_teams())?> Teams in der Deutschen Einradhockeyliga. <a href="teams.php" class="no w3-text-blue w3-hover-text-secondary">Hier</a> findest du eine Liste aller Teams mit ihrer hinterlegten E-Mail-Adresse.</p>
+<p>Es spielen zurzeit <?=count(Team::list_of_all_teams())?> Teams in der Deutschen Einradhockeyliga. <?=Form::link("teams.php","Hier")?> findest du eine Liste aller Teams mit ihrer hinterlegten E-Mail-Adresse.</p>
   
 <p><i>If your team resides outside of Germany, please contact <?=Form::mailto(Config::TECHNIKMAIL)?> to be included in the map.</i></p>
 
@@ -181,7 +181,7 @@ function initMap() {
         '<h5 class="w3-text-primary"><?=Team::teamid_to_teamname(435)?></h5>'+
         '<div class="w3-bottombar"></div>'+
             '<p>412 01 Litoměřice, Tschechien</p>'+
-            '<a href="teams.php#435" class="no w3-text-blue w3-hover-text-secondary">Zur Kontaktliste</a>'+
+            '<?=str_replace("'",'"',Form::link("teams.php#435", 'Zur Kontaktliste'))?>'+
         '</div>';
 
     var infowindow435 = new google.maps.InfoWindow({
@@ -205,7 +205,7 @@ function initMap() {
         '<h5 class="w3-text-primary"><?=Team::teamid_to_teamname(262)?></h5>'+
         '<div class="w3-bottombar"></div>'+
             '<p>Prag, Tschechien</p>'+
-            '<a href="teams.php#435" class="no w3-text-blue w3-hover-text-secondary">Zur Kontaktliste</a>'+
+            '<?=str_replace("'",'"',Form::link("teams.php#262", 'Zur Kontaktliste'))?>'+
         '</div>';
 
     var infowindow262 = new google.maps.InfoWindow({

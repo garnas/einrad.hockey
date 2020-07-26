@@ -79,9 +79,9 @@ $(document).ready(function(){
                 <?php if ($saison <= 25){?>
                     <?=Form::link('archiv.php','<i class="material-icons">info</i> Details')?>
                 <?php }else{ ?>
-                    <a href="<?=$data_turniere[$turnier_id]['link_spielplan'] ?? '#'?>" class="<?php if(empty($data_turniere[$turnier_id]['link_spielplan'])){?>w3-opacity-max<?php }// end if?> no w3-text-blue w3-hover-text-secondary">
-                        <i class="material-icons">info</i>Details
-                    </a>
+                    <div class="<?php if(empty($data_turniere[$turnier_id]['link_spielplan'])){?>w3-opacity-max<?php }// end if?>">
+                        <?=Form::link($data_turniere[$turnier_id]['link_spielplan'] ?: ('#' . $turnier_id), '<i class="material-icons">info</i> Details')?>
+                    </div>
                 <?php }//end if?>
             </p>
         </section>

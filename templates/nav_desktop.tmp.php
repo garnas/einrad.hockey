@@ -111,7 +111,6 @@
                 <a href="https://forum.einrad.hockey/" class="w3-bar-item w3-button">Forum</a>
             </div>
         </div>
-
     </div>
 
     <!-- unten rechts -->
@@ -126,5 +125,4 @@
                 class="material-icons w3-xlarge">block</i> Logout</a>
         <?php } //end if?>
     </div>
-
 </div>

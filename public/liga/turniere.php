@@ -216,11 +216,9 @@ function modal(turnier_id){
                             <p><a class="no w3-text-blue w3-hover-text-secondary" href='../ligacenter/lc_team_anmelden.php?turnier_id=<?=$turnier['turnier_id']?>'>Teams anmelden (Ligaausschuss)</a></p>
                             <p><a class="no w3-text-blue w3-hover-text-secondary" href='../ligacenter/lc_turnier_log.php?turnier_id=<?=$turnier['turnier_id']?>'>Turnierlog einsehen (Ligaausschuss)</a></p>
                         <?php } //endif?>
-
                         <?php if (isset($_SESSION['team_id'])){?>
                             <a class="no w3-text-blue w3-hover-text-secondary" href='../teamcenter/tc_team_anmelden.php?turnier_id=<?=$turnier['turnier_id']?>'><i class="material-icons">how_to_reg</i> Zur Anmeldeseite</a></p>
                         <?php } //endif?>
-
                         <?php if (($_SESSION['team_id'] ?? '') == $turnier['ausrichter']){?>
                             <a class="no w3-text-blue w3-hover-text-secondary" href='../teamcenter/tc_turnier_bearbeiten.php?turnier_id=<?=$turnier['turnier_id']?>'><i class="material-icons">create</i> Turnier als Ausrichter bearbeiten</a></p>
                         <?php } //endif?>

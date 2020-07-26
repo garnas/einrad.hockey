@@ -67,16 +67,18 @@
     <!-- Hintergrundbild -->
     <img src="<?=$_SESSION['hintergrund']?>" class="<?php if (!isset($_SESSION['la_id']) && !isset($_SESSION['team_id'])){?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.4;">
     <div class="w3-display-left w3-margin-left">
-        <!-- <a href="../liga/neues.php"> -->
-            <img src="../bilder/logo_lang_small.png" onclick="open_sidebar()" class="w3-image" alt="langes Logo" style="max-width: 80%; vertical-align: 22%; cursor: pointer">
-        <!-- </a> -->
+        <img src="../bilder/logo_lang_small.png" onclick="open_sidebar()" class="w3-image" alt="langes Logo" style="max-width: 80%; vertical-align: 22%; cursor: pointer">
     </div>
+
+    <!-- Burger Menü -->
     <div class="w3-display-right">
         <button onclick="open_sidebar()" class="w3-btn w3-text-primary">
-            <!-- vertical-align stehen lassen, da material-icons vertical-align verändern -->
+            <!-- vertical-align 0% stehen lassen, da material-icons vertical-align in style.css verändern -->
             <i class="w3-xxlarge material-icons" style="vertical-align: 0%;">menu</i>
         </button>
     </div>
+
+    <!-- Logout Button -->
     <div class="w3-display-bottomright w3-text-primary w3-large">
         <?php if (isset($_SESSION['team_id'])){?>
         <a href='../teamcenter/tc_logout.php' class="w3-button w3-hover-primary"><i style=""

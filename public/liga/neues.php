@@ -80,8 +80,7 @@ include '../../templates/header.tmp.php';
             </a>
             <p class="w3-text-grey w3-small w3-border-top w3-border-grey"></p>
             <p>Die Einradhockeyliga steht jedem Einradhockeybegeisterten offen!</p>
-            <p>
-            <a href="ueber_uns.php" class="no w3-text-blue w3-hover-text-secondary">Mehr Infos</a></p> 
+            <p><?=Form::link("ueber_uns.php", "Mehr Infos")?></p> 
         </div>
 
         <!-- Anstehende Turniere -->
@@ -93,9 +92,7 @@ include '../../templates/header.tmp.php';
             <?php $i=0; foreach ($next_turniere as $turnier){  $i++;?>
                 <p>
                     <?=date("d.m", strtotime($turnier['datum']))?> 
-                    <a class="no w3-text-primary w3-hover-text-secondary" href='turnier_details.php?turnier_id=<?=$turnier['turnier_id']?>'>
-                        <?=$turnier['tname'] .' '. $turnier['ort']?>
-                    </a> 
+                    <?=Form::link('turnier_details.php?turnier_id=' . $turnier['turnier_id'], $turnier['tname'] .' '. $turnier['ort'])?>
                     <i>(<?=$turnier['tblock']?>)</i>
                 </p>
                 <?php if ($i > 4){ break; }?>
@@ -112,9 +109,7 @@ include '../../templates/header.tmp.php';
             <?php $i=0; foreach ($last_turniere as $turnier){ $i++;?>
                 <p>
                     <?=date("d.m", strtotime($turnier['datum']))?> 
-                    <a class="no w3-text-primary w3-hover-text-secondary" href='ergebnisse.php#<?=$turnier['turnier_id']?>'>
-                        <?=$turnier['tname'] .' '. $turnier['ort']?>
-                    </a> 
+                    <?=Form::link('ergebnisse.php#' . $turnier['turnier_id'], $turnier['tname'] .' '. $turnier['ort'])?>
                     <i>(<?=$turnier['tblock']?>)</i>
                 </p>
                 <?php if ($i > 4){ break; }?>

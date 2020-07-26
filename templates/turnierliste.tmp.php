@@ -5,7 +5,7 @@
             <th>Datum</th>
             <th>Ort <i>(Block)  </i></th>
             <th class="w3-hide-small">Turniername</th>
-            <th><i class='' >Phase<i></th>
+            <th><i>Phase<i></th>
             <th>Link</th>
         </tr>
         <?php foreach ($turniere as $turnier){?>
@@ -19,11 +19,11 @@
                 <?php if ($teamcenter) {?> 
                     <td style='vertical-align: middle; white-space: nowrap'>
                         <?php if (isset($turnier['link_anmelden'])){?>
-                        <a class="no w3-text-blue w3-hover-text-secondary" href='<?=$turnier['link_anmelden']?>'><i class="material-icons">how_to_reg</i> An-/Abmeldung</a>
+                        <?=Form::link($turnier['link_anmelden'],'<i class="material-icons">how_to_reg</i> Teams an/abmelden')?>
                         <br>
-                        <a class="no w3-text-blue w3-hover-text-secondary" href='<?=$turnier['link_details']?>'><i class="material-icons">info</i> Details</a>
+                        <?=Form::link($turnier['link_details'], '<i class="material-icons">info</i> Details')?>
                         <?php }elseif (isset($turnier['link_bearbeiten'])){?>
-                            <a class="no w3-text-blue w3-hover-text-secondary" href='<?=$turnier['link_bearbeiten']?>'><i class="material-icons">create</i> Turnier bearbeiten</a>
+                            <?=Form::link($turnier['link_bearbeiten'],'<i class="material-icons">create</i> Turnier bearbeiten')?>
                         <?php }//end if?>
                     </td> 
                 <?php }//end if?>
@@ -31,13 +31,13 @@
                 <!--Aktionen für Ligaausschuss-->
                 <?php if ($ligacenter) {?> 
                     <td style='vertical-align: middle; white-space: nowrap'>
-                        <a class="no w3-large w3-text-blue w3-hover-text-secondary" href='<?=$turnier['link_bearbeiten']?>'>Turnier&nbsp;bearbeiten</a>
+                        <?=Form::link($turnier['link_bearbeiten'],'<i class="material-icons">create</i> Turnier bearbeiten')?>
                         <br>
-                        <a class="no w3-large w3-text-blue w3-hover-text-secondary" href='<?=$turnier['link_log']?>'>Log&nbsp;einsehen</a>
+                        <?=Form::link($turnier['link_log'],'<i class="material-icons">info_outline</i> Log einsehen')?>
                         <br>
-                        <a class="no w3-large w3-text-blue w3-hover-text-secondary" href='<?=$turnier['link_spielplan']?>'>Spielplan/Ergebnis</a>
+                        <?=Form::link($turnier['link_spielplan'], '<i class="material-icons">list</i> Spielplan/Ergebnis')?>
                         <br>
-                        <a class="no w3-large w3-text-blue w3-hover-text-secondary" href='<?=$turnier['link_anmelden']?>'>Teams an/abmelden</a>
+                        <?=Form::link($turnier['link_anmelden'],'<i class="material-icons">how_to_reg</i> Teams an/abmelden')?>
                     </td> 
                 <?php }//end if?>
             </tr>

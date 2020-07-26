@@ -141,7 +141,7 @@ include '../../templates/header.tmp.php';
                 <?=$daten['plaetze'] . ' ' . $daten['spielplan']?>
                 <?php if(!empty($daten['link_spielplan'])){?>
                     <br>
-                    <a href="<?=$daten['link_spielplan']?>" class="no w3-text-blue w3-hover-text-secondary">Download Spielplan</a>
+                    <?=Form::link($daten['link_spielplan'], 'Download Spielplan')?>
                 <?php }else{?>
                     <br>
                     <span class="w3-text-grey">Der Spielplan wird in der Woche vor dem Turnier erstellt</span>
