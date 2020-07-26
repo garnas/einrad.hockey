@@ -29,6 +29,7 @@ if(isset($_GET['spieler_id'])){
     if (array_key_exists($_GET['spieler_id'], $spieler_liste)){
         $akt_spieler = new Spieler($_GET['spieler_id']);
         $daten = $akt_spieler->get_spieler_details();
+        $daten['teamname'] = Team::teamid_to_teamname($daten['team_id']);
         $show_form = true;
     }else{
         Form::error("Spieler wurde nicht gefunden");
@@ -118,6 +119,7 @@ include '../../templates/header.tmp.php';
 </div>
 <?php if ($show_form ?? false){?>
     <form class="w3-card-4 w3-panel" method='post'>
+        <!-- Spieler-Details -->
         <h3>Spieler mit der ID <?=$daten['spieler_id']?> ändern</h3>
         <p>
             <label class="w3-text-primary" for="vorname">Vorname</labeL>
@@ -154,9 +156,10 @@ include '../../templates/header.tmp.php';
             <label for="junior"><span class="w3-text-primary w3-hover-text-secondary" style="cursor: pointer;"><i> Junior-Schiedsrichter</i></span></label>
         </p>
         <p>
-            <label class="w3-text-primary w3-hover-text-secondary" style="cursor: pointer" for="teamname">Team ändern</label>
-            <input type="text" class="w3-input w3-border w3-border-primary" value="<?=Team::teamid_to_teamname($daten['team_id']);?>" list="teams" id="teamname" name="teamname">
+            <label class="w3-text-primary"for="teamname">Team ändern</label>
+            <input type="text" class="w3-input w3-border w3-border-primary" value="<?=$daten['teamname']?>" list="teams" id="teamname" name="teamname">
                 <?=Form::datalist_teams()?>
+                <?=Form::link("lc_kader.php?team_id=" . $daten['team_id'], '<i class="material-icons">group</i> Zum Teamkader der ' . $daten['teamname'])?>
         </p>
         <p>
             <label class="w3-text-primary" for="letzte_saison">Letzte aktive Saison</label>
@@ -167,17 +170,11 @@ include '../../templates/header.tmp.php';
             <input class="w3-button w3-tertiary w3-block" type="submit" name="spieler_aendern" value="Spieler ändern">
         </p>
     </form>
-    <form onsubmit="return confirm('Der Spieler mit der ID <?=$spieler_id?> (<?=$daten['vorname'] . ' ' . $daten['nachname']?>) wird gelöscht werden.');" class="w3-container w3-card-4 w3-panel" method="POST">
+    <form onsubmit="return confirm('Der Spieler mit der ID <?=$daten['spieler_id']?> (<?=$daten['vorname'] . ' ' . $daten['nachname']?>) wird gelöscht werden.');" class="w3-container w3-card-4 w3-panel" method="POST">
         <p>
             <input class="w3-button w3-secondary w3-block" type="submit" name="delete_spieler" value="Spieler löschen">
         </p>
     </form>
-    <!-- Navigation -->
-    <div class="w3-panel w3-card-4">
-        <p>
-            <a class="w3-button w3-primary w3-block" href="lc_kader.php?team_id=<?=$daten['team_id']?>"><i class="material-icons">chevron_left</i>Zum Teamkader<i class="material-icons" style="visibility: hidden">chevron_right</i></a>
-        </p>
-    </div>
 <?php } //Ende IF
 
 include '../../templates/footer.tmp.php';
