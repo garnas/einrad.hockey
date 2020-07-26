@@ -99,7 +99,7 @@
         </p>
         <p>
             <label class="w3-text-primary" for="handy">Handy</label>
-            <input required value="<?=$daten['handy']?>" type="number" class="w3-input w3-border w3-border-primary" id="handy" name="handy">
+            <input required value="<?=$daten['handy']?>" type="text" class="w3-input w3-border w3-border-primary" id="handy" name="handy">
             <i class="w3-text-grey">Das Handy muss am Turniertag erreichbar sein</i>
         </p>
     </div>
