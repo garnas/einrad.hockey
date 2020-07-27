@@ -46,7 +46,6 @@ class Turnier {
                 ON teams_liga.team_id = turniere_liga.ausrichter "
                 . $where .
                  "ORDER BY turniere_liga.datum asc ";
-        //db::debug($sql);
         $result = db::readdb($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)){
@@ -85,10 +84,8 @@ class Turnier {
         WHERE turniere_liga.saison = '$saison'
         AND turniere_liga.phase != 'ergebnis'
         ORDER BY turniere_liste.position_warteliste ASC";
-        //db::debug($sql);
         $result = db::readdb($sql);
         $turnier_listen = array();
-        $return = array();
         while ($anmeldung = mysqli_fetch_assoc($result)){
             if (empty($turnier_listen[$anmeldung['turnier_id']][$anmeldung['liste']])){
                 $turnier_listen[$anmeldung['turnier_id']][$anmeldung['liste']] = array(); //Damit diverse Arrayfunktionen ordentlich funktionieren, auch bei leeren Listen.
@@ -114,14 +111,13 @@ class Turnier {
         ORDER BY turniere_liste.position_warteliste ASC";
         $result = db::readdb($sql);
         $liste = array();
+        $liste['team_ids'] = $liste['teamnamen'] = $liste['spiele'] = $liste['melde'] = $liste['warte'] = array();
         while ($anmeldung = mysqli_fetch_assoc($result)){
+            //Für Turnierlisten
             $liste[$anmeldung['liste']][$anmeldung['team_id']] = $anmeldung;
             $liste[$anmeldung['liste']][$anmeldung['team_id']]['tblock'] = Tabelle::get_team_block($anmeldung['team_id']);
             $liste[$anmeldung['liste']][$anmeldung['team_id']]['wertigkeit'] = Tabelle::get_team_wertigkeit($anmeldung['team_id']);
         }
-        if (empty($liste['spiele'])){ $liste['spiele'] = array();} //Damit Array-Funktionen auch bei leeren Listen funktionieren
-        if (empty($liste['melde'])){ $liste['melde'] = array();}
-        if (empty($liste['warte'])){ $liste['warte'] = array();}
         return db::escape($liste); //array
     }
 
