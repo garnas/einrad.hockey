@@ -133,7 +133,8 @@ if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])){
         if (Config::ACTIVATE_EMAIL){
             if ($mailer->send()){
                 Form::affirm("Email wurde versendet");
-                header('Location: tc_emails.php');
+                unset($_SESSION[$list_id]);
+                header('Location: ' . db::escape($_SERVER['PHP_SELF']));
                 die();
             }else{
                 Form::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden. Manuell Mail versenden: " . Form::mailto(Config::LAMAIL));
@@ -144,7 +145,6 @@ if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])){
             db::debug($mailer);
         }
     }
-    unset($_SESSION[$list_id]);
 }
 
 //Zum Ausfüllen des Absendeforumulars

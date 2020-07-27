@@ -4,14 +4,14 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_team.logic.php'; //Auth
-require_once '../../logic/emails.logic.php';
+require_once '../../logic/kontaktcenter.logic.php';
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 $titel = 'Kontaktcenter | ' . $_SESSION['teamname'];
 include '../../templates/header.tmp.php';
-include '../../templates/emails_auswaehlen.tmp.php';
+include '../../templates/kontaktcenter.tmp.php';
 include '../../templates/footer.tmp.php';
 
 

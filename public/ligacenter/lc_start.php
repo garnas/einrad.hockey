@@ -16,7 +16,7 @@ $centerpanels = array(
   array("name" => "Teamstrafen", "link" => "lc_teamstrafe.php", "farbe" => "w3-tertiary"),
   array("name" => "Teamkader verwalten", "link" => "lc_kader.php", "farbe" => "w3-tertiary"),
   array("name" => "Spieler verwalten", "link" => "lc_spieler_aendern.php", "farbe" => "w3-tertiary"),
-  array("name" => "Emails verschicken", "link" => "lc_emails.php", "farbe" => "w3-green"),
+  array("name" => "Emails verschicken", "link" => "lc_kontaktcenter.php", "farbe" => "w3-green"),
   array("name" => "Passwort ändern", "link" => "lc_pw_aendern.php", "farbe" => "w3-secondary"),
   array("name" => "Admin", "link" => "lc_admin.php", "farbe" => "w3-secondary"),
   array("name" =>"Logout", "link" => "lc_logout.php", "farbe" => "w3-secondary"),

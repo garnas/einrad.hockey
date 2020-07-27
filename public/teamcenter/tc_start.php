@@ -9,7 +9,7 @@ $centerpanels = array(
   array("name" => "Turnier-anmeldung", "link" => "tc_turnierliste_anmelden.php", "farbe" => "w3-primary"),
   array("name" => "Turnier erstellen", "link" => "tc_turnier_erstellen.php", "farbe" => "w3-primary"),
   array("name" => "Turnier verwalten", "link" => "tc_turnierliste_verwalten.php", "farbe" => "w3-primary"),
-  array("name" => "Kontaktcenter", "link" => "tc_emails.php", "farbe" => "w3-tertiary"),
+  array("name" => "Kontaktcenter", "link" => "tc_kontaktcenter.php", "farbe" => "w3-tertiary"),
   array("name" => "Neuigkeit erstellen", "link" => "tc_neuigkeit_eintragen.php", "farbe" => "w3-tertiary"),
   array("name" => "Neuigkeit bearbeiten", "link" => "tc_neuigkeit_liste.php", "farbe" => "w3-tertiary"),
   array("name" => "Teamdaten", "link" => "tc_teamdaten.php", "farbe" => "w3-tertiary"),
