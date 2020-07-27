@@ -57,6 +57,16 @@ class Config {
     const SCHIRIMAIL = 'schiri@einrad.hockey';
 
     ///////////////////////////////////////////////////////////////
+    ///////////////////////Mailversand Server//////////////////////
+    ///////////////////////////////////////////////////////////////
+
+    const ACTIVATE_EMAIL = false; //Bei True, werden Emails tatsächlich versendet, bei false wird db::debug($mailer) ausgeführt
+    const SMTP_HOST = 'smtp.ionos.de';
+    const SMTP_USER = 'mailbot@einrad.hockey';
+    const SMTP_PW = 'Mailbot4einrad!';
+    const SMTP_PORT = 25;
+
+    ///////////////////////////////////////////////////////////////
     ///////////////////////////Teamblöcke//////////////////////////
     ///////////////////////////////////////////////////////////////
     //Für die Block und Wertzuordnung in der Rangtabelle siehe Tabelle::platz_to_block und Tabelle::platz_to_wertigkeit
