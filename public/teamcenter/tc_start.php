@@ -12,8 +12,8 @@ $centerpanels = array(
   array("name" => "Kontaktcenter", "link" => "tc_kontaktcenter.php", "farbe" => "w3-tertiary"),
   array("name" => "Neuigkeit erstellen", "link" => "tc_neuigkeit_eintragen.php", "farbe" => "w3-tertiary"),
   array("name" => "Neuigkeit bearbeiten", "link" => "tc_neuigkeit_liste.php", "farbe" => "w3-tertiary"),
-  array("name" => "Teamdaten", "link" => "tc_teamdaten.php", "farbe" => "w3-tertiary"),
-  array("name" => "Teamkader", "link" => "tc_kader.php", "farbe" => "w3-tertiary"),
+  array("name" => "Teamdaten", "link" => "tc_teamdaten.php", "farbe" => "w3-green"),
+  array("name" => "Teamkader", "link" => "tc_kader.php", "farbe" => "w3-green"),
   array("name" => "Passwort ändern", "link" => "tc_pw_aendern.php", "farbe" => "w3-grey"),
   array("name" => "Logout", "link" => "tc_logout.php", "farbe" => "w3-grey"),
 );

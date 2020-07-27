@@ -77,7 +77,7 @@
 </div>
 
 <!-- Anzeige des Formulars für den Emailversand -->
-<?php if (!empty($_SESSION[$list_id])){ ?>
+<?php if (!empty($_SESSION[$list_id]['emails'])){ ?>
     <div class="w3-card-4 w3-panel">
         <h2 class="w3-text-primary">Kontaktformular: <?=$_SESSION[$list_id]['type']?></h2>
         <form method="post" onsubmit="return confirm('Soll die Email wirklich abgeschickt werden?')">

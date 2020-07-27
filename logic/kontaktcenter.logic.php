@@ -28,7 +28,6 @@ if (isset($_POST['reset'])){
 if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])){
     unset ($_SESSION[$list_id]);
     $akt_turnier = new Turnier($_POST['turnier_id']);
-    $emails_klartext = true;
     if (empty($akt_turnier->daten)){
         Form::error("Turnier wurde nicht gefunden");
         header('Location: ' . db::escape($_SERVER['PHP_SELF']));
@@ -141,7 +140,10 @@ if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])){
                 Form::error($mailer->ErrorInfo);
             }
         }else{ //Debugging
-            $mailer->Password = '***********'; //Passwort verstecken
+            if (!($ligacenter ?? false)){
+                $mailer->Password = '***********'; //Passwort verstecken
+                $mailer->ClearAllRecipients( ); 
+            }
             db::debug($mailer);
         }
     }
@@ -158,4 +160,8 @@ if (isset($_SESSION[$list_id])){
         $from = $_SESSION['teamname'];
         $tos = $_SESSION[$list_id]['empfaenger'];
     }
+    if (empty($_SESSION[$list_id]['emails'])){
+        Form::error("Es wurden keine Email-Adressen gefunden.");
+    }
 }
+

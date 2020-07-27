@@ -53,7 +53,10 @@ class MailBot {
                     Form::error($mailer->ErrorInfo);
                 }
             }else{ //Debugging
-                $mailer->Password = '***********'; //Passwort verstecken
+                if (!($ligacenter ?? false)){
+                    $mailer->Password = '***********'; //Passwort verstecken
+                    $mailer->ClearAllRecipients( ); 
+                }
                 db::debug($mailer);
             }
         }
