@@ -142,7 +142,7 @@ if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])){
         }else{ //Debugging
             if (!($ligacenter ?? false)){
                 $mailer->Password = '***********'; //Passwort verstecken
-                $mailer->ClearAllRecipients( ); 
+                $mailer->ClearAllRecipients(); 
             }
             db::debug($mailer);
         }
