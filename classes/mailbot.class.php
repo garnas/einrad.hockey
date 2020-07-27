@@ -1,39 +1,67 @@
 <?php
-
+// PHP-Mailer hinzufügen //QUELLE: https://www.html-seminar.de/forum/thread/6852-kontaktformular-tutorial/
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 require_once '../../frameworks/phpmailer/src/Exception.php';
 require_once '../../frameworks/phpmailer/src/PHPMailer.php';
+require_once '../../frameworks/phpmailer/src/SMTP.php';
 
 class MailBot {
+
+    //Mailversand mit PHPMailer initieren
+    public static function start_mailer(){
+        $mailer = new PHPMailer();
+        $mailer->isSMTP();
+        $mailer->Host = Config::SMTP_HOST;
+        $mailer->SMTPAuth = true;
+        $mailer->Username = Config::SMTP_USER;
+        $mailer->Password = Config::SMTP_PW;
+        $mailer->SMTPSecure = 'tls';
+        $mailer->Port = Config::SMTP_PORT;
+        $mailer->CharSet = 'UTF-8';
+        return $mailer;
+    }
+
     //Der Mailbot nimmt Emails aus der Datenbank und versendet diese 
     public static function mail_bot()
     {
         $sql = "SELECT * FROM mailbot WHERE mail_status = 'warte' ORDER BY zeit ASC LIMIT 50";
         $result = db::readdb($sql);
         while ($mail = mysqli_fetch_assoc($result)){
-            $mailer = new PHPMailer();
-            $mailer->CharSet = 'UTF-8'; // Charset setzen (für richtige Darstellung von Sonderzeichen/Umlauten)
+            $mailer = self::start_mailer();
             $mailer->isHTML(true); // Für die Links
             $mailer->setFrom($mail['absender']); // Absenderemail und -name setzen
-            $mail_adresses = explode(',',$mail['adressat']);
-            foreach ($mail_adresses as $mail_adress){
-                $mailer->addAddress($mail_adress); // Empfängeradresse
+
+            $mail_addresses = explode(',',$mail['adressat']); //Aus der Datenbank rausholen
+            $anz_mail_addresses = count($mail_addresses);
+            foreach ($mail_addresses as $mail_address){
+                if ($anz_mail_addresses > 15){
+                    $mailer->addBCC($mail_address);
+                }
+                    $mailer->addAddress($mail_address); // Empfängeradresse
             }
-            
+
             $mailer->Subject = $mail['betreff']; // Betreff der Email
             $mailer->Body = stripcslashes($mail['inhalt']); // Betreff der Email
-            db::debug($mailer);
-            /*if ($mailer->send()){
-                self::set_status($mail['mail_id'], 'versendet');
-            }else{
-                self::set_status($mail['mail_id'], 'Fehler', $mailer->ErrorInfo);
-                Form::error($mailer->ErrorInfo);
-            }*/
+
+            //Email-versenden
+            if (Config::ACTIVATE_EMAIL){
+                if ($mailer->send()){
+                    self::set_status($mail['mail_id'], 'versendet');
+                }else{
+                    self::set_status($mail['mail_id'], 'Fehler', $mailer->ErrorInfo);
+                    Form::error($mailer->ErrorInfo);
+                }
+            }else{ //Debugging
+                $mailer->Password = '***********'; //Passwort verstecken
+                db::debug($mailer);
+            }
         }
         Form::affirm('Mailbot wurde ausgeführt.');
     }
+
     //Fügt eine Email zur Datenbank hinzu
+    //Nur für automatische Emails verwenden!
     public static function add_mail($betreff, $inhalt ,$adressaten, $absender = Config::LAMAIL)
     {   
         if (!empty($adressaten)){
@@ -47,6 +75,7 @@ class MailBot {
             db::writedb($sql);
         } 
     }
+
     //Ändert den Status einer Email in der Datenbank
     public static function set_status($mail_id, $mail_status, $fehler = '')
     {
@@ -57,6 +86,7 @@ class MailBot {
         }
         db::writedb($sql);
     }
+
     //Erstellt eine Warnung im Ligacenter, wenn der Mailbot manche mails nicht versenden kann.
     public static function warning_mail()
     {
@@ -67,6 +97,11 @@ class MailBot {
             Form::attention("Der Mailbot kann manche Mails nicht versenden - siehe Datenbank.");
         }
     }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////Automatische Infomails/////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+
     //Erstellt eine Mail in der Datenbank an alle spielberechtigten Teams, wenn es zum Übergang zur Meldephase noch freie Plätze gibt
     public static function mail_plaetze_frei($akt_turnier)
     {   
@@ -88,6 +123,7 @@ class MailBot {
             }
         }
     }
+
     //Erstellt eine Mail in der Datenbank an alle vom Losen betroffenen Teams
     public static function mail_gelost($akt_turnier)
     {   
