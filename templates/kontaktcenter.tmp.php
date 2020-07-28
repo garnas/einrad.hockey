@@ -105,10 +105,10 @@
                 <textarea class="w3-input w3-border w3-border-primary" rows="10" type="text" id="text" name="text" required><?=stripcslashes($_POST['text'] ?? '')?></textarea>
             </p>
             <?php if($teamcenter){ ?>
-                <p class="w3-text-green">Zur Kontrolle wird eine Email an dein Team gesendet, falls es nicht auf der Empfängerliste steht.</p>
+                <p class="w3-text-green">Es wird ebenfalls eine Email an dein Team gesendet, falls ihr nicht schon auf der Empfängerliste steht.</p>
             <?php } //endif?>
             <?php if ($anzahl_emails > $grenze_bcc){?>
-                <p class="w3-text-green">Hinweis: Da mehr als <?=$grenze_bcc?> E-Mail-Adressen angeschrieben werden, werden alle im BCC angeschrieben. 
+                <p class="w3-text-green">Hinweis: Da mehr als <?=$grenze_bcc?> Email-Adressen angeschrieben werden, werden alle im BCC angeschrieben. 
             <?php } //end if?>
             <p>
                 <input type="submit" class="w3-secondary w3-round w3-ripple w3-button" name="send_mail" value="Senden">

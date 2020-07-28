@@ -126,7 +126,7 @@ if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])){
         
         //Text und Betreff hinzufügen
         $mailer->Subject = $betreff;
-        $mailer->Body = $text . "\r\n\r\nVersendet aus dem Teamcenter";
+        $mailer->Body = $text . "\r\n\r\nVersendet aus dem Kontaktcenter von einrad.hockey";
 
         //Email-versenden
         if (Config::ACTIVATE_EMAIL){
