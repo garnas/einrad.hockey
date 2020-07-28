@@ -72,7 +72,7 @@
 
     <!-- Burger Menü -->
     <div class="w3-display-right">
-        <button onclick="open_sidebar()" class="w3-btn w3-text-primary">
+        <button onclick="open_sidebar()" class="w3-btn w3-round w3-ripple w3-text-primary">
             <!-- vertical-align 0% stehen lassen, da material-icons vertical-align in style.css verändern -->
             <i class="w3-xxlarge material-icons" style="vertical-align: 0%;">menu</i>
         </button>
@@ -81,11 +81,9 @@
     <!-- Logout Button -->
     <div class="w3-display-bottomright w3-text-primary w3-large">
         <?php if (isset($_SESSION['team_id'])){?>
-        <a href='../teamcenter/tc_logout.php' class="w3-button w3-hover-primary"><i style=""
-                class="material-icons w3-xlarge">block</i> Logout</a>
+            <a href='../teamcenter/tc_logout.php' class="w3-button w3-hover-primary"><i class="material-icons w3-xlarge">block</i> Logout</a>
         <?php }elseif (isset($_SESSION['la_id'])){?>
-        <a href='../ligacenter/lc_logout.php' class="w3-button w3-hover-primary"><i style=""
-                class="material-icons w3-xlarge">block</i> Logout</a>
+            <a href='../ligacenter/lc_logout.php' class="w3-button w3-hover-primary"><i class="material-icons w3-xlarge">block</i> Logout</a>
         <?php }?>
     </div>
 </div>

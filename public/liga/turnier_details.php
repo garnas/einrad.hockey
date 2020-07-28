@@ -150,11 +150,10 @@ include '../../templates/header.tmp.php';
         </tr>
         <tr>
             <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;"><i class="material-icons">announcement</i> Hinweis</td>
-            <td><?=$daten['hinweis']?></td>
+            <td><?=nl2br($daten['hinweis'])?></td>
         </tr>
     </table>
 </div>
-
 <!--Anmeldungen / Listen -->
 <?php if ($daten['art'] != '<i>Spaßturnier</i>'){?>
     <p class="w3-text-grey w3-border-bottom w3-border-grey">Spielen-Liste</p> 

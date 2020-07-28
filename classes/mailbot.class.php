@@ -42,7 +42,7 @@ class MailBot {
             }
 
             $mailer->Subject = $mail['betreff']; // Betreff der Email
-            $mailer->Body = stripcslashes($mail['inhalt']); // Betreff der Email
+            $mailer->Body = $mail['inhalt']; // Inhalt der Email
 
             //Email-versenden
             if (Config::ACTIVATE_EMAIL){

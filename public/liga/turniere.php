@@ -192,7 +192,7 @@ function modal(turnier_id){
                             </tr>
                             <tr>
                                 <td style="vertical-align: middle" class=""><i class="material-icons">announcement</i> Hinweis</td>
-                                <td><?=$turnier['hinweis']?></td>
+                                <td><?=nl2br($turnier['hinweis'])?></td>
                             </tr>
                             <?php if($turnier['phase'] == 'spielplan'){?>
                                 <tr>

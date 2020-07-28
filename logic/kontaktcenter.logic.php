@@ -89,7 +89,7 @@ if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])){
     $error = false;
     $emails = $_SESSION[$list_id]['emails'];
     $betreff = $_POST['betreff'];
-    $text = stripcslashes($_POST['text']); //stripcslashes: \r\n für newline-chars wieder escaped.
+    $text = stripcslashes($_POST['text']); //stripcslashes: \r\n für newline-chars wieder escaped, $_POST wird ausnahmsweise nicht in db gespeichert.
     
     if (empty($emails) or empty($betreff) or empty($text)){
         Form::error("Kontaktformular unvollständig");
