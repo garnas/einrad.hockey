@@ -50,6 +50,7 @@ if(isset($_POST['login'])) {
 /////////////////////////////////////////////////////////////////////////////
 $page_width = "480px";
 $titel = "Ligacenter | Deutsche Einradhockeyliga";
+$content = "Im Ligacenter kann der Ligaausschuss die Liga verwalten. Nur Mitglieder des Ligaausschusses haben einen Login.";
 include '../../templates/header.tmp.php';
 ?>
 

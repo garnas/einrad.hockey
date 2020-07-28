@@ -1,6 +1,6 @@
 <!-- Auswahl der Emailadressen -->
 <h1 class="w3-text-primary">Kontaktcenter</h1>
-<p class="w3-text-grey">Das Kontaktcenter kann dazu verwendet werden, um andere Teams Emails zu senden.</p>
+<p class="w3-text-grey">Das Kontaktcenter kann dazu verwendet werden, um anderen Teams Emails zu senden.</p>
 
 <!-- Javascript für die Tabs zu finden in script.js -->
 <?php if (empty($_SESSION[$list_id]['emails'])){?>
