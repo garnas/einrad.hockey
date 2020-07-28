@@ -84,7 +84,7 @@ class Team {
     //Gibt ein Array mit allen Teamnamen zurück
     public static function list_of_all_teams()
     {
-        $sql = "SELECT teamname FROM teams_liga WHERE ligateam = 'Ja' AND teams_liga.aktiv = 'Ja' ORDER BY teamname ASC";
+        $sql = "SELECT teamname FROM teams_liga WHERE ligateam = 'Ja' AND aktiv = 'Ja' ORDER BY teamname ASC";
         $result = db::readdb($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)){

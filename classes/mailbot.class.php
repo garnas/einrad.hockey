@@ -1,39 +1,70 @@
 <?php
-
+// PHP-Mailer hinzufügen //QUELLE: https://www.html-seminar.de/forum/thread/6852-kontaktformular-tutorial/
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 require_once '../../frameworks/phpmailer/src/Exception.php';
 require_once '../../frameworks/phpmailer/src/PHPMailer.php';
+require_once '../../frameworks/phpmailer/src/SMTP.php';
 
 class MailBot {
+
+    //Mailversand mit PHPMailer initieren
+    public static function start_mailer(){
+        $mailer = new PHPMailer();
+        $mailer->isSMTP();
+        $mailer->Host = Config::SMTP_HOST;
+        $mailer->SMTPAuth = true;
+        $mailer->Username = Config::SMTP_USER;
+        $mailer->Password = Config::SMTP_PW;
+        $mailer->SMTPSecure = 'tls';
+        $mailer->Port = Config::SMTP_PORT;
+        $mailer->CharSet = 'UTF-8';
+        return $mailer;
+    }
+
     //Der Mailbot nimmt Emails aus der Datenbank und versendet diese 
     public static function mail_bot()
     {
         $sql = "SELECT * FROM mailbot WHERE mail_status = 'warte' ORDER BY zeit ASC LIMIT 50";
         $result = db::readdb($sql);
         while ($mail = mysqli_fetch_assoc($result)){
-            $mailer = new PHPMailer();
-            $mailer->CharSet = 'UTF-8'; // Charset setzen (für richtige Darstellung von Sonderzeichen/Umlauten)
+            $mailer = self::start_mailer();
             $mailer->isHTML(true); // Für die Links
             $mailer->setFrom($mail['absender']); // Absenderemail und -name setzen
-            $mail_adresses = explode(',',$mail['adressat']);
-            foreach ($mail_adresses as $mail_adress){
-                $mailer->addAddress($mail_adress); // Empfängeradresse
+
+            $mail_addresses = explode(',',$mail['adressat']); //Aus der Datenbank rausholen
+            $anz_mail_addresses = count($mail_addresses);
+            foreach ($mail_addresses as $mail_address){
+                if ($anz_mail_addresses > 15){
+                    $mailer->addBCC($mail_address);
+                }
+                    $mailer->addAddress($mail_address); // Empfängeradresse
             }
-            
+
             $mailer->Subject = $mail['betreff']; // Betreff der Email
-            $mailer->Body = stripcslashes($mail['inhalt']); // Betreff der Email
-            db::debug($mailer);
-            /*if ($mailer->send()){
-                self::set_status($mail['mail_id'], 'versendet');
-            }else{
-                self::set_status($mail['mail_id'], 'Fehler', $mailer->ErrorInfo);
-                Form::error($mailer->ErrorInfo);
-            }*/
+            $mailer->Body = nl2br($mail['inhalt']); // Inhalt der Email
+
+            //Email-versenden
+            if (Config::ACTIVATE_EMAIL){
+                if ($mailer->send()){
+                    self::set_status($mail['mail_id'], 'versendet');
+                }else{
+                    self::set_status($mail['mail_id'], 'Fehler', $mailer->ErrorInfo);
+                    Form::error($mailer->ErrorInfo);
+                }
+            }else{ //Debugging
+                if (!($ligacenter ?? false)){
+                    $mailer->Password = '***********'; //Passwort verstecken
+                    $mailer->ClearAllRecipients(); 
+                }
+                db::debug($mailer);
+            }
         }
         Form::affirm('Mailbot wurde ausgeführt.');
     }
+
     //Fügt eine Email zur Datenbank hinzu
+    //Nur für automatische Emails verwenden!
     public static function add_mail($betreff, $inhalt ,$adressaten, $absender = Config::LAMAIL)
     {   
         if (!empty($adressaten)){
@@ -47,6 +78,7 @@ class MailBot {
             db::writedb($sql);
         } 
     }
+
     //Ändert den Status einer Email in der Datenbank
     public static function set_status($mail_id, $mail_status, $fehler = '')
     {
@@ -57,6 +89,7 @@ class MailBot {
         }
         db::writedb($sql);
     }
+
     //Erstellt eine Warnung im Ligacenter, wenn der Mailbot manche mails nicht versenden kann.
     public static function warning_mail()
     {
@@ -67,6 +100,11 @@ class MailBot {
             Form::attention("Der Mailbot kann manche Mails nicht versenden - siehe Datenbank.");
         }
     }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////Automatische Infomails/////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+
     //Erstellt eine Mail in der Datenbank an alle spielberechtigten Teams, wenn es zum Übergang zur Meldephase noch freie Plätze gibt
     public static function mail_plaetze_frei($akt_turnier)
     {   
@@ -88,6 +126,7 @@ class MailBot {
             }
         }
     }
+
     //Erstellt eine Mail in der Datenbank an alle vom Losen betroffenen Teams
     public static function mail_gelost($akt_turnier)
     {   
@@ -132,7 +171,7 @@ class MailBot {
                 if ($akt_turnier->check_team_block($team_id) && !$akt_turnier->check_doppel_anmeldung($team_id)){
                     $betreff = "Neues " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'];
                     $inhalt = "<html>Hallo " . Team::teamid_to_teamname($team_id) . ","
-                        . "\r\n\r\nEs wurde ein neues Turnier eingetragen, für welches ihr euch Anmelden könnt: " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->daten['datum']))
+                        . "\r\n\r\nes wurde ein neues Turnier eingetragen, für welches ihr euch Anmelden könnt: " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->daten['datum']))
                         . " (<a href='https://einrad.hockey/liga/turnier_details?turnier_id=" . $akt_turnier->daten['turnier_id'] . "'>Link des neuen Turniers</a>)"
                         . "\r\n\r\nFalls es nicht gewünscht ist automatische E-Mails durch die Webseite der Einradhockeyliga zu erhalten, kannst du dies <a href='https://einrad.hockey/teamcenter/tc_teamdaten_aendern'>hier</a> deaktivieren."
                         . "\r\n\r\nBis zum nächsten Mal,"
@@ -162,11 +201,11 @@ class MailBot {
     }
     //Erstellt eine Mail in der Datenbank an den Ligaausschuss, wenn ein Team Turnierdaten ändert.
     public static function mail_turnierdaten_geaendert($akt_turnier){
-        $betreff = "Turnierdaten geändert:" . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'];
+        $betreff = "Turnierdaten geändert: " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'];
         $inhalt = "<html>Hallo Ligaausschuss,"
-            . "\r\n\r\nEin Ausrichter hat seine Turnierdaten verändert: <a href='https://einrad.hockey/ligacenter/lc_turnier_log?turnier_id=" . $akt_turnier->daten['turnier_id'] . "'>Link zum Turnier</a>"
+            . "\r\n\r\nein Ausrichter hat seine Turnierdaten verändert: <a href='https://einrad.hockey/ligacenter/lc_turnier_log?turnier_id=" . $akt_turnier->daten['turnier_id'] . "'>Link zum Turnier</a>"
             . "\r\n\r\n<b>Teams werden nicht mehr automatisch benachrichtigt.</b>"
             . "\r\n\r\nEuer Mailbot</html>";
-        self::add_mail($betreff, $inhalt, Config::LAMAIL);
+        self::add_mail($betreff, $inhalt, Config::LAMAIL, Config::SMTP_USER);
     }
 }

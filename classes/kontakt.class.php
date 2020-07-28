@@ -47,8 +47,9 @@ class Kontakt {
     }
 
     public static function get_emails_turnier($turnier_id)
-    {
-        $sql = "SELECT DISTINCT teams_kontakt.email, teams_liga.teamname 
+    {   
+        //distinct email funktioniert nicht, da sonst teamnamen fehlen oder doppelt vorkommen. 
+        $sql = "SELECT teams_kontakt.email, teams_liga.teamname 
         FROM teams_kontakt
         INNER JOIN teams_liga
         ON teams_liga.team_id = teams_kontakt.team_id
@@ -60,8 +61,12 @@ class Kontakt {
         $result = db::readdb($sql);
         $return['emails'] = $return['teamnamen'] = array();
         while ($x = mysqli_fetch_assoc($result)){
-            array_push($return['teamnamen'],$x['teamname']);
-            array_push($return['emails'],$x['email']);
+            if (!in_array($x['teamname'],$return['teamnamen'])){
+                array_push($return['teamnamen'],$x['teamname']);
+            }
+            if (!in_array($x['email'],$return['emails'])){
+                array_push($return['emails'],$x['email']);
+            }
         }
         return db::escape($return);//array
     }

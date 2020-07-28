@@ -53,6 +53,7 @@ if(isset($_POST['login'])) {
 /////////////////////////////////////////////////////////////////////////////
 $page_width = "480px";
 $titel = "Teamcenter | Deutsche Einradhockeyliga";
+$content = "Im Teamcenter können Teams ihren Kader verwalten, ihre Teamdaten ändern und sich zu Turnieren an- und abmelden.";
 include '../../templates/header.tmp.php';
 ?>
 
@@ -74,4 +75,4 @@ include '../../templates/header.tmp.php';
     </p>
 </form>
 
-<?php include '../../templates/footer.tmp.php';?>
+<?php include '../../templates/footer.tmp.php';

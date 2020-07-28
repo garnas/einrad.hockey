@@ -104,8 +104,10 @@
     <div class="w3-panel w3-card-4">
         <h3>Turnierdetails</h3>
         <p>
-            <label class="w3-text-primary" for="hinweis">Hinweistext</label>
-            <input type="text" class="w3-input w3-border w3-border-primary" value="<?=$_POST['hinweis'] ?? '';?>" id="hinweis" name="hinweis">
+            <label class="w3-text-primary" for="text">Hinweistext</label>
+            <!--<input type="text" class="w3-input w3-border w3-border-primary" value="<?=$_POST['hinweis'] ?? '';?>" id="hinweis" name="hinweis">-->
+            <textarea class="w3-input w3-border w3-border-primary" onkeyup="woerter_zaehlen(1500);" maxlength="1500" rows="4" id="text" name="hinweis" required><?=stripcslashes($_POST['hinweis'] ?? '')?></textarea>
+            <p id="counter"><p>
         </p>
         <p>
             <label class="w3-text-primary" for="tname">Turniername <i class="w3-small">(optional)</i></label>

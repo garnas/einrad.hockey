@@ -41,8 +41,8 @@ function centerpanels_anordnung(){
 }
 
 //Woerterzaehlen für Neuigkeit eintragen und bearbeiten
-function woerter_zaehlen() {
-  var anzahl = 500 - window.document.getElementById('text').value.length;
+function woerter_zaehlen(max_woerter = 500) {
+  var anzahl = max_woerter - window.document.getElementById('text').value.length;
   document.getElementById("counter").innerHTML = anzahl + ' Zeichen übrig';
 
   if(anzahl < 30){

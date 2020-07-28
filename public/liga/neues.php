@@ -126,7 +126,7 @@ include '../../templates/header.tmp.php';
             <p>Die meisten Tore: <br> Nicht implementiert</p>
             -->
             <?php if (!empty($statistik['max_turniere'])) {?>
-                <span>Die meisten gespielten Turniere:
+                <span>Die meisten gespielten Turniere:</span>
                 <table class="w3-table">
                     <?php foreach ($statistik['max_turniere'] as $team){?>
                         <tr class="<?=$team['color']?>">
@@ -136,7 +136,6 @@ include '../../templates/header.tmp.php';
                     <?php } //end foreach?>
                 </table>
             <?php }else{?> <p class="w3-text-grey w3-center">Keine gespielten Turniere</p> <?php } //end if?>
-            </span>
             <div class="w3-border">
                 <div class="w3-primary w3-center" style="height:24px;width:<?=max($fortschritt,0)?>%"></div>
             </div>

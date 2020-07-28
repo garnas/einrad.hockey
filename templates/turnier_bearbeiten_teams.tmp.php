@@ -67,7 +67,9 @@
         <h3>Turnierdetails</h3>
         <p>
             <label class="w3-text-primary" for="hinweis">Hinweistext</label>
-            <input type="text" class="w3-input w3-border w3-border-primary" value="<?=$daten['hinweis']?>" id="hinweis" name="hinweis">
+            <!--<input type="text" class="w3-input w3-border w3-border-primary" value="<?=$daten['hinweis']?>" id="hinweis" name="hinweis">-->
+            <textarea class="w3-input w3-border w3-border-primary" onkeyup="woerter_zaehlen(1500);" maxlength="1500" rows="4" id="text" name="hinweis" required><?=$daten['hinweis']?></textarea>
+            <p id="counter"><p>
         </p>
         <p>
             <label class="w3-text-primary" for="startgebuehr">Startgebühr</label>

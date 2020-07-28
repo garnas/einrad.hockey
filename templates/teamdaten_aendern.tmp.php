@@ -121,6 +121,6 @@
             <input class='w3-button w3-secondary' name='neue_email' type='submit' value='Email eintragen'>
         </p>
     </div>
-    <p class=""><b>Öffentlich*</b>: Deine Email-Adresse wird in der Teamsliste <?=Form::link('../liga/teams.php','hier')?> angezeigt. Andere Ligateams können auch nicht-öffentliche Emails einsehen und kontaktieren.</p>
+    <p class=""><b>Öffentlich*</b>: Deine Email-Adresse wird in der Teamsliste <?=Form::link('../liga/teams.php','hier')?> angezeigt. Andere Ligateams können nicht-öffentliche Emails auf der Webseite nicht einsehen, dafür aber im Kontaktcenter anschreiben.</p>
     <p class=""><b>Infomails**</b>: Du bekommst automatische Infomails, z. B. wenn ein für dein Team relevantes Turnier eingestellt wird.</p>
 </form>
