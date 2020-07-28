@@ -42,7 +42,7 @@ class MailBot {
             }
 
             $mailer->Subject = $mail['betreff']; // Betreff der Email
-            $mailer->Body = $mail['inhalt']; // Inhalt der Email
+            $mailer->Body = nl2br($mail['inhalt']); // Inhalt der Email
 
             //Email-versenden
             if (Config::ACTIVATE_EMAIL){
@@ -171,7 +171,7 @@ class MailBot {
                 if ($akt_turnier->check_team_block($team_id) && !$akt_turnier->check_doppel_anmeldung($team_id)){
                     $betreff = "Neues " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'];
                     $inhalt = "<html>Hallo " . Team::teamid_to_teamname($team_id) . ","
-                        . "\r\n\r\nEs wurde ein neues Turnier eingetragen, für welches ihr euch Anmelden könnt: " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->daten['datum']))
+                        . "\r\n\r\nes wurde ein neues Turnier eingetragen, für welches ihr euch Anmelden könnt: " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->daten['datum']))
                         . " (<a href='https://einrad.hockey/liga/turnier_details?turnier_id=" . $akt_turnier->daten['turnier_id'] . "'>Link des neuen Turniers</a>)"
                         . "\r\n\r\nFalls es nicht gewünscht ist automatische E-Mails durch die Webseite der Einradhockeyliga zu erhalten, kannst du dies <a href='https://einrad.hockey/teamcenter/tc_teamdaten_aendern'>hier</a> deaktivieren."
                         . "\r\n\r\nBis zum nächsten Mal,"
@@ -201,11 +201,11 @@ class MailBot {
     }
     //Erstellt eine Mail in der Datenbank an den Ligaausschuss, wenn ein Team Turnierdaten ändert.
     public static function mail_turnierdaten_geaendert($akt_turnier){
-        $betreff = "Turnierdaten geändert:" . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'];
+        $betreff = "Turnierdaten geändert: " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'];
         $inhalt = "<html>Hallo Ligaausschuss,"
-            . "\r\n\r\nEin Ausrichter hat seine Turnierdaten verändert: <a href='https://einrad.hockey/ligacenter/lc_turnier_log?turnier_id=" . $akt_turnier->daten['turnier_id'] . "'>Link zum Turnier</a>"
+            . "\r\n\r\nein Ausrichter hat seine Turnierdaten verändert: <a href='https://einrad.hockey/ligacenter/lc_turnier_log?turnier_id=" . $akt_turnier->daten['turnier_id'] . "'>Link zum Turnier</a>"
             . "\r\n\r\n<b>Teams werden nicht mehr automatisch benachrichtigt.</b>"
             . "\r\n\r\nEuer Mailbot</html>";
-        self::add_mail($betreff, $inhalt, Config::LAMAIL);
+        self::add_mail($betreff, $inhalt, Config::LAMAIL, Config::SMTP_USER);
     }
 }
