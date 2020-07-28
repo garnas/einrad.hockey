@@ -109,7 +109,7 @@ include '../../templates/header.tmp.php';
                 <?=$daten['strasse']?><br>
                 <?=$daten['plz'].' '.$daten['ort']?><br>
                 <?=Form::link(str_replace(' ', '%20', 'https://www.google.de/maps/search/' . $daten['hallenname'] ."+". $daten['strasse'] ."+" . $daten['plz'] ."+". $daten['ort'] .'/'), 'Google Maps', true);?>
-                <?php if (!empty($daten['haltestellen'])){?><p><i>Haltestellen: <?=$daten['haltestellen']?></i></p> <?php } // endif?>
+                <?php if (!empty($daten['haltestellen'])){?><p style="white-space: normal;"><i>Haltestellen: <?=$daten['haltestellen']?></i></p> <?php } // endif?>
             </td>
         </tr>
         <tr>
