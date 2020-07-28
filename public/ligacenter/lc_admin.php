@@ -114,7 +114,7 @@ include '../../templates/header.tmp.php';?>
 </form>
 <!-- Mailbot -->
 <form method='post'>
-    <h4 class="w3-bottombar w3-text-primary">Automatische Mails rausenden</h4>
+    <h4 class="w3-bottombar w3-text-primary">Automatische Mails versenden</h4>
     <p>
         <input type='submit' name='mailbot' value='Mailbot starten' class="w3-button w3-secondary">
     </p>
