@@ -100,8 +100,10 @@ if (isset($_POST['create_turnier'])) {
             Form::error ("Das Datum liegt nicht am Wochende und ist kein bundesweiter Feiertag");
         }
         if ($datum_unix < (Config::time_offset() + 4*7*24*60*60)){
-            $error = true;
-            Form::error ("Turniere können nur vier Wochen im Voraus eingetragen werden");
+            if ($datum_unix > (strtotime(Config::SAISON_ANFANG) + 4*7*24*60*60)){
+                $error = true;
+                Form::error ("Turniere können nur vier Wochen im Voraus eingetragen werden");
+            }
         }
         //Validierung Startzeit:
         if ((date("H", strtotime($startzeit)) < 9 or date("H", strtotime($startzeit)) > 14) and !$ligacenter){
