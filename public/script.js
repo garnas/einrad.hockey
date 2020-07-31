@@ -53,8 +53,6 @@ function woerter_zaehlen(max_woerter = 500) {
   if(anzahl < 0){
       document.getElementById("counter").innerHTML = 'Zeichenanzahl wurde überschritten.';
       document.getElementById("submit").style.display="none";
-  }else{
-      document.getElementById("submit").style.display="block";
   }
 }
 
