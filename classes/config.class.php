@@ -30,7 +30,7 @@ class Config {
     ///////////////////////////////////////////////////////////////
 
     const LINK_FORUM = 'https://forum.einrad.hockey/';
-    const LINK_ARCHIV = 'https://www.einradhockeyliga.de/archiv/index.html';
+    const LINK_ARCHIV = 'https://archiv.einrad.hockey/archiv/index.html';
     const LINK_INSTA = 'https://www.instagram.com/einradhockeyde/';
     const LINK_FACE = 'https://www.facebook.com/DeutscheEinradhockeyliga';
     
@@ -61,10 +61,10 @@ class Config {
     ///////////////////////////////////////////////////////////////
 
     const ACTIVATE_EMAIL = false; //Bei True, werden Emails tatsächlich versendet, bei false wird db::debug($mailer) ausgeführt
-    const SMTP_HOST = 'smtp.ionos.de';
-    const SMTP_USER = 'mailbot@einrad.hockey';
-    const SMTP_PW = 'Mailbot4einrad!';
-    const SMTP_PORT = 25;
+    const SMTP_HOST = 'HOST';
+    const SMTP_USER = 'EMAIL';
+    const SMTP_PW = 'PW';
+    const SMTP_PORT = 666;
 
     ///////////////////////////////////////////////////////////////
     ///////////////////////////Teamblöcke//////////////////////////

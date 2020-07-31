@@ -1,12 +1,12 @@
 <?php
 //Kann das Turnier erweitert werden?
-if ($akt_turnier->daten['phase'] == 'melde' && ($_POST['plaetze'] ?? $akt_turnier->daten['plaetze']) != 4 && strlen($akt_turnier->daten['tblock']) < 3 && $akt_turnier->daten['tblock'] != 'AB' && ($akt_turnier->daten['art'] == 'I' or $akt_turnier->daten['art'] == 'II')){
+if ($akt_turnier->daten['phase'] == 'melde' && strlen($akt_turnier->daten['tblock']) < 3 && $akt_turnier->daten['tblock'] != 'AB' && ($akt_turnier->daten['art'] == 'I' or $akt_turnier->daten['art'] == 'II')){
     $blockhoch = true;
 }else{
     $blockhoch = false;
 }
 //Kann das Turnier auf ABCDEF erweitert werden?
-if ($akt_turnier->daten['phase'] == 'melde' && ($_POST['plaetze'] ?? $akt_turnier->daten['plaetze']) != 4 && $akt_turnier->daten['art'] != 'III' && ($akt_turnier->daten['art'] == 'I' or $akt_turnier->daten['art'] == 'II')){
+if ($akt_turnier->daten['phase'] == 'melde' && $akt_turnier->daten['art'] != 'III' && ($akt_turnier->daten['art'] == 'I' or $akt_turnier->daten['art'] == 'II')){
     $blockfrei = true;
 }else{
     $blockfrei = false;
@@ -67,6 +67,11 @@ if (isset($_POST['change_turnier'])) {
         $error = true;
     }
     if ($plaetze < 4 or $plaetze > 8){
+        $error = true;
+        Form::error("Ungültige Anzahl an Turnierplätzen");
+    }
+    //4er Turniere nur über den LA
+    if ($plaetze == 4 && $teamcenter){
         $error = true;
         Form::error("Ungültige Anzahl an Turnierplätzen");
     }

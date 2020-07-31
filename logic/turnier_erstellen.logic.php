@@ -84,6 +84,11 @@ if (isset($_POST['create_turnier'])) {
         $error = true;
         Form::error("Ungültige Anzahl an Turnierplätzen");
     }
+    //4er Turniere nur über den LA
+    if ($plaetze == 4 && $teamcenter){
+        $error = true;
+        Form::error("Ungültige Anzahl an Turnierplätzen");
+    }
 
     $datum = $_POST['datum'];
     $startzeit = $_POST['startzeit'];
@@ -100,8 +105,10 @@ if (isset($_POST['create_turnier'])) {
             Form::error ("Das Datum liegt nicht am Wochende und ist kein bundesweiter Feiertag");
         }
         if ($datum_unix < (Config::time_offset() + 4*7*24*60*60)){
-            $error = true;
-            Form::error ("Turniere können nur vier Wochen im Voraus eingetragen werden");
+            //if ($datum_unix > (strtotime(Config::SAISON_ANFANG) + 4*7*24*60*60)){
+                $error = true;
+                Form::error ("Turniere können nur vier Wochen im Voraus eingetragen werden");
+            //}
         }
         //Validierung Startzeit:
         if ((date("H", strtotime($startzeit)) < 9 or date("H", strtotime($startzeit)) > 14) and !$ligacenter){
@@ -136,12 +143,12 @@ if (isset($_POST['create_turnier'])) {
                 $autor = "Fehler! Team- oder Ligacenter konnte nicht ermittelt werden!";
             }
             //Logs schreiben
-            $akt_turnier->schreibe_log("Turnier wurde erstellt",  $autor);
+            $akt_turnier->schreibe_log( "Turnier wurde erstellt",  $autor);
             $akt_turnier->schreibe_log( "Turniername: $tname\r\nAusrichter: $ausrichter_name\r\nStartzeit: $startzeit\r\nBesprechung: $besprechung\r\nArt: $art\r\nBlock: $tblock\r\n" .
                                         "Fixiert: $fixed\r\nDatum: $datum \r\nPlätze: $plaetze\r\nSpielplan: $spielplan\r\nHallenname: $hallenname\r\n". 
                                         "Straße: $strasse\r\nPlz: $plz\r\nOrt: $ort\r\nHaltestellen: $haltestellen\r\nHinweis: $hinweis\r\nStartgebühr: $startgebuehr\r\n".
                                         "Verantwortlicher: $organisator\r\nHandy: $handy", $autor);
-            $akt_turnier->schreibe_log("Anmeldung als Ausrichter:\r\n" . $ausrichter_name . " -> Liste: spiele", $autor);
+            $akt_turnier->schreibe_log( "Anmeldung als Ausrichter:\r\n" . $ausrichter_name . " -> Liste: spiele", $autor);
             //Mailbot
             MailBot::mail_neues_turnier($akt_turnier);
             header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier_id);
