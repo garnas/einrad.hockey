@@ -64,7 +64,7 @@
         <p>
             <label class="w3-text-primary" for="plaetze">Plaetze</label>
             <select required class="w3-select w3-border w3-border-primary" id="plaetze" name="plaetze">
-                <option <?php if (($_POST['plaetze'] ?? '') == '4'){?> selected <?php } //endif?> <?php if($ausrichter_block != 'F'){?> disabled <?php } //end if?> value="4">4 Teams (nur für F-Turniere)</option>
+                <option <?php if (($_POST['plaetze'] ?? '') == '4'){?> selected <?php } //endif?> <?php if($teamcenter){?> disabled <?php } //end if?> value="4">4 Teams (nur in Absprache mit dem Ligaausschuss)</option>
                 <option <?php if (($_POST['plaetze'] ?? '') == '5'){?> selected <?php } //endif?> value="5">5 Teams</option>
                 <option <?php if (($_POST['plaetze'] ?? '') == '6'){?> selected <?php } //endif?> value="6">6 Teams</option>
                 <option <?php if (($_POST['plaetze'] ?? '') == '7'){?> selected <?php } //endif?> value="7">7 Teams</option>

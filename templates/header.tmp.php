@@ -29,8 +29,9 @@ if (!isset($_SESSION['hintergrund']) or (Config::time_offset() - $_SESSION['neue
     <link rel="icon" type="image/png" href="../bilder/favicon/favicon-96x96.png" sizes="96x96">
     <link rel="icon" type="image/png" href="../bilder/favicon/android-icon-192x192.png" sizes="192x192" > 
     <link rel="apple-touch-icon" sizes="180x180" href="../bilder/favicon/apple-icon-180x180.png.png">
-    <link type="text/css" rel="stylesheet" href="../w3.css">
-    <link type="text/css" rel="stylesheet" href="../style.css">
+    <link type="text/css" rel="stylesheet" href="../css/normalize.css">
+    <link type="text/css" rel="stylesheet" href="../css/w3.css">
+    <link type="text/css" rel="stylesheet" href="../css/style.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="../script.js"></script>
     <title><?=$titel ?? "Deutsche Einradhockeyliga"?></title>
