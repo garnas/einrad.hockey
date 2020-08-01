@@ -39,9 +39,9 @@ if (isset($_POST['zweites_freilos'])){
             $betreff = 'Zweites Freilos';
             $text = 
                 "Hallo " . $team['teamname']
-                ."\r\n\r\nda ihr zwei ausgebildete Schiedsrichter im Kader eingetragen habt, wurde euch euer zweites Freilos gutgeschrieben."
-                ."\r\n\r\nWir wünschen euch eine schöne Saison " . Form::get_saison_string() . "!"
-                ."\r\n\r\nEuer MailBot";
+                ."<br><br>da ihr zwei ausgebildete Schiedsrichter im Kader eingetragen habt, wurde euch euer zweites Freilos gutgeschrieben."
+                ."<br><br>Wir wünschen euch eine schöne Saison " . Form::get_saison_string() . "!"
+                ."<br><br>Euer MailBot";
             $akt_kontakt = new Kontakt ($team_id);
             $adressaten = $akt_kontakt->get_emails();
             //MailBot::add_mail($betreff, $text, $adressaten);
