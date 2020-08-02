@@ -125,7 +125,7 @@ class Neuigkeit {
                     $image = imagerotate($image, 90, 0);
                     break;
             }
-        }  
+        }
 
         //Bild mit entsprechender Qualität speichern
         imagejpeg($image, $source, $quality);

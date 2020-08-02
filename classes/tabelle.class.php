@@ -49,7 +49,7 @@ class Tabelle {
         while ($test =  mysqli_fetch_assoc($result)){
             if ($test['phase'] != 'ergebnis'){
                 Form::error("Es fehlen noch Turnierergebnisse von vorherigen Spieltagen.");
-                return false;                 
+                return false;
             }
         }
         return true;
