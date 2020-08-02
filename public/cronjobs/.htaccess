@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Access to /einrad.hockey/public/cronjobs"
+AuthUserFile /kunden/homepages/42/d804653108/htpasswd
+Require user cronjob
