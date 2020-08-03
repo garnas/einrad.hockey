@@ -114,7 +114,7 @@ if (isset($_POST['warteliste_aktualisieren'])){
     die();
 }
 
-/////////////Spielenliste von der Warteliste neu auffuellen/////////////
+/////////////Spielen-Liste von der Warteliste neu auffuellen/////////////
 if (isset($_POST['spieleliste_auffuellen'])){
     $error = false;
 
@@ -132,7 +132,7 @@ if (isset($_POST['spieleliste_auffuellen'])){
     
     if (!$error){
         $akt_turnier->spieleliste_auffuellen("Ligaausschuss");
-        Form::affirm("Spielenliste wurde aufgefüllt");
+        Form::affirm("Spielen-Liste wurde aufgefüllt");
         header('Location: ../ligacenter/lc_team_anmelden.php?turnier_id=' . $daten['turnier_id']);
         die();
     }else{
@@ -199,7 +199,7 @@ include '../../templates/header.tmp.php';
         <input type='hidden' name='abmelden' value='abmelden'>
     </form>
 
-    <!-- Spielenliste auffuellen und Warteliste aktualisieren -->
+    <!-- Spielen-Liste auffuellen und Warteliste aktualisieren -->
     <form method='post'>
         <p>
         <input type='submit' class='w3-button w3-block w3-tertiary' name='warteliste_aktualisieren' value='Warteliste aktualisieren'>
@@ -224,7 +224,7 @@ include '../../templates/header.tmp.php';
         <label for="liste" class='w3-text-primary'>Liste wählen:</label>
         <select required class='w3-select w3-border w3-border-primary' name='liste' id='liste'>
             <option selected disabled value=''>--</option>
-            <option value='spiele'>Spielenliste</option>
+            <option value='spiele'>Spielen-Liste</option>
             <option value='melde'>Meldeliste</option>
             <option value='warte'>Warteliste</option>
         </select>
@@ -256,6 +256,7 @@ include '../../templates/header.tmp.php';
         <select required class='w3-select w3-border w3-border-primary' name='nl_liste' id='nl_liste'>
             <option selected disabled value=''>--</option>
             <option value='spiele'>Spielen-Liste</option>
+            <option value='melde'>Meldeliste</option>
             <option value='warte'>Warteliste</option>
         </select>
         </p>

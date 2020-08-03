@@ -306,10 +306,10 @@ class Turnier {
         if ($daten['phase'] != 'offen' && $freie_plaetze > 0){
             $liste = $this->get_anmeldungen(); //Order by Warteliste weshalb die Teams in der foreach schleife in der Richtigen reihenfolge behandelt werden
             foreach ($liste['warte'] as $team){
-                if ($this->check_team_block($team['team_id']) && $freie_plaetze > 0){ //Das Team wird abgemeldet, wenn es schon am Turnierdatum auf einer Spielenliste steht
+                if ($this->check_team_block($team['team_id']) && $freie_plaetze > 0){ //Das Team wird abgemeldet, wenn es schon am Turnierdatum auf einer Spielen-Liste steht
                     if (!$this->check_doppel_anmeldung($team['team_id'])){
                         $this->liste_wechsel($team['team_id'], 'spiele'); //von Warteliste abmelden
-                        $this->schreibe_log("Spielenliste auffüllen: \r\n" . $team['teamname'] . " warte -> spiele", $autor);
+                        $this->schreibe_log("Spielen-Liste auffüllen: \r\n" . $team['teamname'] . " warte -> spiele", $autor);
                         $freie_plaetze -= 1;
                     }else{
                         $this->abmelden($team['team_id']);
@@ -356,7 +356,7 @@ class Turnier {
         }
         return false;
     }
-    //True, wenn das Team am Kalendertag des Turnieres bereits bei einem Turnier auf der Spielenliste steht
+    //True, wenn das Team am Kalendertag des Turnieres bereits bei einem Turnier auf der Spielen-Liste steht
     function check_doppel_anmeldung($team_id)
     {
         $datum = $this->daten['datum'];

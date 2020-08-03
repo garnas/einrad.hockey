@@ -53,7 +53,7 @@ class LigaBot {
                 $akt_turnier->schreibe_log("Phase: offen -> melde", "Ligabot");
                 //losen setzt alle Teams in richtiger Reihenfolge auf die Warteliste
                 self::losen($akt_turnier);
-                //füllt die Spielenliste auf
+                //füllt die Spielen-Liste auf
                 $akt_turnier->spieleliste_auffuellen();
                 //Info-Mails versenden
                  MailBot::mail_gelost($akt_turnier);
@@ -206,6 +206,8 @@ class LigaBot {
                 array_push($los_fblock, $team['team_id']);
             }
         }
+
+        //Überbleibsel für Nichtligateams, welche von der Corona-Saison 2020 noch auf der Warteliste stehen.
         foreach ($liste['warte'] as $team)
         {
             if ($team['ligateam'] == 'Nein'){
@@ -233,10 +235,10 @@ class LigaBot {
                 Form::affirm ("Abmeldung Doppelanmeldung im Turnier" .$akt_turnier->turnier_id. ": \r\n" . Team::teamid_to_teamname($team_id), "Ligabot\r\n");
             }else{
                 $akt_turnier->liste_wechsel($team_id,'warte',$pos);
-                $akt_turnier->schreibe_log("Warteliste: \r\n" . Team::teamid_to_teamname($team_id) . " -> $pos", "Ligabot, Los nach Modus");
+                $akt_turnier->schreibe_log("Auf Warteliste gelost: \r\n" . Team::teamid_to_teamname($team_id) . " -> $pos", "Ligabot, Los nach Modus");
             }
         }
-        //NACH Zusammenstellen der Warteliste via losen, muss die Spielenliste über spieleliste_auffuellen aufgefuellt werden!!
+        //NACH Zusammenstellen der Warteliste via losen, muss die Spielen-Liste über spieleliste_auffuellen aufgefuellt werden!!
         return $gelost ?? false;
     }
     
