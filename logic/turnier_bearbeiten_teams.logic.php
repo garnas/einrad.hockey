@@ -194,7 +194,7 @@ if (isset($_POST['change_turnier'])) {
                 $mail = true;
             }
             if ($akt_turnier->daten['organisator'] != $organisator){
-                $akt_turnier->schreibe_log("Verantwortlicher: " . $akt_turnier->daten['organisator'] . " -> " . $startzeit, $autor);
+                $akt_turnier->schreibe_log("Organisator: " . $akt_turnier->daten['organisator'] . " -> " . $startzeit, $autor);
                 $mail = true;
             }
             if ($akt_turnier->daten['handy'] != $handy){
