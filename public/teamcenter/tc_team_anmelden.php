@@ -243,7 +243,7 @@ include '../../templates/header.tmp.php';
     <form method='post'>
         <h3 class="w3-text-primary">Listen</h3>
 
-        <!--Spielenliste-->
+        <!--Spielen-Liste-->
         <p class="w3-text-grey w3-border-bottom w3-border-grey">Spielen-Liste</p> 
         <p>
             <?php if (!empty($anmeldungen['spiele'])){?>

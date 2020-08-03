@@ -140,7 +140,7 @@ function modal(turnier_id){
                         <?php if ($turnier['art'] != 'spass'){?>
                             <p class="w3-text-grey w3-border-bottom w3-border-grey">Listen</p>                       
                             <div class='w3-row'>
-                                <div class='w3-third'>
+                                <div class='w3-half'>
                                     <h4 class='w3-text-primary'><span>Spielen-Liste</span></h4>
                                     <?php if(!empty($all_anmeldungen[$turnier['turnier_id']]['spiele'])){?>
                                     <!-- Ausklappbarer Content -->
@@ -151,25 +151,26 @@ function modal(turnier_id){
                                         </i></p>
                                     <?php }else{?> <i>leer</i> <?php }//end if?>
                                 </div>
-                                <div class='w3-third'>
-                                    <?php if(!empty($all_anmeldungen[$turnier['turnier_id']]['melde'])){?>
-                                        <h4 class='w3-text-primary'><span>Meldeliste</span></h4>
-                                        <p><i>
-                                            <?php foreach (($all_anmeldungen[$turnier['turnier_id']]['melde']) as $team){?>
-                                                <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?? 'NL'?>)</span><br>
-                                            <?php }//end foreach?>
-                                        </i></p>
-                                    <?php }//end if?>
-                                </div>
-                                <div class='w3-third'>
-                                    <?php if(!empty($all_anmeldungen[$turnier['turnier_id']]['warte'])){?>
-                                        <h4 class='w3-text-primary'><span>Warteliste</span></h4>
-                                        <p><i>
-                                            <?php foreach (($all_anmeldungen[$turnier['turnier_id']]['warte']) as $team){?>
-                                                <?=$team['position_warteliste'] . ". " . $team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?? 'NL'?>)</span><br>
-                                            <?php }//end foreach?>
-                                        </i></p>
-                                    <?php }//end if?>
+                                <div class='w3-half'>
+                                    <?php if($turnier['phase'] == 'offen' or $turnier['art'] == 'final'){?>
+                                        <?php if(!empty($all_anmeldungen[$turnier['turnier_id']]['melde'])){?>
+                                            <h4 class='w3-text-primary'><span>Meldeliste</span></h4>
+                                            <p><i>
+                                                <?php foreach (($all_anmeldungen[$turnier['turnier_id']]['melde']) as $team){?>
+                                                    <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?? 'NL'?>)</span><br>
+                                                <?php }//end foreach?>
+                                            </i></p>
+                                        <?php }//end if?>
+                                    <?php }else{ //else phase?>
+                                        <?php if(!empty($all_anmeldungen[$turnier['turnier_id']]['warte'])){?>
+                                            <h4 class='w3-text-primary'><span>Warteliste</span></h4>
+                                            <p><i>
+                                                <?php foreach (($all_anmeldungen[$turnier['turnier_id']]['warte']) as $team){?>
+                                                    <?=$team['position_warteliste'] . ". " . $team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?? 'NL'?>)</span><br>
+                                                <?php }//end foreach?>
+                                            </i></p>
+                                        <?php }//end if?>
+                                    <?php } //end if phase?>
                                 </div>
                             </div>
                         <?php }else{?><p class="w3-text-green">Anmeldung erfolgt beim Ausrichter<?php } //end if spass?>

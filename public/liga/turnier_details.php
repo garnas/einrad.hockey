@@ -164,25 +164,26 @@ include '../../templates/header.tmp.php';
             <?php }//end foreach?>
         <?php }else{?><i>leer</i><?php } //endif?> 
     </i></p>
-
-    <p class="w3-text-grey w3-border-bottom w3-border-grey">Meldeliste</p> 
-    <p><i>
-        <?php if (!empty($liste['melde'])){?>
-            <?php foreach ($liste['melde'] as $team){?>
-                <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span><br>
-            <?php }//end foreach?>
-        <?php }else{?><i>leer</i><?php } //endif?>
-    </i></p>
-
-    <p class="w3-text-grey w3-border-bottom w3-border-grey">Warteliste</p> 
-    <p><i>
-        <?php if (!empty($liste['warte'])){?>
-            <?php foreach ($liste['warte'] as $team){?>
-                <?=$team['position_warteliste'] . ". " . $team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?? 'NL'?>)</span><br>
-            <?php }//end foreach?>
-        <?php }else{?><i>leer</i><?php } //endif?> 
-    </i></p>
-    <p>Freie Plätze: <?=$daten['plaetze'] - count(($liste['spiele'] ?? array()))?> von <?=$daten['plaetze']?></p>
+    <?php if($daten['phase'] == 'offen' or $daten['art'] == 'Abschlussturnier'){ ?>
+        <p class="w3-text-grey w3-border-bottom w3-border-grey">Meldeliste</p> 
+        <p><i>
+            <?php if (!empty($liste['melde'])){?>
+                <?php foreach ($liste['melde'] as $team){?>
+                    <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span><br>
+                <?php }//end foreach?>
+            <?php }else{?><i>leer</i><?php } //endif?>
+        </i></p>
+    <?php }else{//end if phase?>
+        <p class="w3-text-grey w3-border-bottom w3-border-grey">Warteliste</p> 
+        <p><i>
+            <?php if (!empty($liste['warte'])){?>
+                <?php foreach ($liste['warte'] as $team){?>
+                    <?=$team['position_warteliste'] . ". " . $team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?? 'NL'?>)</span><br>
+                <?php }//end foreach?>
+            <?php }else{?><i>leer</i><?php } //endif?> 
+        </i></p>
+        <p>Freie Plätze: <?=$daten['plaetze'] - count(($liste['spiele'] ?? array()))?> von <?=$daten['plaetze']?></p>
+    <?php  } //end if phase?>
 <?php }else{?><p class="w3-text-grey">Anmeldung erfolgt beim Ausrichter<?php } //end if spass ?>
 
 <!-- Anzeigen der Ligaspezifischen Infos -->
