@@ -127,7 +127,7 @@ include '../../templates/header.tmp.php';
                     <br>
                     <?=Form::mailto($daten['email'], $daten['teamname'])?>
                 </p> 
-                <p><i>organisator:</i><br><?=$daten['organisator']?></p>
+                <p><i>Organisator:</i><br><?=$daten['organisator']?></p>
                 <p><i>Handy:</i><br><?=Form::link('tel:' . str_replace(' ', '', $daten['handy']), "<i class='material-icons'>smartphone</i>" . $daten['handy'])?></a></p>
             </td>
         </tr>

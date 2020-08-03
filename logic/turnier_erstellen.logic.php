@@ -104,10 +104,10 @@ if (isset($_POST['create_turnier'])) {
             $error = true;
             Form::error ("Das Datum liegt nicht am Wochende und ist kein bundesweiter Feiertag");
         }
-        if ($datum_unix < (Config::time_offset() + 4*7*24*60*60)){
-            //if ($datum_unix > (strtotime(Config::SAISON_ANFANG) + 4*7*24*60*60)){
+        if (LigaBot::time_offen_melde($datum) < Config::time_offset()){
+            //if ($datum_unix > (strtotime(Config::SAISON_ANFANG) + 4*7*24*60*60)){ //Ausnahme für die ersten vier Wochen
                 $error = true;
-                Form::error ("Turniere können nur vier Wochen im Voraus eingetragen werden");
+                Form::error ("Turniere können nur vier Wochen vor dem Spieltag eingetragen werden");
             //}
         }
         //Validierung Startzeit:
