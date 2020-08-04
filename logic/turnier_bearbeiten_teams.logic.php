@@ -27,27 +27,12 @@ if (isset($_POST['change_turnier'])) {
     $handy = $_POST['handy'];
     $startzeit = $_POST['startzeit'];
     $plaetze = $_POST['plaetze'];
-    //Leere Felder können eigentlich nicht auftreten (nur durch html-Manipulation), aber sicherheitshalber dass hier...
-    if (empty($plaetze) or empty($startzeit) or empty($hallenname) or empty($strasse) or empty($plz) or empty($ort) or empty($hinweis) or empty($organisator) or empty($handy)){
-        $error = true;
-        Form::error("Bitte alle nicht optionalen Felder ausfüllen.");
-    }
     
     //Besprechung
     if ($_POST['besprechung'] == 'Ja'){
         $besprechung = 'Ja';
     }else{
         $besprechung = 'Nein';
-    }
-
-    //Validierung Startzeit:
-    if ($startzeit != $akt_turnier->daten['startzeit'] && $akt_turnier->daten['art'] == 'final' && $teamcenter){
-        $error = true;
-        Form::error("Die Startzeit bei Abschlussturnieren kann nur vom Ligaausschuss geändert werden.");
-    }
-    if ((date("H", strtotime($startzeit)) < 9 or date("H", strtotime($startzeit)) > 14) && $teamcenter){
-        $error = true;
-        Form::error("Turniere dürfen frühestens um 9:00&nbsp;Uhr beginnen und müssen spätestens um 20:00&nbsp;Uhr beendet sein");
     }
 
     //Anzahl der Plätze bzw ob 8er DKO- oder Gruppen-Spielplan
@@ -61,21 +46,41 @@ if (isset($_POST['change_turnier'])) {
         $spielplan = 'jgj';
     }
 
-    //Validierung der Plätze
-    if ($akt_turnier->daten['art'] == 'final' && $plaetze != $akt_turnier->daten['plaetze'] && $teamcenter){ //Anzahl der Plätze darf nur geändert werden, wenn es sich nicht um ein Finalturnier handelt
-        Form::error("Das Ändern der Anzahl der Plätze ist bei Abschlussturnieren können nur vom Ligaausschuss geändert werden.");
+    //Leere Felder können eigentlich nicht auftreten (nur durch html-Manipulation), aber sicherheitshalber dass hier...
+    if (empty($plaetze) or empty($startzeit) or empty($hallenname) or empty($strasse) or empty($plz) or empty($ort) or empty($hinweis) or empty($organisator) or empty($handy)){
         $error = true;
-    }
-    if ($plaetze < 4 or $plaetze > 8){
-        $error = true;
-        Form::error("Ungültige Anzahl an Turnierplätzen");
-    }
-    //4er Turniere nur über den LA
-    if ($plaetze == 4 && $teamcenter){
-        $error = true;
-        Form::error("Ungültige Anzahl an Turnierplätzen");
+        Form::error("Bitte alle nicht optionalen Felder ausfüllen.");
     }
 
+    //Validierung Startzeit:
+    if ($startzeit != $akt_turnier->daten['startzeit']  && $teamcenter){   
+        if ($akt_turnier->daten['art'] == 'final'){
+            $error = true;
+            Form::error("Die Startzeit bei Abschlussturnieren kann nur vom Ligaausschuss geändert werden.");
+        }
+        if ($startzeit != $daten['startzeit'] && (date("H", strtotime($startzeit)) < 9 or date("H", strtotime($startzeit)) > 14) && $teamcenter){
+            $error = true;
+            Form::error("Turniere dürfen frühestens um 9:00&nbsp;Uhr beginnen und müssen spätestens um 20:00&nbsp;Uhr beendet sein");
+        }
+    }
+
+    //Validierung der Plätze
+    if ($plaetze != $akt_turnier->daten['plaetze']  && $teamcenter){
+        if ($akt_turnier->daten['art'] == 'final'){ //Anzahl der Plätze darf nur geändert werden, wenn es sich nicht um ein Finalturnier handelt
+            Form::error("Das Ändern der Anzahl der Plätze ist bei Abschlussturnieren können nur vom Ligaausschuss geändert werden.");
+            $error = true;
+        }
+        if ($plaetze < 4 or $plaetze > 8){
+            $error = true;
+            Form::error("Ungültige Anzahl an Turnierplätzen");
+        }
+        //4er Turniere nur über den LA
+        if ($plaetze == 4){
+            $error = true;
+            Form::error("Ungültige Anzahl an Turnierplätzen");
+        }
+    }
+    
     /////////////////////////////////////////////////////////////////
 
     //Keine Änderung der Plätze in der Spielplanphase
@@ -136,9 +141,9 @@ if (isset($_POST['change_turnier'])) {
     //Ändern der Turnierdaten
     if (!$error){
         //Autor der Turnierlogs festlegen
-        if ($teamcenter == true){ //sollte übergeben werden
+        if ($teamcenter){ //sollte übergeben werden
             $autor = $_SESSION['teamname'];
-        }elseif ($ligacenter == true){
+        }elseif ($ligacenter){
             $autor = "Ligaausschuss";
         }
         //Turnierblock erweitern
