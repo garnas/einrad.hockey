@@ -12,7 +12,7 @@
             <tr style="cursor: pointer;" class="w3-hover-tertiary <?=$turnier['row_color'] ?? ''?>" onclick="window.open('<?=$turnier['link_anmelden'] ?? $turnier['link_bearbeiten']?>', '_self')">
                 <td style='vertical-align: middle;' ><?=date("d.m.y", strtotime($turnier['datum']))?> <i><?=$turnier['freivoll'] ?? ''?></i></td>
                 <td style='vertical-align: middle; text-align: left;' ><i class='' ><?=$turnier['phase']?></i></td>
-                <td style='vertical-align: middle;' ><?=$turnier['ort']?> <span class='<?=$turnier['block_color'] ?? ''?>'><i><?=$turnier['tblock']?></i></span><br><i class="w3-text-grey"><?=$turnier['tname']?></i></td>
+                <td style='vertical-align: middle;' ><?=$turnier['ort']?> <span class='<?=$turnier['block_color'] ?? ''?>'><i>(<?=$turnier['tblock']?>)</i></span><br><i class="w3-text-grey"><?=$turnier['tname']?></i></td>
                 <td style='vertical-align: middle; text-align: left;' ><i class='' ><?=$turnier['teamname']?></i></td>
                 
             
