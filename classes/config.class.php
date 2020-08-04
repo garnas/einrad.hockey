@@ -33,7 +33,16 @@ class Config {
     const LINK_ARCHIV = 'https://archiv.einrad.hockey/archiv/index.html';
     const LINK_INSTA = 'https://www.instagram.com/einradhockeyde/';
     const LINK_FACE = 'https://www.facebook.com/DeutscheEinradhockeyliga';
+
+    const LINK_AUSTRALIA = 'https://hockey.unicycling.org.au/';
+    const LINK_SWISS = 'https://www.swiss-iuc.ch/Wettkaempfe/Einradhockey';
+    const LINK_FRANCE = 'https://monocycle.info/ligue-de-monocycle-basket-remaniement-co/';
+    const LINK_IUF = 'https://unicycling.org/';
     
+    const LINK_EV = 'https://www.einradverband.de/';
+    const LINK_EV_SH = 'https://www.einradverband-sh.de/';
+    const LINK_EV_BY = 'http://einradverband-bayern.de/';
+
     ///////////////////////////////////////////////////////////////
     ////////////////////////Dokumenten-Links///////////////////////
     ///////////////////////////////////////////////////////////////

@@ -86,7 +86,7 @@ include '../../templates/header.tmp.php';
         <!-- Anstehende Turniere -->
         <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
             <a href='turniere.php' class="no">
-                <h1 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">event</i> Turniere</h1>
+                <h2 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">event</i> Turniere</h2>
             </a>
             <p class="w3-text-grey w3-border-top w3-border-grey"></p>
             <?php $i=0; foreach ($next_turniere as $turnier){  $i++;?>
@@ -102,7 +102,7 @@ include '../../templates/header.tmp.php';
         <!-- Ergebnisse -->
         <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
             <a href='ergebnisse.php' class="no">
-                <h1 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">sports_hockey</i> Ergebnisse</h1>
+                <h2 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">sports_hockey</i> Ergebnisse</h2>
             </a>
             <p class="w3-text-grey w3-border-top w3-border-grey"></p>
             <?php if (empty($last_turniere)){?><p class="w3-text-grey">Es liegen keine Ergebnisse vor</p><?php } //end if?>
@@ -118,10 +118,10 @@ include '../../templates/header.tmp.php';
         
         <!-- Statistik -->
         <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
-        <h1 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">insert_chart_outlined</i> Statistik</h1>
+        <h2 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">insert_chart_outlined</i> Statistik</h2>
         <p class="w3-text-grey w3-border-top w3-border-grey"></p>
-            <p><a class="w3-text-blue no w3-hover-text-secondary" href="ergebnisse.php"><?=$anz_last_turniere ?: '0'?> Turniere</a> gespielt</p>
-            <p><a class="w3-text-blue no w3-hover-text-secondary" href="turniere.php"><?=$anz_next_turniere ?: '0'?> Turniere</a> ausstehend</p>
+            <p><?=Form::link("ergebnisse.php", ($anz_last_turniere ?: '0') . " Turniere")?> gespielt</p>
+            <p><?=Form::link("turniere.php", ($anz_next_turniere ?: '0') . " Turniere")?> ausstehend</p>
             <!--
             <p>Die meisten Tore: <br> Nicht implementiert</p>
             -->
@@ -147,6 +147,22 @@ include '../../templates/header.tmp.php';
             <p>
             </p>
         </div>
+
+        <!-- Links -->
+        <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
+            <h2 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">public</i> Links</h2>
+            <p class="w3-text-grey w3-border-top w3-border-grey"></p>
+            <p><?=Form::link(Config::LINK_SWISS, "Schweizer Einradhockeyliga")?></p>
+            <p><?=Form::link(Config::LINK_AUSTRALIA, "Australische Einradhockeyliga")?></p>
+            <p><?=Form::link(Config::LINK_FRANCE, "Französische Einradbasketballliga")?></p>
+            <p class="w3-text-grey w3-border-top w3-border-grey"></p>
+            <p><?=Form::link(Config::LINK_EV, "Einradverband Deutschland")?></p>
+            <p><?=Form::link(Config::LINK_EV_SH, "Einradverband Schleswig-Holstein")?></p>
+            <p><?=Form::link(Config::LINK_EV_BY, "Einradverband Bayern")?></p>
+            <p class="w3-text-grey w3-border-top w3-border-grey"></p>
+            <p><?=Form::link(Config::LINK_IUF, "International Unicycle Federation")?></p>
+        </div>
+
     </div>
 
     <!-- Neuigkeiten-Einträge -->
@@ -155,7 +171,7 @@ include '../../templates/header.tmp.php';
             <div class='w3-card w3-panel w3-responsive'>
                 
                 <!-- Überschrift -->
-                <h1 class="w3-text-primary"><?=$neuigkeit['titel']?></h1>
+                <h2 class="w3-text-primary"><?=$neuigkeit['titel']?></h2>
                 
                 <!-- Autor -->
                 <p class="w3-text-grey w3-border-top w3-border-grey"><i style="font-size: 22px; vertical-align: -26%" class='material-icons'>create</i> <?=($neuigkeit['eingetragen_von'])?></p>
