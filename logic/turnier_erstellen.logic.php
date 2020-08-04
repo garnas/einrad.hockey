@@ -150,7 +150,9 @@ if (isset($_POST['create_turnier'])) {
                                         "Organisator: $organisator\r\nHandy: $handy", $autor);
             $akt_turnier->schreibe_log( "Anmeldung als Ausrichter:\r\n" . $ausrichter_name . " -> Liste: spiele", $autor);
             //Mailbot
-            MailBot::mail_neues_turnier($akt_turnier);
+            if ($teamcenter){ //Es wird nur eine Mail verschickt, wenn ein Turnier im Teamcenter erstellt wurde
+                MailBot::mail_neues_turnier($akt_turnier);
+            }
             header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier_id);
             die();
         }
