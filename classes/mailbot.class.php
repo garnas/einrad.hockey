@@ -42,7 +42,7 @@ class MailBot {
             }
 
             $mailer->Subject = $mail['betreff']; // Betreff der Email
-            //$mailer->Body = nl2br($mail['inhalt']); // Inhalt der Email
+            $mailer->Body = $mail['inhalt']; // Inhalt der Email
 
             //Email-versenden
             if (Config::ACTIVATE_EMAIL){
@@ -115,7 +115,8 @@ class MailBot {
                 if (!$akt_turnier->check_team_angemeldet($team_id) && $akt_turnier->check_team_block($team_id) && !$akt_turnier->check_doppel_anmeldung($team_id)){
                     $betreff = $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . " hat noch freie Plätze";
                     $inhalt = "<html>Hallo " . Team::teamid_to_teamname($team_id) . ","
-                        . "<br><br>das " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->daten['datum'])) . " ist in die Meldephase übergegangen und hat noch freie Spielen-Plätze. Ihr erhaltet diese automatische E-Mail, weil Ihr einen passenden Turnierblock habt."
+                        . "<br><br>das " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->daten['datum'])) . " ist in die Meldephase übergegangen und hat noch freie Spielen-Plätze"
+                        ."(<a href='https://einrad.hockey/liga/turnier_details?turnier_id=" . $akt_turnier->daten['turnier_id'] . "'>Link zum Turnier</a>). Ihr erhaltet diese automatische E-Mail, weil Ihr einen passenden Turnierblock habt."
                         . "<br><br>Falls du keine automatischen E-Mails mehr von der Einradhockeyliga erhalten willst, kannst du dies <a href='https://einrad.hockey/teamcenter/tc_teamdaten_aendern'>hier</a> deaktivieren."
                         . "<br><br>Bis zum nächsten Mal,"
                         . "<br>Eure Einradhockeyliga</html>";
