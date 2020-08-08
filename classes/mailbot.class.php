@@ -30,7 +30,7 @@ class MailBot {
         while ($mail = mysqli_fetch_assoc($result)){
             $mailer = self::start_mailer();
             $mailer->isHTML(true); // Für die Links
-            $mailer->setFrom($mail['absender']); // Absenderemail und -name setzen
+            $mailer->setFrom($mail['absender'], 'Einradhockey'); // Absenderemail und -name setzen
 
             $mail_addresses = explode(',',$mail['adressat']); //Aus der Datenbank rausholen
             $anz_mail_addresses = count($mail_addresses);
