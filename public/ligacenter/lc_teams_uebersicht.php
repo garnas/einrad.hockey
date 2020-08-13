@@ -38,10 +38,10 @@ if (isset($_POST['zweites_freilos'])){
             //Team::add_freilos($team_id);
             $betreff = 'Zweites Freilos';
             $text = 
-                "Hallo " . $team['teamname']
+                "<html>Hallo " . $team['teamname']
                 ."<br><br>da ihr zwei ausgebildete Schiedsrichter im Kader eingetragen habt, wurde euch euer zweites Freilos gutgeschrieben."
                 ."<br><br>Wir wünschen euch eine schöne Saison " . Form::get_saison_string() . "!"
-                ."<br><br>Euer MailBot";
+                ."<br><br>Euer MailBot</html>";
             $akt_kontakt = new Kontakt ($team_id);
             $adressaten = $akt_kontakt->get_emails();
             //MailBot::add_mail($betreff, $text, $adressaten);
@@ -51,6 +51,7 @@ if (isset($_POST['zweites_freilos'])){
     header('Location: lc_teams.php');
     die();
 }
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -86,7 +87,7 @@ include '../../templates/header.tmp.php';
             <th>Schiris (alt)</th>
         </tr>
         <?php foreach ($teams as $team_id => $team){?>
-            <tr class="w3-center <?php if($team['schiris'] >= 2){?>w3-pale-green<?php }//endif ?>">
+            <tr class="w3-center <?php if($team['schiris'] >= 2){?>w3-pale-green<?php }elseif($team['schiris'] + $team['schiris_alt'] >= 2){?>w3-pale-red<?php }//endif?>">
                 <td><?=$team['team_id']?></td>
                 <td><?=Form::link('lc_kader.php?team_id='. $team_id, $team['teamname'])?></td>
                 <td><?=$team['freilose']?></td>
