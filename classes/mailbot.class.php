@@ -204,7 +204,7 @@ class MailBot {
     public static function mail_turnierdaten_geaendert($akt_turnier){
         $betreff = "Turnierdaten geändert: " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'];
         $inhalt = "<html>Hallo Ligaausschuss,"
-            . "<br><br>". $akt_turnier->daten["teamname"] ." hat als Ausrichter seine Turnierdaten vom " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . "verändert: <a href='https://einrad.hockey/ligacenter/lc_turnier_log?turnier_id=" . $akt_turnier->daten['turnier_id'] . "'>Link zum Turnier</a>"
+            . "<br><br>". $akt_turnier->daten["teamname"] ." hat als Ausrichter seine Turnierdaten vom " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . " verändert: <a href='https://einrad.hockey/ligacenter/lc_turnier_log?turnier_id=" . $akt_turnier->daten['turnier_id'] . "'>Link zum Turnier</a>"
             . "<br><br><b>Teams werden nicht mehr automatisch benachrichtigt.</b>"
             . "<br>Euer Mailbot</html>";
         self::add_mail($betreff, $inhalt, Config::LAMAIL, Config::SMTP_USER);
