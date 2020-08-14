@@ -47,13 +47,13 @@ class Config {
     ////////////////////////Dokumenten-Links///////////////////////
     ///////////////////////////////////////////////////////////////
 
-    const LINK_MODUS = '../dokumente/modus20-21_entwurf.pdf';
-    const LINK_REGELN = '../dokumente/regeln2020.pdf';
-    const LINK_MODUS_KURZ = '../dokumente/modus2020_zusammenfassung.pdf';
-    const LINK_REGELN_KURZ = '../dokumente/wichtige_regeln2020.pdf';
-    const LINK_MODUS_KURZ_ENG = '../dokumente/league_mode2020_summary.pdf';
+    const LINK_MODUS = '../dokumente/ligamodus.pdf';
+    const LINK_REGELN = '../dokumente/regelwerk.pdf';
+    const LINK_MODUS_KURZ = '../dokumente/zusammenfassung_modus.pdf';
+    const LINK_REGELN_KURZ = '../dokumente/zusammenfassung_regeln.pdf';
+    const LINK_MODUS_KURZ_ENG = '../dokumente/summary_modus.pdf';
     const LINK_REGELN_IUF = '../dokumente/iuf-rulebook-2019.pdf';
-    const LINK_TURNIER = '../dokumente/turniermodi2020.pdf';
+    const LINK_TURNIER = '../dokumente/turniermodi.pdf';
     const LINK_DSGVO = '../dokumente/datenschutz-hinweise.pdf';
 
     ///////////////////////////////////////////////////////////////
