@@ -193,7 +193,7 @@ include '../../templates/header.tmp.php';
                 <!-- PDF -->
                 <?php if ($neuigkeit['link_pdf'] != ''){?>
                     <a class='no w3-hover-text-secondary w3-text-primary' href='<?=$neuigkeit['link_pdf'];?>'>
-                        <p class=""><i class='w3-xxlarge material-icons'>insert_drive_file</i> Dokument</p>
+                        <p class=""><i class='w3-xxlarge material-icons'>insert_drive_file</i> Download</p>
                     </a>
                 <?php } //end if?>
 
