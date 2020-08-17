@@ -32,23 +32,25 @@ foreach ($teams as $team_id => $team){
     if ($genug_schiris){$teams_mit_zwei_schiris += 1;}
 }
 
+$team_liste = '';
 if (isset($_POST['zweites_freilos'])){
     foreach ($teams as $team_id => $team){
         if ($team['schiris'] >= 2){
-            //Team::add_freilos($team_id);
+            Team::add_freilos($team_id);
             $betreff = 'Zweites Freilos';
             $text = 
-                "<html>Hallo " . $team['teamname']
+                "<html>Hallo " . $team['teamname'] . ","
                 ."<br><br>da ihr zwei ausgebildete Schiedsrichter im Kader eingetragen habt, wurde euch euer zweites Freilos gutgeschrieben."
                 ."<br><br>Wir wünschen euch eine schöne Saison " . Form::get_saison_string() . "!"
-                ."<br><br>Euer MailBot</html>";
+                ."<br><br>Eure Einradhockeyliga</html>";
             $akt_kontakt = new Kontakt ($team_id);
             $adressaten = $akt_kontakt->get_emails();
-            //MailBot::add_mail($betreff, $text, $adressaten);
+            MailBot::add_mail($betreff, $text, $adressaten);
+            $team_liste .= "<br>" . $team['teamname'];
         }
     }
-    Form::affirm("Freilose vergeben");
-    header('Location: lc_teams.php');
+    Form::affirm("Freilose vergeben an:<br>" . $team_liste);
+    header('Location: lc_teams_uebersicht.php');
     die();
 }
 
@@ -69,8 +71,8 @@ include '../../templates/header.tmp.php';
 </b>
 
 <!-- Button 2. Freilos -->
-<form class="w3-section">
-    <input type="submit" name="zweites_freilos" class="w3-button w3-secondary" disabled value="Zweites Freilos vergeben">
+<form class="w3-section" method='post'>
+    <input disabled type="submit" name="zweites_freilos" class="w3-button w3-secondary" value="Zweites Freilos vergeben">
     <span class="w3-text-grey">Es werden Mails an die betroffenen Teams versendet</span>
 </form>
 

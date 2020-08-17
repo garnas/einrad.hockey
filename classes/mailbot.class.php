@@ -65,7 +65,7 @@ class MailBot {
 
     //Fügt eine Email zur Datenbank hinzu
     //Nur für automatische Emails verwenden!
-    public static function add_mail($betreff, $inhalt ,$adressaten, $absender = Config::LAMAIL)
+    public static function add_mail($betreff, $inhalt ,$adressaten, $absender = Config::SMTP_USER)
     {   
         if (!empty($adressaten)){
             $betreff = db::sanitize($betreff);

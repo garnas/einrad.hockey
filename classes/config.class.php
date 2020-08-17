@@ -71,7 +71,7 @@ class Config {
 
     const ACTIVATE_EMAIL = false; //Bei True, werden Emails tatsächlich versendet, bei false wird db::debug($mailer) ausgeführt
     const SMTP_HOST = 'HOST';
-    const SMTP_USER = 'EMAIL';
+    const SMTP_USER = 'test@einrad.hockey';
     const SMTP_PW = 'PW';
     const SMTP_PORT = 666;
 
