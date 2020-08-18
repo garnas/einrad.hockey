@@ -20,6 +20,9 @@ footer {
 th { /*Keine fetten Tableheads*/
   font-weight: normal;
 }
+td {
+  vertical-align: middle!important;
+}
 
 /*Positionierung der eingepflegten Icons von Google*/
 .material-icons {vertical-align:-27.5%}

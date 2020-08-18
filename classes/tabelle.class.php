@@ -54,9 +54,9 @@ class Tabelle {
         }
         return true;
     }
-
-    //in die klasse turnier verschieben und immer den richtigen wert bekommen!
-    public static function get_team_block($team_id, $spieltag='')
+    
+    //Gibt die Platzierung eines Teams in der Rangtabelle zurück
+    public static function get_team_rang($team_id, $spieltag='')
     {
         //Teamblock des relevanten Spieltages, also des Spieltages für den alle Ergebnisse eingetragen sind
         if (empty($spieltag)){$spieltag = self::get_aktuellen_spieltag() - 1;} //-1, da immer der Spieltag zählt, für den alle Ergebnisse eingetragen sind
@@ -67,6 +67,16 @@ class Tabelle {
         // 0 wird aber auch als false interpretiert, deswegen is_numeric und nicht ($key)
         if (is_numeric($key)){ 
             $platz=$GLOBALS['rang_tabelle'][$spieltag][$key]['platz'];
+            return $platz;
+        }else{
+            return 'NL';
+        }
+    }
+    //in die klasse turnier verschieben und immer den richtigen wert bekommen!
+    public static function get_team_block($team_id, $spieltag='')
+    {   
+        $platz=self::get_team_rang($team_id,$spieltag);
+        if (is_numeric($platz)){ 
             return self::platz_to_block($platz);
         }else{
             return 'NL';
@@ -75,14 +85,8 @@ class Tabelle {
 
     public static function get_team_wertigkeit($team_id, $spieltag='')
     {
-        if (empty($spieltag)){$spieltag = self::get_aktuellen_spieltag() - 1;}
-        if (!isset($GLOBALS['rang_tabelle'][$spieltag])){ //Rangtabelle muss nicht jedes mal neu berechnet werden müssen
-            $GLOBALS['rang_tabelle'][$spieltag] = Tabelle::get_rang_tabelle($spieltag);
-        }
-        $key = array_search($team_id, array_column($GLOBALS['rang_tabelle'][$spieltag], 'team_id'));
-        if (is_numeric($key)){  //$key = false, wenn nicht gefunden, ansonsten Position
-            // 0 wird aber auch als false interpretiert, deswegen is_numeric und nicht ($key)
-            $platz=$GLOBALS['rang_tabelle'][$spieltag][$key]['platz'];
+        $platz=self::get_team_rang($team_id,$spieltag);
+        if (is_numeric($platz)){ 
             return self::platz_to_wertigkeit($platz);
         }else{
             return 'NL';
