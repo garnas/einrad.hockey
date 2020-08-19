@@ -1,5 +1,5 @@
 <?php
-class TurnierBericht {
+class TurnierReport {
 
     public $turnier_id;
     function __construct($turnier_id)
@@ -16,10 +16,10 @@ class TurnierBericht {
         }
         return db::escape($zeitstrafen ?? array());
     }
-    function new_zeitstrafe($spieler, $team_a, $team_b, $beschreibung){
+    function new_zeitstrafe($spieler, $dauer, $team_a, $team_b, $grund){
         $turnier_id = $this->turnier_id;
-        $sql = "INSERT INTO spieler_zeitstrafen (turnier_id, spieler, team_a, team_b, beschreibung) 
-            VALUES ('$turnier_id', '$spieler', '$team_a', '$team_b', '$beschreibung')";
+        $sql = "INSERT INTO spieler_zeitstrafen (turnier_id, spieler, dauer, team_a, team_b, grund) 
+            VALUES ('$turnier_id', '$spieler', '$dauer', '$team_a', '$team_b', '$grund')";
         db::writedb($sql);
     }
     function delete_zeitstrafe($zeitstrafe_id){
@@ -56,7 +56,6 @@ class TurnierBericht {
     {
         $turnier_id = $this->turnier_id;
         $sql = "SELECT bericht FROM turniere_berichte WHERE turnier_id = '$turnier_id'";
-        db::debug($sql);
         $return = db::readdb($sql);
         $return = mysqli_fetch_assoc($return);
         return db::escape($return['bericht'] ?? '');
@@ -65,20 +64,20 @@ class TurnierBericht {
     {
         $turnier_id = $this->turnier_id;
         $sql = "SELECT kader_ueberprueft FROM turniere_berichte WHERE turnier_id = '$turnier_id'";
-        db::debug($sql);
         $return = db::readdb($sql);
         $return = mysqli_fetch_assoc($return);
-        if ($return['kader_ueberprueft'] == 'Ja'){
+        if (!empty($return) && $return['kader_ueberprueft'] == 'Ja'){
             return true;
         }
         return false;
     }
     function set_turnier_bericht($bericht, $kader_check = 'Nein'){
         $turnier_id = $this->turnier_id;
-        if (empty($this->get_turnier_bericht())){
-            $sql = "INSERT INTO turniere_berichte (turnier_id, bericht) VALUES ('$turnier_id', '$bericht', '$kader_check')";
+        $check = db::readdb("SELECT * FROM turniere_berichte WHERE turnier_id = '$turnier_id'");
+        if(mysqli_num_rows($check) == 0){
+            $sql = "INSERT INTO turniere_berichte (turnier_id, bericht, kader_ueberprueft) VALUES ('$turnier_id', '$bericht', '$kader_check')";
         }else{
-            $sql="UPDATE turniere_berichte SET bericht='$bericht', kader_ueberprueft = '$kader_check' WHERE turnier_id = '$turnier_id'";
+            $sql = "UPDATE turniere_berichte SET bericht='$bericht', kader_ueberprueft = '$kader_check' WHERE turnier_id = '$turnier_id'";
         }
         db::writedb($sql);
     }

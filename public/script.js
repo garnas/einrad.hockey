@@ -41,17 +41,17 @@ function centerpanels_anordnung(){
 }
 
 //Woerterzaehlen für Neuigkeit eintragen und bearbeiten
-function woerter_zaehlen(max_woerter = 500) {
-  var anzahl = max_woerter - window.document.getElementById('text').value.length;
-  document.getElementById("counter").innerHTML = anzahl + ' Zeichen übrig';
+function woerter_zaehlen(max_woerter = 500, id_textarea = 'text', id_counter = 'counter') {
+  var anzahl = max_woerter - window.document.getElementById(id_textarea).value.length;
+  document.getElementById(id_counter).innerHTML = anzahl + ' Zeichen übrig';
 
   if(anzahl < 30){
-      document.getElementById("counter").style.color="red";
+      document.getElementById(id_counter).style.color="red";
   }else{
-      document.getElementById("counter").style.color="green";}
+      document.getElementById(id_counter).style.color="green";}
   
   if(anzahl < 0){
-      document.getElementById("counter").innerHTML = 'Zeichenanzahl wurde überschritten.';
+      document.getElementById(id_counter).innerHTML = 'Zeichenanzahl wurde überschritten.';
       document.getElementById("submit").style.display="none";
   }
 }

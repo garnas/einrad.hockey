@@ -65,7 +65,7 @@ class Spieler {
     {   
         $kader_vorsaison = self::get_teamkader($team_id, Config::SAISON - 1);
         $kader_vorvorsaison = self::get_teamkader($team_id, Config::SAISON - 2);
-        $return = array_merge($kader_vorsaison, $kader_vorvorsaison);
+        $return = $kader_vorsaison + $kader_vorvorsaison;
         return db::escape($return ?? array()); //Array 
     }
 
