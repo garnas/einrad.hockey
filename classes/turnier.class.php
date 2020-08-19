@@ -154,6 +154,14 @@ class Turnier {
         }
         return db::escape($liste); //array
     }
+    //Kaderliste für die Kaderkontrolle auf einem Turnier;
+    function get_kader_kontrolle(){
+        $teams = $this->get_liste_spielplan();
+        foreach ($teams as $team){
+            $return[$team['team_id']] = Spieler::get_teamkader($team['team_id']);
+        }
+        return $return ?? array();
+    }
 
     function delete_ergebnis()
     {
@@ -386,7 +394,7 @@ class Turnier {
 
     //True, wenn der Teamblock in das Turnier passt.
     //Um die DB zu schonen, können teamblock und turnierblock auch manuell übergeben werden
-    function check_team_block ($team_id)
+    function check_team_block($team_id)
     {   
         if (!in_array($this->daten['art'],array('I','II','III'))){
             return false;
@@ -397,7 +405,7 @@ class Turnier {
     }
 
     //statische check team block ohne auf die db zugreifen
-    public static function check_team_block_static ($team_block, $turnier_block)
+    public static function check_team_block_static($team_block, $turnier_block)
     {
         if ($team_block == 'NL'){ //NL Teams können auch zu final, spass, fixed Turnieren angemeldet werden
             return true;
@@ -419,15 +427,15 @@ class Turnier {
     }
 
     //True wenn das Team für das Turnier ein freilos setzten darf
-    function check_team_block_freilos ($team_id)
+    function check_team_block_freilos($team_id)
     {
         $team_block = Tabelle::get_team_block($team_id);
         $turnier_block = $this->daten['tblock'];
-        return self::check_team_block_freilos_static ($team_block, $turnier_block);
+        return self::check_team_block_freilos_static($team_block, $turnier_block);
     }
 
     //statische check team block freilos ohne auf die db zugreifen
-    public static function check_team_block_freilos_static ($team_block, $turnier_block)
+    public static function check_team_block_freilos_static($team_block, $turnier_block)
     {
         //Check ob es sich um einen Block-Turnier handelt (nicht spass, finale, oder fix)
         if (in_array($turnier_block, Config::BLOCK_ALL)){
@@ -457,14 +465,14 @@ class Turnier {
     }
     
     //Ändert die Phase in der sich das Turnier befindet
-    function set_phase ($phase)
+    function set_phase($phase)
     {
         $turnier_id = $this->turnier_id;
         $sql = "UPDATE turniere_liga SET phase='$phase' WHERE turnier_id='$turnier_id'";
         db::writedb($sql);
         $this->daten['phase'] = $phase;
     }
-    function set_turnier_block ($block)
+    function set_turnier_block($block)
     {
         $turnier_id = $this->turnier_id;
         $sql = "UPDATE turniere_liga SET tblock='$block' WHERE turnier_id='$turnier_id'";
@@ -537,10 +545,10 @@ class Turnier {
     //Löscht das Turnier
     function delete()
     {
-    $turnier_id = $this->turnier_id;
-    $sql = "DELETE FROM turniere_liga WHERE turnier_id = $turnier_id";
-    db::writedb($sql);
-    Ligabot::set_spieltage();
-    return true;
+        $turnier_id = $this->turnier_id;
+        $sql = "DELETE FROM turniere_liga WHERE turnier_id = $turnier_id";
+        db::writedb($sql);
+        Ligabot::set_spieltage();
+        return true;
     }
 }

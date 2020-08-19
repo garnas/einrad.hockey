@@ -46,35 +46,26 @@ class Spieler {
     }
 
     //Gibt den Teamkader des Teams mit der entsprechenden TeamID zurück
-    public static function get_teamkader($team_id)
+    public static function get_teamkader($team_id, $saison = Config::SAISON)
     {
         $sql = "SELECT *  
             FROM spieler 
             WHERE team_id='$team_id' 
-            AND letzte_saison='". Config::SAISON . "'
+            AND letzte_saison = '$saison'
             ORDER BY letzte_saison DESC, vorname ASC";
         $result = db::readdb($sql);
-        $return = array();
         while ($x = mysqli_fetch_assoc($result)){
             $return[$x['spieler_id']] = $x;
         }
-        return db::escape($return); //Array 
+        return db::escape($return ?? array()); //Array 
     }
 
+    //Ausnahme für die Saison 20/21, da viele Teams ihre Spieler in der Corona_Saison nicht zurückgemeldet haben
     public static function get_teamkader_vorsaison($team_id)
     {   
-        $vorsaison = Config::SAISON - 1;
-        $vorvorsaison = Config::SAISON - 2;
-        $sql = "SELECT *  
-            FROM spieler 
-            WHERE team_id = '$team_id' 
-            AND (letzte_saison = '$vorsaison' OR letzte_saison = '$vorvorsaison')
-            ORDER BY letzte_saison DESC, vorname ASC";
-        $result = db::readdb($sql);
-        $return = array();
-        while ($x = mysqli_fetch_assoc($result)){
-            $return[$x['spieler_id']] = $x;
-        }
+        $kader_vorsaison = self::get_teamkader($team_id, Config::SAISON - 1);
+        $kader_vorvorsaison = self::get_teamkader($team_id, Config::SAISON - 2);
+        $return = $kader_vorsaison + $kader_vorvorsaison;
         return db::escape($return ?? array()); //Array 
     }
 
@@ -96,7 +87,7 @@ class Spieler {
         while ($x = mysqli_fetch_assoc($result)){
             $spielerliste[$x['spieler_id']] = $x['vorname']." ".$x['nachname'];
         }
-        return db::escape($spielerliste); //Array 
+        return db::escape($spielerliste); //Array
     }
     
     //Alle Details eines Spielers werden in einem Array zusammen übergeben

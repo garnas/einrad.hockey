@@ -50,7 +50,7 @@ include '../../templates/header.tmp.php';?>
 </p>
 
 <h2 class="w3-text-primary">Anstehende Turniere</h2>
-<?php 
+<?php
 //Turniere die nicht in der Ergebnis-Phase sind:
 $turniere = $turniere_no_erg;
 include '../../templates/turnierliste.tmp.php';
