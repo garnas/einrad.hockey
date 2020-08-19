@@ -85,7 +85,7 @@ class Config {
     const BLOCK = array('A','AB','BC','CD','DE','EF','F');
 
     //Mögliche Turnier-Blöcke
-    const BLOCK_ALL =  array("ABCDEF",'AB','ABC','BC','BCD','CD','CDE','DE','DEF','EF','F');
+    const BLOCK_ALL =  array("ABCDEF",'A','AB','ABC','BC','BCD','CD','CDE','DE','DEF','EF','F');
     
     //Ligagebühr
     const LIGAGEBUEHR = "30&nbsp;€";

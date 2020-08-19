@@ -27,7 +27,6 @@ class LigaBot {
 
             //////////Turnierblock wandern lassen//////////////
             $ausrichter_block = Tabelle::get_team_block($akt_turnier->daten['ausrichter']);
-            if ($ausrichter_block == "A"){$ausrichter_block = "AB";} //Der Ausrichterblock wird als AB angenommen, damit AB-Turniere nicht als A-Turniere erfasst werden.
             $turnier_block = $akt_turnier->daten['tblock'];
             //Position des Ausrichters in einem Array aller Blöcke in der Klasse Config, um Blockhöhere und erweiterte Turniere erkennen zu können
             $pos_ausrichter = array_search($ausrichter_block, Config::BLOCK_ALL);
