@@ -81,7 +81,7 @@
             <span onclick="document.getElementById('modal_ausleihe').style.display='none'" class="w3-button w3-large w3-text-secondary w3-display-topright">&times;</span>
             <h2 class="w3-text-primary">Spielerausleihe hinzufügen</h2>
             <p>
-                <label for="ausleihe_name">Name des Spielers</label>
+                <label for="ausleihe_name">Spieler</label>
                 <input required class="w3-input w3-border w3-border-primary" type="text" name="ausleihe_name" id="ausleihe_name"></input>   
             </p>
             <p>
