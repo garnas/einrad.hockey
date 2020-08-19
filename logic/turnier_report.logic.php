@@ -9,6 +9,13 @@ if ($akt_turnier->daten['ausrichter'] == ($_SESSION['team_id'] ?? '') or $ligace
     $change_tbericht = false;
 }
 
+if(Config::time_offset() - strtotime($akt_turnier->daten['datum']) < 2*24*60*60 && !$ligacenter){
+    $change_tbericht = false; //Berechtigung zum Verändern des Reports widerrufen für Ausrichter, wenn das Turnier mehr als zwei Tage zurückliegt.
+    if ($akt_turnier->daten['ausrichter'] == ($_SESSION['team_id'] ?? '')){
+        Form::attention("Das Turnier liegt bereits in der Vergangenheit. Bearbeiten des Turnierreports nur noch via den Ligaausschuss möglich.");
+    }
+}
+
 $tbericht = new TurnierReport ($turnier_id);
 //db::debug($akt_turnier->get_liste_spielplan());
 
@@ -72,7 +79,7 @@ if (isset($_POST['new_ausleihe']) && $change_tbericht){
     }
     $platz_ab = Tabelle::get_team_rang($team_id_ab);
     $platz_auf = Tabelle::get_team_rang($team_id_auf);
-    if ($platz_ab - $platz_auf < 10){
+    if ($platz_ab - $platz_auf < 10 && !$ligacenter){
         Form::error("Es müssen mindestens 10 Plätze zwischen den beiden Teams in der Rangtabelle liegen.");
         header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
         die();
