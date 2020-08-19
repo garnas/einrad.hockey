@@ -63,6 +63,20 @@ if (isset($_POST['new_ausleihe']) && $change_tbericht){
     $name = $_POST['ausleihe_name'];
     $team_ab = $_POST['ausleihe_team_ab'];
     $team_auf = $_POST['ausleihe_team_auf'];
+    $team_id_ab = Team::teamname_to_teamid($team_ab);
+    $team_id_auf = Team::teamname_to_teamid($team_auf);
+    if (!(Team::is_ligateam($team_id_ab) && Team::is_ligateam($team_id_auf))){
+        Form::error("Ligateams der Spielerausleihe wurden nicht gefunden");
+        header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
+        die();
+    }
+    $platz_ab = Tabelle::get_team_rang($team_id_ab);
+    $platz_auf = Tabelle::get_team_rang($team_id_auf);
+    if ($platz_ab - $platz_auf < 10){
+        Form::error("Es müssen mindestens 10 Plätze zwischen den beiden Teams in der Rangtabelle liegen.");
+        header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
+        die();
+    }
     $tbericht->new_spieler_ausleihe($name,$team_ab,$team_auf);
     Form::affirm("Spielerausleihe wurde hinzugefügt.");
     header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
