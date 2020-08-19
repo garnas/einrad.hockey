@@ -54,7 +54,7 @@ foreach ($spieler_ausleihen as $ausleihe_id => $ausleihe){
     if (isset($_POST['del_ausleihe_' . $ausleihe_id]) && $change_tbericht){
         $tbericht->delete_spieler_ausleihe($ausleihe_id);
         Form::affirm("Spielerausleihe wurde entfernt.");
-        header('Location:' . db::escape($_SERVER['PHP_SELF']));
+        header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
         die();
     }
 }
@@ -65,7 +65,7 @@ if (isset($_POST['new_ausleihe']) && $change_tbericht){
     $team_auf = $_POST['ausleihe_team_auf'];
     $tbericht->new_spieler_ausleihe($name,$team_ab,$team_auf);
     Form::affirm("Spielerausleihe wurde hinzugefügt.");
-    header('Location:' . db::escape($_SERVER['PHP_SELF']));
+    header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
     die();
 }
 
@@ -76,7 +76,7 @@ foreach ($zeitstrafen as $zeitstrafe_id => $zeitstrafe){
     if (isset($_POST['del_zeitstrafe_' . $zeitstrafe_id]) && $change_tbericht){
         $tbericht->delete_zeitstrafe($zeitstrafe_id);
         Form::affirm("Zeitstrafe wurde entfernt.");
-        header('Location:' . db::escape($_SERVER['PHP_SELF']));
+        header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
         die();
     }
 }
@@ -88,8 +88,8 @@ if (isset($_POST['new_zeitstrafe']) && $change_tbericht){
     $team_b = $_POST['zeitstrafe_team_b'];
     $bericht = $_POST['zeitstrafe_bericht'];
     $tbericht->new_zeitstrafe($name,$dauer,$team_a,$team_b,$bericht);
-    Form::affirm("Spielerausleihe wurde hinzugefügt.");
-    header('Location:' . db::escape($_SERVER['PHP_SELF']));
+    Form::affirm("Zeitstrafe wurde hinzugefügt.");
+    header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
     die();
 }
 
@@ -104,6 +104,6 @@ if (isset($_POST['set_turnierbericht']) && $change_tbericht){
     }
     $tbericht->set_turnier_bericht($bericht, $kader_check);
     Form::affirm("Turnierbericht wurde gespeichert");
-    header('Location:' . db::escape($_SERVER['PHP_SELF']));
+    header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
     die();
 }
