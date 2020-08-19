@@ -45,7 +45,7 @@ class LigaBot {
                 }
             }
     
-            //////////Phasenwechsel in von Offene Phase die Meldephase//////////////
+            //////////Phasenwechsel von Offene Phase in die Meldephase//////////////
             //Prüft, ob wir uns vier Wochen vor dem Spieltag befinden und ob das Turnier in der offenen Phase ist.
             if (self::time_offen_melde($akt_turnier->daten['datum']) <= $heute && $akt_turnier->daten['phase'] == 'offen'){
                 $akt_turnier->set_phase("melde"); //Aktualisiert auch $akt_turnier->daten()
@@ -53,9 +53,9 @@ class LigaBot {
                 //losen setzt alle Teams in richtiger Reihenfolge auf die Warteliste
                 self::losen($akt_turnier);
                 //füllt die Spielen-Liste auf
-                $akt_turnier->spieleliste_auffuellen();
+                $akt_turnier->spieleliste_auffuellen("LigaBot", false);
                 //Info-Mails versenden
-                 MailBot::mail_gelost($akt_turnier);
+                MailBot::mail_gelost($akt_turnier);
                 //Freie Plätze versenden
                 MailBot::mail_plaetze_frei($akt_turnier);
             }
@@ -172,14 +172,6 @@ class LigaBot {
                 MailBot::mail_freilos_abmeldung($akt_turnier, $team['team_id']);
                 //Anmeldeliste aktualisieren
                 $liste = $akt_turnier->get_anmeldungen();
-
-                /*
-                $akt_turnier->abmelden($team['team_id']);
-                Team::add_freilos($team['team_id']);
-                $akt_turnier->schreibe_log(
-                    "Abgemeldet (Freilos): " . $team['teamname'] . "\r\n Teamblock: " . Tabelle::get_team_block($team['team_id']) . " Turnierblock: " . $akt_turnier->daten['tblock'] . 
-                    "\r\nFreilos wurde erstattet");
-                */
             }
         }
 
