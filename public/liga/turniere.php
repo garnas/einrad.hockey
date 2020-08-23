@@ -184,7 +184,7 @@ function modal(turnier_id){
                                 <td><?=$turnier['plaetze']?> (<?=$turnier['spielplan']?>)</td>
                             </tr>
                             <tr>
-                                <td class=""><i class="material-icons">schedule</i> Startzeit</td>
+                                <td class=""><i class="material-icons">schedule</i> Beginn</td>
                                 <td><?=$turnier['startzeit']?>&nbsp;Uhr<?php if (!empty($turnier['besprechung'])){?> <i>(<?=$turnier['besprechung']?>)</i><?php } //endif?></td>
                             </tr>
                             <tr>

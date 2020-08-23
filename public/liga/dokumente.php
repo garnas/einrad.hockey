@@ -38,6 +38,7 @@ include '../../templates/header.tmp.php';
     <h2 class="w3-text-primary">Sonstiges</h2>
     <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?=Form::get_saison_string()?></p>
     <a class="no w3-hover-text-secondary" href="<?=Config::LINK_DSGVO?>"><p><i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i> Datenschutzhinweise</p></a>
+    <a class="no w3-hover-text-secondary" href="<?=Config::LINK_SPIELPLAENE_ALT?>"><p><i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i> alte Spielplanvorlagen</p></a>
     <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">19.08.2020</p>
 </div>
 

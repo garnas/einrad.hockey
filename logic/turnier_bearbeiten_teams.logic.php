@@ -29,7 +29,7 @@ if (isset($_POST['change_turnier'])) {
     $plaetze = $_POST['plaetze'];
     
     //Besprechung
-    if ($_POST['besprechung'] == 'Ja'){
+    if (($_POST['besprechung'] ?? '') == 'Ja'){
         $besprechung = 'Ja';
     }else{
         $besprechung = 'Nein';

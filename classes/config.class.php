@@ -55,6 +55,7 @@ class Config {
     const LINK_REGELN_IUF = '../dokumente/iuf-rulebook-2019.pdf';
     const LINK_TURNIER = '../dokumente/turniermodi.pdf';
     const LINK_DSGVO = '../dokumente/datenschutz-hinweise.pdf';
+    const LINK_SPIELPLAENE_ALT = '../dokumente/alte_spielplan_vorlagen.pdf';
 
     ///////////////////////////////////////////////////////////////
     //////////////////////////Mailadressen/////////////////////////
