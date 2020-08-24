@@ -15,15 +15,23 @@ if (empty($data_ergebnisse)){
     Form::affirm("Es wurden noch keine Turnierergebnisse der Saison " . Form::get_saison_string($saison) . " eingetragen");
 }
 $data_turniere = Turnier::get_all_turniere("WHERE saison='$saison'");
+
+//Farbe für die Plätze auf dem Turnier
 $color[0] = "w3-text-tertiary";
 $color[1] = "w3-text-grey";
 $color[2] = "w3-text-brown";
 
+//Turnierreport Icon
+if(isset($_SESSION['team_id'])){
+    $icon = 'article';
+}else{
+    $icon = 'lock';
+}
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 $titel = "Turnierergebnisse " . Form::get_saison_string($saison) . " | Deutsche Einradhockeyliga";
-$content = 'Hier kann man die Ergebnisse und Tabellen seit der ersten Saison im Jahr 1995 sehen.';
+$content = 'Hier kann man die Ergebnisse und Tabellen der Saison ' . Form::get_saison_string($saison) . ' sehen.';
 include '../../templates/header.tmp.php';
 ?>
 
@@ -79,9 +87,11 @@ $(document).ready(function(){
                 <?php if ($saison <= 25){?>
                     <?=Form::link('archiv.php','<i class="material-icons">info</i> Details')?>
                 <?php }else{ ?>
-                    <div class="<?php if(empty($data_turniere[$turnier_id]['link_spielplan'])){?>w3-opacity-max<?php }// end if?>">
+                    <span class="<?php if(empty($data_turniere[$turnier_id]['link_spielplan'])){?>w3-opacity-max<?php }// end if?>">
                         <?=Form::link($data_turniere[$turnier_id]['link_spielplan'] ?: ('#' . $turnier_id), '<i class="material-icons">info</i> Details')?>
-                    </div>
+                </span>
+                    <?=Form::link("../teamcenter/tc_turnier_report.php?turnier_id=$turnier_id", ' <i class="material-icons">' . $icon . '</i> Turnierreport')?>
+                    <?php if(isset($_SESSION['la_id'])){?><?=Form::link("../ligacenter/lc_turnier_report.php?turnier_id=$turnier_id", '<i class="material-icons">article</i> Turnierreport (Ligaausschuss)')?><?php }//endif?>
                 <?php }//end if?>
             </p>
         </section>
