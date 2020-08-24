@@ -77,6 +77,7 @@ if (isset($_POST['new_ausleihe']) && $change_tbericht){
         header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
         die();
     }
+    /*
     $platz_ab = Tabelle::get_team_rang($team_id_ab, $akt_turnier->daten['spieltag']);
     $platz_auf = Tabelle::get_team_rang($team_id_auf, $akt_turnier->daten['spieltag']);
     if ($platz_ab - $platz_auf < 10 && !$ligacenter){
@@ -84,6 +85,7 @@ if (isset($_POST['new_ausleihe']) && $change_tbericht){
         header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
         die();
     }
+    */
     $tbericht->new_spieler_ausleihe($name,$team_auf,$team_ab);
     Form::affirm("Spielerausleihe wurde hinzugefügt.");
     header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
