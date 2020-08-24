@@ -63,7 +63,7 @@ for ($spieltag = $akt_spieltag; $spieltag >= 0; $spieltag--){
     }
     $spieltage_string .= "<span class='$spieltag_color'>$spieltag</span>";
     if($spieltag == $live_spieltag){
-        $spieltage_string .= "<span class='$spieltag_color'> (live)</span>";
+        $spieltage_string .= "<span class='$spieltag_color'> <i>(unvollständig)</i></span>";
     }
     $spieltage_string .= '</a>, ';
 }
