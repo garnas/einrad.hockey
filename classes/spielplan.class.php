@@ -20,10 +20,12 @@ class spielplan{
         $result = mysqli_fetch_assoc($result);
         if (empty($result)){
             db::debug($this->akt_turnier->daten);
+            db::debug($this->teamliste);
             $plaetze = $this->akt_turnier->daten["plaetze"];
             $spielplan=$this->akt_turnier->daten["spielplan"];
             $sql = "SELECT * FROM spielplan_paarungen WHERE plaetze='$plaetze' AND spielplan='$spielplan'";
             $result = db::readdb($sql);
+            
             $sqlinsert="";
             $sqlinsert="INSERT INTO spiele VALUES ";
             while($spiel=mysqli_fetch_assoc($result)){
@@ -70,23 +72,78 @@ class spielplan{
                 $index=$i+1;
             }
         }
+        //Wertigkeit zuordnen
+        $plaetze = $this->akt_turnier->daten["plaetze"];
+        $wert=0;
+        for($i=$plaetze-1;$i>=0;$i--){
+            $wert=$this->getWertigkeitByTeamID($daten[$i]["team_id_a"]);
+            $daten[$i]["wertigkeit"]=$wert;
+        }
+        //NL Wertigkeiten ausrechnen
+        $daten=$this->setWertigkeitenNL($daten);
+        //Ligapunkte ausrechenen Turnierergebnis
+        $punkte=0;
+        $faktor=$this->getFaktor();
+        for($i=sizeof($daten)-1;$i>=0;$i--){
+            $punkte += $daten[$i]["wertigkeit"];
+            $daten[$i]["ligapunkte"]=round($punkte*(6/$faktor));
+        }
         return $daten;
+    }
+
+    function setWertigkeitenNL($daten){
+        //db::debug($this->teamliste);
+        //letztes Team NL
+        if(!is_numeric($daten[sizeof($daten)-1]["wertigkeit"])){
+            $j=sizeof($daten)-2;
+            while(!is_numeric($daten[$j]["wertigkeit"])&&$j>=0){
+                $j--;
+            }
+            $lastNL=$daten[$j]["wertigkeit"]/2;
+            if($lastNL<15){
+                $lastNL=15;
+            }
+            $daten[sizeof($daten)-1]["wertigkeit"]=$lastNL;
+            
+        }
+        $max_wertigkeit=$daten[sizeof($daten)-1]["wertigkeit"];
+        for($i=sizeof($daten)-2;$i>=0;$i--){
+            if(!is_numeric($daten[$i]["wertigkeit"])){
+                $daten[$i]["wertigkeit"]=$max_wertigkeit+1;
+            }elseif($daten[$i]["wertigkeit"]>$max_wertigkeit){
+                $max_wertigkeit=$daten[$i]["wertigkeit"];
+            }
+        }
+        return $daten;
+    }
+
+
+    function getFaktor(){
+        return $this->getSpielzeiten()["faktor"];
+    }
+
+    function getWertigkeitByTeamID($team_id){
+        for($i=1;$i<=sizeof($this->teamliste);$i++){
+            if($team_id==$this->teamliste[$i]["team_id"]){
+                return $this->teamliste[$i]["wertigkeit"];
+            }
+        }
     }
     function sort_teams($daten,$begin,$end){
         //rufen sql auf mit sortierung nach punken, diff, geschossenen Toren
         //ergebnis testen ob alle gleich ->Penalty oder Teil gleich -> teilweiser direkter Vergleich
         //in daten reihen swapen
         $teams=[];
-        db::debug($daten);
+        //db::debug($daten);
         foreach(range($begin,$end) as $number){
             array_push($teams, $daten[$number]["team_id_a"]);
         }
-        db::debug($teams);
+        //db::debug($teams);
         $subdaten=$this->sqlQuery(TRUE,$teams);
         //alle gleich
         $last=$end-$begin;
-        db::debug($subdaten);
-        echo "----------------------last".$last;
+        //db::debug($subdaten);
+        //echo "----------------------last".$last;
         if($subdaten[0]["punkte"]==$subdaten[$last]["punkte"]&& $subdaten[0]["diff"]==$subdaten[$last]["diff"]&& $subdaten[0]["tore"]==$subdaten[$last]["tore"]){
             //penalty zwischen allen nötig
             $this->penalty_warning="Achtung Penalty";
@@ -177,13 +234,47 @@ class spielplan{
         GROUP BY team_id_a
         ORDER BY".$order;
         $result = db::readdb($sql);
-        echo $sql;
+        //echo $sql;
         $daten=[];
         while($row=mysqli_fetch_assoc($result)){
-            //echo $row["team_id_a"]." ".$row["punkte"]." ".$row["tore"]." ".$row["gegentore"]." ".$row["diff"]." ".$row["penaltytore"];
+            ////echo $row["team_id_a"]." ".$row["punkte"]." ".$row["tore"]." ".$row["gegentore"]." ".$row["diff"]." ".$row["penaltytore"];
             array_push($daten, $row);
         }
         return $daten;
     }
 
+    function get_spiele(){
+        $sql="
+        SELECT spiel_id, t1.teamname AS team_a_name, t2.teamname AS team_b_name, schiri_team_id_a, schiri_team_id_b, tore_a, tore_b, penalty_a, penalty_b
+        FROM spiele sp, teams_liga t1, teams_liga t2
+        WHERE turnier_id='$this->turnier_id'
+        AND team_id_a = t1.team_id
+        AND team_id_b = t2.team_id
+        ORDER BY spiel_id ASC
+        ";
+        $result=db::readdb($sql);
+        $daten=[];
+        $startzeit=new DateTime($this->akt_turnier->daten["startzeit"]);
+        $zeiten=$this->getSpielzeiten();
+        //db::debug($zeiten)
+        $min=$zeiten["anzahl_halbzeiten"]*$zeiten["halbzeit_laenge"]+$zeiten["pause"];
+        $startzeit->sub(date_interval_create_from_date_string($min.' minutes'));
+        while($spiel=mysqli_fetch_assoc($result)){
+            $spiel["zeit"]=$startzeit->add(date_interval_create_from_date_string($min.' minutes'))->format("H:i");
+            array_push($daten, $spiel);
+        }
+        return $daten;
+    }
+    
+
+    function getSpielzeiten(){
+        $plaetze = $this->akt_turnier->daten["plaetze"];
+        $spielplan=$this->akt_turnier->daten["spielplan"];
+        $sql="SELECT * FROM spielplan_details WHERE plaetze='$plaetze' AND spielplan='$spielplan'";
+        $result=db::readdb($sql);
+        return mysqli_fetch_assoc($result);
+    }
+
+
 }
+
