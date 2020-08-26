@@ -138,10 +138,11 @@ class Turnier {
         $result = db::readdb($sql);
         $index = 1;
         $liste = array();
+        //Welcher Spieltag ist relevant?
         while ($anmeldung = mysqli_fetch_assoc($result)){
                 $liste[$index] = $anmeldung;
-                $liste[$index]['tblock'] = Tabelle::get_team_block($anmeldung['team_id']);
-                $liste[$index]['wertigkeit'] = Tabelle::get_team_wertigkeit($anmeldung['team_id']);
+                $liste[$index]['tblock'] = Tabelle::get_team_block($anmeldung['team_id'], $this->daten['spieltag'] - 1);
+                $liste[$index]['wertigkeit'] = Tabelle::get_team_wertigkeit($anmeldung['team_id'], $this->daten['spieltag'] - 1);
                 $index++;
         }
         if (!empty($liste)){

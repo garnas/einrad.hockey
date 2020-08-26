@@ -1,6 +1,6 @@
 <?php
 class Tabelle {
-    
+    //Übergibt den Spieltag, bis zu welchem Ergebnisse eingetragen worden sind.
     public static function get_aktuellen_spieltag($saison = Config::SAISON)
     {
         $sql = "SELECT * FROM turniere_liga WHERE saison = '$saison' AND (art='I' OR art = 'II' OR art='III') ORDER BY spieltag ASC";
