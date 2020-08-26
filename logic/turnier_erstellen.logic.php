@@ -6,10 +6,8 @@ $block_higher_str = ''; //String der möglichen höheren Turnierblöcke
 //Position des eigenen Blockes im Array der Blöcke
 $chosen = array_search($ausrichter_block, Config::BLOCK);
 while ($chosen >= 0){
-    if (Config::BLOCK[$chosen] != 'A'){//Es gibt keine A-Turniere laut Modus
-        array_push($block_higher, Config::BLOCK[$chosen]);
-        $block_higher_str .= Config::BLOCK[$chosen].', ';
-    }
+    array_push($block_higher, Config::BLOCK[$chosen]);
+    $block_higher_str .= Config::BLOCK[$chosen].', ';
     $chosen = $chosen - 1;
 }
 $block_higher_str = substr($block_higher_str, 0, -2);

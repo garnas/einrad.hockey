@@ -15,11 +15,7 @@ if (isset($_GET['team_id'])){
         header('Location: lc_turnier_erstellen.php');
         die();
     }else{
-        if (Tabelle::get_team_block($ausrichter_team_id) == 'A'){
-            $ausrichter_block = 'AB'; //Da A-Teams keine A-Turniere ausrichten dürfen, werden sie bei der Erstellung von Turnieren wie AB-Teams behandelt.
-        }else{
-            $ausrichter_block = Tabelle::get_team_block($ausrichter_team_id);
-        }
+        $ausrichter_block = Tabelle::get_team_block($ausrichter_team_id);
         $error = false;
     }
 }

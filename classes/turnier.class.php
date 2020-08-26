@@ -307,7 +307,7 @@ class Turnier {
     //wenn der Teamblock des Wartelisteneintrags zum Turnier passt
     //wenn das Turnier nicht in der offenen Phase ist
     //wenn das Turnier noch freie Plätze hat
-    function spieleliste_auffuellen ($autor = 'automatisch')
+    function spieleliste_auffuellen ($autor = 'automatisch', $send_mail = true)
     {
         $daten = $this->daten;
         $freie_plaetze = $this->anzahl_freie_plaetze();
@@ -318,6 +318,9 @@ class Turnier {
                     if (!$this->check_doppel_anmeldung($team['team_id'])){
                         $this->liste_wechsel($team['team_id'], 'spiele'); //von Warteliste abmelden
                         $this->schreibe_log("Spielen-Liste auffüllen: \r\n" . $team['teamname'] . " warte -> spiele", $autor);
+                        if($send_mail){
+                            MailBot::mail_warte_zu_spiele($this, $team['team_id']);
+                        }
                         $freie_plaetze -= 1;
                     }else{
                         $this->abmelden($team['team_id']);
