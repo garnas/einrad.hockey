@@ -67,7 +67,7 @@ class MailBot {
     //Nur für automatische Emails verwenden!
     public static function add_mail($betreff, $inhalt ,$adressaten, $absender = Config::SMTP_USER)
     {   
-        if (!empty($adressaten)){
+        if (!empty($adressaten)){ //Nur wenn Mailadressen vorhanden sind, wird eine Mail hinzugefügt
             $betreff = db::sanitize($betreff);
             $inhalt = db::sanitize($inhalt);
             if (is_array($adressaten)){
@@ -127,7 +127,20 @@ class MailBot {
             }
         }
     }
-
+    //Erstellt eine Mail in der Datenbank an Teams, welche in von der Warteliste aufgerückt sind
+    public static function mail_warte_zu_spiele($akt_turnier, $team_id)
+    {   
+        $betreff = $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . ": Auf Spielen-Liste aufgerückt";
+        $inhalt = "<html>Hallo " . Team::teamid_to_teamname($team_id) . ","
+            . "<br><br>dein Team ist auf dem " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->daten['datum'])) . " von der Warteliste auf die Spielen-Liste aufgerückt."
+            . "<br><br><a href='https://einrad.hockey/liga/turnier_details?turnier_id=" . $akt_turnier->daten['turnier_id'] . "'>Link zum Turnier</a>"
+            . "<br><br>Falls du keine automatischen E-Mails mehr von der Einradhockeyliga erhalten willst, kannst du dies <a href='https://einrad.hockey/teamcenter/tc_teamdaten_aendern'>hier</a> deaktivieren."
+            . "<br><br>Bis zum nächsten Mal,"
+            . "<br>Eure Einradhockeyliga</html>";
+        $akt_kontakt = new Kontakt ($team_id);
+        $emails = $akt_kontakt->get_emails_info();
+        self::add_mail($betreff, $inhalt, $emails);
+    }
     //Erstellt eine Mail in der Datenbank an alle vom Losen betroffenen Teams
     public static function mail_gelost($akt_turnier)
     {   

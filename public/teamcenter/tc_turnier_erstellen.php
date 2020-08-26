@@ -14,11 +14,7 @@ if (count(Spieler::get_teamkader($_SESSION['team_id'])) < 5){
 
 $ausrichter_team_id = $_SESSION['team_id'];
 $ausrichter_name = $_SESSION['teamname'];
-if ($_SESSION['teamblock'] == 'A'){
-    $ausrichter_block = 'AB'; //Da A-Teams keine A-Turniere ausrichten dürfen, werden sie bei der Erstellung von Turnieren wie AB-Teams behandelt.
-}else{
-    $ausrichter_block = $_SESSION['teamblock'];
-}
+$ausrichter_block = $_SESSION['teamblock'];
 
 //Formularauswertung
 require_once '../../logic/turnier_erstellen.logic.php';
