@@ -1,7 +1,7 @@
 
 <!-- Neuigkeit bearbeiten -->
 <h3>Neuigkeit bearbeiten<?php if($ligacenter){?> (als Ligaausschuss)<?php }?></h3>
-<p id="counter"><i>Es dürfen 500 Zeichen verwendet werden. Für mehr Infos kannst du ein Bild und/oder ein PDF hochladen.</i><p>
+<p id="counter"><i>Es dürfen 750 Zeichen verwendet werden. Für mehr Infos kannst du ein Bild und/oder ein PDF hochladen.</i><p>
 <form action="" method="post" enctype="multipart/form-data">
     <p>
         <label class="" for="titel">Titel</label>
@@ -9,7 +9,7 @@
     </p>
     <p>
         <label class="" for="text">Text</label>
-        <textarea required class="w3-input w3-border w3-border-primary" rows="10" id="text" name="text" onkeyup="woerter_zaehlen()" maxlength="500"><?=$neuigkeit['inhalt']?></textarea>
+        <textarea required class="w3-input w3-border w3-border-primary" rows="10" id="text" name="text" onkeyup="woerter_zaehlen(750)" maxlength="750"><?=$neuigkeit['inhalt']?></textarea>
     </p>
     <div class="w3-border w3-border-primary">
         <div class="w3-panel">

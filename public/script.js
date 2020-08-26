@@ -52,7 +52,7 @@ function woerter_zaehlen(max_woerter = 500, id_textarea = 'text', id_counter = '
   
   if(anzahl < 0){
       document.getElementById(id_counter).innerHTML = 'Zeichenanzahl wurde überschritten.';
-      document.getElementById("submit").style.display="none";
+      //document.getElementById("submit").style.display="none";
   }
 }
 
