@@ -3,9 +3,9 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/session_la.logic.php';//Auth
+//require_once '../../logic/session_la.logic.php';//Auth
 
-$turnier_id = 913;
+$turnier_id = 919;
 //$turnier_id=$_GET['turnier_id'];
 $akt_turnier=new Turnier($turnier_id);
 //Existiert das Turneir??
@@ -20,7 +20,7 @@ $spielplan->create_spielplan_jgj();
 $tabelle=$spielplan->get_turnier_tabelle();
 $teamliste=$spielplan->teamliste;
 $spielliste=$spielplan->get_spiele();
-db::debug($tabelle);
+//db::debug($teamliste);
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -83,22 +83,22 @@ include '../../templates/header.tmp.php';
             <th>Platzierung</th>
             <th>Mannschaft</th>
             <th >Spiele</th>
+            <th >Punkte</th>
             <th >Tore</th>
             <th >Gegentore</th>
             <th >Differenz</th>
-            <th >Punkte</th>
             <th>Ligapunkte</th>
         </tr>
         <?php foreach ($tabelle as $index => $table){?>
             <tr>
             <td><?=$index+1?></td>
-            <td><?=$table["team_id_a"]?></td>
+            <td><?=$table["teamname"]?></td>
             <td><?=$table["spiele"]?></td>
+            <td><?=$table["punkte"]?></td>
             <td><?=$table["tore"]?></td>
             <td><?=$table["gegentore"]?></td>
             <td><?=$table["diff"]?></td>
-            <td><?=$table["punkte"]?></td>
-            <td><?=$table["ligapunkte"]?><td>
+            <td><?=$table["ligapunkte"]?></td>
             </tr>
             <?php }//end foreach?>
         </table>

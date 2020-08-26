@@ -19,8 +19,8 @@ class spielplan{
         $result = db::readdb($sql);
         $result = mysqli_fetch_assoc($result);
         if (empty($result)){
-            db::debug($this->akt_turnier->daten);
-            db::debug($this->teamliste);
+            //db::debug($this->akt_turnier->daten);
+            //db::debug($this->teamliste);
             $plaetze = $this->akt_turnier->daten["plaetze"];
             $spielplan=$this->akt_turnier->daten["spielplan"];
             $sql = "SELECT * FROM spielplan_paarungen WHERE plaetze='$plaetze' AND spielplan='$spielplan'";
@@ -57,6 +57,7 @@ class spielplan{
         for($i=1 ;$i<=sizeof($this->teamliste);$i++){
             array_push($teams,$this->teamliste[$i]["team_id"]);
         }
+        $daten=NULL;
         $daten=$this->sqlQuery(FALSE,$teams);
         //auf punktgleichheit testen und richtig sortieren
         $index=0;
@@ -65,12 +66,18 @@ class spielplan{
                 $index=$index;
             }elseif($i!=$index){
                  //sortiere teams index bis i
+                echo "sort teams ".$index." bis ".$i."<br>"; 
                 $daten=$this->sort_teams($daten,$index,$i);
-
-                 $index=$i+1;
+                
+                $index=$i+1;
             }else{
                 $index=$i+1;
             }
+        }
+        //letzte Teams unterscheiden
+        if($i!=$index){
+            echo "sort teams letzte Teams ".$index." bis ".$i."<br>"; 
+            $daten=$this->sort_teams($daten,$index,$i);
         }
         //Wertigkeit zuordnen
         $plaetze = $this->akt_turnier->daten["plaetze"];
@@ -87,6 +94,10 @@ class spielplan{
         for($i=sizeof($daten)-1;$i>=0;$i--){
             $punkte += $daten[$i]["wertigkeit"];
             $daten[$i]["ligapunkte"]=round($punkte*(6/$faktor));
+        }
+        //Teamname hinzufügen
+        for($i=0;$i<sizeof($daten);$i++){
+            $daten[$i]["teamname"]=$this->getTeamnameByTeamID($daten[$i]["team_id_a"]);
         }
         return $daten;
     }
@@ -129,6 +140,15 @@ class spielplan{
             }
         }
     }
+
+    function getTeamnameByTeamID($team_id){
+        for($i=1;$i<=sizeof($this->teamliste);$i++){
+            if($team_id==$this->teamliste[$i]["team_id"]){
+                return $this->teamliste[$i]["teamname"];
+            }
+        }
+    }
+
     function sort_teams($daten,$begin,$end){
         //rufen sql auf mit sortierung nach punken, diff, geschossenen Toren
         //ergebnis testen ob alle gleich ->Penalty oder Teil gleich -> teilweiser direkter Vergleich
@@ -145,27 +165,55 @@ class spielplan{
         //db::debug($subdaten);
         //echo "----------------------last".$last;
         if($subdaten[0]["punkte"]==$subdaten[$last]["punkte"]&& $subdaten[0]["diff"]==$subdaten[$last]["diff"]&& $subdaten[0]["tore"]==$subdaten[$last]["tore"]){
-            //penalty zwischen allen nötig
+            //penalty zwischen allen nötig, evtl. schon stattgefunden
             $this->penalty_warning="Achtung Penalty";
+            echo "<br> Achtung Penalty!!! zwischen".$begin." bis ".$end." <br>";
         }else{
             $index=0;
+            //db::debug($daten);
+            for($i=0;$i<$end-$begin+1;$i++){
+                echo "subdaten: ".$i.". tes Team  ".$subdaten[$i]["team_id_a"]."<br>";
+            }
             for($i=0;$i<$end-$begin;$i++){
+                //echo "subdaten: ".$i.". tes Team  ".$subdaten[$i]["team_id_a"];
                 //testen ob aktuelle Zeile gleich zur nächsten 
                 //bei ungleichheit daten swapen
                 //bei gleichheit erneuter direkter vergleich
                 if($subdaten[$i]["punkte"]==$subdaten[$i+1]["punkte"]&& $subdaten[$i]["diff"]==$subdaten[$i+1]["diff"]&& $subdaten[$i]["tore"]==$subdaten[$i+1]["tore"]){
                     $index=$index;
                 }elseif($i!=$index){
+                    echo "<br> in Vergleich Gleichheit <br>";
+                    //so drehen dass die gleichen Teams an der richtigen Stelle im sub array stehen
+                    db::debug($daten);
+                    for($j=0;$j<$i-$index;$j++){
+                        echo "<br> tauschen <br>";
+                        $in=$this->getDatenIndexByTeamID($daten,$subdaten[$index+$j]["team_id_a"]);
+                        $ex=$index+$j;
+                        $temp=$daten[$ex];
+                        $daten[$ex]=$daten[$in];
+                        $daten[$in]=$temp;
+                    }
+                    db::debug($daten);
                     $daten=$this->sort_teams($daten,$index,$i);
                     $index=$i+1;
                 }else{
+                    //aktueller Wert(Punkte, Diff, geschossene Tore) ist anders als Wert davor und danach
                     $index=$index+1;
                     //swapen
-                    $ex=$this->getDatenIndexByTeamID($daten,$subdaten[$i+1]["team_id_a"]);
+                    
+                    //nur tauschen wenn Team noch nicht am richtigen Platz
                     $in=$this->getDatenIndexByTeamID($daten,$subdaten[$i]["team_id_a"]);
-                    $temp=$daten[$ex];
-                    $daten[$ex]=$daten[$in];
-                    $daten[$in]=$temp;
+                    if($in!=$begin+$i){
+                        echo "<br> swap ".$subdaten[$i]["team_id_a"]." mit ".$subdaten[$i+1]["team_id_a"]."<br>";
+                        $ex=$begin+$i;
+                        $temp=$daten[$ex];
+                        $daten[$ex]=$daten[$in];
+                        $daten[$in]=$temp;
+                    }else{
+                        echo "<br>  KEIN swap ".$subdaten[$i]["team_id_a"]." mit ".$subdaten[$i+1]["team_id_a"]."<br>";
+                    }
+                    
+                    //db::debug($daten);
                 } 
             }
             //evtl letzten Gleich
@@ -174,8 +222,9 @@ class spielplan{
             }else{
                 //swapen, muesste schon geswappt sein
             }
-            return $daten;
+            
         }
+        return $daten;
         
     }
 
@@ -197,7 +246,7 @@ class spielplan{
         }
         $where_a=rtrim($where_a,"OR");
         $where_b=rtrim($where_b,"OR");
-        $where=$where_a.") AND ".$where_b.")";
+        $where=$where_a.") AND ".$where_b.") AND turnier_id='$this->turnier_id'";
         $order=" `punkte`  DESC";
         if($isDirektVergleich){
             $order .=", diff DESC, tore DESC";
