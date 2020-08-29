@@ -1,4 +1,15 @@
-<?php 
+<?php
+//TODO
+//+2 Vergleich alles gleich nach Penalty sortieren
+//plaetze != anzahl teams 
+//layout formular zum eintragen
+//8 er Gruppe 
+//4 er Spielplan Pause
+//keine Spiele eingetragen Fehler in Zeile 65, keine rangtabelle möglich da alles NULL
+//-> erst Rangtabelle berechnen wenn jeder mal gespielt hat
+//testen, testen, testen
+//ergebnisse in datenbank speichern, datum dabei testen
+//cronjob dienstags spielplan erstellen -> ansgar 
 class spielplan{
     public $turnier_id;
     public $akt_turnier;
