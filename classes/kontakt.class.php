@@ -120,7 +120,7 @@ class Kontakt {
     function get_all_emails()
     {
         $team_id = $this->team_id;
-        $sql = "SELECT *  FROM teams_kontakt WHERE team_id='$team_id'";
+        $sql = "SELECT *  FROM teams_kontakt WHERE team_id = '$team_id'";
         $result = db::readdb($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)){

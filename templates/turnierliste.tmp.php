@@ -25,6 +25,10 @@
                         <?=Form::link($turnier['link_details'], '<i class="material-icons">info</i> Details')?>
                         <?php }elseif (isset($turnier['link_bearbeiten'])){?>
                             <?=Form::link($turnier['link_bearbeiten'],'<i class="material-icons">create</i> Turnier bearbeiten')?>
+                            <?php if ($turnier['art'] == 'spass'){?>
+                                <br>
+                                <?=Form::link('../teamcenter/tc_spassturnier_anmeldung.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">how_to_reg</i> Teams manuell anmelden')?>
+                            <?php }//endif?>
                         <?php }//end if?>
                     </td> 
                 <?php }//end if?>

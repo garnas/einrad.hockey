@@ -11,6 +11,12 @@ $akt_turnier = new Turnier ($turnier_id);
 $daten = $akt_turnier->daten;
 $akt_kontakt = new Kontakt ($daten['ausrichter']);
 
+if (empty($daten)){
+    Form::error("Das Turnier existiert nicht");
+    header('Location: turniere.php');
+    die();
+}
+
 $emails = $akt_kontakt->get_emails_public();
 $emails_string = '';
 foreach ($emails as $email){
@@ -18,31 +24,18 @@ foreach ($emails as $email){
 }
 $daten['email'] = substr($emails_string, 0, -1);
 
-if (empty($daten)){
-    Form::error("Das Turnier existiert nicht");
-    header('Location: turniere.php');
-    die();
-}
-$liste=$akt_turnier->get_anmeldungen(); //Anmeldungen für dieses Turnier Form: $liste['warte'] = Array([0] => Array['teamname','team_id','tblock', etc])
-
-//Turnierwert berechnen
-if (count($liste['spiele']) > 4){
-    $turnier_wert = 0;
-    foreach($liste['spiele'] as $team){
-        if($team['wertigkeit'] == 'NL'){
-            $ohne_NL = ' (ohne Nichtligateams)';
-            $team['wertigkeit'] = 0;
-        }
-        $turnier_wert += $team['wertigkeit'];
-    }
-$turnier_wert = round($turnier_wert* 6 / count($liste['spiele']),0);
-$turnier_wert .= $ohne_NL ?? '';
-}
+$liste = $akt_turnier->get_anmeldungen(); //Anmeldungen für dieses Turnier Form: $liste['warte'] = Array([0] => Array['teamname','team_id','tblock', etc])
 
 //Parsing
 $daten['loszeit'] = strftime("%A, %d.%m.%Y %H:%M&nbsp;Uhr", Ligabot::time_offen_melde($daten['datum'])-1);
 $daten['datum'] = strftime("%d.%m.%Y&nbsp;(%A)", strtotime($daten['datum']));
 $daten['startzeit'] = substr($daten['startzeit'], 0, -3);
+
+if($daten['besprechung'] == 'Ja'){
+    $daten['besprechung'] = 'Alle Teams sollen sich um ' . date('h:i', strtotime($daten['startzeit']) - 15*60) . '&nbsp;Uhr zu einer gemeinsamen Turnierbesprechung einfinden.';
+}else{
+    $daten['besprechung'] = '';
+}
 
 if ($daten['art'] == 'spass'){
     $daten['tblock'] = '<i>Spaßturnier</i>';
@@ -116,7 +109,7 @@ include '../../templates/header.tmp.php';
             <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;"><i class="material-icons">schedule</i> Beginn</td>
             <td>
                 <?=$daten['startzeit']?>&nbsp;Uhr
-                <?php if($daten['besprechung'] == 'Ja'){?><p><i>Alle Teams sollen sich 15&nbsp;min vor Turnierbeginn zu einer gemeinsamen Turnierbesprechung einfinden.</i></p><?php } //end if?>
+                <?php if (!empty($daten['besprechung'])){?><p><i><?=$daten['besprechung']?></i></p><?php }//endif?>
             </td>
         </tr>
         <tr>
