@@ -27,7 +27,10 @@ $daten['email'] = substr($emails_string, 0, -1);
 $liste = $akt_turnier->get_anmeldungen(); //Anmeldungen für dieses Turnier Form: $liste['warte'] = Array([0] => Array['teamname','team_id','tblock', etc])
 
 //Parsing
-$daten['loszeit'] = strftime("%A, %d.%m.%Y %H:%M&nbsp;Uhr", Ligabot::time_offen_melde($daten['datum'])-1);
+if(in_array($daten['art'],['I','II','III'])){
+    $daten['loszeit'] = strftime("%A, %d.%m.%Y %H:%M&nbsp;Uhr", Ligabot::time_offen_melde($daten['datum'])-1);
+}
+
 $daten['datum'] = strftime("%d.%m.%Y&nbsp;(%A)", strtotime($daten['datum']));
 $daten['startzeit'] = substr($daten['startzeit'], 0, -3);
 
@@ -38,7 +41,7 @@ if($daten['besprechung'] == 'Ja'){
 }
 
 if ($daten['art'] == 'spass'){
-    $daten['tblock'] = 'Spaßturnier';
+    $daten['tblock'] = '--';
     $daten['art'] = 'Spaßturnier';
 }
 if ($daten['art'] == 'I'){
@@ -191,15 +194,15 @@ include '../../templates/header.tmp.php';
         </tr>
         <tr>
             <td class="w3-primary" style="vertical-align: middle">Phase</td>
-            <td><?=$daten['phase']?></td>
+            <td><?=$daten['phase'] ?: '--'?></td>
         </tr>
         <tr>
             <td class="w3-primary" style="vertical-align: middle">Losung</td>
-            <td><?=$daten['loszeit']?></td>
+            <td><?=$daten['loszeit'] ?? '--'?></td>
         </tr>
         <tr>
             <td class="w3-primary" style="vertical-align: middle">Spieltag</td>
-            <td><?=$daten['spieltag']?></td>
+            <td><?=$daten['spieltag'] ?: '--'?></td>
         </tr>
         <tr>
             <td class="w3-primary" style="vertical-align: middle">Art</td>

@@ -27,8 +27,8 @@ if (empty($akt_turnier->daten)){
 }
 
 if ($akt_turnier->daten['art'] == 'spass'){
-    Form::attention("Spassturniere erfordern keinen Turnierreport.");
-    header('Location: ../liga/turniere.php');
+    Form::attention("Spaßturniere erfordern keinen Turnierreport.");
+    header('Location: ../liga/turnier_details.php?turnier_id=' . $akt_turnier->daten['turnier_id']);
     die();
 }
 /*

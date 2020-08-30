@@ -75,7 +75,7 @@ class Tabelle {
     //in die klasse turnier verschieben und immer den richtigen wert bekommen!
     public static function get_team_block($team_id, $spieltag='')
     {   
-        $platz=self::get_team_rang($team_id,$spieltag);
+        $platz=self::get_team_rang($team_id, $spieltag);
         if (is_numeric($platz)){ 
             return self::platz_to_block($platz);
         }else{
