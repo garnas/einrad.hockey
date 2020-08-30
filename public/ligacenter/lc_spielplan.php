@@ -2,6 +2,8 @@
 TODO:
 - Datum und Ort des Turniers in den "Spielplan" einfügen
 - Title entsprechend den anderen anpassen
+- Formelemente auslesen
+- Tabelle dynamisch erstellen
 -->
 <?php
 /////////////////////////////////////////////////////////////////////////////
@@ -59,6 +61,7 @@ include '../../templates/header.tmp.php';
 
 <!-- SPIELE -->
 <h3 class="w3-text-secondary w3-margin-top">Spiele</h3>
+<form>
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped ">
             <tr class="w3-primary">
@@ -76,16 +79,17 @@ include '../../templates/header.tmp.php';
                 <td class="w3-right-align"><?=$spiel["schiri_team_id_b"]?></td>
                 <td><?=$spiel["team_a_name"]?></td>
                 <td><?=$spiel["team_b_name"]?></td>
-                <td class="w3-right-align" style="padding-right: 0;"><?=$spiel["tore_a"]?></td>
+                <td><input type="text" class="w3-input w3-border w3-round" style="width:48px;"></td>
                 <td class="w3-center" style="padding-left: 0; padding-right: 0;">:</td>
-                <td class="w3-left-align" style="padding-left: 0;"><?=$spiel["tore_b"]?></td>
-                <td class="w3-right-align" style="padding-right: 0;"><?=$spiel["penalty_a"]?></td>
+                <td><input type="text" class="w3-input w3-border w3-round" style="width:48px;"></td>
+                <td><input type="text" class="w3-input w3-border w3-round" style="width:48px;"></td>
                 <td class="w3-center" style="padding-left: 0; padding-right: 0;">:</td>
-                <td class="w3-left-align" style="padding-left: 0;"><?=$spiel["penalty_b"]?></td>
+                <td><input type="text" class="w3-input w3-border w3-round" style="width:48px"></td>
                 </tr>
             <?php }//end foreach?>
         </table>
    </div>
+</form>
 
 <!-- ABSCHLUSSTABELLE -->
 <h3 class="w3-text-secondary w3-margin-top">Abschlusstabelle</h3>
