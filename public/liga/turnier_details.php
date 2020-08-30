@@ -38,8 +38,8 @@ if($daten['besprechung'] == 'Ja'){
 }
 
 if ($daten['art'] == 'spass'){
-    $daten['tblock'] = '<i>Spaßturnier</i>';
-    $daten['art'] = '<i>Spaßturnier</i>';
+    $daten['tblock'] = 'Spaßturnier';
+    $daten['art'] = 'Spaßturnier';
 }
 if ($daten['art'] == 'I'){
     $daten['art'] = 'I: Blockeigenes Turnier (Der Turnierblock wandert mit Ausrichterblock)';
@@ -148,36 +148,38 @@ include '../../templates/header.tmp.php';
     </table>
 </div>
 <!--Anmeldungen / Listen -->
-<?php if ($daten['art'] != '<i>Spaßturnier</i>'){?>
-    <p class="w3-text-grey w3-border-bottom w3-border-grey">Spielen-Liste</p> 
+
+<p class="w3-text-grey w3-border-bottom w3-border-grey">Spielen-Liste</p> 
+<p><i>
+    <?php if (!empty($liste['spiele'])){?>
+        <?php foreach ($liste['spiele'] as $team){?>
+            <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span><br>
+        <?php }//end foreach?>
+    <?php }else{?><i>leer</i><?php } //endif?> 
+</i></p>
+<?php if($daten['phase'] == 'Offene Phase' or $daten['art'] == 'Abschlussturnier'){ ?>
+    <p class="w3-text-grey w3-border-bottom w3-border-grey">Meldeliste</p> 
     <p><i>
-        <?php if (!empty($liste['spiele'])){?>
-            <?php foreach ($liste['spiele'] as $team){?>
+        <?php if (!empty($liste['melde'])){?>
+            <?php foreach ($liste['melde'] as $team){?>
                 <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span><br>
+            <?php }//end foreach?>
+        <?php }else{?><i>leer</i><?php } //endif?>
+    </i></p>
+<?php }else{//else phase?>
+    <p class="w3-text-grey w3-border-bottom w3-border-grey">Warteliste</p> 
+    <p><i>
+        <?php if (!empty($liste['warte'])){?>
+            <?php foreach ($liste['warte'] as $team){?>
+                <?=$team['position_warteliste'] . ". " . $team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?? 'NL'?>)</span><br>
             <?php }//end foreach?>
         <?php }else{?><i>leer</i><?php } //endif?> 
     </i></p>
-    <?php if($daten['phase'] == 'Offene Phase' or $daten['art'] == 'Abschlussturnier'){ ?>
-        <p class="w3-text-grey w3-border-bottom w3-border-grey">Meldeliste</p> 
-        <p><i>
-            <?php if (!empty($liste['melde'])){?>
-                <?php foreach ($liste['melde'] as $team){?>
-                    <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span><br>
-                <?php }//end foreach?>
-            <?php }else{?><i>leer</i><?php } //endif?>
-        </i></p>
-    <?php }else{//end if phase?>
-        <p class="w3-text-grey w3-border-bottom w3-border-grey">Warteliste</p> 
-        <p><i>
-            <?php if (!empty($liste['warte'])){?>
-                <?php foreach ($liste['warte'] as $team){?>
-                    <?=$team['position_warteliste'] . ". " . $team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?? 'NL'?>)</span><br>
-                <?php }//end foreach?>
-            <?php }else{?><i>leer</i><?php } //endif?> 
-        </i></p>
-        <p>Freie Plätze: <?=$daten['plaetze'] - count(($liste['spiele'] ?? array()))?> von <?=$daten['plaetze']?></p>
-    <?php  } //end if phase?>
-<?php }else{?><p class="w3-text-grey">Anmeldung erfolgt beim Ausrichter<?php } //end if spass ?>
+    <p>Freie Plätze: <?=$daten['plaetze'] - count(($liste['spiele'] ?? array()))?> von <?=$daten['plaetze']?></p>
+<?php  } //end if phase?>
+<?php if ($daten['art'] == 'Spaßturnier'){?>
+    <p class="w3-text-green">Anmeldung erfolgt beim Ausrichter
+<?php }//end if spass?>
 
 <!-- Anzeigen der Ligaspezifischen Infos -->
 <p class="w3-text-grey w3-margin-top w3-border-bottom w3-border-grey">Ligaspezifische Infos</p> 
