@@ -67,28 +67,21 @@ class spielplan{
     }
     function update_spiel($spiel_id, $tore_a,$tore_b,$penalty_a,$penalty_b){
         //echo "update Tore is penalty numeric?: ".$penalty_a."   ";
-        if($tore_a==""){
+        if(!is_numeric($tore_a)){
             $tore_a='NULL';
         }
-        if($tore_b==""){
+        if(!is_numeric($tore_b)){
             $tore_b='NULL';
         }
-        if($penalty_a==""){
+        if(!is_numeric($penalty_a)){
             $penalty_a='NULL';
         }
-        if($penalty_b==""){
+        if(!is_numeric($penalty_b)){
             $penalty_b='NULL';
         }
         if((is_numeric($tore_a)||$tore_a=="NULL")&&(is_numeric($tore_b)||$tore_b=="NULL")){
-            if(!is_numeric($penalty_a)){
-                //echo "Nein <br>";
-                $sql="UPDATE spiele SET tore_a=$tore_a, tore_b=$tore_b
-                WHERE turnier_id=$this->turnier_id AND spiel_id=$spiel_id;";
-            }else{
-                //echo "Ja <br>";
-                $sql="UPDATE spiele SET tore_a=$tore_a, tore_b=$tore_b, penalty_a=$penalty_a, penalty_b=$penalty_b
+            $sql="UPDATE spiele SET tore_a=$tore_a, tore_b=$tore_b, penalty_a=$penalty_a, penalty_b=$penalty_b
             WHERE turnier_id=$this->turnier_id AND spiel_id=$spiel_id;";
-            }
             db::writedb($sql);
         }else{
             //Form::error("Bitte Zahlen eintragen");
@@ -213,7 +206,7 @@ class spielplan{
         //alle gleich
         $last=$end-$begin;
         //penalty zwischen allen nötig, evtl. schon stattgefunden
-        db::debug($subdaten);
+        //db::debug($subdaten);
         if($subdaten[0]["punkte"]==$subdaten[$last]["punkte"]&&
             $subdaten[0]["diff"]==$subdaten[$last]["diff"]&& 
             $subdaten[0]["tore"]==$subdaten[$last]["tore"]&&
