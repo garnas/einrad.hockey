@@ -9,46 +9,28 @@ TODO:
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_team.logic.php'; //Auth
-
-$turnier_id = 920;
+$turnier_id = 914;
 //$turnier_id=$_GET['turnier_id'];
 $akt_turnier=new Turnier($turnier_id);
 //Existiert das Turneir??
 if(empty($akt_turnier->daten)){
     Form::error("Turnier wurde nicht gefunden");
-    header('Location: ../teamcenter/tc_start.php');
+    header('Location : ../irgendeine/url.php');
     die();
 }
-//Besteht die Berechtigung das Turnier zu bearbeiten? 
-if ($_SESSION['team_id'] != $akt_turnier->daten['ausrichter']){
-    Form::error("Keine Berechtigung das Turnier zu bearbeiten");
-    header('Location: ../teamcenter/tc_start.php');
-    die();
-}
-
 $spielplan = new Spielplan($turnier_id);
 $spielplan->create_spielplan_jgj();
 //einegtragene Tore speichern falls vorher eingetragen
 if(isset($_POST["gesendet_tur"])){
     for($i=0;$i<$spielplan->get_anzahl_spiele();$i++){
+        echo "in tc_spielplan -> reloaden Spiel:".$i." <br>";
         $spielplan->update_spiel($i+1,$_POST["toreAPOST"][$i],$_POST["toreBPOST"][$i],$_POST["penAPOST"][$i],$_POST["penBPOST"][$i]);
     }
 }
 $tabelle=$spielplan->get_turnier_tabelle();
 $teamliste=$spielplan->teamliste;
 $spielliste=$spielplan->get_spiele();
-$penalty_warning=$spielplan->penalty_warning;
-if(empty($penalty_warning)){
-    $penalty_warning=" Kein Penalty notwendig";
-}
-//Turnierergebnisse speichern
-//TODO nach Datum testen, ist es später ale Turnier begin und nicht merh als X Tage nach Turneir??
-if(isset($_POST["gesendet_turnierergebnisse"])){
-    //Sind alle spiele gespielt und kein Penalty mehr notwendig
-    $spielplan->set_ergebnis($tabelle);
-}
-$ort=$spielplan->ort;
-$datum=$spielplan->datum;
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -57,29 +39,128 @@ $titel = "Spielplan Teamcenter";
 include '../../templates/header.tmp.php';
 ?>
 <div class="">
-<h1 class="w3-text-primary w3-border-primary">Spielplan <?=$ort?>, <?=$datum?></h1>
+<h1 class="w3-text-primary w3-border-primary">Spielplan</h1>
 
 <!-- TEAMLISTE -->
-<?php
-include '../../templates/spielplan_vorTurnierTabelle.tmp.php';
-?>
+<h3 class="w3-text-secondary w3-margin-top">Teamliste</h3>
+    <div class="w3-responsive w3-card">
+        <table class="w3-table w3-striped">
+            <tr class="w3-primary">
+                <th class="w3-right-align">Team ID</th>
+                <th>Teamname</th>
+                <th class="w3-right-align">Teamblock</th>
+                <th class="w3-right-align">Wertigkeit</th>
+            </tr>
+
+        <?php foreach ($teamliste as $index => $team){?>
+            <tr>
+            <td class="w3-right-align"><?= $team["team_id"]?></td>
+            <td><?= $team["teamname"]?></td>
+            <td class="w3-right-align"><?= $team["tblock"]?></td>
+            <td class="w3-right-align"><?= $team["wertigkeit"]?></td>
+            </tr>
+        <?php }//end foreach?>
+        </table>
+    </div>
+
 <!-- SPIELE -->
-<h3 class="w3-text-secondary w3-margin-top">Spiele</h3>
 <form action ="tc_spielplan.php" method="post">
-<?php
-include '../../templates/spielplan_spieleTabelleForm.tmp.php';
-?>
+<h3 class="w3-text-secondary w3-margin-top">Spiele</h3>
+    <div class="w3-responsive w3-card">
+        <table class="w3-table w3-striped ">
+            <tr class="w3-primary">
+                <th class="w3-right-align">Zeit</th>
+                <th colspan="2" class="w3-center">Schiri</th>
+                <th>Team 1</th>
+                <th>Team 2</th>
+                <th colspan="3" class="w3-center">Ergebnis</th>
+                <th colspan="3" class="w3-center">Penalty</th>
+            </tr>
+            <?php foreach ($spielliste as $index => $spiel){?>
+                <tr>
+                <td class="w3-right-align"><?=$spiel["zeit"]?></td>
+                <td class="w3-right-align"><?=$spiel["schiri_team_id_a"]?></td>
+                <td class="w3-right-align"><?=$spiel["schiri_team_id_b"]?></td>
+                <td><?=$spiel["team_a_name"]?></td>
+                <td><?=$spiel["team_b_name"]?></td>
+                <td>
+                    <input 
+                        type="text"
+                        class="w3-input w3-border w3-round w3-right-align" 
+                        style="width:48px;"
+                        name='toreAPOST[<?=$index?>]' 
+                        value='<?=$spiel["tore_a"]?>'
+                    >
+                </td>
+                <td class="w3-center" style="padding-left: 0; padding-right: 0;">:</td>
+                <td>
+                    <input
+                        type="text"
+                        class="w3-input w3-border w3-round" 
+                        style="width:48px;" 
+                        name='toreBPOST[<?=$index?>]' 
+                        value='<?=$spiel["tore_b"]?>'
+                    > 
+                </td>
+                <td>
+                    <input 
+                        type="text"
+                        class="w3-input w3-border w3-round" 
+                        style="width:48px;"
+                        name='penAPOST[<?=$index?>]' 
+                        value='<?=$spiel["penalty_a"]?>'
+                    >
+                </td>
+                <td class="w3-center" style="padding-left: 0; padding-right: 0;">:</td>
+                <td>
+                    <input 
+                        type="text"
+                        class="w3-input w3-border w3-round" 
+                        style="width:48px;"
+                        name='penBPOST[<?=$index?>]' 
+                        value='<?=$spiel["penalty_b"]?>' 
+                    >
+                </td>
+                </tr>
+            <?php }//end foreach?>
+        </table>
+    </div>
+    <p class="w3-responsive">
+        <input value="Ergebnisse aktualisieren" type="submit" name="gesendet_tur" class="w3-right w3-button w3-ripple w3-round w3-primary w3-margin">
+    </p>
+</form>
 
 <!-- Penalty Warnung -->
-<h3 class="w3-text-secondary w3-margin-top">Penalty</h3>
-<p> <?= $penalty_warning?></p>
+
+
 <!-- ABSCHLUSSTABELLE -->
-<?php
-include '../../templates/spielplan_ergebnisTabelle.tmp.php';
-?>
+<h3 class="w3-text-secondary w3-margin-top">Abschlusstabelle</h3>
+   <div class="w3-responsive w3-card">
+    <table class="w3-table w3-striped ">
+        <tr class="w3-primary">
+            <th class="w3-right-align">Pl.</th>
+            <th>Mannschaft</th>
+            <th class="w3-right-align">Spiele</th>
+            <th class="w3-right-align">Punkte</th>
+            <th class="w3-right-align">Tore</th>
+            <th class="w3-right-align">Gegentore</th>
+            <th class="w3-right-align">Differenz</th>
+            <th class="w3-right-align">Ligapunkte</th>
+        </tr>
+        <?php foreach ($tabelle as $index => $table){?>
+            <tr>
+            <td class="w3-right-align"><?=$index+1?></td>
+            <td><?=$table["teamname"]?></td>
+            <td class="w3-right-align"><?=$table["spiele"]?></td>
+            <td class="w3-right-align"><?=$table["punkte"]?></td>
+            <td class="w3-right-align"><?=$table["tore"]?></td>
+            <td class="w3-right-align"><?=$table["gegentore"]?></td>
+            <td class="w3-right-align"><?=$table["diff"]?></td>
+            <td class="w3-right-align"><?=$table["ligapunkte"]?></td>
+            </tr>
+            <?php }//end foreach?>
+        </table>
+   </div>
 </div>
-<form action ="tc_spielplan.php" method="post">
-<p><input type="submit" name="gesendet_turnierergebnisse" class="w3-block w3-button w3-tertiary" value="Ergebnisse speichern"></p>
-</form>
 <?php
 include '../../templates/footer.tmp.php';
