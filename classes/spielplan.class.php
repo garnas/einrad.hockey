@@ -409,13 +409,20 @@ class spielplan{
         $result=db::readdb($sql);
         $result=mysqli_fetch_assoc($result);
         if(empty($result)&&empty($this->penalty_warning)){
-            $this->akt_turnier->set_phase('ergebnis');
-            $this->akt_turnier->delete_ergebnis();
-            foreach($daten as $index=>$date){
-                $this->akt_turnier->set_ergebnis($date["team_id_a"], $date["ligapunkte"], $index+1);
-                echo " Turnierergenis ".$date["team_id_a"]." ".$date["teamname"]." -> ".$date["ligapunkte"]." Platz ".($index+1)."<br>";
+            //Testen ob Turnier eingetragen werden darf
+            if (!Tabelle::check_ergebnis_eintragbar($this->akt_turnier)){
+                Form::error("Turnierergebnis wurde nicht eingetragen");
+                header("Location: irgendeine/url.php");
+                die();
+            }else{
+                $this->akt_turnier->set_phase('ergebnis');
+                $this->akt_turnier->delete_ergebnis();
+                foreach($daten as $index=>$date){
+                    $this->akt_turnier->set_ergebnis($date["team_id_a"], $date["ligapunkte"], $index+1);
+                    echo " Turnierergenis ".$date["team_id_a"]." ".$date["teamname"]." -> ".$date["ligapunkte"]." Platz ".($index+1)."<br>";
+                }
+                Form::affirm("Turnierergebnisse wurden eingetragen");
             }
-            Form::affirm("Turnierergebnisse wurden eingetragen");
         }else{
             Form::error("Es sind noch Spiele oder Penaltyergebnisse offen");
         }
