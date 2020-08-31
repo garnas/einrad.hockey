@@ -48,16 +48,17 @@ if(isset($_POST["gesendet_turnierergebnisse"])){
     //Sind alle spiele gespielt und kein Penalty mehr notwendig
     $spielplan->set_ergebnis($tabelle);
 }
-
+$ort=$spielplan->ort;
+$datum=$spielplan->datum;
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-$titel = "Spielplan Ligacenter";
+$titel = "Spielplan Teamcenter";
 
 include '../../templates/header.tmp.php';
 ?>
 <div class="">
-<h1 class="w3-text-primary w3-border-primary">Spielplan</h1>
+<h1 class="w3-text-primary w3-border-primary">Spielplan <?=$ort?>, <?=$datum?></h1>
 
 <!-- TEAMLISTE -->
 <?php

@@ -24,6 +24,8 @@ $spielplan->create_spielplan_jgj();
 $tabelle=$spielplan->get_turnier_tabelle();
 $teamliste=$spielplan->teamliste;
 $spielliste=$spielplan->get_spiele();
+$ort=$spielplan->ort;
+$datum=$spielplan->datum;
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -32,7 +34,8 @@ $titel = "Spielplan";
 include '../../templates/header.tmp.php';
 ?>
 <div class="">
-<h1 class="w3-text-primary w3-border-primary">Spielplan</h1>
+<h1 class="w3-text-primary w3-border-primary">Spielplan <?=$ort?>, <?=$datum?></h1>
+
 
 <!-- TEAMLISTE -->
 <?php
