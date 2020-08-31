@@ -31,7 +31,6 @@ $spielplan->create_spielplan_jgj();
 //einegtragene Tore speichern falls vorher eingetragen
 if(isset($_POST["gesendet_tur"])){
     for($i=0;$i<$spielplan->get_anzahl_spiele();$i++){
-        echo "in tc_spielplan -> reloaden Spiel:".$i." <br>";
         $spielplan->update_spiel($i+1,$_POST["toreAPOST"][$i],$_POST["toreBPOST"][$i],$_POST["penAPOST"][$i],$_POST["penBPOST"][$i]);
     }
 }

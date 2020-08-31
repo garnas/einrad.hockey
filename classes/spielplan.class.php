@@ -67,7 +67,19 @@ class spielplan{
     }
     function update_spiel($spiel_id, $tore_a,$tore_b,$penalty_a,$penalty_b){
         //echo "update Tore is penalty numeric?: ".$penalty_a."   ";
-        if(is_numeric($tore_a)&&is_numeric($tore_b)){
+        if($tore_a==""){
+            $tore_a='NULL';
+        }
+        if($tore_b==""){
+            $tore_b='NULL';
+        }
+        if($penalty_a==""){
+            $penalty_a='NULL';
+        }
+        if($penalty_b==""){
+            $penalty_b='NULL';
+        }
+        if((is_numeric($tore_a)||$tore_a=="NULL")&&(is_numeric($tore_b)||$tore_b=="NULL")){
             if(!is_numeric($penalty_a)){
                 //echo "Nein <br>";
                 $sql="UPDATE spiele SET tore_a=$tore_a, tore_b=$tore_b
@@ -201,6 +213,7 @@ class spielplan{
         //alle gleich
         $last=$end-$begin;
         //penalty zwischen allen nötig, evtl. schon stattgefunden
+        db::debug($subdaten);
         if($subdaten[0]["punkte"]==$subdaten[$last]["punkte"]&&
             $subdaten[0]["diff"]==$subdaten[$last]["diff"]&& 
             $subdaten[0]["tore"]==$subdaten[$last]["tore"]&&
@@ -220,7 +233,7 @@ class spielplan{
                 //echo "subdaten: ".$i.". tes Team  ".$subdaten[$i]["team_id_a"]."<br>";
             }
             for($i=0;$i<$end-$begin;$i++){
-                ////echo "subdaten: ".$i.". tes Team  ".$subdaten[$i]["team_id_a"];
+                echo "subdaten: ".$i.". tes Team  ".$subdaten[$i]["team_id_a"];
                 //testen ob aktuelle Zeile gleich zur nächsten 
                 //bei ungleichheit daten swapen
                 //bei gleichheit erneuter direkter vergleich
@@ -229,13 +242,13 @@ class spielplan{
                      $subdaten[$i]["tore"]==$subdaten[$i+1]["tore"]&&
                      $subdaten[$i]["penalty_points"]==$subdaten[$i+1]["penalty_points"]&&
                      $subdaten[$i]["penalty_diff"]==$subdaten[$i+1]["penalty_diff"]&&
-                     $subdaten[$i]["penaltytore"]==$subdaten[$i+1]["penalty_tore"]){
+                     $subdaten[$i]["penaltytore"]==$subdaten[$i+1]["penaltytore"]){
                     $index=$index;
                 }elseif($i!=$index){
-                    //echo "<br> in Vergleich Gleichheit <br>";
+                    echo "<br> in Vergleich Gleichheit <br>";
                     //im direktvergleich ist wieder Gleichheit aufgetreten -> erneuter direkter Vergleich
                     //so drehen dass die gleichen Teams an der richtigen Stelle im sub array stehen
-                    for($j=0;$j<$i-$index;$j++){
+                    for($j=0;$j<$i-$index+1;$j++){
                         //echo "<br> tauschen <br>";
                         $in=$this->getDatenIndexByTeamID($daten,$subdaten[$index+$j]["team_id_a"]);
                         $ex=$index+$j;
