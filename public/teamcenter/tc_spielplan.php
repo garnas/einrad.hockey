@@ -31,6 +31,7 @@ $spielplan->create_spielplan_jgj();
 //einegtragene Tore speichern falls vorher eingetragen
 if(isset($_POST["gesendet_tur"])){
     for($i=0;$i<$spielplan->get_anzahl_spiele();$i++){
+        echo "in tc_spielplan -> reloaden Spiel:".$i." <br>";
         $spielplan->update_spiel($i+1,$_POST["toreAPOST"][$i],$_POST["toreBPOST"][$i],$_POST["penAPOST"][$i],$_POST["penBPOST"][$i]);
     }
 }
@@ -67,20 +68,23 @@ include '../../templates/spielplan_vorTurnierTabelle.tmp.php';
 <form action ="tc_spielplan.php" method="post">
 <h3 class="w3-text-secondary w3-margin-top">Spiele</h3>
 <form action ="tc_spielplan.php" method="post">
-<?php
-include '../../templates/spielplan_spieleTabelleForm.tmp.php';
-?>
+    <?php
+        include '../../templates/spielplan_spieleTabelleForm.tmp.php';
+    ?>
+</form>
 
 <!-- Penalty Warnung -->
 <h3 class="w3-text-secondary w3-margin-top">Penalty</h3>
 <p> <?= $penalty_warning?></p>
+
 <!-- ABSCHLUSSTABELLE -->
 <?php
-include '../../templates/spielplan_ergebnisTabelle.tmp.php';
+    include '../../templates/spielplan_ergebnisTabelle.tmp.php';
 ?>
-</div>
 <form action ="tc_spielplan.php" method="post">
-<p><input type="submit" name="gesendet_turnierergebnisse" class="w3-block w3-button w3-tertiary" value="Ergebnisse speichern"></p>
+    <p>
+        <input type="submit" name="gesendet_turnierergebnisse" class="w3-block w3-button w3-tertiary" value="Ergebnisse speichern">
+    </p>
 </form>
 <?php
 include '../../templates/footer.tmp.php';

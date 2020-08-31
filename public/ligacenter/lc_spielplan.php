@@ -57,25 +57,31 @@ include '../../templates/header.tmp.php';
 
 <!-- TEAMLISTE -->
 <?php
-include '../../templates/spielplan_vorTurnierTabelle.tmp.php';
+    include '../../templates/spielplan_vorTurnierTabelle.tmp.php';
 ?>
 <!-- SPIELE -->
 <h3 class="w3-text-secondary w3-margin-top">Spiele</h3>
 <form action ="lc_spielplan.php" method="post">
-<?php
-include '../../templates/spielplan_spieleTabelleForm.tmp.php';
-?>
+    <?php
+        include '../../templates/spielplan_spieleTabelleForm.tmp.php';
+    ?>
+    <p>
+        <input type="submit" name="gesendet_tur" class="w3-block w3-button w3-tertiary" value="Spiele senden">
+    </p>
+</form>
 
 <!-- Penalty Warnung -->
 <h3 class="w3-text-secondary w3-margin-top">Penalty</h3>
 <p> <?= $penalty_warning?></p>
+
 <!-- ABSCHLUSSTABELLE -->
 <?php
 include '../../templates/spielplan_ergebnisTabelle.tmp.php';
 ?>
-</div>
 <form action ="lc_spielplan.php" method="post">
-<p><input type="submit" name="gesendet_turnierergebnisse" class="w3-block w3-button w3-tertiary" value="Ergebnisse speichern"></p>
+    <p>
+        <input type="submit" name="gesendet_turnierergebnisse" class="w3-block w3-button w3-tertiary" value="Ergebnisse speichern">
+    </p>
 </form>
 <?php
 include '../../templates/footer.tmp.php';

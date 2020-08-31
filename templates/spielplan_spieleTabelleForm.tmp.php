@@ -17,15 +17,49 @@
                 <td class="w3-right-align"><?=$spiel["schiri_team_id_b"]?></td>
                 <td><?=$spiel["team_a_name"]?></td>
                 <td><?=$spiel["team_b_name"]?></td>
-                <td class="w3-right-align" style="padding-right: 0;"><input name='toreAPOST[<?=$index?>]' value='<?=$spiel["tore_a"]?>' size='3'></td>
+                <!-- TORE A -->
+                <td class="w3-right-align" style="padding-right: 0;">
+                    <input 
+                        name='toreAPOST[<?=$index?>]' 
+                        value='<?=$spiel["tore_a"]?>'
+                        size='3'
+                        class='w3-input w3-border w3-round w3-right-align'
+                        style='padding: 2px;'
+                    >
+                </td>
                 <td class="w3-center" style="padding-left: 0; padding-right: 0;">:</td>
-                <td class="w3-left-align" style="padding-left: 0;"><input name='toreBPOST[<?=$index?>]' value='<?=$spiel["tore_b"]?>' size='3'></td>
-                <td class="w3-right-align" style="padding-right: 0;"><input name='penAPOST[<?=$index?>]' value='<?=$spiel["penalty_a"]?>' size='3'></td>
+                <!-- TORE B -->
+                <td class="w3-left-align" style="padding-left: 0;">
+                    <input 
+                        name='toreBPOST[<?=$index?>]' 
+                        value='<?=$spiel["tore_b"]?>'
+                        size='3'
+                        class='w3-input w3-border w3-round w3-right-align'
+                        style='padding: 2px;'
+                    >
+                </td>
+                <!-- PENALTY TORE A -->
+                <td class="w3-right-align" style="padding-right: 0;">
+                    <input 
+                        name='penAPOST[<?=$index?>]' 
+                        value='<?=$spiel["penalty_a"]?>'
+                        size='3'
+                        class='w3-input w3-border w3-round w3-right-align'
+                        style='padding: 2px;'
+                    >
+                </td>
                 <td class="w3-center" style="padding-left: 0; padding-right: 0;">:</td>
-                <td class="w3-left-align" style="padding-left: 0;"><input name='penBPOST[<?=$index?>]' value='<?=$spiel["penalty_b"]?>' size='3'></td>
+                <!-- PENALTY TORE B -->
+                <td class="w3-left-align" style="padding-left: 0;">
+                    <input 
+                        name='penBPOST[<?=$index?>]' 
+                        value='<?=$spiel["penalty_b"]?>'
+                        size='3'
+                        class='w3-input w3-border w3-round w3-right-align'
+                        style='padding: 2px;'
+                    >
+                </td>
                 </tr>
             <?php }//end foreach?>
         </table>
    </div>
-   <p><input type="submit" name="gesendet_tur" class="w3-block w3-button w3-tertiary" value="Spiele senden"></p>
-</form>
