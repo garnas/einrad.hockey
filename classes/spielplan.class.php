@@ -1,13 +1,13 @@
 <?php
 //TODO
-//+2 Vergleich alles gleich nach Penalty sortieren
+//+2 Vergleich alles gleich nach Penalty sortieren !!Fertig
 //plaetze != anzahl teams !!FERTIG
-//layout formular zum eintragen
+//layout formular zum eintragen !!Ferig
 //8 er Gruppe 
 //4 er Spielplan Pause
 //keine Spiele eingetragen Fehler in Zeile 65, keine rangtabelle möglich da alles NULL !! FERTIG
 //testen, testen, testen
-//ergebnisse in datenbank speichern, datum dabei testen
+//ergebnisse in datenbank speichern, datum dabei testen !! Fertig außer DAtum test
 //cronjob dienstags spielplan erstellen -> ansgar 
 class spielplan{
     public $turnier_id;
@@ -187,19 +187,28 @@ class spielplan{
         //ergebnis testen ob alle gleich ->Penalty oder Teil gleich -> teilweiser direkter Vergleich
         //in daten reihen swapen
         $teams=[];
-        //db::debug($daten);
         foreach(range($begin,$end) as $number){
             array_push($teams, $daten[$number]["team_id_a"]);
         }
-        //db::debug($teams);
         $subdaten=$this->sqlQuery(TRUE,$teams);
+        //Teamname hinzufügen
+        for($i=0;$i<sizeof($subdaten);$i++){
+            $subdaten[$i]["teamname"]=$this->getTeamnameByTeamID($subdaten[$i]["team_id_a"]);
+        }
         //alle gleich
         $last=$end-$begin;
-        //db::debug($subdaten);
-        //echo "----------------------last".$last;
-        if($subdaten[0]["punkte"]==$subdaten[$last]["punkte"]&& $subdaten[0]["diff"]==$subdaten[$last]["diff"]&& $subdaten[0]["tore"]==$subdaten[$last]["tore"]){
-            //penalty zwischen allen nötig, evtl. schon stattgefunden
-            $this->penalty_warning="Achtung Penalty";
+        //penalty zwischen allen nötig, evtl. schon stattgefunden
+        if($subdaten[0]["punkte"]==$subdaten[$last]["punkte"]&&
+            $subdaten[0]["diff"]==$subdaten[$last]["diff"]&& 
+            $subdaten[0]["tore"]==$subdaten[$last]["tore"]&&
+            $subdaten[0]["penalty_points"]==$subdaten[$last]["penalty_points"]&&
+            $subdaten[0]["penalty_diff"]==$subdaten[$last]["penalty_diff"]&&
+            $subdaten[0]["penaltytore"]==$subdaten[$last]["penaltytore"]){
+            $this->penalty_warning .="Achtung Penalty zwischen";
+            for($i=0;$i<$end-$begin;$i++){
+                $this->penalty_warning .=" ".$subdaten[$i]["teamname"]." und";
+            }
+            $this->penalty_warning .=" ".$subdaten[$end-$begin]["teamname"]."! <br>";
             echo "<br> Achtung Penalty!!! zwischen".$begin." bis ".$end." <br>";
         }else{
             $index=0;
@@ -212,7 +221,12 @@ class spielplan{
                 //testen ob aktuelle Zeile gleich zur nächsten 
                 //bei ungleichheit daten swapen
                 //bei gleichheit erneuter direkter vergleich
-                if($subdaten[$i]["punkte"]==$subdaten[$i+1]["punkte"]&& $subdaten[$i]["diff"]==$subdaten[$i+1]["diff"]&& $subdaten[$i]["tore"]==$subdaten[$i+1]["tore"]){
+                if($subdaten[$i]["punkte"]==$subdaten[$i+1]["punkte"]&&
+                     $subdaten[$i]["diff"]==$subdaten[$i+1]["diff"]&& 
+                     $subdaten[$i]["tore"]==$subdaten[$i+1]["tore"]&&
+                     $subdaten[$i]["penalty_points"]==$subdaten[$i+1]["penalty_points"]&&
+                     $subdaten[$i]["penalty_diff"]==$subdaten[$i+1]["penalty_diff"]&&
+                     $subdaten[$i]["penaltytore"]==$subdaten[$i+1]["penalty_tore"]){
                     $index=$index;
                 }elseif($i!=$index){
                     echo "<br> in Vergleich Gleichheit <br>";
@@ -283,14 +297,16 @@ class spielplan{
         $where=$where_a.") AND ".$where_b.") AND turnier_id='$this->turnier_id'";
         $order=" `punkte`  DESC";
         if($isDirektVergleich){
-            $order .=", diff DESC, tore DESC";
+            $order .=", diff DESC, tore DESC, penalty_points DESC, penalty_diff DESC, penaltytore DESC";
         }else{
             $order .=", penaltytore DESC";
         }
         $sql="
-        SELECT team_id_a, SUM(games) AS spiele,  COALESCE(SUM(points),0) AS punkte,  
-        COALESCE(SUM(tore),0) as tore,  COALESCE(SUM(gegentore),0) as gegentore,  
-        COALESCE((SUM(tore) - SUM(gegentore)),0) as diff,  COALESCE(SUM(penaltytore),0) as penaltytore
+        SELECT team_id_a, SUM(games) AS spiele,  COALESCE(SUM(points),0) AS punkte,
+        COALESCE(SUM(tore),0) as tore,  COALESCE(SUM(gegentore),0) as gegentore,
+        COALESCE((SUM(tore) - SUM(gegentore)),0) as diff, COALESCE(SUM(penalty_points),0) as penalty_points,
+        COALESCE(SUM(penaltytore),0) as penaltytore, COALESCE(SUM(penaltygegentore),0) as penaltygegentore,
+        COALESCE((SUM(penaltytore) - SUM(penaltygegentore)),0) as penalty_diff
         FROM(
             SELECT team_id_a,
                 CASE 
@@ -301,7 +317,12 @@ class spielplan{
                 CASE
 		            WHEN `tore_a` IS NULL THEN 0
 		            ELSE 1
-		        END AS games, tore_a as tore, tore_b as gegentore, penalty_a AS penaltytore
+                END AS games,
+                CASE 
+                    WHEN `penalty_a`>`penalty_b` THEN 3
+                    WHEN `penalty_a`=`penalty_b` THEN 0
+                    ELSE 0
+		        END AS penalty_points, tore_a as tore, tore_b as gegentore, penalty_a AS penaltytore, penalty_b as penaltygegentore
             FROM spiele
             WHERE".$where."
            
@@ -316,7 +337,12 @@ class spielplan{
                 CASE
 		            WHEN `tore_a` IS NULL THEN 0
 		            ELSE 1
-		        END AS games, tore_b as tore, tore_a as gegentore, penalty_b AS penaltytore
+                END AS games,
+                CASE 
+                    WHEN `penalty_a`<`penalty_b` THEN 3
+                    WHEN `penalty_a`=`penalty_b` THEN 0
+                    ELSE 0
+		        END AS penalty_points, tore_b as tore, tore_a as gegentore, penalty_b AS penaltytore, penalty_a as penaltygegentore
             FROM spiele
             WHERE ".$where."
             ) AS t
@@ -366,6 +392,34 @@ class spielplan{
 
     function get_anzahl_spiele(){
         return $this->anzahl_spiele;
+    }
+
+    //$daten sollten schon sortiert sein!
+    function set_ergebnis($daten){
+        //Sind alle Spiele gespielt und kein Penalty offen
+        $sql="
+        SELECT spiel_id, t1.teamname AS team_a_name, t2.teamname AS team_b_name, schiri_team_id_a, schiri_team_id_b, tore_a, tore_b, penalty_a, penalty_b
+        FROM spiele sp, teams_liga t1, teams_liga t2
+        WHERE turnier_id='$this->turnier_id'
+        AND team_id_a = t1.team_id
+        AND team_id_b = t2.team_id
+        AND (tore_a IS NULL OR tore_b IS NULL)
+        ORDER BY spiel_id ASC
+        ";
+        $result=db::readdb($sql);
+        $result=mysqli_fetch_assoc($result);
+        if(empty($result)&&empty($this->penalty_warning)){
+            $this->akt_turnier->set_phase('ergebnis');
+            $this->akt_turnier->delete_ergebnis();
+            foreach($daten as $index=>$date){
+                $this->akt_turnier->set_ergebnis($date["team_id_a"], $date["ligapunkte"], $index+1);
+                echo " Turnierergenis ".$date["team_id_a"]." ".$date["teamname"]." -> ".$date["ligapunkte"]." Platz ".($index+1)."<br>";
+            }
+            Form::affirm("Turnierergebnisse wurden eingetragen");
+        }else{
+            Form::error("Es sind noch Spiele oder Penaltyergebnisse offen");
+        }
+        
     }
 
 
