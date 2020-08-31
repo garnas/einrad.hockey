@@ -1,12 +1,11 @@
 <?php
 //TODO
 //+2 Vergleich alles gleich nach Penalty sortieren
-//plaetze != anzahl teams 
+//plaetze != anzahl teams !!FERTIG
 //layout formular zum eintragen
 //8 er Gruppe 
 //4 er Spielplan Pause
-//keine Spiele eingetragen Fehler in Zeile 65, keine rangtabelle möglich da alles NULL
-//-> erst Rangtabelle berechnen wenn jeder mal gespielt hat
+//keine Spiele eingetragen Fehler in Zeile 65, keine rangtabelle möglich da alles NULL !! FERTIG
 //testen, testen, testen
 //ergebnisse in datenbank speichern, datum dabei testen
 //cronjob dienstags spielplan erstellen -> ansgar 
@@ -15,13 +14,15 @@ class spielplan{
     public $akt_turnier;
     public $teamliste;
     public $penalty_warning="";
-
+    public $anzahl_teams;
+    public $anzahl_spiele;
 
     function __construct($turnier_id)
     {
         $this->turnier_id = $turnier_id;
         $this->akt_turnier = new Turnier($turnier_id);
         $this->teamliste = $this->akt_turnier->get_liste_spielplan();
+        $this->anzahl_teams=sizeof($this->teamliste);
     }
 
     function create_spielplan_jgj(){
@@ -29,12 +30,13 @@ class spielplan{
         $sql="SELECT *FROM spiele WHERE turnier_id=$this->turnier_id";
         $result = db::readdb($sql);
         $result = mysqli_fetch_assoc($result);
+        $this->anzahl_spiele=0;
         if (empty($result)){
             //db::debug($this->akt_turnier->daten);
             //db::debug($this->teamliste);
-            $plaetze = $this->akt_turnier->daten["plaetze"];
+            //$plaetze = $this->akt_turnier->daten["plaetze"];
             $spielplan=$this->akt_turnier->daten["spielplan"];
-            $sql = "SELECT * FROM spielplan_paarungen WHERE plaetze='$plaetze' AND spielplan='$spielplan'";
+            $sql = "SELECT * FROM spielplan_paarungen WHERE plaetze='$this->anzahl_teams' AND spielplan='$spielplan'";
             $result = db::readdb($sql);
             
             $sqlinsert="";
@@ -45,22 +47,40 @@ class spielplan{
                 $this->teamliste[intval($spiel["team_b"])]["team_id"].",".
                 $this->teamliste[intval($spiel["schiri_a"])]["team_id"].",".
                 $this->teamliste[intval($spiel["schiri_b"])]["team_id"].", NULL,NULL,NULL,NULL),";
+                $this->anzahl_spiele += 1;
             }
             $sqlinsert=rtrim($sqlinsert,",");
             $sqlinsert= $sqlinsert.";";
             db::writedb($sqlinsert);
-           
+        }else{
+            //spiele zaehlen
+            $sql="SELECT *FROM spiele WHERE turnier_id=$this->turnier_id";
+            $result = db::readdb($sql);
+            while($spiel=mysqli_fetch_assoc($result)){
+                $this->anzahl_spiele += 1;
+            }
+            echo "anzahl spiele ".$this->anzahl_spiele;
         }
     }
     function update_spiel($spiel_id, $tore_a,$tore_b,$penalty_a,$penalty_b){
-        if(!is_numeric($penalty_a)){
-            $sql="UPDATE spiele SET tore_a=$tore_a, tore_b=$tore_b
-        WHERE turnier_id=$this->turnier_id AND spiel_id=$spiel_id;";
+        echo "update Tore is penalty numeric?: ".$penalty_a."   ";
+        if(is_numeric($tore_a)&&is_numeric($tore_b)){
+            if(!is_numeric($penalty_a)){
+                echo "Nein <br>";
+                $sql="UPDATE spiele SET tore_a=$tore_a, tore_b=$tore_b
+                WHERE turnier_id=$this->turnier_id AND spiel_id=$spiel_id;";
+            }else{
+                echo "Ja <br>";
+                $sql="UPDATE spiele SET tore_a=$tore_a, tore_b=$tore_b, penalty_a=$penalty_a, penalty_b=$penalty_b
+            WHERE turnier_id=$this->turnier_id AND spiel_id=$spiel_id;";
+            }
+            db::writedb($sql);
         }else{
-            $sql="UPDATE spiele SET tore_a=$tore_a, tore_b=$tore_b, penalty_a=$penalty_a, penalty_b=$penalty_b
-        WHERE turnier_id=$this->turnier_id AND spiel_id=$spiel_id;";
+            //Form::error("Bitte Zahlen eintragen");
+            //header('Location : ../irgendeine/url.php');
+            //die();
         }
-        db::writedb($sql);
+       
     }
 
     function get_turnier_tabelle(){
@@ -68,11 +88,18 @@ class spielplan{
         for($i=1 ;$i<=sizeof($this->teamliste);$i++){
             array_push($teams,$this->teamliste[$i]["team_id"]);
         }
-        $daten=NULL;
         $daten=$this->sqlQuery(FALSE,$teams);
+        echo " size of daten ".sizeof($daten)."<br>";
+        //Teamname hinzufügen
+        for($i=0;$i<sizeof($daten);$i++){
+            $daten[$i]["teamname"]=$this->getTeamnameByTeamID($daten[$i]["team_id_a"]);
+        }
         //auf punktgleichheit testen und richtig sortieren
+        //index und i werden gleichmäßig erhöht außer es wird punktgleichheit zwischen 
+        //benachbareten Teams festgestellt, dann haben die Teams von index bis i (inklusiv) 
+        //gleich viele Punkte und müssen in den Direktvergleich (sort_teams)
         $index=0;
-        for ($i=0;$i<$this->akt_turnier->daten["plaetze"]-1;$i++){
+        for ($i=0;$i<$this->anzahl_teams-1;$i++){
             if($daten[$i]["punkte"]==$daten[$i+1]["punkte"]){
                 $index=$index;
             }elseif($i!=$index){
@@ -91,9 +118,8 @@ class spielplan{
             $daten=$this->sort_teams($daten,$index,$i);
         }
         //Wertigkeit zuordnen
-        $plaetze = $this->akt_turnier->daten["plaetze"];
         $wert=0;
-        for($i=$plaetze-1;$i>=0;$i--){
+        for($i=$this->anzahl_teams-1;$i>=0;$i--){
             $wert=$this->getWertigkeitByTeamID($daten[$i]["team_id_a"]);
             $daten[$i]["wertigkeit"]=$wert;
         }
@@ -105,10 +131,6 @@ class spielplan{
         for($i=sizeof($daten)-1;$i>=0;$i--){
             $punkte += $daten[$i]["wertigkeit"];
             $daten[$i]["ligapunkte"]=round($punkte*(6/$faktor));
-        }
-        //Teamname hinzufügen
-        for($i=0;$i<sizeof($daten);$i++){
-            $daten[$i]["teamname"]=$this->getTeamnameByTeamID($daten[$i]["team_id_a"]);
         }
         return $daten;
     }
@@ -194,6 +216,7 @@ class spielplan{
                     $index=$index;
                 }elseif($i!=$index){
                     echo "<br> in Vergleich Gleichheit <br>";
+                    //im direktvergleich ist wieder Gleichheit aufgetreten -> erneuter direkter Vergleich
                     //so drehen dass die gleichen Teams an der richtigen Stelle im sub array stehen
                     db::debug($daten);
                     for($j=0;$j<$i-$index;$j++){
@@ -265,19 +288,23 @@ class spielplan{
             $order .=", penaltytore DESC";
         }
         $sql="
-        SELECT team_id_a, COUNT(team_id_a) AS spiele, SUM(points) AS punkte, SUM(tore) as tore, SUM(gegentore) as gegentore, (SUM(tore) - SUM(gegentore)) as diff, SUM(penaltytore) as penaltytore
+        SELECT team_id_a, SUM(games) AS spiele,  COALESCE(SUM(points),0) AS punkte,  
+        COALESCE(SUM(tore),0) as tore,  COALESCE(SUM(gegentore),0) as gegentore,  
+        COALESCE((SUM(tore) - SUM(gegentore)),0) as diff,  COALESCE(SUM(penaltytore),0) as penaltytore
         FROM(
             SELECT team_id_a,
                 CASE 
                     WHEN `tore_a`> `tore_b` THEN 3
                     WHEN `tore_a` = `tore_b` THEN 1
                     ELSE 0
-                END AS points, tore_a as tore, tore_b as gegentore, penalty_a AS penaltytore
+                END AS points,
+                CASE
+		            WHEN `tore_a` IS NULL THEN 0
+		            ELSE 1
+		        END AS games, tore_a as tore, tore_b as gegentore, penalty_a AS penaltytore
             FROM spiele
             WHERE".$where."
-            AND tore_a IS NOT NULL
-            AND tore_b IS NOT NULL
-        
+           
             UNION ALL
         
             SELECT team_id_b,
@@ -285,11 +312,13 @@ class spielplan{
                     WHEN `tore_a` < `tore_b` THEN 3
                     WHEN `tore_a` = `tore_b` THEN 1
                     ELSE 0
-                END AS points, tore_b as tore, tore_a as gegentore, penalty_b AS penaltytore
+                END AS points,
+                CASE
+		            WHEN `tore_a` IS NULL THEN 0
+		            ELSE 1
+		        END AS games, tore_b as tore, tore_a as gegentore, penalty_b AS penaltytore
             FROM spiele
             WHERE ".$where."
-            AND tore_a IS NOT NULL
-            AND tore_b IS NOT NULL
             ) AS t
         GROUP BY team_id_a
         ORDER BY".$order;
@@ -328,11 +357,15 @@ class spielplan{
     
 
     function getSpielzeiten(){
-        $plaetze = $this->akt_turnier->daten["plaetze"];
+        $plaetze = $this->anzahl_teams;
         $spielplan=$this->akt_turnier->daten["spielplan"];
         $sql="SELECT * FROM spielplan_details WHERE plaetze='$plaetze' AND spielplan='$spielplan'";
         $result=db::readdb($sql);
         return mysqli_fetch_assoc($result);
+    }
+
+    function get_anzahl_spiele(){
+        return $this->anzahl_spiele;
     }
 
 

@@ -10,7 +10,7 @@ TODO:
 require_once '../../logic/first.logic.php'; //autoloader und Session
 //require_once '../../logic/session_la.logic.php';//Auth
 
-$turnier_id = 919;
+$turnier_id = 914;
 //$turnier_id=$_GET['turnier_id'];
 $akt_turnier=new Turnier($turnier_id);
 //Existiert das Turneir??
