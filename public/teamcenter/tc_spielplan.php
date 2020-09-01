@@ -96,10 +96,12 @@ include '../../templates/spielplan_vorTurnierTabelle.tmp.php';
     include '../../templates/spielplan_ergebnisTabelle.tmp.php';
 ?>
 <form method="post">
+    <?php if($teamcenter && $akt_turnier->daten['phase'] == 'ergebnis'){?>
+        <p class="w3-text-green">Dem Ligaausschuss liegt ein Turnierergebniss vor. Durch erneutes speichern, kann das Turnierergebnis verändert werden.</p>
+    <?php }//endif?>
     <p>
         <input type="submit" name="gesendet_turnierergebnisse" class="w3-block w3-button w3-tertiary" value="Ergebnisse speichern">
     </p>
-   <?php if($teamcenter && $akt_turnier->daten['phase'] == 'ergebnis'){?><p class="w3-text-green">Dem Ligaausschuss liegt ein Turnierergebniss vor. Durch erneutes speichern, kann das Turnierergebnis verändert werden.</p><?php }//endif?>
 </form>
 
 <?php
