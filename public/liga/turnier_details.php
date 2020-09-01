@@ -135,12 +135,8 @@ include '../../templates/header.tmp.php';
             <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;"><i class="material-icons">format_align_center</i> Spielplan</td>
             <td>
                 <?=$daten['plaetze'] . ' ' . $daten['spielplan']?>
-                <?php if(!empty($daten['link_spielplan'])){?>
-                    <br>
-                    <?=Form::link($daten['link_spielplan'], 'Download Spielplan')?>
-                <?php }else{?>
-                    <br>
-                    <span class="w3-text-grey">Der Spielplan wird in der Woche vor dem Turnier erstellt</span>
+                <?php if($daten['phase'] == 'spielplan'){?>
+                    <?=Form::link($akt_turnier->get_spielplan(), 'Zum Spielplan')?>
                 <?php }//end if?>
             </td>
         </tr>

@@ -87,11 +87,14 @@ $(document).ready(function(){
                 <?php if ($saison <= 25){?>
                     <?=Form::link('archiv.php','<i class="material-icons">info</i> Details')?>
                 <?php }else{ ?>
-                    <span class="<?php if(empty($data_turniere[$turnier_id]['link_spielplan'])){?>w3-opacity-max<?php }// end if?>">
-                        <?=Form::link($data_turniere[$turnier_id]['link_spielplan'] ?: ('#' . $turnier_id), '<i class="material-icons">info</i> Spielergebnisse')?>
-                </span>
+                    <span>
+                        <?=Form::link($data_turniere[$turnier_id]['link_spielplan'] ?: ('spielplan.php?turnier_id=' . $turnier_id), '<i class="material-icons">info</i> Spielergebnisse')?>
+                    </span>
                     <?=Form::link("../teamcenter/tc_turnier_report.php?turnier_id=$turnier_id", ' <i class="material-icons">' . $icon . '</i> Turnierreport')?>
-                    <?php if(isset($_SESSION['la_id'])){?><?=Form::link("../ligacenter/lc_turnier_report.php?turnier_id=$turnier_id", '<i class="material-icons">article</i> Turnierreport (Ligaausschuss)')?><?php }//endif?>
+                    <?php if(isset($_SESSION['la_id'])){?>
+                        <?=Form::link("../ligacenter/lc_turnier_report.php?turnier_id=$turnier_id", '<i class="material-icons">article</i> Turnierreport (Ligaausschuss)')?>
+                        <?=Form::link("../ligacenter/lc_spielplan.php?turnier_id=$turnier_id", '<i class="material-icons">info</i> Spielergebnisse verwalten (Ligaausschuss)')?>
+                    <?php }//endif?>
                 <?php }//end if?>
             </p>
         </section>

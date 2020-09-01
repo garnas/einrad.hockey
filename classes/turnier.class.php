@@ -467,7 +467,27 @@ class Turnier {
         db::writedb($sql);
         $this->daten['link_spielplan'] = $link;
     }
-    
+    function get_spielplan(){
+        if (empty($this->daten['link_spielplan'])){
+            return '../liga/spielplan.php?turnier_id?' . $this->turnier_id;
+        }else{
+            return $this->daten['link_spielplan'];
+        }
+    }
+    function get_tc_spielplan(){
+        if (empty($this->daten['link_spielplan'])){
+            return '../teamcenter/tc_spielplan.php?turnier_id=' . $this->turnier_id;
+        }else{
+            return $this->daten['link_spielplan'];
+        }
+    }
+    function get_lc_spielplan(){
+        if (empty($this->daten['link_spielplan'])){
+            return '../ligacenter/lc_spielplan.php?turnier_id=' . $this->turnier_id;
+        }else{
+            return $this->daten['link_spielplan'];
+        }
+    }
     //Ändert die Phase in der sich das Turnier befindet
     function set_phase($phase)
     {

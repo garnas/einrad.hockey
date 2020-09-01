@@ -63,11 +63,7 @@ foreach ($all_anmeldungen as $turnier_id => $liste){
     }
 
     if ($daten[$turnier_id]['phase'] == 'spielplan'){
-        if (!empty($daten[$turnier_id]['link_spielplan'])){
-            $daten[$turnier_id]['phase'] = Form::link($daten[$turnier_id]['link_spielplan'],'Spielplan');
-        }else{
-            $daten[$turnier_id]['phase'] = '<span class="w3-text-grey">Spielplan</span>';
-        }
+            $daten[$turnier_id]['phase'] = Form::link($daten[$turnier_id]['link_spielplan'] ?: ('spielplan.php?turnier_id=' . $turnier_id), 'Spielplan');
     }
 
 }
