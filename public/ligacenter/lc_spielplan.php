@@ -45,6 +45,8 @@ if(empty($penalty_warning)){
 if(isset($_POST["gesendet_turnierergebnisse"])){
     //Sind alle spiele gespielt und kein Penalty mehr notwendig
     $spielplan->set_ergebnis($tabelle);
+    header('Location: ' . db::escape($_SERVER['REQUEST_URI']));
+    die();
 }
 
 /////////////////////////////////////////////////////////////////////////////
