@@ -226,7 +226,7 @@ class spielplan{
                 //echo "subdaten: ".$i.". tes Team  ".$subdaten[$i]["team_id_a"]."<br>";
             }
             for($i=0;$i<$end-$begin;$i++){
-                echo "subdaten: ".$i.". tes Team  ".$subdaten[$i]["team_id_a"];
+                //echo "subdaten: ".$i.". tes Team  ".$subdaten[$i]["team_id_a"];
                 //testen ob aktuelle Zeile gleich zur nächsten 
                 //bei ungleichheit daten swapen
                 //bei gleichheit erneuter direkter vergleich
@@ -238,7 +238,7 @@ class spielplan{
                      $subdaten[$i]["penaltytore"]==$subdaten[$i+1]["penaltytore"]){
                     $index=$index;
                 }elseif($i!=$index){
-                    echo "<br> in Vergleich Gleichheit <br>";
+                    //echo "<br> in Vergleich Gleichheit <br>";
                     //im direktvergleich ist wieder Gleichheit aufgetreten -> erneuter direkter Vergleich
                     //so drehen dass die gleichen Teams an der richtigen Stelle im sub array stehen
                     for($j=0;$j<$i-$index+1;$j++){
@@ -381,9 +381,17 @@ class spielplan{
         //db::debug($zeiten)
         $min=$zeiten["anzahl_halbzeiten"]*$zeiten["halbzeit_laenge"]+$zeiten["pause"];
         $startzeit->sub(date_interval_create_from_date_string($min.' minutes'));
+        
+        $var=1;
         while($spiel=mysqli_fetch_assoc($result)){
+            //4er Spielplan Pause nach geraden Spiel
+            if($this->anzahl_teams==4 && $var>2&&($var%2)==1){
+                $extra_pause=$zeiten["halbzeit_laenge"]+$zeiten["pause"];
+                $startzeit->add(date_interval_create_from_date_string($extra_pause.' minutes'));
+            }
             $spiel["zeit"]=$startzeit->add(date_interval_create_from_date_string($min.' minutes'))->format("H:i");
             array_push($daten, $spiel);
+            $var += 1;
         }
         return $daten;
     }
@@ -443,7 +451,9 @@ class spielplan{
         
         $sql = "SELECT datum FROM turniere_liga WHERE turnier_id='$this->turnier_id'";
         $result=db::readdb($sql);
-        $this->datum=mysqli_fetch_assoc($result)["datum"];
+        $result=mysqli_fetch_assoc($result)["datum"];
+        $datum=new DateTime($this->akt_turnier->daten["startzeit"]);
+        $this->datum=$datum->format("j.n.o");
     }
 
 }

@@ -12,7 +12,7 @@ TODO:
 require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_la.logic.php';//Auth
 
-$turnier_id = 920;
+$turnier_id = 921;
 //$turnier_id=$_GET['turnier_id'];
 $akt_turnier=new Turnier($turnier_id);
 //Existiert das Turneir??
@@ -25,9 +25,8 @@ if(empty($akt_turnier->daten)){
 $spielplan = new Spielplan($turnier_id);
 $spielplan->create_spielplan_jgj();
 //einegtragene Tore speichern falls vorher eingetragen
-if(isset($_POST["gesendet_tur"])||isset($_POST["gesendet_turnierergebnisse"])){
+if(isset($_POST["gesendet_tur"])){
     for($i=0;$i<$spielplan->get_anzahl_spiele();$i++){
-        echo "in tc_spielplan -> reloaden Spiel:".$i." <br>";
         $spielplan->update_spiel($i+1,$_POST["toreAPOST"][$i],$_POST["toreBPOST"][$i],$_POST["penAPOST"][$i],$_POST["penBPOST"][$i]);
     }
 }

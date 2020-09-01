@@ -22,7 +22,7 @@
                     <input 
                         name='toreAPOST[<?=$index?>]' 
                         value='<?=$spiel["tore_a"]?>'
-                        size='3'
+                        size='2'
                         class='w3-input w3-border w3-round w3-right-align'
                         style='padding: 2px;'
                     >
@@ -33,8 +33,8 @@
                     <input 
                         name='toreBPOST[<?=$index?>]' 
                         value='<?=$spiel["tore_b"]?>'
-                        size='3'
-                        class='w3-input w3-border w3-round w3-right-align'
+                        size='2'
+                        class='w3-input w3-border w3-round w3-left-align'
                         style='padding: 2px;'
                     >
                 </td>
@@ -43,7 +43,7 @@
                     <input 
                         name='penAPOST[<?=$index?>]' 
                         value='<?=$spiel["penalty_a"]?>'
-                        size='3'
+                        size='2'
                         class='w3-input w3-border w3-round w3-right-align'
                         style='padding: 2px;'
                     >
@@ -54,8 +54,8 @@
                     <input 
                         name='penBPOST[<?=$index?>]' 
                         value='<?=$spiel["penalty_b"]?>'
-                        size='3'
-                        class='w3-input w3-border w3-round w3-right-align'
+                        size='2'
+                        class='w3-input w3-border w3-round w3-left-align'
                         style='padding: 2px;'
                     >
                 </td>

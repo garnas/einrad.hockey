@@ -10,7 +10,7 @@ TODO:
 require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_team.logic.php'; //Auth
 
-$turnier_id = 920;
+$turnier_id = 915;
 //$turnier_id=$_GET['turnier_id'];
 $akt_turnier=new Turnier($turnier_id);
 //Existiert das Turneir??
@@ -20,11 +20,11 @@ if(empty($akt_turnier->daten)){
     die();
 }
 //Besteht die Berechtigung das Turnier zu bearbeiten? 
-if ($_SESSION['team_id'] != $akt_turnier->daten['ausrichter']){
-    Form::error("Keine Berechtigung das Turnier zu bearbeiten");
-    header('Location: ../teamcenter/tc_start.php');
-    die();
-}
+//if ($_SESSION['team_id'] != $akt_turnier->daten['ausrichter']){
+//    Form::error("Keine Berechtigung das Turnier zu bearbeiten");
+//    header('Location: ../teamcenter/tc_start.php');
+//    die();
+//}
 
 $spielplan = new Spielplan($turnier_id);
 $spielplan->create_spielplan_jgj();
@@ -71,6 +71,7 @@ include '../../templates/spielplan_vorTurnierTabelle.tmp.php';
     <?php
         include '../../templates/spielplan_spieleTabelleForm.tmp.php';
     ?>
+     <p><input type="submit" name="gesendet_tur" class="w3-block w3-button w3-tertiary" value="Spiele senden"></p>
 </form>
 
 <!-- Penalty Warnung -->
