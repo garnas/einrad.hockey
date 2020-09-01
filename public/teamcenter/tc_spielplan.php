@@ -41,6 +41,8 @@ $spielliste=$spielplan->get_spiele();
 $penalty_warning=$spielplan->penalty_warning;
 if(empty($penalty_warning)){
     $penalty_warning=" Kein Penalty notwendig";
+}else{
+    Form::attention($penalty_warning);
 }
 //Turnierergebnisse speichern
 //TODO nach Datum testen, ist es später ale Turnier begin und nicht merh als X Tage nach Turneir??
@@ -54,20 +56,18 @@ $datum=$spielplan->datum;
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 $titel = "Spielplan Teamcenter";
-
+$content = "Der Spielplan für das Einradhockey-Turnier in ". $akt_turnier->daten['ort'] . "am" . date("d.m.Y", strtotime($akt_turnier->daten['datum']));
 include '../../templates/header.tmp.php';
 ?>
-<div class="">
-<h1 class="w3-text-primary w3-border-primary">Spielplan <?=$ort?>, <?=$datum?></h1>
 
 <!-- TEAMLISTE -->
 <?php
 include '../../templates/spielplan_vorTurnierTabelle.tmp.php';
 ?>
 <!-- SPIELE -->
-<form action ="tc_spielplan.php" method="post">
+<form method="post">
 <h3 class="w3-text-secondary w3-margin-top">Spiele</h3>
-<form action ="tc_spielplan.php" method="post">
+<form method="post">
     <?php
         include '../../templates/spielplan_spieleTabelleForm.tmp.php';
     ?>
@@ -82,7 +82,7 @@ include '../../templates/spielplan_vorTurnierTabelle.tmp.php';
 <?php
     include '../../templates/spielplan_ergebnisTabelle.tmp.php';
 ?>
-<form action ="tc_spielplan.php" method="post">
+<form method="post">
     <p>
         <input type="submit" name="gesendet_turnierergebnisse" class="w3-block w3-button w3-tertiary" value="Ergebnisse speichern">
     </p>

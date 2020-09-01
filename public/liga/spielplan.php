@@ -10,8 +10,8 @@ TODO:
 require_once '../../logic/first.logic.php'; //autoloader und Session
 //require_once '../../logic/session_la.logic.php';//Auth
 
-$turnier_id = 914;
-//$turnier_id=$_GET['turnier_id'];
+
+$turnier_id=$_GET['turnier_id'];
 $akt_turnier=new Turnier($turnier_id);
 //Existiert das Turneir??
 if(empty($akt_turnier->daten)){
@@ -30,12 +30,9 @@ $datum=$spielplan->datum;
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 $titel = "Spielplan";
-
+$content = "Der Spielplan für das Einradhockey-Turnier in ". $akt_turnier->daten['ort'] . "am" . date("d.m.Y", strtotime($akt_turnier->daten['datum']));
 include '../../templates/header.tmp.php';
 ?>
-<div class="">
-<h1 class="w3-text-primary w3-border-primary">Spielplan <?=$ort?>, <?=$datum?></h1>
-
 
 <!-- TEAMLISTE -->
 <?php
@@ -75,7 +72,4 @@ include '../../templates/spielplan_vorTurnierTabelle.tmp.php';
 <!-- ABSCHLUSSTABELLE -->
 <?php
 include '../../templates/spielplan_ergebnisTabelle.tmp.php';
-?>
-</div>
-<?php
 include '../../templates/footer.tmp.php';

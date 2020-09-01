@@ -16,8 +16,8 @@ class spielplan{
     public $penalty_warning="";
     public $anzahl_teams;
     public $anzahl_spiele;
-    public $datum;
-    public $ort;
+    //public $datum;
+    //public $ort;
 
     function __construct($turnier_id)
     {
@@ -25,12 +25,12 @@ class spielplan{
         $this->akt_turnier = new Turnier($turnier_id);
         $this->teamliste = $this->akt_turnier->get_liste_spielplan();
         $this->anzahl_teams=sizeof($this->teamliste);
-        $this->getOrtDatum();
+        //$this->getOrtDatum();
     }
 
     function create_spielplan_jgj(){
         //TESTEN OB SPIELE SCHON EXISTIEREN
-        $sql="SELECT *FROM spiele WHERE turnier_id=$this->turnier_id";
+        $sql="SELECT * FROM spiele WHERE turnier_id=$this->turnier_id";
         $result = db::readdb($sql);
         $result = mysqli_fetch_assoc($result);
         $this->anzahl_spiele=0;
@@ -426,8 +426,8 @@ class spielplan{
         if(empty($result)&&empty($this->penalty_warning)){
             //Testen ob Turnier eingetragen werden darf
             if (!Tabelle::check_ergebnis_eintragbar($this->akt_turnier)){
-                Form::error("Turnierergebnis wurde nicht eingetragen");
-                header("Location: irgendeine/url.php");
+                Form::error("Turnierergebnis konnte nicht eingetragen werden. Kontaktiere bitte den Ligaausschuss.");
+                header("Location: ../liga/kontakt.php");
                 die();
             }else{
                 $this->akt_turnier->set_phase('ergebnis');
@@ -444,7 +444,7 @@ class spielplan{
         
     }
 
-    function getOrtDatum(){
+    /*function getOrtDatum(){
         $sql = "SELECT ort FROM turniere_details WHERE turnier_id='$this->turnier_id'";
         $result=db::readdb($sql);
         $this->ort=mysqli_fetch_assoc($result)["ort"];
@@ -454,7 +454,14 @@ class spielplan{
         $result=mysqli_fetch_assoc($result)["datum"];
         $datum=new DateTime($this->akt_turnier->daten["startzeit"]);
         $this->datum=$datum->format("j.n.o");
-    }
+    }*/
 
+    //Löscht einen Spielplan, falls ein manueller Spielplan hochgeladen werden muss.
+    public static function delete_spielplan($turnier_id){
+        $sql = 
+        "DELETE * FROM spiele WHERE turnier_id = '$turnier_id'; 
+        DELETE * FROM spiele WHERE turnier_id = '$turnier_id';";
+        db::writedb($sql);
+    }
 }
 

@@ -65,7 +65,26 @@ if (isset($_POST['ergebnis_eintragen'])){
     die();
 }
 
-//Spielplan oder Ergebnis hochladen
+//Spielplan dynamisch erstellen
+if(isset($_POST['spielplan_erstellen'])){
+    $akt_turnier->set_phase('spielplan');
+    $akt_turnier->set_link_spielplan('https://www.einrad.hockey/liga/spielplan.php?turnier_id=' . $akt_turnier->daten['turnier_id']);
+    Form::affirm("Der dynamische Spielplan-Link wurde in die Datenbank eingetragen und das Turnier in die Spielplan-Phase versetzt.");
+    header('Location: https://www.einrad.hockey/liga/spielplan.php?turnier_id=' . $akt_turnier->daten['turnier_id']);
+    die();
+}
+
+//Spielplan löschen
+if(isset($_POST['spielplan_loeschen'])){
+    Spielplan::delete_spielplan($turnier_id);
+    $akt_turnier->set_link_spielplan('');
+    $akt_turnier->set_phase('melde');
+    Form::affirm("Der dynamisch erstellte Spielplan wurde gelöscht. Das Turnier wurde in die Meldephase versetzt!");
+    header('Location:' . db::escape($_SERVER['PHP_SELF']));
+    die();
+}
+
+//Spielplan oder Ergebnis manuell hochladen
 if (isset($_POST['spielplan_hochladen'])){
     if (!empty($_FILES["spielplan_file"]["tmp_name"])){
         $target_dir = "../uploads/s/spielplan/";
@@ -148,10 +167,10 @@ include '../../templates/header.tmp.php';
 <p>Hinweis: Dies kommt mit der Spielplanimplementation von Joschua</p>
 <form method="post">
     <p>
-        <input type="submit" name="spielplan_loeschen" disabled value="Spielplan löschen" class="w3-button w3-secondary"> 
+        <input type="submit" name="spielplan_loeschen" value="Spielplan löschen" class="w3-button w3-secondary"> 
     </p>
     <p>
-        <input type="submit" name="spielplan_erstellen" disabled value="Spielplan erstellen" class="w3-button w3-tertiary"> 
+        <input type="submit" name="spielplan_erstellen" value="Spielplan erstellen" class="w3-button w3-tertiary"> 
     </p>
 </form>
 <h3 class="w3-text-grey">Manuell</h3>
