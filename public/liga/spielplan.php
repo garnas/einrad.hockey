@@ -1,14 +1,14 @@
-<!-- 
-TODO:
-- Datum und Ort des Turniers in den "Spielplan" einfügen
-- Title entsprechend den anderen anpassen
--->
 <?php
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-//require_once '../../logic/session_la.logic.php';//Auth
+
+/*<!-- 
+TODO:
+- Datum und Ort des Turniers in den "Spielplan" einfügen
+- Title entsprechend den anderen anpassen
+-->*/
 
 $turnier_id=$_GET['turnier_id'];
 $akt_turnier=new Turnier($turnier_id);
