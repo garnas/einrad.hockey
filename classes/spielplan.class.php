@@ -9,7 +9,7 @@
 //testen, testen, testen
 //ergebnisse in datenbank speichern, datum dabei testen !! Fertig außer DAtum test
 //cronjob dienstags spielplan erstellen -> ansgar 
-class spielplan{
+class Spielplan{
     public $turnier_id;
     public $akt_turnier;
     public $teamliste;
