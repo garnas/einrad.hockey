@@ -10,13 +10,18 @@ TODO:
 require_once '../../logic/first.logic.php'; //autoloader und Session
 //require_once '../../logic/session_la.logic.php';//Auth
 
-
 $turnier_id=$_GET['turnier_id'];
 $akt_turnier=new Turnier($turnier_id);
-//Existiert das Turneir??
+//Existiert das Turnier?
 if(empty($akt_turnier->daten)){
     Form::error("Turnier wurde nicht gefunden");
-    header('Location : ../public/neues.php');
+    header('Location : ../public/turniere.php');
+    die();
+}
+//Ist das Turnier in der richtigen Phase?
+if(!in_array($akt_turnier->daten['phase'], array('ergebnis', 'spielplan'))){
+    Form::error("Turnier befindet sich in der falschen Phase");
+    header('Location : ../public/turniere.php');
     die();
 }
 $spielplan = new Spielplan($turnier_id);
@@ -24,8 +29,7 @@ $spielplan->create_spielplan_jgj();
 $tabelle=$spielplan->get_turnier_tabelle();
 $teamliste=$spielplan->teamliste;
 $spielliste=$spielplan->get_spiele();
-$ort=$spielplan->ort;
-$datum=$spielplan->datum;
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -39,8 +43,18 @@ include '../../templates/header.tmp.php';
 include '../../templates/spielplan_vorTurnierTabelle.tmp.php';
 ?>
 
+<!-- LINKS -->
+<p><?=Form::link("../liga/turnier_details.php?turnier_id=" . $turnier_id, "<i class='material-icons'>info</i> Alle Turnierdetails</i>")?></p>
+<?php if(isset($_SESSION['la_id'])){?>
+    <p><?=Form::link($akt_turnier->get_lc_spielplan(), '<i class="material-icons">create</i> Ergebnisse eintragen (Ligaausschuss)')?></p>
+<?php }//endif?>
+<?php if(($_SESSION['team_id'] ?? '') == $akt_turnier->daten['ausrichter']){?>
+    <p><?=Form::link($akt_turnier->get_tc_spielplan(), '<i class="material-icons">create</i> Ergebnisse eintragen')?></p>
+<?php }//endif?>
+
 <!-- SPIELE -->
 <h3 class="w3-text-secondary w3-margin-top">Spiele</h3>
+<?php if($akt_turnier->daten['besprechung'] == 'Ja'){?><p><i>Alle Teams sollen sich um <?=date('h:i', strtotime($akt_turnier->daten['startzeit']) - 15*60)?>&nbsp;Uhr zu einer gemeinsamen Turnierbesprechung einfinden.</i></p><?php }//endif?>
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped ">
             <tr class="w3-primary">

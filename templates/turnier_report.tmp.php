@@ -1,6 +1,7 @@
 <h1 class="w3-text-primary"><?=date("d.m.Y", strtotime($akt_turnier->daten['datum']))?> <?=$akt_turnier->daten['ort']?> <i>(<?=$akt_turnier->daten['tblock']?>)</i></h1>
 <h2 class="w3-text-grey">Turnier-Report</h2>
-
+<!-- LINK TURNIERREPORT -->
+<p><?=Form::link('../liga/spielplan.php?turnier_id=' . $turnier_id, '<i class="material-icons">list</i> Spielplan anzeigen')?></p>
 
 <!-- Ausbilder -->
 <?php if (!empty($ausbilder_liste)){?>

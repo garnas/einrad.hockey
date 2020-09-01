@@ -14,13 +14,18 @@ require_once '../../logic/session_la.logic.php';//Auth
 
 $turnier_id=$_GET['turnier_id'];
 $akt_turnier=new Turnier($turnier_id);
-//Existiert das Turneir??
+//Existiert das Turnier?
 if(empty($akt_turnier->daten)){
     Form::error("Turnier wurde nicht gefunden");
-    header('Location: ../ligacenter/lc_start.php');
+    header('Location : ../public/turniere.php');
     die();
 }
-
+//Ist das Turnier in der richtigen Phase?
+if(!in_array($akt_turnier->daten['phase'], array('ergebnis', 'spielplan'))){
+    Form::error("Turnier befindet sich in der falschen Phase");
+    header('Location : ../public/turniere.php');
+    die();
+}
 $spielplan = new Spielplan($turnier_id);
 $spielplan->create_spielplan_jgj();
 //eingetragene Tore speichern falls vorher eingetragen

@@ -140,7 +140,7 @@ class spielplan{
             $punkte += $daten[$i]["wertigkeit"];
             $daten[$i]["ligapunkte"]=round($punkte*(6/$faktor));
         }
-        return $daten;
+        return db::escape($daten);
     }
 
     function setWertigkeitenNL($daten){
@@ -166,18 +166,18 @@ class spielplan{
                 $max_wertigkeit=$daten[$i]["wertigkeit"];
             }
         }
-        return $daten;
+        return db::escape($daten);
     }
 
 
     function getFaktor(){
-        return $this->getSpielzeiten()["faktor"];
+        return db::escape($this->getSpielzeiten()["faktor"]);
     }
 
     function getWertigkeitByTeamID($team_id){
         for($i=1;$i<=sizeof($this->teamliste);$i++){
             if($team_id==$this->teamliste[$i]["team_id"]){
-                return $this->teamliste[$i]["wertigkeit"];
+                return db::escape($this->teamliste[$i]["wertigkeit"]);
             }
         }
     }
@@ -185,7 +185,7 @@ class spielplan{
     function getTeamnameByTeamID($team_id){
         for($i=1;$i<=sizeof($this->teamliste);$i++){
             if($team_id==$this->teamliste[$i]["team_id"]){
-                return $this->teamliste[$i]["teamname"];
+                return db::escape($this->teamliste[$i]["teamname"]);
             }
         }
     }
@@ -279,7 +279,7 @@ class spielplan{
             }
             
         }
-        return $daten;
+        return db::escape($daten);
         
     }
 
@@ -362,7 +362,7 @@ class spielplan{
             //////echo $row["team_id_a"]." ".$row["punkte"]." ".$row["tore"]." ".$row["gegentore"]." ".$row["diff"]." ".$row["penaltytore"];
             array_push($daten, $row);
         }
-        return $daten;
+        return db::escape($daten);
     }
 
     function get_spiele(){
@@ -393,7 +393,7 @@ class spielplan{
             array_push($daten, $spiel);
             $var += 1;
         }
-        return $daten;
+        return db::escape($daten);
     }
     
 
@@ -402,11 +402,11 @@ class spielplan{
         $spielplan=$this->akt_turnier->daten["spielplan"];
         $sql="SELECT * FROM spielplan_details WHERE plaetze='$plaetze' AND spielplan='$spielplan'";
         $result=db::readdb($sql);
-        return mysqli_fetch_assoc($result);
+        return db::escape(mysqli_fetch_assoc($result));
     }
 
     function get_anzahl_spiele(){
-        return $this->anzahl_spiele;
+        return db::escape($this->anzahl_spiele);
     }
 
     //$daten sollten schon sortiert sein!
@@ -457,11 +457,8 @@ class spielplan{
     }*/
 
     //Löscht einen Spielplan, falls ein manueller Spielplan hochgeladen werden muss.
-    public static function delete_spielplan($turnier_id){
-        $sql = 
-        "DELETE * FROM spiele WHERE turnier_id = '$turnier_id'; 
-        DELETE * FROM spiele WHERE turnier_id = '$turnier_id';";
-        db::writedb($sql);
+    public static function delete_spielplan($turnier_id){ 
+        db::writedb("DELETE FROM spiele WHERE turnier_id = '$turnier_id'");
     }
 }
 

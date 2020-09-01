@@ -66,21 +66,19 @@ if (isset($_POST['ergebnis_eintragen'])){
 }
 
 //Spielplan dynamisch erstellen
-if(isset($_POST['spielplan_erstellen'])){
+if(isset($_POST['auto_spielplan_erstellen'])){
     $akt_turnier->set_phase('spielplan');
-    $akt_turnier->set_link_spielplan('https://www.einrad.hockey/liga/spielplan.php?turnier_id=' . $akt_turnier->daten['turnier_id']);
-    Form::affirm("Der dynamische Spielplan-Link wurde in die Datenbank eingetragen und das Turnier in die Spielplan-Phase versetzt.");
-    header('Location: https://www.einrad.hockey/liga/spielplan.php?turnier_id=' . $akt_turnier->daten['turnier_id']);
+    Form::affirm("Das Turnier in die Spielplan-Phase versetzt. Der dynamische Spielplan wird jetzt angezeigt.");
+    header('Location: ../liga/spielplan.php?turnier_id=' . $akt_turnier->daten['turnier_id']);
     die();
 }
 
 //Spielplan löschen
-if(isset($_POST['spielplan_loeschen'])){
+if(isset($_POST['auto_spielplan_loeschen'])){
     Spielplan::delete_spielplan($turnier_id);
-    $akt_turnier->set_link_spielplan('');
     $akt_turnier->set_phase('melde');
     Form::affirm("Der dynamisch erstellte Spielplan wurde gelöscht. Das Turnier wurde in die Meldephase versetzt!");
-    header('Location:' . db::escape($_SERVER['PHP_SELF']));
+    header('Location:' . db::escape($_SERVER['REQUEST_URI']));
     die();
 }
 
@@ -102,9 +100,11 @@ if (isset($_POST['spielplan_hochladen'])){
                 $akt_turnier->schreibe_log("Phase -> spielplan", "Ligaausschuss");
                 $akt_turnier->schreibe_log("Spielplandatei manuell hochgeladen", "Ligaausschuss");
                 Form::affirm("Spielplan wurde hochgeladen");
+                Spielplan::delete_spielplan($turnier_id);
             }else{
                 $akt_turnier->schreibe_log("Ergebnisdatei manuell hochgeladen", "Ligaausschuss");
                 Form::affirm("Ergebnis wurde hochgeladen. Die Phase des Turniers wurde nicht verändert.");
+                Spielplan::delete_spielplan($turnier_id);
             }
         }
     }else{
@@ -164,13 +164,12 @@ include '../../templates/header.tmp.php';
 <!-- Spielplan/Ergebnis-Erstellung -->
 <h2 class="w3-text-primary w3-bottombar">Spielplan erstellen/löschen</h2>
 <h3 class="w3-text-grey">Automatisch</h3>
-<p>Hinweis: Dies kommt mit der Spielplanimplementation von Joschua</p>
 <form method="post">
     <p>
-        <input type="submit" name="spielplan_loeschen" value="Spielplan löschen" class="w3-button w3-secondary"> 
+        <input type="submit" name="auto_spielplan_loeschen" value="Automatischer Spielplan löschen" class="w3-button w3-secondary"> 
     </p>
     <p>
-        <input type="submit" name="spielplan_erstellen" value="Spielplan erstellen" class="w3-button w3-tertiary"> 
+        <input type="submit" name="auto_spielplan_erstellen" value="Automatischer Spielplan erstellen" class="w3-button w3-tertiary"> 
     </p>
 </form>
 <h3 class="w3-text-grey">Manuell</h3>

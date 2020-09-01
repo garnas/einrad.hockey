@@ -4,7 +4,7 @@
     <table class="w3-table w3-striped ">
         <tr class="w3-primary">
             <th class="w3-right-align">Pl.</th>
-            <th>Mannschaft</th>
+            <th>Team</th>
             <th class="w3-right-align">Spiele</th>
             <th class="w3-right-align">Punkte</th>
             <th class="w3-right-align">Tore</th>

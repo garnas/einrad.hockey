@@ -11,7 +11,7 @@
                 <th colspan="3" class="w3-center">Penalty</th>
             </tr>
             <?php foreach ($spielliste as $index => $spiel){?>
-                <tr>
+                <tr <?php if (!is_null($spiel["tore_b"]) && !is_null($spiel["tore_b"])){?>class="w3-pale-green"<?php }//endif?>>
                 <td class="w3-right-align"><?=$spiel["zeit"]?></td>
                 <td class="w3-right-align"><?=$spiel["schiri_team_id_a"]?></td>
                 <td class="w3-right-align"><?=$spiel["schiri_team_id_b"]?></td>
