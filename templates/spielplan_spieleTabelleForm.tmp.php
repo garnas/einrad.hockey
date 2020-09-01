@@ -25,6 +25,7 @@
                         size='2'
                         class='w3-input w3-border w3-round w3-right-align'
                         style='padding: 2px;'
+                        autocomplete='off'
                     >
                 </td>
                 <td class="w3-center" style="padding-left: 0; padding-right: 0;">:</td>
