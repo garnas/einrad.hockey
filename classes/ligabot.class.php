@@ -121,19 +121,19 @@ class LigaBot {
     {
         $datum = strtotime($datum);
         $tag = date("N", $datum); //Numerische Zahl des Wochentages 1-7
+        //Faktor 3.93 und strtotime(date("d-M-Y"..)) -> Reset von 12 Uhr Mittags auf Null Uhr, um Winter <-> Sommerzeit korrekt handzuhaben 
         if ($tag >= 3){
-            return $datum - 4*7*24*60*60 + (6-$tag)*24*60*60;
+            return strtotime(date("d-M-Y", $datum - 3.93*7*24*60*60 + (6-$tag)*24*60*60));
         }elseif ($tag < 3){
-            return $datum - 4*7*24*60*60 - $tag*24*60*60;
+            return strtotime(date("d-M-Y", $datum - 3.93*7*24*60*60 - $tag*24*60*60));
         }else{
             Form::error("Zeitpunkt für Phasenwechsel konnte nicht ermittelt werden");
         }
-
     }
     
     public static function get_doppel_anmeldungen()
     {
-        $sql=
+        $sql = 
         "SELECT turniere_liste.team_id, teams_liga.ligateam, COUNT(*), turniere_liga.datum 
         FROM turniere_liste 
         INNER JOIN turniere_liga 
