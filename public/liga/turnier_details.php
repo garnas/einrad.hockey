@@ -135,8 +135,8 @@ include '../../templates/header.tmp.php';
             <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;"><i class="material-icons">format_align_center</i> Spielplan</td>
             <td>
                 <?=$daten['plaetze'] . ' ' . $daten['spielplan']?>
-                <?php if($daten['phase'] == 'spielplan'){?>
-                    <?=Form::link($akt_turnier->get_spielplan(), 'Zum Spielplan')?>
+                <?php if($daten['phase'] == 'Spielplanphase'){?>
+                    <br><?=Form::link($akt_turnier->get_spielplan(), '<i class="material-icons">reorder</i> Zum Spielplan')?>
                 <?php }//end if?>
             </td>
         </tr>

@@ -469,7 +469,7 @@ class Turnier {
     }
     function get_spielplan(){
         if (empty($this->daten['link_spielplan'])){
-            return '../liga/spielplan.php?turnier_id?' . $this->turnier_id;
+            return '../liga/spielplan.php?turnier_id=' . $this->turnier_id;
         }else{
             return $this->daten['link_spielplan'];
         }
