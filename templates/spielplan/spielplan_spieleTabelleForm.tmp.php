@@ -5,7 +5,7 @@
         <div class="w3-responsive w3-card">
             <table class="w3-table w3-striped">
                 <tr class="w3-primary">
-                    <th class="w3-right-align">Zeit</th>
+                    <th class="w3-center">Zeit</th>
                     <th colspan="3" class="w3-center">Schiri</th>
                     <th>Team 1</th>
                     <th>Team 2</th>
@@ -14,7 +14,7 @@
                 </tr>
                 <?php foreach ($spielliste as $index => $spiel){?>
                     <tr <?php if (!is_null($spiel["tore_b"]) && !is_null($spiel["tore_b"])){?>class="w3-pale-green"<?php }//endif?>>
-                        <td class="w3-right-align"><?=$spiel["zeit"]?></td>
+                        <td class="w3-center"><?=$spiel["zeit"]?></td>
                         <td class="w3-center" style="padding-right: 0;" title="<?=Team::teamid_to_teamname($spiel["schiri_team_id_a"])?>"><i style='cursor:help;'><?=$spiel["schiri_team_id_a"]?></i></td>
                         <td style="padding-right: 0; padding-left: 0;">|</td>
                         <td class="w3-center" style="padding-left: 0;" title="<?=Team::teamid_to_teamname($spiel["schiri_team_id_b"])?>"><i style='cursor:help;'><?=$spiel["schiri_team_id_b"]?></i></td>

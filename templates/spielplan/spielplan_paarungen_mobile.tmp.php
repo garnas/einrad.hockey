@@ -1,12 +1,12 @@
 <!-- SPIELPAARUNGEN MOBIL -->
 <div class="w3-hide-large w3-hide-medium">
     <h3 class="w3-text-secondary w3-margin-top">Spiele</h3>
-    <span class="w3-text-grey">Spielzeit: 2 x <?=$spielzeit['halbzeit_laenge']?>&nbsp;min | Puffer je Spiel: <?=$spielzeit['pause']?>&nbsp;min</span>
     <?php if($spielplan->akt_turnier->daten['besprechung'] == 'Ja'){?><p><i>Alle Teams sollen sich um <?=date('h:i', strtotime($spielplan->akt_turnier->daten['startzeit']) - 15*60)?>&nbsp;Uhr zu einer gemeinsamen Turnierbesprechung einfinden.</i></p><?php }//endif?>
+    <span class="w3-text-grey">Spielzeit: 2 x <?=$spielzeit['halbzeit_laenge']?>&nbsp;min | Puffer je Spiel: <?=$spielzeit['pause']?>&nbsp;min</span>
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped" style="white-space: nowrap;">
             <tr class="w3-primary">
-                <th class="w3-right-align">Zeit</th>
+                <th class="w3-center">Zeit</th>
                 <th class="w3-center">Schiri</th>
                 <th class="w3-center">Teams</th>
                 <th class="w3-center">Ergebnis</th>
@@ -16,7 +16,7 @@
             </tr>
             <?php foreach ($spielliste as $index => $spiel){?>
                 <tr>
-                    <td class="w3-right-align"><?=$spiel["zeit"]?></td>
+                    <td class="w3-center"><?=$spiel["zeit"]?></td>
                     <td class="w3-center">
                         <span class="w3-tooltip"><i><?=$spiel["schiri_team_id_b"]?></i> <span class="w3-text w3-small"><em><?=Team::teamid_to_teamname($spiel["schiri_team_id_b"])?></em></span>
                         <br>

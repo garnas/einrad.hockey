@@ -5,7 +5,7 @@
         <div class="w3-responsive w3-card">
             <table class="w3-table w3-striped" style="white-space: nowrap;">
                 <tr class="w3-primary">
-                    <th class="">Zeit</th>
+                    <th class="w3-center">Zeit</th>
                     <th class="w3-center">Schiri</th>
                     <th class="w3-center">Teams</th>
                     <th>Ergebnis</th>
@@ -13,7 +13,7 @@
                 </tr>
                 <?php foreach ($spielliste as $index => $spiel){?>
                     <tr <?php if (!is_null($spiel["tore_b"]) && !is_null($spiel["tore_b"])){?>class="w3-pale-green w3-opacity"<?php }//endif?>>
-                        <td class="w3-right-align"><?=$spiel["zeit"]?></td>
+                        <td class="w3-center"><?=$spiel["zeit"]?></td>
                         <td class="w3-center">
                             <span class="w3-tooltip"><i><?=$spiel["schiri_team_id_b"]?></i> <span class="w3-text w3-small"><em><?=Team::teamid_to_teamname($spiel["schiri_team_id_b"])?></em></span>
                             <br>
@@ -29,7 +29,7 @@
                             </div>
                         </td>
                         <!-- TORE A -->
-                        <td class="w3-right-align">
+                        <td class="w3-center">
                             <input 
                                 name='toreAPOST[<?=$index?>]'
                                 id='toreAPOST[<?=$index?>]'

@@ -11,12 +11,12 @@ if(empty($spielplan->akt_turnier->daten)){
 //Nur Relevant für Ligacenter oder Teamcenter
 if (isset($ligacenter) or isset($teamcenter)){
     //Besteht die Berechtigung das Turnier zu bearbeiten? 
-    if ($_SESSION['team_id'] ?? false != $spielplan->akt_turnier->daten['ausrichter'] && !$ligacenter){
+    if (($_SESSION['team_id'] ?? false) != $spielplan->akt_turnier->daten['ausrichter'] && !$ligacenter){
         Form::error("Nur der Ausrichter darf Spielergebnisse eintragen");
         header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
         die();
     }
-    if ($teamcenter && Config::time_offset() - strtotime($spielplan->akt_turnier->daten['datum']) < 48*60*60){
+    if ($teamcenter && Config::time_offset() - strtotime($spielplan->akt_turnier->daten['datum']) > 48*60*60){
         Form::error("Bitte wende dich an den Ligaausschuss um Ergebnisse nachträglich einzutragen.");
         header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
         die();
