@@ -35,7 +35,7 @@ $daten['datum'] = strftime("%d.%m.%Y&nbsp;(%A)", strtotime($daten['datum']));
 $daten['startzeit'] = substr($daten['startzeit'], 0, -3);
 
 if($daten['besprechung'] == 'Ja'){
-    $daten['besprechung'] = 'Alle Teams sollen sich um ' . date('h:i', strtotime($daten['startzeit']) - 15*60) . '&nbsp;Uhr zu einer gemeinsamen Turnierbesprechung einfinden.';
+    $daten['besprechung'] = 'Alle Teams sollen sich um ' . date('H:i', strtotime($daten['startzeit']) - 15*60) . '&nbsp;Uhr zu einer gemeinsamen Turnierbesprechung einfinden.';
 }else{
     $daten['besprechung'] = '';
 }

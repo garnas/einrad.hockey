@@ -22,7 +22,7 @@ foreach ($daten as $turnier_id => $turnier){
         $daten[$turnier_id]['tblock'] = 'Spaß';
     }
     if ($daten[$turnier_id]['besprechung'] == 'Ja'){
-        $daten[$turnier_id]['besprechung'] = 'Gemeinsame Teambesprechung um ' . date('h:i', strtotime($daten[$turnier_id]['startzeit']) - 15*60) . '&nbsp;Uhr';
+        $daten[$turnier_id]['besprechung'] = 'Gemeinsame Teambesprechung um ' . date('H:i', strtotime($daten[$turnier_id]['startzeit']) - 15*60) . '&nbsp;Uhr';
     }else{
         $daten[$turnier_id]['besprechung'] = '';
     }
