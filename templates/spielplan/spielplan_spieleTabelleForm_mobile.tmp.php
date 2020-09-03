@@ -19,7 +19,15 @@
                             <br>
                             <span class="w3-tooltip"><i><?=$spiel["schiri_team_id_a"]?></i></span> <span class="w3-text w3-small"><em><?=Team::teamid_to_teamname($spiel["schiri_team_id_a"])?></em></span>
                         </td>
-                        <td><div class="w3-center"><b><label for='toreAPOST[<?=$index?>]'><?=$spiel["team_a_name"]?></label><br><label for='toreBPOST[<?=$index?>]'><?=$spiel["team_b_name"]?></label></b></div></td>
+                        <td>
+                            <div class="w3-center">
+                                <b>
+                                    <label for='toreAPOST[<?=$index?>]'><?=$spiel["team_a_name"]?></label>
+                                    <br>
+                                    <label for='toreBPOST[<?=$index?>]'><?=$spiel["team_b_name"]?></label>
+                                </b>
+                            </div>
+                        </td>
                         <!-- TORE A -->
                         <td class="w3-right-align">
                             <input 

@@ -1,11 +1,12 @@
 <!-- ÜBERSCHRIFT -->
-<h1 class="w3-text-primary w3-border-primary">Spielplan<span class="w3-right w3-text-secondary"><?=$spielplan->akt_turnier->daten['ort']?> <i>(<?=$spielplan->akt_turnier->daten['tblock']?>)</i>, <?=date("d.m.Y", strtotime($spielplan->akt_turnier->daten['datum']))?></span></h1>
+<h1 class="w3-text-grey"><?=$spielzeit['plaetze']?>er-Spielplan</h1>
+<h2 class="w3-text-secondary"><?=$spielplan->akt_turnier->daten['ort']?> <i>(<?=$spielplan->akt_turnier->daten['tblock']?>)</i>, <?=date("d.m.Y", strtotime($spielplan->akt_turnier->daten['datum']))?></span></h2>
 <h1 class=""><?=$spielplan->akt_turnier->daten['tname']?></h1>
 
 <!-- LINKS -->
 <div class="drucken-hide">
     <p><?=Form::link("../liga/turnier_details.php?turnier_id=" . $turnier_id, "<i class='material-icons'>info</i> Alle Turnierdetails</i>")?></p>
-    <?php if(isset($_SESSION['la_id']) && !$ligacenter){?>
+    <?php if(isset($_SESSION['la_id']) && !($ligacenter ?? false)){?>
         <p><?=Form::link($spielplan->akt_turnier->get_lc_spielplan(), '<i class="material-icons">create</i> Ergebnisse eintragen (Ligaausschuss)')?></p>
     <?php }//endif?>
     <?php if(isset($_SESSION['la_id'])){?>
@@ -15,6 +16,7 @@
         <?php if(!$teamcenter){?><p><?=Form::link($spielplan->akt_turnier->get_tc_spielplan(), '<i class="material-icons">create</i> Ergebnisse eintragen')?></p><?php }//endif?>
         <p><?=Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">create</i> Turnierreport ausfüllen')?></p>
     <?php }//endif?>
+    <p><?=Form::link("../liga/spielplan_drucken.php?turnier_id=" . $turnier_id, "<i class='material-icons'>print</i> Zur Druckversion</i>")?></p>
 </div>
 
 <!-- TEAMLISTE -->

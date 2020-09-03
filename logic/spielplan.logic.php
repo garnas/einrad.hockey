@@ -11,7 +11,7 @@ if(empty($spielplan->akt_turnier->daten)){
 //Nur Relevant für Ligacenter oder Teamcenter
 if (isset($ligacenter) or isset($teamcenter)){
     //Besteht die Berechtigung das Turnier zu bearbeiten? 
-    if ($_SESSION['team_id'] != $spielplan->akt_turnier->daten['ausrichter'] && !$ligacenter){
+    if ($_SESSION['team_id'] ?? false != $spielplan->akt_turnier->daten['ausrichter'] && !$ligacenter){
         Form::error("Nur der Ausrichter darf Spielergebnisse eintragen");
         header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
         die();
@@ -25,14 +25,14 @@ if (isset($ligacenter) or isset($teamcenter)){
 //Ist das Turnier in der richtigen Phase?
 if(!in_array($spielplan->akt_turnier->daten['phase'], array('ergebnis', 'spielplan'))){
     Form::error("Turnier befindet sich in der falschen Phase");
-    header('Location : ../public/turnier_details.php?turnier_id=' . $turnier_id);
+    header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier_id);
     die();
 }
 
 //Hat das Turnier die richtige Anzahl an Teams?
-if($spielplan->anzahl_teams < 3 or $spielplan->anzahl_teams < 7){
+if($spielplan->anzahl_teams < 4 or $spielplan->anzahl_teams > 7){
     Form::error("Falsche Anzahl an Teams für die Spielplanerstellung");
-    header('Location : ../public/turnier_details.php?turnier_id=' . $turnier_id);
+    header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier_id);
     die();
 }
 
@@ -42,7 +42,6 @@ $tabelle=$spielplan->get_turnier_tabelle();
 $teamliste=$spielplan->teamliste;
 $spielliste=$spielplan->get_spiele();
 $spielzeit = $spielplan->getSpielzeiten();
-
 //Penalty Anzeigen? //Für Spielplan/Druckanzeige
 $penalty_anzeigen = false;
 foreach($spielliste as $spiel){
