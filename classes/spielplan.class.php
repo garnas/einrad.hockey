@@ -13,7 +13,7 @@ class Spielplan{
     public $turnier_id;
     public $akt_turnier;
     public $teamliste;
-    public $penalty_warning="";
+    public $penalty_warning;
     public $anzahl_teams;
     public $anzahl_spiele;
     //public $datum;
@@ -30,16 +30,16 @@ class Spielplan{
 
     function create_spielplan_jgj(){
         //TESTEN OB SPIELE SCHON EXISTIEREN
-        $sql="SELECT * FROM spiele WHERE turnier_id=$this->turnier_id";
+        $sql="SELECT * FROM spiele WHERE turnier_id = '$this->turnier_id'";
         $result = db::readdb($sql);
         $result = mysqli_fetch_assoc($result);
-        $this->anzahl_spiele=0;
+        $this->anzahl_spiele = 0;
         if (empty($result)){
             //db::debug($this->akt_turnier->daten);
             //db::debug($this->teamliste);
             //$plaetze = $this->akt_turnier->daten["plaetze"];
             $spielplan=$this->akt_turnier->daten["spielplan"];
-            $sql = "SELECT * FROM spielplan_paarungen WHERE plaetze='$this->anzahl_teams' AND spielplan='$spielplan'";
+            $sql = "SELECT * FROM spielplan_paarungen WHERE plaetze = '$this->anzahl_teams' AND spielplan = '$spielplan'";
             $result = db::readdb($sql);
             
             $sqlinsert="";
@@ -83,12 +83,7 @@ class Spielplan{
             $sql="UPDATE spiele SET tore_a=$tore_a, tore_b=$tore_b, penalty_a=$penalty_a, penalty_b=$penalty_b
             WHERE turnier_id=$this->turnier_id AND spiel_id=$spiel_id;";
             db::writedb($sql);
-        }else{
-            //Form::error("Bitte Zahlen eintragen");
-            //header('Location : ../irgendeine/url.php');
-            //die();
         }
-       
     }
 
     function get_turnier_tabelle(){
@@ -137,7 +132,7 @@ class Spielplan{
         $punkte=0;
         $faktor=$this->getFaktor();
         for($i=sizeof($daten)-1;$i>=0;$i--){
-            $punkte += $daten[$i]["wertigkeit"];
+            $punkte += round($daten[$i]["wertigkeit"]); //round() von Ansgar hinzugefügt
             $daten[$i]["ligapunkte"]=round($punkte*(6/$faktor));
         }
         return db::escape($daten);
@@ -151,12 +146,8 @@ class Spielplan{
             while(!is_numeric($daten[$j]["wertigkeit"])&&$j>=0){
                 $j--;
             }
-            $lastNL=$daten[$j]["wertigkeit"]/2;
-            if($lastNL<15){
-                $lastNL=15;
-            }
-            $daten[sizeof($daten)-1]["wertigkeit"]=$lastNL;
-            
+            $lastNL = $daten[$j]["wertigkeit"] / 2;
+            $daten[sizeof($daten)-1]["wertigkeit"] = max (15, $lastNL);
         }
         $max_wertigkeit=$daten[sizeof($daten)-1]["wertigkeit"];
         for($i=sizeof($daten)-2;$i>=0;$i--){
@@ -213,7 +204,7 @@ class Spielplan{
             $subdaten[0]["penalty_points"]==$subdaten[$last]["penalty_points"]&&
             $subdaten[0]["penalty_diff"]==$subdaten[$last]["penalty_diff"]&&
             $subdaten[0]["penaltytore"]==$subdaten[$last]["penaltytore"]){
-            $this->penalty_warning .="Achtung Penalty zwischen";
+            $this->penalty_warning ="Achtung Penalty zwischen";
             for($i=0;$i<$end-$begin;$i++){
                 $this->penalty_warning .=" ".$subdaten[$i]["teamname"]." und";
             }
@@ -399,9 +390,9 @@ class Spielplan{
 
     function getSpielzeiten(){
         $plaetze = $this->anzahl_teams;
-        $spielplan=$this->akt_turnier->daten["spielplan"];
-        $sql="SELECT * FROM spielplan_details WHERE plaetze='$plaetze' AND spielplan='$spielplan'";
-        $result=db::readdb($sql);
+        $spielplan = $this->akt_turnier->daten["spielplan"];
+        $sql = "SELECT * FROM spielplan_details WHERE plaetze = '$plaetze' AND spielplan = '$spielplan'";
+        $result = db::readdb($sql);
         return db::escape(mysqli_fetch_assoc($result));
     }
 
