@@ -19,7 +19,7 @@
 
 <!-- TEAMLISTE -->
 <h3 class="w3-text-secondary w3-margin-top">Teamliste</h3>
-<div class="w3-responsive w3-card">
+<div class="w3-responsive w3-card w3-section">
     <table class="w3-table w3-striped" style="white-space: nowrap;">
         <tr class="w3-primary">
             <th class="w3-center">ID</th>
@@ -27,13 +27,13 @@
             <th class="w3-center w3-hide-small">Block</th>
             <th class="w3-center">Wertigkeit</th>
         </tr>
-    <?php foreach ($teamliste as $index => $team){?>
-        <tr>
-            <td class="w3-center"><?= $team["team_id"]?></td>
-            <td><?= $team["teamname"]?></td>
-            <td class="w3-center w3-hide-small"><?= $team["tblock"]?></td>
-            <td class="w3-center"><?= $team["wertigkeit"]?></td>
-        </tr>
-    <?php }//end foreach?>
+        <?php foreach ($teamliste as $index => $team){?>
+            <tr>
+                <td class="w3-center"><?= $team["team_id"]?></td>
+                <td><?= $team["teamname"]?></td>
+                <td class="w3-center w3-hide-small"><?= $team["tblock"]?></td>
+                <td class="w3-center"><?= $team["wertigkeit"]?></td>
+            </tr>
+        <?php }//end foreach?>
     </table>
 </div>

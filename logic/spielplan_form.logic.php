@@ -3,6 +3,9 @@
 if(isset($_POST["gesendet_tur"])){
     for($i=0;$i<$spielplan->get_anzahl_spiele();$i++){
         $spielplan->update_spiel($i+1,$_POST["toreAPOST"][$i],$_POST["toreBPOST"][$i],$_POST["penAPOST"][$i],$_POST["penBPOST"][$i]);
+        Form::affirm('Spielergebnisse wurden gespeichert');
+        header('Location: ' . db::escape($_SERVER['REQUEST_URI']));
+        die();
     }
 }
 

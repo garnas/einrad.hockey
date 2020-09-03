@@ -1,6 +1,6 @@
 <!-- SPIELE MOBIL-->
 <div class="w3-hide-large w3-hide-medium">
-<h3 class="w3-text-secondary w3-margin-top">Spiele</h3>
+    <h3 class="w3-text-secondary w3-margin-top">Spiele</h3>
     <form method="post">
         <div class="w3-responsive w3-card">
             <table class="w3-table w3-striped" style="white-space: nowrap;">
@@ -72,6 +72,5 @@
         <p><input type="submit" name="gesendet_tur" class="w3-block w3-button w3-tertiary" value="Spiele zwischenspeichern"></p>
         <p class='w3-text-grey'>Spielergebnisse sollten zusätzlich schriftlich festgehalten werden</p>
     </form>
-
     <p class="w3-text-red"><?=$penalty_warning ?? ''?></p>
-<div class="w3-hide-large w3-hide-medium">
+</div>
