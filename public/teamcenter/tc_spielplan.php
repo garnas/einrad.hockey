@@ -11,7 +11,7 @@ require_once '../../logic/spielplan_form.logic.php'; //Wertet Formular aus
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 $titel = "Ergebnisse eintragen | Teamcenter";
-$content = "Der Spielplan für das Einradhockey-Turnier in ". $akt_turnier->daten['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->daten['datum']));
+$content = "Der Spielplan für das Einradhockey-Turnier in ". $spielplan->akt_turnier->daten['ort'] . " am " . date("d.m.Y", strtotime($spielplan->akt_turnier->daten['datum']));
 include '../../templates/header.tmp.php';
 include '../../templates/spielplan/spielplan_vorTurnierTabelle.tmp.php'; //Teamliste
 include '../../templates/spielplan/spielplan_spieleTabelleForm.tmp.php'; //Spielplan

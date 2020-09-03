@@ -13,7 +13,7 @@ class Spielplan{
     public $turnier_id;
     public $akt_turnier;
     public $teamliste;
-    public $penalty_warning;
+    public $penalty_warning = '';
     public $anzahl_teams;
     public $anzahl_spiele;
     //public $datum;
@@ -202,7 +202,7 @@ class Spielplan{
             $subdaten[0]["penalty_points"]==$subdaten[$last]["penalty_points"]&&
             $subdaten[0]["penalty_diff"]==$subdaten[$last]["penalty_diff"]&&
             $subdaten[0]["penaltytore"]==$subdaten[$last]["penaltytore"]){
-            $this->penalty_warning ="Achtung Penalty zwischen";
+            $this->penalty_warning .="Achtung Penalty zwischen";
             for($i=0;$i<$end-$begin;$i++){
                 $this->penalty_warning .=" ".$subdaten[$i]["teamname"]." und";
             }
@@ -405,7 +405,7 @@ class Spielplan{
             //Testen ob Turnier eingetragen werden darf
             if (!Tabelle::check_ergebnis_eintragbar($this->akt_turnier)){
                 Form::error("Turnierergebnis konnte nicht eingetragen werden. Kontaktiere bitte den Ligaausschuss.");
-                header("Location: ../liga/kontakt.php");
+                header("Location: " . db::escape($_SERVER['REQUEST_URI']));
                 die();
             }else{
                 $this->akt_turnier->set_phase('ergebnis');

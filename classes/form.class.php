@@ -83,7 +83,7 @@ class Form
         } else {
             $new_tab = '';
         }
-        return "<a href='$link' class='no w3-text-primary w3-hover-text-secondary' $new_tab>$bezeichnung</a>";
+        return "<a href='$link' class='no w3-text-primary w3-hover-text-secondary' style='white-space: nowrap;' $new_tab>$bezeichnung</a>";
     }
 
     //Erstellt eine HTML-Datalist aller Ligateams.

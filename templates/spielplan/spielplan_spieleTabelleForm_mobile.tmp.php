@@ -80,5 +80,5 @@
         <p><input type="submit" name="gesendet_tur" class="w3-block w3-button w3-tertiary" value="Spiele zwischenspeichern"></p>
         <p class='w3-text-grey'>Spielergebnisse sollten zusätzlich schriftlich festgehalten werden</p>
     </form>
-    <p class="w3-text-red"><?=$penalty_warning ?? ''?></p>
+    <p class="w3-text-red"><?=$penalty_warning?></p>
 </div>

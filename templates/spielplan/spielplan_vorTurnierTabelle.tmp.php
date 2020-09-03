@@ -5,16 +5,20 @@
 
 <!-- LINKS -->
 <div class="drucken-hide">
-    <p><?=Form::link("../liga/turnier_details.php?turnier_id=" . $turnier_id, "<i class='material-icons'>info</i> Alle Turnierdetails</i>")?></p>
+    <p><?=Form::link("../liga/turnier_details.php?turnier_id=" . $turnier_id, "<i class='material-icons'>info</i> Alle Turnierdetails</i>")?>
+    <?php if (isset($_SESSION['team_id'])){?>
+        <?=Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">article</i> Zum Turnierreport')?></p>
+    <?php }else{ ?>
+        <?=Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">lock</i> Zum Turnierreport')?></p>
+    <?php } //endif?>
+    <?php if(($_SESSION['team_id'] ?? false) == $spielplan->akt_turnier->daten['ausrichter'] && !($teamcenter ?? false) && $spielplan->akt_turnier->daten['phase'] == 'spielplan'){?>
+        <p><?=Form::link($spielplan->akt_turnier->get_tc_spielplan(), '<i class="material-icons">create</i> Ergebnisse eintragen')?></p>
+    <?php }//endif?>
     <?php if(isset($_SESSION['la_id']) && !($ligacenter ?? false)){?>
         <p><?=Form::link($spielplan->akt_turnier->get_lc_spielplan(), '<i class="material-icons">create</i> Ergebnisse eintragen (Ligaausschuss)')?></p>
     <?php }//endif?>
     <?php if(isset($_SESSION['la_id'])){?>
         <p><?=Form::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">create</i> Turnierreport ausfüllen (Ligaausschuss)')?></p>
-    <?php }//endif?>
-    <?php if(($_SESSION['team_id'] ?? false) == $spielplan->akt_turnier->daten['ausrichter']){?>
-        <?php if(!$teamcenter){?><p><?=Form::link($spielplan->akt_turnier->get_tc_spielplan(), '<i class="material-icons">create</i> Ergebnisse eintragen')?></p><?php }//endif?>
-        <p><?=Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">create</i> Turnierreport ausfüllen')?></p>
     <?php }//endif?>
     <p><?=Form::link("../liga/spielplan_drucken.php?turnier_id=" . $turnier_id, "<i class='material-icons'>print</i> Zur Druckversion</i>")?></p>
 </div>
