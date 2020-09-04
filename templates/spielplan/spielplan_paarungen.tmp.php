@@ -31,6 +31,13 @@
                         <td class="w3-left-align" style="padding-left: 0;"><?=$spiel["penalty_b"]?></td>
                     <?php }//endif?>
                 </tr>
+                <?php if(($zeitdiff = strtotime($spielliste[$index+1]['zeit'] ?? $spiel['zeit']) - strtotime($spiel['zeit']) - $spielzeit['dauer']*60) > 0){?>
+                    <tr>
+                        <td class="w3-center" colspan="<?php if($penalty_anzeigen){?>12<?php }else{?>9<?php }//endif?>">
+                            <i><?=round($zeitdiff/60)?>&nbsp;min Pause</i>
+                        </td>
+                    </tr>
+                <?php }//endif?>
             <?php }//end foreach?>
         </table>
    </div>

@@ -42,9 +42,11 @@ $tabelle=$spielplan->get_turnier_tabelle();
 $teamliste=$spielplan->teamliste;
 $spielliste=$spielplan->get_spiele();
 $spielzeit = $spielplan->getSpielzeiten();
+$spielzeit['dauer'] = $spielzeit['anzahl_halbzeiten']*$spielzeit['halbzeit_laenge'] + $spielzeit['pause'];
+
 //Penalty Anzeigen? //Für Spielplan/Druckanzeige
 $penalty_anzeigen = false;
-foreach($spielliste as $spiel){
+foreach($spielliste as $index => $spiel){
     if (!is_null($spiel["penalty_b"]) or !is_null($spiel["penalty_a"])){
         $penalty_anzeigen = true;
     }
