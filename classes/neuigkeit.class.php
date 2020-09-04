@@ -211,4 +211,38 @@ class Neuigkeit {
         }
         return db::escape($return); //Array 
     }
+    public static function get_statistik_tore($saison = Config::SAISON){
+        //Tore Team A
+        $sqla = "SELECT sum(tore_a) AS tore, team_id_a
+        FROM spiele
+        INNER JOIN turniere_liga 
+        ON spiele.turnier_id = turniere_liga.turnier_id 
+        WHERE tore_a IS NOT NULL
+        AND turniere_liga.saison = '$saison'
+        GROUP BY team_id_a
+        ORDER BY RAND()";
+        $result = db::readdb($sqla);
+        while ($x = mysqli_fetch_assoc($result)){
+            $tore[$x['team_id_a']] = $x['tore'];
+        }
+        //Addition der Tore Team B
+        $sqlb = "SELECT sum(tore_b) AS tore, team_id_b
+        FROM spiele
+        INNER JOIN turniere_liga 
+        ON spiele.turnier_id = turniere_liga.turnier_id 
+        WHERE tore_b IS NOT NULL
+        AND turniere_liga.saison = '$saison'
+        GROUP BY team_id_b
+        ORDER BY RAND()";
+        $result = db::readdb($sqlb);
+        while ($x = mysqli_fetch_assoc($result)){
+            if (isset($tore[$x['team_id_b']])){
+                $tore[$x['team_id_b']] += $x['tore'];
+            }else{
+                $tore[$x['team_id_b']] = $x['tore'];
+            }
+        }
+        arsort($tore);
+        return array_slice($tore, 0, 3, true);
+    }
 }

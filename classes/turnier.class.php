@@ -181,7 +181,7 @@ class Turnier {
             $return[$index] = $eintrag;
             $index++;
         }
-        return db::escape($return);
+        return db::escape($return ?? array());
     }
 
     function set_ergebnis($team_id, $ergebnis, $platz)
