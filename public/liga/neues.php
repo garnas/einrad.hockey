@@ -141,7 +141,7 @@ include '../../templates/header.tmp.php';
                 <p class="w3-text-grey w3-center">Keine gespielten Turniere</p> 
             <?php } //end if?>
              <?php if (!empty($statistik['max_tore'])) {?>
-                <span>Die meisten Tore</span>
+                <span>Die meisten Tore:</span>
                 <table class="w3-table">
                     <?php $i=-1; foreach ($statistik['max_tore'] as $team_id => $tore){ $i++;?>
                         <tr class="<?=$colors[$i]?>">
