@@ -31,7 +31,7 @@ if (!isset($_SESSION['hintergrund']) or (Config::time_offset() - $_SESSION['neue
     <link rel="apple-touch-icon" sizes="180x180" href="../bilder/favicon/apple-icon-180x180.png.png">
     <link type="text/css" rel="stylesheet" href="../css/normalize.css">
     <link type="text/css" rel="stylesheet" href="../css/w3.css">
-    <link type="text/css" rel="stylesheet" href="../css/style.css">
+    <link type="text/css" rel="stylesheet" href="../css/style.css?v=20200904">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="../script.js"></script>
     <title><?=$titel ?? "Deutsche Einradhockeyliga"?></title>
