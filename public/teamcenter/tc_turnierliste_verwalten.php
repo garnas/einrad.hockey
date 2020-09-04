@@ -29,7 +29,12 @@ foreach ($turniere as $turnier_id => $turnier){
     if ($turnier['art'] == 'spass'){
         array_push($turniere[$turnier_id]['links'], Form::link('../teamcenter/tc_spassturnier_anmeldung.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">how_to_reg</i> Teams manuell anmelden'));
     }
+    if ($turnier['phase'] == 'spielplan' or $turnier['phase'] == 'ergebnis'){
+        array_push($turniere[$turnier_id]['links'], Form::link('../teamcenter/tc_spielplan.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">reorder</i> Ergebnisse eintragen'));
+    }
 }
+
+include '../../logic/turnierliste.logic.php'; //Auth
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
