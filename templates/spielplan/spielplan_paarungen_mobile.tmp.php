@@ -20,6 +20,7 @@
                     <td class="w3-center">
                         <span class="w3-tooltip">
                             <i><?=$spiel["schiri_team_id_b"]?></i> <span class="w3-text w3-small"><em><?=Team::teamid_to_teamname($spiel["schiri_team_id_b"])?></em></span>
+                            <br>
                             <i><?=$spiel["schiri_team_id_a"]?></i> <span class="w3-text w3-small"><em><?=Team::teamid_to_teamname($spiel["schiri_team_id_a"])?></em></span>
                         </span>
                     </td>
