@@ -1,11 +1,11 @@
 <!-- ÜBERSCHRIFT -->
 <h1 class="w3-text-grey"><?=$spielzeit['plaetze']?>er-Spielplan</h1>
-<h2 class="w3-text-secondary"><?=$spielplan->akt_turnier->daten['ort']?> <i>(<?=$spielplan->akt_turnier->daten['tblock']?>)</i>, <?=date("d.m.Y", strtotime($spielplan->akt_turnier->daten['datum']))?></span></h2>
-<h1 class=""><?=$spielplan->akt_turnier->daten['tname']?></h1>
+<h2 class="w3-text-secondary"><?=$spielplan->akt_turnier->daten['ort']?> <i>(<?=$spielplan->akt_turnier->daten['tblock']?>)</i>, <?=date("d.m.Y", strtotime($spielplan->akt_turnier->daten['datum']))?></h2>
+<h1><?=$spielplan->akt_turnier->daten['tname']?></h1>
 
 <!-- LINKS -->
 <div class="drucken-hide">
-    <p><?=Form::link("../liga/turnier_details.php?turnier_id=" . $turnier_id, "<i class='material-icons'>info</i> Alle Turnierdetails</i>")?>
+    <p><?=Form::link("../liga/turnier_details.php?turnier_id=" . $turnier_id, "<i class='material-icons'>info</i> Alle Turnierdetails")?>
     <?php if (isset($_SESSION['team_id'])){?>
         <?=Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">article</i> Zum Turnierreport')?></p>
     <?php }else{ ?>
@@ -20,7 +20,7 @@
     <?php if(isset($_SESSION['la_id'])){?>
         <p><?=Form::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">create</i> Turnierreport ausfüllen (Ligaausschuss)')?></p>
     <?php }//endif?>
-    <p><?=Form::link("../liga/spielplan_drucken.php?turnier_id=" . $turnier_id, "<i class='material-icons'>print</i> Zur Druckversion</i>")?></p>
+    <p><?=Form::link("../liga/spielplan_drucken.php?turnier_id=" . $turnier_id, "<i class='material-icons'>print</i> Zur Druckversion")?></p>
 </div>
 
 <!-- TEAMLISTE -->

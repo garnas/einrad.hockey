@@ -28,7 +28,12 @@ if(!in_array($spielplan->akt_turnier->daten['phase'], array('ergebnis', 'spielpl
     header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier_id);
     die();
 }
-
+//Existiert ein manuell hochgeladener Spielplan?
+if(!empty($spielplan->akt_turnier->daten['link_spielplan'])){
+    Form::error("Es existiert ein manuell hochgeladener Spielplan.");
+    header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier_id);
+    die();
+}
 //Hat das Turnier die richtige Anzahl an Teams?
 if($spielplan->anzahl_teams < 4 or $spielplan->anzahl_teams > 7){
     Form::error("Falsche Anzahl an Teams für die Spielplanerstellung");

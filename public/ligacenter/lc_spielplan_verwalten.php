@@ -18,9 +18,7 @@ if (empty($akt_turnier->daten)){
 
 //Vorhandenes Ergebnis anzeigen
 $teamliste = $akt_turnier->get_liste_spielplan();
-if ($akt_turnier->daten['phase'] == "ergebnis"){
-    $turnier_ergebnis = $akt_turnier->get_ergebnis();
-}
+$turnier_ergebnis = $akt_turnier->get_ergebnis();
 
 //Formularauswertung
 

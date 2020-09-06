@@ -132,8 +132,8 @@ include '../../templates/header.tmp.php';
                 <table class="w3-table">
                     <?php foreach ($statistik['max_turniere'] as $team){?>
                         <tr class="<?=$team['color']?>">
-                            <td><?=$team['gespielt']?></td>
                             <td><?=$team['teamname']?></td>
+                            <td><?=$team['gespielt']?></td>
                         </tr>
                     <?php } //end foreach?>
                 </table>

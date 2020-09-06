@@ -21,7 +21,7 @@ foreach ($turniere_no_erg as $turnier_id => $turnier){
             Form::link("lc_spielplan_verwalten.php?turnier_id=".$turnier_id, '<i class="material-icons">playlist_play</i> Spielplan/Ergebnis bearbeiten')
         );
     if ($turnier['phase'] == 'spielplan'){
-        array_push($turniere_no_erg[$turnier_id]['links'], Form::link("lc_spielplan.php?turnier_id=".$turnier_id, '<i class="material-icons">reorder</i> Ergebnis eintragen'));
+        array_push($turniere_no_erg[$turnier_id]['links'], Form::link("lc_spielplan.php?turnier_id=".$turnier_id, '<i class="material-icons">reorder</i> Spielergebnis eintragen'));
     }
 }
 
@@ -36,7 +36,8 @@ foreach ($turniere_erg as $turnier_id => $turnier){
           Form::link("../liga/turnier_details.php?turnier_id=".$turnier_id, '<i class="material-icons">info</i> Details'),
           Form::link("lc_turnier_bearbeiten.php?turnier_id=".$turnier_id, '<i class="material-icons">create</i> Turnier bearbeiten'),
           Form::link("lc_turnier_log.php?turnier_id=".$turnier_id, '<i class="material-icons">info_outline</i> Log einsehen'),
-          Form::link("lc_spielplan_verwalten.php?turnier_id=".$turnier_id, '<i class="material-icons">list</i> Spielplan/Ergebnis')
+          Form::link("lc_spielplan_verwalten.php?turnier_id=".$turnier_id, '<i class="material-icons">playlist_play</i> Ergebnis verwalten'),
+          Form::link("lc_spielplan.php?turnier_id=".$turnier_id, '<i class="material-icons">reorder</i> Spielergebnisse verändern')
       );
 }
 

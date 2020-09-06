@@ -64,6 +64,7 @@ foreach ($all_anmeldungen as $turnier_id => $liste){
 
     if ($daten[$turnier_id]['phase'] == 'spielplan'){
             $daten[$turnier_id]['phase'] = Form::link($daten[$turnier_id]['link_spielplan'] ?: ('spielplan.php?turnier_id=' . $turnier_id), 'Spielplan');
+            $phase_spielplan = true;
     }
 
 }
@@ -198,8 +199,10 @@ function modal(turnier_id){
                     <!-- Links -->
                     <div style="margin-bottom: 24px;">
                         <p class="w3-text-grey w3-border-bottom w3-border-grey">Links</p>
-                            <p><?=Form::link('../liga/turnier_details.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">schedule</i> Alle Turnierdetails')?></p>
-                            
+                            <p><?=Form::link('../liga/turnier_details.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">info</i> Alle Turnierdetails')?></p>
+                            <?php if ($phase_spielplan ?? false){?>
+                                <p><?=Form::link($turnier['link_spielplan'] ?: ('../liga/spielplan.php?turnier_id=' . $turnier['turnier_id']), '<i class="material-icons">reorder</i> Zum Spielplan')?></p>
+                            <?php } //endif?>
                             <?php if (isset($_SESSION['la_id'])){?>
                                 <p><?=Form::link('../ligacenter/lc_turnier_bearbeiten.php?turnier_id=' . $turnier['turnier_id'], 'Turnier bearbeiten (Ligaausschuss)')?></p>
                                 <p><?=Form::link('../ligacenter/lc_team_anmelden.php?turnier_id=' . $turnier['turnier_id'], 'Teams anmelden (Ligaausschuss)')?></p>
