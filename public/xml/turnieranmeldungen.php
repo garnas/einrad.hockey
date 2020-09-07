@@ -4,11 +4,11 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 
-//Assoziatives Array aller Turniere der Aktuellen Saison
-$turniere = Turnier::get_all_anmeldungen();
+//Assoziatives Array aller Turnieranmeldungen der Aktuellen Saison
+$turnieranmeldungen = Turnier::get_all_anmeldungen();
 
 //db::debug wird verwendet fürs debugging. Es zeigt immer den Inhalt von Variablen oben auf der aufgerufenen Seite auf.
-db::debug($turniere);
+db::debug($turnieranmeldungen);
 
 
 //Datum-Umwandlung auf Deutsch:
