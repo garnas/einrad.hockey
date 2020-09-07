@@ -18,9 +18,7 @@ if (empty($akt_turnier->daten)){
 
 //Vorhandenes Ergebnis anzeigen
 $teamliste = $akt_turnier->get_liste_spielplan();
-if ($akt_turnier->daten['phase'] == "ergebnis"){
-    $turnier_ergebnis = $akt_turnier->get_ergebnis();
-}
+$turnier_ergebnis = $akt_turnier->get_ergebnis();
 
 //Formularauswertung
 
@@ -67,16 +65,23 @@ if (isset($_POST['ergebnis_eintragen'])){
 
 //Spielplan dynamisch erstellen
 if(isset($_POST['auto_spielplan_erstellen'])){
-    $akt_turnier->set_phase('spielplan');
-    Form::affirm("Das Turnier in die Spielplan-Phase versetzt. Der dynamische Spielplan wird jetzt angezeigt.");
-    header('Location: ../liga/spielplan.php?turnier_id=' . $akt_turnier->daten['turnier_id']);
-    die();
+    if ($akt_turnier->daten['phase'] == 'melde' && 3 < count($teamliste) && count($teamliste) < 8){
+        $akt_turnier->set_phase('spielplan');
+        $akt_turnier->schreibe_log('Phase -> Spielplan, Automatischer Spielplan', 'Ligaausschuss');
+        Form::affirm("Das Turnier in die Spielplan-Phase versetzt. Der dynamische Spielplan wird jetzt angezeigt.");
+        header('Location: ../liga/spielplan.php?turnier_id=' . $akt_turnier->daten['turnier_id']);
+        die();
+    }else{
+        Form::error('Spielplan konnte nicht erstellt werden. Turnier wurde nicht in die Spielplanphase versetzt.');
+    }
+    
 }
 
 //Spielplan löschen
 if(isset($_POST['auto_spielplan_loeschen'])){
     Spielplan::delete_spielplan($turnier_id);
     $akt_turnier->set_phase('melde');
+    $akt_turnier->schreibe_log("Spielplan wurde aus der Datenbank gelöscht.\r\nPhase -> melde","Ligaausschuss");
     Form::affirm("Der dynamisch erstellte Spielplan wurde gelöscht. Das Turnier wurde in die Meldephase versetzt!");
     header('Location:' . db::escape($_SERVER['REQUEST_URI']));
     die();

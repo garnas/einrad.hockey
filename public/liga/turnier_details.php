@@ -35,7 +35,7 @@ $daten['datum'] = strftime("%d.%m.%Y&nbsp;(%A)", strtotime($daten['datum']));
 $daten['startzeit'] = substr($daten['startzeit'], 0, -3);
 
 if($daten['besprechung'] == 'Ja'){
-    $daten['besprechung'] = 'Alle Teams sollen sich um ' . date('h:i', strtotime($daten['startzeit']) - 15*60) . '&nbsp;Uhr zu einer gemeinsamen Turnierbesprechung einfinden.';
+    $daten['besprechung'] = 'Alle Teams sollen sich um ' . date('H:i', strtotime($daten['startzeit']) - 15*60) . '&nbsp;Uhr zu einer gemeinsamen Turnierbesprechung einfinden.';
 }else{
     $daten['besprechung'] = '';
 }
@@ -75,9 +75,9 @@ if ($daten['phase'] == 'spielplan'){
 if ($daten['spielplan'] == 'jgj'){
     $daten['spielplan'] = 'Jeder-gegen-Jeden';
 }elseif($daten['spielplan'] == 'dko'){
-    $daten['spielplan'] = 'Doppel-KO';
+    $daten['spielplan'] = 'Doppel-KO bei acht Teams, sonst Jeder-gegen-Jeden';
 }elseif($daten['spielplan'] == 'gruppen'){
-    $daten['spielplan'] = 'zwei Gruppen';
+    $daten['spielplan'] = 'Zwei Gruppen bei acht Teams, sonst Jeder-gegen-Jeden';
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -134,7 +134,7 @@ include '../../templates/header.tmp.php';
         <tr>
             <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;"><i class="material-icons">format_align_center</i> Spielplan</td>
             <td>
-                <?=$daten['plaetze'] . ' ' . $daten['spielplan']?>
+                <?=$daten['spielplan']?>
                 <?php if($daten['phase'] == 'Spielplanphase'){?>
                     <br><?=Form::link($akt_turnier->get_spielplan(), '<i class="material-icons">reorder</i> Zum Spielplan')?>
                 <?php }//end if?>
@@ -217,14 +217,10 @@ include '../../templates/header.tmp.php';
 
 <!-- Weiterführende Links -->
 <p class="w3-text-grey w3-border-bottom w3-border-grey">Links</p>
-<p><?=Form::link('../liga/turniere.php#' . $daten['turnier_id'], '<i class="material-icons">reorder</i> Anstehende Turniere')?></p>
-
-<?php if (isset($_SESSION['la_id'])){?> 
-    <p><?=Form::link('../ligacenter/lc_turnier_bearbeiten.php?turnier_id=' . $daten['turnier_id'], 'Turnier bearbeiten (Ligaausschuss)')?></p>
-    <p><?=Form::link('../ligacenter/lc_team_anmelden.php?turnier_id=' . $daten['turnier_id'], 'Teams anmelden (Ligaausschuss)')?></p>
-    <p><?=Form::link('../ligacenter/lc_turnier_log.php?turnier_id=' . $daten['turnier_id'], 'Turnierlog einsehen (Ligaausschuss)')?></p>
-    <p><?=Form::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $daten['turnier_id'], '<i class="material-icons">article</i> Zum Turnierreport (Ligaausschuss)')?></p>
-<?php } //endif?>
+<p><?=Form::link('../liga/turniere.php#' . $daten['turnier_id'], '<i class="material-icons">event</i> Anstehende Turniere')?></p>
+<?php if($daten['phase'] == 'Spielplanphase'){?>
+    <p><?=Form::link($akt_turnier->get_spielplan(), '<i class="material-icons">reorder</i> Zum Spielplan')?></p>
+<?php }//end if?>
 
 <?php if (isset($_SESSION['team_id'])){?>
     <p><?=Form::link('../teamcenter/tc_team_anmelden.php?turnier_id=' . $daten['turnier_id'], '<i class="material-icons">how_to_reg</i> Zum Turnier anmelden')?></p>
@@ -235,6 +231,13 @@ include '../../templates/header.tmp.php';
 
 <?php if (($_SESSION['team_id'] ?? '') == $daten['ausrichter']){?>
     <p><?=Form::link('../teamcenter/tc_turnier_bearbeiten.php?turnier_id=' . $daten['turnier_id'], '<i class="material-icons">create</i> Turnier als Ausrichter bearbeiten')?></p>
+<?php } //endif?>
+
+<?php if (isset($_SESSION['la_id'])){?> 
+    <p><?=Form::link('../ligacenter/lc_turnier_bearbeiten.php?turnier_id=' . $daten['turnier_id'], 'Turnier bearbeiten (Ligaausschuss)')?></p>
+    <p><?=Form::link('../ligacenter/lc_team_anmelden.php?turnier_id=' . $daten['turnier_id'], 'Teams anmelden (Ligaausschuss)')?></p>
+    <p><?=Form::link('../ligacenter/lc_turnier_log.php?turnier_id=' . $daten['turnier_id'], 'Turnierlog einsehen (Ligaausschuss)')?></p>
+    <p><?=Form::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $daten['turnier_id'], '<i class="material-icons">article</i> Zum Turnierreport (Ligaausschuss)')?></p>
 <?php } //endif?>
 
 <?php include '../../templates/footer.tmp.php';

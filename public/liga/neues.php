@@ -20,6 +20,8 @@ $i = 0; foreach ($statistik['max_turniere'] as $key => $team){
     $i++;
 }
 
+$statistik['max_tore'] = Neuigkeit::get_statistik_tore();
+
 //Die nächsten und letzten fünf Turniere:
 $last_turniere = $next_turniere = array();
 foreach ($turniere as $turnier){
@@ -130,12 +132,25 @@ include '../../templates/header.tmp.php';
                 <table class="w3-table">
                     <?php foreach ($statistik['max_turniere'] as $team){?>
                         <tr class="<?=$team['color']?>">
-                            <td><?=$team['gespielt']?></td>
                             <td><?=$team['teamname']?></td>
+                            <td><?=$team['gespielt']?></td>
                         </tr>
                     <?php } //end foreach?>
                 </table>
-            <?php }else{?> <p class="w3-text-grey w3-center">Keine gespielten Turniere</p> <?php } //end if?>
+            <?php }else{?> 
+                <p class="w3-text-grey w3-center">Keine gespielten Turniere</p> 
+            <?php } //end if?>
+             <?php if (!empty($statistik['max_tore'])) {?>
+                <span>Die meisten Tore:</span>
+                <table class="w3-table">
+                    <?php $i=-1; foreach ($statistik['max_tore'] as $team_id => $tore){ $i++;?>
+                        <tr class="<?=$colors[$i]?>">
+                            <td><?=Team::teamid_to_teamname($team_id)?></td>
+                            <td><?=$tore?></td>
+                        </tr>
+                    <?php } //end foreach?>
+                </table>
+            <?php }//endif?>
             <div class="w3-border">
                 <div class="w3-primary w3-center" style="height:24px;width:<?=max($fortschritt,0)?>%"></div>
             </div>

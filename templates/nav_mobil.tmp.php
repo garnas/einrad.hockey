@@ -38,7 +38,7 @@
         <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_start.php">Start</a>
         <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_turnierliste_anmelden.php">Turnieranmeldung</a>
         <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_turnier_erstellen.php">Turnier erstellen</a>
-        <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_turnierliste_verwalten.php">Turnier verwalten</a>
+        <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_turnierliste_verwalten.php">Eigene Turniere</a>
         <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_neuigkeit_eintragen.php">Neuigkeiten eintragen</a>
         <a class="w3-bar-item w3-button" href="../teamcenter/tc_neuigkeit_liste.php">Neuigkeit bearbeiten</a>
         <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_kontaktcenter.php">Kontaktcenter</a>

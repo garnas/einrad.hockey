@@ -6,9 +6,6 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_team.logic.php'; //Auth
 
 $heute = date("Y-m-d", Config::time_offset());
-$anmeldungen = Turnier::get_all_anmeldungen();
-$akt_team = new Team($_SESSION['team_id']);
-$anz_freilose = $akt_team->get_freilose();
 //wird dem template übergeben
 $turniere = Turnier::get_all_turniere("WHERE turniere_liga.datum > '$heute' AND turniere_liga.ausrichter = '".$_SESSION['team_id']."'");
 
@@ -20,14 +17,24 @@ if (empty($turniere)){
 
 //Füge Links zum Weiterverarbeiten der ausgewählten Turniere hinzu
 //diese werden dem Teamplate übergeben
-foreach ($turniere as $key => $turnier){
-    $turniere[$key]['link_bearbeiten'] = "tc_turnier_bearbeiten.php?turnier_id=". $turnier['turnier_id'];
-    if ($turnier['plaetze'] > count($anmeldungen[$turnier['turnier_id']]['spiele'] ?? array())){
-        $turniere[$key]['freivoll'] = '<span class="w3-text-green">frei</span>';
-    }else{
-        $turniere[$key]['freivoll'] = '<span class="w3-text-red">voll</span>';
+
+foreach ($turniere as $turnier_id => $turnier){
+    //Links
+    $turniere[$turnier_id]['link_zeile'] = "tc_turnier_bearbeiten.php?turnier_id=".$turnier_id;
+    $turniere[$turnier_id]['links'] = 
+        array(
+            Form::link("tc_turnier_bearbeiten.php?turnier_id=".$turnier_id, '<i class="material-icons">create</i> Turnier bearbeiten'), 
+            Form::link("../liga/turnier_details.php?turnier_id=".$turnier_id, '<i class="material-icons">info</i> Details')
+        );
+    if ($turnier['art'] == 'spass'){
+        array_push($turniere[$turnier_id]['links'], Form::link('../teamcenter/tc_spassturnier_anmeldung.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">how_to_reg</i> Teams manuell anmelden'));
+    }
+    if ($turnier['phase'] == 'spielplan' or $turnier['phase'] == 'ergebnis'){
+        array_push($turniere[$turnier_id]['links'], Form::link('../teamcenter/tc_spielplan.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">reorder</i> Ergebnisse eintragen'));
     }
 }
+
+include '../../logic/turnierliste.logic.php'; //Auth
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
