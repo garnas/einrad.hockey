@@ -21,7 +21,7 @@ class Config {
     ///////////////////////////////////////////////////////////////
 
     const HOST_NAME = 'localhost';
-    const DATABASE = 'neue_db';
+    const DATABASE = 'dummy-db';
     const USER_NAME = 'root';
     const PASSWORD = '';
 
