@@ -5,11 +5,13 @@
 require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_team.logic.php'; //Auth
 
-$heute = date("Y-m-d", Config::time_offset());
-$anmeldungen = Turnier::get_all_anmeldungen();
+//Teamspezifisches
 $akt_team = new Team($_SESSION['team_id']);
 $turnier_angemeldet = $akt_team->get_turniere_angemeldet();
 $anz_freilose = $akt_team->get_freilose();
+
+//Relevante Turniere finden
+$heute = date("Y-m-d", Config::time_offset());
 $turniere = Turnier::get_all_turniere("WHERE turniere_liga.datum > '$heute'"); //wird dem Template übergeben
 
 //Hinweis Live-Spieltag
@@ -22,38 +24,42 @@ if (Tabelle::check_spieltag_live($akt_spieltag)){
 
 //Füge Links zum Weiterverarbeiten der ausgewählten Turniere hinzu
 //diese werden dem Teamplate übergeben
-foreach ($turniere as $key => $turnier){
-    $turniere[$key]['link_anmelden'] = "tc_team_anmelden.php?turnier_id=". $turnier['turnier_id'];
-    $turniere[$key]['link_details'] = "../liga/turnier_details.php?turnier_id=". $turnier['turnier_id'];
-    if ($turnier['plaetze'] > count($anmeldungen[$turnier['turnier_id']]['spiele'] ?? array())){
-        $turniere[$key]['freivoll'] = '<span class="w3-text-green">frei</span>';
-    }else{
-        $turniere[$key]['freivoll'] = '<span class="w3-text-red">voll</span>';
-    }
-    $turniere[$key]['block_color'] = 'w3-text-red';
+foreach ($turniere as $turnier_id => $turnier){
+    //Links
+    $turniere[$turnier_id]['link_zeile'] = "tc_team_anmelden.php?turnier_id=" . $turnier_id;
+    $turniere[$turnier_id]['links'] = 
+        array(
+            Form::link("tc_team_anmelden.php?turnier_id=".$turnier_id,'<i class="material-icons">how_to_reg</i> An/abmelden'), 
+            Form::link("../liga/turnier_details.php?turnier_id=".$turnier_id, '<i class="material-icons">info</i> Details')
+        );
+        
+    //Farbe des Turnierblocks festlegen
     $freilos = true;
+    $turniere[$turnier_id]['block_color'] = 'w3-text-red';
     if (Turnier::check_team_block_static($_SESSION['teamblock'],$turnier['tblock'])){
-        $turniere[$key]['block_color'] = 'w3-text-green';
+        $turniere[$turnier_id]['block_color'] = 'w3-text-green';
         $freilos = false;
     }
     if ($freilos && Turnier::check_team_block_freilos_static($_SESSION['teamblock'],$turnier['tblock']) && $anz_freilose>0){
-        $turniere[$key]['block_color'] = 'w3-text-yellow';
+        $turniere[$turnier_id]['block_color'] = 'w3-text-yellow';
     }
-    $turniere[$key]['row_color'] = '';
+
+    //Einfärben wenn schon angemeldet
+    $turniere[$turnier_id]['row_color'] = '';
     if (isset($turnier_angemeldet[$turnier['turnier_id']])){
         $liste = $turnier_angemeldet[$turnier['turnier_id']];
         if ($liste == 'spiele'){
-            $turniere[$key]['row_color'] = 'w3-pale-green';
+            $turniere[$turnier_id]['row_color'] = 'w3-pale-green';
         }
         if ($liste == 'melde'){
-            $turniere[$key]['row_color'] = 'w3-pale-yellow';
+            $turniere[$turnier_id]['row_color'] = 'w3-pale-yellow';
         }
         if ($liste == 'warte'){
-            $turniere[$key]['row_color'] = 'w3-pale-blue';
+            $turniere[$turnier_id]['row_color'] = 'w3-pale-blue';
         }
     }
 }
-
+include '../../logic/turnierliste.logic.php';
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////

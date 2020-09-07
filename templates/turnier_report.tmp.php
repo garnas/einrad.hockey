@@ -1,11 +1,11 @@
 <h1 class="w3-text-primary"><?=date("d.m.Y", strtotime($akt_turnier->daten['datum']))?> <?=$akt_turnier->daten['ort']?> <i>(<?=$akt_turnier->daten['tblock']?>)</i></h1>
-<h2 class="w3-text-grey">Turnier-Report</h2>
+<h2 class="w3-text-grey"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">article</i> Turnier-Report</h2>
 <!-- LINK TURNIERREPORT -->
-<p><?=Form::link('../liga/spielplan.php?turnier_id=' . $turnier_id, '<i class="material-icons">list</i> Spielplan anzeigen')?></p>
+<p><?=Form::link('../liga/spielplan.php?turnier_id=' . $turnier_id, '<i class="material-icons">reorder</i> Zum Spielplan')?></p>
 
 <!-- Ausbilder -->
 <?php if (!empty($ausbilder_liste)){?>
-    <h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -24%" class="material-icons">school</i> Schiedsrichter-Ausbilder</h2>
+    <h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">school</i> Schiedsrichter-Ausbilder</h2>
     <ul class='w3-ul w3-margin-left w3-leftbar w3-border-tertiary'>
         <?php foreach ($ausbilder_liste as $spieler){?>
             <li><?=$spieler['vorname'] . ' ' . $spieler['nachname']?> (<i><?=Team::teamid_to_teamname($spieler['team_id'])?></i>)</li>
@@ -14,7 +14,7 @@
 <?php }//endif?>
 
 <!-- Kader -->
-<h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -24%" class="material-icons">groups</i> Kader und Schiedsrichter</h2>
+<h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">groups</i> Kader und Schiedsrichter</h2>
 <?php foreach ($kader_array as $team_id => $kader){?>
     <ul class='w3-ul w3-margin-left w3-leftbar w3-border-tertiary'>
         <li class="w3-hover-tertiary" style="cursor: pointer;" onclick="openTab('<?=$team_id?>')"><?=Team::teamid_to_teamname($team_id)?></li>
@@ -46,7 +46,7 @@
 <?php }//end foreach?>
 
 <!-- Spielerausleihe -->
-<h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -24%" class="material-icons">accessibility</i> Spielerausleihe</h2>
+<h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">accessibility</i> Spielerausleihe</h2>
 <?php if(!empty($spieler_ausleihen)){?>
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped">
@@ -107,7 +107,7 @@
 <?php }//endif?>
 
 <!-- Zeitstrafen -->
-<h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -24%" class="material-icons">schedule</i> Zeitstrafen</h2>
+<h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">schedule</i> Zeitstrafen</h2>
 <?php if(!empty($zeitstrafen)){?>
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped">
@@ -193,7 +193,7 @@
 <?php }//endif?>
 
 <!-- Turnierbericht -->
-<h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -24%" class="material-icons">info</i> Turnierbericht</h2>
+<h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">info</i> Turnierbericht</h2>
 <?php if($change_tbericht){ ?>
     <form method="post">
         <p>

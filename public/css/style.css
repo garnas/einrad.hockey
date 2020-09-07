@@ -61,7 +61,26 @@ td {
 h1 {
   font-size:30px;
 }
+@media print {
+  .nicht-drucken{
+    display: none;
+  }
+}
+/*hide arrows on inputs type number*/
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+td {
+  vertical-align: middle;
+}
 /*Links*/
 .w3-blue,.w3-hover-primary:hover{color:#ffffff!important;background-color:#6c7fbe!important}
 .w3-text-blue,.w3-hover-text-primary:hover{color:#6c7fbe!important}

@@ -3,7 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
+<<<<<<< HEAD
 -- Erstellungszeit: 07. Sep 2020 um 13:39
+=======
+-- Erstellungszeit: 07. Sep 2020 um 13:32
+>>>>>>> 30d71156abfa6b338f53b4bf18cf04f9ea24f5fc
 -- Server-Version: 10.4.13-MariaDB
 -- PHP-Version: 7.4.7
 
@@ -18,7 +22,11 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
+<<<<<<< HEAD
 -- Datenbank: `dummy-db`
+=======
+-- Datenbank: `neue_db`
+>>>>>>> 30d71156abfa6b338f53b4bf18cf04f9ea24f5fc
 --
 
 -- --------------------------------------------------------
@@ -116,6 +124,7 @@ CREATE TABLE `neuigkeiten` (
   `zeit` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+<<<<<<< HEAD
 --
 -- Daten für Tabelle `neuigkeiten`
 --
@@ -123,6 +132,8 @@ CREATE TABLE `neuigkeiten` (
 INSERT INTO `neuigkeiten` (`neuigkeiten_id`, `titel`, `inhalt`, `link_pdf`, `link_jpg`, `eingetragen_von`, `zeit`) VALUES
 (6, 'Willkommen!', 'Dies ist eine Test-Neuigkeit', '', '', 'Ligaausschuss', '2020-09-07 11:38:51');
 
+=======
+>>>>>>> 30d71156abfa6b338f53b4bf18cf04f9ea24f5fc
 -- --------------------------------------------------------
 
 --
@@ -11660,7 +11671,11 @@ ALTER TABLE `mailbot`
 -- AUTO_INCREMENT für Tabelle `neuigkeiten`
 --
 ALTER TABLE `neuigkeiten`
+<<<<<<< HEAD
   MODIFY `neuigkeiten_id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+=======
+  MODIFY `neuigkeiten_id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+>>>>>>> 30d71156abfa6b338f53b4bf18cf04f9ea24f5fc
 
 --
 -- AUTO_INCREMENT für Tabelle `spieler`
