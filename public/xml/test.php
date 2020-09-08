@@ -10,9 +10,14 @@ $turniere = Turnier::get_all_turniere("WHERE saison='".Config::SAISON."'");
 //db::debug wird verwendet fürs debugging. Es zeigt immer den Inhalt von Variablen oben auf der aufgerufenen Seite auf.
 db::debug($turniere);
 
-//Assoziatives Array aller Teamdaten
-$teams = Team::get_all_teamdata();
-db::debug($teams);
+//Assoziatives Array aller Turnieranmeldungen der Aktuellen Saison
+$turnieranmeldungen = Turnier::get_all_anmeldungen();
+db::debug($turnieranmeldungen);
+
+
+//Assoziatives Array der Rangtabelle
+$rang_tabelle = tabelle::get_rang_tabelle(5);
+db::debug($rang_tabelle);
 
 //Datum-Umwandlung auf Deutsch:
 //strtotime erstellt aus einem String eine Unix-Zeit
