@@ -7,7 +7,7 @@ require_once '../../logic/session_team.logic.php'; //Auth
 
 $heute = date("Y-m-d", Config::time_offset());
 //wird dem template übergeben
-$turniere = Turnier::get_all_turniere("WHERE turniere_liga.datum > '$heute' AND turniere_liga.ausrichter = '".$_SESSION['team_id']."'");
+$turniere = Turnier::get_all_turniere("WHERE saison = '".Config::SAISON."' AND turniere_liga.ausrichter = '".$_SESSION['team_id']."'");
 
 if (empty($turniere)){
     Form::affirm('Dein Team richtet zurzeit kein Turnier aus - Erstelle ein Turnier, um es verwalten zu können');
@@ -29,8 +29,15 @@ foreach ($turniere as $turnier_id => $turnier){
     if ($turnier['art'] == 'spass'){
         array_push($turniere[$turnier_id]['links'], Form::link('../teamcenter/tc_spassturnier_anmeldung.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">how_to_reg</i> Teams manuell anmelden'));
     }
-    if ($turnier['phase'] == 'spielplan' or $turnier['phase'] == 'ergebnis'){
+    if ($turnier['phase'] == 'spielplan'){
         array_push($turniere[$turnier_id]['links'], Form::link('../teamcenter/tc_spielplan.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">reorder</i> Ergebnisse eintragen'));
+        array_push($turniere[$turnier_id]['links'], Form::link('../teamcenter/tc_turnierreport.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">article</i> Turnierreport eintragen'));
+        $turniere[$turnier_id]['row_color'] = 'w3-pale-yellow';
+    }
+    if ($turnier['phase'] == 'ergebnis'){
+        array_push($turniere[$turnier_id]['links'], Form::link('../teamcenter/tc_spielplan.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">reorder</i> Ergebnisse verändern'));
+        array_push($turniere[$turnier_id]['links'], Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">article</i> Turnierreport verändern'));
+        $turniere[$turnier_id]['row_color'] = 'w3-pale-green';
     }
 }
 

@@ -119,18 +119,18 @@
                 <input type="text" class="w3-input w3-border w3-border-primary" placeholder="z. B. 5 Euro" id="startgebuehr" name="startgebuehr">
             <?php }else{ ?>
                 <select class="w3-input w3-border w3-border-primary" id="startgebuehr" name="startgebuehr">
-                    <option <?php if(($daten['startgebuehr'] ?? '') == 'keine'){?> selected <?php }?> value="keine">keine</option>
-                    <option <?php if(($daten['startgebuehr'] ?? '') == '5 Euro'){?> selected <?php }?> value="5 Euro">5 Euro</option>
-                    <option <?php if(($daten['startgebuehr'] ?? '') == '6 Euro'){?> selected <?php }?> value="6 Euro">6 Euro</option>
-                    <option <?php if(($daten['startgebuehr'] ?? '') == '7 Euro'){?> selected <?php }?> value="7 Euro">7 Euro</option>
-                    <option <?php if(($daten['startgebuehr'] ?? '') == '8 Euro'){?> selected <?php }?> value="8 Euro">8 Euro</option>
-                    <option <?php if(($daten['startgebuehr'] ?? '') == '9 Euro'){?>  selected <?php }?> value="9 Euro">9 Euro</option>
-                    <option <?php if(($daten['startgebuehr'] ?? '') == '10 Euro'){?>  selected <?php }?> value="10 Euro">10 Euro</option>
-                    <option <?php if(($daten['startgebuehr'] ?? '') == '11 Euro'){?> selected <?php }?> value="11 Euro">11 Euro</option>
-                    <option <?php if(($daten['startgebuehr'] ?? '') == '12 Euro'){?> selected <?php }?> value="12 Euro">12 Euro</option>
-                    <option <?php if(($daten['startgebuehr'] ?? '') == '13 Euro'){?> selected <?php }?> value="13 Euro">13 Euro</option>
-                    <option <?php if(($daten['startgebuehr'] ?? '') == '14 Euro'){?>  selected <?php }?> value="14 Euro">14 Euro</option>
-                    <option <?php if(($daten['startgebuehr'] ?? '') == '15 Euro'){?>  selected <?php }?> value="15 Euro">15 Euro</option>
+                    <option <?php if(($_POST['startgebuehr'] ?? '') == 'keine'){?>selected<?php }?> value="keine">keine</option>
+                    <option <?php if(($_POST['startgebuehr'] ?? '') == '5 Euro'){?>selected<?php }?> value="5 Euro">5 Euro</option>
+                    <option <?php if(($_POST['startgebuehr'] ?? '') == '6 Euro'){?>selected<?php }?> value="6 Euro">6 Euro</option>
+                    <option <?php if(($_POST['startgebuehr'] ?? '') == '7 Euro'){?>selected<?php }?> value="7 Euro">7 Euro</option>
+                    <option <?php if(($_POST['startgebuehr'] ?? '') == '8 Euro'){?>selected<?php }?> value="8 Euro">8 Euro</option>
+                    <option <?php if(($_POST['startgebuehr'] ?? '') == '9 Euro'){?>selected<?php }?> value="9 Euro">9 Euro</option>
+                    <option <?php if(($_POST['startgebuehr'] ?? '') == '10 Euro'){?>selected<?php }?> value="10 Euro">10 Euro</option>
+                    <option <?php if(($_POST['startgebuehr'] ?? '') == '11 Euro'){?>selected<?php }?> value="11 Euro">11 Euro</option>
+                    <option <?php if(($_POST['startgebuehr'] ?? '') == '12 Euro'){?>selected<?php }?> value="12 Euro">12 Euro</option>
+                    <option <?php if(($_POST['startgebuehr'] ?? '') == '13 Euro'){?>selected<?php }?> value="13 Euro">13 Euro</option>
+                    <option <?php if(($_POST['startgebuehr'] ?? '') == '14 Euro'){?>selected<?php }?> value="14 Euro">14 Euro</option>
+                    <option <?php if(($_POST['startgebuehr'] ?? '') == '15 Euro'){?>selected<?php }?> value="15 Euro">15 Euro</option>
                 </select>
             <?php } //end if?>
         </p>

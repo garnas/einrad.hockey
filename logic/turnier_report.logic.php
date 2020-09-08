@@ -16,6 +16,9 @@ if(strtotime($akt_turnier->daten['datum']) - Config::time_offset() < -3*24*60*60
     }
 }
 
+if($change_tbericht){
+    Form::attention("Der Turnierreport ist für andere Ligateams der Deutschen Einradhockeyliga einsehbar.");
+}
 $tbericht = new TurnierReport ($turnier_id);
 //db::debug($akt_turnier->get_liste_spielplan());
 

@@ -203,12 +203,6 @@ function modal(turnier_id){
                             <?php if ($phase_spielplan ?? false){?>
                                 <p><?=Form::link($turnier['link_spielplan'] ?: ('../liga/spielplan.php?turnier_id=' . $turnier['turnier_id']), '<i class="material-icons">reorder</i> Zum Spielplan')?></p>
                             <?php } //endif?>
-                            <?php if (isset($_SESSION['la_id'])){?>
-                                <p><?=Form::link('../ligacenter/lc_turnier_bearbeiten.php?turnier_id=' . $turnier['turnier_id'], 'Turnier bearbeiten (Ligaausschuss)')?></p>
-                                <p><?=Form::link('../ligacenter/lc_team_anmelden.php?turnier_id=' . $turnier['turnier_id'], 'Teams anmelden (Ligaausschuss)')?></p>
-                                <p><?=Form::link('../ligacenter/lc_turnier_log.php?turnier_id=' . $turnier['turnier_id'], 'Turnierlog einsehen (Ligaausschuss)')?></p>
-                                <p><?=Form::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">article</i> Zum Turnierreport (Ligaausschuss)')?></p>
-                            <?php } //endif?>
                             <?php if (isset($_SESSION['team_id'])){?>
                                 <p><?=Form::link('../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">how_to_reg</i> Zur Anmeldeseite')?></p>
                                 <p><?=Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">article</i> Zum Turnierreport')?></p>
@@ -217,6 +211,12 @@ function modal(turnier_id){
                             <?php } //endif?>
                             <?php if (($_SESSION['team_id'] ?? '') == $turnier['ausrichter']){?>
                                 <p><?=Form::link('../teamcenter/tc_turnier_bearbeiten.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">create</i> Turnier als Ausrichter bearbeiten')?></p>
+                            <?php } //endif?>
+                            <?php if (isset($_SESSION['la_id'])){?>
+                                <p><?=Form::link('../ligacenter/lc_turnier_bearbeiten.php?turnier_id=' . $turnier['turnier_id'], 'Turnier bearbeiten (Ligaausschuss)')?></p>
+                                <p><?=Form::link('../ligacenter/lc_team_anmelden.php?turnier_id=' . $turnier['turnier_id'], 'Teams anmelden (Ligaausschuss)')?></p>
+                                <p><?=Form::link('../ligacenter/lc_turnier_log.php?turnier_id=' . $turnier['turnier_id'], 'Turnierlog einsehen (Ligaausschuss)')?></p>
+                                <p><?=Form::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">article</i> Zum Turnierreport (Ligaausschuss)')?></p>
                             <?php } //endif?>
                     </div>
                 </div>

@@ -99,7 +99,7 @@ include '../../templates/header.tmp.php';
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-striped">
         <tr style="white-space: nowrap;">
-            <td class="w3-primary" style="vertical-align: middle; max-width: 100px;"><i class="material-icons">map</i> Adresse</td>
+            <td class="w3-primary" style="vertical-align: middle; width: 100px;"><i class="material-icons">map</i> Adresse</td>
             <td>
                 <?=$daten['hallenname']?><br>
                 <?=$daten['strasse']?><br>

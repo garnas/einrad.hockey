@@ -1,5 +1,6 @@
 <h1 class="w3-text-primary"><?=date("d.m.Y", strtotime($akt_turnier->daten['datum']))?> <?=$akt_turnier->daten['ort']?> <i>(<?=$akt_turnier->daten['tblock']?>)</i></h1>
 <h2 class="w3-text-grey"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">article</i> Turnier-Report</h2>
+
 <!-- LINK TURNIERREPORT -->
 <p><?=Form::link('../liga/spielplan.php?turnier_id=' . $turnier_id, '<i class="material-icons">reorder</i> Zum Spielplan')?></p>
 
@@ -75,7 +76,7 @@
 <?php }//endif?>
 
 <!-- Spielerausleihe hinzufügen -->
-<?php if($change_tbericht){ ?>
+<?php if($change_tbericht){ ?> 
     <button onclick="document.getElementById('modal_ausleihe').style.display='block'" class="w3-section w3-button w3-tertiary">Spielerausleihe hinzufügen</button>
     <div id="modal_ausleihe" class="w3-modal">
         <form method="post" class="w3-card-4 w3-panel w3-round w3-container w3-modal-content">

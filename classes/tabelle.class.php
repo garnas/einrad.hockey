@@ -7,7 +7,7 @@ class Tabelle {
         $result = db::readdb($sql);
         while ($turnier =  mysqli_fetch_assoc($result)){
             if ($turnier['phase'] != 'ergebnis'){
-                return $turnier['spieltag'];
+                return db::escape($turnier['spieltag']);
             }
             $max_spieltag = $turnier['spieltag'];
         }
@@ -66,7 +66,7 @@ class Tabelle {
         $key = array_search($team_id, array_column($GLOBALS['rang_tabelle'][$spieltag], 'team_id')); //$key = false, wenn nicht gefunden, ansonsten Position
         // 0 wird aber auch als false interpretiert, deswegen is_numeric und nicht ($key)
         if (is_numeric($key)){ 
-            $platz=$GLOBALS['rang_tabelle'][$spieltag][$key]['platz'];
+            $platz = $GLOBALS['rang_tabelle'][$spieltag][$key]['platz'];
             return $platz;
         }else{
             return 'NL';

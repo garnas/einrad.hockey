@@ -17,7 +17,7 @@ if (isset($ligacenter) or isset($teamcenter)){
         die();
     }
     if ($teamcenter && Config::time_offset() - strtotime($spielplan->akt_turnier->daten['datum']) > 48*60*60){
-        Form::error("Bitte wende dich an den Ligaausschuss um Ergebnisse nachträglich einzutragen.");
+        Form::error("Bitte wende dich an den Ligaausschuss um Ergebnisse nachträglich zu verändern.");
         header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
         die();
     }
