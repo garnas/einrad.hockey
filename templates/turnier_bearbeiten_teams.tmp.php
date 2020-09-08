@@ -28,7 +28,7 @@
         <?php } //endif?>
         <?php if (!$blockhoch && !$blockfrei){?> Turnierblock kann nicht erweitert werden. <?php if ($daten['phase'] == 'offen'){?> <i class="w3-text-grey">(Turniere können ab der Meldephase erweitert werden)</i><?php }/*Phase*/ }/*$block*/?>
         <p>
-            <label class="w3-text-primary" for="plaetze">Plaetze</label>
+            <label class="w3-text-primary" for="plaetze">Plätze</label>
             <select required class="w3-select w3-border w3-border-primary" id="plaetze" name="plaetze">
             <option <?php if($daten['plaetze'] == '4'){?>selected<?php }elseif($teamcenter){?>disabled<?php }?> value="4">4 Teams (nur in Absprache mit dem Ligaausschuss)</option>
                 <option <?php if($daten['plaetze'] == '5'){?>selected<?php }?> value="5">5 Teams</option>
