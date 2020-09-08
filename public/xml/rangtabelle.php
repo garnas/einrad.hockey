@@ -8,16 +8,15 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 $rang_tabelle = tabelle::get_rang_tabelle(5);
 db::debug($rang_tabelle);
 
-//Datum-Umwandlung auf Deutsch:
-//strtotime erstellt aus einem String eine Unix-Zeit
-$datum = strftime("%A, %d.%m.%Y %H:%M&nbsp;Uhr", strtotime("2020-11-12"));
+$xml = new SimpleXMLElement('<xml/>');
+
+xml::array_to_xml($rang_tabelle,$xml);
+
+Header('Content-type: text/xml');
+print($xml->asXML());
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-include '../../templates/header.tmp.php';
-?>
-<h1>Oben werden Beispiel Arrays dargestellt</h1>
-<p>Beispieldatum: <?=$datum?></p>
 
-<?php include '../../templates/footer.tmp.php';
+?>
