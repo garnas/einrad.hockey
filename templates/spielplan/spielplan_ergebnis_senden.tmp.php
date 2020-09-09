@@ -1,6 +1,6 @@
 <form method="post">
     <?php if($spielplan->akt_turnier->daten['phase'] == 'ergebnis'){?>
-        <p class="w3-text-green">Dem Ligaausschuss liegt ein Turnierergebniss vor. Durch erneutes Speichern kann das Turnierergebnis verändert werden.</p>
+        <p class="w3-text-green">Dem Ligaausschuss liegt ein Turnierergebnis vor. Durch erneutes Speichern kann das Turnierergebnis verändert werden.</p>
     <?php }//endif?>
     <?php if($spielplan->akt_turnier->daten['phase'] != 'ergebnis'){?>
         <p class="w3-text-grey">Dem Ligaausschuss liegt noch kein Turnierergebnis vor.</p>
