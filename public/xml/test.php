@@ -16,7 +16,7 @@ db::debug($turnieranmeldungen);
 
 
 //Assoziatives Array der Rangtabelle
-$rang_tabelle = tabelle::get_rang_tabelle(5);
+$rang_tabelle = tabelle::get_rang_tabelle(Tabelle::get_aktuellen_spieltag()-1);
 db::debug($rang_tabelle);
 
 //Datum-Umwandlung auf Deutsch:

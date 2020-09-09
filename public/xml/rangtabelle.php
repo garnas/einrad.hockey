@@ -4,13 +4,12 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 
-//Assoziatives Array aller Teamdaten
-$rang_tabelle = tabelle::get_rang_tabelle(5);
-db::debug($rang_tabelle);
+//Assoziatives Array der Rangtabelle
+$rang_tabelle = tabelle::get_rang_tabelle(Tabelle::get_aktuellen_spieltag()-1);
 
-$xml = new SimpleXMLElement('<xml/>');
+$xml = new SimpleXMLElement('<rangtabelle/>');
 
-xml::array_to_xml($rang_tabelle,$xml);
+xml::array_to_xml($rang_tabelle, $xml, "platz");
 
 Header('Content-type: text/xml');
 print($xml->asXML());
@@ -18,5 +17,3 @@ print($xml->asXML());
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-
-?>
