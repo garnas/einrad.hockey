@@ -3,10 +3,15 @@
 class xml
 {
     //function defination to convert array to xml
-    public static function array_to_xml($array, &$xml, $ebene1, $ebene3="node")
+    public static function array_to_xml($array, $xml, $ebene1="node1", $ebene3="node3")
     {
         foreach ($array as $key1 => $value1) {
-            $subnode1 = $xml->addChild("$ebene1");
+            if ($ebene1=="meldungen") {
+                $subnode1 = $xml->addChild("turnier_id_$key1");
+            } else {
+                $subnode1 = $xml->addChild("$ebene1");
+            }
+
             if (is_array($value1)) {
                 foreach ($value1 as $key2 => $value2) {
                     if (is_array($value2)) {
@@ -41,6 +46,10 @@ class xml
                         }
                     }
                 }
+                if ($ebene1=="platz") {
+                    $block = Tabelle::platz_to_block($subnode1->platz);
+                    $subnode1->addChild("block", htmlspecialchars("$block"));
+                }
             } else {
                 if (is_numeric($key1)) {
                     $xml->addChild("_$key1", htmlspecialchars("$value1"));
@@ -49,5 +58,7 @@ class xml
                 }
             }
         }
+        Header('Content-type: text/xml');
+        print($xml->asXML());
     }
 }
