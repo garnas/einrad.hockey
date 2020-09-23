@@ -1,6 +1,6 @@
 <!-- ABSCHLUSSTABELLE -->
 <div class="w3-hide-large w3-hide-medium">
-    <h3 class="w3-text-secondary w3-margin-top">Abschlusstabelle</h3>
+    <h3 class="w3-text-secondary w3-margin-top">Tabelle</h3>
     <div class="w3-responsive w3-card">
         <table class="w3-table <?php if($teamcenter && $akt_turnier->daten['phase'] == 'ergebnis'){?>w3-pale-green<?php }else{?>w3-striped<?php }//endif?>" style="white-space: nowrap;">
             <tr class="w3-primary">
