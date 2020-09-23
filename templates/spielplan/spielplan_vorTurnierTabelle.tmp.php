@@ -43,3 +43,6 @@
         <?php }//end foreach?>
     </table>
 </div>
+<?php if(array_search('NL', array_column($teamliste, 'tblock')) != false){ ?>
+    <p class="w3-text-grey w3-small">* Nichtligateam</p>
+<?php } //endif?>
