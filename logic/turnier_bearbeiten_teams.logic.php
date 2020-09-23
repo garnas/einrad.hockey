@@ -1,6 +1,6 @@
 <?php
 //Kann das Turnier erweitert werden?
-if ($akt_turnier->daten['phase'] == 'melde' && strlen($akt_turnier->daten['tblock']) < 3 && $akt_turnier->daten['tblock'] != 'AB' && ($akt_turnier->daten['art'] == 'I' or $akt_turnier->daten['art'] == 'II')){
+if ($akt_turnier->daten['phase'] == 'melde' && strlen($akt_turnier->daten['tblock']) < 3 && $akt_turnier->daten['tblock'] != 'AB' && $akt_turnier->daten['tblock'] != 'A' && ($akt_turnier->daten['art'] == 'I' or $akt_turnier->daten['art'] == 'II')){
     $blockhoch = true;
 }else{
     $blockhoch = false;

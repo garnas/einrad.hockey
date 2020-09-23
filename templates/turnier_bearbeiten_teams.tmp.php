@@ -17,13 +17,13 @@
         <?php if ($blockhoch){ // = true wenn Block erweiterbar ist, aus turnier_details_bearbeiten.logic.php?>
         <p>
         <input type="checkbox" value="<?=Config::BLOCK_ALL[array_search($daten['tblock'], Config::BLOCK_ALL)-1]?>" class="w3-check" id="block_erweitern" name="block_erweitern">
-        <label class="" for="block_erweitern">Turnierblock erweitern auf <?=Config::BLOCK_ALL[array_search($daten['tblock'], Config::BLOCK_ALL)-1]?></label>
+        <label class="w3-text-primary w3-hover-text-secondary" style="cursor: pointer;" for="block_erweitern">Turnierblock erweitern auf <?=Config::BLOCK_ALL[array_search($daten['tblock'], Config::BLOCK_ALL)-1]?></label>
         </p>
         <?php } //endif?>
         <?php if ($blockfrei){ // = true wenn Block auf ABCDEF erweiterbar ist, aus turnier_details_bearbeiten.logic.php?>
         <p>
         <input type="checkbox" value="ABCDEF" class="w3-check" id="block_frei" name="block_frei">
-        <label class="" for="block_frei">Turnierblock erweitern auf ABCDEF</label>
+        <label class="w3-text-primary w3-hover-text-secondary" style="cursor: pointer;" for="block_frei">Turnierblock erweitern auf ABCDEF</label>
         </p>
         <?php } //endif?>
         <?php if (!$blockhoch && !$blockfrei){?> Turnierblock kann nicht erweitert werden. <?php if ($daten['phase'] == 'offen'){?> <i class="w3-text-grey">(Turniere können ab der Meldephase erweitert werden)</i><?php }/*Phase*/ }/*$block*/?>
