@@ -31,7 +31,7 @@ foreach ($turniere as $turnier_id => $turnier){
     }
     if ($turnier['phase'] == 'spielplan'){
         array_push($turniere[$turnier_id]['links'], Form::link('../teamcenter/tc_spielplan.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">reorder</i> Ergebnisse eintragen'));
-        array_push($turniere[$turnier_id]['links'], Form::link('../teamcenter/tc_turnierreport.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">article</i> Turnierreport eintragen'));
+        array_push($turniere[$turnier_id]['links'], Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">article</i> Turnierreport eintragen'));
         $turniere[$turnier_id]['row_color'] = 'w3-pale-yellow';
     }
     if ($turnier['phase'] == 'ergebnis'){
