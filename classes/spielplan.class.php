@@ -26,7 +26,7 @@ class Spielplan{
     }
 
     function create_spielplan_jgj()
-    {
+    {   
         //TESTEN OB SPIELE SCHON EXISTIEREN
         $sql="SELECT * FROM spiele WHERE turnier_id = '$this->turnier_id'";
         $result = db::readdb($sql);
@@ -39,7 +39,6 @@ class Spielplan{
             $result = db::readdb($sql);
             $sqlinsert="";
             $sqlinsert="INSERT INTO spiele VALUES ";
-
             while($spiel=mysqli_fetch_assoc($result)){
                 $sqlinsert= $sqlinsert."(" .$this->turnier_id.",". $spiel["spiel_id"].", " .
                 $this->teamliste[intval($spiel["team_a"])]["team_id"].",".
@@ -97,11 +96,13 @@ class Spielplan{
         //benachbareten Teams festgestellt, dann haben die Teams von index bis i (inklusiv) 
         //gleich viele Punkte und müssen in den Direktvergleich (sort_teams)
         $index=0;
+        ////db::debug($daten);
         for ($i=0;$i<$this->anzahl_teams-1;$i++){
             if($daten[$i]["punkte"]==$daten[$i+1]["punkte"]){
                 $index=$index;
             }elseif($i!=$index){
                  //sortiere teams index bis i
+                 echo "sort Teams von ".$index." bis ".$i." <br>";
                 $daten=$this->sort_teams($daten,$index,$i);
                 
                 $index=$i+1;
@@ -182,6 +183,7 @@ class Spielplan{
             array_push($teams, $daten[$number]["team_id_a"]);
         }
         $subdaten=$this->sqlQuery(TRUE,$teams);
+        //db::debug($subdaten);
         //Teamname hinzufügen
         for($i=0;$i<sizeof($subdaten);$i++){
             $subdaten[$i]["teamname"]=$this->getTeamnameByTeamID($subdaten[$i]["team_id_a"]);
@@ -213,20 +215,25 @@ class Spielplan{
                      $subdaten[$i]["penalty_diff"]==$subdaten[$i+1]["penalty_diff"]&&
                      $subdaten[$i]["penaltytore"]==$subdaten[$i+1]["penaltytore"]){
                     $index=$index;
+                    //echo "sort teams in for schleife case: Gleichwertige Teams <br>";
                 }elseif($i!=$index){
+                    //echo "sort teams in for schleife case: Gleichwertige Teams ueber aktuellem Team(inklusive) <br>";
                     //im direktvergleich ist wieder Gleichheit aufgetreten -> erneuter direkter Vergleich
                     //so drehen dass die gleichen Teams an der richtigen Stelle im sub array stehen
+                    //echo "sort teams <br> im direktvergleich ist wieder Gleichheit aufgetreten <br>";
                     for($j=0;$j<$i-$index+1;$j++){
                         //echo "<br> tauschen <br>";
                         $in=$this->getDatenIndexByTeamID($daten,$subdaten[$index+$j]["team_id_a"]);
-                        $ex=$index+$j;
+                        $ex=$index+$j+$begin;
                         $temp=$daten[$ex];
                         $daten[$ex]=$daten[$in];
                         $daten[$in]=$temp;
                     }
-                    $daten=$this->sort_teams($daten,$index,$i);
+                    //echo "sort teams ".$daten[$index]["teamname"]." und ".$daten[$i]["teamname"];
+                    $daten=$this->sort_teams($daten,$index+$begin,$i+$begin);
                     $index=$i+1;
                 }else{
+                    //echo "sort teams in for schleife case: nicht Gleichwertige Teams <br>";
                     //aktueller Wert(Punkte, Diff, geschossene Tore) ist anders als Wert davor und danach
                     $index=$index+1;
                     //swapen
@@ -241,8 +248,13 @@ class Spielplan{
                 } 
             }
             //evtl letzten Gleich
+            //echo "sort teams - Testen ob letzte Teams gleiche Punktzahl haben<br>";
+            //echo "i: ".$i."  index: ".$index."<br>";
             if($i!=$index){ //TODO zaehlt php for nach ende noch eins weiter -> Ja
-                $daten=$this->sort_teams($daten,$index,$i);
+                //echo "sort teams <br> im direktvergleich ist wieder Gleichheit aufgetreten <br>";
+                //echo "sort teams ".$daten[$index+$begin]["teamname"]." und ".$daten[$i+$begin]["teamname"];
+                $daten=$this->sort_teams($daten,$index+$begin,$i+$begin);
+
             }
         }
         return db::escape($daten);
@@ -344,7 +356,7 @@ class Spielplan{
         $daten=[];
         $startzeit=new DateTime($this->akt_turnier->daten["startzeit"]);
         $zeiten=$this->getSpielzeiten();
-        //db::debug($zeiten)
+        //////db::debug($zeiten)
         $min=$zeiten["anzahl_halbzeiten"]*$zeiten["halbzeit_laenge"]+$zeiten["pause"];
         $startzeit->sub(date_interval_create_from_date_string($min.' minutes'));
         
