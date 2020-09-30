@@ -5,7 +5,7 @@
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped ">
             <tr class="w3-primary">
-                <th class="w3-center">Zeit</th>
+                <th class="w3-center">Beginn</th>
                 <th colspan="3" class="w3-center">Schiri</th>
                 <th>Team 1</th>
                 <th>Team 2</th>

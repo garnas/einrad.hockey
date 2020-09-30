@@ -1,11 +1,12 @@
 <!-- SPIELE -->
 <div class="w3-hide-small">
     <h3 class="w3-text-secondary w3-margin-top">Spiele</h3>
+    <p class='w3-text-grey'>Spielergebnisse müssen zusätzlich schriftlich festgehalten werden.</p>
     <form method="post">
         <div class="w3-responsive w3-card">
             <table class="w3-table w3-striped" style="white-space: nowrap;">
                 <tr class="w3-primary">
-                    <th class="w3-center">Zeit</th>
+                    <th class="w3-center">Beginn</th>
                     <th colspan="3" class="w3-center">Schiri</th>
                     <th>Team 1</th>
                     <th>Team 2</th>
@@ -73,7 +74,6 @@
             </table>
         </div>
         <p><input type="submit" name="gesendet_tur" class="w3-block w3-button w3-tertiary" value="Spiele zwischenspeichern"></p>
-        <p class='w3-text-grey'>Spielergebnisse sollten zusätzlich schriftlich festgehalten werden</p>
     </form>
     <p class="w3-text-red"><?=$penalty_warning?></p>
 </div>

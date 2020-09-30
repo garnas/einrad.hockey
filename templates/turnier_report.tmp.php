@@ -184,7 +184,7 @@
                 <label for="zeitstrafe_bericht">Grund <i>(kurz)</i></label>
                 <textarea class="w3-input w3-border w3-border-primary" onkeyup="woerter_zaehlen(300, 'zeitstrafe_bericht','zeitstrafe_counter');" maxlength="300" rows="3" id="zeitstrafe_bericht" name="zeitstrafe_bericht" required><?=stripcslashes($_POST['text'] ?? '')?></textarea>
                 <p id="zeitstrafe_counter"></p>
-                <span class="w3-text-grey">Eine detailierte Beschreibung der Situation sollte gegebenenfalls in den Turnierbericht aufgenommen werden.</span>  
+                <span class="w3-text-grey">Eine detailierte und neutrale Beschreibung der Situation sollte gegebenenfalls in den Turnierbericht aufgenommen werden.</span>  
             </p>
             <p>
                 <input type="submit" name="new_zeitstrafe" value="Hinzufügen" class="w3-button w3-tertiary">
@@ -203,7 +203,7 @@
         </p>
         <p>
             <label for="spieler_id">Turnierbericht</label>
-            <textarea class="w3-input w3-border w3-border-primary" onkeyup="woerter_zaehlen(1500, 'turnierbericht', 'turnierbericht_counter');" maxlength="1500" placeholder="Wie war das Turnier? Besondere Vorkomnisse, wie zum Beispiel die Verspätung eines Teams, können hier eingetragen werden." rows="12" id="turnierbericht" name="turnierbericht"><?=stripcslashes($_POST['text'] ?? '')?><?=$tbericht->get_turnier_bericht()?></textarea>
+            <textarea class="w3-input w3-border w3-border-primary" onkeyup="woerter_zaehlen(1500, 'turnierbericht', 'turnierbericht_counter');" maxlength="1500" placeholder="Wie war das Turnier? Besondere Vorkomnisse werden hier vermerkt." rows="12" id="turnierbericht" name="turnierbericht"><?=stripcslashes($_POST['text'] ?? '')?><?=$tbericht->get_turnier_bericht()?></textarea>
             <p id="turnierbericht_counter"><p>
         </p>
         <input type="submit" value="Speichern" name="set_turnierbericht" class="w3-button w3-tertiary">

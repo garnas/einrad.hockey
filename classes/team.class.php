@@ -16,7 +16,7 @@ class Team {
         $passwort = password_hash($passwort, PASSWORD_DEFAULT);
 
         //Teamids werden über die Sql-Funktion auto increment vergeben
-        $team_id=db::get_auto_increment("teams_liga");
+        $team_id = db::get_auto_increment("teams_liga");
 
         $sql="INSERT INTO teams_liga (teamname, passwort, freilose) VALUES ('$teamname','$passwort',2)";
         db::writedb($sql);
