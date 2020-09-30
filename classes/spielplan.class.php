@@ -102,7 +102,7 @@ class Spielplan{
                 $index=$index;
             }elseif($i!=$index){
                  //sortiere teams index bis i
-                 echo "sort Teams von ".$index." bis ".$i." <br>";
+                 //echo "sort Teams von ".$index." bis ".$i." <br>";
                 $daten=$this->sort_teams($daten,$index,$i);
                 
                 $index=$i+1;
