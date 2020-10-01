@@ -25,5 +25,5 @@ if (!empty($spielplan->penalty_warning)){
 //Hinweis Kaderkontrolle und Turnierreport
 $turnier_report = new TurnierReport($turnier_id);
 if (!$turnier_report->kader_check()){
-    Form::affirm("Bitte kontrolliert die Teamkader und setzt im " . Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, 'Turnierreport') . " das entsprechende Häckchen.");
+    Form::affirm("Bitte kontrolliert die Teamkader und setzt im " . Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, 'Turnierreport') . " das entsprechende Häkchen.");
 }
