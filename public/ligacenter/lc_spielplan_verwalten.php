@@ -68,7 +68,7 @@ if(isset($_POST['auto_spielplan_erstellen'])){
     if ($akt_turnier->daten['phase'] == 'melde' && 3 < count($teamliste) && count($teamliste) < 8){
         $akt_turnier->set_phase('spielplan');
         $akt_turnier->schreibe_log('Phase -> Spielplan, Automatischer Spielplan', 'Ligaausschuss');
-        Form::affirm("Das Turnier in die Spielplan-Phase versetzt. Der dynamische Spielplan wird jetzt angezeigt.");
+        Form::affirm("Das Turnier wurde in die Spielplan-Phase versetzt. Der dynamische Spielplan wird jetzt angezeigt.");
         header('Location: ../liga/spielplan.php?turnier_id=' . $akt_turnier->daten['turnier_id']);
         die();
     }else{
