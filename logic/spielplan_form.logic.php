@@ -1,6 +1,6 @@
 <?php
 //eingetragene Tore speichern falls vorher eingetragen
-if(isset($_POST["gesendet_tur"])){
+if(isset($_POST["gesendet_tur_oben"]) or isset($_POST["gesendet_tur_unten"])){
     for($i=0;$i<$spielplan->get_anzahl_spiele();$i++){
         $spielplan->update_spiel($i+1,$_POST["toreAPOST"][$i],$_POST["toreBPOST"][$i],$_POST["penAPOST"][$i],$_POST["penBPOST"][$i]);
     }

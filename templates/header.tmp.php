@@ -50,7 +50,7 @@
                 ?>
                 <?php //Fehlermeldungen darstellen 
                 Form::schreibe_errors();
-                Form::schreibe_affirms();
                 Form::schreibe_attentions();
+                Form::schreibe_affirms();
             
             

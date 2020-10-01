@@ -3,6 +3,7 @@
     <h3 class="w3-text-secondary w3-margin-top">Spiele</h3>
     <p class='w3-text-grey'>Spielergebnisse müssen zusätzlich schriftlich festgehalten werden.</p>
     <form method="post">
+    <p><input type="submit" name="gesendet_tur_oben" class="w3-block w3-button w3-tertiary" value="Spiele zwischenspeichern"></p>
         <div class="w3-responsive w3-card">
             <table class="w3-table w3-striped" style="white-space: nowrap;">
                 <tr class="w3-primary">
@@ -80,6 +81,6 @@
                 <?php }//end foreach?>
             </table>
         </div>
-        <p><input type="submit" name="gesendet_tur" class="w3-block w3-button w3-tertiary" value="Spiele zwischenspeichern"></p>
+        <p><input type="submit" name="gesendet_tur_unten" class="w3-block w3-button w3-tertiary" value="Spiele zwischenspeichern"></p>
     </form>
 </div>
