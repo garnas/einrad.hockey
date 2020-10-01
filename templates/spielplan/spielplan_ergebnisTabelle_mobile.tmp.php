@@ -12,9 +12,9 @@
             </tr>
             <?php foreach ($tabelle as $index => $table){?>
                 <tr>
-                    <td class="w3-center"><?=$index+1?></td>
+                    <td class="w3-center"><?php if($show_turnierergebnis){?><?=$index+1?><?php }else{?>--<?php }?></td>
                     <td><?=$table["teamname"]?></td>
-                    <td class="w3-center"><?=$table["ligapunkte"]?></td>
+                    <td class="w3-center"><?php if($show_turnierergebnis){?><?=$table["ligapunkte"]?><?php }else{?>--<?php }?></td>
                 </tr>
             <?php }//end foreach?>
         </table>
