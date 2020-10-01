@@ -13,7 +13,7 @@
                     <th>Penalty</th>
                 </tr>
                 <?php foreach ($spielliste as $index => $spiel){?>
-                    <tr <?php if (!is_null($spiel["tore_b"]) && !is_null($spiel["tore_b"])){?>class="w3-pale-green w3-opacity"<?php }//endif?>>
+                    <tr <?php if (!is_null($spiel["tore_b"]) && !is_null($spiel["tore_b"])){?>class="w3-pale-green"<?php }//endif?>>
                         <td class="w3-center"><?=$spiel["zeit"]?></td>
                         <td class="w3-center">
                             <span class="w3-tooltip">
@@ -82,5 +82,4 @@
         </div>
         <p><input type="submit" name="gesendet_tur" class="w3-block w3-button w3-tertiary" value="Spiele zwischenspeichern"></p>
     </form>
-    <p class="w3-text-red"><?=$penalty_warning?></p>
 </div>

@@ -17,11 +17,9 @@ if(isset($_POST["gesendet_turnierergebnisse"])){
     die();
 }
 
-$penalty_warning = $spielplan->penalty_warning;
-
 //Hinweis Penalty
-if (!empty($penalty_warning)){
-    Form::attention($penalty_warning);
+if (!empty($spielplan->penalty_warning)){
+    Form::attention($spielplan->penalty_warning);
 }
 
 //Hinweis Kaderkontrolle und Turnierreport

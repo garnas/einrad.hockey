@@ -1,7 +1,8 @@
 <!-- ABSCHLUSSTABELLE -->
 <div class="w3-hide-small">
+    <p class="w3-text-red"><?=$spielplan->penalty_warning?></p>
     <h3 class="w3-text-secondary w3-margin-top">Tabelle</h3>
-    <?php if(!$show_turnierergebnis){?><p class="w3-text-grey">Platzierungen und Ligapunkte werden erstmalig angezeigt, wenn jedes Team mindestens ein Spiel gespielt hat.</p><?php }//endif?>
+    <?php if(!$show_turnierergebnis){?><p class="w3-text-grey">Platzierungen und Ligapunkte werden angezeigt, sobald jedes Team mindestens ein Spiel gespielt hat.</p><?php }//endif?>
    <div class="w3-responsive w3-card">
         <table class="w3-table <?php if(($teamcenter or $ligacenter) && $spielplan->akt_turnier->daten['phase'] == 'ergebnis'){?>w3-pale-green<?php }else{?>w3-striped<?php }//endif?>">
             <tr class="w3-primary">

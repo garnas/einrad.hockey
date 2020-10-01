@@ -189,7 +189,6 @@ class Spielplan{
         return db::escape($daten);
     }
 
-
     function getFaktor(){
         return db::escape($this->getSpielzeiten()["faktor"]);
     }
@@ -235,7 +234,7 @@ class Spielplan{
             //Penalty-Hinweis nur anzeigen, wenn relevant für die Teams
             if ($this->check_penalty_warning($subdaten)){
                 if (!$this->check_alles_gespielt($daten)){
-                    $this->penalty_warning .= "Es könnte ein Penalty-Schießen geben - dies kann sich noch bis zum Ende des Turniers ändern.<br>Eventuelles Penalty-Schießen zwischen ";
+                    $this->penalty_warning .= "Es könnte ein Penalty-Schießen geben - unsere Technik kann dies zum Ende des Turniers sicher angeben.<br><br>Mögliches Penalty-Schießen zwischen ";
                 }else{
                     $this->penalty_warning .= "<b>Penalty-Schießen</b> zwischen";
                 }
@@ -456,10 +455,10 @@ class Spielplan{
                 foreach($daten as $index=>$date){
                     $this->akt_turnier->set_ergebnis($date["team_id_a"], $date["ligapunkte"], $index + 1);
                 }
-                Form::affirm("Turnierergebnisse wurden eingetragen");
+                Form::affirm("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
             }
         }else{
-            Form::error("Es sind noch Spiel- oder Penaltyergebnisse offen. Turnierergebnisse wurden nicht gespeichert.");
+            Form::error("Es sind noch Spiel- oder Penaltyergebnisse offen. Turnierergebnisse wurden nicht übermittelt.");
         }
     }
 
