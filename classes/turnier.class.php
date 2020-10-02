@@ -37,7 +37,7 @@ class Turnier {
 
     //Alle Turnierdaten auf einmal um die Datenbank zu schonen:
     //Format: $return[turnier_id][daten]
-    public static function get_all_turniere($where = '')
+    public static function get_all_turniere($where = '', $asc = 'asc')
     {
         $sql = "SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname FROM turniere_liga 
                 INNER JOIN turniere_details 
@@ -45,7 +45,7 @@ class Turnier {
                 INNER JOIN teams_liga
                 ON teams_liga.team_id = turniere_liga.ausrichter "
                 . $where .
-                 "ORDER BY turniere_liga.datum asc ";
+                 "ORDER BY turniere_liga.datum $asc";
         $result = db::readdb($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)){
@@ -574,5 +574,14 @@ class Turnier {
         db::writedb($sql);
         Ligabot::set_spieltage();
         return true;
+    }
+    public static function get_deleted_turnier_ids(){
+        $sql = "SELECT DISTINCT turnier_id FROM turniere_log WHERE turnier_id NOT IN (SELECT turnier_id FROM turniere_liga)";
+        $result = db::readdb($sql);
+        $turnier_ids = array();
+        while ($x = mysqli_fetch_assoc($result)){
+            array_push($turnier_ids, $x['turnier_id']);
+        }
+        return $turnier_ids;
     }
 }

@@ -20,7 +20,6 @@ if (empty($turniere)){
 
 foreach ($turniere as $turnier_id => $turnier){
     //Links
-    $turniere[$turnier_id]['link_zeile'] = "tc_turnier_bearbeiten.php?turnier_id=".$turnier_id;
     $turniere[$turnier_id]['links'] = 
         array(
             Form::link("tc_turnier_bearbeiten.php?turnier_id=".$turnier_id, '<i class="material-icons">create</i> Turnier bearbeiten'), 
@@ -30,8 +29,8 @@ foreach ($turniere as $turnier_id => $turnier){
         array_push($turniere[$turnier_id]['links'], Form::link('../teamcenter/tc_spassturnier_anmeldung.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">how_to_reg</i> Teams manuell anmelden'));
     }
     if ($turnier['phase'] == 'spielplan'){
-        array_push($turniere[$turnier_id]['links'], Form::link('../teamcenter/tc_spielplan.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">reorder</i> Ergebnisse eintragen'));
-        array_push($turniere[$turnier_id]['links'], Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">article</i> Turnierreport eintragen'));
+        array_push($turniere[$turnier_id]['links'], '<b>' . Form::link('../teamcenter/tc_spielplan.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">reorder</i> Ergebnisse eintragen') . '</b>');
+        array_push($turniere[$turnier_id]['links'], '<b>' . Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier['turnier_id'],'<i class="material-icons">article</i> Turnierreport eintragen') . '</b>');
         $turniere[$turnier_id]['row_color'] = 'w3-pale-yellow';
     }
     if ($turnier['phase'] == 'ergebnis'){
