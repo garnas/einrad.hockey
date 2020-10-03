@@ -44,12 +44,13 @@ foreach ($all_anmeldungen as $turnier_id => $liste){
     $anz_warteliste[$turnier_id] = count($liste['warte'] ?? array());
     $anz_spieleliste[$turnier_id] = count($liste['spiele'] ?? array());
     $anz_meldeliste[$turnier_id] = count($liste['melde'] ?? array());
+
     $freie_plaetze = $daten[$turnier_id]['plaetze'] - $anz_spieleliste[$turnier_id] - $anz_meldeliste[$turnier_id] - $anz_warteliste[$turnier_id];
 
     //Oben rechts Plätze frei
     if ($freie_plaetze > 0){
         $daten[$turnier_id]['plaetze_frei'] = '<span class="w3-text-green">frei</span>';
-    }elseif ($freie_plaetze < 0 && $daten[$turnier_id]['phase'] == 'offen'){
+    }elseif ($freie_plaetze < 0 && $daten[$turnier_id]['phase'] == 'offen' && $daten[$turnier_id]['plaetze'] - $anz_spieleliste[$turnier_id] > 0){
         $daten[$turnier_id]['plaetze_frei'] = '<span class="w3-text-yellow">losen</span>';
     }elseif (($daten[$turnier_id]['plaetze'] - $anz_spieleliste[$turnier_id]) <= 0){
         $daten[$turnier_id]['plaetze_frei'] = '<span class="w3-text-red">voll</span>';
