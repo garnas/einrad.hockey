@@ -92,7 +92,7 @@ if (isset($_POST['change_turnier'])) {
     }
     //////////////////Block erweitern//////////////////
 
-    //Es wurden beide Häckchen gesetzt
+    //Es wurden beide Häkchen gesetzt
     if (isset($_POST['block_frei']) && isset($_POST['block_erweitern'])){
         $error = true;
         Form::error ("Bitte entweder um den nächsthöheren Block oder auf ABCDEF öffnen");

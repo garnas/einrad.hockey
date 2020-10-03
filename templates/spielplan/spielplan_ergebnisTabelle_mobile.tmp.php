@@ -1,8 +1,9 @@
 <!-- ABSCHLUSSTABELLE -->
 <div class="w3-hide-large w3-hide-medium">
     <h3 class="w3-text-secondary w3-margin-top">Tabelle</h3>
+    <?php if(!$show_turnierergebnis){?><p class="w3-text-grey">Platzierungen und Ligapunkte werden angezeigt, sobald jedes Team mindestens ein Spiel gespielt hat.</p><?php }//endif?>
     <div class="w3-responsive w3-card">
-        <table class="w3-table <?php if($teamcenter && $akt_turnier->daten['phase'] == 'ergebnis'){?>w3-pale-green<?php }else{?>w3-striped<?php }//endif?>" style="white-space: nowrap;">
+        <table class="w3-table <?php if(($teamcenter or $ligacenter) && $spielplan->akt_turnier->daten['phase'] == 'ergebnis'){?>w3-pale-green<?php }else{?>w3-striped<?php }//endif?>" style="white-space: nowrap;">
             <tr class="w3-primary">
                 <th class='w3-center'>Pl.</th>
                 <th>Team</th>
@@ -10,9 +11,9 @@
             </tr>
             <?php foreach ($tabelle as $index => $table){?>
                 <tr>
-                    <td class="w3-center"><?=$index+1?></td>
+                    <td class="w3-center"><?php if($show_turnierergebnis){?><?=$index+1?><?php }else{?>--<?php }?></td>
                     <td><?=$table["teamname"]?></td>
-                    <td class="w3-center"><?=$table["ligapunkte"]?></td>
+                    <td class="w3-center"><?php if($show_turnierergebnis){?><?=$table["ligapunkte"]?><?php }else{?>--<?php }?></td>
                 </tr>
             <?php }//end foreach?>
         </table>
@@ -22,7 +23,7 @@
     <div id="tabelle_details_mobile" class="w3-modal">
         <div class="w3-modal-content w3-card-4">
             <div class="w3-responsive w3-card" style="white-space: nowrap;">
-                <table class="w3-table <?php if($teamcenter && $akt_turnier->daten['phase'] == 'ergebnis'){?>w3-pale-green<?php }else{?>w3-striped<?php }//endif?>">
+                <table class="w3-table w3-striped">
                     <tr class="w3-primary">
                         <th>Pl.</th>
                         <th>Team</th>
@@ -35,14 +36,14 @@
                     </tr>
                     <?php foreach ($tabelle as $index => $table){?>
                         <tr>
-                            <td><?=$index+1?></td>
+                            <td><?php if($show_turnierergebnis){?><?=$index+1?><?php }else{?>--<?php }?></td>
                             <td><?=$table["teamname"]?></td>
                             <td class="w3-center"><?=$table["spiele"]?></td>
                             <td class="w3-center"><?=$table["punkte"]?></td>
                             <td class="w3-center"><?=$table["tore"]?></td>
                             <td class="w3-center"><?=$table["gegentore"]?></td>
                             <td class="w3-center"><?=$table["diff"]?></td>
-                            <td class="w3-center"><?=$table["ligapunkte"]?></td>
+                            <td class="w3-center"><?php if($show_turnierergebnis){?><?=$table["ligapunkte"]?><?php }else{?>--<?php }?></td>
                         </tr>
                     <?php }//end foreach?>
                 </table>

@@ -64,7 +64,7 @@ foreach ($all_anmeldungen as $turnier_id => $liste){
 
     if ($daten[$turnier_id]['phase'] == 'spielplan'){
             $daten[$turnier_id]['phase'] = Form::link($daten[$turnier_id]['link_spielplan'] ?: ('spielplan.php?turnier_id=' . $turnier_id), 'Spielplan');
-            $phase_spielplan = true;
+            $daten[$turnier_id]['phase_spielplan'] = true;
     }
 
 }
@@ -121,7 +121,7 @@ function modal(turnier_id){
             <!-- Angezeigtes Turnierpanel -->
             <div class='w3-panel'>
                 <div class="w3-center">
-                    <h4 class=''><?=$turnier['datum']?> <span class="w3-text-primary"><?=$turnier['ort']?></span> (<?=$turnier['tblock']?>)</h4> 
+                    <h4 class=''><?=$turnier['datum']?> <span class="w3-text-primary"><?=$turnier['ort']?></span> (<?=$turnier['tblock']?>)</h4>
                     <p class='w3-text-grey'><?=$turnier['tname']?></p>
                 </div>
                 <div style="font-size: 13px;" class="w3-text-grey">
@@ -170,7 +170,7 @@ function modal(turnier_id){
                         </div>
                     </div>
                     <?php if ($turnier['art'] == 'spass'){?>
-                        <p class="w3-text-green">Anmeldung erfolgt beim Ausrichter
+                        <p class="w3-text-green">Anmeldung erfolgt beim Ausrichter</p>
                     <?php } //end if spass?>
                     
                     <!-- Turnierdetails -->
@@ -200,7 +200,7 @@ function modal(turnier_id){
                     <div style="margin-bottom: 24px;">
                         <p class="w3-text-grey w3-border-bottom w3-border-grey">Links</p>
                             <p><?=Form::link('../liga/turnier_details.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">info</i> Alle Turnierdetails')?></p>
-                            <?php if ($phase_spielplan ?? false){?>
+                            <?php if ($turnier['phase_spielplan'] ?? false){?>
                                 <p><?=Form::link($turnier['link_spielplan'] ?: ('../liga/spielplan.php?turnier_id=' . $turnier['turnier_id']), '<i class="material-icons">reorder</i> Zum Spielplan')?></p>
                             <?php } //endif?>
                             <?php if (isset($_SESSION['team_id'])){?>

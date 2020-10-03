@@ -25,6 +25,42 @@ class Spielplan{
         $this->anzahl_teams=sizeof($this->teamliste);
     }
 
+    //Funktion gibt false zurück, wenn beim direkten Vergleich manche Teams noch nicht alle Spiele gespielt haben, sonst true.
+    function check_penalty_warning($subdaten){
+        $turnier_id = $this->turnier_id;
+        foreach ($subdaten as $key => $team_ergebnis){
+            $team_id = $team_ergebnis['team_id_a'];
+            $sql = "SELECT * FROM spiele WHERE turnier_id = '$turnier_id' AND (team_id_a = '$team_id' or team_id_b = '$team_id')";
+            $result = db::readdb($sql);
+            while ($x = mysqli_fetch_assoc($result)){
+                if ($x['tore_a'] === NULL or $x['tore_b'] === NULL){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    //Check, ob alle regulären Spiele beendet worden sind
+    function check_alles_gespielt($daten){
+        foreach ($daten as $team){
+            if ($team['spiele'] < $this->anzahl_teams - 1){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //Check, ob jedes Team ein Team gespielt hat. Wenn ja wird die Platzierung und das Turnierergebnis im Template angezeigt
+    function check_tabelle_einblenden($daten){
+        foreach ($daten as $team){
+            if ($team['spiele'] < 1){
+                return false;
+            }
+        }
+        return true;
+    }
+
     function create_spielplan_jgj()
     {   
         //TESTEN OB SPIELE SCHON EXISTIEREN
@@ -122,7 +158,7 @@ class Spielplan{
         }
         //NL Wertigkeiten ausrechnen
         $daten=$this->setWertigkeitenNL($daten);
-        //Ligapunkte ausrechenen Turnierergebnis
+        //Ligapunkte ausrechnen Turnierergebnis
         $punkte=0;
         $faktor=$this->getFaktor();
         for($i=sizeof($daten)-1;$i>=0;$i--){
@@ -153,7 +189,6 @@ class Spielplan{
         return db::escape($daten);
     }
 
-
     function getFaktor(){
         return db::escape($this->getSpielzeiten()["faktor"]);
     }
@@ -183,7 +218,6 @@ class Spielplan{
             array_push($teams, $daten[$number]["team_id_a"]);
         }
         $subdaten=$this->sqlQuery(TRUE,$teams);
-        //db::debug($subdaten);
         //Teamname hinzufügen
         for($i=0;$i<sizeof($subdaten);$i++){
             $subdaten[$i]["teamname"]=$this->getTeamnameByTeamID($subdaten[$i]["team_id_a"]);
@@ -191,17 +225,24 @@ class Spielplan{
         //alle gleich
         $last=$end-$begin;
         //penalty zwischen allen nötig, evtl. schon stattgefunden
-        if($subdaten[0]["punkte"]==$subdaten[$last]["punkte"]&&
+        if( $subdaten[0]["punkte"]==$subdaten[$last]["punkte"]&&
             $subdaten[0]["diff"]==$subdaten[$last]["diff"]&& 
             $subdaten[0]["tore"]==$subdaten[$last]["tore"]&&
             $subdaten[0]["penalty_points"]==$subdaten[$last]["penalty_points"]&&
             $subdaten[0]["penalty_diff"]==$subdaten[$last]["penalty_diff"]&&
             $subdaten[0]["penaltytore"]==$subdaten[$last]["penaltytore"]){
-            $this->penalty_warning .="Achtung Penalty zwischen";
-            for($i=0;$i<$end-$begin;$i++){
-                $this->penalty_warning .=" ".$subdaten[$i]["teamname"]." und";
+            //Penalty-Hinweis nur anzeigen, wenn relevant für die Teams
+            if ($this->check_penalty_warning($subdaten)){
+                if (!$this->check_alles_gespielt($daten)){
+                    $this->penalty_warning .= "Es könnte ein Penalty-Schießen geben - unsere Technik kann dies zum Ende des Turniers sicher angeben.<br><br>Mögliches Penalty-Schießen zwischen ";
+                }else{
+                    $this->penalty_warning .= "<b>Penalty-Schießen</b> zwischen";
+                }
+                for($i=0;$i<$end-$begin;$i++){
+                    $this->penalty_warning .=" <b>".$subdaten[$i]["teamname"]."</b> und";
+                }
+                $this->penalty_warning .=" <b>".$subdaten[$end-$begin]["teamname"]."</b>!<br><br>";
             }
-            $this->penalty_warning .=" ".$subdaten[$end-$begin]["teamname"]."! <br>";
         }else{
             $index=0;
             for($i=0;$i<$end-$begin;$i++){
@@ -374,7 +415,6 @@ class Spielplan{
         return db::escape($daten);
     }
     
-
     function getSpielzeiten()
     {
         $plaetze = $this->anzahl_teams;
@@ -403,7 +443,7 @@ class Spielplan{
             ORDER BY spiel_id ASC";
         $result = db::readdb($sql);
         $result = mysqli_fetch_assoc($result);
-        if(empty($result) && empty($this->penalty_warning)){
+        if(empty($result) && empty($this->penalty_warning) && $this->check_alles_gespielt($daten)){
             //Testen ob Turnier eingetragen werden darf
             if (!Tabelle::check_ergebnis_eintragbar($this->akt_turnier)){
                 Form::error("Turnierergebnis konnte nicht eingetragen werden. Kontaktiere bitte den Ligaausschuss.");
@@ -415,10 +455,10 @@ class Spielplan{
                 foreach($daten as $index=>$date){
                     $this->akt_turnier->set_ergebnis($date["team_id_a"], $date["ligapunkte"], $index + 1);
                 }
-                Form::affirm("Turnierergebnisse wurden eingetragen");
+                Form::affirm("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
             }
         }else{
-            Form::error("Es sind noch Spiele oder Penaltyergebnisse offen. Turnierergebnisse wurden nicht gespeichert.");
+            Form::error("Es sind noch Spiel- oder Penaltyergebnisse offen. Turnierergebnisse wurden nicht übermittelt.");
         }
     }
 

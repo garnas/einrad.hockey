@@ -49,6 +49,9 @@ $spielliste=$spielplan->get_spiele();
 $spielzeit = $spielplan->getSpielzeiten();
 $spielzeit['dauer'] = $spielzeit['anzahl_halbzeiten']*$spielzeit['halbzeit_laenge'] + $spielzeit['pause'];
 
+//Turniertabelle Plätze und Punkte anzeigen?
+$show_turnierergebnis = $spielplan->check_tabelle_einblenden($tabelle);
+
 //Penalty Anzeigen? //Für Spielplan/Druckanzeige
 $penalty_anzeigen = false;
 foreach($spielliste as $index => $spiel){
