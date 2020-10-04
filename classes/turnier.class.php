@@ -512,7 +512,7 @@ class Turnier {
         $this->daten['spieltag'] = $spieltag;
     }
 
-    function change_turnier_details($startzeit, $besprechung, $plaetze, $spielplan, $hallenname, $strasse, $plz, $ort, $haltestellen = '', $hinweis, $startgebuehr, $name, $handy)
+    function change_turnier_details($startzeit, $besprechung, $plaetze, $spielplan, $hallenname, $strasse, $plz, $ort, $haltestellen, $hinweis, $startgebuehr, $name, $handy)
     {
         $turnier_id = $this->turnier_id;
         $sql=

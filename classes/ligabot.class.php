@@ -53,7 +53,7 @@ class LigaBot {
                 //losen setzt alle Teams in richtiger Reihenfolge auf die Warteliste
                 self::losen($akt_turnier);
                 //füllt die Spielen-Liste auf
-                $akt_turnier->spieleliste_auffuellen("LigaBot", false);
+                $akt_turnier->spieleliste_auffuellen("Ligabot", false);
                 //Info-Mails versenden
                 MailBot::mail_gelost($akt_turnier);
                 //Freie Plätze versenden

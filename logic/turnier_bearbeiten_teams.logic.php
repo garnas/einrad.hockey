@@ -171,7 +171,7 @@ if (isset($_POST['change_turnier'])) {
                 //$mail = true;
             }
             if ($akt_turnier->daten['hinweis'] != $hinweis){
-                $akt_turnier->schreibe_log("Hinweis: " . $akt_turnier->daten['hinweis'] . " -> " . $hinweis, $autor);
+                $akt_turnier->schreibe_log("Hinweis:\r\n" . $akt_turnier->daten['hinweis'] . "\r\n->\r\n" . $hinweis, $autor);
                 //$mail = true;
             }
             if ($akt_turnier->daten['hallenname'] != $hallenname){
@@ -213,12 +213,10 @@ if (isset($_POST['change_turnier'])) {
         }
         if ($mail or $erweitern){
             MailBot::mail_turnierdaten_geaendert($akt_turnier);
-            Form::affirm("Turnierdaten wurden geändert");
-            header ('Location: ../liga/turnier_details.php?turnier_id=' . $akt_turnier->daten['turnier_id']);
-            die();
-        }else{
-            Form::attention("Es wurden keine Daten geändert");
         }
+        Form::affirm("Turnierdaten wurden geändert");
+        header ('Location: ../liga/turnier_details.php?turnier_id=' . $akt_turnier->daten['turnier_id']);
+        die();
     }else{
         Form::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht geändert - alle Änderungen bitte neu eingeben.");
     }
