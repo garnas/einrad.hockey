@@ -175,7 +175,7 @@ class Spielplan{
             while(!is_numeric($daten[$j]["wertigkeit"])&&$j>=0){
                 $j--;
             }
-            $lastNL = $daten[$j]["wertigkeit"] / 2;
+            $lastNL = round($daten[$j]["wertigkeit"] / 2); //Hinzugefügt von Ansgar
             $daten[sizeof($daten)-1]["wertigkeit"] = max (15, $lastNL);
         }
         $max_wertigkeit=$daten[sizeof($daten)-1]["wertigkeit"];
