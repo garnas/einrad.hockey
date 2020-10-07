@@ -234,7 +234,7 @@ class Spielplan{
             //Penalty-Hinweis nur anzeigen, wenn relevant für die Teams
             if ($this->check_penalty_warning($subdaten)){
                 if (!$this->check_alles_gespielt($daten)){
-                    $this->penalty_warning .= "Es könnte ein Penalty-Schießen geben - unsere Technik kann dies zum Ende des Turniers sicher angeben.<br><br>Mögliches Penalty-Schießen zwischen ";
+                    $this->penalty_warning .= "Es könnte ein Penalty-Schießen geben - dies wird zum Ende des Turniers sicher angegeben.<br><br>Mögliches Penalty-Schießen zwischen ";
                 }else{
                     $this->penalty_warning .= "<b>Penalty-Schießen</b> zwischen";
                 }

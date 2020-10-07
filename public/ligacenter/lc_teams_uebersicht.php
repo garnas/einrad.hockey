@@ -70,11 +70,16 @@ include '../../templates/header.tmp.php';
     <p>&sum; Teams mit zwei oder mehr Schiris: <span class="w3-text-green"><?=$teams_mit_zwei_schiris?></span></p>
 </b>
 
-<!-- Button 2. Freilos -->
+<!-- Button 2. Freilos 
 <form class="w3-section" method='post'>
     <input disabled type="submit" name="zweites_freilos" class="w3-button w3-secondary" value="Zweites Freilos vergeben">
-    <span class="w3-text-grey">Es werden Mails an die betroffenen Teams versendet</span>
-</form>
+    <span class="w3-text-grey">Es werden Mails an die betroffenen Teams versendet<br></span>
+</form>-->
+<p><i>Legende:<br>
+    <span class="w3-pale-green">zwei Schiedsrichter im aktuellen Kader</span>
+    <br>
+    <span class="w3-pale-red">zwei nicht zurückgemeldet Schiris</span>
+</i></p>
 
 <!-- Tabelle -->
 <div class="w3-responsive w3-card">

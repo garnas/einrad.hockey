@@ -28,7 +28,7 @@ foreach ($turniere as $turnier_id => $turnier){
     //Links
     $turniere[$turnier_id]['links'] = 
         array(
-            Form::link("tc_team_anmelden.php?turnier_id=".$turnier_id,'<i class="material-icons">how_to_reg</i> ' . $_SESSION['teamname'] . ' an/abmelden'), 
+            Form::link("tc_team_anmelden.php?turnier_id=".$turnier_id,'<i class="material-icons">how_to_reg</i> ' . $_SESSION['teamname'] . ' an/abmelden (Zur Anmeldeseite)'), 
             Form::link("../liga/turnier_details.php?turnier_id=".$turnier_id, '<i class="material-icons">info</i> Zu den Turnierdetails')
         );
         

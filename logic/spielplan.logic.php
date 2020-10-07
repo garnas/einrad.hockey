@@ -12,7 +12,7 @@ if(empty($spielplan->akt_turnier->daten)){
 if (isset($ligacenter) or isset($teamcenter)){
     //Besteht die Berechtigung das Turnier zu bearbeiten? 
     if (($_SESSION['team_id'] ?? false) != $spielplan->akt_turnier->daten['ausrichter'] && !$ligacenter){
-        Form::error("Nur der Ausrichter darf Spielergebnisse eintragen");
+        Form::error("Nur der Ausrichter kann Spielergebnisse eintragen");
         header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
         die();
     }

@@ -1,0 +1,1 @@
+Es wird für den Menü-Hintergrund immer ein zufälliges Bild aus diesem Ordner gewählt.

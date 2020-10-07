@@ -56,7 +56,7 @@
 </form>
 
 <!-- Formular Turnier löschen -->
-<form method="post" onsubmit="return confirm('Das Turnier in am <?=$daten['datum']?> (<?=$daten['tblock']?>) mit der ID <?=$daten['turnier_id']?> wird gelöscht werden.');">
+<form method="post" onsubmit="return confirm('Das Turnier in <?=$daten['ort']?> am <?=$daten['datum']?> (<?=$daten['tblock']?>) mit der ID <?=$daten['turnier_id']?> wird gelöscht werden.');">
     <div class="w3-panel w3-card-4">
         <p>
             <input type="submit" value="Turnier löschen" name="delete_turnier" class="w3-secondary w3-button w3-block">
