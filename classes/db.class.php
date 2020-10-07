@@ -11,7 +11,7 @@ class db {
   {
     self::$link = new mysqli(Config::HOST_NAME, Config::USER_NAME, Config::PASSWORD, $db);
     if (self::$link -> connect_errno) {
-      die('<h2>Verbindung zum MySQL Server fehlgeschlagen: '.mysqli_connect_error().'<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
+      die('<h2>Verbindung zum MySQL Server fehlgeschlagen: '.mysqli_connect_error().'<br><br>Bitte schicke einen Screenshot an <span style="color:red;">' . Config::TECHNIKMAIL . '</span></h2>');
     }
   }
 
@@ -75,7 +75,7 @@ class db {
   public static function readdb($sql)
   {
     if (mysqli_connect_errno()) {
-      die('<h2>Verbindung zum MySQL Server fehlgeschlagen: '.mysqli_connect_error().'<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
+      die('<h2>Verbindung zum MySQL Server fehlgeschlagen: '.mysqli_connect_error().'<br><br>Bitte schicke einen Screenshot an <span style="color:red;">' . Config::TECHNIKMAIL . '</span></h2>');
     }
     return self::$link->query($sql);
   }
@@ -91,7 +91,7 @@ class db {
     if (mysqli_connect_errno()) {
       $error = 'Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error();
       fwrite($log_sql, "\n" . $error);
-      die('<h2>Verbindung zum MySQL Server fehlgeschlagen: '.mysqli_connect_error().'<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
+      die('<h2>Verbindung zum MySQL Server fehlgeschlagen: '.mysqli_connect_error().'<br><br>Bitte schicke einen Screenshot an <span style="color:red;">' . Config::TECHNIKMAIL . '</span></h2>');
     }
 
     if (!self::$link->query($sql) === TRUE) {
@@ -118,15 +118,13 @@ class db {
     return $dumpfile;
   }
 
-  //Schreibt alle deklarierten Variablen ins Dokument //true=1 false=0
-  //Gibt auch das Dokument und Zeile der Variablen aus
+  //Schreibt alle deklarierten Variablen ins Dokument //true=1 false=
   public static function debug($input = "all")
   {
     if ($input == "all"){
       $input = $GLOBALS;
     }
-    $backtrace = debug_backtrace();
-    Form::affirm('<p>File: ' . $backtrace[0]['file'] . '<br>Line: ' . $backtrace[0]['line'] . '</p><pre>' . print_r($input, true) . '</pre>');
+    Form::affirm("<pre>". print_r($input, true) ."</pre>");
   }
 }
 
