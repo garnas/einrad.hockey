@@ -8,6 +8,7 @@
             <th class="w3-primary">Name</th>
             <th class="w3-primary w3-center">J/G</th>
             <th class="w3-primary w3-center">Schiri</th>
+            <?php if($ligacenter){?><th class="w3-primary w3-center">Hinzugefügt am:</th><?php }//endif?>
         </tr>
         </thead>
         <?php foreach($kader as $eintrag){?>
@@ -24,6 +25,7 @@
                 <?php }else{?>
                     <td class='w3-center'></td>
                 <?php } //ende if?>
+                <?php if($ligacenter){?><td class="w3-center"><?=$eintrag['zeit']?></th><?php }//endif?>
             </tr>
         <?php } //Ende foreach?>
     </table>

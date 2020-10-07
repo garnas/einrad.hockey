@@ -55,7 +55,11 @@ class Spieler {
             ORDER BY letzte_saison DESC, vorname ASC";
         $result = db::readdb($sql);
         while ($x = mysqli_fetch_assoc($result)){
+            if (strtotime($x['zeit']) < 0){
+                $x['zeit'] = '--'; //Diese Funktion wurde erst am später hinzugefügt.
+            }
             $return[$x['spieler_id']] = $x;
+
         }
         return db::escape($return ?? array()); //Array 
     }
@@ -72,7 +76,7 @@ class Spieler {
     //Anzahl der Spieler in der Datenbank
     public static function count_spieler()
     {   
-        $saison = Config::SAISON - 1;
+        $saison = Config::SAISON - 1; //Zählt die Spieler welche in dieser oder in der letzten Saison in einem Kader waren
         $sql = "SELECT count(*) FROM spieler WHERE letzte_saison >= '$saison'";
         $result = db::readdb($sql);
         $return = mysqli_fetch_assoc($result);
@@ -82,7 +86,7 @@ class Spieler {
     //Gibt ein Spielerlisten Array aus mit [0] => Vorname Nachname  und [1] => Spieler_id
     public static function get_spielerliste()
     {
-        $sql = "SELECT vorname,nachname,spieler_id  FROM spieler ORDER BY vorname ASC";
+        $sql = "SELECT vorname,nachname,spieler_id FROM spieler ORDER BY vorname ASC";
         $result = db::readdb($sql);
         while ($x = mysqli_fetch_assoc($result)){
             $spielerliste[$x['spieler_id']] = $x['vorname']." ".$x['nachname'];
@@ -104,7 +108,12 @@ class Spieler {
     function set_spieler_detail($entry, $value)
     {
         $spieler_id = $this->spieler_id;
-        $sql = "UPDATE spieler SET $entry = '$value' WHERE spieler_id='$spieler_id'";
+        if ($entry == 'team_id' or $entry == 'letzte_saison'){
+            $zeit = '';
+        }else{
+            $zeit = ', zeit=zeit';
+        }
+        $sql = "UPDATE spieler SET $entry = '$value'$zeit WHERE spieler_id='$spieler_id'";
         db::writedb($sql);
     }
 
