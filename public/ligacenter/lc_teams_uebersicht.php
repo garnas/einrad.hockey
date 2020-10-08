@@ -32,6 +32,7 @@ foreach ($teams as $team_id => $team){
     if ($genug_schiris){$teams_mit_zwei_schiris += 1;}
 }
 
+//Hinzufügen des zweiten Freiloses für zwei Schiris zu Saisonbeginn
 $team_liste = '';
 if (isset($_POST['zweites_freilos'])){
     foreach ($teams as $team_id => $team){

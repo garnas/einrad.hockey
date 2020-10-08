@@ -24,6 +24,7 @@ include '../../templates/header.tmp.php';
     <ul class="w3-ul w3-leftbar w3-border-tertiary">
         <li><?=count(Team::list_of_all_teams())?> Teams mit <?=Spieler::count_spieler()?> Spieler</li>
         <li><?=count(Config::BLOCK)?> Spielstärken (<?=implode(", ", Config::BLOCK)?>)</li>
+        <li><?=Spieler::get_anz_schiris()?> Schiedsrichter</li>
         <li>Saison: <?=Config::SAISON_ANFANG . ' - ' . Config::SAISON_ENDE?></li>
         <li><?=Config::LIGAGEBUEHR?> Ligagebühr</li>
     </ul>

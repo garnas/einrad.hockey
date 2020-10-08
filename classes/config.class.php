@@ -65,6 +65,7 @@ class Config {
     const LAMAIL_ANTWORT = 'la2021@einrad.hockey';
     const TECHNIKMAIL = 'technik@einrad.hockey';
     const SCHIRIMAIL = 'schiri@einrad.hockey';
+    const OEFFIMAIL = 'info@einrad.hockey';
 
     ///////////////////////////////////////////////////////////////
     ///////////////////////Mailversand Server//////////////////////

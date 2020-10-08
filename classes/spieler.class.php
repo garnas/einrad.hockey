@@ -124,4 +124,15 @@ class Spieler {
         $sql = "DELETE FROM spieler WHERE spieler_id='$spieler_id'";
         db::writedb($sql);
     }
+    public static function get_anz_schiris()
+    {   
+        $saison = Config::SAISON;
+        $sql = "SELECT count(*) 
+            FROM `spieler` 
+            INNER JOIN teams_liga 
+            ON teams_liga.team_id = spieler.team_id 
+            WHERE teams_liga.aktiv = 'Ja' 
+            AND CAST(spieler.schiri AS INT) >= '$saison' or spieler.schiri = 'Ausbilder/in'";
+        return mysqli_fetch_assoc(db::readdb($sql))['count(*)'];
+    }
 }

@@ -1,5 +1,6 @@
 <?php
 class Ligaleitung {
+    //Ligaausschuss
     public static function get_all_la()
     {
         $sql="SELECT r_name, team_id, email FROM ausschuss_liga ORDER BY RAND()";
@@ -10,7 +11,7 @@ class Ligaleitung {
         }
         return db::escape($return);
     }
-
+    //Technikausschuss
     public static function get_all_tk()
     {
         $sql="SELECT r_name, team_id FROM ausschuss_technik";
@@ -21,6 +22,29 @@ class Ligaleitung {
         }
         return db::escape($return);
     }
+    //Schiriausschuss
+    public static function get_all_sa()
+    {
+        $sql="SELECT r_name, team_id FROM ausschuss_schiri";
+        $result = db::readdb($sql);
+        $return = array();
+        while ($x = mysqli_fetch_assoc($result)){
+            array_push($return,$x);
+        }
+        return db::escape($return);
+    }
+    //Öffentlichkeitsausschuss
+    public static function get_all_oa()
+    {
+        $sql="SELECT r_name, team_id FROM ausschuss_oeffi";
+        $result = db::readdb($sql);
+        $return = array();
+        while ($x = mysqli_fetch_assoc($result)){
+            array_push($return,$x);
+        }
+        return db::escape($return);
+    }
+    //Liste der Schiriausbilder
     public static function get_all_ausbilder()
     {
         $sql="SELECT vorname, nachname, team_id FROM spieler WHERE schiri = 'Ausbilder/in'";
