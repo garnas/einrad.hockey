@@ -132,7 +132,8 @@ class Spieler {
             INNER JOIN teams_liga 
             ON teams_liga.team_id = spieler.team_id 
             WHERE teams_liga.aktiv = 'Ja' 
-            AND CAST(spieler.schiri AS INT) >= '$saison' or spieler.schiri = 'Ausbilder/in'";
+            AND spieler.schiri >= '$saison' OR spieler.schiri = 'Ausbilder/in'";
+        db::debug($sql);
         return mysqli_fetch_assoc(db::readdb($sql))['count(*)'];
     }
 }
