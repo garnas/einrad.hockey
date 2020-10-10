@@ -6,7 +6,7 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 
 //Honeypot vs Spam
 if (!empty($_POST['cc'] ?? '')){
-    Form::error("Email konnte wegen Spamverdacht nicht versendet werden. Schreib uns bitte an via " . Form::mailto(Config::LAMAIL));
+    Form::error("E-Mail konnte wegen Spamverdacht nicht versendet werden. Schreib uns bitte an via " . Form::mailto(Config::LAMAIL));
     header("Location: kontakt.php");
     die();
 }
@@ -36,7 +36,7 @@ if(isset($_POST['absender'])) {
         //Email-versenden
         if (Config::ACTIVATE_EMAIL){
             if ($mailer->send()){
-                Form::affirm("Email wurde versendet");
+                Form::affirm("Die E-Mail wurde versandt.");
                 $send = true; //Email an den User nur schicken, wenn die Mail an LA rausging
             }else{
                 Form::error("Es ist ein Fehler aufgetreten. E-Mail konnte nicht versendet werden. Manuell versenden: " . Form::mailto(Config::LAMAIL));

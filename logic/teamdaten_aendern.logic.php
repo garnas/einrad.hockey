@@ -61,7 +61,7 @@ if(isset($_POST['neue_email'])) {
 
     if(filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($email)) {
         $akt_team_kontakte->create_new_team_kontakt ($email,$public,$infomail);
-        Form::affirm("Email wurde hinzugefügt");
+        Form::affirm("E-Mail-Adresse wurde hinzugefügt");
         header('Location: ' . db::escape($_SERVER['PHP_SELF']) . $get_var);
         die();
     }else{

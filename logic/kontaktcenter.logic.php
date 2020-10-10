@@ -131,7 +131,7 @@ if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])){
         //Email-versenden
         if (Config::ACTIVATE_EMAIL){
             if ($mailer->send()){
-                Form::affirm("Email wurde versendet");
+                Form::affirm("Die E-Mail wurde versandt.");
                 unset($_SESSION[$list_id]);
                 header('Location: ' . db::escape($_SERVER['PHP_SELF']));
                 die();
@@ -161,7 +161,7 @@ if (isset($_SESSION[$list_id])){
         $tos = $_SESSION[$list_id]['empfaenger'];
     }
     if (empty($_SESSION[$list_id]['emails'])){
-        Form::error("Es wurden keine Email-Adressen gefunden.");
+        Form::error("Es wurden keine E-Mail-Adressen gefunden.");
     }
 }
 
