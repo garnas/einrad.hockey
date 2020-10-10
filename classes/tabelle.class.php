@@ -61,7 +61,6 @@ class Tabelle {
         //Teamblock des relevanten Spieltages, also des Spieltages für den alle Ergebnisse eingetragen sind
         if (!is_numeric($spieltag)){$spieltag = self::get_aktuellen_spieltag() - 1;} //-1, da immer der Spieltag zählt, für den alle Ergebnisse eingetragen sind
         if (!isset($GLOBALS['rang_tabelle'][$spieltag])){ //Rangtabelle muss nicht jedes mal neu berechnet werden müssen
-            db::debug($spieltag);
             $GLOBALS['rang_tabelle'][$spieltag] = Tabelle::get_rang_tabelle($spieltag);
         }
         $key = array_search($team_id, array_column($GLOBALS['rang_tabelle'][$spieltag], 'team_id')); //$key = false, wenn nicht gefunden, ansonsten Position
