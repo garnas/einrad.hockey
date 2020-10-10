@@ -122,7 +122,7 @@ class db {
   //Gibt auch das Dokument und Zeile der Variablen aus
   public static function debug($input = "all")
   {
-    if ($input == "all"){
+    if ($input === "all"){
       $input = $GLOBALS;
     }
     $backtrace = debug_backtrace();
