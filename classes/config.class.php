@@ -12,7 +12,7 @@ class Config {
     ///////////////////////////Saison Jahr/////////////////////////
     ///////////////////////////////////////////////////////////////
 
-    const SAISON = '26'; //Saison Nummer Saison 1 = Saison 1995;
+    const SAISON = '26'; //Saison Nummer Saison 0 = Saison 1995;
     const SAISON_ANFANG = '15.08.2020';
     const SAISON_ENDE = '31.10.2021';
 
