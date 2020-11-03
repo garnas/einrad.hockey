@@ -56,10 +56,10 @@ for ($i = 23; $i < 29; $i++){
 for ($spieltag = $akt_spieltag; $spieltag >= 0; $spieltag--){
     if($spieltag == $gew_spieltag){
         $spieltag_color = 'w3-text-white';
-        $spieltag_button = 'w3-primary';
+        $spieltag_button = 'w3-primary w3-border w3-border-primary';
     }else{
-        $spieltag_color = '';
-        $spieltag_button = 'w3-gray';
+        $spieltag_color = 'w3-text-grey';
+        $spieltag_button = 'w3-light-grey w3-border';
     }
     $spieltag_string = "<span class='$spieltag_color'>$spieltag</span>";
     if($spieltag == $live_spieltag){
@@ -137,9 +137,9 @@ window.onclick = function(event) {
 <!-- Spieltag wählen -->
 <p class="w3-text-grey">Spieltag wählen:<p>
 
-<div class="tab">
+<div class="w3-bar">
     <?php foreach ($spieltage_array as $spieltag_dict){?>
-        <?php echo "<a class='no w3-hover-text-secondary' href='tabelle.php?spieltag={$spieltag_dict[0]}#meister'><button class= 'w3-button {$spieltag_dict['spieltag_button']} w3-hover-primary' type='button'>"?><?=$spieltag_dict["spieltag_string"]?></button></a>
+        <?php echo "<a class='no w3-hover-text-secondary' href='tabelle.php?spieltag={$spieltag_dict[0]}#meister'><button class= 'w3-bar-item w3-button {$spieltag_dict['spieltag_button']} w3-hover-primary' type='button'>"?><?=$spieltag_dict["spieltag_string"]?></button></a>
     <?php } //endforeach?>
 </div>
 
@@ -173,9 +173,9 @@ window.onclick = function(event) {
 <p class="w3-text-grey">Spieltag wählen:<p>
 
 
-<div class="tab">
+<div class="w3-bar">
     <?php foreach ($spieltage_array as $spieltag_dict){?>
-        <?php echo "<a class='no w3-hover-text-secondary' href='tabelle.php?spieltag={$spieltag_dict[0]}#rang'><button class= 'w3-button {$spieltag_dict['spieltag_button']} w3-hover-primary' type='button'>"?><?=$spieltag_dict["spieltag_string"]?></button></a>
+        <?php echo "<a class='no w3-hover-text-secondary' href='tabelle.php?spieltag={$spieltag_dict[0]}#rang'><button class= 'w3-bar-item w3-button {$spieltag_dict['spieltag_button']} w3-hover-primary' type='button'>"?><?=$spieltag_dict["spieltag_string"]?></button></a>
     <?php } //endforeach?>
 </div>
 
