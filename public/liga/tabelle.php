@@ -55,9 +55,11 @@ for ($i = 23; $i < 29; $i++){
 //Spieltag wählen:
 for ($spieltag = $akt_spieltag; $spieltag >= 0; $spieltag--){
     if($spieltag == $gew_spieltag){
-        $spieltag_color = 'w3-text-secondary';
+        $spieltag_color = 'w3-text-white';
+        $spieltag_button = 'w3-primary';
     }else{
         $spieltag_color = '';
+        $spieltag_button = 'w3-gray';
     }
     $spieltag_string = "<span class='$spieltag_color'>$spieltag</span>";
     if($spieltag == $live_spieltag){
@@ -66,8 +68,8 @@ for ($spieltag = $akt_spieltag; $spieltag >= 0; $spieltag--){
 
     $spieltage_array[$akt_spieltag-$spieltag] = array(
         $spieltag,
-        "tab_id_string" => "openCity(event, '".$spieltag."')",
-        "spieltag_string" =>$spieltag_string
+        "spieltag_string" =>$spieltag_string,
+        "spieltag_button" =>$spieltag_button
     );
 }
 
@@ -137,7 +139,7 @@ window.onclick = function(event) {
 
 <div class="tab">
     <?php foreach ($spieltage_array as $spieltag_dict){?>
-        <?php echo "<a class='no w3-hover-text-secondary' href='tabelle.php?spieltag={$spieltag_dict[0]}#meister'>"?><button class="tablinks" onclick="clickSpieltag(event, '<?=$spieltag_dict[0]?>')"><?=$spieltag_dict["spieltag_string"]?></button></a>
+        <?php echo "<a class='no w3-hover-text-secondary' href='tabelle.php?spieltag={$spieltag_dict[0]}#meister'><button class= 'w3-button {$spieltag_dict['spieltag_button']} w3-hover-primary' type='button'>"?><?=$spieltag_dict["spieltag_string"]?></button></a>
     <?php } //endforeach?>
 </div>
 
@@ -173,7 +175,7 @@ window.onclick = function(event) {
 
 <div class="tab">
     <?php foreach ($spieltage_array as $spieltag_dict){?>
-        <?php echo "<a class='no w3-hover-text-secondary' href='tabelle.php?spieltag={$spieltag_dict[0]}#rang'>"?><button class="tablinks" onclick="clickSpieltag(event, '<?=$spieltag_dict[0]?>')"><?=$spieltag_dict["spieltag_string"]?></button></a>
+        <?php echo "<a class='no w3-hover-text-secondary' href='tabelle.php?spieltag={$spieltag_dict[0]}#meister'><button class= 'w3-button {$spieltag_dict['spieltag_button']} w3-hover-primary' type='button'>"?><?=$spieltag_dict["spieltag_string"]?></button></a>
     <?php } //endforeach?>
 </div>
 
