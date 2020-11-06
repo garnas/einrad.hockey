@@ -99,7 +99,7 @@ include '../../templates/header.tmp.php';
         <div class="w3-margin-left">
             <ul class="w3-ul w3-leftbar w3-border-tertiary">
             <li>Alle Turniere welche an einem Wochenende stattfinden, werden einem Spieltag zugeordnet.</li>
-            <li>Oberhalb der jeweiligen Tabelle kann man auch vergangene Spieltage auswählen.</li>
+            <li>Der in der Liste "Spieltag wählen" rot angezeigte Spieltag, ist der aktuelle Spieltag mit Live-Turnierergebnissen, falls sie schon vorhanden sind.</li>
             <li>Für die Turnieranmeldungen ist jedoch immer der vorherige (und damit vollständige) Spieltag relevant, also nicht der aktuelle Spieltag.</li>
             </ul>
         </div>
