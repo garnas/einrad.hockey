@@ -13,6 +13,14 @@ if (isset($_POST['put_challenge'])) {
     $distanz = $_POST["kilometer"];
     $datum = $_POST["datum"];
 
+    if ($datum<"2020-11-01") {
+        $error = true;
+        Form::error("Das ausgewählt Datum liegt vor dem Beginn.");
+    } elseif ($spieler == 0) {
+        $error = true;
+        Form::error("Es wurde kein Spieler ausgewählt.");
+    }
+
     if (!$error) {
         if(Challenge::set_data($spieler, $distanz, $datum)) {
             Form::affirm("Die Strecke wurde erfolgreich eingetragen!");
