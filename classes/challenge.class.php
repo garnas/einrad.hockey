@@ -12,7 +12,12 @@ class Challenge {
         ";
         $result = db::readdb($sql);
 
-        return db::escape(mysqli_fetch_assoc($result));
+        $daten=[];
+        while($row=mysqli_fetch_assoc($result)){
+            array_push($daten, $row);
+        }
+
+        return db::escape($daten);
     }
 
     function get_spieler(){
@@ -26,7 +31,12 @@ class Challenge {
         ";
         $result = db::readdb($sql);
 
-        return db::escape(mysqli_fetch_assoc($result));
+        $daten=[];
+        while($row=mysqli_fetch_assoc($result)){
+            array_push($daten, $row);
+        }
+
+        return db::escape($daten);
     }
 
     function set_data($spieler, $distanz, $datum){
