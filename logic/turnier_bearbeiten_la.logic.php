@@ -60,6 +60,10 @@ if (isset($_POST['turnier_bearbeiten_la'])) {
     if (!$error){
         if ($akt_turnier->change_turnier_liga($tname, $ausrichter, $art, $tblock, $fixed, $datum, $phase)){
             Form::affirm("Turnierdaten wurden geändert");
+            if ($daten['datum'] != $datum){
+                LigaBot::set_spieltage(); //Spieltage ändern sich eventuell, je nach Datumsveränderung
+                $akt_turnier->schreibe_log("Datum: " . $daten['datum'] ." -> ". $datum, "Ligaausschuss", "Ligaausschuss"); 
+            }
             if ($daten['tname'] != $tname){
                 $akt_turnier->schreibe_log("Turniername: " . $daten['tname'] ." -> ". $tname, "Ligaausschuss");
             }
@@ -74,9 +78,6 @@ if (isset($_POST['turnier_bearbeiten_la'])) {
             }
             if ($daten['tblock_fixed'] != $fixed){
                 $akt_turnier->schreibe_log("Fixiert: " . $daten['tblock_fixed'] ." -> ". $fixed, "Ligaausschuss");
-            }
-            if ($daten['datum'] != $datum){
-                $akt_turnier->schreibe_log("Datum: " . $daten['datum'] ." -> ". $datum, "Ligaausschuss", "Ligaausschuss");
             }
             if ($daten['phase'] != $phase){
                 $akt_turnier->schreibe_log("Phase: " . $daten['phase'] ." -> ". $phase, "Ligaausschuss");
