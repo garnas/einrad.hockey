@@ -27,11 +27,16 @@ $strafen = Team::get_all_strafen();
 
 //Testen ob Verwarnungen oder Strafen existieren.
 $verwarnung_not_empty = $strafe_not_empty = false;
-foreach ($strafen as $strafe){
+foreach ($strafen as $key => $strafe){
     if ($strafe['verwarnung'] == 'Ja'){
         $verwarnung_not_empty = true;
     }elseif ($strafe['verwarnung'] == 'Nein'){
         $strafe_not_empty = true;
+    }
+    if (!empty($strafe['datum'])){
+        $strafen[$key]['datum'] = date("d.m.Y", strtotime($strafe['datum']));
+    }else{
+        $strafen[$key]['datum'] = "-";
     }
 }
 
@@ -215,13 +220,13 @@ window.onclick = function(event) {
                 <tr class="w3-primary">
                     <th>Team</th>
                     <th>Grund</th>
-                    <th>Turnier</th>
+                    <th class="w3-center">Turnier</th>
                 </tr>
                 <?php foreach ($strafen as $strafe){ if ($strafe['verwarnung'] == 'Ja'){?>
                     <tr>
                         <td style="white-space: nowrap; vertical-align: middle;"><?=$strafe['teamname']?></td>
                         <td style="vertical-align: middle"><?=$strafe['grund']?></td>
-                        <td style="vertical-align: middle"><?=($strafe['datum'] ?? '') . ' - ' . ($strafe['ort'] ?? '')?></td>
+                        <td class="w3-center" style="vertical-align: middle"><?=$strafe['datum']?><br><?=($strafe['ort'] ?? '')?></td>
                     </tr>
                 <?php }/*end if*/ }/*end foreach*/?>
             
@@ -246,7 +251,7 @@ window.onclick = function(event) {
                             <?=$strafe['grund']?> 
                             <?php if (!empty($strafe['prozentsatz'])){?>(<?=$strafe['prozentsatz']?> %)<?php } //endif?>
                         </td>
-                        <td style="vertical-align: middle"><?=($strafe['datum'] ?? '') . ' - ' . ($strafe['ort'] ?? '')?></td>
+                        <td class="w3-center" style="vertical-align: middle"><?=$strafe['datum']?><br><?=($strafe['ort'] ?? '')?></td>
                     </tr>
                 <?php }/*end if*/ }/*end foreach*/?>
         </table>
