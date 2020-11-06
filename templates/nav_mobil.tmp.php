@@ -17,6 +17,7 @@
     <div class="w3-text-black">
         <h3 class="w3-margin-left w3-text-primary"><i style="vertical-align: -16%" class="material-icons w3-xlarge">emoji_events</i> LIGA</h3>
     </div>
+    <a href="../liga/challenge.php" class="w3-bar-item w3-button">Kilometer-Challenge</a>
     <a href="../liga/turniere.php" class="w3-bar-item w3-button">Turniere</a>
     <a href="../liga/ergebnisse.php" class="w3-bar-item w3-button">Ergebnisse</a>
     <a href="../liga/teams.php" class="w3-bar-item w3-button">Teams</a>
