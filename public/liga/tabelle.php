@@ -142,7 +142,7 @@ window.onclick = function(event) {
 <!-- Spieltag wählen -->
 <div class="w3-bar">
     <?php foreach ($spieltage_array as $spieltag_dict){?>
-        <a class='no w3-hover-text-secondary' href='tabelle.php?spieltag=<?=$spieltag_dict[0]?>#meister'><button class= 'w3-bar-item w3-button <?=$spieltag_dict['spieltag_button']?> w3-hover-primary' type='button'><?=$spieltag_dict["spieltag_string"]?></button></a>
+        <a class='no w3-hover-text-secondary' href='tabelle.php?spieltag=<?=$spieltag_dict[0]?>#meister'><span class= 'w3-bar-item w3-button <?=$spieltag_dict['spieltag_button']?> w3-hover-primary'><?=$spieltag_dict["spieltag_string"]?></span></a>
     <?php } //endforeach?>
 </div>
 
@@ -175,7 +175,7 @@ window.onclick = function(event) {
 <!-- Spieltag wählen -->
 <div class="w3-bar">
     <?php foreach ($spieltage_array as $spieltag_dict){?>
-        <a class='no w3-hover-text-secondary' href='tabelle.php?spieltag=<?=$spieltag_dict[0]?>#rang'><button class= 'w3-bar-item w3-button <?=$spieltag_dict['spieltag_button']?> w3-hover-primary' type='button'><?=$spieltag_dict["spieltag_string"]?></button></a>
+        <a class='no w3-hover-text-secondary' href='tabelle.php?spieltag=<?=$spieltag_dict[0]?>#rang'><span class='w3-bar-item w3-button <?=$spieltag_dict['spieltag_button']?> w3-hover-primary'><?=$spieltag_dict["spieltag_string"]?></span></a>
     <?php } //endforeach?>
 </div>
 
