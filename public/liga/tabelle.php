@@ -53,22 +53,25 @@ for ($i = 23; $i < 29; $i++){
 }
 
 //Spieltag wählen:
-$spieltage_string = '';
 for ($spieltag = $akt_spieltag; $spieltag >= 0; $spieltag--){
-    $spieltage_string .= "<a class='no w3-hover-text-secondary' href='tabelle.php?spieltag=$spieltag#meister'>";
     if($spieltag == $gew_spieltag){
-        $spieltag_color = 'w3-text-secondary';
+        $spieltag_color = 'w3-text-white';
+        $spieltag_button = 'w3-primary w3-border w3-border-primary';
     }else{
-        $spieltag_color = '';
+        $spieltag_color = 'w3-text-grey';
+        $spieltag_button = 'w3-light-grey w3-border';
     }
-    $spieltage_string .= "<span class='$spieltag_color'>$spieltag</span>";
+    $spieltag_string = "<span class='$spieltag_color'>$spieltag</span>";
     if($spieltag == $live_spieltag){
-        $spieltage_string .= "<span class='$spieltag_color'> <i>(unvollständig)</i></span>";
+        $spieltag_string .= "<span class='$spieltag_color'> <i>(unvollständig)</i></span>";
     }
-    $spieltage_string .= '</a>, ';
+
+    $spieltage_array[$akt_spieltag-$spieltag] = array(
+        $spieltag,
+        "spieltag_string" =>$spieltag_string,
+        "spieltag_button" =>$spieltag_button
+    );
 }
-$spieltage_string_meister = substr($spieltage_string, 0, -2);
-$spieltage_string_rang = str_replace("#meister","#rang", $spieltage_string_meister);
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -132,7 +135,13 @@ window.onclick = function(event) {
 <p class="w3-border-top w3-border-grey w3-text-grey"><a href="#rang" class="no w3-hover-text-secondary">Zur Rangtabelle</a><span class="w3-right">Saison <?=Form::get_saison_string()?></span></p>
 
 <!-- Spieltag wählen -->
-<p class="w3-text-grey">Spieltag wählen: <?=$spieltage_string_meister?><p>
+<p class="w3-text-grey">Spieltag wählen:<p>
+
+<div class="w3-bar">
+    <?php foreach ($spieltage_array as $spieltag_dict){?>
+        <?php echo "<a class='no w3-hover-text-secondary' href='tabelle.php?spieltag={$spieltag_dict[0]}#meister'><button class= 'w3-bar-item w3-button {$spieltag_dict['spieltag_button']} w3-hover-primary' type='button'>"?><?=$spieltag_dict["spieltag_string"]?></button></a>
+    <?php } //endforeach?>
+</div>
 
 <!--Tabelle-->
 <div class="w3-responsive w3-card">
@@ -161,7 +170,15 @@ window.onclick = function(event) {
 <p class="w3-border-top w3-border-grey w3-text-grey"><a href="#meister" class="no w3-hover-text-secondary">Zur Meisterschaftstabelle</a><span class="w3-right">Saison <?=Form::get_saison_string()?></span></p>
 
 <!-- Spieltag wählen -->
-<p class="w3-text-grey">Spieltag wählen: <?=$spieltage_string_rang?><p>
+<p class="w3-text-grey">Spieltag wählen:<p>
+
+
+<div class="w3-bar">
+    <?php foreach ($spieltage_array as $spieltag_dict){?>
+        <?php echo "<a class='no w3-hover-text-secondary' href='tabelle.php?spieltag={$spieltag_dict[0]}#rang'><button class= 'w3-bar-item w3-button {$spieltag_dict['spieltag_button']} w3-hover-primary' type='button'>"?><?=$spieltag_dict["spieltag_string"]?></button></a>
+    <?php } //endforeach?>
+</div>
+
 
 <!--Tabelle -->
 <div class="w3-responsive w3-card">
@@ -188,6 +205,7 @@ window.onclick = function(event) {
         <?php } //end foreach?>
     </table>    
 </div>
+
 
 <!-- Pranger -->
 <h3 id="pranger" class="w3-text-primary">Verwarnungen</h3>
