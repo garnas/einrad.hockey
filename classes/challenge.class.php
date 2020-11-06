@@ -29,9 +29,9 @@ class Challenge {
         return db::escape(mysqli_fetch_assoc($result));
     }
 
-    function set_data(spieler, distanz, datum){
+    function set_data($spieler, $distanz, $datum){
         $sql = "
-        INSERT INTO `oeffi_challenge`(`spieler_id`, `kilometer`, `datum`) VALUES (spieler, distanz, datum)
+        INSERT INTO `oeffi_challenge`(`spieler_id`, `kilometer`, `datum`) VALUES ('$spieler', '$distanz', '$datum')
         ";
         $result = db::writedb($sql);
     }
