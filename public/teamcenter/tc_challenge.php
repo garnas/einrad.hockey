@@ -1,9 +1,10 @@
-    <?php
+<?php
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_team.logic.php'; //Auth
+require_once '../../logic/challenge.logic.php';
 
 $team_id = $_SESSION["team_id"];
 $kader = Spieler::get_teamkader($team_id);
@@ -24,7 +25,7 @@ include '../../templates/header.tmp.php';
             <label for="spieler">Spieler/in</label>
             <select required id="spieler" name="spieler">
                 <?php foreach($kader as $spieler){?>
-                    <option><?=$spieler["vorname"]?> <?=$spieler["nachname"]?></option>
+                    <option value=<?=$spieler["spieler_id"]?>><?=$spieler["vorname"]?> <?=$spieler["nachname"]?></option>
                 <?php } ?>
             </select>
         </p>
@@ -36,7 +37,7 @@ include '../../templates/header.tmp.php';
             <label for="datum">Datum</label>
             <input required type="date" id="datum" min="<?php date("Y-m-d") ?>" name="datum"></input>
         </p>
-            <input type="submit" value="submit">
+            <input type="submit" name="put_challenge" value="Eintragen!">
         </p>
     </div>
 </form>
