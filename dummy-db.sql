@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 08. Okt 2020 um 13:54
+-- Erstellungszeit: 07. Nov 2020 um 20:03
 -- Server-Version: 10.4.14-MariaDB
--- PHP-Version: 7.4.10
+-- PHP-Version: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -1324,6 +1324,20 @@ INSERT INTO `neuigkeiten` (`neuigkeiten_id`, `titel`, `inhalt`, `link_pdf`, `lin
 (4, 'Erstes Turnier der Saison', '<video class=\"w3-image w3-card\" src=\"../uploads/video_bottrop.mp4\" autoplay loop muted playsinline>Video</video>\r\nSeit der langen Pause fand gestern wieder ein erstes Ligaturnier in Bottrop statt. \r\n\r\nDie Ergebnisse des Turniers findet ihr <a href=\"ergebnisse.php#913\" class=\"w3-hover-text-secondary w3-text-blue no\">hier</a>.\r\n\r\nFalls ihr selber ein Turnier ausrichtet, könntet ihr Erfahrungswerte und Tipps zum verwendeten Hygiene-Konzept beim Ausrichter <a class=\"w3-hover-text-secondary w3-text-blue no\" href=\"mailto:volker.heek@web.de,funpowerteam@wir-sind-cool.org\"><i style=\"vertical-align: middle;\" class=\"material-icons\">mail</i>  FunPowerTeam</a> erhalten.', '', '', 'Ligaausschuss', '2020-08-23 13:24:15'),
 (5, 'Hygienekonzepte im Forum', 'Es gab die Anregung, Hygienekonzepte für Turniere zu sammeln, damit nicht jeder Ausrichter bei der Erstellung von vorne anfangen muss. \r\nIhr könnt hierfür unser neues Forum (Menü \"Info\" -> Forum oder <a class=\'w3-text-primary w3-hover-text-secondary no\' href=\'https://forum.einrad.hockey/index.php/board,5.0.html\'>hier klicken</a>) benutzen. Dort kann man nach der Registrierung Beiträge mit Datei-Anhängen erstellen und so zum Beispiel PDF-Dateien hochladen.\r\n\r\nDer Ligaausschuss', '', '', 'Ligaausschuss', '2020-08-31 20:38:32'),
 (6, 'Mithilfe bei der Ausschussarbeit', 'Liebe Ligateams,\r\n\r\nwie im Rundschreiben 7/2020 bereits ausführlich beschrieben, wollen wir euch die Möglichkeit geben, aktiv an der Entwicklung der Liga mitzuwirken. Dafür organisieren wir die Unterausschüsse neu. Ihr könnt entweder als dauerhaftes Ausschussmitglied, in der geteilten Leitung eines Ausschusses zusammen mit einem LA-Mitglied oder in einzelnen Arbeitsgruppen tätig werden. Wenn ihr also Interesse habt, in einem der folgenden Bereiche etwas zu bewegen, meldet euch bitte unter <a class=\'w3-text-primary w3-hover-text-secondary no\' href=\'mailto:liga@einrad.hockey\'><i class=\'material-icons\'>mail</i> liga@einrad.hockey</a>\r\n\r\n	- Schiedsrichterausschuss\r\n	- Technikausschuss\r\n	- Öffentlichkeitsausschuss\r\n\r\nEuer Ligaausschuss', '', '', 'Ligaausschuss', '2020-09-08 09:32:08');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `oeffi_challenge`
+--
+
+CREATE TABLE `oeffi_challenge` (
+  `id` int(11) NOT NULL,
+  `spieler_id` int(11) NOT NULL,
+  `kilometer` float DEFAULT NULL,
+  `datum` date NOT NULL DEFAULT current_timestamp(),
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -13014,6 +13028,12 @@ ALTER TABLE `neuigkeiten`
   ADD PRIMARY KEY (`neuigkeiten_id`);
 
 --
+-- Indizes für die Tabelle `oeffi_challenge`
+--
+ALTER TABLE `oeffi_challenge`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indizes für die Tabelle `plz`
 --
 ALTER TABLE `plz`
@@ -13171,6 +13191,12 @@ ALTER TABLE `mailbot`
 --
 ALTER TABLE `neuigkeiten`
   MODIFY `neuigkeiten_id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT für Tabelle `oeffi_challenge`
+--
+ALTER TABLE `oeffi_challenge`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT für Tabelle `spieler`
