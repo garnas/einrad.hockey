@@ -18,6 +18,7 @@ include '../../templates/header.tmp.php';
     Die Kilometer-Challenge findet vom <b><?=$challenge->challenge_start?></b> bis <b><?=$challenge->challenge_end?></b> statt. 
     Die Teams können in diesem Zeitraum so viele Kilometer wie möglich sammeln und am Ende gewinnen!
 </p>
+<p><?=Form::link('../teamcenter/tc_challenge.php', '<i class="material-icons">timeline</i>  Kilometer für dein Team eintragen!');?></p>
 
 
 <h3 class="w3-text-secondary w3-margin-top">Teams</h3>
