@@ -9,10 +9,13 @@ require_once '../../logic/challenge.logic.php';
 $team_id = $_SESSION["team_id"];
 $kader = Spieler::get_teamkader($team_id);
 
+$platz = "-";
+$kilometer = "-";
+
 foreach($teamliste as $team) { 
     if ($team["team_id"] == $team_id) {
-        $platz = $team["platz"];
-        $kilometer = $team["kilometer"];
+        $platz = "#" . strval($team["platz"]);
+        $kilometer = strval(number_format($team["kilometer"], 1, ',', '.')) . " km";
     }
 }
 
@@ -27,10 +30,10 @@ include '../../templates/header.tmp.php';
 
 <div class="w3-panel w3-card-4">
     <p class="w3-text-primary w3-half w3-center w3-xxxlarge">
-        #<?=$platz ?>
+        <?=$platz ?>
     </p>
     <p class="w3-text-primary w3-half w3-center w3-xxxlarge">
-        <?=number_format($kilometer, 1, ',', '.'); ?> km
+        <?=$kilometer?>
     </p>
 </div>
 
@@ -53,7 +56,7 @@ include '../../templates/header.tmp.php';
         <p>
             <label class="w3-text-primary" for="datum">Datum</label>
             <input required class="w3-input w3-border w3-border-primary" type="date" id="datum" min="<?php date("Y-m-d") ?>" name="datum"></input>
-            <i class="w3-text-grey">Das Datum muss zwischen dem <?=$start ?> und <?=$end ?> liegen.</i>
+            <i class="w3-text-grey">Das Datum muss zwischen dem <?=$challenge->challenge_start?> und <?=$challenge->challenge_end?> liegen.</i>
         </p>
             <input type="submit" name="put_challenge" value="Eintragen!" class="w3-secondary w3-button w3-block">
         </p>
@@ -69,19 +72,28 @@ include '../../templates/header.tmp.php';
                 <th class="w3-center">Einträge</th>
                 <th class="w3-center">Kilometer</th>
             <tr>
-            <?php foreach ($spielerliste as $spieler) {
-                if ($spieler["team_id"] == $team_id) {
-            ?> 
-                <tr>
-                    <td class="w3-center"><?=$spieler["platz"]?></td>
-                    <td class="w3-center"><?=$spieler['vorname']?></td>
-                    <td class="w3-center"><?=$spieler['nachname']?></td>
-                    <td class="w3-center"><?=$spieler['einträge']?></td>
-                    <td class="w3-center"><?=number_format($spieler['kilometer'], 1, ',', '.');?></td>
-                </tr>
             <?php 
-                } //end if
-            } //end foreach 
+                $error = True;
+                foreach ($spielerliste as $spieler) {
+                    if ($spieler["team_id"] == $team_id) {
+                        $error = False;
+            ?> 
+                        <tr>
+                            <td class="w3-center"><?=$spieler["platz"]?></td>
+                            <td class="w3-center"><?=$spieler['vorname']?></td>
+                            <td class="w3-center"><?=$spieler['nachname']?></td>
+                            <td class="w3-center"><?=$spieler['einträge']?></td>
+                            <td class="w3-right-align"><?=number_format($spieler['kilometer'], 1, ',', '.');?></td>
+                        </tr>
+            <?php 
+                    } //end if
+                } //end foreach 
+
+                if ($error) {
+                    echo "<tr>";
+                    echo "<td colspan='5' class='w3-center'>Bisher keine Einträge vorhanden.</td>";
+                    echo "<tr>";
+                }
             ?>
         </table>
     </div>

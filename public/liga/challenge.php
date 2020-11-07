@@ -5,7 +5,6 @@
 require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/challenge.logic.php'; //Erstellt Challenge-Objekt nach der Validation
 
-
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -16,7 +15,7 @@ include '../../templates/header.tmp.php';
 
 <h1 class="w3-text-primary">Kilometer-Challenge 2020</h1>
 <p class="w3-text-gray">
-    Die Kilometer-Challenge findet vom XX.XX.2020 bis XX.XX.2020 statt. 
+    Die Kilometer-Challenge findet vom <b><?=$challenge->challenge_start?></b> bis <b><?=$challenge->challenge_end?></b> statt. 
     Die Teams können in diesem Zeitraum so viele Kilometer wie möglich sammeln und am Ende gewinnen!
 </p>
 
@@ -25,21 +24,29 @@ include '../../templates/header.tmp.php';
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped">
             <tr class="w3-primary">
-                <th>Platzierung</th>
-                <th>Team</th>
-                <th>Kilometer</th>
-                <th>Mitglieder</th>
-                <th>Einträge</th>
+                <th class="w3-center">Platzierung</th>
+                <th class="w3-left-align">Team</th>
+                <th class="w3-center">Mitglieder</th>
+                <th class="w3-center">Einträge</th>
+                <th class="w3-center">Kilometer</th>               
             <tr>
-            <?php foreach ($teamliste as $index => $team){?> 
-                <tr>
-                    <td>x</td>
-                    <td><?=$team["teamname"]?></td>
-                    <td><?=$team["kilometer"]?></td>
-                    <td><?=$team["mitglieder"]?></td>
-                    <td><?=$team["einträge"]?></td>
-                </tr>
-            <?php } //end foreach ?>
+            <?php 
+                if ($teamliste == NULL) {
+                    echo "<tr>";
+                    echo "<td colspan='5' class='w3-center'>Bisher keine Einträge vorhanden.</td>";
+                    echo "<tr>";
+                } else {
+                    foreach ($teamliste as $team){?> 
+                        <tr>
+                            <td class="w3-center"><?=$team["platz"]?></td>
+                            <td class="w3-left-align"><?=$team["teamname"]?></td>
+                            <td class="w3-center"><?=$team["mitglieder"]?></td>
+                            <td class="w3-center"><?=$team["einträge"]?></td>
+                            <td class="w3-right-align"><?=number_format($team["kilometer"], 1, ',', '.');?></td>
+                        </tr>
+                    <?php } //end foreach 
+                } //end if
+                ?>
         </table>
     </div>
 </div>
@@ -49,21 +56,29 @@ include '../../templates/header.tmp.php';
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped">
             <tr class="w3-primary">
-                <th>Platzierung</th>
-                <th>Spieler/in</th>
-                <th>Team</th>
-                <th>Einträge</th>
-                <th>Kilometer</th>
+                <th class="w3-center">Platzierung</th>
+                <th class="w3-left-align">Spieler/in</th>
+                <th class="w3-left-align">Team</th>
+                <th class="w3-center">Einträge</th>
+                <th class="w3-center">Kilometer</th>
             <tr>
-            <?php foreach ($spielerliste as $spieler){?> 
-                <tr>
-                    <td>x</td>
-                    <td><?=$spieler['vorname']?></td>
-                    <td><?=$spieler['teamname']?></td>
-                    <td><?=$spieler['einträge']?></td>
-                    <td><?=$spieler['kilometer']?></td>
-                </tr>
-            <?php } //end foreach ?>
+            <?php 
+                if ($spielerliste == NULL) {
+                    echo "<tr>";
+                    echo "<td colspan='5' class='w3-center'>Bisher keine Einträge vorhanden.</td>";
+                    echo "<tr>";
+                } else {            
+                    foreach ($spielerliste as $spieler){?> 
+                        <tr>
+                            <td class="w3-center"><?=$spieler["platz"]?></td>
+                            <td class="w3-left-align"><?=$spieler['vorname']?></td>
+                            <td class="w3-left-align"><?=$spieler['teamname']?></td>
+                            <td class="w3-center"><?=$spieler['einträge']?></td>
+                            <td class="w3-right-align"><?=number_format($spieler["kilometer"], 1, ',', '.');?></td>
+                        </tr>
+                <?php } //end foreach 
+                } //end if
+            ?>
         </table>
     </div>
 </div>

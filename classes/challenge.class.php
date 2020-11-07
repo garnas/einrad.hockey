@@ -2,8 +2,8 @@
 
 class Challenge {
     
-    public $challenge_start = "2020-11-01";
-    public $challenge_end = "2020-11-30";
+    public $challenge_start = "01.11.2020";
+    public $challenge_end = "30.11.2020";
 
     function get_teams(){
         $sql = "
@@ -11,16 +11,19 @@ class Challenge {
         FROM `oeffi_challenge` ch, spieler sp, teams_liga t
         WHERE ch.spieler_id = sp.spieler_id
         AND sp.team_id = t.team_id
-        AND datum >= '" . $this->challenge_start . "'
-        AND datum <= '" . $this->challenge_end . "'
+        AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
+        AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
         GROUP BY teamname
         ORDER BY kilometer DESC
         ";
         $result = db::readdb($sql);
 
-        $daten=[];
-        while($row=mysqli_fetch_assoc($result)){
+        $daten = [];
+        $index = 1;
+        while($row = mysqli_fetch_assoc($result)){
+            $row += ["platz" => $index];
             array_push($daten, $row);
+            $index++;
         }
 
         return db::escape($daten);
@@ -28,22 +31,25 @@ class Challenge {
 
     function get_spieler(){
         $sql = "
-        SELECT sp.vorname, t.teamname, COUNT(ch.id) AS einträge, ROUND(SUM(kilometer), 1) AS kilometer
+        SELECT sp.vorname, sp.nachname, t.teamname, t.team_id, COUNT(ch.id) AS einträge, ROUND(SUM(kilometer), 1) AS kilometer
         FROM `oeffi_challenge` ch, spieler sp, teams_liga t
         WHERE ch.spieler_id = sp.spieler_id
         AND sp.team_id = t.team_id
-        AND datum >= '" . $this->challenge_start . "'
-        AND datum <= '" . $this->challenge_end . "'
+        AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
+        AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
         GROUP BY sp.spieler_id
         ORDER BY kilometer DESC
         ";
         $result = db::readdb($sql);
 
-        $daten=[];
-        while($row=mysqli_fetch_assoc($result)){
+        $daten = [];
+        $index = 1;
+        while($row = mysqli_fetch_assoc($result)){
+            $row += ["platz" => $index];
             array_push($daten, $row);
+            $index++;
         }
-
+        
         return db::escape($daten);
     }
 
