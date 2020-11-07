@@ -30,7 +30,7 @@ include '../../templates/header.tmp.php';
 
 <div class="w3-panel w3-card-4">
     <p class="w3-text-primary w3-half w3-center w3-xxxlarge">
-        <?=$platz ?>
+        <?=$platz?>
     </p>
     <p class="w3-text-primary w3-half w3-center w3-xxxlarge">
         <?=$kilometer?>
@@ -63,40 +63,39 @@ include '../../templates/header.tmp.php';
     </div>
 </form>
 
-<div class="w3-hide-small">
-    <div class="w3-responsive w3-card">
-        <table class="w3-table w3-striped">
-            <tr class="w3-primary">
-                <th class="w3-center">Platzierung</th>
-                <th colspan="2" class="w3-center">Spieler/in</th>
-                <th class="w3-center">Einträge</th>
-                <th class="w3-center">Kilometer</th>
-            <tr>
-            <?php 
-                $error = True;
-                foreach ($spielerliste as $spieler) {
-                    if ($spieler["team_id"] == $team_id) {
-                        $error = False;
-            ?> 
-                        <tr>
-                            <td class="w3-center"><?=$spieler["platz"]?></td>
-                            <td class="w3-center"><?=$spieler['vorname']?></td>
-                            <td class="w3-center"><?=$spieler['nachname']?></td>
-                            <td class="w3-center"><?=$spieler['einträge']?></td>
-                            <td class="w3-right-align"><?=number_format($spieler['kilometer'], 1, ',', '.');?></td>
-                        </tr>
-            <?php 
-                    } //end if
-                } //end foreach 
+<div class="w3-responsive w3-card">
+    <table class="w3-table w3-striped">
+        <tr class="w3-primary">
+            <th class="w3-center">Platzierung</th>
+            <th colspan="2" class="w3-center">Spieler/in</th>
+            <th class="w3-center">Einträge</th>
+            <th class="w3-center">Kilometer</th>
+        <tr>
+        <?php 
+            $error = True;
+            foreach ($spielerliste as $spieler) {
+                if ($spieler["team_id"] == $team_id) {
+                    $error = False;
+        ?> 
+                    <tr>
+                        <td class="w3-center"><?=$spieler["platz"]?></td>
+                        <td class="w3-center"><?=$spieler['vorname']?></td>
+                        <td class="w3-center"><?=$spieler['nachname']?></td>
+                        <td class="w3-center"><?=$spieler['einträge']?></td>
+                        <td class="w3-right-align"><?=number_format($spieler['kilometer'], 1, ',', '.');?></td>
+                    </tr>
+        <?php 
+                } //end if
+            } //end foreach 
 
-                if ($error) {
-                    echo "<tr>";
-                    echo "<td colspan='5' class='w3-center'>Bisher keine Einträge vorhanden.</td>";
-                    echo "<tr>";
-                }
-            ?>
-        </table>
-    </div>
+            if ($error) {
+                echo "<tr>";
+                echo "<td colspan='5' class='w3-center'>Bisher keine Einträge vorhanden.</td>";
+                echo "<tr>";
+            }
+        ?>
+    </table>
 </div>
+
 <?php
 include '../../templates/footer.tmp.php';
