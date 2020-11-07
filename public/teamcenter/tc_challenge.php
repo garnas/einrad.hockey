@@ -19,8 +19,6 @@ foreach($teamliste as $team) {
     }
 }
 
-$challenge = new Challenge;
-
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -37,10 +35,9 @@ include '../../templates/header.tmp.php';
     <p class="w3-text-primary w3-half w3-center w3-xxxlarge">
         <?=$kilometer?>
     </p>
-    <p class="w3-text-grey w3-right w3-small"><i>Platz / Kilometer</i></p>
 </div>
 
-<form method="post" onsubmit="return confirm('Für ' + document.getElementById('spieler').options[document.getElementById('spieler').selectedIndex].text + ' werden ' + document.getElementById('kilometer').value + ' km hinzugefügt.\r\n\r\nDer Vorname des Spielers wird mit seinen insgesamt gefahrenen Kilometern und seiner Teamzugehörigkeit veröffentlicht.');">
+<form method="post">
     <div class="w3-panel w3-card-4">
         <p>
             <label class="w3-text-primary" for="spieler">Spieler/in</label>
@@ -58,7 +55,7 @@ include '../../templates/header.tmp.php';
         </p>
         <p>
             <label class="w3-text-primary" for="datum">Datum</label>
-            <input required class="w3-input w3-border w3-border-primary" type="date" id="datum" min="<?=date("Y-m-d",strtotime($challenge->challenge_start))?>" max="<?=date("Y-m-d",strtotime($challenge->challenge_end))?>" value="<?=date("Y-m-d")?>" name="datum"></input>
+            <input required class="w3-input w3-border w3-border-primary" type="date" id="datum" min="<?php date("Y-m-d") ?>" name="datum"></input>
             <i class="w3-text-grey">Das Datum muss zwischen dem <?=$challenge->challenge_start?> und <?=$challenge->challenge_end?> liegen.</i>
         </p>
             <input type="submit" name="put_challenge" value="Eintragen!" class="w3-secondary w3-button w3-block">
@@ -99,8 +96,6 @@ include '../../templates/header.tmp.php';
         ?>
     </table>
 </div>
-
-<p class="w3-text-grey">Schreibe <?=Form::mailto(Config::TECHNIKMAIL)?> an, um eine genaue Auflistung aller Fahrten deines Teams zu erhalten.</p>
 
 <?php
 include '../../templates/footer.tmp.php';
