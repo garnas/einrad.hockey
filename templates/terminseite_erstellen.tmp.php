@@ -1,13 +1,26 @@
-<form action="https://team.einrad.hockey/forms/gruppe-add_record.php" method="post">
+<form action="http://localhost/eht/site/forms/gruppe-add_record.php" method="post">
     <div class="w3-panel w3-tertiary w3-card-4">
         <h3 class="w3-center">Neue Terminseite für Deinen Verein anlegen</h3>
     </div>
 
+    <div class="w3-panel w3-card-4">
+        <p>Hier kannst Du eine neue Terminseite für Deinen Verein anlegen. Unter <a href="https://team.einrad.hockey">team.einrad.hockey</a> können sich die Mitspieler dann anmelden und für Termine eintragen.
+          So könnt Ihr leicht den Überblick behalten wer zu welchem Termin kommt oder bereits abgesagt hat.<br><br>
+          Trainingszeiten werden nur einmalig angelegt und wiederholen sich wöchentlich.<br>
+          Daten der Ligaturniere können einfach übernommen werden und es ist den Spielern ersichtlich, ob Ihr zum Turnier gemeldet seid und ob Ihr spielt oder auf der Warteliste steht.<br>
+          Auch ist es möglich Eure Termine über CalDAV in verschiedene Clients (z.B. Thunderbird, Outlook) oder Android und iOS einzubinden.<br><br>
+          Es ist möglich und sinnvoll mehrere Mannschaften für einen Verein anzulegen (Nur 1 Account hier anlegen). So könnt Ihr auch Spielern ermöglichen bei Turnieren auszuhelfen oder ein gemeinsames Training für mehrere Mannschaften organsiseren.<br><br>
+          Die Erstellung der Spieleraccounts, Mannschaften etc. ist unabhängig von der Teamkaderverwaltung auf der Ligaseite.<br>
+          Bei Fragen kontaktiere <a href="mailto:team@einrad.hockey">team@einrad.hockey</a>.
+        </p>
+    </div>
+
+<?php if (empty($daten['team_termine_email'])) {?>
     <div class="w3-card-4 w3-panel">
         <h3>Gruppe</h3>
         <div class="w3-section">
             <label class="w3-text-primary" for="gruppenname">Gruppenname</label>
-            <input required type="text" class="w3-input w3-border w3-border-primary" value="<?=$_POST['gruppenname'] ?? ''?>" id="gruppenname" name="gruppenname">
+            <input required type="text" class="w3-input w3-border w3-border-primary" value="<?=$daten['verein']?>" id="gruppenname" name="gruppenname">
         </div>
         <div class="w3-section">
             <label class="w3-text-primary" for="nameBot">Name vom Email-Bot</label>
@@ -29,7 +42,7 @@
         </div>
         <div class="w3-section">
             <label class="w3-text-primary" for="vorname">Vorname</label>
-            <input required type="text" class="w3-input w3-border w3-border-primary" value="<?=$_POST['vorname'] ?? ''?>" id="vorname" name="vorname">
+            <input required type="text" class="w3-input w3-border w3-border-primary" value="<?=$daten['ligavertreter']?>" id="vorname" name="vorname">
         </div>
         <div class="w3-section">
             <label class="w3-text-primary" for="nachname">Nachname</label>
@@ -37,15 +50,24 @@
         </div>
         <div class="w3-section">
             <label class="w3-text-primary" for="email">Emailadresse</label>
-            <input required type="email" class="w3-input w3-border w3-border-primary" value="<?=$_POST['email'] ?? ''?>" id="email" name="email">
+            <input required type="email" class="w3-input w3-border w3-border-primary" value="<?=$emails[0]['email']?>" id="email" name="email">
         </div>
     </div>
 
 
     <!-- Submit -->
     <div class="w3-panel w3-card-4">
+        <input type=hidden name='passphrase' value='NurdamitnichtjederHansundFranzeineGruppeanlegenkann'>
         <p>
-            <input type="submit" value="Gruppe anlegen" name="create_turnier" class="w3-secondary w3-button w3-block">
+            <input type="submit" value="Gruppe anlegen" name="create_team" class="w3-secondary w3-button w3-block">
         </p>
     </div>
+
+  <?php }
+  else { ?>
+    <div class="w3-card-4 w3-panel">
+        Für Deine Mannschaft wurde mit der Emailadresse  <a href="mailto:<?=$daten['team_termine_email'];?>"><?=$daten['team_termine_email'];?></a> bereits eine Gruppe angelegt.<br>
+        Klicke <a href="https://team.einrad.hockey">team.einrad.hockey</a> um auf die Seite zu gelangen.
+    </div>
+  <?php }?>
 </form>
