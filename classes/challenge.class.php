@@ -58,6 +58,7 @@ class Challenge {
         INSERT INTO `oeffi_challenge`(`spieler_id`, `kilometer`, `datum`) VALUES ('$spieler', '$distanz', '$datum')
         ";
         db::writedb($sql);
+        return true;
     }
 
 }
