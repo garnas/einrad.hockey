@@ -1335,7 +1335,7 @@ CREATE TABLE `oeffi_challenge` (
   `id` int(11) NOT NULL,
   `spieler_id` int(11) NOT NULL,
   `kilometer` float DEFAULT NULL,
-  `datum` date NOT NULL DEFAULT current_timestamp(),
+  `datum` date NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
