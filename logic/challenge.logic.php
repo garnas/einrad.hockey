@@ -1,8 +1,10 @@
 <?php
-$challenge = new Challenge;
+$challenge = new Challenge();
 
 $teamliste = $challenge->get_teams();
 $spielerliste = $challenge->get_spieler();
+$start = $challenge->challenge_start;
+$end = $challenge->challenge_end;
 
 
 
@@ -13,9 +15,9 @@ if (isset($_POST['put_challenge'])) {
     $distanz = $_POST["kilometer"];
     $datum = $_POST["datum"];
 
-    if ($datum<"2020-11-01") {
+    if ($datum < $start || $dartum > $end) {
         $error = true;
-        Form::error("Das ausgewählt Datum liegt vor dem Beginn.");
+        Form::error("Das ausgewählt Datum liegt nicht im Bereich.");
     } elseif ($spieler == 0) {
         $error = true;
         Form::error("Es wurde kein Spieler ausgewählt.");
