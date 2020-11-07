@@ -16,7 +16,7 @@ include '../../templates/header.tmp.php';
 <h1 class="w3-text-primary">Kilometer-Challenge 2020</h1>
 <p class="w3-text-gray">
     Die Kilometer-Challenge findet vom <b><?=$challenge->challenge_start?></b> bis <b><?=$challenge->challenge_end?></b> statt. 
-    Die Teams können in diesem Zeitraum so viele Kilometer wie möglich sammeln und am Ende gewinnen!
+    Die Teams können in diesem Zeitraum mit ihrem Einrad so viele Kilometer wie möglich sammeln und am Ende gewinnen!
 </p>
 <p><?=Form::link('../teamcenter/tc_challenge.php', '<i class="material-icons">timeline</i>  Kilometer für dein Team eintragen!');?></p>
 
