@@ -53,11 +53,11 @@ class Challenge {
         return db::escape($daten);
     }
 
-    function set_data($spieler, $distanz, $datum){
+    public static function set_data($spieler, $distanz, $datum){
         $sql = "
         INSERT INTO `oeffi_challenge`(`spieler_id`, `kilometer`, `datum`) VALUES ('$spieler', '$distanz', '$datum')
         ";
-        $result = db::writedb($sql);
+        db::writedb($sql);
     }
 
 }
