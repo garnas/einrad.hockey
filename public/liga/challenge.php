@@ -5,6 +5,10 @@
 require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/challenge.logic.php'; //Erstellt Challenge-Objekt nach der Validation
 
+$color[0] = "background-color: #a6b2d8;";
+$color[1] = "background-color: #b8c1e0;";
+$color[2] = "background-color: #cad0e8;";
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -39,7 +43,7 @@ include '../../templates/header.tmp.php';
                 echo "<tr>";
             } else {
                 foreach ($teamliste as $team){?> 
-                    <tr>
+                    <tr style="<?=$color[$team["platz"] - 1] ?? ''?>">
                         <td class="w3-center"><?=$team["platz"]?></td>
                         <td style="white-space: nowrap;" class="w3-left-align"><?=$team["teamname"]?></td>
                         <td class="w3-center"><?=$team["mitglieder"]?></td>
@@ -70,7 +74,7 @@ include '../../templates/header.tmp.php';
                 echo "<tr>";
             } else {            
                 foreach ($spielerliste as $spieler){?> 
-                    <tr>
+                    <tr style="<?=$color[$spieler["platz"] - 1] ?? ''?>">
                         <td class="w3-center"><?=$spieler["platz"]?></td>
                         <td class="w3-left-align"><?=$spieler['vorname']?></td>
                         <td class="w3-left-align"><?=$spieler['teamname']?></td>
