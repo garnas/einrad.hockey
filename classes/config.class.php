@@ -12,7 +12,7 @@ class Config {
     ///////////////////////////Saison Jahr/////////////////////////
     ///////////////////////////////////////////////////////////////
 
-    const SAISON = '26'; //Saison Nummer Saison 1 = Saison 1995;
+    const SAISON = '26'; //Saison Nummer Saison 0 = Saison 1995;
     const SAISON_ANFANG = '15.08.2020';
     const SAISON_ENDE = '31.10.2021';
 
@@ -65,7 +65,7 @@ class Config {
     const LAMAIL_ANTWORT = 'la2021@einrad.hockey';
     const TECHNIKMAIL = 'technik@einrad.hockey';
     const SCHIRIMAIL = 'schiri@einrad.hockey';
-    const OEFFIMAIL = 'info@einrad.hockey';
+    const OEFFIMAIL = 'oeffentlichkeitsausschuss@einrad.hockey';
 
     ///////////////////////////////////////////////////////////////
     ///////////////////////Mailversand Server//////////////////////

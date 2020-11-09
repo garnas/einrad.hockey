@@ -225,7 +225,8 @@ class Team {
             LEFT JOIN turniere_details
             ON turniere_details.turnier_id = teams_strafen.turnier_id
             WHERE teams_strafen.saison = '".Config::SAISON."'
-            AND teams_liga.aktiv = 'Ja'";
+            AND teams_liga.aktiv = 'Ja'
+            ORDER BY turniere_liga.datum DESC";
         $result = db::readdb($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)){

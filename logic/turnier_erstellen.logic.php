@@ -88,8 +88,9 @@ if (isset($_POST['create_turnier'])) {
         Form::error("Ungültige Anzahl an Turnierplätzen");
     }
 
-    $datum = $_POST['datum'];
+    $datum = date("Y-m-d", strtotime($_POST['datum'])); //Hinzugefügt, falls ein anderes Datumsformat von dem HTML-Form übermittelt wird
     $startzeit = $_POST['startzeit'];
+
     //Validierung des ausgewählten Turnierdatums, falls man nicht als la_eingeloggt ist.
     if (!($ligacenter or $art == "spass")){
         $datum_unix = strtotime($datum);

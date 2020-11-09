@@ -27,11 +27,16 @@ $strafen = Team::get_all_strafen();
 
 //Testen ob Verwarnungen oder Strafen existieren.
 $verwarnung_not_empty = $strafe_not_empty = false;
-foreach ($strafen as $strafe){
+foreach ($strafen as $key => $strafe){
     if ($strafe['verwarnung'] == 'Ja'){
         $verwarnung_not_empty = true;
     }elseif ($strafe['verwarnung'] == 'Nein'){
         $strafe_not_empty = true;
+    }
+    if (!empty($strafe['datum'])){
+        $strafen[$key]['datum'] = date("d.m.Y", strtotime($strafe['datum']));
+    }else{
+        $strafen[$key]['datum'] = "-";
     }
 }
 
@@ -53,22 +58,25 @@ for ($i = 23; $i < 29; $i++){
 }
 
 //Spieltag wählen:
-$spieltage_string = '';
 for ($spieltag = $akt_spieltag; $spieltag >= 0; $spieltag--){
-    $spieltage_string .= "<a class='no w3-hover-text-secondary' href='tabelle.php?spieltag=$spieltag#meister'>";
     if($spieltag == $gew_spieltag){
-        $spieltag_color = 'w3-text-secondary';
+        $spieltag_color = 'w3-text-white';
+        $spieltag_button = 'w3-primary w3-border w3-border-primary';
     }else{
-        $spieltag_color = '';
+        $spieltag_color = 'w3-text-grey';
+        $spieltag_button = 'w3-light-grey w3-border';
     }
-    $spieltage_string .= "<span class='$spieltag_color'>$spieltag</span>";
+    $spieltag_string = "<span class='$spieltag_color'>$spieltag</span>";
     if($spieltag == $live_spieltag){
-        $spieltage_string .= "<span class='$spieltag_color'> <i>(unvollständig)</i></span>";
+        $spieltag_string .= "<span class='$spieltag_color'> <i>(unvollständig)</i></span>";
     }
-    $spieltage_string .= '</a>, ';
+
+    $spieltage_array[$akt_spieltag-$spieltag] = array(
+        $spieltag,
+        "spieltag_string" =>$spieltag_string,
+        "spieltag_button" =>$spieltag_button
+    );
 }
-$spieltage_string_meister = substr($spieltage_string, 0, -2);
-$spieltage_string_rang = str_replace("#meister","#rang", $spieltage_string_meister);
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -91,7 +99,7 @@ include '../../templates/header.tmp.php';
         <div class="w3-margin-left">
             <ul class="w3-ul w3-leftbar w3-border-tertiary">
             <li>Alle Turniere welche an einem Wochenende stattfinden, werden einem Spieltag zugeordnet.</li>
-            <li>Der in der Liste "Spieltag wählen" rot angezeigte Spieltag, ist der aktuelle Spieltag mit Live-Turnierergebnissen, falls sie schon vorhanden sind.</li>
+            <li>Oberhalb der jeweiligen Tabelle kann man auch vergangene Spieltage auswählen.</li>
             <li>Für die Turnieranmeldungen ist jedoch immer der vorherige (und damit vollständige) Spieltag relevant, also nicht der aktuelle Spieltag.</li>
             </ul>
         </div>
@@ -132,7 +140,11 @@ window.onclick = function(event) {
 <p class="w3-border-top w3-border-grey w3-text-grey"><a href="#rang" class="no w3-hover-text-secondary">Zur Rangtabelle</a><span class="w3-right">Saison <?=Form::get_saison_string()?></span></p>
 
 <!-- Spieltag wählen -->
-<p class="w3-text-grey">Spieltag wählen: <?=$spieltage_string_meister?><p>
+<div class="w3-bar">
+    <?php foreach ($spieltage_array as $spieltag_dict){?>
+        <a class='no w3-hover-text-secondary' href='tabelle.php?spieltag=<?=$spieltag_dict[0]?>#meister'><span class= 'w3-bar-item w3-button <?=$spieltag_dict['spieltag_button']?> w3-hover-primary'><?=$spieltag_dict["spieltag_string"]?></span></a>
+    <?php } //endforeach?>
+</div>
 
 <!--Tabelle-->
 <div class="w3-responsive w3-card">
@@ -161,7 +173,12 @@ window.onclick = function(event) {
 <p class="w3-border-top w3-border-grey w3-text-grey"><a href="#meister" class="no w3-hover-text-secondary">Zur Meisterschaftstabelle</a><span class="w3-right">Saison <?=Form::get_saison_string()?></span></p>
 
 <!-- Spieltag wählen -->
-<p class="w3-text-grey">Spieltag wählen: <?=$spieltage_string_rang?><p>
+<div class="w3-bar">
+    <?php foreach ($spieltage_array as $spieltag_dict){?>
+        <a class='no w3-hover-text-secondary' href='tabelle.php?spieltag=<?=$spieltag_dict[0]?>#rang'><span class='w3-bar-item w3-button <?=$spieltag_dict['spieltag_button']?> w3-hover-primary'><?=$spieltag_dict["spieltag_string"]?></span></a>
+    <?php } //endforeach?>
+</div>
+
 
 <!--Tabelle -->
 <div class="w3-responsive w3-card">
@@ -189,6 +206,7 @@ window.onclick = function(event) {
     </table>    
 </div>
 
+
 <!-- Pranger -->
 <h3 id="pranger" class="w3-text-primary">Verwarnungen</h3>
 <?php if ($verwarnung_not_empty) {?>
@@ -197,13 +215,13 @@ window.onclick = function(event) {
                 <tr class="w3-primary">
                     <th>Team</th>
                     <th>Grund</th>
-                    <th>Turnier</th>
+                    <th class="w3-center">Turnier</th>
                 </tr>
                 <?php foreach ($strafen as $strafe){ if ($strafe['verwarnung'] == 'Ja'){?>
                     <tr>
                         <td style="white-space: nowrap; vertical-align: middle;"><?=$strafe['teamname']?></td>
                         <td style="vertical-align: middle"><?=$strafe['grund']?></td>
-                        <td style="vertical-align: middle"><?=($strafe['datum'] ?? '') . ' - ' . ($strafe['ort'] ?? '')?></td>
+                        <td class="w3-center" style="vertical-align: middle"><?=$strafe['datum']?><br><?=($strafe['ort'] ?? '')?></td>
                     </tr>
                 <?php }/*end if*/ }/*end foreach*/?>
             
@@ -228,7 +246,7 @@ window.onclick = function(event) {
                             <?=$strafe['grund']?> 
                             <?php if (!empty($strafe['prozentsatz'])){?>(<?=$strafe['prozentsatz']?> %)<?php } //endif?>
                         </td>
-                        <td style="vertical-align: middle"><?=($strafe['datum'] ?? '') . ' - ' . ($strafe['ort'] ?? '')?></td>
+                        <td class="w3-center" style="vertical-align: middle"><?=$strafe['datum']?><br><?=($strafe['ort'] ?? '')?></td>
                     </tr>
                 <?php }/*end if*/ }/*end foreach*/?>
         </table>

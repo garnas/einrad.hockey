@@ -111,7 +111,7 @@ class Form
     }
 
     //Funktion für Saisonumstellung auf eine Saison über zwei Jahre
-    //1 = Saison 1995
+    //0 = Saison 1995
     public static function get_saison_string($saison = Config::SAISON)
     {
         //Sollte zum Beispiel ein String übergeben werden, dann wird genau dieser String auch wieder rausgeworfen.

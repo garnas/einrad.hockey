@@ -154,6 +154,8 @@ include '../../templates/header.tmp.php';
             <?php } //end if?>
              <?php if (!empty($statistik['max_tore'])) {?>
                 <span>Die meisten Tore:</span>
+                <p><i>Um das Abschießen von Teams zu verhindern, werden auf Anweisung des Ligaausschusses keine Torstatistiken mehr angezeigt.</i></p>
+                <?php /*
                 <table class="w3-table">
                     <?php $i=-1; foreach ($statistik['max_tore'] as $team_id => $tore){ $i++;?>
                         <tr class="<?=$colors[$i]?>">
@@ -162,7 +164,9 @@ include '../../templates/header.tmp.php';
                         </tr>
                     <?php } //end foreach?>
                 </table>
+                */?>
             <?php }//endif?>
+            <!--
             <div class="w3-border">
                 <div class="w3-primary w3-center" style="height:24px;width:<?=max($fortschritt,0)?>%"></div>
             </div>
@@ -171,8 +175,7 @@ include '../../templates/header.tmp.php';
             <?php }else{?>
                 <span>Saison zu <?=$fortschritt?>% abgeschlossen</span>
             <?php } //end if?>
-            <p>
-            </p>
+            -->
         </div>
 
         <!-- Links -->

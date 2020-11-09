@@ -30,7 +30,7 @@ if(isset($_POST['login'])) {
         $akt_team = new Team($team_id);
         if(password_verify($passwort, $akt_team->get_passwort())) {
             $_SESSION['team_id'] = $team_id;
-            $_SESSION['teamname'] = $teamname;
+            $_SESSION['teamname'] = Team::teamid_to_teamname($team_id); //Ansonsten könnte es zu fehlern der Groß- und Kleinschreibung kommen, da SQL diese in der Suche der Team ID igoniert.
             $_SESSION['teamblock'] = Tabelle::get_team_block($_SESSION['team_id']);
             //Logdatei erstellen/beschreiben
             $log_login = fopen('../../system/logs/log_login.txt', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
