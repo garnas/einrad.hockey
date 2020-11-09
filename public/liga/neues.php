@@ -93,9 +93,7 @@ include '../../templates/header.tmp.php';
             <p class="w3-text-grey w3-small w3-border-top w3-border-grey"></p>
             <p>Sammelt für euer Team Kilometer und legt die meiste Strecke zurück!</p>
             <p>
-                <form action="../teamcenter/tc_challenge.php">
-                    <input type="submit" class="w3-button w3-primary" value="Kilometer eintragen!"></input>
-                </form>
+                <a href='../teamcenter/tc_challenge.php' class="w3-button w3-primary">Kilometer eintragen!</a>
             </p>
         </div>
 

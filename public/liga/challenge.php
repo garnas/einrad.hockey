@@ -22,9 +22,8 @@ include '../../templates/header.tmp.php';
     Die Kilometer-Challenge findet vom <b><?=$challenge->challenge_start?></b> bis <b><?=$challenge->challenge_end?></b> statt. 
     Die Teams können in diesem Zeitraum mit ihrem Einrad so viele Kilometer wie möglich sammeln und am Ende gewinnen!
 </p>
-<form action="../teamcenter/tc_challenge.php">
-    <input type="submit" class="w3-button w3-secondary" value="Kilometer für dein Team eintragen!"></input>
-</form>
+
+<a href='../teamcenter/tc_challenge.php' class="w3-button w3-secondary"><i class="material-icons">timeline</i> Kilometer für dein Team eintragen!</a>
 
 <h3 class="w3-text-secondary w3-margin-top">Teams</h3>
 <div class="w3-responsive w3-card">
