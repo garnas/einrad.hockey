@@ -1,4 +1,4 @@
-<form action="http://localhost/eht/site/forms/gruppe-add_record.php" method="post">
+<form action="https://team.einrad.hockey/forms/gruppe-add_record.php" method="post">
     <div class="w3-panel w3-tertiary w3-card-4">
         <h3 class="w3-center">Neue Terminseite für Deinen Verein anlegen</h3>
     </div>
