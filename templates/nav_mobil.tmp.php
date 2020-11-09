@@ -44,6 +44,7 @@
         <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_kontaktcenter.php">Kontaktcenter</a>
         <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_teamdaten.php">Teamdaten</a>
         <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_kader.php">Kader</a>
+        <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_terminseite_erstellen.php">Teamtermine</a>
         <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_pw_aendern.php">Passwort ändern</a>
         <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_logout.php">Logout</a>
     </div>

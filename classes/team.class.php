@@ -153,6 +153,39 @@ class Team {
         return $result['passwort'];
     }
 
+    function set_terminplaner()
+    {
+        $team_id = $this->team_id;
+        $passwort = password_hash($passwort, PASSWORD_DEFAULT);
+        $sql = "UPDATE teams_liga SET terminplaner = 'Ja' WHERE team_id='$team_id'";
+        db::writedb($sql);
+    }
+
+    function get_terminplaner()
+    {
+        $team_id = $this->team_id;
+        $sql = "SELECT terminplaner FROM teams_liga WHERE team_id='$team_id'";
+        $result = db::readdb($sql);
+        $result = mysqli_fetch_assoc($result);
+        if ($result['terminplaner'] === 'Ja'){
+            return true;
+        }
+        return false;
+    }
+
+    function set_freilose($anzahl)
+    {
+        $team_id = $this->team_id;
+        $sql = "UPDATE teams_liga SET freilose='$anzahl' WHERE team_id='$team_id'";
+        db::writedb($sql);
+    }
+
+    public static function add_freilos($team_id)
+    {
+        $sql = "UPDATE teams_liga SET freilose=freilose+1 WHERE team_id='$team_id'";
+        db::writedb($sql);
+    }
+
     function set_passwort($passwort, $pw_geaendert = 'Ja')
     {
         $team_id = $this->team_id;
@@ -168,19 +201,6 @@ class Team {
         $result = db::readdb($sql);
         $result = mysqli_fetch_assoc($result);
         return db::escape($result['freilose']);
-    }
-
-    function set_freilose($anzahl)
-    {
-        $team_id = $this->team_id;
-        $sql = "UPDATE teams_liga SET freilose='$anzahl' WHERE team_id='$team_id'";
-        db::writedb($sql);
-    }
-
-    public static function add_freilos($team_id)
-    {
-        $sql = "UPDATE teams_liga SET freilose=freilose+1 WHERE team_id='$team_id'";
-        db::writedb($sql);
     }
 
     function set_team_detail($entry, $value)

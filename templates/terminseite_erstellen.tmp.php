@@ -9,13 +9,13 @@
           Trainingszeiten werden nur einmalig angelegt und wiederholen sich wöchentlich.<br>
           Daten der Ligaturniere können einfach übernommen werden und es ist den Spielern ersichtlich, ob Ihr zum Turnier gemeldet seid und ob Ihr spielt oder auf der Warteliste steht.<br>
           Auch ist es möglich Eure Termine über CalDAV in verschiedene Clients (z.B. Thunderbird, Outlook) oder Android und iOS einzubinden.<br><br>
-          Es ist möglich und sinnvoll mehrere Mannschaften für einen Verein anzulegen (Nur 1 Account hier anlegen). So könnt Ihr auch Spielern ermöglichen bei Turnieren auszuhelfen oder ein gemeinsames Training für mehrere Mannschaften organsiseren.<br><br>
-          Die Erstellung der Spieleraccounts, Mannschaften etc. ist unabhängig von der Teamkaderverwaltung auf der Ligaseite.<br>
+          Es ist möglich und sinnvoll mehrere Teams für einen Verein anzulegen (Nur 1 Account hier anlegen). So könnt Ihr auch Spielern ermöglichen bei Turnieren auszuhelfen oder ein gemeinsames Training für mehrere Teams organsiseren.<br><br>
+          Die Erstellung der Spieleraccounts, Teams etc. ist unabhängig von der Teamkaderverwaltung auf der Ligaseite.<br>
           Bei Fragen kontaktiere <a href="mailto:team@einrad.hockey">team@einrad.hockey</a>.
         </p>
     </div>
 
-<?php if (empty($daten['team_termine_email'])) {?>
+<?php if (!$akt_team->get_terminplaner()) {?>
     <div class="w3-card-4 w3-panel">
         <h3>Gruppe</h3>
         <div class="w3-section">
@@ -63,11 +63,11 @@
         </p>
     </div>
 
-  <?php }
-  else { ?>
+  <?php } else { ?>
     <div class="w3-card-4 w3-panel">
-        Für Deine Mannschaft wurde mit der Emailadresse  <a href="mailto:<?=$daten['team_termine_email'];?>"><?=$daten['team_termine_email'];?></a> bereits eine Gruppe angelegt.<br>
-        Klicke <a href="https://team.einrad.hockey">team.einrad.hockey</a> um auf die Seite zu gelangen.
+        Für Dein Team wurde mit der Emailadresse bereits eine Gruppe angelegt.<br>
+        Klicke <?=Form::link('https://team.einrad.hockey')?>, um auf deine Seite zu gelangen.<br><br>
+        Bei Fragen kannst du dich bei <?=Form::mailto(Config::TECHNIKMAIL)?> melden.
     </div>
   <?php }?>
 </form>
