@@ -109,23 +109,4 @@ class Form
         }
         return "<a href='mailto:$email' class='no w3-text-blue w3-hover-text-secondary' style='white-space: nowrap;'><i class='material-icons'>mail</i> $name</a>";
     }
-
-    //Funktion für Saisonumstellung auf eine Saison über zwei Jahre
-    //0 = Saison 1995
-    public static function get_saison_string($saison = Config::SAISON)
-    {
-        //Sollte zum Beispiel ein String übergeben werden, dann wird genau dieser String auch wieder rausgeworfen.
-        if (!is_numeric($saison)) {
-            return $saison;
-        }
-        if ($saison == 25) {
-            return "2020 (Corona-Saison)";
-        }
-        if ($saison > 25) {
-            $saison_jahr = 1994 + $saison;
-            $saison_jahr_next = $saison_jahr + 1;
-            return substr($saison_jahr, -2) . "/" . substr($saison_jahr_next, -2);
-        }
-        return 1995 + $saison;
-    }
 }

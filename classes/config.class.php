@@ -80,7 +80,7 @@ class Config {
     ///////////////////////////////////////////////////////////////
     ///////////////////////////Teamblöcke//////////////////////////
     ///////////////////////////////////////////////////////////////
-    //Für die Block und Wertzuordnung in der Rangtabelle siehe Tabelle::platz_to_block und Tabelle::platz_to_wertigkeit
+    //Für die Block und Wertzuordnung in der Rangtabelle siehe Saison::platz_to_block und Saison::platz_to_wertigkeit
     //Reihenfolge bei den Blöcken muss immer hoch -> niedrig sein
 
     //Mögliche Team-Blöcke

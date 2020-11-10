@@ -21,7 +21,7 @@
                 <?php } //ende if?>
                     <td class='w3-center'><?=$eintrag['jahrgang']." ".$eintrag['geschlecht']?></td>
                 <?php if (!empty($eintrag['schiri'])){ //Häkchen Setzten wenn gültiger Schirieintrag?>
-                    <td class='w3-center'><i class='material-icons'>check_circle_outline</i><?=Form::get_saison_string($eintrag['schiri'])?> <?php if($eintrag['junior'] == 'Ja'){?><i class="w3-text-primary">junior</i><?php }//endif?></td>
+                    <td class='w3-center'><i class='material-icons'>check_circle_outline</i><?=Saison::get_saison_string($eintrag['schiri'])?> <?php if($eintrag['junior'] == 'Ja'){?><i class="w3-text-primary">junior</i><?php }//endif?></td>
                 <?php }else{?>
                     <td class='w3-center'></td>
                 <?php } //ende if?>
@@ -54,7 +54,7 @@
                         <?php } //ende if?>
                         <td class='w3-center'><?=$eintrag['jahrgang']." ".$eintrag['geschlecht']?></td>
                         <?php if (!empty($eintrag['schiri'])){ //Häkchen Setzten wenn gültiger Schirieintrag?>
-                            <td class='w3-center'><i class='material-icons'>check_circle_outline</i><?=Form::get_saison_string($eintrag['schiri'])?> <?php if($eintrag['junior'] == 'Ja'){?><i class="w3-text-primary">junior</i><?php }//endif?></td>
+                            <td class='w3-center'><i class='material-icons'>check_circle_outline</i><?=Saison::get_saison_string($eintrag['schiri'])?> <?php if($eintrag['junior'] == 'Ja'){?><i class="w3-text-primary">junior</i><?php }//endif?></td>
                         <?php }else{?>
                             <td class='w3-center'></td>
                         <?php } //ende if?>

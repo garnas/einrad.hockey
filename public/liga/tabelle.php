@@ -137,7 +137,7 @@ window.onclick = function(event) {
 
 <!-- Meisterschaftstabelle -->
 <h1 class="w3-text-primary w3-border-primary" id='meister'>Meisterschaftstabelle</h1>
-<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#rang" class="no w3-hover-text-secondary">Zur Rangtabelle</a><span class="w3-right">Saison <?=Form::get_saison_string()?></span></p>
+<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#rang" class="no w3-hover-text-secondary">Zur Rangtabelle</a><span class="w3-right">Saison <?=Saison::get_saison_string()?></span></p>
 
 <!-- Spieltag wählen -->
 <div class="w3-bar">
@@ -170,7 +170,7 @@ window.onclick = function(event) {
 
 <!--Rangtabelle-->
 <h1 id="rang" class="w3-text-primary w3-border-primary">Rangtabelle</h1>
-<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#meister" class="no w3-hover-text-secondary">Zur Meisterschaftstabelle</a><span class="w3-right">Saison <?=Form::get_saison_string()?></span></p>
+<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#meister" class="no w3-hover-text-secondary">Zur Meisterschaftstabelle</a><span class="w3-right">Saison <?=Saison::get_saison_string()?></span></p>
 
 <!-- Spieltag wählen -->
 <div class="w3-bar">
@@ -196,8 +196,8 @@ window.onclick = function(event) {
         <?php foreach ($rang_tabelle as $spalte){?>
             <tr>
                 <td><span class="w3-text-grey"><?=$spalte['platz']?></span></td>
-                <td class="w3-center"><?=Tabelle::platz_to_block($spalte['platz'])?></td>
-                <td class="w3-center"><?=Tabelle::platz_to_wertigkeit($spalte['platz'])?></td>
+                <td class="w3-center"><?=Saison::platz_to_block($spalte['platz'], Config::SAISON)?></td>
+                <td class="w3-center"><?=Saison::platz_to_wertigkeit($spalte['platz'])?></td>
                 <td style="white-space: nowrap"><?=$spalte['teamname']?></td>
                 <td><?=htmlspecialchars_decode($spalte['string'])?></td>
                 <td><?=$spalte['avg'] ?: 0?></td>

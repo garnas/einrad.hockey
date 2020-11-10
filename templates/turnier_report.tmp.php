@@ -36,7 +36,7 @@
                         <tr class="<?php if(!empty($spieler['schiri'])){?>w3-pale-green<?php } //endif?>">
                             <td><?=$spieler_id?></td>
                             <td><?=$spieler['vorname'] . ' ' .  mb_substr($spieler['nachname'],0,1, "utf-8") . '.'?></td>
-                            <td><?php if (!empty($spieler['schiri'])){?><i class="material-icons">check_circle</i> <?=Form::get_saison_string($spieler['schiri'])?><?php } //endif?></td>
+                            <td><?php if (!empty($spieler['schiri'])){?><i class="material-icons">check_circle</i> <?=Saison::get_saison_string($spieler['schiri'])?><?php } //endif?></td>
                         </tr>
                     <?php }//end foreach?>
                 </table>

@@ -47,7 +47,7 @@ class xml
                     }
                 }
                 if ($ebene1=="platz") {
-                    $block = Tabelle::platz_to_block($subnode1->platz);
+                    $block = Saison::platz_to_block($subnode1->platz, Config::SAISON);
                     $subnode1->addChild("block", htmlspecialchars("$block"));
                 }
             } else {

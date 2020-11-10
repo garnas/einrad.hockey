@@ -45,7 +45,7 @@ include '../../templates/header.tmp.php';
 ?>
 
 <!-- Vergangene Strafen -->
-<h2 class="w3-bottombar w3-border-primary">Vergebene Strafen/Verwarnungen der Saison <?=Form::get_saison_string()?></h2>
+<h2 class="w3-bottombar w3-border-primary">Vergebene Strafen/Verwarnungen der Saison <?=Saison::get_saison_string()?></h2>
 <div class="w3-responsive">
     <table class="w3-table w3-striped">
         <thead>

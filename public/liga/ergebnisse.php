@@ -12,7 +12,7 @@ if (isset($_GET['saison']) && is_numeric($_GET['saison'])){
 $data_ergebnisse = Tabelle::get_all_ergebnisse($saison);
 
 if (empty($data_ergebnisse)){
-    Form::affirm("Es wurden noch keine Turnierergebnisse der Saison " . Form::get_saison_string($saison) . " eingetragen");
+    Form::affirm("Es wurden noch keine Turnierergebnisse der Saison " . Saison::get_saison_string($saison) . " eingetragen");
 }
 $data_turniere = Turnier::get_all_turniere("WHERE saison='$saison'");
 
@@ -30,8 +30,8 @@ if(isset($_SESSION['team_id'])){
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-$titel = "Turnierergebnisse " . Form::get_saison_string($saison) . " | Deutsche Einradhockeyliga";
-$content = 'Hier kann man die Ergebnisse und Tabellen der Saison ' . Form::get_saison_string($saison) . ' sehen.';
+$titel = "Turnierergebnisse " . Saison::get_saison_string($saison) . " | Deutsche Einradhockeyliga";
+$content = 'Hier kann man die Ergebnisse und Tabellen der Saison ' . Saison::get_saison_string($saison) . ' sehen.';
 include '../../templates/header.tmp.php';
 ?>
 
@@ -50,7 +50,7 @@ $(document).ready(function(){
 </script>
 
 <!--Überschrift-->
-<h1 class="w3-text-primary">Turnierergebnisse<br><span class="w3-text-grey">Saison <?=Form::get_saison_string($saison)?></span></h1>
+<h1 class="w3-text-primary">Turnierergebnisse<br><span class="w3-text-grey">Saison <?=Saison::get_saison_string($saison)?></span></h1>
 
 <!-- Ergebnis suchen -->
 <div class="w3-section w3-text-grey w3-border-bottom" style="width: 250px;" >

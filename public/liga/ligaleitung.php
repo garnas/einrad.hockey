@@ -12,7 +12,7 @@ $content = "Übersicht über die Ausschüsse der Deutschen Einradhockeyliga, wel
 include '../../templates/header.tmp.php';
 ?>
 
-<h1 class="w3-text-grey">Ligaleitung der Saison <?=Form::get_saison_string()?></h1>
+<h1 class="w3-text-grey">Ligaleitung der Saison <?=Saison::get_saison_string()?></h1>
 <p class="w3-text-grey">Die Liga wird von den hier aufgelisteten Gremien geleitet. Wenn du auch in einem der Ausschüsse die Einradhockeyliga weiterentwickeln möchtest, kannst du dich jederzeit beim Ligaauschuss melden.</p> 
 <!--Liga -->
 <h2 class="w3-border-bottom w3-text-primary">Ligaausschuss</h2>
