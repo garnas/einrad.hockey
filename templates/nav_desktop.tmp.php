@@ -56,7 +56,7 @@
                 <?php if (!isset($_SESSION['team_id'])){ $tc_color="w3-text-grey";?><?php } // endif?>
                 <div class="<?=$tc_color ?? ''?>">
                     <a class="w3-bar-item w3-button" href="../teamcenter/tc_start.php">Start</a>
-                    <a class="w3-bar-item w3-button" href="../teamcenter/tc_challenge.php">Kilometer-Challenge</a>
+                    <a class="w3-bar-item w3-button" href="../teamcenter/tc_challenge.php">km-Challenge</a>
                     <a class="w3-bar-item w3-button" href="../teamcenter/tc_turnierliste_anmelden.php">Turnieranmeldung</a>
                     <a class="w3-bar-item w3-button" href="../teamcenter/tc_turnier_erstellen.php">Turnier erstellen</a>
                     <a class="w3-bar-item w3-button" href="../teamcenter/tc_turnierliste_verwalten.php">Eigene Turniere</a>
@@ -90,7 +90,7 @@
                 <span style="font-size: 22px">LIGA</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <a href="../liga/challenge.php" class="w3-bar-item  w3-button">Kilometer-Challenge</a>
+                <a href="../liga/challenge.php" class="w3-bar-item  w3-button">km-Challenge</a>
                 <a href="../liga/turniere.php" class="w3-bar-item  w3-button">Turniere</a>
                 <a href="../liga/ergebnisse.php" class="w3-bar-item w3-button">Ergebnisse</a>
                 <a href="../liga/teams.php" class="w3-bar-item w3-button">Teams</a>

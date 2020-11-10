@@ -27,7 +27,7 @@ $challenge = new Challenge;
 include '../../templates/header.tmp.php';
 ?>
 
-<h1 class="w3-text-primary">Kilometer-Challenge</h1>
+<h1 class="w3-text-primary">km-Challenge</h1>
 <!-- <h2 class="w3-text-grey">Eintragen von Ergebnissen</h2> -->
 
 <div class="w3-panel w3-card-4">

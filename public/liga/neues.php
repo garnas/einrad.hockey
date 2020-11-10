@@ -88,10 +88,10 @@ include '../../templates/header.tmp.php';
         <!-- Kilometer Challenge -->
         <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
             <a href='challenge.php' class="no">
-                <h1 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">linear_scale</i> Challenge</h1>
+                <h1 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">outlined_flag</i> km-Challenge</h1>
             </a>
             <p class="w3-text-grey w3-small w3-border-top w3-border-grey"></p>
-            <p>Sammelt für euer Team Kilometer und legt die meiste Strecke zurück!</p>
+            <p>Sammelt Kilometer für euer Team und legt die längste Strecke zurück.</p>
             <p>
                 <a href='../teamcenter/tc_challenge.php' class="w3-button w3-primary">Kilometer eintragen!</a>
             </p>

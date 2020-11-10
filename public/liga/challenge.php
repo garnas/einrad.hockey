@@ -17,13 +17,14 @@ $content = 'Hier sind die aktuellen Ergebnisse der Kilometer-Challenge zu sehen.
 include '../../templates/header.tmp.php';
 ?>
 
-<h1 class="w3-text-primary">Kilometer-Challenge 2020</h1>
+<h1 class="w3-text-primary">km-Challenge</h1>
+<h3 class="w3-text-gray">vom <?=$challenge->challenge_start?> bis zum <?=$challenge->challenge_end?></h3>
 <p class="w3-text-gray">
-    Die Kilometer-Challenge findet vom <b><?=$challenge->challenge_start?></b> bis <b><?=$challenge->challenge_end?></b> statt. 
-    Die Teams können in diesem Zeitraum mit ihrem Einrad so viele Kilometer wie möglich sammeln und am Ende gewinnen!
+    Hier habt ihr die Möglichkeit die geradelten Kilometer einzutragen. Gewertet werden eure Einträge als Einzelperson, aber immer auch im Team.
+    Also ran ans Rad und viel Spaß beim Sammeln.
 </p>
 
-<a href='../teamcenter/tc_challenge.php' class="w3-button w3-secondary"><i class="material-icons">timeline</i> Kilometer für dein Team eintragen!</a>
+<a href='../teamcenter/tc_challenge.php' class="w3-button w3-secondary">Kilometer eintragen!</a>
 
 <h3 class="w3-text-secondary w3-margin-top">Teams</h3>
 <div class="w3-responsive w3-card">

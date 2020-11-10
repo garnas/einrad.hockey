@@ -2,8 +2,8 @@
 
 class Challenge {
     
-    public $challenge_start = "01.11.2020";
-    public $challenge_end = "30.11.2020";
+    public $challenge_start = "13.11.2020";
+    public $challenge_end = "20.12.2020";
 
     function get_teams(){
         $sql = "
