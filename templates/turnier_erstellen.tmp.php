@@ -9,7 +9,7 @@
         <p>
             <label class="w3-text-primary" for="datum">Datum</label>
             <input required type="date" value="<?=$_POST['datum'] ?? date("Y-m-d", (Config::time_offset()+4*7*24*60*60))?>" class="w3-input w3-border w3-border-primary" style="max-width: 320px" id="datum" name="datum">
-            <i class="w3-text-grey"> Ligaturniere müssen spätestens vier Wochen vor dem Spieltag eingetragen werden<br>nur Samstage, Sonntage und bundesweite Feiertage<br>Saison: <?=Config::SAISON_ANFANG;?> - <?=Config::SAISON_ENDE;?></i>
+            <i class="w3-text-grey"> Ligaturniere müssen spätestens vier Wochen vor dem Spieltag eingetragen werden<br>nur Samstage, Sonntage und bundesweite Feiertage<br>Saison: <?=Saison::get_saison_anfang();?> - <?=Saison::get_saison_ende();?></i>
         </p>
         <p>
             <label class="w3-text-primary" for="startzeit">Startzeit</label>
@@ -35,7 +35,7 @@
                 
                 <?php if ($ligacenter){?>
                 <option <?php if (($_POST['art'] ?? '') == 'final'){?> selected <?php } //endif?> value='final'>Abschlussturnier</option>
-                <option <?php if (($_POST['art'] ?? '') == 'fixed'){?> selected <?php } //endif?> value='fixed'>Fixierter Turnierblock (<?=implode(", ", Config::BLOCK)?>)</option>
+                <option <?php if (($_POST['art'] ?? '') == 'fixed'){?> selected <?php } //endif?> value='fixed'>Fixierter Turnierblock (<?=implode(", ", Saison::get_block())?>)</option>
                 <?php } //endif?>
             </select>
         </p>
@@ -53,7 +53,7 @@
             <p>
             <label class="w3-text-primary" for="block_fixed">Fixierter Turnierblock</label>
             <select class="w3-input w3-border w3-border-primary" id="block_fixed" name="block_fixed">
-            <?php foreach (Config::BLOCK as $block_fixed) {?>
+            <?php foreach (Saison::get_block() as $block_fixed) {?>
             <option <?php if (($_POST['block_fixed'] ?? '') == $block_fixed){?> selected <?php } //endif?> value='<?=$block_fixed?>'><?=$block_fixed?></option>
             <?php } //end foreach?>
             </select><i class="w3-small w3-text-grey">Fixierte Turnierblöcke verändern sich nicht mehr</i>

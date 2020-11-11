@@ -4,10 +4,10 @@ $block_higher = array(); //Array der möglichen höheren Turnierblöcke
 $block_higher_str = ''; //String der möglichen höheren Turnierblöcke
 
 //Position des eigenen Blockes im Array der Blöcke
-$chosen = array_search($ausrichter_block, Config::BLOCK);
+$chosen = array_search($ausrichter_block, Saison::get_block());
 while ($chosen >= 0){
-    array_push($block_higher, Config::BLOCK[$chosen]);
-    $block_higher_str .= Config::BLOCK[$chosen].', ';
+    array_push($block_higher, Saison::get_block()[$chosen]);
+    $block_higher_str .= Saison::get_block()[$chosen].', ';
     $chosen = $chosen - 1;
 }
 $block_higher_str = substr($block_higher_str, 0, -2);
@@ -60,7 +60,7 @@ if (isset($_POST['create_turnier'])) {
     }
 
     //Validierung des Turnierblocks
-    if (!($tblock == "final" or $tblock == "ABCDEF" or $tblock == "spass" or in_array($tblock, Config::BLOCK))) {
+    if (!($tblock == "final" or $tblock == "ABCDEF" or $tblock == "spass" or in_array($tblock, Saison::get_block()))) {
         $error = true;
         Form::error ("Das Turnier hat einen ungültigen Turnierblock");
     }
@@ -94,7 +94,7 @@ if (isset($_POST['create_turnier'])) {
     //Validierung des ausgewählten Turnierdatums, falls man nicht als la_eingeloggt ist.
     if (!($ligacenter or $art == "spass")){
         $datum_unix = strtotime($datum);
-        if ($datum_unix < strtotime(Config::SAISON_ANFANG) or $datum_unix > strtotime(Config::SAISON_ENDE)){
+        if ($datum_unix < strtotime(Saison::get_saison_anfang()) or $datum_unix > strtotime(Saison::get_saison_ende())){
             $error = true;
             Form::error ("Das Datum liegt außerhalb der Saison");
         }
@@ -104,7 +104,7 @@ if (isset($_POST['create_turnier'])) {
             Form::error ("Das Datum liegt nicht am Wochende und ist kein bundesweiter Feiertag");
         }
         if (LigaBot::time_offen_melde($datum) < Config::time_offset()){
-            //if ($datum_unix > (strtotime(Config::SAISON_ANFANG) + 4*7*24*60*60)){ //Ausnahme für die ersten vier Wochen
+            //if ($datum_unix > (strtotime(Saison::get_saison_anfang()) + 4*7*24*60*60)){ //Ausnahme für die ersten vier Wochen
                 $error = true;
                 Form::error ("Turniere können nur vier Wochen vor dem Spieltag eingetragen werden");
             //}

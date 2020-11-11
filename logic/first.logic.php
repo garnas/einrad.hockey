@@ -15,7 +15,7 @@ spl_autoload_register(function ($class) {
     if ($class != 'PHPMailer'){ //Der PHPMailer muss als externes Framework manuell über phpmailer.logic.php geladen werden
         $class = strtolower($class);
         if (strpos($class, 'saison') !== false){
-            include __DIR__ . '/../classes/saison/' . $class . '.class.php';
+            include __DIR__ . '/../classes/saisons/' . $class . '.class.php';
         }
         else{
             include __DIR__ . '/../classes/' . $class . '.class.php';

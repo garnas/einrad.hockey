@@ -4,8 +4,8 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 
-$fortschritt = round(100*(Config::time_offset()-strtotime(Config::SAISON_ANFANG))/(strtotime(Config::SAISON_ENDE)-strtotime(Config::SAISON_ANFANG)),0);
-$tage = round((strtotime(Config::SAISON_ANFANG) - Config::time_offset())/(24*60*60),0);
+$fortschritt = round(100*(Config::time_offset()-strtotime(Saison::get_saison_anfang()))/(strtotime(Saison::get_saison_ende())-strtotime(Saison::get_saison_anfang())),0);
+$tage = round((strtotime(Saison::get_saison_anfang()) - Config::time_offset())/(24*60*60),0);
 
 $neuigkeiten = Neuigkeit::get_neuigkeiten(); //Alle Neuigkeiten werden übergeben, da kein Argument überliefert
                                             //Es werden die 10 letzten Neuigkeiten angzeigt

@@ -23,10 +23,10 @@ include '../../templates/header.tmp.php';
 <div class="w3-container">
     <ul class="w3-ul w3-leftbar w3-border-tertiary">
         <li><?=count(Team::list_of_all_teams())?> Teams mit <?=Spieler::count_spieler()?> Spieler</li>
-        <li><?=count(Config::BLOCK)?> Spielstärken (<?=implode(", ", Config::BLOCK)?>)</li>
+        <li><?=count(Saison::get_block())?> Spielstärken (<?=implode(", ", Saison::get_block())?>)</li>
         <li><?=Spieler::get_anz_schiris()?> Schiedsrichter</li>
-        <li>Saison: <?=Config::SAISON_ANFANG . ' - ' . Config::SAISON_ENDE?></li>
-        <li><?=Config::LIGAGEBUEHR?> Ligagebühr</li>
+        <li>Saison: <?=Saison::get_saison_anfang() . ' - ' . Saison::get_saison_ende()?></li>
+        <li><?=Saison::get_ligagebuehr()?> Ligagebühr</li>
     </ul>
 </div>
 
@@ -46,7 +46,7 @@ include '../../templates/header.tmp.php';
 <div class="w3-container">
     <ul class="w3-ul w3-primary w3-card">
         <li>1. <?=Config::LAMAIL?> anschreiben (Teamname, Ligavertreter, Email-Adresse angeben)</li>
-        <li>2. <?=Config::LIGAGEBUEHR?> Ligagebühr überweisen</li>
+        <li>2. <?=Saison::get_ligagebuehr()?> Ligagebühr überweisen</li>
         <li>3. Teamcenter-Login erhalten</li>
         <li>4. Im Teamcenter zu Turnieren anmelden</li>
     </ul>

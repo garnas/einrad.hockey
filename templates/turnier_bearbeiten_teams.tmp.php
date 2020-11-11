@@ -16,8 +16,8 @@
         <h3>Turnier erweitern</h3>
         <?php if ($blockhoch){ // = true wenn Block erweiterbar ist, aus turnier_details_bearbeiten.logic.php?>
         <p>
-        <input type="checkbox" value="<?=Config::BLOCK_ALL[array_search($daten['tblock'], Config::BLOCK_ALL)-1]?>" class="w3-check" id="block_erweitern" name="block_erweitern">
-        <label class="w3-text-primary w3-hover-text-secondary" style="cursor: pointer;" for="block_erweitern">Turnierblock erweitern auf <?=Config::BLOCK_ALL[array_search($daten['tblock'], Config::BLOCK_ALL)-1]?></label>
+        <input type="checkbox" value="<?=Saison::get_block()[array_search($daten['tblock'], Saison::get_block())-1]?>" class="w3-check" id="block_erweitern" name="block_erweitern">
+        <label class="w3-text-primary w3-hover-text-secondary" style="cursor: pointer;" for="block_erweitern">Turnierblock erweitern auf <?=Saison::get_block()[array_search($daten['tblock'], Saison::get_block())-1]?></label>
         </p>
         <?php } //endif?>
         <?php if ($blockfrei){ // = true wenn Block auf ABCDEF erweiterbar ist, aus turnier_details_bearbeiten.logic.php?>

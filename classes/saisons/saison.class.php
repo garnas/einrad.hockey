@@ -1,5 +1,6 @@
 <?php
 class Saison {
+
     public static function get_saison_class($saison)
     {
         $class_map = array(
@@ -8,6 +9,39 @@ class Saison {
         );
         return $class_map[$saison];
     }
+
+    //Ligagebühr
+    public static function get_ligagebuehr($saison = Config::SAISON)
+    {
+        return Saison::get_saison_class($saison)::get_ligagebuehr();
+    }
+    //SAISON_ANFANG
+    public static function get_saison_anfang($saison = Config::SAISON)
+    {
+        return Saison::get_saison_class($saison)::get_saison_anfang();
+    }
+    //SAISON_ENDE
+    public static function get_saison_ende($saison = Config::SAISON)
+    {
+        return Saison::get_saison_class($saison)::get_saison_ende();
+    }
+    ///////////////////////////////////////////////////////////////
+    ///////////////////////////Teamblöcke//////////////////////////
+    ///////////////////////////////////////////////////////////////
+    //Für die Block und Wertzuordnung in der Rangtabelle siehe Saison::platz_to_block und Saison::platz_to_wertigkeit
+    //Reihenfolge bei den Blöcken muss immer hoch -> niedrig sein
+
+    //Mögliche Team-Blöcke
+    public static function get_block($saison = Config::SAISON)
+    {
+        return Saison::get_saison_class($saison)::get_block();
+    }
+    //Mögliche Turnier-Blöcke 
+    public static function get_block_all($saison = Config::SAISON)
+    {
+        return Saison::get_saison_class($saison)::get_block_all();
+    }
+
     //Funktion für Saisonumstellung auf eine Saison über zwei Jahre
     //0 = Saison 1995
     public static function get_saison_string($saison = Config::SAISON)

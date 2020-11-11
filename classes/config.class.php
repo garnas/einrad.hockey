@@ -13,8 +13,6 @@ class Config {
     ///////////////////////////////////////////////////////////////
 
     const SAISON = '26'; //Saison Nummer Saison 0 = Saison 1995;
-    const SAISON_ANFANG = '15.08.2020';
-    const SAISON_ENDE = '31.10.2021';
 
     ///////////////////////////////////////////////////////////////
     ////////////////////////SQL Zugangsdaten///////////////////////
@@ -76,19 +74,5 @@ class Config {
     const SMTP_USER = 'test@einrad.hockey';
     const SMTP_PW = 'PW';
     const SMTP_PORT = 666;
-
-    ///////////////////////////////////////////////////////////////
-    ///////////////////////////Teamblöcke//////////////////////////
-    ///////////////////////////////////////////////////////////////
-    //Für die Block und Wertzuordnung in der Rangtabelle siehe Saison::platz_to_block und Saison::platz_to_wertigkeit
-    //Reihenfolge bei den Blöcken muss immer hoch -> niedrig sein
-
-    //Mögliche Team-Blöcke
-    const BLOCK = array('A','AB','BC','CD','DE','EF','F');
-
-    //Mögliche Turnier-Blöcke
-    const BLOCK_ALL =  array("ABCDEF",'A','AB','ABC','BC','BCD','CD','CDE','DE','DEF','EF','F');
     
-    //Ligagebühr
-    const LIGAGEBUEHR = "30&nbsp;€";
 }

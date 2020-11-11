@@ -37,7 +37,7 @@ class Spieler {
     public static function check_timing()
     {
         //23:59:59 am Saisonende
-        $saison_ende = strtotime(Config::SAISON_ENDE) + 25*60*60 - 1;
+        $saison_ende = strtotime(Saison::get_saison_ende()) + 25*60*60 - 1;
         $heute = Config::time_offset();
         if ($saison_ende > $heute ){
             return true;
