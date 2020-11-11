@@ -29,8 +29,8 @@ class LigaBot {
             $ausrichter_block = Tabelle::get_team_block($akt_turnier->daten['ausrichter']);
             $turnier_block = $akt_turnier->daten['tblock'];
             //Position des Ausrichters in einem Array aller Blöcke in der Klasse Config, um Blockhöhere und erweiterte Turniere erkennen zu können
-            $pos_ausrichter = array_search($ausrichter_block, Saison::get_block());
-            $pos_turnier = array_search($turnier_block, Saison::get_block());
+            $pos_ausrichter = array_search($ausrichter_block, Saison::get_block_all());
+            $pos_turnier = array_search($turnier_block, Saison::get_block_all());
     
             if ($akt_turnier->daten['art'] == 'I' && $akt_turnier->daten['phase'] == 'offen' && $akt_turnier->daten['tblock_fixed'] != 'Ja' && $turnier_block != $ausrichter_block){
                 if (($pos_ausrichter - 1) != $pos_turnier){ //Um einen Block vom Ausrichterblock aus erweiterte Turniere sollen nicht wandern...
