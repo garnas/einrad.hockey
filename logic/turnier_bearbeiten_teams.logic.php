@@ -106,9 +106,9 @@ if (isset($_POST['change_turnier'])) {
     //Um den nächst höheren Buchstaben erweitern
     if (isset($_POST['block_erweitern'])){
         if ($blockhoch){
-            $chosen = array_search($akt_turnier->daten['tblock'], Saison::get_block());
-            if (($_POST['block_erweitern'] ?? '') == Saison::get_block()[$chosen-1]){
-                $tblock = Saison::get_block()[$chosen-1];
+            $chosen = array_search($akt_turnier->daten['tblock'], Saison::get_block_all());
+            if (($_POST['block_erweitern'] ?? '') == Saison::get_block_all()[$chosen-1]){
+                $tblock = Saison::get_block_all()[$chosen-1];
                 $fixed = $akt_turnier->daten['tblock_fixed'];
                 $erweitern = true;
             }

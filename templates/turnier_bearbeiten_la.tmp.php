@@ -41,7 +41,7 @@
         <p>
         <label class="w3-text-primary" for="block">Turnierblock</label>
         <select required class="w3-select w3-border w3-border-primary" id="block" name="block">';
-        <?php foreach (Saison::get_block() as $block){?>
+        <?php foreach (Saison::get_block_all() as $block){?>
             <option <?php if ($daten['tblock'] == $block){?> selected <?php }?> value='<?=$block?>'><?=$block?></option>
         <?php } //end foreach?>
         </select>

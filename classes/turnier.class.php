@@ -415,7 +415,7 @@ class Turnier {
             return true;
         }else{
             //Check ob es sich um ein Block-Turnier handelt (nicht spass oder finale)
-            if (in_array($turnier_block, Saison::get_block())){
+            if (in_array($turnier_block, Config::BLOCK_ALL)){
                 //Block-String in Array auflösen
                 $turnier_block = str_split($turnier_block);
                 $team_block = str_split($team_block);
@@ -442,12 +442,12 @@ class Turnier {
     public static function check_team_block_freilos_static($team_block, $turnier_block)
     {
         //Check ob es sich um einen Block-Turnier handelt (nicht spass, finale, oder fix)
-        if (in_array($turnier_block, Saison::get_block())){
-            $pos_turnier = array_search($turnier_block, Saison::get_block(), true);
+        if (in_array($turnier_block, Config::BLOCK_ALL)){
+            $pos_turnier = array_search($turnier_block, Config::BLOCK_ALL, true);
             $team_block = str_split($team_block);
-            for ($i = $pos_turnier; $i <= (count(Saison::get_block())-1); $i++){
+            for ($i = $pos_turnier; $i <= (count(Config::BLOCK_ALL)-1); $i++){
                 foreach ($team_block as $buchstabe){
-                    $turnier_block = str_split(Saison::get_block()[$i]);
+                    $turnier_block = str_split(Config::BLOCK_ALL[$i]);
                     if (in_array($buchstabe,$turnier_block)){
                         return true;
                     }
