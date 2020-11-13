@@ -7,72 +7,77 @@
 
 <url>
   <loc>https://einrad.hockey/liga/neues</loc>
-  <lastmod>2020-07-24T09:19:57+00:00</lastmod>
+  <lastmod>2020-11-13T09:19:57+00:00</lastmod>
   <priority>1.00</priority>
 </url>
 <url>
+  <loc>https://einrad.hockey/liga/challenge</loc>
+  <lastmod>2020-11-13T09:19:57+00:00</lastmod>
+  <priority>0.90</priority>
+</url>
+<url>
   <loc>https://einrad.hockey/liga/ueber_uns</loc>
-  <lastmod>2020-07-24T09:19:57+00:00</lastmod>
+  <lastmod>2020-11-13T09:19:57+00:00</lastmod>
   <priority>0.90</priority>
 </url>
 <url>
   <loc>https://einrad.hockey/liga/ligakarte</loc>
-  <lastmod>2020-07-24T09:19:57+00:00</lastmod>
+  <lastmod>2020-11-13T09:19:57+00:00</lastmod>
   <priority>0.90</priority>
 </url>
 <url>
   <loc>https://einrad.hockey/liga/ligaleitung</loc>
-  <lastmod>2020-07-24T09:19:57+00:00</lastmod>
+  <lastmod>2020-11-13T09:19:57+00:00</lastmod>
   <priority>0.85</priority>
 </url>
 <url>
   <loc>https://einrad.hockey/liga/teams</loc>
-  <lastmod>2020-07-24T09:19:57+00:00</lastmod>
+  <lastmod>2020-11-13T09:19:57+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://einrad.hockey/liga/turniere</loc>
-  <lastmod>2020-07-24T09:19:57+00:00</lastmod>
+  <lastmod>2020-11-13T09:19:57+00:00</lastmod>
   <priority>0.80</priority>
 </url>
 <url>
   <loc>https://einrad.hockey/liga/ergebnisse</loc>
-  <lastmod>2020-07-24T09:19:57+00:00</lastmod>
+  <lastmod>2020-11-13T09:19:57+00:00</lastmod>
   <priority>0.75</priority>
 </url>
 <url>
   <loc>https://einrad.hockey/liga/tabelle</loc>
-  <lastmod>2020-07-24T09:19:57+00:00</lastmod>
+  <lastmod>2020-11-13T09:19:57+00:00</lastmod>
   <priority>0.64</priority>
 </url>
 <url>
   <loc>https://einrad.hockey/liga/kontakt</loc>
-  <lastmod>2020-07-24T09:19:57+00:00</lastmod>
+  <lastmod>2020-11-13T09:19:57+00:00</lastmod>
   <priority>0.60</priority>
 </url>
 <url>
   <loc>https://einrad.hockey/liga/dokumente</loc>
-  <lastmod>2020-07-24T09:19:57+00:00</lastmod>
+  <lastmod>2020-11-13T09:19:57+00:00</lastmod>
   <priority>0.50</priority>
 </url>
 <url>
   <loc>https://einrad.hockey/teamcenter/tc_login</loc>
-  <lastmod>2020-07-24T09:19:57+00:00</lastmod>
+  <lastmod>2020-11-13T09:19:57+00:00</lastmod>
   <priority>0.50</priority>
 </url>
 <url>
   <loc>https://einrad.hockey/liga/archiv</loc>
-  <lastmod>2020-07-24T09:19:57+00:00</lastmod>
+  <lastmod>2020-11-13T09:19:57+00:00</lastmod>
   <priority>0.40</priority>
 </url>
 <url>
   <loc>https://einrad.hockey/liga/impressum</loc>
-  <lastmod>2020-07-24T09:19:57+00:00</lastmod>
+  <lastmod>2020-11-13T09:19:57+00:00</lastmod>
   <priority>0.20</priority>
 </url>
 <url>
   <loc>https://einrad.hockey/liga/datenschutz</loc>
-  <lastmod>2020-07-24T09:19:57+00:00</lastmod>
+  <lastmod>2020-11-13T09:19:57+00:00</lastmod>
   <priority>0.10</priority>
 </url>
 
