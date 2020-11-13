@@ -53,9 +53,9 @@ class Challenge {
         return db::escape($daten);
     }
 
-    public static function set_data($spieler, $distanz, $datum){
+    public static function set_data($spieler, $distanz, $radgroesse, $datum){
         $sql = "
-        INSERT INTO `oeffi_challenge`(`spieler_id`, `kilometer`, `datum`) VALUES ('$spieler', '$distanz', '$datum')
+        INSERT INTO `oeffi_challenge`(`spieler_id`, `kilometer`, `radgröße`, `datum`) VALUES ('$spieler', '$distanz', '$radgroesse', '$datum')
         ";
         db::writedb($sql);
         return true;

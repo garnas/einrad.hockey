@@ -12,6 +12,7 @@ if (isset($_POST['put_challenge'])) {
     $spieler = $_POST["spieler"];
     $distanz = $_POST["kilometer"];
     $datum = $_POST["datum"];
+    $radgroesse = $_POST["radgroesse"];
 
     if ($datum < $start || $datum > $end) {
         $error = true;
@@ -22,7 +23,7 @@ if (isset($_POST['put_challenge'])) {
     }
 
     if (!$error) {
-        if(Challenge::set_data($spieler, $distanz, $datum)) {
+        if(Challenge::set_data($spieler, $distanz, $radgroesse, $datum)) {
             Form::affirm("Die Strecke wurde erfolgreich eingetragen!");
             header('Location: tc_challenge.php');//Setzt den Html-Header zu einer direkten Weiterleitung, somit wird die Seite neu geladen mit den aktuellen Daten
             die(); //Trotz gesetzten Header würde das Skript noch zu ende ausgeführt werden. Deswegen wird es hier beendet.

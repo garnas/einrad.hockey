@@ -63,6 +63,11 @@ include '../../templates/header.tmp.php';
             <i class="w3-text-grey">Bitte gebt die Strecke in Kilometer auf eine Nachkommastelle genau an.</i>
         </p>
         <p>
+            <label class="w3-text-primary" for="radgroesse">Radgröße</label>
+            <input required class="w3-input w3-border w3-border-primary" type="number" id="radgroesse" name="radgroesse" min="0" step="1"></input>
+            <i class="w3-text-grey">Angabe in Zoll.</i>
+        </p>
+        <p>
             <label class="w3-text-primary" for="datum">Datum</label>
             <input required class="w3-input w3-border w3-border-primary" type="date" id="datum" min="<?=date("Y-m-d",strtotime($challenge->challenge_start))?>" max="<?=$max?>" value="<?=date("Y-m-d")?>" name="datum"></input>
             <i class="w3-text-grey">Das Datum muss zwischen dem <?=$challenge->challenge_start?> und <?=$challenge->challenge_end?> liegen.</i>
