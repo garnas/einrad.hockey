@@ -53,6 +53,23 @@ class Challenge {
         return db::escape($daten);
     }
 
+    function get_eintraege() {
+        $sql = "
+        SELECT sp.team_id, ch.datum, sp.vorname, sp.nachname, ch.kilometer
+        FROM `oeffi_challenge` ch, `spieler` sp
+        WHERE ch.spieler_id = sp.spieler_id
+        ORDER BY ch.datum DESC, ch.timestamp DESC
+        ";
+        $result = db::readdb($sql);
+
+        $daten = [];
+        while($row = mysqli_fetch_assoc($result)){
+            array_push($daten, $row);
+        }
+
+        return db::escape($daten);
+    }
+    
     public static function set_data($spieler, $distanz, $radgroesse, $datum){
         $sql = "
         INSERT INTO `oeffi_challenge`(`spieler_id`, `kilometer`, `radgröße`, `datum`) VALUES ('$spieler', '$distanz', '$radgroesse', '$datum')

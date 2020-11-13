@@ -3,6 +3,7 @@ $challenge = new Challenge();
 
 $teamliste = $challenge->get_teams();
 $spielerliste = $challenge->get_spieler();
+$eintraege = $challenge->get_eintraege();
 $start = date("Y-m-d", strtotime($challenge->challenge_start));
 $end = date("Y-m-d", strtotime($challenge->challenge_end));
 

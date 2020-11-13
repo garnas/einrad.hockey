@@ -19,8 +19,6 @@ foreach($teamliste as $team) {
     }
 }
 
-$challenge = new Challenge;
-
 if (date("Y-m-d",strtotime($challenge->challenge_end)) < date("Y-m-d")) {
     $max = date("Y-m-d",strtotime($challenge->challenge_end));
 } else {
@@ -111,7 +109,7 @@ include '../../templates/header.tmp.php';
     </table>
 </div>
 
-<p class="w3-text-grey">Schreibe <?=Form::mailto(Config::TECHNIKMAIL)?> an, um eine genaue Auflistung aller Fahrten deines Teams zu erhalten.</p>
+<a href='tc_challenge_eintraege.php'>Einträge bearbeiten</a>
 
 <?php
 include '../../templates/footer.tmp.php';
