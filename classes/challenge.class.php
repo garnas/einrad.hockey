@@ -7,7 +7,7 @@ class Challenge {
 
     function get_teams(){
         $sql = "
-        SELECT t.team_id, teamname, COUNT(sp.spieler_id) AS mitglieder, COUNT(ch.id) AS einträge, ROUND(SUM(kilometer), 1) AS kilometer
+        SELECT t.team_id, teamname, COUNT(DISTINCT(sp.spieler_id)) AS mitglieder, COUNT(ch.id) AS einträge, ROUND(SUM(kilometer), 1) AS kilometer
         FROM `oeffi_challenge` ch, spieler sp, teams_liga t
         WHERE ch.spieler_id = sp.spieler_id
         AND sp.team_id = t.team_id
