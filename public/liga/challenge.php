@@ -30,10 +30,10 @@ include '../../templates/header.tmp.php';
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-striped">
         <tr class="w3-primary">
-            <th class="w3-center">Platzierung</th>
+            <th class="w3-center">#</th>
             <th class="w3-left-align">Team</th>
-            <th class="w3-center">Mitglieder</th>
-            <th class="w3-center">Einträge</th>
+            <th class="w3-center w3-hide-small">Mitglieder</th>
+            <th class="w3-center w3-hide-small">Einträge</th>
             <th class="w3-center">Kilometer</th>               
         <tr>
         <?php 
@@ -46,8 +46,8 @@ include '../../templates/header.tmp.php';
                     <tr style="<?=$color[$team["platz"] - 1] ?? ''?>">
                         <td class="w3-center"><?=$team["platz"]?></td>
                         <td style="white-space: nowrap;" class="w3-left-align"><?=$team["teamname"]?></td>
-                        <td class="w3-center"><?=$team["mitglieder"]?></td>
-                        <td class="w3-center"><?=$team["einträge"]?></td>
+                        <td class="w3-center w3-hide-small"><?=$team["mitglieder"]?></td>
+                        <td class="w3-center w3-hide-small"><?=$team["einträge"]?></td>
                         <td class="w3-right-align"><?=number_format($team["kilometer"], 1, ',', '.');?></td>
                     </tr>
                 <?php } //end foreach 
@@ -61,10 +61,10 @@ include '../../templates/header.tmp.php';
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-striped">
         <tr class="w3-primary">
-            <th class="w3-center">Platzierung</th>
+            <th class="w3-center">#</th>
             <th class="w3-left-align">Spieler/in</th>
             <th class="w3-left-align">Team</th>
-            <th class="w3-center">Einträge</th>
+            <th class="w3-center w3-hide-small">Einträge</th>
             <th class="w3-center">Kilometer</th>
         <tr>
         <?php 
@@ -78,7 +78,7 @@ include '../../templates/header.tmp.php';
                         <td class="w3-center"><?=$spieler["platz"]?></td>
                         <td class="w3-left-align"><?=$spieler['vorname']?></td>
                         <td class="w3-left-align"><?=$spieler['teamname']?></td>
-                        <td class="w3-center"><?=$spieler['einträge']?></td>
+                        <td class="w3-center w3-hide-small"><?=$spieler['einträge']?></td>
                         <td class="w3-right-align"><?=number_format($spieler["kilometer"], 1, ',', '.');?></td>
                     </tr>
             <?php } //end foreach 
