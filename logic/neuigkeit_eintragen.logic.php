@@ -10,7 +10,7 @@ if ($teamcenter){
 }
 
 //Formularauswertung
-if (isset($_POST['titel'])){
+if (isset($_POST['create_neuigkeit'])){
 
     if (empty($_POST['titel']) or empty($_POST['text'])){
         Form::error("Bitte Titel und Text eingeben.");
@@ -29,8 +29,7 @@ if (isset($_POST['titel'])){
             }
             
         }else{
-            //Wert aus der Datenbank wird übernommen
-            $target_file_jpg=$neuigkeit['link_jpg'];
+            $target_file_jpg = '';
         }
         //pdf
         if (!empty($_FILES["pdfupload"]["tmp_name"])){
@@ -42,15 +41,16 @@ if (isset($_POST['titel'])){
             }
 
         }else{
-            $target_file_pdf=$neuigkeit['link_pdf'];
+            $target_file_pdf = '';
         }
 
         //////Titel, Text und Verlinkungen werden in die Datenbank eingetragen//////
         $titel = $_POST['titel'];
         $text = $_POST['text'];
+        $bild_verlinken = $_POST['bild_verlinken'];
         //$text = preg_replace("/[\r\n]+/", "\n", $text); //Entfernt doppelte Newline-Characters (Absätze) - ansonsten wäre es möglich einen Neuigkeiteseintrag mit 200 neuen Zeilen zu erstellen
         if (!$error) {
-            Neuigkeit::create_neuigkeit($titel,$text,$name,$target_file_jpg ?? '',$target_file_pdf ?? '');
+            Neuigkeit::create_neuigkeit($titel,$text,$name,$target_file_jpg,$target_file_pdf,$bild_verlinken);
             Form::affirm("Deine Neuigkeit wurde erfolgreich eingetragen");
             header ('Location: ../liga/neues.php');
             die(); //Damit das Skript nicht zu auf dem Server zu ende ausgeführt wird.

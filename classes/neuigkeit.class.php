@@ -2,30 +2,35 @@
 
 class Neuigkeit {
 
-    public static function create_neuigkeit ($titel,$text,$name, $link_jpg ='', $link_pdf = '')
+    public static function create_neuigkeit ($titel,$text,$name, $link_jpg ='', $link_pdf = '', $bild_verlinken = '')
     {
-        $sql="INSERT INTO neuigkeiten (titel, inhalt, eingetragen_von, link_jpg, link_pdf) VALUES ('$titel','$text','$name','$link_jpg','$link_pdf')";
+        $sql="INSERT INTO neuigkeiten (titel, inhalt, eingetragen_von, link_jpg, link_pdf, bild_verlinken) VALUES ('$titel','$text','$name','$link_jpg','$link_pdf', '$bild_verlinken')";
         db::writedb($sql);
     }
 
-    public static function delete_neuigkeit ($neuigkeiten_id,$link_jpg,$link_pdf)
-    {
+    public static function delete_neuigkeit ($neuigkeiten_id)
+    {   
+        //Bilder und Dokumente der Neuigkeit löschen
+        $neuigkeit = self::get_neuigkeiten($neuigkeiten_id);
+        $neuigkeit = $neuigkeit[$neuigkeiten_id];
+        if (file_exists($neuigkeit['link_jpg'])){unlink ($neuigkeit['link_jpg']);}
+        if (file_exists($neuigkeit['link_pdf'])){unlink ($neuigkeit['link_pdf']);}
+
+        //Neuigkeiteintrag aus der DB löschen
         $sql="DELETE FROM `neuigkeiten` WHERE neuigkeiten_id='$neuigkeiten_id'";
-        if (!empty($link_jpg)){unlink($link_jpg);}
-        if (!empty($link_pdf)){unlink($link_pdf);}
         db::writedb($sql);
     }
 
-    public static function update_neuigkeit($neuigkeiten_id, $titel, $text, $link_jpg ='', $link_pdf = '')
+    public static function update_neuigkeit($neuigkeiten_id, $titel, $text, $link_jpg ='', $link_pdf = '', $bild_verlinken = '')
     {
-        $sql="UPDATE neuigkeiten SET titel='$titel', inhalt='$text', link_jpg='$link_jpg', link_pdf='$link_pdf', zeit=zeit WHERE neuigkeiten_id = '$neuigkeiten_id'"; //zeit=zeit, damit der timestamp nicht erneuert wird
+        $sql="UPDATE neuigkeiten SET titel='$titel', inhalt='$text', link_jpg='$link_jpg', link_pdf='$link_pdf', bild_verlinken = '$bild_verlinken', zeit=zeit WHERE neuigkeiten_id = '$neuigkeiten_id'"; //zeit=zeit, damit der timestamp nicht erneuert wird
         db::writedb($sql);
     }
 
     public static function get_neuigkeiten ($neuigkeiten_id = 'neuigkeiten_id')
     {
         //Wenn kein Argument überliefert wird, werden alle Neuigkeiten herausgegeben
-        $sql="SELECT * FROM neuigkeiten WHERE neuigkeiten_id = $neuigkeiten_id ORDER BY zeit DESC LIMIT 10";
+        $sql="SELECT * FROM neuigkeiten WHERE neuigkeiten_id = $neuigkeiten_id ORDER BY zeit DESC LIMIT 10"; //Es werden max. 10 Neuigkeiten angezeigt
         //db::debug($sql);
         $result = db::readdb($sql);
         $return = array();
