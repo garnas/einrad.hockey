@@ -209,8 +209,8 @@ include '../../templates/header.tmp.php';
                 <!-- Bild -->
                 <?php if ($neuigkeit['link_jpg'] != ''){?>
                     <div class='w3-center w3-card'> 
-                        <a href='<?=$neuigkeit['link_jpg']?>'>
-                            <img class='w3-image w3-hover-opacity' style="max-height: 800px" alt="<?=$neuigkeit['titel']?>" src=<?=$neuigkeit['link_jpg']?>>
+                        <a href='<?=$neuigkeit['bild_verlinken'] ?: $neuigkeit['link_jpg']?>'>
+                            <img class='w3-image w3-hover-opacity' alt="<?=$neuigkeit['titel']?>" src=<?=$neuigkeit['link_jpg']?>>
                         </a>
                     </div>
                 <?php } //end if?>
