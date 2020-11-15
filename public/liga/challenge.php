@@ -24,6 +24,13 @@ include '../../templates/header.tmp.php';
     Also ran ans Rad und viel Spaß beim Sammeln.
 </p>
 
+<div class='w3-card w3-panel w3-leftbar w3-border-yellow w3-pale-yellow'>
+    <h3>Hinweis zur Korrektur</h3>
+    <p>Aufgrund eines Fehlers in der Eintragung konnten nicht alle Radgrößen mitgeteilt werden. 
+    Sollte dies bei euch der Fall gewesen sein, dann schickt uns eine Mail zur Korrektur an <?=Form::mailto(Config::OEFFIMAIL)?> oder <?=Form::mailto(Config::TECHNIKMAIL)?> mit 
+    eurem Namen, dem Datum und der richtigen Radgröße.<br /><br />Vielen Dank für euer Verständis!</p>
+</div>
+
 <a href='../teamcenter/tc_challenge.php' class="w3-button w3-secondary">Kilometer eintragen!</a>
 
 <h3 class="w3-text-secondary w3-margin-top">Teams</h3>
