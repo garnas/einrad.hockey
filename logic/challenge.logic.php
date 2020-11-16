@@ -38,5 +38,10 @@ if (isset($_POST['put_challenge'])) {
 }
 
 if (isset($_POST['update_challenge'])) {
+    $eintrag = $_POST["eintrag_id"];
 
+    Challenge::update_data($eintrag);
+    
+    header('Location: tc_challenge_eintraege.php');
+    die();
 }

@@ -13,6 +13,7 @@ class Challenge {
         AND sp.team_id = t.team_id
         AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
         AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
+        AND ch.count = TRUE
         GROUP BY teamname
         ORDER BY kilometer DESC
         ";
@@ -37,6 +38,7 @@ class Challenge {
         AND sp.team_id = t.team_id
         AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
         AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
+        AND ch.count = TRUE
         GROUP BY sp.spieler_id
         ORDER BY kilometer DESC
         ";
@@ -55,9 +57,10 @@ class Challenge {
 
     function get_eintraege() {
         $sql = "
-        SELECT sp.team_id, ch.datum, sp.vorname, sp.nachname, ch.kilometer, ch.radgröße
+        SELECT ch.id, sp.team_id, ch.datum, sp.vorname, sp.nachname, ch.kilometer, ch.radgröße
         FROM `oeffi_challenge` ch, `spieler` sp
         WHERE ch.spieler_id = sp.spieler_id
+        AND ch.count = TRUE
         ORDER BY ch.datum DESC, ch.timestamp DESC
         ";
         $result = db::readdb($sql);
@@ -78,6 +81,13 @@ class Challenge {
         return true;
     }
 
+    public static function update_data($id) {
+        $sql = "
+        UPDATE `oeffi_challenge` SET `count` = FALSE WHERE `id` = '$id';  
+        ";
+        db::writedb($sql);
+        return true;
+    }
 }
 
 ?>
