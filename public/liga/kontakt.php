@@ -33,7 +33,6 @@ if(isset($_POST['absenden'])) {
     //Um die Ausfüllzeit verdeckt gegenüber Spambots zu messen, wird time() verschlüsselt im Hidden-Feld gespeichert
     //Hier dann entschlüsselt. Key ist der Database-Name, welcher nicht auf Github veröffentlicht ist
     $time = time() - @openssl_decrypt($_POST['no_bot'],'AES-256-CBC', Config::DATABASE);
-    db::debug($time . " Sekunden");
     if ($time < 6){ //Bot, wenn in unter 6 Sekunden das Formular abgeschickt wurde
         Form::error("E-Mail konnte wegen Spamverdacht nicht versendet werden, da das Formular zu schnell ausgefüllt wurde. Schreib uns bitte an via " . Form::mailto(Config::LAMAIL));
         $error = true;
