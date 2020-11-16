@@ -55,7 +55,7 @@ class Challenge {
 
     function get_eintraege() {
         $sql = "
-        SELECT sp.team_id, ch.datum, sp.vorname, sp.nachname, ch.kilometer
+        SELECT sp.team_id, ch.datum, sp.vorname, sp.nachname, ch.kilometer, ch.radgröße
         FROM `oeffi_challenge` ch, `spieler` sp
         WHERE ch.spieler_id = sp.spieler_id
         ORDER BY ch.datum DESC, ch.timestamp DESC

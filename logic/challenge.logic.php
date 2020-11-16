@@ -36,3 +36,7 @@ if (isset($_POST['put_challenge'])) {
     }
 
 }
+
+if (isset($_POST['update_challenge'])) {
+
+}
