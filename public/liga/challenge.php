@@ -75,12 +75,12 @@ include '../../templates/header.tmp.php';
             <th class="w3-center">Kilometer</th>
         <tr>
         <?php 
-            if ($spielerliste == NULL) {
+            if ($alle_spielerliste == NULL) {
                 echo "<tr>";
                 echo "<td colspan='5' class='w3-center'>Bisher keine Einträge vorhanden.</td>";
                 echo "<tr>";
             } else {            
-                foreach ($spielerliste as $spieler){?> 
+                foreach ($alle_spielerliste as $spieler){?> 
                     <tr style="<?=$color[$spieler["platz"] - 1] ?? ''?>">
                         <td class="w3-center"><?=$spieler["platz"]?></td>
                         <td class="w3-left-align"><?=$spieler['vorname']?></td>

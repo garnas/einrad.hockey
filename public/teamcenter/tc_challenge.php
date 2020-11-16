@@ -34,82 +34,55 @@ include '../../templates/header.tmp.php';
 <h1 class="w3-text-primary">km-Challenge</h1>
 <!-- <h2 class="w3-text-grey">Eintragen von Ergebnissen</h2> -->
 
-<div class="w3-panel w3-card-4">
-    <p class="w3-text-primary w3-half w3-center w3-xxxlarge">
-        <?=$platz?>
-    </p>
-    <p class="w3-text-primary w3-half w3-center w3-xxxlarge">
-        <?=$kilometer?>
-    </p>
-    <p class="w3-text-grey w3-right w3-small"><i>Platz / Kilometer</i></p>
-</div>
+<div class="w3-col">
+    <div class="w3-row-padding w3-twothird">
+        <p>
+            <a href='../teamcenter/tc_challenge_eintraege.php' class="w3-button w3-secondary w3-block w3-card-2">Eintrag hinzufügen</a>
+        </p> 
+        <div class="w3-panel w3-card-4" style="padding:0;">
+            <table class="w3-table w3-striped">
+                <tr class="w3-primary">
+                    <th class="w3-center">Platzierung</th>
+                    <th class="w3-center">Spieler/in</th>
+                    <th class="w3-center">Kilometer</th>
+                <tr>
+                <?php 
+                    $error = True;
+                    foreach ($team_spielerliste as $spieler) {
+                            $error = False;
+                ?> 
+                            <tr>
+                                <td class="w3-center"><?=$spieler["platz"]?></td>
+                                <td class="w3-center"><?=$spieler['vorname']?></td>
+                                <td class="w3-center"><?=number_format($spieler['kilometer'], 1, ',', '.');?></td>
+                            </tr>
+                <?php 
+                    } //end foreach 
 
-<form method="post" onsubmit="return confirm('Für ' + document.getElementById('spieler').options[document.getElementById('spieler').selectedIndex].text + ' werden ' + document.getElementById('kilometer').value + ' km hinzugefügt.\r\n\r\nDer Vorname des Spielers wird mit seinen insgesamt gefahrenen Kilometern und seiner Teamzugehörigkeit veröffentlicht.');">
-    <div class="w3-panel w3-card-4">
-        <p>
-            <label class="w3-text-primary" for="spieler">Spieler/in</label>
-            <select required class="w3-select w3-border w3-border-primary" id="spieler" name="spieler">
-                <option value="0">--- Bitte wählen ---</option>
-                <?php foreach($kader as $spieler){?>
-                    <option value=<?=$spieler["spieler_id"]?>><?=$spieler["vorname"]?> <?=$spieler["nachname"]?></option>
-                <?php } ?>
-            </select>
-        </p>
-        <p>
-            <label class="w3-text-primary" for="kilometer">Strecke</label>
-            <input required class="w3-input w3-border w3-border-primary" type="number" id="kilometer" name="kilometer" min="0" step="0.1"></input>
-            <i class="w3-text-grey">Bitte gebt die Strecke in Kilometer auf eine Nachkommastelle genau an.</i>
-        </p>
-        <p>
-            <label class="w3-text-primary" for="radgroesse">Radgröße</label>
-            <input required class="w3-input w3-border w3-border-primary" type="number" id="radgroesse" name="radgroesse" min="0" step="0.5"></input>
-            <i class="w3-text-grey">Angabe in Zoll.</i>
-        </p>
-        <p>
-            <label class="w3-text-primary" for="datum">Datum</label>
-            <input required class="w3-input w3-border w3-border-primary" type="date" id="datum" min="<?=date("Y-m-d",strtotime($challenge->challenge_start))?>" max="<?=$max?>" value="<?=date("Y-m-d")?>" name="datum"></input>
-            <i class="w3-text-grey">Das Datum muss zwischen dem <?=$challenge->challenge_start?> und <?=$challenge->challenge_end?> liegen.</i>
-        </p>
-            <input type="submit" name="put_challenge" value="Eintragen!" class="w3-secondary w3-button w3-block">
-        </p>
+                    if ($error) {
+                        echo "<tr>";
+                        echo "<td colspan='5' class='w3-center'>Bisher keine Einträge vorhanden.</td>";
+                        echo "<tr>";
+                    }
+                ?>
+            </table>
+        </div>
     </div>
-</form>
-
-<div class="w3-responsive w3-card">
-    <table class="w3-table w3-striped">
-        <tr class="w3-primary">
-            <th class="w3-center">Platzierung</th>
-            <th colspan="2" class="w3-center">Spieler/in</th>
-            <th class="w3-center">Einträge</th>
-            <th class="w3-center">Kilometer</th>
-        <tr>
-        <?php 
-            $error = True;
-            foreach ($spielerliste as $spieler) {
-                if ($spieler["team_id"] == $team_id) {
-                    $error = False;
-        ?> 
-                    <tr>
-                        <td class="w3-center"><?=$spieler["platz"]?></td>
-                        <td class="w3-center"><?=$spieler['vorname']?></td>
-                        <td class="w3-center"><?=$spieler['nachname']?></td>
-                        <td class="w3-center"><?=$spieler['einträge']?></td>
-                        <td class="w3-right-align"><?=number_format($spieler['kilometer'], 1, ',', '.');?></td>
-                    </tr>
-        <?php 
-                } //end if
-            } //end foreach 
-
-            if ($error) {
-                echo "<tr>";
-                echo "<td colspan='5' class='w3-center'>Bisher keine Einträge vorhanden.</td>";
-                echo "<tr>";
-            }
-        ?>
-    </table>
+    <div class="w3-row-padding w3-third">  
+        <div class="w3-panel w3-card-4 w3-primary">
+            <p class="w3-center w3-xxxlarge">
+                <?=$platz?>
+            </p>
+        </div> 
+        <div class="w3-panel w3-card-4 w3-primary">
+            <p class="w3-center w3-xxxlarge">
+                <?=$kilometer?>
+            </p>
+        </div>
+    </div>
 </div>
 
-<a href='tc_challenge_eintraege.php'>Einträge bearbeiten</a>
+</div>
 
 <?php
 include '../../templates/footer.tmp.php';
