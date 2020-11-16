@@ -21,7 +21,6 @@ button {
     cursor: pointer;
     background-color: transparent;
     color: gray;
-    padding: 5px;
 }
 
 button:hover {
@@ -29,6 +28,37 @@ button:hover {
     color: #e3776f;
 }
 </style>
+
+<form method="post" onsubmit="return confirm('Für ' + document.getElementById('spieler').options[document.getElementById('spieler').selectedIndex].text + ' werden ' + document.getElementById('kilometer').value + ' km hinzugefügt.\r\n\r\nDer Vorname des Spielers wird mit seinen insgesamt gefahrenen Kilometern und seiner Teamzugehörigkeit veröffentlicht.');">
+    <div class="w3-panel w3-card-4">
+        <p>
+            <label class="w3-text-primary" for="spieler">Spieler/in</label>
+            <select required class="w3-select w3-border w3-border-primary" id="spieler" name="spieler">
+                <option value="0">--- Bitte wählen ---</option>
+                <?php foreach($kader as $spieler){?>
+                    <option value=<?=$spieler["spieler_id"]?>><?=$spieler["vorname"]?> <?=$spieler["nachname"]?></option>
+                <?php } ?>
+            </select>
+        </p>
+        <p>
+            <label class="w3-text-primary" for="kilometer">Strecke</label>
+            <input required class="w3-input w3-border w3-border-primary" type="number" id="kilometer" name="kilometer" min="0" step="0.1"></input>
+            <i class="w3-text-grey">Bitte gebt die Strecke in Kilometer auf eine Nachkommastelle genau an.</i>
+        </p>
+        <p>
+            <label class="w3-text-primary" for="radgroesse">Radgröße</label>
+            <input required class="w3-input w3-border w3-border-primary" type="number" id="radgroesse" name="radgroesse" min="0" step="0.5"></input>
+            <i class="w3-text-grey">Angabe in Zoll.</i>
+        </p>
+        <p>
+            <label class="w3-text-primary" for="datum">Datum</label>
+            <input required class="w3-input w3-border w3-border-primary" type="date" id="datum" min="<?=date("Y-m-d",strtotime($challenge->challenge_start))?>" max="<?=$max?>" value="<?=date("Y-m-d")?>" name="datum"></input>
+            <i class="w3-text-grey">Das Datum muss zwischen dem <?=$challenge->challenge_start?> und <?=$challenge->challenge_end?> liegen.</i>
+        </p>
+            <input type="submit" name="put_challenge" value="Eintragen!" class="w3-secondary w3-button w3-block">
+        </p>
+    </div>
+</form>
 
 <div class="w3-responsive w3-panel">
         <?php
