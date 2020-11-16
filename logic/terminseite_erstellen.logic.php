@@ -7,14 +7,6 @@ if (isset($_POST['create_team']) && !$akt_team->get_terminplaner()) {
         $error = true;
         Form::error ("Gruppenname fehlt");
     }
-    if ($_POST['nameBot']==false) {
-        $error = true;
-        Form::error ("Name vom Email-Bot fehlt");
-    }
-    if ($_POST['emailBot']==false) {
-        $error = true;
-        Form::error ("Emailadresse vom Bot fehlt");
-    }
     if ($_POST['alias']==false) {
         $error = true;
         Form::error ("Alias fehlt");

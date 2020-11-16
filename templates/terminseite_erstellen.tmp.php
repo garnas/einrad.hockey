@@ -19,17 +19,8 @@
     <div class="w3-card-4 w3-panel">
         <h3>Gruppe</h3>
         <div class="w3-section">
-            <label class="w3-text-primary" for="gruppenname">Gruppenname</label>
+            <label class="w3-text-primary" for="gruppenname">Gruppen- / Vereinsname</label>
             <input required type="text" class="w3-input w3-border w3-border-primary" value="<?=$daten['verein']?>" id="gruppenname" name="gruppenname">
-        </div>
-        <div class="w3-section">
-            <label class="w3-text-primary" for="nameBot">Name vom Email-Bot</label>
-            <input required type="text" class="w3-input w3-border w3-border-primary" value="<?=$_POST['nameBot'] ?? ''?>" id="nameBot" name="nameBot">
-        </div>
-        <div class="w3-section">
-            <label class="w3-text-primary" for="emailBot">Emailadresse vom Bot</label>
-            <input required type="email" class="w3-input w3-border w3-border-primary" value="<?=$_POST['emailBot'] ?? ''?>" id="emailBot" name="emailBot">
-            <i class="w3-text-grey">Absendeadresse bei automatisch versendeten Nachrichten</i>
         </div>
     </div>
 
@@ -37,16 +28,16 @@
         <h3>Administrator</h3>
         <div class="w3-section">
             <label class="w3-text-primary" for="alias">Alias</label>
-            <input required type="text" class="w3-input w3-border w3-border-primary" value="<?=$_POST['alias'] ?? ''?>" id="alias" name="alias">
+            <input required type="text" class="w3-input w3-border w3-border-primary" value="" id="alias" name="alias">
             <i class="w3-text-grey">Der Alias ist später für andere Gruppenmitglieder sichtbar</i>
         </div>
         <div class="w3-section">
             <label class="w3-text-primary" for="vorname">Vorname</label>
-            <input required type="text" class="w3-input w3-border w3-border-primary" value="<?=$daten['ligavertreter']?>" id="vorname" name="vorname">
+            <input required type="text" class="w3-input w3-border w3-border-primary" value="<?=explode(' ',$daten['ligavertreter'])[0]?>" id="vorname" name="vorname">
         </div>
         <div class="w3-section">
             <label class="w3-text-primary" for="nachname">Nachname</label>
-            <input required type="text" class="w3-input w3-border w3-border-primary" value="<?=$_POST['nachname'] ?? ''?>" id="nameBot" name="nachname">
+            <input required type="text" class="w3-input w3-border w3-border-primary" value="<?=explode(' ',$daten['ligavertreter'])[1]?>" id="nameBot" name="nachname">
         </div>
         <div class="w3-section">
             <label class="w3-text-primary" for="email">Emailadresse</label>
