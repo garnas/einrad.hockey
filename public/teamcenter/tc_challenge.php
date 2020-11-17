@@ -64,7 +64,7 @@ include '../../templates/header.tmp.php';
         </p>
         <p>
             <label class="w3-text-primary" for="radgroesse">Radgröße</label>
-            <input required class="w3-input w3-border w3-border-primary" type="number" id="radgroesse" name="radgroesse" min="0" step="0.5"></input>
+            <input required class="w3-input w3-border w3-border-primary" type="number" id="radgroesse" name="radgroesse" min="0" step="any"></input>
             <i class="w3-text-grey">Angabe in Zoll.</i>
         </p>
         <p>
