@@ -79,7 +79,7 @@ function invert(checkbox_name) {
 }
 
 //Countdown
-function countdown(date_string, countdown_id = 'countdown'){ //Format: 1995-12-17T03:24:00
+function countdown(date_string, countdown_id){ //Format: 1995-12-17T03:24:00
 // Set the date we're counting down to
 var countDownDate = new Date(date_string).getTime();
 
