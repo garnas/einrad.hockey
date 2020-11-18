@@ -51,11 +51,11 @@ include '../../templates/header.tmp.php';
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-striped">
         <tr class="w3-primary">
-            <th class="w3-center">#</th>
+            <th class="w3-center">Platz</th>
             <th class="w3-left-align">Team</th>
             <th class="w3-center w3-hide-small">Mitglieder</th>
             <th class="w3-center w3-hide-small">Einträge</th>
-            <th class="w3-center">Kilometer</th>               
+            <th class="w3-right-align">Kilometer</th>               
         <tr>
         <?php 
             if ($teamliste == NULL) {
@@ -82,11 +82,11 @@ include '../../templates/header.tmp.php';
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-striped">
         <tr class="w3-primary">
-            <th class="w3-center">#</th>
+            <th class="w3-center">Platz</th>
             <th class="w3-left-align">Spieler/in</th>
-            <th class="w3-left-align">Team</th>
+            <th style="white-space: nowrap;" class="w3-left-align">Team</th>
             <th class="w3-center w3-hide-small">Einträge</th>
-            <th class="w3-center">Kilometer</th>
+            <th class="w3-right-align">Kilometer</th>
         <tr>
         <?php 
             if ($alle_spielerliste == NULL) {
