@@ -77,3 +77,51 @@ function invert(checkbox_name) {
       }
   }
 }
+
+//Countdown
+function countdown(date_string, countdown_id = 'countdown'){ //Format: 1995-12-17T03:24:00
+// Set the date we're counting down to
+var countDownDate = new Date(date_string).getTime();
+
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+  // Get today's date and time
+  var now = new Date().getTime();
+
+  // Find the distance between now and the count down date
+  var distance = countDownDate - now;
+
+  // Time calculations for days, hours, minutes and seconds
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  if (days <= 0){
+    days = ''
+  }else if (days < 10){
+    days = "0" + days
+  }
+  if (hours < 10){hours = "0" + hours}
+  if (minutes < 10){minutes = "0" + minutes}
+  if (seconds < 10){seconds = "0" + seconds}
+
+  // Display the result in the element with id="demo"
+  document.getElementById(countdown_id + "_days").innerHTML = days;
+  document.getElementById(countdown_id + "_hours").innerHTML = hours;
+  document.getElementById(countdown_id + "_minutes").innerHTML = minutes;
+  document.getElementById(countdown_id + "_seconds").innerHTML = seconds;
+
+  /*    "<span class='w3-center' style='display: inline-block'>" +  + "<span style='display: block' class='w3-small w3-text-black'>Tage</span></span>"
+    + "<span class='w3-center' style='display: inline-block'>" + hours + "<span style='display: block' class='w3-small'>Stunden</span></span>"
+    + "<span class='w3-center' style='display: inline-block'>" + minutes + "<span style='display: block' class='w3-small'>Minuten</span></span>"
+    + "<span class='w3-center' style='display: inline-block'>" + seconds + "<span style='display: block' class='w3-small'>Sekunden</span></span>"*/
+
+  // If the count down is finished, write some text
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById(countdown_id).style.display = "none";
+  }
+}, 1000);
+
+}

@@ -139,4 +139,28 @@ class Form
         }
         return 1995 + $saison;
     }
+    public static function countdown($date, $id){
+        ?>
+            <script>countdown('<?=date("Y-m-d\TH:i:s", strtotime($date))?>', '<?=$id?>')</script>
+            <div id='countdown' class="w3-section w3-xlarge w3-text-primary">
+                <span class="w3-center w3-margin-right" style="display: inline-block">
+                    <span id='countdown_days'>--</span>
+                    <span class="w3-small w3-text-grey" style="display: block">Tage</span>
+                </span>
+                <span class="w3-center w3-margin-right" style="display: inline-block">
+                    <span id='countdown_hours'>--</span>
+                    <span class="w3-small w3-text-grey" style="display: block">Stunden</span>
+                </span>
+                <span class="w3-center w3-margin-right" style="display: inline-block">
+                    <span id='countdown_minutes'>--</span>
+                    <span class="w3-small w3-text-grey" style="display: block">Minuten</span>
+                </span>
+                <span class="w3-center" style="display: inline-block">
+                    <span id='countdown_seconds'>--</span>
+                    <span class="w3-small w3-text-grey" style="display: block">Sekunden</span>
+                </span>
+            </div>
+        <?php
+    }
+
 }
