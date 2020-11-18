@@ -42,7 +42,7 @@ include '../../templates/header.tmp.php';
             <th class="w3-right-align">Kilometer</th>               
         <tr>
         <?php 
-            if ($teamliste == NULL) {
+            if (empty($teamliste)) {
                 echo "<tr>";
                 echo "<td colspan='5' class='w3-center'>Bisher keine Einträge vorhanden.</td>";
                 echo "<tr>";
@@ -73,7 +73,7 @@ include '../../templates/header.tmp.php';
             <th class="w3-right-align">Kilometer</th>
         <tr>
         <?php 
-            if ($alle_spielerliste == NULL) {
+            if (empty($alle_spielerliste)) {
                 echo "<tr>";
                 echo "<td colspan='5' class='w3-center'>Bisher keine Einträge vorhanden.</td>";
                 echo "<tr>";
