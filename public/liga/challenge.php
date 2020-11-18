@@ -17,8 +17,14 @@ $content = 'Hier sind die aktuellen Ergebnisse der Kilometer-Challenge zu sehen.
 include '../../templates/header.tmp.php';
 ?>
 
+<!-- Überschrift -->
 <h1 class="w3-text-primary">km-Challenge</h1>
-<h3 class="w3-text-gray">vom <?=$challenge->challenge_start?> bis zum <?=$challenge->challenge_end?></h3>
+<span class="w3-text-gray w3-small"><?=$challenge->challenge_start?> bis <?=$challenge->challenge_end?></span>
+
+<!-- Countdown -->
+<?=Form::countdown($challenge->challenge_end)?>
+
+<!-- Button zum Teamcenter -->
 <p class="w3-text-gray">
     Hier habt ihr die Möglichkeit die geradelten Kilometer einzutragen. Gewertet werden eure Einträge als Einzelperson, aber immer auch im Team.
     Also ran ans Rad und viel Spaß beim Sammeln.
