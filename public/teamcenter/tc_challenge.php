@@ -70,11 +70,17 @@ include '../../templates/header.tmp.php';
     </div>
     <div class="w3-row-padding w3-third">  
         <div class="w3-panel w3-card-4 w3-primary">
+            <p class="w3-center">
+                Gesamtplatzierung
+            </p>
             <p class="w3-center w3-xxxlarge">
                 <?=$platz?>
             </p>
         </div> 
         <div class="w3-panel w3-card-4 w3-primary">
+            <p class="w3-center">
+                Teamkilometer
+            </p>
             <p class="w3-center w3-xxxlarge">
                 <?=$kilometer?>
             </p>

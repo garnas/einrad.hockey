@@ -6,6 +6,12 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_team.logic.php'; //Auth
 require_once '../../logic/challenge.logic.php';
 
+if (count($team_eintraege) == 0) {
+    $eintrag_text = "-";
+} else {
+    $eintrag_text = count($team_eintraege);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -61,8 +67,11 @@ button:hover {
 </div>
 <div class="w3-row-padding w3-third ">
     <div class="w3-panel w3-card-4 w3-primary">
-        <p>
-            <?=count($team_eintraege)?>
+        <p class="w3-center">
+            Teameinträge
+        </p>
+        <p class="w3-center w3-xxxlarge">
+            <?=$eintrag_text?>
         </p>
     </div>
 </div>
