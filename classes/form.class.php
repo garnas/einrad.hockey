@@ -30,45 +30,56 @@ class Form
         array_push($_SESSION['w_messages'], $string);
     }
 
+    //Hinweise werden ins Html-Dokument geschrieben
+    public static function schreibe_attention($message, $caption = 'Hinweis')
+    { ?>
+        <div class='w3-card w3-panel w3-leftbar w3-border-yellow w3-pale-yellow'>
+            <h3><?=$caption?></h3>
+            <p><?=$message?></p>
+        </div>
+    <?php }
+
     //Errors werden ins Html-Dokument geschrieben
-    public static function schreibe_errors()
-    {
-        if (isset($_SESSION['e_messages'])) {
-            foreach ($_SESSION['e_messages'] as $message) {
-                echo "<div class='w3-card w3-panel w3-leftbar w3-border-red w3-pale-red'>
-                <h3>Fehler</h3>
-                <p>$message</p>
-              </div>";
-            }
-            unset($_SESSION['e_messages']); //Nachdem die Fehlermeldungen dargestellt worden sind, wird dass Array geleert
-        }
-    }
+    public static function schreibe_error($message, $caption = 'Fehler')
+    { ?>
+        <div class='w3-card w3-panel w3-leftbar w3-border-red w3-pale-red'>
+            <h3><?=$caption?></h3>
+            <p><?=$message?></p>
+        </div>
+    <?php }
 
-    //Confirmations werden ins Html-Dokument geschrieben
-    public static function schreibe_affirms()
-    {
-        if (isset($_SESSION['a_messages'])) {
-            foreach ($_SESSION['a_messages'] as $message) {
-                echo "<div class='w3-card w3-panel w3-leftbar w3-border-green w3-pale-green'>
-                <h3>Info</h3>
-                <p>$message</p>
-              </div>";
-            }
-            unset($_SESSION['a_messages']); //Nachdem die Meldungen dargestellt worden sind, wird dass Array geleert
-        }
-    }
+    //Infos werden ins Html-Dokument geschrieben
+    public static function schreibe_affirm($message, $caption = 'Info')
+    { ?>
+        <div class='w3-card w3-panel w3-leftbar w3-border-green w3-pale-green'>
+            <h3><?=$caption?></h3>
+            <p><?=$message?></p>
+        </div>
+    <?php }
 
-    //Attentions werden ins Html-Dokument geschrieben
-    public static function schreibe_attentions()
-    {
+    //Meldungen aus $_SESSION werden ins Html-Dokument geschrieben
+    public static function schreibe_meldungen()
+    {   
+        //Hinweise
         if (isset($_SESSION['w_messages'])) {
             foreach ($_SESSION['w_messages'] as $message) {
-                echo "<div class='w3-card w3-panel w3-leftbar w3-border-yellow w3-pale-yellow'>
-                <h3>Hinweis</h3>
-                <p>$message</p>
-              </div>";
+                Self::schreibe_attention($message);
             }
-            unset($_SESSION['w_messages']); //Nachdem die Meldungen dargestellt worden sind, wird dass Array geleert
+            unset($_SESSION['w_messages']);
+        }
+        //Fehler
+        if (isset($_SESSION['e_messages'])) {
+            foreach ($_SESSION['e_messages'] as $message) {
+                Self::schreibe_error($message);
+            }
+            unset($_SESSION['e_messages']);
+        }
+        //Info
+        if (isset($_SESSION['a_messages'])) {
+            foreach ($_SESSION['a_messages'] as $message) {
+                Self::schreibe_affirm($message);
+            }
+            unset($_SESSION['a_messages']);
         }
     }
 
@@ -128,4 +139,28 @@ class Form
         }
         return 1995 + $saison;
     }
+    public static function countdown($date, $id = 'countdown'){
+        ?>
+            <script>countdown('<?=date("Y-m-d\TH:i:s", strtotime($date))?>', '<?=$id?>')</script>
+            <div id='countdown' class="w3-xlarge w3-text-primary">
+                <span class="w3-center w3-margin-right" style="display: inline-block">
+                    <span id='countdown_days'>--</span>
+                    <span class="w3-small w3-text-grey" style="display: block">Tage</span>
+                </span>
+                <span class="w3-center w3-margin-right" style="display: inline-block">
+                    <span id='countdown_hours'>--</span>
+                    <span class="w3-small w3-text-grey" style="display: block">Stunden</span>
+                </span>
+                <span class="w3-center w3-margin-right" style="display: inline-block">
+                    <span id='countdown_minutes'>--</span>
+                    <span class="w3-small w3-text-grey" style="display: block">Minuten</span>
+                </span>
+                <span class="w3-center" style="display: inline-block">
+                    <span id='countdown_seconds'>--</span>
+                    <span class="w3-small w3-text-grey" style="display: block">Sekunden</span>
+                </span>
+            </div>
+        <?php
+    }
+
 }
