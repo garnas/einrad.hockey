@@ -31,6 +31,52 @@ include '../../templates/header.tmp.php';
 </p>
 <a href='../teamcenter/tc_challenge.php' class="w3-button w3-secondary">Kilometer eintragen!</a>
 
+<!-- Kacheln für Sonderauswertungen -->
+<div class="w3-col">
+    <!-- Alter ist 50+ -->
+    <div class="w3-row-padding w3-third">
+        <div class="w3-panel w3-primary w3-card-4">
+        <p class="w3-center">
+            50+
+        </p>
+        <p class="w3-center w3-xxlarge">
+            <?=number_format($alt['kilometer'], 1, ',', '.');?> km
+        </p>
+        <p class="w3-center">
+            <?=$alt['vorname']?> <?=$alt['teamname']?>
+        </p>
+        </div>
+    </div>
+    <!-- Alter ist U16 -->
+    <div class="w3-row-padding w3-third">
+        <div class="w3-panel w3-primary w3-card-4">
+        <p class="w3-center">
+            16 Jahren
+        </p>
+        <p class="w3-center w3-xxlarge">
+            <?=number_format($jung['kilometer'], 1, ',', '.');?> km
+        </p>
+        <p class="w3-center">
+            <?=$jung['vorname']?> <?=$jung['teamname']?>
+        </p>
+        </div>
+    </div>
+    <!-- Einradhockeyrad -->
+    <div class="w3-row-padding w3-third">
+        <div class="w3-panel w3-primary w3-card-4">
+        <p class="w3-center">
+            Einradhockey-Rad
+        </p>
+        <p class="w3-center w3-xxlarge">
+            <?=number_format($einradhockey['kilometer'], 1, ',', '.');?> km
+        </p>
+        <p class="w3-center">
+            <?=$einradhockey['vorname']?> <?=$einradhockey['teamname']?>
+        </p>
+        </div>
+    </div>
+</div>
+
 <h3 class="w3-text-secondary w3-margin-top">Teams</h3>
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-striped">
