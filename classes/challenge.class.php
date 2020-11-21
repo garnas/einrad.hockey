@@ -139,6 +139,8 @@ class Challenge {
         WHERE sp.spieler_id = ch.spieler_id
         AND sp.team_id = te.team_id
         AND ch.count = TRUE
+        AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
+        AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
         GROUP BY sp.spieler_id
         ORDER BY spieleralter DESC, kilometer DESC
         LIMIT 1
@@ -156,6 +158,8 @@ class Challenge {
         FROM `oeffi_challenge` ch, `spieler` sp, `teams_liga` te
         WHERE sp.spieler_id = ch.spieler_id
         AND sp.team_id = te.team_id
+        AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
+        AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
         AND ch.count = TRUE
         GROUP BY sp.spieler_id
         ORDER BY spieleralter DESC, kilometer DESC
@@ -176,6 +180,8 @@ class Challenge {
         AND sp.team_id = te.team_id
         AND ch.radgröße <= 24
         AND ch.count = TRUE
+        AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
+        AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
         GROUP BY sp.spieler_id
         ORDER BY radgröße DESC, kilometer DESC
         LIMIT 1
