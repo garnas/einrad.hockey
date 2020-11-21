@@ -43,7 +43,7 @@ include '../../templates/header.tmp.php';
             <?=number_format($alt['kilometer'], 1, ',', '.');?> km
         </p>
         <p class="w3-center">
-            <?=$alt['vorname']?> <?=$alt['teamname']?>
+            <?=$alt['vorname']?><br /><?=$alt['teamname']?>
         </p>
         </div>
     </div>
@@ -57,7 +57,7 @@ include '../../templates/header.tmp.php';
             <?=number_format($jung['kilometer'], 1, ',', '.');?> km
         </p>
         <p class="w3-center">
-            <?=$jung['vorname']?> <?=$jung['teamname']?>
+            <?=$jung['vorname']?><br /><?=$jung['teamname']?>
         </p>
         </div>
     </div>
@@ -71,7 +71,7 @@ include '../../templates/header.tmp.php';
             <?=number_format($einradhockey['kilometer'], 1, ',', '.');?> km
         </p>
         <p class="w3-center">
-            <?=$einradhockey['vorname']?> <?=$einradhockey['teamname']?>
+            <?=$einradhockey['vorname']?><br /><?=$einradhockey['teamname']?>
         </p>
         </div>
     </div>
@@ -81,7 +81,7 @@ include '../../templates/header.tmp.php';
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-striped">
         <tr class="w3-primary">
-            <th class="w3-center">Platz</th>
+            <th class="w3-center">#</th>
             <th class="w3-left-align">Team</th>
             <th class="w3-center w3-hide-small">Mitglieder</th>
             <th class="w3-center w3-hide-small">Einträge</th>
@@ -112,8 +112,8 @@ include '../../templates/header.tmp.php';
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-striped">
         <tr class="w3-primary">
-            <th class="w3-center">Platz</th>
-            <th class="w3-left-align">Spieler/in</th>
+            <th class="w3-center">#</th>
+            <th class="w3-left-align">Teilnehmer/in</th>
             <th style="white-space: nowrap;" class="w3-left-align">Team</th>
             <th class="w3-center w3-hide-small">Einträge</th>
             <th class="w3-right-align">Kilometer</th>

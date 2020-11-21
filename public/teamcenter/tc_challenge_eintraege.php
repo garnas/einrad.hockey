@@ -37,7 +37,7 @@ button:hover {
         <form method="post" onsubmit="return confirm('Für ' + document.getElementById('spieler').options[document.getElementById('spieler').selectedIndex].text + ' werden ' + document.getElementById('kilometer').value + ' km hinzugefügt.\r\n\r\nDer Vorname des Spielers wird mit seinen insgesamt gefahrenen Kilometern und seiner Teamzugehörigkeit veröffentlicht.');">
         <div class="w3-panel w3-card-4">
             <p>
-                <label class="w3-text-primary" for="spieler">Spieler/in</label>
+                <label class="w3-text-primary" for="spieler">Teilnehmer/in</label>
                 <select required class="w3-select w3-border w3-border-primary" id="spieler" name="spieler">
                     <option value="0">--- Bitte wählen ---</option>
                     <?php foreach($kader as $spieler){?>
