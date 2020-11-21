@@ -104,16 +104,20 @@ class Challenge {
     function get_team_spieler($team_id) {
         $sql = "
         SELECT platz, vorname, kilometer
-        FROM (
-            SELECT ROW_NUMBER() OVER (ORDER BY kilometer DESC) AS platz, sp.team_id, sp.vorname, ROUND(SUM(kilometer), 1) AS kilometer
-            FROM `oeffi_challenge` ch, spieler sp, teams_liga t
-            WHERE ch.spieler_id = sp.spieler_id
-            AND sp.team_id = t.team_id
-            AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
-            AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
-            AND ch.count = TRUE
-            GROUP BY sp.spieler_id
-        ) AS spieler
+        FROM(
+	        SELECT (@row_number:=@row_number + 1) AS platz, sp.*
+	        FROM ( 
+		        SELECT sp.team_id, sp.vorname, ROUND(SUM(kilometer), 1) AS kilometer
+		        FROM `oeffi_challenge` ch, spieler sp, teams_liga t
+		        WHERE ch.spieler_id = sp.spieler_id
+		        AND sp.team_id = t.team_id
+                AND ch.count = TRUE
+                AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
+                AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
+		        GROUP BY sp.spieler_id 
+		        ORDER BY kilometer DESC
+		        ) AS sp, (SELECT @row_number:= 0) AS t
+	        ) AS neu
         WHERE team_id = '" . $team_id . "'
         ORDER BY kilometer DESC
         ";
