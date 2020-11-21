@@ -19,7 +19,7 @@ include '../../templates/header.tmp.php';
 
 <!-- Überschrift -->
 <h1 class="w3-text-primary">km-Challenge</h1>
-<span class="w3-text-gray w3-small"><?=$challenge->challenge_start?> bis <?=$challenge->challenge_end?></span>
+<p class="w3-text-gray"><?=$challenge->challenge_start?> bis <?=$challenge->challenge_end?></p>
 
 <!-- Countdown -->
 <?=Form::countdown($challenge->challenge_end)?>

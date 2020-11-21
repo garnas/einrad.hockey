@@ -9,6 +9,8 @@ require_once '../../logic/challenge.logic.php';
 $team_id = $_SESSION["team_id"];
 $kader = Spieler::get_teamkader($team_id);
 
+
+// Feststellung des aktuellen Teamplatzes
 $platz = "-";
 $kilometer = "-";
 
@@ -19,6 +21,7 @@ foreach($teamliste as $team) {
     }
 }
 
+// Feststellung der Datumseinschränkung für die Eingabe in das Formular
 if (date("Y-m-d",strtotime($challenge->challenge_end)) < date("Y-m-d")) {
     $max = date("Y-m-d",strtotime($challenge->challenge_end));
 } else {
@@ -32,9 +35,6 @@ include '../../templates/header.tmp.php';
 ?>
 
 <h1 class="w3-text-primary">km-Challenge</h1>
-<!-- <h2 class="w3-text-grey">Eintragen von Ergebnissen</h2> -->
-<?=Form::schreibe_attention('Gibt es Probleme beim Eintrag? Dann schickt uns eine Mail an <br />' . Form::mailto(Config::TECHNIKMAIL). ' oder ' . Form::mailto(Config::OEFFIMAIL), '')?>
-
 <div class="w3-col">
     <div class="w3-row-padding w3-twothird">
         <p>
@@ -43,8 +43,8 @@ include '../../templates/header.tmp.php';
         <div class="w3-panel w3-card-4" style="padding:0;">
             <table class="w3-table w3-striped">
                 <tr class="w3-primary">
-                    <th class="w3-center">Platzierung</th>
-                    <th class="w3-center">Spieler/in</th>
+                    <th class="w3-center">#</th>
+                    <th class="w3-center">Teilnehmer/in</th>
                     <th class="w3-center">Kilometer</th>
                 <tr>
                 <?php 
@@ -90,6 +90,8 @@ include '../../templates/header.tmp.php';
 </div>
 
 </div>
+
+<?=Form::schreibe_attention('Gibt es Probleme beim Eintrag? Dann schickt uns eine Mail an <br />' . Form::mailto(Config::TECHNIKMAIL). ' oder ' . Form::mailto(Config::OEFFIMAIL), '')?>
 
 <?php
 include '../../templates/footer.tmp.php';

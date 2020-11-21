@@ -84,13 +84,13 @@ button:hover {
             if ($eintrag["team_id"] == $team_id) {
     ?> 
                 <div class="w3-panel w3-card-4 w3-text-grey w3-padding-16">
-                    <div class="w3-row">
-                        <div class="w3-col w3-center" style="width: 23%"><?=date("d.m.Y", strtotime($eintrag['datum']))?></div>
-                        <div class="w3-col w3-center" style="width: 23%"><?=$eintrag['vorname']?> <?=$eintrag['nachname']?></div>
-                        <div class="w3-col w3-center" style="width: 23%"><?=number_format($eintrag['kilometer'], 1, ',', '.');?> km</div>
-                        <div class="w3-col w3-center" style="width: 23%"><?=$eintrag['radgröße']?> Zoll</div>
-                        <div class="w3-col w3-right-align" style="width: 8%">
-                            <form method="post">
+                    <div class="w3-row" id='<?=$eintrag['id']?>'>
+                            <form method="post" onsubmit="return confirm('Soll der Eintrag wirklich gelöscht werden?')">
+                                <div class="w3-col w3-center" style="width: 23%" id='del-datum'><?=date("d.m.Y", strtotime($eintrag['datum']))?></div>
+                                <div class="w3-col w3-center" style="width: 23%" id='del-name'><?=$eintrag['vorname']?> <?=$eintrag['nachname']?></div>
+                                <div class="w3-col w3-center" style="width: 23%" id='del-km'><?=number_format($eintrag['kilometer'], 1, ',', '.');?> km</div>
+                                <div class="w3-col w3-center" style="width: 23%" id='del-rad'><?=$eintrag['radgröße']?> Zoll</div>
+                                <div class="w3-col w3-right-align" style="width: 8%">
                                 <input type="hidden" name="eintrag_id" value="<?=$eintrag['id']?>"></input>
                                 <button type="submit" name="update_challenge"><i class="material-icons">delete</i></button>
                             </form>
