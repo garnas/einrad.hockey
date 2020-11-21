@@ -125,3 +125,23 @@ var x = setInterval(function() {
 }, 1000);
 
 }
+
+// Progress Bar
+function progressBar(stand, ende) {
+  var percent = Math.round(stand / ende * 100);
+  var bar = document.getElementById('progress');
+  bar.innerHTML = stand + ' km';
+
+  var width = 1;
+  var id = setInterval(frame(), 10);
+
+  function frame() {
+    if (width >= percent) {
+      clearInterval(id);
+    } else {
+      width++;
+      bar.style.width = width + '%';
+    }
+  }
+
+}

@@ -24,6 +24,9 @@ include '../../templates/header.tmp.php';
 <!-- Countdown -->
 <?=Form::countdown($challenge->challenge_end)?>
 
+<!-- ProgressBar -->
+<?=Form::progressBar()?>
+
 <!-- Button zum Teamcenter -->
 <p class="w3-text-gray">
     Hier habt ihr die Möglichkeit die geradelten Kilometer einzutragen. Gewertet werden eure Einträge als Einzelperson, aber immer auch im Team.

@@ -139,6 +139,7 @@ class Form
         }
         return 1995 + $saison;
     }
+    
     public static function countdown($date, $id = 'countdown'){
         ?>
             <script>countdown('<?=date("Y-m-d\TH:i:s", strtotime($date))?>', '<?=$id?>')</script>
@@ -159,6 +160,16 @@ class Form
                     <span id='countdown_seconds'>--</span>
                     <span class="w3-small w3-text-grey" style="display: block">Sekunden</span>
                 </span>
+            </div>
+        <?php
+    }
+
+    public static function progressBar() {
+        ?>
+            <script>progressBar(2500, 16098.4)</script>
+            <div id='bar'>
+                <div id='progress'>
+                </div>
             </div>
         <?php
     }
