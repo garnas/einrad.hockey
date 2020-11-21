@@ -51,7 +51,7 @@ include '../../templates/header.tmp.php';
     <div class="w3-row-padding w3-third">
         <div class="w3-panel w3-primary w3-card-4">
         <p class="w3-center">
-            16 Jahren
+            U16
         </p>
         <p class="w3-center w3-xxlarge">
             <?=number_format($jung['kilometer'], 1, ',', '.');?> km
@@ -108,7 +108,7 @@ include '../../templates/header.tmp.php';
 </div>
 
 
-<h3 class="w3-text-secondary w3-margin-top">Spieler/innen</h3>
+<h3 class="w3-text-secondary w3-margin-top">Teilnehmer/innen</h3>
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-striped">
         <tr class="w3-primary">

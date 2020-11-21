@@ -33,8 +33,7 @@ include '../../templates/header.tmp.php';
 
 <h1 class="w3-text-primary">km-Challenge</h1>
 <!-- <h2 class="w3-text-grey">Eintragen von Ergebnissen</h2> -->
-<?=Form::schreibe_error('Aufgrund eines Fehlers konnten manche Radgrößen (z.B. 27,5 Zoll) nicht im Formular eingegeben werden. Dieser Fehler ist nun behoben.','Fehler im Formular korrigiert')?>
-<?=Form::schreibe_attention('Solltet ihr aufgrund des Formularfehlers eine andere Radgröße anstelle der Richtigen angegeben haben, dann schickt und bitte eine Mail mit Namen, Datum und richtiger Radgröße an <br />' . Form::mailto(Config::TECHNIKMAIL). ' oder ' . Form::mailto(Config::OEFFIMAIL) . '<br /><br />Vielen Dank für euer Verständnis!', 'Korrektur von Eingaben')?>
+<?=Form::schreibe_attention('Gibt es Probleme beim Eintrag? Dann schickt uns eine Mail an <br />' . Form::mailto(Config::TECHNIKMAIL). ' oder ' . Form::mailto(Config::OEFFIMAIL), '')?>
 
 <div class="w3-col">
     <div class="w3-row-padding w3-twothird">

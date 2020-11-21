@@ -66,6 +66,9 @@ button:hover {
     </form>
 </div>
 <div class="w3-row-padding w3-third ">
+    <p>
+        <a href='../teamcenter/tc_challenge.php' class="w3-button w3-secondary w3-block w3-card-2"><i class="material-icons">keyboard_backspace</i> Zurück</a>
+    </p> 
     <div class="w3-panel w3-card-4 w3-primary">
         <p class="w3-center">
             Teameinträge
