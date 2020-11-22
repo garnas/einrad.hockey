@@ -40,10 +40,13 @@ include '../../templates/header.tmp.php';
 <!-- Kacheln für Sonderauswertungen -->
 <div class="w3-col">
     <!-- Alter ist 50+ -->
-    <div class="w3-row-padding w3-third">
+    <div class="w3-row-padding w3-third" style='padding-left: 0;'>
         <div class="w3-panel w3-primary w3-card-4">
         <p class="w3-center">
             50+
+        </p>
+        <p class="w3-center w3-tiny">
+            Die meisten gefahrenen Kilometer von einer Person älter oder gleich 50 Jahren.
         </p>
         <p class="w3-center w3-xxlarge">
             <?=number_format($alt['kilometer'], 1, ',', '.');?> km
@@ -59,6 +62,9 @@ include '../../templates/header.tmp.php';
         <p class="w3-center">
             U16
         </p>
+        <p class="w3-center w3-tiny">
+            Die meisten gefahrenen Kilometer von einer Person unter 16 Jahren.
+        </p>
         <p class="w3-center w3-xxlarge">
             <?=number_format($jung['kilometer'], 1, ',', '.');?> km
         </p>
@@ -68,10 +74,13 @@ include '../../templates/header.tmp.php';
         </div>
     </div>
     <!-- Einradhockeyrad -->
-    <div class="w3-row-padding w3-third">
+    <div class="w3-row-padding w3-third" style='padding-right: 0;'>
         <div class="w3-panel w3-primary w3-card-4">
         <p class="w3-center">
             Einradhockey-Rad
+        </p>
+        <p class="w3-center w3-tiny">
+            Die meisten gefahrenen Kilometer von einer Person auf einem Einradhockey-Rad.
         </p>
         <p class="w3-center w3-xxlarge">
             <?=number_format($einradhockey['kilometer'], 1, ',', '.');?> km
