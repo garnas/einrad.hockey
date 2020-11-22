@@ -68,19 +68,19 @@ sort($values);
 
 if ($values[0] == $value) {
     $class = ['w3-tertiary', '', '', '', ''];
-    $text = ['Stand', 'Distanz 1', 'Distanz 2', 'Distanz 3', 'Distanz 4'];
+    $text = ['Stand', 'Distanz 1', 'Distanz 2', 'Distanz 3', 'Sydney'];
 } elseif ($values[1] == $value) {
     $class = ['w3-tertiary', 'w3-tertiary', '', '', ''];
-    $text = ['Distanz 1', 'Stand', 'Distanz 2', 'Distanz 3', 'Distanz 4'];
+    $text = ['Distanz 1', 'Stand', 'Distanz 2', 'Distanz 3', 'Sydney'];
 } elseif ($values[2] == $value) {
     $class = ['w3-tertiary', 'w3-tertiary', 'w3-tertiary', '', ''];
-    $text = ['Distanz 1', 'Distanz 2', 'Stand', 'Distanz 3', 'Distanz 4'];   
+    $text = ['Distanz 1', 'Distanz 2', 'Stand', 'Distanz 3', 'Sydney'];   
 } elseif ($values[3] == $value) {
     $class = ['w3-tertiary', 'w3-tertiary', 'w3-tertiary', 'w3-tertiary', ''];
-    $text = ['Distanz 1', 'Distanz 2', 'Distanz 3', 'Stand', 'Distanz 4'];     
+    $text = ['Distanz 1', 'Distanz 2', 'Distanz 3', 'Stand', 'Sydney'];     
 } else {
     $class = ['w3-tertiary', 'w3-tertiary', 'w3-tertiary', 'w3-tertiary', 'w3-tertiary'];
-    $text = ['Distanz 1', 'Distanz 2', 'Distanz 3', 'Distanz 4', 'Stand'];  
+    $text = ['Distanz 1', 'Distanz 2', 'Distanz 3', 'Sydney', 'Stand'];  
 }
 
 $width_1 = round($values[0] / $values[4] * 100);
