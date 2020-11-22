@@ -63,29 +63,4 @@ if (isset($_POST['update_challenge'])) {
 // Breiten für die ProgressBar
 $stand = $challenge->get_stand();
 $value = $stand['kilometer'];
-$values = [$value, 3500.0, 6400.0, 11000.0, 16098.4];
-sort($values);
-
-if ($values[0] == $value) {
-    $class = ['w3-tertiary', '', '', '', ''];
-    $text = ['Stand', 'Distanz 1', 'Distanz 2', 'Distanz 3', 'Sydney'];
-} elseif ($values[1] == $value) {
-    $class = ['w3-tertiary', 'w3-tertiary', '', '', ''];
-    $text = ['Distanz 1', 'Stand', 'Distanz 2', 'Distanz 3', 'Sydney'];
-} elseif ($values[2] == $value) {
-    $class = ['w3-tertiary', 'w3-tertiary', 'w3-tertiary', '', ''];
-    $text = ['Distanz 1', 'Distanz 2', 'Stand', 'Distanz 3', 'Sydney'];   
-} elseif ($values[3] == $value) {
-    $class = ['w3-tertiary', 'w3-tertiary', 'w3-tertiary', 'w3-tertiary', ''];
-    $text = ['Distanz 1', 'Distanz 2', 'Distanz 3', 'Stand', 'Sydney'];     
-} else {
-    $class = ['w3-tertiary', 'w3-tertiary', 'w3-tertiary', 'w3-tertiary', 'w3-tertiary'];
-    $text = ['Distanz 1', 'Distanz 2', 'Distanz 3', 'Sydney', 'Stand'];  
-}
-
-$width_1 = round($values[0] / $values[4] * 100);
-$width_2 = round($values[1] / $values[4] * 100) - $width_1;
-$width_3 = round($values[2] / $values[4] * 100) - $width_1 - $width_2;
-$width_4 = round($values[3] / $values[4] * 100) - $width_1 - $width_2 - $width_3;
-$width_5 = 99 - $width_1 - $width_2 - $width_3 - $width_4 + 1;
-
+$percent = round($value / 10698.4 * 100);
