@@ -164,13 +164,13 @@ class Form
         <?php
     }
 
-    public static function progressBar() {
+    public static function progressBar($stand, $ende) {
         ?>  
             <div id='bar'>
                 <div id='progress'>
                 </div>
             </div>
-            <script>progressBar(2500, 16098.4)</script>
+            <script>progressBar(<?=$stand?>, <?=$ende?>)</script>
         <?php
     }
 

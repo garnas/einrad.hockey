@@ -32,7 +32,10 @@ include '../../templates/header.tmp.php';
 <a href='../teamcenter/tc_challenge.php' class="w3-button w3-secondary">Kilometer eintragen!</a>
 
 <h3 class="w3-text-secondary w3-margin-top">Ergebnisse</h3>
-    
+
+<!-- ProgressBar -->
+<?=Form::progressBar($value, 16098.4)?>
+
 <!-- ProgressBar -->
 <div class='w3-col w3-light-grey w3-card-2'>
     <div class='<?=$class[0]?>' style='width:<?=$width_1?>%; padding-right: 10px; border-right: 1px solid black; float: left;'><p class='w3-right-align'><?=$text[0]?></p></div>
