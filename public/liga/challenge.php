@@ -24,15 +24,23 @@ include '../../templates/header.tmp.php';
 <!-- Countdown -->
 <?=Form::countdown($challenge->challenge_end)?>
 
-<!-- ProgressBar -->
-<?=Form::progressBar()?>
-
 <!-- Button zum Teamcenter -->
 <p class="w3-text-gray">
     Hier habt ihr die Möglichkeit die geradelten Kilometer einzutragen. Gewertet werden eure Einträge als Einzelperson, aber immer auch im Team.
     Also ran ans Rad und viel Spaß beim Sammeln.
 </p>
 <a href='../teamcenter/tc_challenge.php' class="w3-button w3-secondary">Kilometer eintragen!</a>
+
+<h3 class="w3-text-secondary w3-margin-top">Ergebnisse</h3>
+    
+<!-- ProgressBar -->
+<div class='w3-col w3-light-grey w3-card-2'>
+    <div class='<?=$class[0]?>' style='width:<?=$width_1?>%; padding-right: 10px; border-right: 1px solid black; float: left;'><p class='w3-right-align'><?=$text[0]?></p></div>
+    <div class='<?=$class[1]?>' style='width:<?=$width_2?>%; padding-right: 10px; border-right: 1px solid black; float: left;'><p class='w3-right-align'><?=$text[1]?></p></div>
+    <div class='<?=$class[2]?>' style='width:<?=$width_3?>%; padding-right: 10px; border-right: 1px solid black; float: left;'><p class='w3-right-align'><?=$text[2]?></p></div>
+    <div class='<?=$class[3]?>' style='width:<?=$width_4?>%; padding-right: 10px; border-right: 1px solid black; float: left;'><p class='w3-right-align'><?=$text[3]?></p></div>
+    <div class='<?=$class[4]?>' style='width:<?=$width_5?>%; padding-right: 10px; float: left;'><p class='w3-right-align'><?=$text[4]?></p></div>
+</div>
 
 <!-- Kacheln für Sonderauswertungen -->
 <div class="w3-col">

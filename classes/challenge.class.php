@@ -5,6 +5,22 @@ class Challenge {
     public $challenge_start = "13.11.2020";
     public $challenge_end = "20.12.2020";
 
+    // Erhalte den aktuellen km-Stand
+    function get_stand(){
+        $sql = "
+        SELECT ROUND(SUM(kilometer), 1) AS kilometer
+        FROM `oeffi_challenge`
+        WHERE count = TRUE
+        AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
+        AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
+        ";
+
+        $result = db::readdb($sql);
+        $daten = mysqli_fetch_assoc($result);
+
+        return db::escape($daten);
+    }
+    
     // Erhalte die Ergebnisliste der Teams
     function get_teams(){
         $sql = "
