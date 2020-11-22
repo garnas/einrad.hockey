@@ -95,6 +95,7 @@ include '../../templates/header.tmp.php';
             <p>
                 <a href='../teamcenter/tc_challenge.php' class="w3-button w3-primary">Kilometer eintragen!</a>
             </p>
+            <?=Form::countdown('2020-12-20')?>
         </div>
 
         <!-- Anstehende Turniere -->

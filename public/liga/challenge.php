@@ -21,9 +21,6 @@ include '../../templates/header.tmp.php';
 <h1 class="w3-text-primary">km-Challenge</h1>
 <p class="w3-text-gray"><?=$challenge->challenge_start?> bis <?=$challenge->challenge_end?></p>
 
-<!-- Countdown -->
-<?=Form::countdown($challenge->challenge_end)?>
-
 <!-- Button zum Teamcenter -->
 <p class="w3-text-gray">
     Hier habt ihr die Möglichkeit die geradelten Kilometer einzutragen. Gewertet werden eure Einträge als Einzelperson, aber immer auch im Team.
