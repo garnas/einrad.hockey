@@ -199,7 +199,7 @@ class Challenge {
         AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
         AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
         GROUP BY sp.spieler_id
-        ORDER BY radgröße DESC, kilometer DESC
+        ORDER BY kilometer DESC, radgröße ASC
         LIMIT 1
         ";
         $result = db::readdb($sql);
