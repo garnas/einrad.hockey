@@ -32,8 +32,8 @@ button:hover {
 }
 </style>
 
-<div class="w3-col">
-    <div class="w3-row-padding w3-twothird">
+<div class="w3-row-padding w3-stretch">
+    <div class="w3-twothird">
         <form method="post" onsubmit="return confirm('Für ' + document.getElementById('spieler').options[document.getElementById('spieler').selectedIndex].text + ' werden ' + document.getElementById('kilometer').value + ' km hinzugefügt.\r\n\r\nDer Vorname des Spielers wird mit seinen insgesamt gefahrenen Kilometern und seiner Teamzugehörigkeit veröffentlicht.');">
         <div class="w3-panel w3-card-4">
             <p>
@@ -65,7 +65,7 @@ button:hover {
         </div>
     </form>
 </div>
-<div class="w3-row-padding w3-third ">
+<div class="w3-third ">
     <p>
         <a href='../teamcenter/tc_challenge.php' class="w3-button w3-secondary w3-block w3-card-2"><i class="material-icons">keyboard_backspace</i> Zurück</a>
     </p> 
@@ -84,7 +84,7 @@ button:hover {
             if ($eintrag["team_id"] == $team_id) {
     ?> 
                 <div class="w3-panel w3-card-4 w3-text-grey w3-padding-16">
-                    <div class="w3-row" id='<?=$eintrag['id']?>'>
+                    <div id='<?=$eintrag['id']?>'>
                             <form method="post" onsubmit="return confirm('Soll der Eintrag wirklich gelöscht werden?')">
                                 <div class="w3-col w3-center" style="width: 23%" id='del-datum'><?=date("d.m.Y", strtotime($eintrag['datum']))?></div>
                                 <div class="w3-col w3-center" style="width: 23%" id='del-name'><?=$eintrag['vorname']?> <?=$eintrag['nachname']?></div>

@@ -35,11 +35,11 @@ include '../../templates/header.tmp.php';
 ?>
 
 <h1 class="w3-text-primary">km-Challenge</h1>
-<div class="w3-col">
-    <div class="w3-row-padding w3-twothird">
+<div class="w3-row-padding w3-stretch">
+    <div class="w3-twothird">
         <p>
             <a href='../teamcenter/tc_challenge_eintraege.php' class="w3-button w3-secondary w3-block w3-card-2">Eintrag hinzufügen/entfernen</a>
-        </p> 
+        </p>
         <div class="w3-panel w3-card-4" style="padding:0;">
             <table class="w3-table w3-striped">
                 <tr class="w3-primary">
@@ -69,7 +69,7 @@ include '../../templates/header.tmp.php';
             </table>
         </div>
     </div>
-    <div class="w3-row-padding w3-third">  
+    <div class="w3-third">  
         <div class="w3-panel w3-card-4 w3-primary">
             <p class="w3-center">
                 Gesamtplatzierung
@@ -88,9 +88,7 @@ include '../../templates/header.tmp.php';
         </div>
     </div>
 </div>
-
-</div>
-
+    
 <?=Form::schreibe_attention('Gibt es Probleme beim Eintrag? Dann schickt uns eine Mail an <br />' . Form::mailto(Config::TECHNIKMAIL). ' oder ' . Form::mailto(Config::OEFFIMAIL), '')?>
 
 <?php
