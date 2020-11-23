@@ -20,13 +20,13 @@ $start = date("Y-m-d", strtotime($challenge->challenge_start));
 $end = date("Y-m-d", strtotime($challenge->challenge_end));
 
 // Überprüfung, ob ein neuer Eintrag plausibel / vollständig ist
-if (isset($_POST['put_challenge'])) {
+if (isset($_POST['put_challenge']) && $teamcenter) {
     $error = false;
-    
-    $spieler = $_POST["spieler"];
     $distanz = $_POST["kilometer"];
     $datum = $_POST["datum"];
     $radgroesse = $_POST["radgroesse"];
+    $spieler_id = $_POST["spieler"];
+    $spieler = new Spieler($spieler_id); //Für Überprüfung der Teamzugehörigkeit
 
     if ($datum < $start || $datum > $end) {
         $error = true;
@@ -34,10 +34,13 @@ if (isset($_POST['put_challenge'])) {
     } elseif ($spieler == 0) {
         $error = true;
         Form::error("Es wurde kein Spieler ausgewählt.");
+    } elseif ($spieler->get_spieler_details()['team_id'] !== $_SESSION['team_id']){ //Spielt die übergebene Spieler_id auch für das eingeloggte Team?
+        $error = true; 
+        Form::error("Eintragen nicht möglich.");
     }
 
     if (!$error) {
-        if(Challenge::set_data($spieler, $distanz, $radgroesse, $datum)) {
+        if(Challenge::set_data($spieler_id, $distanz, $radgroesse, $datum)) {
             Form::affirm("Die Strecke wurde erfolgreich eingetragen!");
             header('Location: tc_challenge_eintraege.php');//Setzt den Html-Header zu einer direkten Weiterleitung, somit wird die Seite neu geladen mit den aktuellen Daten
             die(); //Trotz gesetzten Header würde das Skript noch zu ende ausgeführt werden. Deswegen wird es hier beendet.
@@ -51,13 +54,19 @@ if (isset($_POST['put_challenge'])) {
 }
 
 // "Löscht" den ausgewählten Eintrag
-if (isset($_POST['update_challenge'])) {
-    $eintrag = $_POST["eintrag_id"];
+if (isset($_POST['update_challenge']) && $teamcenter) {
+    $eintrag_id = $_POST["eintrag_id"];
 
-    Challenge::update_data($eintrag);
-    
-    header('Location: tc_challenge_eintraege.php');
-    die();
+    // Überprüfung ob die Mittels Post übergebene Eintrag-ID auch wirklich zu diesem Team gehört
+    foreach ($team_eintraege as $eintrag){
+        if($eintrag['id'] == $eintrag_id){
+            Challenge::update_data($eintrag_id);
+            Form::affirm('Dein Eintrag wurde erfolgreich entfernt.');
+            header('Location: tc_challenge_eintraege.php');
+            die();
+        }
+    }
+    Form::error("Eintrag konnte nicht entfernt werden");
 }
 
 // Breiten für die ProgressBar
