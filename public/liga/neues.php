@@ -228,7 +228,7 @@ include '../../templates/header.tmp.php';
                     </a>
                 <?php } //end if?>
 
-                <!--Zeitstempel -->
+                <!-- Zeitstempel -->
                 <p class='w3-text-grey w3-border-bottom w3-border-grey' style="text-align: right;"><i style="font-size: 22px; vertical-align: -26%" class='material-icons'>schedule</i> <?=$neuigkeit['zeit']?></p>
 
                 <!-- Link zum Bearbeiten falls man im Ligacenter oder Teamcenter eingeloggt ist -->

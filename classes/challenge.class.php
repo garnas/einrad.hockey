@@ -21,7 +21,7 @@ class Challenge {
         return db::escape($daten);
     }
     
-    // Erhalte die Ergebnisliste der Teams
+    // Erhalte die Ergebnisliste aufgeschlüsselt nach Teams
     function get_teams(){
         $sql = "
         SELECT t.team_id, teamname, COUNT(DISTINCT(sp.spieler_id)) AS mitglieder, COUNT(ch.id) AS einträge, ROUND(SUM(kilometer), 1) AS kilometer
@@ -47,7 +47,7 @@ class Challenge {
         return db::escape($daten);
     }
 
-    // Erhalte die Ergebnisliste der Spieler
+    // Erhalte die Ergebnisliste aufgeschlüsselt nach Spieler
     function get_spieler(){
         $sql = "
         SELECT sp.vorname, sp.nachname, t.teamname, t.team_id, COUNT(ch.id) AS einträge, ROUND(SUM(kilometer), 1) AS kilometer

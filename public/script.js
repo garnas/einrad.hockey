@@ -133,7 +133,7 @@ function progressBar(stand, ende) {
   bar.innerHTML = stand + ' km';
 
   var width = 1;
-  var id = setInterval(frame(), 10);
+  var id = setInterval(frame(), 10); //Alle 10ms, Overkill ;) ?
 
   function frame() {
     if (width >= percent) {
