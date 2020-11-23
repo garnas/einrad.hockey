@@ -38,7 +38,7 @@ include '../../templates/header.tmp.php';
 <div class="w3-col">
     <div class="w3-row-padding w3-twothird">
         <p>
-            <a href='../teamcenter/tc_challenge_eintraege.php' class="w3-button w3-secondary w3-block w3-card-2">Eintrag hinzufügen</a>
+            <a href='../teamcenter/tc_challenge_eintraege.php' class="w3-button w3-secondary w3-block w3-card-2">Eintrag hinzufügen/entfernen</a>
         </p> 
         <div class="w3-panel w3-card-4" style="padding:0;">
             <table class="w3-table w3-striped">
