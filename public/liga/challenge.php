@@ -100,12 +100,12 @@ include '../../templates/header.tmp.php';
             <th class="w3-center w3-hide-small">Mitglieder</th>
             <th class="w3-center w3-hide-small">Einträge</th>
             <th class="w3-right-align">Kilometer</th>               
-        <tr>
+        </tr>
         <?php 
             if (empty($teamliste)) {
                 echo "<tr>";
                 echo "<td colspan='5' class='w3-center'>Bisher keine Einträge vorhanden.</td>";
-                echo "<tr>";
+                echo "</tr>";
             } else {
                 foreach ($teamliste as $team){?> 
                     <tr style="<?=$color[$team["platz"] - 1] ?? ''?>">
@@ -131,12 +131,12 @@ include '../../templates/header.tmp.php';
             <th style="white-space: nowrap;" class="w3-left-align">Team</th>
             <th class="w3-center w3-hide-small">Einträge</th>
             <th class="w3-right-align">Kilometer</th>
-        <tr>
+        </tr>
         <?php 
             if (empty($alle_spielerliste)) {
                 echo "<tr>";
                 echo "<td colspan='5' class='w3-center'>Bisher keine Einträge vorhanden.</td>";
-                echo "<tr>";
+                echo "</tr>";
             } else {            
                 foreach ($alle_spielerliste as $spieler){?> 
                     <tr style="<?=$color[$spieler["platz"] - 1] ?? ''?>">

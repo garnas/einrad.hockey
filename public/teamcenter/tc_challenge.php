@@ -46,7 +46,7 @@ include '../../templates/header.tmp.php';
                     <th class="w3-center">#</th>
                     <th class="w3-center">Teilnehmer/in</th>
                     <th class="w3-center">Kilometer</th>
-                <tr>
+                </tr>
                 <?php 
                     $error = True;
                     foreach ($team_spielerliste as $spieler) {
@@ -63,7 +63,7 @@ include '../../templates/header.tmp.php';
                     if ($error) {
                         echo "<tr>";
                         echo "<td colspan='5' class='w3-center'>Bisher keine Einträge vorhanden.</td>";
-                        echo "<tr>";
+                        echo "</tr>";
                     }
                 ?>
             </table>
