@@ -27,8 +27,8 @@ if (isset($_POST['put_challenge']) && $teamcenter) {
     $radgroesse = $_POST["radgroesse"];
     $spieler_id = $_POST["spieler"];
     $spieler = new Spieler($spieler_id); //Für Überprüfung der Teamzugehörigkeit
-
-    if ($datum < $start || $datum > $end) {
+    // Datums vergleich, Startdatum, Enddatum, liegt in der Zunkunft 
+    if (strtotime($datum) < strtotime($start) || strtotime($datum) > strtotime($end) || strtotime($datum) > strtotime(date('Y-m-d'))) {
         $error = true;
         Form::error("Das ausgewählt Datum liegt nicht im Bereich.");
     } elseif (empty($spieler_id)) {
