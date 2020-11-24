@@ -19,6 +19,13 @@ $einradhockey = $challenge->get_einradhockey_rad();
 $start = date("Y-m-d", strtotime($challenge->challenge_start));
 $end = date("Y-m-d", strtotime($challenge->challenge_end));
 
+//Ab zweiten Vornamen abkürzen mit erster Buchstabe und .
+foreach ($alle_spielerliste as $key => $spieler){
+    $vorname_array = explode(' ', $spieler['vorname']);
+    if (isset($vorname_array[1])){
+        $alle_spielerliste[$key]['vorname'] = $vorname_array[0] . ' ' . $vorname_array[1][0] . '.';
+    }
+}
 // Überprüfung, ob ein neuer Eintrag plausibel / vollständig ist
 if (isset($_POST['put_challenge']) && $teamcenter) {
     $error = false;
