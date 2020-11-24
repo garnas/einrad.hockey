@@ -37,9 +37,9 @@ include '../../templates/header.tmp.php';
 <p class='w3-text-gray'><span class='w3-left'>Berlin</span><span class="w3-right">Sydney</span></p>
 
 <!-- Kacheln für Sonderauswertungen -->
-<div class="w3-col">
+<div id='sonderauswertungen_panels' class="w3-row-padding w3-stretch" style='display: none;'>
     <!-- Alter ist 50+ -->
-    <div class="w3-row-padding w3-third" style='padding-left: 0;'>
+    <div class="w3-third">
         <div class="w3-panel w3-primary w3-card-4">
         <p class="w3-center">
             50+
@@ -56,7 +56,7 @@ include '../../templates/header.tmp.php';
         </div>
     </div>
     <!-- Alter ist U16 -->
-    <div class="w3-row-padding w3-third">
+    <div class="w3-third">
         <div class="w3-panel w3-primary w3-card-4">
         <p class="w3-center">
             U16
@@ -73,7 +73,7 @@ include '../../templates/header.tmp.php';
         </div>
     </div>
     <!-- Einradhockeyrad -->
-    <div class="w3-row-padding w3-third" style='padding-right: 0;'>
+    <div class="w3-third">
         <div class="w3-panel w3-primary w3-card-4">
         <p class="w3-center">
             Einradhockey-Rad
@@ -128,7 +128,7 @@ include '../../templates/header.tmp.php';
         <tr class="w3-primary">
             <th class="w3-center">#</th>
             <th class="w3-left-align">Teilnehmer/in</th>
-            <th style="white-space: nowrap;" class="w3-left-align">Team</th>
+            <th class="w3-left-align">Team</th>
             <th class="w3-center w3-hide-small">Einträge</th>
             <th class="w3-right-align">Kilometer</th>
         </tr>
@@ -142,7 +142,7 @@ include '../../templates/header.tmp.php';
                     <tr style="<?=$color[$spieler["platz"] - 1] ?? ''?>">
                         <td class="w3-center"><?=$spieler["platz"]?></td>
                         <td class="w3-left-align"><?=$spieler['vorname']?></td>
-                        <td class="w3-left-align"><?=$spieler['teamname']?></td>
+                        <td style="white-space: nowrap;"  class="w3-left-align"><?=$spieler['teamname']?></td>
                         <td class="w3-center w3-hide-small"><?=$spieler['einträge']?></td>
                         <td class="w3-right-align"><?=number_format($spieler["kilometer"], 1, ',', '.');?></td>
                     </tr>
