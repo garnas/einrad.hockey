@@ -25,6 +25,18 @@ function ausblenden(){
     document.getElementById('infobar').classList.add('w3-hide-small');
 }
 
+//Infos aus/einblenden
+function modal(id){
+  var x = document.getElementById(id);
+  if (window.getComputedStyle(x).display === "none") {
+      x.style.display = "block";
+  }else{
+      if (window.getComputedStyle(x).display === "block") {
+          x.style.display = "none";
+      }
+  }
+}
+
 //Gleichmäßige Verteilung der Centerpanels in lc_start und tc_start
 //Siehe hierzu auch .centerpanels in style.css
 function centerpanels_anordnung(){
