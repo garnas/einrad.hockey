@@ -39,7 +39,6 @@ include '../../templates/header.tmp.php';
 
 <!-- Buttons zum Ein/Ausblenden der Sonderauswertungen -->
 <div class="w3-section w3-margin-top">
-    experimental - Idee: Sonderauswertungen nehmen Mobil viel Platz ein, und verstecken die Tabellen als wesentlichen Teil der Seite
     <div id='button_da'>
         <button  class="w3-primary w3-block w3-button" onclick='modal("sonderauswertungen_panels");modal("button_da");modal("button_weg");'>
             <i class="material-icons">keyboard_arrow_down</i> Sonderwertungen <i class="material-icons">keyboard_arrow_down</i>
@@ -53,7 +52,7 @@ include '../../templates/header.tmp.php';
 </div>
 
 <!-- Kacheln für Sonderauswertungen -->
-<div id='sonderauswertungen_panels' class="w3-row-padding w3-stretch">
+<div id='sonderauswertungen_panels' class="w3-row-padding w3-stretch" style='display: none;'>
     <!-- Alter ist 50+ -->
     <div class="w3-third">
         <div class="w3-panel w3-primary w3-card-4">
