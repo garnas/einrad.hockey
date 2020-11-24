@@ -44,12 +44,12 @@ include '../../templates/header.tmp.php';
 <div class="w3-section w3-margin-top">
     <div id='button_da'>
         <button  class="w3-primary w3-block w3-button" onclick='modal("sonderauswertungen_panels");modal("button_da");modal("button_weg");'>
-            <i class="material-icons">keyboard_arrow_down</i> Nenneswerte FahrerInnen <i class="material-icons">keyboard_arrow_down</i>
+            <i class="material-icons">keyboard_arrow_down</i> Nennenswerte FahrerInnen <i class="material-icons">keyboard_arrow_down</i>
         </button>
     </div>
     <div id='button_weg' style='display: none;'>     
         <button class="w3-primary w3-block w3-button" onclick='modal("sonderauswertungen_panels");modal("button_da");modal("button_weg");'>
-            <i class="material-icons">keyboard_arrow_up</i> Nenneswerte FahrerInnen <i class="material-icons">keyboard_arrow_up</i>
+            <i class="material-icons">keyboard_arrow_up</i> Nennenswerte FahrerInnen <i class="material-icons">keyboard_arrow_up</i>
         </button>
     </div>
 </div>
