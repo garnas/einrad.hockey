@@ -27,6 +27,8 @@ if (isset($_POST['put_challenge']) && $teamcenter) {
     $radgroesse = $_POST["radgroesse"];
     $spieler_id = $_POST["spieler"];
     $spieler = new Spieler($spieler_id); //Für Überprüfung der Teamzugehörigkeit
+    // Validierung des Datums
+    $datum = date("Y-m-d",strtotime($datum)); // Es kam zu seltsamen Datumsformaten, die uns übermittelt worden sind.
     // Datums vergleich, Startdatum, Enddatum, liegt in der Zunkunft 
     if (strtotime($datum) < strtotime($start) || strtotime($datum) > strtotime($end) || strtotime($datum) > strtotime(date('Y-m-d'))) {
         $error = true;
