@@ -86,7 +86,7 @@ include '../../templates/header.tmp.php';
                             <div class="w3-col w3-center w3-mobile" style="width: 23%"><?=$eintrag['vorname']?> <?=$eintrag['nachname']?></div>
                             <div class="w3-col w3-center w3-mobile" style="width: 23%"><?=number_format($eintrag['kilometer'], 1, ',', '.');?> km</div>
                             <div class="w3-col w3-center w3-mobile" style="width: 23%"><?=$eintrag['radgröße']?> Zoll</div>
-                            <div class="w3-col w3-right-align w3-mobile" style="width: 8%"></div>
+                            <div class="w3-col w3-mobile" style="width: 8%"></div>
                             <input type="hidden" name="eintrag_id" value="<?=$eintrag['id']?>">
                             <button style='cursor: pointer; border: 0px;' class="w3-right w3-hover-text-secondary w3-text-gray w3-white" type="submit" name="update_challenge"><i class="material-icons">delete</i></button>
                         </form>
