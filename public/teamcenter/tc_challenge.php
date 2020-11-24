@@ -40,7 +40,7 @@ include '../../templates/header.tmp.php';
         <p>
             <a href='../teamcenter/tc_challenge_eintraege.php' class="w3-button w3-secondary w3-block w3-card-2">Eintrag hinzufügen/entfernen</a>
         </p>
-        <div class="w3-panel w3-card-4" style="padding:0;">
+        <div class="w3-panel w3-responsive w3-card-4" style="padding:0;">
             <table class="w3-table w3-striped">
                 <tr class="w3-primary">
                     <th class="w3-center">#</th>
