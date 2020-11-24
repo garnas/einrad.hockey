@@ -157,7 +157,6 @@ class Form
                     <span class="w3-small w3-text-grey" style="display: block">Minuten</span>
                 </span>
                 <span class="w3-center" style="display: inline-block">
-                    <span class="w3-center" style="display: inline-block">
                     <span id='countdown_seconds'>--</span>
                     <span class="w3-small w3-text-grey" style="display: block">Sekunden</span>
                 </span>
