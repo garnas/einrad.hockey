@@ -18,20 +18,6 @@ if (count($team_eintraege) == 0) {
 include '../../templates/header.tmp.php';
 ?>
 
-<style>
-button {
-    border: 0px;
-    cursor: pointer;
-    background-color: transparent;
-    color: gray;
-}
-
-button:hover {
-    transition: 0.3s;
-    color: #e3776f;
-}
-</style>
-
 <div class="w3-row-padding w3-stretch">
     <div class="w3-twothird">
         <form method="post" onsubmit="return confirm('Für ' + document.getElementById('spieler').options[document.getElementById('spieler').selectedIndex].text + ' werden ' + document.getElementById('kilometer').value + ' km hinzugefügt.\r\n\r\nDer Vorname des Spielers wird mit seinen insgesamt gefahrenen Kilometern und seiner Teamzugehörigkeit veröffentlicht.');">
@@ -92,7 +78,7 @@ button:hover {
                                 <div class="w3-col w3-center" style="width: 23%" id='del-rad'><?=$eintrag['radgröße']?> Zoll</div>
                                 <div class="w3-col w3-right-align" style="width: 8%">
                                 <input type="hidden" name="eintrag_id" value="<?=$eintrag['id']?>"></input>
-                                <button type="submit" name="update_challenge"><i class="material-icons">delete</i></button>
+                                <button style='cursor:pointer;border: 0px;' class="w3-hover-text-secondary w3-text-gray w3-white" type="submit" name="update_challenge"><i class="material-icons">delete</i></button>
                             </form>
                         </div>
                     </div>
