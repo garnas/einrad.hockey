@@ -81,4 +81,4 @@ if (isset($_POST['update_challenge']) && $teamcenter) {
 // Breiten für die ProgressBar
 $stand = $challenge->get_stand();
 $value = $stand['kilometer'];
-$percent = round($value / 10698.4 * 100);
+$percent = round($value / 16098.4 * 100);
