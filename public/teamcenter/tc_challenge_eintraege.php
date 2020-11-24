@@ -12,6 +12,13 @@ if (count($team_eintraege) == 0) {
     $eintrag_text = count($team_eintraege);
 }
 
+// Feststellung der Datumseinschränkung für die Eingabe in das Formular
+if (date("Y-m-d",strtotime($challenge->challenge_end)) < date("Y-m-d")) {
+    $max = date("Y-m-d",strtotime($challenge->challenge_end));
+} else {
+    $max = date("Y-m-d");
+}
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -43,7 +50,7 @@ include '../../templates/header.tmp.php';
                 </p>
                 <p>
                     <label class="w3-text-primary" for="datum">Datum</label>
-                    <input required class="w3-input w3-border w3-border-primary" type="date" id="datum" min="<?=date("Y-m-d",strtotime($challenge->challenge_start))?>" max="<?=date("Y-m-d",strtotime($challenge->challenge_end))?>" value="<?=date("Y-m-d")?>" name="datum">
+                    <input required class="w3-input w3-border w3-border-primary" type="date" id="datum" min="<?=date("Y-m-d",strtotime($challenge->challenge_start))?>" max="<?=$max?>" value="<?=date("Y-m-d")?>" name="datum">
                     <i class="w3-text-grey">Das Datum muss zwischen dem <?=$challenge->challenge_start?> und <?=$challenge->challenge_end?> liegen.</i>
                 </p>
                 <p>
