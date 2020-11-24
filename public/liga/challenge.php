@@ -37,7 +37,7 @@ include '../../templates/header.tmp.php';
 <p class='w3-text-gray'><span class='w3-left'>Berlin</span><span class="w3-right">Sydney</span></p>
 
 <!-- Kacheln für Sonderauswertungen -->
-<div id='sonderauswertungen_panels' class="w3-row-padding w3-stretch" style='display: none;'>
+<div id='sonderauswertungen_panels' class="w3-row-padding w3-stretch">
     <!-- Alter ist 50+ -->
     <div class="w3-third">
         <div class="w3-panel w3-primary w3-card-4">
