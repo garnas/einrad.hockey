@@ -34,7 +34,23 @@ include '../../templates/header.tmp.php';
 <div class='w3-row w3-light-grey'>
     <div class='w3-col w3-tertiary w3-card-2' style='max-width: 100%; width: <?=$percent?>%; padding-right: 5px; text-align: right;'><p><?=number_format($value, 1, ',', '.');?> km</p></div>
 </div>
-<p class='w3-text-gray'><span class='w3-left'>Berlin</span><span class="w3-right">Sydney</span></p>
+
+<p class='w3-text-gray'><span>Berlin</span><span class="w3-right">Sydney</span></p>
+
+<!-- Buttons zum Ein/Ausblenden der Sonderauswertungen -->
+<div class="w3-section w3-margin-top">
+    experimental - Idee: Sonderauswertungen nehmen Mobil viel Platz ein, und verstecken die Tabellen als wesentlichen Teil der Seite
+    <div id='button_da'>
+        <button  class="w3-primary w3-block w3-button" onclick='modal("sonderauswertungen_panels");modal("button_da");modal("button_weg");'>
+            <i class="material-icons">keyboard_arrow_down</i> Sonderwertungen <i class="material-icons">keyboard_arrow_down</i>
+        </button>
+    </div>
+    <div id='button_weg' style='display: none;'>     
+        <button class="w3-primary w3-block w3-button" onclick='modal("sonderauswertungen_panels");modal("button_da");modal("button_weg");'>
+            <i class="material-icons">keyboard_arrow_up</i> Sonderwertungen <i class="material-icons">keyboard_arrow_up</i>
+        </button>
+    </div>
+</div>
 
 <!-- Kacheln für Sonderauswertungen -->
 <div id='sonderauswertungen_panels' class="w3-row-padding w3-stretch">
