@@ -25,6 +25,18 @@ function ausblenden(){
     document.getElementById('infobar').classList.add('w3-hide-small');
 }
 
+//Infos aus/einblenden
+function modal(id){
+  var x = document.getElementById(id);
+  if (window.getComputedStyle(x).display === "none") {
+      x.style.display = "block";
+  }else{
+      if (window.getComputedStyle(x).display === "block") {
+          x.style.display = "none";
+      }
+  }
+}
+
 //Gleichmäßige Verteilung der Centerpanels in lc_start und tc_start
 //Siehe hierzu auch .centerpanels in style.css
 function centerpanels_anordnung(){
@@ -123,5 +135,25 @@ var x = setInterval(function() {
     document.getElementById(countdown_id).style.display = "none";
   }
 }, 1000);
+
+}
+
+// Progress Bar
+function progressBar(stand, ende) {
+  var percent = Math.round(stand / ende * 100);
+  var bar = document.getElementById('progress');
+  bar.innerHTML = stand + ' km';
+
+  var width = 1;
+  var id = setInterval(frame(), 10); //Alle 10ms, Overkill ;) ?
+
+  function frame() {
+    if (width >= percent) {
+      clearInterval(id);
+    } else {
+      width++;
+      bar.style.width = width + '%';
+    }
+  }
 
 }

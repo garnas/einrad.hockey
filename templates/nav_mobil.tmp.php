@@ -37,7 +37,7 @@
     <?php if (!isset($_SESSION['team_id'])){$tc_color = 'w3-text-grey';}?>
     <div class="<?=$tc_color ?? ''?>">
         <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_start.php">Start</a>
-        <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_challenge.php">Kilometer-Challenge</a>
+        <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_challenge.php">km-Challenge</a>
         <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_turnierliste_anmelden.php">Turnieranmeldung</a>
         <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_turnier_erstellen.php">Turnier erstellen</a>
         <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_turnierliste_verwalten.php">Eigene Turniere</a>

@@ -139,10 +139,11 @@ class Form
         }
         return 1995 + $saison;
     }
+    
     public static function countdown($date, $id = 'countdown'){
         ?>
             <script>countdown('<?=date("Y-m-d\TH:i:s", strtotime($date))?>', '<?=$id?>')</script>
-            <div id='countdown' class="w3-xlarge w3-text-primary">
+            <div id='countdown' class="w3-xlarge w3-text-primary" style='white-space: nowrap;'>
                 <span class="w3-center w3-margin-right" style="display: inline-block">
                     <span id='countdown_days'>--</span>
                     <span class="w3-small w3-text-grey" style="display: block">Tage</span>
@@ -160,6 +161,16 @@ class Form
                     <span class="w3-small w3-text-grey" style="display: block">Sekunden</span>
                 </span>
             </div>
+        <?php
+    }
+
+    public static function progressBar($stand, $ende) {
+        ?>  
+            <div id='bar'>
+                <div id='progress'>
+                </div>
+            </div>
+            <script>progressBar(<?=$stand?>, <?=$ende?>)</script>
         <?php
     }
 

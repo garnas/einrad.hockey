@@ -17,7 +17,7 @@
     <link type="text/css" rel="stylesheet" href="../css/w3.css">
     <link type="text/css" rel="stylesheet" href="../css/style.css?v=20201126">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="../script.js?v=20201118"></script>
+    <script src="../script.js?v=20201124"></script>
     <title><?=$titel ?? "Deutsche Einradhockeyliga"?></title>
 </head>
 

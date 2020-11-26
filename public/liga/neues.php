@@ -92,6 +92,8 @@ include '../../templates/header.tmp.php';
             </a>
             <p class="w3-text-grey w3-small w3-border-top w3-border-grey"></p>
             <p>Sammelt Kilometer für euer Team und legt die längste Strecke zurück.</p>
+            <!-- Countdown -->
+            <a href='challenge.php' class='no'><?=Form::countdown('2020-12-20')?></a>
             <p>
                 <a href='../teamcenter/tc_challenge.php' class="w3-button w3-primary">Kilometer eintragen!</a>
             </p>
@@ -227,7 +229,7 @@ include '../../templates/header.tmp.php';
                     </a>
                 <?php } //end if?>
 
-                <!--Zeitstempel -->
+                <!-- Zeitstempel -->
                 <p class='w3-text-grey w3-border-bottom w3-border-grey' style="text-align: right;"><i style="font-size: 22px; vertical-align: -26%" class='material-icons'>schedule</i> <?=$neuigkeit['zeit']?></p>
 
                 <!-- Link zum Bearbeiten falls man im Ligacenter oder Teamcenter eingeloggt ist -->
