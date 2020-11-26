@@ -595,15 +595,4 @@ class Turnier {
         }
         return $turniere_deleted;
     }
-    /* Alt
-    public static function get_deleted_turnier_ids(){
-        $sql = "SELECT DISTINCT turnier_id FROM turniere_log WHERE turnier_id NOT IN (SELECT turnier_id FROM turniere_liga)";
-        $result = db::readdb($sql);
-        $turnier_ids = array();
-        while ($x = mysqli_fetch_assoc($result)){
-            array_push($turnier_ids, $x['turnier_id']);
-        }
-        return $turnier_ids;
-    }
-    */
 }
