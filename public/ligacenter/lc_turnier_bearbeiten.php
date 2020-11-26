@@ -23,7 +23,6 @@ include '../../templates/header.tmp.php';
     <a href='../ligacenter/lc_turnierliste.php?turnier_id=<?=$daten['turnier_id']?>'><button style='display: inline;' class="w3-button w3-right w3-text-blue no">Turniere verwalten (Liste)</button></a>
 </p>
 
-<h3 class="w3-text-grey">Folgende Turnierdaten können nur vom Ligaausschuss geändert werden:</h3>
 <?php include '../../templates/turnier_bearbeiten_la.tmp.php';?>
 
 <h3 class="w3-text-grey">Folgende Turnierdaten können auch vom Ausrichter geändert werden. Als Ligaausschuss hat man allerdings keine Restriktionen.</h3>

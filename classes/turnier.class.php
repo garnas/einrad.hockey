@@ -567,14 +567,35 @@ class Turnier {
     }
 
     //Löscht das Turnier
-    function delete()
-    {
+    function delete($grund = '')
+    {   
+        db::db_sichern();
         $turnier_id = $this->turnier_id;
+        $ort = $this->daten['ort'];
+        $datum = $this->daten['datum'];
+        $saison = $this->daten['saison'];
+
+        //Turnier in der Datenbank vermerken
+        $sql = "INSERT INTO turniere_geloescht (turnier_id, datum, ort, grund, saison) VALUES ('$turnier_id','$datum','$ort','$grund','$saison')";
+        db::writedb($sql);
+        
+        //Turnier aus der Datenbank löschen
         $sql = "DELETE FROM turniere_liga WHERE turnier_id = $turnier_id";
         db::writedb($sql);
+
+        //Spieltage neu sortieren
         Ligabot::set_spieltage();
         return true;
     }
+    public static function get_deleted_turniere(){
+        $sql = "SELECT * FROM turniere_geloescht WHERE saison = '" . Config::SAISON . "' ORDER BY datum DESC";
+        $result = db::readdb($sql);
+        while ($x = mysqli_fetch_assoc($result)){
+            $turniere_deleted[$x['turnier_id']] = $x;
+        }
+        return $turniere_deleted;
+    }
+    /* Alt
     public static function get_deleted_turnier_ids(){
         $sql = "SELECT DISTINCT turnier_id FROM turniere_log WHERE turnier_id NOT IN (SELECT turnier_id FROM turniere_liga)";
         $result = db::readdb($sql);
@@ -584,4 +605,5 @@ class Turnier {
         }
         return $turnier_ids;
     }
+    */
 }
