@@ -5,7 +5,7 @@ $spielplan = new Spielplan($turnier_id);
 //Existiert das Turnier?
 if(empty($spielplan->akt_turnier->daten)){
     Form::error("Turnier wurde nicht gefunden");
-    header('Location : ../public/turniere.php');
+    header('Location: ../liga/turniere.php');
     die();
 }
 //Nur Relevant für Ligacenter oder Teamcenter

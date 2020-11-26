@@ -1,6 +1,4 @@
 <?php
-//declare(strict_types=1); Abklären mit Joschi
-
 //Dieses Dokument muss immer als Erstes für die Logik geladen werden
 //Session hauptsächlich für Authentifizierung
 session_start();
@@ -9,14 +7,15 @@ session_regenerate_id();
 //Quelle: https://www.php-kurs.com/php-datumsausgabe-deutsch.htm
 setlocale (LC_ALL, 'de_DE@euro', 'de_DE', 'de', 'ge');
 
-//Läd automatisch die benötigten Klassen, wichtig ist, dass der relative Pfad stimmt
+//Lädt automatisch die benötigten Klassen
 //Quelle https://www.php.net/manual/de/language.oop5.autoload.php
-spl_autoload_register(function ($class) {
-    if ($class != 'PHPMailer'){ //Der PHPMailer muss als externes Framework manuell über phpmailer.logic.php geladen werden
+spl_autoload_register(
+    function ($class)
+    {
         $class = strtolower($class);
-        include __DIR__ . '/../classes/' . $class . '.class.php';
-    }        
-});
+        include __DIR__ . '/../classes/' . $class . '.class.php';    
+    }
+);
 
 //SQL-Connection wird hergestellt und automatisch wieder gechlossen
 $verbindung_zur_datenbank = new db;
@@ -27,7 +26,7 @@ if (!empty($_POST)){
 }
 if (!empty($_GET)){
     $_GET = db::sanitize($_GET);
-    $_GET = db::escape($_GET); //XSS über Url. Damit keine Entities in der Datenbank gespeichert werden, sollte man $_GET nicht in der Datenbank speichern.
+    $_GET = db::escape($_GET); //XSS über Url. Damit keine Entities in der Datenbank gespeichert werden, sollte man $_GET nicht ohne weiteres in der Datenbank speichern.
 }
 
 //Nach einer Zeit ein neues Hintergrundbild für die Navigation

@@ -1,8 +1,9 @@
-<!-- Penalty Warnung -->
-<p class="w3-text-red"><?=$spielplan->penalty_warning?></p>
-
-<!-- ABSCHLUSSTABELLE -->
 <div class="w3-hide-small">
+
+    <!-- Penalty Warnung -->
+    <p class="w3-text-secondary"><?=$spielplan->penalty_warning?></p>
+
+    <!-- ABSCHLUSSTABELLE -->
     <h3 class="w3-text-secondary w3-margin-top">Tabelle</h3>
     <?php if(!$show_turnierergebnis){?><p class="w3-text-grey">Platzierungen und Ligapunkte werden angezeigt, sobald jedes Team mindestens ein Spiel gespielt hat.</p><?php }//endif?>
    <div class="w3-responsive w3-card">
