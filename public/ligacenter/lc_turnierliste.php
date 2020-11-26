@@ -41,8 +41,9 @@ foreach ($turniere_erg as $turnier_id => $turnier){
       );
 }
 
-//Turnier IDs gelöschter Turniere
-$turnier_ids = Turnier::get_deleted_turnier_ids();
+//Gelöschte Turniere
+$turniere_deleted = Turnier::get_deleted_turniere();
+
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -71,11 +72,26 @@ $turniere = $turniere_erg;
 include '../../logic/turnierliste.logic.php'; //Als absolute Ausnahme zur Init
 include '../../templates/turnierliste.tmp.php';
 ?>
+
 <h2 class="w3-text-primary" id="deleted">Gelöschte Turniere</h2>
 <p>
-    <?php foreach ($turnier_ids as $turnier_id){?>
-        <?=Form::link('lc_turnier_log.php?turnier_id=' . $turnier_id, 'Link zum Log')?> des gelöschten Turniers <?=$turnier_id?><br>
-    <?php }//end foreach?>
+    <div class="w3-card w3-responsive">
+        <table class="w3-table w3-striped">
+            <tr class="w3-primary">
+                <th>Turnier</th>
+                <th>Grund</th>
+            </tr>
+            <?php foreach ($turniere_deleted as $turnier){?>
+                <tr>
+                    <td><?=date("d.m.y", strtotime($turnier['datum']))?> in <?=$turnier['ort']?> (<?=$turnier['turnier_id']?>)</td>
+                    <td><?=$turnier['grund']?></td>
+                </tr>
+                <tr>
+                    <td colspan='4'><?=Form::link('lc_turnier_log.php?turnier_id=' . $turnier['turnier_id'], 'Link zum Turnierlog')?></td>
+                </tr>
+            <?php }//end foreach?>
+        </table>
+    </div>
 </p>
 <?php
 include '../../templates/footer.tmp.php';
