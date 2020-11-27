@@ -34,6 +34,8 @@ include '../../templates/header.tmp.php';
 ?>
 <?php if (!empty($daten)){?>
     <h2>Turnierlog <?=$daten['datum'] . ' ' . $daten['tname']?> <?=$daten['ort']?> (<?=$daten['tblock']?>)</h2>
+<?php }else{ ?>
+    <h2>Turnierlog Turnier-ID <?=$turnier_id?></h2>
 <?php } //endif?>
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-striped">

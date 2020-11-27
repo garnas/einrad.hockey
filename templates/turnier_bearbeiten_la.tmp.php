@@ -11,7 +11,9 @@
             <label for='delete_turnier_grund' class="w3-text-primary">Grund der Turnierabsage</label>
             <input required list="browsers" id="delete_turnier_grund" name="delete_turnier_grund" placeholder="Bitte eingeben.." class="w3-input w3-border w3-border-primary">
                 <datalist id="browsers">
-                    <option value="Zu wenig spielberechtigte Ligateams">  
+                    <option value="Zu wenig spielberechtigte Ligateams">
+                    <option value="Vom Ausrichter im Vorfeld abgesagt">
+                    <option value="Spaßturnier">
                     <option value="Corona-Pandemie">
                     <option value="Fehler beim Eintragen">
                     <option value="Dritter Weltkrieg">

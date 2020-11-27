@@ -49,14 +49,16 @@ $turniere_deleted = Turnier::get_deleted_turniere();
 /////////////////////////////////////////////////////////////////////////////
 include '../../templates/header.tmp.php';?>
 
-<h2 class="w3-text-grey">Turniere verwalten</h2>
-<p>
-    <?=Form::link('#ergebnis', 'Zu den Turnieren in der Ergebnisphase')?>
+<h1 class="w3-text-grey">Turniere verwalten</h1>
+<p> 
+    <?=Form::link('#anstehend', '<span class="material-icons">sports_hockey</span> Anstehende Turniere')?>
     <br>
-    <?=Form::link('#deleted', 'Zu den Logs der gelöschten Turniere')?>
+    <?=Form::link('#ergebnis', '<span class="material-icons">emoji_events</span> Ergebnisphase-Turniere')?>
+    <br>
+    <?=Form::link('#deleted', '<span class="material-icons">not_interested</span> Gelöschte Turniere')?>
 </p>
 
-<h2 class="w3-text-primary">Anstehende Turniere</h2>
+<h2 id="anstehend" class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">sports_hockey</i> Anstehende Turniere</h2>
 <?php
 //Turniere die nicht in der Ergebnis-Phase sind:
 $turniere = $turniere_no_erg;
@@ -64,7 +66,7 @@ include '../../logic/turnierliste.logic.php'; //Als absolute Ausnahme zur Init
 include '../../templates/turnierliste.tmp.php';
 ?>
 
-<h2 class="w3-text-primary" id="ergebnis">Vergangene Turniere</h2>
+<h2 class="w3-text-primary" id="ergebnis"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">emoji_events</i> Ergebnisphase-Turniere</h2>
 <?php
 //Turniere die in der Ergebnisphase sind:
 $turniere = $turniere_erg;
@@ -72,7 +74,7 @@ include '../../logic/turnierliste.logic.php'; //Als absolute Ausnahme zur Init
 include '../../templates/turnierliste.tmp.php';
 ?>
 
-<h2 class="w3-text-primary" id="deleted">Gelöschte Turniere</h2>
+<h2 class="w3-text-primary" id="deleted"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">not_interested</i> Gelöschte Turniere</h2>
 <p>
     <div class="w3-card w3-responsive">
         <table class="w3-table w3-striped">
