@@ -36,7 +36,15 @@ if(isset($_POST['login'])) {
             $log_login = fopen('../../system/logs/log_login.txt', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
             $log = "\nErfolgreich: "  . date('Y-m-d H:i:s') . " TeamID: " . $_SESSION['team_id'] . " Teamname: " . $_SESSION['teamname'] . "\n";
             fwrite($log_login, $log);
-            header('Location: ' . ($_GET['redirect'] ?? 'tc_start.php'));
+            //Weiterleitung zum in der Session (aus session.logic.php) gespeicherten Pfad oder zu start.php
+            //Wegen header-injection sollten keine Pfade an den header via Get übergeben werden
+            if(isset($_GET['redirect']) && isset($_SESSION['tc_redirect'])){
+                $redirect = $_SESSION['tc_redirect'];
+                unset($_SESSION['tc_redirect']);
+            }else{
+                $redirect = 'tc_start.php';
+            }
+            header('Location: ' . $redirect);
             die();
         }else{
             //Logdatei erstellen/beschreiben

@@ -1,9 +1,9 @@
 <?php
 //Dies hier muss in jeder geschützten Seite direkt unterhalb von first.logic.php eingefügt werden!
 if(!isset($_SESSION['team_id'])) {
-  $redirect = db::escape($_SERVER['REQUEST_URI']); //Damit man nach dem Login direkt auf die gewünschte Seite geführt wird
-  Form::affirm("Bitte zuerst einloggen");
-  header('Location: ../teamcenter/tc_login.php?redirect=' . $redirect);
+  $_SESSION['tc_redirect'] = db::escape($_SERVER['REQUEST_URI']); //Damit man nach dem Login direkt auf die gewünschte Seite geführt wird
+  Form::affirm("Du wirst nach deinem Login weitergeleitet.");
+  header('Location: ../teamcenter/tc_login.php?redirect');
   die();
 }
 
