@@ -31,9 +31,10 @@ if(isset($_POST['login'])) {
             $_SESSION['la_login_name'] = $login_name;
             $_SESSION['la_id'] = $la_id;
             //Logdatei erstellen/beschreiben
-            $log_login = fopen('../../system/logs/log_login.txt', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
-            $log = "\nErfolgreich: "  . date('Y-m-d H:i:s') . " LaID: " . $_SESSION['la_id'] . " Loginname: " . $_SESSION['la_login_name'] . "\n";
+            $log_login = fopen('../../system/logs/log_login.log', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
+            $log =  date('[Y-M-d H:i:s e]') . " Erfolgreich       | Loginname: " . $_SESSION['la_login_name'] . "\n";
             fwrite($log_login, $log);
+            fclose($log_login);
             //Weiterleitung zum in der Session (aus session.logic.php) gespeicherten Pfad oder zu start.php
             //Wegen header-injection sollten keine Pfade an den header via Get übergeben werden
             if(isset($_GET['redirect']) && isset($_SESSION['lc_redirect'])){
@@ -46,9 +47,10 @@ if(isset($_POST['login'])) {
             die();
         }else{
             //Logdatei erstellen/beschreiben
-            $log_login = fopen('../../system/logs/log_login.txt', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
-            $log = "\nFalsches Passwort: "  . date('Y-m-d H:i:s') . " Teamname: " . $login_name . "\n";
+            $log_login = fopen('../../system/logs/log_login.log', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
+            $log =  date('[Y-M-d H:i:s e]') . " Falsches Passwort | Loginname: " . $login_name . "\n";
             fwrite($log_login, $log);
+            fclose($log_login);
             Form::error("Falsches Passwort");
         }
     }

@@ -22,6 +22,11 @@ if (isset($_POST['anmelden'])){
         $_SESSION['teamblock'] = Tabelle::get_team_block($team_id);
         Form::affirm("Login via Ligaausschuss erfolgreich");
         header('Location: ../teamcenter/tc_start.php');
+        //Logdatei erstellen/beschreiben
+        $log_login = fopen('../../system/logs/log_login.log', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
+        $log =  date('[Y-M-d H:i:s e]') . " Erfolgreich       | via Ligacenter: " . $_SESSION['la_login_name'] . " als " . $_SESSION['teamname'] . "\n";
+        fwrite($log_login, $log);
+        fclose($log_login);
         die();
     }else{
         Form::error("Anmeldung als Team nicht möglich, da der Teamname keinem Ligateam zugeordnet werden konnte.");

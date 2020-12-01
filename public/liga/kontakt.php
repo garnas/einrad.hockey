@@ -24,9 +24,9 @@ if(isset($_POST['absenden'])) {
         Form::error("E-Mail konnte wegen Spamverdacht nicht versendet werden - bitte Felder nicht automatisch ausfüllen. Schreib uns bitte an via " . Form::mailto(Config::LAMAIL));
         $error = true;
         //Logdatei erstellen/beschreiben
-        $log_sql = fopen('../../system/logs/log_kontaktformular.txt', "a");
-        $log = "Honey_Pot: \n" . print_r($_POST, true) . "\n\n";
-        fwrite($log_sql, $log);
+        $log_kontakt = fopen('../../system/logs/log_kontaktformular.log', "a");
+        $log = date('[Y-M-d H:i:s e]'). " Honey_Pot:\n" . print_r($_POST, true) . "\n\n";
+        fwrite($log_kontakt, $log);
     }
 
     //Zeitmessung vs Bots
@@ -37,9 +37,9 @@ if(isset($_POST['absenden'])) {
         Form::error("E-Mail konnte wegen Spamverdacht nicht versendet werden, da das Formular zu schnell ausgefüllt wurde. Schreib uns bitte an via " . Form::mailto(Config::LAMAIL));
         $error = true;
         //Logdatei erstellen/beschreiben
-        $log_sql = fopen('../../system/logs/log_kontaktformular.txt', "a");
-        $log = "Zu schnell: ". $time . " Sekunden\n" . print_r($_POST, true) . "\n\n";
-        fwrite($log_sql, $log);
+        $log_kontakt = fopen('../../system/logs/log_kontaktformular.log', "a");
+        $log = date('[Y-M-d H:i:s e]') . " Zu schnell: ". $time . " Sekunden\n" . print_r($_POST, true) . "\n\n";
+        fwrite($log_kontakt, $log);
     }
 
     if(!$error){
@@ -57,7 +57,10 @@ if(isset($_POST['absenden'])) {
                 $send = true; //Email an den User nur schicken, wenn die Mail an LA rausging
             }else{
                 Form::error("Es ist ein Fehler aufgetreten. E-Mail konnte nicht versendet werden. Manuell versenden: " . Form::mailto(Config::LAMAIL));
-                Form::error($mailer->ErrorInfo);
+                $log_kontakt = fopen('../../system/logs/log_kontaktformular.log', "a");
+                $log = date('[Y-M-d H:i:s e]') . " Fehler:\n" . print_r($_POST, true) . $mailer->ErrorInfo . "\n\n";
+                fwrite($log_kontakt, $log);
+                fclose($log_kontakt);
             }
         }else{ //Debugging
             if (!($ligacenter ?? false)){
@@ -83,7 +86,10 @@ if(isset($_POST['absenden'])) {
                     die();
                 }else{
                     Form::error("Es ist ein Fehler aufgetreten: Eine Kopie der E-Mail wurde nicht an dich versendet! Stimmt \"$absender\"?");
-                    Form::error($mailer->ErrorInfo);
+                    $log_kontakt = fopen('../../system/logs/log_kontaktformular.log', "a");
+                    $log = date('[Y-M-d H:i:s e]') . "Fehler:\n" . print_r($_POST, true) . $mailer->ErrorInfo . "\n\n";
+                    fwrite($log_kontakt, $log);
+                    fclose($log_kontakt);
                 }
             }else{ //Debugging
                 if (!($ligacenter ?? false)){
