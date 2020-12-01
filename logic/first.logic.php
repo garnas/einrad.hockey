@@ -1,11 +1,15 @@
 <?php
 //Dieses Dokument muss immer als Erstes für die Logik geladen werden
-//Session hauptsächlich für Authentifizierung
-session_start();
-session_regenerate_id();
 
 //Quelle: https://www.php-kurs.com/php-datumsausgabe-deutsch.htm
 setlocale (LC_ALL, 'de_DE@euro', 'de_DE', 'de', 'ge');
+
+//Zeitzone Festlegen
+date_default_timezone_set('Europe/Berlin');
+
+//Session hauptsächlich für Authentifizierung
+session_start();
+session_regenerate_id();
 
 //Lädt automatisch die benötigten Klassen
 //Quelle https://www.php.net/manual/de/language.oop5.autoload.php

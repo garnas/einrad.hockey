@@ -5,7 +5,6 @@ require_once '../../logic/session_team.logic.php'; //Auth
 
 //In der Regel wird die gesammte Session beendet. Nur wenn man entweder aus dem LC oder aus dem TC ausloggen will, werden Variablen verändert
 if (!isset($_SESSION['la_id'])){
-    session_start();
     session_destroy();
     session_start();
 }else{
