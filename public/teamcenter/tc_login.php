@@ -9,7 +9,8 @@ if(isset($_POST['login'])) {
     $teamname = $_POST['teamname'];
     $passwort = $_POST['passwort'];
     $team_id = Team::teamname_to_teamid ($teamname);
-
+    $log_file = "log_login.log";
+    
     //Fehlermeldungen
     if(strlen($teamname) == 0) {
         $error = true;
@@ -22,6 +23,7 @@ if(isset($_POST['login'])) {
     if (!Team::is_ligateam($team_id)){
         $error = true;
         Form::error("Falscher Loginname");
+        Form::log($log_file, "Falscher Teamname | Teamname: " . $_POST['teamname'] ?? '');
         unset ($_POST['teamname']); //Damit der Teamname als Value im Input-Feld gelöscht wird.
     }
 
@@ -33,10 +35,7 @@ if(isset($_POST['login'])) {
             $_SESSION['teamname'] = Team::teamid_to_teamname($team_id); //Ansonsten könnte es zu fehlern der Groß- und Kleinschreibung kommen, da SQL diese in der Suche der Team ID igoniert.
             $_SESSION['teamblock'] = Tabelle::get_team_block($_SESSION['team_id']);
             //Logdatei erstellen/beschreiben
-            $log_login = fopen('../../system/logs/log_login.log', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
-            $log =  date('[Y-M-d H:i:s e]') . " Erfolgreich       | Teamname: " . $_SESSION['teamname'] . "\n";
-            fwrite($log_login, $log);
-            fclose($log_login);
+            Form::log($log_file, "Erfolgreich       | Teamname: " . $teamname);
             //Weiterleitung zum in der Session (aus session.logic.php) gespeicherten Pfad oder zu start.php
             //Wegen header-injection sollten keine Pfade an den header via Get übergeben werden
             if(isset($_GET['redirect']) && isset($_SESSION['tc_redirect'])){
@@ -49,10 +48,7 @@ if(isset($_POST['login'])) {
             die();
         }else{
             //Logdatei erstellen/beschreiben
-            $log_login = fopen('../../system/logs/log_login.log', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
-            $log =  date('[Y-M-d H:i:s e]') . " Falsches Passwort | Teamname: " . $_POST['teamname'] . "\n";
-            fwrite($log_login, $log);
-            fclose($log_login);
+            Form::log($log_file, "Falsches Passwort | Teamname: " . $teamname);
             Form::error("Falsches Passwort. Schreibe " . Form::mailto(Config::LAMAIL) . " um euer Passwort zurückzusetzen");
         }
     }

@@ -5,12 +5,14 @@
 class db {
   
   public static $link; //Verbindung zur Datenbank
+  public static $log_file = "log_db.log";
   
   //Verbindung wird bei der Erstellung des Objektes geöffnet. Das erste db-Objekt wird in first.logic.php erstellt.
   function __construct($db = Config::DATABASE)
   {
     self::$link = new mysqli(Config::HOST_NAME, Config::USER_NAME, Config::PASSWORD, $db);
     if (self::$link -> connect_errno) {
+      Form::log(self::$log_file,"Verbindung zum MySQL Server fehlgeschlagen: ".mysqli_connect_error());
       die('<h2>Verbindung zum MySQL Server fehlgeschlagen: '.mysqli_connect_error().'<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
     }
   }
@@ -75,6 +77,7 @@ class db {
   public static function readdb($sql)
   {
     if (mysqli_connect_errno()) {
+      Form::log(self::$log_file,"Lesen der Datenbank fehlgeschlagen: ".mysqli_connect_error());
       die('<h2>Verbindung zum MySQL Server fehlgeschlagen: '.mysqli_connect_error().'<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
     }
     return self::$link->query($sql);
@@ -84,25 +87,25 @@ class db {
   public static function writedb($sql)
   {
     //SQL-Logdatei erstellen/beschreiben
-    $log_sql = fopen('../../system/logs/log_db.log', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
     $autor_string = implode(" | ", array_filter([$_SESSION['teamname'] ?? '', $_SESSION['la_login_name'] ?? '', $_SESSION['ligabot'] ?? '']));
-    $log = date('[Y-M-d H:i:s e]') . " " . $autor_string . ":\n" . trim($sql) . "\n\n";
-    fwrite($log_sql, $log);
+    $log = $autor_string . ":\n" . trim($sql);
+    Form::log(self::$log_file, $log);
 
+    //Keine Verbindung zum SQL-Server möglich
     if (mysqli_connect_errno()) {
-      $error = 'Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error();
-      fwrite($log_sql, "\n" . $error . "\n\n");
+      $error_text = 'Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error();
+      Form::log(self::$log_file, $error_text);
       die('<h2>Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error() . '<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
     }
 
+    //Beschreiben der Datenbank nicht möglich
     if (!self::$link->query($sql) === TRUE) {
-        $error = 'Fehlgeschlagen: '.self::$link->error . "\n\n";
-        fwrite($log_sql, $error);
-        Form::error("SQL: " . $error);
-        Form::error($sql);
+        $error_text = 'Fehlgeschlagen: ' . self::$link->error;
+        Form::log(self::$log_file, $error_text);
+        Form::error("Fehler beim Beschreiben der Datenbank. " . Form::mailto(Config::TECHNIKMAIL));
+        //Debug Form::error($sql);
         die();
     }
-    fclose($log_sql);
   }
   
   public static function db_sichern()
