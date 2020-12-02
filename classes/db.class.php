@@ -88,7 +88,7 @@ class db {
   {
     //SQL-Logdatei erstellen/beschreiben
     $autor_string = implode(" | ", array_filter([$_SESSION['teamname'] ?? '', $_SESSION['la_login_name'] ?? '', $_SESSION['ligabot'] ?? '']));
-    $log = $autor_string . ":\n" . trim($sql);
+    $log = $autor_string . "\n" . trim($sql);
     Form::log(self::$log_file, $log);
 
     //Keine Verbindung zum SQL-Server möglich

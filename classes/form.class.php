@@ -178,7 +178,7 @@ class Form
         $path = '../../system/logs/';
         //SQL-Logdatei erstellen/beschreiben
         $log_file = fopen($path . $file_name, "a");
-        $line = date('[Y-M-d H:i:s e] ') . $line  . "\n";
+        $line = date('[Y-M-d H:i:s e]: ') . $line  . "\n";
         fwrite($log_file, $line);
         fclose($log_file);
       }
