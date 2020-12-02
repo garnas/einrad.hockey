@@ -1,15 +1,14 @@
 <?php
-class Saison_25 {
-    //Abgebrochene Corona Saison
+class Saison_23 {
     //SAISON_ANFANG
     public static function get_saison_anfang()
     {
-        return "01.02.2020";
+        return "01.02.2018";
     }
     //SAISON_ENDE
     public static function get_saison_ende()
     {
-        return "17.06.2020";
+        return "31.10.2018";
     }
     public static function platz_to_block($platz, $saison)
     {       

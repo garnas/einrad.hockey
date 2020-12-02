@@ -1,11 +1,5 @@
 <?php
 class Saison_26 {
-
-    //Ligagebühr
-    public static function get_ligagebuehr()
-    {
-        return "30&nbsp;€";
-    }
     //SAISON_ANFANG
     public static function get_saison_anfang()
     {
@@ -15,6 +9,11 @@ class Saison_26 {
     public static function get_saison_ende()
     {
         return "31.10.2021";
+    }
+    //Ligagebühr
+    public static function get_ligagebuehr()
+    {
+        return "30&nbsp;€";
     }
 
     ///////////////////////////////////////////////////////////////
@@ -33,15 +32,12 @@ class Saison_26 {
     {
         return array("ABCDEF",'A','AB','ABC','BC','BCD','CD','CDE','DE','DEF','EF','F');
     }
-
-
     public static function platz_to_block($platz, $saison)
     {       
-        return Saison::platz_to_block($platz, $saison-1);
+        return Saison::platz_to_block($platz, 13);
     }
     public static function platz_to_wertigkeit($platz, $saison)
     {       
-        return Saison::platz_to_wertigkeit($platz, $saison-1);
+        return Saison::platz_to_wertigkeit($platz, 13);
     }    
-
 }

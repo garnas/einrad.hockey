@@ -25,7 +25,7 @@ spl_autoload_register(
         }
 
     }        
-});
+);
 
 //SQL-Connection wird hergestellt und automatisch wieder gechlossen
 $verbindung_zur_datenbank = new db;
