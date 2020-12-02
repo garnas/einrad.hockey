@@ -18,8 +18,14 @@
             <p>
                 <input class="w3-button w3-block w3-primary" type="file" name="jpgupload" id="jpgupload">
             </p>
+            <?php if($ligacenter){?>
+                <p>
+                    <label class="" for="bild_verlinken">Bild verlinken (optional) | nur Ligaausschuss</label>
+                    <input class="w3-input w3-border w3-border-primary" placeholder="Link angeben" type="url" id="bild_verlinken" name="bild_verlinken" value="<?=$neuigkeit['bild_verlinken'] ?: ''?>" >
+                </p>
+            <?php } //endif?>
             <p>
-                <label for="delete_jpg">Bisheriges Bild löschen:</label> 
+                <label for="delete_jpg">Bild löschen:</label>
                 <select class='w3-select w3-border w3-border-primary' id='delete_jpg' name='delete_jpg'>
                     <option value='Ja'>Bild löschen</option>
                     <option value='Nein' selected>Nein</option>
@@ -42,7 +48,7 @@
     </div>
     </div>
     <p>
-        <input type="submit" class="w3-tertiary w3-block w3-button" id="submit" value="Neuigkeit bearbeiten">
+        <input type="submit" class="w3-tertiary w3-block w3-button" id="submit" name="change_neuigkeit" value="Neuigkeit bearbeiten">
     </p>
 </form>
 

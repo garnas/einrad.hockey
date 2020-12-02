@@ -1,15 +1,15 @@
 <?php
-// PHP-Mailer hinzufügen //QUELLE: https://www.html-seminar.de/forum/thread/6852-kontaktformular-tutorial/
+// PHP-Mailer hinzufügen
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-require_once '../../frameworks/phpmailer/src/Exception.php';
-require_once '../../frameworks/phpmailer/src/PHPMailer.php';
-require_once '../../frameworks/phpmailer/src/SMTP.php';
 
 class MailBot {
 
-    //Mailversand mit PHPMailer initieren
+    // Lädt den PHPMailer und erstellt ein PHPMailer-Objekt
     public static function start_mailer(){
+        require_once __DIR__ . '/../frameworks/phpmailer/src/Exception.php';
+        require_once __DIR__ . '/../frameworks/phpmailer/src/PHPMailer.php';
+        require_once __DIR__ . '/../frameworks//phpmailer/src/SMTP.php';
         $mailer = new PHPMailer();
         $mailer->isSMTP();
         $mailer->Host = Config::SMTP_HOST;
@@ -22,7 +22,7 @@ class MailBot {
         return $mailer;
     }
 
-    //Der Mailbot nimmt Emails aus der Datenbank und versendet diese 
+    // Der Mailbot nimmt Emails aus der Datenbank und versendet diese 
     public static function mail_bot()
     {
         $sql = "SELECT * FROM mailbot WHERE mail_status = 'warte' ORDER BY zeit ASC LIMIT 50";

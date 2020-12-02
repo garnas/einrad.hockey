@@ -15,9 +15,9 @@
     <link rel="apple-touch-icon" sizes="180x180" href="../bilder/favicon/apple-icon-180x180.png.png">
     <link type="text/css" rel="stylesheet" href="../css/normalize.css">
     <link type="text/css" rel="stylesheet" href="../css/w3.css">
-    <link type="text/css" rel="stylesheet" href="../css/style.css?v=20200904">
+    <link type="text/css" rel="stylesheet" href="../css/style.css?v=20201126">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="../script.js"></script>
+    <script src="../script.js?v=20201124"></script>
     <title><?=$titel ?? "Deutsche Einradhockeyliga"?></title>
 </head>
 
@@ -49,8 +49,6 @@
                 }
                 ?>
                 <?php //Fehlermeldungen darstellen 
-                Form::schreibe_errors();
-                Form::schreibe_attentions();
-                Form::schreibe_affirms();
+                Form::schreibe_meldungen();
             
             

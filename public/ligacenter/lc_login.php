@@ -25,21 +25,32 @@ if(isset($_POST['login'])) {
         unset ($_POST['loginname']); //Damit der Name als Value im Input-Feld gelöscht wird.
     }
 
+    //Passwortcheck
     if (!($error ?? false)){
         if(password_verify($passwort, Ligaleitung::get_la_password($la_id))) {
-            $_SESSION['la_login_name'] = $login_name; 
+            $_SESSION['la_login_name'] = $login_name;
             $_SESSION['la_id'] = $la_id;
             //Logdatei erstellen/beschreiben
-            $log_login = fopen('../../system/logs/log_login.txt', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
-            $log = "\nErfolgreich: "  . date('Y-m-d H:i:s') . " LaID: " . $_SESSION['la_id'] . " Loginname: " . $_SESSION['la_login_name'] . "\n";
+            $log_login = fopen('../../system/logs/log_login.log', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
+            $log =  date('[Y-M-d H:i:s e]') . " Erfolgreich       | Loginname: " . $_SESSION['la_login_name'] . "\n";
             fwrite($log_login, $log);
-            header('Location: ' . ($_GET['redirect'] ?? 'lc_start.php'));
+            fclose($log_login);
+            //Weiterleitung zum in der Session (aus session.logic.php) gespeicherten Pfad oder zu start.php
+            //Wegen header-injection sollten keine Pfade an den header via Get übergeben werden
+            if(isset($_GET['redirect']) && isset($_SESSION['lc_redirect'])){
+                $redirect = $_SESSION['lc_redirect'];
+                unset($_SESSION['lc_redirect']);
+            }else{
+                $redirect = 'lc_start.php';
+            }
+            header('Location: ' . $redirect);
             die();
         }else{
             //Logdatei erstellen/beschreiben
-            $log_login = fopen('../../system/logs/log_login.txt', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
-            $log = "\nFalsches Passwort: "  . date('Y-m-d H:i:s') . " Teamname: " . $login_name . "\n";
+            $log_login = fopen('../../system/logs/log_login.log', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
+            $log =  date('[Y-M-d H:i:s e]') . " Falsches Passwort | Loginname: " . $login_name . "\n";
             fwrite($log_login, $log);
+            fclose($log_login);
             Form::error("Falsches Passwort");
         }
     }

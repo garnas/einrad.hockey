@@ -169,8 +169,8 @@ if (isset($_POST['change_turnier'])) {
             if ($akt_turnier->daten['besprechung'] != $besprechung){
                 $akt_turnier->schreibe_log("Besprechung: " . $akt_turnier->daten['besprechung'] . " -> " . $besprechung, $autor);
                 //$mail = true;
-            }
-            if ($akt_turnier->daten['hinweis'] != $hinweis){
+            }          
+            if ($akt_turnier->daten['hinweis'] != stripcslashes($hinweis)){
                 $akt_turnier->schreibe_log("Hinweis:\r\n" . $akt_turnier->daten['hinweis'] . "\r\n->\r\n" . $hinweis, $autor);
                 //$mail = true;
             }

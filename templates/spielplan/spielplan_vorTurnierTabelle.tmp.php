@@ -1,10 +1,10 @@
 <!-- ÜBERSCHRIFT -->
 <h1 class="w3-text-grey"><?=$spielzeit['plaetze']?>er-Spielplan</h1>
-<h2 class="w3-text-secondary"><?=$spielplan->akt_turnier->daten['ort']?> <i>(<?=$spielplan->akt_turnier->daten['tblock']?>)</i>, <?=date("d.m.Y", strtotime($spielplan->akt_turnier->daten['datum']))?></h2>
-<h1><?=$spielplan->akt_turnier->daten['tname']?></h1>
+<h2 class="w3-text-primary"><?=$spielplan->akt_turnier->daten['ort']?> <i>(<?=$spielplan->akt_turnier->daten['tblock']?>)</i>, <?=date("d.m.Y", strtotime($spielplan->akt_turnier->daten['datum']))?></h2>
+<h3><?=$spielplan->akt_turnier->daten['tname']?></h3>
 
 <!-- LINKS -->
-<div class="drucken-hide">
+<div class="pdf-hide">
     <p><?=Form::link("../liga/turnier_details.php?turnier_id=" . $turnier_id, "<i class='material-icons'>info</i> Alle Turnierdetails")?>
     <?php if (isset($_SESSION['team_id'])){?>
         <?=Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">article</i> Zum Turnierreport')?></p>
@@ -20,7 +20,7 @@
     <?php if(isset($_SESSION['la_id'])){?>
         <p><?=Form::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">create</i> Turnierreport ausfüllen (Ligaausschuss)')?></p>
     <?php }//endif?>
-    <p><?=Form::link("../liga/spielplan_drucken.php?turnier_id=" . $turnier_id, "<i class='material-icons'>print</i> Zur Druckversion")?></p>
+    <p><?=Form::link("../liga/spielplan_pdf.php?turnier_id=" . $turnier_id, "<i class='material-icons'>print</i> PDF-Version anzeigen")?></p>
 </div>
 
 <!-- TEAMLISTE -->
@@ -29,7 +29,7 @@
     <table class="w3-table w3-striped" style="white-space: nowrap;">
         <tr class="w3-primary">
             <th class="w3-center">ID</th>
-            <th>Name</th>
+            <th class="w3-left-align">Name</th>
             <th class="w3-center w3-hide-small">Block</th>
             <th class="w3-center">Wertigkeit</th>
         </tr>
@@ -44,5 +44,5 @@
     </table>
 </div>
 <?php if(array_search('NL', array_column($teamliste, 'tblock')) != false){ ?>
-    <p class="w3-text-grey w3-small">* Nichtligateam</p>
+    <span class="w3-text-grey w3-small">* Nichtligateam</span>
 <?php } //endif?>

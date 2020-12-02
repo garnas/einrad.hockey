@@ -85,6 +85,20 @@ include '../../templates/header.tmp.php';
             <p><?=Form::link("ueber_uns.php", "Mehr Infos")?></p> 
         </div>
 
+        <!-- Kilometer Challenge -->
+        <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
+            <a href='challenge.php' class="no">
+                <h1 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">outlined_flag</i> km-Challenge</h1>
+            </a>
+            <p class="w3-text-grey w3-small w3-border-top w3-border-grey"></p>
+            <p>Sammelt Kilometer für euer Team und legt die längste Strecke zurück.</p>
+            <!-- Countdown -->
+            <a href='challenge.php' class='no'><?=Form::countdown('2020-12-20')?></a>
+            <p>
+                <a href='../teamcenter/tc_challenge.php' class="w3-button w3-primary">Kilometer eintragen!</a>
+            </p>
+        </div>
+
         <!-- Anstehende Turniere -->
         <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
             <a href='turniere.php' class="no">
@@ -197,8 +211,8 @@ include '../../templates/header.tmp.php';
                 <!-- Bild -->
                 <?php if ($neuigkeit['link_jpg'] != ''){?>
                     <div class='w3-center w3-card'> 
-                        <a href='<?=$neuigkeit['link_jpg']?>'>
-                            <img class='w3-image w3-hover-opacity' style="max-height: 800px" alt="<?=$neuigkeit['titel']?>" src=<?=$neuigkeit['link_jpg']?>>
+                        <a href='<?=$neuigkeit['bild_verlinken'] ?: $neuigkeit['link_jpg']?>'>
+                            <img class='w3-image w3-hover-opacity' alt="<?=$neuigkeit['titel']?>" src=<?=$neuigkeit['link_jpg']?>>
                         </a>
                     </div>
                 <?php } //end if?>
@@ -215,7 +229,7 @@ include '../../templates/header.tmp.php';
                     </a>
                 <?php } //end if?>
 
-                <!--Zeitstempel -->
+                <!-- Zeitstempel -->
                 <p class='w3-text-grey w3-border-bottom w3-border-grey' style="text-align: right;"><i style="font-size: 22px; vertical-align: -26%" class='material-icons'>schedule</i> <?=$neuigkeit['zeit']?></p>
 
                 <!-- Link zum Bearbeiten falls man im Ligacenter oder Teamcenter eingeloggt ist -->

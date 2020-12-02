@@ -17,6 +17,7 @@
     <div class="w3-text-black">
         <h3 class="w3-margin-left w3-text-primary"><i style="vertical-align: -16%" class="material-icons w3-xlarge">emoji_events</i> LIGA</h3>
     </div>
+    <a href="../liga/challenge.php" class="w3-bar-item w3-button">km-Challenge</a>
     <a href="../liga/turniere.php" class="w3-bar-item w3-button">Turniere</a>
     <a href="../liga/ergebnisse.php" class="w3-bar-item w3-button">Ergebnisse</a>
     <a href="../liga/teams.php" class="w3-bar-item w3-button">Teams</a>
@@ -35,17 +36,18 @@
     <a href="../teamcenter/tc_login.php" class="w3-bar-item w3-button">Login</a>
     <?php if (!isset($_SESSION['team_id'])){$tc_color = 'w3-text-grey';}?>
     <div class="<?=$tc_color ?? ''?>">
-        <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_start.php">Start</a>
-        <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_turnierliste_anmelden.php">Turnieranmeldung</a>
-        <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_turnier_erstellen.php">Turnier erstellen</a>
-        <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_turnierliste_verwalten.php">Eigene Turniere</a>
-        <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_neuigkeit_eintragen.php">Neuigkeiten eintragen</a>
+        <a class="w3-bar-item w3-button" href="../teamcenter/tc_start.php">Start</a>
+        <a class="w3-bar-item w3-button" href="../teamcenter/tc_challenge.php">km-Challenge</a>
+        <a class="w3-bar-item w3-button" href="../teamcenter/tc_turnierliste_anmelden.php">Turnieranmeldung</a>
+        <a class="w3-bar-item w3-button" href="../teamcenter/tc_turnier_erstellen.php">Turnier erstellen</a>
+        <a class="w3-bar-item w3-button" href="../teamcenter/tc_turnierliste_verwalten.php">Eigene Turniere</a>
+        <a class="w3-bar-item w3-button" href="../teamcenter/tc_neuigkeit_eintragen.php">Neuigkeiten eintragen</a>
         <a class="w3-bar-item w3-button" href="../teamcenter/tc_neuigkeit_liste.php">Neuigkeit bearbeiten</a>
-        <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_kontaktcenter.php">Kontaktcenter</a>
-        <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_teamdaten.php">Teamdaten</a>
-        <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_kader.php">Kader</a>
-        <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_pw_aendern.php">Passwort ändern</a>
-        <a class="w3-bar-item w3-button <?=$tc_color?>" href="../teamcenter/tc_logout.php">Logout</a>
+        <a class="w3-bar-item w3-button" href="../teamcenter/tc_kontaktcenter.php">Kontaktcenter</a>
+        <a class="w3-bar-item w3-button" href="../teamcenter/tc_teamdaten.php">Teamdaten</a>
+        <a class="w3-bar-item w3-button" href="../teamcenter/tc_kader.php">Kader</a>
+        <a class="w3-bar-item w3-button" href="../teamcenter/tc_pw_aendern.php">Passwort ändern</a>
+        <a class="w3-bar-item w3-button" href="../teamcenter/tc_logout.php">Logout</a>
     </div>
     <div class="w3-text-primary">
         <h3 class="w3-margin-left"><i style="vertical-align: -16%" class="material-icons w3-xlarge">format_list_bulleted</i> SONSTIGES</h3>

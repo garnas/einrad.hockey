@@ -22,7 +22,7 @@ if (isset($_GET['spieltag']) && is_numeric($_GET['spieltag'])){
 
 //Tabellen und Strafen, um sie an das Layout zu übergeben
 $meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag);
-$rang_tabelle = Tabelle::get_rang_tabelle($gew_spieltag);
+$rang_tabelle = Tabelle::get_rang_tabelle(1, 25);
 $strafen = Team::get_all_strafen();
 
 //Testen ob Verwarnungen oder Strafen existieren.
@@ -148,7 +148,7 @@ window.onclick = function(event) {
 
 <!--Tabelle-->
 <div class="w3-responsive w3-card">
-    <table class="w3-table w3-striped" style="">
+    <table class="w3-table w3-striped">
         <thead class="w3-primary">
             <tr>
                 <th><b>Platz</b></th>
@@ -159,7 +159,7 @@ window.onclick = function(event) {
         </thead>
         <?php foreach ($meisterschafts_tabelle as $spalte){?>
             <tr>
-                <td class="<?=$platz_color[$spalte['platz']]?>"><?=$spalte['platz'] ?? ''?></td>
+                <td class="<?=$platz_color[$spalte['platz']] ?? ''?>"><?=$spalte['platz'] ?? ''?></td>
                 <td style="white-space: nowrap"><?=$spalte['teamname']?></td>
                 <td><?=htmlspecialchars_decode($spalte['string'])?></td>
                 <td><?=$spalte['summe'] ?: 0?><a class="no w3-text-blue w3-hover-text-secondary" href="#pranger"><?=$spalte['strafe_stern'] ?? ''?></a></td>

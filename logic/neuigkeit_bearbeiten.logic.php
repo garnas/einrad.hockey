@@ -10,12 +10,16 @@ if (!isset($neuigkeiten[$neuigkeiten_id])){
     $neuigkeit = $neuigkeiten[$neuigkeiten_id];
 }
 
+//Neuigkeit löschen
 if (isset($_POST['delete_neuigkeit'])){
-    Neuigkeit::delete_neuigkeit($neuigkeiten_id,$neuigkeit['link_jpg'],$neuigkeit['link_pdf']);
+    Neuigkeit::delete_neuigkeit($neuigkeiten_id);
     Form::affirm("Neuigkeit wurde gelöscht");
     header('Location: ../liga/neues.php');
     die();
-}elseif (isset($_POST['titel'])){
+}
+
+//Neuigkeiten verändern
+if (isset($_POST['change_neuigkeit'])){
 
     if (!empty($_POST['titel']) && !empty($_POST['text'])){
         
@@ -32,7 +36,7 @@ if (isset($_POST['delete_neuigkeit'])){
             
         }else{
             //Wert aus der Datenbank wird übernommen
-            $target_file_jpg=$neuigkeit['link_jpg'];
+            $target_file_jpg = $neuigkeit['link_jpg'];
         }
         //pdf
         if (!empty($_FILES["pdfupload"]["tmp_name"])){
@@ -44,12 +48,13 @@ if (isset($_POST['delete_neuigkeit'])){
             }
 
         }else{
-            $target_file_pdf=$neuigkeit['link_pdf'];
+            $target_file_pdf = $neuigkeit['link_pdf'];
         }
 
         //////Titel, Text und Verlinkungen werden in die Datenbank eingetragen//////
         $titel = $_POST['titel'];
         $text = $_POST['text'];
+        $bild_verlinken = $_POST['bild_verlinken'];
         //$text = preg_replace("/[\r\n]+/", "\n", $text); //Entfernt doppelte Newline-Characters (Absätze) - ansonsten wäre es möglich einen Neuigkeiteseintrag mit 200 neuen Zeilen zu erstellen
         if (!$error) {
 
@@ -67,7 +72,7 @@ if (isset($_POST['delete_neuigkeit'])){
                 if ($neuigkeit['link_pdf'] == $target_file_pdf){$target_file_pdf = '';}
             }
 
-            Neuigkeit::update_neuigkeit($neuigkeiten_id,$titel,$text,$target_file_jpg,$target_file_pdf);
+            Neuigkeit::update_neuigkeit($neuigkeiten_id,$titel,$text,$target_file_jpg,$target_file_pdf, $bild_verlinken);
             //Alte Bilder löschen
             if ($neuigkeit['link_jpg'] != $target_file_jpg && !empty($neuigkeit['link_jpg'])){
                 if (file_exists($neuigkeit['link_jpg'])){unlink ($neuigkeit['link_jpg']);}

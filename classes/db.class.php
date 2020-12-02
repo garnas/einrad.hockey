@@ -84,25 +84,24 @@ class db {
   public static function writedb($sql)
   {
     //SQL-Logdatei erstellen/beschreiben
-    $log_sql = fopen('../../system/logs/log_db.txt', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
-    $log = "\n" . date('Y-m-d H:i:s') . " " . ($_SESSION['teamname'] ?? '') . " " . ($_SESSION['la_login_name'] ?? '') . " " . ($_SESSION['ligabot'] ?? '') . "\n" . $sql;
+    $log_sql = fopen('../../system/logs/log_db.log', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
+    $autor_string = implode(" | ", array_filter([$_SESSION['teamname'] ?? '', $_SESSION['la_login_name'] ?? '', $_SESSION['ligabot'] ?? '']));
+    $log = date('[Y-M-d H:i:s e]') . " " . $autor_string . ":\n" . trim($sql) . "\n\n";
     fwrite($log_sql, $log);
 
     if (mysqli_connect_errno()) {
       $error = 'Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error();
-      fwrite($log_sql, "\n" . $error);
-      die('<h2>Verbindung zum MySQL Server fehlgeschlagen: '.mysqli_connect_error().'<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
+      fwrite($log_sql, "\n" . $error . "\n\n");
+      die('<h2>Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error() . '<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
     }
 
     if (!self::$link->query($sql) === TRUE) {
-        $error = 'Fehlgeschlagen: '.self::$link->error;
-        fwrite($log_sql, "\n" . $error);
+        $error = 'Fehlgeschlagen: '.self::$link->error . "\n\n";
+        fwrite($log_sql, $error);
         Form::error("SQL: " . $error);
         Form::error($sql);
         die();
     }
-
-    fwrite($log_sql, "\n -------------");
     fclose($log_sql);
   }
   
@@ -129,5 +128,3 @@ class db {
     Form::affirm('<p>File: ' . $backtrace[0]['file'] . '<br>Line: ' . $backtrace[0]['line'] . '</p><pre>' . print_r($input, true) . '</pre>');
   }
 }
-
-

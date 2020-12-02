@@ -80,7 +80,6 @@ include '../../templates/header.tmp.php';
 ?>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
 <script>
 //Turnierergebnisse filtern
 $(document).ready(function(){
@@ -91,18 +90,6 @@ $(document).ready(function(){
     });
   });
 });
-
-//Turnierinfos ausklappen
-function modal(turnier_id){
-    var x = document.getElementById(turnier_id);
-    if (window.getComputedStyle(x).display === "none") {
-        x.style.display = "block";
-    }else{
-        if (window.getComputedStyle(x).display === "block") {
-            x.style.display = "none";
-        }
-    }
-}
 </script>
 
 <h1 class="w3-text-primary">Ausstehende Turniere</h1>

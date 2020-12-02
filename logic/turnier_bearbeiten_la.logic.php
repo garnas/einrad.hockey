@@ -3,11 +3,13 @@
 
 //Formularauswertung Turnier löschen
 if (isset($_POST['delete_turnier'])) {
-    if($akt_turnier->delete()){
+    if ($_POST['delete_turnier_check'] !== 'checked'){
+        Form::error('Bitte Hinweistext vor dem Löschen des Turnieres lesen.');
+    }else{
         $akt_turnier->schreibe_log("Turnier wurde gelöscht", "Ligaausschuss");
-        Ligabot::liga_bot(); //Um die Spieltage neu zu verteilen
+        $akt_turnier->delete($_POST['delete_turnier_grund']);
         Form::affirm("Turnier wurde gelöscht");
-        header('Location: ../liga/turniere.php');
+        header('Location: ../ligacenter/lc_turnierliste.php#deleted');
         die();
     }
 }

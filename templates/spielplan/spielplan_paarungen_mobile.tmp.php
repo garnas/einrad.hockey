@@ -8,10 +8,10 @@
             <tr class="w3-primary">
                 <th class="w3-center">Beginn</th>
                 <th class="w3-center">Schiri</th>
-                <th class="w3-center">Teams</th>
+                <th class="w3-center"></th>
                 <th class="w3-center">Ergebnis</th>
                 <?php if($penalty_anzeigen){?>
-                    <th class="w3-center">Penalty</th>
+                    <th class="w3-center"><i>Penalty</i></th>
                 <?php }//endif?>
             </tr>
             <?php foreach ($spielliste as $index => $spiel){?>
@@ -35,7 +35,7 @@
                         <span><?=$spiel["tore_b"]?></span>
                     </td>
                     <?php if($penalty_anzeigen){?>
-                        <td class="w3-center"><?=$spiel["penalty_a"]?><br><?=$spiel["penalty_b"]?></td>
+                        <td class="w3-center w3-text-secondary"><?=$spiel["penalty_a"]?><br><?=$spiel["penalty_b"]?></td>
                     <?php }//endif?>
                 </tr>
                 <?php if(($zeitdiff = strtotime($spielliste[$index+1]['zeit'] ?? $spiel['zeit']) - strtotime($spiel['zeit']) - $spielzeit['dauer']*60) > 0){?>
