@@ -40,7 +40,7 @@ class Saison_13 {
             return '';
         }
         if ($platz ==1){
-            return 150;
+            return 134;
         }
         //Sprung AB->A
         if ($platz ==7)
