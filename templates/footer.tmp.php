@@ -26,6 +26,6 @@ if (!isset($_SESSION['start_zeit'])){
 }
 $delta_load_time = microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"];
 $delta_user_time = str_pad((time() - $_SESSION['start_zeit'])." s", 6, " ");
-$line = $_SESSION['id_for_debug'] . " | " . $delta_user_time . "(use) | " . $_SERVER['REQUEST_URI'] . " | " . round($delta_load_time, 3) . " s (load)";
+$line = $_SESSION['id_for_debug'] . " | " . $_SERVER['REMOTE_ADDR'] . " | " . $delta_user_time . "(use) | " . $_SERVER['REQUEST_URI'] . " | " . round($delta_load_time, 3) . " s (load)";
 Form::log("log_visits.log", $line);
 ?>
