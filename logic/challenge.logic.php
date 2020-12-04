@@ -19,11 +19,22 @@ $einradhockey = $challenge->get_einradhockey_rad();
 $start = date("Y-m-d", strtotime($challenge->challenge_start));
 $end = date("Y-m-d", strtotime($challenge->challenge_end));
 
-//Ab zweiten Vornamen abkürzen mit erster Buchstabe und .
+foreach ($teamliste as $key => $team){
+    //Platz teilen, bei gleichem Kilometerstand
+    if($team['kilometer'] == ($teamliste[$key - 1]['kilometer'] ?? 0)){
+        $teamliste[$key]['platz'] = $teamliste[$key - 1]['platz'];
+    }
+}
+
 foreach ($alle_spielerliste as $key => $spieler){
+    // Ab zweiten Vornamen abkürzen mit erster Buchstabe und .
     $vorname_array = explode(' ', $spieler['vorname']);
     if (isset($vorname_array[1])){
         $alle_spielerliste[$key]['vorname'] = $vorname_array[0] . ' ' . $vorname_array[1][0] . '.';
+    }
+    // Platz teilen, bei gleichem Kilometerstand
+    if($spieler['kilometer'] == ($alle_spielerliste[$key - 1]['kilometer'] ?? 0)){
+        $alle_spielerliste[$key]['platz'] = $alle_spielerliste[$key - 1]['platz'] ?? '';
     }
 }
 // Überprüfung, ob ein neuer Eintrag plausibel / vollständig ist

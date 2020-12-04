@@ -32,7 +32,7 @@ class Challenge {
         AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
         AND ch.count = TRUE
         GROUP BY teamname
-        ORDER BY kilometer DESC
+        ORDER BY kilometer DESC, RAND()
         ";
         $result = db::readdb($sql);
 
@@ -58,7 +58,7 @@ class Challenge {
         AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
         AND ch.count = TRUE
         GROUP BY sp.spieler_id
-        ORDER BY kilometer DESC
+        ORDER BY kilometer DESC, RAND()
         ";
         $result = db::readdb($sql);
 
