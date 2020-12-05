@@ -34,10 +34,10 @@ class Saison_26 {
     }
     public static function platz_to_block($platz, $saison)
     {       
-        return Saison::platz_to_block($platz, 26);
+        return Saison::platz_to_block($platz, 22);
     }
     public static function platz_to_wertigkeit($platz, $saison)
     {       
-        return Saison::platz_to_wertigkeit($platz, 26);
+        return Saison::platz_to_wertigkeit($platz, 22);
     }    
 }
