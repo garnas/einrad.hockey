@@ -1,16 +1,9 @@
 <?php
-// PHP-Mailer hinzufügen
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 class MailBot {
 
-    // Lädt den PHPMailer und erstellt ein PHPMailer-Objekt
+    // Grundlegende Einstellungen für den PHPMailer
     public static function start_mailer(){
-        require_once __DIR__ . '/../frameworks/phpmailer/src/Exception.php';
-        require_once __DIR__ . '/../frameworks/phpmailer/src/PHPMailer.php';
-        require_once __DIR__ . '/../frameworks//phpmailer/src/SMTP.php';
-        $mailer = new PHPMailer();
+        $mailer = PHPMailer::load_phpmailer();
         $mailer->isSMTP();
         $mailer->Host = Config::SMTP_HOST;
         $mailer->SMTPAuth = true;

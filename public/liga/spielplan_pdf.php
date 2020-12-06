@@ -30,7 +30,7 @@ $html =
     .'</html>';
 
 // PDF-Erstellung
-$mpdf = PDF::start_mpdf(); // Erstellt ein MPDF-Objekt aus dem Framework
+$mpdf = MPDF::load_mpdf(); // Erstellt ein MPDF-Objekt aus dem Framework
 $mpdf->shrink_tables_to_fit = 4; // Tabellen können um den Faktor 4 verkleinert werden, um noch auf eine Seite zu passen.
 
 // PDF beschreiben
