@@ -4,8 +4,8 @@
 //$sql = Sql-Befehl als Text
 class db {
   
-  public static $link; //Verbindung zur Datenbank
   public static $log_file = "log_db.log";
+  public static mysqli $link; //Verbindung zur Datenbank
   
   //Verbindung wird bei der Erstellung des Objektes geöffnet. Das erste db-Objekt wird in first.logic.php erstellt.
   function __construct($db = Config::DATABASE)
@@ -27,7 +27,7 @@ class db {
 
   /*Sanitizing eines gesamten Arrays - In der Regel $_POST / $_GET in first.logic.php
   Siehe https://www.php.net/manual/de/mysqli.real-escape-string.php*/
-  public static function sanitize($input)
+  public static function sanitize($input): mixed
   {
     if (is_array($input)){
       foreach ($input as $key => $value){
@@ -41,7 +41,7 @@ class db {
   }
 
   //Verhindert XSS durch das einbringen html-Entities
-  public static function escape($input)
+  public static function escape($input): array|string
   {
     if (empty($input)){
       return $input;
@@ -55,7 +55,7 @@ class db {
     }else{
       $output = htmlspecialchars($input);
     }
-    return $output;
+    return $output ?? '';
   }
 
   /*auto_increment wert einer Sql-Tabelle erkennen. Alle IDs werden über auto_increment erstellt
@@ -74,7 +74,7 @@ class db {
 
   //funktion zum lesen der sql datenbank, sie gibt ein mysqli-objekt zurück
   //dieses mysqli-objekt muss immer in assoziatives array umgewandelt werden
-  public static function readdb($sql)
+  public static function readdb($sql): mysqli_result|bool
   {
     if (mysqli_connect_errno()) {
       Form::log(self::$log_file,"Lesen der Datenbank fehlgeschlagen: ".mysqli_connect_error());
@@ -108,7 +108,7 @@ class db {
     }
   }
   
-  public static function db_sichern()
+  public static function db_sichern(): string
   {
     $dbname = Config::DATABASE;
     $dbuser = Config::USER_NAME;

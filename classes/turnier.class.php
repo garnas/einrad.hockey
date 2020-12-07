@@ -1,8 +1,12 @@
 <?php
 
+use JetBrains\PhpStorm\Pure;
+
 class Turnier {
 
-    public $turnier_id;
+    public int $turnier_id;
+    public array $daten;
+
     function __construct($turnier_id)
     {
         $this->turnier_id = $turnier_id;
@@ -10,9 +14,9 @@ class Turnier {
     }
 
     //Erstellt ein neues Turnier in der Datenbank
-    public static function create_turnier($tname, $ausrichter, $startzeit, $besprechung = "Nein", 
-        $art, $tblock, $fixed="Nein", $datum ,$plaetze, $spielplan, $hallenname, $strasse, $plz, $ort, $haltestellen = '', $hinweis,
-        $startgebuehr, $name, $handy, $phase)
+    public static function create_turnier($tname, $ausrichter, $startzeit, $besprechung,
+        $art, $tblock, $fixed, $datum ,$plaetze, $spielplan, $hallenname, $strasse, $plz, $ort, $haltestellen, $hinweis,
+        $startgebuehr, $name, $handy, $phase): bool
     {
         $saison = Config::SAISON;
         $turnier_id = db::get_auto_increment('turniere_liga');
@@ -37,7 +41,7 @@ class Turnier {
 
     //Alle Turnierdaten auf einmal um die Datenbank zu schonen:
     //Format: $return[turnier_id][daten]
-    public static function get_all_turniere($where = '', $asc = 'asc')
+    public static function get_all_turniere($where = '', $asc = 'asc'): array
     {
         $sql = "SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname FROM turniere_liga 
                 INNER JOIN turniere_details 
@@ -55,7 +59,7 @@ class Turnier {
     }
 
     //Turnierdetails von nur dem Objekt Turnier erstellen
-    function get_turnier_details()
+    function get_turnier_details(): array
     {
         $turnier_id = $this->turnier_id;
         $sql = "SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname
@@ -72,7 +76,7 @@ class Turnier {
 
     //Alle Turnieranmeldelisten auf einmal um die Datenbank zu schonen: 
     //Format: $turnierlisten[turnier_id][liste] => Array der Anmeldedaten
-    public static function get_all_anmeldungen($saison = Config::SAISON)
+    public static function get_all_anmeldungen($saison = Config::SAISON) :array
     {
         $sql=
         "SELECT turniere_liste.*, teams_liga.teamname, teams_liga.ligateam
@@ -83,7 +87,7 @@ class Turnier {
         ON turniere_liga.turnier_id = turniere_liste.turnier_id
         WHERE turniere_liga.saison = '$saison'
         AND turniere_liga.phase != 'ergebnis'
-        ORDER BY turniere_liste.position_warteliste ASC";
+        ORDER BY turniere_liste.position_warteliste";
         $result = db::readdb($sql);
         $turnier_listen = array();
         while ($anmeldung = mysqli_fetch_assoc($result)){
@@ -99,7 +103,7 @@ class Turnier {
 
     //Nur die Anmeldungen der Warte-, Melde-, Spielen-Liste des aktuellen Objektes
     //Format: zb. $liste['warte'] => Array der Anmeldedaten der Angemeldeten Teams auf der Warteliste
-    function get_anmeldungen()
+    function get_anmeldungen() :array
     {
         $turnier_id = $this->turnier_id;
         $sql=
@@ -108,7 +112,7 @@ class Turnier {
         LEFT JOIN teams_liga
         ON turniere_liste.team_id = teams_liga.team_id
         WHERE turniere_liste.turnier_id='$turnier_id'
-        ORDER BY turniere_liste.position_warteliste ASC";
+        ORDER BY turniere_liste.position_warteliste";
         $result = db::readdb($sql);
         $liste = array();
         $liste['team_ids'] = $liste['teamnamen'] = $liste['spiele'] = $liste['melde'] = $liste['warte'] = array();
@@ -126,7 +130,7 @@ class Turnier {
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //Bekommt alle Turnieranmeldungen für den Spielplan nach wertigkeit sortiert.
-    function get_liste_spielplan()
+    function get_liste_spielplan() :array
     {
         $turnier_id = $this->turnier_id;
         $sql=
@@ -156,7 +160,8 @@ class Turnier {
         return db::escape($liste); //array
     }
     //Kaderliste für die Kaderkontrolle auf einem Turnier;
-    function get_kader_kontrolle(){
+    function get_kader_kontrolle() :array
+    {
         $teams = $this->get_liste_spielplan();
         foreach ($teams as $team){
             $return[$team['team_id']] = Spieler::get_teamkader($team['team_id']);
@@ -171,10 +176,10 @@ class Turnier {
         db::writedb($sql);
     }
 
-    function get_ergebnis()
+    function get_ergebnis() :array
     {
         $turnier_id = $this->turnier_id;
-        $sql = "SELECT * FROM turniere_ergebnisse WHERE turnier_id = $turnier_id ORDER BY platz ASC";
+        $sql = "SELECT * FROM turniere_ergebnisse WHERE turnier_id = $turnier_id ORDER BY platz";
         $result = db::readdb($sql);
         $index = 1;
         while ($eintrag = mysqli_fetch_assoc($result)){
@@ -202,11 +207,8 @@ class Turnier {
     function team_anmelden($team_id, $liste, $pos = 0)
     {
         $turnier_id = $this->turnier_id;
-        $freilos_gesetzt = 'Nein';
         //Handhabung der Warteliste, bei einer Anmeldung durch den LA nicht ans Ende der Warteliste... todo? Gehört das hier rein? Wird das überhaupt jemals benutzt werden?
         if ($liste == 'warte'){
-            //Schreiben der Logs
-            $teamname = Team::teamid_to_teamname($team_id);
             $sql = "SELECT team_id, position_warteliste FROM turniere_liste WHERE turnier_id = $turnier_id AND position_warteliste >= $pos";
             $result = db::readdb($sql);
             while ($team = mysqli_fetch_assoc($result)){
@@ -226,8 +228,7 @@ class Turnier {
     //Nichtligateams bekommen immer einen Stern hinter ihrem Namen
     function nl_anmelden($teamname, $liste, $pos = 0)
     {
-        $turnier_id = $this->turnier_id;     
-        $freilos_gesetzt = 'Nein';
+        $turnier_id = $this->turnier_id;
         $teamname .= "*"; //Nichtligateams haben einen Stern hinter dem Namen
         if (empty(Team::teamname_to_teamid($teamname))){
             $nl_team_id = db::get_auto_increment('teams_liga');
@@ -238,7 +239,6 @@ class Turnier {
         }
         if ($liste == 'warte'){
             //Schreiben der Logs für die Warteliste //Siehe auch team_anmelden()
-            $teamname = 
             $sql = "SELECT team_id, position_warteliste FROM turniere_liste WHERE turnier_id = $turnier_id AND position_warteliste >= $pos";
             $result = db::readdb($sql);
             while ($team = mysqli_fetch_assoc($result)){
@@ -334,7 +334,7 @@ class Turnier {
     }
 
     //Findet die Anzahl der freien Plätze auf dem Turnier
-    function anzahl_freie_plaetze()
+    function anzahl_freie_plaetze() :int|string
     {
         $turnier_id = $this->turnier_id;
         $sql=
@@ -357,7 +357,7 @@ class Turnier {
     }
 
     //True, wenn das Team bereits zum Turnier angemeldet ist, sonst false
-    function check_team_angemeldet($team_id)
+    function check_team_angemeldet($team_id): bool
     {
         $turnier_id = $this->turnier_id;
         $sql = "SELECT liste FROM turniere_liste WHERE team_id='$team_id' AND turnier_id='$turnier_id'";
@@ -369,7 +369,7 @@ class Turnier {
         return false;
     }
     //True, wenn das Team am Kalendertag des Turnieres bereits bei einem Turnier auf der Spielen-Liste steht
-    function check_doppel_anmeldung($team_id)
+    function check_doppel_anmeldung($team_id): bool
     {
         $datum = $this->daten['datum'];
         $sql = 
@@ -386,7 +386,7 @@ class Turnier {
         return false;
     }
 
-    function get_team_liste($team_id)
+    function get_team_liste($team_id): string
     {
         $turnier_id = $this->turnier_id;
         $sql = "SELECT liste FROM turniere_liste WHERE team_id='$team_id' AND turnier_id='$turnier_id'";
@@ -398,7 +398,7 @@ class Turnier {
 
     //True, wenn der Teamblock in das Turnier passt.
     //Um die DB zu schonen, können teamblock und turnierblock auch manuell übergeben werden
-    function check_team_block($team_id)
+    function check_team_block($team_id): bool
     {   
         if (!in_array($this->daten['art'],array('I','II','III'))){
             return false;
@@ -409,7 +409,7 @@ class Turnier {
     }
 
     //statische check team block ohne auf die db zugreifen
-    public static function check_team_block_static($team_block, $turnier_block)
+    #[Pure] public static function check_team_block_static($team_block, $turnier_block): bool
     {
         if ($team_block == 'NL'){ //NL Teams können auch zu final, spass, fixed Turnieren angemeldet werden
             return true;
@@ -431,7 +431,7 @@ class Turnier {
     }
 
     //True wenn das Team für das Turnier ein freilos setzten darf
-    function check_team_block_freilos($team_id)
+    function check_team_block_freilos($team_id): bool
     {
         $team_block = Tabelle::get_team_block($team_id);
         $turnier_block = $this->daten['tblock'];
@@ -439,7 +439,7 @@ class Turnier {
     }
 
     //statische check team block freilos ohne auf die db zugreifen
-    public static function check_team_block_freilos_static($team_block, $turnier_block)
+    #[Pure] public static function check_team_block_freilos_static($team_block, $turnier_block): bool
     {
         //Check ob es sich um einen Block-Turnier handelt (nicht spass, finale, oder fix)
         if (in_array($turnier_block, Config::BLOCK_ALL)){
@@ -512,7 +512,7 @@ class Turnier {
         $this->daten['spieltag'] = $spieltag;
     }
 
-    function change_turnier_details($startzeit, $besprechung, $plaetze, $spielplan, $hallenname, $strasse, $plz, $ort, $haltestellen, $hinweis, $startgebuehr, $name, $handy)
+    function change_turnier_details($startzeit, $besprechung, $plaetze, $spielplan, $hallenname, $strasse, $plz, $ort, $haltestellen, $hinweis, $startgebuehr, $name, $handy): bool
     {
         $turnier_id = $this->turnier_id;
         $sql=
@@ -523,7 +523,7 @@ class Turnier {
         return true;
     }
 
-    function change_turnier_liga($tname, $ausrichter, $art, $tblock, $fixed, $datum, $phase)
+    function change_turnier_liga($tname, $ausrichter, $art, $tblock, $fixed, $datum, $phase): bool
     {
         $turnier_id = $this->turnier_id;
         $sql= 
@@ -534,7 +534,7 @@ class Turnier {
         return true;
     }
 
-    function change_turnier_block($tblock, $fixed, $art)
+    function change_turnier_block($tblock, $fixed, $art): bool
     {
         $turnier_id = $this->turnier_id;
         $sql=
@@ -554,7 +554,7 @@ class Turnier {
     }
 
     //Schreibt in den Turnierlog
-    function get_logs()
+    function get_logs(): array
     {
         $turnier_id = $this->turnier_id;
         $sql= "SELECT * FROM turniere_log WHERE turnier_id = '$turnier_id'";
@@ -585,14 +585,15 @@ class Turnier {
 
         //Spieltage neu sortieren
         Ligabot::set_spieltage();
-        return true;
     }
-    public static function get_deleted_turniere(){
+    //Liste an gelöschten Turnieren
+    public static function get_deleted_turniere(): array
+    {
         $sql = "SELECT * FROM turniere_geloescht WHERE saison = '" . Config::SAISON . "' ORDER BY datum DESC";
         $result = db::readdb($sql);
         while ($x = mysqli_fetch_assoc($result)){
             $turniere_deleted[$x['turnier_id']] = $x;
         }
-        return $turniere_deleted;
+        return db::escape($turniere_deleted ?? array());
     }
 }

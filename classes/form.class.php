@@ -1,4 +1,7 @@
 <?php
+
+use JetBrains\PhpStorm\Pure;
+
 class Form
 {
     //Fehlermeldungem werden in einer $_SESSION Variable gespeichert
@@ -63,28 +66,28 @@ class Form
         //Hinweise
         if (isset($_SESSION['w_messages'])) {
             foreach ($_SESSION['w_messages'] as $message) {
-                Self::schreibe_attention($message);
+                self::schreibe_attention($message);
             }
             unset($_SESSION['w_messages']);
         }
         //Fehler
         if (isset($_SESSION['e_messages'])) {
             foreach ($_SESSION['e_messages'] as $message) {
-                Self::schreibe_error($message);
+                self::schreibe_error($message);
             }
             unset($_SESSION['e_messages']);
         }
         //Info
         if (isset($_SESSION['a_messages'])) {
             foreach ($_SESSION['a_messages'] as $message) {
-                Self::schreibe_affirm($message);
+                self::schreibe_affirm($message);
             }
             unset($_SESSION['a_messages']);
         }
     }
 
     //Erstellt eine HTML-Datalist aller Ligateams.
-    public static function link($link, $bezeichnung = '', $extern = false)
+    public static function link($link, $bezeichnung = '', $extern = false): string
     {
         if (empty($bezeichnung)) {
             $bezeichnung = $link;
@@ -98,7 +101,7 @@ class Form
     }
 
     //Erstellt eine HTML-Datalist aller Ligateams.
-    public static function datalist_teams()
+    public static function datalist_teams(): string
     {
         $return = "<datalist id='teams'>";
         $liste = Team::list_of_all_teams();
@@ -110,7 +113,7 @@ class Form
     }
 
     //Erststellt anklickbare Email-Adressen
-    public static function mailto($email, $name = '')
+    #[Pure] public static function mailto($email, $name = ''): string
     {
         if (is_array($email)) {
             $email = implode(',', $email);
@@ -123,7 +126,7 @@ class Form
 
     //Funktion für Saisonumstellung auf eine Saison über zwei Jahre
     //0 = Saison 1995
-    public static function get_saison_string($saison = Config::SAISON)
+    #[Pure] public static function get_saison_string($saison = Config::SAISON)
     {
         //Sollte zum Beispiel ein String übergeben werden, dann wird genau dieser String auch wieder rausgeworfen.
         if (!is_numeric($saison)) {

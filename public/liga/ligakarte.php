@@ -30,23 +30,24 @@ foreach ($koordinaten as $keya => $teama){
 
 //Teamgesuche Formularauswertung
 if (isset($_POST['eintragen'])){
-  if (empty($_POST['name']) or empty($_POST['kontakt']) or empty($_POST['plz']) or empty($_POST['ort'])){
-    Form::error("Bitte Formular vollständig ausfüllen");
-    $error = true;
-  }
+    $error = false;
+    if (empty($_POST['name']) or empty($_POST['kontakt']) or empty($_POST['plz']) or empty($_POST['ort'])){
+        Form::error("Bitte Formular vollständig ausfüllen");
+        $error = true;
+    }
 
-  $lonlat = LigaKarte::plz_to_lonlat($_POST['plz']);
-  if(empty($lonlat)){
-    Form::error("Deine eingegebene Postleitzahl wurde nicht gefunden.");
-    $error = true;
-  }
+    $lonlat = LigaKarte::plz_to_lonlat($_POST['plz']);
+    if(empty($lonlat)){
+        Form::error("Deine eingegebene Postleitzahl wurde nicht gefunden.");
+        $error = true;
+    }
 
-  if(!$error){
-    LigaKarte::gesuch_eintragen_db($_POST['plz'],$_POST['ort'],$lonlat['LAT'],$lonlat['Lon'],$_POST['name'],$_POST['kontakt']);
-    Form::affirm("Dein Gesuch wurde eingetragen");
-    header("Location: ligakarte.php");
-    die();
-  }
+    if(!$error){
+        LigaKarte::gesuch_eintragen_db($_POST['plz'],$_POST['ort'],$lonlat['LAT'],$lonlat['Lon'],$_POST['name'],$_POST['kontakt']);
+        Form::affirm("Dein Gesuch wurde eingetragen");
+        header("Location: ligakarte.php");
+        die();
+    }
 }
 $gesuche = LigaKarte::get_all_gesuche();
 
@@ -70,7 +71,7 @@ include '../../templates/header.tmp.php';
 <p>Du kannst einen Eintrag in die Ligakarte erstellen, um Einradhockeyspieler in deiner Umgebung zu finden. Der Eintrag wird ein Jahr lang angezeigt.<p>
 <button onclick="document.getElementById('gesuch_formular').style.display='block'" class="w3-button w3-tertiary">Mitspielergesuch eintragen</button>
 <div id="gesuch_formular" class="w3-modal">
-  <form method="post" class="w3-card-4 w3-panel w3-round w3-container w3-modal-content" autocomplete="off" style="max-width: 400px" 
+  <form method="post" class="w3-card-4 w3-panel w3-round w3-container w3-modal-content" autocomplete="off" style="max-width: 400px"
   onsubmit="return confirm('Alle Daten die du hier eingeben hast werden gespeichert und ein Jahr lang hier veröffentlicht. Wende dich an <?=Config::LAMAIL?> um deinen Eintrag zu löschen.');">
     <span onclick="document.getElementById('gesuch_formular').style.display='none'" class="w3-button w3-large w3-text-secondary w3-display-topright">&times;</span>
     <h3 class="w3-text-primary">Mitspielergesuch eintragen</h3>

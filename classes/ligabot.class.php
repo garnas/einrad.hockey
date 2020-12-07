@@ -1,4 +1,7 @@
 <?php
+
+use JetBrains\PhpStorm\Pure;
+
 class LigaBot {
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -105,9 +108,9 @@ class LigaBot {
     }
 
     //Bekommt alle TurnierIDs um sie im Ligabot abzuarbeiten
-    public static function get_turnier_ids($saison = Config::SAISON)
+    public static function get_turnier_ids($saison = Config::SAISON): array
     {
-        $sql = "SELECT turnier_id FROM turniere_liga WHERE saison = $saison AND (art='I' OR art='II' OR art='III') ORDER BY datum ASC";
+        $sql = "SELECT turnier_id FROM turniere_liga WHERE saison = $saison AND (art='I' OR art='II' OR art='III') ORDER BY datum";
         $result = db::readdb($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)){
@@ -117,21 +120,19 @@ class LigaBot {
     }
 
     //Ermittelt den Zeitpunkt, wann das Turnier in die Meldephase wechseln soll und gibt diesen Zeitpunk als Unix-Time zurück
-    public static function time_offen_melde($datum)
+    #[Pure] public static function time_offen_melde($datum): int
     {
         $datum = strtotime($datum);
         $tag = date("N", $datum); //Numerische Zahl des Wochentages 1-7
         //Faktor 3.93 und strtotime(date("d-M-Y"..)) -> Reset von 12 Uhr Mittags auf Null Uhr, um Winter <-> Sommerzeit korrekt handzuhaben 
         if ($tag >= 3){
             return strtotime(date("d-M-Y", $datum - 3.93*7*24*60*60 + (6-$tag)*24*60*60));
-        }elseif ($tag < 3){
-            return strtotime(date("d-M-Y", $datum - 3.93*7*24*60*60 - $tag*24*60*60));
         }else{
-            Form::error("Zeitpunkt für Phasenwechsel konnte nicht ermittelt werden");
+            return strtotime(date("d-M-Y", $datum - 3.93*7*24*60*60 - $tag*24*60*60));
         }
     }
     
-    public static function get_doppel_anmeldungen()
+    public static function get_doppel_anmeldungen(): array
     {
         $sql = 
         "SELECT turniere_liste.team_id, teams_liga.ligateam, COUNT(*), turniere_liga.datum 
@@ -155,7 +156,7 @@ class LigaBot {
     //Regelt den Übergang von offen zu melden bezüglich der Teamlisten
     //$akt_turnier ist ein Objekt des Typs Turnier
     //setzt die Teams in geloster Reihenfolge auf die Warteliste, also danach: Spielen-Liste auffuellen!
-    public static function losen($akt_turnier)
+    public static function losen($akt_turnier): bool
     {  
         //Falsche Freilosanmeldungen beim Übergang in die Meldephase abmelden
         //TODO Nicht abmelden, sondern auf warteliste!
@@ -223,7 +224,7 @@ class LigaBot {
             if ($akt_turnier->check_doppel_anmeldung($team_id)){ //Check ob das Team am Kalendertag des Turnieres schon auf einer Spiele-Liste steht
                 $akt_turnier->abmelden($team_id);
                 $akt_turnier->schreibe_log("Abmeldung Doppelanmeldung: \r\n" . Team::teamid_to_teamname($team_id), "Ligabot");
-                Form::affirm ("Abmeldung Doppelanmeldung im Turnier" .$akt_turnier->turnier_id. ": \r\n" . Team::teamid_to_teamname($team_id), "Ligabot\r\n");
+                Form::affirm ("Abmeldung Doppelanmeldung im Turnier" . $akt_turnier->turnier_id . ": \r\n" . Team::teamid_to_teamname($team_id));
             }else{
                 $akt_turnier->liste_wechsel($team_id,'warte',$pos);
                 $akt_turnier->schreibe_log("Auf Warteliste gelost: \r\n" . Team::teamid_to_teamname($team_id) . " -> $pos", "Ligabot, Los nach Modus");
@@ -234,6 +235,8 @@ class LigaBot {
     }
     
     //Alle I,II,III Turniere werden in die Offene Phase geschickt
+    //Fürs Debugging
+    /*
     public static function zuruecksetzen()
     {
         $liste = self::get_turnier_ids();
@@ -247,4 +250,5 @@ class LigaBot {
             }
         }
     }
+    */
 }

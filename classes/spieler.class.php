@@ -1,12 +1,14 @@
 <?php
 class Spieler {
+    public int $spieler_id;
+
     function __construct($spieler_id)
     {
         $this->spieler_id = $spieler_id;
     }
 
     //Erstellt einen neuen Spieler in der Datenbank
-    public static function create_new_spieler($vorname,$nachname,$jahrgang,$geschlecht,$team_id)
+    public static function create_new_spieler($vorname,$nachname,$jahrgang,$geschlecht,$team_id): bool
     {
         $saison = Config::SAISON;
         //Es wird getestet, ob der Spieler bereits existiert:
@@ -34,7 +36,7 @@ class Spieler {
     }
 
     //Check ob der Spieler dem Kader hinzugefügt werden darf
-    public static function check_timing()
+    public static function check_timing(): bool
     {
         //23:59:59 am Saisonende
         $saison_ende = strtotime(Config::SAISON_ENDE) + 25*60*60 - 1;
@@ -46,13 +48,13 @@ class Spieler {
     }
 
     //Gibt den Teamkader des Teams mit der entsprechenden TeamID zurück
-    public static function get_teamkader($team_id, $saison = Config::SAISON)
+    public static function get_teamkader($team_id, $saison = Config::SAISON) :array
     {
         $sql = "SELECT *  
             FROM spieler 
             WHERE team_id='$team_id' 
             AND letzte_saison = '$saison'
-            ORDER BY letzte_saison DESC, vorname ASC";
+            ORDER BY letzte_saison DESC, vorname";
         $result = db::readdb($sql);
         while ($x = mysqli_fetch_assoc($result)){
             if (strtotime($x['zeit']) < 0){
@@ -65,7 +67,7 @@ class Spieler {
     }
 
     //Ausnahme für die Saison 20/21, da viele Teams ihre Spieler in der Corona_Saison nicht zurückgemeldet haben
-    public static function get_teamkader_vorsaison($team_id)
+    public static function get_teamkader_vorsaison($team_id): array
     {   
         $kader_vorsaison = self::get_teamkader($team_id, Config::SAISON - 1);
         $kader_vorvorsaison = self::get_teamkader($team_id, Config::SAISON - 2);
@@ -74,7 +76,7 @@ class Spieler {
     }
 
     //Anzahl der Spieler in der Datenbank
-    public static function count_spieler()
+    public static function count_spieler(): int
     {   
         $saison = Config::SAISON - 1; //Zählt die Spieler welche in dieser oder in der letzten Saison in einem Kader waren
         $sql = "SELECT count(*) FROM spieler WHERE letzte_saison >= '$saison'";
@@ -84,18 +86,18 @@ class Spieler {
     }
 
     //Gibt ein Spielerlisten Array aus mit [0] => Vorname Nachname  und [1] => Spieler_id
-    public static function get_spielerliste()
+    public static function get_spielerliste(): array
     {
-        $sql = "SELECT vorname,nachname,spieler_id FROM spieler ORDER BY vorname ASC";
+        $sql = "SELECT vorname,nachname,spieler_id FROM spieler ORDER BY vorname";
         $result = db::readdb($sql);
         while ($x = mysqli_fetch_assoc($result)){
             $spielerliste[$x['spieler_id']] = $x['vorname']." ".$x['nachname'];
         }
-        return db::escape($spielerliste); //Array
+        return db::escape($spielerliste ?? array()); //Array
     }
     
     //Alle Details eines Spielers werden in einem Array zusammen übergeben
-    function get_spieler_details()
+    function get_spieler_details(): array
     {
         $spieler_id = $this->spieler_id;
         $sql = "SELECT *  FROM spieler WHERE spieler_id='$spieler_id'";

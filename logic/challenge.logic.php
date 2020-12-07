@@ -18,7 +18,7 @@ $alt = $challenge->get_alter_alt();
 $einradhockey = $challenge->get_einradhockey_rad();
 $start = date("Y-m-d", strtotime($challenge->challenge_start));
 $end = date("Y-m-d", strtotime($challenge->challenge_end));
-
+db::debug($jung);
 foreach ($teamliste as $key => $team){
     //Platz teilen, bei gleichem Kilometerstand
     if($team['kilometer'] == ($teamliste[$key - 1]['kilometer'] ?? 0)){

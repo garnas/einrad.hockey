@@ -9,7 +9,7 @@ class LigaKarte {
     }
     
     //Gibt ein Array aler Mitspielergesuche zurück
-    public static function get_all_gesuche()
+    public static function get_all_gesuche(): array
     {
         $sql = "SELECT * FROM ligakarte_gesuch";
         $result = db::readdb($sql);
@@ -23,6 +23,7 @@ class LigaKarte {
     }
     
     //Prüft, ob schon ein Mitspielergesuch für die eingebene Postleitzahl existiert.
+    /*
     public static function gesuch_plz_exists($plz){
         $sql = "SELECT * FROM ligakarte_gesuch WHERE PLZ = '$plz'";
         $result = db::readdb($sql);
@@ -32,9 +33,10 @@ class LigaKarte {
         }
         return false;
     }
+    */
 
     //Gibt ein Array aller Teamdaten und Teamkoordinaten LAT und Lon heraus
-    public static function get_all_team_koordinaten()
+    public static function get_all_team_koordinaten(): array
     {
         $sql = 
         "SELECT teams_details.*, plz.*, teams_liga.teamname 
@@ -44,7 +46,7 @@ class LigaKarte {
         INNER JOIN teams_liga 
         ON teams_details.team_id  = teams_liga.team_id
         WHERE teams_liga.aktiv = 'Ja'
-        ORDER BY teams_liga.teamname ASC";
+        ORDER BY teams_liga.teamname";
         $result = db::readdb($sql);
         $return = array();
         while ($team = mysqli_fetch_assoc($result)){
@@ -54,7 +56,7 @@ class LigaKarte {
     }
 
     //Wandelt eine PLZ in Longitude ('Lon') und Latitude('LAT') um
-    public static function plz_to_lonlat($plz)
+    public static function plz_to_lonlat($plz): array
     {
         $sql = "SELECT Lon,LAT FROM plz WHERE PLZ='$plz'";
         $result = db::readdb($sql);

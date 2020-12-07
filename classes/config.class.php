@@ -3,7 +3,7 @@ class Config {
     
     //Fürs Debugging kann hier die Zeit verändert werden, mit der die Ligalogik arbeitet
     //Dies hat keine Auswirkung auf Benennung der Uploads und auf die Log-Dateien
-    public static function time_offset()
+    public static function time_offset(): int
     {
         return time() + 0; // Offset in Sekunden: 31 Tage: time() + 31*24*60*60
     }
@@ -28,6 +28,8 @@ class Config {
     ///////////////////////////////////////////////////////////////
     /////////////////////////Absolute Links////////////////////////
     ///////////////////////////////////////////////////////////////
+
+    const BASE_LINK = 'http://localhost/einrad.hockey/public/'; // Webroot fürs Erstellen von absoluten Links
 
     const LINK_FORUM = 'https://forum.einrad.hockey/';
     const LINK_ARCHIV = 'https://archiv.einrad.hockey/archiv/index.html';

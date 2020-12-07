@@ -1,6 +1,6 @@
 <?php
 class Kontakt {
-    public $team_id;
+    public int $team_id;
 
     function __construct($team_id)
     {
@@ -8,7 +8,7 @@ class Kontakt {
     }
     
     //Sucht alle public emails und sortiert diese anschließend in das return array ein BSP: team_id 12 --> 12 => email1,email2,email3
-    public static function get_all_public_emails_per_team()
+    public static function get_all_public_emails_per_team(): array
     {
         $sql = "SELECT teams_kontakt.email, teams_kontakt.team_id  
             FROM teams_kontakt
@@ -31,7 +31,7 @@ class Kontakt {
         return db::escape($return);//array
     }
 
-    public static function get_emails_rundmail()
+    public static function get_emails_rundmail(): array
     {
         $sql = "SELECT DISTINCT teams_kontakt.email
             FROM teams_kontakt
@@ -46,7 +46,7 @@ class Kontakt {
         return db::escape($return);//array
     }
 
-    public static function get_emails_turnier($turnier_id)
+    public static function get_emails_turnier($turnier_id): array
     {   
         //distinct email funktioniert nicht, da sonst teamnamen fehlen oder doppelt vorkommen. 
         $sql = "SELECT teams_kontakt.email, teams_liga.teamname 
@@ -80,7 +80,7 @@ class Kontakt {
         db::writedb($sql);
     }
 
-    function get_emails()
+    function get_emails(): array
     {
         $team_id = $this->team_id;
         $sql = "SELECT email  FROM teams_kontakt WHERE team_id='$team_id'";
@@ -92,24 +92,24 @@ class Kontakt {
         return db::escape($return);//array
     }
 
-    function get_emails_public()
+    function get_emails_public(): array
     {
         $team_id = $this->team_id;
         $sql = "SELECT email  FROM teams_kontakt WHERE team_id='$team_id' AND public='Ja'";
         $result = db::readdb($sql);
-        $return=array();
+        $return = array();
         while ($x = mysqli_fetch_assoc($result)){
             array_push($return,$x['email']);
         }
         return db::escape($return);//array
     }
 
-    function get_emails_info()
+    function get_emails_info(): array
     {
         $team_id = $this->team_id;
         $sql = "SELECT email  FROM teams_kontakt WHERE team_id='$team_id' AND get_info_mail='Ja'";
         $result = db::readdb($sql);
-        $return=array();
+        $return = array();
         while ($x = mysqli_fetch_assoc($result)){
             array_push($return,$x['email']);
         }
@@ -117,7 +117,7 @@ class Kontakt {
     }
 
     //Funktioniert nicht mit Form::mailto()
-    function get_all_emails()
+    function get_all_emails(): array
     {
         $team_id = $this->team_id;
         $sql = "SELECT *  FROM teams_kontakt WHERE team_id = '$team_id'";
@@ -141,7 +141,7 @@ class Kontakt {
         db::writedb($sql);
     }
 
-    function delete_email($teams_kontakt_id)
+    function delete_email($teams_kontakt_id): bool
     {
         if (count($this->get_emails()) > 1){
             $sql = "DELETE FROM teams_kontakt WHERE teams_kontakt_id = '$teams_kontakt_id'";
