@@ -4,14 +4,14 @@ $no_redirect = true; //Verhindert die Endlosschleife, bei der Überprüfung, ob 
 require_once '../../logic/session_team.logic.php'; //Auth
 
 //In der Regel wird die gesammte Session beendet. Nur wenn man entweder aus dem LC oder aus dem TC ausloggen will, werden Variablen verändert
-if (!isset($_SESSION['la_id'])){
+/* if (!isset($_SESSION['la_id'])){
     session_destroy();
     session_start();
-}else{
+}else{ */
     unset($_SESSION['team_id']); 
     unset($_SESSION['teamname']);
     unset($_SESSION['teamblock']);
-}
+//}
 
 Form::affirm("Logout erfolgreich");
 header('Location: ../teamcenter/tc_login.php');

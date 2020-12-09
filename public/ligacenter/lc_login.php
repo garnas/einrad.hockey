@@ -6,6 +6,7 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 
 //Formularauswertung
 if(isset($_POST['login'])) {
+    $log_file = "log_login.log";
     $login_name = $_POST['loginname'];
     $la_id = Ligaleitung::get_la_id($login_name);
     $passwort = $_POST['passwort'];
@@ -22,6 +23,7 @@ if(isset($_POST['login'])) {
     if (empty($la_id)){
         $error = true;
         Form::error("Unbekannter Loginname");
+        Form::log($log_file, "Falscher LC-Login | Loginname: " . $login_name);
         unset ($_POST['loginname']); //Damit der Name als Value im Input-Feld gelöscht wird.
     }
 
@@ -31,10 +33,7 @@ if(isset($_POST['login'])) {
             $_SESSION['la_login_name'] = $login_name;
             $_SESSION['la_id'] = $la_id;
             //Logdatei erstellen/beschreiben
-            $log_login = fopen('../../system/logs/log_login.log', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
-            $log =  date('[Y-M-d H:i:s e]') . " Erfolgreich       | Loginname: " . $_SESSION['la_login_name'] . "\n";
-            fwrite($log_login, $log);
-            fclose($log_login);
+            Form::log($log_file, "Erfolgreich       | Loginname: " . $_SESSION['la_login_name']);
             //Weiterleitung zum in der Session (aus session.logic.php) gespeicherten Pfad oder zu start.php
             //Wegen header-injection sollten keine Pfade an den header via Get übergeben werden
             if(isset($_GET['redirect']) && isset($_SESSION['lc_redirect'])){
@@ -47,10 +46,7 @@ if(isset($_POST['login'])) {
             die();
         }else{
             //Logdatei erstellen/beschreiben
-            $log_login = fopen('../../system/logs/log_login.log', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
-            $log =  date('[Y-M-d H:i:s e]') . " Falsches Passwort | Loginname: " . $login_name . "\n";
-            fwrite($log_login, $log);
-            fclose($log_login);
+            Form::log($log_file, "Falsches Passwort | Loginname: " . $login_name);
             Form::error("Falsches Passwort");
         }
     }
