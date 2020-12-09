@@ -1,4 +1,5 @@
-frameworks/phpmailer/
+frameworks/
+.idea/
 public/uploads/s/
 system/backups/
 system/logs/
