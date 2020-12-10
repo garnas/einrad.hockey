@@ -103,7 +103,6 @@ class Spieler {
         $sql = "SELECT *  FROM spieler WHERE spieler_id='$spieler_id'";
         $result = db::read($sql);
         $result = mysqli_fetch_assoc($result);
-        db::debug($result);
         return db::escape($result);
     }
 
