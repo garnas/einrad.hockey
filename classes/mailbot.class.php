@@ -19,7 +19,7 @@ class MailBot {
     public static function mail_bot()
     {
         $sql = "SELECT * FROM mailbot WHERE mail_status = 'warte' ORDER BY zeit ASC LIMIT 50";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         while ($mail = mysqli_fetch_assoc($result)){
             $mailer = self::start_mailer();
             $mailer->isHTML(true); // Für die Links
@@ -68,7 +68,7 @@ class MailBot {
             }
             $sql = "INSERT INTO mailbot (betreff, inhalt, adressat, absender, mail_status)
                     VALUES ('$betreff', '$inhalt', '$adressaten', '$absender', 'warte')";
-            db::writedb($sql);
+            db::write($sql);
         } 
     }
 
@@ -80,14 +80,14 @@ class MailBot {
         }else{
             $sql = "UPDATE mailbot SET mail_status = '$mail_status', zeit = zeit, fehler = '$fehler' WHERE mail_id = '$mail_id'";
         }
-        db::writedb($sql);
+        db::write($sql);
     }
 
     //Erstellt eine Warnung im Ligacenter, wenn der Mailbot manche mails nicht versenden kann.
     public static function warning_mail()
     {
         $sql = "SELECT count(*) FROM mailbot WHERE mail_status = 'fehler'";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $result = mysqli_fetch_assoc($result);
         if ($result['count(*)'] > 0){
             Form::attention("Der Mailbot kann manche Mails nicht versenden - siehe Datenbank.");

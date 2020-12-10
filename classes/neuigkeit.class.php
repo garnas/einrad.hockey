@@ -5,7 +5,7 @@ class Neuigkeit {
     public static function create_neuigkeit ($titel,$text,$name, $link_jpg ='', $link_pdf = '', $bild_verlinken = '')
     {
         $sql="INSERT INTO neuigkeiten (titel, inhalt, eingetragen_von, link_jpg, link_pdf, bild_verlinken) VALUES ('$titel','$text','$name','$link_jpg','$link_pdf', '$bild_verlinken')";
-        db::writedb($sql);
+        db::write($sql);
     }
 
     public static function delete_neuigkeit ($neuigkeiten_id)
@@ -18,13 +18,13 @@ class Neuigkeit {
 
         //Neuigkeiteintrag aus der DB löschen
         $sql="DELETE FROM `neuigkeiten` WHERE neuigkeiten_id='$neuigkeiten_id'";
-        db::writedb($sql);
+        db::write($sql);
     }
 
     public static function update_neuigkeit($neuigkeiten_id, $titel, $text, $link_jpg ='', $link_pdf = '', $bild_verlinken = '')
     {
         $sql="UPDATE neuigkeiten SET titel='$titel', inhalt='$text', link_jpg='$link_jpg', link_pdf='$link_pdf', bild_verlinken = '$bild_verlinken', zeit=zeit WHERE neuigkeiten_id = '$neuigkeiten_id'"; //zeit=zeit, damit der timestamp nicht erneuert wird
-        db::writedb($sql);
+        db::write($sql);
     }
 
     public static function get_neuigkeiten ($neuigkeiten_id = 'neuigkeiten_id')
@@ -32,7 +32,7 @@ class Neuigkeit {
         //Wenn kein Argument überliefert wird, werden alle Neuigkeiten herausgegeben
         $sql="SELECT * FROM neuigkeiten WHERE neuigkeiten_id = $neuigkeiten_id ORDER BY zeit DESC LIMIT 10"; //Es werden max. 10 Neuigkeiten angezeigt
         //db::debug($sql);
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)){
             if ($x['eingetragen_von'] != 'Ligaausschuss'){
@@ -209,7 +209,7 @@ class Neuigkeit {
             GROUP BY teams_liga.teamname 
             ORDER BY gespielt desc, rand()
             LIMIT 3";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $return['max_turniere'] = array();
         while ($x = mysqli_fetch_assoc($result)){
             array_push($return['max_turniere'], $x);
@@ -226,7 +226,7 @@ class Neuigkeit {
         AND turniere_liga.saison = '$saison'
         GROUP BY team_id_a
         ORDER BY RAND()";
-        $result = db::readdb($sqla);
+        $result = db::read($sqla);
         while ($x = mysqli_fetch_assoc($result)){
             $tore[$x['team_id_a']] = $x['tore'];
         }
@@ -239,7 +239,7 @@ class Neuigkeit {
         AND turniere_liga.saison = '$saison'
         GROUP BY team_id_b
         ORDER BY RAND()";
-        $result = db::readdb($sqlb);
+        $result = db::read($sqlb);
         while ($x = mysqli_fetch_assoc($result)){
             if (isset($tore[$x['team_id_b']])){
                 $tore[$x['team_id_b']] += $x['tore'];

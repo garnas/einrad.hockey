@@ -5,14 +5,14 @@ class LigaKarte {
     public static function gesuch_eintragen_db($plz,$ort,$LAT,$Lon,$name,$kontakt)
     {
         $sql = "INSERT INTO ligakarte_gesuch (plz, ort, LAT, Lon, r_name, kontakt) VALUES ('$plz','$ort','$LAT','$Lon','$name','$kontakt')";
-        db::writedb($sql);
+        db::write($sql);
     }
     
     //Gibt ein Array aler Mitspielergesuche zurück
     public static function get_all_gesuche(): array
     {
         $sql = "SELECT * FROM ligakarte_gesuch";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)){
             if ((Config::time_offset() - strtotime($x['zeit'])) < 365*24*60*60){
@@ -26,7 +26,7 @@ class LigaKarte {
     /*
     public static function gesuch_plz_exists($plz){
         $sql = "SELECT * FROM ligakarte_gesuch WHERE PLZ = '$plz'";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $result = mysqli_fetch_assoc($result);
         if (!empty($result)){
             return true;
@@ -47,7 +47,7 @@ class LigaKarte {
         ON teams_details.team_id  = teams_liga.team_id
         WHERE teams_liga.aktiv = 'Ja'
         ORDER BY teams_liga.teamname";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $return = array();
         while ($team = mysqli_fetch_assoc($result)){
             array_push($return,$team);
@@ -59,7 +59,7 @@ class LigaKarte {
     public static function plz_to_lonlat($plz): array
     {
         $sql = "SELECT Lon,LAT FROM plz WHERE PLZ='$plz'";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $return = mysqli_fetch_assoc($result);
         return db::escape($return);
     }
