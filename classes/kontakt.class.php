@@ -15,7 +15,7 @@ class Kontakt {
             INNER JOIN teams_liga
             ON teams_liga.team_id = teams_kontakt.team_id 
             WHERE public='Ja' AND teams_liga.aktiv = 'Ja'";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $liste=array();
         while ($x = mysqli_fetch_assoc($result)){
             array_push($liste,$x);
@@ -38,7 +38,7 @@ class Kontakt {
             INNER JOIN teams_liga
             ON teams_liga.team_id = teams_kontakt.team_id 
             WHERE teams_liga.aktiv = 'Ja'";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)){
             array_push($return,$x['email']);
@@ -58,7 +58,7 @@ class Kontakt {
         ON turniere_liste.team_id = teams_kontakt.team_id
         WHERE teams_liga.aktiv = 'Ja' AND turniere_liste.turnier_id = '$turnier_id'";
 
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $return['emails'] = $return['teamnamen'] = array();
         while ($x = mysqli_fetch_assoc($result)){
             if (!in_array($x['teamname'],$return['teamnamen'])){
@@ -77,14 +77,14 @@ class Kontakt {
         $team_id = $this->team_id;
         $email = strtolower($email);
         $sql="INSERT INTO teams_kontakt (team_id, email, public, get_info_mail) VALUES ('$team_id','$email','$public','$infomail')";
-        db::writedb($sql);
+        db::write($sql);
     }
 
     function get_emails(): array
     {
         $team_id = $this->team_id;
         $sql = "SELECT email  FROM teams_kontakt WHERE team_id='$team_id'";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)){
             array_push($return,$x['email']);
@@ -96,7 +96,7 @@ class Kontakt {
     {
         $team_id = $this->team_id;
         $sql = "SELECT email  FROM teams_kontakt WHERE team_id='$team_id' AND public='Ja'";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)){
             array_push($return,$x['email']);
@@ -108,7 +108,7 @@ class Kontakt {
     {
         $team_id = $this->team_id;
         $sql = "SELECT email  FROM teams_kontakt WHERE team_id='$team_id' AND get_info_mail='Ja'";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)){
             array_push($return,$x['email']);
@@ -121,7 +121,7 @@ class Kontakt {
     {
         $team_id = $this->team_id;
         $sql = "SELECT *  FROM teams_kontakt WHERE team_id = '$team_id'";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)){
             array_push($return,$x);
@@ -132,20 +132,20 @@ class Kontakt {
     function set_public($teams_kontakt_id, $value)
     {
         $sql = "UPDATE teams_kontakt SET public = '$value' WHERE teams_kontakt_id = '$teams_kontakt_id'";
-        db::writedb($sql);
+        db::write($sql);
     }
 
     function set_info($teams_kontakt_id, $value)
     {
         $sql = "UPDATE teams_kontakt SET get_info_mail = '$value' WHERE teams_kontakt_id = '$teams_kontakt_id'";
-        db::writedb($sql);
+        db::write($sql);
     }
 
     function delete_email($teams_kontakt_id): bool
     {
         if (count($this->get_emails()) > 1){
             $sql = "DELETE FROM teams_kontakt WHERE teams_kontakt_id = '$teams_kontakt_id'";
-            db::writedb($sql);
+            db::write($sql);
             return true;
         }
         return false;

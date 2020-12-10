@@ -13,7 +13,7 @@ class Challenge
         $sql = "
         INSERT INTO `oeffi_challenge`(`spieler_id`, `kilometer`, `radgröße`, `datum`) VALUES ('$spieler', '$distanz', '$radgroesse', '$datum')
         ";
-        db::writedb($sql);
+        db::write($sql);
         return true;
     }
 
@@ -24,7 +24,7 @@ class Challenge
         $sql = "
         UPDATE `oeffi_challenge` SET `count` = FALSE WHERE `id` = '$id';  
         ";
-        db::writedb($sql);
+        db::write($sql);
         return true;
     }
 
@@ -40,7 +40,7 @@ class Challenge
         AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
         ";
 
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $daten = mysqli_fetch_assoc($result);
 
         return db::escape($daten);
@@ -61,7 +61,7 @@ class Challenge
         GROUP BY teamname
         ORDER BY kilometer DESC, RAND()
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
 
         $daten = [];
         $index = 1;
@@ -89,7 +89,7 @@ class Challenge
         GROUP BY sp.spieler_id
         ORDER BY kilometer DESC, RAND()
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
 
         $daten = [];
         $index = 1;
@@ -115,7 +115,7 @@ class Challenge
         AND ch.count = TRUE
         ORDER BY ch.datum DESC, ch.timestamp DESC
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
 
         $daten = [];
         while ($row = mysqli_fetch_assoc($result)) {
@@ -139,7 +139,7 @@ class Challenge
         AND ch.count = TRUE
         ORDER BY ch.datum DESC, ch.timestamp DESC
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
 
         $daten = [];
         while ($row = mysqli_fetch_assoc($result)) {
@@ -172,7 +172,7 @@ class Challenge
         WHERE team_id = '" . $team_id . "'
         ORDER BY kilometer DESC
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
 
         $daten = [];
         while ($row = mysqli_fetch_assoc($result)) {
@@ -198,7 +198,7 @@ class Challenge
         ORDER BY spieleralter DESC, kilometer DESC
         LIMIT 1
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $daten = mysqli_fetch_assoc($result);
 
         return db::escape($daten);
@@ -220,7 +220,7 @@ class Challenge
         ORDER BY spieleralter DESC, kilometer DESC
         LIMIT 1
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $daten = mysqli_fetch_assoc($result);
 
         return db::escape($daten);
@@ -243,7 +243,7 @@ class Challenge
         ORDER BY kilometer DESC, max(ch.radgröße)
         LIMIT 1
         "; //max da radgröße gruppiert wird und somit unterschiedliche werte beinhalten kann
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $daten = mysqli_fetch_assoc($result);
 
         return db::escape($daten);

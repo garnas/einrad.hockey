@@ -18,7 +18,7 @@ $alt = $challenge->get_alter_alt();
 $einradhockey = $challenge->get_einradhockey_rad();
 $start = date("Y-m-d", strtotime($challenge->challenge_start));
 $end = date("Y-m-d", strtotime($challenge->challenge_end));
-db::debug($jung);
+
 foreach ($teamliste as $key => $team){
     //Platz teilen, bei gleichem Kilometerstand
     if($team['kilometer'] == ($teamliste[$key - 1]['kilometer'] ?? 0)){
@@ -61,9 +61,11 @@ if (isset($_POST['put_challenge']) && $teamcenter) {
     } elseif (empty($spieler_id)) {
         $error = true;
         Form::error("Es wurde kein Spieler ausgewählt.");
-    } elseif ($spieler->get_spieler_details()['team_id'] !== $_SESSION['team_id']){ //Spielt die übergebene Spieler_id auch für das eingeloggte Team?
+    } elseif ($spieler->get_spieler_details()['team_id'] != $_SESSION['team_id']){ //Spielt die übergebene Spieler_id auch für das eingeloggte Team?
         $error = true; 
         Form::error("Eintragen nicht möglich.");
+        db::debug($spieler->get_spieler_details());
+        db::debug($_SESSION['team_id']);
     }
 
     if (!$error) {

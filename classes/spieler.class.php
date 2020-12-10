@@ -13,14 +13,14 @@ class Spieler {
         $saison = Config::SAISON;
         //Es wird getestet, ob der Spieler bereits existiert:
         $sql="SELECT spieler_id, team_id, letzte_saison FROM spieler WHERE vorname='$vorname' AND nachname='$nachname' AND jahrgang='$jahrgang' AND geschlecht='$geschlecht'";
-        $result=db::readdb ($sql);
+        $result=db::read ($sql);
         $result=mysqli_fetch_assoc($result);
         $spieler_id = $result['spieler_id'] ?? 0;
         
         if ($spieler_id>0){ //Testen ob der Spieler schon existiert
             if ($result['letzte_saison'] <  $saison){ //Testet ob der Spieler aus der Datenbank übernommen werden kann
                 $sql="UPDATE spieler SET team_id = '$team_id', letzte_saison = ' $saison' WHERE spieler_id = '$spieler_id'";
-                db::writedb($sql);
+                db::write($sql);
                 Form::affirm ("Der Spieler wurde vom Team ".Team::teamid_to_teamname($result['team_id'])." übernommen.");
                 return true;
             }else{
@@ -30,7 +30,7 @@ class Spieler {
         }else{
             //Spieler wird in Spieler-Datenbank eingetragen
             $sql="INSERT INTO spieler(vorname, nachname, jahrgang, geschlecht, team_id, letzte_saison) VALUES ('$vorname','$nachname','$jahrgang','$geschlecht','$team_id','".Config::SAISON."')";
-            db::writedb ($sql);
+            db::write ($sql);
             return true;
         } 
     }
@@ -55,7 +55,7 @@ class Spieler {
             WHERE team_id='$team_id' 
             AND letzte_saison = '$saison'
             ORDER BY letzte_saison DESC, vorname";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         while ($x = mysqli_fetch_assoc($result)){
             if (strtotime($x['zeit']) < 0){
                 $x['zeit'] = '--'; //Diese Funktion wurde erst am später hinzugefügt.
@@ -80,7 +80,7 @@ class Spieler {
     {   
         $saison = Config::SAISON - 1; //Zählt die Spieler welche in dieser oder in der letzten Saison in einem Kader waren
         $sql = "SELECT count(*) FROM spieler WHERE letzte_saison >= '$saison'";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $return = mysqli_fetch_assoc($result);
         return db::escape($return['count(*)']);
     }
@@ -89,7 +89,7 @@ class Spieler {
     public static function get_spielerliste(): array
     {
         $sql = "SELECT vorname,nachname,spieler_id FROM spieler ORDER BY vorname";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         while ($x = mysqli_fetch_assoc($result)){
             $spielerliste[$x['spieler_id']] = $x['vorname']." ".$x['nachname'];
         }
@@ -101,9 +101,10 @@ class Spieler {
     {
         $spieler_id = $this->spieler_id;
         $sql = "SELECT *  FROM spieler WHERE spieler_id='$spieler_id'";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $result = mysqli_fetch_assoc($result);
-        return db::escape($result); //array
+        db::debug($result);
+        return db::escape($result);
     }
 
     //Ein Spieler Detail verändern: $entry -> Spaltenname in der Datenbank, $value->Wert der in die Datenbank eingetragen werden soll
@@ -116,7 +117,7 @@ class Spieler {
             $zeit = ', zeit=zeit';
         }
         $sql = "UPDATE spieler SET $entry = '$value'$zeit WHERE spieler_id='$spieler_id'";
-        db::writedb($sql);
+        db::write($sql);
     }
 
     //Der Spieler wird aus der Datenbank gelöscht
@@ -124,7 +125,7 @@ class Spieler {
     {
         $spieler_id = $this->spieler_id;
         $sql = "DELETE FROM spieler WHERE spieler_id='$spieler_id'";
-        db::writedb($sql);
+        db::write($sql);
     }
     public static function get_anz_schiris()
     {   
@@ -135,6 +136,6 @@ class Spieler {
             ON teams_liga.team_id = spieler.team_id 
             WHERE teams_liga.aktiv = 'Ja' 
             AND spieler.schiri >= '$saison' OR spieler.schiri = 'Ausbilder/in'";
-        return mysqli_fetch_assoc(db::readdb($sql))['count(*)'];
+        return mysqli_fetch_assoc(db::read($sql))['count(*)'];
     }
 }

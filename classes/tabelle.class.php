@@ -4,7 +4,7 @@ class Tabelle {
     public static function get_aktuellen_spieltag($saison = Config::SAISON)
     {
         $sql = "SELECT * FROM turniere_liga WHERE saison = '$saison' AND (art='I' OR art = 'II' OR art='III') ORDER BY spieltag ASC";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         while ($turnier =  mysqli_fetch_assoc($result)){
             if ($turnier['phase'] != 'ergebnis'){
                 return db::escape($turnier['spieltag']);
@@ -18,7 +18,7 @@ class Tabelle {
     public static function check_spieltag_live($spieltag, $saison = Config::SAISON)
     {
         $sql = "SELECT * FROM turniere_liga WHERE spieltag = '$spieltag' AND (art='I' OR art = 'II' OR art='III') AND saison = '$saison'";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $check_1 = $check_2 = false;
         while ($turnier =  mysqli_fetch_assoc($result)){
             if ($turnier['phase'] != 'ergebnis'){
@@ -45,7 +45,7 @@ class Tabelle {
         //Spieltag = 0, wenn keiner zugeorndet wurde
         $sql = "SELECT * FROM turniere_liga WHERE spieltag < '$spieltag' AND spieltag != 0 AND (art='I' OR art = 'II' OR art='III') AND saison = '$saison' ORDER BY spieltag ASC, datum ASC";
         //db::debug($sql);
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         while ($test =  mysqli_fetch_assoc($result)){
             if ($test['phase'] != 'ergebnis'){
                 Form::error("Es fehlen noch Turnierergebnisse von vorherigen Spieltagen.");
@@ -145,7 +145,7 @@ class Tabelle {
         ON turniere_liga.turnier_id = turniere_ergebnisse.turnier_id
         WHERE turniere_liga.saison = '$saison'
         ORDER BY turniere_liga.datum DESC, platz ASC";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $return = array();
         while ($eintrag = mysqli_fetch_assoc($result)){
             if (!isset($return[$eintrag['turnier_id']])){
@@ -169,7 +169,7 @@ class Tabelle {
             AND (turniere_liga.saison = '$saison') 
             AND (turniere_liga.spieltag <= '$spieltag')
             ORDER BY ergebnis DESC, RAND()";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $return = array();
         $counter = array();
         while ($eintrag = mysqli_fetch_assoc($result)){
@@ -277,7 +277,7 @@ class Tabelle {
             OR (turniere_liga.saison = '$saison' - 1)
             $ausnahme)
             ORDER BY turniere_liga.saison DESC, turniere_liga.datum DESC";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $return = array();
         $counter = array();
         
