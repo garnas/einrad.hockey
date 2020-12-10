@@ -196,7 +196,7 @@ class Tabelle {
         //Tabelle mit aktiven Teams ohne Ergebnis auffüllen
         //In vergangenen Saisons werden nur Teams mit Ergebnissen gelistet
         if ($saison == Config::SAISON){
-            $list_of_teamids = Team::get_all_teamids();
+            $list_of_teamids = Team::get_ligateams_id();
             foreach($list_of_teamids as $team_id){
                 if (!array_key_exists($team_id, $return)){
                     $return[$team_id] = array();
@@ -210,7 +210,7 @@ class Tabelle {
         }
         //db::debug($return);
         //Hinzufügen der Strafen:
-        $strafen = Team::get_all_strafen();
+        $strafen = Team::get_strafen_all_teams();
         foreach ($strafen as $strafe){
             //Hinzufügen des Sterns
             if (!isset($return[$strafe['team_id']]['strafe_stern'])){
@@ -320,7 +320,7 @@ class Tabelle {
         //Tabelle mit aktiven Teams ohne Ergebnis auffüllen
         //In vergangenen Saisons werden nur Teams mit Ergebnissen gelistet
         if ($saison == Config::SAISON){
-            $list_of_teamids = Team::get_all_teamids();
+            $list_of_teamids = Team::get_ligateams_id();
             foreach($list_of_teamids as $team_id){
                 if (!array_key_exists($team_id, $return)){
                     $return[$team_id] = array();

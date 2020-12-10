@@ -81,8 +81,8 @@ if (isset($_POST['new_ausleihe']) && $change_tbericht){
         die();
     }
     /*
-    $platz_ab = Tabelle::get_team_rang($team_id_ab, $akt_turnier->daten['spieltag']);
-    $platz_auf = Tabelle::get_team_rang($team_id_auf, $akt_turnier->daten['spieltag']);
+    $platz_ab = Tabelle::get_team_rang($team_id_ab, $akt_turnier->get_teamdaten['spieltag']);
+    $platz_auf = Tabelle::get_team_rang($team_id_auf, $akt_turnier->get_teamdaten['spieltag']);
     if ($platz_ab - $platz_auf < 10 && !$ligacenter){
         Form::error("Es müssen mindestens 10 Plätze zwischen den beiden Teams in der Rangtabelle liegen.");
         header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);

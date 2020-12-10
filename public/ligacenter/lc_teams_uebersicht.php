@@ -5,7 +5,7 @@
 require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_la.logic.php'; //Auth
 
-$teams = Team::get_all_teamdata();
+$teams = Team::get_teamdata_all_teams();
 $max_schiris = $max_spieler = $teams_mit_zwei_schiris = 0;
 foreach ($teams as $team_id => $team){
     $genug_schiris = false;

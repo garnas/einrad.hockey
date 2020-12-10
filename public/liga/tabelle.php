@@ -23,7 +23,7 @@ if (isset($_GET['spieltag']) && is_numeric($_GET['spieltag'])){
 //Tabellen und Strafen, um sie an das Layout zu übergeben
 $meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag);
 $rang_tabelle = Tabelle::get_rang_tabelle($gew_spieltag);
-$strafen = Team::get_all_strafen();
+$strafen = Team::get_strafen_all_teams();
 
 //Testen ob Verwarnungen oder Strafen existieren.
 $verwarnung_not_empty = $strafe_not_empty = false;

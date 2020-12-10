@@ -11,7 +11,7 @@ $akt_team_kontakte = new Kontakt ($_SESSION['team_id']);
 
 //Werden an teamdaten.tmp.php übergeben
 $emails = $akt_team_kontakte->get_all_emails();
-$daten = $akt_team ->daten();
+$daten = $akt_team ->get_teamdaten();
 
 $change = false; // Wenn sich in teamdaten_aendern.logic etwas ändert, wird $change auf true gesetzt
 require_once '../../logic/teamdaten_aendern.logic.php';

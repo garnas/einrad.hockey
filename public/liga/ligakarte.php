@@ -60,7 +60,7 @@ include '../../templates/header.tmp.php';
 ?>
 
 <h1 class='w3-border-bottom w3-text-primary'>Karte der Ligateams<span class="w3-right w3-hide-small"><?=Form::get_saison_string()?></span></h1>
-<p>Es spielen zurzeit <?=count(Team::list_of_all_teams())?> Teams in der Deutschen Einradhockeyliga. <?=Form::link("teams.php","Hier")?> findest du eine Liste aller Teams mit ihrer hinterlegten E-Mail-Adresse.</p>
+<p>Es spielen zurzeit <?=count(Team::get_ligateams_name())?> Teams in der Deutschen Einradhockeyliga. <?=Form::link("teams.php","Hier")?> findest du eine Liste aller Teams mit ihrer hinterlegten E-Mail-Adresse.</p>
   
 <p><i>If your team resides outside of Germany, please contact <?=Form::mailto(Config::TECHNIKMAIL)?> to be included in the map.</i></p>
 

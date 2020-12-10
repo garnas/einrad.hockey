@@ -51,7 +51,7 @@ class LigaBot {
             //////////Phasenwechsel von Offene Phase in die Meldephase//////////////
             //Prüft, ob wir uns vier Wochen vor dem Spieltag befinden und ob das Turnier in der offenen Phase ist.
             if (self::time_offen_melde($akt_turnier->daten['datum']) <= $heute && $akt_turnier->daten['phase'] == 'offen'){
-                $akt_turnier->set_phase("melde"); //Aktualisiert auch $akt_turnier->daten()
+                $akt_turnier->set_phase("melde"); //Aktualisiert auch $akt_turnier->get_teamdaten()
                 $akt_turnier->schreibe_log("Phase: offen -> melde", "Ligabot");
                 //losen setzt alle Teams in richtiger Reihenfolge auf die Warteliste
                 self::losen($akt_turnier);
@@ -242,7 +242,7 @@ class LigaBot {
         $liste = self::get_turnier_ids();
         foreach ($liste as $turnier_id){
             $akt_turnier = new Turnier ($turnier_id);
-            if ($akt_turnier->daten['phase'] != 'ergebnis'){
+            if ($akt_turnier->get_teamdaten['phase'] != 'ergebnis'){
                 $akt_turnier -> set_phase("offen");
                 $akt_turnier -> set_spieltag(0);
                 $akt_turnier -> schreibe_log("Phase -> offen" , "Zurückgesetzt von Ligabot");

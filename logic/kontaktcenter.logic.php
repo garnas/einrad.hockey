@@ -51,7 +51,7 @@ if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])){
 if (isset($_POST['rundmail'])){
     unset ($_SESSION[$list_id]);
     $_SESSION[$list_id]['type'] = 'Rundmail';
-    $_SESSION[$list_id]['empfaenger'] = Team::list_of_all_teams();
+    $_SESSION[$list_id]['empfaenger'] = Team::get_ligateams_name();
     $_SESSION[$list_id]['emails'] = Kontakt::get_emails_rundmail();
 
     array_unshift($_SESSION[$list_id]['emails'], Config::LAMAIL);
