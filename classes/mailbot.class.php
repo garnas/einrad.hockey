@@ -102,7 +102,7 @@ class MailBot {
     public static function mail_plaetze_frei($akt_turnier)
     {   
         if ($akt_turnier->anzahl_freie_plaetze() > 0 && in_array($akt_turnier->daten['art'], array('I','II','III'))){
-            $team_ids = Team::get_all_teamids();
+            $team_ids = Team::get_ligateams_id();
             foreach ($team_ids as $team_id){
                 //Noch Plätze frei
                 if (!$akt_turnier->check_team_angemeldet($team_id) && $akt_turnier->check_team_block($team_id) && !$akt_turnier->check_doppel_anmeldung($team_id)){
@@ -138,7 +138,7 @@ class MailBot {
     public static function mail_gelost($akt_turnier)
     {   
         if (in_array($akt_turnier->daten['art'], array('I','II','III'))){
-            $team_ids = Team::get_all_teamids();
+            $team_ids = Team::get_ligateams_id();
             foreach ($team_ids as $team_id){
                 //Team angemeldet?
                 if ($akt_turnier->check_team_angemeldet($team_id)){
@@ -172,7 +172,7 @@ class MailBot {
     public static function mail_neues_turnier($akt_turnier)
     {   
         if (in_array($akt_turnier->daten['art'], array('I','II','III'))){
-            $team_ids = Team::get_all_teamids();
+            $team_ids = Team::get_ligateams_id();
             foreach ($team_ids as $team_id){
                 //Noch Plätze frei
                 if ($akt_turnier->check_team_block($team_id) && !$akt_turnier->check_doppel_anmeldung($team_id)){

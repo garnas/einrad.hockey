@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 
-$alle_teamdaten = Team::get_all_teamdata();
+$alle_teamdaten = Team::get_teamdata_all_teams();
 $emails = Kontakt::get_all_public_emails_per_team();
 
 /////////////////////////////////////////////////////////////////////////////

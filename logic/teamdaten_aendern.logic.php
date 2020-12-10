@@ -77,7 +77,7 @@ if (isset($_POST['teamfoto'])){
         if($target_file_jpg === false){
             Form::error("Fehler beim Fotoupload");
         }else{
-            $akt_team->teamfoto($target_file_jpg);
+            $akt_team->set_teamfoto($target_file_jpg);
             Form::affirm("Teamfoto wurde hochgeladen");
             header('Location: ' . db::escape($_SERVER['PHP_SELF']) . $get_var);
             die();
