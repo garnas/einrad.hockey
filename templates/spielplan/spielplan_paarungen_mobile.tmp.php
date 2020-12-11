@@ -1,7 +1,7 @@
 <!-- SPIELPAARUNGEN MOBIL -->
 <div class="w3-hide-large w3-hide-medium">
     <h3 class="w3-text-secondary w3-margin-top">Spiele</h3>
-    <?php if($spielplan->akt_turnier->daten['besprechung'] == 'Ja'){?><p><i>Alle Teams sollen sich um <?=date('H:i', strtotime($spielplan->akt_turnier->daten['startzeit']) - 15*60)?>&nbsp;Uhr zu einer gemeinsamen Turnierbesprechung einfinden.</i></p><?php }//endif?>
+    <?php if($spielplan->akt_turnier->details['besprechung'] == 'Ja'){?><p><i>Alle Teams sollen sich um <?=date('H:i', strtotime($spielplan->akt_turnier->details['startzeit']) - 15*60)?>&nbsp;Uhr zu einer gemeinsamen Turnierbesprechung einfinden.</i></p><?php }//endif?>
     <span class="w3-text-grey">Spielzeit: 2 x <?=$spielzeit['halbzeit_laenge']?>&nbsp;min | Puffer je Spiel: <?=$spielzeit['pause']?>&nbsp;min</span>
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped" style="white-space: nowrap;">

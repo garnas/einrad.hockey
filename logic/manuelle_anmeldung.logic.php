@@ -4,7 +4,7 @@ $turnier_id = $_GET['turnier_id'];
 $akt_turnier = new Turnier ($turnier_id);
 
 //Turnierdaten bekommen
-$daten = $akt_turnier->daten;
+$daten = $akt_turnier->details;
 
 //Existiert das Turnier?
 if (empty($daten)){
@@ -130,7 +130,7 @@ if (isset($_POST['spieleliste_auffuellen'])){
     $error = false;
 
     //Hat das Turnier noch freie Plätze?
-    if ($akt_turnier->anzahl_freie_plaetze() <= 0){
+    if ($akt_turnier->get_anzahl_freie_plaetze() <= 0){
         $error = true;
         Form::error("Spielen-Liste ist bereits voll");
     }

@@ -1,4 +1,4 @@
-<h1 class="w3-text-primary"><?=date("d.m.Y", strtotime($akt_turnier->daten['datum']))?> <?=$akt_turnier->daten['ort']?> <i>(<?=$akt_turnier->daten['tblock']?>)</i></h1>
+<h1 class="w3-text-primary"><?=date("d.m.Y", strtotime($akt_turnier->details['datum']))?> <?=$akt_turnier->details['ort']?> <i>(<?=$akt_turnier->details['tblock']?>)</i></h1>
 <h2 class="w3-text-grey"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">article</i> Turnier-Report</h2>
 
 <!-- LINK TURNIERREPORT -->

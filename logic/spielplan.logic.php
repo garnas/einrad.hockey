@@ -3,7 +3,7 @@
 $turnier_id=$_GET['turnier_id'];
 $spielplan = new Spielplan($turnier_id);
 //Existiert das Turnier?
-if(empty($spielplan->akt_turnier->daten)){
+if(empty($spielplan->akt_turnier->details)){
     Form::error("Turnier wurde nicht gefunden");
     header('Location: ../liga/turniere.php');
     die();
@@ -11,25 +11,25 @@ if(empty($spielplan->akt_turnier->daten)){
 //Nur Relevant für Ligacenter oder Teamcenter
 if (isset($ligacenter) or isset($teamcenter)){
     //Besteht die Berechtigung das Turnier zu bearbeiten? 
-    if (($_SESSION['team_id'] ?? false) != $spielplan->akt_turnier->daten['ausrichter'] && !$ligacenter){
+    if (($_SESSION['team_id'] ?? false) != $spielplan->akt_turnier->details['ausrichter'] && !$ligacenter){
         Form::error("Nur der Ausrichter kann Spielergebnisse eintragen");
         header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
         die();
     }
-    if ($teamcenter && Config::time_offset() - strtotime($spielplan->akt_turnier->daten['datum']) > 48*60*60){
+    if ($teamcenter && Config::time_offset() - strtotime($spielplan->akt_turnier->details['datum']) > 48*60*60){
         Form::error("Bitte wende dich an den Ligaausschuss um Ergebnisse nachträglich zu verändern.");
         header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
         die();
     }
 }
 //Ist das Turnier in der richtigen Phase?
-if(!in_array($spielplan->akt_turnier->daten['phase'], array('ergebnis', 'spielplan'))){
+if(!in_array($spielplan->akt_turnier->details['phase'], array('ergebnis', 'spielplan'))){
     Form::error("Turnier befindet sich in der falschen Phase");
     header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier_id);
     die();
 }
 //Existiert ein manuell hochgeladener Spielplan?
-if(!empty($spielplan->akt_turnier->daten['link_spielplan'])){
+if(!empty($spielplan->akt_turnier->details['link_spielplan'])){
     Form::error("Es existiert ein manuell hochgeladener Spielplan.");
     header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier_id);
     die();

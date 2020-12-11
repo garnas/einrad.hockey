@@ -3,15 +3,15 @@
 $turnier_id = $_GET['turnier_id'];
 $akt_turnier = new Turnier ($turnier_id);
 
-if ($akt_turnier->daten['ausrichter'] == ($_SESSION['team_id'] ?? '') or $ligacenter){
+if ($akt_turnier->details['ausrichter'] == ($_SESSION['team_id'] ?? '') or $ligacenter){
     $change_tbericht = true; //Berechtigung zum Verändern des Reports
 }else{
     $change_tbericht = false;
 }
 
-if(strtotime($akt_turnier->daten['datum']) - Config::time_offset() < -3*24*60*60 && !$ligacenter){
+if(strtotime($akt_turnier->details['datum']) - Config::time_offset() < -3*24*60*60 && !$ligacenter){
     $change_tbericht = false; //Berechtigung zum Verändern des Reports widerrufen für Ausrichter, wenn das Turnier mehr als zwei Tage zurückliegt.
-    if ($akt_turnier->daten['ausrichter'] == ($_SESSION['team_id'] ?? '')){
+    if ($akt_turnier->details['ausrichter'] == ($_SESSION['team_id'] ?? '')){
         Form::attention("Das Turnier liegt bereits in der Vergangenheit. Bearbeiten des Turnierreports nur noch via den Ligaausschuss möglich.");
     }
 }
@@ -23,19 +23,19 @@ $tbericht = new TurnierReport ($turnier_id);
 //db::debug($akt_turnier->get_liste_spielplan());
 
 //Existiert das Turnier?
-if (empty($akt_turnier->daten)){
+if (empty($akt_turnier->details)){
     Form::error("Turnier wurde nicht gefunden");
     header('Location: ../liga/turniere.php');
     die();
 }
 
-if ($akt_turnier->daten['art'] == 'spass'){
+if ($akt_turnier->details['art'] == 'spass'){
     Form::attention("Spaßturniere erfordern keinen Turnierreport.");
-    header('Location: ../liga/turnier_details.php?turnier_id=' . $akt_turnier->daten['turnier_id']);
+    header('Location: ../liga/turnier_details.php?turnier_id=' . $akt_turnier->details['turnier_id']);
     die();
 }
 /*
-if ($akt_turnier->get_team_liste($_SESSION['team_id']) != 'spiele'){
+if ($akt_turnier->get_liste($_SESSION['team_id']) != 'spiele'){
     Form::error("Fehlende Berechtigung");
     header('Location: ../teamcenter/tc_turnierliste_anmelden.php');
     die();

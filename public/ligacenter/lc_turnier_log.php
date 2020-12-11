@@ -10,7 +10,7 @@ $turnier_id = $_GET['turnier_id'];
 $akt_turnier = new Turnier ($turnier_id);
 
 //Turnierdaten bekommen
-$daten = $akt_turnier->daten;
+$daten = $akt_turnier->details;
 
 //Logs des Turnieres bekommen
 $logs = $akt_turnier->get_logs();

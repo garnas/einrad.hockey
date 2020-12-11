@@ -9,7 +9,7 @@ require_once '../../logic/spielplan.logic.php'; //Erstellt Spielplanobjekt nach 
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 $titel = "Spielplan | Einradhockey";
-$content = "Der Spielplan für das Einradhockey-Turnier in ". $spielplan->akt_turnier->daten['ort'] . " am " . date("d.m.Y", strtotime($spielplan->akt_turnier->daten['datum']));
+$content = "Der Spielplan für das Einradhockey-Turnier in ". $spielplan->akt_turnier->details['ort'] . " am " . date("d.m.Y", strtotime($spielplan->akt_turnier->details['datum']));
 include '../../templates/header.tmp.php';
 include '../../templates/spielplan/spielplan_vorTurnierTabelle.tmp.php'; //Teamliste
 include '../../templates/spielplan/spielplan_paarungen.tmp.php'; //Spiele

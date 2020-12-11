@@ -28,13 +28,13 @@ if (isset($_POST['reset'])){
 if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])){
     unset ($_SESSION[$list_id]);
     $akt_turnier = new Turnier($_POST['turnier_id']);
-    if (empty($akt_turnier->daten)){
+    if (empty($akt_turnier->details)){
         Form::error("Turnier wurde nicht gefunden");
         header('Location: ' . db::escape($_SERVER['PHP_SELF']));
         die();
     }
     $array = Kontakt::get_emails_turnier($_POST['turnier_id']);
-    $_SESSION[$list_id]['type'] = 'Turnier in ' . $akt_turnier->daten['ort'] . ' (' . date("d.m.Y", strtotime($akt_turnier->daten['datum'])) .', ' . $akt_turnier->daten['tblock'] . ')';
+    $_SESSION[$list_id]['type'] = 'Turnier in ' . $akt_turnier->details['ort'] . ' (' . date("d.m.Y", strtotime($akt_turnier->details['datum'])) .', ' . $akt_turnier->details['tblock'] . ')';
     $_SESSION[$list_id]['emails'] = $array['emails'];
     $_SESSION[$list_id]['empfaenger'] = $array['teamnamen'];
 

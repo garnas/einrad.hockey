@@ -8,7 +8,7 @@ $turnier_id=$_GET['turnier_id'];
 $akt_turnier = new Turnier ($turnier_id);
 
 
-$daten = $akt_turnier->daten;
+$daten = $akt_turnier->details;
 $akt_kontakt = new Kontakt ($daten['ausrichter']);
 
 if (empty($daten)){

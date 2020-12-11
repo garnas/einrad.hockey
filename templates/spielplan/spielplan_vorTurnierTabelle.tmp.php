@@ -1,7 +1,7 @@
 <!-- ÜBERSCHRIFT -->
 <h1 class="w3-text-grey"><?=$spielzeit['plaetze']?>er-Spielplan</h1>
-<h2 class="w3-text-primary"><?=$spielplan->akt_turnier->daten['ort']?> <i>(<?=$spielplan->akt_turnier->daten['tblock']?>)</i>, <?=date("d.m.Y", strtotime($spielplan->akt_turnier->daten['datum']))?></h2>
-<h3><?=$spielplan->akt_turnier->daten['tname']?></h3>
+<h2 class="w3-text-primary"><?=$spielplan->akt_turnier->details['ort']?> <i>(<?=$spielplan->akt_turnier->details['tblock']?>)</i>, <?=date("d.m.Y", strtotime($spielplan->akt_turnier->details['datum']))?></h2>
+<h3><?=$spielplan->akt_turnier->details['tname']?></h3>
 
 <!-- LINKS -->
 <div class="pdf-hide">
@@ -11,7 +11,7 @@
     <?php }else{ ?>
         <?=Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">lock</i> Zum Turnierreport')?></p>
     <?php } //endif?>
-    <?php if(($_SESSION['team_id'] ?? false) == $spielplan->akt_turnier->daten['ausrichter'] && !($teamcenter ?? false) && $spielplan->akt_turnier->daten['phase'] == 'spielplan'){?>
+    <?php if(($_SESSION['team_id'] ?? false) == $spielplan->akt_turnier->details['ausrichter'] && !($teamcenter ?? false) && $spielplan->akt_turnier->details['phase'] == 'spielplan'){?>
         <p><?=Form::link($spielplan->akt_turnier->get_tc_spielplan(), '<i class="material-icons">create</i> Ergebnisse eintragen')?></p>
     <?php }//endif?>
     <?php if(isset($_SESSION['la_id']) && !($ligacenter ?? false)){?>

@@ -7,7 +7,7 @@ require_once '../../logic/session_team.logic.php'; //Auth
 
 $turnier_id = $_GET['turnier_id'];
 $akt_turnier = new Turnier($turnier_id);
-$daten = $akt_turnier->daten;
+$daten = $akt_turnier->details;
 
 //Turnier und $daten-Array erstellen +
 //Sanitizing + Berechtigung Prüfen + Existiert das Turnier?

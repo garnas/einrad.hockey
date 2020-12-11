@@ -29,19 +29,19 @@ class LigaBot {
             $akt_turnier = new Turnier ($turnier_id);
 
             //////////Turnierblock wandern lassen//////////////
-            $ausrichter_block = Tabelle::get_team_block($akt_turnier->daten['ausrichter']);
-            $turnier_block = $akt_turnier->daten['tblock'];
+            $ausrichter_block = Tabelle::get_team_block($akt_turnier->details['ausrichter']);
+            $turnier_block = $akt_turnier->details['tblock'];
             //Position des Ausrichters in einem Array aller Blöcke in der Klasse Config, um Blockhöhere und erweiterte Turniere erkennen zu können
             $pos_ausrichter = array_search($ausrichter_block, Config::BLOCK_ALL);
             $pos_turnier = array_search($turnier_block, Config::BLOCK_ALL);
     
-            if ($akt_turnier->daten['art'] == 'I' && $akt_turnier->daten['phase'] == 'offen' && $akt_turnier->daten['tblock_fixed'] != 'Ja' && $turnier_block != $ausrichter_block){
+            if ($akt_turnier->details['art'] == 'I' && $akt_turnier->details['phase'] == 'offen' && $akt_turnier->details['tblock_fixed'] != 'Ja' && $turnier_block != $ausrichter_block){
                 if (($pos_ausrichter - 1) != $pos_turnier){ //Um einen Block vom Ausrichterblock aus erweiterte Turniere sollen nicht wandern...
                     $akt_turnier->set_turnier_block($ausrichter_block);
                     $akt_turnier->schreibe_log("Turnierblock gewandert (I): \r\n $turnier_block -> $ausrichter_block", "Ligabot");
                 }
             }
-            if ($akt_turnier->daten['art'] == 'II' && $akt_turnier->daten['tblock_fixed'] != 'Ja' && $akt_turnier->daten['phase'] == 'offen'){
+            if ($akt_turnier->details['art'] == 'II' && $akt_turnier->details['tblock_fixed'] != 'Ja' && $akt_turnier->details['phase'] == 'offen'){
                 if ($pos_ausrichter < $pos_turnier){
                     $akt_turnier->set_turnier_block($ausrichter_block);
                     $akt_turnier->schreibe_log("Turnierblock gewandert (II): \r\n $turnier_block -> $ausrichter_block", "Ligabot");
@@ -50,7 +50,7 @@ class LigaBot {
     
             //////////Phasenwechsel von Offene Phase in die Meldephase//////////////
             //Prüft, ob wir uns vier Wochen vor dem Spieltag befinden und ob das Turnier in der offenen Phase ist.
-            if (self::time_offen_melde($akt_turnier->daten['datum']) <= $heute && $akt_turnier->daten['phase'] == 'offen'){
+            if (self::time_offen_melde($akt_turnier->details['datum']) <= $heute && $akt_turnier->details['phase'] == 'offen'){
                 $akt_turnier->set_phase("melde"); //Aktualisiert auch $akt_turnier->get_teamdaten()
                 $akt_turnier->schreibe_log("Phase: offen -> melde", "Ligabot");
                 //losen setzt alle Teams in richtiger Reihenfolge auf die Warteliste
@@ -84,7 +84,7 @@ class LigaBot {
         ////////////Spieltag identifizieren und in die Tabelle schreiben..//////////////
         foreach ($liste as $turnier_id){ //Schleife durch alle Turniere
             $akt_turnier = new Turnier ($turnier_id);
-            $datum = strtotime($akt_turnier->daten['datum']); //Datum des Turniers als Unix-Time
+            $datum = strtotime($akt_turnier->details['datum']); //Datum des Turniers als Unix-Time
             $wochentag = date("N",$datum); //Wochentage nummeriert 1 - 7
             //Man muss auch Turniere berücksichtigen, welche nicht am Wochende sind:
             if ($kw != date('W',$datum)){
@@ -99,8 +99,8 @@ class LigaBot {
                     $set_spieltag = $spieltag-1;
                 }
             }
-            if ($akt_turnier->daten['spieltag'] != $set_spieltag){//die datenbank wird nur beschrieben, wenn sich der spieltag ändert.
-                $akt_turnier->schreibe_log("Spieltag: ". $akt_turnier->daten['spieltag'] . " -> " . $set_spieltag, "Ligabot");
+            if ($akt_turnier->details['spieltag'] != $set_spieltag){//die datenbank wird nur beschrieben, wenn sich der spieltag ändert.
+                $akt_turnier->schreibe_log("Spieltag: ". $akt_turnier->details['spieltag'] . " -> " . $set_spieltag, "Ligabot");
                 $akt_turnier->set_spieltag($set_spieltag);
             }
             $kw = date('W',$datum); //$kalenderwoche übernehmen für die nächste Iteration

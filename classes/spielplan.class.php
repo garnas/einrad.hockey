@@ -70,7 +70,7 @@ class Spielplan{
         $this->anzahl_spiele = 0;
 
         if (empty($result)){
-            $spielplan=$this->akt_turnier->daten["spielplan"];
+            $spielplan=$this->akt_turnier->details["spielplan"];
             $sql = "SELECT * FROM spielplan_paarungen WHERE plaetze = '$this->anzahl_teams' AND spielplan = '$spielplan'";
             $result = db::read($sql);
             $sqlinsert="";
@@ -395,7 +395,7 @@ class Spielplan{
             ORDER BY spiel_id ASC";
         $result=db::read($sql);
         $daten=[];
-        $startzeit=new DateTime($this->akt_turnier->daten["startzeit"]);
+        $startzeit=new DateTime($this->akt_turnier->details["startzeit"]);
         $zeiten=$this->getSpielzeiten();
         //////db::debug($zeiten)
         $min=$zeiten["anzahl_halbzeiten"]*$zeiten["halbzeit_laenge"]+$zeiten["pause"];
@@ -418,7 +418,7 @@ class Spielplan{
     function getSpielzeiten()
     {
         $plaetze = $this->anzahl_teams;
-        $spielplan = $this->akt_turnier->daten["spielplan"];
+        $spielplan = $this->akt_turnier->details["spielplan"];
         $sql = "SELECT * FROM spielplan_details WHERE plaetze = '$plaetze' AND spielplan = '$spielplan'";
         $result = db::read($sql);
         return db::escape(mysqli_fetch_assoc($result));

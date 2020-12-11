@@ -351,7 +351,7 @@ class Team
         $sql =  "
                 SELECT passwort
                 FROM teams_liga
-                WHERE team_id='$team_id'
+                WHERE team_id = '$team_id'
                 ";
         $result = db::read($sql);
         $result = mysqli_fetch_assoc($result);
