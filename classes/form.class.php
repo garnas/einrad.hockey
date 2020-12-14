@@ -1,6 +1,7 @@
 <?php
 class Form
 {
+    public static string $confetti = '';
     //Fehlermeldungem werden in einer $_SESSION Variable gespeichert
     public static function error($string)
     {
@@ -59,7 +60,7 @@ class Form
 
     //Meldungen aus $_SESSION werden ins Html-Dokument geschrieben
     public static function schreibe_meldungen()
-    {   
+    {
         //Hinweise
         if (isset($_SESSION['w_messages'])) {
             foreach ($_SESSION['w_messages'] as $message) {
@@ -139,7 +140,7 @@ class Form
         }
         return 1995 + $saison;
     }
-    
+
     public static function countdown($date, $id = 'countdown'){
         ?>
             <script>countdown('<?=date("Y-m-d\TH:i:s", strtotime($date))?>', '<?=$id?>')</script>
@@ -165,13 +166,33 @@ class Form
     }
 
     public static function progressBar($stand, $ende) {
-        ?>  
+        ?>
             <div id='bar'>
                 <div id='progress'>
                 </div>
             </div>
             <script>progressBar(<?=$stand?>, <?=$ende?>)</script>
         <?php
+    }
+
+    /**
+     * Fügt einen Confetti-Effekt hinzu.
+     *
+     * Muss vor dem HTML-Code aufgerufen werden.
+     *
+     * Wie lange soll der Effekt in ms anhalten?
+     * Keine Zeitbegrenzung bei $timeout = 0
+     * @param int $timeout
+     *
+     * Anzahl der Konfettis liegt zufällig zwischen $min und $max
+     * @param int $min
+     * @param int $max
+     */
+    public static function set_confetti(int $min = 40, int $max = 90, $timeout = 0){
+        self::$confetti =   "
+                            <script src = '../javascript/confetti/confetti.js'></script>
+                            <script>confetti.start($timeout, $min, $max)</script>
+                            ";
     }
 
     public static function log($file_name, $line){

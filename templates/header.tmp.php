@@ -22,7 +22,8 @@
 </head>
 
 <body class="w3-white w3-auto w3-card-4">
-    <main class="content">
+    <main id="width_for_confetti" class="content">
+        <?=Form::$confetti?>
         <div class="w3-hide-large w3-hide-medium">
             <?php include "nav_mobil.tmp.php"; ?>
         </div>

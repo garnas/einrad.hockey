@@ -9,6 +9,9 @@ $color[0] = "background-color: #a6b2d8;";
 $color[1] = "background-color: #b8c1e0;";
 $color[2] = "background-color: #cad0e8;";
 
+// Fügt Confetti-Effekt hinzu
+Form::set_confetti();
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -162,3 +165,4 @@ include '../../templates/header.tmp.php';
 </div>
 
 <?php include '../../templates/footer.tmp.php';
+Form::confetti();?>
