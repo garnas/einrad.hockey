@@ -44,7 +44,12 @@ class Config
     /**
      *  Webroot fürs Erstellen von absoluten Links
      */
-    const BASE_LINK = 'http://localhost/einrad.hockey/public/'; //
+    const BASE_LINK = 'http://localhost/einrad.hockey/public/';
+
+    /**
+     *  Wurzelverzeichnis in welchem einrad.hockey liegt
+     */
+    const BASE_PATH = 'C:\xampp\htdocs\einrad.hockey';
 
     /**
      *  Ligalinks
