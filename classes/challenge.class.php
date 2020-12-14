@@ -219,7 +219,7 @@ class Challenge {
 		        SELECT sp.spieler_id, sp.vorname, sp.nachname, te.teamname, ROUND(SUM(kilometer), 1) AS kilometer
         		FROM `oeffi_challenge` ch, spieler sp, teams_liga te
                 WHERE ch.spieler_id = sp.spieler_id
-                AND sp.team_id = sp.team_id
+                AND sp.team_id = te.team_id
 		        AND ch.count = TRUE
 		        AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
 		        AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
