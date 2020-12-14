@@ -4,6 +4,7 @@ class Challenge {
     
     public $challenge_start = "13.11.2020";
     public $challenge_end = "20.12.2020";
+    public $ziel_kilometer = 16098.4;
 
     // Erhalte den aktuellen km-Stand
     function get_stand(){
@@ -18,7 +19,7 @@ class Challenge {
         $result = db::readdb($sql);
         $daten = mysqli_fetch_assoc($result);
 
-        return db::escape($daten);
+        return db::escape($daten['kilometer']);
     }
     
     // Erhalte die Ergebnisliste aufgeschlüsselt nach Teams
