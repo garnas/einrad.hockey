@@ -14,6 +14,9 @@ $color[3] = "background-color: #cad0e8;";
 if ($akt_kilometerstand >= $challenge->ziel_kilometer) {
     Form::set_confetti(40,90,7000); 
     $color[0] = "background-color: rgb(189, 107, 153);";
+    $ziel_text = 'Wir haben es bis nach Sydney (16098&nbsp;km) geschafft! Zum am weitesten entfernten Einradhockeyteam.';
+} else {
+    $ziel_text = "Schaffen wir es zusammen bis nach Sydney? Zum am weitesten entfernten Einradhockeyteam.";
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -36,9 +39,7 @@ include '../../templates/header.tmp.php';
 <a href='../teamcenter/tc_challenge.php' class="w3-button w3-secondary">Kilometer eintragen!</a>
 
 <h3 class="w3-text-secondary w3-margin-top">Gesamt-km</h3>
-<p class="w3-text-gray">
-    Schaffen wir es zusammen bis nach Sydney? Zum am weitesten entfernten Einradhockeyteam.
-</p>
+<p class="w3-text-gray"><?= $ziel_text ?></p>
 
 <!-- ProgressBar -->
 <div class='w3-row w3-light-grey'>
