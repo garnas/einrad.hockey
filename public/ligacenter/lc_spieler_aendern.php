@@ -144,9 +144,9 @@ include '../../templates/header.tmp.php';
         <p>
             <label class="w3-text-primary" for="schiri">Schiri</labeL>
             <select style="height:40px" class='w3-input w3-border w3-border-primary' name='schiri'>
-                <option <?php if($daten['schiri'] == Config::SAISON + 2){?>selected<?php }?> value='<?=Config::SAISON + 2?>'><?=Form::get_saison_string(Config::SAISON + 2)?></option>
-                <option <?php if($daten['schiri'] == Config::SAISON + 1){?>selected<?php } ?> value='<?=Config::SAISON + 1?>'><?=Form::get_saison_string(Config::SAISON + 1)?></option>
-                <option <?php if($daten['schiri'] == Config::SAISON){?>selected<?php }?> value='<?=Config::SAISON?>'><?=Form::get_saison_string()?></option>
+                <option <?php if($daten['schiri'] == Config::SAISON + 2){?>selected<?php }?> value='<?=Config::SAISON + 2?>'><?=Saison::get_saison_string(Config::SAISON + 2)?></option>
+                <option <?php if($daten['schiri'] == Config::SAISON + 1){?>selected<?php } ?> value='<?=Config::SAISON + 1?>'><?=Saison::get_saison_string(Config::SAISON + 1)?></option>
+                <option <?php if($daten['schiri'] == Config::SAISON){?>selected<?php }?> value='<?=Config::SAISON?>'><?=Saison::get_saison_string()?></option>
                 <option <?php if(empty($daten['schiri'])){?>selected<?php }?> value=''>kein Schiri</option>
                 <option <?php if(($daten['schiri']) == 'Ausbilder/in'){?>selected<?php }?> value='Ausbilder/in'>Ausbilder/in</option>
             </select>
@@ -164,7 +164,7 @@ include '../../templates/header.tmp.php';
         <p>
             <label class="w3-text-primary" for="letzte_saison">Letzte aktive Saison</label>
             <input class="w3-input w3-border w3-border-primary" type="number" id="letzte_saison" name="letzte_saison" value="<?=$daten['letzte_saison']?>" autocomplete="off" required>
-            <span class="w3-text-grey">(Saison Nr. <?=$daten['letzte_saison']?> entspricht Saison <?=Form::get_saison_string($daten['letzte_saison'])?>)</span>
+            <span class="w3-text-grey">(Saison Nr. <?=$daten['letzte_saison']?> entspricht Saison <?=Saison::get_saison_string($daten['letzte_saison'])?>)</span>
         </p>
         <p>
             <input class="w3-button w3-tertiary w3-block" type="submit" name="spieler_aendern" value="Spieler ändern">

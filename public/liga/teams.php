@@ -28,7 +28,7 @@ $(document).ready(function(){
 });
 </script>
 
-<h1 class='w3-text-primary w3-border-bottom w3-border-grey'>Ligateams<span class="w3-right w3-hide-small">Saison <?=Form::get_saison_string()?></span></h1>
+<h1 class='w3-text-primary w3-border-bottom w3-border-grey'>Ligateams<span class="w3-right w3-hide-small">Saison <?=Saison::get_saison_string()?></span></h1>
 <p>
   <!-- Legende -->
   <span class="w3-right">

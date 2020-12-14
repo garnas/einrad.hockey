@@ -21,7 +21,7 @@
                 <?php } //ende if?>
                     <td class='w3-center'><?=$eintrag['jahrgang']." ".$eintrag['geschlecht']?></td>
                 <?php if (!empty($eintrag['schiri'])){ //Häkchen Setzten wenn gültiger Schirieintrag?>
-                    <td class='w3-center'><i class='material-icons'>check_circle_outline</i><?=Form::get_saison_string($eintrag['schiri'])?> <?php if($eintrag['junior'] == 'Ja'){?><i class="w3-text-primary">junior</i><?php }//endif?></td>
+                    <td class='w3-center'><i class='material-icons'>check_circle_outline</i><?=Saison::get_saison_string($eintrag['schiri'])?> <?php if($eintrag['junior'] == 'Ja'){?><i class="w3-text-primary">junior</i><?php }//endif?></td>
                 <?php }else{?>
                     <td class='w3-center'></td>
                 <?php } //ende if?>
@@ -54,7 +54,7 @@
                         <?php } //ende if?>
                         <td class='w3-center'><?=$eintrag['jahrgang']." ".$eintrag['geschlecht']?></td>
                         <?php if (!empty($eintrag['schiri'])){ //Häkchen Setzten wenn gültiger Schirieintrag?>
-                            <td class='w3-center'><i class='material-icons'>check_circle_outline</i><?=Form::get_saison_string($eintrag['schiri'])?> <?php if($eintrag['junior'] == 'Ja'){?><i class="w3-text-primary">junior</i><?php }//endif?></td>
+                            <td class='w3-center'><i class='material-icons'>check_circle_outline</i><?=Saison::get_saison_string($eintrag['schiri'])?> <?php if($eintrag['junior'] == 'Ja'){?><i class="w3-text-primary">junior</i><?php }//endif?></td>
                         <?php }else{?>
                             <td class='w3-center'></td>
                         <?php } //ende if?>
@@ -76,7 +76,7 @@
 
 <!-- Form zum Eintragen eines neuen Spielers -->
 <div class="w3-section">
-    <!--<p class="w3-text-grey">Neue Spieler können bis zum <?=Config::SAISON_ENDE?> 23:59:59&nbsp;Uhr hinzugefügt werden.</p>-->
+    <!--<p class="w3-text-grey">Neue Spieler können bis zum <?=Saison::get_saison_ende()?> 23:59:59&nbsp;Uhr hinzugefügt werden.</p>-->
     <p class="w3-text-grey">Um einen neuen Spieler aus einem anderen Team zu übernehmen, bitte den Spieler neu eintragen. Die Übernahme geschieht dann automatisch, wenn die Daten identisch sind und dieser Spieler noch nicht in einem aktuellen Kader steht. Der Schiedsrichterstatus wird dann ebenfalls übernommen.</p>
     <button class="w3-button w3-tertiary" onclick="document.getElementById('spieler_eintragen').style.display='block'">Neuen Spieler eintragen</button>
     <div class="w3-modal" id="spieler_eintragen" style="display: none;">

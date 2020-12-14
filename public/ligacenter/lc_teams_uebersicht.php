@@ -42,7 +42,7 @@ if (isset($_POST['zweites_freilos'])){
             $text = 
                 "<html>Hallo " . $team['teamname'] . ","
                 ."<br><br>da ihr zwei ausgebildete Schiedsrichter im Kader eingetragen habt, wurde euch euer zweites Freilos gutgeschrieben."
-                ."<br><br>Wir wünschen euch eine schöne Saison " . Form::get_saison_string() . "!"
+                ."<br><br>Wir wünschen euch eine schöne Saison " . Saison::get_saison_string() . "!"
                 ."<br><br>Eure Einradhockeyliga</html>";
             $akt_kontakt = new Kontakt ($team_id);
             $adressaten = $akt_kontakt->get_emails();
@@ -61,7 +61,7 @@ if (isset($_POST['zweites_freilos'])){
 include '../../templates/header.tmp.php';
 ?>
 <h1 class="w3-text-primary">Übersicht Ligateams</h1>
-<span class="w3-text-grey">Saison <?=Form::get_saison_string()?></span>
+<span class="w3-text-grey">Saison <?=Saison::get_saison_string()?></span>
 
 <!-- Infobox -->
 <b>

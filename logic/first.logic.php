@@ -17,8 +17,14 @@ spl_autoload_register(
     function ($class)
     {
         $class = strtolower($class);
-        include __DIR__ . '/../classes/' . $class . '.class.php';    
-    }
+        if (strpos($class, 'saison') !== false){
+            include __DIR__ . '/../classes/saisons/' . $class . '.class.php';
+        }
+        else{
+            include __DIR__ . '/../classes/' . $class . '.class.php';
+        }
+
+    }        
 );
 
 //SQL-Connection wird hergestellt und automatisch wieder gechlossen
