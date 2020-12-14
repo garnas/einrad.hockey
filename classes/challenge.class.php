@@ -210,7 +210,7 @@ class Challenge {
     }
     
     // Erhalte das Gesamtergebnis für einen einzelnen Spieler
-    public static function get_spieler_results($spieler_id){
+    function get_spieler_result($spieler_id){
         $sql = "
         SELECT platz, vorname, nachname, teamname, kilometer
         FROM (
@@ -235,7 +235,8 @@ class Challenge {
         return db::escape($daten);
     }
 
-    public static function get_team_results($team_id){
+    //Erhalte das Gesamtergebnis für ein einziges Team
+    function get_team_result($team_id){
         $sql = "
         SELECT platz, teamname, kilometer
         FROM(
