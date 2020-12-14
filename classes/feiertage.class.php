@@ -1,9 +1,20 @@
-<?php //Quelle: https://www.symcon.de/forum/threads/5983-Feiertage-berechnen
-// Errechnet das Datum des Ostersonntags für ein gegebenes Jahr
-use JetBrains\PhpStorm\Pure;
+<?php
 
+/**
+ * Class Feiertage
+ *
+ * Findet Feiertage
+ *
+ * Quelle: https://www.symcon.de/forum/threads/5983-Feiertage-berechnen
+ */
 class Feiertage {
-    #[Pure] public static function easter($year): int
+    /**
+     * Errechnet das Datum des Ostersonntags für ein gegebenes Jahr
+     *
+     * @param int $year
+     * @return int|false
+     */
+    public static function easter(int $year): int|false
     {
         if($year > 2038 || $year < 1970) {
             return false;
@@ -29,10 +40,16 @@ class Feiertage {
         }
     }
 
-    // Berechnet alle festen und variablen Feiertage eines gegebenen Jahrs.
-    // Die Feiertage werden als Array zurückgeliefert, wobei der Key dem
-    // Feiertagsnamen entspricht und der Wert dem entsprechenden Zeitstempel.
-    public static function finden($year): array|bool
+    /**
+     * Berechnet alle Feiertage eines gegebenen Jahrs.
+     *
+     * Die Feiertage werden als Array zurückgeliefert, wobei der Key dem Feiertagsnamen entspricht und der Wert dem
+     * entsprechenden Zeitstempel.
+     *
+     * @param int $year
+     * @return array|false
+     */
+    public static function finden(int $year): array|false
     {
         $OneDay = 24 * 60 * 60;
         $easter = self::easter($year);
@@ -54,7 +71,12 @@ class Feiertage {
     }
 }
 
-// Beseitigt Stundenanteile in einem UNIX-Zeitstempel
+/**
+ * Beseitigt Stundenanteile in einem UNIX-Zeitstempel
+ *
+ *
+ * @param $timestamp
+ */
 function ResetHours(&$timestamp)
 {
     $hour = date('G', $timestamp);
