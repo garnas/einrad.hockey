@@ -209,6 +209,57 @@ class Challenge {
         return db::escape($daten);
     }
     
+    // Erhalte das Gesamtergebnis für einen einzelnen Spieler
+    public static function get_spieler_results($spieler_id){
+        $sql = "
+        SELECT platz, vorname, nachname, teamname, kilometer
+        FROM (
+            SELECT (@row_number:=@row_number + 1) AS platz, sp.*
+	        FROM ( 
+		        SELECT sp.spieler_id, sp.vorname, sp.nachname, te.teamname, ROUND(SUM(kilometer), 1) AS kilometer
+        		FROM `oeffi_challenge` ch, spieler sp, teams_liga te
+                WHERE ch.spieler_id = sp.spieler_id
+                AND sp.team_id = sp.team_id
+		        AND ch.count = TRUE
+		        AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
+		        AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
+    	        GROUP BY sp.spieler_id
+                ORDER BY kilometer DESC
+	        ) AS sp, (SELECT @row_number:= 0) AS t
+        ) AS neu
+        WHERE spieler_id = '" . $spieler_id . "'
+        ";
+        $result = db::readdb($sql);
+        $daten = mysqli_fetch_assoc($result);
+
+        return db::escape($daten);
+    }
+
+    public static function get_team_results($team_id){
+        $sql = "
+        SELECT platz, teamname, kilometer
+        FROM(
+            SELECT (@row_number:=@row_number + 1) AS platz, te.*
+            FROM(
+	            SELECT te.team_id, te.teamname, ROUND(SUM(kilometer), 1) AS kilometer
+	            FROM `oeffi_challenge` ch, spieler sp, teams_liga te
+	            WHERE ch.spieler_id = sp.spieler_id
+	            AND sp.team_id = te.team_id
+	            AND ch.count = TRUE
+	            AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
+	            AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
+	            GROUP BY te.team_id
+	            ORDER BY kilometer DESC
+            ) AS te, (SELECT @row_number:= 0) AS t
+        ) AS neu
+        WHERE team_id = '" . $team_id . "'
+        ";
+        $result = db::readdb($sql);
+        $daten = mysqli_fetch_assoc($result);
+
+        return db::escape($daten);
+    }
+
     // Schreibe einen Eintrag in die Datenbank
     public static function set_data($spieler, $distanz, $radgroesse, $datum){
         $sql = "
