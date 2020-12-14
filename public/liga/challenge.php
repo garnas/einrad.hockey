@@ -170,4 +170,3 @@ include '../../templates/header.tmp.php';
 </div>
 
 <?php include '../../templates/footer.tmp.php';
-Form::confetti();?>
