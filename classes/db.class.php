@@ -169,18 +169,28 @@ class db
     /**
      * Schreibt alle deklarierten Variablen unter die Navigation in HTML //true=1 false=0
      * Schreibt auch das Dokument und Zeile der Variablen aus
+     * z.B. db::debug(get_defined_vars(), true);
      *
+     * Zu debuggende Variable
      * @param string $input
+     *
+     * Sollen Typen angezeigt werden?
+     * @param bool $types
      */
-    public static function debug($input = "all")
+    public static function debug($input = NULL, $types = false)
     {
-        if ($input === "all") {
+        if ($input === NULL) {
             $input = $GLOBALS;
         }
         $backtrace = debug_backtrace();
-        ob_start();
-        var_dump($input);
-        $string = ob_get_clean();
+        // Show Types?
+        if ($types) {
+            ob_start();
+            var_dump($input);
+            $string = ob_get_clean();
+        } else {
+            $string = print_r($input, true);
+        }
         Form::affirm('<p>File: ' . $backtrace[0]['file'] . '<br>Line: ' . $backtrace[0]['line'] . '</p><pre>' . $string . '</pre>');
     }
 }
