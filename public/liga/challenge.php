@@ -5,12 +5,16 @@
 require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/challenge.logic.php'; //Erstellt Challenge-Objekt nach der Validation
 
-$color[0] = "background-color: #a6b2d8;";
-$color[1] = "background-color: #b8c1e0;";
-$color[2] = "background-color: #cad0e8;";
+$color[0] = "background-color: rgb(189, 148, 107);";
+$color[1] = "background-color: #a6b2d8;";
+$color[2] = "background-color: #b8c1e0;";
+$color[3] = "background-color: #cad0e8;";
 
 // Fügt Confetti-Effekt hinzu
-Form::set_confetti();
+if ($akt_kilometerstand >= $challenge->ziel_kilometer) {
+    Form::set_confetti(40,90,7000); 
+    $color[0] = "background-color: rgb(189, 107, 153);";
+}
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -38,7 +42,7 @@ include '../../templates/header.tmp.php';
 
 <!-- ProgressBar -->
 <div class='w3-row w3-light-grey'>
-    <div class='w3-col w3-card-2' style='max-width: 100%; width: <?=$percent?>%; padding-right: 5px; text-align: right; background-color: rgb(189, 148, 107);'><p style="margin-top: 5px; margin-bottom: 5px;"><?=number_format($value, 1, ',', '.');?> km</p></div>
+    <div class='w3-col w3-card-2' style='max-width: 100%; width: <?=$percent?>%; padding-right: 5px; text-align: right; <?=$color[0] ?? ''?>'><p style="margin-top: 5px; margin-bottom: 5px;"><?=number_format($akt_kilometerstand, 1, ',', '.');?> km</p></div>
 </div>
 
 <p class='w3-text-gray'><span>Berlin</span><span class="w3-right">Sydney</span></p>
@@ -120,7 +124,7 @@ include '../../templates/header.tmp.php';
                 echo "</tr>";
             } else {
                 foreach ($teamliste as $team){?> 
-                    <tr style="<?=$color[$team["platz"] - 1] ?? ''?>">
+                    <tr style="<?=$color[$team["platz"]] ?? ''?>">
                         <td class="w3-center"><?=$team["platz"]?></td>
                         <td style="white-space: nowrap;" class="w3-left-align"><?=$team["teamname"]?></td>
                         <td class="w3-center w3-hide-small"><?=$team["mitglieder"]?></td>
@@ -151,7 +155,7 @@ include '../../templates/header.tmp.php';
                 echo "</tr>";
             } else {            
                 foreach ($alle_spielerliste as $spieler){?> 
-                    <tr style="<?=$color[$spieler["platz"] - 1] ?? ''?>">
+                    <tr style="<?=$color[$spieler["platz"]] ?? ''?>">
                         <td class="w3-center"><?=$spieler["platz"]?></td>
                         <td class="w3-left-align"><?=$spieler['vorname']?></td>
                         <td style="white-space: nowrap;"  class="w3-left-align"><?=$spieler['teamname']?></td>
