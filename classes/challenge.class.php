@@ -120,11 +120,11 @@ class Challenge {
     // Erhalte Ergebnisse der Spieler für das einzelne Team (inkl. Platzierung)
     function get_team_spieler($team_id) {
         $sql = "
-        SELECT platz, vorname, kilometer
+        SELECT spieler_id, platz, vorname, kilometer
         FROM(
 	        SELECT (@row_number:=@row_number + 1) AS platz, sp.*
 	        FROM ( 
-		        SELECT sp.team_id, sp.vorname, ROUND(SUM(kilometer), 1) AS kilometer
+		        SELECT sp.team_id, sp.spieler_id, sp.vorname, ROUND(SUM(kilometer), 1) AS kilometer
 		        FROM `oeffi_challenge` ch, spieler sp, teams_liga t
 		        WHERE ch.spieler_id = sp.spieler_id
 		        AND sp.team_id = t.team_id
