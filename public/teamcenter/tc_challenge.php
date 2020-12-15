@@ -39,6 +39,7 @@ include '../../templates/header.tmp.php';
                     <th class="w3-center">#</th>
                     <th class="w3-center">Teilnehmer/in</th>
                     <th class="w3-center">Kilometer</th>
+                    <th class="w3-center">Urkunde</th>
                 </tr>
                 <?php 
                     $error = True;
@@ -49,6 +50,12 @@ include '../../templates/header.tmp.php';
                                 <td class="w3-center"><?=$spieler["platz"]?></td>
                                 <td class="w3-center"><?=$spieler['vorname']?></td>
                                 <td class="w3-center"><?=number_format($spieler['kilometer'], 1, ',', '.');?></td>
+                                <td>
+                                    <form methid="post">
+                                        <input type="hidden" name="urkunde_spieler_id" value="<?=$spieler['spieler_id']?>">
+                                        <button style='cursor: pointer; border: 0px; background-color: unset;' class="w3-center w3-hover-text-secondary w3-text-gray" type="submit" name="open_spieler_urkunde"><i class="material-icons">description</i></button>
+                                    </form>
+                                </td>
                             </tr>
                 <?php 
                     } //end foreach 
