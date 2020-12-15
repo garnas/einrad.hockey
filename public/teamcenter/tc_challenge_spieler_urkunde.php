@@ -24,6 +24,7 @@ $mpdf = PDF::start_mpdf();
 
 $html = '
 <div style="height: 50mm;">
+    <div style="float: right; width: 45mm;"><img src="../bilder/logo_kurz_small.png"></div>
 </div>
 <div style="font-size: 16px;">
     <div style="margin-bottom: 5mm;">' . $anrede . '</div>
