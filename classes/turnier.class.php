@@ -674,7 +674,7 @@ class Turnier
     function get_spielplan(): string
     {
         if (empty($this->details['link_spielplan'])) {
-            return Config::BASE_LINK . 'liga/spielplan.php?turnier_id=' . $this->turnier_id;
+            return Config::BASE_LINK . '/liga/spielplan.php?turnier_id=' . $this->turnier_id;
         } else {
             return $this->details['link_spielplan'];
         }

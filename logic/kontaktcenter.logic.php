@@ -124,27 +124,19 @@ if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])){
             }
         }
         
-        //Text und Betreff hinzufügen
+        // Text und Betreff hinzufügen
         $mailer->Subject = $betreff;
         $mailer->Body = $text . "\r\n\r\nVersendet aus dem Kontaktcenter von einrad.hockey";
 
-        //Email-versenden
-        if (Config::ACTIVATE_EMAIL){
-            if ($mailer->send()){
-                Form::affirm("Die E-Mail wurde versandt.");
-                unset($_SESSION[$list_id]);
-                header('Location: ' . db::escape($_SERVER['PHP_SELF']));
-                die();
-            }else{
-                Form::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden. Manuell Mail versenden: " . Form::mailto(Config::LAMAIL));
-                Form::error($mailer->ErrorInfo);
-            }
-        }else{ //Debugging
-            if (!($ligacenter ?? false)){
-                $mailer->Password = '***********'; //Passwort verstecken
-                $mailer->ClearAllRecipients(); 
-            }
-            db::debug($mailer);
+        // Email-versenden
+        if (MailBot::send_mail($mailer)){
+            Form::affirm("Die E-Mail wurde versandt.");
+            unset($_SESSION[$list_id]);
+            header('Location: ' . db::escape($_SERVER['PHP_SELF']));
+            die();
+        }else{
+            Form::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden. Manuell Mail versenden: " . Form::mailto(Config::LAMAIL));
+            Form::error($mailer->ErrorInfo);
         }
     }
 }
