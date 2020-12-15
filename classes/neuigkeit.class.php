@@ -32,7 +32,7 @@ class Neuigkeit
      */
     public static function delete_neuigkeit($neuigkeiten_id)
     {
-        //Bilder und Dokumente der Neuigkeit löschen
+        // Bilder und Dokumente der Neuigkeit löschen
         $neuigkeit = self::get_neuigkeiten($neuigkeiten_id);
         $neuigkeit = $neuigkeit[$neuigkeiten_id];
         if (file_exists($neuigkeit['link_jpg'])) {
@@ -42,7 +42,7 @@ class Neuigkeit
             unlink($neuigkeit['link_pdf']);
         }
 
-        //Neuigkeiteintrag aus der DB löschen
+        // Neuigkeiteintrag aus der DB löschen
         $sql = "
                 DELETE FROM `neuigkeiten` 
                 WHERE neuigkeiten_id='$neuigkeiten_id'
@@ -66,7 +66,7 @@ class Neuigkeit
                 UPDATE neuigkeiten 
                 SET titel='$titel', inhalt='$text', link_jpg='$link_jpg', link_pdf='$link_pdf', bild_verlinken = '$bild_verlinken', zeit = zeit 
                 WHERE neuigkeiten_id = '$neuigkeiten_id'
-                "; //zeit=zeit, damit der timestamp nicht erneuert wird
+                "; // zeit=zeit, damit der timestamp nicht erneuert wird
         db::write($sql);
     }
 
@@ -85,7 +85,7 @@ class Neuigkeit
                 WHERE neuigkeiten_id = $neuigkeiten_id 
                 ORDER BY zeit DESC 
                 LIMIT 10
-                "; //Es werden max. 10 Neuigkeiten angezeigt
+                "; // Es werden max. 10 Neuigkeiten angezeigt
         $result = db::read($sql);
         while ($x = mysqli_fetch_assoc($result)) {
             if ($x['eingetragen_von'] != 'Ligaausschuss') {
@@ -93,7 +93,7 @@ class Neuigkeit
             }
             $return[$x['neuigkeiten_id']] = $x;
         }
-        return $return ?? []; //Array //Escape in Funktion, nicht bei Ligaausschuss als Autor
+        return $return ?? []; // Escaping in Funktion, nicht bei Ligaausschuss als Autor
     }
 
     /**
@@ -107,18 +107,18 @@ class Neuigkeit
      */
     public static function upload_image(array $file, string $target_dir = "../uploads/s/", int $quality = 75, int $pix = 1680): false|string
     {
-        //Validierung des hochgeladenen Bildes
+        // Validierung des hochgeladenen Bildes
         if (self::check_error_image($file)) {
             return false;
         }
-        //Gibt den Pfad mit neuem unix-time Namen zurück, wo die hochgeladene Datei gespeichert werden soll.
+        // Gibt den Pfad mit neuem unix-time Namen zurück, wo die hochgeladene Datei gespeichert werden soll.
         $file_type = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        //Speicherpfad des Uploads mit neuem Dateinamen
+        // Speicherpfad des Uploads mit neuem Dateinamen
         $file_dir = $target_dir . date("Y_m_d_H_i_s") . "." . $file_type;
 
-        //Datei wird vom temporären Ordner in den richtigen Ordner verschoben
+        // Datei wird vom temporären Ordner in den richtigen Ordner verschoben
         if (move_uploaded_file($file["tmp_name"], $file_dir)) {
-            //Bild wird kompressiert //Sehr hoher Memory Bedarf...
+            // Bild wird kompressiert //Sehr hoher Memory Bedarf...
             self::compress_image($file_dir, $quality, $pix);
         } else {
             Form::error("Bild konnte nicht hochgeladen werden.");
@@ -136,16 +136,16 @@ class Neuigkeit
      */
     public static function upload_pdf(array $file, string $target_dir = "../uploads/s/"): false|string
     {
-        //Validierung des hochgeladenen Bildes
+        // Validierung des hochgeladenen Bildes
         if (!self::check_pdf($file)) {
             return false;
         }
-        //Gibt den Pfad mit neuem unix-time Namen zurück, wo die hochgeladene Datei gespeichert werden soll.
+        // Gibt den Pfad mit neuem unix-time Namen zurück, wo die hochgeladene Datei gespeichert werden soll.
         $file_type = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        //Speicherpfad des Uploads mit neuem Dateinamen
+        // Speicherpfad des Uploads mit neuem Dateinamen
         $file_dir = $target_dir . date("Y_m_d_H_i_s") . "." . $file_type;
 
-        //Datei wird vom temporären Ordner in den richtigen Ordner verschoben
+        // Datei wird vom temporären Ordner in den richtigen Ordner verschoben
         if (!move_uploaded_file($file["tmp_name"], $file_dir)) {
             Form::error("PDF konnte nicht hochgeladen werden.");
             return false;
@@ -217,7 +217,7 @@ class Neuigkeit
     {
         $imageFileType = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 
-        //Test auf Filegröße
+        // Test auf Filegröße
         if ($file["size"] > 12582912) {
             Form::error("Das Bild ist mit über 11,9 Megabyte zu groß. Der Arbeitsspeicher des Servers reicht nicht aus, um es zu kompressieren");
             return true;
@@ -228,14 +228,14 @@ class Neuigkeit
             return true;
         }
 
-        //Test ob es ein fake image ist
+        // Test ob es ein fake image ist
         $check = getimagesize($file["tmp_name"]);
         if ($check == false) {
             Form::error("Die Datei konnte nicht als Bild identifiziert werden.");
             return true;
         }
 
-        //Test auf richtigen Dateityp
+        // Test auf richtigen Dateityp
         if (!in_array($imageFileType, ["jpg", "jpeg", "png", "gif"])) {
             Form::error("Für das Bild können nur die Formate JPG, JPEG, PNG & GIF verwendet werden.");
             return true;
@@ -243,8 +243,6 @@ class Neuigkeit
 
         return false;
     }
-
-    //
 
     /**
      * Test ob es sich um valides PDF handelt
@@ -259,14 +257,14 @@ class Neuigkeit
             return false;
         }
 
-        //Test auf Filegröße
+        // Test auf Filegröße
         if ($file["size"] > 3100000) {
             Form::error("Das PDF-Dokument darf nicht größer als drei Megabyte sein.");
             return false;
         }
 
         $pdfFileType = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        //Test auf richtigen Dateityp
+        // Test auf richtigen Dateityp
         if ($pdfFileType != "pdf" && $pdfFileType != "xlsx") {
             Form::error("Ungültiger Dateityp");
             return false;
@@ -283,8 +281,8 @@ class Neuigkeit
      */
     public static function get_statistik_turniere(int $saison = Config::SAISON): array
     {
-        //Findet die drei Teams, welche die meisten Turniere bisher gespielt haben
-        //Sortiert nach Zufall bei gleichstand
+        // Findet die drei Teams, welche die meisten Turniere bisher gespielt haben
+        // Sortiert nach Zufall bei gleichstand
         $sql = "
                 SELECT teams_liga.teamname, count(*) as gespielt 
                 FROM turniere_liste 
@@ -310,12 +308,13 @@ class Neuigkeit
 
     /**
      * Max Tore Statistik für das Inforboard
+     *
      * @param int $saison
      * @return array
      */
     public static function get_statistik_tore(int $saison = Config::SAISON): array
     {
-        //Tore Team A
+        // Tore Team A
         $sqla = "
                 SELECT sum(tore_a) AS tore, team_id_a
                 FROM spiele
@@ -330,7 +329,7 @@ class Neuigkeit
         while ($x = mysqli_fetch_assoc($result)) {
             $tore[$x['team_id_a']] = $x['tore'];
         }
-        //Addition der Tore Team B
+        // Addition der Tore Team B
         $sqlb = "
                 SELECT sum(tore_b) AS tore, team_id_b
                 FROM spiele
