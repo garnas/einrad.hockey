@@ -35,7 +35,10 @@ if (isset($_POST['eintragen'])){
         Form::error("Bitte Formular vollständig ausfüllen");
         $error = true;
     }
-
+    if (LigaKarte::check_gesuch_for_plz_exists($_POST['plz'])){
+        Form::error("Es existiert bereits ein Teamgesuch für diese PLZ, bitte wähle eine andere PLZ in der Nähe.");
+        $error = true;
+    }
     $lonlat = LigaKarte::plz_to_lonlat($_POST['plz']);
     if(empty($lonlat)){
         Form::error("Deine eingegebene Postleitzahl wurde nicht gefunden.");
@@ -68,7 +71,7 @@ include '../../templates/header.tmp.php';
 </div>
 
 <h2 class='w3-border-bottom w3-text-primary'>Mitspieler suchen</h2>
-<p>Du kannst einen Eintrag in die Ligakarte erstellen, um Einradhockeyspieler in deiner Umgebung zu finden. Der Eintrag wird ein Jahr lang angezeigt.<p>
+<p>Du kannst einen Eintrag in die Ligakarte erstellen, um Einradhockeyspieler in deiner Umgebung zu finden. Der Eintrag wird ein Jahr lang angezeigt.</p>
 <button onclick="document.getElementById('gesuch_formular').style.display='block'" class="w3-button w3-tertiary">Mitspielergesuch eintragen</button>
 <div id="gesuch_formular" class="w3-modal">
   <form method="post" class="w3-card-4 w3-panel w3-round w3-container w3-modal-content" autocomplete="off" style="max-width: 400px"
