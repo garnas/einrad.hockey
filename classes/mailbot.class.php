@@ -114,7 +114,7 @@ class MailBot {
                         . "<br><br>Bis zum nächsten Mal"
                         . "<br>Eure Einradhockeyliga</html>";
                     $akt_kontakt = new Kontakt ($team_id);
-                    $emails = $akt_kontakt->get_emails_info();
+                    $emails = $akt_kontakt->get_emails('info');
                     self::add_mail($betreff, $inhalt, $emails);
                 }
             }
@@ -131,7 +131,7 @@ class MailBot {
             . "<br><br>Bis zum nächsten Mal"
             . "<br>Eure Einradhockeyliga</html>";
         $akt_kontakt = new Kontakt ($team_id);
-        $emails = $akt_kontakt->get_emails_info();
+        $emails = $akt_kontakt->get_emails('info');
         self::add_mail($betreff, $inhalt, $emails);
     }
     //Erstellt eine Mail in der Datenbank an alle vom Losen betroffenen Teams
@@ -162,7 +162,7 @@ class MailBot {
                             . "<br>Eure Einradhockeyliga<html>";
                      }
                     $akt_kontakt = new Kontakt ($team_id);
-                    $emails = $akt_kontakt->get_emails_info();
+                    $emails = $akt_kontakt->get_emails('info');
                     self::add_mail($betreff, $inhalt, $emails);
                 }
             }
@@ -184,7 +184,7 @@ class MailBot {
                         . "<br><br>Bis zum nächsten Mal"
                         . "<br>Eure Einradhockeyliga</html>";
                     $akt_kontakt = new Kontakt ($team_id);
-                    $emails = $akt_kontakt->get_emails_info();
+                    $emails = $akt_kontakt->get_emails('info');
                     self::add_mail($betreff, $inhalt, $emails);
                 }
             }
@@ -202,7 +202,7 @@ class MailBot {
                 . "<br><br>Bis zum nächsten Mal"
                 . "<br>Eure Einradhockeyliga</html>";
             $akt_kontakt = new Kontakt ($team_id);
-            $emails = $akt_kontakt->get_emails_info();
+            $emails = $akt_kontakt->get_emails('info');
             self::add_mail($betreff, $inhalt, $emails);
         }
     }

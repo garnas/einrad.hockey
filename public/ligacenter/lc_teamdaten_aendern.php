@@ -15,7 +15,7 @@ if (empty($daten)) {
   Form::error("Team wurde nicht gefunden");
 }
 
-$emails = $akt_team_kontakte->get_all_emails();
+$emails = $akt_team_kontakte->get_emails_with_details();
 
 $change = false; // Wenn sich in teamdaten_aendern.logic etwas ändert, wird $change auf true gesetzt
 require_once '../../logic/teamdaten_aendern.logic.php'; //Formularverarbeitung
@@ -27,7 +27,7 @@ require_once '../../logic/teamdaten_aendern_la.logic.php'; //Formularverarbeitun
 //Damit aktuelle Änderungen dargestellt werden.
 if ($change){
   $daten = $akt_team ->get_teamdaten();
-  $emails = $akt_team_kontakte->get_all_emails();
+  $emails = $akt_team_kontakte->get_emails_with_details();
 }
 
 /////////////////////////////////////////////////////////////////////////////

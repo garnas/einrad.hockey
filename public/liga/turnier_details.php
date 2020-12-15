@@ -17,16 +17,12 @@ if (empty($daten)){
     die();
 }
 
-$emails = $akt_kontakt->get_emails_public();
-$emails_string = '';
-foreach ($emails as $email){
-    $emails_string .= $email . ',';
-}
-$daten['email'] = substr($emails_string, 0, -1);
+// Email-Adressen hinzufügen
+$daten['email'] = implode(',', $akt_kontakt->get_emails('public'));
 
 $liste = $akt_turnier->get_anmeldungen(); //Anmeldungen für dieses Turnier Form: $liste['warte'] = Array([0] => Array['teamname','team_id','tblock', etc])
 
-//Parsing
+// Parsing
 if(in_array($daten['art'],['I','II','III'])){
     $daten['loszeit'] = strftime("%A, %d.%m.%Y %H:%M&nbsp;Uhr", Ligabot::time_offen_melde($daten['datum'])-1);
 }
@@ -121,7 +117,7 @@ include '../../templates/header.tmp.php';
                 <p>
                     <i>Ausrichter:</i>
                     <br>
-                    <?=Form::mailto($daten['email'], $daten['teamname'])?>
+                    <?=Form::mailto($daten['email'], $daten['teamname'])  ?: $daten['teamname']?>
                 </p> 
                 <p><i>Organisator:</i><br><?=$daten['organisator']?></p>
                 <p><i>Handy:</i><br><?=Form::link('tel:' . str_replace(' ', '', $daten['handy']), "<i class='material-icons'>smartphone</i>" . $daten['handy'])?></a></p>

@@ -147,6 +147,9 @@ class Form
      */
     public static function link(string $link, string $bezeichnung = '', bool $extern = false): string
     {
+        if (empty($link)){
+            return '';
+        }
         if (empty($bezeichnung)) {
             $bezeichnung = $link;
         }
@@ -177,13 +180,16 @@ class Form
     /**
      * Erststellt anklickbare Email-Adressen
      *
-     * @param string $email
-     * Wenn $name nicht übergeben wird ist, dann wird $email als Bezeichner übernommen
-     * @param string|null $name
+     * @param string|array $email Wenn $email ein Array ist, wird es in einen mit "," getrennten String umgewandelt
+     *                            Wenn $email leer ist, so wird ein leerer String zurückgegeben
+     * @param string|null $name Wenn $name nicht übergeben wird ist, dann wird $email als Bezeichner übernommen
      * @return string
      */
-    public static function mailto(string $email, string $name = NULL): string
+    public static function mailto(string|array $email, string $name = NULL): string
     {
+        if (empty ($email)){
+            return '';
+        }
         if (is_array($email)) {
             $email = implode(',', $email);
         }
