@@ -478,7 +478,6 @@ class Turnier
                 AS freie_plaetze";
         $result = db::read($sql);
         $return = mysqli_fetch_assoc($result);
-        db::debug($return);
         return db::escape($return['freie_plaetze']);
     }
 
