@@ -89,6 +89,22 @@ if (isset($_POST['update_challenge']) && $teamcenter) {
     Form::error("Eintrag konnte nicht entfernt werden");
 }
 
+// Lädt die Urkunde für den ausgewählten Spieler
+if (isset($_POST['open_spieler_urkunde']) && $teamcenter) {
+    $spieler_id = $_POST['urkunde_spieler_id'];
+
+    header('Location: tc_challenge_spieler_urkunde.php?spieler_id=' . $spieler_id);
+    die();
+
+    // Überprüfung, ob die SpielerID auch zum Team gehört
+    foreach ($team_spielerliste as $eintrag) {
+        	if ($eintrag['spieler_id'] == $spieler_id) {
+                header('Location: tc_challenge_spieler_urkunde.php?spieler_id=' . $spieler_id);
+                die();
+        }
+    }
+}
+
 // Breite für die ProgressBar
 $akt_kilometerstand = $challenge->get_stand();
 $percent = round($akt_kilometerstand / $challenge->ziel_kilometer * 100);
