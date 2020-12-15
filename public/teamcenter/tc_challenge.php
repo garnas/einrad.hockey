@@ -31,7 +31,7 @@ include '../../templates/header.tmp.php';
 <div class="w3-row-padding w3-stretch">
     <div class="w3-twothird">
         <p>
-            <a href='../teamcenter/tc_challenge_eintraege.php' class="w3-button w3-secondary w3-block w3-card-2">Eintrag hinzufügen/entfernen</a>
+            <a href='../teamcenter/tc_challenge_team_urkunde.php?team_id=<?=$team_id?>' class="w3-button w3-secondary w3-block w3-card-2"><i class="material-icons">description</i> Teamurkunde herunterladen</a>
         </p>
         <div class="w3-panel w3-responsive w3-card-4" style="padding:0;">
             <table class="w3-table w3-striped">
