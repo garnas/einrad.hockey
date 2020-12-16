@@ -9,7 +9,7 @@ if(empty($spielplan->akt_turnier->details)){
     die();
 }
 //Nur Relevant für Ligacenter oder Teamcenter
-if (isset($ligacenter) or isset($teamcenter)){
+if ($ligacenter or $teamcenter){
     //Besteht die Berechtigung das Turnier zu bearbeiten? 
     if (($_SESSION['team_id'] ?? false) != $spielplan->akt_turnier->details['ausrichter'] && !$ligacenter){
         Form::error("Nur der Ausrichter kann Spielergebnisse eintragen");
