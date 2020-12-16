@@ -23,14 +23,15 @@ class Spieler
     /**
      * Fügt einen neuen Spieler in die Datenbank ein
      *
-     * @param $vorname
-     * @param $nachname
-     * @param $jahrgang
-     * @param $geschlecht
-     * @param $team_id
+     * @param string $vorname
+     * @param string $nachname
+     * @param string $jahrgang
+     * @param string $geschlecht
+     * @param int $team_id
      * @return bool
      */
-    public static function create_new_spieler($vorname, $nachname, $jahrgang, $geschlecht, $team_id): bool
+    public static function create_new_spieler(string $vorname, string $nachname, string $jahrgang, string $geschlecht,
+                                              int $team_id): bool
     {
         $saison = Config::SAISON;
         //Es wird getestet, ob der Spieler bereits existiert:
@@ -46,8 +47,8 @@ class Spieler
         $result = mysqli_fetch_assoc($result);
         $spieler_id = $result['spieler_id'] ?? 0;
 
-        if ($spieler_id > 0) { //Testen ob der Spieler schon existiert
-            if ($result['letzte_saison'] < $saison) { //Testet ob der Spieler aus der Datenbank übernommen werden kann
+        if ($spieler_id > 0) { // Testen ob der Spieler schon existiert
+            if ($result['letzte_saison'] < $saison) { // Testet ob der Spieler aus der Datenbank übernommen werden kann
                 $sql = "
                         UPDATE spieler 
                         SET team_id = '$team_id', letzte_saison = ' $saison' 
@@ -61,7 +62,7 @@ class Spieler
                 return false;
             }
         } else {
-            //Spieler wird in Spieler-Datenbank eingetragen
+            // Spieler wird in Spieler-Datenbank eingetragen
             $sql = "
                     INSERT INTO spieler(vorname, nachname, jahrgang, geschlecht, team_id, letzte_saison) 
                     VALUES ('$vorname','$nachname','$jahrgang','$geschlecht','$team_id','" . Config::SAISON . "')
@@ -105,21 +106,21 @@ class Spieler
         $result = db::read($sql);
         while ($x = mysqli_fetch_assoc($result)) {
             if (strtotime($x['zeit']) < 0) {
-                $x['zeit'] = '--'; //Diese Funktion wurde erst am später hinzugefügt.
+                $x['zeit'] = '--'; // Diese Funktion wurde erst am später hinzugefügt.
             }
             $return[$x['spieler_id']] = $x;
 
         }
-        return db::escape($return ?? []); //Array
+        return db::escape($return ?? []); // Array
     }
 
     /**
      * Alte Teamkadereinträge für die Rückmeldung von Spielern
      *
-     * @param $team_id
+     * @param int $team_id
      * @return array
      */
-    public static function get_teamkader_vorsaison($team_id): array
+    public static function get_teamkader_vorsaison(int $team_id): array
     {
         $kader_vorsaison = self::get_teamkader($team_id, Config::SAISON - 1);
         $kader_vorvorsaison = self::get_teamkader($team_id, Config::SAISON - 2); // Ausnahme für die Saison 20/21, da viele Teams ihre Spieler in der Corona_Saison nicht zurückgemeldet haben
