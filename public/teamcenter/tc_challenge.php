@@ -9,7 +9,6 @@ require_once '../../logic/challenge.logic.php';
 $team_id = $_SESSION["team_id"];
 $kader = Spieler::get_teamkader($team_id);
 
-
 // Feststellung des aktuellen Teamplatzes
 $platz = "-";
 $kilometer = "-";
@@ -31,7 +30,7 @@ include '../../templates/header.tmp.php';
 <div class="w3-row-padding w3-stretch">
     <div class="w3-twothird">
         <p>
-            <a href='../teamcenter/tc_challenge_team_urkunde.php?team_id=<?=$team_id?>' class="w3-button w3-secondary w3-block w3-card-2"><i class="material-icons">description</i> Teamurkunde herunterladen</a>
+            <a href='../teamcenter/tc_challenge_team_urkunde.php?team_id=<?=$team_id?>' target="_blank" class="w3-button w3-secondary w3-block w3-card-2"><i class="material-icons">description</i> Teamurkunde herunterladen</a>
         </p>
         <div class="w3-panel w3-responsive w3-card-4" style="padding:0;">
             <table class="w3-table w3-striped">
@@ -50,11 +49,8 @@ include '../../templates/header.tmp.php';
                                 <td class="w3-center"><?=$spieler["platz"]?></td>
                                 <td class="w3-center"><?=$spieler['vorname']?></td>
                                 <td class="w3-center"><?=number_format($spieler['kilometer'], 1, ',', '.');?></td>
-                                <td>
-                                    <form method="post">
-                                        <input type="hidden" name="urkunde_spieler_id" value="<?=$spieler['spieler_id']?>">
-                                        <button style='cursor: pointer; border: 0px; background-color: unset;' class="w3-center w3-hover-text-secondary w3-text-gray" type="submit" name="open_spieler_urkunde"><i class="material-icons">description</i></button>
-                                    </form>
+                                <td class="w3-center">
+                                    <a href='../teamcenter/tc_challenge_spieler_urkunde.php?spieler_id=<?=$spieler["spieler_id"]?>' target="_blank" class="no w3-hover-text-secondary"><i class="material-icons">description</i></a>
                                 </td>
                             </tr>
                 <?php 

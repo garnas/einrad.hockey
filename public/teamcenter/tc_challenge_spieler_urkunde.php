@@ -3,7 +3,11 @@ require_once '../../logic/first.logic.php'; // Autoloader und Session
 require_once '../../logic/session_team.logic.php'; //Auth
 require_once '../../logic/challenge.logic.php'; // Logic der Challenge
 
-$spieler_id = $_GET['spieler_id'];
+$spieler_id = $_GET['spieler_id'] ?? 0;
+
+// Überprüfung, ob die SpielerID auch zum Team gehört
+if (!in_array($_GET['spieler_id'], array_column($team_spielerliste, 'spieler_id'))) die("Ungültige Spieler-Id");
+
 $urkunden_daten = $challenge->get_spieler_result($spieler_id);
 
 if ($urkunden_daten['geschlecht'] == "m") {

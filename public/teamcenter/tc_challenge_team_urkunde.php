@@ -3,7 +3,10 @@ require_once '../../logic/first.logic.php'; // Autoloader und Session
 require_once '../../logic/session_team.logic.php'; //Auth
 require_once '../../logic/challenge.logic.php'; // Logic der Challenge
 
-$team_id = $_GET['team_id'];
+$team_id = $_GET['team_id'] ?? 0;
+
+if ($_GET['team_id'] != $_SESSION['team_id']) die("Ungültige Team-ID"); // Keine Urkunde für falsche Team-IDs
+
 $urkunden_daten = $challenge->get_team_result($team_id);
 
 // Css-Code als String
