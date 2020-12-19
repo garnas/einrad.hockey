@@ -58,7 +58,7 @@ $html = '
 $mpdf->SetTitle($urkunden_daten['teamname'] . ' - Urkunde km-Challenge 2020');
 
 // Einfügen des Wasserzeichens
-$mpdf->SetWatermarkImage('../bilder/logo_kurz_small.png', 0.2, 45, 'F');
+$mpdf->SetWatermarkImage('../bilder/logo_kurz_small.jpg', 0.1, 45, 'F');
 $mpdf->showWatermarkImage = true;
 
 // Einstellen der CSS- und HTML-Strings für die Erstellung des Dokuments
