@@ -16,12 +16,6 @@ if ($urkunden_daten['geschlecht'] == "m") {
     $anrede = "Die Spielerin";
 }
 
-// Css-Code als String
-// ob_start();
-// Es wurde eine eigene Css-Datei für die PDF-Erstellung erstellt, da der Css-Code nicht immer kompatibel mit mpdf war
-//include "../css/pdf.css.php";
-//$css_style = ob_get_clean();
-
 $css_style = '
 .standard {
     position: absolute;
@@ -39,6 +33,7 @@ $css_style = '
 // Start der PDF Erstellung
 $mpdf = PDF::start_mpdf();
 
+// Darstellung der Elemente auf der Seite
 $html = '
 <div class="standard rahmen" style="top:       0mm; left:  0mm; height: 5mm;   width: 100%;    "></div>
 <div class="standard rahmen" style="bottom:    0mm; left:  0mm; height: 5mm;   width: 100%;    "></div>
@@ -66,13 +61,17 @@ $html = '
 </div>
 ';
 
-// PDF Bearbeitung
+// Titel des Reiters im Browser
 $mpdf->SetTitle($urkunden_daten['vorname'] . ' ' . $urkunden_daten['nachname'] . ' - Urkunde km-Challenge 2020');
+
+// Einfügen des Wasserzeichens
 $mpdf->SetWatermarkImage('../bilder/logo_kurz_small.png', 0.2, 45, 'F');
 $mpdf->showWatermarkImage = true;
+
+// Einstellen der CSS- und HTML-Strings für die Erstellung des Dokuments
 $mpdf->WriteHTML($css_style,\Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
 
-// Output - Option 'D' für Download, 'I' für im Browser anzeigen
+// Output des Dokuments
 $mpdf->Output('Urkunde_' . $urkunden_daten['vorname'] . '_' . $urkunden_daten['nachname'] . '.pdf', 'I');
 ?>
