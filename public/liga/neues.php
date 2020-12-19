@@ -93,7 +93,7 @@ include '../../templates/header.tmp.php';
             <p class="w3-text-grey w3-small w3-border-top w3-border-grey"></p>
             <p>Sammelt Kilometer für euer Team und legt die längste Strecke zurück.</p>
             <!-- Countdown -->
-            <a href='challenge.php' class='no'><?=Form::countdown('2020-12-20 24:00')?></a>
+            <a href='challenge.php' class='no'><?=Form::countdown('2020-12-20 20:00')?></a>
             <p>
                 <a href='../teamcenter/tc_challenge.php' class="w3-button w3-primary">Kilometer eintragen!</a>
             </p>
