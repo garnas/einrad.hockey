@@ -25,8 +25,14 @@ if ($urkunden_daten['geschlecht'] == "m") {
 $css_style = '
 .standard {
     position: absolute;
-    font-size: 20px;
+    font-size: 16px;
     font-family: Verdana;
+    text-align: center;
+    color: #6b7ebd;
+}
+
+.rahmen {
+    background-color: #6b7ebd;
 }
 ';
 
@@ -34,34 +40,36 @@ $css_style = '
 $mpdf = PDF::start_mpdf();
 
 $html = '
-<div class="standard" style="top: 25mm; left: 25mm; width: 5mm; height: 250mm; background-color: #6b7ebd;"></div>
-<div class="standard" style="top: 50mm; left: 35mm;">
+<div class="standard rahmen" style="top:       0mm; left:  0mm; height: 5mm;   width: 100%;    "></div>
+<div class="standard rahmen" style="bottom:    0mm; left:  0mm; height: 5mm;   width: 100%;    "></div>
+<div class="standard rahmen" style="top:       0mm; left:  0mm; height: 100%;  width: 5mm;     "></div>
+<div class="standard rahmen" style="top:       0mm; right: 0mm; height: 100%;  width: 5mm;     "></div>
+
+<div class="standard" style="top: 40mm; left: 0mm; width: 100%;">
     <div style="">' . $anrede . '</div>
-    <div style="padding-bottom: 15mm;">
-        <div style="font-size: 36px;">' . $urkunden_daten['vorname'] . ' ' . $urkunden_daten['nachname'] . '</div>
-        <div style="">' . $urkunden_daten['teamname'] . '</div>
-    </div>
-    <div style="">erreichte bei der</div>
-    <div style="padding-bottom: 15mm;">
-        <div style="font-size: 36px;">km-Challenge 2020</div>
-        <div style="">13.11.2020 - 20.12.2020</div>
-    </div>
-    <div style="">mit</div>
-    <div style="padding-bottom: 15mm; font-size: 36px;">' . number_format($urkunden_daten['kilometer'], 1, ',', '.') . ' km' . '</div>
+    <div style="font-size: 48px; padding-bottom: 25mm;">' . $urkunden_daten['vorname'] . ' ' . $urkunden_daten['nachname'] . '</div>
+    <div style="">erreichte bei der km-Challenge 2020</div>
+    <div style="">vom 13.11.2020 - 20.12.2020 mit</div>
+    <div style="font-size: 48px; padding-bottom: 35mm;">' . number_format($urkunden_daten['kilometer'], 1, ',', '.') . 'km' . '</div>
     <div style="">den</div>
-    <div style="font-size: 36px;">' . $urkunden_daten['platz'] . '. Platz' . '</div>
+    <div style="font-size: 48px;">' . $urkunden_daten['platz'] . '. Platz' . '</div>
 </div>
-<div class="standard" style="top: 215mm; left: 35mm; width: 90mm; border-top: 1px solid black;">
-    <div style="font-size: 16px; color: #c1c1c1; padding-top: 3mm;">Philipp Gross</div>
-    <div style="font-size: 16px; color: #c1c1c1;">Mitglied des Ligaausschusses</div>
+
+<div class="standard" style="top: 240mm; left: 20mm; text-align: left; padding-top: 12px; padding-right: 10mm; font-size: 12px; border-top: 2px solid #6b7ebd;">
+    <div style="">Philipp Gross</div>
+    <div style="">stellv. für den Ligaausschuss</div>
 </div>
-<div class="standard" style="bottom: 22mm; right: 25mm; width: 40mm;"><img src="../bilder/logo_kurz_small.png"></div>
-<div class="standard" style="bottom: 22mm; left: 35mm; width: 40mm; font-size: 16px; color: #c1c1c1;">21.12.2020</div>
-<div class="standard" style="bottom: 22mm; left: 75mm; font-size: 16px; color: #c1c1c1;">Deutsche Einradhockeyliga</div>
+
+<div class="standard" style="top: 240mm; right: 20mm; text-align: right; padding-top: 15px; font-size: 12px;">
+    <div style="">21.12.2020</div>
+    <div style="">Deutsche Einradhockeyliga</div>
+</div>
 ';
 
 // PDF Bearbeitung
 $mpdf->SetTitle($urkunden_daten['vorname'] . ' ' . $urkunden_daten['nachname'] . ' - Urkunde km-Challenge 2020');
+$mpdf->SetWatermarkImage('../bilder/logo_kurz_small.png', 0.2, 45, 'F');
+$mpdf->showWatermarkImage = true;
 $mpdf->WriteHTML($css_style,\Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
 
