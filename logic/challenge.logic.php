@@ -1,6 +1,9 @@
 <?php
 $challenge = new Challenge();
 
+$abschluss = $challenge->challenge_end . ' ' . $challenge->challenge_end_time;
+$uhrzeit = date('Y-m-d H:i:s');
+
 // Einträge für das Teamcenter-Dashboard. Diese werden nur "gefüllt", wenn eine TC-Session vorhanden ist.
 if(isset($_SESSION['team_id'])) {
     $team_id = $_SESSION["team_id"];

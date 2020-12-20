@@ -36,7 +36,9 @@ include '../../templates/header.tmp.php';
     Hier habt ihr die Möglichkeit die geradelten Kilometer einzutragen. Gewertet werden eure Einträge als Einzelperson, aber immer auch im Team.
     Also ran ans Rad und viel Spaß beim Sammeln.
 </p>
-<a href='../teamcenter/tc_challenge.php' class="w3-button w3-secondary">Kilometer eintragen!</a>
+<?php if ($uhrzeit <= $abschluss) { ?>
+    <a href='../teamcenter/tc_challenge.php' class="w3-button w3-secondary">Kilometer eintragen!</a>
+<?php } ?>
 
 <h3 class="w3-text-secondary w3-margin-top">Gesamt-km</h3>
 <p class="w3-text-gray"><?= $ziel_text ?></p>
