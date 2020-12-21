@@ -45,7 +45,7 @@ $html = '
     <div style="font-size: 48px; padding-bottom: 25mm;">' . $urkunden_daten['vorname'] . ' ' . $urkunden_daten['nachname'] . '</div>
     <div style="">erreichte bei der km-Challenge 2020</div>
     <div style="">vom 13.11.2020 - 20.12.2020 mit</div>
-    <div style="font-size: 48px; padding-bottom: 35mm;">' . number_format($urkunden_daten['kilometer'], 1, ',', '.') . 'km' . '</div>
+    <div style="font-size: 48px; padding-bottom: 35mm;">' . number_format($urkunden_daten['kilometer'], 1, ',', '.') . ' km' . '</div>
     <div style="">den</div>
     <div style="font-size: 48px;">' . $urkunden_daten['platz'] . '. Platz' . '</div>
 </div>
