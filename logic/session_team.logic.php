@@ -25,5 +25,3 @@ if (!isset($no_redirect) && $daten['ligavertreter'] == ''){
 $titel = $_SESSION['teamname'];
 $ligacenter = false; //Man kann sich gleichzeitig im Liga- und Teamcenter anmelden
 $teamcenter = true; //Hiermit erkennt man, ob man sich gerade im Team- oder Ligacenter befindet, da Session-Variablen seitenübergreifend existieren
-
-Form::attention("Das Eintragen von Strecken für die km-Challenge ist noch bis zum 20.12 um 20:00 Uhr möglich.");
