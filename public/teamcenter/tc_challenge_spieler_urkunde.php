@@ -51,7 +51,7 @@ $html = '
 </div>
 
 <div class="standard" style="top: 231mm; left: 20mm;">
-    <img src="../bilder/unterschrift.png" style="height: 48px";>
+    <img src="../bilder/unterschrift.png" style="height: 48px;">
 </div>
 <div class="standard" style="top: 240mm; left: 20mm; text-align: left; padding-top: 12px; padding-right: 10mm; font-size: 12px; border-top: 2px solid #6b7ebd;">
     <div style="">Philipp Gross</div>

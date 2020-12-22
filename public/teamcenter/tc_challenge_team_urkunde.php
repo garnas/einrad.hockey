@@ -44,7 +44,7 @@ $html = '
 </div>
 
 <div class="standard" style="top: 231mm; left: 20mm;">
-    <img src="../bilder/unterschrift.png" style="height: 48px";>
+    <img src="../bilder/unterschrift.png" style="height: 48px;">
 </div>
 <div class="standard" style="top: 240mm; left: 20mm; text-align: left; padding-top: 12px; padding-right: 10mm; font-size: 12px; border-top: 2px solid #6b7ebd;">
     <div style="">Philipp Gross</div>
@@ -57,6 +57,7 @@ $html = '
 </div>
 ';
 
+echo "<style>".$css_style."</style>". $html;
 // Titel des Reiters im Browser
 $mpdf->SetTitle($urkunden_daten['teamname'] . ' - Urkunde km-Challenge 2020');
 
@@ -69,5 +70,5 @@ $mpdf->WriteHTML($css_style,\Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
 
 // Output des Dokuments
-$mpdf->Output('Urkunde_' . $urkunden_daten['teamname'] . '.pdf', 'I');
+#$mpdf->Output('Urkunde_' . $urkunden_daten['teamname'] . '.pdf', 'I');
 ?>
