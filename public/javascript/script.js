@@ -110,7 +110,7 @@ var x = setInterval(function() {
   var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   var seconds = Math.floor((distance % (1000 * 60)) / 1000);
   if (days <= 0){
-    days = ''
+    days = '00'
   }else if (days < 10){
     days = "0" + days
   }

@@ -1,10 +1,11 @@
 <?php
 
-class Challenge
-{
-
-    public string $challenge_start = "13.11.2020";
-    public string $challenge_end = "20.12.2020";
+class Challenge {
+    
+    public $challenge_start = "13.11.2020";
+    public $challenge_end = "20.12.2020";
+    public $challenge_end_time = "20:00:00";
+    public $ziel_kilometer = 16098.4;
 
     // Erhalte den aktuellen km-Stand
 
@@ -38,12 +39,13 @@ class Challenge
         WHERE count = TRUE
         AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
         AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
+        AND timestamp <= '" . date("Y-m-d", strtotime($this->challenge_end)) . " " . $this->challenge_end_time . "'
         ";
 
         $result = db::read($sql);
         $daten = mysqli_fetch_assoc($result);
 
-        return db::escape($daten);
+        return db::escape($daten['kilometer']);
     }
 
     // Erhalte die einzelnen Einträge
@@ -57,6 +59,7 @@ class Challenge
         AND sp.team_id = t.team_id
         AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
         AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
+        AND timestamp <= '" . date("Y-m-d", strtotime($this->challenge_end)) . " " . $this->challenge_end_time . "'
         AND ch.count = TRUE
         GROUP BY teamname
         ORDER BY kilometer DESC, RAND()
@@ -85,6 +88,7 @@ class Challenge
         AND sp.team_id = t.team_id
         AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
         AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
+        AND timestamp <= '" . date("Y-m-d", strtotime($this->challenge_end)) . " " . $this->challenge_end_time . "'
         AND ch.count = TRUE
         GROUP BY sp.spieler_id
         ORDER BY kilometer DESC, RAND()
@@ -112,6 +116,7 @@ class Challenge
         WHERE ch.spieler_id = sp.spieler_id
         AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
         AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
+        AND timestamp <= '" . date("Y-m-d", strtotime($this->challenge_end)) . " " . $this->challenge_end_time . "'
         AND ch.count = TRUE
         ORDER BY ch.datum DESC, ch.timestamp DESC
         ";
@@ -135,6 +140,7 @@ class Challenge
         WHERE ch.spieler_id = sp.spieler_id
         AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
         AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
+        AND timestamp <= '" . date("Y-m-d", strtotime($this->challenge_end)) . " " . $this->challenge_end_time . "'
         AND sp.team_id = '" . $team_id . "'
         AND ch.count = TRUE
         ORDER BY ch.datum DESC, ch.timestamp DESC
@@ -165,6 +171,7 @@ class Challenge
                 AND ch.count = TRUE
                 AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
                 AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
+                AND timestamp <= '" . date("Y-m-d", strtotime($this->challenge_end)) . " " . $this->challenge_end_time . "'
 		        GROUP BY sp.spieler_id 
 		        ORDER BY kilometer DESC
 		        ) AS sp, (SELECT @row_number:= 0) AS t
@@ -194,6 +201,7 @@ class Challenge
         AND ch.count = TRUE
         AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
         AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
+        AND timestamp <= '" . date("Y-m-d", strtotime($this->challenge_end)) . " " . $this->challenge_end_time . "'
         GROUP BY sp.spieler_id
         ORDER BY spieleralter DESC, kilometer DESC
         LIMIT 1
@@ -215,6 +223,7 @@ class Challenge
         AND sp.team_id = te.team_id
         AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
         AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
+        AND timestamp <= '" . date("Y-m-d", strtotime($this->challenge_end)) . " " . $this->challenge_end_time . "'
         AND ch.count = TRUE
         GROUP BY sp.spieler_id
         ORDER BY spieleralter DESC, kilometer DESC
@@ -239,6 +248,7 @@ class Challenge
         AND ch.count = TRUE
         AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
         AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
+        AND timestamp <= '" . date("Y-m-d", strtotime($this->challenge_end)) . " " . $this->challenge_end_time . "'
         GROUP BY sp.spieler_id
         ORDER BY kilometer DESC, max(ch.radgröße)
         LIMIT 1

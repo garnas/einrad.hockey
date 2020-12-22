@@ -15,6 +15,9 @@ class Form
      * Text der Fehlermeldung
      * @param $string
      */
+    public static string $confetti = '';
+    
+    //Fehlermeldungem werden in einer $_SESSION Variable gespeichert
     public static function error($string)
     {
         //Falls $_SESSION noch nicht gesetzt wurde, wird sie als array deklariert
@@ -254,6 +257,7 @@ class Form
                     <span class="w3-small w3-text-grey" style="display: block">Sekunden</span>
                 </span>
         </div>
+            </div>
         <?php
     }
 
@@ -275,5 +279,23 @@ class Form
         fwrite($log_file, $line);
         fclose($log_file);
     }
-
+    
+    /** Fügt einen Confetti-Effekt hinzu.
+     *
+     * Muss vor dem HTML-Code aufgerufen werden.
+     *
+     * Wie lange soll der Effekt in ms anhalten?
+     * Keine Zeitbegrenzung bei $timeout = 0
+     * @param int $timeout
+     *
+     * Anzahl der Konfettis liegt zufällig zwischen $min und $max
+     * @param int $min
+     * @param int $max
+     */
+    public static function set_confetti(int $min = 40, int $max = 90, $timeout = 0){
+        self::$confetti =   "
+                            <script src = '../javascript/confetti/confetti.js'></script>
+                            <script>confetti.start($timeout, $min, $max)</script>
+                            ";
+    }
 }

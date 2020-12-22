@@ -5,9 +5,19 @@
 require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/challenge.logic.php'; //Erstellt Challenge-Objekt nach der Validation
 
-$color[0] = "background-color: #a6b2d8;";
-$color[1] = "background-color: #b8c1e0;";
-$color[2] = "background-color: #cad0e8;";
+$color[0] = "background-color: rgb(189, 148, 107);";
+$color[1] = "background-color: #a6b2d8;";
+$color[2] = "background-color: #b8c1e0;";
+$color[3] = "background-color: #cad0e8;";
+
+// Fügt Confetti-Effekt hinzu
+if ($akt_kilometerstand >= $challenge->ziel_kilometer) {
+    Form::set_confetti(40,90,7000); 
+    $color[0] = "background-color: rgb(189, 107, 153);";
+    $ziel_text = 'Geschafft! Zusammen sind wir bis nach Sydney (16098,4&nbsp;km) geradelt. Zum am weitesten entfernten Einradhockeyteam.';
+} else {
+    $ziel_text = "Schaffen wir es zusammen bis nach Sydney? Zum am weitesten entfernten Einradhockeyteam.";
+}
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -26,16 +36,16 @@ include '../../templates/header.tmp.php';
     Hier habt ihr die Möglichkeit die geradelten Kilometer einzutragen. Gewertet werden eure Einträge als Einzelperson, aber immer auch im Team.
     Also ran ans Rad und viel Spaß beim Sammeln.
 </p>
-<a href='../teamcenter/tc_challenge.php' class="w3-button w3-secondary">Kilometer eintragen!</a>
+<?php if ($uhrzeit <= $abschluss) { ?>
+    <a href='../teamcenter/tc_challenge.php' class="w3-button w3-secondary">Kilometer eintragen!</a>
+<?php } ?>
 
 <h3 class="w3-text-secondary w3-margin-top">Gesamt-km</h3>
-<p class="w3-text-gray">
-    Schaffen wir es zusammen bis nach Sydney? Zum am weitesten entfernten Einradhockeyteam.
-</p>
+<p class="w3-text-gray"><?= $ziel_text ?></p>
 
 <!-- ProgressBar -->
 <div class='w3-row w3-light-grey'>
-    <div class='w3-col w3-card-2' style='max-width: 100%; width: <?=$percent?>%; padding-right: 5px; text-align: right; background-color: rgb(189, 148, 107);'><p style="margin-top: 5px; margin-bottom: 5px;"><?=number_format($value, 1, ',', '.');?> km</p></div>
+    <div class='w3-col w3-card-2' style='max-width: 100%; width: <?=$percent?>%; padding-right: 5px; text-align: right; <?=$color[0] ?? ''?>'><p style="margin-top: 5px; margin-bottom: 5px;"><?=number_format($akt_kilometerstand, 1, ',', '.');?> km</p></div>
 </div>
 
 <p class='w3-text-gray'><span>Berlin</span><span class="w3-right">Sydney</span></p>
@@ -117,7 +127,7 @@ include '../../templates/header.tmp.php';
                 echo "</tr>";
             } else {
                 foreach ($teamliste as $team){?> 
-                    <tr style="<?=$color[$team["platz"] - 1] ?? ''?>">
+                    <tr style="<?=$color[$team["platz"]] ?? ''?>">
                         <td class="w3-center"><?=$team["platz"]?></td>
                         <td style="white-space: nowrap;" class="w3-left-align"><?=$team["teamname"]?></td>
                         <td class="w3-center w3-hide-small"><?=$team["mitglieder"]?></td>
@@ -148,7 +158,7 @@ include '../../templates/header.tmp.php';
                 echo "</tr>";
             } else {            
                 foreach ($alle_spielerliste as $spieler){?> 
-                    <tr style="<?=$color[$spieler["platz"] - 1] ?? ''?>">
+                    <tr style="<?=$color[$spieler["platz"]] ?? ''?>">
                         <td class="w3-center"><?=$spieler["platz"]?></td>
                         <td class="w3-left-align"><?=$spieler['vorname']?></td>
                         <td style="white-space: nowrap;"  class="w3-left-align"><?=$spieler['teamname']?></td>
