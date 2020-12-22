@@ -53,9 +53,11 @@ include '../../templates/header.tmp.php';
                     <input required class="w3-input w3-border w3-border-primary" type="date" id="datum" min="<?=date("Y-m-d",strtotime($challenge->challenge_start))?>" max="<?=$max?>" value="<?=date("Y-m-d")?>" name="datum">
                     <i class="w3-text-grey">Das Datum muss zwischen dem <?=$challenge->challenge_start?> und <?=$challenge->challenge_end?> liegen.</i>
                 </p>
-                <p>
-                    <input type="submit" name="put_challenge" value="Eintragen!" class="w3-secondary w3-button w3-block">
-                </p>
+                <?php if ($uhrzeit <= $abschluss) { ?>
+                    <p>
+                        <input type="submit" name="put_challenge" value="Eintragen!" class="w3-secondary w3-button w3-block">
+                    </p>
+                <?php } ?>
             </div>
         </form>
     </div>

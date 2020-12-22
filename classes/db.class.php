@@ -56,7 +56,7 @@ class db
             }
         } else {
             $input = trim($input);
-            $input = self::$link->real_escape_string($input);
+            $input = is_numeric($input) ? $input : self::$link->real_escape_string($input);
         }
         return $input;
     }
@@ -91,9 +91,9 @@ class db
      * auto_increment wert einer Sql-Tabelle erkennen. Alle IDs werden über auto_increment erstellt
      *
      * @param $tabelle //Tabellenname
-     * @return mixed|string
+     * @return int
      */
-    public static function get_auto_increment($tabelle)
+    public static function get_auto_increment($tabelle): int
     {
         $sql = "  SELECT AUTO_INCREMENT
             FROM  INFORMATION_SCHEMA.TABLES
@@ -113,11 +113,19 @@ class db
      */
     public static function read(string $sql): mysqli_result|bool
     {
+        #$before = microtime(true);
         if (mysqli_connect_errno()) {
             Form::log(self::$log_file, "Lesen der Datenbank fehlgeschlagen: " . mysqli_connect_error());
             die('<h2>Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error() . '<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
         }
-        return self::$link->query($sql);
+
+
+        $return = self::$link->query($sql);
+        #$after = microtime(true);
+        #$backtrace = array_reverse(array_column(debug_backtrace(), 'function'));
+        #array_pop($backtrace);
+        #Form::log('db_last.log', implode(" | ", $backtrace) . " -- ". round($after - $before, 4) . " s " . preg_replace("/\h+/", " ", $sql));
+        return $return;
     }
 
     /**
@@ -130,6 +138,7 @@ class db
         $autor_string = implode(" | ", array_filter([$_SESSION['teamname'] ?? '', $_SESSION['la_login_name'] ?? '', $_SESSION['ligabot'] ?? '']));
         $log = $autor_string . "\n" . trim($sql);
         Form::log(self::$log_file, $log);
+        Form::log('db_last.log', $sql);
 
         //Keine Verbindung zum SQL-Server möglich
         if (mysqli_connect_errno()) {

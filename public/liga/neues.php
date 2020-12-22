@@ -3,7 +3,6 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-
 $fortschritt = round(100*(Config::time_offset()-strtotime(Config::SAISON_ANFANG))/(strtotime(Config::SAISON_ENDE)-strtotime(Config::SAISON_ANFANG)),0);
 $tage = round((strtotime(Config::SAISON_ANFANG) - Config::time_offset())/(24*60*60),0);
 
@@ -93,10 +92,7 @@ include '../../templates/header.tmp.php';
             <p class="w3-text-grey w3-small w3-border-top w3-border-grey"></p>
             <p>Sammelt Kilometer für euer Team und legt die längste Strecke zurück.</p>
             <!-- Countdown -->
-            <a href='challenge.php' class='no'><?=Form::countdown('2020-12-20')?></a>
-            <p>
-                <a href='../teamcenter/tc_challenge.php' class="w3-button w3-primary">Kilometer eintragen!</a>
-            </p>
+            <a href='challenge.php' class='no'><?=Form::countdown('2020-12-20 20:00')?></a>
         </div>
 
         <!-- Anstehende Turniere -->

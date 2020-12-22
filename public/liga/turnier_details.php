@@ -132,7 +132,7 @@ include '../../templates/header.tmp.php';
             <td>
                 <?=$daten['spielplan']?>
                 <?php if($daten['phase'] == 'Spielplanphase'){?>
-                    <br><?=Form::link($akt_turnier->get_spielplan(), '<i class="material-icons">reorder</i> Zum Spielplan')?>
+                    <br><?=Form::link($akt_turnier->get_spielplan_link(), '<i class="material-icons">reorder</i> Zum Spielplan')?>
                 <?php }//end if?>
             </td>
         </tr>
@@ -215,7 +215,7 @@ include '../../templates/header.tmp.php';
 <p class="w3-text-grey w3-border-bottom w3-border-grey">Links</p>
 <p><?=Form::link('../liga/turniere.php#' . $daten['turnier_id'], '<i class="material-icons">event</i> Anstehende Turniere')?></p>
 <?php if($daten['phase'] == 'Spielplanphase'){?>
-    <p><?=Form::link($akt_turnier->get_spielplan(), '<i class="material-icons">reorder</i> Zum Spielplan')?></p>
+    <p><?=Form::link($akt_turnier->get_spielplan_link(), '<i class="material-icons">reorder</i> Zum Spielplan')?></p>
 <?php }//end if?>
 
 <?php if (isset($_SESSION['team_id'])){?>

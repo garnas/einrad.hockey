@@ -41,13 +41,13 @@ class LigaBot
             if ($akt_turnier->details['art'] == 'I' && $akt_turnier->details['phase'] == 'offen' && $akt_turnier->details['tblock_fixed'] != 'Ja' && $turnier_block != $ausrichter_block) {
                 if (($pos_ausrichter - 1) != $pos_turnier) { // Um einen Block vom Ausrichterblock aus erweiterte Turniere sollen nicht wandern...
                     $akt_turnier->set_turnier_block($ausrichter_block);
-                    $akt_turnier->schreibe_log("Turnierblock gewandert (I): \r\n $turnier_block -> $ausrichter_block", "Ligabot");
+                    $akt_turnier->log("Turnierblock gewandert (I): \r\n $turnier_block -> $ausrichter_block", "Ligabot");
                 }
             }
             if ($akt_turnier->details['art'] == 'II' && $akt_turnier->details['tblock_fixed'] != 'Ja' && $akt_turnier->details['phase'] == 'offen') {
                 if ($pos_ausrichter < $pos_turnier) {
                     $akt_turnier->set_turnier_block($ausrichter_block);
-                    $akt_turnier->schreibe_log("Turnierblock gewandert (II): \r\n $turnier_block -> $ausrichter_block", "Ligabot");
+                    $akt_turnier->log("Turnierblock gewandert (II): \r\n $turnier_block -> $ausrichter_block", "Ligabot");
                 }
             }
 
@@ -57,7 +57,7 @@ class LigaBot
             // Prüft, ob wir uns vier Wochen vor dem Spieltag befinden und ob das Turnier in der offenen Phase ist.
             if (self::time_offen_melde($akt_turnier->details['datum']) <= $heute && $akt_turnier->details['phase'] == 'offen') {
                 $akt_turnier->set_phase("melde"); //Aktualisiert auch $akt_turnier->get_teamdaten()
-                $akt_turnier->schreibe_log("Phase: offen -> melde", "Ligabot");
+                $akt_turnier->log("Phase: offen -> melde", "Ligabot");
                 // Losen setzt alle Teams in richtiger Reihenfolge auf die Warteliste.
                 self::losen($akt_turnier);
                 // Füllt die Spielen-Liste auf.
@@ -104,7 +104,7 @@ class LigaBot
                 }
             }
             if ($akt_turnier->details['spieltag'] != $set_spieltag) {// Die Datenbank wird nur beschrieben, wenn sich der Spieltag ändert.
-                $akt_turnier->schreibe_log("Spieltag: " . $akt_turnier->details['spieltag'] . " -> " . $set_spieltag, "Ligabot");
+                $akt_turnier->log("Spieltag: " . $akt_turnier->details['spieltag'] . " -> " . $set_spieltag, "Ligabot");
                 $akt_turnier->set_spieltag($set_spieltag);
             }
             $kw = date('W', $datum); // Kalenderwoche übernehmen für die nächste Iteration
@@ -192,8 +192,8 @@ class LigaBot
             if ($team['freilos_gesetzt'] == 'Ja' && !$akt_turnier->check_team_block_freilos($team['team_id'])) {
                 $akt_turnier->liste_wechsel($team['team_id'], 'warte');
                 Team::add_freilos($team['team_id']);
-                $akt_turnier->schreibe_log(
-                    "Falscher Freilos-Block: " . $team['teamname'] . "\r\n Teamblock: " . Tabelle::get_team_block($team['team_id']) . " Turnierblock: " . $akt_turnier->daten['tblock'] .
+                $akt_turnier->log(
+                    "Falscher Freilos-Block: " . $team['teamname'] . "\r\n Teamblock: " . Tabelle::get_team_block($team['team_id']) . " Turnierblock: " . $akt_turnier->details['tblock'] .
                     "\r\nTeam wurde auf die Warteliste gesetzt, Freilos wurde erstattet", "Ligabot");
                 MailBot::mail_freilos_abmeldung($akt_turnier, $team['team_id']);
                 // Anmeldeliste aktualisieren
@@ -206,7 +206,7 @@ class LigaBot
         $anz_melde = count($liste['melde']);
 
         // Anzahl der zu losenden Teams
-        $anz_los = $anz_warte + $anz_melde + $anz_spiele - $akt_turnier->daten['plaetze'];
+        $anz_los = $anz_warte + $anz_melde + $anz_spiele - $akt_turnier->details['plaetze'];
         if ($anz_los < 0) {
             $gelost = true;
         }
@@ -236,11 +236,11 @@ class LigaBot
             $pos += 1;
             if ($akt_turnier->check_doppel_anmeldung($team_id)) { //Check ob das Team am Kalendertag des Turnieres schon auf einer Spiele-Liste steht
                 $akt_turnier->abmelden($team_id);
-                $akt_turnier->schreibe_log("Abmeldung Doppelanmeldung: \r\n" . Team::teamid_to_teamname($team_id), "Ligabot");
+                $akt_turnier->log("Abmeldung Doppelanmeldung: \r\n" . Team::teamid_to_teamname($team_id), "Ligabot");
                 Form::affirm("Abmeldung Doppelanmeldung im Turnier" . $akt_turnier->turnier_id . ": \r\n" . Team::teamid_to_teamname($team_id));
             } else {
                 $akt_turnier->liste_wechsel($team_id, 'warte', $pos);
-                $akt_turnier->schreibe_log("Auf Warteliste gelost: \r\n" . Team::teamid_to_teamname($team_id) . " -> $pos", "Ligabot, Los nach Modus");
+                $akt_turnier->log("Auf Warteliste gelost: \r\n" . Team::teamid_to_teamname($team_id) . " -> $pos", "Ligabot, Los nach Modus");
             }
         }
         // NACH Zusammenstellen der Warteliste via losen, muss die Spielen-Liste über spieleliste_auffuellen aufgefuellt werden!!
@@ -258,8 +258,8 @@ class LigaBot
             if ($akt_turnier->get_teamdaten['phase'] != 'ergebnis'){
                 $akt_turnier -> set_phase("offen");
                 $akt_turnier -> set_spieltag(0);
-                $akt_turnier -> schreibe_log("Phase -> offen" , "Zurückgesetzt von Ligabot");
-                $akt_turnier -> schreibe_log("Spieltag -> 0" , "Zurückgesetzt von Ligabot");
+                $akt_turnier -> log("Phase -> offen" , "Zurückgesetzt von Ligabot");
+                $akt_turnier -> log("Spieltag -> 0" , "Zurückgesetzt von Ligabot");
             }
         }
     }

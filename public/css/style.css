@@ -62,11 +62,6 @@ td {
 h1 {
   font-size:30px;
 }
-@media print {
-  .nicht-drucken{
-    display: none;
-  }
-}
 
 /*hide arrows on inputs type number*/
 /* Chrome, Safari, Edge, Opera */

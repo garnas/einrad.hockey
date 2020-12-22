@@ -70,9 +70,9 @@ class Tabelle
      */
     public static function check_ergebnis_eintragbar($akt_turnier): bool
     {
-        $spieltag = $akt_turnier->daten['spieltag'];
-        $saison = $akt_turnier->daten['saison'];
-        if (!in_array($akt_turnier->daten['art'], ['I', 'II', 'III', 'final'])) {
+        $spieltag = $akt_turnier->details['spieltag'];
+        $saison = $akt_turnier->details['saison'];
+        if (!in_array($akt_turnier->details['art'], ['I', 'II', 'III', 'final'])) {
             Form::error("Für diesen Turniertyp können keine Ergebnisse eingetragen werden.");
             return false;
         }
@@ -411,6 +411,7 @@ class Tabelle
 
         // Tabelle mit aktiven Teams ohne Ergebnis auffüllen
         // In vergangenen Saisons werden nur Teams mit Ergebnissen gelistet
+        // TODO geht das nicht besser?
         if ($saison == Config::SAISON) {
             $list_of_teamids = Team::get_ligateams_id();
             foreach ($list_of_teamids as $team_id) {

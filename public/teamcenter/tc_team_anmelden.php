@@ -105,7 +105,7 @@ if (isset($_POST['anmelden'])){
             Form::error("Dein Team ist bereits auf einer Spiele-Liste am gleichen Kalendertag");
         }else{
             $akt_turnier->team_anmelden($_SESSION['team_id'], $liste, $pos);
-            $akt_turnier->schreibe_log("Anmeldung: ". $_SESSION['teamname'] ."\r\nTeamblock: ".$_SESSION['teamblock']. " Turnierblock: " . $akt_turnier->details['tblock'] . "\r\nListe: $liste (WartePos: $pos)", $_SESSION['teamname']);
+            $akt_turnier->log("Anmeldung: ". $_SESSION['teamname'] ."\r\nTeamblock: ".$_SESSION['teamblock']. " Turnierblock: " . $akt_turnier->details['tblock'] . "\r\nListe: $liste (WartePos: $pos)", $_SESSION['teamname']);
             Form::affirm ("Dein Team wurde zum Turnier angemeldet");
             header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $akt_turnier->details['turnier_id']);
             die();
@@ -156,7 +156,7 @@ if (isset($_POST['freilos'])){
     if (!$error){
         $akt_turnier->abmelden($_SESSION['team_id']);
         $akt_turnier->freilos($_SESSION['team_id']);
-        $akt_turnier->schreibe_log("Freilos: ". $_SESSION['teamname'] ."\r\nTeamblock: ".$_SESSION['teamblock']. " Turnierblock: " . $akt_turnier->details['tblock'] . "\r\nListe: spiele\r\n(WartePos: 0)", $_SESSION['teamname']);
+        $akt_turnier->log("Freilos: ". $_SESSION['teamname'] ."\r\nTeamblock: ".$_SESSION['teamblock']. " Turnierblock: " . $akt_turnier->details['tblock'] . "\r\nListe: spiele\r\n(WartePos: 0)", $_SESSION['teamname']);
         Form::affirm ("Dein Team wurde zum Turnier angemeldet");
         header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $akt_turnier->details['turnier_id']);
         die();
@@ -191,7 +191,7 @@ if (isset($_POST['abmelden']) && isset($_SESSION['team_id'])){
         if ($warteliste_neu){
             $akt_turnier->warteliste_aktualisieren();
         }
-        $akt_turnier->schreibe_log("Abmeldung: ". $_SESSION['teamname'] ."\r\nvon Liste: " . $liste, $_SESSION['teamname']);
+        $akt_turnier->log("Abmeldung: ". $_SESSION['teamname'] ."\r\nvon Liste: " . $liste, $_SESSION['teamname']);
         header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $akt_turnier->details['turnier_id']);
         die();
     }
@@ -209,7 +209,7 @@ if (isset($_POST['bewerben'])){
     }
     if (!$error){
         $akt_turnier->team_anmelden($_SESSION['team_id'],'melde',0);
-        $akt_turnier->schreibe_log("Bewerbung für Spielplatz:\r\n". $_SESSION['teamname'] ."\r\nauf Liste: melde", $_SESSION['teamname']);
+        $akt_turnier->log("Bewerbung für Spielplatz:\r\n". $_SESSION['teamname'] ."\r\nauf Liste: melde", $_SESSION['teamname']);
         header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $akt_turnier->details['turnier_id']);
         die();
     }

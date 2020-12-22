@@ -146,12 +146,12 @@ if (isset($_POST['change_turnier'])) {
             $akt_turnier->change_turnier_block($tblock, $fixed, $art);
             $akt_turnier->details['tblock'] = $tblock;
             $akt_turnier->spieleliste_auffuellen(); //Spielen-Liste auffuellen
-            $akt_turnier->schreibe_log("Turnierblock erweitert zu $tblock", $autor);
+            $akt_turnier->log("Turnierblock erweitert zu $tblock", $autor);
             if ($akt_turnier->details['tblock_fixed'] != $fixed){
-                $akt_turnier->schreibe_log("Turnierfixierung geändert zu $fixed", $autor);
+                $akt_turnier->log("Turnierfixierung geändert zu $fixed", $autor);
             }
             if ($akt_turnier->details['art'] != $art){
-                $akt_turnier->schreibe_log("Turnierart geändert zu $art", $autor);
+                $akt_turnier->log("Turnierart geändert zu $art", $autor);
             }
             Form::affirm("Turnier wurde erweitert");
         }
@@ -159,55 +159,55 @@ if (isset($_POST['change_turnier'])) {
         //Ändern der Turnierdetails
         if ($akt_turnier->change_turnier_details($startzeit, $besprechung, $plaetze, $spielplan, $hallenname, $strasse, $plz, $ort, $haltestellen, $hinweis, $startgebuehr, $organisator, $handy)){
             if ($akt_turnier->details['startzeit'] != $startzeit){
-                $akt_turnier->schreibe_log("Startzeit: " . $akt_turnier->details['startzeit'] . " -> " . $startzeit, $autor);
+                $akt_turnier->log("Startzeit: " . $akt_turnier->details['startzeit'] . " -> " . $startzeit, $autor);
                 $mail = true;
             }
             if ($akt_turnier->details['plaetze'] != $plaetze){
-                $akt_turnier->schreibe_log("Plätze: " . $akt_turnier->details['plaetze'] . " -> " . $plaetze, $autor);
+                $akt_turnier->log("Plätze: " . $akt_turnier->details['plaetze'] . " -> " . $plaetze, $autor);
                 $mail = true;
             }
             if ($akt_turnier->details['besprechung'] != $besprechung){
-                $akt_turnier->schreibe_log("Besprechung: " . $akt_turnier->details['besprechung'] . " -> " . $besprechung, $autor);
+                $akt_turnier->log("Besprechung: " . $akt_turnier->details['besprechung'] . " -> " . $besprechung, $autor);
                 //$mail = true;
             }          
             if ($akt_turnier->details['hinweis'] != stripcslashes($hinweis)){
-                $akt_turnier->schreibe_log("Hinweis:\r\n" . $akt_turnier->details['hinweis'] . "\r\n->\r\n" . $hinweis, $autor);
+                $akt_turnier->log("Hinweis:\r\n" . $akt_turnier->details['hinweis'] . "\r\n->\r\n" . $hinweis, $autor);
                 //$mail = true;
             }
             if ($akt_turnier->details['hallenname'] != $hallenname){
-                $akt_turnier->schreibe_log("Hallenname: " . $akt_turnier->details['hallenname'] . " -> " . $hallenname, $autor);
+                $akt_turnier->log("Hallenname: " . $akt_turnier->details['hallenname'] . " -> " . $hallenname, $autor);
                 //$mail = true;
             }
             if ($akt_turnier->details['plz'] != $plz){
-                $akt_turnier->schreibe_log("PLZ: " . $akt_turnier->details['plz'] . " -> " . $plz, $autor);
+                $akt_turnier->log("PLZ: " . $akt_turnier->details['plz'] . " -> " . $plz, $autor);
                 $mail = true;
             }
             if ($akt_turnier->details['strasse'] != $strasse){
-                $akt_turnier->schreibe_log("Straße: " . $akt_turnier->details['strasse'] . " -> " . $strasse, $autor);
+                $akt_turnier->log("Straße: " . $akt_turnier->details['strasse'] . " -> " . $strasse, $autor);
                 $mail = true;
             }
             if ($akt_turnier->details['ort'] != $ort){
-                $akt_turnier->schreibe_log("Ort: " . $akt_turnier->details['ort'] . " -> " . $ort, $autor);
+                $akt_turnier->log("Ort: " . $akt_turnier->details['ort'] . " -> " . $ort, $autor);
                 $mail = true;
             }
             if ($akt_turnier->details['haltestellen'] != $haltestellen){
-                $akt_turnier->schreibe_log("Haltestellen: " . $akt_turnier->details['haltestellen'] . " -> " . $haltestellen, $autor);
+                $akt_turnier->log("Haltestellen: " . $akt_turnier->details['haltestellen'] . " -> " . $haltestellen, $autor);
                 //$mail = true;
             }
             if ($akt_turnier->details['organisator'] != $organisator){
-                $akt_turnier->schreibe_log("Organisator: " . $akt_turnier->details['organisator'] . " -> " . $startzeit, $autor);
+                $akt_turnier->log("Organisator: " . $akt_turnier->details['organisator'] . " -> " . $startzeit, $autor);
                 //$mail = true;
             }
             if ($akt_turnier->details['handy'] != $handy){
-                $akt_turnier->schreibe_log("Handy: " . $akt_turnier->details['handy'] . " -> " . $handy, $autor);
+                $akt_turnier->log("Handy: " . $akt_turnier->details['handy'] . " -> " . $handy, $autor);
                 //$mail = true;
             }
             if ($akt_turnier->details['startgebuehr'] != $startgebuehr){
-                $akt_turnier->schreibe_log("Startgebühr: " . $akt_turnier->details['startgebuehr'] . " -> " . $startgebuehr, $autor);
+                $akt_turnier->log("Startgebühr: " . $akt_turnier->details['startgebuehr'] . " -> " . $startgebuehr, $autor);
                 //$mail = true;
             }
             if ($akt_turnier->details['spielplan'] != $spielplan){
-                $akt_turnier->schreibe_log("Spielplan: " . $akt_turnier->details['spielplan'] . " -> " . $spielplan, $autor);
+                $akt_turnier->log("Spielplan: " . $akt_turnier->details['spielplan'] . " -> " . $spielplan, $autor);
                 $mail = true;
             }
         }

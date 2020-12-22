@@ -30,9 +30,11 @@ include '../../templates/header.tmp.php';
 <h1 class="w3-text-primary">km-Challenge</h1>
 <div class="w3-row-padding w3-stretch">
     <div class="w3-twothird">
-        <p>
-            <a href='../teamcenter/tc_challenge_eintraege.php' class="w3-button w3-secondary w3-block w3-card-2">Eintrag hinzufügen/entfernen</a>
-        </p>
+        <?php if ($uhrzeit <= $abschluss) {?>
+            <p>
+                <a href='../teamcenter/tc_challenge_eintraege.php' class="w3-button w3-secondary w3-block w3-card-2">Eintrag hinzufügen/entfernen</a>
+            </p>
+        <?php } ?>
         <div class="w3-panel w3-responsive w3-card-4" style="padding:0;">
             <table class="w3-table w3-striped">
                 <tr class="w3-primary">
