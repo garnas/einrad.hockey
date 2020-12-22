@@ -26,9 +26,9 @@
                         <td>
                             <div class="w3-center">
                                 <b>
-                                    <label for='toreAPOST[<?=$index?>]'><?=$spiel["team_a_name"]?></label>
+                                    <label for='toreAPOST[<?=$index?>]'><?=$spiel["teamname_a"]?></label>
                                     <br>
-                                    <label for='toreBPOST[<?=$index?>]'><?=$spiel["team_b_name"]?></label>
+                                    <label for='toreBPOST[<?=$index?>]'><?=$spiel["teamname_b"]?></label>
                                 </b>
                             </div>
                         </td>

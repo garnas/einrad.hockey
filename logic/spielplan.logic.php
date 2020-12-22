@@ -1,60 +1,53 @@
 <?php
 //Spielplan-Objekt aus Url-TurnierID erstellen
-$turnier_id=$_GET['turnier_id'];
-$spielplan = new Spielplan($turnier_id);
-//Existiert das Turnier?
-if(empty($spielplan->akt_turnier->details)){
-    Form::error("Turnier wurde nicht gefunden");
+$turnier_id = $_GET['turnier_id'];
+
+$spielplan = new Spielplan((new Turnier ($turnier_id)));
+
+// Gibt es einen Spielplan zu diesem Turnier?
+if(empty($spielplan->tore_tabelle)){
+    Form::error("Spielplan wurde nicht gefunden");
     header('Location: ../liga/turniere.php');
     die();
 }
+$spiele = $spielplan->get_spiele();
+#db::debug($spiele);
+
+$spielplan->direkter_vergleich($spielplan->tore_tabelle);
+$spielplan->set_wertigkeiten();
+
+
 //Nur Relevant für Ligacenter oder Teamcenter
 if ($ligacenter or $teamcenter){
-    //Besteht die Berechtigung das Turnier zu bearbeiten? 
-    if (($_SESSION['team_id'] ?? false) != $spielplan->akt_turnier->details['ausrichter'] && !$ligacenter){
+    //Besteht die Berechtigung das Turnier zu bearbeiten?
+    if (($_SESSION['team_id'] ?? false) != $spielplan->turnier->details['ausrichter'] && !$ligacenter){
         Form::error("Nur der Ausrichter kann Spielergebnisse eintragen");
         header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
         die();
     }
-    if ($teamcenter && Config::time_offset() - strtotime($spielplan->akt_turnier->details['datum']) > 48*60*60){
+    if ($teamcenter && Config::time_offset() - strtotime($spielplan->turnier->details['datum']) > 48*60*60){
         Form::error("Bitte wende dich an den Ligaausschuss um Ergebnisse nachträglich zu verändern.");
         header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
         die();
     }
 }
-//Ist das Turnier in der richtigen Phase?
-if(!in_array($spielplan->akt_turnier->details['phase'], array('ergebnis', 'spielplan'))){
-    Form::error("Turnier befindet sich in der falschen Phase");
-    header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier_id);
-    die();
-}
-//Existiert ein manuell hochgeladener Spielplan?
-if(!empty($spielplan->akt_turnier->details['link_spielplan'])){
-    Form::error("Es existiert ein manuell hochgeladener Spielplan.");
-    header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier_id);
-    die();
-}
-//Hat das Turnier die richtige Anzahl an Teams?
-if($spielplan->anzahl_teams < 4 or $spielplan->anzahl_teams > 7){
-    Form::error("Falsche Anzahl an Teams für die Spielplanerstellung");
-    header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier_id);
-    die();
-}
 
-//Spielplan erstellen / Spielplan aus der Datenbank lesen, falls schon mal einer erstellt worden ist.
-$spielplan->create_spielplan_jgj();
-$tabelle=$spielplan->get_turnier_tabelle();
-$teamliste=$spielplan->teamliste;
-$spielliste=$spielplan->get_spiele();
-$spielzeit = $spielplan->getSpielzeiten();
-$spielzeit['dauer'] = $spielzeit['anzahl_halbzeiten']*$spielzeit['halbzeit_laenge'] + $spielzeit['pause'];
+$spielplan->details['dauer'] = $spielplan->details['anzahl_halbzeiten'] * $spielplan->details['halbzeit_laenge']
+    + $spielplan->details['pause'];
+#db::debug($spielplan->platzierungstabelle);
+#db::debug($spielplan->penalty_begegnungen);
+#db::debug($spielplan->penalty_warnung);
 
-//Turniertabelle Plätze und Punkte anzeigen?
-$show_turnierergebnis = $spielplan->check_tabelle_einblenden($tabelle);
+// Pixellänge des längsten Teamnamens für die perfekte Darstellung des Spielplans
+$function = function ($platz){
+    return strlen($platz['teamname']);
+};
+$teamnamen_laengen = array_map(function ($platz){return strlen($platz['teamname']);},$spielplan->platzierungstabelle);
+$width_in_px = max($teamnamen_laengen) * 8; // 7.5 Durchschnittliche px-Weite eines Characters
 
-//Penalty Anzeigen? //Für Spielplan/Druckanzeige
+// Penalty Anzeigen? //Für Spielplan/Druckanzeige
 $penalty_anzeigen = false;
-foreach($spielliste as $index => $spiel){
+foreach($spiele as $index => $spiel){
     if (!is_null($spiel["penalty_b"]) or !is_null($spiel["penalty_a"])){
         $penalty_anzeigen = true;
     }
