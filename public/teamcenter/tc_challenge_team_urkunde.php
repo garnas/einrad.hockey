@@ -57,7 +57,6 @@ $html = '
 </div>
 ';
 
-echo "<style>".$css_style."</style>". $html;
 // Titel des Reiters im Browser
 $mpdf->SetTitle($urkunden_daten['teamname'] . ' - Urkunde km-Challenge 2020');
 
