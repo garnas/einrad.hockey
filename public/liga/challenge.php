@@ -33,7 +33,7 @@ include '../../templates/header.tmp.php';
 
 <!-- Button zum Teamcenter -->
 <p class="w3-text-gray">
-    Unglaubliche <b>22.771,6&nbsp;km sind wir gemeinsam geradelt</b>. Damit sind wir nicht nur von Berlin bis nach Sydney (16.098,4&nbsp;km) sondern wieder bir zurück nach Singapur gefahren. Aber nicht nur das Gesamtergebnis ist erstaunlich... 💪🏼
+    Unglaubliche <b>22.771,6&nbsp;km sind wir gemeinsam geradelt</b>. Damit sind wir nicht nur von Berlin bis nach Sydney (16.098,4&nbsp;km) sondern wieder bis zurück nach Singapur gefahren. Aber nicht nur das Gesamtergebnis ist erstaunlich... 💪🏼
     <br><br>
     4.536,6&nbsp;km so viele km wie <b>FreiradFreiburg</b> hat kein anderes Team zusammen gesammelt. Auf Platz 2. mit ebenfalls spitzenmäßigen 2.661.7&nbsp;km erradelte das Team <b>Einradhockey Elmshorn</b>! Außerdem stark dabei die <b>Legionäre der MJC&nbsp;Trier</b> mit gemeinsamen 1.725,1&nbsp;km.
     <br><br>
@@ -41,7 +41,7 @@ include '../../templates/header.tmp.php';
     <br><br>
     Außerdem hervorheben möchten wir natürlich die km von <b>Tom</b> auch in der Einzelwertung aller Fahrer hat er sich den ersten Platz gesichert.
     <br><br>
-    Wir sind immer noch erstaunt wie viele km ihr alle gefahren seid und hoffen dass ihr euch nun auch ohne die km-Challenge weiterhin aufs Rad schwingt und ein paar km zurücklegt. Vielen Dank an alle Teilnehmer. Uns hat es wahnsinnig viel Spaß gemacht! Wir hoffen euch auch 😉
+    Wir sind immer noch erstaunt wie viele km ihr alle gefahren seid und hoffen dass ihr euch nun auch ohne die km-Challenge weiterhin aufs Rad schwingt und ein paar km zurücklegt. Vielen Dank an alle Teilnehmer*innen. Uns hat es wahnsinnig viel Spaß gemacht! Wir hoffen euch auch 😉
     <br><br>
     Und wie zu Beginn angekündigt werden alle genannten Fahrer*innen und Teams in den kommenden Wochen eine kleine Überraschung erhalten. ✨
     <br><br>
