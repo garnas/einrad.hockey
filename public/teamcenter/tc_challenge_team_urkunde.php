@@ -70,5 +70,5 @@ $mpdf->WriteHTML($css_style,\Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
 
 // Output des Dokuments
-#$mpdf->Output('Urkunde_' . $urkunden_daten['teamname'] . '.pdf', 'I');
+$mpdf->Output('Urkunde_' . $urkunden_daten['teamname'] . '.pdf', 'I');
 ?>
