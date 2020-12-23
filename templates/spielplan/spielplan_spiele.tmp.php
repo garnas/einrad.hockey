@@ -12,17 +12,61 @@
 </p>
 
 <div class="w3-responsive w3-card">
-    <table class="w3-table w3-striped">
+    <table class="w3-table w3-centered w3-striped">
         <tr class="w3-primary">
-            <th class="">Beginn</th>
-            <th class="w3-center w3-hide-large w3-hide-medium">Schiri</th>
-            <th class="w3-center w3-hide-small pdf-hide"><span class="pdf-hide">Schiri</span></th>
-            <th class="w3-center w3-hide-large w3-hide-medium">Spiel</th>
-            <th class="w3-center w3-hide-small"><span class="pdf-hide">Spiel</span></th>
-            <th class="w3-center w3-hide-large w3-hide-medium">Tore</th>
-            <th class="w3-center w3-hide-small"><span class="pdf-hide">Tore</span></span></th>
-            <?php if ($penalty_anzeigen = false) { ?>
-                <th colspan="3" class="w3-center"><i>Penalty</i></th>
+            <th>
+                <i class="material-icons">schedule</i>
+                <br>
+                Zeit
+            </th>
+            <th class="w3-hide-small">
+                <i class="material-icons">sports</i>
+                <br>
+                Schiri
+            </th>
+            <th class="w3-hide-large w3-hide-medium pdf-hide">
+                <span class="pdf-hide">
+                    <i class="material-icons">sports</i>
+                    <br>
+                    Schiri
+                </span>
+            </th>
+            <th class="w3-hide-small">
+                    <i class="material-icons">sports_hockey</i>
+                    <br>
+                    Spiele
+            </th>
+            <th class="w3-hide-large w3-hide-medium">
+                <span class="pdf-hide">
+                    <i class="material-icons">sports_hockey</i>
+                    <br>
+                    Spiele
+                </span>
+            </th>
+            <th class="w3-hide-small">
+                <i class="material-icons">sports_baseball</i>
+                <br>
+                Tore
+            </th>
+            <th class="w3-hide-large w3-hide-medium">
+                <span class="pdf-hide">
+                    <i class="material-icons">sports_baseball</i>
+                    <br>Tore
+                </span>
+            </th>
+            <?php if ($spielplan->check_penalty_anzeigen()) { ?>
+                <th class="w3-hide-small">
+                    <i class="material-icons">priority_high</i>
+                    <br>
+                    Penalty
+                </th>
+                <th class="w3-hide-large w3-hide-medium">
+                    <span class="pdf-hide">
+                        <i class="material-icons">priority_high</i>
+                        <br>
+                        Penalty
+                    </span>
+                </th>
             <?php }//endif?>
         </tr>
         <?php foreach ($spiele as $index => $spiel) { ?>
@@ -33,7 +77,7 @@
                     <table class="w3-table w3-centered" style="width: auto; margin: auto;">
                         <tr>
                             <td style="width: 30px; padding:0;">
-                                <span class="w3-tooltip">
+                                <span class="w3-tooltip" style="cursor: help;">
                                     <i class="w3-text-primary"><?=$spiel["schiri_team_id_b"]?></i>
                                     <span style="white-space: nowrap; position:absolute;right:30px;top:0" class="w3-text w3-small w3-primary w3-tag pdf-hide">
                                         <?=$spielplan->platzierungstabelle[$spiel["schiri_team_id_b"]]['teamname']?>
@@ -42,7 +86,7 @@
                             </td>
                             <td style="width: 30px; padding:0;">|</td>
                             <td style="width: 30px; padding:0;">
-                                <span class="w3-tooltip">
+                                <span class="w3-tooltip" style="cursor: help;">
                                     <i class="w3-text-primary"><?=$spiel["schiri_team_id_a"]?></i>
                                     <span style="white-space: nowrap; position:absolute;left:30px;top:0" class="w3-text w3-small w3-primary w3-tag pdf-hide">
                                         <?=$spielplan->platzierungstabelle[$spiel["schiri_team_id_a"]]['teamname']?>
@@ -85,7 +129,7 @@
                     </table>
                 </td>
                 <!-- Mobil -->
-                <td class="w3-center w3-hide-large w3-hide-medium pdf-hide" style="white-space: nowrap;">
+                <td class="w3-center w3-hide-large w3-hide-medium" style="white-space: nowrap;">
                     <span class="pdf-hide"><?= $spiel["teamname_a"] ?></span>
                     <br class="pdf-hide">
                     <span class="pdf-hide"><?= $spiel["teamname_b"] ?></span>
@@ -101,21 +145,41 @@
                     </table>
                 </td>
                 <!-- Mobil -->
-                <td class="w3-center w3-hide-large w3-hide-medium pdf-hide">
+                <td class="w3-center w3-hide-large w3-hide-medium">
                     <span class="pdf-hide"><b><?=$spiel["tore_a"]?></b></span>
                     <br class="pdf-hide">
                     <span class="pdf-hide"><b><?=$spiel["tore_b"]?></b></span>
                 </td>
-                <?php if ($penalty_anzeigen) { ?>
-                    <td class="w3-right-align w3-text-secondary"><?= $spiel["penalty_a"] ?></td>
-                    <td class="w3-center w3-text-black">:</td>
-                    <td class="w3-left-align w3-text-secondary"><?= $spiel["penalty_b"] ?></td>
+                <?php if ($spielplan->check_penalty_anzeigen()) { ?>
+                    <!-- Dekstop -->
+                    <td class="w3-hide-small">
+                        <table class="w3-table w3-centered" style="width: auto; margin: auto;">
+                            <tr>
+                                <td class="w3-text-secondary" style="width: 30px; padding:0;"><?=$spiel["penalty_a"]?></td>
+                                <td style="width: 30px; padding:0;">:</td>
+                                <td class="w3-text-secondary" style="width: 30px; padding:0;"><?=$spiel["penalty_b"]?></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <!-- Mobil -->
+                    <td class="w3-center w3-hide-large w3-hide-medium">
+                        <span class="pdf-hide w3-text-secondary"><b><?=$spiel["penalty_a"]?></b></span>
+                        <br class="pdf-hide">
+                        <span class="pdf-hide w3-text-secondary"><b><?=$spiel["penalty_b"]?></b></span>
+                    </td>
                 <?php }// endif?>
             </tr>
-            <?php if (($delta_zeit = strtotime($spiele[$index + 1]['zeit'] ?? $spiel['zeit']) - strtotime($spiel['zeit']) - $spielplan->details['dauer'] * 60) > 0) { ?>
+            <?php if (($delta_zeit = strtotime($spiele[$index + 1]['zeit'] ?? $spiel['zeit'])
+                    - strtotime($spiel['zeit']) - $spielplan->details['dauer'] * 60) > 0) { ?>
                 <tr>
-                    <td><?= date("H:i", strtotime($spiel["zeit"]) + $spielplan->details['dauer'] * 60) ?></td>
-                    <td colspan="4" class="w3-center"><i><i class="material-icons">schedule</i> <?= round($delta_zeit / 60) ?>&nbsp;min Pause</i> <i class="material-icons">schedule</i></td>
+                    <td>
+                        <?= date("H:i", strtotime($spiel["zeit"]) + $spielplan->details['dauer'] * 60) ?>
+                    </td>
+                    <td colspan="4" class="w3-center">
+                        <i class="material-icons">schedule</i>
+                        <i><?= round($delta_zeit / 60) ?>&nbsp; min Pause</i>
+                        <i class="material-icons">schedule</i>
+                    </td>
                 </tr>
             <?php }// endif?>
         <?php }// end foreach?>

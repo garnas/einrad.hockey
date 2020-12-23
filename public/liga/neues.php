@@ -147,7 +147,7 @@ include '../../templates/header.tmp.php';
                         </tr>
                     <?php } //end foreach?>
                 </table>
-            <?php }else{?> 
+            <?php }else{ ?>
                 <p class="w3-text-grey w3-center">Keine gespielten Turniere</p> 
             <?php } //end if?>
              <?php if (!empty($statistik['max_tore'])) {?>

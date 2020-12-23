@@ -18,8 +18,10 @@ $css_style = ob_get_clean();
 // Html-Code als String
 $penalty_anzeigen = true;
 ob_start();
+include '../../templates/spielplan/spielplan_titel.tmp.php';
 include '../../templates/spielplan/spielplan_teamliste.tmp.php';
 include '../../templates/spielplan/spielplan_spiele.tmp.php';
+
 $html = 
     '<html>
         <head>
@@ -28,6 +30,7 @@ $html =
         </head>' 
         .ob_get_clean() 
     .'</html>';
+$html = str_replace('<br>','', $html);
 
 // PDF-Erstellung
 $mpdf = MPDF::load_mpdf(); // Erstellt ein MPDF-Objekt aus dem Framework

@@ -13,7 +13,7 @@ class Spielplan
     public int $anzahl_teams;
     public int $anzahl_spiele;
     public array $platzierungstabelle = [];
-    public string $direkter_vergleich_tabellen = '';
+    public array $direkter_vergleich_tabellen = [];
     public array $tore_tabelle;
     public array $turnier_tabelle;
     public array $details;
@@ -301,46 +301,10 @@ class Spielplan
     {
         $gleichplatzierte_teams =
             $this->get_gleichplatzierte_teams($turnier_tabelle, array_key_first($turnier_tabelle), true);
-        $penalty = count($gleichplatzierte_teams) == count($turnier_tabelle);
+        $direkter_vergleich['penalty'] = ((count($gleichplatzierte_teams) == count($turnier_tabelle)));
+        $direkter_vergleich['tabelle'] = $turnier_tabelle;
 
-        ob_start();
-        $teams = array_map(['Team', 'teamid_to_teamname'], array_keys($turnier_tabelle));
-        ?>
-        <h4 class="w3-text-secondary"><?= ((!$penalty) ? "Direkter Vergleich: " : "Penalty-Schießen: ") . implode(' | ', $teams) ?></h4>
-        <div class="w3-card w3-responsive">
-            <table class="w3-table w3-centered <?= ($penalty) ? "w3-secondary" : "w3-striped" ?>">
-                <tr class="w3-primary">
-                    <th>Pl</th>
-                    <th>Team</th>
-                    <th>Spiele</th>
-                    <th>Punkte</th>
-                    <th>Tordifferenz</th>
-                    <th>Tore</th>
-                    <th>Gegentore</th>
-                    <th>Pen. Punkte</th>
-                    <th>Pen. Diff</th>
-                    <th>Pen. Tore</th>
-                </tr>
-                <?php $platz = 1;
-                foreach ($turnier_tabelle as $team_id => $ergebnis) { ?>
-                    <tr>
-                        <td><?= $penalty ? '?' : $platz++ ?></td>
-                        <td><?= Team::teamid_to_teamname($team_id) ?></td>
-                        <td><?= $ergebnis['spiele'] ?></td>
-                        <td><?= $ergebnis['punkte'] ?></td>
-                        <td><?= $ergebnis['tordifferenz'] ?></td>
-                        <td><?= $ergebnis['tore'] ?></td>
-                        <td><?= $ergebnis['gegentore'] ?></td>
-                        <td><?= $ergebnis['penalty_punkte'] ?? "--" ?></td>
-                        <td><?= $ergebnis['penalty_diff'] ?? "--" ?></td>
-                        <td><?= $ergebnis['penalty_tore'] ?? "--" ?></td>
-                    </tr>
-                <?php } //end foreach
-                ?>
-            </table>
-        </div>
-        <?php
-        $this->direkter_vergleich_tabellen .= ob_get_clean();
+        $this->direkter_vergleich_tabellen[] = $direkter_vergleich;
     }
 
     /**
@@ -573,7 +537,7 @@ class Spielplan
      * @param $spiel_id
      * @return bool
      */
-    public function check_penalty_eintragbar($spiel_id): bool
+    public function check_penalty_spiel($spiel_id): bool
     {
         $penalty_team_ids = [];
         foreach ($this->penalty_begegnungen as $team_ids) {
@@ -582,6 +546,10 @@ class Spielplan
         if (array_key_exists($this->spiele[$spiel_id]['team_id_a'], $penalty_team_ids)
             && array_key_exists($this->spiele[$spiel_id]['team_id_b'], $penalty_team_ids)) return true;
         return false;
+    }
+    public function check_penalty_anzeigen(): bool
+    {
+        return !empty($this->penalty_begegnungen);
     }
 
     /**
@@ -601,6 +569,14 @@ class Spielplan
                 or !array_key_exists($spiel['team_id_b'], $team_ids)) return false;
         }
         return true;
+    }
+    public function check_penalty_team(int $team_id): bool
+    {
+        $team_ids = [];
+        foreach ($this->ausstehende_penalty_begegnungen as $penalty) {
+            $team_ids += $penalty;
+        }
+        return array_key_exists($team_id, $team_ids);
     }
 
     /**

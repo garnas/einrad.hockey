@@ -27,7 +27,7 @@
                     <th class="w3-center">Penalty</th>
                 </tr>
                 <?php foreach ($spiele as $spiel_id => $spiel) { ?>
-                    <tr <?php if (!is_null($spiel["tore_a"]) && !is_null($spiel["tore_b"])){ ?>class="w3-pale-green"<?php }//endif?>>
+                    <tr <?php if (($teamcenter or $ligacenter) && !is_null($spiel["tore_a"]) && !is_null($spiel["tore_b"])){ ?>class="w3-pale-green"<?php }//endif?>>
 
                         <!-- Uhrzeit -->
                         <td class="w3-center"><?= $spiel["zeit"] ?></td>
@@ -78,9 +78,9 @@
                                 <input id="penalty_a[<?= $spiel_id ?>]"
                                        name="penalty_a[<?= $spiel_id ?>]"
                                        value='<?= $spiel["penalty_a"] ?>'
-                                       class='w3-input w3-border w3-round w3-center <?= !(!is_null($spiel["penalty_a"]) && !$spielplan->check_penalty_eintragbar($spiel_id)) ?: 'w3-secondary' ?>'
+                                       class='w3-input w3-border w3-round w3-center <?= !(!is_null($spiel["penalty_a"]) && !$spielplan->check_penalty_spiel($spiel_id)) ?: 'w3-secondary' ?>'
                                        style='padding: 2px; width: 65px; display: inline-block;'
-                                        <?= (!is_null($spiel["penalty_a"]) or $spielplan->check_penalty_eintragbar($spiel_id)) ?: 'disabled'?>
+                                        <?= (!is_null($spiel["penalty_a"]) or $spielplan->check_penalty_spiel($spiel_id)) ?: 'disabled'?>
                                        type='number'
                                        autocomplete='off'
                                        min='0'
@@ -91,9 +91,9 @@
                             <label for="penalty_b[<?= $spiel_id ?>]">
                                 <input id="penalty_b[<?= $spiel_id ?>]"
                                        name="penalty_b[<?= $spiel_id ?>]" value='<?= $spiel["penalty_b"] ?>'
-                                       class='w3-input w3-border w3-round w3-center <?= !(!is_null($spiel["penalty_b"]) && !$spielplan->check_penalty_eintragbar($spiel_id)) ?: 'w3-secondary' ?>'
+                                       class='w3-input w3-border w3-round w3-center <?= !(!is_null($spiel["penalty_b"]) && !$spielplan->check_penalty_spiel($spiel_id)) ?: 'w3-secondary' ?>'
                                        style='padding: 2px; width: 65px; display: inline-block;'
-                                        <?= (!is_null($spiel["penalty_b"]) or $spielplan->check_penalty_eintragbar($spiel_id)) ?: 'disabled'?>
+                                        <?= (!is_null($spiel["penalty_b"]) or $spielplan->check_penalty_spiel($spiel_id)) ?: 'disabled'?>
                                        type='number'
                                        autocomplete='off'
                                        min='0'
