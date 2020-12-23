@@ -92,6 +92,7 @@ if (isset($_POST['update_challenge']) && $teamcenter) {
     Form::error("Eintrag konnte nicht entfernt werden");
 }
 
+
 // Breite für die ProgressBar
 $akt_kilometerstand = $challenge->get_stand();
 $percent = round($akt_kilometerstand / $challenge->ziel_kilometer * 100);

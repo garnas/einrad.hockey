@@ -399,7 +399,7 @@ class ConfigVariables
 			'useActiveForms' => false,
 
 			// WATERMARKS
-			'watermarkImgBehind' => false,
+			'watermarkImgBehind' => true,
 			'showWatermarkText' => 0,
 			'showWatermarkImage' => 0,
 			'watermarkText' => '',

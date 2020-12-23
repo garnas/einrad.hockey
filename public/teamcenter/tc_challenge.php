@@ -9,7 +9,6 @@ require_once '../../logic/challenge.logic.php';
 $team_id = $_SESSION["team_id"];
 $kader = Spieler::get_teamkader($team_id);
 
-
 // Feststellung des aktuellen Teamplatzes
 $platz = "-";
 $kilometer = "-";
@@ -30,17 +29,16 @@ include '../../templates/header.tmp.php';
 <h1 class="w3-text-primary">km-Challenge</h1>
 <div class="w3-row-padding w3-stretch">
     <div class="w3-twothird">
-        <?php if ($uhrzeit <= $abschluss) {?>
-            <p>
-                <a href='../teamcenter/tc_challenge_eintraege.php' class="w3-button w3-secondary w3-block w3-card-2">Eintrag hinzufügen/entfernen</a>
-            </p>
-        <?php } ?>
+        <p>
+            <a href='../teamcenter/tc_challenge_team_urkunde.php?team_id=<?=$team_id?>' target="_blank" class="w3-button w3-secondary w3-block w3-card-2"><i class="material-icons">description</i> Teamurkunde herunterladen</a>
+        </p>
         <div class="w3-panel w3-responsive w3-card-4" style="padding:0;">
             <table class="w3-table w3-striped">
                 <tr class="w3-primary">
                     <th class="w3-center">#</th>
                     <th class="w3-center">Teilnehmer/in</th>
                     <th class="w3-center">Kilometer</th>
+                    <th class="w3-center">Urkunde</th>
                 </tr>
                 <?php 
                     $error = True;
@@ -51,6 +49,9 @@ include '../../templates/header.tmp.php';
                                 <td class="w3-center"><?=$spieler["platz"]?></td>
                                 <td class="w3-center"><?=$spieler['vorname']?></td>
                                 <td class="w3-center"><?=number_format($spieler['kilometer'], 1, ',', '.');?></td>
+                                <td class="w3-center">
+                                    <a href='../teamcenter/tc_challenge_spieler_urkunde.php?spieler_id=<?=$spieler["spieler_id"]?>' target="_blank" class="no w3-hover-text-secondary"><i class="material-icons">description</i></a>
+                                </td>
                             </tr>
                 <?php 
                     } //end foreach 

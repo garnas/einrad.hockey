@@ -126,11 +126,11 @@ class Challenge {
     // Erhalte Ergebnisse der Spieler für das einzelne Team (inkl. Platzierung)
     function get_team_spieler($team_id) {
         $sql = "
-        SELECT platz, vorname, kilometer
+        SELECT spieler_id, platz, vorname, kilometer
         FROM(
 	        SELECT (@row_number:=@row_number + 1) AS platz, sp.*
 	        FROM ( 
-		        SELECT sp.team_id, sp.vorname, ROUND(SUM(kilometer), 1) AS kilometer
+		        SELECT sp.team_id, sp.spieler_id, sp.vorname, ROUND(SUM(kilometer), 1) AS kilometer
 		        FROM `oeffi_challenge` ch, spieler sp, teams_liga t
 		        WHERE ch.spieler_id = sp.spieler_id
 		        AND sp.team_id = t.team_id
@@ -219,6 +219,58 @@ class Challenge {
         return db::escape($daten);
     }
     
+    // Erhalte das Gesamtergebnis für einen einzelnen Spieler
+    function get_spieler_result($spieler_id){
+        $sql = "
+        SELECT platz, vorname, nachname, geschlecht, teamname, kilometer
+        FROM (
+            SELECT (@row_number:=@row_number + 1) AS platz, sp.*
+	        FROM ( 
+		        SELECT sp.spieler_id, sp.vorname, sp.nachname, sp.geschlecht, te.teamname, ROUND(SUM(kilometer), 1) AS kilometer
+        		FROM `oeffi_challenge` ch, spieler sp, teams_liga te
+                WHERE ch.spieler_id = sp.spieler_id
+                AND sp.team_id = te.team_id
+		        AND ch.count = TRUE
+		        AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
+		        AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
+    	        GROUP BY sp.spieler_id
+                ORDER BY kilometer DESC
+	        ) AS sp, (SELECT @row_number:= 0) AS t
+        ) AS neu
+        WHERE spieler_id = '" . $spieler_id . "'
+        ";
+        $result = db::readdb($sql);
+        $daten = mysqli_fetch_assoc($result);
+
+        return db::escape($daten);
+    }
+
+    //Erhalte das Gesamtergebnis für ein einziges Team
+    function get_team_result($team_id){
+        $sql = "
+        SELECT platz, teamname, kilometer
+        FROM(
+            SELECT (@row_number:=@row_number + 1) AS platz, te.*
+            FROM(
+	            SELECT te.team_id, te.teamname, ROUND(SUM(kilometer), 1) AS kilometer
+	            FROM `oeffi_challenge` ch, spieler sp, teams_liga te
+	            WHERE ch.spieler_id = sp.spieler_id
+	            AND sp.team_id = te.team_id
+	            AND ch.count = TRUE
+	            AND datum >= '" . date("Y-m-d", strtotime($this->challenge_start)) . "'
+	            AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
+	            GROUP BY te.team_id
+	            ORDER BY kilometer DESC
+            ) AS te, (SELECT @row_number:= 0) AS t
+        ) AS neu
+        WHERE team_id = '" . $team_id . "'
+        ";
+        $result = db::readdb($sql);
+        $daten = mysqli_fetch_assoc($result);
+
+        return db::escape($daten);
+    }
+
     // Schreibe einen Eintrag in die Datenbank
     public static function set_data($spieler, $distanz, $radgroesse, $datum){
         $sql = "
