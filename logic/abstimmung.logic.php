@@ -5,3 +5,19 @@ if(isset($_SESSION['team_id'])) {
     $team_id = $_SESSION["team_id"];
     $stimme_check = $abstimmung->get_team($team_id);
 }
+
+// Formularpfrüfung für eine abgegebene Stimme
+if(isset($_POST['abstimmung']) && $teamcenter) {
+    $value = $_POST['abstimmung'];
+    $stimme = Abstimmung::add_stimme($value);
+    $team = Abstimmung::add_team($team_id);
+
+    if ($stimme && $team) {
+        Form::affirm("Die Stimme wurde erfolgreich abgegeben!");
+    } else {
+        Form::error("Die Stimme konnte nicht eingetragen werden.");
+    }
+
+    header('Location: tc_abstimmung.php');
+    die();
+}

@@ -3,10 +3,10 @@
 class Abstimmung {
 
     // Stimmt ein Team ab, wird die Stimme getrennt von der team_id gespeichert
-    function add_stimme($value) {
+    static function add_stimme($value) {
         $sql = '
         INSERT INTO `abstimmung_ergebnisse` (`id`, `value`) 
-        VALUES (NULL, ' . $value . ')
+        VALUES (NULL, "' . $value . '")
         ';
 
         db::writedb($sql);
@@ -15,7 +15,7 @@ class Abstimmung {
     }
 
     // Stimmt ein Team ab, wird das Team getrennt von der Stimme gespeichert
-    function add_team($team_id) {
+    static function add_team($team_id) {
         $sql = '
         INSERT INTO `abstimmung_teams` (`team_id`, `value`)
         VALUES (' . $team_id . ', 1)
