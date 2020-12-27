@@ -12,3 +12,16 @@ require_once '../../logic/abstimmung.logic.php';
 /////////////////////////////////////////////////////////////////////////////
 include '../../templates/header.tmp.php';
 ?>
+
+<h1 class="w3-text-primary">Abstimmung</h1>
+
+<form class="" method="post">
+    <input type="radio" name="abstimmung" value="sommerpause" class="w3-radio">
+    <label for="sommerpause">Sommerpause</label><br>
+    <input type="radio" name="abstimmung" value="winterpause" class="w3-radio">
+    <label for="winterpause">Winterpause</label><br>
+    <button style='cursor: pointer; border: 0px;' class="w3-btn w3-secondary"><i class="material-icons">how_to_vote</i> Stimme abgeben!</button>
+</form>
+
+<?php
+include '../../templates/footer.tmp.php';
