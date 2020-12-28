@@ -24,11 +24,13 @@ include '../../templates/header.tmp.php';
         <tr class="w3-primary">
             <th>Antwort</th>    
             <th class="w3-right-align">Stimmen</th>
+            <th class="w3-right-align">Prozent</th>
         </tr>
-    <?php foreach($tabelle as $zeile => $wert) { ?>
+    <?php foreach($tabelle as $zeile) { ?>
         <tr>
-            <td><?=$zeile?></td>
-            <td class="w3-right-align"><?=$wert?></td>
+            <td><?=$zeile['antwort']?></td>
+            <td class="w3-right-align"><?=$zeile['stimmen']?></td>
+            <td class="w3-right-align"><?=$zeile['prozent']?></td>
         </tr>
     <?php } ?>
     </table>

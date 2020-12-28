@@ -72,7 +72,8 @@ class Abstimmung {
             }
         }
 
-        $ergebnisse = array_merge($ergebnisse, array('Gesamt' => $anzahl_stimmen));
+        $ergebnisse = array_merge($ergebnisse, array('gesamt' => $anzahl_stimmen));
+        db::debug($ergebnisse);
         return $ergebnisse;
     }
 }
