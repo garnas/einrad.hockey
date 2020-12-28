@@ -2,7 +2,7 @@
 
 class Abstimmung {
 
-    public $beginn_der_abstimmung = "2021-01-17 10:00:00";
+    public $beginn_der_abstimmung = "2020-12-28 10:00:00";
     public $ende_der_abstimmung = "2021-01-31 18:00:00";
 
     // Stimmt ein Team ab, wird die Stimme getrennt von der team_id gespeichert

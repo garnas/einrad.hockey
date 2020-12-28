@@ -51,6 +51,11 @@ include '../../templates/header.tmp.php';
                     <label for="winterpause">Wir sprechen uns für einen Erhalt des bisherigen Formats mit einer <b>Saisonpause im Winter</b> aus.</label>
                 </p>
                 <p>
+                    <!-- Dritte Antwortmöglichkeit -->
+                    <input type="radio" name="abstimmung" id="enthaltung" value="enthaltung" class="w3-radio">
+                    <label for="enthaltung">Wir <b>enthalten</b> uns.</label>
+                </p>
+                <p>
                     <button style='cursor: pointer; border: 0px;' class="w3-block w3-primary w3-padding"><i class="material-icons">how_to_vote</i> Stimme abgeben!</button>
                 </p>
             </form>

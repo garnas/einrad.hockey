@@ -11,6 +11,7 @@ $abgegebene_stimmen = $ergebnisse['Gesamt'];
 $tabelle = array(
     "Winterpause" => $ergebnisse['winterpause'] ?? 0,
     "Sommerpause" => $ergebnisse['sommerpause'] ?? 0,
+    "Enthaltung" => $ergebnisse['enthaltung'] ?? 0,
     "Gesamt" => $ergebnisse['Gesamt'] ?? 0
 );
 
