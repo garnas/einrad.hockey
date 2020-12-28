@@ -1,6 +1,10 @@
 <?php
 $abstimmung = new Abstimmung();
 
+$uhrzeit = strtotime(date('Y-m-d H:i:s'));
+$abschluss = strtotime($abstimmung->ende_der_abstimmung);
+$beginn = strtotime($abstimmung->beginn_der_abstimmung);
+
 if(isset($_SESSION['team_id'])) {
     $team_id = $_SESSION["team_id"];
     $stimme_check = $abstimmung->get_team($team_id);
