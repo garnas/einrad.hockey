@@ -17,6 +17,7 @@ include '../../templates/header.tmp.php';
 
 <p>Start: <?= date("d.m.Y", $beginn)?> <?=date("H:i", $beginn)?> Uhr</p>
 <p>Ende: <?=date("d.m.Y", $abschluss)?> <?=date("H:i", $abschluss)?> Uhr</p>
+<p>Im Sinne der Anonymität wird eine Mindestanzahl an Stimmen benötigt.</p>
 
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-striped">
