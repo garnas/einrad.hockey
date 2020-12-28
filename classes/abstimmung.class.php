@@ -2,8 +2,8 @@
 
 class Abstimmung {
 
-    public $beginn_der_abstimmung = "28.12.2020 10:00:00";
-    public $ende_der_abstimmung = "28.12.2020 11:00:00";
+    public $beginn_der_abstimmung = "2021-01-17 10:00:00";
+    public $ende_der_abstimmung = "2021-01-31 18:00:00";
 
     // Stimmt ein Team ab, wird die Stimme getrennt von der team_id gespeichert
     static function add_stimme($value) {
