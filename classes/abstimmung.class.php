@@ -48,4 +48,31 @@ class Abstimmung {
             return false;
         }
     }
+
+    function get_ergebnisse($min = 6) {
+        $sql = '
+        SELECT value, COUNT(value) AS stimmen 
+        FROM `abstimmung_ergebnisse`
+        GROUP BY value
+        ';
+
+        $result = db::readdb($sql);
+
+        $ergebnisse = array();
+        $anzahl_stimmen = 0;
+
+        while($row = mysqli_fetch_assoc($result)) {
+            $ergebnisse = array_merge($ergebnisse, array($row['value'] => $row['stimmen']));
+            $anzahl_stimmen = $anzahl_stimmen + $row['stimmen'];
+        }
+        
+        if ($anzahl_stimmen < $min) {
+            foreach($ergebnisse as $möglichkeit => $stimmen) {
+                $ergebnisse[$möglichkeit] = 0;
+            }
+        }
+
+        $ergebnisse = array_merge($ergebnisse, array('Gesamt' => $anzahl_stimmen));
+        return $ergebnisse;
+    }
 }
