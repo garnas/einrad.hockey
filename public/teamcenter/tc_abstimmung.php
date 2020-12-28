@@ -25,7 +25,7 @@ include '../../templates/header.tmp.php';
 <p>Um ein hohes Maß an Anonymität bei der Abstimmung zu erzielen, ist eine Korrektur eurer Stimme <b>nicht</b> möglich! Nach dem Ende der Abstimmung wird der Ligaausschuss über das Ergebnis informieren.</p>
 
 <!-- Bereich der sich je nach Zeitpunkt in der Abstimmung änder -->
-<div class="w3-panel w3-light-grey">
+<div class="w3-panel w3-light-grey w3-padding-32">
     <?php if ($beginn >= $abschluss) { ?>
         <p style="text-transform: uppercase;" class="w3-large w3-text-red">Fehler bei der Einrichtung der Abstimmung</p>
         <?=Form::error("Fehler bei der Einrichtung der Abstimmung!");?>
@@ -43,12 +43,12 @@ include '../../templates/header.tmp.php';
                 <p">
                     <!-- Erste Antwortmöglichkeit -->
                     <input type="radio" name="abstimmung" id="sommerpause" value="sommerpause" class="w3-radio">
-                    <label for="sommerpause">Wir sprechen uns für eine Änderung zur <b>Saisonpause im Sommer</b> aus.</label>
+                    <label for="sommerpause">Wir sprechen uns für eine Änderung hin zu einer <b>Saisonpause im Sommer</b> aus.</label>
                 </p>
                 <p>
                     <!-- Zweite Antwortmöglichkeit -->
                     <input type="radio" name="abstimmung" id="winterpause" value="winterpause" class="w3-radio">
-                    <label for="winterpause">Wir sprechen uns für einen Erhalt des bisherigen Formats mit einer <b>Saisonpause im Winter</b> aus.</label>
+                    <label for="winterpause">Wir sprechen uns für einen Erhalt des bisherigen Saisonverlaufs mit einer <b>Saisonpause im Winter</b> aus.</label>
                 </p>
                 <p>
                     <!-- Dritte Antwortmöglichkeit -->
