@@ -35,6 +35,7 @@ class Abstimmung {
         SELECT * 
         FROM abstimmung_teams 
         WHERE team_id = '. $team_id . '
+        AND value = true
         ';
 
         $result = db::readdb($sql);
