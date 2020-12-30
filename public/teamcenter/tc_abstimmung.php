@@ -40,17 +40,17 @@ include '../../templates/header.tmp.php';
             </p>
             <p">
                 <!-- Erste Antwortmöglichkeit -->
-                <input type="radio" name="abstimmung" id="sommerpause" value="sommerpause" class="w3-radio">
+                <input type="radio" name="abstimmung" id="sommerpause" value="sommerpause" class="w3-radio" <?=$vorauswahl['sommerpause'] ? "checked" : ""?>>
                 <label for="sommerpause">Wir sprechen uns für eine Änderung hin zu einer <b>Saisonpause im Sommer</b> aus.</label>
             </p>
             <p>
                 <!-- Zweite Antwortmöglichkeit -->
-                <input type="radio" name="abstimmung" id="winterpause" value="winterpause" class="w3-radio">
+                <input type="radio" name="abstimmung" id="winterpause" value="winterpause" class="w3-radio" <?=$vorauswahl['winterpause'] ? "checked" : ""?>>
                 <label for="winterpause">Wir sprechen uns für einen Erhalt des bisherigen Saisonverlaufs mit einer <b>Saisonpause im Winter</b> aus.</label>
             </p>
             <p>
                 <!-- Dritte Antwortmöglichkeit -->
-                <input type="radio" name="abstimmung" id="enthaltung" value="enthaltung" class="w3-radio">
+                <input type="radio" name="abstimmung" id="enthaltung" value="enthaltung" class="w3-radio" <?=$vorauswahl['enthaltung'] ? "checked" : ""?>>
                 <label for="enthaltung">Wir <b>enthalten</b> uns.</label>
             </p>
             <p>

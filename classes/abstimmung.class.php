@@ -8,7 +8,7 @@ class Abstimmung {
     // Überprüfung, ob das Team bereits abgestimmt hat
     function get_team($crypt) {
         $sql = '
-        SELECT * 
+        SELECT value 
         FROM abstimmung 
         WHERE crypt = "'. $crypt . '"
         ';
@@ -16,13 +16,7 @@ class Abstimmung {
         $result = db::readdb($sql);
         $data = mysqli_fetch_assoc($result);
         
-        // Check, ob Team bereits abgestimmt hat
-        // true -> Das Team hat noch nie abgestimmt; false -> Das Team hat bereits einmal abgestimmt
-        if (empty($data)) {
-            return true;
-        } else {
-            return false;
-        }
+        return $data;
     }
 
     function get_crypt($key, $teamname, $iv) {

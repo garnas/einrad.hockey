@@ -43,12 +43,18 @@ if(isset($_SESSION['team_id'])) {
     $crypt = $abstimmung->get_crypt($key, $teamname, $iv);
 
     $stimme_check = $abstimmung->get_team($crypt);
+    $vorauswahl['sommerpause'] = False;
+    $vorauswahl['winterpause'] = False;
+    $vorauswahl['enthaltung'] = False;
+    if (isset($stimme_check)) {
+        $vorauswahl[$stimme_check['value']] = True;
+    }
 
     // Formularpfrüfung für eine abgegebene Stimme
     if(isset($_POST['abstimmung'])) {
         $value = $_POST['abstimmung'];
         
-        if($stimme_check) {
+        if(empty($stimme_check)) {
             $stimme = Abstimmung::add_stimme($value, $crypt);
         } else {
             $stimme = Abstimmung::update_stimme($value, $crypt);
