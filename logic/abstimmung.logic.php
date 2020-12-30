@@ -5,7 +5,7 @@ $uhrzeit = strtotime(date('Y-m-d H:i:s'));
 $abschluss = strtotime($abstimmung->ende_der_abstimmung);
 $beginn = strtotime($abstimmung->beginn_der_abstimmung);
 
-
+// Berechnungen für das Ligacenter
 if(isset($_SESSION['la_id'])) {
     $ergebnisse = $abstimmung->get_ergebnisse();
     $abgegebene_stimmen = $ergebnisse['gesamt'];
@@ -33,23 +33,35 @@ if(isset($_SESSION['la_id'])) {
     );
 }
 
+// Berechnungen für das Teamcenter
 if(isset($_SESSION['team_id'])) {
-    $team_id = $_SESSION["team_id"];
-    $stimme_check = $abstimmung->get_team($team_id);
-}
 
-// Formularpfrüfung für eine abgegebene Stimme
-if(isset($_POST['abstimmung']) && $teamcenter) {
-    $value = $_POST['abstimmung'];
-    $stimme = Abstimmung::add_stimme($value);
-    $team = Abstimmung::add_team($team_id);
+    // Variablen für Verschlüsselung
+    $teamname = $daten['teamname'];
+    $key = $daten['passwort'];
+    $iv = $daten['team_id'];
+    $crypt = $abstimmung->get_crypt($key, $teamname, $iv);
 
-    if ($stimme && $team) {
-        Form::affirm("Die Stimme wurde erfolgreich abgegeben!");
-    } else {
-        Form::error("Die Stimme konnte nicht eingetragen werden.");
+    $stimme_check = $abstimmung->get_team($crypt);
+
+    // Formularpfrüfung für eine abgegebene Stimme
+    if(isset($_POST['abstimmung'])) {
+        $value = $_POST['abstimmung'];
+        
+        if($stimme_check) {
+            $stimme = Abstimmung::add_stimme($value, $crypt);
+        } else {
+            $stimme = Abstimmung::update_stimme($value, $crypt);
+        }
+        
+
+        if ($stimme) {
+            Form::affirm("Die Stimme wurde erfolgreich abgegeben!");
+        } else {
+            Form::error("Die Stimme konnte nicht eingetragen werden.");
+        }
+
+        header('Location: tc_abstimmung.php');
+        die();
     }
-
-    header('Location: tc_abstimmung.php');
-    die();
 }

@@ -5,49 +5,58 @@ class Abstimmung {
     public $beginn_der_abstimmung = "2020-12-28 10:00:00";
     public $ende_der_abstimmung = "2021-01-31 18:00:00";
 
-    // Stimmt ein Team ab, wird die Stimme getrennt von der team_id gespeichert
-    static function add_stimme($value) {
-        $sql = '
-        INSERT INTO `abstimmung_ergebnisse` (`id`, `value`) 
-        VALUES (NULL, "' . $value . '")
-        ';
-
-        db::writedb($sql);
-
-        return true;
-    }
-
-    // Stimmt ein Team ab, wird das Team getrennt von der Stimme gespeichert
-    static function add_team($team_id) {
-        $sql = '
-        INSERT INTO `abstimmung_teams` (`team_id`, `value`)
-        VALUES (' . $team_id . ', 1)
-        ';
-
-        db::writedb($sql);
-
-        return true;
-    }
-
-    // Überprüfung, ob ein Team bereits abgestimmt hat
-    function get_team($team_id) {
+    // Überprüfung, ob das Team bereits abgestimmt hat
+    function get_team($crypt) {
         $sql = '
         SELECT * 
-        FROM abstimmung_teams 
-        WHERE team_id = '. $team_id . '
-        AND value = true
+        FROM abstimmung 
+        WHERE crypt = "'. $crypt . '"
         ';
 
         $result = db::readdb($sql);
         $data = mysqli_fetch_assoc($result);
         
         // Check, ob Team bereits abgestimmt hat
-        // true -> Das Team darf noch abstimmen; false -> Das Team hat bereits abgestimmt
+        // true -> Das Team hat noch nie abgestimmt; false -> Das Team hat bereits einmal abgestimmt
         if (empty($data)) {
             return true;
         } else {
             return false;
         }
+    }
+
+    function get_crypt($key, $teamname, $iv) {
+        $cipher = "aes-128-gcm";
+        if (in_array($cipher, openssl_get_cipher_methods())) {
+            # Alternativ kann man auch mit einem Datum Arbeiten (das müsste dann aber gespeichert werden)
+            # Oder man gibt einfach eine Zahl vor
+            $ciphertext = openssl_encrypt($teamname, $cipher, $key, $options=0, $iv, $tag);
+        }
+        return $ciphertext;
+    }
+
+    // Stimmt ein Team ab, wird die Stimme getrennt von der team_id gespeichert
+    static function add_stimme($value, $crypt) {
+        $sql = '
+        INSERT INTO `abstimmung` (`id`, `value`, `crypt`) 
+        VALUES (NULL, "' . $value . '", "' . $crypt . '")
+        ';
+        
+        db::writedb($sql);
+    
+        return true;
+    }
+
+    static function update_stimme($value, $crypt) {
+        $sql = '
+        UPDATE `abstimmung` 
+        SET `value` = "' . $value . '"
+        WHERE `crypt` = "' . $crypt . '"
+        ';
+        
+        db::writedb($sql);
+    
+        return true;
     }
 
     function get_ergebnisse($min = 6) {
@@ -75,6 +84,7 @@ class Abstimmung {
 
         $ergebnisse = array_merge($ergebnisse, array('gesamt' => $anzahl_stimmen));
         db::debug($ergebnisse);
+
         return $ergebnisse;
     }
 }

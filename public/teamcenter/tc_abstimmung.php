@@ -22,7 +22,6 @@ include '../../templates/header.tmp.php';
 
 <!-- Informationstext für die Abstimmung -->
 <p>Hier kann dann noch ein Text eingefügt werden</p>
-<p>Um ein hohes Maß an Anonymität bei der Abstimmung zu erzielen, ist eine Korrektur eurer Stimme <b>nicht</b> möglich! Nach dem Ende der Abstimmung wird der Ligaausschuss über das Ergebnis informieren.</p>
 
 <!-- Bereich der sich je nach Zeitpunkt in der Abstimmung änder -->
 <div class="w3-panel w3-light-grey w3-padding-32">
@@ -34,36 +33,30 @@ include '../../templates/header.tmp.php';
         <p class="w3-large">Die Abstimmung startet am <?=date("d.m.Y", $beginn)?> um <?=date("H:i", $beginn)?> Uhr.</p>
     <!-- WÄHREND DER ABSTIMMUNG -->
     <?php } elseif ($uhrzeit < $abschluss) { ?>
-        <?php if ($stimme_check) {?>
-            <!-- Formular zur Stimmabgabe -->
-            <form method="post">
-                <p class="w3-large">
-                    Hier kann ein Fragetext rein.
-                </p>
-                <p">
-                    <!-- Erste Antwortmöglichkeit -->
-                    <input type="radio" name="abstimmung" id="sommerpause" value="sommerpause" class="w3-radio">
-                    <label for="sommerpause">Wir sprechen uns für eine Änderung hin zu einer <b>Saisonpause im Sommer</b> aus.</label>
-                </p>
-                <p>
-                    <!-- Zweite Antwortmöglichkeit -->
-                    <input type="radio" name="abstimmung" id="winterpause" value="winterpause" class="w3-radio">
-                    <label for="winterpause">Wir sprechen uns für einen Erhalt des bisherigen Saisonverlaufs mit einer <b>Saisonpause im Winter</b> aus.</label>
-                </p>
-                <p>
-                    <!-- Dritte Antwortmöglichkeit -->
-                    <input type="radio" name="abstimmung" id="enthaltung" value="enthaltung" class="w3-radio">
-                    <label for="enthaltung">Wir <b>enthalten</b> uns.</label>
-                </p>
-                <p>
-                    <button style='cursor: pointer; border: 0px;' class="w3-block w3-primary w3-padding"><i class="material-icons">how_to_vote</i> Stimme abgeben!</button>
-                </p>
-            </form>
-        <?php } else {?>
-            <div>
-                <p class="w3-large">Ihr habt bereits an der Abstimmung teilgenommen. Vielen Dank!</p>
-            </div>
-        <?php } ?>
+        <!-- Formular zur Stimmabgabe -->
+        <form method="post">
+            <p class="w3-large">
+                Hier kann ein Fragetext rein.
+            </p>
+            <p">
+                <!-- Erste Antwortmöglichkeit -->
+                <input type="radio" name="abstimmung" id="sommerpause" value="sommerpause" class="w3-radio">
+                <label for="sommerpause">Wir sprechen uns für eine Änderung hin zu einer <b>Saisonpause im Sommer</b> aus.</label>
+            </p>
+            <p>
+                <!-- Zweite Antwortmöglichkeit -->
+                <input type="radio" name="abstimmung" id="winterpause" value="winterpause" class="w3-radio">
+                <label for="winterpause">Wir sprechen uns für einen Erhalt des bisherigen Saisonverlaufs mit einer <b>Saisonpause im Winter</b> aus.</label>
+            </p>
+            <p>
+                <!-- Dritte Antwortmöglichkeit -->
+                <input type="radio" name="abstimmung" id="enthaltung" value="enthaltung" class="w3-radio">
+                <label for="enthaltung">Wir <b>enthalten</b> uns.</label>
+            </p>
+            <p>
+                <button style='cursor: pointer; border: 0px;' class="w3-block w3-primary w3-padding"><i class="material-icons">how_to_vote</i> Stimme abgeben!</button>
+            </p>
+        </form>
     <!-- NACH DER ABSTIMMUNG -->
     <?php } elseif ($uhrzeit > $abschluss) { ?>
         <p class="w3-large">Die Abstimmung ist beendet.</p>
