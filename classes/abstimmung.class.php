@@ -56,7 +56,7 @@ class Abstimmung {
     function get_ergebnisse($min = 6) {
         $sql = '
         SELECT value, COUNT(value) AS stimmen 
-        FROM `abstimmung_ergebnisse`
+        FROM `abstimmung`
         GROUP BY value
         ';
 
@@ -77,7 +77,6 @@ class Abstimmung {
         }
 
         $ergebnisse = array_merge($ergebnisse, array('gesamt' => $anzahl_stimmen));
-        db::debug($ergebnisse);
 
         return $ergebnisse;
     }
