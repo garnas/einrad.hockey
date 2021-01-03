@@ -46,15 +46,30 @@ Iceland banjo dreamcatcher, snackwave marfa aesthetic vape photo booth YOLO goda
     </div>
   </div>
   <div class="w3-twothird">
-    <p class="w3c-margin">Das ist ein Text.</p>
+    <h1 class="w3-text-primary w3-padding w3-white w3-round">Adrian</h1>
+    <table class="w3-table">
+      <tr>
+        <td style="vertical-align: top;">Spielt seit:</td>
+        <td style="vertical-align: top;">ca. 1996</td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top;">Erstes Team:</td>
+        <td style="vertical-align: top;">VE Berlin (VEB = Volkseigener Betrieb aus der DDR)</td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top;">Lieblingsgegner:</td>
+        <td style="vertical-align: top;">Wupper Piraten</td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top;">Turniere:</td>
+        <td style="vertical-align: top;">ca. 60</td>
+      </tr>
+    </table>
   </div>
 </div>
 
 <!-- Zweiter Spielerabschnitt -->
 <div class="w3-container w3-card-4 w3-primary w3-margin w3-round">
-  <div class="w3-twothird w3-right-align">
-    <p>Das ist ein Text.</p>
-  </div>
   <div class="w3-third w3-padding">
     <div class="w3-display-container w3-card w3-round" style="border: 1px solid white;">
       <img class="slideshow2 w3-round" src="../bilder/spielerprofile/Robert.jpg" style="width:100%">
@@ -64,6 +79,27 @@ Iceland banjo dreamcatcher, snackwave marfa aesthetic vape photo booth YOLO goda
       <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
       <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
     </div>
+  </div>
+  <div class="w3-twothird">
+    <h1 class="w3-text-primary w3-padding w3-white w3-round">Robert</h1>
+    <table class="w3-table">
+      <tr>
+        <td style="vertical-align: top;">Spielt seit:</td>
+        <td style="vertical-align: top;">1990</td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top;">Erstes Team:</td>
+        <td style="vertical-align: top;">Radlos (gelb) - bis heute</td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top;">Lieblingsgegner:</td>
+        <td style="vertical-align: top;">Mehrere (z.B. Wirbelsturm Bonlanden, Stolpervögel Breckenheim)</td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top;">Turniere:</td>
+        <td style="vertical-align: top;">ca. 200</td>
+      </tr>
+    </table>
   </div>
 </div>
 
@@ -82,7 +118,21 @@ Iceland banjo dreamcatcher, snackwave marfa aesthetic vape photo booth YOLO goda
     </div>
   </div>
   <div class="w3-twothird">
-    <p class="w3c-margin">Das ist ein Text.</p>
+    <h1 class="w3-text-primary w3-padding w3-white w3-round">Günther</h1>
+    <table class="w3-table">
+      <tr>
+        <td style="vertical-align: top;">Spielt seit:</td>
+        <td style="vertical-align: top;">1990</td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top;">Erstes Team:</td>
+        <td style="vertical-align: top;">Uniwheeler (auch heute noch) </td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top;">Turniere:</td>
+        <td style="vertical-align: top;">ca. 150 + Abschlussturniere</td>
+      </tr>
+    </table>
   </div>
 </div>
 
