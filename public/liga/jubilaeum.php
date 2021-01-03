@@ -12,6 +12,7 @@ $content = "Spielerprofile für das 25. Jubiläum der Deutschen Einradhockeyliga
 include '../../templates/header.tmp.php';
 ?>
 
+<!-- Erster Spielerabschnitt -->
 <div class="w3-container w3-card-4 w3-primary w3-margin w3-round">
   <div class="w3-third w3-padding">
     <div class="w3-display-container w3-round w3-card" style="border: 1px solid white;">
@@ -28,7 +29,7 @@ include '../../templates/header.tmp.php';
   </div>
 </div>
 
-
+<!-- Zweiter Spielerabschnitt -->
 <div class="w3-container w3-card-4 w3-primary w3-margin w3-round">
   <div class="w3-twothird w3-right-align">
     <p>Das ist ein Text.</p>
@@ -45,6 +46,7 @@ include '../../templates/header.tmp.php';
   </div>
 </div>
 
+<!-- Dritter Spielerabschnitt -->
 <div class="w3-container w3-card-4 w3-primary w3-margin w3-round">
   <div class="w3-third w3-padding">
     <div class="w3-display-container w3-card w3-round" style="border: 1px solid white;">
@@ -61,6 +63,7 @@ include '../../templates/header.tmp.php';
   </div>
 </div>
 
+<!-- Script für die Slideshow -->
 <script>
 var slideIndex = [1,1,1];
 var slideId = ["slideshow1","slideshow2","slideshow3"];
