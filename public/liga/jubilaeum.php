@@ -13,7 +13,7 @@ include '../../templates/header.tmp.php';
 ?>
 
 <div class="w3-row">
-    <div class="w3-third w3-display-container w3-margin">
+    <div class="w3-third w3-display-container">
       <img class="slideshow1" src="../bilder/spielerprofile/Adrian.jpg" style="width:100%">
       <img class="slideshow1" src="../bilder/spielerprofile/Adrian2.jpg" style="width:100%">
       <img class="slideshow1" src="../bilder/spielerprofile/Adrian6.jpg" style="width:100%">
@@ -21,7 +21,7 @@ include '../../templates/header.tmp.php';
       <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 0)">&#10094;</button>
       <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 0)">&#10095;</button>
     </div>
-    <div class="w3-third w3-display-container w3-margin">
+    <div class="w3-third w3-display-container">
       <img class="slideshow2" src="../bilder/spielerprofile/Adrian.jpg" style="width:100%">
       <img class="slideshow2" src="../bilder/spielerprofile/Adrian2.jpg" style="width:100%">
       <img class="slideshow2" src="../bilder/spielerprofile/Adrian6.jpg" style="width:100%">
@@ -29,13 +29,22 @@ include '../../templates/header.tmp.php';
       <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
       <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
     </div>
+    <div class="w3-third w3-display-container">
+      <img class="slideshow3" src="../bilder/spielerprofile/Adrian.jpg" style="width:100%">
+      <img class="slideshow3" src="../bilder/spielerprofile/Adrian2.jpg" style="width:100%">
+      <img class="slideshow3" src="../bilder/spielerprofile/Adrian6.jpg" style="width:100%">
+      <img class="slideshow3" src="../bilder/spielerprofile/Adrian7.jpg" style="width:100%">
+      <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 2)">&#10094;</button>
+      <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 2)">&#10095;</button>
+    </div>
 </div>
 
 <script>
-var slideIndex = [1,1];
-var slideId = ["slideshow1","slideshow2"];
+var slideIndex = [1,1,1];
+var slideId = ["slideshow1","slideshow2","slideshow3"];
 showDivs(1,0);
 showDivs(1,1);
+showDivs(1,2);
 
 function plusDivs(n, no) {
   showDivs(slideIndex[no] += n, no);
