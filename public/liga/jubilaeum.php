@@ -13,21 +13,21 @@ include '../../templates/header.tmp.php';
 ?>
 
 <div class="w3-row">
-    <div class=" w3-third w3-display-container">
+    <div class="w3-third w3-display-container w3-margin">
       <img class="slideshow1" src="../bilder/spielerprofile/Adrian.jpg" style="width:100%">
       <img class="slideshow1" src="../bilder/spielerprofile/Adrian2.jpg" style="width:100%">
       <img class="slideshow1" src="../bilder/spielerprofile/Adrian6.jpg" style="width:100%">
       <img class="slideshow1" src="../bilder/spielerprofile/Adrian7.jpg" style="width:100%">
-      <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1, 0)">&#10094;</button>
-      <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1, 0)">&#10095;</button>
+      <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 0)">&#10094;</button>
+      <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 0)">&#10095;</button>
     </div>
-    <div class="w3-third w3-display-container">
+    <div class="w3-third w3-display-container w3-margin">
       <img class="slideshow2" src="../bilder/spielerprofile/Adrian.jpg" style="width:100%">
       <img class="slideshow2" src="../bilder/spielerprofile/Adrian2.jpg" style="width:100%">
       <img class="slideshow2" src="../bilder/spielerprofile/Adrian6.jpg" style="width:100%">
       <img class="slideshow2" src="../bilder/spielerprofile/Adrian7.jpg" style="width:100%">
-      <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1, 1)">&#10094;</button>
-      <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1, 1)">&#10095;</button>
+      <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
+      <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
     </div>
 </div>
 
