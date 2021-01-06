@@ -200,14 +200,28 @@ Iceland banjo dreamcatcher, snackwave marfa aesthetic vape photo booth YOLO goda
 </div>
 
 <!-- Antworten zweiter Abschnitt -->
-<p class="w3-text-secondary"><b>Snackwave typewriter drinking vinegar letterpress</b></p>
-<p>I'm baby iceland synth activated charcoal lo-fi copper mug williamsburg normcore hella banjo banh mi adaptogen narwhal squid typewriter. Fam distillery brunch edison bulb portland selvage sustainable four loko lyft man braid. Offal raw denim small batch wolf food truck asymmetrical lumbersexual truffaut kinfolk try-hard pork belly beard. Synth la croix put a bird on it schlitz chartreuse viral narwhal 8-bit pok pok brunch taxidermy humblebrag kale chips. Irony helvetica retro twee art party. Fanny pack XOXO cronut flannel, sriracha bicycle rights street art blog. Kickstarter hell of bespoke drinking vinegar normcore, four loko gochujang kogi hoodie wayfarers photo booth knausgaard street art.</p>
+<p class="w3-text-secondary"><b>Was vermisste du aus den vergangenen Saisons am meisten?</b></p>
+<p>In der Anfangszeit der Liga war es noch möglich, mitten im Spiel das Team zu wechseln. So kam es immer wieder vor, wenn ein Spiel eindeutig von uns gewinnen werden würde, dass ich vorher zu entsprechendem Teamchef ging und mir ein Trikot vom Gegner geben ließ und das unter mein Trikot anzog. Mitten im Spiel zog ich mein Trikot aus und wechselte das Team, während ein Spieler aus der gegnerischen Mannschaft zu uns wechselte. Das hatte immer viel Spaß gemacht und für Stimmung gesorgt und Spiele waren nicht mehr so eindeutig. Natürlich gab es dann auch Stimmen von anderen Teams, das würde die Ergebnisse verfälschen. Tatsächlich hatte das Team, in das ich wechselte, dadurch mehr Spielanteile, manche Spieler bekamen Pässe, die sie sonst nicht bekommen hätten und ich war immer bemüht, das Ergebnis nicht zu beeinflussen. Es hat dann doch immer RADLOS gewonnen. Aber alle hatten mehr Spaß! Ich weiß nicht, was ich heute sagen würde, wenn bei einem Turnier ein "besserer" Spieler in mehreren Teams mitspielen würde.  </p>
 
-<p class="w3-text-secondary"><b>Cred 90's flexitarian</b></p>
-<p>Fashion axe prism portland, meh enamel pin hoodie distillery chartreuse kinfolk health goth 90's. Gentrify narwhal man bun viral poke, swag mumblecore fashion axe messenger bag shabby chic palo santo blue bottle wayfarers squid biodiesel. Mustache taxidermy normcore brunch. 8-bit celiac viral, pok pok four dollar toast cray microdosing. Mustache keffiyeh mixtape drinking vinegar plaid butcher fixie.</p>
+<p class="w3-text-secondary"><b>Wie bist du zum Einradhockey gekommen?</b></p>
+<p>Auf dem Europäischen Jonglierfestival in Oldenburg 1990 gab es einen Einradhockey-Workshop, zu dem mich mein Freundeskreis drängte und ich dann spontan daran teilnahm, weil ein anderer Workshop ausfiel.</p>
 
-<p class="w3-text-secondary"><b>Snackwave poutine poke vinyl dreamcatcher occupy. Kogi XOXO hoodie, sartorial chambray PBR&B sustainable chillwave vaporware gastropub</b></p>
-<p>Gluten-free brooklyn artisan shoreditch kitsch ugh four loko paleo pork belly raclette brunch. Fanny pack photo booth pabst, messenger bag next level readymade bushwick sriracha prism etsy activated charcoal. Taiyaki four loko tilde VHS. Pok pok sustainable hot chicken hashtag narwhal brooklyn iceland franzen tumeric green juice tumblr craft beer VHS. Tilde pour-over retro, gastropub master cleanse keffiyeh four loko organic keytar prism. Kogi organic meh, quinoa unicorn chia tumeric pok pok try-hard cold-pressed. Williamsburg man braid tacos schlitz sustainable 8-bit affogato.</p>
+<p class="w3-text-secondary"><b>Wie bist du zum Einradfahren gekommen?</b></p>
+<p>Beim Fahrräder basteln mit einem Freund war ich für die "Feinarbeiten" zuständig, wie Schaltungen einstellen und Bremsen testen. Damit war ich der Testfahrer für Erstkonstruktionen, zum Teil für Fahrräder, die kaum fahrtauglich waren. Irgendwann kam besagter Freund und meinte, er hätte ein Rad gesehen, auf dem ich nicht fahren könne und nahm mich zu einem Jongliertreffen mit. Dort drückte er mir ein Einrad in die Hand. Ich wusste, dass es so etwas gab. Aber dass es so etwas außerhalb eines Zirkus geben könnte, war mir neu.</p>
+
+<p class="w3-text-secondary"><b>Hättest du zur Gründung der Liga gedacht, dass sie so sein wird, wie sie heute ist?</b></p>
+<p>Nein. Ich war da aber unvoreingenommen und ohne Vorstellungen oder Wünsche, wie sie sich entwickeln würde und ließ es auf mich zukommen. Ich war aber gespannt, wie und was daraus werden würde.<br><br>Es gab Befürchtungen, dass die freundschaftlichen Begegnungen einem strengen Ligabetrieb mit strengen Regeln unterliegen würden.
+Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jeder auf alle achten muss und mehr Rücksicht gefordert ist. Heute kann ich es mir ohne Schiedsrichter nicht mehr für alle Begegnungen vorstellen.<br><br>Zwischendurch gab es von mir Bedenken, als sich in der Liga Stimmen erhoben, wir sollten uns einem Verband anschließen. Da war ich klar dagegen.<br><br>Als es früh abzusehen war, dass es immer größer werden würde, regte ich eine Diskussion zur Teilung der Liga an. Ich wollte keine Teilung, niemand wollte eine Teilung, aber für mich sah es so aus, als würde da kein Weg vorbeiführen. Eine "Einigung" und Pläne, wie so etwas aussehen könnte, bevor es tatsächlich so weit wäre, fand ich wichtig. Tatsächlich scheinen die kleinen Schritte im Laufe der Jahre mit der Buchstabenteilung und Wertungen in der Tabelle eine gute Richtung gewesen zu sein, ohne dass die damaligen Diskussionen zu einem schnellen Ergebnis führten.</p>
+
+<p class="w3-text-secondary"><b>Woran merkst du am meisten, dass die Liga "älter" geworden ist?</b></p>
+<p>Umgekehrt: Ich merke, dass alle um mich herum immer jünger werden. Während ich in den ersten Jahren alle Spieler in der Liga kannte, gibt es heute ganze Teams, denen ich noch nicht mal begegnet bin.<br><br>Die Menge an Regeln, die ein neues Team zu beachten hat, finde ich enorm. Den Ligabetrieb komplett zu erklären ist nicht mehr verständlich machbar. Wir hatten bei Gründung wenige Regeln und da sind Jahr für Jahr immer nur kleine neue Häppchen dazugekommen. Die haben sicher alle ihre Berechtigung, aber ein Einstieg ist damit schwerer geworden.</p>
+
+<p class="w3-text-secondary"><b>Was wünschst du dir für den Sport?</b></p>
+<p>Dass er ein Nischensport bleibt! Niemals Olympisch. Es wäre negativ für unsere Individualität.</p>
+
+<p class="w3-text-secondary"><b>Wenn du dir nochmal ein komplett neues Team aussuchen müsstest, bei wem würdest du spielen?</b></p>
+<p>Dürfte ich nicht in meinem Team spielen, dann würde ich eigentlich am Liebsten aus Leuten verschiedener Teams ein komplett neues Team bilden wollen.</p>
+
 
 <!-- Dritter Spielerabschnitt -->
 <h1 class="w3-text-primary">Adrian</h1>
