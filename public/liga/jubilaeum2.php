@@ -10,6 +10,13 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 $titel = "25 Jahre | Deutsche Einradhockeyliga";
 $content = "Spielerprofile für das 25. Jubiläum der Deutschen Einradhockeyliga";
 include '../../templates/header.tmp.php';
+
+$header = "w3-display-topleft w3-margin w3-white w3-padding w3-text-primary w3-large";
+$answer = "w3-display-bottomleft w3-margin w3-padding";
+
+/////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////CONTENT///////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 ?>
 
 <h1 class="w3-text-primary">25 Jahre Deutsche Einradhockeyliga</h1>
@@ -31,17 +38,20 @@ Iceland banjo dreamcatcher, snackwave marfa aesthetic vape photo booth YOLO goda
 </p>
 
 <!-- Erster Spielerabschnitt -->
-<div class="w3-primary w3-round w3-display-container" style="min-height: 250px;">  
-    <div class="slideshow1 w3-container">
-        <h1 class="w3-text-primary w3-padding w3-white w3-round">Günther</h1>
-        <table class="w3-table">
+<h1 class="w3-text-primary">Günther</h1>
+<div class="w3-primary w3-display-container" style="min-height: 250px;">  
+    <div class="slideshow1">
+        <p class="<?=$header?>">
+            Kurze Fakten
+        </p>
+        <table class="<?=$answer?>">
             <tr>
                 <td style="vertical-align: top; width: 150px;">Spielt seit:</td>
                 <td style="vertical-align: top;">1990</td>
             </tr>
             <tr>
                 <td style="vertical-align: top; width: 150px;">Erstes Team:</td>
-                <td style="vertical-align: top;">Uniwheeler (auch heute noch) </td>
+                <td style="vertical-align: top;">Uniwheeler (auch heute noch)</td>
             </tr>
             <tr>
                 <td style="vertical-align: top; width: 150px;">Turniere:</td>
@@ -51,41 +61,41 @@ Iceland banjo dreamcatcher, snackwave marfa aesthetic vape photo booth YOLO goda
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 0)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 0)">&#10095;</button>
     </div>
-    <div class="slideshow1 w3-container">
-        <p class="w3-display-topleft w3-margin w3-white w3-padding w3-round w3-text-primary w3-large">
+    <div class="slideshow1">
+        <p class="<?=$header?>">
             Wenn du eine Regel im Einradhockey verändert dürftest welche wäre es?
         </p>
-        <p class="w3-display-bottomleft w3-margin w3-padding">
+        <p class="<?=$answer?>">
             Ausleihen müsste einfacher werden, so können Turniere einfacher durchgeführt werden.
         </p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 0)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 0)">&#10095;</button>
     </div>
-    <div class="slideshow1 w3-container">
-        <p class="w3-display-topleft w3-margin w3-white w3-padding w3-round w3-text-primary w3-large">
+    <div class="slideshow1">
+        <p class="<?=$header?>">
             Was wünschst du dir für den Sport?
         </p>
-        <p class="w3-display-bottomleft w3-margin w3-padding">
+        <p class="<?=$answer?>">
             Soll weiterhin Spaß machen. Ich mag das familiäre und das wir eigentlich immer gut miteinander ausgkommen.
         </p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 0)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 0)">&#10095;</button>
     </div>
-    <div class="slideshow1 w3-container">
-        <p class="w3-display-topleft w3-margin w3-white w3-padding w3-round w3-text-primary w3-large">
+    <div class="slideshow1">
+        <p class="<?=$header?>">
             An welches Turnier kannst du dich noch besonders erinnern und warum?
         </p>
-        <p class="w3-display-bottomleft w3-margin w3-padding">
+        <p class="<?=$answer?>">
             Genossen habe ich das Turnier in Peking. Da habe ich in einer Mannschaft aus Hong Kong gespielt. Das war lustig, auch wenn wir nichts gerissen haben. Deswegen spiele ich Einradhockey, um immer mal wieder mit anderen zusammen spielen zu können.
         </p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 0)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 0)">&#10095;</button>
     </div>
-    <div class="slideshow1 w3-container">
-        <p class="w3-display-topleft w3-margin w3-white w3-padding w3-round w3-text-primary w3-large">
+    <div class="slideshow1">
+        <p class="<?=$header?>">
             Wie bist du zum Einradfahren gekommen?
         </p>
-        <p class="w3-display-bottomleft w3-margin w3-padding">
+        <p class="<?=$answer?>">
             In unserem Jugendzentrum hat mein Trainer damals Einradfahren angeboten, das war 1987. Für uns war das sehr spannend, weil es damals noch nicht populär war. Wir haben die ersten Einräder aus Teilen aus dem Sperrmüll zusammengebaut. UNd mühsam Einradfahren gelernt.
         </p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 0)">&#10094;</button>
@@ -104,62 +114,59 @@ Iceland banjo dreamcatcher, snackwave marfa aesthetic vape photo booth YOLO goda
 <p>Gluten-free brooklyn artisan shoreditch kitsch ugh four loko paleo pork belly raclette brunch. Fanny pack photo booth pabst, messenger bag next level readymade bushwick sriracha prism etsy activated charcoal. Taiyaki four loko tilde VHS. Pok pok sustainable hot chicken hashtag narwhal brooklyn iceland franzen tumeric green juice tumblr craft beer VHS. Tilde pour-over retro, gastropub master cleanse keffiyeh four loko organic keytar prism. Kogi organic meh, quinoa unicorn chia tumeric pok pok try-hard cold-pressed. Williamsburg man braid tacos schlitz sustainable 8-bit affogato.</p>
 
 <!-- Zweiter Spielerabschnitt -->
-<div class="w3-primary w3-round w3-display-container" style="min-height: 250px;">  
-    <div class="slideshow2 w3-container">
-        <h1 class="w3-text-primary w3-padding w3-white w3-round">Florian</h1>
-        <table class="w3-table">
+<h1 class="w3-text-primary">Robert</h1>
+<div class="w3-primary w3-display-container" style="min-height: 250px;">  
+    <div class="slideshow2">
+        <p class="<?=$header?>">
+            Kurze Fakten
+        </p>
+        <table class="<?=$answer?>">
             <tr>
                 <td style="vertical-align: top; width: 150px;">Spielt seit:</td>
-                <td style="vertical-align: top;">1234</td>
+                <td style="vertical-align: top;">1990</td>
             </tr>
             <tr>
                 <td style="vertical-align: top; width: 150px;">Erstes Team:</td>
-                <td style="vertical-align: top;">FreiradFreiburg</td>
+                <td style="vertical-align: top;">Radlos (gelb) - bis heute</td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top; width: 150px;">Lieblingsgegner:</td>
+                <td style="vertical-align: top;">Mehrere (z.B. Wirbelsturm Bonlanden, Stolpervögel Breckenheim)</td>
             </tr>
             <tr>
                 <td style="vertical-align: top; width: 150px;">Turniere:</td>
-                <td style="vertical-align: top;">999</td>
+                <td style="vertical-align: top;">ca. 200</td>
             </tr>
         </table>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
     </div>
-    <div class="slideshow2 w3-container">
-        <p class="w3-display-topleft w3-margin w3-white w3-padding w3-round w3-text-primary w3-large">
-            Wenn du eine Regel im Einradhockey verändert dürftest welche wäre es?
+    <div class="slideshow2">
+        <p class="<?=$header?>">
+            Hättest du zur Gründung der Liga gedacht, dass sie so sein wird, wie sie heute ist?
         </p>
-        <p class="w3-display-bottomleft w3-margin w3-padding">
-        Health goth occupy jean shorts disrupt twee, bushwick artisan cray. Four loko tacos bicycle rights pop-up ramps. Brunch banjo microdosing, biodiesel shoreditch normcore kitsch literally man braid meditation umami pitchfork offal artisan. Live-edge humblebrag XOXO, gastropub 90's chicharrones you probably haven't heard of them next level.
-        </p>
-        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
-        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
-    </div>
-    <div class="slideshow2 w3-container">
-        <p class="w3-display-topleft w3-margin w3-white w3-padding w3-round w3-text-primary w3-large">
-            Was wünschst du dir für den Sport?
-        </p>
-        <p class="w3-display-bottomleft w3-margin w3-padding">
-        Cronut literally actually venmo skateboard pickled art party bushwick marfa. Stumptown paleo bitters fanny pack semiotics waistcoat humblebrag. Marfa edison bulb succulents, aesthetic bitters cray single-origin coffee ramps narwhal YOLO dreamcatcher raw denim vinyl.
+        <p class="<?=$answer?>">
+            Nein. Ich war aber auch unvoreingenommen und ohne Vorstellungen und Wünsche, wie sie sich entwickeln würde und ließ es auf mich zukommen. Ich war aber gespannt, wie und was daraus gemacht werden würde.
         </p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
     </div>
-    <div class="slideshow2 w3-container">
-        <p class="w3-display-topleft w3-margin w3-white w3-padding w3-round w3-text-primary w3-large">
+    <div class="slideshow2">
+        <p class="<?=$header?>">
+            Welche Modusänderung war dringend notwendig?
+        </p>
+        <p class="<?=$answer?>">
+            Die Teilung der Liga in verschieden starke Bereiche.
+        </p>
+        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
+        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
+    </div>
+    <div class="slideshow2">
+        <p class="<?=$header?>">
             An welches Turnier kannst du dich noch besonders erinnern und warum?
         </p>
-        <p class="w3-display-bottomleft w3-margin w3-padding">
-        Enamel pin vegan crucifix bushwick twee PBR&B small batch plaid XOXO photo booth. Gluten-free meggings single-origin coffee kale chips, butcher echo park tbh DIY seitan poutine migas asymmetrical shoreditch gentrify. Brunch fixie affogato, mixtape biodiesel 8-bit hexagon man braid +1 yuccie cred man bun selfies.
-        </p>
-        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
-        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
-    </div>
-    <div class="slideshow2 w3-container">
-        <p class="w3-display-topleft w3-margin w3-white w3-padding w3-round w3-text-primary w3-large">
-        Readymade affogato air plant dreamcatcher artisan DIY, subway tile tousled meh try-hard woke deep v. Neutra cred fam, polaroid echo park occupy venmo mlkshk kombucha. Offal kombucha keffiyeh locavore vexillologist poutine.
-        </p>
-        <p class="w3-display-bottomleft w3-margin w3-padding">
-            In unserem Jugendzentrum hat mein Trainer damals Einradfahren angeboten, das war 1987. Für uns war das sehr spannend, weil es damals noch nicht populär war. Wir haben die ersten Einräder aus Teilen aus dem Sperrmüll zusammengebaut. UNd mühsam Einradfahren gelernt.
+        <p class="<?=$answer?>">
+            Eher an einzelne Szenen, als an ganze Turniere. Aber zum Beispiel das UNICON Einradhockeyweltmeisterschaftsturnier in Bottrop 1998 beim Finale mit Huunderten tobenden Zuschauern und grandioser Stimmung.
         </p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
@@ -176,12 +183,64 @@ Iceland banjo dreamcatcher, snackwave marfa aesthetic vape photo booth YOLO goda
 <p class="w3-text-secondary"><b>Snackwave poutine poke vinyl dreamcatcher occupy. Kogi XOXO hoodie, sartorial chambray PBR&B sustainable chillwave vaporware gastropub</b></p>
 <p>Gluten-free brooklyn artisan shoreditch kitsch ugh four loko paleo pork belly raclette brunch. Fanny pack photo booth pabst, messenger bag next level readymade bushwick sriracha prism etsy activated charcoal. Taiyaki four loko tilde VHS. Pok pok sustainable hot chicken hashtag narwhal brooklyn iceland franzen tumeric green juice tumblr craft beer VHS. Tilde pour-over retro, gastropub master cleanse keffiyeh four loko organic keytar prism. Kogi organic meh, quinoa unicorn chia tumeric pok pok try-hard cold-pressed. Williamsburg man braid tacos schlitz sustainable 8-bit affogato.</p>
 
+<!-- Dritter Spielerabschnitt -->
+<h1 class="w3-text-primary">Adrian</h1>
+<div class="w3-primary w3-display-container" style="min-height: 250px;">  
+    <div class="slideshow3">
+        <p class="<?=$header?>">
+            Kurze Fakten
+        </p>
+        <table class="<?=$answer?>">
+            <tr>
+                <td style="vertical-align: top; width: 150px;">Spielt seit:</td>
+                <td style="vertical-align: top;">ca. 1996</td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top; width: 150px;">Erstes Team:</td>
+                <td style="vertical-align: top;">VE Berlin (VEB = Volkseigener Betrieb aus der DDR)</td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top; width: 150px;">Lieblingsgegner:</td>
+                <td style="vertical-align: top;">Wupper Piraten</td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top; width: 150px;">Turniere:</td>
+                <td style="vertical-align: top;">ca. 60</td>
+            </tr>
+        </table>
+        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 2)">&#10094;</button>
+        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 2)">&#10095;</button>
+    </div>
+    <div class="slideshow3">
+        <p class="<?=$header?>">
+            An welches Turnier kannst du dich noch besonders erinnern?
+        </p>
+        <p class="<?=$answer?>">
+            Wuppertal (2011?) weil ich mir beim Sackhüpfen am Vorabend im Vereinsheim eine blaube Nase geholt habe.
+        </p>
+        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 2)">&#10094;</button>
+        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 2)">&#10095;</button>
+    </div>
+    <div class="slideshow3">
+        <p class="<?=$header?>">
+            Wie bist du zum Einradfahren gekommen?
+        </p>
+        <p class="<?=$answer?>">
+            Mein Sportlehrer am Gynmasium hat das Buch "Einradfahren, Vom Anfänger zum Könner" geschrieben und es mir beigebracht.
+        </p>
+        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 2)">&#10094;</button>
+        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 2)">&#10095;</button>
+    </div>
+</div>
+
+
 <!-- Script für die Slideshow -->
 <script>
-var slideIndex = [1, 1];
-var slideId = ["slideshow1", "slideshow2"];
+var slideIndex = [1, 1, 1];
+var slideId = ["slideshow1", "slideshow2", "slideshow3"];
 showDivs(1,0);
 showDivs(1,1);
+showDivs(1,2);
 
 function plusDivs(n, no) {
   showDivs(slideIndex[no] += n, no);
