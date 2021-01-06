@@ -275,6 +275,9 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
     </div>
 </div>
 
+
+<img src="../bilder/spielerprofile/Adrian2.jpg" style="width: 350px; float: right;" class="w3-section w3-margin-left"></img>
+
 <!-- Antworten dritter Abschnitt -->
 <p class="w3-text-secondary"><b>Wie bist du zum Einradhockey gekommen?</b></p>
 <p>Ich habe an der Musikhochschule beim Sport einen Bratscher kennengelernt, der es im Ruhrgebiet bei Fumi gesehen hatte.</p>
