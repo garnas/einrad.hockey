@@ -103,6 +103,8 @@ Iceland banjo dreamcatcher, snackwave marfa aesthetic vape photo booth YOLO goda
     </div>
 </div>
 
+<img src="../bilder/spielerprofile/Guenther_Post2.jpg" style="width: 350px; float: right;" class="w3-section w3-margin-left"></img>
+
 <!-- Antworten erster Abschnitt -->
 <p class="w3-text-secondary"><b>Welche Modusänderung war dringend notwendig?</b></p>
 <p>Da fällt mir nichts ein. Die Modusänderungen haben mir persönlich keinen Mehrwert gebracht.<br>Soweit ich das überblicken kann waren die Mannschaften in der Tabelle immer da, wo sie hingehörten. Jetzt ist es etwas schwierig in der Tabelle wieder etwas abzusteigen. Dadurch kann man an manchen Turnieren nicht Teilnehmen und dadurch auch etwas weniger spielen. </p>
