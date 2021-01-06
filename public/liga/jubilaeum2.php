@@ -201,7 +201,7 @@ Iceland banjo dreamcatcher, snackwave marfa aesthetic vape photo booth YOLO goda
 
 <!-- Antworten zweiter Abschnitt -->
 <p class="w3-text-secondary"><b>Was vermisste du aus den vergangenen Saisons am meisten?</b></p>
-<p>In der Anfangszeit der Liga war es noch möglich, mitten im Spiel das Team zu wechseln. So kam es immer wieder vor, wenn ein Spiel eindeutig von uns gewinnen werden würde, dass ich vorher zu entsprechendem Teamchef ging und mir ein Trikot vom Gegner geben ließ und das unter mein Trikot anzog. Mitten im Spiel zog ich mein Trikot aus und wechselte das Team, während ein Spieler aus der gegnerischen Mannschaft zu uns wechselte. Das hatte immer viel Spaß gemacht und für Stimmung gesorgt und Spiele waren nicht mehr so eindeutig. Natürlich gab es dann auch Stimmen von anderen Teams, das würde die Ergebnisse verfälschen. Tatsächlich hatte das Team, in das ich wechselte, dadurch mehr Spielanteile, manche Spieler bekamen Pässe, die sie sonst nicht bekommen hätten und ich war immer bemüht, das Ergebnis nicht zu beeinflussen. Es hat dann doch immer RADLOS gewonnen. Aber alle hatten mehr Spaß! Ich weiß nicht, was ich heute sagen würde, wenn bei einem Turnier ein "besserer" Spieler in mehreren Teams mitspielen würde.  </p>
+<p>In der Anfangszeit der Liga war es noch möglich, mitten im Spiel das Team zu wechseln. So kam es immer wieder vor, wenn ein Spiel eindeutig von uns gewinnen werden würde, dass ich vorher zu entsprechendem Teamchef ging und mir ein Trikot vom Gegner geben ließ und das unter mein Trikot anzog. Mitten im Spiel zog ich mein Trikot aus und wechselte das Team, während ein Spieler aus der gegnerischen Mannschaft zu uns wechselte. Das hatte immer viel Spaß gemacht und für Stimmung gesorgt und Spiele waren nicht mehr so eindeutig. Natürlich gab es dann auch Stimmen von anderen Teams, das würde die Ergebnisse verfälschen. Tatsächlich hatte das Team, in das ich wechselte, dadurch mehr Spielanteile, manche Spieler bekamen Pässe, die sie sonst nicht bekommen hätten und ich war immer bemüht, das Ergebnis nicht zu beeinflussen. Es hat dann doch immer RADLOS gewonnen. Aber alle hatten mehr Spaß! Ich weiß nicht, was ich heute sagen würde, wenn bei einem Turnier ein "besserer" Spieler in mehreren Teams mitspielen würde.</p>
 
 <p class="w3-text-secondary"><b>Wie bist du zum Einradhockey gekommen?</b></p>
 <p>Auf dem Europäischen Jonglierfestival in Oldenburg 1990 gab es einen Einradhockey-Workshop, zu dem mich mein Freundeskreis drängte und ich dann spontan daran teilnahm, weil ein anderer Workshop ausfiel.</p>
@@ -272,6 +272,22 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 2)">&#10095;</button>
     </div>
 </div>
+
+<!-- Antworten dritter Abschnitt -->
+<p class="w3-text-secondary"><b>Wie bist du zum Einradhockey gekommen?</b></p>
+<p>Ich habe an der Musikhochschule beim Sport einen Bratscher kennengelernt, der es im Ruhrgebiet bei Fumi gesehen hatte.</p>
+
+<p class="w3-text-secondary"><b>Wie bist du zum Einradfahren gekommen? </b></p>
+<p>Mein Sportlehrer am Gymnasium hat das Buch „Einradfahren, Vom Anfänger zum Könner“ geschrieben und es mir beigebracht.</p>
+
+<p class="w3-text-secondary"><b>Woran merkst du am meisten, dass die Liga "älter" geworden ist? </b></p>
+<p>An mir.</p>
+
+<p class="w3-text-secondary"><b>Welche ist die auffälligste Veränderung seit damals?</b></p>
+<p>Die Qualität der TOP 10 ist dramatisch besser.</p>
+
+<p class="w3-text-secondary"><b>Wenn du eine Regel im Einradhockey verändern dürftest welche wäre es?</b></p>
+<p>Fernschüsse erlauben.</p>
 
 
 <!-- Script für die Slideshow -->
