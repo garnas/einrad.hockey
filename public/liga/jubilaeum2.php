@@ -25,29 +25,11 @@ $answer = "w3-display-bottomleft w3-margin w3-padding";
 
 <p>Wir wollten uns dies zum Anlass nehmen mit ein paar Spielerinnen und Spielern zu sprechen, die schon länger Einradhockey spielen, als es die Deutsche Einradhockeyliga gibt. Andere sind kurz nach dem Start hinzugekommen oder haben den Sport in besonderer Art gefördert. Uns interessierte ihre Geschichte, wie sie von diesem Sport erfahren haben, wollten Erinnerungen an „alte Zeiten“ hervorrufen und einen Rückblick auf die vergangenen 25 Jahre werfen.</p>
 
-<!--
-<blockquote class="w3-panel w3-leftbar w3-light-grey">
-  <p class="w3-large">
-  <i>"Einradhockey macht am meisten Spaß von allem. Ich habe schon einiges ausprobiert, aber Einradhockey macht einfach Sauspaß."</i></p>
-  <p>Günther (Uniwheeler Bremen-Bochum)</p>
-</blockquote>
--->
-
 <p>Einen Teil dieser Interviews haben wir bereits auf <a class="w3-text-secondary" style="text-decoration: none;" href="https://www.facebook.com/DeutscheEinradhockeyliga"><b>Facebook</b></a> und <a class="w3-text-secondary" style="text-decoration: none;" href="https://www.instagram.com/einradhockeyde/"><b>Instagram</b></a> veröffentlich. Und nun in ausführlicher Form auch hier. Schaut gerne immer mal wieder auf dieser Seite oder auf unseren Social-Media-Kanälen vorbei, um die weiteren Interviews nicht zu verpassen!</p>
-
-<!--
-<p class="w3-text-primary w3-large">Nachfolgend findet ihr die Interviews mit:</p>
-
-<ul class="w3-ul w3-hoverable">
-    <li><a style="text-decoration: none;" href="#guenther">Günther (Uniwheeler Bremen-Bochum)</a></li>
-    <li><a style="text-decoration: none;" href="#robert">Robert (RADLOS)</a></li>
-    <li><a style="text-decoration: none;" href="#adrian">Adrian (Berlin)</a></li>
-</ul>
--->
 
 <!-- Erster Spielerabschnitt -->
 <h1 id="guenther" class="w3-text-primary">Günther</h1>
-<div class="w3-primary w3-display-container" style="min-height: 250px;">  
+<div class="w3-primary w3-display-container" style="min-height: 200px;">  
     <div class="slideshow1">
         <p class="<?=$header?>">
             Kurze Fakten
@@ -151,7 +133,7 @@ $answer = "w3-display-bottomleft w3-margin w3-padding";
 
 <!-- Zweiter Spielerabschnitt -->
 <h1 id="robert" class="w3-text-primary">Robert</h1>
-<div class="w3-primary w3-display-container" style="min-height: 250px;">  
+<div class="w3-primary w3-display-container" style="min-height: 200px;">  
     <div class="slideshow2">
         <p class="<?=$header?>">
             Kurze Fakten
@@ -235,7 +217,7 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
 
 <!-- Dritter Spielerabschnitt -->
 <h1 id="adrian" class="w3-text-primary">Adrian</h1>
-<div class="w3-primary w3-display-container" style="min-height: 250px;">  
+<div class="w3-primary w3-display-container" style="min-height: 200px;">  
     <div class="slideshow3">
         <p class="<?=$header?>">
             Kurze Fakten
