@@ -104,14 +104,40 @@ Iceland banjo dreamcatcher, snackwave marfa aesthetic vape photo booth YOLO goda
 </div>
 
 <!-- Antworten erster Abschnitt -->
-<p class="w3-text-secondary"><b>Snackwave typewriter drinking vinegar letterpress</b></p>
-<p>I'm baby iceland synth activated charcoal lo-fi copper mug williamsburg normcore hella banjo banh mi adaptogen narwhal squid typewriter. Fam distillery brunch edison bulb portland selvage sustainable four loko lyft man braid. Offal raw denim small batch wolf food truck asymmetrical lumbersexual truffaut kinfolk try-hard pork belly beard. Synth la croix put a bird on it schlitz chartreuse viral narwhal 8-bit pok pok brunch taxidermy humblebrag kale chips. Irony helvetica retro twee art party. Fanny pack XOXO cronut flannel, sriracha bicycle rights street art blog. Kickstarter hell of bespoke drinking vinegar normcore, four loko gochujang kogi hoodie wayfarers photo booth knausgaard street art.</p>
+<p class="w3-text-secondary"><b>Welche Modusänderung war dringend notwendig?</b></p>
+<p>Da fällt mir nichts ein. Die Modusänderungen haben mir persönlich keinen Mehrwert gebracht.<br>Soweit ich das überblicken kann waren die Mannschaften in der Tabelle immer da, wo sie hingehörten. Jetzt ist es etwas schwierig in der Tabelle wieder etwas abzusteigen. Dadurch kann man an manchen Turnieren nicht Teilnehmen und dadurch auch etwas weniger spielen. </p>
 
-<p class="w3-text-secondary"><b>Cred 90's flexitarian</b></p>
-<p>Fashion axe prism portland, meh enamel pin hoodie distillery chartreuse kinfolk health goth 90's. Gentrify narwhal man bun viral poke, swag mumblecore fashion axe messenger bag shabby chic palo santo blue bottle wayfarers squid biodiesel. Mustache taxidermy normcore brunch. 8-bit celiac viral, pok pok four dollar toast cray microdosing. Mustache keffiyeh mixtape drinking vinegar plaid butcher fixie.</p>
+<p class="w3-text-secondary"><b>Wie bist du zum Einradhockey gekommen?</b></p>
+<p>Ich habe in unserem Dorf Einradfahren gelernt. Das wurde im Jugendzentrum angeboten, zusammen mit Jonglieren. Daraus ist auch ein Kinderzirkus entstanden, der heute noch existiert. Unser damaliger Trainer hatte das Einradfahren an der Uni in Bremen gelernt. Dort gab es eine lebendige Szene mit Einradfahrern und Jongleuren, wo ich dann einige Jahre gefahren bin. Zu Beginn haben wir auch immer Einradhockey mit Unihockeyschlägern gespielt, unter uns.<br>1990 sind wir zu der Europäischen Jonglierconvention in Oldenburg gefahren. Dort in der Outdoorhalle haben wir die Langenfelder kennengelernt, die richtig Einradhockey gespielt haben. Im Herbst desselben Jahres sind wir nach Langenfeld gefahren und haben dort ein Wochenende nur Hockey gespielt.<br>Mit der Zeit waren wir auf einer Europäischen Einradconvention in Brüssel, sind dann noch öfter zu den Langenfeldern gefahren und haben dort ab und an gespielt. Parallel dazu haben wir in Bremen Conventions veranstaltet mit einem großen Einradhockeyblock.<br>Über die Jahre sind immer mehr Mannschaften aufgetaucht und haben sich vernetzt. Daraus ist dann die Liga entstanden. An der wir seit der Gründung teilnehmen.</p>
 
-<p class="w3-text-secondary"><b>Snackwave poutine poke vinyl dreamcatcher occupy. Kogi XOXO hoodie, sartorial chambray PBR&B sustainable chillwave vaporware gastropub</b></p>
-<p>Gluten-free brooklyn artisan shoreditch kitsch ugh four loko paleo pork belly raclette brunch. Fanny pack photo booth pabst, messenger bag next level readymade bushwick sriracha prism etsy activated charcoal. Taiyaki four loko tilde VHS. Pok pok sustainable hot chicken hashtag narwhal brooklyn iceland franzen tumeric green juice tumblr craft beer VHS. Tilde pour-over retro, gastropub master cleanse keffiyeh four loko organic keytar prism. Kogi organic meh, quinoa unicorn chia tumeric pok pok try-hard cold-pressed. Williamsburg man braid tacos schlitz sustainable 8-bit affogato.</p>
+<p class="w3-text-secondary"><b>Wie bist du zum Einradfahren gekommen?</b></p>
+<p>In unserem Jugendzentrum hat mein Trainer damals Einradfahren angeboten, das war 1987. Für uns war das sehr spannend, weil es damals noch nicht populär war. Wir haben die ersten Einräder aus Teilen aus dem Sperrmüll zusammengebaut. Und mühsam Einradfahren gelernt. Da wir nur ein paar Räder hatten haben wir in den Trainingspausen auch Jonglieren gelernt. Mein Trainer hat das Einradfahren an der Uni Bremen gelernt, da sind wir anschließend auch hin.<br><br>Es war damals früher etwas mühsamer mit dem Lernen. Vom Wheelwalk haben wir immer nur gehört und ich konnte nach drei Jahren dann mal nach Kiel fahren, und jemanden Treffen, der mir das zeigen konnte. Wir waren noch lange nicht so gut vernetzt und es gab auch kein YouTube, wo man sich schnell mal ein paar Tutorials anschauen konnte.</p>
+
+<p class="w3-text-secondary"><b>Hättest du zur Gründung der Liga gedacht, dass sie so sein wird, wie sie heute ist?</b></p>
+<p>Nö, das konnte ich mir nicht vorstellen.<br>Als wir angefangen haben waren wir eine überschaubare Gruppe und alle in ähnlichem Alter. Dass es jetzt so viele Mannschaften mit Kindern gibt habe ich mir nicht vorstellen können. Aber der ganze Sport ist immer jünger geworden.
+</p>
+
+<p class="w3-text-secondary"><b>Was wünschst du dir für die Liga?</b></p>
+<p>Sie soll ganz entspannt weiterlaufen. Das wichtigste ist, dass man spielen kann und auch immer wieder neue Mannschaften kennenlernt.</p>
+
+<p class="w3-text-secondary"><b>Was wünschst du dir für den Sport?</b></p>
+<p>Er soll weiterhin Spaß machen. Ich glaube nicht, dass wir in meinem Leben noch International werden. Ich mag das familiäre und das wir eigentlich immer gut miteinander auskommen. Das ist bei größeren Sportarten wie zum Beispiel Fußball, nicht so gegeben.</p>
+
+<p class="w3-text-secondary"><b>Welche ist die auffälligste Veränderung seit damals?</b></p>
+<p>Durch die Strukturierung, mit der versucht wurde, dass alles etwas zu professionalisieren, sind immer alle dabei zuschauen was regelkonform ist und wie sie mit diesen Regeln noch ein paar Plätze in der Tabelle gut machen können.</p>
+
+<p class="w3-text-secondary"><b>Wenn du eine Regel im Einradhockey verändern dürftest welche wäre es?</b></p>
+<p>Ausleihen müsste einfacher werden, so können Turniere einfacher durchgeführt werden. Wenn alle Mannschaften auf einem Turnier mit der Ausleihe einverstanden sind könnte das problemlos geschehen. Eigentlich kennen wir uns untereinander und können zu große Ungerechtigkeiten auf Turnieren vermeiden. </p>
+
+<p class="w3-text-secondary"><b>Was bringt dich dazu dich regelmäßig auf das Einrad zu setzen?</b></p>
+<p>Einradhockey macht am meisten Spaß von allem. Ich habe schon einiges ausprobiert, aber Einradhockey macht einfach Sauspaß.
+
+<p class="w3-text-secondary"><b>Wenn du dir nochmal ein komplett neues Team aussuchen müsstest, bei wem würdest du spielen?</b></p>
+<p>Da ich nur spielen möchte, kann ich mit jedem spielen. Ich bin aber mit meiner Mannschaft ganz zufrieden.</p>
+
+<p class="w3-text-secondary"><b>Wie ist die Idee zur Gründung der Liga entstanden?</b></p>
+<p>Mit der Zunahme an Mannschaften wollten wir versuchen regelmäßig zu spielen und auch das jeder gegen jeden spielen kann. Es wurden auch schon Turniere gespielt, aber eben unregelmäßig. Wir fanden es eine gute Idee, auch wenn wir zu Anfang zu den Außenseitern gehörten, also eine Mannschaft waren die weitere Wege zu den Turnieren fahren musste. Das hat sich zum Glück etwas geändert.</p>
+
 
 <!-- Zweiter Spielerabschnitt -->
 <h1 class="w3-text-primary">Robert</h1>
