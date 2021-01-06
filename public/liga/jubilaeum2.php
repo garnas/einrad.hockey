@@ -21,24 +21,32 @@ $answer = "w3-display-bottomleft w3-margin w3-padding";
 
 <h1 class="w3-text-primary">25 Jahre Deutsche Einradhockeyliga</h1>
 
-<p>
-I'm baby iceland hell of wolf direct trade, narwhal ennui church-key woke fingerstache distillery PBR&B aesthetic bicycle rights green juice. Single-origin coffee actually bitters man bun kickstarter DIY tumblr four dollar toast shoreditch yr trust fund la croix organic. Woke vegan tousled lyft. Snackwave drinking vinegar raw denim, gastropub health goth before they sold out beard blog artisan man bun subway tile venmo tilde literally. Asymmetrical shabby chic echo park intelligentsia food truck la croix. Freegan marfa subway tile tumeric cronut.
-</p>
-<p>
-Vinyl sartorial flexitarian roof party aesthetic, dreamcatcher migas normcore paleo lomo helvetica cold-pressed church-key subway tile. Offal banjo fashion axe, normcore waistcoat food truck pork belly jean shorts af portland neutra tumeric echo park copper mug kale chips. Pabst asymmetrical fixie readymade. Kitsch +1 pickled swag. 8-bit thundercats vape polaroid cronut scenester lomo retro hexagon pinterest iceland keytar sriracha.
-</p>
-<p>
-Everyday carry tilde food truck fanny pack jean shorts, blue bottle yr DIY selvage cliche whatever. IPhone organic fingerstache, VHS four loko photo booth bushwick lo-fi brunch you probably haven't heard of them chicharrones kitsch. Letterpress fixie authentic, intelligentsia ennui yuccie craft beer photo booth gluten-free street art raw denim. Shabby chic poke tbh tote bag, hell of leggings williamsburg trust fund. La croix chillwave wolf, lo-fi actually raclette vexillologist pop-up fixie lumbersexual cold-pressed.
-</p>
-<p>
-Subway tile meditation mlkshk pork belly fam cronut. Williamsburg wolf snackwave normcore heirloom franzen iceland ugh. Crucifix taxidermy fanny pack listicle, street art whatever blue bottle vegan +1 chartreuse hell of readymade meditation. Pinterest godard freegan pug jianbing. La croix bitters offal slow-carb hammock etsy asymmetrical.
-</p>
-<p>
-Iceland banjo dreamcatcher, snackwave marfa aesthetic vape photo booth YOLO godard ethical. Mumblecore lyft glossier mixtape, bushwick gastropub fam mustache 8-bit post-ironic single-origin coffee master cleanse cronut. Pok pok actually cloud bread migas readymade put a bird on it four loko small batch aesthetic gluten-free. Fixie artisan iceland bespoke af swag ennui beard man braid hot chicken. Fam thundercats keffiyeh roof party etsy, portland heirloom chillwave tacos fingerstache.
-</p>
+<p>Die Gründung der Deutschen Einradhockeyliga am 1. Februar 1995 liegt mehr als 25 Jahre zurück. Teilgenommen in der Debütsaison haben 13 Teams aus den verschiedensten Teilen der Bundesrepublik. Einige von ihnen sind noch heute ein Teil dieser Liga.</p>
+
+<p>Wir wollten uns dies zum Anlass nehmen mit ein paar Spielerinnen und Spielern zu sprechen, die schon länger Einradhockey spielen, als es die Deutsche Einradhockeyliga gibt. Andere sind kurz nach dem Start hinzugekommen oder haben den Sport in besonderer Art gefördert. Uns interessierte ihre Geschichte, wie sie von diesem Sport erfahren haben, wollten Erinnerungen an „alte Zeiten“ hervorrufen und einen Rückblick auf die vergangenen 25 Jahre werfen.</p>
+
+<!--
+<blockquote class="w3-panel w3-leftbar w3-light-grey">
+  <p class="w3-large">
+  <i>"Einradhockey macht am meisten Spaß von allem. Ich habe schon einiges ausprobiert, aber Einradhockey macht einfach Sauspaß."</i></p>
+  <p>Günther (Uniwheeler Bremen-Bochum)</p>
+</blockquote>
+-->
+
+<p>Einen Teil dieser Interviews haben wir bereits auf <a class="w3-text-secondary" style="text-decoration: none;" href="https://www.facebook.com/DeutscheEinradhockeyliga"><b>Facebook</b></a> und <a class="w3-text-secondary" style="text-decoration: none;" href="https://www.instagram.com/einradhockeyde/"><b>Instagram</b></a> veröffentlich. Und nun in ausführlicher Form auch hier. Schaut gerne immer mal wieder auf dieser Seite oder auf unseren Social-Media-Kanälen vorbei, um die weiteren Interviews nicht zu verpassen!</p>
+
+<!--
+<p class="w3-text-primary w3-large">Nachfolgend findet ihr die Interviews mit:</p>
+
+<ul class="w3-ul w3-hoverable">
+    <li><a style="text-decoration: none;" href="#guenther">Günther (Uniwheeler Bremen-Bochum)</a></li>
+    <li><a style="text-decoration: none;" href="#robert">Robert (RADLOS)</a></li>
+    <li><a style="text-decoration: none;" href="#adrian">Adrian (Berlin)</a></li>
+</ul>
+-->
 
 <!-- Erster Spielerabschnitt -->
-<h1 class="w3-text-primary">Günther</h1>
+<h1 id="guenther" class="w3-text-primary">Günther</h1>
 <div class="w3-primary w3-display-container" style="min-height: 250px;">  
     <div class="slideshow1">
         <p class="<?=$header?>">
@@ -142,7 +150,7 @@ Iceland banjo dreamcatcher, snackwave marfa aesthetic vape photo booth YOLO goda
 
 
 <!-- Zweiter Spielerabschnitt -->
-<h1 class="w3-text-primary">Robert</h1>
+<h1 id="robert" class="w3-text-primary">Robert</h1>
 <div class="w3-primary w3-display-container" style="min-height: 250px;">  
     <div class="slideshow2">
         <p class="<?=$header?>">
@@ -226,7 +234,7 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
 
 
 <!-- Dritter Spielerabschnitt -->
-<h1 class="w3-text-primary">Adrian</h1>
+<h1 id="adrian" class="w3-text-primary">Adrian</h1>
 <div class="w3-primary w3-display-container" style="min-height: 250px;">  
     <div class="slideshow3">
         <p class="<?=$header?>">
