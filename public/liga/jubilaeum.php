@@ -11,8 +11,8 @@ $titel = "25 Jahre | Deutsche Einradhockeyliga";
 $content = "Spielerprofile für das 25. Jubiläum der Deutschen Einradhockeyliga";
 include '../../templates/header.tmp.php';
 
-$header = "w3-display-topleft w3-margin w3-white w3-padding w3-text-primary w3-large";
-$answer = "w3-display-bottomleft w3-margin w3-padding";
+$header = "w3-white w3-padding w3-text-primary w3-large";
+$answer = "w3-margin w3-display-bottomleft";
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////CONTENT///////////////////////////////////
@@ -30,70 +30,52 @@ $answer = "w3-display-bottomleft w3-margin w3-padding";
 <!-- Erster Spielerabschnitt -->
 <h1 id="guenther" class="w3-text-primary">Günther</h1>
 <div class="w3-primary w3-display-container" style="min-height: 200px;">  
-    <div class="slideshow1">
-        <p class="<?=$header?>">
-            Kurze Fakten
-        </p>
-        <table class="<?=$answer?>">
-            <tr>
-                <td style="vertical-align: top; width: 150px;">Spielt seit:</td>
-                <td style="vertical-align: top;">1990</td>
-            </tr>
-            <tr>
-                <td style="vertical-align: top; width: 150px;">Erstes Team:</td>
-                <td style="vertical-align: top;">Uniwheeler (auch heute noch)</td>
-            </tr>
-            <tr>
-                <td style="vertical-align: top; width: 150px;">Turniere:</td>
-                <td style="vertical-align: top;">ca. 150 + Abschlussturniere</td>
-            </tr>
-        </table>
-        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 0)">&#10094;</button>
-        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 0)">&#10095;</button>
-    </div>
-    <div class="slideshow1">
-        <p class="<?=$header?>">
-            Wenn du eine Regel im Einradhockey verändert dürftest welche wäre es?
-        </p>
-        <p class="<?=$answer?>">
-            Ausleihen müsste einfacher werden, so können Turniere einfacher durchgeführt werden.
+    <div class="slideshow1 w3-padding">
+        <p style="display: inline-block" class="<?=$header?>">Kurze Fakten</p>
+        <p class="<?=$answer?>"> 
+            <table>
+                <tr>
+                    <td style="vertical-align: top; width: 150px;">Spielt seit:</td>
+                    <td style="vertical-align: top;">1990</td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top; width: 150px;">Erstes Team:</td>
+                    <td style="vertical-align: top;">Uniwheeler (auch heute noch)</td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top; width: 150px;">Lieblingsgegner:</td>
+                    <td style="vertical-align: top;">Mehrere (z.B. Wirbelsturm Bonlanden, Stolpervögel Breckenheim)</td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top; width: 150px;">Gespielte Turniere:</td>
+                    <td style="vertical-align: top;">ca. 150 + Abschlussturniere</td>
+                </tr>
+            </table>
         </p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 0)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 0)">&#10095;</button>
     </div>
-    <div class="slideshow1">
-        <p class="<?=$header?>">
-            Was wünschst du dir für den Sport?
-        </p>
-        <p class="<?=$answer?>">
-            Soll weiterhin Spaß machen. Ich mag das familiäre und das wir eigentlich immer gut miteinander ausgkommen.
-        </p>
+    <div class="slideshow1 w3-padding">
+        <p style="display: inline-block" class="<?=$header?>">Was wünschst du dir für den Sport?</p>
+        <p class="<?=$answer?>">Soll weiterhin Spaß machen. Ich mag das familiäre und das wir eigentlich immer gut miteinander ausgkommen.</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 0)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 0)">&#10095;</button>
     </div>
-    <div class="slideshow1">
-        <p class="<?=$header?>">
-            An welches Turnier kannst du dich noch besonders erinnern und warum?
-        </p>
-        <p class="<?=$answer?>">
-            Genossen habe ich das Turnier in Peking. Da habe ich in einer Mannschaft aus Hong Kong gespielt. Das war lustig, auch wenn wir nichts gerissen haben. Deswegen spiele ich Einradhockey, um immer mal wieder mit anderen zusammen spielen zu können.
-        </p>
+    <div class="slideshow1 w3-padding">
+        <p style="display: inline-block" class="<?=$header?>">An welches Turnier kannst du dich noch besonders erinnern und warum?</p>
+        <p class="<?=$answer?>">Genossen habe ich das Turnier in Peking. Da habe ich in einer Mannschaft aus Hong Kong gespielt. Das war lustig, auch wenn wir nichts gerissen haben. Deswegen spiele ich Einradhockey, um immer mal wieder mit anderen zusammen spielen zu können.</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 0)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 0)">&#10095;</button>
     </div>
-    <div class="slideshow1">
-        <p class="<?=$header?>">
-            Wie bist du zum Einradfahren gekommen?
-        </p>
-        <p class="<?=$answer?>">
-            In unserem Jugendzentrum hat mein Trainer damals Einradfahren angeboten, das war 1987. Für uns war das sehr spannend, weil es damals noch nicht populär war. Wir haben die ersten Einräder aus Teilen aus dem Sperrmüll zusammengebaut. UNd mühsam Einradfahren gelernt.
-        </p>
+    <div class="slideshow1 w3-padding">
+        <p style="display: inline-block" class="<?=$header?>">Wie bist du zum Einradfahren gekommen?</p>
+        <p class="<?=$answer?>">In unserem Jugendzentrum hat mein Trainer damals Einradfahren angeboten, das war 1987. Für uns war das sehr spannend, weil es damals noch nicht populär war. Wir haben die ersten Einräder aus Teilen aus dem Sperrmüll zusammengebaut. UNd mühsam Einradfahren gelernt.</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 0)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 0)">&#10095;</button>
     </div>
 </div>
 
-<img src="../bilder/spielerprofile/Guenther_Post2.jpg" style="width: 350px; float: right;" class="w3-section w3-margin-left"></img>
+<img src="../bilder/spielerprofile/Guenther_Post2.jpg" style="width: 350px; float: right;" class="w3-section"></img>
 
 <!-- Antworten erster Abschnitt -->
 <p class="w3-text-secondary"><b>Welche Modusänderung war dringend notwendig?</b></p>
@@ -130,62 +112,49 @@ $answer = "w3-display-bottomleft w3-margin w3-padding";
 <p class="w3-text-secondary"><b>Wie ist die Idee zur Gründung der Liga entstanden?</b></p>
 <p>Mit der Zunahme an Mannschaften wollten wir versuchen regelmäßig zu spielen und auch das jeder gegen jeden spielen kann. Es wurden auch schon Turniere gespielt, aber eben unregelmäßig. Wir fanden es eine gute Idee, auch wenn wir zu Anfang zu den Außenseitern gehörten, also eine Mannschaft waren die weitere Wege zu den Turnieren fahren musste. Das hat sich zum Glück etwas geändert.</p>
 
-
 <!-- Zweiter Spielerabschnitt -->
 <h1 id="robert" class="w3-text-primary">Robert</h1>
-<div class="w3-primary w3-display-container" style="min-height: 200px;">  
-    <div class="slideshow2">
-        <p class="<?=$header?>">
-            Kurze Fakten
-        </p>
-        <table class="<?=$answer?>">
-            <tr>
-                <td style="vertical-align: top; width: 150px;">Spielt seit:</td>
-                <td style="vertical-align: top;">1990</td>
-            </tr>
-            <tr>
-                <td style="vertical-align: top; width: 150px;">Erstes Team:</td>
-                <td style="vertical-align: top;">Radlos (gelb) - bis heute</td>
-            </tr>
-            <tr>
-                <td style="vertical-align: top; width: 150px;">Lieblingsgegner:</td>
-                <td style="vertical-align: top;">Mehrere (z.B. Wirbelsturm Bonlanden, Stolpervögel Breckenheim)</td>
-            </tr>
-            <tr>
-                <td style="vertical-align: top; width: 150px;">Turniere:</td>
-                <td style="vertical-align: top;">ca. 200</td>
-            </tr>
-        </table>
-        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
-        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
-    </div>
-    <div class="slideshow2">
-        <p class="<?=$header?>">
-            Hättest du zur Gründung der Liga gedacht, dass sie so sein wird, wie sie heute ist?
-        </p>
-        <p class="<?=$answer?>">
-            Nein. Ich war aber auch unvoreingenommen und ohne Vorstellungen und Wünsche, wie sie sich entwickeln würde und ließ es auf mich zukommen. Ich war aber gespannt, wie und was daraus gemacht werden würde.
+<div class="w3-primary w3-display-container" style="min-height: 250px;">  
+    <div class="slideshow2 w3-padding">
+        <p style="display: inline-block" class="<?=$header?>">Kurze Fakten</p>
+        <p class="<?=$answer?>"> 
+            <table>
+                <tr>
+                    <td style="vertical-align: top; width: 150px;">Spielt seit:</td>
+                    <td style="vertical-align: top;">1990</td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top; width: 150px;">Erstes Team:</td>
+                    <td style="vertical-align: top;">Radlos (gelb) - bis heute</td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top; width: 150px;">Lieblingsgegner:</td>
+                    <td style="vertical-align: top;">Mehrere (z.B. Wirbelsturm Bonlanden, Stolpervögel Breckenheim)</td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top; width: 150px;">Turniere:</td>
+                    <td style="vertical-align: top;">ca. 200</td>
+                </tr>
+            </table>
         </p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
     </div>
-    <div class="slideshow2">
-        <p class="<?=$header?>">
-            Welche Modusänderung war dringend notwendig?
-        </p>
-        <p class="<?=$answer?>">
-            Die Teilung der Liga in verschieden starke Bereiche.
-        </p>
+    <div class="slideshow2 w3-padding">
+        <p style="display: inline-block" class="<?=$header?>">Hättest du zur Gründung der Liga gedacht, dass sie so sein wird, wie sie heute ist?</p>
+        <p class="<?=$answer?>">Nein. Ich war aber auch unvoreingenommen und ohne Vorstellungen und Wünsche, wie sie sich entwickeln würde und ließ es auf mich zukommen. Ich war aber gespannt, wie und was daraus gemacht werden würde.</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
     </div>
-    <div class="slideshow2">
-        <p class="<?=$header?>">
-            An welches Turnier kannst du dich noch besonders erinnern und warum?
-        </p>
-        <p class="<?=$answer?>">
-            Eher an einzelne Szenen, als an ganze Turniere. Aber zum Beispiel das UNICON Einradhockeyweltmeisterschaftsturnier in Bottrop 1998 beim Finale mit Huunderten tobenden Zuschauern und grandioser Stimmung.
-        </p>
+    <div class="slideshow2 w3-padding">
+        <p style="display: inline-block" class="<?=$header?>">Welche Modusänderung war dringend notwendig?</p>
+        <p class="<?=$answer?>">Die Teilung der Liga in verschieden starke Bereiche.</p>
+        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
+        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
+    </div>
+    <div class="slideshow2 w3-padding">
+        <p style="display: inline-block" class="<?=$header?>">An welches Turnier kannst du dich noch besonders erinnern und warum?</p>
+        <p class="<?=$answer?>">Eher an einzelne Szenen, als an ganze Turniere. Aber zum Beispiel das UNICON Einradhockeyweltmeisterschaftsturnier in Bottrop 1998 beim Finale mit Huunderten tobenden Zuschauern und grandioser Stimmung.</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
     </div>
@@ -214,59 +183,49 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
 <p class="w3-text-secondary"><b>Wenn du dir nochmal ein komplett neues Team aussuchen müsstest, bei wem würdest du spielen?</b></p>
 <p>Dürfte ich nicht in meinem Team spielen, dann würde ich eigentlich am Liebsten aus Leuten verschiedener Teams ein komplett neues Team bilden wollen.</p>
 
-
 <!-- Dritter Spielerabschnitt -->
 <h1 id="adrian" class="w3-text-primary">Adrian</h1>
 <div class="w3-primary w3-display-container" style="min-height: 200px;">  
-    <div class="slideshow3">
-        <p class="<?=$header?>">
-            Kurze Fakten
-        </p>
-        <table class="<?=$answer?>">
-            <tr>
-                <td style="vertical-align: top; width: 150px;">Spielt seit:</td>
-                <td style="vertical-align: top;">ca. 1996</td>
-            </tr>
-            <tr>
-                <td style="vertical-align: top; width: 150px;">Erstes Team:</td>
-                <td style="vertical-align: top;">VE Berlin (VEB = Volkseigener Betrieb aus der DDR)</td>
-            </tr>
-            <tr>
-                <td style="vertical-align: top; width: 150px;">Lieblingsgegner:</td>
-                <td style="vertical-align: top;">Wupper Piraten</td>
-            </tr>
-            <tr>
-                <td style="vertical-align: top; width: 150px;">Turniere:</td>
-                <td style="vertical-align: top;">ca. 60</td>
-            </tr>
-        </table>
-        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 2)">&#10094;</button>
-        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 2)">&#10095;</button>
-    </div>
-    <div class="slideshow3">
-        <p class="<?=$header?>">
-            An welches Turnier kannst du dich noch besonders erinnern?
-        </p>
-        <p class="<?=$answer?>">
-            Wuppertal (2011?) weil ich mir beim Sackhüpfen am Vorabend im Vereinsheim eine blaube Nase geholt habe.
+    <div class="slideshow3 w3-padding">
+        <p style="display: inline-block" class="<?=$header?>">Kurze Fakten</p>
+        <p class="<?=$answer?>"> 
+            <table>
+                <tr>
+                    <td style="vertical-align: top; width: 150px;">Spielt seit:</td>
+                    <td style="vertical-align: top;">ca. 1996</td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top; width: 150px;">Erstes Team:</td>
+                    <td style="vertical-align: top;">VE Berlin (VEB = Volkseigener Betrieb aus der DDR)</td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top; width: 150px;">Lieblingsgegner:</td>
+                    <td style="vertical-align: top;">Wupper Piraten</td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top; width: 150px;">Turniere:</td>
+                    <td style="vertical-align: top;">ca. 60</td>
+                </tr>
+            </table>
         </p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 2)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 2)">&#10095;</button>
     </div>
-    <div class="slideshow3">
-        <p class="<?=$header?>">
-            Wie bist du zum Einradfahren gekommen?
-        </p>
-        <p class="<?=$answer?>">
-            Mein Sportlehrer am Gynmasium hat das Buch "Einradfahren, Vom Anfänger zum Könner" geschrieben und es mir beigebracht.
-        </p>
+    <div class="slideshow3 w3-padding">
+        <p style="display: inline-block" class="<?=$header?>">An welches Turnier kannst du dich noch besonders erinnern?</p>
+        <p class="<?=$answer?>">Wuppertal (2011?) weil ich mir beim Sackhüpfen am Vorabend im Vereinsheim eine blaube Nase geholt habe.</p>
+        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 2)">&#10094;</button>
+        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 2)">&#10095;</button>
+    </div>
+    <div class="slideshow3 w3-padding">
+        <p style="display: inline-block" class="<?=$header?>">Wie bist du zum Einradfahren gekommen?</p>
+        <p class="<?=$answer?>">Mein Sportlehrer am Gynmasium hat das Buch "Einradfahren, Vom Anfänger zum Könner" geschrieben und es mir beigebracht.</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 2)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 2)">&#10095;</button>
     </div>
 </div>
 
-
-<img src="../bilder/spielerprofile/Adrian2.jpg" style="width: 350px; float: right;" class="w3-section w3-margin-left"></img>
+<img src="../bilder/spielerprofile/Adrian2.jpg" style="width: 350px; float: right;" class="w3-section"></img>
 
 <!-- Antworten dritter Abschnitt -->
 <p class="w3-text-secondary"><b>Wie bist du zum Einradhockey gekommen?</b></p>
