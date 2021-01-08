@@ -32,7 +32,7 @@ $answer = "w3-margin w3-display-bottomleft";
 <div class="w3-primary w3-display-container">  
     <div class="slideshow1 w3-padding">
         <p style="display: inline-block" class="<?=$header?>">Kurze Fakten</p>
-        <table>
+        <table class="w3-hide-small">
             <tr>
                 <td style="vertical-align: top; width: 150px;">Spielt seit:</td>
                 <td style="vertical-align: top;">1990</td>
@@ -42,14 +42,13 @@ $answer = "w3-margin w3-display-bottomleft";
                 <td style="vertical-align: top;">Uniwheeler (auch heute noch)</td>
             </tr>
             <tr>
-                <td style="vertical-align: top; width: 150px;">Lieblingsgegner:</td>
-                <td style="vertical-align: top;">Mehrere (z.B. Wirbelsturm Bonlanden, Stolpervögel Breckenheim)</td>
-            </tr>
-            <tr>
                 <td style="vertical-align: top; width: 150px;">Gespielte Turniere:</td>
                 <td style="vertical-align: top;">ca. 150 + Abschlussturniere</td>
             </tr>
         </table>
+        <p class="w3-hide-medium w3-hide-large"><i>Spielt seit:</i><br>1990</p>
+        <p class="w3-hide-medium w3-hide-large"><i>Erstes Team:</i><br>Uniwheeler (auch heute noch)</p>
+        <p class="w3-hide-medium w3-hide-large"><i>Gespielte Turniere:</i><br>ca. 150 + Abschlussturniere</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 0)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 0)">&#10095;</button>
     </div>
@@ -119,7 +118,7 @@ $answer = "w3-margin w3-display-bottomleft";
 <div class="w3-primary w3-display-container">  
     <div class="slideshow2 w3-padding">
         <p style="display: inline-block" class="<?=$header?>">Kurze Fakten</p>
-        <table>
+        <table class="w3-hide-small">
             <tr>
                 <td style="vertical-align: top; width: 150px;">Spielt seit:</td>
                 <td style="vertical-align: top;">1990</td>
@@ -137,6 +136,10 @@ $answer = "w3-margin w3-display-bottomleft";
                 <td style="vertical-align: top;">ca. 200</td>
             </tr>
         </table>
+        <p class="w3-hide-medium w3-hide-large"><i>Spielt seit:</i><br>1990</p>
+        <p class="w3-hide-medium w3-hide-large"><i>Erstes Team:</i><br>Radlos (gelb) - bis heute</p>
+        <p class="w3-hide-medium w3-hide-large"><i>Lieblingsgegner:</i><br>Mehrere (z.B. Wirbelsturm Bonlanden, Stolpervögel Breckenheim)</p>
+        <p class="w3-hide-medium w3-hide-large"><i>Gespielte Turniere:</i><br>ca. 200</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
     </div>
@@ -188,7 +191,7 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
 <div class="w3-primary w3-display-container">  
     <div class="slideshow3 w3-padding">
         <p style="display: inline-block" class="<?=$header?>">Kurze Fakten</p>
-        <table>
+        <table class="w3-hide-small">
             <tr>
                 <td style="vertical-align: top; width: 150px;">Spielt seit:</td>
                 <td style="vertical-align: top;">ca. 1996</td>
@@ -206,6 +209,10 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
                 <td style="vertical-align: top;">ca. 60</td>
             </tr>
         </table>
+        <p class="w3-hide-medium w3-hide-large"><i>Spielt seit:</i><br>ca. 1996</p>
+        <p class="w3-hide-medium w3-hide-large"><i>Erstes Team:</i><br>VE Berlin (VEB = Volkseigener Betrieb aus der DDR)</p>
+        <p class="w3-hide-medium w3-hide-large"><i>Lieblingsgegner:</i><br>Wupper Piraten</p>
+        <p class="w3-hide-medium w3-hide-large"><i>Gespielte Turniere:</i><br>ca. 60</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 2)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 2)">&#10095;</button>
     </div>
