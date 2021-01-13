@@ -31,8 +31,8 @@ Du hast Lust mitzuwirken? Melde dich bei ansgar@einrad.hockey!
 ## xml-Schnittstelle:
 
 * [https://www.einrad.hockey/xml/turnierliste.php](https://www.einrad.hockey/xml/turnierliste.php)
-* [https://www.einrad.hockey/xml/turnierliste.php](https://www.einrad.hockey/xml/turnieranmeldungen.php)
-* [https://www.einrad.hockey/xml/turnierliste.php](https://www.einrad.hockey/xml/rangtabelle.php)
+* [https://www.einrad.hockey/xml/turnieranmeldungen.php](https://www.einrad.hockey/xml/turnieranmeldungen.php)
+* [https://www.einrad.hockey/xml/rangtabelle.php](https://www.einrad.hockey/xml/rangtabelle.php)
 
 
 
