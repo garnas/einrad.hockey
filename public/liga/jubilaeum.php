@@ -30,7 +30,7 @@ $answer = "w3-margin w3-display-bottomleft";
 <!-- Erster Spielerabschnitt -->
 <h1 id="guenther" class="w3-text-primary">Günther</h1>
 <div class="w3-primary w3-display-container">  
-    <div class="slideshow1 w3-padding">
+    <div class="slideshow1" style="padding: 8px 48px;">
         <p style="display: inline-block" class="<?=$header?>">Kurze Fakten</p>
         <table class="w3-hide-small">
             <tr>
@@ -52,19 +52,19 @@ $answer = "w3-margin w3-display-bottomleft";
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 0)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 0)">&#10095;</button>
     </div>
-    <div class="slideshow1 w3-padding">
+    <div class="slideshow1" style="padding: 8px 48px;">
         <p style="display: inline-block" class="<?=$header?>">Was wünschst du dir für den Sport?</p>
         <p>Soll weiterhin Spaß machen. Ich mag das familiäre und das wir eigentlich immer gut miteinander ausgkommen.</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 0)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 0)">&#10095;</button>
     </div>
-    <div class="slideshow1 w3-padding">
+    <div class="slideshow1" style="padding: 8px 48px;">
         <p style="display: inline-block" class="<?=$header?>">An welches Turnier kannst du dich noch besonders erinnern und warum?</p>
         <p>Genossen habe ich das Turnier in Peking. Da habe ich in einer Mannschaft aus Hong Kong gespielt. Das war lustig, auch wenn wir nichts gerissen haben. Deswegen spiele ich Einradhockey, um immer mal wieder mit anderen zusammen spielen zu können.</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 0)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 0)">&#10095;</button>
     </div>
-    <div class="slideshow1 w3-padding">
+    <div class="slideshow1" style="padding: 8px 48px;">
         <p style="display: inline-block" class="<?=$header?>">Wie bist du zum Einradfahren gekommen?</p>
         <p>In unserem Jugendzentrum hat mein Trainer damals Einradfahren angeboten, das war 1987. Für uns war das sehr spannend, weil es damals noch nicht populär war. Wir haben die ersten Einräder aus Teilen aus dem Sperrmüll zusammengebaut. UNd mühsam Einradfahren gelernt.</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 0)">&#10094;</button>
@@ -116,7 +116,7 @@ $answer = "w3-margin w3-display-bottomleft";
 <!-- Zweiter Spielerabschnitt -->
 <h1 id="robert" class="w3-text-primary">Robert</h1>
 <div class="w3-primary w3-display-container">  
-    <div class="slideshow2 w3-padding">
+    <div class="slideshow2" style="padding: 8px 48px;">
         <p style="display: inline-block" class="<?=$header?>">Kurze Fakten</p>
         <table class="w3-hide-small">
             <tr>
@@ -143,19 +143,19 @@ $answer = "w3-margin w3-display-bottomleft";
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
     </div>
-    <div class="slideshow2 w3-padding">
+    <div class="slideshow2" style="padding: 8px 48px;">
         <p style="display: inline-block" class="<?=$header?>">Hättest du zur Gründung der Liga gedacht, dass sie so sein wird, wie sie heute ist?</p>
         <p>Nein. Ich war aber auch unvoreingenommen und ohne Vorstellungen und Wünsche, wie sie sich entwickeln würde und ließ es auf mich zukommen. Ich war aber gespannt, wie und was daraus gemacht werden würde.</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
     </div>
-    <div class="slideshow2 w3-padding">
+    <div class="slideshow2" style="padding: 8px 48px;">
         <p style="display: inline-block" class="<?=$header?>">Welche Modusänderung war dringend notwendig?</p>
         <p>Die Teilung der Liga in verschieden starke Bereiche.</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 1)">&#10095;</button>
     </div>
-    <div class="slideshow2 w3-padding">
+    <div class="slideshow2" style="padding: 8px 48px;">
         <p style="display: inline-block" class="<?=$header?>">An welches Turnier kannst du dich noch besonders erinnern und warum?</p>
         <p>Eher an einzelne Szenen, als an ganze Turniere. Aber zum Beispiel das UNICON Einradhockeyweltmeisterschaftsturnier in Bottrop 1998 beim Finale mit Huunderten tobenden Zuschauern und grandioser Stimmung.</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 1)">&#10094;</button>
@@ -189,7 +189,7 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
 <!-- Dritter Spielerabschnitt -->
 <h1 id="adrian" class="w3-text-primary">Adrian</h1>
 <div class="w3-primary w3-display-container">  
-    <div class="slideshow3 w3-padding">
+    <div class="slideshow3" style="padding: 8px 48px;">
         <p style="display: inline-block" class="<?=$header?>">Kurze Fakten</p>
         <table class="w3-hide-small">
             <tr>
@@ -216,14 +216,14 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 2)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 2)">&#10095;</button>
     </div>
-    <div class="slideshow3 w3-padding">
+    <div class="slideshow3" style="padding: 8px 48px;">
         <p style="display: inline-block"class="<?=$header?>">An welches Turnier kannst du dich noch besonders erinnern?</p>
         <p>Wuppertal (2011?) weil ich mir beim Sackhüpfen am Vorabend im Vereinsheim eine blaube Nase geholt habe.</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 2)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 2)">&#10095;</button>
     </div>
-    <div style="display: inline-block" class="slideshow3 w3-padding">
-        <p class="<?=$header?>">Wie bist du zum Einradfahren gekommen?</p>
+    <div class="slideshow3" style="padding: 8px 48px;">
+        <p style="display: inline-block" class="<?=$header?>">Wie bist du zum Einradfahren gekommen?</p>
         <p>Mein Sportlehrer am Gynmasium hat das Buch "Einradfahren, Vom Anfänger zum Könner" geschrieben und es mir beigebracht.</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 2)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 2)">&#10095;</button>
