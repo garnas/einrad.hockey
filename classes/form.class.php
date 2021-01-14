@@ -257,7 +257,6 @@ class Form
                     <span class="w3-small w3-text-grey" style="display: block">Sekunden</span>
                 </span>
         </div>
-            </div>
         <?php
     }
 

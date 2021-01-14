@@ -1,18 +1,38 @@
 <?php
 
-if (isset($_POST["tore_speichern_oben"]) or isset($_POST["tore_speichern_unten"])) {
+// Besteht die Berechtigung das Turnier zu bearbeiten?
+if(!$ligacenter){ // Ligacenter darf alles.
+    if (($teamcenter && ($_SESSION['team_id'] ?? false) != $spielplan->turnier->details['ausrichter'])){
+        Form::error("Nur der Ausrichter kann Spielergebnisse eintragen");
+        header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
+        die();
+    }
+
+    // Wird das Turnierergebnis rechtzeitig eingetragen?
+    $date = $spielplan->turnier->details['datum'];
+    $N = date("N", strtotime($date)); // Numerischer Wochentag.
+    $delta = (8-$N) * 24*60*60 + 18*60*60; // Die Zeit bis zum nächsten Montag 18:00 Uhr von 0:00 Uhr aus gesehen.
+    $abgabe = strtotime($date) + $delta;
+    if ($abgabe > Config::time_offset()){
+        Form::error("Bitte wende dich an den Ligaausschuss um Ergebnisse nachträglich zu verändern.");
+        header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
+        die();
+    }
+}
+
+if (isset($_POST["tore_speichern"])) {
     // Neu eingetragene Tore speichern
-    foreach ($spiele as $spiel_id => $spiel) {
+    foreach ($spielplan->spiele as $spiel_id => $spiel) {
         if ($spiel['tore_a'] == $_POST["tore_a"][$spiel_id]
             && $spiel['tore_b'] == $_POST["tore_b"][$spiel_id]
-            && ($spiel['penalty_a'] ?? '') == ($_POST["penalty_a"][$spiel_id] ?? '')
-            && ($spiel['penalty_b'] ?? '') == ($_POST["penalty_b"][$spiel_id] ?? '')) continue;
+            && $spiel['penalty_a'] == ($_POST["penalty_a"][$spiel_id]  ?? '')
+            && $spiel['penalty_b'] == ($_POST["penalty_b"][$spiel_id]  ?? '')) continue;
         $spielplan->set_spiele(
             $spiel['spiel_id'],
             $_POST["tore_a"][$spiel_id],
             $_POST["tore_b"][$spiel_id],
-            $_POST["penalty_a"][$spiel_id] ?? '',
-            $_POST["penalty_b"][$spiel_id] ?? '',
+            $_POST["penalty_a"][$spiel_id] ?? 'NULL',
+            $_POST["penalty_b"][$spiel_id] ?? 'NULL'
         );
     }
     Form::affirm('Spielergebnisse wurden gespeichert');
@@ -23,31 +43,24 @@ if (isset($_POST["tore_speichern_oben"]) or isset($_POST["tore_speichern_unten"]
 //Turnierergebnisse speichern
 if (isset($_POST["turnierergebnis_speichern"])) {
 
-    // Sind alle Spiele gespielt und kein Penalty offen
+    // Sind alle Spiele gespielt und kein Penalty offen?
     if (!$spielplan->check_turnier_beendet()) {
         Form::error("Es sind noch Spiel- oder Penaltyergebnisse offen. Turnierergebnisse wurden nicht übermittelt.");
         $error = true;
     }
 
-    // Testen ob Turnier eingetragen werden darf
+    // Testen ob Turnier tabellentechnisch eingetragen werden darf.
     if (!Tabelle::check_ergebnis_eintragbar($spielplan->turnier)) {
         Form::error("Turnierergebnis konnte nicht eingetragen werden. Kontaktiere bitte den Ligaausschuss.");
         $error = true;
     }
 
-    // Sind alle spiele gespielt und kein Penalty mehr notwendig
     if (!$error ?? false) {
         $spielplan->set_ergebnis();
         header('Location: ' . db::escape($_SERVER['REQUEST_URI']));
         die();
     }
 
-}
-
-// Hinweis Penalty
-#$spielplan->filter_penalty_begegnungen(); // Nicht endgültige Penaltys werden gelöscht.
-foreach ($spielplan->ausstehende_penalty_begegnungen as $key => $penalty){
-    Form::attention("Penalty-Schießen zwischen " . implode(" und ", $penalty));
 }
 
 // Hinweis Kaderkontrolle und Turnierreport

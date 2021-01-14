@@ -134,7 +134,7 @@ if (isset($_POST['spielplan_delete'])) {
 if ($turnier->details['art'] === 'final') {
     Form::attention("Beim Eintragen von Finalturnieren kann eine beliebige Punktzahl eingeben werden.");
 }
-var_dump(Spielplan::check_exist($turnier));
+var_dump(Spielplan::check_exist($turnier->turnier_id));
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -179,7 +179,7 @@ include '../../templates/header.tmp.php';
 
     <?php if (empty($turnier->details['link_spielplan'])) { ?>
         <form method="post">
-            <?php if (Spielplan::check_exist($turnier)) { ?>
+            <?php if (Spielplan::check_exist($turnier->turnier_id)) { ?>
                 <p>
                     <input type="submit" name="auto_spielplan_loeschen" value="Dynamischen Spielplan löschen"
                            class="w3-button w3-secondary">
@@ -200,7 +200,7 @@ include '../../templates/header.tmp.php';
 
     <form method="post" enctype="multipart/form-data">
 
-        <?php if (!Spielplan::check_exist($turnier)) { ?>
+        <?php if (!Spielplan::check_exist($turnier->turnier_id)) { ?>
 
             <?php if (empty($turnier->details['link_spielplan'])) { ?>
                 <p class="w3-text-grey">Nur .pdf oder .xlsx Format</p>

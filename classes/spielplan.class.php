@@ -17,17 +17,17 @@ class Spielplan
     public array $tore_tabelle;
     public array $turnier_tabelle;
     public array $details;
-    public array $ausstehende_penalty_begegnungen = [];
-    public array $penalty_begegnungen = [];
+    public array $ausstehende_penaltys = [];
+    public array $gesamt_penaltys = [];
     public array $spiele;
 
     /**
      * Spielplan constructor.
      *
      * @param Turnier $turnier
-     * @param bool $penalty_checks Es wird ein weiteres Objekt Spielplan erstellt, um Penalty-Begegnungen festzustellen.
+     * @param bool $with_penaltys Es wird ein zweites Objekt Spielplan erstellt, um Penalty-Begegnungen festzustellen.
      */
-    function __construct(Turnier $turnier, $penalty_checks = true)
+    function __construct(Turnier $turnier, $with_penaltys = true)
     {
         $this->turnier_id = $turnier->turnier_id;
         $this->turnier = $turnier;
@@ -38,7 +38,10 @@ class Spielplan
         $this->spiele = $this->get_spiele();
         $this->tore_tabelle = $this->get_toretabelle();
         $this->turnier_tabelle = self::get_sorted_turniertabelle($this->tore_tabelle);
-        if ($penalty_checks) $this->penalty_begegnungen = $this->get_penalty_begegnungen();
+        if ($with_penaltys) $this->gesamt_penaltys = $this->get_gesamt_penaltys();
+        $this->direkter_vergleich($this->tore_tabelle);
+        $this->filter_ausstehende_penalty_begegnungen(); //$this->ausstehende_penaltys wird gesetzt
+        $this->set_wertigkeiten(); // $this->platziierungstabelle wird gesetzt
     }
 
     /**
@@ -84,7 +87,7 @@ class Spielplan
             $spiel["zeit"] = date("H:i", $startzeit);
             $spiele[$spiel['spiel_id']] = $spiel;
             $extra_pause = ($this->details['plaetze'] == 4 && !($spiel['spiel_id'] % 2)) ? (30 * 60) : 0;
-            // 4er Spielplan Extrapause nach geraden Spielen
+                // 4er Spielplan Extrapause nach geraden Spielen
             $startzeit += $spielzeit + $extra_pause;
         }
         return db::escape($spiele ?? []);
@@ -221,22 +224,23 @@ class Spielplan
      *
      * @return array
      */
-    public function get_penalty_begegnungen(): array
+    public function get_gesamt_penaltys(): array
     {
         // Penalty-Tore auf NULL setzen
         $spielplan = new Spielplan($this->turnier, false);
         foreach ($spielplan->tore_tabelle as $team_id => $spiele) {
             foreach ($spiele as $team_id_gegner => $spiel) {
                 // Zuerst wurden die Variablen per Referenz übergeben, dies führte in der Ausführung vom späteren
-                // direkten Vergleich zu fehlern. Dieser Bug hat mich 3h gekostet und viele Nerven gekostet. Zur
+                // direkten Vergleich zu fehlern. Dieser Bug hat mich >3h gekostet und viele Nerven gekostet. Zur
                 // Würdigung meiner Zeit wurde dieser Kommentar hier geschrieben.
                 $spielplan->tore_tabelle[$team_id][$team_id_gegner]
                     = array_replace($spiel, ['penalty_tore' => NULL, 'penalty_gegentore' => NULL]);
             }
         }
+        $spielplan->ausstehende_penaltys = []; //TODO das geht besser
         $spielplan->direkter_vergleich($spielplan->tore_tabelle);
-        $spielplan->filter_penalty_begegnungen();
-        return $spielplan->ausstehende_penalty_begegnungen; // Alle Penaltyteams ohne schon ausgeführte Penaltys
+        $spielplan->filter_ausstehende_penalty_begegnungen();
+        return $spielplan->ausstehende_penaltys; // Alle Penaltyteams ohne schon ausgeführte Penaltys
     }
 
     /**
@@ -283,7 +287,7 @@ class Spielplan
                 $penalty_teams[$team_id] = Team::teamid_to_teamname($team_id);
                 $this->set_platzierung($team_id, true);
             }
-            $this->ausstehende_penalty_begegnungen[] = $penalty_teams;
+            $this->ausstehende_penaltys[] = $penalty_teams;
         } else {
             // Da wir nicht im direkten Vergleich waren, werden sie jetzt hineingeschickt mit den Begegnungen untereinander
             $tore_tabelle = self::filter_team_ids($tore_tabelle, $gleichplatzierte_teams);
@@ -404,7 +408,7 @@ class Spielplan
     /**
      * Löscht alle Penalty-Begegnungen, außer denjenigen, welche unvermeidbar sind.
      */
-    public function filter_penalty_begegnungen()
+    public function filter_ausstehende_penalty_begegnungen()
     {
         $vergleich = function ($team_id) {
             $return['punkte_min'] = $this->turnier_tabelle[$team_id]['punkte'];
@@ -414,12 +418,10 @@ class Spielplan
             return $return;
         };
 
-        foreach ($this->ausstehende_penalty_begegnungen as $key => $penalty_teams) {
-            #$this->penalty_warnung[$key]['unvermeidbar'] = true;
+        foreach ($this->ausstehende_penaltys as $key => $penalty_teams) {
             foreach (array_keys($penalty_teams) as $penalty_team_id) {
                 if ($this->turnier_tabelle[$penalty_team_id]['spiele'] < $this->anzahl_spiele) {
-                    #$this->penalty_warnung[$key]['unvermeidbar'] = false;
-                    unset($this->ausstehende_penalty_begegnungen[$key]);
+                    unset($this->ausstehende_penaltys[$key]);
                     // Penaltybegnung wird gelöscht, da noch nicht alle Spiele von den Penaltyteams gespielt worden sind.
                     break;
                 }
@@ -429,8 +431,7 @@ class Spielplan
                     if ($punkte_pen_team < $vergleich($vgl_team_id)['punkte_max']
                         && $punkte_pen_team > $vergleich($vgl_team_id)['punkte_min']
                         && $punkte_pen_team != $vergleich($vgl_team_id)['nicht_erreichbar']) {
-                        #$this->penalty_warnung[$key]['unvermeidbar'] = false;
-                        unset($this->ausstehende_penalty_begegnungen[$key]);
+                        unset($this->ausstehende_penaltys[$key]);
                         // Penaltybegnung wird gelöscht, da ein Team die Punktzahl des Penalty-Teams noch erreichen könnte.
                         break;
                     } // if Punktzahl erreichbar
@@ -503,7 +504,7 @@ class Spielplan
     public static function delete_spielplan(Turnier $turnier)
     {
         // Es existiert kein dynamischer Spielplan
-        if (!self::check_exist($turnier)) return;
+        if (!self::check_exist($turnier->turnier_id)) return;
 
         // Spielplan löschen
         $sql = "
@@ -518,15 +519,15 @@ class Spielplan
     /**
      * Existiert ein automatisch erstellter Spielplan in der Datenbank?
      *
-     * @param Turnier $turnier
+     * @param int $turnier_id
      * @return bool
      */
-    public static function check_exist(Turnier $turnier): bool
+    public static function check_exist(int $turnier_id): bool
     {
         $sql = "
                 SELECT *
                 FROM spiele
-                WHERE turnier_id = $turnier->turnier_id;
+                WHERE turnier_id = $turnier_id;
                 ";
         return db::read($sql)->num_rows > 0;
     }
@@ -534,22 +535,24 @@ class Spielplan
     /**
      * Überprüft ob Penaltyfelder zum Eintragen freigegeben werden.
      *
-     * @param $spiel_id
-     * @return bool
+     * @param int $spiel_id
+     * @param bool $ausstehend Ausstehende oder allgemeine Penalty-Teams?
+     * @return bool True, wenn ein Penalty gespielt werden muss.
      */
-    public function check_penalty_spiel($spiel_id): bool
+    public function check_penalty_spiel(int $spiel_id, bool $ausstehend = false): bool
     {
-        $penalty_team_ids = [];
-        foreach ($this->penalty_begegnungen as $team_ids) {
-            $penalty_team_ids += $team_ids;
+        $penaltys = ($ausstehend) ? $this->ausstehende_penaltys : $this->gesamt_penaltys;
+        foreach ($penaltys as $team_ids) {
+            if (array_key_exists($this->spiele[$spiel_id]['team_id_a'], $team_ids)
+                && array_key_exists($this->spiele[$spiel_id]['team_id_b'], $team_ids)) return true;
+            return false;
         }
-        if (array_key_exists($this->spiele[$spiel_id]['team_id_a'], $penalty_team_ids)
-            && array_key_exists($this->spiele[$spiel_id]['team_id_b'], $penalty_team_ids)) return true;
         return false;
     }
     public function check_penalty_anzeigen(): bool
     {
-        return !empty($this->penalty_begegnungen);
+        if(!$this->check_penalty_ergebnisse()) return true;
+        return !empty($this->gesamt_penaltys);
     }
 
     /**
@@ -560,7 +563,7 @@ class Spielplan
     public function check_penalty_ergebnisse(): bool
     {
         $team_ids = [];
-        foreach ($this->penalty_begegnungen as $penalty) {
+        foreach ($this->gesamt_penaltys as $penalty) {
             $team_ids += $penalty;
         }
         foreach ($this->spiele as $spiel) {
@@ -573,7 +576,7 @@ class Spielplan
     public function check_penalty_team(int $team_id): bool
     {
         $team_ids = [];
-        foreach ($this->ausstehende_penalty_begegnungen as $penalty) {
+        foreach ($this->ausstehende_penaltys as $penalty) {
             $team_ids += $penalty;
         }
         return array_key_exists($team_id, $team_ids);
@@ -586,7 +589,7 @@ class Spielplan
      */
     function check_turnier_beendet(): bool
     {
-        if (!empty($this->ausstehende_penalty_begegnungen)) return false;
+        if (!empty($this->ausstehende_penaltys)) return false;
         return $this->anzahl_spiele == min(array_column($this->turnier_tabelle, 'spiele'));
     }
 
@@ -615,4 +618,5 @@ class Spielplan
         $this->turnier->log("Turnierergebnis wurde in die Datenbank eingetragen");
         Form::affirm("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
     }
+
 }

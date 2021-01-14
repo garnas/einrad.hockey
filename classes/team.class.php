@@ -321,7 +321,7 @@ class Team
                 ";
         $result = db::read($sql);
         $result = mysqli_fetch_assoc($result);
-        return db::escape($result);
+        return db::escape($result) ?? [];
     }
 
     /**

@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-#db::write("UPDATE `spiele` SET `tore_a` = ROUND(3*RAND(),0) ,`tore_b`= ROUND(3*RAND(),0)");
+#db::write("UPDATE `spiele` SET `tore_a` = ROUND(4*RAND(),0) ,`tore_b`= ROUND(4*RAND(),0)");
 #db::write("UPDATE `spiele` SET `tore_a` = 1 ,`tore_b`= 1");
 #db::write("UPDATE `spiele` SET `penalty_a` = NULL ,`penalty_b`= NULL");
 
@@ -12,6 +12,8 @@ $turnier_id = $_GET['turnier_id'];
 #Spielplan::delete_spielplan(new Turnier ($_GET['turnier_id']));
 
 require_once '../../logic/spielplan.logic.php'; //Erstellt Spielplanobjekt nach Validation
+db::debug($spielplan->ausstehende_penaltys);
+db::debug($spielplan->gesamt_penaltys);
 #db::debug($spielplan->get_penalty_begegnungen());
 #db::debug($spielplan->penalty_begegnungen);
 #db::debug($spielplan->ausstehende_penalty_begegnungen);
@@ -32,7 +34,7 @@ $spielplan->direkter_vergleich($spielplan->get_toretabelle(), true, false);
 
 $spielplan->check_tabelle_einblenden();
 
-$spielplan->filter_penalty_begegnungen();
+$spielplan->filter_ausstehende_penalty_begegnungen();
 foreach ($spielplan->penalty_begegnungen as $key => $penalty_teams){
     if ($spielplan->penalty_warnung[$key]['unvermeidbar']) Form::attention("PENALTY PENALTY");
 }
@@ -48,6 +50,7 @@ include '../../templates/spielplan/spielplan_titel.tmp.php';
 include '../../templates/spielplan/spielplan_teamliste.tmp.php'; //Teamliste
 include '../../templates/spielplan/spielplan_spiele.tmp.php'; //Spiele
 include '../../templates/spielplan/spielplan_turniertabelle.tmp.php'; //Abschlusstabelle
+include '../../templates/spielplan/spielplan_direkter_vergleich.tmp.php'; //Abschlusstabelle
 
 include '../../templates/footer.tmp.php';
 

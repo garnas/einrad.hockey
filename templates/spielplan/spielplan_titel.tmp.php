@@ -4,7 +4,11 @@
 <h2 class="w3-text-primary"><?= $spielplan->turnier->details['ort'] ?>
     <i>(<?= $spielplan->turnier->details['tblock'] ?>)</i>, <?= date("d.m.Y", strtotime($spielplan->turnier->details['datum'])) ?></h2>
 <h3><?= $spielplan->turnier->details['tname'] ?></h3>
-
+<p class="w3-text-grey">
+    <i class="material-icons">star</i>Organisator: <?= $spielplan->turnier->details['organisator'] ?>
+    <?=Form::link('tel:' . str_replace(' ', '', $spielplan->turnier->details['handy']),
+        "<i class='material-icons'>smartphone</i>" . $spielplan->turnier->details['handy'])?>
+</p>
 <!-- LINKS -->
 <div class="pdf-hide">
     <p><?= Form::link("../liga/turnier_details.php?turnier_id=" . $turnier_id, "<i class='material-icons'>info</i> Alle Turnierdetails") ?></p>
