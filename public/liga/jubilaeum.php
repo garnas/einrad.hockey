@@ -25,7 +25,7 @@ $answer = "w3-margin w3-display-bottomleft";
 
 <p>Wir wollten uns dies zum Anlass nehmen mit ein paar Spielerinnen und Spielern zu sprechen, die schon länger Einradhockey spielen, als es die Deutsche Einradhockeyliga gibt. Andere sind kurz nach dem Start hinzugekommen oder haben den Sport in besonderer Art gefördert. Uns interessierte ihre Geschichte, wie sie von diesem Sport erfahren haben, wollten Erinnerungen an „alte Zeiten“ hervorrufen und einen Rückblick auf die vergangenen 25 Jahre werfen.</p>
 
-<p>Einen Teil dieser Interviews haben wir bereits auf <a class="w3-text-secondary" style="text-decoration: none;" href="https://www.facebook.com/DeutscheEinradhockeyliga"><b>Facebook</b></a> und <a class="w3-text-secondary" style="text-decoration: none;" href="https://www.instagram.com/einradhockeyde/"><b>Instagram</b></a> veröffentlich. Und nun in ausführlicher Form auch hier. Schaut gerne immer mal wieder auf dieser Seite oder auf unseren Social-Media-Kanälen vorbei, um die weiteren Interviews nicht zu verpassen!</p>
+<p>Einen Teil dieser Interviews haben wir bereits auf <?=Form::link(Config::LINK_FACE, '<b>Facebook</b>', true)?> und <?=Form::link(Config::LINK_INSTA, '<b>Instagramm</b>', true)?> veröffentlich. Und nun in ausführlicher Form auch hier. Schaut gerne immer mal wieder auf dieser Seite oder auf unseren Social-Media-Kanälen vorbei, um die weiteren Interviews nicht zu verpassen!</p>
 
 <!-- Erster Spielerabschnitt -->
 <h1 id="guenther" class="w3-text-primary">Günther</h1>
@@ -73,10 +73,10 @@ $answer = "w3-margin w3-display-bottomleft";
 </div>
 
 <!-- Für mobile Darstellung -->
-<img src="../bilder/spielerprofile/Guenther_Post2.jpg" style="width: 100%; margin-left: auto; margin-right: auto;" class="w3-hide-large w3-hide-medium w3-section"></img>
+<img alt="Guenther" src="../bilder/spielerprofile/Guenther_Post2.jpg" style="width: 100%; margin-left: auto; margin-right: auto;" class="w3-hide-large w3-hide-medium w3-section">
 
 <!-- Für Desktop Darstellung -->
-<img src="../bilder/spielerprofile/Guenther_Post2.jpg" style="width: 350px; float: right;" class="w3-section w3-hide-small w3-margin-left"></img>
+<img alt="Guenther" src="../bilder/spielerprofile/Guenther_Post2.jpg" style="width: 350px; float: right;" class="w3-section w3-hide-small w3-margin-left">
 
 <!-- Antworten erster Abschnitt -->
 <p class="w3-text-secondary"><b>Welche Modusänderung war dringend notwendig?</b></p>
@@ -217,7 +217,7 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 2)">&#10095;</button>
     </div>
     <div class="slideshow3" style="padding: 8px 48px;">
-        <p style="display: inline-block"class="<?=$header?>">An welches Turnier kannst du dich noch besonders erinnern?</p>
+        <p style="display: inline-block" class="<?=$header?>">An welches Turnier kannst du dich noch besonders erinnern?</p>
         <p>Wuppertal (2011?) weil ich mir beim Sackhüpfen am Vorabend im Vereinsheim eine blaube Nase geholt habe.</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 2)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 2)">&#10095;</button>
@@ -231,10 +231,10 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
 </div>
 
 <!-- Für mobile Darstellung -->
-<img src="../bilder/spielerprofile/Adrian2.jpg" style="width: 100%; margin-left: auto; margin-right: auto;" class="w3-hide-large w3-hide-medium w3-section"></img>
+<img alt="Adrian" src="../bilder/spielerprofile/Adrian2.jpg" style="width: 100%; margin-left: auto; margin-right: auto;" class="w3-hide-large w3-hide-medium w3-section">
 
 <!-- Für Desktop Darstellung -->
-<img src="../bilder/spielerprofile/Adrian2.jpg" style="width: 350px; float: right;" class="w3-section w3-hide-small w3-margin-left"></img>
+<img alt="Adrian" src="../bilder/spielerprofile/Adrian2.jpg" style="width: 350px; float: right;" class="w3-section w3-hide-small w3-margin-left">
 
 <!-- Antworten dritter Abschnitt -->
 <p class="w3-text-secondary"><b>Wie bist du zum Einradhockey gekommen?</b></p>
