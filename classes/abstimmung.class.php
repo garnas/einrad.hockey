@@ -1,83 +1,174 @@
 <?php
 
+/**
+ * Class Abstimmung
+ *
+ * Handling der Abstimmung zum Saisonwechsel
+ *
+ * Es gibt zwei Tabellen: abstimmung_teams ist eine Tabelle mit allen Teams die bisher Abgestimmt haben und wichtigen
+ * Metadaten. abstimmung_ergebnisse ist eine Tabelle mit verschlüsselter TeamID und Stimme des Teams. Durch Verschlüsselung
+ * der TeamID mit dem Passwort des Teams, ist die Abstimmung anonym und ein Team kann seine Stimme im Nachhinein noch ändern.
+ */
 class Abstimmung {
 
-    public $beginn_der_abstimmung = "2020-12-28 10:00:00";
-    public $ende_der_abstimmung = "2021-01-31 18:00:00";
+    /**
+     * Frühstmöglicher Zeitpunkt der Stimmabgabe
+     */
+    const BEGINN = "2020-12-28 10:00:00";
+    /**
+     * Letztmöglicher Zeitpunkt der Stimmabgabe
+     */
+    const ENDE = "2021-01-31 18:00:00";
+    /**
+     * Verschlüsselungsverfahren für die TeamIDs
+     */
+    const CIPHER = 'AES-256-CBC';
+    /**
+     * Verhindert, dass bei einer neuen Abstimmung der gleiche Crypt bei gleichen Passwort und TeamID entsteht.
+     * Muss für jede Liga-Abstimmung erneuert werden.
+     */
+    const IV = 'RUEvrH/ovYG9t8bA';
+    /**
+     * @var array|string[] Daten aus der DB-Tabelle abstimmung_teams
+     */
+    public array $team;
+    /**
+     * @var int Eindeutige ligaweite TeamID
+     */
+    public int $team_id;
+    /**
+     * @var string Passwort-Hash, welcher für das Team bei erstmaliger Abstimmung hinterlegt war.
+     */
+    public string $passwort_hash;
 
-    // Überprüfung, ob das Team bereits abgestimmt hat
-    function get_team($crypt) {
-        $sql = '
-        SELECT value 
-        FROM abstimmung 
-        WHERE crypt = "'. $crypt . '"
-        ';
+    /**
+     * Abstimmung constructor.
+     *
+     * Erstellt eine Klasse für die Abstimmung eines Teams und initiert wichtige Variablen.
+     *
+     * @param $team_id
+     */
+    public function __construct($team_id)
+    {
+        $this->team_id = $team_id;
 
+        // Details aus abstimmung_teams bekommen
+        $sql = "
+                SELECT *
+                FROM abstimmung_teams
+                WHERE team_id = $this->team_id
+                ";
         $result = db::readdb($sql);
-        $data = mysqli_fetch_assoc($result);
-        
-        return $data;
-    }
+        $this->team = mysqli_fetch_assoc($result) ?? [];
 
-    function get_crypt($key, $teamname, $iv) {
-        $cipher = "aes-128-gcm";
-        if (in_array($cipher, openssl_get_cipher_methods())) {
-            # Alternativ kann man auch mit einem Datum Arbeiten (das müsste dann aber gespeichert werden)
-            # Oder man gibt einfach eine Zahl vor
-            $ciphertext = openssl_encrypt($teamname, $cipher, $key, $options=0, $iv, $tag);
+        // Beim ersten Mal Abstimmen den für die Verschlüsselung benutzen Passwort-Hash speichern.
+        if (empty($this->team)){
+            $this->passwort_hash = (new Team($team_id))->get_passwort();
+        }else{
+            $this->passwort_hash = $this->team['passwort'];
         }
-        return $ciphertext;
+
     }
 
-    // Stimmt ein Team ab, wird die Stimme getrennt von der team_id gespeichert
-    static function add_stimme($value, $crypt) {
-        $sql = '
-        INSERT INTO `abstimmung` (`id`, `value`, `crypt`) 
-        VALUES (NULL, "' . $value . '", "' . $crypt . '")
-        ';
-        
-        db::writedb($sql);
-    
-        return true;
+    /**
+     * Optional: Entschlüsselung einer TeamID
+     *
+     * @param $passwort
+     * @param $crypt
+     * @return string
+     */
+    function crypt_to_teamid($passwort, $crypt): string {
+        return openssl_decrypt($crypt, self::CIPHER, $passwort, 0, self::IV);
     }
 
-    static function update_stimme($value, $crypt) {
-        $sql = '
-        UPDATE `abstimmung` 
-        SET `value` = "' . $value . '"
-        WHERE `crypt` = "' . $crypt . '"
-        ';
-        
-        db::writedb($sql);
-    
-        return true;
+    /**
+     * Wie hat das Team bisher abgestimmt?
+     *
+     * @param $crypt
+     * @return string
+     */
+    function get_stimme($crypt): string {
+        $sql = "
+            SELECT stimme 
+            FROM abstimmung_ergebnisse
+            WHERE crypt = '$crypt'";
+        $result = db::readdb($sql);
+        return mysqli_fetch_assoc($result)['stimme'] ?? 'Keine Stimme hinterlegt.';
     }
 
-    function get_ergebnisse($min = 6) {
-        $sql = '
-        SELECT value, COUNT(value) AS stimmen 
-        FROM `abstimmung`
-        GROUP BY value
-        ';
+    /**
+     * Verschlüsselung der TeamID
+     *
+     * @param string $passwort
+     * @return string
+     */
+    function teamid_to_crypt(string $passwort): string {
+        return openssl_encrypt($this->team_id,self::CIPHER, $passwort, 0, self::IV);
+    }
 
+    /**
+     * Schreibt eine Stimme in die Datenbank
+     * Wenn die Stimme bereits gezählt wurde, dann wird diese aktualisiert.
+     * @param $value
+     * @param $crypt
+     */
+    function set_stimme($value, $crypt) {
+        if (empty($this->team)){ // Team stimmt zum ersten mal ab.
+            $sql = "
+                INSERT INTO abstimmung_teams (team_id, passwort)
+                VALUES ($this->team_id, '$this->passwort_hash')";
+            db::writedb($sql);
+            $sql = "
+                INSERT INTO abstimmung_ergebnisse (stimme, crypt) 
+                VALUES ('$value', '$crypt')
+                ";
+            db::writedb($sql);
+            Form::log("abstimmung.log", "$this->team_id hat seine Stimme abgegeben");
+            Form::affirm("Dein Team hat erfolgreich abgestimmt. Vielen Dank!");
+        }else{ // Team korrigiert seine Stimme.
+            $sql = "
+                UPDATE abstimmung_ergebnisse
+                SET stimme = '$value'
+                WHERE crypt = '$crypt'
+                ";
+            db::writedb($sql);
+            $sql = "
+                UPDATE abstimmung_teams
+                SET aenderungen = aenderungen + 1
+                WHERE team_id = $this->team_id
+                ";
+            db::writedb($sql);
+            Form::log("abstimmung.log", "$this->team_id hat seine Stimme geändert");
+            Form::affirm("Dein Team hat neu abgestimmt.");
+        }
+    }
+
+    /**
+     * Gibt das Gesamt-Ergebnis der Abstimmung aus.
+     *
+     * @param int $min Minimale anzahl an Stimmen bis zur Veröffentlichung
+     * @return array Array mit den Ergebnissen der Abstimmung
+     */
+    public static function get_ergebnisse($min = 0): array {
+        $sql = "
+            SELECT stimme, COUNT(stimme) AS stimmen 
+            FROM abstimmung_ergebnisse
+            GROUP BY stimme
+            ";
         $result = db::readdb($sql);
 
         $ergebnisse = array();
-        $anzahl_stimmen = 0;
-
+        $ergebnisse['gesamt'] = 0;
         while($row = mysqli_fetch_assoc($result)) {
-            $ergebnisse = array_merge($ergebnisse, array($row['value'] => $row['stimmen']));
-            $anzahl_stimmen = $anzahl_stimmen + $row['stimmen'];
+            $ergebnisse[$row['stimme']] = $row['stimmen'];
+            $ergebnisse['gesamt'] += $row['stimmen'];
         }
         
-        if ($anzahl_stimmen < $min) {
-            foreach($ergebnisse as $möglichkeit => $stimmen) {
-                $ergebnisse[$möglichkeit] = 0;
+        if ($ergebnisse['gesamt'] < $min) {
+            foreach($ergebnisse as $moeglichkeit => $stimmen) {
+                $ergebnisse[$moeglichkeit] = 0;
             }
         }
-
-        $ergebnisse = array_merge($ergebnisse, array('gesamt' => $anzahl_stimmen));
-
-        return $ergebnisse;
+        return $ergebnisse ?? [];
     }
 }

@@ -1,73 +1,72 @@
 <?php
-$abstimmung = new Abstimmung();
 
-$uhrzeit = strtotime(date('Y-m-d H:i:s'));
-$abschluss = strtotime($abstimmung->ende_der_abstimmung);
-$beginn = strtotime($abstimmung->beginn_der_abstimmung);
+$uhrzeit = time();
+$abschluss = strtotime(Abstimmung::ENDE);
+$beginn = strtotime(Abstimmung::BEGINN);
 
-// Berechnungen für das Ligacenter
-if(isset($_SESSION['la_id'])) {
-    $ergebnisse = $abstimmung->get_ergebnisse();
-    $abgegebene_stimmen = $ergebnisse['gesamt'];
-    $tabelle = array(
-        "Winterpause" => array(
-            "antwort" => "Winterpause",
-            "stimmen" => $ergebnisse['winterpause'] ?? 0,
-            "prozent" => isset($ergebnisse['wintepauser']) && $ergebnisse['winterpause'] != 0 ? round($ergebnisse['winterpauser'] / $abgegebene_stimmen * 100) . '%' : '-'
-        ),
-        "Sommerpause" => array(
-            "antwort" => "Sommerpause",
-            "stimmen" => $ergebnisse['sommerpause'] ?? 0,
-            "prozent" => isset($ergebnisse['sommerpause']) && $ergebnisse['sommerpause'] != 0 ? round($ergebnisse['sommerpause'] / $abgegebene_stimmen * 100) . '%' : '-'
-        ),
-        "Enthaltung" => array(
-            "antwort" => "Enthaltung",
-            "stimmen" => $ergebnisse['enthaltung'] ?? 0,
-            "prozent" => isset($ergebnisse['enthaltung']) && $ergebnisse['enthaltung'] != 0 ? round($ergebnisse['enthaltung'] / $abgegebene_stimmen * 100) . '%' : '-'
-        ),
-        "Gesamt" => array(
-            "antwort" => "Gesamt",
-            "stimmen" => $ergebnisse['gesamt'] ?? 0,
-            "prozent" => ($ergebnisse['gesamt']) != 0 ? round($ergebnisse['gesamt'] / $abgegebene_stimmen * 100) . '%' : '-'
-        )
-    );
-}
+$ergebnisse = Abstimmung::get_ergebnisse();
+$abgegebene_stimmen = $ergebnisse['gesamt'];
+$anzahl_teams = count(Team::list_of_all_teams());
+$wahlbeteiligung = round(100 * $abgegebene_stimmen / $anzahl_teams) . '%';
+$tabelle = array(
+    "Winterpause" => array(
+        "farbe"   => "w3-indigo",
+        "stimmen" => $ergebnisse['winterpause'] ?? 0,
+        "prozent" => (isset($ergebnisse['winterpause']) && $ergebnisse['winterpause'] != 0) ? round($ergebnisse['winterpause'] / $abgegebene_stimmen * 100) . '%' : '0%'
+    ),
+    "Sommerpause" => array(
+        "farbe"   => "w3-green",
+        "stimmen" => $ergebnisse['sommerpause'] ?? 0,
+        "prozent" => (isset($ergebnisse['sommerpause']) && $ergebnisse['sommerpause'] != 0) ? round($ergebnisse['sommerpause'] / $abgegebene_stimmen * 100) . '%' : '0%'
+    ),
+    "Enthaltung" => array(
+        "farbe"   => "w3-gray",
+        "stimmen" => $ergebnisse['enthaltung'] ?? 0,
+        "prozent" => (isset($ergebnisse['enthaltung']) && $ergebnisse['enthaltung'] != 0) ? round($ergebnisse['enthaltung'] / $abgegebene_stimmen * 100) . '%' : '0%'
+    )
+);
 
-// Berechnungen für das Teamcenter
-if(isset($_SESSION['team_id'])) {
+// Höchstes Abstimmungsergebnis oben anzeigen lassen.
+$sort_function = function ($value1, $value2){
+    return $value1['stimmen'] < $value2['stimmen'];
+};
+uasort($tabelle, $sort_function);
 
-    // Variablen für Verschlüsselung
-    $teamname = $daten['teamname'];
-    $key = $daten['passwort'];
-    $iv = $daten['team_id'];
-    $crypt = $abstimmung->get_crypt($key, $teamname, $iv);
-
-    $stimme_check = $abstimmung->get_team($crypt);
-    $vorauswahl['sommerpause'] = False;
-    $vorauswahl['winterpause'] = False;
-    $vorauswahl['enthaltung'] = False;
-    if (isset($stimme_check)) {
-        $vorauswahl[$stimme_check['value']] = True;
+// Nur für das Teamcenter
+if($teamcenter) {
+    $abstimmung = new Abstimmung($_SESSION['team_id']);
+    $stimme = '';
+    // Team will seine Stimme einsehen
+    if (isset($_POST['stimme_einsehen'])){
+        if (!password_verify($_POST['passwort'],$abstimmung->passwort_hash)) {
+            Form::log("abstimmung.log", "$abstimmung->team_id Ungültiges Passwort (Stimme einsehen)");
+            Form::error("Ungültiges Passwort.");
+        }else{
+           $crypt = $abstimmung->teamid_to_crypt($_POST['passwort']);
+           $stimme = $abstimmung->get_stimme($crypt);
+           // Keinen Header einbauen, da $stimme sonst verloren geht.
+        }
     }
 
-    // Formularpfrüfung für eine abgegebene Stimme
+    // Team will abstimmen
     if(isset($_POST['abstimmung'])) {
-        $value = $_POST['abstimmung'];
-        
-        if(empty($stimme_check)) {
-            $stimme = Abstimmung::add_stimme($value, $crypt);
-        } else {
-            $stimme = Abstimmung::update_stimme($value, $crypt);
+        $error = false;
+        $stimme = $_POST['abstimmung'];
+        if (!in_array($stimme, ['winterpause', 'sommerpause','enthaltung'])){
+            $error = true;
+            Form::log("abstimmung.log", "$abstimmung->team_id HTML-Manipulation");
+            Form::error("Ungültige Formularübermittlung");
         }
-        
-
-        if ($stimme) {
-            Form::affirm("Die Stimme wurde erfolgreich abgegeben!");
-        } else {
-            Form::error("Die Stimme konnte nicht eingetragen werden.");
+        if (!password_verify($_POST['passwort'],$abstimmung->passwort_hash)) {
+            $error = true;
+            Form::log("abstimmung.log", "$abstimmung->team_id Ungültiges Passwort");
+            Form::error("Ungültiges Passwort.");
         }
-
-        header('Location: tc_abstimmung.php');
-        die();
+        if (!$error){
+            $crypt = $abstimmung->teamid_to_crypt($_POST['passwort']);
+            $abstimmung->set_stimme($stimme, $crypt);
+            header('Location: tc_abstimmung.php');
+            die();
+        }
     }
 }

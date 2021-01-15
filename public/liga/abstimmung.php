@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/session_la.logic.php'; //Auth
+$teamcenter = $ligacenter = false;
 require_once '../../logic/abstimmung.logic.php';
 
 /////////////////////////////////////////////////////////////////////////////
@@ -11,4 +11,11 @@ require_once '../../logic/abstimmung.logic.php';
 /////////////////////////////////////////////////////////////////////////////
 include '../../templates/header.tmp.php';
 include '../../templates/abstimmung_ergebnis.tmp.php';
+?>
+
+    <a href="../teamcenter/tc_abstimmung.php" class="w3-button w3-section w3-block w3-primary">
+        <i class="material-icons">how_to_vote</i> Jetzt abstimmen!
+    </a>
+
+<?php
 include '../../templates/footer.tmp.php';
