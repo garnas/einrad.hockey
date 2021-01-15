@@ -15,7 +15,7 @@ include '../../templates/header.tmp.php';
     <h1 class="w3-text-primary">Abstimmung</h1>
 
     <!-- Panel mit dem Hinweis für den Abschluss der Befragung -->
-    <?php Form::schreibe_attention("Die Abstimmung endet am " . date("d.m.Y H:i", $abschluss) . " Uhr", ''); ?>.
+    <?php Form::schreibe_attention("Die Abstimmung endet am " . date("d.m.Y H:i", $abschluss) . " Uhr.", ''); ?>
 
     <!-- Informationstext für die Abstimmung -->
     <div class="w3-section">
