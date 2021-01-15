@@ -15,7 +15,7 @@ include '../../templates/header.tmp.php';
     <h1 class="w3-text-primary">Abstimmung</h1>
 
     <!-- Panel mit dem Hinweis für den Abschluss der Befragung -->
-    <?php Form::schreibe_attention("Die Abstimmung endet am " . date("d.m.Y H:i", $abschluss) . " Uhr", ''); ?>
+    <?php Form::schreibe_attention("Die Abstimmung endet am " . date("d.m.Y H:i", $abschluss) . " Uhr", ''); ?>.
 
     <!-- Informationstext für die Abstimmung -->
     <div class="w3-section">
@@ -25,7 +25,7 @@ include '../../templates/header.tmp.php';
         <p class="w3-text-grey">
             <i>
                 Ohne euer Passwort ist eine Einsicht oder Änderung eurer Stimme nicht mehr möglich. Es muss immer das
-                Teamcenter-Passwort eingegeben werden, mit welchem ihr das erste mal abgestimmt habt (Unabhängig davon,
+                Teamcenter-Passwort eingegeben werden, mit welchem ihr das erste Mal abgestimmt habt (unabhängig davon,
                 ob es danach geändert wurde).
             </i>
         </p>
@@ -45,7 +45,7 @@ include '../../templates/header.tmp.php';
                 <?= Form::link("../liga/abstimmung.php", "<i class='material-icons'>info </i> Ergebnis einsehen")?>
                 <?php if (empty($abstimmung->team)){ ?>
                     <!-- Noch nicht abgestimmt hinterlegt -->
-                    <p class="w3-text-red">Dein Team "<?=$_SESSION['teamname']?>" hat noch nicht abgestimmt.</p>
+                    <p class="w3-text-secondary">Dein Team "<?=$_SESSION['teamname']?>" hat noch nicht abgestimmt.</p>
                 <?php }else{?>
                     <p class="w3-text-green"><b>Es wurde eine Stimme für dein Team hinterlegt.</b></p>
                     <p>Dein Team hat seine Stimme <?=$abstimmung->team['aenderungen']?> mal im Nachhinein geändert.</p>
