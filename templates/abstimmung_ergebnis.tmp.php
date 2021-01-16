@@ -1,18 +1,17 @@
 <h1 class="w3-text-primary">Abstimmungsergebnis</h1>
 
 <p class="w3-text-grey">
-    Start: <?= date("d.m.Y H:i", $beginn)?>&nbsp;Uhr
+    Start: <?=Abstimmung::BEGINN?>&nbsp;Uhr
     <br>
-    Ende: <?=date("d.m.Y H:i", $abschluss)?>&nbsp;Uhr
+    Ende: <?=Abstimmung::ENDE?>&nbsp;Uhr
 </p>
-<?php Form::countdown(Abstimmung::ENDE);?>
-<?php foreach($tabelle as $key => $zeile) { ?>
+<?php foreach($display_ergebnisse as $ergebnis) { ?>
     <div class="w3-section">
-        <span><b><?=$key?></b></span>
+        <span><?=$ergebnis['formulierung']?></span>
         <div class="w3-light-grey w3-round w3-center">
-            <div class="<?=$zeile['farbe']?> w3-round" style="width:<?=$zeile['prozent']?>; height:24px;"></div>
+            <div class="<?=$ergebnis['farbe']?> w3-round" style="width:<?=$ergebnis['prozent']?>; height:24px;"></div>
         </div>
-        <span class=""><i><?=$zeile['stimmen']?> Stimmen (<?=$zeile['prozent']?>)</i></span>
+        <span><i><?=$ergebnis['stimmen']?> Stimmen (<?=$ergebnis['prozent']?>)</i></span>
     </div>
 <?php } ?>
 <div class="w3-section">

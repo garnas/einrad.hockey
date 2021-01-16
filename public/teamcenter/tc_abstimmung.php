@@ -12,119 +12,172 @@ require_once '../../logic/abstimmung.logic.php';
 /////////////////////////////////////////////////////////////////////////////
 include '../../templates/header.tmp.php';
 ?>
-    <h1 class="w3-text-primary">Abstimmung</h1>
-
-    <!-- Panel mit dem Hinweis für den Abschluss der Befragung -->
-    <?php Form::schreibe_attention("Die Abstimmung endet am " . date("d.m.Y H:i", $abschluss) . " Uhr.", ''); ?>
-
-    <!-- Informationstext für die Abstimmung -->
-    <div class="w3-section">
-        <p>
-            Die Abstimmung erfolgt technisch anonym - die Stimmzuordnung wird mit eurem Teamcenter-Passwort verschlüsselt.
-        </p>
-        <p class="w3-text-grey">
-            <i>
-                Ohne euer Passwort ist eine Einsicht oder Änderung eurer Stimme nicht mehr möglich. Es muss immer das
-                Teamcenter-Passwort eingegeben werden, mit welchem ihr das erste Mal abgestimmt habt (unabhängig davon,
-                ob es danach geändert wurde).
-            </i>
-        </p>
-    </div>
-
+    <h1 class="w3-text-primary">Abstimmung Saisonrhythmus</h1>
     <!-- Bereich der sich je nach Zeitpunkt in der Abstimmung ändert -->
-    <div class="w3-panel w3-light-grey">
-        <p class="w3-large">
-            Status
-        </p>
-            <!-- VOR DER ABSTIMMUNG -->
-        <?php if ($uhrzeit < $beginn) { ?>
-            <p class="w3-large">Die Abstimmung startet am <?= date("d.m.Y", $beginn) ?> um <?= date("H:i", $beginn) ?>
-                Uhr.</p>
-            <!-- WÄHREND DER ABSTIMMUNG -->
-        <?php } elseif ($uhrzeit < $abschluss) { ?>
-                <?= Form::link("../liga/abstimmung.php", "<i class='material-icons'>info </i> Ergebnis einsehen")?>
-                <?php if (empty($abstimmung->team)){ ?>
-                    <!-- Noch nicht abgestimmt hinterlegt -->
-                    <p class="w3-text-secondary">Dein Team "<?=$_SESSION['teamname']?>" hat noch nicht abgestimmt.</p>
-                <?php }else{?>
-                    <p class="w3-text-green"><b>Es wurde eine Stimme für dein Team hinterlegt.</b></p>
-                    <p>Dein Team hat seine Stimme <?=$abstimmung->team['aenderungen']?> mal im Nachhinein geändert.</p>
-                    <?php if (empty($stimme)){ ?>
-                        <!-- Formular zur Stimmeinsicht -->
-                        <form method="post">
-                            <p>
-                                <!-- Passwort -->
-                                <label for="passwort_einsicht" style="cursor: pointer;">
-                                    Bitte Teamcenter-Passwort eingeben, um deine Stimme einzusehen:
-                                </label>
-                                <input required type="password" name="passwort" id="passwort_einsicht" placeholder="Passwort eingeben"
-                                       class="w3-input">
-                            </p>
-                            <p>
-                                <button type="submit" name="stimme_einsehen" class="w3-block w3-primary w3-button">
-                                    <i class="material-icons">info</i>
-                                    Stimme einsehen
-                                </button>
-                            </p>
-                        </form>
-                    <?php }else{?>
-                        <p id="stimme">Dein Team hat wie folgt abgestimmt: <b><?=ucfirst($stimme)?></b></p>
-                    <?php } //endif?>
-                <?php } //endif?>
-    </div>
-    <div class="w3-panel w3-light-grey">
-            <!-- Formular zur Stimmabgabe -->
+
+    <!-- Vor der Abstimmung -->
+    <?php if (time() < $beginn) { ?>
+        <div class="w3-panel w3-light-grey">
+            <p class="w3-large">Die Abstimmung startet am <?= date("d.m.Y \u\m H:i", $beginn) ?> Uhr.</p>
+        </div>
+    <?php } //endif ?>
+
+    <!-- Nach Beginn der Abstimmung -->
+<?php if (time() > $beginn) { ?>
+    <!-- Informationstext für die Abstimmung -->
+    <?php Form::schreibe_attention(
+        "Die Abstimmung endet am " . date("d.m.Y \u\m H:i", $abschluss) . " Uhr. "
+        . "Es haben bisher $abgegebene_stimmen von $anzahl_teams Teams abgestimmt.", ''); ?>
+    <!-- Informationstext für die Stimmeinsicht -->
+    <div class="w3-card-4 w3-panel w3-light-grey">
+        <h2 class="w3-text-primary">Status</h2>
+        <?php if (empty($abstimmung->team)) { ?>
+            <!-- Noch nicht abgestimmt hinterlegt -->
+            <p class="w3-text-secondary">Es ist keine Stimme für dein Team hinterlegt.</p>
+        <?php } else { ?>
+        <p class="w3-text-green">Es wurde eine Stimme für dein Team hinterlegt. (<?= $abstimmung->team['aenderungen'] ?> mal geändert)</p>
+        <?php if (empty($stimme)) { ?>
+            <!-- Formular zur Stimmeinsicht -->
             <form method="post">
-                <p class="w3-large">
-                    Hier kann ein Fragetext rein.
-                </p>
                 <p>
                     <!-- Passwort -->
-                    <label for="passwort" style="cursor: pointer;">
-                        Bitte Teamcenter-Passwort eingeben, um abzustimmen:
+                    <label for="passwort_einsicht" style="cursor: pointer;">
+                        Bitte Teamcenter-Passwort eingeben, um deine Stimme einzusehen:
                     </label>
-                    <input required type="password" name="passwort" id="passwort" placeholder="Passwort eingeben"
-                           class="w3-input">
-                </p>
-                <p class="w3-hover-text-primary">
-                    <!-- Erste Antwortmöglichkeit -->
-                    <input required type="radio" name="abstimmung" id="sommerpause" value="sommerpause" class="w3-radio">
-                    <label style="cursor: pointer;" for="sommerpause">
-                        Wir sprechen uns für eine Änderung hin zu einer <b>Saisonpause im Sommer</b> aus.
-                    </label>
-                </p>
-                <p class="w3-hover-text-primary">
-                    <!-- Zweite Antwortmöglichkeit -->
-                    <input required type="radio" name="abstimmung" id="winterpause" value="winterpause" class="w3-radio">
-                    <label style="cursor: pointer;" for="winterpause">
-                        Wir sprechen uns für einen Erhalt des bisherigen Saisonverlaufs mit einer
-                        <b>Saisonpause im Winter</b> aus.
-                    </label>
-                </p>
-                <p class="w3-hover-text-primary">
-                    <!-- Dritte Antwortmöglichkeit -->
-                    <input required type="radio" name="abstimmung" id="enthaltung" value="enthaltung" class="w3-radio">
-                    <label style="cursor: pointer;" for="enthaltung">
-                        Wir <b>enthalten</b> uns.
-                    </label>
+                    <input required
+                           type="password"
+                           name="passwort"
+                           id="passwort_einsicht"
+                           placeholder="Passwort eingeben"
+                           class="w3-input"
+                    >
                 </p>
                 <p>
-                    <button type="submit" class="w3-block w3-primary w3-button">
-                        <i class="material-icons">how_to_vote</i>
-                        <?php if (empty($abstimmung->team)){ ?>
-                            Stimme abgeben
-                        <?php }else{ ?>
-                            Stimme ändern
-                        <?php } //end if?>
+                    <button type="submit"
+                            name="stimme_einsehen"
+                            class="w3-primary w3-button"
+                    >
+                        <i class="material-icons">info</i>
+                        Stimme einsehen
                     </button>
                 </p>
             </form>
-            <!-- NACH DER ABSTIMMUNG -->
-        <?php } elseif ($uhrzeit > $abschluss) { ?>
-            <p class="w3-large">Die Abstimmung ist beendet.</p>
-        <?php } ?>
+        <?php } else { ?>
+            <p id="stimme">Dein Team hat wie folgt abgestimmt:</p>
+            <p><?= $display_ergebnisse[$stimme]['formulierung'] ?></p>
+        <?php } //endif Team will Stimme einsehen?>
+    <?php } //endif Team hat abgestimmt?>
     </div>
+<?php } //endif Zeit?>
 
+    <!-- Während der Abstimmung -->
+<?php if (time() > $beginn && time() < $abschluss) { ?>
+    <!-- Formular zur Stimmabgabe -->
+    <div class="w3-card-4 w3-panel w3-light-grey">
+        <h2 class="w3-text-primary"><?= (empty($abstimmung->team)) ? 'Jetzt abstimmen' :  'Stimme ändern' ?></h2>
+        <form method="post">
+            <p class="w3-large">
+                Im Zuge der aktuellen Situation hat sich der Ligaausschuss mit dem Gedanken auseinandergesetzt, ob wir
+                die Gelegenheit nutzen sollten, unseren bisher bewährten Saisonrhythmus zu ändern.
+            </p>
+            <p class="w3-large">
+                <b>Es geht dabei nicht um die aktuelle Saison 2020/21, sondern um alle zukünftigen Saisons.</b>
+            </p>
+            <p class="w3-large">
+                Da es sich hierbei um eine Entscheidung von grundlegender Bedeutung handelt, gibt es eine Abstimmung
+                unter den Ligavertretern.
+            </p>
+            <p class="w3-hover-text-primary">
+                <!-- Erste Antwortmöglichkeit -->
+                <input required
+                       type="radio"
+                       name="abstimmung"
+                       id="sommerpause"
+                       value="sommerpause"
+                       class="w3-radio"
+                >
+                <label style="cursor: pointer;" for="sommerpause">
+                    Der Ligaausschuss arbeitet auf einen <b>Saisonrhythmus Sommer-Sommer</b> hin. Der Saisonwechsel
+                    würde so in die Sommerferien fallen, mit Abschlussturnieren etwa im Mai/Juni.
+                </label>
+            </p>
+            <p class="w3-hover-text-primary">
+                <!-- Zweite Antwortmöglichkeit -->
+                <input required
+                       type="radio"
+                       name="abstimmung"
+                       id="winterpause"
+                       value="winterpause"
+                       class="w3-radio"
+                >
+                <label style="cursor: pointer;" for="winterpause">
+                    Der bisherige Rhythmus mit einer Saison, die sich am <b>Kalenderjahr</b> orientiert, wird
+                    beibehalten.
+                </label>
+            </p>
+            <p class="w3-hover-text-primary">
+                <!-- Dritte Antwortmöglichkeit -->
+                <input required
+                       type="radio"
+                       name="abstimmung"
+                       id="enthaltung"
+                       value="enthaltung"
+                       class="w3-radio"
+                >
+                <label style="cursor: pointer;" for="enthaltung">
+                    Wir <b>enthalten</b> uns.
+                </label>
+            </p>
+            <p>
+                <!-- Passwort -->
+                <label for="passwort" style="cursor: pointer;">
+                    Bitte Teamcenter-Passwort eingeben, um abzustimmen:
+                </label>
+                <input required
+                       type="password"
+                       name="passwort"
+                       id="passwort"
+                       placeholder="Passwort eingeben"
+                       class="w3-input"
+                >
+            </p>
+            <p>
+                <button type="submit" class="w3-block w3-primary w3-button">
+                    <i class="material-icons">how_to_vote</i>
+                    <?php if (empty($abstimmung->team)) { ?>
+                        Stimme abgeben
+                    <?php } else { ?>
+                        Stimme ändern
+                    <?php } //end if?>
+                </button>
+            </p>
+        </form>
+    </div>
+    <!-- Hinweise zur Abstimmung -->
+    <h3 class="w3-text-primary">Hinweise zur Abstimmung</h3>
+
+        <p>
+            <i>
+            Die Abstimmung ist technisch anonym - die Stimmzuordnung wird mit eurem Teamcenter-Passwort verschlüsselt. Eine
+            Einsicht und Änderung eurer abgegebenen Stimme ist im Nachhinein möglich.
+            </i>
+        </p>
+        <p>
+            <i>
+            Dafür muss immer das Teamcenter-Passwort eingegeben werden, mit welchem ihr das erste Mal abgestimmt habt
+            (unabhängig davon, ob es danach geändert wurde). Ohne euer Passwort ist eine Einsicht oder Änderung eurer Stimme
+            nicht mehr möglich.
+            </i>
+        </p>
+
+<?php } //endif?>
+
+    <!-- NACH DER ABSTIMMUNG -->
+<?php if (time() > $abschluss) { ?>
+    <div class="w3-panel w3-light-grey">
+        <p class="w3-large">Die Abstimmung ist beendet.</p>
+    </div>
+<?php } //endif?>
 
 <?php
 include '../../templates/footer.tmp.php';

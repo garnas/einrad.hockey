@@ -12,7 +12,12 @@ require_once '../../logic/abstimmung.logic.php';
 $titel = "Saisonrhythmus Abstimmung | Deutsche Einradhockeyliga";
 $content = "Das aktuelle Abstimmungsergebnis der Teams über einen Saisonrhythmus-Wechsel.";
 include '../../templates/header.tmp.php';
-include '../../templates/abstimmung_ergebnis.tmp.php';
+
+if (time() > strtotime(Abstimmung::ENDE)){
+    include '../../templates/abstimmung_ergebnis.tmp.php';
+}else{
+    Form::schreibe_attention(
+            "Das Abstimmunsergebnis wird hier am " . Abstimmung::ENDE . " Uhr veröffentlicht.");
 ?>
 
     <a href="../teamcenter/tc_abstimmung.php" class="w3-button w3-section w3-block w3-primary">
@@ -20,4 +25,5 @@ include '../../templates/abstimmung_ergebnis.tmp.php';
     </a>
 
 <?php
+} //end if
 include '../../templates/footer.tmp.php';
