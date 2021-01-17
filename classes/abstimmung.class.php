@@ -79,7 +79,8 @@ class Abstimmung
      */
     function crypt_to_teamid($passwort, $crypt): string
     {
-        $key = hash('sha256', $passwort); // User-Passwort war kein geeigneter Key zum verschlüsseln.
+        // Verwendete password-based key derivation, das User-Passwort kein geeigner Key ist zum verschlüsseln.
+        $key = hash_pbkdf2("sha256", $passwort, $this->passwort_hash, 8000);
         return openssl_decrypt($crypt, self::CIPHER, $key, 0, self::IV);
     }
 
@@ -91,7 +92,8 @@ class Abstimmung
      */
     function teamid_to_crypt(string $passwort): string
     {
-        $key = hash('sha256', $passwort); // User-Passwort ist kein geeigneter Key zum verschlüsseln.
+        // Verwendete password-based key derivation, das User-Passwort kein geeigner Key ist zum verschlüsseln.
+        $key = hash_pbkdf2("sha256", $passwort, $this->passwort_hash, 8000);
         return openssl_encrypt($this->team_id, self::CIPHER, $key, 0, self::IV);
     }
 
