@@ -49,10 +49,9 @@ class Abstimmung
      *
      * @param $team_id
      */
-    public function __construct($team_id)
+    function __construct($team_id)
     {
         $this->team_id = $team_id;
-
         // Details aus abstimmung_teams bekommen
         $sql = "
                 SELECT *
@@ -80,7 +79,8 @@ class Abstimmung
      */
     function crypt_to_teamid($passwort, $crypt): string
     {
-        return openssl_decrypt($crypt, self::CIPHER, $passwort, 0, self::IV);
+        $key = hash('sha256', $passwort); // User-Passwort war kein geeigneter Key zum verschlüsseln.
+        return openssl_decrypt($crypt, self::CIPHER, $key, 0, self::IV);
     }
 
     /**
@@ -91,7 +91,8 @@ class Abstimmung
      */
     function teamid_to_crypt(string $passwort): string
     {
-        return openssl_encrypt($this->team_id, self::CIPHER, $passwort, 0, self::IV);
+        $key = hash('sha256', $passwort); // User-Passwort ist kein geeigneter Key zum verschlüsseln.
+        return openssl_encrypt($this->team_id, self::CIPHER, $key, 0, self::IV);
     }
 
     /**
@@ -129,7 +130,7 @@ class Abstimmung
                 INSERT INTO abstimmung_ergebnisse (stimme, crypt) 
                 VALUES ('$stimme', '$crypt')
                 ";
-            db::writedb($sql);
+            db::writedb($sql, true);
             Form::log("abstimmung.log", "$this->team_id hat seine Stimme abgegeben");
             Form::affirm("Dein Team hat erfolgreich abgestimmt. Vielen Dank!");
         } else { // Team korrigiert seine Stimme.
@@ -138,7 +139,7 @@ class Abstimmung
                 SET stimme = '$stimme'
                 WHERE crypt = '$crypt'
                 ";
-            db::writedb($sql);
+            db::writedb($sql, true);
             $sql = "
                 UPDATE abstimmung_teams
                 SET aenderungen = aenderungen + 1
