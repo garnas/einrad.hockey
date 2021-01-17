@@ -14,11 +14,11 @@ class Abstimmung
     /**
      * Frühstmöglicher Zeitpunkt der Stimmabgabe
      */
-    const BEGINN = "11.01.2021 18:00";
+    const BEGINN = "18.01.2021 00:06";
     /**
      * Letztmöglicher Zeitpunkt der Stimmabgabe
      */
-    const ENDE = "01.02.2021 23:59";
+    const ENDE = "19.01.2021 00:00";
     /**
      * Verschlüsselungsverfahren für die TeamIDs
      */
@@ -108,9 +108,10 @@ class Abstimmung
         $sql = "
             SELECT stimme 
             FROM abstimmung_ergebnisse
-            WHERE crypt = '$crypt'";
+            WHERE crypt = '$crypt'
+            ";
         $result = db::readdb($sql);
-        return mysqli_fetch_assoc($result)['stimme'] ?? 'Keine Stimme hinterlegt.';
+        return mysqli_fetch_assoc($result)['stimme'] ?? 'none';
     }
 
     /**
@@ -123,6 +124,10 @@ class Abstimmung
      */
     function set_stimme($stimme, $crypt)
     {
+        if (empty($this->team) xor $this->get_stimme($crypt) === 'none'){
+            Form::error("Fehler, bitte melde dich bei " . Form::mailto(Config::TECHNIKMAIL));
+            return;
+        }
         if (empty($this->team)) { // Team stimmt zum ersten mal ab.
             $sql = "
                 INSERT INTO abstimmung_teams (team_id, passwort)

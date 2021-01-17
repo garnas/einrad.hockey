@@ -47,7 +47,7 @@ if ($teamcenter) {
             Form::error("Ungültiges Passwort.");
         } else {
             $crypt = $abstimmung->teamid_to_crypt($_POST['passwort']);
-            $stimme = $abstimmung->get_stimme($crypt);
+            $einsicht = $abstimmung->get_stimme($crypt);
             Form::log("abstimmung.log", "$abstimmung->team_id hat seine Stimme eingesehen");
             // Keinen Header einbauen, da $stimme sonst verloren geht.
         }
@@ -69,7 +69,7 @@ if ($teamcenter) {
         }
         if (!password_verify($_POST['passwort'], $abstimmung->passwort_hash)) {
             $error = true;
-            Form::log("abstimmung.log", "$abstimmung->team_id Ungültiges Passwort");
+            Form::log("abstimmung.log", "$abstimmung->team_id Ungültiges Passwort (Abstimmen)");
             Form::error("Ungültiges Passwort.");
         }
         if (!$error) {

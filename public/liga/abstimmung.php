@@ -17,7 +17,7 @@ if (time() > strtotime(Abstimmung::ENDE)){
     include '../../templates/abstimmung_ergebnis.tmp.php';
 }else{
     Form::schreibe_attention(
-            "Das Abstimmunsergebnis wird hier am " . Abstimmung::ENDE . " Uhr veröffentlicht.");
+            "Das Abstimmungsergebnis wird hier am " . Abstimmung::ENDE . " Uhr veröffentlicht.");
 ?>
 
     <a href="../teamcenter/tc_abstimmung.php" class="w3-button w3-section w3-block w3-primary">

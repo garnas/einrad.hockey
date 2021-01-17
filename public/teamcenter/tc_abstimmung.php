@@ -36,7 +36,7 @@ include '../../templates/header.tmp.php';
             <p class="w3-text-secondary">Es ist keine Stimme für dein Team hinterlegt.</p>
         <?php } else { ?>
         <p class="w3-text-green">Es wurde eine Stimme für dein Team hinterlegt. (<?= $abstimmung->team['aenderungen'] ?> mal geändert)</p>
-        <?php if (empty($stimme)) { ?>
+        <?php if (empty($einsicht)) { ?>
             <!-- Formular zur Stimmeinsicht -->
             <form method="post">
                 <p>
@@ -64,7 +64,9 @@ include '../../templates/header.tmp.php';
             </form>
         <?php } else { ?>
             <p id="stimme">Dein Team hat wie folgt abgestimmt:</p>
-            <p><?= $display_ergebnisse[$stimme]['formulierung'] ?></p>
+            <p>
+                <?= $display_ergebnisse[$einsicht]['formulierung'] ?? "<span class='w3-text-red'>Fehler, bitte melde dich bei </span>" . Form::mailto(Config::TECHNIKMAIL)?>
+            </p>
         <?php } //endif Team will Stimme einsehen?>
     <?php } //endif Team hat abgestimmt?>
     </div>
@@ -176,6 +178,7 @@ include '../../templates/header.tmp.php';
 <?php if (time() > $abschluss) { ?>
     <div class="w3-panel w3-light-grey">
         <p class="w3-large">Die Abstimmung ist beendet.</p>
+        <p><?=Form::link('../liga/abstimmung.php', "<i class='material-icons'>info</i> Zu den Ergebnissen")?></p>
     </div>
 <?php } //endif?>
 
