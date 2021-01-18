@@ -279,7 +279,7 @@ class Challenge {
         ) AS neu
         WHERE spieler_id = '" . $spieler_id . "'
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $daten = mysqli_fetch_assoc($result);
 
         return db::escape($daten);
@@ -305,7 +305,7 @@ class Challenge {
         ) AS neu
         WHERE team_id = '" . $team_id . "'
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $daten = mysqli_fetch_assoc($result);
 
         return db::escape($daten);
@@ -316,7 +316,7 @@ class Challenge {
         $sql = "
         INSERT INTO `oeffi_challenge`(`spieler_id`, `kilometer`, `radgröße`, `datum`) VALUES ('$spieler', '$distanz', '$radgroesse', '$datum')
         ";
-        db::writedb($sql);
+        db::write($sql);
         return true;
     }
 
@@ -325,7 +325,7 @@ class Challenge {
         $sql = "
         UPDATE `oeffi_challenge` SET `count` = FALSE WHERE `id` = '$id';  
         ";
-        db::writedb($sql);
+        db::write($sql);
         return true;
     }
 }
