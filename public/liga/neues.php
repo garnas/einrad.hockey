@@ -90,9 +90,7 @@ include '../../templates/header.tmp.php';
                 <h1 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">outlined_flag</i> km-Challenge</h1>
             </a>
             <p class="w3-text-grey w3-small w3-border-top w3-border-grey"></p>
-            <p>Sammelt Kilometer für euer Team und legt die längste Strecke zurück.</p>
-            <!-- Countdown -->
-            <a href='challenge.php' class='no'><?php Form::countdown('2020-12-20 20:00')?></a>
+            <p>Die km-Challenge wurde erfolgreich beendet. Es wurden ganze 22.771,6&nbsp;km zurückgelegt!</p>
         </div>
 
         <!-- Anstehende Turniere -->

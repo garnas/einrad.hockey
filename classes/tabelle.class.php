@@ -168,12 +168,12 @@ class Tabelle
         }
         //Blockzuordnung
         $blocks = [
-            "A" => range(1, 6),
-            "AB" => range(7, 14),
-            "BC" => range(14, 21),
-            "CD" => range(21, 31),
-            "DE" => range(31, 43),
-            "EF" => range(43, 57),
+            "A"=>range(1,6),
+            "AB"=>range(7,13),
+            "BC"=>range(13,21),
+            "CD"=>range(21,31),
+            "DE"=>range(31,43),
+            "EF"=>range(43,57),
             //"F"=>range(1,999),
         ];
         foreach ($blocks as $block => $platzierung) {

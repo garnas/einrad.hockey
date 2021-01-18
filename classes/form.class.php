@@ -7,7 +7,6 @@
  */
 class Form
 {
-
     /**
      * Fehlermeldungem werden in einer $_SESSION Variable gespeichert und beim nächsten Aufruf der HTML-Navigation
      * angezeigt
@@ -226,17 +225,7 @@ class Form
         return (string)(1995 + $saison);
     }
 
-    /**
-     * Fügt einen Countdown ein
-     *
-     * mit strtotime() lesbares Datum
-     * @param string $date
-     *
-     * HTML-ID welcher der Countdown haben soll (falls multiple Countdowns eignefügt werden)
-     * @param string $id
-     */
-    public static function countdown(string $date, $id = 'countdown')
-    {
+    public static function countdown($date, $id = 'countdown'){
         ?>
         <script>countdown('<?=date("Y-m-d\TH:i:s", strtotime($date))?>', '<?=$id?>')</script>
         <div id='countdown' class="w3-xlarge w3-text-primary" style='white-space: nowrap;'>
@@ -256,22 +245,12 @@ class Form
                     <span id='countdown_seconds'>--</span>
                     <span class="w3-small w3-text-grey" style="display: block">Sekunden</span>
                 </span>
-        </div>
+            </div>
         <?php
     }
 
-    /**
-     * Schreibt einen Log-Eintrag in die Log-Datei
-     * Existiert die Log-Datei nicht, so wird sie erstellt.
-     *
-     * Name der Logdatei
-     * @param string $file_name
-     * Was in die Logdatei geschrieben werden soll
-     * @param string $line
-     */
-    public static function log(string $file_name, string $line)
-    {
-        $path = Config::BASE_PATH . '/system/logs/';
+    public static function log($file_name, $line){
+        $path = '../../system/logs/';
         //SQL-Logdatei erstellen/beschreiben
         $log_file = fopen($path . $file_name, "a");
         $line = date('[Y-M-d H:i:s e]: ') . $line . "\n";

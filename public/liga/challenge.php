@@ -33,33 +33,34 @@ include '../../templates/header.tmp.php';
 
 <!-- Button zum Teamcenter -->
 <p class="w3-text-gray">
-    Hier habt ihr die Möglichkeit die geradelten Kilometer einzutragen. Gewertet werden eure Einträge als Einzelperson, aber immer auch im Team.
-    Also ran ans Rad und viel Spaß beim Sammeln.
+    Unglaubliche <b>22.771,6&nbsp;km sind wir gemeinsam geradelt</b>. Damit sind wir nicht nur von Berlin bis nach Sydney (16.098,4&nbsp;km) sondern wieder bis zurück nach Singapur gefahren. Aber nicht nur das Gesamtergebnis ist erstaunlich... 💪🏼
+    <br><br>
+    4.536,6&nbsp;km so viele km wie <b>FreiradFreiburg</b> hat kein anderes Team zusammen gesammelt. Auf Platz 2. mit ebenfalls spitzenmäßigen 2.661.7&nbsp;km erradelte das Team <b>Einradhockey Elmshorn</b>! Außerdem stark dabei die <b>Legionäre der MJC&nbsp;Trier</b> mit gemeinsamen 1.725,1&nbsp;km.
+    <br><br>
+    Was wir euch ebenfalls nicht vorenthalten wollen sind die klasse Einzelleistungen von <b>Tom&nbsp;(FreiradFreiburg)</b> in der Kategorie&nbsp;U16, <b>Uli&nbsp;(MJC Trier - Die Römer)</b> in der Kategorie&nbsp;50+ sowie <b>Luc&nbsp;(MJC Trier - Die Legionäre)</b> in der Kategorie&nbsp;Einradhockey-Rad.
+    <br><br>
+    Außerdem hervorheben möchten wir natürlich die km von <b>Tom</b> auch in der Einzelwertung aller Fahrer hat er sich den ersten Platz gesichert.
+    <br><br>
+    Wir sind immer noch erstaunt wie viele km ihr alle gefahren seid und hoffen dass ihr euch nun auch ohne die km-Challenge weiterhin aufs Rad schwingt und ein paar km zurücklegt. Vielen Dank an alle Teilnehmer*innen. Uns hat es wahnsinnig viel Spaß gemacht! Wir hoffen euch auch 😉
+    <br><br>
+    Und wie zu Beginn angekündigt werden alle genannten Fahrer*innen und Teams in den kommenden Wochen eine kleine Überraschung erhalten. ✨
+    <br><br>
+    Darüber hinaus kann sich <b>jedes Team, jede Spielerin und jeder Spieler die eigene Urkunde</b> aus dem Teamcenter herunterladen! 🥳
 </p>
-<?php if ($uhrzeit <= $abschluss) { ?>
-    <a href='../teamcenter/tc_challenge.php' class="w3-button w3-secondary">Kilometer eintragen!</a>
-<?php } ?>
+<a href='../teamcenter/tc_challenge.php' class="w3-button w3-secondary">Urkunde herunterladen!</a>
 
 <h3 class="w3-text-secondary w3-margin-top">Gesamt-km</h3>
-<p class="w3-text-gray"><?= $ziel_text ?></p>
-
-<!-- ProgressBar -->
-<div class='w3-row w3-light-grey'>
-    <div class='w3-col w3-card-2' style='max-width: 100%; width: <?=$percent?>%; padding-right: 5px; text-align: right; <?=$color[0] ?? ''?>'><p style="margin-top: 5px; margin-bottom: 5px;"><?=number_format($akt_kilometerstand, 1, ',', '.');?> km</p></div>
-</div>
-
-<p class='w3-text-gray'><span>Berlin</span><span class="w3-right">Sydney</span></p>
 
 <!-- Buttons zum Ein/Ausblenden der Sonderauswertungen -->
 <div class="w3-section w3-margin-top">
     <div id='button_da'>
         <button  class="w3-primary w3-block w3-button" onclick='modal("sonderauswertungen_panels");modal("button_da");modal("button_weg");'>
-            <i class="material-icons">keyboard_arrow_down</i> Nennenswerte FahrerInnen <i class="material-icons">keyboard_arrow_down</i>
+            <i class="material-icons">keyboard_arrow_down</i> Nennenswerte Fahrer*innen <i class="material-icons">keyboard_arrow_down</i>
         </button>
     </div>
     <div id='button_weg' style='display: none;'>     
         <button class="w3-primary w3-block w3-button" onclick='modal("sonderauswertungen_panels");modal("button_da");modal("button_weg");'>
-            <i class="material-icons">keyboard_arrow_up</i> Nennenswerte FahrerInnen <i class="material-icons">keyboard_arrow_up</i>
+            <i class="material-icons">keyboard_arrow_up</i> Nennenswerte Fahrer*innen <i class="material-icons">keyboard_arrow_up</i>
         </button>
     </div>
 </div>
@@ -140,7 +141,7 @@ include '../../templates/header.tmp.php';
     </table>
 </div>
 
-<h3 class="w3-text-secondary w3-margin-top">Teilnehmer/innen</h3>
+<h3 class="w3-text-secondary w3-margin-top">Teilnehmer*innen</h3>
 
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-striped">
