@@ -12,12 +12,19 @@ require_once '../../logic/abstimmung.logic.php';
 $titel = "Saisonrhythmus Abstimmung | Deutsche Einradhockeyliga";
 $content = "Das aktuelle Abstimmungsergebnis der Teams über einen Saisonrhythmus-Wechsel.";
 include '../../templates/header.tmp.php';
+?>
 
+<h1 class="w3-text-primary">Abstimmung Saisonwechsel</h1>
+
+<p>Schon häufig gab es in der Liga Stimmen, welche sich für eine Änderung des Saisonrhythmus einsetzten. Darüber lässt der Ligaausschuss nun unter den Ligavertretern abstimmen.</p>
+    <p>Mehr Infos: <?=Form::link("../dokumente/rundmails/rundmail_saisonwechsel.pdf", "<i class='material-icons'>insert_drive_file</i> Rundmail bezüglich der Abstimmung", true)?></p>
+
+<?php
 if (time() > strtotime(Abstimmung::ENDE)){
     include '../../templates/abstimmung_ergebnis.tmp.php';
 }else{
     Form::schreibe_attention(
-            "Das Abstimmungsergebnis wird hier am " . Abstimmung::ENDE . " Uhr veröffentlicht.");
+            "Das Abstimmungsergebnis wird hier am " . Abstimmung::ENDE . " Uhr veröffentlicht.", "");
 ?>
 
     <a href="../teamcenter/tc_abstimmung.php" class="w3-button w3-section w3-block w3-primary">
