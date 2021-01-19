@@ -14,11 +14,11 @@ class Abstimmung
     /**
      * Frühstmöglicher Zeitpunkt der Stimmabgabe
      */
-    const BEGINN = "18.01.2021 00:06";
+    const BEGINN = "19.01.2021 17:15";
     /**
      * Letztmöglicher Zeitpunkt der Stimmabgabe
      */
-    const ENDE = "19.01.2021 00:00";
+    const ENDE = "01.02.2021 23:59";
     /**
      * Verschlüsselungsverfahren für die TeamIDs
      */
@@ -27,7 +27,7 @@ class Abstimmung
      * Verhindert, dass bei einer neuen Abstimmung der gleiche Crypt bei gleichen Passwort und TeamID entsteht.
      * Muss für jede Liga-Abstimmung erneuert werden.
      */
-    const IV = 'RUEvrH/ovYG9t8bA';
+    const IV = 'ZUEvrHAovY29t/bA';
     /**
      * @var array|string[] Daten aus der DB-Tabelle abstimmung_teams
      */
