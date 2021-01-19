@@ -16,6 +16,11 @@
   <priority>0.90</priority>
 </url>
 <url>
+  <loc>https://einrad.hockey/liga/abstimmung</loc>
+  <lastmod>2020-11-13T09:19:57+00:00</lastmod>
+  <priority>1</priority>
+</url>
+<url>
   <loc>https://einrad.hockey/liga/ueber_uns</loc>
   <lastmod>2020-11-13T09:19:57+00:00</lastmod>
   <priority>0.90</priority>

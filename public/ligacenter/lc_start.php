@@ -6,6 +6,7 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_la.logic.php'; //auth
 
 $centerpanels = array(
+  array("name" => "Abstimmung", "link" => "lc_abstimmung.php", "farbe" => "w3-red"),
   array("name" => "Turniere verwalten", "link" => "lc_turnierliste.php", "farbe" => "w3-primary"),
   array("name" => "Turnier erstellen", "link" => "lc_turnier_erstellen.php", "farbe" => "w3-primary"),
   array("name" => "Kontaktcenter", "link" => "lc_kontaktcenter.php", "farbe" => "w3-tertiary"),

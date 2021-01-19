@@ -84,11 +84,12 @@ class db {
   }
 
   //funktion zum schreiben in die sql datenbank
-  public static function writedb($sql)
+  public static function writedb($sql, $anonym = false)
   {
     //SQL-Logdatei erstellen/beschreiben
     $autor_string = implode(" | ", array_filter([$_SESSION['teamname'] ?? '', $_SESSION['la_login_name'] ?? '', $_SESSION['ligabot'] ?? '']));
-    $log = $autor_string . "\n" . trim($sql);
+      $sql = trim(preg_replace("/(^\h+|\h+$)/m",'',$sql)); // Schönere Formatierung
+      $log = $autor_string . "\n" . (($anonym) ? 'Anonyme Query' : $sql);
     Form::log(self::$log_file, $log);
 
     //Keine Verbindung zum SQL-Server möglich
