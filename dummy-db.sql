@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 27. Nov 2020 um 16:07
--- Server-Version: 10.4.14-MariaDB
--- PHP-Version: 7.4.10
+-- Erstellungszeit: 21. Jan 2021 um 18:56
+-- Server-Version: 10.4.17-MariaDB
+-- PHP-Version: 8.0.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,29 @@ SET time_zone = "+00:00";
 --
 -- Datenbank: `dummy-db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `abstimmung_ergebnisse`
+--
+
+CREATE TABLE `abstimmung_ergebnisse` (
+  `crypt` varchar(255) NOT NULL,
+  `stimme` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `abstimmung_teams`
+--
+
+CREATE TABLE `abstimmung_teams` (
+  `team_id` int(11) NOT NULL,
+  `aenderungen` int(8) NOT NULL DEFAULT 0,
+  `passwort` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -10991,6 +11014,31 @@ INSERT INTO `plz` (`PLZ`, `Ort`, `Lon`, `LAT`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Tabellenstruktur für Tabelle `schiri_test`
+--
+
+CREATE TABLE `schiri_test` (
+  `frage_id` int(11) NOT NULL,
+  `kategorie` varchar(255) NOT NULL,
+  `titel` varchar(255) NOT NULL,
+  `frage` varchar(750) NOT NULL,
+  `antwort_1` varchar(255) NOT NULL,
+  `antwort_2` varchar(255) NOT NULL,
+  `antwort_3` varchar(255) NOT NULL,
+  `antwort_4` varchar(255) NOT NULL,
+  `antwort_5` varchar(255) NOT NULL,
+  `antwort_6` varchar(255) NOT NULL,
+  `richtige_antworten` varchar(255) NOT NULL,
+  `erklaerung` varchar(750) NOT NULL,
+  `punkte` int(11) NOT NULL,
+  `name_bild` varchar(255) NOT NULL,
+  `name_video` varchar(255) NOT NULL,
+  `autor` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Tabellenstruktur für Tabelle `spiele`
 --
 
@@ -14782,6 +14830,18 @@ INSERT INTO `turniere_log` (`turnier_log_id`, `turnier_id`, `log_text`, `autor`,
 --
 
 --
+-- Indizes für die Tabelle `abstimmung_ergebnisse`
+--
+ALTER TABLE `abstimmung_ergebnisse`
+  ADD PRIMARY KEY (`crypt`);
+
+--
+-- Indizes für die Tabelle `abstimmung_teams`
+--
+ALTER TABLE `abstimmung_teams`
+  ADD PRIMARY KEY (`team_id`);
+
+--
 -- Indizes für die Tabelle `ausschuss_liga`
 --
 ALTER TABLE `ausschuss_liga`
@@ -14837,6 +14897,12 @@ ALTER TABLE `oeffi_challenge`
 --
 ALTER TABLE `plz`
   ADD PRIMARY KEY (`PLZ`);
+
+--
+-- Indizes für die Tabelle `schiri_test`
+--
+ALTER TABLE `schiri_test`
+  ADD PRIMARY KEY (`frage_id`);
 
 --
 -- Indizes für die Tabelle `spiele`
@@ -15004,6 +15070,12 @@ ALTER TABLE `oeffi_challenge`
   MODIFY `id` smallint(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=436;
 
 --
+-- AUTO_INCREMENT für Tabelle `schiri_test`
+--
+ALTER TABLE `schiri_test`
+  MODIFY `frage_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT für Tabelle `spieler`
 --
 ALTER TABLE `spieler`
@@ -15072,6 +15144,12 @@ ALTER TABLE `turniere_log`
 --
 -- Constraints der exportierten Tabellen
 --
+
+--
+-- Constraints der Tabelle `abstimmung_teams`
+--
+ALTER TABLE `abstimmung_teams`
+  ADD CONSTRAINT `abstimmung_teams_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams_liga` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints der Tabelle `oeffi_challenge`
