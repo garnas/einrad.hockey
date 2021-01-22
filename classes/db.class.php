@@ -130,15 +130,16 @@ class db
 
     /**
      * Funktion zum schreiben in die Datenbank
+     * 
      * @param string $sql
      */
-    public static function write(string $sql)
+    public static function write(string $sql, $anonym = false)
     {
         //SQL-Logdatei erstellen/beschreiben
         $autor_string = implode(" | ", array_filter([$_SESSION['teamname'] ?? '', $_SESSION['la_login_name'] ?? '', $_SESSION['ligabot'] ?? '']));
-        $log = $autor_string . "\n" . trim($sql);
+        $sql = trim(preg_replace("/(^\h+|\h+$)/m",'',$sql)); // Schönere Formatierung
+        $log = $autor_string . "\n" . (($anonym) ? 'Anonyme Query' : $sql);
         Form::log(self::$log_file, $log);
-        Form::log('db_last.log', $sql);
 
         //Keine Verbindung zum SQL-Server möglich
         if (mysqli_connect_errno()) {
@@ -155,7 +156,8 @@ class db
             //Debug Form::error($sql);
             die();
         }
-    }
+    return self::$link->query($sql);
+  }
 
     /**
      * Sichert die Datenbank
