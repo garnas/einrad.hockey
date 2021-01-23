@@ -92,6 +92,7 @@
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
                 <a href="../liga/challenge.php" class="w3-bar-item  w3-button">km-Challenge</a>
+                <a href="../liga/jubilaeum.php" class="w3-bar-item  w3-button">25 Jahre Liga</a>
                 <a href="../liga/turniere.php" class="w3-bar-item  w3-button">Turniere</a>
                 <a href="../liga/ergebnisse.php" class="w3-bar-item w3-button">Ergebnisse</a>
                 <a href="../liga/teams.php" class="w3-bar-item w3-button">Teams</a>
