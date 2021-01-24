@@ -47,51 +47,33 @@ if(isset($_POST['absenden'])) {
         $mailer->Subject = 'Kontaktformular: ' . $betreff; // Betreff der Email
         $mailer->Body = $text;
 
-        //Email-versenden
-        if (Config::ACTIVATE_EMAIL){
-            if ($mailer->send()){
-                Form::affirm("Die E-Mail wurde versandt.");
-                $send = true; //Email an den User nur schicken, wenn die Mail an LA rausging
-            }else{
-                Form::error("Es ist ein Fehler aufgetreten. E-Mail konnte nicht versendet werden. Manuell versenden: " . Form::mailto(Config::LAMAIL));
-                Form::log($log_file, "Error Mail:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
-            }
-        }else{ //Debugging
-            if (!($ligacenter ?? false)){
-                $mailer->Password = '***********'; //Passwort verstecken
-                $mailer->ClearAllRecipients(); 
-            }
-            db::debug($mailer);
-            $send = true;
+        // Email an den Ligaausschuss versenden
+        if (MailBot::send_mail($mailer)) {
+            Form::affirm("Die E-Mail wurde versandt.");
+            $send = true; //Email an den User nur schicken, wenn die Mail an LA rausging
+        } else {
+            Form::error("Es ist ein Fehler aufgetreten. E-Mail konnte nicht versendet werden. Manuell versenden: " . Form::mailto(Config::LAMAIL));
+            Form::log($log_file, "Error Mail:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
         }
-
         if ($send){
-            //Mail an die angegebene Absendeadresse
+            // Confirmation Mail an die angegebene Absendeadresse
             $mailer = MailBot::start_mailer();
             $mailer->setFrom(Config::LAMAIL); // Absenderemail und -name setzen
             $mailer->addAddress($_POST['absender'],$_POST['name']); // Empfängeradresse
             $mailer->Subject = 'Kontaktformular: ' . $_POST['betreff']; // Betreff der Email
             $mailer->Body = "Danke für deine Mail! Du hast uns folgendes gesendet:\r\n\r\n" . $text;
-            //Email-versenden
-            if (Config::ACTIVATE_EMAIL){
-                if ($mailer->send()){
-                    Form::affirm("Es wurde eine Kopie an $absender gesendet.");
-                    header('Location: ../liga/neues.php');
-                    die();
-                }else{
-                    Form::error("Es ist ein Fehler aufgetreten: Eine Kopie der E-Mail wurde nicht an dich versendet! Stimmt \"$absender\"?");
-                    Form::log($log_file, "Error Mailback:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
-                }
-            }else{ //Debugging
-                if (!($ligacenter ?? false)){
-                    $mailer->Password = '***********'; //Passwort verstecken
-                    $mailer->ClearAllRecipients(); 
-                }
-                db::debug($mailer);
+            // Email-versenden
+            if (MailBot::send_mail($mailer)) {
+                Form::affirm("Es wurde eine Kopie an $absender gesendet.");
+                header('Location: ../liga/neues.php');
+                die();
+            } else {
+                Form::error("Es ist ein Fehler aufgetreten: Eine Kopie der E-Mail wurde nicht an dich versendet! Stimmt \"$absender\"?");
+                Form::log($log_file, "Error Mailback:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
             }
-        }//send
-    }//error
-}//Form
+        } // send
+    } // error
+} // Form
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////

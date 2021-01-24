@@ -29,6 +29,13 @@ foreach ($teamliste as $key => $team){
     }
 }
 
+foreach ($teamliste as $key => $team){
+    // Platz teilen, bei gleichem Kilometerstand
+    if($team['kilometer'] == ($teamliste[$key - 1]['kilometer'] ?? 0)){
+        $teamliste[$key]['platz'] = $teamliste[$key - 1]['platz'];
+    }
+}
+
 foreach ($alle_spielerliste as $key => $spieler){
     // Ab zweiten Vornamen abkürzen mit erster Buchstabe und .
     $vorname_array = explode(' ', $spieler['vorname']);
@@ -57,7 +64,7 @@ if (isset($_POST['put_challenge']) && $teamcenter) {
     } elseif (empty($spieler_id)) {
         $error = true;
         Form::error("Es wurde kein Spieler ausgewählt.");
-    } elseif ($spieler->get_spieler_details()['team_id'] !== $_SESSION['team_id']){ //Spielt die übergebene Spieler_id auch für das eingeloggte Team?
+    } elseif ($spieler->get_spieler_details()['team_id'] != $_SESSION['team_id']){ //Spielt die übergebene Spieler_id auch für das eingeloggte Team?
         $error = true; 
         Form::error("Eintragen nicht möglich.");
     }
@@ -91,7 +98,6 @@ if (isset($_POST['update_challenge']) && $teamcenter) {
     }
     Form::error("Eintrag konnte nicht entfernt werden");
 }
-
 
 // Breite für die ProgressBar
 $akt_kilometerstand = $challenge->get_stand();

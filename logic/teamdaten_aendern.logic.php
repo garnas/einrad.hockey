@@ -7,7 +7,7 @@ if ($ligacenter){
 
 if(isset($_POST['change'])) {
     $array = array('plz','ort','verein','homepage', 'ligavertreter');
-
+    $error = false;
     if (empty($_POST['ligavertreter'])) {
         Form::error('Es muss ein Ligavertreter angegeben werden');
         $error = true;
@@ -16,8 +16,8 @@ if(isset($_POST['change'])) {
         Form::error('Der Ligavertreter muss den Datenschutz-Hinweisen zustimmen.');
         $error = true;
     }
-    
-    //teamdetails
+
+    // Teamdetails
     if (!$error){
         foreach ($array as $entry) {
             if ($daten[$entry] != $_POST[$entry]) {
@@ -27,8 +27,8 @@ if(isset($_POST['change'])) {
         }
     }
 
-    //emails
-    foreach($akt_team_kontakte->get_all_emails() as $email){
+    // Emails
+    foreach($akt_team_kontakte->get_emails_with_details() as $email){
         if ($email['public'] != ($_POST['public'.$email['teams_kontakt_id']]  ?? '')) {
             $akt_team_kontakte->set_public($email['teams_kontakt_id'],$_POST['public'.$email['teams_kontakt_id']]);
             $change = true;
@@ -40,10 +40,10 @@ if(isset($_POST['change'])) {
         if ("Ja" == ($_POST['delete'.$email['teams_kontakt_id']]) ?? '') {
             if ($akt_team_kontakte->delete_email($email['teams_kontakt_id'])){
                 Form::affirm($email['email'] . " wurde gelöscht");
-                $change = true;  
+                $change = true;
             }else{
                 Form::error("Es muss mindestens eine E-Mail-Adresse hinterlegt sein");
-            }   
+            }
         }
     }
     if ($change ?? false){
@@ -71,13 +71,13 @@ if(isset($_POST['neue_email'])) {
 
 //Teamfoto hochladen
 if (isset($_POST['teamfoto'])){
-    if (!empty($_FILES["jpgupload"]["tmp_name"])){  
+    if (!empty($_FILES["jpgupload"]["tmp_name"])){
         //Bild wird hochgeladen, target_file_jpg = false, falls fehlgeschlagen.
         $target_file_jpg = Neuigkeit::upload_image($_FILES["jpgupload"]);
         if($target_file_jpg === false){
             Form::error("Fehler beim Fotoupload");
         }else{
-            $akt_team->teamfoto($target_file_jpg);
+            $akt_team->set_teamfoto($target_file_jpg);
             Form::affirm("Teamfoto wurde hochgeladen");
             header('Location: ' . db::escape($_SERVER['PHP_SELF']) . $get_var);
             die();

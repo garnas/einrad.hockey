@@ -11,7 +11,7 @@ $neuigkeiten = Neuigkeit::get_neuigkeiten(); //Alle Neuigkeiten werden übergebe
 //db::debug($neuigkeiten);
 $turniere = Turnier::get_all_turniere("WHERE SAISON = '" . Config::SAISON . "'");
 
-$statistik = Neuigkeit::get_statistik();
+$statistik = Neuigkeit::get_statistik_turniere();
 //Zuordnen der Farben für 1. 2. 3. Platz
 $colors = array("w3-text-tertiary", "w3-text-grey", "w3-text-brown");
 $i = 0; foreach ($statistik['max_turniere'] as $key => $team){
@@ -145,7 +145,7 @@ include '../../templates/header.tmp.php';
                         </tr>
                     <?php } //end foreach?>
                 </table>
-            <?php }else{?> 
+            <?php }else{ ?>
                 <p class="w3-text-grey w3-center">Keine gespielten Turniere</p> 
             <?php } //end if?>
              <?php if (!empty($statistik['max_tore'])) {?>

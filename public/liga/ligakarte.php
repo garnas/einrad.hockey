@@ -30,23 +30,27 @@ foreach ($koordinaten as $keya => $teama){
 
 //Teamgesuche Formularauswertung
 if (isset($_POST['eintragen'])){
-  if (empty($_POST['name']) or empty($_POST['kontakt']) or empty($_POST['plz']) or empty($_POST['ort'])){
-    Form::error("Bitte Formular vollständig ausfüllen");
-    $error = true;
-  }
+    $error = false;
+    if (empty($_POST['name']) or empty($_POST['kontakt']) or empty($_POST['plz']) or empty($_POST['ort'])){
+        Form::error("Bitte Formular vollständig ausfüllen");
+        $error = true;
+    }
+    if (LigaKarte::check_gesuch_for_plz_exists($_POST['plz'])){
+        Form::error("Es existiert bereits ein Teamgesuch für diese PLZ, bitte wähle eine andere PLZ in der Nähe.");
+        $error = true;
+    }
+    $lonlat = LigaKarte::plz_to_lonlat($_POST['plz']);
+    if(empty($lonlat)){
+        Form::error("Deine eingegebene Postleitzahl wurde nicht gefunden.");
+        $error = true;
+    }
 
-  $lonlat = LigaKarte::plz_to_lonlat($_POST['plz']);
-  if(empty($lonlat)){
-    Form::error("Deine eingegebene Postleitzahl wurde nicht gefunden.");
-    $error = true;
-  }
-
-  if(!$error){
-    LigaKarte::gesuch_eintragen_db($_POST['plz'],$_POST['ort'],$lonlat['LAT'],$lonlat['Lon'],$_POST['name'],$_POST['kontakt']);
-    Form::affirm("Dein Gesuch wurde eingetragen");
-    header("Location: ligakarte.php");
-    die();
-  }
+    if(!$error){
+        LigaKarte::gesuch_eintragen_db($_POST['plz'],$_POST['ort'],$lonlat['LAT'],$lonlat['Lon'],$_POST['name'],$_POST['kontakt']);
+        Form::affirm("Dein Gesuch wurde eingetragen");
+        header("Location: ligakarte.php");
+        die();
+    }
 }
 $gesuche = LigaKarte::get_all_gesuche();
 
@@ -59,7 +63,7 @@ include '../../templates/header.tmp.php';
 ?>
 
 <h1 class='w3-border-bottom w3-text-primary'>Karte der Ligateams<span class="w3-right w3-hide-small"><?=Form::get_saison_string()?></span></h1>
-<p>Es spielen zurzeit <?=count(Team::list_of_all_teams())?> Teams in der Deutschen Einradhockeyliga. <?=Form::link("teams.php","Hier")?> findest du eine Liste aller Teams mit ihrer hinterlegten E-Mail-Adresse.</p>
+<p>Es spielen zurzeit <?=count(Team::get_ligateams_name())?> Teams in der Deutschen Einradhockeyliga. <?=Form::link("teams.php","Hier")?> findest du eine Liste aller Teams mit ihrer hinterlegten E-Mail-Adresse.</p>
   
 <p><i>If your team resides outside of Germany, please contact <?=Form::mailto(Config::TECHNIKMAIL)?> to be included in the map.</i></p>
 
@@ -67,10 +71,10 @@ include '../../templates/header.tmp.php';
 </div>
 
 <h2 class='w3-border-bottom w3-text-primary'>Mitspieler suchen</h2>
-<p>Du kannst einen Eintrag in die Ligakarte erstellen, um Einradhockeyspieler in deiner Umgebung zu finden. Der Eintrag wird ein Jahr lang angezeigt.<p>
+<p>Du kannst einen Eintrag in die Ligakarte erstellen, um Einradhockeyspieler in deiner Umgebung zu finden. Der Eintrag wird ein Jahr lang angezeigt.</p>
 <button onclick="document.getElementById('gesuch_formular').style.display='block'" class="w3-button w3-tertiary">Mitspielergesuch eintragen</button>
 <div id="gesuch_formular" class="w3-modal">
-  <form method="post" class="w3-card-4 w3-panel w3-round w3-container w3-modal-content" autocomplete="off" style="max-width: 400px" 
+  <form method="post" class="w3-card-4 w3-panel w3-round w3-container w3-modal-content" autocomplete="off" style="max-width: 400px"
   onsubmit="return confirm('Alle Daten die du hier eingeben hast werden gespeichert und ein Jahr lang hier veröffentlicht. Wende dich an <?=Config::LAMAIL?> um deinen Eintrag zu löschen.');">
     <span onclick="document.getElementById('gesuch_formular').style.display='none'" class="w3-button w3-large w3-text-secondary w3-display-topright">&times;</span>
     <h3 class="w3-text-primary">Mitspielergesuch eintragen</h3>

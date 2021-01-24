@@ -1,6 +1,6 @@
 /*Positionierung von Footer und Nav*/
 nav {
-  margin-top: 0px;
+  margin-top: 0;
 }
 footer {
   margin-bottom: 0;
@@ -22,7 +22,7 @@ th { /*Keine fetten Tableheads*/
 }
 
 td {
-  vertical-align : middle;
+  vertical-align: middle!important;
 }
 
 /*Positionierung der eingepflegten Icons von Google*/
@@ -61,11 +61,6 @@ td {
 
 h1 {
   font-size:30px;
-}
-@media print {
-  .nicht-drucken{
-    display: none;
-  }
 }
 
 /*hide arrows on inputs type number*/

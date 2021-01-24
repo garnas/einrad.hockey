@@ -18,7 +18,7 @@ include '../../templates/header.tmp.php';
 <h2 class="w3-border-bottom w3-text-primary">Ligaausschuss</h2>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
-        <?php foreach (Ligaleitung::get_all_la() as $la){?>
+        <?php foreach (Ligaleitung::get_la() as $la){?>
         <tr>
             <td><?=Form::mailto($la['email'], ' ')?><?=$la['r_name']?></td>
             <td><i class="w3-text-primary">(<?=Team::teamid_to_teamname ($la['team_id']) ?: 'Ehrenamtlich'?>)</i></td>
@@ -42,7 +42,7 @@ include '../../templates/header.tmp.php';
 <h2 class="w3-border-bottom w3-text-primary">Technikausschuss</h2>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
-        <?php foreach (Ligaleitung::get_all_tk() as $tk){?>
+        <?php foreach (Ligaleitung::get_tk() as $tk){?>
         <tr>
             <td><?=$tk['r_name']?></td>
             <td><i class="w3-text-primary">(<?=Team::teamid_to_teamname ($tk['team_id']) ?: 'Ehrenamtlich'?>)</i>
@@ -58,7 +58,7 @@ include '../../templates/header.tmp.php';
 <h2 class="w3-border-bottom w3-text-primary">Öffentlichkeitsausschuss</h2>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
-    <?php foreach (LigaLeitung::get_all_oa() as $oa){?>
+    <?php foreach (LigaLeitung::get_oa() as $oa){?>
         <tr>
             <td><?=$oa['r_name']?></td>
             <td><i class="w3-text-primary">(<?=Team::teamid_to_teamname ($oa['team_id']) ?: 'Ehrenamtlich'?>)</i></td>
@@ -73,7 +73,7 @@ include '../../templates/header.tmp.php';
 <h2 class="w3-border-bottom w3-text-primary">Schiedsrichterausschuss</h2>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
-    <?php foreach (LigaLeitung::get_all_sa() as $sa){?>
+    <?php foreach (LigaLeitung::get_sa() as $sa){?>
         <tr>
             <td><?=$sa['r_name']?></td>
             <td><i class="w3-text-primary">(<?=Team::teamid_to_teamname ($sa['team_id']) ?: 'Ehrenamtlich'?>)</i></td>
@@ -86,7 +86,7 @@ include '../../templates/header.tmp.php';
 <h3 class="w3-border-bottom w3-text-primary">Schiedsrichterausbilder</h3>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
-        <?php foreach (Ligaleitung::get_all_ausbilder() as $ausbilder){?>
+        <?php foreach (Ligaleitung::get_ausbilder() as $ausbilder){?>
         <tr>
             <td><?=$ausbilder['vorname'] . ' ' . $ausbilder['nachname']?></td>
             <td><i class="w3-text-primary">(<?=Team::teamid_to_teamname ($ausbilder['team_id']) ?: 'Ehrenamtlich'?>)</i>
@@ -95,6 +95,6 @@ include '../../templates/header.tmp.php';
         <?php } //end foreach?>
     </table>
 </div>
-<p>Dank unserer Ausbilder haben wir zurzeit <?=Spieler::get_anz_schiris()?> Schiedsrichter in der Deutschen Einradhockeyliga.</p>
+<p>Dank unserer Ausbilder haben wir zurzeit <?=Spieler::get_schiris_anzahl()?> Schiedsrichter in der Deutschen Einradhockeyliga.</p>
 
 <?php include '../../templates/footer.tmp.php';

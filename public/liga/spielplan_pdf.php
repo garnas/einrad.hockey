@@ -18,8 +18,10 @@ $css_style = ob_get_clean();
 // Html-Code als String
 $penalty_anzeigen = true;
 ob_start();
-include '../../templates/spielplan/spielplan_vorTurnierTabelle.tmp.php';
-include '../../templates/spielplan/spielplan_paarungen.tmp.php';
+include '../../templates/spielplan/spielplan_titel.tmp.php';
+include '../../templates/spielplan/spielplan_teamliste.tmp.php';
+include '../../templates/spielplan/spielplan_spiele.tmp.php';
+
 $html = 
     '<html>
         <head>
@@ -28,13 +30,14 @@ $html =
         </head>' 
         .ob_get_clean() 
     .'</html>';
+$html = str_replace('<br>','', $html);
 
 // PDF-Erstellung
-$mpdf = PDF::start_mpdf(); // Erstellt ein MPDF-Objekt aus dem Framework
+$mpdf = MPDF::load_mpdf(); // Erstellt ein MPDF-Objekt aus dem Framework
 $mpdf->shrink_tables_to_fit = 4; // Tabellen können um den Faktor 4 verkleinert werden, um noch auf eine Seite zu passen.
 
 // PDF beschreiben
-$mpdf->SetTitle('Spielplan ' . $spielplan->akt_turnier->daten['ort']);
+$mpdf->SetTitle('Spielplan ' . $spielplan->turnier->details['ort']);
 $mpdf->SetHTMLHeader('<img src="../bilder/logo_lang_small.png" style="margin-top:18px; width: 70mm; float: right;">');
 $mpdf->SetHTMLFooter(
     '<table style="width: 100%">
@@ -48,4 +51,4 @@ $mpdf->WriteHTML($css_style,\Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
 
 // Output - Otpion 'D' für Download, 'I' für im Browser anzeigen
-$mpdf->Output('Spielplan '. $spielplan->akt_turnier->daten['ort'] . '.pdf', 'I');
+$mpdf->Output('Spielplan '. $spielplan->turnier->details['ort'] . '.pdf', 'I');

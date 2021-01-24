@@ -80,9 +80,9 @@ function openTab(tabName) {
 
 //Invertieren der Teamauswahl im Kommunikationscenter
 function invert(checkbox_name) {
-  checkboxes = document.getElementsByName(checkbox_name);
+    let checkboxes = document.getElementsByName(checkbox_name);
   for(var i=0, n=checkboxes.length;i<n;i++) {
-      if (checkboxes[i].checked == true){
+      if (checkboxes[i].checked === true){
           checkboxes[i].checked = false;
       }else{
           checkboxes[i].checked = true;
@@ -91,7 +91,7 @@ function invert(checkbox_name) {
 }
 
 //Countdown
-function countdown(date_string, countdown_id){ //Format: 1995-12-17T03:24:00
+function countdown(date_string, countdown_id){ // Format: 1995-12-17T03:24:00
 // Set the date we're counting down to
 var countDownDate = new Date(date_string).getTime();
 
@@ -135,25 +135,5 @@ var x = setInterval(function() {
     document.getElementById(countdown_id).style.display = "none";
   }
 }, 1000);
-
-}
-
-// Progress Bar
-function progressBar(stand, ende) {
-  var percent = Math.round(stand / ende * 100);
-  var bar = document.getElementById('progress');
-  bar.innerHTML = stand + ' km';
-
-  var width = 1;
-  var id = setInterval(frame(), 10); //Alle 10ms, Overkill ;) ?
-
-  function frame() {
-    if (width >= percent) {
-      clearInterval(id);
-    } else {
-      width++;
-      bar.style.width = width + '%';
-    }
-  }
 
 }

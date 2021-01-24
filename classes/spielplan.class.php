@@ -1,471 +1,642 @@
 <?php
-//TODO
-//+2 Vergleich alles gleich nach Penalty sortieren !!Fertig
-//plaetze != anzahl teams !!FERTIG
-//layout formular zum eintragen !!Ferig
-//8 er Gruppe 
-//4 er Spielplan Pause
-//keine Spiele eingetragen Fehler in Zeile 65, keine rangtabelle möglich da alles NULL !! FERTIG
-//testen, testen, testen
-//ergebnisse in datenbank speichern, datum dabei testen !! Fertig
-//cronjob dienstags spielplan erstellen -> ansgar 
-class Spielplan{
-    public $turnier_id;
-    public $akt_turnier;
-    public $teamliste;
-    public $penalty_warning = '';
-    public $anzahl_teams;
-    public $anzahl_spiele;
 
-    function __construct($turnier_id)
-    {   
-        $this->turnier_id = $turnier_id;
-        $this->akt_turnier = new Turnier($turnier_id);
-        $this->teamliste = $this->akt_turnier->get_liste_spielplan();
-        $this->anzahl_teams=sizeof($this->teamliste);
-    }
+/**
+ * Class Spielplan
+ *
+ * Verwaltet Spielpläne, berechnet Turniertabellen und schreibt Turnierergebnisse in die DB.
+ */
+class Spielplan
+{
+    public int $turnier_id;
+    public Turnier $turnier;
+    public array $teamliste;
+    public int $anzahl_teams;
+    public int $anzahl_spiele;
+    public array $platzierungstabelle = [];
+    public array $direkter_vergleich_tabellen = [];
+    public array $tore_tabelle;
+    public array $turnier_tabelle;
+    public array $details;
+    /**
+     * @var array|array[]
+     * gesamt => Alle Spiel-Ids für Penaltys
+     * ausstehend => Ausstehende Spiel-IDs für Penaltys
+     * gesamt => Team-ids der ausstehenden Penaltys
+     */
+    public array $penaltys = [
+        'gesamt' => [],
+        'ausstehend' => [],
+        ];
+    public array $spiele;
 
-    //Funktion gibt false zurück, wenn beim direkten Vergleich manche Teams noch nicht alle Spiele gespielt haben, sonst true.
-    function check_penalty_warning($subdaten){
-        $turnier_id = $this->turnier_id;
-        foreach ($subdaten as $key => $team_ergebnis){
-            $team_id = $team_ergebnis['team_id_a'];
-            $sql = "SELECT * FROM spiele WHERE turnier_id = '$turnier_id' AND (team_id_a = '$team_id' or team_id_b = '$team_id')";
-            $result = db::readdb($sql);
-            while ($x = mysqli_fetch_assoc($result)){
-                if ($x['tore_a'] === NULL or $x['tore_b'] === NULL){
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    //Check, ob alle regulären Spiele beendet worden sind
-    function check_alles_gespielt($daten){
-        foreach ($daten as $team){
-            if ($team['spiele'] < $this->anzahl_teams - 1){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    //Check, ob jedes Team ein Team gespielt hat. Wenn ja wird die Platzierung und das Turnierergebnis im Template angezeigt
-    function check_tabelle_einblenden($daten){
-        foreach ($daten as $team){
-            if ($team['spiele'] < 1){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    function create_spielplan_jgj()
-    {   
-        //TESTEN OB SPIELE SCHON EXISTIEREN
-        $sql="SELECT * FROM spiele WHERE turnier_id = '$this->turnier_id'";
-        $result = db::readdb($sql);
-        $result = mysqli_fetch_assoc($result);
-        $this->anzahl_spiele = 0;
-
-        if (empty($result)){
-            $spielplan=$this->akt_turnier->daten["spielplan"];
-            $sql = "SELECT * FROM spielplan_paarungen WHERE plaetze = '$this->anzahl_teams' AND spielplan = '$spielplan'";
-            $result = db::readdb($sql);
-            $sqlinsert="";
-            $sqlinsert="INSERT INTO spiele VALUES ";
-            while($spiel=mysqli_fetch_assoc($result)){
-                $sqlinsert= $sqlinsert."(" .$this->turnier_id.",". $spiel["spiel_id"].", " .
-                $this->teamliste[intval($spiel["team_a"])]["team_id"].",".
-                $this->teamliste[intval($spiel["team_b"])]["team_id"].",".
-                $this->teamliste[intval($spiel["schiri_a"])]["team_id"].",".
-                $this->teamliste[intval($spiel["schiri_b"])]["team_id"].", NULL,NULL,NULL,NULL),";
-                $this->anzahl_spiele += 1;
-            }
-            $sqlinsert=rtrim($sqlinsert,",");
-            $sqlinsert= $sqlinsert.";";
-            db::writedb($sqlinsert);
-            $this->akt_turnier->schreibe_log("Spielplan wurde in die Datenbank eingetragen.","automatisch");
-        }else{
-            //spiele zaehlen
-            $sql="SELECT * FROM spiele WHERE turnier_id=$this->turnier_id";
-            $result = db::readdb($sql);
-            while($spiel=mysqli_fetch_assoc($result)){
-                $this->anzahl_spiele += 1;
-            }
-        }
-    }
-    
-    function update_spiel($spiel_id, $tore_a,$tore_b,$penalty_a,$penalty_b){
-        if(!is_numeric($tore_a)){
-            $tore_a='NULL';
-        }
-        if(!is_numeric($tore_b)){
-            $tore_b='NULL';
-        }
-        if(!is_numeric($penalty_a)){
-            $penalty_a='NULL';
-        }
-        if(!is_numeric($penalty_b)){
-            $penalty_b='NULL';
-        }
-        if((is_numeric($tore_a)||$tore_a=="NULL")&&(is_numeric($tore_b)||$tore_b=="NULL")){
-            $sql="UPDATE spiele SET tore_a=$tore_a, tore_b=$tore_b, penalty_a=$penalty_a, penalty_b=$penalty_b
-            WHERE turnier_id=$this->turnier_id AND spiel_id=$spiel_id;";
-            db::writedb($sql);
-        }
-    }
-
-    function get_turnier_tabelle(){
-        $teams=[];
-        for($i=1 ;$i<=sizeof($this->teamliste);$i++){
-            array_push($teams,$this->teamliste[$i]["team_id"]);
-        }
-        $daten=$this->sqlQuery(FALSE,$teams);
-        //Teamname hinzufügen
-        for($i=0;$i<sizeof($daten);$i++){
-            $daten[$i]["teamname"]=$this->getTeamnameByTeamID($daten[$i]["team_id_a"]);
-        }
-        //auf punktgleichheit testen und richtig sortieren
-        //index und i werden gleichmäßig erhöht außer es wird punktgleichheit zwischen 
-        //benachbareten Teams festgestellt, dann haben die Teams von index bis i (inklusiv) 
-        //gleich viele Punkte und müssen in den Direktvergleich (sort_teams)
-        $index=0;
-        ////db::debug($daten);
-        for ($i=0;$i<$this->anzahl_teams-1;$i++){
-            if($daten[$i]["punkte"]==$daten[$i+1]["punkte"]){
-                $index=$index;
-            }elseif($i!=$index){
-                 //sortiere teams index bis i
-                 //echo "sort Teams von ".$index." bis ".$i." <br>";
-                $daten=$this->sort_teams($daten,$index,$i);
-                
-                $index=$i+1;
-            }else{
-                $index=$i+1;
-            }
-        }
-        //letzte Teams unterscheiden
-        if($i!=$index){ 
-            $daten=$this->sort_teams($daten,$index,$i);
-        }
-        //Wertigkeit zuordnen
-        $wert=0;
-        for($i=$this->anzahl_teams-1;$i>=0;$i--){
-            $wert=$this->getWertigkeitByTeamID($daten[$i]["team_id_a"]);
-            $daten[$i]["wertigkeit"]=$wert;
-        }
-        //NL Wertigkeiten ausrechnen
-        $daten=$this->setWertigkeitenNL($daten);
-        //Ligapunkte ausrechnen Turnierergebnis
-        $punkte=0;
-        $faktor=$this->getFaktor();
-        for($i=sizeof($daten)-1;$i>=0;$i--){
-            $punkte += round($daten[$i]["wertigkeit"]); //round() von Ansgar hinzugefügt
-            $daten[$i]["ligapunkte"]=round($punkte*(6/$faktor));
-        }
-        return db::escape($daten);
-    }
-
-    function setWertigkeitenNL($daten){
-        //letztes Team NL
-        if(!is_numeric($daten[sizeof($daten)-1]["wertigkeit"])){
-            $j=sizeof($daten)-2;
-            while(!is_numeric($daten[$j]["wertigkeit"])&&$j>=0){
-                $j--;
-            }
-            $lastNL = round($daten[$j]["wertigkeit"] / 2); //Hinzugefügt von Ansgar
-            $daten[sizeof($daten)-1]["wertigkeit"] = max (15, $lastNL);
-        }
-        $max_wertigkeit=$daten[sizeof($daten)-1]["wertigkeit"];
-        for($i=sizeof($daten)-2;$i>=0;$i--){
-            if(!is_numeric($daten[$i]["wertigkeit"])){
-                $daten[$i]["wertigkeit"]=$max_wertigkeit+1;
-            }elseif($daten[$i]["wertigkeit"]>$max_wertigkeit){
-                $max_wertigkeit=$daten[$i]["wertigkeit"];
-            }
-        }
-        return db::escape($daten);
-    }
-
-    function getFaktor(){
-        return db::escape($this->getSpielzeiten()["faktor"]);
-    }
-
-    function getWertigkeitByTeamID($team_id){
-        for($i=1;$i<=sizeof($this->teamliste);$i++){
-            if($team_id==$this->teamliste[$i]["team_id"]){
-                return db::escape($this->teamliste[$i]["wertigkeit"]);
-            }
-        }
-    }
-
-    function getTeamnameByTeamID($team_id){
-        for($i=1;$i<=sizeof($this->teamliste);$i++){
-            if($team_id==$this->teamliste[$i]["team_id"]){
-                return db::escape($this->teamliste[$i]["teamname"]);
-            }
-        }
-    }
-
-    function sort_teams($daten,$begin,$end){
-        //rufen sql auf mit sortierung nach punken, diff, geschossenen Toren
-        //ergebnis testen ob alle gleich ->Penalty oder Teil gleich -> teilweiser direkter Vergleich
-        //in daten reihen swapen
-        $teams=[];
-        foreach(range($begin,$end) as $number){
-            array_push($teams, $daten[$number]["team_id_a"]);
-        }
-        $subdaten=$this->sqlQuery(TRUE,$teams);
-        //Teamname hinzufügen
-        for($i=0;$i<sizeof($subdaten);$i++){
-            $subdaten[$i]["teamname"]=$this->getTeamnameByTeamID($subdaten[$i]["team_id_a"]);
-        }
-        //alle gleich
-        $last=$end-$begin;
-        //penalty zwischen allen nötig, evtl. schon stattgefunden
-        if( $subdaten[0]["punkte"]==$subdaten[$last]["punkte"]&&
-            $subdaten[0]["diff"]==$subdaten[$last]["diff"]&& 
-            $subdaten[0]["tore"]==$subdaten[$last]["tore"]&&
-            $subdaten[0]["penalty_points"]==$subdaten[$last]["penalty_points"]&&
-            $subdaten[0]["penalty_diff"]==$subdaten[$last]["penalty_diff"]&&
-            $subdaten[0]["penaltytore"]==$subdaten[$last]["penaltytore"]){
-            //Penalty-Hinweis nur anzeigen, wenn relevant für die Teams
-            if ($this->check_penalty_warning($subdaten)){
-                if (!$this->check_alles_gespielt($daten)){
-                    $this->penalty_warning .= "Es könnte ein Penalty-Schießen geben - dies wird zum Ende des Turniers sicher angegeben.<br><br>Mögliches Penalty-Schießen zwischen ";
-                }else{
-                    $this->penalty_warning .= "<b>Penalty-Schießen</b> zwischen";
-                }
-                for($i=0;$i<$end-$begin;$i++){
-                    $this->penalty_warning .=" <b>".$subdaten[$i]["teamname"]."</b> und";
-                }
-                $this->penalty_warning .=" <b>".$subdaten[$end-$begin]["teamname"]."</b>!<br><br>";
-            }
-        }else{
-            $index=0;
-            for($i=0;$i<$end-$begin;$i++){
-                //testen ob aktuelle Zeile gleich zur nächsten 
-                //bei ungleichheit daten swapen
-                //bei gleichheit erneuter direkter vergleich
-                if($subdaten[$i]["punkte"]==$subdaten[$i+1]["punkte"]&&
-                     $subdaten[$i]["diff"]==$subdaten[$i+1]["diff"]&& 
-                     $subdaten[$i]["tore"]==$subdaten[$i+1]["tore"]&&
-                     $subdaten[$i]["penalty_points"]==$subdaten[$i+1]["penalty_points"]&&
-                     $subdaten[$i]["penalty_diff"]==$subdaten[$i+1]["penalty_diff"]&&
-                     $subdaten[$i]["penaltytore"]==$subdaten[$i+1]["penaltytore"]){
-                    $index=$index;
-                    //echo "sort teams in for schleife case: Gleichwertige Teams <br>";
-                }elseif($i!=$index){
-                    //echo "sort teams in for schleife case: Gleichwertige Teams ueber aktuellem Team(inklusive) <br>";
-                    //im direktvergleich ist wieder Gleichheit aufgetreten -> erneuter direkter Vergleich
-                    //so drehen dass die gleichen Teams an der richtigen Stelle im sub array stehen
-                    //echo "sort teams <br> im direktvergleich ist wieder Gleichheit aufgetreten <br>";
-                    for($j=0;$j<$i-$index+1;$j++){
-                        //echo "<br> tauschen <br>";
-                        $in=$this->getDatenIndexByTeamID($daten,$subdaten[$index+$j]["team_id_a"]);
-                        $ex=$index+$j+$begin;
-                        $temp=$daten[$ex];
-                        $daten[$ex]=$daten[$in];
-                        $daten[$in]=$temp;
-                    }
-                    //echo "sort teams ".$daten[$index]["teamname"]." und ".$daten[$i]["teamname"];
-                    $daten=$this->sort_teams($daten,$index+$begin,$i+$begin);
-                    $index=$i+1;
-                }else{
-                    //echo "sort teams in for schleife case: nicht Gleichwertige Teams <br>";
-                    //aktueller Wert(Punkte, Diff, geschossene Tore) ist anders als Wert davor und danach
-                    $index=$index+1;
-                    //swapen
-                    //nur tauschen wenn Team noch nicht am richtigen Platz
-                    $in=$this->getDatenIndexByTeamID($daten,$subdaten[$i]["team_id_a"]);
-                    if($in!=$begin+$i){
-                        $ex=$begin+$i;
-                        $temp=$daten[$ex];
-                        $daten[$ex]=$daten[$in];
-                        $daten[$in]=$temp;
-                    }
-                } 
-            }
-            //evtl letzten Gleich
-            //echo "sort teams - Testen ob letzte Teams gleiche Punktzahl haben<br>";
-            //echo "i: ".$i."  index: ".$index."<br>";
-            if($i!=$index){ //TODO zaehlt php for nach ende noch eins weiter -> Ja
-                //echo "sort teams <br> im direktvergleich ist wieder Gleichheit aufgetreten <br>";
-                //echo "sort teams ".$daten[$index+$begin]["teamname"]." und ".$daten[$i+$begin]["teamname"];
-                $daten=$this->sort_teams($daten,$index+$begin,$i+$begin);
-
-            }
-        }
-        return db::escape($daten);
-    }
-
-    function getDatenIndexByTeamID($daten, $team_id)
+    /**
+     * Spielplan constructor.
+     *
+     * @param Turnier $turnier
+     * @param bool $with_penaltys Es wird ein zweites Objekt Spielplan erstellt, um Penalty-Begegnungen festzustellen.
+     */
+    function __construct(Turnier $turnier, $with_penaltys = true)
     {
-        for($i=0;$i<sizeof($daten);$i++){
-            if($daten[$i]["team_id_a"]==$team_id){
-                return $i;
-            }
-        }
+        $this->turnier_id = $turnier->turnier_id;
+        $this->turnier = $turnier;
+        $this->teamliste = $this->turnier->get_liste_spielplan();
+        $this->anzahl_teams = count($this->teamliste);
+        $this->anzahl_spiele = $this->anzahl_teams - 1;
+        $this->details = self::get_details();
+        $this->spiele = $this->get_spiele();
+        $this->tore_tabelle = $this->get_toretabelle();
+        $this->turnier_tabelle = self::get_sorted_turniertabelle($this->tore_tabelle);
+        if ($with_penaltys) $this->penaltys['gesamt'] = $this->get_gesamt_penaltys();
+        $this->direkter_vergleich($this->tore_tabelle);
+        $this->set_wertigkeiten(); // $this->platzierungstabelle wird gesetzt
     }
 
-    function sqlQuery($isDirektVergleich, $active_teams)
-    {
-        $where_a= "(";
-        $where_b="(";
-        foreach ($active_teams as $team){
-            $where_a .=" team_id_a ='$team' OR";
-            $where_b .=" team_id_b ='$team' OR";
-        }
-        $where_a=rtrim($where_a,"OR");
-        $where_b=rtrim($where_b,"OR");
-        $where=$where_a.") AND ".$where_b.") AND turnier_id='$this->turnier_id'";
-        $order=" `punkte`  DESC";
-        if($isDirektVergleich){
-            $order .=", diff DESC, tore DESC, penalty_points DESC, penalty_diff DESC, penaltytore DESC";
-        }else{
-            $order .=", penaltytore DESC";
-        }
-        $sql="
-        SELECT team_id_a, SUM(games) AS spiele,  COALESCE(SUM(points),0) AS punkte,
-        COALESCE(SUM(tore),0) as tore,  COALESCE(SUM(gegentore),0) as gegentore,
-        COALESCE((SUM(tore) - SUM(gegentore)),0) as diff, COALESCE(SUM(penalty_points),0) as penalty_points,
-        COALESCE(SUM(penaltytore),0) as penaltytore, COALESCE(SUM(penaltygegentore),0) as penaltygegentore,
-        COALESCE((SUM(penaltytore) - SUM(penaltygegentore)),0) as penalty_diff
-        FROM(
-            SELECT team_id_a,
-                CASE 
-                    WHEN `tore_a`> `tore_b` THEN 3
-                    WHEN `tore_a` = `tore_b` THEN 1
-                    ELSE 0
-                END AS points,
-                CASE
-		            WHEN `tore_a` IS NULL THEN 0
-		            ELSE 1
-                END AS games,
-                CASE 
-                    WHEN `penalty_a`>`penalty_b` THEN 3
-                    WHEN `penalty_a`=`penalty_b` THEN 0
-                    ELSE 0
-		        END AS penalty_points, tore_a as tore, tore_b as gegentore, penalty_a AS penaltytore, penalty_b as penaltygegentore
-            FROM spiele
-            WHERE".$where."
-           
-            UNION ALL
-        
-            SELECT team_id_b,
-                CASE 
-                    WHEN `tore_a` < `tore_b` THEN 3
-                    WHEN `tore_a` = `tore_b` THEN 1
-                    ELSE 0
-                END AS points,
-                CASE
-		            WHEN `tore_a` IS NULL THEN 0
-		            ELSE 1
-                END AS games,
-                CASE 
-                    WHEN `penalty_a`<`penalty_b` THEN 3
-                    WHEN `penalty_a`=`penalty_b` THEN 0
-                    ELSE 0
-		        END AS penalty_points, tore_b as tore, tore_a as gegentore, penalty_b AS penaltytore, penalty_a as penaltygegentore
-            FROM spiele
-            WHERE ".$where."
-            ) AS t
-        GROUP BY team_id_a
-        ORDER BY".$order;
-        $result = db::readdb($sql);
-        ////echo $sql;
-        $daten=[];
-        while($row=mysqli_fetch_assoc($result)){
-            //////echo $row["team_id_a"]." ".$row["punkte"]." ".$row["tore"]." ".$row["gegentore"]." ".$row["diff"]." ".$row["penaltytore"];
-            array_push($daten, $row);
-        }
-        return db::escape($daten);
-    }
-
-    function get_spiele()
-    {
-        $sql=
-            "SELECT spiel_id, t1.teamname AS team_a_name, t2.teamname AS team_b_name, schiri_team_id_a, schiri_team_id_b, tore_a, tore_b, penalty_a, penalty_b
-            FROM spiele sp, teams_liga t1, teams_liga t2
-            WHERE turnier_id='$this->turnier_id'
-            AND team_id_a = t1.team_id
-            AND team_id_b = t2.team_id
-            ORDER BY spiel_id ASC";
-        $result=db::readdb($sql);
-        $daten=[];
-        $startzeit=new DateTime($this->akt_turnier->daten["startzeit"]);
-        $zeiten=$this->getSpielzeiten();
-        //////db::debug($zeiten)
-        $min=$zeiten["anzahl_halbzeiten"]*$zeiten["halbzeit_laenge"]+$zeiten["pause"];
-        $startzeit->sub(date_interval_create_from_date_string($min.' minutes'));
-        
-        $var=1;
-        while($spiel=mysqli_fetch_assoc($result)){
-            //4er Spielplan Pause nach geraden Spiel
-            if($this->anzahl_teams==4 && $var>2&&($var%2)==1){
-                $extra_pause=$zeiten["halbzeit_laenge"]+$zeiten["pause"];
-                $startzeit->add(date_interval_create_from_date_string($extra_pause.' minutes'));
-            }
-            $spiel["zeit"]=$startzeit->add(date_interval_create_from_date_string($min.' minutes'))->format("H:i");
-            array_push($daten, $spiel);
-            $var += 1;
-        }
-        return db::escape($daten);
-    }
-    
-    function getSpielzeiten()
+    /**
+     * Holt sich die Spielplandetails aus der DB
+     *
+     * @return array Array der Details
+     */
+    public function get_details(): array
     {
         $plaetze = $this->anzahl_teams;
-        $spielplan = $this->akt_turnier->daten["spielplan"];
-        $sql = "SELECT * FROM spielplan_details WHERE plaetze = '$plaetze' AND spielplan = '$spielplan'";
-        $result = db::readdb($sql);
+        $spielplan = $this->turnier->details["spielplan"];
+        $sql = "
+                SELECT * 
+                FROM spielplan_details 
+                WHERE plaetze = '$plaetze' 
+                AND spielplan = '$spielplan'
+                ";
+        $result = db::read($sql);
         return db::escape(mysqli_fetch_assoc($result));
     }
 
-    function get_anzahl_spiele()
+    /**
+     * Gibt ein Array der Spiele aus dem in der Datenbank hinterlegten Spielplan
+     *
+     * @return array
+     */
+    public function get_spiele(): array
     {
-        return db::escape($this->anzahl_spiele);
+        $startzeit = strtotime($this->turnier->details["startzeit"]);
+        $spielzeit = ($this->details["anzahl_halbzeiten"] * $this->details["halbzeit_laenge"]
+                + $this->details["pause"]) * 60; // In Sekunden für Unixzeit
+        $sql = "
+                SELECT spiel_id, team_id_a, t1.teamname AS teamname_a, team_id_b, t2.teamname AS teamname_b,
+                schiri_team_id_a, schiri_team_id_b, tore_a, tore_b, penalty_a, penalty_b
+                FROM spiele sp, teams_liga t1, teams_liga t2
+                WHERE turnier_id = $this->turnier_id
+                AND team_id_a = t1.team_id
+                AND team_id_b = t2.team_id
+                ORDER BY spiel_id
+                ";
+        $result = db::read($sql);
+        while ($spiel = mysqli_fetch_assoc($result)) {
+            $spiel["zeit"] = date("H:i", $startzeit);
+            $spiele[$spiel['spiel_id']] = $spiel;
+            $extra_pause = ($this->details['plaetze'] == 4 && !($spiel['spiel_id'] % 2)) ? (30 * 60) : 0;
+            // 4er Spielplan Extrapause nach geraden Spielen
+            $startzeit += $spielzeit + $extra_pause;
+        }
+        return db::escape($spiele ?? []);
     }
 
-    //$daten sollten schon sortiert sein!
-    function set_ergebnis($daten)
+    /**
+     * Schreibt ein Spielergebnis in die Datenbank
+     *
+     * @param int $spiel_id
+     * @param string $tore_a
+     * @param string $tore_b
+     * @param string $penalty_a
+     * @param string $penalty_b
+     */
+    public function set_spiele(int $spiel_id, string $tore_a, string $tore_b, string $penalty_a, string $penalty_b)
     {
-        //Sind alle Spiele gespielt und kein Penalty offen
-        $sql = 
-            "SELECT spiel_id, t1.teamname AS team_a_name, t2.teamname AS team_b_name, schiri_team_id_a, schiri_team_id_b, tore_a, tore_b, penalty_a, penalty_b
-            FROM spiele sp, teams_liga t1, teams_liga t2
-            WHERE turnier_id='$this->turnier_id'
-            AND team_id_a = t1.team_id
-            AND team_id_b = t2.team_id
-            AND (tore_a IS NULL OR tore_b IS NULL)
-            ORDER BY spiel_id ASC";
-        $result = db::readdb($sql);
-        $result = mysqli_fetch_assoc($result);
-        if(empty($result) && empty($this->penalty_warning) && $this->check_alles_gespielt($daten)){
-            //Testen ob Turnier eingetragen werden darf
-            if (!Tabelle::check_ergebnis_eintragbar($this->akt_turnier)){
-                Form::error("Turnierergebnis konnte nicht eingetragen werden. Kontaktiere bitte den Ligaausschuss.");
-                header("Location: " . db::escape($_SERVER['REQUEST_URI']));
-                die();
-            }else{
-                $this->akt_turnier->set_phase('ergebnis');
-                $this->akt_turnier->delete_ergebnis();
-                foreach($daten as $index=>$date){
-                    $this->akt_turnier->set_ergebnis($date["team_id_a"], $date["ligapunkte"], $index + 1);
-                }
-                Form::affirm("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
+        // Damit die nicht eingetragene Tore nicht als 0 : 0 gewertet werden, müssen sie NULL sein
+        $tore_a = !is_numeric($tore_a) ? 'NULL' : $tore_a;
+        $tore_b = !is_numeric($tore_b) ? 'NULL' : $tore_b;
+        $penalty_a = !is_numeric($penalty_a) ? 'NULL' : $penalty_a;
+        $penalty_b = !is_numeric($penalty_b) ? 'NULL' : $penalty_b;
+
+        $sql = "
+                UPDATE spiele 
+                SET tore_a = $tore_a, tore_b = $tore_b, penalty_a = $penalty_a, penalty_b = $penalty_b
+                WHERE turnier_id = $this->turnier_id AND spiel_id = $spiel_id
+                ";
+        db::write($sql);
+    }
+
+    /**
+     * Gibt eine Tabelle der Spielergebnisse der Teams untereinander aus.
+     * Für den direkten Vergleich wichtig.
+     *
+     * @return array Torematrix aller Teams untereinander
+     */
+    public function get_toretabelle(): array
+    {
+        foreach ($this->spiele as $spiel) {
+            $tore_tabelle[$spiel['team_id_a']][$spiel['team_id_b']] =
+                [
+                    'tore' => $spiel['tore_a'],
+                    'gegentore' => $spiel['tore_b'],
+                    'penalty_tore' => $spiel['penalty_a'],
+                    'penalty_gegentore' => $spiel['penalty_b'],
+                ];
+            $tore_tabelle[$spiel['team_id_b']][$spiel['team_id_a']] =
+                [
+                    'tore' => $spiel['tore_b'],
+                    'gegentore' => $spiel['tore_a'],
+                    'penalty_tore' => $spiel['penalty_b'],
+                    'penalty_gegentore' => $spiel['penalty_a'],
+                ];
+        }
+        return $tore_tabelle ?? [];
+    }
+
+    /**
+     * Sortiert die Turniertabelle
+     *
+     * @param array $tore_tabelle Toretabelle aus get_toretabelle
+     * @return array Sortierte Turniertabelle
+     */
+    public static function get_sorted_turniertabelle(array $tore_tabelle): array
+    {
+        $sort_function = function ($ergebnis_a, $ergebnis_b) {
+            if ($ergebnis_a['punkte'] > $ergebnis_b['punkte']) return -1;
+            if ($ergebnis_a['punkte'] < $ergebnis_b['punkte']) return 1;
+            if ($ergebnis_a['tordifferenz'] > $ergebnis_b['tordifferenz']) return -1;
+            if ($ergebnis_a['tordifferenz'] < $ergebnis_b['tordifferenz']) return 1;
+            if ($ergebnis_a['tore'] > $ergebnis_b['tore']) return -1;
+            if ($ergebnis_a['tore'] < $ergebnis_b['tore']) return 1;
+            if ($ergebnis_a['penalty_punkte'] > $ergebnis_b['penalty_punkte']) return -1;
+            if ($ergebnis_a['penalty_punkte'] < $ergebnis_b['penalty_punkte']) return 1;
+            if ($ergebnis_a['penalty_diff'] > $ergebnis_b['penalty_diff']) return -1;
+            if ($ergebnis_a['penalty_diff'] < $ergebnis_b['penalty_diff']) return 1;
+            if ($ergebnis_a['penalty_tore'] > $ergebnis_b['penalty_tore']) return -1;
+            if ($ergebnis_a['penalty_tore'] < $ergebnis_b['penalty_tore']) return 1;
+            return -1; // Team welches links steht kommt nach oben, also das Team mit der höheren Rangtabellenwertung
+        };
+        $turnier_tabelle = self::get_turniertabelle($tore_tabelle);
+        uasort($turnier_tabelle, $sort_function);
+        return $turnier_tabelle;
+    }
+
+    /**
+     * Erstellt eine Turniertabelle mit Punkten, Tordifferenz, etc.
+     *
+     * @param array $tore_tabelle Toretabelle aus get_toretabelle()
+     * @return array unsortierte Turniertabelle
+     */
+    private static function get_turniertabelle(array $tore_tabelle): array
+    {
+        // Punkte zählen
+        foreach ($tore_tabelle as $team_id => $team_spiele) {
+            $punkte = $tordifferenz = $gegentore = $tore = $penalty_diff = $penalty_tore = $penalty_punkte = NULL;
+            $spiele = 0;
+            foreach ($team_spiele as $spiel) {
+                if (is_null($spiel['tore']) or is_null($spiel['gegentore'])) continue;
+                $punkte += ($spiel['tore'] > $spiel['gegentore']) ? 3 : 0;
+                $punkte += ($spiel['tore'] == $spiel['gegentore']) ? 1 : 0;
+                $tordifferenz += $spiel['tore'] - $spiel['gegentore'];
+                $tore += $spiel['tore'];
+                $gegentore += $spiel['gegentore'];
+                $spiele += 1;
+
+                if (is_null($spiel['penalty_tore']) or is_null($spiel['penalty_gegentore'])) continue;
+                $penalty_punkte += ($spiel['penalty_tore'] > $spiel['penalty_gegentore']) ? 3 : 0;
+                $penalty_punkte += ($spiel['penalty_tore'] == $spiel['penalty_gegentore']) ? 1 : 0;
+                $penalty_diff += $spiel['penalty_tore'] - $spiel['penalty_gegentore'];
+                $penalty_tore += $spiel['penalty_tore'];
             }
-        }else{
-            Form::error("Es sind noch Spiel- oder Penaltyergebnisse offen. Turnierergebnisse wurden nicht übermittelt.");
+            // Turniertabelle beschreiben
+            $turnier_tabelle[$team_id] =
+                [
+                    'spiele' => $spiele,
+                    'punkte' => $punkte,
+                    'tordifferenz' => $tordifferenz,
+                    'tore' => $tore,
+                    'gegentore' => $gegentore,
+                    'penalty_punkte' => $penalty_punkte,
+                    'penalty_diff' => $penalty_diff,
+                    'penalty_tore' => $penalty_tore
+                ];
+        }
+        return $turnier_tabelle ?? [];
+    }
+
+    /**
+     * Es wird ein weiteres Objekt Spielplan instantiert, jedoch ohne die Berücksichtigung der Penalty-Ergebnisse
+     * Somit bekommt man Teams, welche ein Penaltyschießen absolvieren mussten und kann falsch eingetragenen Penaltys
+     * vorbeugen.
+     *
+     * @return array
+     */
+    public function get_gesamt_penaltys(): array
+    {
+        // Penalty-Tore auf NULL setzen
+        $spielplan = new Spielplan($this->turnier, false);
+        foreach ($spielplan->tore_tabelle as $team_id => $spiele) {
+            foreach ($spiele as $team_id_gegner => $spiel) {
+                // Zuerst wurden die Variablen per Referenz übergeben, dies führte in der Ausführung vom späteren
+                // direkten Vergleich zu Fehlern. Dieser Bug hat mich >3h gekostet und viele Nerven gekostet. Zur
+                // Würdigung meiner Zeit wurde dieser Kommentar hier geschrieben.
+                $spielplan->tore_tabelle[$team_id][$team_id_gegner]
+                    = array_replace($spiel, ['penalty_tore' => NULL, 'penalty_gegentore' => NULL]);
+            }
+        }
+        $spielplan->penaltys['ausstehend'] = [];
+        $spielplan->direkter_vergleich($spielplan->tore_tabelle);
+        return $spielplan->penaltys['ausstehend']; // Alle Penaltyteams ohne schon ausgeführte Penaltys
+    }
+
+    /**
+     * Ausführung des direkten Vergleiches. Das Endresultat wird in $this->platzeriungs_tabelle platziert.
+     *
+     * @param array $tore_tabelle Toretabelle, auf welcher Grundlage der Vergleich ausgeführt wird
+     * @param bool $print Der direkte Vergleich soll im Spielplan angezeigt werden.
+     * @param bool $direkter_vergleich Es ist ein direkter Vergleich, und die Erstsortierung nur nach erreichten Turnierpunkten
+     */
+    public function direkter_vergleich(array $tore_tabelle, bool $print = true, bool $direkter_vergleich = false)
+    {
+        $turnier_tabelle = self::get_sorted_turniertabelle($tore_tabelle); // neue Turniertabelle erstellen
+        // Den direkten Vergleich drucken
+        if ($print && $direkter_vergleich && count($tore_tabelle) > 1) $this->print_direkter_vergleich($turnier_tabelle);
+        // Mit dem ersten Team gleichplatzierte Teams suchen
+        $first_team_id = array_key_first($turnier_tabelle);
+        $gleichplatzierte_teams = $this->get_gleichplatzierte_teams($turnier_tabelle, $first_team_id, $direkter_vergleich);
+
+        // Fall 1: Team ist eindeutig platzierbar, da das erste Team in der sortierten Turniertabelle
+        // nur mit sich selbst gleichplatziert ist.
+        if (count($gleichplatzierte_teams) === 1) {
+            $this->set_platzierung($first_team_id);
+            self::remove_team_ids($tore_tabelle, [$first_team_id]); // Werden aus der Toretabelle entfernt
+            if (count($tore_tabelle) != 0) self::direkter_vergleich($tore_tabelle, false, $direkter_vergleich);
+            return;
+        }
+
+        // Fall 2: Team ist nicht eindeutig platzierbar, es muss ein neuer direkter Vergleich mit Untertabelle erstellt werden
+        if (count($gleichplatzierte_teams) < count($turnier_tabelle)) {
+            // Toretabelle mit nur den gleichplatzierten Teams
+            $tore_tabelle_gleiche_teams = self::filter_team_ids($tore_tabelle, $gleichplatzierte_teams);
+            self::direkter_vergleich($tore_tabelle_gleiche_teams, true, true);
+            // Toretabelle ohne die gleichplatzierten Teams
+            self::remove_team_ids($tore_tabelle, $gleichplatzierte_teams);
+            if (count($tore_tabelle) != 0) self::direkter_vergleich($tore_tabelle, true, $direkter_vergleich);
+            return;
+        }
+
+        // Fall 3: Alle Teams in der Tabelle sind gleichplatziert, ein erneutes Anwenden des direkten Vergleichs hätte keine Wirkung mehr.
+        if ($direkter_vergleich && self::filter_team_ids($tore_tabelle, $gleichplatzierte_teams) == $tore_tabelle) {
+            // Penalty-Schießen
+            foreach ($gleichplatzierte_teams as $team_id) {
+                $this->set_platzierung($team_id, true);
+            }
+            if ($this->check_penalty_unvermeidbar($gleichplatzierte_teams)){
+                $this->penaltys['ausstehend'] += $this->get_spiel_ids($gleichplatzierte_teams);
+            }
+        } else {
+            // Da wir nicht im direkten Vergleich waren, werden sie jetzt hineingeschickt mit den Begegnungen untereinander
+            $tore_tabelle = self::filter_team_ids($tore_tabelle, $gleichplatzierte_teams);
+            self::direkter_vergleich($tore_tabelle, true, true);
         }
     }
 
-    //Löscht einen Spielplan, falls ein manueller Spielplan hochgeladen werden muss.
-    public static function delete_spielplan($turnier_id)
+    /**
+     * Gibt eine Untertabelle des direkten Vergleichs aus
+     * Schreibt den html-String in $this->direkter_vergleich_tabellen
+     *
+     * @param array $turnier_tabelle Die dem direkten vergleich zugrundeliegende Untertabelle
+     */
+    function print_direkter_vergleich(array $turnier_tabelle)
     {
-        db::writedb("DELETE FROM spiele WHERE turnier_id = '$turnier_id'");
-    }
-}
+        $gleichplatzierte_teams =
+            $this->get_gleichplatzierte_teams($turnier_tabelle, array_key_first($turnier_tabelle), true);
+        $direkter_vergleich['penalty'] = ((count($gleichplatzierte_teams) == count($turnier_tabelle)));
+        $direkter_vergleich['tabelle'] = $turnier_tabelle;
 
+        $this->direkter_vergleich_tabellen[] = $direkter_vergleich;
+    }
+
+    /**
+     * Gibt ein Array der team_ids von mit einem Team gleichplatzierten Teams.
+     * Gibt nur eine team_id aus, wenn das übergebene Team nur mit sich selbst gleichplatziert ist,
+     * also eindeutig Platzierbar ist.
+     *
+     * @param array $turnier_tabelle Turniertabelle als Grundlage für Gleichplatzierung
+     * @param int $team_id Team-ID des Teams, nach dem gleichplatzierte Teams gesucht werden sollen
+     * @param bool $direkter_vergleich Handelt sich um die Erstsortierung, oder um einen direkten Vergleich?
+     * @return array Array der team_ids
+     */
+    private function get_gleichplatzierte_teams(array $turnier_tabelle, int $team_id, bool $direkter_vergleich = false): array
+    {
+        $match = $turnier_tabelle[$team_id];
+        $function = function ($value) use ($match, $direkter_vergleich) {
+            if ($direkter_vergleich) return $value == $match; // Teams mit identischer Direkter-Vergleich-Tabelle
+            return $value['punkte'] == $match['punkte']; // Nur Punkte vergleichen, wenn nicht im direkten Vergleich
+        };
+        return array_keys(array_filter($turnier_tabelle, $function)); // Wenn es mehrere gleiche Teams gibt: false
+    }
+
+    /**
+     * Platziert ein Team in $this->platzierungstabelle
+     *
+     * @param int $team_id Team-ID des Teams, welches platziert werden soll
+     * @param bool $penalty Steht noch ein Penalty aus?
+     */
+    private function set_platzierung(int $team_id, bool $penalty = false)
+    {
+        $this->platzierungstabelle[$team_id] =
+            [
+                'platz' => count($this->platzierungstabelle) + 1,
+                'teamname' => $this->teamliste[$team_id]['teamname'],
+                'ligapunkte' => 0,
+                'statistik' => $this->turnier_tabelle[$team_id],
+                'penalty' => $penalty
+            ];
+    }
+
+    /**
+     * Fügt die Teamwertigkeiten in die Platzeriungstabelle ein.
+     */
+    public function set_wertigkeiten()
+    {
+        $reverse_tabelle = array_reverse($this->platzierungstabelle, true);
+
+        $highest_ligateam = function () use ($reverse_tabelle) {
+            foreach ($reverse_tabelle as $team_id => $eintrag) {
+                if ($this->teamliste[$team_id]['wertigkeit'] !== 'NL') return $this->teamliste[$team_id]['wertigkeit'];
+            }
+            return 0;
+        };
+
+        $ligapunkte = 0;
+        foreach ($reverse_tabelle as $team_id => $eintrag) {
+            $wert = $this->teamliste[$team_id]['wertigkeit'];
+            $wert = ($wert === 'NL') ? max($werte ?? [max(round($highest_ligateam() / 2) - 1, 14)]) + 1 : $wert;
+            $werte[] = $wert;
+            $ligapunkte += $wert;
+            $this->platzierungstabelle[$team_id]['ligapunkte'] = round($ligapunkte * 6 / $this->details['faktor']);
+        }
+    }
+
+    /**
+     * Entfernt Teams aus der Toretabelle, nicht jedoch aus Unter-Torebegegnungs-Tabelle
+     *
+     * @param array $tore_tabelle Toretabelle als Grundlage
+     * @param array $team_ids Teams die Entfernt werden
+     */
+    private static function remove_team_ids(array &$tore_tabelle, array $team_ids)
+    {
+        foreach ($team_ids as $team_id) {
+            unset($tore_tabelle[$team_id]);
+        }
+    }
+
+    /**
+     * Filtert eine Toretabelle nach Teams und erstellt so eine Untertabelle für den direkten Vergleich mit nur
+     * noch diesen Teams und Begegnungen dieser Teams untereinander.
+     *
+     * @param array $tore_tabelle Toretabelle als Grundlage
+     * @param array $team_ids Liste an TeamIDs nach welchen
+     * @return array Neue Toretabelle mit noch den Team-IDs wird zurückgegeben.
+     */
+    private static function filter_team_ids(array $tore_tabelle, array $team_ids): array
+    {
+        $filter_function = function ($team_id) use ($team_ids) {
+            return in_array($team_id, $team_ids); // Alle Team-IDs, bis auf die Übergebenen, werden entfernt
+        };
+        foreach ($tore_tabelle as &$ergebnis) {
+            $ergebnis = array_filter($ergebnis, $filter_function, ARRAY_FILTER_USE_KEY);
+        }
+        return array_filter($tore_tabelle, $filter_function, ARRAY_FILTER_USE_KEY);
+    }
+
+    /**
+     * Ist die Penaltybegegnung unvermeidbar?
+     * @param array $team_ids Array der Penalty-Teams
+     * @return bool
+     */
+    public function check_penalty_unvermeidbar(array $team_ids): bool
+    {
+        // Hilfsfunktion für erreichbare Punkte eines Teams
+        $vergleich = function ($team_id) {
+            $return['punkte_min'] = $this->turnier_tabelle[$team_id]['punkte'];
+            $return['punkte_max'] =
+                $return['punkte_min'] + ($this->anzahl_spiele - $this->turnier_tabelle[$team_id]['spiele']) * 3;
+            $return['nicht_erreichbar'] = $return['punkte_max'] - 1;
+            return $return;
+        };
+
+        foreach ($team_ids as $team_id) {
+            if ($this->turnier_tabelle[$team_id]['spiele'] < $this->anzahl_spiele) {
+                return false; // Penaltybegegnung  vermeidbar, da noch nicht alle Spiele vom Team absolviert
+            }
+            $punkte_pen_team = $this->turnier_tabelle[$team_id]['punkte'];
+            foreach (array_keys($this->turnier_tabelle) as $vgl_team_id) {
+                if ($team_id == $vgl_team_id) continue; // Nicht mit sich selbst vergleichen
+                // Penaltybegnung vermeidbar, da ein Team die Punktzahl des Penalty-Teams noch erreichen könnte?
+                if ($punkte_pen_team < $vergleich($vgl_team_id)['punkte_max']
+                    && $punkte_pen_team > $vergleich($vgl_team_id)['punkte_min']
+                    && $punkte_pen_team != $vergleich($vgl_team_id)['nicht_erreichbar']) return false;
+            } // foreach Teams auf dem Turnier
+        } // foreach Penalty-Teams
+        return true;
+    }
+
+    /**
+     * Erstellt einen Spielplan in der Datenbank
+     *
+     * @param Turnier $turnier
+     * @return bool Erfolgreich / Nicht erfolgreich estellt
+     */
+    public static function set_spielplan(Turnier $turnier): bool
+    {
+        $spielplan_art = $turnier->details["spielplan"];
+        $teamliste = $turnier->get_liste_spielplan();
+        $anzahl_teams = count($teamliste);
+
+        // Teamlisten-Array mit 1 Beginnen lassen zum Ausfüllen der Spielplan-Vorlage
+        $teamliste = array_values($teamliste);
+        array_unshift($teamliste, '');
+        unset($teamliste[0]);
+
+        // Spielplanvorlage aus der Datenbank
+        $sql = "
+                SELECT * 
+                FROM spielplan_paarungen 
+                WHERE plaetze = '$anzahl_teams' 
+                AND spielplan = '$spielplan_art'
+                ";
+        $result = db::read($sql);
+
+        while ($spiel = mysqli_fetch_assoc($result)) {
+            $sql_inserts[] = "("
+                . $turnier->turnier_id . "," . $spiel["spiel_id"] . ","
+                . $teamliste[$spiel["team_a"]]["team_id"] . ","
+                . $teamliste[$spiel["team_b"]]["team_id"] . ","
+                . $teamliste[$spiel["schiri_a"]]["team_id"] . ","
+                . $teamliste[$spiel["schiri_b"]]["team_id"] . ", "
+                . "NULL, NULL, NULL, NULL)";
+        }
+        if (!isset($sql_inserts)) {
+            Form::error("Es konnte keine Spielreihenfolge aus dem Spielplan ermittelt werden");
+            return false;
+        }
+
+        // Eventuell alten Spielpläne löschen
+        Spielplan::delete_spielplan($turnier);
+
+        // Neuen Spielplan erstellen
+        $sql = "
+                INSERT INTO spiele 
+                VALUES " . implode(', ', $sql_inserts) . "
+                ";
+        db::write($sql);
+
+        // Turnierlog
+        $turnier->log("Dynamischer" . $anzahl_teams . "er JgJ-Spielplan erstellt.");
+        $turnier->set_phase('spielplan');
+        return true;
+    }
+
+    /**
+     * Löscht einen bisher erstellten Spielplan
+     *
+     * @param Turnier $turnier
+     */
+    public static function delete_spielplan(Turnier $turnier)
+    {
+        // Es existiert kein dynamischer Spielplan
+        if (!self::check_exist($turnier->turnier_id)) return;
+
+        // Spielplan löschen
+        $sql = "
+                DELETE FROM spiele 
+                WHERE turnier_id = $turnier->turnier_id
+                ";
+        db::write($sql);
+        $turnier->log("Dynamischer JgJ-Spielplan gelöscht.");
+        $turnier->set_phase('melde');
+    }
+
+    /**
+     * Existiert ein automatisch erstellter Spielplan in der Datenbank?
+     *
+     * @param int $turnier_id
+     * @return bool
+     */
+    public static function check_exist(int $turnier_id): bool
+    {
+        $sql = "
+                SELECT *
+                FROM spiele
+                WHERE turnier_id = $turnier_id;
+                ";
+        return db::read($sql)->num_rows > 0;
+    }
+
+    /**
+     * Überprüft ob Penaltyfelder zum Eintragen freigegeben werden.
+     *
+     * @param int $spiel_id
+     * @param bool $ausstehend Ausstehende oder allgemeine Penalty-Teams?
+     * @return bool True, wenn ein Penalty gespielt werden muss.
+     */
+    public function check_penalty_spiel(int $spiel_id, bool $ausstehend = false): bool
+    {
+        $penaltys = ($ausstehend) ? $this->penaltys['ausstehend'] : $this->penaltys['gesamt'];
+        return in_array($spiel_id, $penaltys);
+    }
+    public function check_penalty_team(int $team_id): bool
+    {
+        foreach ($this->penaltys['ausstehend'] as $spiel_id){
+            if (
+                $this->spiele[$spiel_id]['team_id_a'] == $team_id
+                or $this->spiele[$spiel_id]['team_id_b'] == $team_id
+            ) return true;
+        }
+        return false;
+    }
+
+    public function check_penalty_anzeigen(): bool
+    {
+        if (!$this->check_penalty_ergebnisse()) return true;
+        return !empty($this->penaltys['gesamt']);
+    }
+
+    public function get_penalty_warnung() // TODO besseres Get ausstehende Penaltys!!
+    {
+        $messages[] = 'Penaltys:';
+        foreach ($this->penaltys['gesamt'] as $spiel_id) {
+            if ($this->spiele[$spiel_id]['penalty_a'] == $this->spiele[$spiel_id]['penalty_b']){
+                $messages[] = $this->spiele[$spiel_id]['teamname_a'] . ' - ' . $this->spiele[$spiel_id]['teamname_b'];
+            }
+        }
+        if(isset($messages)) Form::attention(implode('<br>', $messages));
+    }
+
+    /**
+     * Überprüft, ob Penalty-Ergebnisse bei den richtigen Teams eingetragen worden sind.
+     *
+     * @return bool
+     */
+    public function check_penalty_ergebnisse(): bool
+    {
+        foreach ($this->spiele as $spiel_id => $spiel) {
+            if (
+                (!is_null($spiel['penalty_a']) or !is_null($spiel['penalty_b']))
+                && !in_array($spiel_id, $this->penaltys['gesamt'])
+                ) return false;
+            // Es wurde also ein Penalty bei einem Spiel eingetragen, bei welchem kein Penalty vorgesehen ist.
+        }
+        return true;
+    }
+
+    /**
+     * Check, ob das Turnier beendet wurde
+     *
+     * @return bool true, wenn keine Spiele und Penalty-Begegnungen ausstehen.
+     */
+    function check_turnier_beendet(): bool
+    {
+        if (!empty($this->penaltys['ausstehend'])) return false;
+        $min_spiele = min(array_column($this->turnier_tabelle, 'spiele'));
+        // kleinsten Anzahl an beendeten Spielen eines Teams
+        return $this->anzahl_spiele == $min_spiele;
+    }
+
+    /**
+     * Check, ob jedes Team ein Team gespielt hat.
+     * Wenn ja, wird die Platzierung und das Turnierergebnis im Template angezeigt
+     *
+     * @return bool true, wenn alle mind. ein Spiel gespielt haben
+     */
+    function check_tabelle_einblenden(): bool
+    {
+        // Team mit der kleinsten Anzahl an Spielen hat mehr als 0 Spiele vollendet
+        return 0 < min(array_column($this->turnier_tabelle, 'spiele'));
+    }
+
+    /**
+     * Überträgt das Turnierergebnis der Platzierungstabelle in die Datenbank
+     */
+    public function set_ergebnis()
+    {
+        // Ergebnis eintragen
+        $this->turnier->set_phase('ergebnis');
+        $this->turnier->delete_ergebnis();
+        foreach ($this->platzierungstabelle as $team_id => $ergebnis) {
+            $this->turnier->set_ergebnis($team_id, $ergebnis['ligapunkte'], $ergebnis['platz']);
+        }
+        $this->turnier->log("Turnierergebnis wurde in die Datenbank eingetragen");
+        Form::affirm("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
+    }
+
+    public function get_spiel_ids(array $team_ids): array{
+        foreach ($this->spiele as $spiel_id => $spiel){
+            if(in_array($spiel['team_id_a'], $team_ids) && in_array($spiel['team_id_b'], $team_ids))
+                $return[] = $spiel_id;
+        }
+        return $return ?? [];
+    }
+
+}

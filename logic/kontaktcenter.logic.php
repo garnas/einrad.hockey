@@ -28,13 +28,13 @@ if (isset($_POST['reset'])){
 if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])){
     unset ($_SESSION[$list_id]);
     $akt_turnier = new Turnier($_POST['turnier_id']);
-    if (empty($akt_turnier->daten)){
+    if (empty($akt_turnier->details)){
         Form::error("Turnier wurde nicht gefunden");
         header('Location: ' . db::escape($_SERVER['PHP_SELF']));
         die();
     }
     $array = Kontakt::get_emails_turnier($_POST['turnier_id']);
-    $_SESSION[$list_id]['type'] = 'Turnier in ' . $akt_turnier->daten['ort'] . ' (' . date("d.m.Y", strtotime($akt_turnier->daten['datum'])) .', ' . $akt_turnier->daten['tblock'] . ')';
+    $_SESSION[$list_id]['type'] = 'Turnier in ' . $akt_turnier->details['ort'] . ' (' . date("d.m.Y", strtotime($akt_turnier->details['datum'])) .', ' . $akt_turnier->details['tblock'] . ')';
     $_SESSION[$list_id]['emails'] = $array['emails'];
     $_SESSION[$list_id]['empfaenger'] = $array['teamnamen'];
 
@@ -51,7 +51,7 @@ if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])){
 if (isset($_POST['rundmail'])){
     unset ($_SESSION[$list_id]);
     $_SESSION[$list_id]['type'] = 'Rundmail';
-    $_SESSION[$list_id]['empfaenger'] = Team::list_of_all_teams();
+    $_SESSION[$list_id]['empfaenger'] = Team::get_ligateams_name();
     $_SESSION[$list_id]['emails'] = Kontakt::get_emails_rundmail();
 
     array_unshift($_SESSION[$list_id]['emails'], Config::LAMAIL);
@@ -124,27 +124,19 @@ if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])){
             }
         }
         
-        //Text und Betreff hinzufügen
+        // Text und Betreff hinzufügen
         $mailer->Subject = $betreff;
         $mailer->Body = $text . "\r\n\r\nVersendet aus dem Kontaktcenter von einrad.hockey";
 
-        //Email-versenden
-        if (Config::ACTIVATE_EMAIL){
-            if ($mailer->send()){
-                Form::affirm("Die E-Mail wurde versandt.");
-                unset($_SESSION[$list_id]);
-                header('Location: ' . db::escape($_SERVER['PHP_SELF']));
-                die();
-            }else{
-                Form::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden. Manuell Mail versenden: " . Form::mailto(Config::LAMAIL));
-                Form::error($mailer->ErrorInfo);
-            }
-        }else{ //Debugging
-            if (!($ligacenter ?? false)){
-                $mailer->Password = '***********'; //Passwort verstecken
-                $mailer->ClearAllRecipients(); 
-            }
-            db::debug($mailer);
+        // Email-versenden
+        if (MailBot::send_mail($mailer)){
+            Form::affirm("Die E-Mail wurde versandt.");
+            unset($_SESSION[$list_id]);
+            header('Location: ' . db::escape($_SERVER['PHP_SELF']));
+            die();
+        }else{
+            Form::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden. Manuell Mail versenden: " . Form::mailto(Config::LAMAIL));
+            Form::error($mailer->ErrorInfo);
         }
     }
 }

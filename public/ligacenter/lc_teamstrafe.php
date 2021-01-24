@@ -7,7 +7,7 @@ require_once '../../logic/session_la.logic.php'; //Auth
 
 //Turnierdaten für Select
 $turniere = Turnier::get_all_turniere("WHERE saison='".Config::SAISON."'");
-$strafen = Team::get_all_strafen();
+$strafen = Team::get_strafen_all_teams();
 
 //Formularauswertung
 foreach ($strafen as $strafe){
@@ -24,6 +24,10 @@ if (isset($_POST['strafe_eintragen'])){
     if (empty($_POST['teamname']) or empty($_POST['grund'])){
         $error = true;
         Form::error("Bitte Team auswählen und Begründung eintragen.");
+    }
+    if ($_POST['verwarnung'] == 'Ja' && !empty($_POST['prozent'])){
+        $error = true;
+        Form::error("Prozentstrafen sind bei Vewarnungen nicht möglich.");
     }
     $team_id = Team::teamname_to_teamid($_POST['teamname']);
     if (!Team::is_ligateam($team_id)){
@@ -105,8 +109,8 @@ include '../../templates/header.tmp.php';
         <input required class="w3-input w3-border w3-border-primary" type="text" name="grund" id="grund">
     <p>
     <p>
-        <label class="w3-text-primary" for="prozent">Prozentstrafe in % (leer lassen, wenn keine Prozentstrafe)</label>
-        <input class="w3-input w3-border w3-border-primary" type="number" name="prozent" id="prozent">
+        <label class="w3-text-primary" for="prozent">Prozentstrafe in % (ganze Zahlen | leer lassen, wenn keine Prozentstrafe)</label>
+        <input class="w3-input w3-border w3-border-primary" type="number" step="1" min="1" max="100" name="prozent" id="prozent">
     <p>
     <p>
         <input class="w3-button w3-tertiary" type="submit" name="strafe_eintragen" value="Strafe/Verwarnung eintragen">

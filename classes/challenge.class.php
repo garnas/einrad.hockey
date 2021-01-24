@@ -8,7 +8,31 @@ class Challenge {
     public $ziel_kilometer = 16098.4;
 
     // Erhalte den aktuellen km-Stand
-    function get_stand(){
+
+    public static function set_data($spieler, $distanz, $radgroesse, $datum): bool
+    {
+        $sql = "
+        INSERT INTO `oeffi_challenge`(`spieler_id`, `kilometer`, `radgröße`, `datum`) VALUES ('$spieler', '$distanz', '$radgroesse', '$datum')
+        ";
+        db::write($sql);
+        return true;
+    }
+
+    // Erhalte die Ergebnisliste aufgeschlüsselt nach Teams
+
+    public static function update_data($id): bool
+    {
+        $sql = "
+        UPDATE `oeffi_challenge` SET `count` = FALSE WHERE `id` = '$id';  
+        ";
+        db::write($sql);
+        return true;
+    }
+
+    // Erhalte die Ergebnisliste aufgeschlüsselt nach Spieler
+
+    function get_stand(): string
+    {
         $sql = "
         SELECT ROUND(SUM(kilometer), 1) AS kilometer
         FROM `oeffi_challenge`
@@ -18,14 +42,16 @@ class Challenge {
         AND timestamp <= '" . date("Y-m-d", strtotime($this->challenge_end)) . " " . $this->challenge_end_time . "'
         ";
 
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $daten = mysqli_fetch_assoc($result);
 
         return db::escape($daten['kilometer']);
     }
-    
-    // Erhalte die Ergebnisliste aufgeschlüsselt nach Teams
-    function get_teams(){
+
+    // Erhalte die einzelnen Einträge
+
+    function get_teams(): array
+    {
         $sql = "
         SELECT t.team_id, teamname, COUNT(DISTINCT(sp.spieler_id)) AS mitglieder, COUNT(ch.id) AS einträge, ROUND(SUM(kilometer), 1) AS kilometer
         FROM `oeffi_challenge` ch, spieler sp, teams_liga t
@@ -38,11 +64,11 @@ class Challenge {
         GROUP BY teamname
         ORDER BY kilometer DESC, RAND()
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
 
         $daten = [];
         $index = 1;
-        while($row = mysqli_fetch_assoc($result)){
+        while ($row = mysqli_fetch_assoc($result)) {
             $row += ["platz" => $index];
             array_push($daten, $row);
             $index++;
@@ -51,8 +77,10 @@ class Challenge {
         return db::escape($daten);
     }
 
-    // Erhalte die Ergebnisliste aufgeschlüsselt nach Spieler
-    function get_spieler(){
+    // Erhalte alle einzelnen Einträge für ein Team
+
+    function get_spieler(): array
+    {
         $sql = "
         SELECT sp.vorname, sp.nachname, t.teamname, t.team_id, COUNT(ch.id) AS einträge, ROUND(SUM(kilometer), 1) AS kilometer
         FROM `oeffi_challenge` ch, spieler sp, teams_liga t
@@ -65,21 +93,23 @@ class Challenge {
         GROUP BY sp.spieler_id
         ORDER BY kilometer DESC, RAND()
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
 
         $daten = [];
         $index = 1;
-        while($row = mysqli_fetch_assoc($result)){
+        while ($row = mysqli_fetch_assoc($result)) {
             $row += ["platz" => $index];
             array_push($daten, $row);
             $index++;
         }
-        
+
         return db::escape($daten);
     }
 
-    // Erhalte die einzelnen Einträge
-    function get_eintraege() {
+    // Erhalte Ergebnisse der Spieler für das einzelne Team (inkl. Platzierung)
+
+    function get_eintraege(): array
+    {
         $sql = "
         SELECT ch.id, sp.team_id, ch.datum, sp.vorname, sp.nachname, ch.kilometer, ch.radgröße
         FROM `oeffi_challenge` ch, `spieler` sp
@@ -90,18 +120,20 @@ class Challenge {
         AND ch.count = TRUE
         ORDER BY ch.datum DESC, ch.timestamp DESC
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
 
         $daten = [];
-        while($row = mysqli_fetch_assoc($result)){
+        while ($row = mysqli_fetch_assoc($result)) {
             array_push($daten, $row);
         }
 
         return db::escape($daten);
     }
-    
-    // Erhalte alle einzelnen Einträge für ein Team
-    function get_team_eintraege($team_id) {
+
+    // Erhalte den erfolgreichsten Spieler unter 16 Jahren
+
+    function get_team_eintraege($team_id): array
+    {
         $sql = "
         SELECT ch.id, sp.team_id, ch.datum, sp.vorname, sp.nachname, ch.kilometer, ch.radgröße
         FROM `oeffi_challenge` ch, `spieler` sp
@@ -113,18 +145,20 @@ class Challenge {
         AND ch.count = TRUE
         ORDER BY ch.datum DESC, ch.timestamp DESC
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
 
         $daten = [];
-        while($row = mysqli_fetch_assoc($result)){
+        while ($row = mysqli_fetch_assoc($result)) {
             array_push($daten, $row);
         }
 
         return db::escape($daten);
     }
 
-    // Erhalte Ergebnisse der Spieler für das einzelne Team (inkl. Platzierung)
-    function get_team_spieler($team_id) {
+    // Erhalte den erfolgreichsten Spieler älter oder gleich 50 Jahre
+
+    function get_team_spieler($team_id): array
+    {
         $sql = "
         SELECT spieler_id, platz, vorname, kilometer
         FROM(
@@ -145,18 +179,20 @@ class Challenge {
         WHERE team_id = '" . $team_id . "'
         ORDER BY kilometer DESC
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
 
         $daten = [];
-        while($row = mysqli_fetch_assoc($result)){
+        while ($row = mysqli_fetch_assoc($result)) {
             array_push($daten, $row);
         }
 
         return db::escape($daten);
     }
 
-    // Erhalte den erfolgreichsten Spieler unter 16 Jahren
-    function get_alter_jung() {
+    // Erhalte den Spieler, der die meisten Kilometer auf einem Rad zurück gelegt hat, welches für Einradhockey zugelassen ist
+
+    function get_alter_jung(): array
+    {
         $sql = "
         SELECT IF (jahrgang > 2004, TRUE, FALSE) AS spieleralter, sp.vorname, te.teamname, ROUND(SUM(ch.kilometer), 1) AS kilometer
         FROM `oeffi_challenge` ch, `spieler` sp, `teams_liga` te
@@ -170,14 +206,16 @@ class Challenge {
         ORDER BY spieleralter DESC, kilometer DESC
         LIMIT 1
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $daten = mysqli_fetch_assoc($result);
 
         return db::escape($daten);
     }
 
-    // Erhalte den erfolgreichsten Spieler älter oder gleich 50 Jahre
-    function get_alter_alt() {
+    // Schreibe einen Eintrag in die Datenbank
+
+    function get_alter_alt(): array
+    {
         $sql = "
         SELECT IF (jahrgang <= 1970, TRUE, FALSE) AS spieleralter, sp.vorname, te.teamname, ROUND(SUM(ch.kilometer), 1) AS kilometer
         FROM `oeffi_challenge` ch, `spieler` sp, `teams_liga` te
@@ -191,14 +229,16 @@ class Challenge {
         ORDER BY spieleralter DESC, kilometer DESC
         LIMIT 1
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $daten = mysqli_fetch_assoc($result);
 
         return db::escape($daten);
     }
 
-    // Erhalte den Spieler, der die meisten Kilometer auf einem Rad zurück gelegt hat, welches für Einradhockey zugelassen ist
-    function get_einradhockey_rad() {
+    // Flagge einen Datensatz als gelöscht
+
+    function get_einradhockey_rad(): array
+    {
         $sql = "
         SELECT ch.radgröße, sp.vorname, te.teamname, ROUND(SUM(ch.kilometer), 1) AS kilometer
         FROM `oeffi_challenge` ch, `spieler` sp, `teams_liga` te
@@ -210,10 +250,10 @@ class Challenge {
         AND datum <= '" . date("Y-m-d", strtotime($this->challenge_end)) . "'
         AND timestamp <= '" . date("Y-m-d", strtotime($this->challenge_end)) . " " . $this->challenge_end_time . "'
         GROUP BY sp.spieler_id
-        ORDER BY kilometer DESC, radgröße ASC
+        ORDER BY kilometer DESC, max(ch.radgröße)
         LIMIT 1
-        ";
-        $result = db::readdb($sql);
+        "; //max da radgröße gruppiert wird und somit unterschiedliche werte beinhalten kann
+        $result = db::read($sql);
         $daten = mysqli_fetch_assoc($result);
 
         return db::escape($daten);
@@ -239,7 +279,7 @@ class Challenge {
         ) AS neu
         WHERE spieler_id = '" . $spieler_id . "'
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $daten = mysqli_fetch_assoc($result);
 
         return db::escape($daten);
@@ -265,29 +305,9 @@ class Challenge {
         ) AS neu
         WHERE team_id = '" . $team_id . "'
         ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $daten = mysqli_fetch_assoc($result);
 
         return db::escape($daten);
     }
-
-    // Schreibe einen Eintrag in die Datenbank
-    public static function set_data($spieler, $distanz, $radgroesse, $datum){
-        $sql = "
-        INSERT INTO `oeffi_challenge`(`spieler_id`, `kilometer`, `radgröße`, `datum`) VALUES ('$spieler', '$distanz', '$radgroesse', '$datum')
-        ";
-        db::writedb($sql);
-        return true;
-    }
-
-    // Flagge einen Datensatz als gelöscht
-    public static function update_data($id) {
-        $sql = "
-        UPDATE `oeffi_challenge` SET `count` = FALSE WHERE `id` = '$id';  
-        ";
-        db::writedb($sql);
-        return true;
-    }
 }
-
-?>

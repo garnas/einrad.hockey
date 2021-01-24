@@ -1,61 +1,38 @@
 <?php
 //Spielplan-Objekt aus Url-TurnierID erstellen
-$turnier_id=$_GET['turnier_id'];
-$spielplan = new Spielplan($turnier_id);
-//Existiert das Turnier?
-if(empty($spielplan->akt_turnier->daten)){
-    Form::error("Turnier wurde nicht gefunden");
+$turnier_id = $_GET['turnier_id'] ?? 0;
+
+
+// Gibt es einen Spielplan zu diesem Turnier?
+
+if (!Spielplan::check_exist($turnier_id)) {
+    Form::error("Spielplan wurde nicht gefunden");
     header('Location: ../liga/turniere.php');
     die();
 }
-//Nur Relevant für Ligacenter oder Teamcenter
-if (isset($ligacenter) or isset($teamcenter)){
-    //Besteht die Berechtigung das Turnier zu bearbeiten? 
-    if (($_SESSION['team_id'] ?? false) != $spielplan->akt_turnier->daten['ausrichter'] && !$ligacenter){
-        Form::error("Nur der Ausrichter kann Spielergebnisse eintragen");
-        header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
-        die();
-    }
-    if ($teamcenter && Config::time_offset() - strtotime($spielplan->akt_turnier->daten['datum']) > 48*60*60){
-        Form::error("Bitte wende dich an den Ligaausschuss um Ergebnisse nachträglich zu verändern.");
-        header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
-        die();
-    }
-}
-//Ist das Turnier in der richtigen Phase?
-if(!in_array($spielplan->akt_turnier->daten['phase'], array('ergebnis', 'spielplan'))){
-    Form::error("Turnier befindet sich in der falschen Phase");
-    header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier_id);
-    die();
-}
-//Existiert ein manuell hochgeladener Spielplan?
-if(!empty($spielplan->akt_turnier->daten['link_spielplan'])){
-    Form::error("Es existiert ein manuell hochgeladener Spielplan.");
-    header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier_id);
-    die();
-}
-//Hat das Turnier die richtige Anzahl an Teams?
-if($spielplan->anzahl_teams < 4 or $spielplan->anzahl_teams > 7){
-    Form::error("Falsche Anzahl an Teams für die Spielplanerstellung");
-    header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier_id);
-    die();
-}
+$spielplan = new Spielplan((new Turnier ($turnier_id)));
 
-//Spielplan erstellen / Spielplan aus der Datenbank lesen, falls schon mal einer erstellt worden ist.
-$spielplan->create_spielplan_jgj();
-$tabelle=$spielplan->get_turnier_tabelle();
-$teamliste=$spielplan->teamliste;
-$spielliste=$spielplan->get_spiele();
-$spielzeit = $spielplan->getSpielzeiten();
-$spielzeit['dauer'] = $spielzeit['anzahl_halbzeiten']*$spielzeit['halbzeit_laenge'] + $spielzeit['pause'];
+$spielplan->get_penalty_warnung();
 
-//Turniertabelle Plätze und Punkte anzeigen?
-$show_turnierergebnis = $spielplan->check_tabelle_einblenden($tabelle);
+// Spielplanpause feststellen
 
-//Penalty Anzeigen? //Für Spielplan/Druckanzeige
-$penalty_anzeigen = false;
-foreach($spielliste as $index => $spiel){
-    if (!is_null($spiel["penalty_b"]) or !is_null($spiel["penalty_a"])){
-        $penalty_anzeigen = true;
-    }
-}
+$spiel_dauer = ($spielplan->details['anzahl_halbzeiten'] * $spielplan->details['halbzeit_laenge']
+        + $spielplan->details['pause']) * 60; // Spieldauer in Sekunden;
+$get_pause = function ($spiel) use ($spielplan, $spiel_dauer): int {
+    return strtotime($spielplan->spiele[$spiel['spiel_id'] + 1]['zeit'] ?? $spiel['zeit']) //Uhrzeit des nächsten Spiels
+        - strtotime($spiel['zeit'])  // Zeit dieses Spiels
+        - $spiel_dauer;
+};
+
+
+// Pixellänge des längsten Teamnamens für die perfekte Darstellung des Spielplans (Tore, Schiris, Penaltys in Desktop)
+$function = function ($platz) {
+    return strlen($platz['teamname']);
+};
+$teamnamen_laengen = array_map(function ($platz) {
+    return strlen($platz['teamname']);
+}, $spielplan->platzierungstabelle);
+$width_in_px = max($teamnamen_laengen) * 8; // 7.5 Durchschnittliche px-Weite eines Characters
+
+//db::debug($spielplan->penalty_begegnungen);
+//db::debug($spielplan->ausstehende_penalty_begegnungen);

@@ -17,8 +17,8 @@ if(isset($_GET['team_id'])){
         $team_kontakte = new Kontakt($team_id);
 
         //Werden an teamdaten.tmp.php übergeben
-        $emails = $team_kontakte->get_all_emails();
-        $daten = $akt_team->daten();
+        $emails = $team_kontakte->get_emails_with_details();
+        $daten = $akt_team->get_teamdaten();
     }else{
         $daten = '';
         $emails = '';

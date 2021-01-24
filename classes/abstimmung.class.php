@@ -58,7 +58,7 @@ class Abstimmung
                 FROM abstimmung_teams
                 WHERE team_id = $this->team_id
                 ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $this->team = mysqli_fetch_assoc($result) ?? [];
 
         // Beim ersten Mal Abstimmen den für die Verschlüsselung benutzen Passwort-Hash speichern.
@@ -110,7 +110,7 @@ class Abstimmung
             FROM abstimmung_ergebnisse
             WHERE crypt = '$crypt'
             ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         return mysqli_fetch_assoc($result)['stimme'] ?? 'none';
     }
 
@@ -132,12 +132,12 @@ class Abstimmung
             $sql = "
                 INSERT INTO abstimmung_teams (team_id, passwort)
                 VALUES ($this->team_id, '$this->passwort_hash')";
-            db::writedb($sql);
+            db::write($sql);
             $sql = "
                 INSERT INTO abstimmung_ergebnisse (stimme, crypt) 
                 VALUES ('$stimme', '$crypt')
                 ";
-            db::writedb($sql, true);
+            db::write($sql, true);
             Form::log("abstimmung.log", "$this->team_id hat seine Stimme abgegeben");
             Form::affirm("Dein Team hat erfolgreich abgestimmt. Vielen Dank!");
         } else { // Team korrigiert seine Stimme.
@@ -146,13 +146,13 @@ class Abstimmung
                 SET stimme = '$stimme'
                 WHERE crypt = '$crypt'
                 ";
-            db::writedb($sql, true);
+            db::write($sql, true);
             $sql = "
                 UPDATE abstimmung_teams
                 SET aenderungen = aenderungen + 1
                 WHERE team_id = $this->team_id
                 ";
-            db::writedb($sql);
+            db::write($sql);
             Form::log("abstimmung.log", "$this->team_id hat seine Stimme geändert");
             Form::affirm("Dein Team hat erfolgreich neu abgestimmt. Vielen Dank!");
         }
@@ -171,7 +171,7 @@ class Abstimmung
             FROM abstimmung_ergebnisse
             GROUP BY stimme
             ";
-        $result = db::readdb($sql);
+        $result = db::read($sql);
         $ergebnisse['gesamt'] = 0;
         while ($row = mysqli_fetch_assoc($result)) {
             $ergebnisse[$row['stimme']] = $row['stimmen'];

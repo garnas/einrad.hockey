@@ -9,8 +9,8 @@ $akt_team = new Team ($_SESSION['team_id']);
 $akt_team_kontakte = new Kontakt ($_SESSION['team_id']);
 
 //Werden an teamdaten.tmp.php übergeben
-$emails = $akt_team_kontakte->get_all_emails();
-$daten = $akt_team ->daten();
+$emails = $akt_team_kontakte->get_emails_with_details();
+$daten = $akt_team ->get_teamdaten();
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////

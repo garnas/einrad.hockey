@@ -142,12 +142,12 @@ if (isset($_POST['create_turnier'])) {
                 $autor = "Fehler! Team- oder Ligacenter konnte nicht ermittelt werden!";
             }
             //Logs schreiben
-            $akt_turnier->schreibe_log( "Turnier wurde erstellt",  $autor);
-            $akt_turnier->schreibe_log( "Turniername: $tname\r\nAusrichter: $ausrichter_name\r\nStartzeit: $startzeit\r\nBesprechung: $besprechung\r\nArt: $art\r\nBlock: $tblock\r\n" .
+            $akt_turnier->log( "Turnier wurde erstellt",  $autor);
+            $akt_turnier->log( "Turniername: $tname\r\nAusrichter: $ausrichter_name\r\nStartzeit: $startzeit\r\nBesprechung: $besprechung\r\nArt: $art\r\nBlock: $tblock\r\n" .
                                         "Fixiert: $fixed\r\nDatum: $datum \r\nPlätze: $plaetze\r\nSpielplan: $spielplan\r\nHallenname: $hallenname\r\n". 
                                         "Straße: $strasse\r\nPlz: $plz\r\nOrt: $ort\r\nHaltestellen: $haltestellen\r\nHinweis: $hinweis\r\nStartgebühr: $startgebuehr\r\n".
                                         "Organisator: $organisator\r\nHandy: $handy", $autor);
-            $akt_turnier->schreibe_log( "Anmeldung als Ausrichter:\r\n" . $ausrichter_name . " -> Liste: spiele", $autor);
+            $akt_turnier->log( "Anmeldung als Ausrichter:\r\n" . $ausrichter_name . " -> Liste: spiele", $autor);
             //Mailbot
             if ($teamcenter){ //Es wird nur eine Mail verschickt, wenn ein Turnier im Teamcenter erstellt wurde
                 MailBot::mail_neues_turnier($akt_turnier);

@@ -31,7 +31,7 @@ $css_style = '
 ';
 
 // Start der PDF Erstellung
-$mpdf = PDF::start_mpdf();
+$mpdf = Mpdf::load_mpdf();
 
 // Darstellung der Elemente auf der Seite
 $html = '

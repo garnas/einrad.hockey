@@ -4,7 +4,7 @@ $turnier_id = $_GET['turnier_id'];
 $akt_turnier = new Turnier ($turnier_id);
 
 //Turnierdaten bekommen
-$daten = $akt_turnier->daten;
+$daten = $akt_turnier->details;
 
 //Existiert das Turnier?
 if (empty($daten)){
@@ -41,7 +41,7 @@ if (isset($_POST['abmelden'])){
         foreach ($liste as $team) {
             if (isset($_POST['abmelden' . $team['team_id']])){
                 $akt_turnier->abmelden($team['team_id']);
-                $akt_turnier->schreibe_log("Abmeldung: " . $team['teamname'] . "\r\nvon Liste: " . $team['liste'], $autor);
+                $akt_turnier->log("Abmeldung: " . $team['teamname'] . "\r\nvon Liste: " . $team['liste'], $autor);
                 if ($team['liste'] == 'warte'){
                     $akt_turnier->warteliste_aktualisieren();
                 }
@@ -82,7 +82,7 @@ if (isset($_POST['team_anmelden'])){
 
     if (!$error){
         $akt_turnier->team_anmelden($team_id, $liste, $pos);
-        $akt_turnier->schreibe_log("Anmeldung: $teamname\r\nTeamblock: " . (Tabelle::get_team_block($team_id) ?: 'NL') . " Turnierblock: " . $daten['tblock'] ."\r\nListe: $liste (WartePos: $pos)", $autor);
+        $akt_turnier->log("Anmeldung: $teamname\r\nTeamblock: " . (Tabelle::get_team_block($team_id) ?: 'NL') . " Turnierblock: " . $daten['tblock'] ."\r\nListe: $liste (WartePos: $pos)", $autor);
         Form::affirm ("$teamname wurde angemeldet");
         header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $daten['turnier_id']));
         die();
@@ -105,7 +105,7 @@ if (isset($_POST['nl_anmelden'])){
     $team_id = Team::teamname_to_teamid($teamname . '*');
     if (!$akt_turnier->check_team_angemeldet($team_id)){
         $akt_turnier->nl_anmelden($teamname, $liste, $pos);
-        $akt_turnier->schreibe_log("Anmeldung: $teamname*\r\nTeamblock: " . (Tabelle::get_team_block($team_id) ?: 'NL') . "\r\nListe:  $liste (WartePos: $pos)", $autor);
+        $akt_turnier->log("Anmeldung: $teamname*\r\nTeamblock: " . (Tabelle::get_team_block($team_id) ?: 'NL') . "\r\nListe:  $liste (WartePos: $pos)", $autor);
         Form::affirm("$teamname wurde angemeldet auf Liste: $liste");
         header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $daten['turnier_id']));
         die();
@@ -130,7 +130,7 @@ if (isset($_POST['spieleliste_auffuellen'])){
     $error = false;
 
     //Hat das Turnier noch freie Plätze?
-    if ($akt_turnier->anzahl_freie_plaetze() <= 0){
+    if ($akt_turnier->get_anzahl_freie_plaetze() <= 0){
         $error = true;
         Form::error("Spielen-Liste ist bereits voll");
     }
