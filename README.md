@@ -22,11 +22,11 @@ Du hast Lust mitzuwirken? Melde dich bei ansgar@einrad.hockey!
 
 ## Dokumente
 
-[Allgemeine Dokumentation](http://einrad.hockey/dokumente/dokumetation/allgemeine_dokumentation.pdf)
+* [Allgemeine Dokumentation](http://einrad.hockey/dokumente/dokumetation/allgemeine_dokumentation.pdf)
 
-[Entwicklungsumgebung erstellen](http://einrad.hockey/dokumente/dokumetation/entwicklungsumgebung_erstellen.pdf)
+* [Entwicklungsumgebung erstellen](http://einrad.hockey/dokumente/dokumetation/entwicklungsumgebung_erstellen.pdf)
 
-[Baustellen und Projekte](http://einrad.hockey/dokumente/dokumetation/baustellen_und_projekte.pdf)
+* [Baustellen und Projekte](http://einrad.hockey/dokumente/dokumetation/baustellen_und_projekte.pdf)
 
 ## xml-Schnittstelle:
 
