@@ -6,7 +6,6 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_team.logic.php'; //auth
 
 $centerpanels = array(
-  array("name" => "km-Challenge", "link" => "tc_challenge.php", "farbe" => "w3-pink"),
   array("name" => "Abstimmung", "link" => "tc_abstimmung.php", "farbe" => "w3-teal"),
   array("name" => "Turnier-anmeldung", "link" => "tc_turnierliste_anmelden.php", "farbe" => "w3-primary"),
   array("name" => "Eigene Turniere", "link" => "tc_turnierliste_verwalten.php", "farbe" => "w3-primary"),
