@@ -47,7 +47,7 @@ if (isset($_POST['create_neuigkeit'])){
         //////Titel, Text und Verlinkungen werden in die Datenbank eingetragen//////
         $titel = $_POST['titel'];
         $text = $_POST['text'];
-        $bild_verlinken = $_POST['bild_verlinken'];
+        $bild_verlinken = $_POST['bild_verlinken'] ?? '';
         //$text = preg_replace("/[\r\n]+/", "\n", $text); //Entfernt doppelte Newline-Characters (Absätze) - ansonsten wäre es möglich einen Neuigkeiteseintrag mit 200 neuen Zeilen zu erstellen
         if (!$error) {
             Neuigkeit::create_neuigkeit($titel,$text,$name,$target_file_jpg,$target_file_pdf,$bild_verlinken);

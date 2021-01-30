@@ -291,7 +291,7 @@ class Spielplan
                 $this->set_platzierung($team_id, true);
             }
             if ($this->check_penalty_unvermeidbar($gleichplatzierte_teams)){
-                $this->penaltys['ausstehend'] += $this->get_spiel_ids($gleichplatzierte_teams);
+                $this->penaltys['ausstehend'] = array_merge($this->penaltys['ausstehend'], $this->get_spiel_ids($gleichplatzierte_teams));
             }
         } else {
             // Da wir nicht im direkten Vergleich waren, werden sie jetzt hineingeschickt mit den Begegnungen untereinander

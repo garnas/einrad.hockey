@@ -19,28 +19,26 @@ function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
         return;
     }
 
-    db::write("UPDATE `spiele` SET `tore_a` = ROUND(1*RAND(),0) ,`tore_b`= ROUND(1*RAND(),0) WHERE turnier_id = $turnier_id");
+    db::write("UPDATE `spiele` SET `tore_a` = ROUND(4*RAND(),0) ,`tore_b`= ROUND(4*RAND(),0) WHERE turnier_id = $turnier_id");
     db::write("UPDATE `spiele` SET `penalty_a` = NULL ,`penalty_b`= NULL WHERE turnier_id = $turnier_id");
 
     // Neu
     $spielplan = new Spielplan((new Turnier($turnier_id)));
 
-    // Penaltys hinzufügen
-    foreach($spielplan->penalty_begegnungen as $team_ids){
-        foreach($team_ids as $team_id_a => $teamname_a){
-            foreach($team_ids as $team_id_b => $teamname_b){
-                db::write("
-                                UPDATE `spiele` SET `penalty_a` = $team_id_a, `penalty_b`= $team_id_b 
-                                WHERE turnier_id = $turnier_id
-                                AND ((team_id_a = $team_id_a AND team_id_b = $team_id_b) OR (team_id_a = $team_id_b AND team_id_b = $team_id_a))
-                                ");
-            }
-        }
-    }
+//    // Penaltys hinzufügen
+//    foreach($spielplan->penalty_begegnungen as $team_ids){
+//        foreach($team_ids as $team_id_a => $teamname_a){
+//            foreach($team_ids as $team_id_b => $teamname_b){
+//                db::write("
+//                                UPDATE `spiele` SET `penalty_a` = $team_id_a, `penalty_b`= $team_id_b
+//                                WHERE turnier_id = $turnier_id
+//                                AND ((team_id_a = $team_id_a AND team_id_b = $team_id_b) OR (team_id_a = $team_id_b AND team_id_b = $team_id_a))
+//                                ");
+//            }
+//        }
+//    }
 
     $spielplan = new Spielplan((new Turnier($turnier_id)));
-    $spielplan->direkter_vergleich($spielplan->get_toretabelle());
-    $spielplan->set_wertigkeiten();
     $tabelle_neu = $spielplan->platzierungstabelle;
 
     // Alt
@@ -49,7 +47,7 @@ function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
 
     // Ligapunkte
     #db::debug($tabelle_alt);
-    #db::debug($tabelle_neu);
+    db::debug($tabelle_neu);
     foreach ($tabelle_neu as $team_id => $eintrag_neu) {
         $platz_neu = $eintrag_neu['platz'];
         if (
