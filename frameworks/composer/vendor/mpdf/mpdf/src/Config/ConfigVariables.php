@@ -399,7 +399,7 @@ class ConfigVariables
 			'useActiveForms' => false,
 
 			// WATERMARKS
-			'watermarkImgBehind' => true,
+			'watermarkImgBehind' => false,
 			'showWatermarkText' => 0,
 			'showWatermarkImage' => 0,
 			'watermarkText' => '',
@@ -454,6 +454,8 @@ class ConfigVariables
 			],
 
 			'tempDir' => __DIR__ . '/../../tmp',
+
+			'cacheCleanupInterval' => 3600,
 
 			'allowAnnotationFiles' => false,
 
