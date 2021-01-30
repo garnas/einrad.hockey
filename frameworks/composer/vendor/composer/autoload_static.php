@@ -15,6 +15,10 @@ class ComposerStaticInit0ca5aefa3d37ef79edd9ef69a217db1c
         array (
             'setasign\\Fpdi\\' => 14,
         ),
+        'S' => 
+        array (
+            'Symfony\\Component\\Finder\\' => 25,
+        ),
         'P' => 
         array (
             'Psr\\Log\\' => 8,
@@ -23,6 +27,10 @@ class ComposerStaticInit0ca5aefa3d37ef79edd9ef69a217db1c
         'M' => 
         array (
             'Mpdf\\' => 5,
+        ),
+        'G' => 
+        array (
+            'Gregwar\\' => 8,
         ),
         'D' => 
         array (
@@ -35,6 +43,10 @@ class ComposerStaticInit0ca5aefa3d37ef79edd9ef69a217db1c
         array (
             0 => __DIR__ . '/..' . '/setasign/fpdi/src',
         ),
+        'Symfony\\Component\\Finder\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/finder',
+        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
@@ -46,6 +58,10 @@ class ComposerStaticInit0ca5aefa3d37ef79edd9ef69a217db1c
         'Mpdf\\' => 
         array (
             0 => __DIR__ . '/..' . '/mpdf/mpdf/src',
+        ),
+        'Gregwar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/gregwar/captcha/src/Gregwar',
         ),
         'DeepCopy\\' => 
         array (

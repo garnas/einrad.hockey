@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '5362a885606ecd0acc041bba7cc08e7d5115790d',
+    'reference' => 'ec082c69297921d06dba45f3fa4632d6ab9b61da',
     'name' => '__root__',
   ),
   'versions' => 
@@ -18,7 +18,16 @@
       'aliases' => 
       array (
       ),
-      'reference' => '5362a885606ecd0acc041bba7cc08e7d5115790d',
+      'reference' => 'ec082c69297921d06dba45f3fa4632d6ab9b61da',
+    ),
+    'gregwar/captcha' => 
+    array (
+      'pretty_version' => 'v1.1.9',
+      'version' => '1.1.9.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '4bb668e6b40e3205a020ca5ee4ca8cff8b8780c5',
     ),
     'mpdf/mpdf' => 
     array (
@@ -77,6 +86,15 @@
       array (
       ),
       'reference' => 'f2246c8669bd25834f5c264425eb0e250d7a9312',
+    ),
+    'symfony/finder' => 
+    array (
+      'pretty_version' => 'v5.2.2',
+      'version' => '5.2.2.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '196f45723b5e618bf0e23b97e96d11652696ea9e',
     ),
   ),
 );
