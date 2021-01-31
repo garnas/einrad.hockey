@@ -17,7 +17,6 @@
     <div class="w3-text-black">
         <h3 class="w3-margin-left w3-text-primary"><i style="vertical-align: -16%" class="material-icons w3-xlarge">emoji_events</i> LIGA</h3>
     </div>
-    <a href="../liga/challenge.php" class="w3-bar-item w3-button">km-Challenge</a>
     <a href="../liga/jubilaeum.php" class="w3-bar-item w3-button">25 Jahre Liga</a>
     <a href="../liga/turniere.php" class="w3-bar-item w3-button">Turniere</a>
     <a href="../liga/ergebnisse.php" class="w3-bar-item w3-button">Ergebnisse</a>
@@ -38,7 +37,6 @@
     <?php if (!isset($_SESSION['team_id'])){$tc_color = 'w3-text-grey';}?>
     <div class="<?=$tc_color ?? ''?>">
         <a class="w3-bar-item w3-button" href="../teamcenter/tc_start.php">Start</a>
-        <a class="w3-bar-item w3-button" href="../teamcenter/tc_challenge.php">km-Challenge</a>
         <a class="w3-bar-item w3-button" href="../teamcenter/tc_abstimmung.php">Abstimmung</a>
         <a class="w3-bar-item w3-button" href="../teamcenter/tc_turnierliste_anmelden.php">Turnieranmeldung</a>
         <a class="w3-bar-item w3-button" href="../teamcenter/tc_turnier_erstellen.php">Turnier erstellen</a>
