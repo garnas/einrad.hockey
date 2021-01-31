@@ -84,15 +84,6 @@ include '../../templates/header.tmp.php';
             <p><?=Form::link("ueber_uns.php", "Mehr Infos")?></p> 
         </div>
 
-        <!-- Kilometer Challenge -->
-        <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
-            <a href='challenge.php' class="no">
-                <h1 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">outlined_flag</i> km-Challenge</h1>
-            </a>
-            <p class="w3-text-grey w3-small w3-border-top w3-border-grey"></p>
-            <p>Die km-Challenge wurde erfolgreich beendet. Es wurden ganze 22.771,6&nbsp;km zurückgelegt!</p>
-        </div>
-
         <!-- Anstehende Turniere -->
         <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
             <a href='turniere.php' class="no">
