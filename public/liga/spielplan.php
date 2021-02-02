@@ -12,8 +12,6 @@ $turnier_id = $_GET['turnier_id'];
 #Spielplan::delete_spielplan(new Turnier ($_GET['turnier_id']));
 
 require_once '../../logic/spielplan.logic.php'; //Erstellt Spielplanobjekt nach Validation
-db::debug($spielplan->penaltys['ausstehend']);
-db::debug($spielplan->penaltys['gesamt']);
 
 //db::debug($spielplan);
 //db::debug($spielplan->spiele);

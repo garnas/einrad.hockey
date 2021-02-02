@@ -119,13 +119,11 @@ class db
             die('<h2>Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error() . '<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
         }
 
-
-        $return = self::$link->query($sql);
         #$after = microtime(true);
         #$backtrace = array_reverse(array_column(debug_backtrace(), 'function'));
         #array_pop($backtrace);
         #Form::log('db_last.log', implode(" | ", $backtrace) . " -- ". round($after - $before, 4) . " s " . preg_replace("/\h+/", " ", $sql));
-        return $return;
+        return self::$link->query($sql);
     }
 
     /**
@@ -148,15 +146,14 @@ class db
             die('<h2>Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error() . '<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
         }
 
-        //Beschreiben der Datenbank nicht möglich
-        if (!self::$link->query($sql) === TRUE) {
+        // Beschreiben der Datenbank nicht möglich? $sql wird im if schon ausgeführt
+        if (!self::$link->query($sql)) {
             $error_text = 'Fehlgeschlagen: ' . self::$link->error;
             Form::log(self::$log_file, $error_text);
             Form::error("Fehler beim Beschreiben der Datenbank. " . Form::mailto(Config::TECHNIKMAIL));
             //Debug Form::error($sql);
             die();
         }
-    return self::$link->query($sql);
   }
 
     /**

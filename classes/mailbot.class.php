@@ -163,13 +163,14 @@ class MailBot
     public static function warning_mail()
     {
         $sql = "
-            SELECT count(*) 
+            SELECT count(*) as anzahl
             FROM mailbot 
             WHERE mail_status = 'fehler'
             ";
         $result = db::read($sql);
-        if (mysqli_num_rows($result) > 0) {
-            Form::attention("Der Mailbot kann manche Mails nicht versenden - siehe Datenbank.");
+        $anzahl = mysqli_fetch_assoc($result)['anzahl'];
+        if ($anzahl > 0) {
+            Form::attention("Der Mailbot kann $anzahl Mail(s) nicht versenden - siehe Datenbank.");
         }
     }
 

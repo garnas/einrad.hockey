@@ -13,10 +13,10 @@
         <?php foreach ($spielplan->teamliste as $team_id => $team) { ?>
             <tr>
                 <td><?= $team_id ?></td>
-                <td><?= ($team_id == $spielplan->turnier->details['ausrichter']) ? "<i class='material-icons'>house</i> " : '' ?><?= $team["teamname"] ?></td>
+                <td><?= $team["teamname"] ?></td>
                 <td><?= $team["tblock"] ?></td>
                 <td><?= $team["wertigkeit"] ?></td>
-                <td><?= (new Team($team_id))->get_teamdaten()['ligavertreter'] ?? '' ?></td>
+                <td><?= $team["ligavertreter"] ?></td>
                 <td><span class="pdf-hide"><?=Form::mailto((new Kontakt($team_id))->get_emails('public'),'E-Mail')?></span></td>
             </tr>
         <?php }//end foreach?>

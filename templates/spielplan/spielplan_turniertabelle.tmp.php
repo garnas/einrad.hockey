@@ -69,7 +69,7 @@
                         <td><?= $x['statistik']["punkte"] ?></td>
                         <td><?= $x['statistik']["tore"] ?></td>
                         <td><?= $x['statistik']["gegentore"] ?></td>
-                        <td><?= $x['statistik']["tordifferenz"] ?></td>
+                        <td><?= $x['statistik']["tordifferenz"]?></td>
                         <td><?= (($x['penalty'] && empty($x['statistik']['penalty_diff'])) or !$spielplan->check_tabelle_einblenden()) ? '--' : $x["ligapunkte"] ?></td>
                     </tr>
                 <?php }//end foreach?>

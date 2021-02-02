@@ -12,8 +12,6 @@ if (!Spielplan::check_exist($turnier_id)) {
 }
 $spielplan = new Spielplan((new Turnier ($turnier_id)));
 
-$spielplan->get_penalty_warnung();
-
 // Spielplanpause feststellen
 
 $spiel_dauer = ($spielplan->details['anzahl_halbzeiten'] * $spielplan->details['halbzeit_laenge']
@@ -33,6 +31,3 @@ $teamnamen_laengen = array_map(function ($platz) {
     return strlen($platz['teamname']);
 }, $spielplan->platzierungstabelle);
 $width_in_px = max($teamnamen_laengen) * 8; // 7.5 Durchschnittliche px-Weite eines Characters
-
-db::debug($spielplan->penaltys['ausstehend']);
-db::debug($spielplan->penaltys['gesamt']);

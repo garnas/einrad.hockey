@@ -217,10 +217,12 @@ class Turnier
     {
         $turnier_id = $this->turnier_id;
         $sql = "
-                SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam
+                SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam, teams_details.ligavertreter
                 FROM turniere_liste
                 LEFT JOIN teams_liga
                 ON turniere_liste.team_id = teams_liga.team_id
+                LEFT JOIN teams_details
+                ON turniere_liste.team_id = teams_details.team_id
                 WHERE turniere_liste.turnier_id='$turnier_id' AND turniere_liste.liste='spiele'
                 ";
         $result = db::read($sql);
@@ -260,10 +262,11 @@ class Turnier
     function delete_ergebnis()
     {
         $sql = "
-        SELECT FROM turniere_ergebnisse
+        SELECT * 
+        FROM turniere_ergebnisse
         WHERE turnier_id = $this->turnier_id
         ";
-        if (db::read($sql) !== false) return;
+        if ((db::read($sql))->num_rows == 0) return;
         $sql = "
                 DELETE FROM turniere_ergebnisse 
                 WHERE turnier_id = $this->turnier_id
@@ -304,6 +307,21 @@ class Turnier
                 VALUES ($this->turnier_id, $team_id, $ergebnis, $platz);
                 ";
         db::write($sql);
+    }
+    /**
+     * Überträgt das Turnierergebnis der Platzierungstabelle in die Datenbank
+     */
+
+    public static function set_ergebnisse(Spielplan $spielplan)
+    {
+        // Ergebnis eintragen
+        $spielplan->turnier->set_phase('ergebnis');
+        $spielplan->turnier->delete_ergebnis();
+        foreach ($spielplan->platzierungstabelle as $team_id => $ergebnis) {
+            $spielplan->turnier->set_ergebnis($team_id, $ergebnis['ligapunkte'], $ergebnis['platz']);
+        }
+        $spielplan->turnier->log("Turnierergebnis wurde in die Datenbank eingetragen");
+        Form::affirm("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
     }
 
     /********************

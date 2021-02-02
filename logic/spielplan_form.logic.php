@@ -55,8 +55,8 @@ if (isset($_POST["turnierergebnis_speichern"])) {
         $error = true;
     }
 
-    if (!$error ?? false) {
-        $spielplan->set_ergebnis();
+    if (!($error ?? false)) {
+        Turnier::set_ergebnisse($spielplan);
         header('Location: ' . db::escape($_SERVER['REQUEST_URI']));
         die();
     }
@@ -68,6 +68,6 @@ if (!(new TurnierReport($turnier_id))->kader_check()) {
     Form::affirm("Bitte kontrolliert die Teamkader und setzt im " . Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, 'Turnierreport') . " das entsprechende Häkchen.");
 }
 
-if(!$spielplan->check_penalty_ergebnisse()){
+if(!$spielplan->validate_penalty_ergebnisse()){
     Form::error("Achtung: Es liegen falsch eingetragene Penaltyergebnisse vor!.");
 }
