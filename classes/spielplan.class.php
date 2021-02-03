@@ -28,6 +28,7 @@ class Spielplan
         'ausstehend' => [],
         ];
     public array $spiele;
+    public bool $out_of_scope;
 
     /**
      * Spielplan constructor.
@@ -248,11 +249,10 @@ class Spielplan
             // mehr als ein Team direkt verglichen wird
             && count($tore_tabelle) > 1
             // Angemessene Anzahl an gespielten Spielen in der ungefilterten Turniertabelle
-            && $this->anzahl_spiele - 1 > min(array_column($this->turnier_tabelle, 'spiele'))
+            && $this->anzahl_spiele - 1 < min(array_column($this->turnier_tabelle, 'spiele'))
             // Alle Teams im direkten Vergleich haben gegeneinander gespielt
             && count($tore_tabelle) - 1 == min(array_column($turnier_tabelle, 'spiele'))
         ) $this->direkter_vergleich_tabellen[] = $turnier_tabelle;
-
         // Mit dem ersten Team gleichplatzierte Teams suchen
         $first_team_id = array_key_first($turnier_tabelle);
         $gleichplatzierte_teams = $this->get_gleichplatzierte_teams($turnier_tabelle, $first_team_id, $direkter_vergleich);
