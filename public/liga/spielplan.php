@@ -5,7 +5,8 @@
 require_once '../../logic/first.logic.php'; //autoloader und Session
 #db::write("UPDATE `spiele` SET `tore_a` = ROUND(4*RAND(),0) ,`tore_b`= ROUND(4*RAND(),0)");
 #db::write("UPDATE `spiele` SET `tore_a` = 1 ,`tore_b`= 1");
-#db::write("UPDATE `spiele` SET `penalty_a` = NULL ,`penalty_b`= NULL");
+//db::write("UPDATE `spiele` SET `penalty_a` = NULL ,`penalty_b`= NULL");
+//db::write("UPDATE `spiele` SET `tore_a` = NULL ,`tore_b`= NULL");
 
 #Spielplan::upload_spielplan(new Turnier ($_GET['turnier_id']));
 $turnier_id = $_GET['turnier_id'];

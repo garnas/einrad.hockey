@@ -28,11 +28,11 @@
                 <td class="w3-center" style="white-space: nowrap;">
                     <?= $x["teamname"] ?>
                 </td>
-                <td class="w3-hide-small"><?= $x['statistik']["spiele"] ?></td>
-                <td class="w3-hide-small"><?= $x['statistik']["punkte"] ?></td>
-                <td class="w3-hide-small"><?= $x['statistik']["tordifferenz"] ?></td>
-                <td class="w3-hide-small"><?= $x['statistik']["tore"] ?></td>
-                <td class="w3-hide-small"><?= $x['statistik']["gegentore"] ?></td>
+                <td class="w3-hide-small"><?= $x['statistik']["spiele"]?></td>
+                <td class="w3-hide-small"><?= $x['statistik']["punkte"] ?? '--'  ?></td>
+                <td class="w3-hide-small"><?= $x['statistik']["tordifferenz"] ?? '--'  ?></td>
+                <td class="w3-hide-small"><?= $x['statistik']["tore"] ?? '--'  ?></td>
+                <td class="w3-hide-small"><?= $x['statistik']["gegentore"] ?? '--'  ?></td>
                 <td><?= ($spielplan->check_penalty_team($team_id) or !$spielplan->check_tabelle_einblenden()) ? '--' : $x["ligapunkte"] ?></td>
             </tr>
         <?php }//end foreach?>
