@@ -26,9 +26,11 @@ class Spielplan
     public array $penaltys = [
         'gesamt' => [],
         'ausstehend' => [],
-        ];
+        'kontrolle' => []
+    ];
     public array $spiele;
-    public bool $out_of_scope;
+    public bool $out_of_scope = false;
+    public array $penalty_tabellen = [];
 
     /**
      * Spielplan constructor.
@@ -48,13 +50,8 @@ class Spielplan
         $this->spiele = $this->get_spiele();
         $this->tore_tabelle = $this->get_toretabelle($penaltys);
         $this->turnier_tabelle = self::get_sorted_turniertabelle($this->tore_tabelle);
-        $this->direkter_vergleich($this->tore_tabelle);
-        $this->set_wertigkeiten(); // $this->platzierungstabelle wird gesetzt
-
-        // Alle zu spielenden Penaltyspiele lassen sich nur bekommen, wenn die Penaltyergebnisse ignoriert werden
-        if ($penaltys){
-            $this->penaltys['gesamt'] = (new Spielplan($this->turnier, false))->penaltys['ausstehend'];
-        }
+        $this->set_platzierungen($this->tore_tabelle);
+        $this->set_wertigkeiten();
     }
 
     /**
@@ -142,7 +139,7 @@ class Spielplan
     {
         foreach ($this->spiele as $spiel) {
 
-            if(!$penaltys) $spiel['penalty_a'] = $spiel['penalty_b'] = NULL;
+            if (!$penaltys) $spiel['penalty_a'] = $spiel['penalty_b'] = NULL;
 
             $tore_tabelle[$spiel['team_id_a']][$spiel['team_id_b']] =
                 [
@@ -200,8 +197,8 @@ class Spielplan
     {
         // Punkte zählen
         foreach ($tore_tabelle as $team_id => $team_spiele) {
-            $punkte = $tordifferenz = $gegentore = $tore = $penalty_diff = $penalty_tore = $penalty_punkte = NULL;
-            $spiele = 0;
+            $punkte = $tordifferenz = $gegentore = $tore = $penalty_diff = $penalty_tore = $penalty_gegentore = $penalty_punkte = NULL;
+            $spiele = $penalty_spiele = 0;
             foreach ($team_spiele as $spiel) {
                 if (is_null($spiel['tore']) or is_null($spiel['gegentore'])) continue;
                 $punkte += ($spiel['tore'] > $spiel['gegentore']) ? 3 : 0;
@@ -216,101 +213,187 @@ class Spielplan
                 $penalty_punkte += ($spiel['penalty_tore'] == $spiel['penalty_gegentore']) ? 1 : 0;
                 $penalty_diff += $spiel['penalty_tore'] - $spiel['penalty_gegentore'];
                 $penalty_tore += $spiel['penalty_tore'];
+                $penalty_gegentore += $spiel['penalty_gegentore'];
+                $penalty_spiele += 1;
             }
             // Turniertabelle beschreiben
             $turnier_tabelle[$team_id] =
                 [
                     'spiele' => $spiele,
                     'punkte' => $punkte,
-                    'tordifferenz' => $tordifferenz,
+                    'penalty_spiele' => $penalty_spiele,
+                    'tordifferenz' =>  $tordifferenz,
                     'tore' => $tore,
                     'gegentore' => $gegentore,
                     'penalty_punkte' => $penalty_punkte,
                     'penalty_diff' => $penalty_diff,
-                    'penalty_tore' => $penalty_tore
+                    'penalty_tore' => $penalty_tore,
+                    'penalty_gegentore' => $penalty_gegentore
                 ];
         }
         return $turnier_tabelle ?? [];
     }
 
-    /**
-     * Ausführung des direkten Vergleiches. Das Endresultat wird in $this->platzeriungs_tabelle platziert.
-     *
-     * @param array $tore_tabelle Toretabelle, auf welcher Grundlage der Vergleich ausgeführt wird
-     * @param bool $direkter_vergleich Es ist ein direkter Vergleich, und die Erstsortierung nur nach erreichten Turnierpunkten
-     */
-    public function direkter_vergleich(array $tore_tabelle, bool $direkter_vergleich = false)
+    public function set_platzierungen($tore_tabelle)
     {
         $turnier_tabelle = self::get_sorted_turniertabelle($tore_tabelle); // neue Turniertabelle erstellen
-
-        // Den direkten Vergleich abspeichern, wenn
-        if (// es sich um einen direkten Vergleich handelt
-            $direkter_vergleich
-            // mehr als ein Team direkt verglichen wird
-            && count($tore_tabelle) > 1
-            // Angemessene Anzahl an gespielten Spielen in der ungefilterten Turniertabelle
-            && $this->anzahl_spiele - 1 < min(array_column($this->turnier_tabelle, 'spiele'))
-            // Alle Teams im direkten Vergleich haben gegeneinander gespielt
-            && count($tore_tabelle) - 1 == min(array_column($turnier_tabelle, 'spiele'))
-        ) $this->direkter_vergleich_tabellen[] = $turnier_tabelle;
         // Mit dem ersten Team gleichplatzierte Teams suchen
         $first_team_id = array_key_first($turnier_tabelle);
-        $gleichplatzierte_teams = $this->get_gleichplatzierte_teams($turnier_tabelle, $first_team_id, $direkter_vergleich);
+        $gleichplatzierte_teams = $this->get_gleichplatzierte_teams($turnier_tabelle, $first_team_id, "erster_vergleich");
 
         // Fall 1: Team ist eindeutig platzierbar, da das erste Team in der sortierten Turniertabelle
         // nur mit sich selbst gleichplatziert ist.
         if (count($gleichplatzierte_teams) === 1) {
             $this->set_platzierung($first_team_id);
             self::remove_team_ids($tore_tabelle, [$first_team_id]); // Werden aus der Toretabelle entfernt
-            if (count($tore_tabelle) != 0) self::direkter_vergleich($tore_tabelle,  $direkter_vergleich);
-            return;
-        }
-
-        // Fall 2: Team ist nicht eindeutig platzierbar, es muss ein neuer direkter Vergleich mit Untertabelle erstellt werden
-        if (count($gleichplatzierte_teams) < count($turnier_tabelle)) {
-            // Toretabelle mit nur den gleichplatzierten Teams
-            $tore_tabelle_gleiche_teams = self::filter_team_ids($tore_tabelle, $gleichplatzierte_teams);
-            self::direkter_vergleich($tore_tabelle_gleiche_teams,  true);
-            // Toretabelle ohne die gleichplatzierten Teams
-            self::remove_team_ids($tore_tabelle, $gleichplatzierte_teams);
-            if (count($tore_tabelle) != 0) self::direkter_vergleich($tore_tabelle,  $direkter_vergleich);
-            return;
-        }
-
-        // Fall 3: Alle Teams in der Tabelle sind gleichplatziert, ein erneutes Anwenden des direkten Vergleichs hätte keine Wirkung mehr.
-        if ($direkter_vergleich && self::filter_team_ids($tore_tabelle, $gleichplatzierte_teams) == $tore_tabelle) {
-            // Penalty-Schießen
-            foreach ($gleichplatzierte_teams as $team_id) {
-                $this->set_platzierung($team_id, true);
-            }
-            if ($this->check_penalty_unvermeidbar($gleichplatzierte_teams)){
-                $this->penaltys['ausstehend'] =
-                    array_merge($this->penaltys['ausstehend'], $this->get_spiel_ids($gleichplatzierte_teams));
-            }
+            if (count($tore_tabelle) != 0) self::set_platzierungen($tore_tabelle);
         } else {
-            // Da wir nicht im direkten Vergleich waren, werden sie jetzt hineingeschickt mit den Begegnungen untereinander
-            $tore_tabelle = self::filter_team_ids($tore_tabelle, $gleichplatzierte_teams);
-            self::direkter_vergleich($tore_tabelle,  true);
+            // Direkter Vergleich mit nur den gleichplatzierten Teams in den nicht-ersten Vergleich
+            $tore_tabelle_gleiche_teams = self::filter_team_ids($tore_tabelle, $gleichplatzierte_teams);
+            self::direkter_vergleich($tore_tabelle_gleiche_teams, true);
+
+            // Forführung des ersten Vergleichs ohne die gleichplatzierten Teams
+            self::remove_team_ids($tore_tabelle, $gleichplatzierte_teams);
+            if (count($tore_tabelle) != 0) self::set_platzierungen($tore_tabelle);
+        }
+        if (count($tore_tabelle) == 0){ // Zuletzt werden die noch zu spielenden Penaltys ermittelt
+            foreach($this->penaltys['gesamt'] as $spiel_id){
+                if(
+                    is_null($this->spiele[$spiel_id]['penalty_a'])
+                    or is_null($this->spiele[$spiel_id]['penalty_b'])
+                ){
+                    $this->penaltys['ausstehend'][] = $spiel_id;
+                }
+            }
         }
     }
 
-     /**
+    public function direkter_vergleich($tore_tabelle, $print = false)
+    {
+        // Fall 0: Nur ein Team verblieben
+        if (count($tore_tabelle) == 1){
+            $this->set_platzierung(array_key_first($tore_tabelle));
+            return;
+        }
+        $turnier_tabelle = self::get_sorted_turniertabelle($tore_tabelle); // neue Turniertabelle erstellen
+        // Direktervergleich Tabelle ausgeben
+        if ($print && $this->check_ergebnis_fix(array_keys($tore_tabelle)))
+            $this->direkter_vergleich_tabellen[] = $turnier_tabelle;
+
+        // Mit dem ersten Team gleichplatzierte Teams suchen
+        $first_team_id = array_key_first($turnier_tabelle);
+        $gleichplatzierte_teams = $this->get_gleichplatzierte_teams($turnier_tabelle, $first_team_id, "direkter_vergleich");
+
+        // Fall 1: Team ist eindeutig platzierbar, da das erste Team in der sortierten Turniertabelle
+        // nur mit sich selbst gleichplatziert ist.
+        if (count($gleichplatzierte_teams) === 1) {
+            $this->set_platzierung($first_team_id);
+            self::remove_team_ids($tore_tabelle, [$first_team_id]); // Werden aus der Toretabelle entfernt
+            if (count($tore_tabelle) != 0) self::direkter_vergleich($tore_tabelle);
+            return;
+        }
+        // Fall 2: Team ist nicht eindeutig platzierbar, es muss ein neuer direkter Vergleich mit Untertabelle erstellt werden
+        if (count($gleichplatzierte_teams) < count($turnier_tabelle)) {
+            // Toretabelle mit nur den gleichplatzierten Teams in den nicht-ersten Vergleich
+            $tore_tabelle_gleiche_teams = self::filter_team_ids($tore_tabelle, $gleichplatzierte_teams);
+            self::direkter_vergleich($tore_tabelle_gleiche_teams, true);
+            // Toretabelle ohne die gleichplatzierten Teams
+            self::remove_team_ids($tore_tabelle, $gleichplatzierte_teams);
+            if (count($tore_tabelle) != 0) self::direkter_vergleich($tore_tabelle);
+            return;
+        }
+        // Fall 3:
+        // Tabelle besteht nur aus gleichplatzierten Teams also ab in den Penalty-Vergleich
+        // Mit einer Tortabelle, in welcher nur die Spiele der gleichplatzierten Teams gezählt werden
+        $tore_tabelle_gefiltert = self::filter_team_ids($tore_tabelle, $gleichplatzierte_teams);
+        if ($tore_tabelle != $tore_tabelle_gefiltert){
+            self::direkter_vergleich($tore_tabelle_gefiltert, true);
+        }else{
+            if ($this->check_ergebnis_fix($gleichplatzierte_teams))
+                $this->penaltys['gesamt'] =
+                    array_merge($this->penaltys['gesamt'], $this->get_spiel_ids($gleichplatzierte_teams));
+            self::penalty_vergleich($tore_tabelle, true);
+        }
+    }
+
+    public function penalty_vergleich($tore_tabelle, $print = false)
+    {
+        // Fall 0: Nur ein Team verblieben
+        if (count($tore_tabelle) == 1){
+            $this->set_platzierung(array_key_first($tore_tabelle));
+            return;
+        }
+        // neue Turniertabelle erstellen und ggf ausgeben
+        $turnier_tabelle = self::get_sorted_turniertabelle($tore_tabelle);
+        if ($print && $this->check_ergebnis_fix(array_keys($turnier_tabelle)))
+            $this->penalty_tabellen[] = $turnier_tabelle;
+        // Mit dem ersten Team gleichplatzierte Teams suchen
+        $first_team_id = array_key_first($turnier_tabelle);
+        $gleichplatzierte_teams = $this->get_gleichplatzierte_teams($turnier_tabelle, $first_team_id, "penalty_vergleich");
+        if (count($gleichplatzierte_teams) === 1) {
+            $this->set_platzierung($first_team_id);
+            self::remove_team_ids($tore_tabelle, [$first_team_id]); // Werden aus der Toretabelle entfernt
+            if (count($tore_tabelle) != 0) self::penalty_vergleich($tore_tabelle);
+            return;
+        }
+
+        // Fall 2: Team ist nicht eindeutig platzierbar, es kann ein neuer Vergleich mit Untertabelle erstellt werden
+        if (count($gleichplatzierte_teams) < count($turnier_tabelle)) {
+            // Tabelle mit nur den gleichplatzierten Teams und deren Spiele
+            $tore_tabelle_gleiche_teams = self::filter_team_ids($tore_tabelle, $gleichplatzierte_teams);
+            self::penalty_vergleich($tore_tabelle_gleiche_teams, true);
+            // Tabelle ohne die gleichplatzierten Teams
+            self::remove_team_ids($tore_tabelle, $gleichplatzierte_teams);
+            if (count($tore_tabelle) != 0) self::penalty_vergleich($tore_tabelle);
+            return;
+        }
+
+        // Fall 3: Team ist nicht eindeutig platzierbar, ein neuer Vergleich ändert nichts
+        if (self::filter_team_ids($tore_tabelle, $gleichplatzierte_teams) != $tore_tabelle) {
+            $this->penalty_vergleich(self::filter_team_ids($tore_tabelle, $gleichplatzierte_teams), true);
+        } else {
+            if ($this->check_ergebnis_fix($gleichplatzierte_teams))
+                $this->penaltys['kontrolle'] = $this->get_spiel_ids($gleichplatzierte_teams);
+            // Eine weitere Sortierung ist nicht mehr möglich, Penaltys müssen gespielt werden
+            foreach ($gleichplatzierte_teams as $team_id) {
+                $this->set_platzierung($team_id);
+            }
+        }
+    }
+
+    /**
      * Gibt ein Array der team_ids von mit einem Team gleichplatzierten Teams.
      * Gibt nur eine team_id aus, wenn das übergebene Team nur mit sich selbst gleichplatziert ist,
      * also eindeutig Platzierbar ist.
      *
      * @param array $turnier_tabelle Turniertabelle als Grundlage für Gleichplatzierung
      * @param int $team_id Team-ID des Teams, nach dem gleichplatzierte Teams gesucht werden sollen
-     * @param bool $direkter_vergleich Handelt es sich um die Erstsortierung, oder um einen direkten Vergleich?
+     * @param string $art Um welche art des Vergleiches handelt es sich?
      * @return array Array der team_ids
      */
-    private function get_gleichplatzierte_teams(array $turnier_tabelle, int $team_id, bool $direkter_vergleich = false): array
+    private function get_gleichplatzierte_teams(array $turnier_tabelle, int $team_id, $art = 'erster_vergleich'): array
     {
         $match = $turnier_tabelle[$team_id];
-        $function = function ($value) use ($match, $direkter_vergleich) {
-            if ($direkter_vergleich) return $value == $match; // Teams mit identischer Direkter-Vergleich-Tabelle
-            return $value['punkte'] == $match['punkte']; // Nur Punkte vergleichen, wenn nicht im direkten Vergleich
-        };
+        unset($match['spiele'], $match['penalty_spiele']);
+            // Anzahl der Spiele und Anzahl der Penaltys sollen nicht berücksichtigt werden.
+        if ($art == 'erster_vergleich'){
+            $function = function ($value) use ($match) {
+                return $value['punkte'] == $match['punkte'];
+            };
+        }elseif($art == 'direkter_vergleich'){
+            $function = function ($value) use ($match) {
+                return ($value['punkte'] == $match['punkte']
+                        && $value['tordifferenz'] == $match['tordifferenz']
+                        && $value['tore'] == $match['tore']);
+            };
+        }else{
+            $function = function ($value) use ($match) {
+                return ($value['penalty_punkte'] == $match['penalty_punkte']
+                    && $value['penalty_diff'] == $match['penalty_diff']
+                    && $value['penalty_tore'] == $match['penalty_tore']);
+            };
+        }
+
         return array_keys(array_filter($turnier_tabelle, $function)); // Wenn es mehrere gleiche Teams gibt: false
     }
 
@@ -318,9 +401,8 @@ class Spielplan
      * Platziert ein Team in $this->platzierungstabelle
      *
      * @param int $team_id Team-ID des Teams, welches platziert werden soll
-     * @param bool $penalty Steht noch ein Penalty aus?
      */
-    private function set_platzierung(int $team_id, bool $penalty = false)
+    private function set_platzierung(int $team_id)
     {
         $this->platzierungstabelle[$team_id] =
             [
@@ -328,7 +410,6 @@ class Spielplan
                 'teamname' => $this->teamliste[$team_id]['teamname'],
                 'ligapunkte' => 0,
                 'statistik' => $this->turnier_tabelle[$team_id],
-                'penalty' => $penalty
             ];
     }
 
@@ -393,7 +474,7 @@ class Spielplan
      * @param array $team_ids Array der Penalty-Teams
      * @return bool
      */
-    public function check_penalty_unvermeidbar(array $team_ids): bool
+    public function check_ergebnis_fix(array $team_ids): bool
     {
         // Hilfsfunktion für erreichbare Punkte eines Teams
         $vergleich = function ($team_id) {
@@ -419,6 +500,62 @@ class Spielplan
         } // foreach Penalty-Teams
         return true;
     }
+//    public function get_erreichbare_plaetze($team_id){
+/*        $spielplan = new Spielplan ($turnier_id);
+        foreach($spielplan->spiele as $spiel_id => $spiel){
+            if ($spiel['team_id_a'] == $team_id){
+                if (is_null($spiel['tore_a']) $spielplan->spiele[$spiel_id]['tore_a'] = 127;
+                if (is_null($spiel['penalty_a']) $spielplan->spiele[$spiel_id]['penalty_a'] = 127;
+                if (is_null($spiel['tore_b']) $spielplan->spiele[$spiel_id]['tore_b'] = 0;
+                if (is_null($spiel['penalty_b']) $spielplan->spiele[$spiel_id]['penalty_b'] = 0;
+            }
+            if ($spiel['team_id_b'] == $team_id){
+                if (is_null($spiel['tore_a']) $spielplan->spiele[$spiel_id]['tore_a'] = 0;
+                if (is_null($spiel['penalty_a']) $spielplan->spiele[$spiel_id]['penalty_a'] = 0;
+                if (is_null($spiel['tore_b']) $spielplan->spiele[$spiel_id]['tore_b'] = 127;
+                if (is_null($spiel['penalty_b']) $spielplan->spiele[$spiel_id]['penalty_b'] = 127;
+            }
+        }
+            unset($spielplan->platzierungstabelle);
+            $spielplan->set_platzierungen($spielplan->get_toretabelle());
+            $max_platz = $spielplan->platzierungstabelle[$team_id]['platz']);
+        foreach($spielplan->spiele as $spiel_id => $spiel){
+            if ($spiel['team_id_a'] == $team_id){
+                if (is_null($spiel['tore_a']) $spielplan->spiele[$spiel_id]['tore_a'] = 0;
+                if (is_null($spiel['penalty_a']) $spielplan->spiele[$spiel_id]['penalty_a'] = 0;
+                if (is_null($spiel['tore_b']) $spielplan->spiele[$spiel_id]['tore_b'] = 127;
+                if (is_null($spiel['penalty_b']) $spielplan->spiele[$spiel_id]['penalty_b'] = 127;
+            }
+            if ($spiel['team_id_b'] == $team_id){
+                if (is_null($spiel['tore_a']) $spielplan->spiele[$spiel_id]['tore_a'] = 127;
+                if (is_null($spiel['penalty_a']) $spielplan->spiele[$spiel_id]['penalty_a'] = 127;
+                if (is_null($spiel['tore_b']) $spielplan->spiele[$spiel_id]['tore_b'] = 0;
+                if (is_null($spiel['penalty_b']) $spielplan->spiele[$spiel_id]['penalty_b'] = 0;
+            }
+            unset($spielplan->platzierungstabelle);
+            $spielplan->set_platzierungen($spielplan->get_toretabelle());
+            $min_platz = $spielplan->platzierungstabelle[$team_id]['platz']);
+        }*/
+//        // Hilfsfunktion für erreichbare Punkte eines Teams
+//        $vergleich = function ($team_id) {
+//            $return['punkte_min'] = $this->turnier_tabelle[$team_id]['punkte'];
+//            $return['punkte_max'] =
+//                $return['punkte_min'] + ($this->anzahl_spiele - $this->turnier_tabelle[$team_id]['spiele']) * 3;
+//            return $return;
+//        };
+//        $max_punkte = $vergleich($team_id)['punkte_max'];
+//        $min_punkte = $this->turnier_tabelle[$team_id]['punkte'];
+//        $bester_platz = $this->anzahl_teams;
+//        $letzter_platz = 1;
+//        foreach (array_keys($this->turnier_tabelle) as $key => $vgl_team_id) {
+//            // Welche Plätze kann as Team noch erreichen?
+//            if ($vergleich($vgl_team_id)['punkte_min'] <= $max_punkte) $bester_platz = min([$bester_platz, $key + 1]);
+//            if ($vergleich($vgl_team_id)['punkte_max'] >= $min_punkte) $letzter_platz = max([$letzter_platz, $key + 1]);
+//        } // foreach Teams auf dem Turnier
+//        db::debug($bester_platz.$letzter_platz);
+//        return ($bester_platz == $letzter_platz) ? $bester_platz : $bester_platz . '-' . $letzter_platz;
+//    }
+
 
     /**
      * Erstellt einen Spielplan in der Datenbank
@@ -524,9 +661,10 @@ class Spielplan
         $penaltys = ($ausstehend) ? $this->penaltys['ausstehend'] : $this->penaltys['gesamt'];
         return in_array($spiel_id, $penaltys);
     }
+
     public function check_penalty_team(int $team_id): bool
     {
-        foreach ($this->penaltys['ausstehend'] as $spiel_id){
+        foreach ($this->penaltys['ausstehend'] as $spiel_id) {
             if (
                 $this->spiele[$spiel_id]['team_id_a'] == $team_id
                 or $this->spiele[$spiel_id]['team_id_b'] == $team_id
@@ -569,7 +707,7 @@ class Spielplan
         foreach ($this->spiele as $spiel_id => $spiel) {
             if ((!is_null($spiel['penalty_a']) or !is_null($spiel['penalty_b']))
                 && !in_array($spiel_id, $this->penaltys['gesamt'])
-                ) return false;
+            ) return false;
             // Es wurde also ein Penalty bei einem Spiel eingetragen, bei welchem kein Penalty vorgesehen ist.
         }
         return true;
@@ -600,9 +738,10 @@ class Spielplan
         return 0 < min(array_column($this->turnier_tabelle, 'spiele'));
     }
 
-    public function get_spiel_ids(array $team_ids): array{
-        foreach ($this->spiele as $spiel_id => $spiel){
-            if(in_array($spiel['team_id_a'], $team_ids) && in_array($spiel['team_id_b'], $team_ids))
+    public function get_spiel_ids(array $team_ids): array
+    {
+        foreach ($this->spiele as $spiel_id => $spiel) {
+            if (in_array($spiel['team_id_a'], $team_ids) && in_array($spiel['team_id_b'], $team_ids))
                 $return[] = $spiel_id;
         }
         return $return ?? [];

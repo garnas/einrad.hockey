@@ -1,9 +1,5 @@
 <!-- ABSCHLUSSTABELLE -->
 <h3 class="w3-text-secondary w3-margin-top">Tabelle</h3>
-<?php if (!$spielplan->check_tabelle_einblenden()) { ?>
-    <p class="w3-text-grey">Platzierungen und Ligapunkte werden angezeigt, sobald jedes Team mindestens ein Spiel
-        gespielt hat.</p>
-<?php } // endif?>
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-centered <?= (($teamcenter or $ligacenter) && $spielplan->turnier->details['phase'] == 'ergebnis') ? 'w3-pale-green' : 'w3-striped' ?>">
         <tr class="w3-primary">
@@ -11,9 +7,9 @@
             <th><i class="material-icons">group</i><br>Team</th>
             <th class="w3-hide-small"><i class="material-icons">sports_hockey</i><br>Spiele</th>
             <th class="w3-hide-small"><i class="material-icons">workspaces</i><br>Punkte</th>
+            <th class="w3-hide-small"><i class="material-icons">drag_handle</i><br>Differenz</th>
             <th class="w3-hide-small"><i class="material-icons">add</i><br>Tore</th>
             <th class="w3-hide-small"><i class="material-icons">remove</i><br>Gegentore</th>
-            <th class="w3-hide-small"><i class="material-icons">drag_handle</i><br>Differenz</th>
             <th><i class="material-icons">emoji_events</i><br>Ligapunkte</th>
         </tr>
         <?php foreach ($spielplan->platzierungstabelle as $team_id => $x) { ?>
@@ -34,9 +30,9 @@
                 </td>
                 <td class="w3-hide-small"><?= $x['statistik']["spiele"] ?></td>
                 <td class="w3-hide-small"><?= $x['statistik']["punkte"] ?></td>
+                <td class="w3-hide-small"><?= $x['statistik']["tordifferenz"] ?></td>
                 <td class="w3-hide-small"><?= $x['statistik']["tore"] ?></td>
                 <td class="w3-hide-small"><?= $x['statistik']["gegentore"] ?></td>
-                <td class="w3-hide-small"><?= $x['statistik']["tordifferenz"] ?></td>
                 <td><?= ($spielplan->check_penalty_team($team_id) or !$spielplan->check_tabelle_einblenden()) ? '--' : $x["ligapunkte"] ?></td>
             </tr>
         <?php }//end foreach?>
@@ -52,6 +48,7 @@
         <div class="w3-responsive w3-card">
             <table class="w3-table w3-centered w3-striped">
                 <tr class="w3-primary">
+                    <th><i class="material-icons">bar_chart</i><br>Platz</th>
                     <th><i class="material-icons">bar_chart</i><br>Platz</th>
                     <th><i class="material-icons">group</i><br>Team</th>
                     <th><i class="material-icons">sports_hockey</i><br>Spiele</th>

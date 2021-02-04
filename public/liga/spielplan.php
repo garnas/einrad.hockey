@@ -13,12 +13,7 @@ $turnier_id = $_GET['turnier_id'];
 
 require_once '../../logic/spielplan.logic.php'; //Erstellt Spielplanobjekt nach Validation
 
-//db::debug($spielplan);
-//db::debug($spielplan->spiele);
-//db::debug($spielplan->get_spiel_ids([312,610]));
-#db::debug($spielplan->get_penalty_begegnungen());
-#db::debug($spielplan->penalty_begegnungen);
-#db::debug($spielplan->ausstehende_penalty_begegnungen);
+db::debug($spielplan->penaltys);
 /*
 $function = function ($mean, $sd){
     $x = mt_rand()/mt_getrandmax();
