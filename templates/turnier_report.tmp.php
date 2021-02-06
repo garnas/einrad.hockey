@@ -1,7 +1,8 @@
-<h1 class="w3-text-primary"><?=date("d.m.Y", strtotime($akt_turnier->details['datum']))?> <?=$akt_turnier->details['ort']?> <i>(<?=$akt_turnier->details['tblock']?>)</i></h1>
+<h1 class="w3-text-primary"><?=date("d.m.Y", strtotime($turnier->details['datum']))?> <?=$turnier->details['ort']?> <i>(<?=$turnier->details['tblock']?>)</i></h1>
 <h2 class="w3-text-grey"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">article</i> Turnier-Report</h2>
-
-<!-- LINK TURNIERREPORT -->
+<?php Form::schreibe_attention("Der Turnierreport ist
+        nur von andere Ligateams und dem Ligaausschuss der Deutschen Einradhockeyliga einsehbar.") ?>
+<!-- Link Spielplan -->
 <p><?=Form::link('../liga/spielplan.php?turnier_id=' . $turnier_id, '<i class="material-icons">reorder</i> Zum Spielplan')?></p>
 
 <!-- Ausbilder -->
@@ -21,6 +22,7 @@
         <li class="w3-hover-tertiary" style="cursor: pointer;" onclick="openTab('<?=$team_id?>')"><?=Team::teamid_to_teamname($team_id)?></li>
     </ul>
 <?php }//end foreach?>
+
 <?php foreach ($kader_array as $team_id => $kader){?> 
     <div id="<?=$team_id?>" class="tab" style="display:none; max-width: 600px">
         <?php if(!empty($kader)){?>
@@ -198,12 +200,26 @@
 <?php if($change_tbericht){ ?>
     <form method="post">
         <p>
-            <input <?php if($tbericht->kader_check()){?>checked<?php }//endif?> class="w3-check" value="kader_checked" type="checkbox" name="kader_check" id="kader_check"></input>
+            <input <?php if($tbericht->kader_check()){?>checked<?php }//endif?>
+                   class="w3-check"
+                   value="kader_checked"
+                   type="checkbox"
+                   name="kader_check"
+                   id="kader_check"
+                   onchange="this.form.submit()"
+            >
             <label for="kader_check" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer;"> Kader wurden kontrolliert</label>           
         </p>
         <p>
-            <label for="spieler_id">Turnierbericht</label>
-            <textarea class="w3-input w3-border w3-border-primary" onkeyup="woerter_zaehlen(1500, 'turnierbericht', 'turnierbericht_counter');" maxlength="1500" placeholder="Wie war das Turnier? Besondere Vorkomnisse werden hier vermerkt." rows="12" id="turnierbericht" name="turnierbericht"><?=stripcslashes($_POST['text'] ?? '')?><?=$tbericht->get_turnier_bericht()?></textarea>
+            <label for="turnierbericht">Turnierbericht</label>
+            <textarea class="w3-input w3-border w3-border-primary"
+                      onkeyup="woerter_zaehlen(1500, 'turnierbericht', 'turnierbericht_counter');"
+                      maxlength="1500"
+                      placeholder="Wie war das Turnier? Besondere Vorkomnisse werden hier vermerkt."
+                      rows="12"
+                      id="turnierbericht"
+                      name="turnierbericht"
+            ><?=stripcslashes($_POST['text'] ?? '')?><?=$tbericht->get_turnier_bericht()?></textarea>
             <p id="turnierbericht_counter"><p>
         </p>
         <input type="submit" value="Speichern" name="set_turnierbericht" class="w3-button w3-tertiary">

@@ -309,10 +309,11 @@ class Turnier
         db::write($sql);
         $this->log("Ergebnis eingetragen: $platz. " . Team::teamid_to_teamname($team_id) . "($ergebnis Punkte)");
     }
+
     /**
      * Überträgt das Turnierergebnis der Platzierungstabelle in die Datenbank
+     * @param Spielplan $spielplan
      */
-
     public static function set_ergebnisse(Spielplan $spielplan)
     {
         // Ergebnis eintragen
@@ -658,7 +659,7 @@ class Turnier
      * @param string $turnier_block
      * @return bool
      */
-    public static function check_team_block_freilos_static($team_block, $turnier_block): bool
+    public static function check_team_block_freilos_static(string $team_block, string $turnier_block): bool
     {
         //Check ob es sich um einen Block-Turnier handelt (nicht spass, finale, oder fix)
         if (in_array($turnier_block, Config::BLOCK_ALL)) {
@@ -706,9 +707,9 @@ class Turnier
      */
     function get_spielplan_link(): string
     {
-        if (empty($this->details['link_spielplan']))
-            return Config::BASE_LINK . '/liga/spielplan.php?turnier_id=' . $this->turnier_id;
-        return $this->details['link_spielplan'];
+        return  (empty($this->details['link_spielplan']))
+                ? Config::BASE_LINK . '/liga/spielplan.php?turnier_id=' . $this->turnier_id
+                : $this->details['link_spielplan'];
     }
 
     /**
@@ -717,9 +718,9 @@ class Turnier
      */
     function get_spielplan_link_tc(): string
     {
-        if (empty($this->details['link_spielplan']))
-            return '../teamcenter/tc_spielplan.php?turnier_id=' . $this->turnier_id;
-        return $this->details['link_spielplan'];
+        return (empty($this->details['link_spielplan']))
+            ? '../teamcenter/tc_spielplan.php?turnier_id=' . $this->turnier_id
+            : $this->details['link_spielplan'];
     }
 
     /**
@@ -728,9 +729,9 @@ class Turnier
      */
     function get_spielplan_link_lc(): string
     {
-        if (empty($this->details['link_spielplan']))
-            return '../ligacenter/lc_spielplan.php?turnier_id=' . $this->turnier_id;
-        return $this->details['link_spielplan'];
+        return (empty($this->details['link_spielplan']))
+            ? '../teamcenter/lc_spielplan.php?turnier_id=' . $this->turnier_id
+            : $this->details['link_spielplan'];
     }
 
     /**
@@ -915,26 +916,25 @@ class Turnier
     function delete($grund = '')
     {
         db::db_sichern();
-        $turnier_id = $this->turnier_id;
         $ort = $this->details['ort'];
         $datum = $this->details['datum'];
         $saison = $this->details['saison'];
 
-        //Turnier in der Datenbank vermerken
+        // Turnier in der Datenbank vermerken
         $sql = "
                 INSERT INTO turniere_geloescht (turnier_id, datum, ort, grund, saison) 
-                VALUES ('$turnier_id','$datum','$ort','$grund','$saison'
+                VALUES ('$this->turnier_id','$datum','$ort','$grund','$saison')
                 ";
         db::write($sql);
 
-        //Turnier aus der Datenbank löschen
+        // Turnier aus der Datenbank löschen
         $sql = "
                 DELETE FROM turniere_liga 
-                WHERE turnier_id = $turnier_id
+                WHERE turnier_id = $this->turnier_id
                 ";
         db::write($sql);
 
-        //Spieltage neu sortieren
+        // Spieltage neu sortieren
         Ligabot::set_spieltage();
     }
 

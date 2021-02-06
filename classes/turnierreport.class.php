@@ -171,22 +171,21 @@ class TurnierReport
      */
     function set_turnier_bericht(string $bericht, string $kader_check = 'Nein')
     {
-        $turnier_id = $this->turnier_id;
         // Existiert bereits ein Turnierbericht?
         $check = db::read("
                                 SELECT * FROM turniere_berichte 
-                                WHERE turnier_id = '$turnier_id'
+                                WHERE turnier_id = $this->turnier_id
                                 ");
         if (mysqli_num_rows($check) == 0) {
             $sql = "
                     INSERT INTO turniere_berichte (turnier_id, bericht, kader_ueberprueft)
-                    VALUES ('$turnier_id', '$bericht', '$kader_check')
+                    VALUES ($this->turnier_id, '$bericht', '$kader_check')
                     ";
         } else {
             $sql = "
                     UPDATE turniere_berichte 
                     SET bericht='$bericht', kader_ueberprueft = '$kader_check' 
-                    WHERE turnier_id = '$turnier_id'
+                    WHERE turnier_id = $this->turnier_id
                     ";
         }
         db::write($sql);

@@ -14,6 +14,18 @@ $titel = "Ergebnisse eintragen | Teamcenter";
 $content = "Der Spielplan für das Einradhockey-Turnier in ". $spielplan->turnier->details['ort'] . " am " . date("d.m.Y", strtotime($spielplan->turnier->details['datum']));
 include '../../templates/header.tmp.php';
 include '../../templates/spielplan/spielplan_titel.tmp.php'; // Titel
+?>
+
+<h3>Bitte ausfüllen</h3>
+<p>
+    <a href="<?=CONFIG::BASE_LINK?>/teamcenter/tc_turnier_report.php?turnier_id=<?= $spielplan->turnier_id ?>"
+       class="w3-button w3-tertiary w3-block"
+    >
+            <i class="material-icons">report</i> Turnierreport + Teamkader
+    </a>
+</p>
+
+<?php
 include '../../templates/spielplan/spielplan_tore_eintragen.tmp.php'; // Spielplan -> Formular übertragen
 include '../../templates/spielplan/spielplan_turniertabelle.tmp.php'; // Turniertabelle
 include '../../templates/spielplan/spielplan_ergebnis_senden.tmp.php'; // Ergebnis senden
