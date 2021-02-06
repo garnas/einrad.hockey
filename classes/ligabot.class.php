@@ -247,8 +247,8 @@ class LigaBot
         return $gelost ?? false;
     }
 
-    //Alle I,II,III Turniere werden in die Offene Phase geschickt
-    //Fürs Debugging
+    // Alle I,II,III Turniere werden in die Offene Phase geschickt
+    // Fürs Debugging
     /*
     public static function zuruecksetzen()
     {

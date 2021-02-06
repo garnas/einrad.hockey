@@ -243,7 +243,12 @@ class Spielplan
         return $turnier_tabelle ?? [];
     }
 
-    public function set_platzierungen($tore_tabelle)
+    /**
+     * Sortiert die Turniertabelle und wendet ggf. den direkten Vergleich an.
+     *
+     * @param array $tore_tabelle
+     */
+    public function set_platzierungen(array $tore_tabelle)
     {
         $turnier_tabelle = self::get_sorted_turniertabelle($tore_tabelle); // neue Turniertabelle erstellen
         // Mit dem ersten Team gleichplatzierte Teams suchen
@@ -277,7 +282,13 @@ class Spielplan
         }
     }
 
-    public function direkter_vergleich($tore_tabelle, $print = false)
+    /**
+     * Direkter Vergleich
+     *
+     * @param $tore_tabelle
+     * @param false $print Soll er ausgegeben werden?
+     */
+    public function direkter_vergleich(array $tore_tabelle, bool $print = false)
     {
         // Fall 0: Nur ein Team verblieben
         if (count($tore_tabelle) == 1) {
@@ -325,7 +336,13 @@ class Spielplan
         }
     }
 
-    public function penalty_vergleich($tore_tabelle, $print = false)
+    /**
+     * Direkter Vergleich der Penalty-Begegenungen
+     *
+     * @param array $tore_tabelle
+     * @param bool $print
+     */
+    public function penalty_vergleich(array $tore_tabelle, bool $print = false)
     {
         // Fall 0: Nur ein Team verblieben
         if (count($tore_tabelle) == 1) {
@@ -621,7 +638,13 @@ class Spielplan
         return in_array($spiel_id, $penaltys);
     }
 
-    public function validate_penalty_spiel($spiel): bool
+    /**
+     * Wurde der Penalty vom Spiel richtig eingetragen?
+     *
+     * @param array $spiel
+     * @return bool
+     */
+    public function validate_penalty_spiel(array $spiel): bool
     {
         return (
                 !is_null($spiel["penalty_a"])
@@ -630,6 +653,12 @@ class Spielplan
             && !$this->check_penalty_spiel($spiel["spiel_id"]);
     }
 
+    /**
+     * Muss das Team einen Penalty spielen?
+     *
+     * @param int $team_id
+     * @return bool
+     */
     public function check_penalty_team(int $team_id): bool
     {
         foreach ($this->penaltys['ausstehend'] as $spiel_id) {
@@ -672,12 +701,12 @@ class Spielplan
      */
     public function validate_penalty_ergebnisse(): bool
     {
-            foreach ($this->spiele as $spiel_id => $spiel) {
-                if ((!is_null($spiel['penalty_a']) or !is_null($spiel['penalty_b']))
-                    && !in_array($spiel_id, $this->penaltys['gesamt'])
-                ) return false;
-                // Es wurde also ein Penalty bei einem Spiel eingetragen, bei welchem kein Penalty vorgesehen ist.
-            }
+        foreach ($this->spiele as $spiel_id => $spiel) {
+            if ((!is_null($spiel['penalty_a']) or !is_null($spiel['penalty_b']))
+                && !in_array($spiel_id, $this->penaltys['gesamt'])
+            ) return false;
+            // Es wurde also ein Penalty bei einem Spiel eingetragen, bei welchem kein Penalty vorgesehen ist.
+        }
         return true;
     }
 
@@ -706,6 +735,11 @@ class Spielplan
         return 0 < min(array_column($this->turnier_tabelle, 'spiele'));
     }
 
+    /**
+     * Gibt die Spiele-IDs zurück, in denen die Team-IDs gegeneinander spielen.
+     * @param array $team_ids
+     * @return array
+     */
     public function get_spiel_ids(array $team_ids): array
     {
         foreach ($this->spiele as $spiel_id => $spiel) {
