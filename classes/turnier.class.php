@@ -307,6 +307,7 @@ class Turnier
                 VALUES ($this->turnier_id, $team_id, $ergebnis, $platz);
                 ";
         db::write($sql);
+        $this->log("Ergebnis eingetragen: $platz. " . Team::teamid_to_teamname($team_id) . "($ergebnis Punkte)");
     }
     /**
      * Überträgt das Turnierergebnis der Platzierungstabelle in die Datenbank
@@ -688,15 +689,14 @@ class Turnier
      */
     function upload_spielplan(string $link, string $phase)
     {
-        $turnier_id = $this->turnier_id;
         $sql = "
                 UPDATE turniere_details
                 SET link_spielplan = '$link'
-                WHERE turnier_id = '$turnier_id'
+                WHERE turnier_id = $this->turnier_id;
                 ";
         db::write($sql);
         $this->details['link_spielplan'] = $link;
-        $this->log("Manueller Spielplan wurde hochgeladen.");
+        $this->log("Manuelle Spielplan- oder Ergebnisdatei wurde hochgeladen.");
         $this->set_phase("$phase");
     }
 

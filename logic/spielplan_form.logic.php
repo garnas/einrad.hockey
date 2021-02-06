@@ -27,7 +27,7 @@ if (isset($_POST["tore_speichern"])) {
             && $spiel['tore_b'] == $_POST["tore_b"][$spiel_id]
             && $spiel['penalty_a'] == ($_POST["penalty_a"][$spiel_id]  ?? '')
             && $spiel['penalty_b'] == ($_POST["penalty_b"][$spiel_id]  ?? '')) continue;
-        $spielplan->set_spiele(
+        $spielplan->set_tore(
             $spiel['spiel_id'],
             $_POST["tore_a"][$spiel_id],
             $_POST["tore_b"][$spiel_id],
@@ -56,7 +56,7 @@ if (isset($_POST["turnierergebnis_speichern"])) {
     }
 
     // Testen ob Zweite Runde Penaltys gespielt werden müssen
-    if (!Tabelle::check_ergebnis_eintragbar($spielplan->out_of_scope)) {
+    if ($spielplan->out_of_scope) {
         Form::error("Es muss noch eine zweite Runde Penaltys gespielt werden.");
         $error = true;
     }
@@ -82,7 +82,10 @@ if(!$spielplan->validate_penalty_ergebnisse()){
 $error = false;
 $vgl_data = $spielplan->turnier->get_ergebnis();
 if (!empty($vgl_data)) {
-    if (!$spielplan->check_turnier_beendet()) {
+    if (
+        !$spielplan->check_turnier_beendet()
+        or count($vgl_data) != $spielplan->anzahl_teams
+    ) {
         $error = true;
     } else {
         foreach ($spielplan->platzierungstabelle as $ergebnis) {

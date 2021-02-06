@@ -65,14 +65,14 @@ class Tabelle
     /**
      * True, wenn das Turnierergebnis eingetragen werden darf.
      *
-     * @param $akt_turnier
+     * @param $turnier
      * @return bool
      */
-    public static function check_ergebnis_eintragbar($akt_turnier): bool
+    public static function check_ergebnis_eintragbar($turnier): bool
     {
-        $spieltag = $akt_turnier->details['spieltag'];
-        $saison = $akt_turnier->details['saison'];
-        if (!in_array($akt_turnier->details['art'], ['I', 'II', 'III', 'final'])) {
+        $spieltag = $turnier->details['spieltag'];
+        $saison = $turnier->details['saison'];
+        if (!in_array($turnier->details['art'], ['I', 'II', 'III', 'final'])) {
             Form::error("Für diesen Turniertyp können keine Ergebnisse eingetragen werden.");
             return false;
         }

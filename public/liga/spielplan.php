@@ -3,8 +3,8 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-#db::write("UPDATE `spiele` SET `tore_a` = ROUND(4*RAND(),0) ,`tore_b`= ROUND(4*RAND(),0)");
-#db::write("UPDATE `spiele` SET `tore_a` = 1 ,`tore_b`= 1");
+//db::write("UPDATE `spiele` SET `tore_a` = ROUND(4*RAND(),0) ,`tore_b`= ROUND(4*RAND(),0)");
+//db::write("UPDATE `spiele` SET `tore_a` = 1 ,`tore_b`= 1");
 //db::write("UPDATE `spiele` SET `penalty_a` = NULL ,`penalty_b`= NULL");
 //db::write("UPDATE `spiele` SET `tore_a` = NULL ,`tore_b`= NULL");
 
@@ -23,6 +23,5 @@ include '../../templates/spielplan/spielplan_teamliste.tmp.php'; //Teamliste
 include '../../templates/spielplan/spielplan_spiele.tmp.php'; //Spiele
 include '../../templates/spielplan/spielplan_turniertabelle.tmp.php'; //Abschlusstabelle
 include '../../templates/spielplan/spielplan_direkter_vergleich.tmp.php'; //Abschlusstabelle
-
 include '../../templates/footer.tmp.php';
 
