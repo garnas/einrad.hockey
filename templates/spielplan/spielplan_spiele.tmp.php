@@ -1,13 +1,5 @@
 <h3 class="w3-text-secondary w3-margin-top">Spiele</h3>
 <!-- Teambesprechung -->
-<?php if ($spielplan->turnier->details['besprechung'] == 'Ja') { ?>
-    <p class="nicht-drucken">
-        <i>Alle Teams sollen sich um <?= date('H:i', strtotime($spielplan->turnier->details['startzeit']) - 15 * 60) ?>
-           &nbsp;Uhr zu einer
-           gemeinsamen Turnierbesprechung einfinden.
-        </i>
-    </p>
-<?php }//endif?>
 
 <!-- Spielzeiten -->
 <p class="w3-text-grey">
@@ -73,6 +65,13 @@
                 </th>
             <?php }//endif?>
         </tr>
+        <?php if ($spielplan->turnier->details['besprechung'] == 'Ja') { ?>
+            <tr class="w3-primary-3">
+                <td colspan="100%">
+                    Alle Teams sollen sich um <?= date('H:i', strtotime($spielplan->turnier->details['startzeit']) - 15 * 60) ?>&nbsp;Uhr zu einer gemeinsamen Turnierbesprechung einfinden.
+                </td>
+            </tr>
+        <?php }//endif?>
         <?php foreach ($spielplan->spiele as $spiel_id => $spiel) { ?>
             <tr>
                 <td><?= $spiel["zeit"] ?></td>

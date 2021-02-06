@@ -44,7 +44,7 @@
                         && !is_null($spiel["tore_b"])
                         && !$spielplan->check_penalty_spiel($spiel_id, true)) { ?>
                         class="w3-pale-green"
-                    <?php }//endif?>
+                    <?php } //endif?>
                 >
                     <td><?= $spiel["zeit"] ?></td>
                     <!-- Schiris -->
@@ -98,19 +98,14 @@
                         >
                     </td>
                     <!-- Penalty -->
-                    <td class="w3-center">
+                    <td class="w3-center <?= (!$spielplan->validate_penalty_spiel($spiel)) ?: 'w3-secondary' ?>">
                         <input id="penalty_a[<?= $spiel_id ?>]"
                                name="penalty_a[<?= $spiel_id ?>]"
                                value='<?= $spiel["penalty_a"] ?>'
-                               class='w3-input w3-border w3-round w3-center w3-text-secondary
-                                    <?= !(!is_null($spiel["penalty_a"])
-                                   && !$spielplan->check_penalty_spiel($spiel_id))
-                                   ?: 'w3-pink' ?>'
+                               class='w3-input w3-border w3-round w3-center w3-text-secondary'
                                style='padding: 2px; width: 65px; display: inline-block;'
-                                       <?= (!is_null($spiel["penalty_a"])
-                                           || $spielplan->check_penalty_spiel($spiel_id))
-                                           ?: 'disabled placeholder = "/"' ?>
-                                       type='number'
+                               <?= ($spielplan->check_penalty_spiel($spiel_id) or $spielplan->validate_penalty_spiel($spiel)) ?: 'disabled placeholder = "/"' ?>
+                               type='number'
                                autocomplete='off'
                                min='0'
                                step='1'
@@ -119,14 +114,9 @@
                         <input id="penalty_b[<?= $spiel_id ?>]"
                                name="penalty_b[<?= $spiel_id ?>]"
                                value='<?= $spiel["penalty_b"] ?>'
-                               class='w3-input w3-border w3-round w3-center w3-text-secondary
-                               <?= !(!is_null($spiel["penalty_b"])
-                                   && !$spielplan->check_penalty_spiel($spiel_id)) // Penalty ist falsch
-                                   ?: 'w3-secondary' ?>'
+                               class='w3-input w3-border w3-round w3-center w3-text-secondary'
                                style='padding: 2px; width: 65px; display: inline-block;'
-                               <?= (!is_null($spiel["penalty_b"])
-                                   || $spielplan->check_penalty_spiel($spiel_id)) // Penalty nicht erforderlich
-                                   ?: 'disabled placeholder = "/"' ?>
+                               <?= ($spielplan->check_penalty_spiel($spiel_id) or $spielplan->validate_penalty_spiel($spiel)) ?: 'disabled placeholder = "/"' ?>
                                type='number'
                                autocomplete='off'
                                min='0'
@@ -154,7 +144,6 @@
     </div>
     <!-- Formular für die Ergebniseintragung in den Centern erstellen -->
     <p>
-
         <button type="submit"
                 name="tore_speichern"
                 class="w3-block w3-card w3-button w3-tertiary"

@@ -1,10 +1,11 @@
 <form method="post">
     <p>
-        <input type="submit"
+        <button type="submit"
                name="turnierergebnis_speichern"
                class="w3-block w3-button w3-tertiary <?= $spielplan->check_turnier_beendet() ?: 'w3-opacity' ?>"
-               value="Turnierergebnis übermitteln"
         >
+            <i class="material-icons">send</i> In die Ligatabellen eintragen
+        </button>
     </p>
     <?php if ($spielplan->turnier->details['phase'] == 'ergebnis') { ?>
         <p class="w3-text-green">

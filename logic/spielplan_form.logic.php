@@ -55,6 +55,12 @@ if (isset($_POST["turnierergebnis_speichern"])) {
         $error = true;
     }
 
+    // Testen ob Zweite Runde Penaltys gespielt werden müssen
+    if (!Tabelle::check_ergebnis_eintragbar($spielplan->out_of_scope)) {
+        Form::error("Es muss noch eine zweite Runde Penaltys gespielt werden.");
+        $error = true;
+    }
+
     if (!($error ?? false)) {
         Turnier::set_ergebnisse($spielplan);
         header('Location: ' . db::escape($_SERVER['REQUEST_URI']));
@@ -70,4 +76,22 @@ if (!(new TurnierReport($turnier_id))->kader_check()) {
 
 if(!$spielplan->validate_penalty_ergebnisse()){
     Form::error("Achtung: Es liegen falsch eingetragene Penaltyergebnisse vor!.");
+}
+
+// Gibt es eine Diskrepanz zwischen Turnierergebnis und in der Datenbank hinterlegtem Turnierergebnis?
+$error = false;
+$vgl_data = $spielplan->turnier->get_ergebnis();
+if (!empty($vgl_data)) {
+    if (!$spielplan->check_turnier_beendet()) {
+        $error = true;
+    } else {
+        foreach ($spielplan->platzierungstabelle as $ergebnis) {
+            if ($vgl_data[$ergebnis['platz']]['ergebnis'] != $ergebnis['ligapunkte']) {
+                $error = true;
+            }
+        }
+    }
+    if ($error) {
+        Form::attention("Turnierergebnis stimmt nicht mit dem in der Datenbank hinterlegtem Ergebnis überein.");
+    }
 }

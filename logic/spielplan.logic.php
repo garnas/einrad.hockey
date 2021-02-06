@@ -3,6 +3,7 @@
 $turnier_id = $_GET['turnier_id'] ?? 0;
 
 
+
 // Gibt es einen Spielplan zu diesem Turnier?
 
 if (!Spielplan::check_exist($turnier_id)) {
@@ -11,7 +12,6 @@ if (!Spielplan::check_exist($turnier_id)) {
     die();
 }
 $spielplan = new Spielplan((new Turnier ($turnier_id)));
-
 // Spielplanpause feststellen
 
 $spiel_dauer = ($spielplan->details['anzahl_halbzeiten'] * $spielplan->details['halbzeit_laenge']
@@ -31,3 +31,4 @@ $teamnamen_laengen = array_map(function ($platz) {
     return strlen($platz['teamname']);
 }, $spielplan->platzierungstabelle);
 $width_in_px = max($teamnamen_laengen) * 8; // 7.5 Durchschnittliche px-Weite eines Characters
+

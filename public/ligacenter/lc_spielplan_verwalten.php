@@ -72,7 +72,7 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
         Form::error("Das Turnier muss in der Meldephase sein.");
         $error = true;
     }
-    if (3 > count($teamliste) && count($teamliste) > 7) {
+    if (3 > count($teamliste) && count($teamliste) > 8) {
         Form::error("Falsche Anzahl an Teams. Nur 4er - 7er Jeder-gegen-Jeden Spielpläne können erstellt werden.");
         $error = true;
     }
@@ -258,7 +258,7 @@ include '../../templates/header.tmp.php';
                             </option>
                             <?php foreach ($teamliste as $team_id => $team) { ?>
                                 <option
-                                    <?php if (($turnier_ergebnis[$platz]['team_id'] ?? '') == $team['team_id']){ ?>selected<?php } //endif?>
+                                    <?php if (($turnier_ergebnis[$platz]['team_id'] ?? 0) == $team['team_id']){ ?>selected<?php } //endif?>
                                     value="<?= $team['team_id'] ?>"><?= $team['teamname'] ?></option>
                             <?php } //end foreach?>
                         </select>
