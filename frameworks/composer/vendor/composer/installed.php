@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'ec082c69297921d06dba45f3fa4632d6ab9b61da',
+    'reference' => 'f9ef87960027f932ecc2ad467126fd95666345f6',
     'name' => '__root__',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'ec082c69297921d06dba45f3fa4632d6ab9b61da',
+      'reference' => 'f9ef87960027f932ecc2ad467126fd95666345f6',
     ),
     'gregwar/captcha' => 
     array (
@@ -89,12 +89,12 @@
     ),
     'symfony/finder' => 
     array (
-      'pretty_version' => 'v5.2.2',
-      'version' => '5.2.2.0',
+      'pretty_version' => 'v5.2.3',
+      'version' => '5.2.3.0',
       'aliases' => 
       array (
       ),
-      'reference' => '196f45723b5e618bf0e23b97e96d11652696ea9e',
+      'reference' => '4adc8d172d602008c204c2e16956f99257248e03',
     ),
   ),
 );

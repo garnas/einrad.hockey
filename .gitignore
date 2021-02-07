@@ -1,24 +1,6 @@
 .idea/
-frameworks/
 public/uploads/s/
 system/backups/
 system/logs/
 classes/xml.class.php_bak
 public/xml/test.php
-frameworks/phpmailer
-
-# Die Config-Dateien von mpdf sollen nicht ignoriert werden. Der Rest schon
-frameworks/mpdf/*
-!frameworks/mpdf/vendor
-
-frameworks/mpdf/vendor/*
-!frameworks/mpdf/vendor/mpdf
-
-frameworks/mpdf/vendor/mpdf/*
-!frameworks/mpdf/vendor/mpdf/mpdf
-
-frameworks/mpdf/vendor/mpdf/mpdf/*
-!frameworks/mpdf/vendor/mpdf/mpdf/src
-
-frameworks/mpdf/vendor/mpdf/mpdf/src/*
-!frameworks/mpdf/vendor/mpdf/mpdf/src/Config
