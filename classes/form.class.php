@@ -276,4 +276,18 @@ class Form
                             <script>confetti.start($timeout, $min, $max)</script>
                             ";
     }
+
+    /**
+     * Fügt ein Material-Icon hinzu
+     * @param string $icon  Icon-Bezeichnung
+     * @param int $vertical_align
+     * @param string $font_size
+     * @return string
+     */
+    public static function icon(string $icon, int $vertical_align = 0, string $font_size = '' ): string
+    {
+        $style = (empty($vertical_align)) ? "" : "vertical-align:-" . $vertical_align . "%;";
+        $style .= (empty($vertical_align)) ? "" : "font-size:" . $font_size . "px;";
+        return "<i class='material-icons' style='$style'>$icon</i>";
+    }
 }

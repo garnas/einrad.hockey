@@ -10,7 +10,8 @@ class Team
      * TeamID zur eindeutigen Identifikation
      * @var int
      */
-    public int $team_id;
+    public int $id;
+    public array $details;
 
     /**
      * Team constructor.
@@ -18,7 +19,8 @@ class Team
      */
     function __construct($team_id)
     {
-        $this->team_id = $team_id;
+        $this->id = $team_id;
+        $this->details = $this->get_details();
     }
 
     /**
@@ -309,15 +311,14 @@ class Team
      *
      * @return array
      */
-    function get_teamdaten(): array
+    function get_details(): array
     {
-        $team_id = $this->team_id;
         $sql =  "
                 SELECT *  
                 FROM teams_liga 
                 INNER JOIN teams_details
-                ON teams_details.team_id=teams_liga.team_id
-                WHERE teams_liga.team_id='$team_id'
+                ON teams_details.team_id = teams_liga.team_id
+                WHERE teams_liga.team_id = $this->id
                 ";
         $result = db::read($sql);
         $result = mysqli_fetch_assoc($result);
@@ -331,7 +332,7 @@ class Team
      */
     function set_teamname(string $name)
     {
-        $team_id = $this->team_id;
+        $team_id = $this->id;
         $sql =  "
                 UPDATE teams_liga
                 SET teamname = '$name'
@@ -347,7 +348,7 @@ class Team
      */
     function get_passwort(): string|bool
     {
-        $team_id = $this->team_id;
+        $team_id = $this->id;
         $sql =  "
                 SELECT passwort
                 FROM teams_liga
@@ -366,7 +367,7 @@ class Team
      */
     function set_passwort(string $passwort, string $pw_geaendert = 'Ja')
     {
-        $team_id = $this->team_id;
+        $team_id = $this->id;
         $passwort = password_hash($passwort, PASSWORD_DEFAULT);
         $sql =  "
                 UPDATE teams_liga
@@ -383,7 +384,7 @@ class Team
      */
     function get_freilose(): int
     {
-        $team_id = $this->team_id;
+        $team_id = $this->id;
         $sql =  "
                 SELECT freilose
                 FROM teams_liga
@@ -401,7 +402,7 @@ class Team
      */
     function set_freilose($anzahl)
     {
-        $team_id = $this->team_id;
+        $team_id = $this->id;
         $sql =  "
                 UPDATE teams_liga
                 SET freilose='$anzahl'
@@ -418,13 +419,13 @@ class Team
      * Wert der in die Datenbank für das Team eingefügt werden soll
      * @param mixed $value
      */
-    function set_team_detail(string $entry, mixed $value)
+    function set_detail(string $entry, mixed $value)
     {
-        $team_id = $this->team_id;
+        $entry = db::sanitize($entry);
         $sql =  "
                 UPDATE teams_details
                 SET $entry = '$value'
-                WHERE team_id='$team_id'
+                WHERE team_id = '$this->id'
                 ";
         db::write($sql);
     }
@@ -436,7 +437,7 @@ class Team
      */
     function get_turniere_angemeldet(): array
     {
-        $team_id = $this->team_id;
+        $team_id = $this->id;
         $sql =  "
                 SELECT turnier_id, liste 
                 FROM turniere_liste 
@@ -458,7 +459,7 @@ class Team
      */
     function set_teamfoto(string $target)
     {
-        $team_id = $this->team_id;
+        $team_id = $this->id;
         $sql =  "
                 UPDATE teams_details 
                 SET teamfoto = '$target' 
@@ -475,7 +476,7 @@ class Team
      */
     function delete_teamfoto(string $target)
     {
-        $team_id = $this->team_id;
+        $team_id = $this->id;
         // Foto löschen
         if (file_exists($target)) {
             unlink($target);

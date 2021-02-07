@@ -133,7 +133,7 @@ class SpielplanAlt{
         //benachbareten Teams festgestellt, dann haben die Teams von index bis i (inklusiv)
         //gleich viele Punkte und müssen in den Direktvergleich (sort_teams)
         $index=0;
-        ////db::debug($get_teamdaten);
+        ////db::debug($get_details);
         for ($i=0;$i<$this->anzahl_teams-1;$i++){
             if($daten[$i]["punkte"]==$daten[$i+1]["punkte"]){
                 $index=$index;
@@ -213,7 +213,7 @@ class SpielplanAlt{
     function sort_teams($daten,$begin,$end){
         //rufen sql auf mit sortierung nach punken, diff, geschossenen Toren
         //ergebnis testen ob alle gleich ->Penalty oder Teil gleich -> teilweiser direkter Vergleich
-        //in get_teamdaten reihen swapen
+        //in get_details reihen swapen
         $teams=[];
         foreach(range($begin,$end) as $number){
             array_push($teams, $daten[$number]["team_id_a"]);
@@ -248,7 +248,7 @@ class SpielplanAlt{
             $index=0;
             for($i=0;$i<$end-$begin;$i++){
                 //testen ob aktuelle Zeile gleich zur nächsten
-                //bei ungleichheit get_teamdaten swapen
+                //bei ungleichheit get_details swapen
                 //bei gleichheit erneuter direkter vergleich
                 if($subdaten[$i]["punkte"]==$subdaten[$i+1]["punkte"]&&
                     $subdaten[$i]["diff"]==$subdaten[$i+1]["diff"]&&
@@ -271,7 +271,7 @@ class SpielplanAlt{
                         $daten[$ex]=$daten[$in];
                         $daten[$in]=$temp;
                     }
-                    //echo "sort teams ".$get_teamdaten[$index]["teamname"]." und ".$get_teamdaten[$i]["teamname"];
+                    //echo "sort teams ".$get_details[$index]["teamname"]." und ".$get_details[$i]["teamname"];
                     $daten=$this->sort_teams($daten,$index+$begin,$i+$begin);
                     $index=$i+1;
                 }else{
@@ -294,7 +294,7 @@ class SpielplanAlt{
             //echo "i: ".$i."  index: ".$index."<br>";
             if($i!=$index){ //TODO zaehlt php for nach ende noch eins weiter -> Ja
                 //echo "sort teams <br> im direktvergleich ist wieder Gleichheit aufgetreten <br>";
-                //echo "sort teams ".$get_teamdaten[$index+$begin]["teamname"]." und ".$get_teamdaten[$i+$begin]["teamname"];
+                //echo "sort teams ".$get_details[$index+$begin]["teamname"]." und ".$get_details[$i+$begin]["teamname"];
                 $daten=$this->sort_teams($daten,$index+$begin,$i+$begin);
 
             }
@@ -430,7 +430,7 @@ class SpielplanAlt{
         return db::escape($this->anzahl_spiele);
     }
 
-    //$get_teamdaten sollten schon sortiert sein!
+    //$get_details sollten schon sortiert sein!
     function set_ergebnis($daten)
     {
         //Sind alle Spiele gespielt und kein Penalty offen

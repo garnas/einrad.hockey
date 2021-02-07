@@ -8,7 +8,7 @@ if(!isset($_SESSION['team_id'])) {
 }
 
 $akt_team = new Team ($_SESSION['team_id']);
-$daten = $akt_team->get_teamdaten();
+$daten = $akt_team->get_details();
 
 if (!isset($no_redirect) && $daten['passwort_geaendert'] == 'Nein'){
   Form::affirm("Bitte ändere zuerst das von uns vergebene Passwort");

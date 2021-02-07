@@ -56,7 +56,7 @@ class LigaBot
              */
             // Prüft, ob wir uns vier Wochen vor dem Spieltag befinden und ob das Turnier in der offenen Phase ist.
             if (self::time_offen_melde($akt_turnier->details['datum']) <= $heute && $akt_turnier->details['phase'] == 'offen') {
-                $akt_turnier->set_phase("melde"); //Aktualisiert auch $akt_turnier->get_teamdaten()
+                $akt_turnier->set_phase("melde"); //Aktualisiert auch $akt_turnier->get_details()
                 $akt_turnier->log("Phase: offen -> melde", "Ligabot");
                 // Losen setzt alle Teams in richtiger Reihenfolge auf die Warteliste.
                 self::losen($akt_turnier);
@@ -255,7 +255,7 @@ class LigaBot
         $liste = self::get_turnier_ids();
         foreach ($liste as $turnier_id){
             $akt_turnier = new Turnier ($turnier_id);
-            if ($akt_turnier->get_teamdaten['phase'] != 'ergebnis'){
+            if ($akt_turnier->get_details['phase'] != 'ergebnis'){
                 $akt_turnier -> set_phase("offen");
                 $akt_turnier -> set_spieltag(0);
                 $akt_turnier -> log("Phase -> offen" , "Zurückgesetzt von Ligabot");

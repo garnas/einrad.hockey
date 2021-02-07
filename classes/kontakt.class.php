@@ -130,11 +130,10 @@ class Kontakt
      */
     function get_emails_with_details(): array
     {
-        $team_id = $this->team_id;
         $sql = "
                 SELECT * 
                 FROM teams_kontakt 
-                WHERE team_id = '$team_id'
+                WHERE team_id = $this->team_id
                 ";
         $result = db::read($sql);
         while ($x = mysqli_fetch_assoc($result)) {
