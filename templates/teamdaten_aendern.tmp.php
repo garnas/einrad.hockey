@@ -30,7 +30,7 @@
         eingesehen werden.
     </p>
 </form>
-<form method="post" class="w3-card-4 w3-panel">
+<div class="w3-card-4 w3-panel">
     <h2 id="trikotfarbe" class="w3-text-primary">
         <?= Form::icon("brush", 16,28 ) ?> Trikotfarben
     </h2>
@@ -105,7 +105,10 @@
             </form>
         </div>
     </div>
-</form>
+    <p class="w3-text-grey">
+        Eure Trikotfarben werden im Spielplan angezeigt. Sie helfen anderen Teams bei der Wahl ihrer Trikots und Zuschauern dein Teams zu identifizieren.
+    </p>
+</div>
 <form method='post' class="w3-panel w3-card">
     <h2 class="w3-text-primary"><?= Form::icon("info", 16,28 ) ?> Teamdetails</h2>
     <p>

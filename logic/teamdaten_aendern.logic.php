@@ -3,6 +3,7 @@
 // Inititalisierung
 $team_id = ($teamcenter) ? $_SESSION['team_id'] : (int)$_GET['team_id'];
 $team = new Team ($team_id);
+$path = ($ligacenter) ? '../liga/lc_teamdaten_aendern.php' : '../teamcenter/tc_teamdaten_aendern.php';
 if (empty($team->details)) {
     die("Team wurde nicht gefunden");
 }
@@ -25,7 +26,8 @@ if (
         $team->set_detail('trikot_farbe_1', '');
     if (isset($_POST['no_color_2']))
         $team->set_detail('trikot_farbe_2', '');
-    header("Location:" . db::escape($_SERVER['PHP_SELF'] . "#trikotfarbe"));
+    Form::affirm("Trikotfarbe geändert.");
+    header("Location:" . $path . '#trikotfarbe');
     die();
 }
 
@@ -41,7 +43,7 @@ if (isset($_POST['teamdaten_aendern'])) {
         Form::error('Der Ligavertreter muss den Datenschutz-Hinweisen zustimmen.');
         $error = true;
     }
-    
+
     if (!$error) {
         $array = ['plz', 'ort', 'verein', 'homepage', 'ligavertreter'];
         foreach ($array as $entry) {
@@ -68,7 +70,7 @@ if (isset($_POST['teamdaten_aendern'])) {
         }
     }
     Form::affirm("Teamdaten wurden gespeichert.");
-    header('Location: ' . db::escape($_SERVER['PHP_SELF']));
+    header('Location: ' . $path);
     die();
 }
 
@@ -81,7 +83,7 @@ if (isset($_POST['neue_email'])) {
     if (filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($email)) {
         $kontakte->create_new_team_kontakt($email, $public, $infomail);
         Form::affirm("E-Mail-Adresse wurde hinzugefügt");
-        header('Location: ' . db::escape($_SERVER['PHP_SELF']));
+        header('Location: ' . $path);
         die();
     } else {
         Form::error("E-Mail-Adresse wurde nicht akzeptiert");
@@ -98,7 +100,7 @@ if (isset($_POST['teamfoto'])) {
         } else {
             $team->set_teamfoto($target_file_jpg);
             Form::affirm("Teamfoto wurde hochgeladen");
-            header('Location: ' . db::escape($_SERVER['PHP_SELF']));
+            header('Location: ' . $path);
             die();
         }
     }
@@ -108,6 +110,6 @@ if (isset($_POST['teamfoto'])) {
 if (isset($_POST['delete_teamfoto'])) {
     $team->delete_teamfoto($daten['teamfoto']);
     Form::affirm("Teamfoto wurde gelöscht");
-    header('Location: ' . db::escape($_SERVER['PHP_SELF']));
+    header('Location: ' . $path);
     die();
 }

@@ -63,11 +63,10 @@ class Form
      * Hinweis-Kasten wird ins Html-Dokument geschrieben
      *
      * Text
-     * @param $message
-     * Überschrift
-     * @param string $caption
+     * @param string $message Text
+     * @param string $caption Überschrift
      */
-    public static function schreibe_attention($message, $caption = 'Hinweis')
+    public static function schreibe_attention(string $message, string $caption = 'Hinweis')
     { ?>
         <div class='w3-card w3-panel w3-leftbar w3-border-yellow w3-pale-yellow'>
             <h3><?= $caption ?></h3>
@@ -78,12 +77,10 @@ class Form
     /**
      * Fehler-Kasten wird ins Html-Dokument geschrieben
      *
-     * Text
-     * @param $message
-     * Überschrift
-     * @param string $caption
+     * @param string $message Text
+     * @param string $caption Überschrift
      */
-    public static function schreibe_error($message, $caption = 'Fehler')
+    public static function schreibe_error(string $message, string $caption = 'Fehler')
     {
         ?>
         <div class='w3-card w3-panel w3-leftbar w3-border-red w3-pale-red'>
@@ -96,12 +93,10 @@ class Form
     /**
      * Info-Kasten wird ins Html-Dokument geschrieben
      *
-     * Text
-     * @param $message
-     * Überschrift
-     * @param string $caption
+     * @param string $message Text
+     * @param string $caption Überschrift
      */
-    public static function schreibe_affirm($message, $caption = 'Info')
+    public static function schreibe_affirm(string $message, string $caption = 'Info')
     {
         ?>
         <div class='w3-card w3-panel w3-leftbar w3-border-green w3-pale-green'>

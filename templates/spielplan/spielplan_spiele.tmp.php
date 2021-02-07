@@ -67,7 +67,7 @@
         </tr>
         <?php if ($spielplan->turnier->details['besprechung'] == 'Ja') { ?>
             <tr class="w3-primary-3">
-                <td colspan="100%">
+                <td colspan="<?= ($spielplan->check_penalty_anzeigen()) ? 9 : 7 ?>">
                     Alle Teams sollen sich um <?= date('H:i', strtotime($spielplan->turnier->details['startzeit']) - 15 * 60) ?>&nbsp;Uhr zu einer gemeinsamen Turnierbesprechung einfinden.
                 </td>
             </tr>

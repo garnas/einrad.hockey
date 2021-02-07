@@ -215,19 +215,17 @@ class Turnier
      */
     function get_liste_spielplan(): array
     {
-        $turnier_id = $this->turnier_id;
         $sql = "
-                SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam, teams_details.ligavertreter
+                SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam,
+                    teams_details.ligavertreter, teams_details.trikot_farbe_1, teams_details.trikot_farbe_2
                 FROM turniere_liste
                 LEFT JOIN teams_liga
                 ON turniere_liste.team_id = teams_liga.team_id
                 LEFT JOIN teams_details
                 ON turniere_liste.team_id = teams_details.team_id
-                WHERE turniere_liste.turnier_id='$turnier_id' AND turniere_liste.liste='spiele'
+                WHERE turniere_liste.turnier_id = $this->turnier_id AND turniere_liste.liste = 'spiele'
                 ";
         $result = db::read($sql);
-
-        $liste = [];
         // Welcher Spieltag ist relevant?
         while ($anmeldung = mysqli_fetch_assoc($result)) {
             $liste[$anmeldung['team_id']] = $anmeldung;
@@ -240,7 +238,7 @@ class Turnier
                 return ((int) $team_b['wertigkeit'] <=> (int) $team_a['wertigkeit']);
             });
         }
-        return db::escape($liste);
+        return db::escape($liste ?? []);
     }
 
     /**
