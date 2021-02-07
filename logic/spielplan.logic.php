@@ -1,6 +1,6 @@
 <?php
 //Spielplan-Objekt aus Url-TurnierID erstellen
-$turnier_id = $_GET['turnier_id'] ?? 0;
+$turnier_id = (int) $_GET['turnier_id'] ?? 0;
 
 
 

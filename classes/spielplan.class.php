@@ -56,7 +56,7 @@ class Spielplan
     function __construct(Turnier $turnier, bool $penaltys = true)
     {
         // Turnier
-        $this->turnier_id = $turnier->turnier_id;
+        $this->turnier_id = $turnier->id;
         $this->turnier = $turnier;
 
         // Spielplan
@@ -85,7 +85,7 @@ class Spielplan
      */
     public static function set_spielplan(Turnier $turnier): bool
     {
-        if (Spielplan::check_exist($turnier->turnier_id)){
+        if (Spielplan::check_exist($turnier->id)){
             Form::error("Es existiert bereits ein Spielplan");
             return false;
         }
@@ -109,7 +109,7 @@ class Spielplan
 
         while ($spiel = mysqli_fetch_assoc($result)) {
             $sql_inserts[] = "("
-                . $turnier->turnier_id . "," . $spiel["spiel_id"] . ","
+                . $turnier->id . "," . $spiel["spiel_id"] . ","
                 . $teamliste[$spiel["team_a"]]["team_id"] . ","
                 . $teamliste[$spiel["team_b"]]["team_id"] . ","
                 . $teamliste[$spiel["schiri_a"]]["team_id"] . ","
@@ -142,12 +142,12 @@ class Spielplan
     public static function delete_spielplan(Turnier $turnier)
     {
         // Es existiert kein dynamischer Spielplan
-        if (!self::check_exist($turnier->turnier_id)) return;
+        if (!self::check_exist($turnier->id)) return;
 
         // Spielplan löschen
         $sql = "
                 DELETE FROM spiele 
-                WHERE turnier_id = $turnier->turnier_id
+                WHERE turnier_id = $turnier->id
                 ";
         db::write($sql);
         $turnier->log("Dynamischer JgJ-Spielplan gelöscht.");

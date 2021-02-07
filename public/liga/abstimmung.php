@@ -3,7 +3,6 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-$teamcenter = $ligacenter = false;
 require_once '../../logic/abstimmung.logic.php';
 
 /////////////////////////////////////////////////////////////////////////////
@@ -31,6 +30,5 @@ if (time() > strtotime(Abstimmung::ENDE)){
         <i class="material-icons">how_to_vote</i> Jetzt abstimmen!
     </a>
 
-<?php
-} //end if
+<?php } //end if
 include '../../templates/footer.tmp.php';

@@ -105,7 +105,7 @@ class Neuigkeit
      * @param int $pix
      * @return false|string
      */
-    public static function upload_image(array $file, string $target_dir = "../uploads/s/", int $quality = 75, int $pix = 1680): false|string
+    public static function upload_bild(array $file, string $target_dir = "../uploads/s/", int $quality = 75, int $pix = 1680): false|string
     {
         // Validierung des hochgeladenen Bildes
         if (self::check_error_image($file)) {
@@ -134,7 +134,7 @@ class Neuigkeit
      * @param string $target_dir
      * @return false|string
      */
-    public static function upload_pdf(array $file, string $target_dir = "../uploads/s/"): false|string
+    public static function upload_dokument(array $file, string $target_dir = "../uploads/s/"): false|string
     {
         // Validierung des hochgeladenen Bildes
         if (!self::check_pdf($file)) {

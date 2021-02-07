@@ -48,7 +48,7 @@ if (isset($_POST['ergebnis_eintragen'])) {
         }
     }
     if ($error ?? false) {
-        header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->turnier_id);
+        header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->id);
         die();
     }
     // Kein Fehler
@@ -80,7 +80,7 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
     if (!$error) {
         if (Spielplan::set_spielplan($turnier))
             Form::affirm("Das Turnier wurde in die Spielplan-Phase versetzt. Der Spielplan wird jetzt angezeigt.");
-        header('Location: ../liga/spielplan.php?turnier_id=' . $turnier->turnier_id);
+        header('Location: ../liga/spielplan.php?turnier_id=' . $turnier->id);
         die();
     }
 }
@@ -95,14 +95,14 @@ if (isset($_POST['auto_spielplan_loeschen'])) {
 
 // Spielplan oder Ergebnis manuell hochladen
 if (isset($_POST['spielplan_hochladen'])) {
-    if (Spielplan::check_exist($turnier->turnier_id)) {
+    if (Spielplan::check_exist($turnier->id)) {
         $error = true;
         Form::error("Hochladen nicht möglich. Es existiert bereits ein dynamisch erstellter Spielplan.");
     }
     if (!empty($_FILES["spielplan_file"]["tmp_name"])) {
         $target_dir = "../uploads/s/spielplan/";
         // PDF wird hochgeladen, target_file_pdf = false, falls fehlgeschlagen.
-        $target_file_pdf = Neuigkeit::upload_pdf($_FILES["spielplan_file"], $target_dir);
+        $target_file_pdf = Neuigkeit::upload_dokument($_FILES["spielplan_file"], $target_dir);
         if ($target_file_pdf === false) {
             Form::error("Fehler beim Upload");
         } else {
@@ -113,7 +113,7 @@ if (isset($_POST['spielplan_hochladen'])) {
                 $turnier->upload_spielplan($target_file_pdf, 'spielplan');
                 Form::attention("Manueller Spielplan hochgeladen. Das Turnier wurde in die Spielplan-Phase versetzt.");
             }
-            header("Location: lc_spielplan_verwalten.php?turnier_id=$turnier->turnier_id" );
+            header("Location: lc_spielplan_verwalten.php?turnier_id=$turnier->id" );
             die();
         }
     } else {
@@ -125,7 +125,7 @@ if (isset($_POST['spielplan_hochladen'])) {
 if (isset($_POST['spielplan_delete'])) {
     $turnier->upload_spielplan('', 'melde');
     Form::affirm("Spielplan- / Ergebnisdatei wurde gelöscht. Turnier wurde in die Meldephase versetzt.");
-    header("Location: lc_spielplan_verwalten.php?turnier_id=$turnier->turnier_id");
+    header("Location: lc_spielplan_verwalten.php?turnier_id=$turnier->id");
     die();
 }
 
@@ -178,7 +178,7 @@ include '../../templates/header.tmp.php';
 
     <?php if (empty($turnier->details['link_spielplan'])) { ?>
         <form method="post">
-            <?php if (Spielplan::check_exist($turnier->turnier_id)) { ?>
+            <?php if (Spielplan::check_exist($turnier->id)) { ?>
                 <p>
                     <input type="submit" name="auto_spielplan_loeschen" value="Dynamischen Spielplan löschen"
                            class="w3-button w3-secondary">
@@ -199,7 +199,7 @@ include '../../templates/header.tmp.php';
 
     <form method="post" enctype="multipart/form-data">
 
-        <?php if (!Spielplan::check_exist($turnier->turnier_id)) { ?>
+        <?php if (!Spielplan::check_exist($turnier->id)) { ?>
 
             <?php if (empty($turnier->details['link_spielplan'])) { ?>
                 <p class="w3-text-grey">Nur .pdf oder .xlsx Format</p>

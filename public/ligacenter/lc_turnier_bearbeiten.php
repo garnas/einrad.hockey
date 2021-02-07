@@ -19,7 +19,7 @@ include '../../templates/header.tmp.php';
     <h3><?=$turnier->details['ort']?> (<?=$turnier->details['tblock']?>) am <?=date("d.m.Y", strtotime($turnier->details['datum']))?> </h3>
 </div>
 <p>
-    <a href='../liga/turnier_details.php?turnier_id=<?=$turnier->turnier_id?>'><button class="w3-button w3-text-blue no">Zu den Turnierdetails</button></a>
+    <a href='../liga/turnier_details.php?turnier_id=<?=$turnier->id?>'><button class="w3-button w3-text-blue no">Zu den Turnierdetails</button></a>
     <a href='../ligacenter/lc_turnierliste.php?turnier_id=<?=$turnier->details['turnier_id']?>'><button style='display: inline;' class="w3-button w3-right w3-text-blue no">Turniere verwalten (Liste)</button></a>
 </p>
 

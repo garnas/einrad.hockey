@@ -32,7 +32,7 @@ if ($akt_turnier->details['art'] == 'spass'){
     $kontakt = new Kontakt ($akt_turnier->details['ausrichter']);
     $email = $kontakt->get_emails();
     Form::attention("Anmeldung zu Spass-Turnieren erfolgt über den Ausrichter: " . Form::mailto($email, Team::teamid_to_teamname($akt_turnier->details['ausrichter'])));
-    header('Location: ../liga/turnier_details.php?turnier_id=' . $akt_turnier->turnier_id);
+    header('Location: ../liga/turnier_details.php?turnier_id=' . $akt_turnier->id);
     die();
 }
 

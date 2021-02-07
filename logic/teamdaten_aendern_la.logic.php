@@ -30,7 +30,7 @@ if (isset($_POST['change_la'])) {
     }
 
     if (!$error) {
-        if ($neuer_teamname != htmlspecialchars_decode($team->details['teamname'])) {
+        if ($neuer_teamname != $team->details['teamname']) {
             $team->set_teamname($neuer_teamname);
             Form::affirm("Der Teamname wurde geändert");
         }

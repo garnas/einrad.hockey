@@ -1,8 +1,8 @@
 <?php
 
-/********************************************************************
+/**
  * Dieses Dokument muss immer als Erstes für die Logik geladen werden
- *******************************************************************/
+ **/
 
 /**
  * Zeitzone festlegen und Sprache festlegen

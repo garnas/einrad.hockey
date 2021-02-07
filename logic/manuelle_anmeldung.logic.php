@@ -1,19 +1,16 @@
 <?php
 //Turnierobjekt erstellen
-$turnier_id = $_GET['turnier_id'];
+$turnier_id = (int) $_GET['turnier_id'];
 $turnier = new Turnier ($turnier_id);
 
-//Turnierdaten bekommen
-$daten = $turnier->details;
-
 //Existiert das Turnier?
-if (empty($daten)){
+if (empty($turnier->details)){
     Form::error("Turnier wurde nicht gefunden");
     header('Location: ../liga/turniere.php');
     die();
 }
 //im Teamcenter testen, ob es sich um den Ausrichter handelt
-if ($teamcenter && ($daten['ausrichter'] != $_SESSION['team_id'] or $daten['art'] != 'spass')){
+if ($teamcenter && ($turnier->details['ausrichter'] != $_SESSION['team_id'] or $turnier->details['art'] != 'spass')){
     Form::error("Fehlende Berechtigung Teams zu diesem Turnier anzumelden");
     header('Location: ../liga/turniere.php');
     die();
@@ -46,7 +43,7 @@ if (isset($_POST['abmelden'])){
                     $turnier->warteliste_aktualisieren();
                 }
                 Form::affirm ($team['teamname'] . " wurde abgemeldet");
-                header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $daten['turnier_id']));
+                header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
                 die();
             }
         }
@@ -82,9 +79,9 @@ if (isset($_POST['team_anmelden'])){
 
     if (!$error){
         $turnier->team_anmelden($team_id, $liste, $pos);
-        $turnier->log("Anmeldung: $teamname\r\nTeamblock: " . (Tabelle::get_team_block($team_id) ?: 'NL') . " Turnierblock: " . $daten['tblock'] ."\r\nListe: $liste (WartePos: $pos)", $autor);
+        $turnier->log("Anmeldung: $teamname\r\nTeamblock: " . (Tabelle::get_team_block($team_id) ?: 'NL') . " Turnierblock: " . $turnier->details['tblock'] ."\r\nListe: $liste (WartePos: $pos)", $autor);
         Form::affirm ("$teamname wurde angemeldet");
-        header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $daten['turnier_id']));
+        header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
         die();
     }
 }
@@ -107,7 +104,7 @@ if (isset($_POST['nl_anmelden'])){
         $turnier->nl_anmelden($teamname, $liste, $pos);
         $turnier->log("Anmeldung: $teamname*\r\nTeamblock: " . (Tabelle::get_team_block($team_id) ?: 'NL') . "\r\nListe:  $liste (WartePos: $pos)", $autor);
         Form::affirm("$teamname wurde angemeldet auf Liste: $liste");
-        header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $daten['turnier_id']));
+        header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
         die();
     }else{
         Form::error("Ein Nichtligateam mit diesem Namen ist bereits angemeldet");
@@ -121,7 +118,7 @@ if (isset($_POST['warteliste_aktualisieren'])){
     //Log wird automatisch in der Funktion geschrieben, Argument: Autor
 
     Form::affirm("Warteliste wurde aktualisiert");
-    header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $daten['turnier_id']));
+    header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
     die();
 }
 
@@ -136,7 +133,7 @@ if (isset($_POST['spieleliste_auffuellen'])){
     }
 
     //Ist das Turnier in der Meldephase?
-    if ($daten['phase'] != 'melde'){
+    if ($turnier->details['phase'] != 'melde'){
         $error = true;
         Form::error("Turnier befindet sich nicht in der Meldephase");
     }
@@ -144,7 +141,7 @@ if (isset($_POST['spieleliste_auffuellen'])){
     if (!$error){
         $turnier->spieleliste_auffuellen("Ligaausschuss");
         Form::affirm("Spielen-Liste wurde aufgefüllt");
-        header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $daten['turnier_id']));
+        header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
         die();
     }else{
         Form::error('Spielen-Liste wurde nicht aufgefüllt');

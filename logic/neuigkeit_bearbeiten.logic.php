@@ -28,7 +28,7 @@ if (isset($_POST['change_neuigkeit'])){
         if (!empty($_FILES["jpgupload"]["tmp_name"])){
             
             //Bild wird hochgeladen, target_file_jpg = false, falls fehlgeschlagen.
-            $target_file_jpg = Neuigkeit::upload_image($_FILES["jpgupload"]);
+            $target_file_jpg = Neuigkeit::upload_bild($_FILES["jpgupload"]);
         
             if($target_file_jpg === false){
                 $error = true;
@@ -42,7 +42,7 @@ if (isset($_POST['change_neuigkeit'])){
         if (!empty($_FILES["pdfupload"]["tmp_name"])){
             
             //Bild wird hochgeladen, target_file_jpg = false, falls fehlgeschlagen.
-            $target_file_pdf = Neuigkeit::upload_pdf($_FILES["pdfupload"]);
+            $target_file_pdf = Neuigkeit::upload_dokument($_FILES["pdfupload"]);
             if($target_file_pdf === false){
                 $error = true;
             }

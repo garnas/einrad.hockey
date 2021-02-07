@@ -185,7 +185,7 @@ class LigaBot
     public static function losen(Turnier $akt_turnier): bool
     {
         // Falsche Freilosanmeldungen beim Übergang in die Meldephase abmelden
-        Form::affirm($akt_turnier->turnier_id . " wurde gelost.");
+        Form::affirm($akt_turnier->id . " wurde gelost.");
         $liste = $akt_turnier->get_anmeldungen();
         foreach (($liste['spiele'] ?? []) as $team) {
             // Das Team hat ein Freilos gesetzt, aber den falschen Freilosblock
@@ -237,7 +237,7 @@ class LigaBot
             if ($akt_turnier->check_doppel_anmeldung($team_id)) { //Check ob das Team am Kalendertag des Turnieres schon auf einer Spiele-Liste steht
                 $akt_turnier->abmelden($team_id);
                 $akt_turnier->log("Abmeldung Doppelanmeldung: \r\n" . Team::teamid_to_teamname($team_id), "Ligabot");
-                Form::affirm("Abmeldung Doppelanmeldung im Turnier" . $akt_turnier->turnier_id . ": \r\n" . Team::teamid_to_teamname($team_id));
+                Form::affirm("Abmeldung Doppelanmeldung im Turnier" . $akt_turnier->id . ": \r\n" . Team::teamid_to_teamname($team_id));
             } else {
                 $akt_turnier->liste_wechsel($team_id, 'warte', $pos);
                 $akt_turnier->log("Auf Warteliste gelost: \r\n" . Team::teamid_to_teamname($team_id) . " -> $pos", "Ligabot, Los nach Modus");

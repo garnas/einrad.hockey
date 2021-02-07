@@ -94,7 +94,7 @@ if (isset($_POST['neue_email'])) {
 if (isset($_POST['teamfoto'])) {
     if (!empty($_FILES["jpgupload"]["tmp_name"])) {
         //Bild wird hochgeladen, target_file_jpg = false, falls fehlgeschlagen.
-        $target_file_jpg = Neuigkeit::upload_image($_FILES["jpgupload"]);
+        $target_file_jpg = Neuigkeit::upload_bild($_FILES["jpgupload"]);
         if ($target_file_jpg === false) {
             Form::error("Fehler beim Fotoupload");
         } else {
