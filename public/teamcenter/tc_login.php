@@ -29,8 +29,8 @@ if(isset($_POST['login'])) {
 
     //Passwort überprüfen
     if(!($error ?? false)) {
-        $akt_team = new Team($team_id);
-        if(password_verify($passwort, $akt_team->get_passwort())) {
+        $team = new Team($team_id);
+        if(password_verify($passwort, $team->get_passwort())) {
             $_SESSION['team_id'] = $team_id;
             $_SESSION['teamname'] = Team::teamid_to_teamname($team_id); //Ansonsten könnte es zu fehlern der Groß- und Kleinschreibung kommen, da SQL diese in der Suche der Team ID igoniert.
             $_SESSION['teamblock'] = Tabelle::get_team_block($_SESSION['team_id']);
@@ -44,6 +44,12 @@ if(isset($_POST['login'])) {
             }else{
                 $redirect = 'tc_start.php';
             }
+            if (empty($team->details['trikot_farbe_1']))
+                Form::affirm("Du kannst jetzt  Trikotfarben hinterlegen - diese werden in deinen Spielplänen angezeigt. "
+                    . Form::link("tc_teamdaten_aendern.php", 'Hier kannst du sie eintragen.'));
+            if (empty($team->details['teamfoot']))
+                Form::affirm("Dein Team hat noch kein Teamfoto hinterlegt."
+                    . Form::link("tc_teamdaten_aendern.php", ' Hier kannst du ein Foto hochladen.'));
             header('Location: ' . $redirect);
             die();
         }else{

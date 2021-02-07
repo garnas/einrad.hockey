@@ -167,8 +167,6 @@ class Neuigkeit
             return;
         }
         $info = getimagesize($source);
-        db::debug($source);
-        db::debug($info);
         if ($info['mime'] == 'image/jpeg') {
             $image = imagecreatefromjpeg($source);
         } elseif ($info['mime'] == 'image/gif') {

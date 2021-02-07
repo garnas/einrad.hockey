@@ -765,7 +765,7 @@ class Turnier
      *
      * @param string $block
      */
-    function set_turnier_block(string $block)
+    function set_block(string $block)
     {
         $turnier_id = $this->id;
         $sql = "

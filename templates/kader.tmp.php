@@ -15,7 +15,7 @@
             <tr>
                 <td><?=$eintrag['spieler_id']?></td>
                 <?php if ($ligacenter){ //Direktverlinkung zum Bearbeiten eines Spielers $ligacenter wird definiert in session_la.logic.php?>
-                    <td><a class="no w3-text-blue w3-hover-text-secondary" href='lc_spieler_aendern.php?spieler_id=<?=$eintrag['spieler_id']?>'> <?=$eintrag['vorname'] . " " . $eintrag['nachname']?></a></td>
+                    <td><?= Form::link('lc_spieler_aendern.php?spieler_id=' . $eintrag['spieler_id'], $eintrag['vorname'] . " " . $eintrag['nachname']) ?></td>
                 <?php }else{?>
                     <td><?=$eintrag['vorname']." ".$eintrag['nachname']?></td>
                 <?php } //ende if?>
@@ -25,7 +25,7 @@
                 <?php }else{?>
                     <td class='w3-center'></td>
                 <?php } //ende if?>
-                <?php if($ligacenter){?><td class="w3-center"><?=$eintrag['zeit']?></th><?php }//endif?>
+                <?php if($ligacenter){?><td class="w3-center"><?=$eintrag['zeit']?></td><?php }//endif?>
             </tr>
         <?php } //Ende foreach?>
     </table>
@@ -48,7 +48,7 @@
                     <tr style="vertical-align: middle">
                         <td class=""><?=$eintrag['spieler_id']?></td>
                         <?php if ($ligacenter){ //Direktverlinkung zum Bearbeiten eines Spielers $ligacenter wird definiert in session_la.logic.php?>
-                            <td class=""><a class="no w3-text-blue w3-hover-text-secondary" href='lc_spieler_aendern.php?spieler_id=<?=$eintrag['spieler_id']?>'> <?=$eintrag['vorname'] . " " . $eintrag['nachname']?></a></td>
+                            <td class=""><?= Form::link('lc_spieler_aendern.php?spieler_id=' . $eintrag['spieler_id'], $eintrag['vorname'] . " " . $eintrag['nachname']) ?></td>
                         <?php }else{?>
                             <td class=""><?=$eintrag['vorname']." ".$eintrag['nachname']?></td>
                         <?php } //ende if?>
@@ -106,7 +106,7 @@
             </p>
             <p>
                 <input type="checkbox" class="w3-check" value="zugestimmt" name="dsgvo" id="dsgvo_neu">
-                <label for="dsgvo_neu" style="cursor: pointer;" class="">Der Spieler hat die aktuellen <?=Form::link(Config::LINK_DSGVO, "Datenschutz-Hinweise")?> gelesen und der Verwendung seiner Daten zugestimmt.</label>
+                <label for="dsgvo_neu" style="cursor: pointer;" class="">Der Spieler hat die aktuellen <?=Form::link(Config::LINK_DSGVO, "Datenschutz-Hinweise", true)?> gelesen und der Verwendung seiner Daten zugestimmt.</label>
             </p>
             <p>
                 <input class="w3-button w3-tertiary" type='submit' name='neuer_eintrag' value='Spieler eintragen'>

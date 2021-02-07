@@ -8,7 +8,7 @@
             <i>Es können Bilder im <b>.jpg, .jpeg, .gif, .png</b> Format mit bis zu 11,9 Megabyte hochgeladen werden.</i>
         </p>
         <p>
-            <input class="w3-button w3-block w3-primary" type="file" name="jpgupload" id="jpgupload">
+            <input required class="w3-button w3-block w3-primary" type="file" name="jpgupload" id="jpgupload">
         </p>
         <p>
             <button type="submit" name="teamfoto" class="w3-button w3-tertiary">
@@ -106,7 +106,7 @@
         </div>
     </div>
     <p class="w3-text-grey">
-        Eure Trikotfarben werden im Spielplan angezeigt. Sie helfen anderen Teams bei der Wahl ihrer Trikots und Zuschauern dein Teams zu identifizieren.
+        Eure Trikotfarben werden im Spielplan angezeigt. Sie helfen anderen Teams bei der Wahl ihrer Trikots und Zuschauern dein Team zu identifizieren.
     </p>
 </div>
 <form method='post' class="w3-panel w3-card">

@@ -62,8 +62,8 @@ include '../../templates/header.tmp.php';
                 <tr>
                     <!-- Icons -->
                     <td style='vertical-align: middle; text-align: right; white-space: nowrap;'>
-                        <?= Form::Link($team['homepage'], "<i class='material-icons'>home</i>", true)?>
-                        <?= Form::Link($team['teamfoto'], "<i class='material-icons'>group</i>", true)?>
+                        <?= Form::Link($team['homepage'] ?? '', "<i class='material-icons'>home</i>", true)?>
+                        <?= Form::Link($team['teamfoto'] ?? '', "<i class='material-icons'>group</i>", true)?>
                         <?= Form::mailto((new Kontakt($team['team_id']))->get_emails('public'), '')?>
                     </td>
                     <!-- Text -->

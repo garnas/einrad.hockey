@@ -471,21 +471,18 @@ class Team
     /**
      * Teamfoto löschen
      *
-     * Pfad des Teamfotos
-     * @param string $target
      */
-    function delete_teamfoto(string $target)
+    function delete_teamfoto()
     {
-        $team_id = $this->id;
         // Foto löschen
-        if (file_exists($target)) {
-            unlink($target);
+        if (file_exists($this->details['teamfoto'])) {
+            unlink($this->details['teamfoto']);
         }
         // Fotolink aus der Datenbank entfernen
         $sql =  "
                 UPDATE teams_details
                 SET teamfoto = ''
-                WHERE team_id='$team_id'
+                WHERE team_id = '$this->id'
                 ";
         db::write($sql);
     }

@@ -2,16 +2,20 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/session_la.logic.php'; //Auth
-require_once '../../logic/teamdaten_aendern.logic.php'; //Formularverarbeitung
-require_once '../../logic/teamdaten_aendern_la.logic.php'; //Formularverarbeitung
+require_once '../../logic/first.logic.php'; // Autoloader und Session
+require_once '../../logic/session_la.logic.php'; // Auth
+require_once '../../logic/la_team_waehlen.logic.php'; // Team wählen
+require_once '../../logic/teamdaten_aendern.logic.php'; // Formularverarbeitung
+require_once '../../logic/teamdaten_aendern_la.logic.php'; // Formularverarbeitung Ligaausschuss
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
 include '../../templates/header.tmp.php';
-include '../../templates/teamdaten_aendern_la.tmp.php';
-include '../../templates/teamdaten_aendern.tmp.php';
+include '../../templates/la_team_waehlen.tmp.php';
+if (isset($team)){
+    include '../../templates/teamdaten_aendern_la.tmp.php';
+    include '../../templates/teamdaten_aendern.tmp.php';
+}
 include '../../templates/footer.tmp.php';

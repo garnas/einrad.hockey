@@ -1,5 +1,5 @@
 <?php
-if (isset($_POST['change_la'])) {
+if (isset($_POST['change_la']) && $ligacenter) {
     $error = false;
     $neuer_teamname = $_POST['teamname'];
     $freilose = $_POST['freilose'];
@@ -43,6 +43,6 @@ if (isset($_POST['change_la'])) {
             Form::affirm("Passwort wurde geändert");
         }
     }
-    header('Location: lc_teamdaten.php?team_id=' . $team->id);
+    header('Location: lc_teamdaten_aendern.php?team_id=' . $team->id);
     die();
 }

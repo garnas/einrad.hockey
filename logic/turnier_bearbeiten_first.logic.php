@@ -1,7 +1,6 @@
 <?php
-//Turnier und $daten-Array erstellen
-$turnier_id = (int) $_GET['turnier_id'];
-$turnier = new Turnier($turnier_id);
+// Turnier und $daten-Array erstellen
+$turnier = new Turnier((int) $_GET['turnier_id']);
 
 //Existiert das Turnier?
 if (empty($turnier->details)){

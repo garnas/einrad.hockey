@@ -2,21 +2,21 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../logic/first.logic.php'; // autoloader und Session
 
-$no_redirect = true; //Verhindert die Endlosschleife, bei der Überprüfung, ob das Passwort geändert wurde
-require_once '../../logic/session_team.logic.php'; //Auth
+$no_redirect = true; // Verhindert die Endlosschleife, bei der Überprüfung, ob das Passwort geändert wurde
+require_once '../../logic/session_team.logic.php'; // Auth
 
-$akt_team = new Team ($_SESSION['team_id']);
+$team = new Team ($_SESSION['team_id']);
 
 //Formularauswertung
 if(isset($_POST['change'])) {
     $passwort_alt = $_POST['passwort_alt'];
     $passwort_neu = $_POST['passwort_neu'];
 
-    if (strlen($passwort_neu) >= 6 && strlen($passwort_neu) < 100){ //Zu lange Passwörter sollten ebenfalls verhindert werden, damit keine Fehlermeldungen provoziert werden können
-        if(password_verify($passwort_alt, $akt_team->get_passwort())) {
-            $akt_team->set_passwort($passwort_neu);
+    if (strlen($passwort_neu) >= 6 && strlen($passwort_neu) < 100){ // Zu lange Passwörter sollten ebenfalls verhindert werden, damit keine Fehlermeldungen provoziert werden können
+        if(password_verify($passwort_alt, $team->get_passwort())) {
+            $team->set_passwort($passwort_neu);
             Form::affirm("Euer Passwort wurde geändert.");
             header('Location: tc_start.php');
             die();

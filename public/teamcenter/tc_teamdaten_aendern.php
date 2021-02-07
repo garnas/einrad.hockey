@@ -14,11 +14,7 @@ require_once '../../logic/teamdaten_aendern.logic.php';
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 include '../../templates/header.tmp.php';
-include '../../templates/teamdaten_aendern.tmp.php';
-?>
-
-<p>
-    <a class="no w3-text-primary w3-hover-text-secondary" href="tc_teamdaten.php"><i class="material-icons">chevron_left</i>Zurück<i class="material-icons" style="visibility: hidden">chevron_right</i></a>
-</p>
-
-<?php include '../../templates/footer.tmp.php';
+if (isset($team)){
+    include '../../templates/teamdaten_aendern.tmp.php';
+}
+include '../../templates/footer.tmp.php';

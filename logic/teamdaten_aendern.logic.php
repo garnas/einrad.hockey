@@ -1,15 +1,17 @@
 <?php
 
 // Inititalisierung
-$team_id = ($teamcenter) ? $_SESSION['team_id'] : (int)$_GET['team_id'];
-$team = new Team ($team_id);
-$path = ($ligacenter) ? '../liga/lc_teamdaten_aendern.php' : '../teamcenter/tc_teamdaten_aendern.php';
-if (empty($team->details)) {
-    die("Team wurde nicht gefunden");
+
+$team_id = ($teamcenter) ? $_SESSION['team_id'] : (int) ($_GET['team_id'] ?? 0);
+if (Team::is_ligateam($team_id)){
+    $team = new Team ($team_id);
+    $kontakte = new Kontakt ($team->id);
+    $emails = $kontakte->get_emails_with_details();
 }
 
-$kontakte = new Kontakt ($team->id);
-$emails = $kontakte->get_emails_with_details();
+$path = ($ligacenter) ? '../ligacenter/lc_teamdaten_aendern.php?team_id=' . $team_id : '../teamcenter/tc_teamdaten_aendern.php';
+
+
 
 // Trikotfarben verwalten
 if (
@@ -27,7 +29,7 @@ if (
     if (isset($_POST['no_color_2']))
         $team->set_detail('trikot_farbe_2', '');
     Form::affirm("Trikotfarbe geändert.");
-    header("Location:" . $path . '#trikotfarbe');
+    header("Location:" . $path);
     die();
 }
 
@@ -108,7 +110,7 @@ if (isset($_POST['teamfoto'])) {
 
 // Teamfoto löschen
 if (isset($_POST['delete_teamfoto'])) {
-    $team->delete_teamfoto($daten['teamfoto']);
+    $team->delete_teamfoto();
     Form::affirm("Teamfoto wurde gelöscht");
     header('Location: ' . $path);
     die();

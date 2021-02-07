@@ -178,19 +178,19 @@ class MailBot
      * Schreibt eine Mail in die Datenbank an alle spielberechtigten Teams, wenn es (zum Übergang zur Meldephase) noch
      * freie Plätze gibt.
      *
-     * @param Turnier $akt_turnier
+     * @param Turnier $turnier
      */
-    public static function mail_plaetze_frei(Turnier $akt_turnier)
+    public static function mail_plaetze_frei(Turnier $turnier)
     {
-        if ($akt_turnier->get_anzahl_freie_plaetze() > 0 && in_array($akt_turnier->details['art'], ['I', 'II', 'III'])) {
+        if ($turnier->get_anzahl_freie_plaetze() > 0 && in_array($turnier->details['art'], ['I', 'II', 'III'])) {
             $team_ids = Team::get_ligateams_id();
             foreach ($team_ids as $team_id) {
                 // Noch Plätze frei
-                if (!$akt_turnier->check_team_angemeldet($team_id) && $akt_turnier->check_team_block($team_id) && !$akt_turnier->check_doppel_anmeldung($team_id)) {
-                    $betreff = $akt_turnier->details['tblock'] . "-Turnier in " . $akt_turnier->details['ort'] . " hat noch freie Plätze";
+                if (!$turnier->check_team_angemeldet($team_id) && $turnier->check_team_block($team_id) && !$turnier->check_doppel_anmeldung($team_id)) {
+                    $betreff = $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'] . " hat noch freie Plätze";
                     $inhalt = self::$mail_beginning . "Hallo " . Team::teamid_to_teamname($team_id) . ","
-                        . "<br><br>das " . $akt_turnier->details['tblock'] . "-Turnier in " . $akt_turnier->details['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->details['datum'])) . " ist in die Meldephase übergegangen und hat noch freie Spielen-Plätze"
-                        . "(<a href='" . Config::BASE_LINK . "/liga/turnier_details?turnier_id=" . $akt_turnier->details['turnier_id'] . "'>Link zum Turnier</a>). Ihr erhaltet diese automatische E-Mail, weil Ihr einen passenden Turnierblock habt."
+                        . "<br><br>das " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'] . " am " . date("d.m.Y", strtotime($turnier->details['datum'])) . " ist in die Meldephase übergegangen und hat noch freie Spielen-Plätze"
+                        . "(<a href='" . Config::BASE_LINK . "/liga/turnier_details?turnier_id=" . $turnier->details['turnier_id'] . "'>Link zum Turnier</a>). Ihr erhaltet diese automatische E-Mail, weil Ihr einen passenden Turnierblock habt."
                         . self::$mail_ending;
                     $akt_kontakt = new Kontakt ($team_id);
                     $emails = $akt_kontakt->get_emails('info');
@@ -203,16 +203,16 @@ class MailBot
     /**
      * Erstellt eine Mail in der Datenbank an Teams, welche in von der Warteliste aufgerückt sind
      *
-     * @param Turnier $akt_turnier
+     * @param Turnier $turnier
      * @param int $team_id
      */
-    public static function mail_warte_zu_spiele(Turnier $akt_turnier, int $team_id)
+    public static function mail_warte_zu_spiele(Turnier $turnier, int $team_id)
     {
-        $betreff = $akt_turnier->details['tblock'] . "-Turnier in " . $akt_turnier->details['ort'] . ": Auf Spielen-Liste aufgerückt";
+        $betreff = $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'] . ": Auf Spielen-Liste aufgerückt";
         $inhalt = self::$mail_beginning
             . "Hallo " . Team::teamid_to_teamname($team_id) . ","
-            . "<br><br>dein Team ist auf dem " . $akt_turnier->details['tblock'] . "-Turnier in " . $akt_turnier->details['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->details['datum'])) . " von der Warteliste auf die Spielen-Liste aufgerückt."
-            . "<br><br><a href='" . Config::BASE_LINK . "/liga/turnier_details?turnier_id=" . $akt_turnier->details['turnier_id'] . "'>Link zum Turnier</a>"
+            . "<br><br>dein Team ist auf dem " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'] . " am " . date("d.m.Y", strtotime($turnier->details['datum'])) . " von der Warteliste auf die Spielen-Liste aufgerückt."
+            . "<br><br><a href='" . Config::BASE_LINK . "/liga/turnier_details?turnier_id=" . $turnier->details['turnier_id'] . "'>Link zum Turnier</a>"
             . self::$mail_ending;
         $akt_kontakt = new Kontakt ($team_id);
         $emails = $akt_kontakt->get_emails('info');
@@ -222,29 +222,29 @@ class MailBot
     /**
      * Erstellt eine Mail in der Datenbank an alle vom Losen betroffenen Teams
      *
-     * @param $akt_turnier
+     * @param Turnier $turnier
      */
-    public static function mail_gelost($akt_turnier)
+    public static function mail_gelost(Turnier $turnier)
     {
-        if (in_array($akt_turnier->details['art'], ['I', 'II', 'III'])) {
+        if (in_array($turnier->details['art'], ['I', 'II', 'III'])) {
             $team_ids = Team::get_ligateams_id();
             foreach ($team_ids as $team_id) {
                 // Team angemeldet?
-                if ($akt_turnier->check_team_angemeldet($team_id)) {
+                if ($turnier->check_team_angemeldet($team_id)) {
                     // Auf Warteliste gelandet
-                    if ($akt_turnier->get_team_liste($team_id) == 'warte') {
-                        $betreff = "Warteliste: " . $akt_turnier->details['tblock'] . "-Turnier in " . $akt_turnier->details['ort'];
+                    if ($turnier->get_team_liste($team_id) == 'warte') {
+                        $betreff = "Warteliste: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
                         $inhalt = self::$mail_beginning . "Hallo " . Team::teamid_to_teamname($team_id) . ","
-                            . "<br><br>das " . $akt_turnier->details['tblock'] . "-Turnier in " . $akt_turnier->details['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->details['datum'])) . " ist in die Meldephase übergegangen und die freien Spielen-Plätze wurden nach Modus 4.4.2 verteilt. Euer Team steht nun auf der <b>Warteliste</b>."
-                            . " Erfahre <a " . Config::BASE_LINK . "/liga/turnier_details?turnier_id=" . $akt_turnier->details['turnier_id'] . "'>hier</a> mehr."
+                            . "<br><br>das " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'] . " am " . date("d.m.Y", strtotime($turnier->details['datum'])) . " ist in die Meldephase übergegangen und die freien Spielen-Plätze wurden nach Modus 4.4.2 verteilt. Euer Team steht nun auf der <b>Warteliste</b>."
+                            . " Erfahre <a " . Config::BASE_LINK . "/liga/turnier_details?turnier_id=" . $turnier->details['turnier_id'] . "'>hier</a> mehr."
                             . self::$mail_ending;
                         // Auf Spielen-Liste gelandet
-                    } elseif ($akt_turnier->get_team_liste($team_id) == 'spiele') {
-                        $betreff = "Spielen-Liste: " . $akt_turnier->details['tblock'] . "-Turnier in " . $akt_turnier->details['ort'];
+                    } elseif ($turnier->get_team_liste($team_id) == 'spiele') {
+                        $betreff = "Spielen-Liste: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
                         $inhalt = self::$mail_beginning
                             . "Hallo " . Team::teamid_to_teamname($team_id) . ","
-                            . "<br><br>das " . $akt_turnier->details['tblock'] . "-Turnier in " . $akt_turnier->details['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->details['datum'])) . " ist in die Meldephase übergegangen und die freien Spielen-Plätze wurden nach Modus 4.4.2 verteilt. Euer Team steht auf der <b>Spielen-Liste</b>."
-                            . " Erfahre <a href='" . Config::BASE_LINK . "/liga/turnier_details?turnier_id=" . $akt_turnier->details['turnier_id'] . "'>hier</a> mehr."
+                            . "<br><br>das " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'] . " am " . date("d.m.Y", strtotime($turnier->details['datum'])) . " ist in die Meldephase übergegangen und die freien Spielen-Plätze wurden nach Modus 4.4.2 verteilt. Euer Team steht auf der <b>Spielen-Liste</b>."
+                            . " Erfahre <a href='" . Config::BASE_LINK . "/liga/turnier_details?turnier_id=" . $turnier->details['turnier_id'] . "'>hier</a> mehr."
                             . self::$mail_ending;
                     } else {
                         return;
@@ -260,20 +260,20 @@ class MailBot
     /**
      * Erstellt eine Mail in der Datenbank an alle spielberechtigten Teams, wenn ein neues Turnier eingetragen wird
      *
-     * @param Turnier $akt_turnier
+     * @param Turnier $turnier
      */
-    public static function mail_neues_turnier(Turnier $akt_turnier)
+    public static function mail_neues_turnier(Turnier $turnier)
     {
-        if (in_array($akt_turnier->details['art'], ['I', 'II', 'III'])) {
+        if (in_array($turnier->details['art'], ['I', 'II', 'III'])) {
             $team_ids = Team::get_ligateams_id();
             foreach ($team_ids as $team_id) {
                 // Noch Plätze frei?
-                if ($akt_turnier->check_team_block($team_id) && !$akt_turnier->check_doppel_anmeldung($team_id)) {
-                    $betreff = "Neues " . $akt_turnier->details['tblock'] . "-Turnier in " . $akt_turnier->details['ort'];
+                if ($turnier->check_team_block($team_id) && !$turnier->check_doppel_anmeldung($team_id)) {
+                    $betreff = "Neues " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
                     $inhalt = self::$mail_beginning
                         . "Hallo " . Team::teamid_to_teamname($team_id) . ","
-                        . "<br><br>es wurde ein neues Turnier eingetragen, für welches ihr euch anmelden könnt: " . $akt_turnier->details['tblock'] . "-Turnier in " . $akt_turnier->details['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->details['datum']))
-                        . " (<a href='" . Config::BASE_LINK . "/liga/turnier_details?turnier_id=" . $akt_turnier->details['turnier_id'] . "'>Link des neuen Turniers</a>)"
+                        . "<br><br>es wurde ein neues Turnier eingetragen, für welches ihr euch anmelden könnt: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'] . " am " . date("d.m.Y", strtotime($turnier->details['datum']))
+                        . " (<a href='" . Config::BASE_LINK . "/liga/turnier_details?turnier_id=" . $turnier->details['turnier_id'] . "'>Link des neuen Turniers</a>)"
                         . self::$mail_ending;
                     $akt_kontakt = new Kontakt ($team_id);
                     $emails = $akt_kontakt->get_emails('info');
@@ -286,20 +286,19 @@ class MailBot
     /**
      * Erstellt eine Mail in der Datenbank, wenn ein Team trotz Freilos beim übergang in die Datenbank abgemeldet wird.
      *
-     * @param Turnier $akt_turnier
+     * @param Turnier $turnier
      * @param int $team_id
      */
-    public static function mail_freilos_abmeldung(Turnier $akt_turnier, int $team_id)
+    public static function mail_freilos_abmeldung(Turnier $turnier, int $team_id)
     {
-        if (in_array($akt_turnier->details['art'], ['I', 'II', 'III'])) {
-            $betreff = "Falscher Freilosblock: " . $akt_turnier->details['tblock'] . "-Turnier in " . $akt_turnier->details['ort'];
+        if (in_array($turnier->details['art'], ['I', 'II', 'III'])) {
+            $betreff = "Falscher Freilosblock: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
             $inhalt = self::$mail_beginning
                 . "Hallo " . Team::teamid_to_teamname($team_id) . ","
-                . "<br><br>Ihr hattet für das " . $akt_turnier->details['tblock'] . "-Turnier in " . $akt_turnier->details['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->details['datum']))
-                . " (<a href='" . Config::BASE_LINK . "/liga/turnier_details?turnier_id=" . $akt_turnier->details['turnier_id'] . "'>Link zum Turnier</a>) ein Freilos gesetzt. Da euer Teamblock höher war als der des Turnierblocks, wurdet ihr von der Spielen-Liste abgemeldet und seid nun auf der Warteliste. Das Freilos wurde euch erstattet."
+                . "<br><br>Ihr hattet für das " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'] . " am " . date("d.m.Y", strtotime($turnier->details['datum']))
+                . " (<a href='" . Config::BASE_LINK . "/liga/turnier_details?turnier_id=" . $turnier->details['turnier_id'] . "'>Link zum Turnier</a>) ein Freilos gesetzt. Da euer Teamblock höher war als der des Turnierblocks, wurdet ihr von der Spielen-Liste abgemeldet und seid nun auf der Warteliste. Das Freilos wurde euch erstattet."
                 . self::$mail_ending;
-            $akt_kontakt = new Kontakt ($team_id);
-            $emails = $akt_kontakt->get_emails('info');
+            $emails = (new Kontakt ($team_id))->get_emails('info');
             self::add_mail($betreff, $inhalt, $emails);
         }
     }
@@ -307,14 +306,14 @@ class MailBot
     /**
      * Erstellt eine Mail in der Datenbank an den Ligaausschuss, wenn ein Team Turnierdaten ändert.
      *
-     * @param Turnier $akt_turnier
+     * @param Turnier $turnier
      */
-    public static function mail_turnierdaten_geaendert(Turnier $akt_turnier)
+    public static function mail_turnierdaten_geaendert(Turnier $turnier)
     {
-        $betreff = "Turnierdaten geändert: " . $akt_turnier->details['tblock'] . "-Turnier in " . $akt_turnier->details['ort'];
+        $betreff = "Turnierdaten geändert: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
         $inhalt = self::$mail_beginning
             . "Hallo Ligaausschuss,"
-            . "<br><br>" . $akt_turnier->details["teamname"] . " hat als Ausrichter seine Turnierdaten vom " . $akt_turnier->details['tblock'] . "-Turnier in " . $akt_turnier->details['ort'] . " verändert: <a href='" . Config::BASE_LINK . "/ligacenter/lc_turnier_log?turnier_id=" . $akt_turnier->details['turnier_id'] . "'>Link zum Turnier</a>"
+            . "<br><br>" . $turnier->details["teamname"] . " hat als Ausrichter seine Turnierdaten vom " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'] . " verändert: <a href='" . Config::BASE_LINK . "/ligacenter/lc_turnier_log?turnier_id=" . $turnier->details['turnier_id'] . "'>Link zum Turnier</a>"
             . "<br><br><b>Teams werden nicht mehr automatisch benachrichtigt.</b>"
             . "<br>Euer Mailbot</html>";
         self::add_mail($betreff, $inhalt, Config::LAMAIL);
