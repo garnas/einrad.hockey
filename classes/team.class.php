@@ -44,19 +44,19 @@ class Team
                 INSERT INTO teams_liga (teamname, passwort, freilose) 
                 VALUES ('$teamname','$passwort',2)
                 ";
-        db::write($sql);
+        db::writedb($sql);
 
         // Eintrag in teams_details
         $sql =  "
                 INSERT INTO teams_details (team_id) 
                 VALUES ('$team_id')";
-        db::write($sql);
+        db::writedb($sql);
 
         // Eintrag in teams_kontakt
         $sql =  "
                 INSERT INTO teams_kontakt (team_id, email, public, get_info_mail) 
                 VALUES ('$team_id','$email','Ja','Nein')";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -71,7 +71,7 @@ class Team
                 SET aktiv='Nein'
                 WHERE team_id='$team_id'
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -87,7 +87,7 @@ class Team
                 WHERE aktiv = 'Nein' AND ligateam = 'Ja' 
                 ORDER BY teamname
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)) {
             array_push($return, $x);
@@ -107,7 +107,7 @@ class Team
                 SET aktiv = 'Ja' 
                 WHERE team_id = '$team_id'
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -124,7 +124,7 @@ class Team
                 FROM teams_liga 
                 WHERE teamname = '$teamname'
                 ";
-        $result = mysqli_fetch_assoc(db::read($sql));
+        $result = mysqli_fetch_assoc(db::readdb($sql));
         return $result['team_id'] ?? 0;
     }
 
@@ -141,7 +141,7 @@ class Team
                 FROM teams_liga 
                 WHERE team_id = '$team_id'
                 ";
-        $result = mysqli_fetch_assoc(db::read($sql));
+        $result = mysqli_fetch_assoc(db::readdb($sql));
         return db::escape($result['teamname'] ?? '');
     }
 
@@ -158,7 +158,7 @@ class Team
                 FROM teams_liga
                 WHERE team_id = '$team_id' AND ligateam='Ja' AND aktiv='Ja'
                 ";
-        $result = mysqli_fetch_assoc(db::read($sql));
+        $result = mysqli_fetch_assoc(db::readdb($sql));
         if (!empty($result['team_id'])) {
             return true;
         }
@@ -178,7 +178,7 @@ class Team
                 WHERE ligateam = 'Ja' AND aktiv = 'Ja' 
                 ORDER BY teamname
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)) {
             array_push($return, $x['teamname']);
@@ -199,7 +199,7 @@ class Team
                 WHERE ligateam = 'Ja' AND aktiv = 'Ja' 
                 ORDER BY RAND()
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $return = array();
         while ($eintrag = mysqli_fetch_assoc($result)) {
             array_push($return, $eintrag['team_id']);
@@ -222,7 +222,7 @@ class Team
                 WHERE teams_liga.ligateam = 'Ja' AND teams_liga.aktiv = 'Ja'
                 ORDER BY teams_liga.teamname
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)) {
             $return[$x['team_id']] = $x;
@@ -242,7 +242,7 @@ class Team
                 SET freilose = freilose + 1 
                 WHERE team_id = '$team_id'
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -261,7 +261,7 @@ class Team
                 INSERT INTO teams_strafen (team_id, verwarnung, turnier_id, grund, prozentsatz, saison)
                 VALUES ('$team_id','$verwarnung','$turnier_id','$grund','$prozentsatz', '$saison'
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -275,7 +275,7 @@ class Team
                 DELETE FROM teams_strafen
                 WHERE strafe_id = '$strafe_id'
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -298,7 +298,7 @@ class Team
                 AND teams_liga.aktiv = 'Ja'
                 ORDER BY turniere_liga.datum DESC
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)) {
             $return[$x['strafe_id']] = $x;
@@ -320,7 +320,7 @@ class Team
                 ON teams_details.team_id = teams_liga.team_id
                 WHERE teams_liga.team_id = $this->id
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $result = mysqli_fetch_assoc($result);
         return db::escape($result) ?? [];
     }
@@ -338,7 +338,7 @@ class Team
                 SET teamname = '$name'
                 WHERE team_id='$team_id'
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -354,7 +354,7 @@ class Team
                 FROM teams_liga
                 WHERE team_id = '$team_id'
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $result = mysqli_fetch_assoc($result);
         return $result['passwort'];
     }
@@ -374,7 +374,7 @@ class Team
                 SET passwort = '$passwort', passwort_geaendert = '$pw_geaendert'
                 WHERE team_id='$team_id'
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -390,7 +390,7 @@ class Team
                 FROM teams_liga
                 WHERE team_id='$team_id'
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $result = mysqli_fetch_assoc($result);
         return $result['freilose'];
     }
@@ -408,7 +408,7 @@ class Team
                 SET freilose='$anzahl'
                 WHERE team_id='$team_id'
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -427,7 +427,7 @@ class Team
                 SET $entry = '$value'
                 WHERE team_id = '$this->id'
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -443,7 +443,7 @@ class Team
                 FROM turniere_liste 
                 WHERE team_id = $team_id
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $return = array();
         while ($x = mysqli_fetch_assoc($result)) {
             $return[$x['turnier_id']] = $x['liste'];
@@ -465,7 +465,7 @@ class Team
                 SET teamfoto = '$target' 
                 WHERE team_id='$team_id'
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -484,6 +484,6 @@ class Team
                 SET teamfoto = ''
                 WHERE team_id = '$this->id'
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 }

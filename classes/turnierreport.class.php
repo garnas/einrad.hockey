@@ -32,7 +32,7 @@ class TurnierReport
                 FROM spieler_zeitstrafen 
                 WHERE turnier_id = $turnier_id
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         while ($x = mysqli_fetch_assoc($result)) {
             $zeitstrafen[$x['zeitstrafe_id']] = $x;
         }
@@ -55,7 +55,7 @@ class TurnierReport
                 INSERT INTO spieler_zeitstrafen (turnier_id, spieler, dauer, team_a, team_b, grund) 
                 VALUES ('$turnier_id', '$spieler_name', '$dauer', '$team_a', '$team_b', '$grund')
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -70,7 +70,7 @@ class TurnierReport
                 WHERE zeitstrafe_id = '$zeitstrafe_id' 
                 AND turnier_id = $this->turnier_id
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -84,7 +84,7 @@ class TurnierReport
                 FROM spieler_ausleihen 
                 WHERE turnier_id = $this->turnier_id
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         while ($x = mysqli_fetch_assoc($result)) {
             $return[$x['ausleihe_id']] = $x;
         }
@@ -105,7 +105,7 @@ class TurnierReport
                 INSERT INTO spieler_ausleihen (turnier_id, spieler, team_auf, team_ab) 
                 VALUES ('$turnier_id', '$spieler', '$team_auf', '$team_ab')
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -121,7 +121,7 @@ class TurnierReport
                 WHERE ausleihe_id = '$ausleihe_id' 
                 AND turnier_id = '$turnier_id'
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -137,7 +137,7 @@ class TurnierReport
             FROM turniere_berichte 
             WHERE turnier_id = '$turnier_id'
             ";
-        $return = db::read($sql);
+        $return = db::readdb($sql);
         $return = mysqli_fetch_assoc($return);
         return db::escape($return['bericht'] ?? '');
     }
@@ -155,7 +155,7 @@ class TurnierReport
                 FROM turniere_berichte 
                 WHERE turnier_id = '$turnier_id'
                 ";
-        $return = db::read($sql);
+        $return = db::readdb($sql);
         $return = mysqli_fetch_assoc($return);
         if (!empty($return) && $return['kader_ueberprueft'] == 'Ja') {
             return true;
@@ -172,7 +172,7 @@ class TurnierReport
     function set_turnier_bericht(string $bericht, string $kader_check = 'Nein')
     {
         // Existiert bereits ein Turnierbericht?
-        $check = db::read("
+        $check = db::readdb("
                                 SELECT * FROM turniere_berichte 
                                 WHERE turnier_id = $this->turnier_id
                                 ");
@@ -188,6 +188,6 @@ class TurnierReport
                     WHERE turnier_id = $this->turnier_id
                     ";
         }
-        db::write($sql);
+        db::writedb($sql);
     }
 }

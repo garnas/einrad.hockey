@@ -120,7 +120,7 @@ class LigaBot
     public static function get_turnier_ids(int $saison = Config::SAISON): array
     {
         $sql = "SELECT turnier_id FROM turniere_liga WHERE saison = $saison AND (art='I' OR art='II' OR art='III') ORDER BY datum";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $return = [];
         while ($x = mysqli_fetch_assoc($result)) {
             array_push($return, $x['turnier_id']);
@@ -166,7 +166,7 @@ class LigaBot
                 GROUP BY turniere_liga.datum, turniere_liste.team_id 
                 HAVING (COUNT(*) > 1)
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $return = [];
         while ($x = mysqli_fetch_assoc($result)) {
             $return[$x['team_id']] = $x;

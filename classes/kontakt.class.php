@@ -37,7 +37,7 @@ class Kontakt
                 ON teams_liga.team_id = teams_kontakt.team_id 
                 WHERE teams_liga.aktiv = 'Ja'
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         while ($x = mysqli_fetch_assoc($result)) {
             $return[] = $x['email'];
         }
@@ -64,7 +64,7 @@ class Kontakt
                 AND turniere_liste.turnier_id = '$turnier_id'
                 ";
 
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $return['emails'] = $return['teamnamen'] = [];
         while ($x = mysqli_fetch_assoc($result)) {
             if (!in_array($x['teamname'], $return['teamnamen'])) {
@@ -91,7 +91,7 @@ class Kontakt
                 INSERT INTO teams_kontakt (team_id, email, public, get_info_mail) 
                 VALUES ('$team_id','$email','$public','$infomail')
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -114,7 +114,7 @@ class Kontakt
                 FROM teams_kontakt 
                 WHERE team_id = $team_id
                 " . $and_clause;
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         while ($x = mysqli_fetch_assoc($result)) {
             $return[] = $x['email'];
         }
@@ -135,7 +135,7 @@ class Kontakt
                 FROM teams_kontakt 
                 WHERE team_id = $this->team_id
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         while ($x = mysqli_fetch_assoc($result)) {
             $return[$x['teams_kontakt_id']] = $x;
         }
@@ -155,7 +155,7 @@ class Kontakt
                 SET public = '$value' 
                 WHERE teams_kontakt_id = '$teams_kontakt_id'
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -171,7 +171,7 @@ class Kontakt
                 SET get_info_mail = '$value'
                 WHERE teams_kontakt_id = '$teams_kontakt_id'
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -184,7 +184,7 @@ class Kontakt
     {
         if (count($this->get_emails()) > 1) {
             $sql = "DELETE FROM teams_kontakt WHERE teams_kontakt_id = '$teams_kontakt_id'";
-            db::write($sql);
+            db::writedb($sql);
             return true;
         }
         return false;

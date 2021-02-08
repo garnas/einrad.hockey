@@ -105,7 +105,7 @@ class Spielplan
                 WHERE plaetze = '$anzahl_teams' 
                 AND spielplan = '$spielplan_art'
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
 
         while ($spiel = mysqli_fetch_assoc($result)) {
             $sql_inserts[] = "("
@@ -126,7 +126,7 @@ class Spielplan
                 INSERT INTO spiele 
                 VALUES " . implode(', ', $sql_inserts) . "
                 ";
-        db::write($sql);
+        db::writedb($sql);
 
         // Turnierlog
         $turnier->log("Dynamischer " . $anzahl_teams . "er-JgJ-Spielplan erstellt.");
@@ -149,7 +149,7 @@ class Spielplan
                 DELETE FROM spiele 
                 WHERE turnier_id = $turnier->id
                 ";
-        db::write($sql);
+        db::writedb($sql);
         $turnier->log("Dynamischer JgJ-Spielplan gelöscht.");
         $turnier->set_phase('melde');
     }
@@ -169,7 +169,7 @@ class Spielplan
                 WHERE plaetze = '$plaetze' 
                 AND spielplan = '$spielplan'
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         return db::escape(mysqli_fetch_assoc($result));
     }
 
@@ -192,7 +192,7 @@ class Spielplan
                 AND team_id_b = t2.team_id
                 ORDER BY spiel_id
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         while ($spiel = mysqli_fetch_assoc($result)) {
             $spiel["zeit"] = date("H:i", $startzeit);
             $spiele[$spiel['spiel_id']] = $spiel;
@@ -238,7 +238,7 @@ class Spielplan
                 SET tore_a = $tore_a, tore_b = $tore_b, penalty_a = $penalty_a, penalty_b = $penalty_b
                 WHERE turnier_id = $this->turnier_id AND spiel_id = $spiel_id
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -628,7 +628,7 @@ class Spielplan
                 FROM spiele
                 WHERE turnier_id = $turnier_id;
                 ";
-        return db::read($sql)->num_rows > 0;
+        return db::readdb($sql)->num_rows > 0;
     }
 
     /**

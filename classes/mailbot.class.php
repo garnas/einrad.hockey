@@ -80,7 +80,7 @@ class MailBot
                 ORDER BY zeit 
                 LIMIT 50
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         while ($mail = mysqli_fetch_assoc($result)) {
             $mailer = self::start_mailer();
             $mailer->isHTML(true); // Für die Links
@@ -128,7 +128,7 @@ class MailBot
             }
             $sql = "INSERT INTO mailbot (betreff, inhalt, adressat, absender, mail_status)
                     VALUES ('$betreff', '$inhalt', '$adressaten', '$absender', 'warte')";
-            db::write($sql);
+            db::writedb($sql);
         }
     }
 
@@ -154,7 +154,7 @@ class MailBot
                 WHERE mail_id = '$mail_id'
                 ";
         }
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -167,7 +167,7 @@ class MailBot
             FROM mailbot 
             WHERE mail_status = 'fehler'
             ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $anzahl = mysqli_fetch_assoc($result)['anzahl'];
         if ($anzahl > 0) {
             Form::attention("Der Mailbot kann $anzahl Mail(s) nicht versenden - siehe Datenbank.");

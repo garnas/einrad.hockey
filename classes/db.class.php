@@ -99,7 +99,7 @@ class db
             FROM  INFORMATION_SCHEMA.TABLES
             WHERE TABLE_SCHEMA = '" . Config::DATABASE . "'  
             AND   TABLE_NAME   = '$tabelle';";
-        $auto_incr = self::read($sql);
+        $auto_incr = self::readdb($sql);
         $auto_incr = mysqli_fetch_assoc($auto_incr);
         $auto_incr = $auto_incr["AUTO_INCREMENT"];
         return $auto_incr;

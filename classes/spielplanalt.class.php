@@ -32,7 +32,7 @@ class SpielplanAlt{
         foreach ($subdaten as $key => $team_ergebnis){
             $team_id = $team_ergebnis['team_id_a'];
             $sql = "SELECT * FROM spiele WHERE turnier_id = '$turnier_id' AND (team_id_a = '$team_id' or team_id_b = '$team_id')";
-            $result = db::read($sql);
+            $result = db::readdb($sql);
             while ($x = mysqli_fetch_assoc($result)){
                 if ($x['tore_a'] === NULL or $x['tore_b'] === NULL){
                     return false;
@@ -66,14 +66,14 @@ class SpielplanAlt{
     {
         //TESTEN OB SPIELE SCHON EXISTIEREN
         $sql="SELECT * FROM spiele WHERE turnier_id = '$this->turnier_id'";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $result = mysqli_fetch_assoc($result);
         $this->anzahl_spiele = 0;
 
         if (empty($result)){
             $spielplan=$this->akt_turnier->details["spielplan"];
             $sql = "SELECT * FROM spielplan_paarungen WHERE plaetze = '$this->anzahl_teams' AND spielplan = '$spielplan'";
-            $result = db::read($sql);
+            $result = db::readdb($sql);
             $sqlinsert="";
             $sqlinsert="INSERT INTO spiele VALUES ";
             while($spiel=mysqli_fetch_assoc($result)){
@@ -86,12 +86,12 @@ class SpielplanAlt{
             }
             $sqlinsert=rtrim($sqlinsert,",");
             $sqlinsert= $sqlinsert.";";
-            db::write($sqlinsert);
+            db::writedb($sqlinsert);
             $this->akt_turnier->log("Spielplan wurde in die Datenbank eingetragen.","automatisch");
         }else{
             //spiele zaehlen
             $sql="SELECT * FROM spiele WHERE turnier_id=$this->turnier_id";
-            $result = db::read($sql);
+            $result = db::readdb($sql);
             while($spiel=mysqli_fetch_assoc($result)){
                 $this->anzahl_spiele += 1;
             }
@@ -114,7 +114,7 @@ class SpielplanAlt{
         if((is_numeric($tore_a)||$tore_a=="NULL")&&(is_numeric($tore_b)||$tore_b=="NULL")){
             $sql="UPDATE spiele SET tore_a=$tore_a, tore_b=$tore_b, penalty_a=$penalty_a, penalty_b=$penalty_b
             WHERE turnier_id=$this->turnier_id AND spiel_id=$spiel_id;";
-            db::write($sql);
+            db::writedb($sql);
         }
     }
 
@@ -375,7 +375,7 @@ class SpielplanAlt{
             ) AS t
         GROUP BY team_id_a
         ORDER BY".$order;
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         ////echo $sql;
         $daten=[];
         while($row=mysqli_fetch_assoc($result)){
@@ -394,7 +394,7 @@ class SpielplanAlt{
             AND team_id_a = t1.team_id
             AND team_id_b = t2.team_id
             ORDER BY spiel_id ASC";
-        $result=db::read($sql);
+        $result=db::readdb($sql);
         $daten=[];
         $startzeit=new DateTime($this->akt_turnier->details["startzeit"]);
         $zeiten=$this->getSpielzeiten();
@@ -421,7 +421,7 @@ class SpielplanAlt{
         $plaetze = $this->anzahl_teams;
         $spielplan = $this->akt_turnier->details["spielplan"];
         $sql = "SELECT * FROM spielplan_details WHERE plaetze = '$plaetze' AND spielplan = '$spielplan'";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         return db::escape(mysqli_fetch_assoc($result));
     }
 
@@ -442,7 +442,7 @@ class SpielplanAlt{
             AND team_id_b = t2.team_id
             AND (tore_a IS NULL OR tore_b IS NULL)
             ORDER BY spiel_id ASC";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $result = mysqli_fetch_assoc($result);
         if(empty($result) && empty($this->penalty_warning) && $this->check_alles_gespielt($daten)){
             //Testen ob Turnier eingetragen werden darf
@@ -466,7 +466,7 @@ class SpielplanAlt{
     //Löscht einen Spielplan, falls ein manueller Spielplan hochgeladen werden muss.
     public static function delete_spielplan($turnier_id)
     {
-        db::write("DELETE FROM spiele WHERE turnier_id = '$turnier_id'");
+        db::writedb("DELETE FROM spiele WHERE turnier_id = '$turnier_id'");
     }
 }
 

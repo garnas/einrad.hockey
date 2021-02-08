@@ -20,8 +20,8 @@
 //        return;
 //    }
 //
-//    db::write("UPDATE `spiele` SET `tore_a` = ROUND(4*RAND(),0) ,`tore_b`= ROUND(4*RAND(),0) WHERE turnier_id = $turnier_id");
-//    db::write("UPDATE `spiele` SET `penalty_a` = NULL ,`penalty_b`= NULL WHERE turnier_id = $turnier_id");
+//    db::writedb("UPDATE `spiele` SET `tore_a` = ROUND(4*RAND(),0) ,`tore_b`= ROUND(4*RAND(),0) WHERE turnier_id = $turnier_id");
+//    db::writedb("UPDATE `spiele` SET `penalty_a` = NULL ,`penalty_b`= NULL WHERE turnier_id = $turnier_id");
 //
 //    // Neu
 //    $spielplan = new Spielplan((new Turnier($turnier_id)));
@@ -36,7 +36,7 @@
 //        $tore_b = random_int(0,3);
 //        $tore_b = (abs($tore_b-$tore_a) > 2) ? max($tore_a+1,0) : $tore_b;
 //        $tore_b = ($tore_a == $tore_b) ? $tore_a + 1 : $tore_b;
-//        db::write("
+//        db::writedb("
 //                        UPDATE `spiele` SET `penalty_a` = $tore_a, `penalty_b`= $tore_b
 //                        WHERE turnier_id = $turnier_id
 //                        AND ((team_id_a = $team_id_a AND team_id_b = $team_id_b) OR (team_id_a = $team_id_b AND team_id_b = $team_id_a))

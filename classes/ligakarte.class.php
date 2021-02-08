@@ -23,7 +23,7 @@ class LigaKarte
                 INSERT INTO ligakarte_gesuch (plz, ort, LAT, Lon, r_name, kontakt) 
                 VALUES ('$plz','$ort','$LAT','$Lon','$name','$kontakt')
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -36,7 +36,7 @@ class LigaKarte
                 SELECT * 
                 FROM ligakarte_gesuch
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         while ($x = mysqli_fetch_assoc($result)) {
             if ((Config::time_offset() - strtotime($x['zeit'])) < 365 * 24 * 60 * 60) {
                 $return[] = $x;
@@ -58,7 +58,7 @@ class LigaKarte
                 FROM ligakarte_gesuch 
                 WHERE PLZ = '$plz'
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $result = mysqli_fetch_assoc($result);
         if (!empty($result)){
             return true;
@@ -83,7 +83,7 @@ class LigaKarte
                 WHERE teams_liga.aktiv = 'Ja'
                 ORDER BY teams_liga.teamname
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         while ($team = mysqli_fetch_assoc($result)) {
            $return[] = $team;
         }
@@ -103,7 +103,7 @@ class LigaKarte
                 FROM plz 
                 WHERE PLZ = '$plz'
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $return = mysqli_fetch_assoc($result);
         return db::escape($return);
     }

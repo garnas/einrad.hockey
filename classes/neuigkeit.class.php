@@ -22,7 +22,7 @@ class Neuigkeit
                 INSERT INTO neuigkeiten (titel, inhalt, eingetragen_von, link_jpg, link_pdf, bild_verlinken) 
                 VALUES ('$titel','$text','$name','$link_jpg','$link_pdf', '$bild_verlinken')
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -47,7 +47,7 @@ class Neuigkeit
                 DELETE FROM `neuigkeiten` 
                 WHERE neuigkeiten_id='$neuigkeiten_id'
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -67,7 +67,7 @@ class Neuigkeit
                 SET titel='$titel', inhalt='$text', link_jpg='$link_jpg', link_pdf='$link_pdf', bild_verlinken = '$bild_verlinken', zeit = zeit 
                 WHERE neuigkeiten_id = '$neuigkeiten_id'
                 "; // zeit=zeit, damit der timestamp nicht erneuert wird
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -86,7 +86,7 @@ class Neuigkeit
                 ORDER BY zeit DESC 
                 LIMIT 10
                 "; // Es werden max. 10 Neuigkeiten angezeigt
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         while ($x = mysqli_fetch_assoc($result)) {
             if ($x['eingetragen_von'] != 'Ligaausschuss') {
                 $x = db::escape($x);
@@ -296,7 +296,7 @@ class Neuigkeit
                 ORDER BY gespielt desc, rand()
                 LIMIT 3
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $return['max_turniere'] = [];
         while ($x = mysqli_fetch_assoc($result)) {
             array_push($return['max_turniere'], $x);
@@ -323,7 +323,7 @@ class Neuigkeit
                 GROUP BY team_id_a
                 ORDER BY RAND()
                 ";
-        $result = db::read($sqla);
+        $result = db::readdb($sqla);
         while ($x = mysqli_fetch_assoc($result)) {
             $tore[$x['team_id_a']] = $x['tore'];
         }
@@ -338,7 +338,7 @@ class Neuigkeit
                 GROUP BY team_id_b
                 ORDER BY RAND()
                 ";
-        $result = db::read($sqlb);
+        $result = db::readdb($sqlb);
         while ($x = mysqli_fetch_assoc($result)) {
             if (isset($tore[$x['team_id_b']])) {
                 $tore[$x['team_id_b']] += $x['tore'];

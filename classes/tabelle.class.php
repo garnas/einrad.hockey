@@ -21,7 +21,7 @@ class Tabelle
                 WHERE saison = '$saison' 
                 AND (art='I' OR art = 'II' OR art='III') 
                 ORDER BY spieltag";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         while ($turnier = mysqli_fetch_assoc($result)) {
             if ($turnier['phase'] != 'ergebnis') {
                 return db::escape($turnier['spieltag']);
@@ -47,7 +47,7 @@ class Tabelle
                 AND (art='I' OR art = 'II' OR art='III') 
                 AND saison = '$saison'
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $check_1 = $check_2 = false;
         while ($turnier = mysqli_fetch_assoc($result)) {
             if ($turnier['phase'] != 'ergebnis') {
@@ -86,7 +86,7 @@ class Tabelle
                 AND saison = '$saison' 
                 ORDER BY spieltag, datum
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         while ($test = mysqli_fetch_assoc($result)) {
             if ($test['phase'] != 'ergebnis') {
                 Form::error("Es fehlen noch Turnierergebnisse von vorherigen Spieltagen.");
@@ -223,7 +223,7 @@ class Tabelle
                 WHERE turniere_liga.saison = '$saison'
                 ORDER BY turniere_liga.datum DESC, platz
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $return = [];
         while ($eintrag = mysqli_fetch_assoc($result)) {
             if (!isset($return[$eintrag['turnier_id']])) {
@@ -256,7 +256,7 @@ class Tabelle
                 AND (turniere_liga.saison = '$saison') 
                 AND (turniere_liga.spieltag <= '$spieltag')
                 ORDER BY ergebnis DESC, RAND()";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $return = [];
         $counter = [];
         while ($eintrag = mysqli_fetch_assoc($result)) {
@@ -369,7 +369,7 @@ class Tabelle
                 OR (turniere_liga.saison = '$saison' - 1)
                 $ausnahme)
                 ORDER BY turniere_liga.saison DESC, turniere_liga.datum DESC";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $return = [];
         $counter = [];
 

@@ -43,7 +43,7 @@ class Spieler
                 AND jahrgang='$jahrgang' 
                 AND geschlecht='$geschlecht'
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $result = mysqli_fetch_assoc($result);
         $spieler_id = $result['spieler_id'] ?? 0;
 
@@ -54,7 +54,7 @@ class Spieler
                         SET team_id = '$team_id', letzte_saison = ' $saison' 
                         WHERE spieler_id = '$spieler_id'
                         ";
-                db::write($sql);
+                db::writedb($sql);
                 Form::affirm("Der Spieler wurde vom Team " . Team::teamid_to_teamname($result['team_id']) . " übernommen.");
                 return true;
             } else {
@@ -67,7 +67,7 @@ class Spieler
                     INSERT INTO spieler(vorname, nachname, jahrgang, geschlecht, team_id, letzte_saison) 
                     VALUES ('$vorname','$nachname','$jahrgang','$geschlecht','$team_id','" . Config::SAISON . "')
                     ";
-            db::write($sql);
+            db::writedb($sql);
             return true;
         }
     }
@@ -103,7 +103,7 @@ class Spieler
                 AND letzte_saison = '$saison'
                 ORDER BY letzte_saison DESC, vorname
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         while ($x = mysqli_fetch_assoc($result)) {
             if (strtotime($x['zeit']) < 0) {
                 $x['zeit'] = '--'; // Diese Funktion wurde erst am später hinzugefügt.
@@ -143,7 +143,7 @@ class Spieler
                 FROM spieler 
                 WHERE letzte_saison >= '$saison'
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $return = mysqli_fetch_assoc($result);
         return db::escape($return['count(*)']);
     }
@@ -160,7 +160,7 @@ class Spieler
                 FROM spieler 
                 ORDER BY vorname
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         while ($x = mysqli_fetch_assoc($result)) {
             $spielerliste[$x['spieler_id']] = $x['vorname'] . " " . $x['nachname'];
         }
@@ -180,7 +180,7 @@ class Spieler
                 FROM spieler 
                 WHERE spieler_id = '$spieler_id'
                 ";
-        $result = db::read($sql);
+        $result = db::readdb($sql);
         $result = mysqli_fetch_assoc($result);
         return db::escape($result);
     }
@@ -204,7 +204,7 @@ class Spieler
                 SET $entry = '$value'$zeit 
                 WHERE spieler_id='$spieler_id'
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
 
@@ -218,7 +218,7 @@ class Spieler
                 DELETE FROM spieler 
                 WHERE spieler_id='$spieler_id'
                 ";
-        db::write($sql);
+        db::writedb($sql);
     }
 
     /**
@@ -238,6 +238,6 @@ class Spieler
                 AND spieler.schiri >= '$saison' 
                 OR spieler.schiri = 'Ausbilder/in'
                 ";
-        return mysqli_fetch_assoc(db::read($sql))['count(*)'];
+        return mysqli_fetch_assoc(db::readdb($sql))['count(*)'];
     }
 }

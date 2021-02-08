@@ -3,10 +3,10 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-//db::write("UPDATE `spiele` SET `tore_a` = ROUND(4*RAND(),0) ,`tore_b`= ROUND(4*RAND(),0)");
-//db::write("UPDATE `spiele` SET `tore_a` = 1 ,`tore_b`= 1");
-//db::write("UPDATE `spiele` SET `penalty_a` = NULL ,`penalty_b`= NULL");
-//db::write("UPDATE `spiele` SET `tore_a` = NULL ,`tore_b`= NULL");
+//db::writedb("UPDATE `spiele` SET `tore_a` = ROUND(4*RAND(),0) ,`tore_b`= ROUND(4*RAND(),0)");
+//db::writedb("UPDATE `spiele` SET `tore_a` = 1 ,`tore_b`= 1");
+//db::writedb("UPDATE `spiele` SET `penalty_a` = NULL ,`penalty_b`= NULL");
+//db::writedb("UPDATE `spiele` SET `tore_a` = NULL ,`tore_b`= NULL");
 
 $turnier_id = $_GET['turnier_id'];
 require_once '../../logic/spielplan.logic.php'; //Erstellt Spielplanobjekt nach Validation
