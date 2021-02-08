@@ -111,7 +111,7 @@ class db
      * @param string $sql
      * @return mysqli_result|bool
      */
-    public static function read(string $sql): mysqli_result|bool
+    public static function readdb(string $sql): mysqli_result|bool
     {
         #$before = microtime(true);
         if (mysqli_connect_errno()) {
@@ -128,10 +128,11 @@ class db
 
     /**
      * Funktion zum schreiben in die Datenbank
-     * 
+     *
      * @param string $sql
+     * @param bool $anonym Keine Logs (z.B. für anonyme Abstimmungen)
      */
-    public static function write(string $sql, $anonym = false)
+    public static function writedb(string $sql, $anonym = false)
     {
         //SQL-Logdatei erstellen/beschreiben
         $autor_string = implode(" | ", array_filter([$_SESSION['teamname'] ?? '', $_SESSION['la_login_name'] ?? '', $_SESSION['ligabot'] ?? '']));
