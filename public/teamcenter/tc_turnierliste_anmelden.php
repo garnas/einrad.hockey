@@ -67,7 +67,7 @@ include '../../templates/header.tmp.php';?>
 <h2 class="w3-text-primary" style='display: inline;'>Turnieranmeldung und -abmeldung</h2>
 <!-- Trigger/Open the Modal -->
 <p>
-    <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-text-blue">
+    <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-text-primary">
         <?= Form::icon("help") ?> Legende
     </button>
 </p>

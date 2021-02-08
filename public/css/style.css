@@ -76,11 +76,6 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
-/*Links*/
-.w3-blue,.w3-hover-primary:hover{color:#ffffff!important;background-color:#6c7fbe!important}
-.w3-text-blue,.w3-hover-text-primary:hover{color:#6c7fbe!important}
-.w3-border-blue,.w3-hover-border-primary:hover{border-color:#6c7fbe!important}
-
 /*Primärfarbe*/
 .w3-primary,.w3-hover-primary:hover{color:#ffffff!important;background-color:#6c7fbe!important}
 .w3-text-primary,.w3-hover-text-primary:hover{color:#6c7fbe!important}

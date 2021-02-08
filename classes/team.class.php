@@ -459,11 +459,10 @@ class Team
      */
     function set_teamfoto(string $target)
     {
-        $team_id = $this->id;
         $sql =  "
                 UPDATE teams_details 
                 SET teamfoto = '$target' 
-                WHERE team_id='$team_id'
+                WHERE team_id = $this->id
                 ";
         db::writedb($sql);
     }

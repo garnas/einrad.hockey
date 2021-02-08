@@ -27,11 +27,17 @@
                     Schiri
                 </span>
             </th>
+            <th class="w3-hide-small"></th>
+            <th class="w3-hide-small"></th>
             <th class="w3-hide-small">
                 <i class="material-icons">sports_hockey</i>
                 <br>
                 Spiele
             </th>
+            <th class="w3-hide-small"></th>
+            <th class="w3-hide-small"></th>
+            <th class="w3-hide-large w3-hide-medium"></th>
+            <th class="w3-hide-large w3-hide-medium"></th>
             <th class="w3-hide-large w3-hide-medium">
                 <span class="pdf-hide">
                     <i class="material-icons">sports_hockey</i>
@@ -65,9 +71,9 @@
                 </th>
             <?php }//endif?>
         </tr>
-        <?php if ($spielplan->turnier->details['besprechung'] == 'Ja') { ?>
+        <?php if ($spielplan->turnier->details['besprechung'] === 'Ja') { ?>
             <tr class="w3-primary-3">
-                <td colspan="<?= ($spielplan->check_penalty_anzeigen()) ? 9 : 7 ?>">
+                <td colspan="<?= ($spielplan->check_penalty_anzeigen()) ? 10 : 8 ?>">
                     Alle Teams sollen sich um <?= date('H:i', strtotime($spielplan->turnier->details['startzeit']) - 15 * 60) ?>&nbsp;Uhr zu einer gemeinsamen Turnierbesprechung einfinden.
                 </td>
             </tr>
@@ -123,19 +129,24 @@
                 </td>
                 <!-- Dekstop -->
                 <td class="w3-hide-small">
-                    <table class="w3-table w3-centered" style="white-space: nowrap; width: auto; margin: auto;">
-                        <tr>
-                            <td class="w3-right-align" style="width: <?= $width_in_px ?>px; padding:0;">
-                                <?= $spiel["teamname_a"] ?>
-                            </td>
-                            <td style="width: 40px; padding:0;">-</td>
-                            <td class="w3-left-align" style="width: <?= $width_in_px ?>px; padding:0;">
-                                <?= $spiel["teamname_b"] ?>
-                            </td>
-                        </tr>
-                    </table>
+                    <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_a']] ?? '' ?>
+                </td>
+                <td style="white-space: nowrap;" class="w3-right-align w3-hide-small">
+                    <?= $spiel["teamname_a"] ?>
+                </td>
+                <td class="w3-hide-small">-</td>
+                <td style="white-space: nowrap;" class="w3-left-align w3-hide-small">
+                    <?= $spiel["teamname_b"] ?>
+                </td>
+                <td class="w3-hide-small">
+                    <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_b']] ?? '' ?>
                 </td>
                 <!-- Mobil -->
+                <td class="w3-hide-large w3-hide-medium"></td>
+                <td class="w3-center w3-hide-large w3-hide-medium">
+                    <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_a']]  ?? '' ?>
+                    <br>
+                    <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_b']]  ?? '' ?>
                 <td class="w3-center w3-hide-large w3-hide-medium" style="white-space: nowrap;">
                     <span class="pdf-hide"><?= $spiel["teamname_a"] ?></span>
                     <br class="pdf-hide">

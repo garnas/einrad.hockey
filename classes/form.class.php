@@ -146,10 +146,9 @@ class Form
     public static function link(string $link, string $bezeichnung = '', bool $extern = false, string $icon = ''): string
     {
         if (empty($link)) return '';
-
-        $bezeichnung = empty($bezeichnung) ? $link : $bezeichnung;
         $new_tab =  ($extern) ? 'target="_blank" rel="noopener noreferrer"' : '';
         $bezeichnung = (!empty($icon)) ? self::icon($icon) . $bezeichnung : $bezeichnung;
+        $bezeichnung = empty($bezeichnung) ? $link : $bezeichnung;
         return "<a href='$link' class='no w3-text-primary w3-hover-text-secondary' style='white-space: nowrap;' $new_tab>$bezeichnung</a>";
     }
 
@@ -188,7 +187,7 @@ class Form
         if ($name === NULL) {
             $name = $email;
         }
-        return "<a href='mailto:$email' class='no w3-text-blue w3-hover-text-secondary' style='white-space: nowrap;'><i class='material-icons'>mail</i> $name</a>";
+        return "<a href='mailto:$email' class='no w3-text-primary w3-hover-text-secondary' style='white-space: nowrap;'><i class='material-icons'>mail</i> $name</a>";
     }
 
     /**

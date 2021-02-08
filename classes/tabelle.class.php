@@ -379,7 +379,7 @@ class Tabelle
             if ($eintrag['saison'] != $saison) {
                 $color = "w3-text-green";
             } else {
-                $color = 'w3-text-blue';
+                $color = 'w3-text-primary';
             }
             //Verlinkung des Ergebnisses hinzufügen
             $link = "ergebnisse.php?saison=" . $eintrag['saison'] . "#" . $eintrag['turnier_id'];

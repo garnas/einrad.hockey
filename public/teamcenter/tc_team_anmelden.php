@@ -232,12 +232,16 @@ include '../../templates/header.tmp.php';
 <h2 class="w3-text-primary">Turnieranmeldung</h2>
 <h3 class="w3-text-grey"><?=$turnier->details['tname'] ?: 'Turnier'?> in <?=$turnier->details['ort']?>, <?=strftime("%d.%m.%Y (%A)", strtotime($turnier->details['datum']))?>(<?=$turnier->details['tblock']?>)</h3>
 
-<a href='../liga/turnier_details.php?turnier_id=<?=$turnier->details['turnier_id']?>' class="w3-text-hover-secondary w3-text-blue no">
-    <i class="material-icons">keyboard_arrow_left</i>Turnierdetails
-</a>
-<a href='../teamcenter/tc_turnierliste_anmelden.php?turnier_id=<?=$turnier->details['turnier_id']?>' class="w3-right w3-text-hover-secondary w3-text-blue no">
-    Turnieranmeldeliste<i class="material-icons">keyboard_arrow_right</i>
-</a>
+<!-- Weiterführende Links -->
+<?= Form::link('../liga/turnier_details.php?turnier_id=' . $turnier->details['turnier_id'],
+    "Turnierdetails",
+    false,
+    "keyboard_arrow_left") ?>
+<?= Form::link('../liga/tc_turnierliste_anmelden.php?turnier_id=' . $turnier->details['turnier_id'],
+    "Turnieranmeldeliste",
+    false,
+    "keyboard_arrow_right") ?>
+
 <!-- Anzeigen der angemeldeten Teams und gleichzeitig Abmeldeformular -->
 <div class="w3-card w3-container">
     <form method='post'>
@@ -271,7 +275,7 @@ include '../../templates/header.tmp.php';
             <?php if (!empty($anmeldungen['warte'])){?>
                 <p class="w3-opacity w3-border-bottom w3-border-black">Warteliste</p> 
                 <?php foreach ($anmeldungen['warte'] as $team){?>
-                <?php if ($team['teamname'] == $_SESSION['teamname']) {$team['teamname'] = "<span class='w3-text-blue'><b>".$team['teamname']."</b></span>";}?>
+                <?php if ($team['teamname'] == $_SESSION['teamname']) {$team['teamname'] = "<span class='w3-text-primary'><b>".$team['teamname']."</b></span>";}?>
                 <?=$team['position_warteliste'] . ". " . $team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?? 'NL'?>)</span>
                 <br>
                 <?php }//end foreach?>

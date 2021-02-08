@@ -75,7 +75,7 @@ include '../../templates/header.tmp.php';
                     <td  style="vertical-align: middle">
                         <form method="POST" onsubmit="return confirm('Soll die Strafe/Verwarnung für das Team <?=$strafe['teamname']?> wirklich gelöscht werden?')">
                             <input type="hidden" name="delete<?=$strafe['strafe_id']?>" value='delete'>
-                            <input class="w3-button w3-text-blue" type="submit" name="delete<?=$strafe['strafe_id']?>" value="Löschen">
+                            <input class="w3-button w3-text-primary" type="submit" name="delete<?=$strafe['strafe_id']?>" value="Löschen">
                         </form>
                     </td>
                 </tr>

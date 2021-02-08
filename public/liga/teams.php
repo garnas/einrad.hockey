@@ -27,15 +27,17 @@ include '../../templates/header.tmp.php';
         });
     </script>
 
-    <h1 class='w3-text-primary w3-border-bottom w3-border-grey'>Ligateams<span
-                class="w3-right w3-hide-small">Saison <?= Form::get_saison_string() ?></span></h1>
+    <h1 class='w3-text-primary w3-border-bottom w3-border-grey'>
+        Ligateams
+        <span class="w3-right w3-hide-small">Saison <?= Form::get_saison_string() ?></span>
+    </h1>
+    <!-- Legende -->
     <p>
-        <!-- Legende -->
-        <span class="w3-right">
-  <i class='material-icons w3-text-blue w3-hover-text-secondary'>home</i> Homepage
-  <i class='material-icons w3-text-blue w3-hover-text-secondary'>group</i> Teamfoto
-  <i class='material-icons w3-text-blue w3-hover-text-secondary'>mail</i>&nbsp;Email
-  </span>
+        <span class="w3-right w3-text-primary">
+          <?= Form::icon("home") ?>&nbsp;Homepage
+          <?= Form::icon("group") ?>&nbsp;Teamfoto
+          <?= Form::icon("mail") ?>&nbsp;Email
+        </span>
     </p>
     <br class="w3-hide-large w3-hide-medium">
     <p><?= Form::link("ligakarte.php", '<i class="material-icons">place</i> Ligakarte aller Teams') ?></p>
@@ -62,8 +64,8 @@ include '../../templates/header.tmp.php';
                 <tr>
                     <!-- Icons -->
                     <td style='vertical-align: middle; text-align: right; white-space: nowrap;'>
-                        <?= Form::Link($team['homepage'] ?? '', "<i class='material-icons'>home</i>", true)?>
-                        <?= Form::Link($team['teamfoto'] ?? '', "<i class='material-icons'>group</i>", true)?>
+                        <?= Form::Link($team['homepage'] ?? '', "", true, "home")?>
+                        <?= Form::Link($team['teamfoto'] ?? '', "", true, "group")?>
                         <?= Form::mailto((new Kontakt($team['team_id']))->get_emails('public'), '')?>
                     </td>
                     <!-- Text -->

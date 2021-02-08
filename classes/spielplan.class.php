@@ -85,7 +85,7 @@ class Spielplan
      */
     public static function set_spielplan(Turnier $turnier): bool
     {
-        if (Spielplan::check_exist($turnier->id)){
+        if (Spielplan::check_exist($turnier->id)) {
             Form::error("Es existiert bereits ein Spielplan");
             return false;
         }
@@ -765,6 +765,60 @@ class Spielplan
             // Es wurde also ein Penalty bei einem Spiel eingetragen, bei welchem kein Penalty vorgesehen ist.
         }
         return true;
+    }
+
+    public function get_trikot_colors($spiel)
+    {
+//        if (time() - strtotime($this->turnier->details['datum']) > 7 * 24 * 60 * 60) return [];
+        $team_id_a = $spiel['team_id_a'];
+        $team_id_b = $spiel['team_id_b'];
+        $farben = [
+            $team_id_a  => [
+                1 => $this->teamliste[$spiel['team_id_a']]['trikot_farbe_1'],
+                2 => $this->teamliste[$spiel['team_id_a']]['trikot_farbe_2']
+            ],
+            $team_id_b => [
+                1 => $this->teamliste[$spiel['team_id_b']]['trikot_farbe_1'],
+                2 => $this->teamliste[$spiel['team_id_b']]['trikot_farbe_2']
+            ]
+        ];
+
+        // Nicht hinterlegte Farben entfernen
+        $farben[$team_id_a] = array_filter($farben[$team_id_a]);
+        $farben[$team_id_b] = array_filter($farben[$team_id_b]);
+
+        if (
+            empty($farben[$team_id_a])
+            or empty($farben[$team_id_b])
+        ) return [];
+
+
+
+        // Hexfarbe in RGB umwandeln
+        $get_delta_e = function ($hex_color_1, $hex_color_2) {
+            [$r_1, $g_1, $b_1] = sscanf($hex_color_1, "#%02x%02x%02x");
+            [$r_2, $g_2, $b_2] = sscanf($hex_color_2, "#%02x%02x%02x");
+            $r_m = ($r_1 + $r_2) / 2;
+            $r_d = $r_1 - $r_2;
+            $g_d = $g_1 - $g_2;
+            $b_d = $b_1 - $b_2;
+            return ((2 + $r_m / 256) * $r_d ** 2 + 4 * $g_d ** 2 + (2 + (255 - $r_m) / 256) * $b_d ** 2) ** 0.5;
+        };
+
+        foreach($farben[$team_id_a] as $farbe_a){
+            foreach ($farben[$team_id_b] as $farbe_b){
+                $delta_e = $get_delta_e($farbe_a, $farbe_b);
+                if ($delta_e > ($max_delta_e ?? 0)){
+                    if (($max_delta_e ?? 0) > 450) continue;
+                    $max_delta_e = $delta_e;
+
+                    $return[$team_id_a] = "<span class='w3-card-4' style='height:11px;width:11px;background-color:$farbe_a;border-radius:50%;display:inline-block;'></span>";
+                    $return[$team_id_b] = "<span class='w3-card-4' style='height:11px;width:11px;background-color:$farbe_b;border-radius:50%;display:inline-block;'></span>";
+                }
+            }
+        }
+
+        return $return ?? [];
     }
 
 

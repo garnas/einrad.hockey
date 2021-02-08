@@ -18,7 +18,7 @@
             <?php if (!empty($anmeldungen['spiele'])){?>
                 <?php foreach ($anmeldungen['spiele'] as $team){?>
                     <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span>
-                    <input type='submit' class='w3-button w3-text-blue' name='abmelden<?=$team['team_id']?>' value='Abmelden'><br>
+                    <input type='submit' class='w3-button w3-text-primary' name='abmelden<?=$team['team_id']?>' value='Abmelden'><br>
                 <?php }//end foreach?>
             <?php }else{?><i>leer</i><?php } //endif?> 
         </p>
@@ -27,7 +27,7 @@
             <?php if (!empty($anmeldungen['melde'])){?>
                 <?php foreach ($anmeldungen['melde'] as $team){?>
                     <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span>
-                    <input type='submit' class='w3-button w3-text-blue' name='abmelden<?=$team['team_id']?>' value='Abmelden'><br>
+                    <input type='submit' class='w3-button w3-text-primary' name='abmelden<?=$team['team_id']?>' value='Abmelden'><br>
                 <?php }//end foreach?>
             <?php }else{?><i>leer</i><?php } //endif?>
         </p>
@@ -36,7 +36,7 @@
             <?php if (!empty($anmeldungen['warte'])){?>
                 <?php foreach ($anmeldungen['warte'] as $team){?>
                     <?=$team['position_warteliste'] . ". " . $team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?? 'NL'?>)</span>
-                    <input type='submit' class='w3-button w3-text-blue' name='abmelden<?=$team['team_id']?>' value='Abmelden'><br>
+                    <input type='submit' class='w3-button w3-text-primary' name='abmelden<?=$team['team_id']?>' value='Abmelden'><br>
                 <?php }//end foreach?>
             <?php }else{ ?><i>leer</i><?php } //endif?> 
         </p>

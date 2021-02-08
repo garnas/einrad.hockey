@@ -4,11 +4,11 @@ require_once '../../logic/spielplan.logic.php'; // Erstellt Spielplanobjekt nach
 
 // Legt die Schriftgrößen fest je nach Teamanzahl
 $font_size_array = ['4' => 15, '5' => 15, '6' => 14, '7' => 14]; // in px
-$font_size = $font_size_array[$spielplan->anzahl_teams];
+$font_size = $font_size_array[$spielplan->anzahl_teams] ?? '12';
 
 // Legt das Padding der table <td>s fest je nach Teamanzahl
 $padding_array = ['4' => 11, '5' => 11, '6' => 8, '7' => 4];  // in px
-$padding = $padding_array[$spielplan->anzahl_teams];
+$padding = $padding_array[$spielplan->anzahl_teams] ?? 3;
 
 // Css-Code als String
 ob_start();

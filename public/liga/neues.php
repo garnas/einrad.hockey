@@ -67,9 +67,9 @@ include '../../templates/header.tmp.php';
 ?>
 
 <!-- Links (u. a zum Ein- und Ausblenden der Infobar bei Mobils) -->
-<a class="w3-tiny w3-hide-large w3-hide-medium w3-button w3-text-blue" href="ueber_uns.php">Erfahre mehr über uns</a>
-<button id="einblenden" class="w3-right w3-tiny w3-hide-large w3-hide-medium w3-button w3-text-blue" onclick="einblenden()">Infobar anzeigen</button>
-<button id="ausblenden" class="w3-right w3-tiny w3-hide w3-hide-large w3-hide-medium w3-button w3-text-blue" onclick="ausblenden()">Infobar ausblenden</button>
+<?= Form::link("ueber_uns.php", "Erfahre mehr über uns") ?>
+<button id="einblenden" class="w3-right w3-hide-large w3-hide-medium w3-button w3-text-primary" onclick="einblenden()">Infobar anzeigen</button>
+<button id="ausblenden" class="w3-right w3-hide w3-hide-large w3-hide-medium w3-button w3-text-primary" onclick="ausblenden()">Infobar ausblenden</button>
 
 <!-- Responsive Container -->
 <div class="w3-row-padding w3-stretch">

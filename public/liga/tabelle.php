@@ -89,7 +89,7 @@ include '../../templates/header.tmp.php';
 <!-- Erklärungen zur Tabelle -->
 
 <!-- Trigger/Open the Modal -->
-<button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-text-blue"><i class="material-icons">info</i> Infos zu den Tabellen</button>
+<button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-text-primary"><?= Form::icon("info") ?> Infos zu den Tabellen</button>
 <!-- The Modal -->
 <div id="id01" class="w3-modal">
   <div class="w3-modal-content w3-card-4" style="max-width:660px">
@@ -117,7 +117,7 @@ include '../../templates/header.tmp.php';
             <ul class="w3-ul w3-leftbar w3-border-tertiary">
             <li>In der Meisterschaftstabelle werden die besten fünf Turnierergebnisse deines Teams in der aktuellen Saison aufaddiert.</li>
             <li>Der Platz in der Meisterschaftstabelle bestimmt, für welche Meisterschaft sich dein Team qualifizieren kann.</li>
-            <li><b>Meisterschaften</b> <i>(Plätze)</i><br>Deutsche Meisterschaft (<span class="w3-text-tertiary">1-4</span>)<br>Quali zur Deutschen (<span class="w3-text-grey">5-10</span>)<br>B-Meisterschaft (<span class="w3-text-brown">11-16</span>)<br>C-Meisterschaft (<span class="w3-text-blue">17-22</span>)<br>D-Meisterschaft (<span class="w3-text-green">23-28</span>)</li>
+            <li><b>Meisterschaften</b> <i>(Plätze)</i><br>Deutsche Meisterschaft (<span class="w3-text-tertiary">1-4</span>)<br>Quali zur Deutschen (<span class="w3-text-grey">5-10</span>)<br>B-Meisterschaft (<span class="w3-text-brown">11-16</span>)<br>C-Meisterschaft (<span class="w3-text-primary">17-22</span>)<br>D-Meisterschaft (<span class="w3-text-green">23-28</span>)</li>
             </ul>
         </div>
     </div>
@@ -162,7 +162,7 @@ window.onclick = function(event) {
                 <td class="<?=$platz_color[$spalte['platz']] ?? ''?>"><?=$spalte['platz'] ?? ''?></td>
                 <td style="white-space: nowrap"><?=$spalte['teamname']?></td>
                 <td><?=htmlspecialchars_decode($spalte['string'])?></td>
-                <td><?=$spalte['summe'] ?: 0?><a class="no w3-text-blue w3-hover-text-secondary" href="#pranger"><?=$spalte['strafe_stern'] ?? ''?></a></td>
+                <td><?=$spalte['summe'] ?: 0?><a class="no w3-text-primary w3-hover-text-secondary" href="#pranger"><?=$spalte['strafe_stern'] ?? ''?></a></td>
             </tr>
         <?php } //end foreach?>
     </table>    

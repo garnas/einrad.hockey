@@ -737,7 +737,7 @@ class Turnier
     function get_spielplan_link_lc(): string
     {
         return (empty($this->details['link_spielplan']))
-            ? '../teamcenter/lc_spielplan.php?turnier_id=' . $this->id
+            ? '../ligacenter/lc_spielplan.php?turnier_id=' . $this->id
             : $this->details['link_spielplan'];
     }
 
