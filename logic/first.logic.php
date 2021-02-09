@@ -33,6 +33,7 @@ spl_autoload_register(
  * Verbindung zur Datenbank
  */
 $verbindung_zur_datenbank = new db;
+new dbi();
 
 
 /**

@@ -25,7 +25,7 @@ class db
     {
         self::$link = new mysqli(Config::HOST_NAME, Config::USER_NAME, Config::PASSWORD, $db);
         if (self::$link->connect_errno) {
-            Form::log(self::$log_file, "Verbindung zum MySQL Server fehlgeschlagen: " . mysqli_connect_error());
+            Form::log(self::$log_file, "Verbindung fehlgeschlagen: " . self::$link->error);
             die('<h2>Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error() . '<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
         }
     }
@@ -37,7 +37,6 @@ class db
     {
         self::$link->close();
     }
-
 
     /**
      * Sanitizing eines gesamten Arrays
@@ -181,16 +180,13 @@ class db
      * z.B. db::debug(get_defined_vars(), true);
      *
      * Zu debuggende Variable
-     * @param string $input
+     * @param mixed $input
      *
      * Sollen Typen angezeigt werden?
      * @param bool $types
      */
-    public static function debug($input = NULL, $types = false)
+    public static function debug(mixed $input, $types = false)
     {
-        if ($input === NULL) {
-            $input = $GLOBALS;
-        }
         $backtrace = debug_backtrace();
         // Show Types?
         if ($types) {
