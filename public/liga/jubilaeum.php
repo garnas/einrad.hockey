@@ -296,13 +296,13 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
     </div>
     <div class="slideshow4" style="padding: 8px 48px;">
         <p style="display: inline-block" class="<?=$header?>">Wie bist du zum Einradfahren gekommen?</p>
-        <p>Da wurden in der Stadt Kurse angeboten und meine Mutter meinte das hört sch doch lustig an.</p>
+        <p>Da wurden in der Stadt Kurse angeboten und meine Mutter meinte, das hört sch doch lustig an.</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 3)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 3)">&#10095;</button>
     </div>
     <div class="slideshow4" style="padding: 8px 48px;">
-        <p style="display: inline-block" class="<?=$header?>">An welche damalige Regel kannst du dich erinnern, die heute für schmunzeln sorgen würde?</p>
-        <p>Der Schlägerwurf war mal erlaubt. :)</p>
+        <p style="display: inline-block" class="<?=$header?>">An welche damalige Regel kannst du dich erinnern, die heute für Schmunzeln sorgen würde?</p>
+        <p>Der Schlägerwurf war mal erlaubt. 😊</p>
         <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 3)">&#10094;</button>
         <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 3)">&#10095;</button>
     </div>
@@ -325,22 +325,22 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
 <p>Mein damaliger Trainer, bei dem ich Einrad gefahren bin, kam auf die Idee jetzt auch Hockey zu spielen. Er hatte 1997 von der Liga gehört.</p>
 
 <p class="w3-text-secondary"><b>Woran merkst du, dass die Liga "älter" geworden ist?</b></p>
-<p>Die Spieler sind deutlich besser geworden (Geschwindigkeit, Technik, Taktik). Das bezieht sich leider nur auf einen kleinen Teil, wenn ich die gesamte große Liga betrachte.</p>
+<p>Die Spieler sind deutlich besser geworden (Geschwindigkeit, Technik, Taktik). Das bezieht sich leider nur auf einen kleinen Teil, wenn ich die gesamte Große der Liga betrachte.</p>
 
 <p class="w3-text-secondary"><b>Welche ist die auffälligste Veränderung seit damals?</b></p>
-<p>Die Rangtabelle, teilweise der Ehrgeiz mit teilweise verbundenen Unsportlichkeit.</p>
+<p>Die Rangtabelle, teilweise der Ehrgeiz mit teilweise verbundenen Unsportlichkeiten.</p>
 
 <p class="w3-text-secondary"><b>Hast du einen Lieblingsgegner?</b></p>
-<p>Eigentlich alle bei denen ich eine sportliche Herausforderung habe. Natürlich gibt oder gab es da wenige Ausnahmen. 10:0 Spiele - egal in welche Richtung - kann ich nicht leiden. Daher vermeide ich A-F Turniere.</p>
+<p>Eigentlich alle bei denen ich eine sportliche Herausforderung habe. Natürlich gibt oder gab es da wenige Ausnahmen. 10:0 Spiele - egal in welche Richtung - kann ich nicht leiden. Daher vermeide ich ABCDEF Turniere.</p>
 
 <p class="w3-text-secondary"><b>Hättest du zur Gründung der Liga gedacht, dass sie so sein wird, wie sie heute ist?</b></p>
-<p>War bei der Gründung nicht dabei. Aber das hätte vermutlich keiner gedacht.</p>
+<p>Ich war bei der Gründung nicht dabei. Aber das hätte vermutlich keiner gedacht.</p>
 
 <p class="w3-text-secondary"><b>Was wünschst du dir für die Liga?</b></p>
-<p>Das sie noch lange besteht und Turniere weiterhin in gleicher Spielstärke stattfinden können. Ich  bin kein Freund von Fun- und Mixteams im Ligabetrieb. Teilweise sind sie auf jeden Fall nötig, um Turniere stattfinden zu lassen oder um neuen Teams einen Einblick zu gewähren. Aber nur weil ein Spieler krank wird, muss auf einem 7er-Turnier kein Mixteam generiert werden!</p>
+<p>Dass sie noch lange besteht und Turniere weiterhin in gleicher Spielstärke stattfinden können. Ich  bin kein Freund von Fun- und Mixteams im Ligabetrieb. Teilweise sind sie auf jeden Fall nötig, um Turniere stattfinden zu lassen oder um neuen Teams einen Einblick zu gewähren. Aber nur weil ein Spieler krank wird, muss auf einem 7er-Turnier kein Mixteam generiert werden!</p>
 
-<p class="w3-text-secondary"><b>Wenn du eine Regel im Einradhockey verändern dürftest welche wäre es?</b></p>
-<p>Der Hohe Schläger. Bälle sollten aus der Luft geholt werden dürfen, wenn keine Gefährdung vorliegt. <br> Das setzt aber leider gute Schiris und empfindliche Strafen voraus.</p>
+<p class="w3-text-secondary"><b>Wenn du eine Regel im Einradhockey verändern dürftest, welche wäre es?</b></p>
+<p>Der hohe Schläger. Bälle sollten aus der Luft geholt werden dürfen, wenn keine Gefährdung vorliegt. <br> Das setzt aber leider gute Schiedsrichter und empfindliche Strafen voraus.</p>
 
 <!-- Script für die Slideshow -->
 <script>
