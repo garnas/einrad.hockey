@@ -108,35 +108,35 @@ function db_test()
     db::debug($delta_load_time = microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"]);
 }
 
-function internet()
-{
-    $is = range(1, 27);
-
-    $db = new dbi(Config::HOST_NAME, Config::USER_NAME, Config::PASSWORD, Config::DATABASE);
-    foreach ($is as $i) {
-        foreach (Ligabot::get_turnier_ids($i) as $turnier_id) {
-            $sql = "
-                SELECT *
-                FROM turniere_liga
-                LEFT JOIN turniere_details
-                ON turniere_liga.turnier_id = turniere_details.turnier_id
-                WHERE turniere_liga.turnier_id = ?
-                ";
-            $turniere_n[] = $db->query($sql, $turnier_id)->fetchALL();
-        }
-    }
-    foreach (Team::get_ligateams_id() as $team_id) {
-        $sql = "
-            SELECT *
-            FROM teams_liga
-            LEFT JOIN teams_details
-            on teams_liga.team_id = teams_details.team_id
-            WHERE teams_liga.team_id = ?
-            ";
-        $teams_n[] = $db->query($sql, $team_id)->fetchArray();
-    }
-    db::debug($delta_load_time = microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"]);
-}
+//function internet()
+//{
+//    $is = range(1, 27);
+//
+//    $db = new dbi();
+//    foreach ($is as $i) {
+//        foreach (Ligabot::get_turnier_ids($i) as $turnier_id) {
+//            $sql = "
+//                SELECT *
+//                FROM turniere_liga
+//                LEFT JOIN turniere_details
+//                ON turniere_liga.turnier_id = turniere_details.turnier_id
+//                WHERE turniere_liga.turnier_id = ?
+//                ";
+//            $turniere_n[] = $db->query($sql, $turnier_id)->fetchALL();
+//        }
+//    }
+//    foreach (Team::get_ligateams_id() as $team_id) {
+//        $sql = "
+//            SELECT *
+//            FROM teams_liga
+//            LEFT JOIN teams_details
+//            on teams_liga.team_id = teams_details.team_id
+//            WHERE teams_liga.team_id = ?
+//            ";
+//        $teams_n[] = $db->query($sql, $team_id)->fetchArray();
+//    }
+//    db::debug($delta_load_time = microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"]);
+//}
 
 function ansgar()
 {
@@ -168,6 +168,7 @@ function ansgar()
     db::debug($turniere_nn);
     db::debug($delta_load_time = microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"]);
 }
+
 //ansgar();
 //db_test();
 //internet();
@@ -177,7 +178,6 @@ $sql = "
         SELECT * FROM turniere_liste
         INNER JOIN teams_liga tl on turniere_liste.team_id = tl.team_id
         WHERE liste = ?
-        AND tl.team_id = ?
         ORDER BY RAND();
         ";
 //db::debug(adb::$link->query($sql, "spiele", "Ja")->fetch());
@@ -188,35 +188,61 @@ $sql = "
 //dbi::$db->query($sql, 0);
 
 
-$sql =  "
-        SELECT inhalt FROM neuigkeiten
-";
-$team_id = 16;
+//$sql =  "
+//        SELECT inhalt FROM neuigkeiten
+//";
+//$team_id = 16;
 //db::debug(adb::$link->query($sql)->esc()->fetch_one());
 //db::debug(adb::$link->query($sql)->fetch_one());
 //db::debug(adb::$link->query($sql)->esc()->fetch_row());
 //db::debug(adb::$link->query($sql)->fetch_row());
 //db::debug(adb::$link->query($sql)->esc()->fetch()[0]);
 //db::debug(adb::$link->query($sql)->fetch()[0]);
-db::debug(dbi::$db->query($sql)->log()->fetch());
+//db::debug(dbi::$db->query($sql, 'spiele')->log()->fetch());
+$sql = "INSERT INTO teams_liga (teamname, ligateam) VALUES (?, ?)";
+dbi::$db->query($sql, uniqid(), "Ja")->log();
+dbi::$db->query("UPDATE teams_liga SET aktiv = ?", "Ja")->log();
 
+db::debug(
+    dbi::$db
+        ->query("SELECT * FROM teams_liga")
+        ->esc()
+        ->fetch_row(),
+    false
+);
 
+//db::debug(dbi::$db->query("SELECT * FROM teams_liga WHERE team_id = ?", dbi::$db->get_last_insert_id())
+//    ->log()
+//    ->esc()
+//    ->fetch_row()
+//);
+db::debug(microtime(true) . " davor");
+dbi::terminate();
+db::debug(microtime(true) . " danach");
+dbi::initialize();
+    db::debug(
+dbi::$db->query("SELECT * FROM turniere_liste WHERE freilos_gesetzt = ?", ['nein', 2])->fetch()
+);
 //db::debug(adb::$link->query($sql)->result->num_rows);
 //db::debug(adb::$link->query($sql, "spiele", 16)->fetch());
 //db::debug(adb::$link->result, true);
 //db::debug(adb::$link->stmt->num_rows);
 //db::debug(adb::$link->query_count);
 //db::debug(adb::$link);
-function test($string, ...$test){
+function test($string, ...$test)
+{
     db::debug($string);
     db::debug($test);
-    if (empty($test)){
+    if (empty($test)) {
         db::debug("empty");
     }
-    if(is_array($test)){
+    if (is_array($test)) {
         db::debug("array");
     }
 }
+
+
+
 //db::debug(adb::$link->query_count);
 include '../../templates/header.tmp.php'; ?>
     <h1>Test Skript</h1>

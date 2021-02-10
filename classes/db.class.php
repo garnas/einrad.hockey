@@ -162,14 +162,13 @@ class db
      * Name der Sicherung
      * @return string
      */
-    public static function db_sichern(): string
+    public static function backup(): string
     {
-        $dbname = Config::DATABASE;
-        $dbuser = Config::USER_NAME;
-        $dbpassword = Config::PASSWORD;
-        $dbhost = Config::HOST_NAME;
-        $dumpfile = "../../system/backups/" . $dbname . "." . date("Y-m-d_H-i-s") . ".sql"; //Dateiname der Sicherungskopie
-        exec("mysqldump --user=$dbuser --password=$dbpassword --host=$dbhost $dbname > $dumpfile");
+        $dumpfile = "../../system/backups/" . Config::DATABASE . "." . date("Y-m-d_H-i-s") . ".sql"; //Dateiname der Sicherungskopie
+        exec("mysqldump --user=" . Config::USER_NAME
+            . " --password=" . Config::PASSWORD
+            . " --host=" . Config::HOST_NAME
+            . " " . Config::DATABASE  . " > " . $dumpfile);
         Form::affirm("Datenbank wurde gesichert als " . date("Y-m-d_H-i-s") . ".sql im Ordner system/backup/");
         return $dumpfile;
     }
