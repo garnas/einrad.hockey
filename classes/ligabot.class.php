@@ -121,7 +121,7 @@ class LigaBot
                 AND (art='I' OR art='II' OR art='III') 
                 ORDER BY datum
                 ";
-        return dbi::$db->query($sql, $saison)->esc()->fetch();
+        return dbi::$db->query($sql, $saison)->esc()->list('turnier_id');
     }
 
 

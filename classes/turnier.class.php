@@ -97,6 +97,8 @@ class Turnier
             . "Straße: $strasse\r\nPlz: $plz\r\nOrt: $ort\r\nHaltestellen: $haltestellen\r\nHinweis:\r\n$hinweis\r\nStartgebühr: $startgebuehr\r\n"
             . "Organisator: $organisator\r\nHandy: $handy");
         $turnier->log("Anmeldung:\r\n" . Team::teamid_to_teamname($ausrichter) . " (spiele)");
+
+        return $turnier;
     }
 
     /**

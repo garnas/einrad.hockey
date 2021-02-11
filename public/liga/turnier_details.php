@@ -4,12 +4,8 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 
-$turnier_id=$_GET['turnier_id'];
+$turnier_id = (int) $_GET['turnier_id'] ?? 0;
 $turnier = new Turnier ($turnier_id);
-
-
-$turnier->details = $turnier->details;
-$akt_kontakt = new Kontakt ($turnier->details['ausrichter']);
 
 if (empty($turnier->details)){
     Form::error("Das Turnier existiert nicht");
@@ -17,8 +13,10 @@ if (empty($turnier->details)){
     die();
 }
 
+$kontakt = new Kontakt ($turnier->details['ausrichter']);
+
 // Email-Adressen hinzufügen
-$turnier->details['email'] = implode(',', $akt_kontakt->get_emails('public'));
+$turnier->details['email'] = implode(',', $kontakt->get_emails('public'));
 
 $liste = $turnier->get_anmeldungen(); //Anmeldungen für dieses Turnier Form: $liste['warte'] = Array([0] => Array['teamname','team_id','tblock', etc])
 
@@ -132,7 +130,7 @@ include '../../templates/header.tmp.php';
             <td>
                 <?=$turnier->details['spielplan']?>
                 <?php if($turnier->details['phase'] == 'Spielplanphase'){?>
-                    <br><?=Form::link($turnier->get_spielplan_link(), '<i class="material-icons">reorder</i> Zum Spielplan')?>
+                    <br><?=Form::link($turnier->get_spielplan_link(), 'Zum Spielplan', true, "reorder")?>
                 <?php }//end if?>
             </td>
         </tr>
@@ -215,7 +213,7 @@ include '../../templates/header.tmp.php';
 <p class="w3-text-grey w3-border-bottom w3-border-grey">Links</p>
 <p><?=Form::link('../liga/turniere.php#' . $turnier->details['turnier_id'], '<i class="material-icons">event</i> Anstehende Turniere')?></p>
 <?php if($turnier->details['phase'] == 'Spielplanphase'){?>
-    <p><?=Form::link($turnier->get_spielplan_link(), '<i class="material-icons">reorder</i> Zum Spielplan')?></p>
+    <p><?=Form::link($turnier->get_spielplan_link(), 'Zum Spielplan', true, "reorder")?></p>
 <?php }//end if?>
 
 <?php if (isset($_SESSION['team_id'])){?>

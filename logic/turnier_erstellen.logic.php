@@ -130,18 +130,14 @@ if (isset($_POST['create_turnier'])) {
     // Eintragen des Turnieres
     if (!$error) {
         // Turnier erstellen
-        Turnier::create_turnier($tname, $ausrichter_team_id, $startzeit, $besprechung, $art, $tblock, $fixed, $datum,
+        $turnier = Turnier::create_turnier($tname, $ausrichter_team_id, $startzeit, $besprechung, $art, $tblock, $fixed, $datum,
             $plaetze, $spielplan, $hallenname, $strasse, $plz, $ort, $haltestellen, $hinweis, $startgebuehr,
-            $organisator, $handy, $phase);
-        $turnier = new Turnier($turnier_id);
-
-        // Logs schreiben
-        $autor = ($ligacenter) ? "Ligaausschuss" : $_SESSION['teamname'];
+            $organisator, $handy, $phase); // Vom Typ Turnier
 
         // Mailbot
         if ($teamcenter) MailBot::mail_neues_turnier($turnier); // Nur wenn Teams turnier erstellen.
         Form::affirm("Euer Turnier wurde erfolgreich eingetragen!");
-        header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier_id);
+        header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->id);
         die();
     } else {
         Form::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht erstellt.");
