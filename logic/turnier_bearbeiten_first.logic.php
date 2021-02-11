@@ -17,7 +17,7 @@ if ($teamcenter && ($_SESSION['team_id'] ?? '') != $turnier->details['ausrichter
 }
 
 //Turniere in der Vergangenheit können von Teams nicht mehr verändert werden
-if ($teamcenter && strtotime($turnier->details['datum']) < Config::time_offset()){
+if ($teamcenter && strtotime($turnier->details['datum']) < time()){
     Form::error("Das Turnier liegt bereits in der Vergangenheit und kann nicht bearbeitet werden");
     header('Location: ../liga/turniere.php');
     die();

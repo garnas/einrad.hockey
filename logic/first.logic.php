@@ -50,16 +50,16 @@ if (!empty($_GET)) {
  * Nach einiger Zeit ein neues Hintergrundbild in der Navigation anzeigen
  */
 if (!isset($_SESSION['neues_bild'])) {
-    $_SESSION['neues_bild'] = Config::time_offset();
+    $_SESSION['neues_bild'] = time();
 }
-if (!isset($_SESSION['hintergrund']) or (Config::time_offset() - $_SESSION['neues_bild']) > 600) {
+if (!isset($_SESSION['hintergrund']) or (time() - $_SESSION['neues_bild']) > 600) {
     //https://stackoverflow.com/questions/1761252/how-to-get-random-image-from-directory-using-php 
     $imagesDir = '../bilder/hintergrund/';
     $images = glob($imagesDir . '*.{jpg,JPG,jpeg,png,gif}', GLOB_BRACE);
     $randomImage = $images[array_rand($images)];
 
     $_SESSION['hintergrund'] = $randomImage;
-    $_SESSION['neues_bild'] = Config::time_offset();
+    $_SESSION['neues_bild'] = time();
 }
 
 /**

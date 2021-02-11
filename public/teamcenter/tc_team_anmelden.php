@@ -22,7 +22,7 @@ if (empty($turnier->details)){
     header('Location: ../teamcenter/tc_turnierliste_anmelden.php');
     die();
 }
-if (strtotime($turnier->details['datum']) < Config::time_offset()){
+if (strtotime($turnier->details['datum']) < time()){
     Form::error ("Das Turnier liegt in der Vergangenheit.");
     header('Location: ../teamcenter/tc_turnierliste_anmelden.php');
     die();
@@ -172,7 +172,7 @@ if (isset($_POST['abmelden']) && isset($_SESSION['team_id'])){
         $error = true;
         Form::error ("Dein Team ist momentan nicht zum Turnier angemeldet");
     }
-    if (Config::time_offset() > $abmelden_moeglich_bis && $liste == 'spiele'){
+    if (time() > $abmelden_moeglich_bis && $liste == 'spiele'){
         $error = true;
         Form::error ("Abmeldungen von der Spielen-Liste sind nur bis Freitag 23:59 zwei Wochen vor dem Turnier möglich. Bitte nehmt via Email Kontakt mit dem Ligaausschuss auf: " .Form::mailto(Config::LAMAIL). "");
     }

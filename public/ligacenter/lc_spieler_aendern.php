@@ -54,7 +54,7 @@ if (isset($_POST['spieler_aendern'])){
         Form::error("Das Team $teamname wurde nicht gefunden");
         $error = true;
     }
-    if (1900 > $jahrgang  or $jahrgang > date('Y', Config::time_offset())) {
+    if (1900 > $jahrgang  or $jahrgang > date('Y')) {
         Form::error("Ungültiger Jahrgang (Jahreszahl vierstellig ausschreiben)");
         $error = true;
         db::debug($jahrgang);

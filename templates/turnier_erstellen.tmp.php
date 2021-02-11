@@ -8,7 +8,7 @@
         <h3 id="result">Turnierdaten</h3>
         <p>
             <label class="w3-text-primary" for="datum">Datum</label>
-            <input required type="date" value="<?=$_POST['datum'] ?? date("Y-m-d", (Config::time_offset()+4*7*24*60*60))?>" class="w3-input w3-border w3-border-primary" style="max-width: 320px" id="datum" name="datum">
+            <input required type="date" value="<?=$_POST['datum'] ?? date("Y-m-d", (time()+4*7*24*60*60))?>" class="w3-input w3-border w3-border-primary" style="max-width: 320px" id="datum" name="datum">
             <i class="w3-text-grey"> Ligaturniere müssen spätestens vier Wochen vor dem Spieltag eingetragen werden<br>nur Samstage, Sonntage und bundesweite Feiertage<br>Saison: <?=Config::SAISON_ANFANG;?> - <?=Config::SAISON_ENDE;?></i>
         </p>
         <p>

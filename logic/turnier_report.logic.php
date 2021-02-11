@@ -9,7 +9,7 @@ if ($turnier->details['ausrichter'] == ($_SESSION['team_id'] ?? '') or $ligacent
     $change_tbericht = false;
 }
 
-if (strtotime($turnier->details['datum']) - Config::time_offset() < -3 * 24 * 60 * 60 && !$ligacenter) {
+if (strtotime($turnier->details['datum']) - time() < -3 * 24 * 60 * 60 && !$ligacenter) {
     $change_tbericht = false; //Berechtigung zum Verändern des Reports widerrufen für Ausrichter, wenn das Turnier mehr als zwei Tage zurückliegt.
     if ($turnier->details['ausrichter'] == ($_SESSION['team_id'] ?? '')) {
         Form::attention("Das Turnier liegt bereits in der Vergangenheit. Bearbeiten des Turnierreports nur noch via den Ligaausschuss möglich.");

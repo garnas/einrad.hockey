@@ -83,7 +83,7 @@ class Kontakt
      * @param string $public
      * @param string $infomail
      */
-    function create_new_team_kontakt(string $email, string $public, string $infomail)
+    function create_new_team_kontakt(string $email, string $public, string $infomail) //TODO Umbenennen
     {
         $team_id = $this->team_id;
         $email = strtolower($email);

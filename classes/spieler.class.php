@@ -9,7 +9,7 @@ class Spieler
      * Eindeutige ID eines Spielers
      * @var int
      */
-    public int $spieler_id;
+    public int $id;
 
     /**
      * Spieler constructor.
@@ -17,7 +17,7 @@ class Spieler
      */
     function __construct($spieler_id)
     {
-        $this->spieler_id = $spieler_id;
+        $this->id = $spieler_id;
     }
 
     /**
@@ -80,7 +80,7 @@ class Spieler
     public static function check_timing(): bool
     {
         $saison_ende = strtotime(Config::SAISON_ENDE) + 25 * 60 * 60 - 1; // 23:59:59 am Saisonende
-        $heute = Config::time_offset();
+        $heute = time();
         if ($saison_ende > $heute) {
             return true;
         }
@@ -99,7 +99,7 @@ class Spieler
         $sql = "
                 SELECT *  
                 FROM spieler 
-                WHERE team_id='$team_id' 
+                WHERE team_id = '$team_id' 
                 AND letzte_saison = '$saison'
                 ORDER BY letzte_saison DESC, vorname
                 ";
@@ -174,7 +174,7 @@ class Spieler
      */
     function get_spieler_details(): array
     {
-        $spieler_id = $this->spieler_id;
+        $spieler_id = $this->id;
         $sql = "
                 SELECT *  
                 FROM spieler 
@@ -193,7 +193,7 @@ class Spieler
      */
     function set_spieler_detail(string $entry, mixed $value)
     {
-        $spieler_id = $this->spieler_id;
+        $spieler_id = $this->id;
         if ($entry == 'team_id' or $entry == 'letzte_saison') {
             $zeit = '';
         } else {
@@ -213,7 +213,7 @@ class Spieler
      */
     function delete_spieler()
     {
-        $spieler_id = $this->spieler_id;
+        $spieler_id = $this->id;
         $sql = "
                 DELETE FROM spieler 
                 WHERE spieler_id='$spieler_id'

@@ -21,7 +21,7 @@ class LigaBot
         }
 
         $_SESSION['ligabot'] = 'Ligabot'; // Wird in den logs als Autor verwendet
-        $heute = Config::time_offset();  // Datum Heute als Unix-Time
+        $heute = time();  // Datum Heute als Unix-Time
 
         self::set_spieltage(); // Setzt alle Spieltage der Turniere
 

@@ -38,7 +38,7 @@ class LigaKarte
                 ";
         $result = db::readdb($sql);
         while ($x = mysqli_fetch_assoc($result)) {
-            if ((Config::time_offset() - strtotime($x['zeit'])) < 365 * 24 * 60 * 60) {
+            if ((time() - strtotime($x['zeit'])) < 365 * 24 * 60 * 60) {
                 $return[] = $x;
             }
         }

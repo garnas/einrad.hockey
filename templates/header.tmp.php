@@ -44,11 +44,6 @@
             <!-- Zentrierung der Webseite und Breite mit welcher diese dargestellt werden soll -->
             <div class="w3-content" style="max-width: <?=$page_width ?? '980px'?>">
                 <div class="w3-container">
-                    <?php //Debugging:
-                    if (Config::time_offset() != time()){
-                        echo date("d.m.Y H:i", Config::time_offset()) . " Uhr<br>";
-                    }
-                    ?>
                     <?php //Fehlermeldungen darstellen
                     Form::schreibe_meldungen();
             

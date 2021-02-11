@@ -16,18 +16,16 @@ class Form
      */
     public static string $confetti = '';
     
-    //Fehlermeldungem werden in einer $_SESSION Variable gespeichert
+    // Fehlermeldungem werden in einer $_SESSION Variable gespeichert
     public static function error($string)
     {
-        //Falls $_SESSION noch nicht gesetzt wurde, wird sie als array deklariert
+        // Falls $_SESSION noch nicht gesetzt wurde, wird sie als array deklariert
         if (!isset($_SESSION['e_messages'])) {
             $_SESSION['e_messages'] = [];
         }
-        //argument wird dem array $_SESSION['e_messages'] hinzugefügt
+        // Argument wird dem array $_SESSION['e_messages'] hinzugefügt
         array_push($_SESSION['e_messages'], $string);
     }
-
-    //Analog zur error funktion
 
     /**
      * Infomeldungem werden in einer $_SESSION Variable gespeichert und beim nächsten Aufruf der HTML-Navigation
@@ -66,7 +64,7 @@ class Form
      * @param string $message Text
      * @param string $caption Überschrift
      */
-    public static function schreibe_attention(string $message, string $caption = 'Hinweis')
+    public static function schreibe_attention(string $message, string $caption = 'Hinweis') //TODO Return als String
     { ?>
         <div class='w3-card w3-panel w3-leftbar w3-border-yellow w3-pale-yellow'>
             <h3><?= $caption ?></h3>
@@ -80,7 +78,7 @@ class Form
      * @param string $message Text
      * @param string $caption Überschrift
      */
-    public static function schreibe_error(string $message, string $caption = 'Fehler')
+    public static function schreibe_error(string $message, string $caption = 'Fehler') //TODO Return als String
     {
         ?>
         <div class='w3-card w3-panel w3-leftbar w3-border-red w3-pale-red'>
@@ -96,7 +94,7 @@ class Form
      * @param string $message Text
      * @param string $caption Überschrift
      */
-    public static function schreibe_affirm(string $message, string $caption = 'Info')
+    public static function schreibe_affirm(string $message, string $caption = 'Info') //TODO Return als String
     {
         ?>
         <div class='w3-card w3-panel w3-leftbar w3-border-green w3-pale-green'>
@@ -214,7 +212,7 @@ class Form
         return (string)(1995 + $saison);
     }
 
-    public static function countdown($date, $id = 'countdown'){
+    public static function countdown($date, $id = 'countdown'){ //TODO Return als String
         ?>
             <div id='countdown' class="w3-xlarge w3-text-primary" style='white-space: nowrap;'>
                 <span class="w3-center w3-margin-right" style="display: inline-block">

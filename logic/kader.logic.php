@@ -16,7 +16,7 @@ if (isset($_POST['neuer_eintrag'])) {
         $error = true;
         Form::error("Bitte Felder ausfüllen");
     }
-    if (1900 > $jahrgang or $jahrgang > date('Y', Config::time_offset())) {
+    if (1900 > $jahrgang or $jahrgang > date('Y')) {
         $error = true;
         Form::error("Ungültiger Jahrgang: Bitte als Jahreszahl ausschreiben.");
     }

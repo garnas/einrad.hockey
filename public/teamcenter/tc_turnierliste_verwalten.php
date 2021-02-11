@@ -5,7 +5,7 @@
 require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_team.logic.php'; //Auth
 
-$heute = date("Y-m-d", Config::time_offset());
+$heute = date("Y-m-d");
 //wird dem template übergeben
 $turniere = Turnier::get_eigene_turniere($_SESSION['team_id']);
 

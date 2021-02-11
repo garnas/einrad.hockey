@@ -20,7 +20,6 @@ class Captcha
         // Captchas werden in der Session gespeichert, ansonsten wenn kein Captcha in der Session, dann ein Zufälliges
         $phrase = $_SESSION['captcha'] ?? array_rand(array_flip($phrases));
 
-
         $captcha = new Gregwar\Captcha\CaptchaBuilder($phrase);
         $captcha->build(200, 80);
 

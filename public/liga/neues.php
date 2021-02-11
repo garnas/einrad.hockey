@@ -3,8 +3,8 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-$fortschritt = round(100*(Config::time_offset()-strtotime(Config::SAISON_ANFANG))/(strtotime(Config::SAISON_ENDE)-strtotime(Config::SAISON_ANFANG)),0);
-$tage = round((strtotime(Config::SAISON_ANFANG) - Config::time_offset())/(24*60*60),0);
+$fortschritt = round(100*(time()-strtotime(Config::SAISON_ANFANG))/(strtotime(Config::SAISON_ENDE)-strtotime(Config::SAISON_ANFANG)),0);
+$tage = round((strtotime(Config::SAISON_ANFANG) - time())/(24*60*60),0);
 
 $neuigkeiten = Neuigkeit::get_neuigkeiten(); //Alle Neuigkeiten werden übergeben, da kein Argument überliefert
                                             //Es werden die 10 letzten Neuigkeiten angzeigt
@@ -39,7 +39,7 @@ $anz_next_turniere = count($next_turniere);
 
 //Zeitanzeige der Neuigkeiteneinträge verschönern
 foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit){
-    $zeit_differenz = (Config::time_offset() - strtotime($neuigkeiten[$neuigkeiten_id]['zeit']))/(60*60); //in Stunden
+    $zeit_differenz = (time() - strtotime($neuigkeiten[$neuigkeiten_id]['zeit']))/(60*60); //in Stunden
     if ($zeit_differenz < 24){
         if ($zeit_differenz <= 1.5){
             $zeit = "gerade eben";

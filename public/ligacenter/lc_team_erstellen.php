@@ -60,10 +60,10 @@ include '../../templates/header.tmp.php';
             </p>
             <p>
                 <label class="w3-text-primary" for="email">E-Mail:</label><br>
-                <input class="w3-input w3-border w3-border-primary" type="email" id="email" value="<?= $_POST['email'] ?? '' ?>" name="email">
+                <input required class="w3-input w3-border w3-border-primary" type="email" id="email" value="<?= $_POST['email'] ?? '' ?>" name="email">
             </p>
             <p>
-                <input class="w3-button w3-block w3-secondary" required type="submit" name="team_erstellen" value="Team erstellen">
+                <input class="w3-button w3-block w3-secondary" type="submit" name="team_erstellen" value="Team erstellen">
             </p>
         </form>
     </div>

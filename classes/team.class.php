@@ -350,7 +350,7 @@ class Team
         $sql = "
                 SELECT freilose
                 FROM teams_liga
-                WHERE team_id= $this->id
+                WHERE team_id = $this->id
                 ";
         return dbi::$db->query($sql)->log()->fetch_one();
     }
