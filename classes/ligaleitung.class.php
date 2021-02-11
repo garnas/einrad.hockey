@@ -18,11 +18,7 @@ class Ligaleitung
                 FROM ausschuss_liga 
                 ORDER BY r_name
                 ";
-        $result = db::readdb($sql);
-        while ($x = mysqli_fetch_assoc($result)) {
-            $return[] = $x;
-        }
-        return db::escape($return ?? []);
+        return dbi::$db->query($sql)->esc()->fetch();
     }
 
     /**
@@ -37,11 +33,7 @@ class Ligaleitung
                 FROM ausschuss_technik
                 ORDER BY r_name
                 ";
-        $result = db::readdb($sql);
-        while ($x = mysqli_fetch_assoc($result)) {
-            $return[] = $x;
-        }
-        return db::escape($return ?? []);
+        return dbi::$db->query($sql)->esc()->fetch();
     }
 
     /**
@@ -55,11 +47,7 @@ class Ligaleitung
                 FROM ausschuss_schiri
                 ORDER BY r_name
                 ";
-        $result = db::readdb($sql);
-        while ($x = mysqli_fetch_assoc($result)) {
-            $return[] = $x;
-        }
-        return db::escape($return ?? []);
+        return dbi::$db->query($sql)->esc()->fetch();
     }
 
     /**
@@ -74,11 +62,7 @@ class Ligaleitung
                 FROM ausschuss_oeffi
                 ORDER BY r_name
                 ";
-        $result = db::readdb($sql);
-        while ($x = mysqli_fetch_assoc($result)) {
-            $return[] = $x;
-        }
-        return db::escape($return ?? []);
+        return dbi::$db->query($sql)->esc()->fetch();
     }
 
     /**
@@ -94,11 +78,7 @@ class Ligaleitung
                 WHERE schiri = 'Ausbilder/in'
                 ORDER BY vorname
                 ";
-        $result = db::readdb($sql);
-        while ($x = mysqli_fetch_assoc($result)) {
-            $return[] = $x;
-        }
-        return db::escape($return ?? []);
+        return dbi::$db->query($sql)->esc()->fetch();
     }
 
     /**
@@ -112,10 +92,9 @@ class Ligaleitung
         $sql = "
                 SELECT ligaausschuss_id 
                 FROM ausschuss_liga 
-                WHERE login_name = '$name'";
-        $result = db::readdb($sql);
-        $result = mysqli_fetch_assoc($result);
-        return $result['ligaausschuss_id'] ?? 0;
+                WHERE login_name = ?
+                ";
+        return dbi::$db->query($sql, $name)->esc()->fetch_one();
     }
 
     /**
@@ -129,11 +108,9 @@ class Ligaleitung
         $sql = "
                 SELECT passwort
                 FROM ausschuss_liga 
-                WHERE ligaausschuss_id = '$la_id'
+                WHERE ligaausschuss_id = ?
                 ";
-        $result = db::readdb($sql);
-        $result = mysqli_fetch_assoc($result);
-        return $result['passwort'] ?? '';
+        return dbi::$db->query($sql, $la_id)->esc()->fetch_one();
     }
 
     /**
@@ -146,11 +123,9 @@ class Ligaleitung
         $sql = "
                 SELECT r_name  
                 FROM ausschuss_liga 
-                WHERE ligaausschuss_id = '$la_id'
+                WHERE ligaausschuss_id = ?
                 ";
-        $result = db::readdb($sql);
-        $result = mysqli_fetch_assoc($result);
-        return db::escape($result['r_name']);
+        return dbi::$db->query($sql, $la_id)->esc()->fetch_one();
     }
 
     /**
@@ -164,10 +139,10 @@ class Ligaleitung
         $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
         $sql = "
                 UPDATE ausschuss_liga 
-                SET passwort = '$passwort_hash' 
-                WHERE  ligaausschuss_id = '$la_id'
+                SET passwort = ? 
+                WHERE  ligaausschuss_id = ?
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql, $passwort_hash, $la_id)->log();
     }
 }
 

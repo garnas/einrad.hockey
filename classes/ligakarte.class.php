@@ -21,9 +21,10 @@ class LigaKarte
     {
         $sql = "
                 INSERT INTO ligakarte_gesuch (plz, ort, LAT, Lon, r_name, kontakt) 
-                VALUES ('$plz','$ort','$LAT','$Lon','$name','$kontakt')
+                VALUES (?, ?, ?, ?, ?, ?)
                 ";
-        db::writedb($sql);
+        $params = [$plz, $ort, $LAT, $Lon, $name, $kontakt];
+        return dbi::$db->query($sql, $params)->log();
     }
 
     /**
@@ -35,14 +36,9 @@ class LigaKarte
         $sql = "
                 SELECT * 
                 FROM ligakarte_gesuch
+                WHERE DATE(zeit) >  CURDATE() - INTERVAL 365 DAY
                 ";
-        $result = db::readdb($sql);
-        while ($x = mysqli_fetch_assoc($result)) {
-            if ((time() - strtotime($x['zeit'])) < 365 * 24 * 60 * 60) {
-                $return[] = $x;
-            }
-        }
-        return db::escape($return ?? []);
+        return dbi::$db->query($sql)->esc()->fetch();
     }
 
     /**
@@ -56,14 +52,9 @@ class LigaKarte
         $sql = "
                 SELECT * 
                 FROM ligakarte_gesuch 
-                WHERE PLZ = '$plz'
+                WHERE PLZ = ?
                 ";
-        $result = db::readdb($sql);
-        $result = mysqli_fetch_assoc($result);
-        if (!empty($result)){
-            return true;
-        }
-        return false;
+        return dbi::$db->query($sql, $plz)->num_rows() > 0;
     }
 
     /**
@@ -83,11 +74,7 @@ class LigaKarte
                 WHERE teams_liga.aktiv = 'Ja'
                 ORDER BY teams_liga.teamname
                 ";
-        $result = db::readdb($sql);
-        while ($team = mysqli_fetch_assoc($result)) {
-           $return[] = $team;
-        }
-        return db::escape($return ?? []);
+        return dbi::$db->query($sql)->esc()->fetch();
     }
 
     /**
@@ -101,10 +88,8 @@ class LigaKarte
         $sql = "
                 SELECT Lon,LAT 
                 FROM plz 
-                WHERE PLZ = '$plz'
+                WHERE PLZ = ?
                 ";
-        $result = db::readdb($sql);
-        $return = mysqli_fetch_assoc($result);
-        return db::escape($return);
+        return dbi::$db->query($sql, $plz)->esc()->fetch_row();
     }
 }

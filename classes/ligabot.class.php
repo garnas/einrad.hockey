@@ -21,7 +21,6 @@ class LigaBot
         }
 
         $_SESSION['ligabot'] = 'Ligabot'; // Wird in den logs als Autor verwendet
-        $heute = time();  // Datum Heute als Unix-Time
 
         self::set_spieltage(); // Setzt alle Spieltage der Turniere
 
@@ -53,12 +52,12 @@ class LigaBot
              * Phasenwechsel von Offene Phase in die Meldephase
              */
             // Prüft, ob wir uns vier Wochen vor dem Spieltag befinden und ob das Turnier in der offenen Phase ist.
-            if (self::time_offen_melde($turnier->details['datum']) <= $heute && $turnier->details['phase'] == 'offen') {
+            if (self::time_offen_melde($turnier->details['datum']) <= time() && $turnier->details['phase'] == 'offen') {
                 $turnier->set_phase("melde"); //Aktualisiert auch $turnier->get_details()
                 // Losen setzt alle Teams in richtiger Reihenfolge auf die Warteliste.
                 self::losen($turnier);
                 // Füllt die Spielen-Liste auf.
-                $turnier->spieleliste_auffuellen("Ligabot", false);
+                $turnier->spieleliste_auffuellen(false);
                 // Info-Mails versenden.
                 MailBot::mail_gelost($turnier);
                 // Freie-Plätze-Mails versenden.
@@ -115,13 +114,14 @@ class LigaBot
      */
     public static function get_turnier_ids(int $saison = Config::SAISON): array
     {
-        $sql = "SELECT turnier_id FROM turniere_liga WHERE saison = $saison AND (art='I' OR art='II' OR art='III') ORDER BY datum";
-        $result = db::readdb($sql);
-        $return = [];
-        while ($x = mysqli_fetch_assoc($result)) {
-            array_push($return, $x['turnier_id']);
-        }
-        return db::escape($return); //array
+        $sql = "
+                SELECT turnier_id 
+                FROM turniere_liga 
+                WHERE saison = ? 
+                AND (art='I' OR art='II' OR art='III') 
+                ORDER BY datum
+                ";
+        return dbi::$db->query($sql, $saison)->esc()->fetch();
     }
 
 
@@ -162,12 +162,7 @@ class LigaBot
                 GROUP BY turniere_liga.datum, turniere_liste.team_id 
                 HAVING (COUNT(*) > 1)
                 ";
-        $result = db::readdb($sql);
-        $return = [];
-        while ($x = mysqli_fetch_assoc($result)) {
-            $return[$x['team_id']] = $x;
-        }
-        return db::escape($return);
+        return dbi::$db->query($sql)->esc()->fetch();
     }
 
     /**
