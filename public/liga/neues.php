@@ -3,8 +3,8 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-$fortschritt = round(100*(time()-strtotime(Config::SAISON_ANFANG))/(strtotime(Config::SAISON_ENDE)-strtotime(Config::SAISON_ANFANG)),0);
-$tage = round((strtotime(Config::SAISON_ANFANG) - time())/(24*60*60),0);
+$fortschritt = round(100*(time()-strtotime(Config::SAISON_ANFANG))/(strtotime(Config::SAISON_ENDE)-strtotime(Config::SAISON_ANFANG)));
+$tage = round((strtotime(Config::SAISON_ANFANG) - time())/(24*60*60));
 
 $neuigkeiten = Neuigkeit::get_neuigkeiten(); //Alle Neuigkeiten werden übergeben, da kein Argument überliefert
                                             //Es werden die 10 letzten Neuigkeiten angzeigt
@@ -44,13 +44,13 @@ foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit){
         if ($zeit_differenz <= 1.5){
             $zeit = "gerade eben";
         }else{
-            $zeit = "vor " . round($zeit_differenz, 0) ." Stunden";
+            $zeit = "vor " . round($zeit_differenz) ." Stunden";
         }
     }elseif ($zeit_differenz < 7*24){
         if ($zeit_differenz <= 1.5*24){
             $zeit = "vor einem Tag";
         }else{
-            $zeit = "vor " . round($zeit_differenz/24, 0) ." Tagen";
+            $zeit = "vor " . round($zeit_differenz/24) ." Tagen";
         }
     }else{
         $zeit = date("d.m.Y", strtotime($neuigkeiten[$neuigkeiten_id]['zeit']));
@@ -204,7 +204,7 @@ include '../../templates/header.tmp.php';
 
                 <!-- Text -->
                 <div class="w3-section">
-                    <?=$neuigkeit['inhalt'] //nl2br --> new line to <br>?>>
+                    <?= nl2br($neuigkeit['inhalt']) //nl2br --> new line to <br> ?>
                 </div>
 
                 <!-- PDF -->

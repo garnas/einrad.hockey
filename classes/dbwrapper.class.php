@@ -40,6 +40,7 @@ class dbWrapper
             Form::log(self::$log_file, "ERROR Verbindung: " . mysqli_connect_error());
             die("Verbindung zur Datenbank nicht möglich.");
         }
+        $this->link->set_charset("utf-8");
     }
 
     /**
@@ -60,7 +61,7 @@ class dbWrapper
         if (!$this->stmt = $this->link->prepare($sql)){
             Form::log(self::$log_file, "ERROR " . dbi::escape($this->link->error));
 //            die(dbi::escape($this->link->error));
-        };
+        }
         // Parameter übergeben
         if ($this->stmt->param_count > 0) { // Alternativ if (!empty($params))
             if (is_array($params[array_key_first($params)])) {
@@ -81,7 +82,7 @@ class dbWrapper
         if (!$this->stmt->execute()){
             Form::log(self::$log_file, "ERROR " . dbi::escape($this->stmt->error));
 //            die(dbi::escape($this->stmt->error));
-        };
+        }
         $this->result = $this->stmt->get_result();
 
         // Für Logs
