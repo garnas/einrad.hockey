@@ -181,7 +181,7 @@
                     <td class="w3-center" style="vertical-align:bottom">Löschen?</td>
                 </tr>
             </thead>
-            <?php foreach ($kontakte->get_emails_with_details() as $email) { ?>
+            <?php foreach ($emails as $email) { ?>
                 <tr>
                     <td style='vertical-align: middle'><?= $email['email'] ?></td>
                     <td>

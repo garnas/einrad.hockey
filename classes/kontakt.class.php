@@ -80,7 +80,7 @@ class Kontakt
         $email = strtolower($email);
         $sql = "
                 INSERT INTO teams_kontakt (team_id, email, public, get_info_mail) 
-                VALUES ($this->team_id, ?, ?, ?,)
+                VALUES ($this->team_id, ?, ?, ?)
                 ";
         dbi::$db->query($sql, [$email, $public, $infomail])->log();
     }
@@ -90,7 +90,6 @@ class Kontakt
      *
      * @param string $scope $scope = 'info => Nur Emails für automatische Infomails
      *                      $scope = 'public' => Nur öffentliche Emails
-     *                      $scope = '' => Alle Emails
      * @return array
      */
     function get_emails(string $scope = ''): array
@@ -101,11 +100,28 @@ class Kontakt
             'info' => "AND get_info_mail = 'Ja'"
         };
         $sql = "
-                SELECT *
+                SELECT email
                 FROM teams_kontakt 
                 WHERE team_id = $this->team_id
                 " . $and_clause;
-        return dbi::$db->query($sql)->esc()->fetch();
+        return dbi::$db->query($sql)->esc()->list('email');
+    }
+
+    /**
+     * Get alle verfügbaren Emails eines Teams in einem Array mit allen Infos aufgeschlüsselt
+     *
+     * Funktioniert nicht mit Form::mailto()
+     *
+     * @return array der Form [teams_kontakt_id][email, public, get_info_mail]
+     */
+    function get_emails_with_details(): array
+    {
+        $sql = "
+                SELECT * 
+                FROM teams_kontakt 
+                WHERE team_id = $this->team_id
+                ";
+        return dbi::$db->query($sql)->esc()->fetch('teams_kontakt_id');
     }
 
     /**
@@ -120,6 +136,7 @@ class Kontakt
                 UPDATE teams_kontakt 
                 SET public = ? 
                 WHERE teams_kontakt_id = ?
+                AND team_id = $this->team_id
                 ";
         dbi::$db->query($sql, [$value, $teams_kontakt_id])->log();
 
@@ -137,6 +154,7 @@ class Kontakt
                 UPDATE teams_kontakt 
                 SET get_info_mail = ?
                 WHERE teams_kontakt_id = ?
+                AND team_id = $this->team_id
                 ";
         dbi::$db->query($sql, [$value, $teams_kontakt_id])->log();
     }
@@ -153,6 +171,7 @@ class Kontakt
             $sql = "
                     DELETE FROM teams_kontakt 
                     WHERE teams_kontakt_id = ?
+                    AND team_id = $this->team_id
                     ";
             dbi::$db->query($sql, $teams_kontakt_id)->log();
             return true;

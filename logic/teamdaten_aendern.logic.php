@@ -6,7 +6,7 @@ $team_id = ($teamcenter) ? $_SESSION['team_id'] : (int) ($_GET['team_id'] ?? 0);
 if (Team::is_ligateam($team_id)){
     $team = new Team ($team_id);
     $kontakte = new Kontakt ($team->id);
-    $emails = $kontakte->get_emails();
+    $emails = $kontakte->get_emails_with_details();
 }
 
 $path = ($ligacenter) ? '../ligacenter/lc_teamdaten_aendern.php?team_id=' . $team_id : '../teamcenter/tc_teamdaten_aendern.php';
@@ -56,8 +56,8 @@ if (isset($_POST['teamdaten_aendern'])) {
     }
 
     // Emails
-    foreach ($kontakte->get_emails() as $email) {
-        if ($email['public'] != ($_POST['public' . $email['teams_kontakt_id']] ?? '')) {
+    foreach ($emails as $email) {
+        if ($email['public'] != ($_POST['public' . $email['teams_kontakt_id']] ?? '')) { //TODO in Array Umwandeln
             $kontakte->set_public($email['teams_kontakt_id'], $_POST['public' . $email['teams_kontakt_id']]);
         }
         if ($email['get_info_mail'] != ($_POST['info' . $email['teams_kontakt_id']] ?? '')) {
