@@ -61,7 +61,8 @@ if (isset($_POST["turnierergebnis_speichern"])) {
     }
 
     if (!($error ?? false)) {
-        Turnier::set_ergebnisse($spielplan);
+        $spielplan->turnier->set_ergebnisse($spielplan->platzierungstabelle);
+        Form::affirm("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
         header('Location: ' . db::escape($_SERVER['REQUEST_URI']));
         die();
     }

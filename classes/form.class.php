@@ -160,7 +160,7 @@ class Form
     public static function datalist_teams(): string
     {
         $return = "<datalist id='teams'>";
-        $liste = Team::get_ligateams_name();
+        $liste = Team::get_liste_namen();
         foreach ($liste as $teamname) {
             $return .= "<option value='$teamname'>";
         }

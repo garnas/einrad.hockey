@@ -9,7 +9,7 @@ $tage = round((strtotime(Config::SAISON_ANFANG) - Config::time_offset())/(24*60*
 $neuigkeiten = Neuigkeit::get_neuigkeiten(); //Alle Neuigkeiten werden übergeben, da kein Argument überliefert
                                             //Es werden die 10 letzten Neuigkeiten angzeigt
 //db::debug($neuigkeiten);
-$turniere = Turnier::get_all_turniere("WHERE SAISON = '" . Config::SAISON . "'");
+$turniere = Turnier::get_turniere('alle', false);
 
 $statistik = Neuigkeit::get_statistik_turniere();
 //Zuordnen der Farben für 1. 2. 3. Platz

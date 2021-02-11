@@ -22,7 +22,7 @@ include '../../templates/header.tmp.php';
 <h3 class="w3-text-grey">Ligadaten</h3>
 <div class="w3-container">
     <ul class="w3-ul w3-leftbar w3-border-tertiary">
-        <li><?=count(Team::get_ligateams_name())?> Teams mit <?=Spieler::get_spieler_anzahl()?> Spieler</li>
+        <li><?=count(Team::get_liste_namen())?> Teams mit <?=Spieler::get_spieler_anzahl()?> Spieler</li>
         <li><?=count(Config::BLOCK)?> Spielstärken (<?=implode(", ", Config::BLOCK)?>)</li>
         <li><?=Spieler::get_schiris_anzahl()?> Schiedsrichter</li>
         <li>Saison: <?=Config::SAISON_ANFANG . ' - ' . Config::SAISON_ENDE?></li>

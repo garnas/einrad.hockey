@@ -4,11 +4,9 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 
-$daten = Turnier::get_all_turniere("WHERE turniere_liga.phase != 'ergebnis' AND SAISON='" . Config::SAISON . "'");
+$daten = Turnier::get_turniere('ergebnis', false);
 
-if (empty($daten)) {
-    Form::affirm("Es wurden noch keine Turniere eingetragen.");
-}
+if (empty($daten)) Form::affirm("Es wurden noch keine Turniere eingetragen.");
 
 $all_anmeldungen = Turnier::get_all_anmeldungen();
 

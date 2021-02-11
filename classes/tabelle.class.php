@@ -103,22 +103,22 @@ class Tabelle
      * @param string $spieltag
      * @return string|int
      */
-    public static function get_team_rang(int $team_id, $spieltag = ''): string|int
+    public static function get_team_rang(int $team_id, string $spieltag = ''): string|int
     {
         //Teamblock des relevanten Spieltages, also des Spieltages für den alle Ergebnisse eingetragen sind
-        if (!is_numeric($spieltag)) {
-            $spieltag = self::get_aktuellen_spieltag() - 1;
-        } //-1, da immer der Spieltag zählt, für den alle Ergebnisse eingetragen sind
-        if (!isset($GLOBALS['rang_tabelle'][$spieltag])) { //Rangtabelle muss nicht jedes mal neu berechnet werden müssen
+        if (!is_numeric($spieltag)) $spieltag = self::get_aktuellen_spieltag() - 1;
+            // -1, da immer der Spieltag zählt, für den alle Ergebnisse eingetragen sind
+
+        if (!isset($GLOBALS['rang_tabelle'][$spieltag]))
             $GLOBALS['rang_tabelle'][$spieltag] = Tabelle::get_rang_tabelle($spieltag);
-        }
-        $key = array_search($team_id, array_column($GLOBALS['rang_tabelle'][$spieltag], 'team_id')); //$key = false, wenn nicht gefunden, ansonsten Position
-        // 0 wird aber auch als false interpretiert, deswegen is_numeric und nicht ($key)
-        if (is_numeric($key)) {
-            return $GLOBALS['rang_tabelle'][$spieltag][$key]['platz'];
-        } else {
-            return 'NL';
-        }
+            //Rangtabelle muss nicht jedes mal neu berechnet werden müssen
+
+        $key = array_search($team_id, array_column($GLOBALS['rang_tabelle'][$spieltag], 'team_id'));
+            // $key = false, wenn nicht gefunden, ansonsten Position
+            // 0 wird aber auch als false interpretiert, deswegen is_numeric und nicht ($key)
+
+        return is_numeric($key) ? $GLOBALS['rang_tabelle'][$spieltag][$key]['platz'] : 'NL';
+
     }
 
     /**
@@ -283,7 +283,7 @@ class Tabelle
         // Tabelle mit aktiven Teams ohne Ergebnis auffüllen
         // In vergangenen Saisons werden nur Teams mit Ergebnissen gelistet
         if ($saison == Config::SAISON) {
-            $list_of_teamids = Team::get_ligateams_id();
+            $list_of_teamids = Team::get_liste_ids();
             foreach ($list_of_teamids as $team_id) {
                 if (!array_key_exists($team_id, $return)) {
                     $return[$team_id] = [];
@@ -297,7 +297,7 @@ class Tabelle
         }
 
         // Hinzufügen der Strafen:
-        $strafen = Team::get_strafen_all_teams();
+        $strafen = Team::get_strafen();
         foreach ($strafen as $strafe) {
             // Hinzufügen des Sterns
             if (!isset($return[$strafe['team_id']]['strafe_stern'])) {
@@ -413,7 +413,7 @@ class Tabelle
         // In vergangenen Saisons werden nur Teams mit Ergebnissen gelistet
         // TODO geht das nicht besser?
         if ($saison == Config::SAISON) {
-            $list_of_teamids = Team::get_ligateams_id();
+            $list_of_teamids = Team::get_liste_ids();
             foreach ($list_of_teamids as $team_id) {
                 if (!array_key_exists($team_id, $return)) {
                     $return[$team_id] = [];

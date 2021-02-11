@@ -8,7 +8,7 @@ require_once '../../logic/session_la.logic.php'; //Auth
 //Füge Links zum Weiterverarbeiten der ausgewählten Turniere hinzu; diese werden dem Teamplate übergeben
 
 //Für Turniere die nicht in der Ergebnis-Phase sind:
-$turniere_no_erg = Turnier::get_all_turniere("WHERE saison='".Config::SAISON."' AND phase != 'ergebnis'");
+$turniere_no_erg = Turnier::get_turniere('ergebnis', false);
 foreach ($turniere_no_erg as $turnier_id => $turnier){
     //Links
     $turniere_no_erg[$turnier_id]['links'] = 
@@ -26,7 +26,7 @@ foreach ($turniere_no_erg as $turnier_id => $turnier){
 }
 
 //Für Turniere die in der Ergebnisphase sind:
-$turniere_erg = Turnier::get_all_turniere("WHERE saison='".Config::SAISON."' AND phase = 'ergebnis'", "desc");
+$turniere_erg = Turnier::get_turniere('ergebnis', true, "desc");
 foreach ($turniere_erg as $turnier_id => $turnier){
   //Links
   $turniere_erg[$turnier_id]['links'] = 

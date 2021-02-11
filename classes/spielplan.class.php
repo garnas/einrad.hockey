@@ -63,7 +63,7 @@ class Spielplan
         $this->teamliste = $this->turnier->get_liste_spielplan();
         $this->anzahl_teams = count($this->teamliste);
         $this->anzahl_spiele = $this->anzahl_teams - 1;
-        $this->details = self::get_details();
+        $this->details = $this->get_details();
         $this->spiele = $this->get_spiele();
 
         // Turniertabellen
@@ -129,7 +129,7 @@ class Spielplan
         db::writedb($sql);
 
         // Turnierlog
-        $turnier->log("Dynamischer " . $anzahl_teams . "er-JgJ-Spielplan erstellt.");
+        $turnier->log("Automatischer " . $anzahl_teams . "er-JgJ-Spielplan erstellt.");
         $turnier->set_phase('spielplan');
         return true;
     }
@@ -150,7 +150,7 @@ class Spielplan
                 WHERE turnier_id = $turnier->id
                 ";
         db::writedb($sql);
-        $turnier->log("Dynamischer JgJ-Spielplan gelöscht.");
+        $turnier->log("Automatischer JgJ-Spielplan gelöscht.");
         $turnier->set_phase('melde');
     }
 

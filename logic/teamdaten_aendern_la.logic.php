@@ -1,14 +1,14 @@
 <?php
+
 if (isset($_POST['change_la']) && $ligacenter) {
     $error = false;
     $neuer_teamname = $_POST['teamname'];
-    $freilose = $_POST['freilose'];
+    $freilose = (int) $_POST['freilose'];
     $passwort = $_POST['passwort'];
 
-    if (
-        $neuer_teamname == $team->details['teamname']
-        && $passwort == 'Neues Passwort vergeben'
-        && $freilose == $team->details['freilose']
+    if ($neuer_teamname === $team->details['teamname']
+        && empty ($passwort)
+        && $freilose === $team->details['freilose']
     ) {
         Form::error("Es wurden keine Daten verändert");
         $error = true;
@@ -23,7 +23,6 @@ if (isset($_POST['change_la']) && $ligacenter) {
     if (
         empty($neuer_teamname)
         or $freilose < 0
-        or empty($passwort)
     ) {
         Form::error("Felder dürfen nicht leer sein");
         $error = true;
@@ -38,7 +37,7 @@ if (isset($_POST['change_la']) && $ligacenter) {
             $team->set_freilose($freilose);
             Form::affirm("Anzahl der Freilose wurde geändert");
         }
-        if ($passwort != 'Neues Passwort vergeben') {
+        if (!empty($passwort)) {
             $team->set_passwort($passwort, 'Nein');
             Form::affirm("Passwort wurde geändert");
         }

@@ -28,7 +28,6 @@ spl_autoload_register(
     }
 );
 
-
 /**
  * Verbindung zur Datenbank
  */
@@ -40,10 +39,10 @@ dbi::initialize();
  * Sanitizing von $_POST und $_GET
  */
 if (!empty($_POST)) {
-    $_POST = db::sanitize($_POST);
+    //$_POST = db::sanitize($_POST);
 }
 if (!empty($_GET)) {
-    $_GET = db::sanitize($_GET);
+    //$_GET = db::sanitize($_GET);
     $_GET = db::escape($_GET); //XSS über Url. Damit keine Entities in der Datenbank gespeichert werden, sollte man $_GET nicht ohne weiteres in der Datenbank speichern.
 }
 

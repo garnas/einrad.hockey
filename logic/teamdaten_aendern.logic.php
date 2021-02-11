@@ -100,7 +100,7 @@ if (isset($_POST['teamfoto'])) {
         if ($target_file_jpg === false) {
             Form::error("Fehler beim Fotoupload");
         } else {
-            $team->set_teamfoto($target_file_jpg);
+            $team->set_detail('teamfoto', $target_file_jpg);
             Form::affirm("Teamfoto wurde hochgeladen");
             header('Location: ' . $path);
             die();

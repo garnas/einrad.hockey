@@ -7,7 +7,7 @@ require_once '../../logic/session_team.logic.php'; //Auth
 
 $heute = date("Y-m-d", Config::time_offset());
 //wird dem template übergeben
-$turniere = Turnier::get_all_turniere("WHERE saison = '".Config::SAISON."' AND turniere_liga.ausrichter = '".$_SESSION['team_id']."'");
+$turniere = Turnier::get_eigene_turniere($_SESSION['team_id']);
 
 if (empty($turniere)){
     Form::affirm('Dein Team richtet zurzeit kein Turnier aus - Erstelle ein Turnier, um es verwalten zu können');

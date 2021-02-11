@@ -5,7 +5,7 @@ $beginn = strtotime(Abstimmung::BEGINN);
 
 $ergebnisse = Abstimmung::get_ergebnisse();
 $abgegebene_stimmen = $ergebnisse['gesamt'];
-$anzahl_teams = count(Team::get_ligateams_id());
+$anzahl_teams = count(Team::get_liste_ids());
 $wahlbeteiligung = round(100 * $abgegebene_stimmen / $anzahl_teams) . '%';
 
 $display_ergebnisse = [

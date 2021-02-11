@@ -1,12 +1,12 @@
 
 <h1 class="w3-text-primary">Manuelle Teamanmeldung</h1>
-<h3 class="w3-text-grey"><?=$daten['tname'] ?: 'Turnier'?> in <?=$daten['ort']?> am <?=$daten['datum']?> (<?=$daten['tblock']?>)</h3>
+<h3 class="w3-text-grey"><?=$turnier->details['tname'] ?: 'Turnier'?> in <?=$turnier->details['ort']?> am <?=$turnier->details['datum']?> (<?=$turnier->details['tblock']?>)</h3>
 
 <!-- Links -->
-<p><?=Form::link('../liga/turnier_details.php?turnier_id=' . $daten['turnier_id'], '<i class="material-icons">info</i> Turnierdetails')?>
+<p><?=Form::link('../liga/turnier_details.php?turnier_id=' . $turnier->details['turnier_id'], '<i class="material-icons">info</i> Turnierdetails')?>
 <?php if($ligacenter){?>
-    <p><?=Form::link('../ligacenter/lc_turnier_bearbeiten.php?turnier_id=' . $daten['turnier_id'], '<i class="material-icons">create</i> Turnier bearbeiten (Ligaausschuss)')?></p>
-    <p><?=Form::link('../ligacenter/lc_turnier_log.php?turnier_id=' . $daten['turnier_id'], '<i class="material-icons">list</i> Turnierlog einsehen (Ligaausschuss)')?></p>
+    <p><?=Form::link('../ligacenter/lc_turnier_bearbeiten.php?turnier_id=' . $turnier->details['turnier_id'], '<i class="material-icons">create</i> Turnier bearbeiten (Ligaausschuss)')?></p>
+    <p><?=Form::link('../ligacenter/lc_turnier_log.php?turnier_id=' . $turnier->details['turnier_id'], '<i class="material-icons">list</i> Turnierlog einsehen (Ligaausschuss)')?></p>
 <?php }//endif?>
 
 <!-- Anzeigen der angemeldeten Teams und gleichzeitig Abmeldeformular -->
@@ -40,8 +40,8 @@
                 <?php }//end foreach?>
             <?php }else{ ?><i>leer</i><?php } //endif?> 
         </p>
-        <p>Freie Plätze: <?=$daten['plaetze'] - count(($anmeldungen['spiele'] ?? array()))?> von <?=$daten['plaetze']?></p>
-        <p class="w3-small w3-text-primary">Phase: <?=$daten['phase'] ?: '--'?></p>
+        <p>Freie Plätze: <?=$turnier->details['plaetze'] - count(($anmeldungen['spiele'] ?? array()))?> von <?=$turnier->details['plaetze']?></p>
+        <p class="w3-small w3-text-primary">Phase: <?=$turnier->details['phase'] ?: '--'?></p>
         <!-- hidden input, um zu erkennen ob ein Team abgemeldet werden soll -->
         <input type='hidden' name='abmelden' value='abmelden'>
     </form>

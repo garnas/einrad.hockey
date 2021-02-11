@@ -183,7 +183,7 @@ class MailBot
     public static function mail_plaetze_frei(Turnier $turnier)
     {
         if ($turnier->get_anzahl_freie_plaetze() > 0 && in_array($turnier->details['art'], ['I', 'II', 'III'])) {
-            $team_ids = Team::get_ligateams_id();
+            $team_ids = Team::get_liste_ids();
             foreach ($team_ids as $team_id) {
                 // Noch Plätze frei
                 if (!$turnier->check_team_angemeldet($team_id) && $turnier->check_team_block($team_id) && !$turnier->check_doppel_anmeldung($team_id)) {
@@ -227,19 +227,19 @@ class MailBot
     public static function mail_gelost(Turnier $turnier)
     {
         if (in_array($turnier->details['art'], ['I', 'II', 'III'])) {
-            $team_ids = Team::get_ligateams_id();
+            $team_ids = Team::get_liste_ids();
             foreach ($team_ids as $team_id) {
                 // Team angemeldet?
                 if ($turnier->check_team_angemeldet($team_id)) {
                     // Auf Warteliste gelandet
-                    if ($turnier->get_team_liste($team_id) == 'warte') {
+                    if ($turnier->get_liste($team_id) == 'warte') {
                         $betreff = "Warteliste: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
                         $inhalt = self::$mail_beginning . "Hallo " . Team::teamid_to_teamname($team_id) . ","
                             . "<br><br>das " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'] . " am " . date("d.m.Y", strtotime($turnier->details['datum'])) . " ist in die Meldephase übergegangen und die freien Spielen-Plätze wurden nach Modus 4.4.2 verteilt. Euer Team steht nun auf der <b>Warteliste</b>."
                             . " Erfahre <a " . Config::BASE_LINK . "/liga/turnier_details?turnier_id=" . $turnier->details['turnier_id'] . "'>hier</a> mehr."
                             . self::$mail_ending;
                         // Auf Spielen-Liste gelandet
-                    } elseif ($turnier->get_team_liste($team_id) == 'spiele') {
+                    } elseif ($turnier->get_liste($team_id) == 'spiele') {
                         $betreff = "Spielen-Liste: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
                         $inhalt = self::$mail_beginning
                             . "Hallo " . Team::teamid_to_teamname($team_id) . ","
@@ -265,7 +265,7 @@ class MailBot
     public static function mail_neues_turnier(Turnier $turnier)
     {
         if (in_array($turnier->details['art'], ['I', 'II', 'III'])) {
-            $team_ids = Team::get_ligateams_id();
+            $team_ids = Team::get_liste_ids();
             foreach ($team_ids as $team_id) {
                 // Noch Plätze frei?
                 if ($turnier->check_team_block($team_id) && !$turnier->check_doppel_anmeldung($team_id)) {

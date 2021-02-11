@@ -93,7 +93,7 @@ function db_test()
             $turniere[] = $x;
         }
     }
-    foreach (Team::get_ligateams_id() as $team_id) {
+    foreach (Team::get_liste_ids() as $team_id) {
         $sql = "
             SELECT *
             FROM teams_liga
@@ -125,7 +125,7 @@ function db_test()
 //            $turniere_n[] = $db->query($sql, $turnier_id)->fetchALL();
 //        }
 //    }
-//    foreach (Team::get_ligateams_id() as $team_id) {
+//    foreach (Team::get_liste_ids() as $team_id) {
 //        $sql = "
 //            SELECT *
 //            FROM teams_liga
@@ -154,7 +154,7 @@ function ansgar()
             $turniere_nn[] = dbi::$db->query($sql, $turnier_id)->fetch('turnier_id');
         }
     }
-    foreach (Team::get_ligateams_id() as $team_id) {
+    foreach (Team::get_liste_ids() as $team_id) {
         $sql = "
             SELECT *
             FROM teams_liga
@@ -187,7 +187,14 @@ $sql = "
 //";
 //dbi::$db->query($sql, 0);
 
+db::debug(dbi::$db->query("SHOW FIELDS FROM teams_liga")->list('Field'));
+db::debug((new Team(16))->get_turniere_angemeldet());
+function atest($var1 = "Test", $var2 = "Test"){
+    db::debug($var1);
+    db::debug($var2);
 
+}
+atest(var1: "BOO");
 //$sql =  "
 //        SELECT inhalt FROM neuigkeiten
 //";
@@ -199,47 +206,47 @@ $sql = "
 //db::debug(adb::$link->query($sql)->esc()->fetch()[0]);
 //db::debug(adb::$link->query($sql)->fetch()[0]);
 //db::debug(dbi::$db->query($sql, 'spiele')->log()->fetch());
-$sql = "INSERT INTO teams_liga (teamname, ligateam) VALUES (?, ?)";
-dbi::$db->query($sql, uniqid(), "Ja")->log();
-dbi::$db->query("UPDATE teams_liga SET aktiv = ?", "Ja")->log();
-
-db::debug(
-    dbi::$db
-        ->query("SELECT * FROM teams_liga")
-        ->esc()
-        ->fetch_row(),
-    false
-);
+//$sql = "INSERT INTO teams_liga (teamname, ligateam) VALUES (?, ?)";
+//dbi::$db->query($sql, uniqid(), "Ja")->log();
+//dbi::$db->query("UPDATE teams_liga SET aktiv = ?", "Ja")->log();
+//
+//db::debug(
+//    dbi::$db
+//        ->query("SELECT * FROM teams_liga")
+//        ->esc()
+//        ->fetch_row(),
+//    false
+//);
 
 //db::debug(dbi::$db->query("SELECT * FROM teams_liga WHERE team_id = ?", dbi::$db->get_last_insert_id())
 //    ->log()
 //    ->esc()
 //    ->fetch_row()
 //);
-db::debug(microtime(true) . " davor");
-dbi::terminate();
-db::debug(microtime(true) . " danach");
-dbi::initialize();
-    db::debug(
-dbi::$db->query("SELECT * FROM turniere_liste WHERE freilos_gesetzt = ?", ['nein', 2])->fetch()
-);
+//db::debug(microtime(true) . " davor");
+//dbi::terminate();
+//db::debug(microtime(true) . " danach");
+//dbi::initialize();
+//    db::debug(
+//dbi::$db->query("SELECT * FROM turniere_liste WHERE freilos_gesetzt = ?", ['nein'])->fetch()
+//);
 //db::debug(adb::$link->query($sql)->result->num_rows);
 //db::debug(adb::$link->query($sql, "spiele", 16)->fetch());
 //db::debug(adb::$link->result, true);
 //db::debug(adb::$link->stmt->num_rows);
 //db::debug(adb::$link->query_count);
 //db::debug(adb::$link);
-function test($string, ...$test)
-{
-    db::debug($string);
-    db::debug($test);
-    if (empty($test)) {
-        db::debug("empty");
-    }
-    if (is_array($test)) {
-        db::debug("array");
-    }
-}
+//function test($string, ...$test)
+//{
+//    db::debug($string);
+//    db::debug($test);
+//    if (empty($test)) {
+//        db::debug("empty");
+//    }
+//    if (is_array($test)) {
+//        db::debug("array");
+//    }
+//}
 
 
 

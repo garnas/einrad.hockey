@@ -38,25 +38,24 @@ class Team
         $passwort = password_hash($passwort, PASSWORD_DEFAULT);
 
         // TeamIDs werden über die Sql-Funktion auto increment vergeben
-        $team_id = db::get_auto_increment("teams_liga");
-
-        $sql =  "
+        $sql = "
                 INSERT INTO teams_liga (teamname, passwort, freilose) 
-                VALUES ('$teamname','$passwort',2)
+                VALUES (?, ?, 2)
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql, $teamname, $passwort)->log();
 
         // Eintrag in teams_details
-        $sql =  "
+        $team_id = dbi::$db->get_last_insert_id();
+        $sql = "
                 INSERT INTO teams_details (team_id) 
-                VALUES ('$team_id')";
-        db::writedb($sql);
+                VALUES (?)";
+        dbi::$db->query($sql, $team_id)->log();
 
         // Eintrag in teams_kontakt
-        $sql =  "
+        $sql = "
                 INSERT INTO teams_kontakt (team_id, email, public, get_info_mail) 
-                VALUES ('$team_id','$email','Ja','Nein')";
-        db::writedb($sql);
+                VALUES (?, ?, 'Ja', 'Nein')";
+        dbi::$db->query($sql, $team_id, $email)->log();
     }
 
     /**
@@ -64,14 +63,14 @@ class Team
      *
      * @param $team_id
      */
-    public static function deactivate_team($team_id)
+    public static function deactivate_team(int $team_id)
     {
-        $sql =  "
+        $sql = "
                 UPDATE teams_liga
-                SET aktiv='Nein'
-                WHERE team_id='$team_id'
+                SET aktiv = 'Nein'
+                WHERE team_id = ?
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql, $team_id)->log();
     }
 
     /**
@@ -81,18 +80,13 @@ class Team
      */
     public static function get_deactive_teams(): array
     {
-        $sql =  "
+        $sql = "
                 SELECT * 
                 FROM teams_liga 
                 WHERE aktiv = 'Nein' AND ligateam = 'Ja' 
                 ORDER BY teamname
                 ";
-        $result = db::readdb($sql);
-        $return = array();
-        while ($x = mysqli_fetch_assoc($result)) {
-            array_push($return, $x);
-        }
-        return db::escape($return);
+        return dbi::$db->query($sql)->esc()->fetch();
     }
 
     /**
@@ -100,49 +94,47 @@ class Team
      *
      * @param $team_id
      */
-    public static function activate_team($team_id)
+    public static function activate_team(int $team_id)
     {
-        $sql =  "
+        $sql = "
                 UPDATE teams_liga 
                 SET aktiv = 'Ja' 
-                WHERE team_id = '$team_id'
+                WHERE team_id = ?
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql, $team_id);
     }
 
     /**
      * Wandelt den Teamnamen in die Teamid um. Gibt 0 zurück, wenn es die TeamID nicht gibt.
      *
      * @param $teamname
-     * @return int
+     * @return int|null
      */
-    public static function teamname_to_teamid($teamname): int
+    public static function teamname_to_teamid($teamname): null|int
     {
-        $teamname = htmlspecialchars_decode($teamname);
-        $sql =  " 
+        $sql = " 
                 SELECT team_id 
                 FROM teams_liga 
-                WHERE teamname = '$teamname'
+                WHERE teamname = ?
                 ";
-        $result = mysqli_fetch_assoc(db::readdb($sql));
-        return $result['team_id'] ?? 0;
+        return dbi::$db->query($sql, $teamname)->esc()->fetch_one();
     }
 
     /**
      * Wandelt die TeamID in den Teamnamen um. Gibt leer zurück, wenn es den Teamnamen nicht gibt.
      *
      * @param $team_id
-     * @return string
+     * @return string|null
      */
-    public static function teamid_to_teamname($team_id): string
+    public static function teamid_to_teamname($team_id): null|string
     {
-        $sql =  "
+        $sql = "
                 SELECT teamname 
                 FROM teams_liga 
-                WHERE team_id = '$team_id'
+                WHERE team_id = ?
                 ";
-        $result = mysqli_fetch_assoc(db::readdb($sql));
-        return db::escape($result['teamname'] ?? '');
+        return dbi::$db->query($sql, $team_id)->esc()->fetch_one();
+
     }
 
     /**
@@ -153,16 +145,12 @@ class Team
      */
     public static function is_ligateam($team_id): bool
     {
-        $sql =  "
+        $sql = "
                 SELECT team_id
                 FROM teams_liga
-                WHERE team_id = '$team_id' AND ligateam='Ja' AND aktiv='Ja'
+                WHERE team_id = ? AND ligateam = 'Ja' AND aktiv = 'Ja'
                 ";
-        $result = mysqli_fetch_assoc(db::readdb($sql));
-        if (!empty($result['team_id'])) {
-            return true;
-        }
-        return false;
+        return dbi::$db->query($sql, $team_id)->num_rows() > 0;
     }
 
     /**
@@ -170,20 +158,15 @@ class Team
      *
      * @return array
      */
-    public static function get_ligateams_name(): array
+    public static function get_liste_namen(): array
     {
-        $sql =  "
+        $sql = "
                 SELECT teamname
                 FROM teams_liga
                 WHERE ligateam = 'Ja' AND aktiv = 'Ja' 
                 ORDER BY teamname
                 ";
-        $result = db::readdb($sql);
-        $return = array();
-        while ($x = mysqli_fetch_assoc($result)) {
-            array_push($return, $x['teamname']);
-        }
-        return db::escape($return);
+        return dbi::$db->query($sql)->esc()->list('teamname');
     }
 
     /**
@@ -191,30 +174,25 @@ class Team
      *
      * @return array
      */
-    public static function get_ligateams_id(): array
+    public static function get_liste_ids(): array
     {
-        $sql =  "
+        $sql = "
                 SELECT team_id
                 FROM teams_liga
                 WHERE ligateam = 'Ja' AND aktiv = 'Ja' 
-                ORDER BY RAND()
-                ";
-        $result = db::readdb($sql);
-        $return = array();
-        while ($eintrag = mysqli_fetch_assoc($result)) {
-            array_push($return, $eintrag['team_id']);
-        }
-        return db::escape($return);
+                ORDER BY team_id 
+                "; //TODO Früher nach RAND() für Abhandlung Ligabot, jetzt besser shuffle() einbauen
+        return dbi::$db->query($sql)->esc()->list('team_id');
     }
 
     /**
      * Gibt ein Array mit allen Teamdaten aller aktiven Ligateams zurück
      *
-     * @return array
+     * @return array key: team_id
      */
     public static function get_teamdata_all_teams(): array
     {
-        $sql =  "
+        $sql = "
                 SELECT * 
                 FROM teams_liga
                 INNER JOIN teams_details
@@ -222,12 +200,7 @@ class Team
                 WHERE teams_liga.ligateam = 'Ja' AND teams_liga.aktiv = 'Ja'
                 ORDER BY teams_liga.teamname
                 ";
-        $result = db::readdb($sql);
-        $return = array();
-        while ($x = mysqli_fetch_assoc($result)) {
-            $return[$x['team_id']] = $x;
-        }
-        return db::escape($return);
+        return dbi::$db->query($sql)->esc()->fetch('team_id');
     }
 
     /**
@@ -237,12 +210,12 @@ class Team
      */
     public static function add_freilos($team_id)
     {
-        $sql =  "
+        $sql = "
                 UPDATE teams_liga 
                 SET freilose = freilose + 1 
-                WHERE team_id = '$team_id'
+                WHERE team_id = ?
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql, $team_id)->log();
     }
 
     /**
@@ -255,13 +228,15 @@ class Team
      * @param int $prozentsatz
      * @param string $saison
      */
-    public static function strafe_eintragen(int $team_id, string $verwarnung, int $turnier_id, string $grund, int $prozentsatz, $saison = Config::SAISON)
+    public static function strafe_eintragen(int $team_id, string $verwarnung, int $turnier_id, string $grund,
+                                            int $prozentsatz, $saison = Config::SAISON)
     {
-        $sql =  "
+        $sql = "
                 INSERT INTO teams_strafen (team_id, verwarnung, turnier_id, grund, prozentsatz, saison)
-                VALUES ('$team_id','$verwarnung','$turnier_id','$grund','$prozentsatz', '$saison'
+                VALUES (?, ?, ?, ?, ?, ?)
                 ";
-        db::writedb($sql);
+        $params = [$team_id, $verwarnung, $turnier_id, $grund, $prozentsatz, $saison];
+        dbi::$db->query($sql, $params)->log();
     }
 
     /**
@@ -271,11 +246,11 @@ class Team
      */
     public static function strafe_loeschen(int $strafe_id)
     {
-        $sql =  "
+        $sql = "
                 DELETE FROM teams_strafen
-                WHERE strafe_id = '$strafe_id'
+                WHERE strafe_id = ?
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql, $strafe_id)->log();
     }
 
     /**
@@ -283,9 +258,9 @@ class Team
      *
      * @return array
      */
-    public static function get_strafen_all_teams(): array
+    public static function get_strafen(): array
     {
-        $sql =  "
+        $sql = "
                 SELECT teams_strafen.*, teams_liga.teamname, turniere_details.ort, turniere_liga.datum 
                 FROM teams_strafen
                 INNER JOIN teams_liga
@@ -298,12 +273,7 @@ class Team
                 AND teams_liga.aktiv = 'Ja'
                 ORDER BY turniere_liga.datum DESC
                 ";
-        $result = db::readdb($sql);
-        $return = array();
-        while ($x = mysqli_fetch_assoc($result)) {
-            $return[$x['strafe_id']] = $x;
-        }
-        return db::escape($return);
+        return dbi::$db->query($sql)->esc()->fetch('strafe_id');
     }
 
     /**
@@ -313,16 +283,14 @@ class Team
      */
     function get_details(): array
     {
-        $sql =  "
+        $sql = "
                 SELECT *  
                 FROM teams_liga 
                 INNER JOIN teams_details
                 ON teams_details.team_id = teams_liga.team_id
                 WHERE teams_liga.team_id = $this->id
                 ";
-        $result = db::readdb($sql);
-        $result = mysqli_fetch_assoc($result);
-        return db::escape($result) ?? [];
+        return dbi::$db->query($sql)->esc()->fetch_row();
     }
 
     /**
@@ -332,13 +300,12 @@ class Team
      */
     function set_teamname(string $name)
     {
-        $team_id = $this->id;
-        $sql =  "
+        $sql = "
                 UPDATE teams_liga
-                SET teamname = '$name'
-                WHERE team_id='$team_id'
+                SET teamname = ?
+                WHERE team_id = $this->id
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql, $name)->log();
     }
 
     /**
@@ -348,15 +315,12 @@ class Team
      */
     function get_passwort(): string|bool
     {
-        $team_id = $this->id;
-        $sql =  "
+        $sql = "
                 SELECT passwort
                 FROM teams_liga
-                WHERE team_id = '$team_id'
+                WHERE team_id = $this->id
                 ";
-        $result = db::readdb($sql);
-        $result = mysqli_fetch_assoc($result);
-        return $result['passwort'];
+        return dbi::$db->query($sql)->log()->fetch_one();
     }
 
     /**
@@ -367,14 +331,13 @@ class Team
      */
     function set_passwort(string $passwort, string $pw_geaendert = 'Ja')
     {
-        $team_id = $this->id;
         $passwort = password_hash($passwort, PASSWORD_DEFAULT);
-        $sql =  "
+        $sql = "
                 UPDATE teams_liga
-                SET passwort = '$passwort', passwort_geaendert = '$pw_geaendert'
-                WHERE team_id='$team_id'
+                SET passwort = ?, passwort_geaendert = ?
+                WHERE team_id = $this->id
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql, $passwort, $pw_geaendert)->log();
     }
 
     /**
@@ -384,15 +347,12 @@ class Team
      */
     function get_freilose(): int
     {
-        $team_id = $this->id;
-        $sql =  "
+        $sql = "
                 SELECT freilose
                 FROM teams_liga
-                WHERE team_id='$team_id'
+                WHERE team_id= $this->id
                 ";
-        $result = db::readdb($sql);
-        $result = mysqli_fetch_assoc($result);
-        return $result['freilose'];
+        return dbi::$db->query($sql)->log()->fetch_one();
     }
 
     /**
@@ -400,34 +360,36 @@ class Team
      *
      * @param $anzahl
      */
-    function set_freilose($anzahl)
+    function set_freilose(int $anzahl)
     {
-        $team_id = $this->id;
-        $sql =  "
+        $sql = "
                 UPDATE teams_liga
-                SET freilose='$anzahl'
-                WHERE team_id='$team_id'
+                SET freilose = ?
+                WHERE team_id = $this->id
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql, $anzahl)->log();
     }
 
     /**
      * Schreibt Teamdetails in die Datenbank
      *
      * SQL-Tabellenspaltenname
-     * @param string $entry
+     * @param string $spalten_name
      * Wert der in die Datenbank für das Team eingefügt werden soll
      * @param mixed $value
      */
-    function set_detail(string $entry, mixed $value)
+    function set_detail(string $spalten_name, mixed $value)
     {
-        $entry = db::sanitize($entry);
-        $sql =  "
+        // Validieren, ob der Spaltenname ein echter Spaltenname ist
+        $spalten_namen = dbi::$db->query("SHOW FIELDS FROM teams_details")->list('Field');
+        if (!in_array($spalten_name, $spalten_namen)) die("Ungültiger Spaltenname");
+
+        $sql = "
                 UPDATE teams_details
-                SET $entry = '$value'
-                WHERE team_id = '$this->id'
+                SET $spalten_name = ?
+                WHERE team_id = $this->id
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql, $value)->log();
     }
 
     /**
@@ -437,34 +399,12 @@ class Team
      */
     function get_turniere_angemeldet(): array
     {
-        $team_id = $this->id;
-        $sql =  "
+        $sql = "
                 SELECT turnier_id, liste 
                 FROM turniere_liste 
-                WHERE team_id = $team_id
-                ";
-        $result = db::readdb($sql);
-        $return = array();
-        while ($x = mysqli_fetch_assoc($result)) {
-            $return[$x['turnier_id']] = $x['liste'];
-        }
-        return $return;
-    }
-
-    /**
-     * Pfad des Teamfotos in die Datenbank schreiben
-     *
-     * Pfad des Teamfotos
-     * @param string $target
-     */
-    function set_teamfoto(string $target)
-    {
-        $sql =  "
-                UPDATE teams_details 
-                SET teamfoto = '$target' 
                 WHERE team_id = $this->id
                 ";
-        db::writedb($sql);
+        return dbi::$db->query($sql)->list('liste', 'turnier_id');
     }
 
     /**
@@ -478,11 +418,11 @@ class Team
             unlink($this->details['teamfoto']);
         }
         // Fotolink aus der Datenbank entfernen
-        $sql =  "
+        $sql = "
                 UPDATE teams_details
                 SET teamfoto = ''
-                WHERE team_id = '$this->id'
+                WHERE team_id = $this->id
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql)->log();
     }
 }

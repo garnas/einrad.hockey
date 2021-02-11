@@ -38,7 +38,6 @@ if (isset($_POST['abmelden'])){
         foreach ($liste as $team) {
             if (isset($_POST['abmelden' . $team['team_id']])){
                 $turnier->abmelden($team['team_id']);
-                $turnier->log("Abmeldung: " . $team['teamname'] . "\r\nvon Liste: " . $team['liste'], $autor);
                 if ($team['liste'] == 'warte'){
                     $turnier->warteliste_aktualisieren();
                 }
@@ -79,7 +78,6 @@ if (isset($_POST['team_anmelden'])){
 
     if (!$error){
         $turnier->team_anmelden($team_id, $liste, $pos);
-        $turnier->log("Anmeldung: $teamname\r\nTeamblock: " . (Tabelle::get_team_block($team_id) ?: 'NL') . " Turnierblock: " . $turnier->details['tblock'] ."\r\nListe: $liste (WartePos: $pos)", $autor);
         Form::affirm ("$teamname wurde angemeldet");
         header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
         die();
@@ -100,9 +98,8 @@ if (isset($_POST['nl_anmelden'])){
     //Check ob schon ein Nichtligateam mit diesem Namen in der Datenbank existiert
     //Nichtligateams bekommen immer einen Stern hinter ihrem Namen
     $team_id = Team::teamname_to_teamid($teamname . '*');
-    if (!$turnier->check_team_angemeldet($team_id)){
+    if (!$turnier->check_team_angemeldet($team_id ?? 0)){
         $turnier->nl_anmelden($teamname, $liste, $pos);
-        $turnier->log("Anmeldung: $teamname*\r\nTeamblock: " . (Tabelle::get_team_block($team_id) ?: 'NL') . "\r\nListe:  $liste (WartePos: $pos)", $autor);
         Form::affirm("$teamname wurde angemeldet auf Liste: $liste");
         header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
         die();

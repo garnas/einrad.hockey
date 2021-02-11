@@ -123,21 +123,41 @@ class dbWrapper
     /**
      * Gibt die erste Reihe als Array aus
      *
-     * @return array|null
+     * @return array
      */
-    function fetch_row(): null|array
+    function fetch_row(): array
     {
-        if ($this->escape_result) return dbi::escape($this->result->fetch_assoc());
+        if ($this->escape_result) return dbi::escape($this->result->fetch_assoc() ?? []);
         return $this->result->fetch_assoc() ?? [];
     }
 
     /**
+     * Gibt eine Spalte als Liste zurück
+     *
+     * @param string $spalte
+     * @param string $key (optional) String eines Spaltennamens, welcher als Key des Arrays verwendet werden soll.
+     * @return array
+     */
+    function list(string $spalte, string $key = ''): array
+    {
+        if (empty($key)) {
+            while ($x = $this->result->fetch_assoc()) {
+                $return[] = $x[$spalte];
+            }
+        } else {
+            while ($x = $this->result->fetch_assoc()) {
+                $return[$x[$key]] = $x[$spalte];
+            }
+        }
+        return ($this->escape_result) ? dbi::escape($return ?? []) : $return ?? [];
+    }
+    /**
      * Gibt alle Reihen als Array aus.
      *
      * @param string $key (optional) String eines Spaltennamens, welcher als Key des Arrays verwendet werden soll.
-     * @return array|null
+     * @return array
      */
-    function fetch(string $key = ''): null|array
+    function fetch(string $key = ''): array
     {
         if (empty($key)) {
             while ($x = $this->result->fetch_assoc()) {
@@ -161,6 +181,15 @@ class dbWrapper
         return $this->result->num_rows;
     }
 
+    /**
+     * Wie viele Reihen wurden verändert?
+     *
+     * @return int
+     */
+    function affected_rows(): int
+    {
+        return $this->stmt->affected_rows;
+    }
 
     /**
      * Die zuletzt eingefügte ID (auto increment)
@@ -222,9 +251,8 @@ class dbWrapper
             $params = ($anonym) ? "\nAnonyme Query" :  "\n?: " . implode("\n?: ", $this->params);
         }
 
-
         // Log-Text
-        $log = $autoren . "\n" . $sql . ($params ?? '');
+        $log = $autoren . "\n" . $sql . ($params ?? '') . "\n";
         Form::log(self::$log_file, $log);
         return $this;
     }

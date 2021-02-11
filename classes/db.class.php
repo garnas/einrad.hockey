@@ -162,7 +162,7 @@ class db
      * Name der Sicherung
      * @return string
      */
-    public static function backup(): string
+    public static function db_sichern(): string
     {
         $dumpfile = "../../system/backups/" . Config::DATABASE . "." . date("Y-m-d_H-i-s") . ".sql"; //Dateiname der Sicherungskopie
         exec("mysqldump --user=" . Config::USER_NAME

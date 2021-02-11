@@ -3,7 +3,7 @@
 $grenze_bcc = 12;
 
 //Für die Turnierauswahl
-$turniere = Turnier::get_all_turniere("WHERE saison='" . Config::SAISON . "'");
+$turniere = Turnier::get_turniere('alle', false, false);
 
 //Für Sortierung der Teams nach Blöcken
 $akt_spieltag = Tabelle::get_aktuellen_spieltag();
@@ -51,7 +51,7 @@ if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
 if (isset($_POST['rundmail'])) {
     unset ($_SESSION[$list_id]);
     $_SESSION[$list_id]['type'] = 'Rundmail';
-    $_SESSION[$list_id]['empfaenger'] = Team::get_ligateams_name();
+    $_SESSION[$list_id]['empfaenger'] = Team::get_liste_namen();
     $_SESSION[$list_id]['emails'] = Kontakt::get_emails_rundmail();
 
     array_unshift($_SESSION[$list_id]['emails'], Config::LAMAIL);

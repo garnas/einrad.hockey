@@ -6,13 +6,13 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_la.logic.php'; //Auth
 
 //Turnierdaten für Select
-$turniere = Turnier::get_all_turniere("WHERE saison='".Config::SAISON."'");
-$strafen = Team::get_strafen_all_teams();
+$turniere = Turnier::get_turniere('alle', false, false);
+$strafen = Team::get_strafen();
 
 //Formularauswertung
 foreach ($strafen as $strafe){
     if(isset($_POST['delete' . $strafe['strafe_id']])){
-        Team::strafe_loeschen($strafe['strafe_id']);
+        Team::strafe_loeschen((int) $strafe['strafe_id']);
         Form::affirm("Strafe wurde gelöscht.");
         header ("Location: lc_teamstrafe.php");
         die();
@@ -35,7 +35,11 @@ if (isset($_POST['strafe_eintragen'])){
         Form::error("Teamname gehört zu keinem Ligateam");
     }
     if (!$error){
-        Team::strafe_eintragen($team_id, $_POST['verwarnung'] ?? 'Nein', $_POST['turnier'] ?? '', $_POST['grund'], $_POST['prozent'] ?? 0);
+        Team::strafe_eintragen($team_id,
+            $_POST['verwarnung'] ?? 'Nein',
+            (int) $_POST['turnier'] ?? 0,
+            $_POST['grund'],
+            (int) $_POST['prozent'] ?? 0);
         Form::affirm("Strafe wurde eingetragen.");
         header ("Location: ../liga/tabelle.php#pranger");
         die();

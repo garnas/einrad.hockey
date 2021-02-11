@@ -156,7 +156,6 @@ if (isset($_POST['freilos'])){
     if (!$error){
         $turnier->abmelden($_SESSION['team_id']);
         $turnier->freilos($_SESSION['team_id']);
-        $turnier->log("Freilos: ". $_SESSION['teamname'] ."\r\nTeamblock: ".$_SESSION['teamblock']. " Turnierblock: " . $turnier->details['tblock'] . "\r\nListe: spiele\r\n(WartePos: 0)", $_SESSION['teamname']);
         Form::affirm ("Dein Team wurde zum Turnier angemeldet");
         header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier->details['turnier_id']);
         die();
@@ -178,26 +177,22 @@ if (isset($_POST['abmelden']) && isset($_SESSION['team_id'])){
         Form::error ("Abmeldungen von der Spielen-Liste sind nur bis Freitag 23:59 zwei Wochen vor dem Turnier möglich. Bitte nehmt via Email Kontakt mit dem Ligaausschuss auf: " .Form::mailto(Config::LAMAIL). "");
     }
     if (!$error){
-        if ($liste == 'warte' && $turnier->details['phase'] != 'offen'){
-            $warteliste_neu = true;
-        }else{
-            $warteliste_neu = false;
-        }
+
         $turnier->abmelden($_SESSION['team_id']);
-        Form::affirm ("Dein Team wurde erfolgreich abgemeldet");
-        if ($turnier->get_anzahl_freie_plaetze() > 0 && $turnier->details['phase'] == 'melde'){
+
+        if ($turnier->get_anzahl_freie_plaetze() > 0 && $turnier->details['phase'] == 'melde')
             $turnier->spieleliste_auffuellen();
-        }
-        if ($warteliste_neu){
+
+        if ($liste == 'warte' && $turnier->details['phase'] != 'offen')
             $turnier->warteliste_aktualisieren();
-        }
-        $turnier->log("Abmeldung: ". $_SESSION['teamname'] ."\r\nvon Liste: " . $liste, $_SESSION['teamname']);
+
+        Form::affirm ("Dein Team wurde erfolgreich abgemeldet");
         header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier->details['turnier_id']);
         die();
     }
 }
 
-//Für Abschlussturnier bewerben
+// Für Abschlussturnier bewerben
 if (isset($_POST['bewerben'])){
     if ($turnier->details['art'] != 'final'){
         Form::error ("Anmeldung fehlgeschlagen.");
@@ -209,17 +204,15 @@ if (isset($_POST['bewerben'])){
     }
     if (!$error){
         $turnier->team_anmelden($_SESSION['team_id'],'melde',0);
-        $turnier->log("Bewerbung für Spielplatz:\r\n". $_SESSION['teamname'] ."\r\nauf Liste: melde", $_SESSION['teamname']);
+        Form::affirm("Deine Meldung wurde erfolgreich entgegen genommmen.");
         header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier->details['turnier_id']);
         die();
     }
 }
 
-//Hinweis Live-Spieltag
-$akt_spieltag = Tabelle::get_aktuellen_spieltag();
-if (Tabelle::check_spieltag_live($akt_spieltag)){
-    Form::attention(
-        "Für den aktuelle Spieltag (ein Spieltag ist immer ein ganzes Wochenende) wurden noch nicht alle Ergebnisse eingetragen. Für die Turnieranmeldung gilt immer der Teamblock des letzten vollständigen Spieltages: "
+// Hinweis Live-Spieltag
+if (Tabelle::check_spieltag_live(Tabelle::get_aktuellen_spieltag())){
+    Form::attention("Für den aktuelle Spieltag (ein Spieltag ist immer ein ganzes Wochenende) wurden noch nicht alle Ergebnisse eingetragen. Für die Turnieranmeldung gilt immer der Teamblock des letzten vollständigen Spieltages: "
         . Form::link("../liga/tabelle.php?spieltag=" . ($akt_spieltag - 1) . "#rang", "Spieltag " . ($akt_spieltag - 1)));
 }
 
@@ -248,39 +241,41 @@ include '../../templates/header.tmp.php';
         <h3 class="w3-text-primary">Listen</h3>
 
         <!--Spielen-Liste-->
-        <p class="w3-text-grey w3-border-bottom w3-border-grey">Spielen-Liste</p> 
-        <p>
-            <?php if (!empty($anmeldungen['spiele'])){?>
-                <?php foreach ($anmeldungen['spiele'] as $team){?>
-                    <?php if ($team['teamname'] == $_SESSION['teamname']) {$team['teamname'] = "<span class='w3-text-green'><b>".$team['teamname']."</b></span>";}?>
-                    <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span>
-                    <br>
-                <?php }//end foreach?>
-            <?php }else{ ?><i>leer</i><?php } //endif?> 
-        </p>
+        <div class="w3-section">
+            <p class="w3-text-grey w3-border-bottom w3-border-grey">Spielen-Liste</p>
+            <p>
+                <?php if (!empty($anmeldungen['spiele'])){?>
+                    <?php foreach ($anmeldungen['spiele'] as $team){?>
+                        <?php if ($team['teamname'] == $_SESSION['teamname']) {$team['teamname'] = "<span class='w3-text-green'><b>".$team['teamname']."</b></span>";}?>
+                        <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span>
+                        <br>
+                    <?php }//end foreach?>
+                <?php }else{ ?><i>leer</i><?php } //endif?>
+            </p>
+        </div>
         <!--Meldeliste-->
-        <p>
+        <div class="w3-section">
             <?php if (!empty($anmeldungen['melde'])){?>
-                <p class="w3-text-grey w3-border-bottom w3-border-grey">Meldeliste</p> 
+                <p class="w3-text-grey w3-border-bottom w3-border-grey">Meldeliste</p>
                     <?php foreach ($anmeldungen['melde'] as $team){?>
                         <?php if ($team['teamname'] == $_SESSION['teamname']) {$team['teamname'] = "<span class='w3-text-yellow'><b>".$team['teamname']."</b></span>";}?>
                         <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span>
                         <br>
                     <?php }//end foreach?>
             <?php } //endif?>
-        </p>
-        
+        </div>
+
         <!--Warteliste-->
-        <p>
+        <div class="w3-section">
             <?php if (!empty($anmeldungen['warte'])){?>
-                <p class="w3-opacity w3-border-bottom w3-border-black">Warteliste</p> 
+                <p class="w3-opacity w3-border-bottom w3-border-black">Warteliste</p>
                 <?php foreach ($anmeldungen['warte'] as $team){?>
                 <?php if ($team['teamname'] == $_SESSION['teamname']) {$team['teamname'] = "<span class='w3-text-primary'><b>".$team['teamname']."</b></span>";}?>
                 <?=$team['position_warteliste'] . ". " . $team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?? 'NL'?>)</span>
                 <br>
                 <?php }//end foreach?>
-            <?php } //endif?> 
-        </p>
+            <?php } //endif?>
+        </div>
         <p>Freie Plätze: <?=$turnier->details['plaetze'] - count(($anmeldungen['spiele'] ?? array()))?> von <?=$turnier->details['plaetze']?></p>
         <p class="w3-small w3-text-primary">Phase: <?=$turnier->details['phase']?></p>
     </form>
@@ -289,7 +284,7 @@ include '../../templates/header.tmp.php';
     <?php if ($turnier->details['art'] == 'final'){?>
         <form class="" method="post">
             <p>
-                <input type='submit' class='w3-button w3-margin-bottom w3-block w3-tertiary <?php if ($team_angemeldet){?>w3-opacity<?php } //end if?>' name='bewerben' value='Bewerben'>
+                <input type='submit' class='w3-button w3-margin-bottom w3-block w3-tertiary <?php if ($team_angemeldet){?>w3-opacity<?php } //end if?>' name='bewerben' value='Melden für Abschlussturnier'>
                 <span class="w3-text-grey"><i class="material-icons">info</i>Wir wollen auf dem Abschlussturnier spielen bzw. wir wären bereit nachzurücken.</span>
             </p>
         </form>
@@ -301,12 +296,12 @@ include '../../templates/header.tmp.php';
         </form>
         <form method="post" onsubmit="return confirm('Freilose setzen dein Team direkt auf die Spielen-Liste. Beim Übergang in die Meldephase wirst du auf die Warteliste gesetzt, wenn dein Teamblock höher ist als der Turnierblock. Das Freilos wird euch dann erstattet.');">
             <p>
-                <input type='submit' 
-                    class='w3-button w3-margin-bottom w3-block w3-tertiary  
+                <input type='submit'
+                    class='w3-button w3-margin-bottom w3-block w3-tertiary
                     <?php if (($turnier->get_liste($_SESSION['team_id']) == 'spiele') or
                                 !$turnier->check_team_block_freilos($_SESSION['team_id']) or
                                 $akt_team->get_freilose() <= 0){?>w3-opacity
-                                <?php }//endif?>'   
+                                <?php }//endif?>'
                     name='freilos' value='Freilos setzen (<?=$akt_team->get_freilose()?> vorhanden)'>
             </p>
         </form>
@@ -316,6 +311,5 @@ include '../../templates/header.tmp.php';
             <p class="w3-text-grey">Abmeldung von der Spielen-Liste ist möglich bis <?=strftime("%A, %d.%m.%Y %H:%M", $abmelden_moeglich_bis-1)?>&nbsp;Uhr</p>
         </form>
     </div>
-</div>
 
 <?php include '../../templates/footer.tmp.php';

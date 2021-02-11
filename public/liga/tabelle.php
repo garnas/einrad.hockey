@@ -23,7 +23,7 @@ if (isset($_GET['spieltag']) && is_numeric($_GET['spieltag'])){
 //Tabellen und Strafen, um sie an das Layout zu übergeben
 $meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag);
 $rang_tabelle = Tabelle::get_rang_tabelle($gew_spieltag);
-$strafen = Team::get_strafen_all_teams();
+$strafen = Team::get_strafen();
 
 //Testen ob Verwarnungen oder Strafen existieren.
 $verwarnung_not_empty = $strafe_not_empty = false;
@@ -237,14 +237,14 @@ window.onclick = function(event) {
                 <tr class="w3-primary">
                     <th>Team</th>
                     <th>Grund</th>
-                    <th>Turnier</th>
+                    <th class="w3-center">Turnier</th>
                 </tr>
                 <?php foreach ($strafen as $strafe){ if ($strafe['verwarnung'] == 'Nein'){?>
                     <tr>
                         <td style="white-space: nowrap; vertical-align: middle;"><?=$strafe['teamname']?></td>
                         <td style="vertical-align: middle">
-                            <?=$strafe['grund']?> 
-                            <?php if (!empty($strafe['prozentsatz'])){?>(<?=$strafe['prozentsatz']?> %)<?php } //endif?>
+                            <?=$strafe['grund']?>
+                            <?php if ($strafe['prozentsatz'] != 0){?>(<?=$strafe['prozentsatz']?> %)<?php } //endif?>
                         </td>
                         <td class="w3-center" style="vertical-align: middle"><?=$strafe['datum']?><br><?=($strafe['ort'] ?? '')?></td>
                     </tr>

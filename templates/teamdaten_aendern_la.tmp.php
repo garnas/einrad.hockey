@@ -17,8 +17,7 @@
             <div class="w3-half">
                 <p>
                     <label for="paswort" class="w3-text-primary">Passwort</label>
-                    <input required
-                           class='w3-input w3-border w3-border-primary'
+                    <input class='w3-input w3-border w3-border-primary'
                            type='text'
                            id='passwort'
                            name='passwort'

@@ -134,87 +134,24 @@ if (isset($_POST['change_turnier'])) {
 
     // Ändern der Turnierdaten
     if (!$error){
-        // Autor der Turnierlogs festlegen
-        if ($teamcenter){ // sollte übergeben werden
-            $autor = $_SESSION['teamname'];
-        }elseif ($ligacenter){
-            $autor = "Ligaausschuss";
-        }
         // Turnierblock erweitern
         if ($erweitern){
             $turnier->change_turnier_block($tblock, $fixed, $art);
-            $turnier->details['tblock'] = $tblock;
             $turnier->spieleliste_auffuellen(); // Spielen-Liste auffuellen
-            $turnier->log("Turnierblock erweitert zu $tblock", $autor);
-            if ($turnier->details['tblock_fixed'] != $fixed){
-                $turnier->log("Turnierfixierung geändert zu $fixed", $autor);
-            }
-            if ($turnier->details['art'] != $art){
-                $turnier->log("Turnierart geändert zu $art", $autor);
-            }
             Form::affirm("Turnier wurde erweitert");
         }
-        $mail = false;
+
         // Ändern der Turnierdetails
-        if ($turnier->change_turnier_details($startzeit, $besprechung, $plaetze, $spielplan, $hallenname, $strasse, $plz, $ort, $haltestellen, $hinweis, $startgebuehr, $organisator, $handy)){
-            if ($turnier->details['startzeit'] != $startzeit){
-                $turnier->log("Startzeit: " . $turnier->details['startzeit'] . " -> " . $startzeit, $autor);
-                $mail = true;
-            }
-            if ($turnier->details['plaetze'] != $plaetze){
-                $turnier->log("Plätze: " . $turnier->details['plaetze'] . " -> " . $plaetze, $autor);
-                $mail = true;
-            }
-            if ($turnier->details['besprechung'] != $besprechung){
-                $turnier->log("Besprechung: " . $turnier->details['besprechung'] . " -> " . $besprechung, $autor);
-                // $mail = true;
-            }          
-            if ($turnier->details['hinweis'] != stripcslashes($hinweis)){
-                $turnier->log("Hinweis:\r\n" . $turnier->details['hinweis'] . "\r\n->\r\n" . $hinweis, $autor);
-                // $mail = true;
-            }
-            if ($turnier->details['hallenname'] != $hallenname){
-                $turnier->log("Hallenname: " . $turnier->details['hallenname'] . " -> " . $hallenname, $autor);
-                // $mail = true;
-            }
-            if ($turnier->details['plz'] != $plz){
-                $turnier->log("PLZ: " . $turnier->details['plz'] . " -> " . $plz, $autor);
-                $mail = true;
-            }
-            if ($turnier->details['strasse'] != $strasse){
-                $turnier->log("Straße: " . $turnier->details['strasse'] . " -> " . $strasse, $autor);
-                $mail = true;
-            }
-            if ($turnier->details['ort'] != $ort){
-                $turnier->log("Ort: " . $turnier->details['ort'] . " -> " . $ort, $autor);
-                $mail = true;
-            }
-            if ($turnier->details['haltestellen'] != $haltestellen){
-                $turnier->log("Haltestellen: " . $turnier->details['haltestellen'] . " -> " . $haltestellen, $autor);
-                // $mail = true;
-            }
-            if ($turnier->details['organisator'] != $organisator){
-                $turnier->log("Organisator: " . $turnier->details['organisator'] . " -> " . $startzeit, $autor);
-                // $mail = true;
-            }
-            if ($turnier->details['handy'] != $handy){
-                $turnier->log("Handy: " . $turnier->details['handy'] . " -> " . $handy, $autor);
-                // $mail = true;
-            }
-            if ($turnier->details['startgebuehr'] != $startgebuehr){
-                $turnier->log("Startgebühr: " . $turnier->details['startgebuehr'] . " -> " . $startgebuehr, $autor);
-                // $mail = true;
-            }
-            if ($turnier->details['spielplan'] != $spielplan){
-                $turnier->log("Spielplan: " . $turnier->details['spielplan'] . " -> " . $spielplan, $autor);
-                $mail = true;
-            }
-        }
-        if ($mail or $erweitern){
-            MailBot::mail_turnierdaten_geaendert($turnier);
-        }
+        $wichtiges_geaendert = $turnier->change_turnier_details(
+                $startzeit, $besprechung, $plaetze, $spielplan, $hallenname, $strasse,
+                $plz, $ort, $haltestellen, $hinweis, $startgebuehr, $organisator, $handy);
+
+        // Mail an den Ligaausschuss?
+        if (($wichtiges_geaendert or $erweitern)
+            && $teamcenter) MailBot::mail_turnierdaten_geaendert($turnier);
+
         Form::affirm("Turnierdaten wurden geändert");
-        header ('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->details['turnier_id']);
+        header ('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->id);
         die();
     }else{
         Form::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht geändert - alle Änderungen bitte neu eingeben.");
