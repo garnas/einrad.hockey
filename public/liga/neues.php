@@ -191,7 +191,7 @@ include '../../templates/header.tmp.php';
                 <h2 class="w3-text-primary"><?=$neuigkeit['titel']?></h2>
                 
                 <!-- Autor -->
-                <p class="w3-text-grey w3-border-top w3-border-grey"><?= Form::icon("create") ?><?=($neuigkeit['eingetragen_von'])?></p>
+                <p class="w3-text-grey w3-border-top w3-border-grey"><?= Form::icon("create") ?> <?=($neuigkeit['eingetragen_von'])?></p>
                 
                 <!-- Bild -->
                 <?php if ($neuigkeit['link_jpg'] != ''){?>
