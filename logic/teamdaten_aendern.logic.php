@@ -6,7 +6,7 @@ $team_id = ($teamcenter) ? $_SESSION['team_id'] : (int) ($_GET['team_id'] ?? 0);
 if (Team::is_ligateam($team_id)){
     $team = new Team ($team_id);
     $kontakte = new Kontakt ($team->id);
-    $emails = $kontakte->get_emails_with_details();
+    $emails = $kontakte->get_emails();
 }
 
 $path = ($ligacenter) ? '../ligacenter/lc_teamdaten_aendern.php?team_id=' . $team_id : '../teamcenter/tc_teamdaten_aendern.php';
@@ -56,7 +56,7 @@ if (isset($_POST['teamdaten_aendern'])) {
     }
 
     // Emails
-    foreach ($kontakte->get_emails_with_details() as $email) {
+    foreach ($kontakte->get_emails() as $email) {
         if ($email['public'] != ($_POST['public' . $email['teams_kontakt_id']] ?? '')) {
             $kontakte->set_public($email['teams_kontakt_id'], $_POST['public' . $email['teams_kontakt_id']]);
         }
@@ -83,7 +83,7 @@ if (isset($_POST['neue_email'])) {
     $public = $_POST['public'];
 
     if (filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($email)) {
-        $kontakte->create_new_team_kontakt($email, $public, $infomail);
+        $kontakte->set_email($email, $public, $infomail);
         Form::affirm("E-Mail-Adresse wurde hinzugefügt");
         header('Location: ' . $path);
         die();

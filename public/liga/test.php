@@ -187,14 +187,14 @@ $sql = "
 //";
 //dbi::$db->query($sql, 0);
 
-db::debug(dbi::$db->query("SHOW FIELDS FROM teams_liga")->list('Field'));
-db::debug((new Team(16))->get_turniere_angemeldet());
-function atest($var1 = "Test", $var2 = "Test"){
-    db::debug($var1);
-    db::debug($var2);
-
-}
-atest(var1: "BOO");
+//db::debug(dbi::$db->query("SHOW FIELDS FROM teams_liga")->list('Field'));
+//db::debug((new Team(16))->get_turniere_angemeldet());
+//function atest($var1 = "Test", $var2 = "Test"){
+//    db::debug($var1);
+//    db::debug($var2);
+//
+//}
+//atest(var1: "BOO");
 //$sql =  "
 //        SELECT inhalt FROM neuigkeiten
 //";
@@ -253,5 +253,6 @@ atest(var1: "BOO");
 //db::debug(adb::$link->query_count);
 include '../../templates/header.tmp.php'; ?>
     <h1>Test Skript</h1>
+<?= Form::icon("home", font_size: 350) ?>
 <?php include '../../templates/footer.tmp.php';
 

@@ -37,11 +37,7 @@ class Kontakt
                 ON teams_liga.team_id = teams_kontakt.team_id 
                 WHERE teams_liga.aktiv = 'Ja'
                 ";
-        $result = db::readdb($sql);
-        while ($x = mysqli_fetch_assoc($result)) {
-            $return[] = $x['email'];
-        }
-        return db::escape($return ?? []);
+        return dbi::$db->query($sql)->esc()->fetch();
     }
 
     /**
@@ -50,7 +46,7 @@ class Kontakt
      * @param $turnier_id
      * @return array
      */
-    public static function get_emails_turnier($turnier_id): array
+    public static function get_emails_turnier(int $turnier_id): array
     {
         // distinct email funktioniert nicht, da sonst Teamnamen fehlen oder doppelt vorkommen.
         $sql = "
@@ -61,20 +57,16 @@ class Kontakt
                 INNER JOIN turniere_liste
                 ON turniere_liste.team_id = teams_kontakt.team_id
                 WHERE teams_liga.aktiv = 'Ja' 
-                AND turniere_liste.turnier_id = '$turnier_id'
+                AND turniere_liste.turnier_id = ?
                 ";
-
-        $result = db::readdb($sql);
         $return['emails'] = $return['teamnamen'] = [];
-        while ($x = mysqli_fetch_assoc($result)) {
-            if (!in_array($x['teamname'], $return['teamnamen'])) {
+        foreach (dbi::$db->query($sql, $turnier_id)->esc()->fetch() as $x){
+            if (!in_array($x['teamname'], $return['teamnamen']))
                 $return['teamnamen'][] = $x['teamname'];
-            }
-            if (!in_array($x['email'], $return['emails'])) {
+            if (!in_array($x['email'], $return['emails']))
                 $return['emails'][] = $x['email'];
-            }
         }
-        return db::escape($return);
+        return $return;
     }
 
     /**
@@ -83,15 +75,14 @@ class Kontakt
      * @param string $public
      * @param string $infomail
      */
-    function create_new_team_kontakt(string $email, string $public, string $infomail) //TODO Umbenennen
+    function set_email(string $email, string $public, string $infomail) //TODO Umbenennen
     {
-        $team_id = $this->team_id;
         $email = strtolower($email);
         $sql = "
                 INSERT INTO teams_kontakt (team_id, email, public, get_info_mail) 
-                VALUES ('$team_id','$email','$public','$infomail')
+                VALUES ($this->team_id, ?, ?, ?,)
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql, [$email, $public, $infomail])->log();
     }
 
     /**
@@ -99,47 +90,22 @@ class Kontakt
      *
      * @param string $scope $scope = 'info => Nur Emails für automatische Infomails
      *                      $scope = 'public' => Nur öffentliche Emails
+     *                      $scope = '' => Alle Emails
      * @return array
      */
     function get_emails(string $scope = ''): array
     {
-        $team_id = $this->team_id;
         $and_clause = match ($scope) {
             '' => '',
             'public' => "AND public = 'Ja'",
             'info' => "AND get_info_mail = 'Ja'"
         };
         $sql = "
-                SELECT email
-                FROM teams_kontakt 
-                WHERE team_id = $team_id
-                " . $and_clause;
-        $result = db::readdb($sql);
-        while ($x = mysqli_fetch_assoc($result)) {
-            $return[] = $x['email'];
-        }
-        return db::escape($return ?? []);
-    }
-
-    /**
-     * Get alle verfügbaren Emails eines Teams in einem Array mit allen Infos aufgeschlüsselt
-     *
-     * Funktioniert nicht mit Form::mailto()
-     *
-     * @return array der Form [teams_kontakt_id][email, public, get_info_mail]
-     */
-    function get_emails_with_details(): array
-    {
-        $sql = "
-                SELECT * 
+                SELECT *
                 FROM teams_kontakt 
                 WHERE team_id = $this->team_id
-                ";
-        $result = db::readdb($sql);
-        while ($x = mysqli_fetch_assoc($result)) {
-            $return[$x['teams_kontakt_id']] = $x;
-        }
-        return db::escape($return ?? []);
+                " . $and_clause;
+        return dbi::$db->query($sql)->esc()->fetch();
     }
 
     /**
@@ -148,14 +114,15 @@ class Kontakt
      * @param $teams_kontakt_id
      * @param $value
      */
-    function set_public($teams_kontakt_id, $value)
+    function set_public(int $teams_kontakt_id, string $value)
     {
         $sql = "
                 UPDATE teams_kontakt 
-                SET public = '$value' 
-                WHERE teams_kontakt_id = '$teams_kontakt_id'
+                SET public = ? 
+                WHERE teams_kontakt_id = ?
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql, [$value, $teams_kontakt_id])->log();
+
     }
 
     /**
@@ -164,14 +131,14 @@ class Kontakt
      * @param $teams_kontakt_id
      * @param $value
      */
-    function set_info($teams_kontakt_id, $value)
+    function set_info(int $teams_kontakt_id, string $value)
     {
         $sql = "
                 UPDATE teams_kontakt 
-                SET get_info_mail = '$value'
-                WHERE teams_kontakt_id = '$teams_kontakt_id'
+                SET get_info_mail = ?
+                WHERE teams_kontakt_id = ?
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql, [$value, $teams_kontakt_id])->log();
     }
 
     /**
@@ -180,11 +147,14 @@ class Kontakt
      * @param $teams_kontakt_id
      * @return bool
      */
-    function delete_email($teams_kontakt_id): bool
+    function delete_email(int $teams_kontakt_id): bool
     {
         if (count($this->get_emails()) > 1) {
-            $sql = "DELETE FROM teams_kontakt WHERE teams_kontakt_id = '$teams_kontakt_id'";
-            db::writedb($sql);
+            $sql = "
+                    DELETE FROM teams_kontakt 
+                    WHERE teams_kontakt_id = ?
+                    ";
+            dbi::$db->query($sql, $teams_kontakt_id)->log();
             return true;
         }
         return false;
