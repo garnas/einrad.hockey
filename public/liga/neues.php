@@ -203,8 +203,8 @@ include '../../templates/header.tmp.php';
                 <?php } //end if?>
 
                 <!-- Text -->
-                <div class="">
-                    <p style="" class=""><?=nl2br($neuigkeit['inhalt']) //nl2br --> new line to <br>?></p> 
+                <div class="w3-section">
+                    <?=nl2br($neuigkeit['inhalt'])?>
                 </div>
 
                 <!-- PDF -->
