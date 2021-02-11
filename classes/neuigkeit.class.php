@@ -20,9 +20,10 @@ class Neuigkeit
     {
         $sql = "
                 INSERT INTO neuigkeiten (titel, inhalt, eingetragen_von, link_jpg, link_pdf, bild_verlinken) 
-                VALUES ('$titel','$text','$name','$link_jpg','$link_pdf', '$bild_verlinken')
+                VALUES (?, ?, ?, ?, ?, ?)
                 ";
-        db::writedb($sql);
+        $params = [$titel, $text, $name, $link_jpg, $link_pdf, $bild_verlinken];
+        dbi::$db->query($sql, $params)->log();
     }
 
     /**
@@ -35,19 +36,17 @@ class Neuigkeit
         // Bilder und Dokumente der Neuigkeit löschen
         $neuigkeit = self::get_neuigkeiten($neuigkeiten_id);
         $neuigkeit = $neuigkeit[$neuigkeiten_id];
-        if (file_exists($neuigkeit['link_jpg'])) {
-            unlink($neuigkeit['link_jpg']);
-        }
-        if (file_exists($neuigkeit['link_pdf'])) {
-            unlink($neuigkeit['link_pdf']);
-        }
+
+        if (file_exists($neuigkeit['link_jpg'])) unlink($neuigkeit['link_jpg']);
+        if (file_exists($neuigkeit['link_pdf'])) unlink($neuigkeit['link_pdf']);
 
         // Neuigkeiteintrag aus der DB löschen
         $sql = "
-                DELETE FROM `neuigkeiten` 
-                WHERE neuigkeiten_id='$neuigkeiten_id'
+                DELETE FROM neuigkeiten
+                WHERE neuigkeiten_id = ?
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql, $neuigkeiten_id)->log();
+
     }
 
     /**
@@ -55,45 +54,55 @@ class Neuigkeit
      *
      * @param int $neuigkeiten_id
      * @param string $titel
-     * @param string $text
+     * @param string $inhalt
      * @param string $link_jpg
      * @param string $link_pdf
      * @param string $bild_verlinken
      */
-    public static function update_neuigkeit(int $neuigkeiten_id, string $titel, string $text, string $link_jpg, string $link_pdf, string $bild_verlinken = '')
+    public static function update_neuigkeit(int $neuigkeiten_id, string $titel, string $inhalt, string $link_jpg,
+                                            string $link_pdf, string $bild_verlinken = '')
     {
         $sql = "
                 UPDATE neuigkeiten 
-                SET titel='$titel', inhalt='$text', link_jpg='$link_jpg', link_pdf='$link_pdf', bild_verlinken = '$bild_verlinken', zeit = zeit 
+                SET titel = ?, inhalt = ?, link_jpg = ?, link_pdf = ?, bild_verlinken = ?, zeit = zeit 
                 WHERE neuigkeiten_id = '$neuigkeiten_id'
                 "; // zeit=zeit, damit der timestamp nicht erneuert wird
-        db::writedb($sql);
+        $params = [$titel, $inhalt, $link_jpg, $link_pdf, $bild_verlinken];
+        dbi::$db->query($sql, $params)->log();
     }
 
     /**
      * Neuigkeiten aus der DB
      *
      * Wenn keine Neuigkeit ausgewählt wird, werden die letzten 10 ausgegeben
-     * @param string $neuigkeiten_id
+     * @param int $neuigkeiten_id
      * @return array
      */
-    public static function get_neuigkeiten($neuigkeiten_id = 'neuigkeiten_id'): array
+    public static function get_neuigkeiten(int $neuigkeiten_id = 0): array
     {
-        $sql = "
+        if (empty($neuigkeiten_id)) { // Alle
+            $sql = "
                 SELECT * 
                 FROM neuigkeiten 
-                WHERE neuigkeiten_id = $neuigkeiten_id 
                 ORDER BY zeit DESC 
                 LIMIT 10
                 "; // Es werden max. 10 Neuigkeiten angezeigt
-        $result = db::readdb($sql);
-        while ($x = mysqli_fetch_assoc($result)) {
-            if ($x['eingetragen_von'] != 'Ligaausschuss') {
-                $x = db::escape($x);
-            }
-            $return[$x['neuigkeiten_id']] = $x;
+            $neuigkeiten = dbi::$db->query($sql)->esc()->fetch('neuigkeiten_id');
+        } else { // Eine
+            $sql = "
+                SELECT * 
+                FROM neuigkeiten 
+                WHERE neuigkeiten_id = ? 
+                ";
+            $neuigkeiten = dbi::$db->query($sql, $neuigkeiten_id)->esc()->fetch('neuigkeiten_id');
         }
-        return $return ?? []; // Escaping in Funktion, nicht bei Ligaausschuss als Autor
+        foreach ($neuigkeiten as $key => $neuigkeit) {
+            if ($neuigkeit['eingetragen_von'] == 'Ligaausschuss') {
+                $neuigkeiten[$key]['inhalt'] = htmlspecialchars_decode($neuigkeit['inhalt']);
+                $neuigkeiten[$key]['titel'] = htmlspecialchars_decode($neuigkeit['titel']);
+            }
+        }
+        return $neuigkeiten; // Escaping in Funktion, nicht bei Ligaausschuss als Autor
     }
 
     /**
@@ -288,22 +297,61 @@ class Neuigkeit
                 ON turniere_liste.turnier_id = turniere_liga.turnier_id 
                 INNER JOIN teams_liga 
                 ON teams_liga.team_id = turniere_liste.team_id 
-                WHERE teams_liga.aktiv = 'JA' 
-                AND turniere_liga.saison = '$saison' 
+                WHERE teams_liga.aktiv = 'Ja' 
+                AND turniere_liga.saison = ? 
                 AND turniere_liste.liste = 'spiele' 
                 AND turniere_liga.phase = 'ergebnis' 
                 GROUP BY teams_liga.teamname 
                 ORDER BY gespielt desc, rand()
                 LIMIT 3
                 ";
-        $result = db::readdb($sql);
         $return['max_turniere'] = [];
-        while ($x = mysqli_fetch_assoc($result)) {
+        foreach (dbi::$db->query($sql, $saison)->esc()->fetch() as $x){
             array_push($return['max_turniere'], $x);
         }
-        return db::escape($return);
+        return $return;
     }
 
+    public static function get_statistik_gew_spiele(int $saison = Config::SAISON): array
+    {
+        // Gewonnen Team A
+        $sqla = "
+                SELECT COUNT(*) AS gew, team_id_a
+                FROM spiele
+                INNER JOIN turniere_liga 
+                ON spiele.turnier_id = turniere_liga.turnier_id 
+                WHERE tore_a > tore_b 
+                OR penalty_a > penalty_b
+                AND turniere_liga.saison = ?
+                GROUP BY team_id_a
+                ORDER BY RAND()
+                ";
+        foreach (dbi::$db->query($sqla, $saison)->esc()->fetch() as $x) {
+            $gew[$x['team_id_a']] = $x['gew'];
+        }
+        // Addition der Tore Team B
+        $sqlb = "
+                SELECT COUNT(*) AS gew, team_id_b
+                FROM spiele
+                INNER JOIN turniere_liga
+                ON spiele.turnier_id = turniere_liga.turnier_id
+                WHERE tore_a < tore_b 
+                OR penalty_a < penalty_b
+                AND turniere_liga.saison = ?
+                GROUP BY team_id_b
+                ORDER BY RAND()
+                ";
+        foreach (dbi::$db->query($sqlb, $saison)->esc()->fetch() as $x) {
+            if (isset($gew[$x['team_id_b']])) {
+                $gew[$x['team_id_b']] += $x['gew'];
+            } else {
+                $gew[$x['team_id_b']] = $x['gew'];
+            }
+        }
+        arsort($gew);
+        db::debug($gew[16]);
+        return array_slice($gew, 0, 3, true);
+    }
     /**
      * Max Tore Statistik für das Inforboard
      *
@@ -316,30 +364,28 @@ class Neuigkeit
         $sqla = "
                 SELECT sum(tore_a) AS tore, team_id_a
                 FROM spiele
-                INNER JOIN turniere_liga 
-                ON spiele.turnier_id = turniere_liga.turnier_id 
+                INNER JOIN turniere_liga
+                ON spiele.turnier_id = turniere_liga.turnier_id
                 WHERE tore_a IS NOT NULL
-                AND turniere_liga.saison = '$saison'
+                AND turniere_liga.saison = ?
                 GROUP BY team_id_a
                 ORDER BY RAND()
                 ";
-        $result = db::readdb($sqla);
-        while ($x = mysqli_fetch_assoc($result)) {
+        foreach(dbi::$db->query($sqla, $saison)->esc()->fetch() as $x) {
             $tore[$x['team_id_a']] = $x['tore'];
         }
         // Addition der Tore Team B
         $sqlb = "
                 SELECT sum(tore_b) AS tore, team_id_b
                 FROM spiele
-                INNER JOIN turniere_liga 
-                ON spiele.turnier_id = turniere_liga.turnier_id 
+                INNER JOIN turniere_liga
+                ON spiele.turnier_id = turniere_liga.turnier_id
                 WHERE tore_b IS NOT NULL
-                AND turniere_liga.saison = '$saison'
+                AND turniere_liga.saison = ?
                 GROUP BY team_id_b
                 ORDER BY RAND()
                 ";
-        $result = db::readdb($sqlb);
-        while ($x = mysqli_fetch_assoc($result)) {
+        foreach(dbi::$db->query($sqlb, $saison)->esc()->fetch() as $x) {
             if (isset($tore[$x['team_id_b']])) {
                 $tore[$x['team_id_b']] += $x['tore'];
             } else {
