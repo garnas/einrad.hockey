@@ -266,15 +266,27 @@ class Form
 
     /**
      * Fügt ein Material-Icon hinzu
-     * @param string $icon  Icon-Bezeichnung
+     * @param string $icon Icon-Bezeichnung
      * @param int $vertical_align
-     * @param string $font_size
+     * @param int $font_size
+     * @param string $tag
      * @return string
      */
-    public static function icon(string $icon, int $vertical_align = 0, string $font_size = '' ): string
+    public static function icon(string $icon, int $vertical_align = 0, int $font_size = 0, string $tag = 'p' ): string
     {
-        $style = (empty($vertical_align)) ? "" : "vertical-align:-" . $vertical_align . "%;";
-        $style .= (empty($vertical_align)) ? "" : "font-size:" . $font_size . "px;";
-        return "<i class='material-icons' style='$style'>$icon</i>";
+        $style = '';
+        if ($tag != 'p'){
+            $style = match($tag) {
+                'h1', 'h2' => 'style="font-size: 31px; vertical-align: -19%;"',
+                'h3' => 'style="vertical-align: -16%;"',
+                default => ''
+            };
+        }elseif (!(empty($vertical_align) && empty($font_size))) {
+            $style = "style='"
+                . (empty($vertical_align) ? "" : "vertical-align: -" . $vertical_align . "%;")
+                . (empty($font_size) ? "" : "font-size: " . $font_size . "px;")
+                . "'";
+        }
+        return "<span class='material-icons' " . ($style ?? '') . ">$icon</span>";
     }
 }

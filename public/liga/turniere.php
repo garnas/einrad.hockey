@@ -94,8 +94,7 @@ include '../../templates/header.tmp.php';
 
     <!-- Turnier suchen -->
     <div class="w3-section w3-text-grey w3-border-bottom" style="width: 250px;">
-        <i class="material-icons">search</i>
-        <input id="myInput" class='w3-padding w3-border-0' style="width: 225px;" type="text" placeholder="Turnier suchen">
+        <?= Form::icon("search") ?><input id="myInput" class='w3-padding w3-border-0' style="width: 225px;" type="text" placeholder="Turnier suchen">
     </div>
 
     <div id="myDIV"><!-- zu durchsuchendes div -->

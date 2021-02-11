@@ -89,7 +89,9 @@ include '../../templates/header.tmp.php';
 <!-- Erklärungen zur Tabelle -->
 
 <!-- Trigger/Open the Modal -->
-<button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-text-primary"><?= Form::icon("info") ?> Infos zu den Tabellen</button>
+<button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-text-primary">
+    <?= Form::icon("info") ?> Infos zu den Tabellen
+</button>
 <!-- The Modal -->
 <div id="id01" class="w3-modal">
   <div class="w3-modal-content w3-card-4" style="max-width:660px">

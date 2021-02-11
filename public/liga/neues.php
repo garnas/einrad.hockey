@@ -77,7 +77,7 @@ include '../../templates/header.tmp.php';
     <div class="w3-col l4 m5 w3-hide-small" id="infobar">
         <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
             <a href='ueber_uns.php' class="no">
-                <h1 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">help_outline</i> Interesse</h1>
+                <h1 class="w3-text-primary"><?= Form::icon("help_outline", tag: "h1") ?> Interesse</h1>
             </a>
             <p class="w3-text-grey w3-small w3-border-top w3-border-grey"></p>
             <p>Die Einradhockeyliga steht jedem Einradhockeybegeisterten offen!</p>
@@ -87,7 +87,7 @@ include '../../templates/header.tmp.php';
         <!-- Anstehende Turniere -->
         <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
             <a href='turniere.php' class="no">
-                <h2 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">event</i> Turniere</h2>
+                <h2 class="w3-text-primary"><?= Form::icon("event", tag: "h2") ?> Turniere</h2>
             </a>
             <p class="w3-text-grey w3-border-top w3-border-grey"></p>
             <?php $i=0; foreach ($next_turniere as $turnier){  $i++;?>
@@ -103,7 +103,7 @@ include '../../templates/header.tmp.php';
         <!-- Ergebnisse -->
         <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
             <a href='ergebnisse.php' class="no">
-                <h2 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">sports_hockey</i> Ergebnisse</h2>
+                <h2 class="w3-text-primary"><?= Form::icon("sports_hockey", tag: "h2") ?> Ergebnisse</h2>
             </a>
             <p class="w3-text-grey w3-border-top w3-border-grey"></p>
             <?php if (empty($last_turniere)){?><p class="w3-text-grey">Es liegen keine Ergebnisse vor</p><?php } //end if?>
@@ -119,7 +119,7 @@ include '../../templates/header.tmp.php';
         
         <!-- Statistik -->
         <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
-        <h2 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">insert_chart_outlined</i> Statistik</h2>
+        <h2 class="w3-text-primary"><?= Form::icon("insert_chart_outlined", tag: "h2") ?> Statistik</h2>
         <p class="w3-text-grey w3-border-top w3-border-grey"></p>
             <p><?=Form::link("ergebnisse.php", ($anz_last_turniere ?: '0') . " Turniere")?> gespielt</p>
             <p><?=Form::link("turniere.php", ($anz_next_turniere ?: '0') . " Turniere")?> ausstehend</p>
@@ -167,7 +167,7 @@ include '../../templates/header.tmp.php';
 
         <!-- Links -->
         <div class="w3-panel w3-card w3-light-grey w3-border-primary w3-leftbar w3-responsive">
-            <h2 class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">public</i> Links</h2>
+            <h2 class="w3-text-primary"><?= Form::icon("public", tag: "h2") ?> Links</h2>
             <p class="w3-text-grey w3-border-top w3-border-grey"></p>
             <p><?=Form::link(Config::LINK_SWISS, "Schweizer Einradhockeyliga")?></p>
             <p><?=Form::link(Config::LINK_AUSTRALIA, "Australische Einradhockeyliga")?></p>
@@ -191,7 +191,7 @@ include '../../templates/header.tmp.php';
                 <h2 class="w3-text-primary"><?=$neuigkeit['titel']?></h2>
                 
                 <!-- Autor -->
-                <p class="w3-text-grey w3-border-top w3-border-grey"><i style="font-size: 22px; vertical-align: -26%" class='material-icons'>create</i> <?=($neuigkeit['eingetragen_von'])?></p>
+                <p class="w3-text-grey w3-border-top w3-border-grey"><?= Form::icon("create") ?><?=($neuigkeit['eingetragen_von'])?></p>
                 
                 <!-- Bild -->
                 <?php if ($neuigkeit['link_jpg'] != ''){?>
@@ -203,19 +203,19 @@ include '../../templates/header.tmp.php';
                 <?php } //end if?>
 
                 <!-- Text -->
-                <div class="">
-                    <p style="" class=""><?=nl2br($neuigkeit['inhalt']) //nl2br --> new line to <br>?></p> 
+                <div class="w3-section">
+                    <?=$neuigkeit['inhalt'] //nl2br --> new line to <br>?>>
                 </div>
 
                 <!-- PDF -->
                 <?php if ($neuigkeit['link_pdf'] != ''){?>
                     <a class='no w3-hover-text-secondary w3-text-primary' href='<?=$neuigkeit['link_pdf'];?>'>
-                        <p class=""><i class='w3-xxlarge material-icons'>insert_drive_file</i> Download</p>
+                        <p class=""><?= Form::icon("insert_drive_file", font_size: "36") ?> Download</p>
                     </a>
                 <?php } //end if?>
 
                 <!-- Zeitstempel -->
-                <p class='w3-text-grey w3-border-bottom w3-border-grey' style="text-align: right;"><i style="font-size: 22px; vertical-align: -26%" class='material-icons'>schedule</i> <?=$neuigkeit['zeit']?></p>
+                <p class='w3-text-grey w3-border-bottom w3-border-grey' style="text-align: right;"><?= Form::icon("schedule") ?> <?=$neuigkeit['zeit']?></p>
 
                 <!-- Link zum Bearbeiten falls man im Ligacenter oder Teamcenter eingeloggt ist -->
                 <?php if (isset($_SESSION['la_id'])) {?>

@@ -16,7 +16,7 @@
         <link type="text/css" rel="stylesheet" href="<?=Config::BASE_LINK?>/css/normalize.css">
         <link type="text/css" rel="stylesheet" href="<?=Config::BASE_LINK?>/css/w3.css">
         <link type="text/css" rel="stylesheet" href="<?=Config::BASE_LINK?>/css/style.css?v=20201126">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link type="text/css" rel="stylesheet" href="<?=Config::BASE_LINK?>/css/icons/icons.css">
         <script src="<?=Config::BASE_LINK?>/javascript/script.js?v=20201214"></script>
         <title><?=$titel ?? "Deutsche Einradhockeyliga"?></title>
     </head>

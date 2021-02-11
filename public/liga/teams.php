@@ -40,18 +40,17 @@ include '../../templates/header.tmp.php';
         </span>
     </p>
     <br class="w3-hide-large w3-hide-medium">
-    <p><?= Form::link("ligakarte.php", '<i class="material-icons">place</i> Ligakarte aller Teams') ?></p>
+    <p><?= Form::link("ligakarte.php", 'Ligakarte aller Teams', true, 'place') ?></p>
 
     <!-- Team suchen -->
     <div class="w3-section w3-text-grey w3-border-bottom" style="width: 250px;">
-        <i class="material-icons">search</i><input id="myInput" class='w3-padding w3-border-0' style="width: 225px;"
+        <?= Form::icon("search") ?><input id="myInput" class='w3-padding w3-border-0' style="width: 225px;"
                                                    type="text" placeholder="Team suchen">
     </div>
 
     <!-- Teams Tabelle -->
     <div id="myDIV" class="w3-responsive w3-card">
         <table class="w3-table w3-striped ">
-            <thead>
             <tr class="w3-primary">
                 <th></th>
                 <th>Teamname</th>
@@ -59,7 +58,6 @@ include '../../templates/header.tmp.php';
                 <th class="w3-hide-small">Verein</th>
                 <th>Ligavertreter</th>
             </tr>
-            </thead>
             <?php foreach ($alle_teamdaten as $team) { ?>
                 <tr>
                     <!-- Icons -->

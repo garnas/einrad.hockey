@@ -1,6 +1,6 @@
 <?php if (isset($team->details)){ //Wird nur angezeigt, wenn daten zum ausfüllen übertragen worden sind?>
 <!-- Link Teamdaten ändern -->
-<h1 class="w3-text-primary"><?= Form::icon("group", 16,28 ) ?> <?=$team->details['teamname']?></h1>
+<h1 class="w3-text-primary"><?= Form::icon("group", tag: "h1") ?> <?=$team->details['teamname']?></h1>
     <p>
         <?= Form::link(
                 ($ligacenter) ? 'lc_teamdaten_aendern.php?team_id=' . $team->id : 'tc_teamdaten_aendern.php',
@@ -8,7 +8,7 @@
         </>
     </p>
 <div class="w3-panel w3-card-4">
-    <h2 class="w3-text-primary"><?= Form::icon("image", 16,28 ) ?> Teamfoto</h2>
+    <h2 class="w3-text-primary"><?= Form::icon("image", tag: "h2") ?> Teamfoto</h2>
     <?php if (!empty($team->details['teamfoto'])){?>
         <p>
             <img src="<?=$team->details['teamfoto']?>" class="w3-card w3-image" alt="<?=$team->details['teamname']?>" style="max-height: 360px;">
@@ -20,7 +20,7 @@
 
 <div class="w3-panel w3-card-4">
     <h2 id="trikotfarbe" class="w3-text-primary">
-        <?= Form::icon("brush", 16,28 ) ?> Trikotfarben
+        <?= Form::icon("brush", tag: "h2") ?> Trikotfarben
     </h2>
 
     <div class="w3-row-padding w3-center w3-strech">
@@ -46,7 +46,7 @@
         Eure Trikotfarben werden im Spielplan angezeigt. Sie helfen anderen Teams bei der Wahl ihrer Trikots und Zuschauern dein Team zu identifizieren.
     </p>
 </div>
-<h2 class="w3-text-primary"><?= Form::icon("info", 16,28 ) ?> Teamdaten</h2>
+<h2 class="w3-text-primary"><?= Form::icon("info", tag: "h2") ?> Teamdaten</h2>
 <div class="w3-responsive w3-card-4">
     <table class="w3-table w3-striped">
         <tr>
@@ -83,7 +83,7 @@
         </tr>
     </table>
 </div>
-<h2 class="w3-text-primary"><?= Form::icon("mail", 16,28 ) ?> Kontaktdaten</h2>
+<h2 class="w3-text-primary"><?= Form::icon("mail", tag: "h2") ?> Kontaktdaten</h2>
 <div class="w3-responsive w3-card-4">
     <table class="w3-table w3-striped">
         <tr>

@@ -25,9 +25,6 @@ td {
   vertical-align: middle!important;
 }
 
-/*Positionierung der eingepflegten Icons von Google*/
-.material-icons {vertical-align:-27.5%}
-
 /*Für die Auswahlquadrate auf der Startseite des Team- und Ligacenters*/
 .centerpanels {
   height: 160px;
