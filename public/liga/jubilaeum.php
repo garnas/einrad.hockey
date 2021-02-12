@@ -163,6 +163,12 @@ $answer = "w3-margin w3-display-bottomleft";
     </div>
 </div>
 
+<!-- Für mobile Darstellung -->
+<img alt="Robert" src="../bilder/spielerprofile/Robert.jpg" style="width: 100%; margin-left: auto; margin-right: auto;" class="w3-hide-large w3-hide-medium w3-section">
+
+<!-- Für Desktop Darstellung -->
+<img alt="Robert" src="../bilder/spielerprofile/Robert.jpg" style="width: 350px; float: right;" class="w3-section w3-hide-small w3-margin-left">
+
 <!-- Antworten zweiter Abschnitt -->
 <p class="w3-text-secondary"><b>Was vermisste du aus den vergangenen Saisons am meisten?</b></p>
 <p>In der Anfangszeit der Liga war es noch möglich, mitten im Spiel das Team zu wechseln. So kam es immer wieder vor, wenn ein Spiel eindeutig von uns gewinnen werden würde, dass ich vorher zu entsprechendem Teamchef ging und mir ein Trikot vom Gegner geben ließ und das unter mein Trikot anzog. Mitten im Spiel zog ich mein Trikot aus und wechselte das Team, während ein Spieler aus der gegnerischen Mannschaft zu uns wechselte. Das hatte immer viel Spaß gemacht und für Stimmung gesorgt und Spiele waren nicht mehr so eindeutig. Natürlich gab es dann auch Stimmen von anderen Teams, das würde die Ergebnisse verfälschen. Tatsächlich hatte das Team, in das ich wechselte, dadurch mehr Spielanteile, manche Spieler bekamen Pässe, die sie sonst nicht bekommen hätten und ich war immer bemüht, das Ergebnis nicht zu beeinflussen. Es hat dann doch immer RADLOS gewonnen. Aber alle hatten mehr Spaß! Ich weiß nicht, was ich heute sagen würde, wenn bei einem Turnier ein "besserer" Spieler in mehreren Teams mitspielen würde.</p>
@@ -252,14 +258,98 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
 <p class="w3-text-secondary"><b>Wenn du eine Regel im Einradhockey verändern dürftest welche wäre es?</b></p>
 <p>Fernschüsse erlauben.</p>
 
+<!-- Vierter Spielerabschnitt -->
+<h1 id="adrian" class="w3-text-primary">Jan</h1>
+<div class="w3-primary w3-display-container">  
+    <div class="slideshow4" style="padding: 8px 48px;">
+        <p style="display: inline-block" class="<?=$header?>">Kurze Fakten</p>
+        <table class="w3-hide-small">
+            <tr>
+                <td style="vertical-align: top; width: 200px;">Spielt seit:</td>
+                <td style="vertical-align: top;">1998</td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top; width: 200px;">Erstes Team:</td>
+                <td style="vertical-align: top;">Crazy People</td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top; width: 200px;">Turniere:</td>
+                <td style="vertical-align: top;">ca. 170</td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top; width: 200px;">Lustigster Teamname:</td>
+                <td style="vertical-align: top;">Rollende Rosinen</td>
+            </tr>
+        </table>
+        <p class="w3-hide-medium w3-hide-large"><i>Spielt seit:</i><br>1998</p>
+        <p class="w3-hide-medium w3-hide-large"><i>Erstes Team:</i><br>Crazy People</p>
+        <p class="w3-hide-medium w3-hide-large"><i>Gespielte Turniere:</i><br>ca. 170</p>
+        <p class="w3-hide-medium w3-hide-large"><i>Lustigster Teamname:</i><br>Rollende Rosinen</p>
+        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 3)">&#10094;</button>
+        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 3)">&#10095;</button>
+    </div>
+    <div class="slideshow4" style="padding: 8px 48px;">
+        <p style="display: inline-block" class="<?=$header?>">Was vermisst du aus den vergangenen Saisons am meisten?</p>
+        <p>Die Turniere! Und 2 x 20min Spiele. Wobei ich fast glaube das ich zweiteres in mienem heutigen Alter nicht mehr so toll finde</p>
+        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 3)">&#10094;</button>
+        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 3)">&#10095;</button>
+    </div>
+    <div class="slideshow4" style="padding: 8px 48px;">
+        <p style="display: inline-block" class="<?=$header?>">Wie bist du zum Einradfahren gekommen?</p>
+        <p>Da wurden in der Stadt Kurse angeboten und meine Mutter meinte, das hört sch doch lustig an.</p>
+        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 3)">&#10094;</button>
+        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 3)">&#10095;</button>
+    </div>
+    <div class="slideshow4" style="padding: 8px 48px;">
+        <p style="display: inline-block" class="<?=$header?>">An welche damalige Regel kannst du dich erinnern, die heute für Schmunzeln sorgen würde?</p>
+        <p>Der Schlägerwurf war mal erlaubt. 😊</p>
+        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 3)">&#10094;</button>
+        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 3)">&#10095;</button>
+    </div>
+    <div class="slideshow4" style="padding: 8px 48px;">
+        <p style="display: inline-block" class="<?=$header?>">Was bringt dich dazu dich regelmäßig auf das Einrad zu setzen?</p>
+        <p>Der Kampf gegen den Verfall. Es macht einfach Spaß!</p>
+        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 3)">&#10094;</button>
+        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 3)">&#10095;</button>
+    </div>
+</div>
+
+<!-- Für mobile Darstellung -->
+<img alt="Jan" src="../bilder/spielerprofile/Jan_Schubert.jpg" style="width: 100%; margin-left: auto; margin-right: auto;" class="w3-hide-large w3-hide-medium w3-section">
+
+<!-- Für Desktop Darstellung -->
+<img alt="Jan" src="../bilder/spielerprofile/Jan_Schubert.jpg" style="width: 350px; float: right;" class="w3-section w3-hide-small w3-margin-left">
+
+<!-- Antworten vierter Abschnitt -->
+<p class="w3-text-secondary"><b>Wie bist du zum Einradhockey gekommen?</b></p>
+<p>Mein damaliger Trainer, bei dem ich Einrad gefahren bin, kam auf die Idee jetzt auch Hockey zu spielen. Er hatte 1997 von der Liga gehört.</p>
+
+<p class="w3-text-secondary"><b>Woran merkst du, dass die Liga "älter" geworden ist?</b></p>
+<p>Die Spieler sind deutlich besser geworden (Geschwindigkeit, Technik, Taktik). Das bezieht sich leider nur auf einen kleinen Teil, wenn ich die gesamte Große der Liga betrachte.</p>
+
+<p class="w3-text-secondary"><b>Welche ist die auffälligste Veränderung seit damals?</b></p>
+<p>Die Rangtabelle, teilweise der Ehrgeiz mit teilweise verbundenen Unsportlichkeiten.</p>
+
+<p class="w3-text-secondary"><b>Hast du einen Lieblingsgegner?</b></p>
+<p>Eigentlich alle bei denen ich eine sportliche Herausforderung habe. Natürlich gibt oder gab es da wenige Ausnahmen. 10:0 Spiele - egal in welche Richtung - kann ich nicht leiden. Daher vermeide ich ABCDEF Turniere.</p>
+
+<p class="w3-text-secondary"><b>Hättest du zur Gründung der Liga gedacht, dass sie so sein wird, wie sie heute ist?</b></p>
+<p>Ich war bei der Gründung nicht dabei. Aber das hätte vermutlich keiner gedacht.</p>
+
+<p class="w3-text-secondary"><b>Was wünschst du dir für die Liga?</b></p>
+<p>Dass sie noch lange besteht und Turniere weiterhin in gleicher Spielstärke stattfinden können. Ich  bin kein Freund von Fun- und Mixteams im Ligabetrieb. Teilweise sind sie auf jeden Fall nötig, um Turniere stattfinden zu lassen oder um neuen Teams einen Einblick zu gewähren. Aber nur weil ein Spieler krank wird, muss auf einem 7er-Turnier kein Mixteam generiert werden!</p>
+
+<p class="w3-text-secondary"><b>Wenn du eine Regel im Einradhockey verändern dürftest, welche wäre es?</b></p>
+<p>Der hohe Schläger. Bälle sollten aus der Luft geholt werden dürfen, wenn keine Gefährdung vorliegt. <br> Das setzt aber leider gute Schiedsrichter und empfindliche Strafen voraus.</p>
 
 <!-- Script für die Slideshow -->
 <script>
-var slideIndex = [1, 1, 1];
-var slideId = ["slideshow1", "slideshow2", "slideshow3"];
+var slideIndex = [1, 1, 1, 1];
+var slideId = ["slideshow1", "slideshow2", "slideshow3", "slideshow4"];
 showDivs(1,0);
 showDivs(1,1);
 showDivs(1,2);
+showDivs(1,3);
 
 function plusDivs(n, no) {
   showDivs(slideIndex[no] += n, no);
