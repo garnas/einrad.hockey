@@ -5,8 +5,8 @@
     font-weight: 400;
     src: local('Material Icons'),
     local('MaterialIcons-Regular'),
-    url(http://localhost/einrad.hockey/public/css/icons/fonts/MaterialIcons-Regular.woff2) format('woff2'),
-    url(http://localhost/einrad.hockey/public/css/icons/fonts/MaterialIcons-Regular.ttf) format('truetype');
+    url(fonts/MaterialIcons-Regular.woff2) format('woff2'),
+    url(fonts/MaterialIcons-Regular.ttf) format('truetype');
 }
 
 .material-icons {

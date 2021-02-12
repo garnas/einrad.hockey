@@ -20,7 +20,6 @@
 //Logs der Besucher
 $url = $_SERVER['REQUEST_URI'];
 $delta_load_time = microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"];
-$delta_user_time = str_pad((time() - $_SESSION['start_zeit'])." s", 6, " ");
 $line = $_SERVER['REMOTE_ADDR']
     . " | " . $_SERVER['REQUEST_URI']
     . " | " . round($delta_load_time, 3) . " s (load)"

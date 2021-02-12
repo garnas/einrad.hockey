@@ -305,11 +305,7 @@ class Neuigkeit
                 ORDER BY gespielt desc, rand()
                 LIMIT 3
                 ";
-        $return['max_turniere'] = [];
-        foreach (dbi::$db->query($sql, $saison)->esc()->fetch() as $x){
-            array_push($return['max_turniere'], $x);
-        }
-        return $return;
+        return dbi::$db->query($sql, $saison)->esc()->fetch();
     }
 
     public static function get_statistik_gew_spiele(int $saison = Config::SAISON): array
@@ -349,7 +345,6 @@ class Neuigkeit
             }
         }
         arsort($gew);
-        db::debug($gew[16]);
         return array_slice($gew, 0, 3, true);
     }
     /**
@@ -394,5 +389,27 @@ class Neuigkeit
         }
         arsort($tore);
         return array_slice($tore, 0, 3, true);
+    }
+    public static function get_alle_tore(int $saison = Config::SAISON): int
+    {
+        $sql = "
+                SELECT sum(tore_a) + sum(tore_b) + sum(penalty_a) + sum(penalty_b) AS tore
+                FROM spiele
+                INNER JOIN turniere_liga tl on spiele.turnier_id = tl.turnier_id
+                WHERE tl.saison = ?
+                ";
+        return dbi::$db->query($sql, $saison)->esc()->fetch_one();
+    }
+    public static function get_alle_spiele(int $saison = Config::SAISON): int
+    {
+        $sql = "
+                SELECT count(*) AS spiele
+                FROM spiele
+                INNER JOIN turniere_liga tl on spiele.turnier_id = tl.turnier_id
+                WHERE tl.saison = ?
+                AND tore_b IS NOT NULL
+                AND tore_a IS NOT NULL
+                ";
+        return dbi::$db->query($sql, $saison)->esc()->fetch_one();
     }
 }

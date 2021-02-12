@@ -65,7 +65,7 @@
 <div class="w3-overlay" id="myOverlay" onclick="close_sidebar()" style="cursor:pointer;"></div>
 
 <!--Navigation für Smartphones -->
-<div class="w3-display-container w3-hide-large w3-hide-medium">
+<div class="w3-display-container w3-hide-large w3-hide-medium w3-card">
     <!-- Hintergrundbild -->
     <img src="<?=$_SESSION['hintergrund']?>" class="<?php if (!isset($_SESSION['la_id']) && !isset($_SESSION['team_id'])){?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.4;">
     <div class="w3-display-left w3-margin-left">

@@ -1,5 +1,5 @@
 <!--Navigation für Desktop und Tablet -->
-<div class="w3-display-container w3-hide-small" style="width: 100%;">
+<div class="w3-display-container w3-hide-small">
     
     <!-- Hintergrundbild -->
     <img src="<?=$_SESSION['hintergrund']?>" class="<?php if (!isset($_SESSION['la_id']) && !isset($_SESSION['team_id'])){?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.3;">
