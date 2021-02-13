@@ -126,7 +126,7 @@ class TurnierReport
             FROM turniere_berichte 
             WHERE turnier_id = $this->turnier_id
             ";
-        return dbi::$db->query($sql)->esc()->fetch_one();
+        return dbi::$db->query($sql)->esc()->fetch_one() ?? '';
     }
 
     /**
@@ -148,16 +148,17 @@ class TurnierReport
      * Turnierbericht in die Datenbank schreiben
      *
      * @param string $bericht
-     * @param string $kader_check
+     * @param bool $kader_check
      */
-    function set_turnier_bericht(string $bericht, string $kader_check = 'Nein')
+    function set_turnier_bericht(string $bericht, bool $kader_check)
     {
+        $kader_check = ($kader_check) ? 'Ja' : 'Nein';
         // Existiert bereits ein Turnierbericht?
         $sql = "
                 SELECT * FROM turniere_berichte 
                 WHERE turnier_id = $this->turnier_id
                 ";
-        if (dbi::$db->query($sql)->num_rows() > 0) {
+        if (dbi::$db->query($sql)->num_rows() === 0) {
             $sql = "
                     INSERT INTO turniere_berichte (turnier_id, bericht, kader_ueberprueft)
                     VALUES ($this->turnier_id, ?, ?)

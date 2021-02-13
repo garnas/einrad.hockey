@@ -67,7 +67,15 @@
                     <td><?=$ausleihe['team_auf']?></td>
                     <td><?=$ausleihe['team_ab']?></td>
                     <?php if($change_tbericht){ ?>
-                        <td><form method="post"><input type="submit" class="w3-button w3-text-primary" value="X" name="del_ausleihe_<?=$ausleihe['ausleihe_id']?>"></form></td>
+                        <td>
+                            <form method="post">
+                                <button type="submit"
+                                       class="w3-button w3-text-primary"
+                                       name="del_ausleihe_<?=$ausleihe['ausleihe_id']?>">
+                                    <?= Form::icon("delete") ?>
+                                </button>
+                            </form>
+                        </td>
                     <?php }//endif?>
                 </tr>
             <?php }//end foreach?>
@@ -82,15 +90,26 @@
     <button onclick="document.getElementById('modal_ausleihe').style.display='block'" class="w3-section w3-button w3-tertiary">Spielerausleihe hinzufügen</button>
     <div id="modal_ausleihe" class="w3-modal">
         <form method="post" class="w3-card-4 w3-panel w3-round w3-container w3-modal-content">
-            <span onclick="document.getElementById('modal_ausleihe').style.display='none'" class="w3-button w3-large w3-text-secondary w3-display-topright">&times;</span>
+            <span onclick="document.getElementById('modal_ausleihe').style.display='none'"
+                  class="w3-button w3-large w3-text-secondary w3-display-topright">
+                &times;
+            </span>
             <h2 class="w3-text-primary">Spielerausleihe hinzufügen</h2>
             <p>
                 <label for="ausleihe_name">Spieler</label>
-                <input required class="w3-input w3-border w3-border-primary" type="text" name="ausleihe_name" id="ausleihe_name"></input>   
+                <input required
+                       class="w3-input w3-border w3-border-primary"
+                       type="text"
+                       name="ausleihe_name"
+                       id="ausleihe_name">
             </p>
             <p>
                 <label for="ausleihe_team_auf">Aufnehmendes Team</label>
-                <select required name="ausleihe_team_auf" id="ausleihe_team_auf" class="w3-select w3-input w3-border w3-border-primary">
+                <select required
+                        name="ausleihe_team_auf"
+                        id="ausleihe_team_auf"
+                        class="w3-select w3-input w3-border w3-border-primary"
+                >
                     <option selected disabled>--</option>
                     <?php foreach($teams as $team){?>
                         <option><?=$team['teamname']?></option>
@@ -100,7 +119,7 @@
             <p>
                 <label for="ausleihe_team_ab">Abgebendes Team</label>
                 <input class="w3-input w3-border w3-border-primary" placeholder="Team eingeben" type="text" list="teams" id="ausleihe_team_ab" name="ausleihe_team_ab" required>
-                    <?=Form::datalist_teams()?>
+                <?=Form::datalist_teams()?>
             </p>
             <p>
                 <input type="submit" value="Hinzufügen" name="new_ausleihe" class="w3-button w3-tertiary">
@@ -208,7 +227,7 @@
                    id="kader_check"
                    onchange="this.form.submit()"
             >
-            <label for="kader_check" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer;"> Kader wurden kontrolliert</label>           
+            <label for="kader_check" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer;"> Kader wurden kontrolliert</label>
         </p>
         <p>
             <label for="turnierbericht">Turnierbericht</label>
@@ -219,7 +238,7 @@
                       rows="12"
                       id="turnierbericht"
                       name="turnierbericht"
-            ><?=stripcslashes($_POST['text'] ?? '')?><?=$tbericht->get_turnier_bericht()?></textarea>
+            ><?=$_POST['text'] ?? ''?><?=$tbericht->get_turnier_bericht()?></textarea>
             <p id="turnierbericht_counter"><p>
         </p>
         <input type="submit" value="Speichern" name="set_turnierbericht" class="w3-button w3-tertiary">

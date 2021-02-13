@@ -27,7 +27,7 @@ if (empty($turnier->details)) {
 
 if ($turnier->details['art'] == 'spass') {
     Form::attention("Spaßturniere erfordern keinen Turnierreport.");
-    header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->details['turnier_id']);
+    header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->id);
     die();
 }
 
@@ -37,7 +37,7 @@ $teams = $turnier->get_liste_spielplan();
 $kader_array = $turnier->get_kader_kontrolle();
 $ausbilder_liste = [];
 $spieler_liste = [];
-foreach ($kader_array as $team_id => $kader) {
+foreach ($kader_array as $team_id => $kader) { // Todo In Funktion
     foreach ($kader as $spieler_id => $spieler) {
         if ($spieler['schiri'] == 'Ausbilder/in') {
             $ausbilder_liste[$spieler_id] = $spieler;
@@ -111,12 +111,7 @@ if ($change_tbericht) {
         or isset($_POST['turnierbericht'])
     ) {
         $bericht = $_POST['turnierbericht'];
-        $kader_check = $_POST['kader_check'];
-        if ($kader_check == "kader_checked") {
-            $kader_check = 'Ja';
-        } else {
-            $kader_check = 'Nein';
-        }
+        $kader_check = $_POST['kader_check'] == "kader_checked";
         $tbericht->set_turnier_bericht($bericht, $kader_check);
         Form::affirm("Turnierbericht wurde aktualisiert");
         header("Location:" . dbi::escape($_SERVER['PHP_SELF']) . "?turnier_id=$turnier_id");
