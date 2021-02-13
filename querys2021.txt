@@ -1,0 +1,16 @@
+ALTER TABLE `turniere_liga` CHANGE `spieltag` `spieltag` INT(11) NOT NULL DEFAULT '0';
+ALTER TABLE `turniere_details` CHANGE `link_spielplan` `link_spielplan` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
+ALTER TABLE `turniere_details` CHANGE `link_spielplan` `link_spielplan` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
+ALTER TABLE `teams_liga` CHANGE `freilose` `freilose` INT(11) NULL;
+ALTER TABLE `teams_liga` CHANGE `passwort` `passwort` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
+ALTER TABLE `spieler` CHANGE `schiri` `schiri` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '';
+ALTER TABLE `mailbot` CHANGE `fehler` `fehler` VARCHAR(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '';
+ALTER TABLE `teams_details` CHANGE `plz` `plz` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `ort` `ort` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `verein` `verein` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `homepage` `homepage` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `ligavertreter` `ligavertreter` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL, CHANGE `teamfoto` `teamfoto` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
+ALTER TABLE `turniere_ergebnisse` CHANGE `ergebnis` `ergebnis` INT(11) NULL;
+ALTER TABLE `teams_details` ADD `trikot_farbe_1` VARCHAR(9) NULL AFTER `teamfoto`, ADD `trikot_farbe_2` VARCHAR(9) NULL AFTER `trikot_farbe_1`;
+ALTER TABLE `turniere_liste` CHANGE `position_warteliste` `position_warteliste` INT(11) NULL;
+ALTER TABLE `plz` CHANGE `PLZ` `PLZ` VARCHAR(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL, CHANGE `Ort` `Ort` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+ALTER TABLE `spieler` CHANGE `vorname` `vorname` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL, CHANGE `nachname` `nachname` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL, CHANGE `geschlecht` `geschlecht` ENUM('m','w','d') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL, CHANGE `schiri` `schiri` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '', CHANGE `junior` `junior` ENUM('Ja','Nein','') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Nein';
+ALTER TABLE `neuigkeiten` CHANGE `inhalt` `inhalt` VARCHAR(1800) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `spieler` CHANGE `zeit` `zeit` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP;
+UPDATE `spieler` SET `zeit`= NULL WHERE zeit = '0000-00-00 00:00:00'
