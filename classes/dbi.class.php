@@ -2,7 +2,7 @@
 
 class dbi
 {
-    public static NULL|dbWrapper $db;
+    public static null|dbWrapper $db;
 
     /**
      * Stellt die Verbindung zur Datenbank her
@@ -26,7 +26,8 @@ class dbi
     /**
      * Terminiert die Datenbankverbindung und ermöglicht eine neue Initialisierung zu einer anderen Datenbank
      */
-    public static function terminate(){
+    public static function terminate()
+    {
         self::$db = NULL;
     }
 
@@ -105,13 +106,8 @@ class dbi
         exec("mysqldump --user=" . Config::USER_NAME
             . " --password=" . Config::PASSWORD
             . " --host=" . Config::HOST_NAME
-            . " " . Config::DATABASE  . " > " . $dumpfile);
+            . " " . Config::DATABASE . " > " . $dumpfile);
         Form::affirm("Datenbank wurde gesichert als " . date("Y-m-d_H-i-s") . ".sql im Ordner system/backup/");
         return $dumpfile;
     }
-
-    /**
-     * Static Class, Erstellen eines Objektes soll nicht möglich sein.
-     */
-    private function __construct(){}
 }
