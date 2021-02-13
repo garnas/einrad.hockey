@@ -102,4 +102,9 @@ class Config
     const LINK_DSGVO = '../dokumente/datenschutz-hinweise.pdf';
     const LINK_SPIELPLAENE_ALT = '../dokumente/alte_spielplan_vorlagen.pdf';
 
+    /**
+     * Authentification
+     */
+    public static bool $ligacenter = false; // Befindet sich der Ligaausschuss im Ligacenter?
+    public static bool $teamcenter = false; // Befindet sich das Team im Teamcenter?
 }

@@ -1,10 +1,10 @@
 <?php
-// Autor festlegen - $ligacenter und Config::$teamcenter werden als boolean in session_la.logic.php bzw session_team.logic.php festgelegt
+// Autor festlegen - Config::$ligacenter und Config::Config::$teamcenter werden als boolean in session_la.logic.php bzw session_team.logic.php festgelegt
 // Dadurch weiß man, ob vom Teamcenter oder vom Ligacenter auf dieses Skript zugegriffen wird
 // Dies ermöglicht den gleichzeitgen Login von Ligaausschuss und Ligateams in einem Browser
 
 // Autor
-$name = ($ligacenter) ? "Ligaausschuss" : $_SESSION['teamname'];
+$name = (Config::$ligacenter) ? "Ligaausschuss" : $_SESSION['teamname'];
 
 
 // Formularauswertung

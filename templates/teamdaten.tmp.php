@@ -3,7 +3,7 @@
 <h1 class="w3-text-primary"><?= Form::icon("group", tag: "h1") ?> <?=$team->details['teamname']?></h1>
     <p>
         <?= Form::link(
-                ($ligacenter) ? 'lc_teamdaten_aendern.php?team_id=' . $team->id : 'tc_teamdaten_aendern.php',
+                (Config::$ligacenter) ? 'lc_teamdaten_aendern.php?team_id=' . $team->id : 'tc_teamdaten_aendern.php',
                 Form::icon('create') . ' Team- und Kontaktdaten ändern') ?>
         </>
     </p>
@@ -103,7 +103,7 @@
 
 <!-- Link Teamdaten ändern -->
 <p>
-    <a href="<?=($ligacenter) ? 'lc_teamdaten_aendern.php?team_id=' . $team->id : 'tc_teamdaten_aendern.php'?>"
+    <a href="<?=(Config::$ligacenter) ? 'lc_teamdaten_aendern.php?team_id=' . $team->id : 'tc_teamdaten_aendern.php'?>"
        class="w3-button w3-block w3-secondary">
         <?= Form::icon("create") ?> Team- und Kontaktdaten ändern
     </a>

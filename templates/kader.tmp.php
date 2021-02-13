@@ -8,13 +8,13 @@
             <th class="w3-primary">Name</th>
             <th class="w3-primary w3-center">J/G</th>
             <th class="w3-primary w3-center">Schiri</th>
-            <?php if($ligacenter){?><th class="w3-primary w3-center">Hinzugefügt am:</th><?php }//endif?>
+            <?php if(Config::$ligacenter){?><th class="w3-primary w3-center">Hinzugefügt am:</th><?php }//endif?>
         </tr>
         </thead>
         <?php foreach($kader as $eintrag){?>
             <tr>
                 <td><?=$eintrag['spieler_id']?></td>
-                <?php if ($ligacenter){ //Direktverlinkung zum Bearbeiten eines Spielers $ligacenter wird definiert in session_la.logic.php?>
+                <?php if (Config::$ligacenter){ //Direktverlinkung zum Bearbeiten eines Spielers Config::$ligacenter wird definiert in session_la.logic.php?>
                     <td><?= Form::link('lc_spieler_aendern.php?spieler_id=' . $eintrag['spieler_id'], $eintrag['vorname'] . " " . $eintrag['nachname']) ?></td>
                 <?php }else{?>
                     <td><?=$eintrag['vorname']." ".$eintrag['nachname']?></td>
@@ -25,7 +25,7 @@
                 <?php }else{?>
                     <td class='w3-center'></td>
                 <?php } //ende if?>
-                <?php if($ligacenter){?><td class="w3-center"><?=$eintrag['zeit']?></td><?php }//endif?>
+                <?php if(Config::$ligacenter){?><td class="w3-center"><?=$eintrag['zeit']?></td><?php }//endif?>
             </tr>
         <?php } //Ende foreach?>
     </table>
@@ -47,7 +47,7 @@
                 <?php foreach($kader_vorsaison as $eintrag){?>
                     <tr style="vertical-align: middle">
                         <td class=""><?=$eintrag['spieler_id']?></td>
-                        <?php if ($ligacenter){ //Direktverlinkung zum Bearbeiten eines Spielers $ligacenter wird definiert in session_la.logic.php?>
+                        <?php if (Config::$ligacenter){ //Direktverlinkung zum Bearbeiten eines Spielers Config::$ligacenter wird definiert in session_la.logic.php?>
                             <td class=""><?= Form::link('lc_spieler_aendern.php?spieler_id=' . $eintrag['spieler_id'], $eintrag['vorname'] . " " . $eintrag['nachname']) ?></td>
                         <?php }else{?>
                             <td class=""><?=$eintrag['vorname']." ".$eintrag['nachname']?></td>

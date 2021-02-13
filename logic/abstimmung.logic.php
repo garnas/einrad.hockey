@@ -36,7 +36,7 @@ $sort_function = function ($value1, $value2) {
 uasort($display_ergebnisse, $sort_function);
 
 // Nur für das Teamcenter und im Zeitraum der Abstimmung
-if ($teamcenter) {
+if (Config::$teamcenter) {
     $abstimmung = new Abstimmung($_SESSION['team_id']);
     $stimme = '';
 

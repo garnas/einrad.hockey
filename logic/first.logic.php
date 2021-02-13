@@ -54,4 +54,4 @@ dbi::initialize(); // Neue DB-Verbindung mit Prepared-Statements
  * Geben an, ob man sich in einem der Center befindet.
  * Werden in session.logic.php während der Authentifikation überschrieben.
  */
-$teamcenter = $ligacenter = false;
+Config::$teamcenter = Config::$ligacenter = false;

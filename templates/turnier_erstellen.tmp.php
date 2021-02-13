@@ -33,7 +33,7 @@
                 <option <?php if (($_POST['art'] ?? '') == 'III'){?> selected <?php } //endif?> value="III">III: Blockfreies Turnier (ABCDEF)</option>
                 <option <?php if (($_POST['art'] ?? '') == 'spass'){?> selected <?php } //endif?> value="spass">Spaßturnier (außerhalb der Liga, Anmeldung beim Ausrichter, Datum und Uhrzeit beliebig)</option>
 
-                <?php if ($ligacenter){?>
+                <?php if (Config::$ligacenter){?>
                 <option <?php if (($_POST['art'] ?? '') == 'final'){?> selected <?php } //endif?> value='final'>Abschlussturnier</option>
                 <option <?php if (($_POST['art'] ?? '') == 'fixed'){?> selected <?php } //endif?> value='fixed'>Fixierter Turnierblock (<?=implode(", ", Config::BLOCK)?>)</option>
                 <?php } //endif?>
@@ -48,7 +48,7 @@
             </select>
         </div>
 
-        <?php if ($ligacenter){?>
+        <?php if (Config::$ligacenter){?>
         <div id="block_fixed_div" style="display: none">
             <p>
             <label class="w3-text-primary" for="block_fixed">Fixierter Turnierblock</label>
@@ -64,7 +64,7 @@
         <p>
             <label class="w3-text-primary" for="plaetze">Plätze</label>
             <select required class="w3-select w3-border w3-border-primary" id="plaetze" name="plaetze">
-                <option <?php if (($_POST['plaetze'] ?? '') == '4'){?> selected <?php } //endif?> <?php if($teamcenter){?> disabled <?php } //end if?> value="4">4 Teams (nur in Absprache mit dem Ligaausschuss)</option>
+                <option <?php if (($_POST['plaetze'] ?? '') == '4'){?> selected <?php } //endif?> <?php if(Config::$teamcenter){?> disabled <?php } //end if?> value="4">4 Teams (nur in Absprache mit dem Ligaausschuss)</option>
                 <option <?php if (($_POST['plaetze'] ?? '') == '5'){?> selected <?php } //endif?> value="5">5 Teams</option>
                 <option <?php if (($_POST['plaetze'] ?? '') == '6'){?> selected <?php } //endif?> value="6">6 Teams</option>
                 <option <?php if (($_POST['plaetze'] ?? '') == '7'){?> selected <?php } //endif?> value="7">7 Teams</option>
@@ -115,7 +115,7 @@
         </p>
         <p>
             <label class="w3-text-primary" for="startgebuehr">Startgebühr</label>
-            <?php if($ligacenter){?>
+            <?php if(Config::$ligacenter){?>
                 <input type="text" class="w3-input w3-border w3-border-primary" placeholder="z. B. 5 Euro" id="startgebuehr" name="startgebuehr">
             <?php }else{ ?>
                 <select class="w3-input w3-border w3-border-primary" id="startgebuehr" name="startgebuehr">
@@ -167,7 +167,7 @@ function onstart_show_block(){
     var e = document.getElementById("art");
     var result = e.options[e.selectedIndex].value;
 
-    <?php if($ligacenter){?>
+    <?php if(Config::$ligacenter){?>
     if (result === "fixed"){
         document.getElementById("block_fixed_div").style.display = "block";
     }
@@ -184,7 +184,7 @@ onstart_show_block();
 function onchange_show_block(selectObject) {
     /* Einblenden der Auswahl des fixierten Turnierblocks */
 
-    <?php if($ligacenter){?>
+    <?php if(Config::$ligacenter){?>
     if (selectObject.value ===  "fixed") {
         document.getElementById("block_fixed_div").style.display = "block";
     }else{

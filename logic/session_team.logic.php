@@ -22,5 +22,5 @@ if (!isset($no_redirect) && empty($team->details['ligavertreter'])){
 }
 
 $titel = $_SESSION['teamname'];
-$ligacenter = false; // Man kann sich gleichzeitig im Liga- und Teamcenter anmelden
-$teamcenter = true; // Hiermit erkennt man, ob man sich gerade im Team- oder Ligacenter befindet, da Session-Variablen seitenübergreifend existieren
+
+Config::$teamcenter = true; // Dies zeigt allen Dateien (insbeondere .tmp.php) , das man sich im Teamcenter befindet.

@@ -10,16 +10,16 @@ if (empty($turnier->details)){
     die();
 }
 //im Teamcenter testen, ob es sich um den Ausrichter handelt
-if ($teamcenter && ($turnier->details['ausrichter'] != $_SESSION['team_id'] or $turnier->details['art'] != 'spass')){
+if (Config::$teamcenter && ($turnier->details['ausrichter'] != $_SESSION['team_id'] or $turnier->details['art'] != 'spass')){
     Form::error("Fehlende Berechtigung Teams zu diesem Turnier anzumelden");
     header('Location: ../liga/turniere.php');
     die();
 } 
 
 //Autor für Logs
-if($teamcenter){
+if(Config::$teamcenter){
     $autor = $_SESSION['teamname'];
-}elseif ($ligacenter){
+}elseif (Config::$ligacenter){
     $autor = "Ligaausschuss";
 }else{
     Form::error("Weder im Teamcenter noch im Ligacenter angemeldet");

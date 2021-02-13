@@ -83,7 +83,7 @@
         <form method="post" onsubmit="return confirm('Soll die Email wirklich abgeschickt werden?')">
             <p class=""><b><i class=material-icons>mail</i> Absender</b></p>
             <p><?=$from?></p>
-            <p class=""><b><i class=material-icons>mail</i> Empfänger <?php if($ligacenter){?>(<?=$anzahl_emails?>)<?php }//end if?></b></p>
+            <p class=""><b><i class=material-icons>mail</i> Empfänger <?php if(Config::$ligacenter){?>(<?=$anzahl_emails?>)<?php }//end if?></b></p>
             <p>
                 <div class="w3-row"><i>
                     <?php foreach($tos as $to){?>
@@ -93,7 +93,7 @@
                     <?php }//end foreach?>
                 </i><div class="w3-row">
             </p>
-            <?php if($ligacenter){ ?>
+            <?php if(Config::$ligacenter){ ?>
                 <p><b>+ BCC:</b> <?=Config::LAMAIL_ANTWORT?></p>
             <?php } //endif?>
             <p>
@@ -104,7 +104,7 @@
                 <label class="" for="text"><b><i class="material-icons">subject</i> Text</b></label>
                 <textarea class="w3-input w3-border w3-border-primary" rows="10" type="text" id="text" name="text" required><?=stripcslashes($_POST['text'] ?? '')?></textarea>
             </p>
-            <?php if($teamcenter){ ?>
+            <?php if(Config::$teamcenter){ ?>
                 <p class="w3-text-green">Es wird ebenfalls eine Email an dein Team gesendet, falls ihr nicht schon auf der Empfängerliste steht.</p>
             <?php } //endif?>
             <?php if ($anzahl_emails > $grenze_bcc){?>

@@ -53,19 +53,19 @@ if (isset($_POST['change_turnier'])) {
     }
 
     // Validierung Startzeit:
-    if ($startzeit != $turnier->details['startzeit']  && $teamcenter){
+    if ($startzeit != $turnier->details['startzeit']  && Config::$teamcenter){
         if ($turnier->details['art'] == 'final'){
             $error = true;
             Form::error("Die Startzeit bei Abschlussturnieren kann nur vom Ligaausschuss geändert werden.");
         }
-        if ($startzeit != $turnier->details['startzeit'] && (date("H", strtotime($startzeit)) < 9 or date("H", strtotime($startzeit)) > 14) && $teamcenter){
+        if ($startzeit != $turnier->details['startzeit'] && (date("H", strtotime($startzeit)) < 9 or date("H", strtotime($startzeit)) > 14) && Config::$teamcenter){
             $error = true;
             Form::error("Turniere dürfen frühestens um 9:00&nbsp;Uhr beginnen und müssen spätestens um 20:00&nbsp;Uhr beendet sein");
         }
     }
 
     // Validierung der Plätze
-    if ($plaetze != $turnier->details['plaetze']  && $teamcenter){
+    if ($plaetze != $turnier->details['plaetze']  && Config::$teamcenter){
         if ($turnier->details['art'] == 'final'){ //Anzahl der Plätze darf nur geändert werden, wenn es sich nicht um ein Finalturnier handelt
             Form::error("Das Ändern der Anzahl der Plätze ist bei Abschlussturnieren können nur vom Ligaausschuss geändert werden.");
             $error = true;
@@ -78,13 +78,13 @@ if (isset($_POST['change_turnier'])) {
 
     // Keine Änderung der Plätze in der Spielplanphase
     if ($turnier->details['phase'] == 'spielplan'){
-        if ($turnier->details['plaetze'] != $plaetze && $teamcenter){
+        if ($turnier->details['plaetze'] != $plaetze && Config::$teamcenter){
             $error = true;
             Form::error("Die Anzahl der Plätze kann in der Spielplanphase nicht mehr geändert werden. Bitte wende dich unter ".Config::LAMAIL." an den Ligaaussschuss.");
         }
     }
     // Keine Änderung der Plätze in der Spielplanphase
-    if ($turnier->details['phase'] == 'ergebnis' && $teamcenter){
+    if ($turnier->details['phase'] == 'ergebnis' && Config::$teamcenter){
         $error = true;
         Form::error("Turniere können in der Ergebnisphase nicht mehr geändert werden. Bitte wende dich unter ".Config::LAMAIL." an den Ligaaussschuss.");
     }
@@ -148,7 +148,7 @@ if (isset($_POST['change_turnier'])) {
 
         // Mail an den Ligaausschuss?
         if (($wichtiges_geaendert or $erweitern)
-            && $teamcenter) MailBot::mail_turnierdaten_geaendert($turnier);
+            && Config::$teamcenter) MailBot::mail_turnierdaten_geaendert($turnier);
 
         Form::affirm("Turnierdaten wurden geändert");
         header ('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->id);

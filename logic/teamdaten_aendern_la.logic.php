@@ -1,6 +1,6 @@
 <?php
 
-if (isset($_POST['change_la']) && $ligacenter) {
+if (isset($_POST['change_la']) && Config::$ligacenter) {
     $error = false;
     $neuer_teamname = $_POST['teamname'];
     $freilose = (int) $_POST['freilose'];

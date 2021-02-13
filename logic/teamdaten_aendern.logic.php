@@ -2,14 +2,14 @@
 
 // Inititalisierung
 
-$team_id = ($teamcenter) ? $_SESSION['team_id'] : (int) ($_GET['team_id'] ?? 0);
+$team_id = (Config::$teamcenter) ? $_SESSION['team_id'] : (int) ($_GET['team_id'] ?? 0);
 if (Team::is_ligateam($team_id)){
     $team = new Team ($team_id);
     $kontakte = new Kontakt ($team->id);
     $emails = $kontakte->get_emails_with_details();
 }
 
-$path = ($ligacenter) ? '../ligacenter/lc_teamdaten_aendern.php?team_id=' . $team_id : '../teamcenter/tc_teamdaten_aendern.php';
+$path = (Config::$ligacenter) ? '../ligacenter/lc_teamdaten_aendern.php?team_id=' . $team_id : '../teamcenter/tc_teamdaten_aendern.php';
 
 
 

@@ -10,9 +10,9 @@ $akt_spieltag = Tabelle::get_aktuellen_spieltag();
 $teams = Tabelle::get_rang_tabelle($akt_spieltag); // Sortierung nach Rangtabelle
 
 //Damit sich $_SESSION von team- und ligacenter nicht vermischen
-if ($ligacenter) {
+if (Config::$ligacenter) {
     $list_id = 'lc_emails' . $_SESSION['la_id'];
-} elseif ($teamcenter) {
+} elseif (Config::$teamcenter) {
     $list_id = 'tc_emails' . $_SESSION['team_id'];
 }
 
@@ -98,10 +98,10 @@ if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])) {
 
     if (!$error) {
         $mailer = MailBot::start_mailer();
-        if ($ligacenter) {
+        if (Config::$ligacenter) {
             $mailer->setFrom(Config::LAMAIL, 'Ligaausschuss');
             $mailer->addBCC(Config::LAMAIL_ANTWORT);
-        } elseif ($teamcenter) {
+        } elseif (Config::$teamcenter) {
             $akt_kontakt = new Kontakt($_SESSION['team_id']); //Absender Mails bekommen
             $absender = $akt_kontakt->get_emails();
             foreach ($absender as $email) {
@@ -145,10 +145,10 @@ if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])) {
 if (isset($_SESSION[$list_id])) {
     $anzahl_emails = count($_SESSION[$list_id]['emails']);
     $adressaten = $bcc = [];
-    if ($ligacenter) {
+    if (Config::$ligacenter) {
         $from = Config::LAMAIL;
         $tos = $_SESSION[$list_id]['emails'];
-    } elseif ($teamcenter) {
+    } elseif (Config::$teamcenter) {
         $from = $_SESSION['teamname'];
         $tos = $_SESSION[$list_id]['empfaenger'];
     }

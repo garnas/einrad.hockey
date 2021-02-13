@@ -7,6 +7,7 @@ if(!isset($_SESSION['la_id'])) {
   die();
 }
 MailBot::warning_mail(); // Sendet eine Warnung, wenn Mails nicht versendet werden konnten.
+
 $titel = 'Ligacenter';
-$ligacenter = true; // Man kann sich gleichzeitig im Liga- und Teamcenter anmelden
-$teamcenter = false; // Hiermit erkennt man, ob man sich gerade im Team- oder Ligacenter befindet, da Session-Variablen seitenübergreifend existieren
+
+Config::$ligacenter = true; // Dies zeigt allen Dateien (insbeondere .tmp.php) , das man sich im Ligacenter befindet.

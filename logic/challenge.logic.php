@@ -48,7 +48,7 @@ foreach ($alle_spielerliste as $key => $spieler){
     }
 }
 // Überprüfung, ob ein neuer Eintrag plausibel / vollständig ist
-if (isset($_POST['put_challenge']) && $teamcenter) {
+if (isset($_POST['put_challenge']) && Config::$teamcenter) {
     $error = false;
     $distanz = $_POST["kilometer"];
     $datum = $_POST["datum"];
@@ -84,7 +84,7 @@ if (isset($_POST['put_challenge']) && $teamcenter) {
 }
 
 // "Löscht" den ausgewählten Eintrag
-if (isset($_POST['update_challenge']) && $teamcenter) {
+if (isset($_POST['update_challenge']) && Config::$teamcenter) {
     $eintrag_id = $_POST["eintrag_id"];
 
     // Überprüfung ob die Mittels Post übergebene Eintrag-ID auch wirklich zu diesem Team gehört

@@ -43,7 +43,7 @@ class MailBot
                 return false;
             }
         } else { // Debugging
-            if (!($ligacenter ?? false)) {
+            if (!(Config::$ligacenter ?? false)) {
                 $mailer->Password = '***********'; // Passwort verstecken
                 $mailer->ClearAllRecipients();
                 Form::log('emails.log', 'Mail erfolgreich versendet');

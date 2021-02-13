@@ -16,7 +16,7 @@
             <p>
                 <input class="w3-button w3-block w3-primary" type="file" name="jpgupload" id="jpgupload">
             </p>
-            <?php if($ligacenter){?>
+            <?php if(Config::$ligacenter){?>
                 <p>
                     <label class="" for="bild_verlinken">Bild verlinken (optional) | nur Ligaausschuss</label>
                     <input class="w3-input w3-border w3-border-primary" placeholder="Link angeben" type="url" id="bild_verlinken" name="bild_verlinken" value="<?=$_POST['bild_verlinken'] ?? ''?>" >

@@ -1,8 +1,8 @@
 <?php
 
 // Besteht die Berechtigung das Turnier zu bearbeiten?
-if(!$ligacenter){ // Ligacenter darf alles.
-    if (($teamcenter && ($_SESSION['team_id'] ?? 0) != $spielplan->turnier->details['ausrichter'])){
+if(!Config::$ligacenter){ // Ligacenter darf alles.
+    if ((Config::$teamcenter && ($_SESSION['team_id'] ?? 0) != $spielplan->turnier->details['ausrichter'])){
         Form::error("Nur der Ausrichter kann Spielergebnisse eintragen");
         header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
         die();
