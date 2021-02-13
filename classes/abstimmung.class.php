@@ -110,7 +110,7 @@ class Abstimmung
             FROM abstimmung_ergebnisse
             WHERE crypt = ?
             ";
-        return dbi::$db->query($sql, $crypt)->esc()->fetch_one();
+        return dbi::$db->query($sql, $crypt)->esc()->fetch_one() ?? '';
     }
 
     /**

@@ -107,12 +107,7 @@ class Spieler
                 AND letzte_saison = ?
                 ORDER BY letzte_saison DESC, vorname
                 ";
-        $kader = dbi::$db->query($sql, $team_id, $saison)->esc()->fetch('spieler_id');
-        foreach ($kader as $id => $spieler) {
-            if (strtotime($spieler['zeit'])) $kader[$id]['zeit'] = '--';
-            // Diese Funktion wurde erst am später hinzugefügt.
-        }
-        return $kader;
+        return dbi::$db->query($sql, $team_id, $saison)->esc()->fetch('spieler_id');
     }
 
     /**
@@ -143,7 +138,7 @@ class Spieler
                 FROM spieler 
                 WHERE letzte_saison >= '$saison'
                 ";
-        return dbi::$db->query($sql)->fetch_one();
+        return dbi::$db->query($sql)->fetch_one() ?? 0;
     }
 
     /**
@@ -197,7 +192,7 @@ class Spieler
                 UPDATE spieler 
                 SET $entry = ?
                 $zeit 
-                WHERE spieler_id=$this->id
+                WHERE spieler_id = $this->id
                 ";
         dbi::$db->query($sql, $value)->log();
     }
@@ -232,6 +227,6 @@ class Spieler
                 AND spieler.schiri >= $saison 
                 OR spieler.schiri = 'Ausbilder/in'
                 ";
-        return dbi::$db->query($sql)->esc()->fetch_one();
+        return dbi::$db->query($sql)->esc()->fetch_one() ?? 0;
     }
 }

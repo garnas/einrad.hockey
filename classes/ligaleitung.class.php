@@ -93,7 +93,7 @@ class Ligaleitung
                 FROM ausschuss_liga 
                 WHERE login_name = ?
                 ";
-        return dbi::$db->query($sql, $name)->esc()->fetch_one();
+        return dbi::$db->query($sql, $name)->esc()->fetch_one() ?? 0;
     }
 
     /**
@@ -109,7 +109,7 @@ class Ligaleitung
                 FROM ausschuss_liga 
                 WHERE ligaausschuss_id = ?
                 ";
-        return dbi::$db->query($sql, $la_id)->esc()->fetch_one();
+        return dbi::$db->query($sql, $la_id)->esc()->fetch_one() ?? '';
     }
 
     /**
@@ -124,7 +124,7 @@ class Ligaleitung
                 FROM ausschuss_liga 
                 WHERE ligaausschuss_id = ?
                 ";
-        return dbi::$db->query($sql, $la_id)->esc()->fetch_one();
+        return dbi::$db->query($sql, $la_id)->esc()->fetch_one() ?? '';
     }
 
     /**
