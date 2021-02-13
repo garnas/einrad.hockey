@@ -19,18 +19,18 @@
                 <td><?= $team["teamname"] ?></td>
                 <td><?= $team["tblock"] ?></td>
                 <td><?= $team["wertigkeit"] ?></td>
-                <td>
-                    <span class="pdf-hide">
-                        <?php if (!empty($team['trikot_farbe_1'])
-                            && $spielplan->turnier->details['phase'] != 'ergebnis'){ ?>
-                            <span class="w3-card-4" style="height:14px;width:14px; background-color:<?= $team['trikot_farbe_1']?>;border-radius:50%;display:inline-block;"></span>
-                        <?php } // end if ?>
-                        <?php if (!empty($team['trikot_farbe_2'])
-                            && $spielplan->turnier->details['phase'] != 'ergebnis'){ ?>
-                            <span class="w3-card-4" style="height:14px;width:14px; background-color:<?= $team['trikot_farbe_2']?>;border-radius:50%;display:inline-block;"></span>
-                        <?php } // end if ?>
-                    </span>
-                </td>
+                <?php if ($spielplan->turnier->details['phase'] != 'ergebnis') { ?>
+                    <td>
+                        <span class="pdf-hide">
+                            <?php if (!empty($team['trikot_farbe_1'])){ ?>
+                                <span class="w3-card-4" style="height:14px;width:14px; background-color:<?= $team['trikot_farbe_1']?>;border-radius:50%;display:inline-block;"></span>
+                            <?php } // end if ?>
+                            <?php if (!empty($team['trikot_farbe_2'])){ ?>
+                                <span class="w3-card-4" style="height:14px;width:14px; background-color:<?= $team['trikot_farbe_2']?>;border-radius:50%;display:inline-block;"></span>
+                            <?php } // end if ?>
+                        </span>
+                    </td>
+                <?php } // end if ?>
                 <td><?= $team["ligavertreter"] ?></td>
                 <td>
                     <span class="pdf-hide">
