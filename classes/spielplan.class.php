@@ -220,13 +220,13 @@ class Spielplan
      * @param string $penalty_a
      * @param string $penalty_b
      */
-    public function set_tore(int $spiel_id, string $tore_a, string $tore_b, string $penalty_a, string $penalty_b)
+    public function set_tore(int $spiel_id, string $tore_a, null|string $tore_b, null|string $penalty_a, null|string $penalty_b)
     {
         // Damit die nicht eingetragene Tore nicht als 0 : 0 gewertet werden, müssen sie NULL sein
-        $tore_a = !is_numeric($tore_a) ? 'NULL' : $tore_a;
-        $tore_b = !is_numeric($tore_b) ? 'NULL' : $tore_b;
-        $penalty_a = !is_numeric($penalty_a) ? 'NULL' : $penalty_a;
-        $penalty_b = !is_numeric($penalty_b) ? 'NULL' : $penalty_b;
+        $tore_a = !is_numeric($tore_a) ? NULL : $tore_a;
+        $tore_b = !is_numeric($tore_b) ? NULL : $tore_b;
+        $penalty_a = !is_numeric($penalty_a) ? NULL : $penalty_a;
+        $penalty_b = !is_numeric($penalty_b) ? NULL : $penalty_b;
 
         $sql = "
                 UPDATE spiele 
