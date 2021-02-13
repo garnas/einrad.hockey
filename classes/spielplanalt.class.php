@@ -166,7 +166,7 @@ class SpielplanAlt{
             $punkte += round($daten[$i]["wertigkeit"]); //round() von Ansgar hinzugefügt
             $daten[$i]["ligapunkte"]=round($punkte*(6/$faktor));
         }
-        return db::escape($daten);
+        return dbi::escape($daten);
     }
 
     function setWertigkeitenNL($daten){
@@ -187,17 +187,17 @@ class SpielplanAlt{
                 $max_wertigkeit=$daten[$i]["wertigkeit"];
             }
         }
-        return db::escape($daten);
+        return dbi::escape($daten);
     }
 
     function getFaktor(){
-        return db::escape($this->getSpielzeiten()["faktor"]);
+        return dbi::escape($this->getSpielzeiten()["faktor"]);
     }
 
     function getWertigkeitByTeamID($team_id){
         for($i=1;$i<=sizeof($this->teamliste);$i++){
             if($team_id==$this->teamliste[$i]["team_id"]){
-                return db::escape($this->teamliste[$i]["wertigkeit"]);
+                return dbi::escape($this->teamliste[$i]["wertigkeit"]);
             }
         }
     }
@@ -205,7 +205,7 @@ class SpielplanAlt{
     function getTeamnameByTeamID($team_id){
         for($i=1;$i<=sizeof($this->teamliste);$i++){
             if($team_id==$this->teamliste[$i]["team_id"]){
-                return db::escape($this->teamliste[$i]["teamname"]);
+                return dbi::escape($this->teamliste[$i]["teamname"]);
             }
         }
     }
@@ -299,7 +299,7 @@ class SpielplanAlt{
 
             }
         }
-        return db::escape($daten);
+        return dbi::escape($daten);
     }
 
     function getDatenIndexByTeamID($daten, $team_id)
@@ -382,7 +382,7 @@ class SpielplanAlt{
             //////echo $row["team_id_a"]." ".$row["punkte"]." ".$row["tore"]." ".$row["gegentore"]." ".$row["diff"]." ".$row["penaltytore"];
             array_push($daten, $row);
         }
-        return db::escape($daten);
+        return dbi::escape($daten);
     }
 
     function get_spiele()
@@ -413,7 +413,7 @@ class SpielplanAlt{
             array_push($daten, $spiel);
             $var += 1;
         }
-        return db::escape($daten);
+        return dbi::escape($daten);
     }
 
     function getSpielzeiten()
@@ -422,12 +422,12 @@ class SpielplanAlt{
         $spielplan = $this->akt_turnier->details["spielplan"];
         $sql = "SELECT * FROM spielplan_details WHERE plaetze = '$plaetze' AND spielplan = '$spielplan'";
         $result = db::readdb($sql);
-        return db::escape(mysqli_fetch_assoc($result));
+        return dbi::escape(mysqli_fetch_assoc($result));
     }
 
     function get_anzahl_spiele()
     {
-        return db::escape($this->anzahl_spiele);
+        return dbi::escape($this->anzahl_spiele);
     }
 
     //$get_details sollten schon sortiert sein!
@@ -448,7 +448,7 @@ class SpielplanAlt{
             //Testen ob Turnier eingetragen werden darf
             if (!Tabelle::check_ergebnis_eintragbar($this->akt_turnier)){
                 Form::error("Turnierergebnis konnte nicht eingetragen werden. Kontaktiere bitte den Ligaausschuss.");
-                header("Location: " . db::escape($_SERVER['REQUEST_URI']));
+                header("Location: " . dbi::escape($_SERVER['REQUEST_URI']));
                 die();
             }else{
                 $this->akt_turnier->set_phase('ergebnis');

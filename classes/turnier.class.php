@@ -949,7 +949,7 @@ class Turnier
      */
     function delete($grund = '')
     {
-        db::db_sichern();
+        dbi::sql_backup();();
         // Turnier in der Datenbank vermerken
         $sql = "
                 INSERT INTO turniere_geloescht (turnier_id, datum, ort, grund, saison) 

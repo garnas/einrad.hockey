@@ -52,14 +52,14 @@ class Abstimmung
     function __construct($team_id)
     {
         $this->team_id = $team_id;
+        if (!Team::is_ligateam($team_id)) die("Ungültige Team-ID");
         // Details aus abstimmung_teams bekommen
         $sql = "
                 SELECT *
                 FROM abstimmung_teams
-                WHERE team_id = $this->team_id
+                WHERE team_id = ?
                 ";
-        $result = db::readdb($sql);
-        $this->team = mysqli_fetch_assoc($result) ?? [];
+        $this->team = dbi::$db->query($sql, $this->team_id)->esc()->fetch_row();
 
         // Beim ersten Mal Abstimmen den für die Verschlüsselung benutzen Passwort-Hash speichern.
         if (empty($this->team)) {
@@ -100,18 +100,17 @@ class Abstimmung
     /**
      * Gibt die einem $crypt zugeordneten Stimme aus.
      *
-     * @param $crypt
+     * @param string $crypt
      * @return string
      */
-    function get_stimme($crypt): string
+    function get_stimme(string $crypt): string
     {
         $sql = "
             SELECT stimme 
             FROM abstimmung_ergebnisse
-            WHERE crypt = '$crypt'
+            WHERE crypt = ?
             ";
-        $result = db::readdb($sql);
-        return mysqli_fetch_assoc($result)['stimme'] ?? 'none';
+        return dbi::$db->query($sql, $crypt)->esc()->fetch_one();
     }
 
     /**
@@ -131,28 +130,28 @@ class Abstimmung
         if (empty($this->team)) { // Team stimmt zum ersten mal ab.
             $sql = "
                 INSERT INTO abstimmung_teams (team_id, passwort)
-                VALUES ($this->team_id, '$this->passwort_hash')";
-            db::writedb($sql);
+                VALUES ($this->team_id, ?)";
+            dbi::$db->query($sql, $this->passwort_hash)->log();
             $sql = "
                 INSERT INTO abstimmung_ergebnisse (stimme, crypt) 
                 VALUES ('$stimme', '$crypt')
                 ";
-            db::writedb($sql, true);
+            dbi::$db->query($sql, $this->passwort_hash)->log(true);
             Form::log("abstimmung.log", "$this->team_id hat seine Stimme abgegeben");
             Form::affirm("Dein Team hat erfolgreich abgestimmt. Vielen Dank!");
         } else { // Team korrigiert seine Stimme.
             $sql = "
                 UPDATE abstimmung_ergebnisse
-                SET stimme = '$stimme'
-                WHERE crypt = '$crypt'
+                SET stimme = ?
+                WHERE crypt = ?
                 ";
-            db::writedb($sql, true);
+            dbi::$db->query($sql, $stimme, $crypt)->log();
             $sql = "
                 UPDATE abstimmung_teams
                 SET aenderungen = aenderungen + 1
                 WHERE team_id = $this->team_id
                 ";
-            db::writedb($sql);
+            dbi::$db->query($sql)->log();
             Form::log("abstimmung.log", "$this->team_id hat seine Stimme geändert");
             Form::affirm("Dein Team hat erfolgreich neu abgestimmt. Vielen Dank!");
         }
@@ -171,9 +170,9 @@ class Abstimmung
             FROM abstimmung_ergebnisse
             GROUP BY stimme
             ";
-        $result = db::readdb($sql);
+        $ergebnisse = dbi::$db->query($sql)->esc()->fetch('stimme');
         $ergebnisse['gesamt'] = 0;
-        while ($row = mysqli_fetch_assoc($result)) {
+        foreach ($ergebnisse as $row) {
             $ergebnisse[$row['stimme']] = $row['stimmen'];
             $ergebnisse['gesamt'] += $row['stimmen'];
         }

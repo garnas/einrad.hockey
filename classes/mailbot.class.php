@@ -161,8 +161,12 @@ class MailBot
             $team_ids = Team::get_liste_ids();
             foreach ($team_ids as $team_id) {
                 // Noch Plätze frei
-                if (!$turnier->check_team_angemeldet($team_id) && $turnier->check_team_block($team_id) && !$turnier->check_doppel_anmeldung($team_id)) {
-                    $betreff = $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'] . " hat noch freie Plätze";
+                if (
+                    !$turnier->check_team_angemeldet($team_id)
+                    && $turnier->check_team_block($team_id)
+                    && !$turnier->check_doppel_anmeldung($team_id)
+                ) {
+                    $betreff = "Freie Plätze: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
                     ob_start();
                         include(__dir__ . "../templates/mails/mail_anfang.tmp.php");
                         include(__dir__ . "../templates/mails/mail_plaetze_frei.tmp.php");
@@ -183,7 +187,7 @@ class MailBot
      */
     public static function mail_warte_zu_spiele(Turnier $turnier, int $team_id)
     {
-        $betreff = $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'] . ": Auf Spielen-Liste aufgerückt";
+        $betreff = "Spielen-Liste: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
         ob_start();
             include(__dir__ . "../templates/mails/mail_anfang.tmp.php");
             include(__dir__ . "../templates/mails/mail_warte_zu_spiele.tmp.php");

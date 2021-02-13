@@ -26,7 +26,7 @@ foreach ($turniere_no_erg as $turnier_id => $turnier){
 }
 
 //Für Turniere die in der Ergebnisphase sind:
-$turniere_erg = Turnier::get_turniere('ergebnis', true, "desc");
+$turniere_erg = Turnier::get_turniere('ergebnis', true, false);
 foreach ($turniere_erg as $turnier_id => $turnier){
   //Links
   $turniere_erg[$turnier_id]['links'] = 

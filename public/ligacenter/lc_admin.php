@@ -11,7 +11,7 @@ $deaktivierte_teams = Team::get_deactive_teams();
 
 //Als Ligateam anmelden
 if (isset($_POST['anmelden'])){
-    $teamname = db::escape($_POST['teamname']);
+    $teamname = dbi::escape($_POST['teamname']);
     $team_id = Team::teamname_to_teamid($teamname);
     
     if (Team::is_ligateam($team_id)){
@@ -67,7 +67,7 @@ if (isset($_POST['ligabot'])){
 
 //Datenbank sichern
 if (isset($_POST['sichern'])){
-    db::db_sichern();
+    dbi::sql_backup();
 }
 
 //Datenbank sichern

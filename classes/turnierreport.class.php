@@ -26,17 +26,12 @@ class TurnierReport
      */
     function get_zeitstrafen(): array
     {
-        $turnier_id = $this->turnier_id;
         $sql = "
                 SELECT * 
                 FROM spieler_zeitstrafen 
-                WHERE turnier_id = $turnier_id
+                WHERE turnier_id = $this->turnier_id
                 ";
-        $result = db::readdb($sql);
-        while ($x = mysqli_fetch_assoc($result)) {
-            $zeitstrafen[$x['zeitstrafe_id']] = $x;
-        }
-        return db::escape($zeitstrafen ?? []);
+        return dbi::$db->query($sql)->esc()->fetch('zeitstrafe_id');
     }
 
     /**
@@ -50,12 +45,12 @@ class TurnierReport
      */
     function new_zeitstrafe(string $spieler_name, string $dauer, string $team_a, string $team_b, string $grund)
     {
-        $turnier_id = $this->turnier_id;
         $sql = "
                 INSERT INTO spieler_zeitstrafen (turnier_id, spieler, dauer, team_a, team_b, grund) 
-                VALUES ('$turnier_id', '$spieler_name', '$dauer', '$team_a', '$team_b', '$grund')
+                VALUES ($this->turnier_id, ?, ?, ?, ?, ?)
                 ";
-        db::writedb($sql);
+        $params = [$spieler_name, $dauer, $team_a, $team_b, $grund];
+        dbi::$db->query($sql,$params)->log();
     }
 
     /**
@@ -67,10 +62,10 @@ class TurnierReport
     {
         $sql = "
                 DELETE FROM spieler_zeitstrafen
-                WHERE zeitstrafe_id = '$zeitstrafe_id' 
+                WHERE zeitstrafe_id = ? 
                 AND turnier_id = $this->turnier_id
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql, $zeitstrafe_id)->log();
     }
 
     /**
@@ -84,11 +79,8 @@ class TurnierReport
                 FROM spieler_ausleihen 
                 WHERE turnier_id = $this->turnier_id
                 ";
-        $result = db::readdb($sql);
-        while ($x = mysqli_fetch_assoc($result)) {
-            $return[$x['ausleihe_id']] = $x;
-        }
-        return db::escape($return ?? []);
+        return dbi::$db->query($sql)->esc()->fetch('ausleihe_id');
+
     }
 
     /**
@@ -98,14 +90,13 @@ class TurnierReport
      * @param string $team_auf
      * @param string $team_ab
      */
-    function new_spieler_ausleihe(string $spieler, string $team_auf, string $team_ab)
+    function set_spieler_ausleihe(string $spieler, string $team_auf, string $team_ab)
     {
-        $turnier_id = $this->turnier_id;
         $sql = "
                 INSERT INTO spieler_ausleihen (turnier_id, spieler, team_auf, team_ab) 
-                VALUES ('$turnier_id', '$spieler', '$team_auf', '$team_ab')
+                VALUES ($this->turnier_id, ?, ?, ?)
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql,$spieler, $team_auf, $team_ab)->log();
     }
 
     /**
@@ -115,13 +106,12 @@ class TurnierReport
      */
     function delete_spieler_ausleihe(int $ausleihe_id)
     {
-        $turnier_id = $this->turnier_id;
         $sql = "
                 DELETE FROM spieler_ausleihen 
-                WHERE ausleihe_id = '$ausleihe_id' 
-                AND turnier_id = '$turnier_id'
+                WHERE ausleihe_id = ?
+                AND turnier_id = $this->turnier_id
                 ";
-        db::writedb($sql);
+        dbi::$db->query($sql, $ausleihe_id)->log();
     }
 
     /**
@@ -131,15 +121,12 @@ class TurnierReport
      */
     function get_turnier_bericht(): string
     {
-        $turnier_id = $this->turnier_id;
         $sql = "
             SELECT bericht 
             FROM turniere_berichte 
-            WHERE turnier_id = '$turnier_id'
+            WHERE turnier_id = $this->turnier_id
             ";
-        $return = db::readdb($sql);
-        $return = mysqli_fetch_assoc($return);
-        return db::escape($return['bericht'] ?? '');
+        return dbi::$db->query($sql)->esc()->fetch_one();
     }
 
     /**
@@ -149,18 +136,12 @@ class TurnierReport
      */
     function kader_check(): bool
     {
-        $turnier_id = $this->turnier_id;
         $sql = "
                 SELECT kader_ueberprueft
                 FROM turniere_berichte 
-                WHERE turnier_id = '$turnier_id'
+                WHERE turnier_id = $this->turnier_id
                 ";
-        $return = db::readdb($sql);
-        $return = mysqli_fetch_assoc($return);
-        if (!empty($return) && $return['kader_ueberprueft'] == 'Ja') {
-            return true;
-        }
-        return false;
+        return dbi::$db->query($sql)->fetch_one() === "Ja";
     }
 
     /**
@@ -172,22 +153,23 @@ class TurnierReport
     function set_turnier_bericht(string $bericht, string $kader_check = 'Nein')
     {
         // Existiert bereits ein Turnierbericht?
-        $check = db::readdb("
-                                SELECT * FROM turniere_berichte 
-                                WHERE turnier_id = $this->turnier_id
-                                ");
-        if (mysqli_num_rows($check) == 0) {
+        $sql = "
+                SELECT * FROM turniere_berichte 
+                WHERE turnier_id = $this->turnier_id
+                ";
+        if (dbi::$db->query($sql)->num_rows() > 0) {
             $sql = "
                     INSERT INTO turniere_berichte (turnier_id, bericht, kader_ueberprueft)
-                    VALUES ($this->turnier_id, '$bericht', '$kader_check')
+                    VALUES ($this->turnier_id, ?, ?)
                     ";
         } else {
             $sql = "
                     UPDATE turniere_berichte 
-                    SET bericht='$bericht', kader_ueberprueft = '$kader_check' 
+                    SET bericht = ?, kader_ueberprueft = ? 
                     WHERE turnier_id = $this->turnier_id
                     ";
         }
-        db::writedb($sql);
+        $params = [$bericht, $kader_check];
+        dbi::$db->query($sql, $params)->log();
     }
 }

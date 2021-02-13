@@ -29,31 +29,13 @@ spl_autoload_register(
 );
 
 /**
- * Verbindung zur Datenbank
- */
-$verbindung_zur_datenbank = new db;
-dbi::initialize();
-
-
-/**
- * Sanitizing von $_POST und $_GET
- */
-if (!empty($_POST)) {
-    //$_POST = db::sanitize($_POST);
-}
-if (!empty($_GET)) {
-    //$_GET = db::sanitize($_GET);
-    $_GET = db::escape($_GET); //XSS über Url. Damit keine Entities in der Datenbank gespeichert werden, sollte man $_GET nicht ohne weiteres in der Datenbank speichern.
-}
-
-/**
  * Nach einiger Zeit ein neues Hintergrundbild in der Navigation anzeigen
  */
 if (!isset($_SESSION['neues_bild'])) {
     $_SESSION['neues_bild'] = time();
 }
 if (!isset($_SESSION['hintergrund']) or (time() - $_SESSION['neues_bild']) > 600) {
-    //https://stackoverflow.com/questions/1761252/how-to-get-random-image-from-directory-using-php 
+    // https://stackoverflow.com/questions/1761252/how-to-get-random-image-from-directory-using-php
     $imagesDir = '../bilder/hintergrund/';
     $images = glob($imagesDir . '*.{jpg,JPG,jpeg,png,gif}', GLOB_BRACE);
     $randomImage = $images[array_rand($images)];
@@ -63,7 +45,13 @@ if (!isset($_SESSION['hintergrund']) or (time() - $_SESSION['neues_bild']) > 600
 }
 
 /**
+ * Verbindung zur Datenbank
+ */
+//$verbindung_zur_datenbank = new db; // Alte DB
+dbi::initialize(); // Neue DB-Verbindung mit Prepared-Statements
+
+/**
  * Geben an, ob man sich in einem der Center befindet.
- * Werden in sesses.logic.php während der Authentifikation überschrieben.
+ * Werden in session.logic.php während der Authentifikation überschrieben.
  */
 $teamcenter = $ligacenter = false;

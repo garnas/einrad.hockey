@@ -16,7 +16,7 @@ if (isset($_POST['absenden'])) {
     $absender = $_POST['absender'];
     $name = $_POST['name'];
     $betreff = $_POST['betreff'];
-    $text = stripcslashes($_POST['text']); // Revidiere die Sql-Sanitation von db::sanitize in first.logic
+    $text = $_POST['text'];
     $user_captcha = $_POST['captcha'];
     if (empty($absender) or empty($betreff) or empty($text)) {
         Form::error("Bitte Formular ausfüllen");
@@ -150,7 +150,7 @@ include '../../templates/header.tmp.php';
                           id="text"
                           name="text"
                           required
-                ><?= stripcslashes($_POST['text'] ?? '') ?></textarea>
+                ><?= $_POST['text'] ?></textarea>
             </p>
             <!-- Captcha -->
             <p>

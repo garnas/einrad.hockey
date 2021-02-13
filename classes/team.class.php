@@ -31,8 +31,9 @@ class Team
      * @param $teamname
      * @param $passwort
      * @param $email
+     * @return int Team-ID des neu erstellten Teams
      */
-    public static function create_new_team($teamname, $passwort, $email)
+    public static function set_new_team($teamname, $passwort, $email): int
     {
         // Eintrag in teams_liga
         $passwort = password_hash($passwort, PASSWORD_DEFAULT);
@@ -56,6 +57,7 @@ class Team
                 INSERT INTO teams_kontakt (team_id, email, public, get_info_mail) 
                 VALUES (?, ?, 'Ja', 'Nein')";
         dbi::$db->query($sql, $team_id, $email)->log();
+        return $team_id;
     }
 
     /**
@@ -158,15 +160,15 @@ class Team
      *
      * @return array
      */
-    public static function get_liste_namen(): array
+    public static function get_liste(): array
     {
         $sql = "
-                SELECT teamname
+                SELECT teamname, team_id
                 FROM teams_liga
                 WHERE ligateam = 'Ja' AND aktiv = 'Ja' 
                 ORDER BY teamname
                 ";
-        return dbi::$db->query($sql)->esc()->list('teamname');
+        return dbi::$db->query($sql)->esc()->list('teamname', 'team_id');
     }
 
     /**
@@ -383,6 +385,7 @@ class Team
         // Validieren, ob der Spaltenname ein echter Spaltenname ist
         $spalten_namen = dbi::$db->query("SHOW FIELDS FROM teams_details")->list('Field');
         if (!in_array($spalten_name, $spalten_namen)) die("Ungültiger Spaltenname");
+        $spalten_name = "`" . $spalten_name . "`";
 
         $sql = "
                 UPDATE teams_details

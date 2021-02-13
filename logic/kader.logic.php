@@ -28,9 +28,9 @@ if (isset($_POST['neuer_eintrag'])) {
 
     if (!$error) {
         //Spieler Eintragen, wenn der Spieler schon existiert wird false zurückgegeben und eine Fehlermeldung
-        if (Spieler::create_new_spieler($vorname, $nachname, $jahrgang, $geschlecht, $team_id)) {
+        if (Spieler::set_new_spieler($vorname, $nachname, $jahrgang, $geschlecht, $team_id)) {
             Form::affirm("Der Spieler wurde eingetragen");
-            header('Location: ' . db::escape($_SERVER['PHP_SELF']) . '?team_id=' . $team_id);
+            header('Location: ' . dbi::escape($_SERVER['PHP_SELF']) . '?team_id=' . $team_id);
             die ("Warten..");
         }
     }
@@ -43,13 +43,13 @@ if (isset($_POST['submit_takeover'])) {
     } else {
         foreach (($_POST['takeover'] ?? []) as $spieler_id) {
             if (!empty($kader_vorsaison[$spieler_id])) { // Validation + Schutz gegen Html-Manipulation
-                (new Spieler($spieler_id))->set_spieler_detail('letzte_saison', Config::SAISON);
+                (new Spieler($spieler_id))->set_detail('letzte_saison', Config::SAISON);
                 $changed = true;
             }
         }
         if ($changed ?? false) {
             Form::affirm("Spieler wurden in die neue Saison übernommen");
-            header('Location: ' . db::escape($_SERVER['PHP_SELF']) . '?team_id=' . $team_id);
+            header('Location: ' . dbi::escape($_SERVER['PHP_SELF']) . '?team_id=' . $team_id);
             die ();
         }
     }

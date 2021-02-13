@@ -316,12 +316,12 @@ class Neuigkeit
                 FROM spiele
                 INNER JOIN turniere_liga 
                 ON spiele.turnier_id = turniere_liga.turnier_id 
-                WHERE tore_a > tore_b 
-                OR penalty_a > penalty_b
+                WHERE (tore_a > tore_b OR penalty_a > penalty_b)
                 AND turniere_liga.saison = ?
                 GROUP BY team_id_a
-                ORDER BY RAND()
+                ORDER BY gew, RAND()
                 ";
+        $gew = [];
         foreach (dbi::$db->query($sqla, $saison)->esc()->fetch() as $x) {
             $gew[$x['team_id_a']] = $x['gew'];
         }
@@ -331,8 +331,7 @@ class Neuigkeit
                 FROM spiele
                 INNER JOIN turniere_liga
                 ON spiele.turnier_id = turniere_liga.turnier_id
-                WHERE tore_a < tore_b 
-                OR penalty_a < penalty_b
+                WHERE (tore_a < tore_b OR penalty_a < penalty_b)
                 AND turniere_liga.saison = ?
                 GROUP BY team_id_b
                 ORDER BY RAND()
@@ -388,8 +387,15 @@ class Neuigkeit
             }
         }
         arsort($tore);
-        return array_slice($tore, 0, 3, true);
+        return array_slice($tore, 0, 3, true) ?? [];
     }
+
+    /**
+     * Gibt alle gefallenen Tore inklusive Penaltys einer Saison aus.
+     *
+     * @param int $saison
+     * @return int
+     */
     public static function get_alle_tore(int $saison = Config::SAISON): int
     {
         $sql = "
@@ -398,7 +404,7 @@ class Neuigkeit
                 INNER JOIN turniere_liga tl on spiele.turnier_id = tl.turnier_id
                 WHERE tl.saison = ?
                 ";
-        return dbi::$db->query($sql, $saison)->esc()->fetch_one();
+        return dbi::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
     }
     public static function get_alle_spiele(int $saison = Config::SAISON): int
     {
@@ -410,6 +416,6 @@ class Neuigkeit
                 AND tore_b IS NOT NULL
                 AND tore_a IS NOT NULL
                 ";
-        return dbi::$db->query($sql, $saison)->esc()->fetch_one();
+        return dbi::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
     }
 }

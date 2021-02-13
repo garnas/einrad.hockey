@@ -94,6 +94,7 @@ class db
      */
     public static function get_auto_increment($tabelle): int
     {
+        Form::error("Es wurde die veraltete DB-Klasse verwendet");
         $sql = "  SELECT AUTO_INCREMENT
             FROM  INFORMATION_SCHEMA.TABLES
             WHERE TABLE_SCHEMA = '" . Config::DATABASE . "'  
@@ -112,6 +113,7 @@ class db
      */
     public static function readdb(string $sql): mysqli_result|bool
     {
+        Form::error("Es wurde die veraltete DB-Klasse verwendet");
         #$before = microtime(true);
         if (mysqli_connect_errno()) {
             Form::log(self::$log_file, "Lesen der Datenbank fehlgeschlagen: " . mysqli_connect_error());
@@ -133,6 +135,7 @@ class db
      */
     public static function writedb(string $sql, $anonym = false)
     {
+        Form::error("Es wurde die veraltete DB-Klasse verwendet");
         //SQL-Logdatei erstellen/beschreiben
         $autor_string = implode(" | ", array_filter([$_SESSION['teamname'] ?? '', $_SESSION['la_login_name'] ?? '', $_SESSION['ligabot'] ?? '']));
         $sql = trim(preg_replace("/(^\h+|\h+$)/m",'',$sql)); // Schönere Formatierung
@@ -156,22 +159,22 @@ class db
         }
   }
 
-    /**
-     * Sichert die Datenbank
-     *
-     * Name der Sicherung
-     * @return string
-     */
-    public static function db_sichern(): string
-    {
-        $dumpfile = "../../system/backups/" . Config::DATABASE . "." . date("Y-m-d_H-i-s") . ".sql"; //Dateiname der Sicherungskopie
-        exec("mysqldump --user=" . Config::USER_NAME
-            . " --password=" . Config::PASSWORD
-            . " --host=" . Config::HOST_NAME
-            . " " . Config::DATABASE  . " > " . $dumpfile);
-        Form::affirm("Datenbank wurde gesichert als " . date("Y-m-d_H-i-s") . ".sql im Ordner system/backup/");
-        return $dumpfile;
-    }
+//    /**
+//     * Sichert die Datenbank
+//     *
+//     * Name der Sicherung
+//     * @return string
+//     */
+//    public static function db_sichern(): string
+//    {
+//        $dumpfile = "../../system/backups/" . Config::DATABASE . "." . date("Y-m-d_H-i-s") . ".sql"; //Dateiname der Sicherungskopie
+//        exec("mysqldump --user=" . Config::USER_NAME
+//            . " --password=" . Config::PASSWORD
+//            . " --host=" . Config::HOST_NAME
+//            . " " . Config::DATABASE  . " > " . $dumpfile);
+//        Form::affirm("Datenbank wurde gesichert als " . date("Y-m-d_H-i-s") . ".sql im Ordner system/backup/");
+//        return $dumpfile;
+//    }
 
     /**
      * Schreibt alle deklarierten Variablen unter die Navigation in HTML //true=1 false=0

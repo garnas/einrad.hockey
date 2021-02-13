@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 
-db::db_sichern();
+dbi::sql_backup();
 //Meldungen protokollieren
 foreach (($_SESSION['e_messages'] ?? array()) as $message){
     echo 'Fehler: ' . $message . '<br><br>';

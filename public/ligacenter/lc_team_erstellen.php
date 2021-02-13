@@ -32,11 +32,10 @@ if (isset($_POST['team_erstellen'])) {
 
     //Team wird erstellt
     if (!$error) {
-        $team_id = db::get_auto_increment("teams_liga");
-        Team::create_new_team($teamname, $passwort, $email);
-        Form::affirm("Das Team \"" . db::escape($teamname)
-            . "\" wurde erfolgreich erstellt.<br> Email: " . db::escape($email)
-            . "<br> Passwort: " . db::escape($passwort));
+        Team::set_new_team($teamname, $passwort, $email);
+        Form::affirm("Das Team \"" . dbi::escape($teamname)
+            . "\" wurde erfolgreich erstellt.<br> Email: " . dbi::escape($email)
+            . "<br> Passwort: " . dbi::escape($passwort));
         header("Location: ../liga/teams.php");
         die();
     }

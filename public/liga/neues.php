@@ -13,7 +13,7 @@ $turniere = Turnier::get_turniere('ergebnis', false, true);
 $anz_next_turniere = count($turniere);
 $next_turniere = array_slice($turniere, 0, 3);
 
-$turniere = Turnier::get_turniere('ergebnis', true, true);
+$turniere = Turnier::get_turniere('ergebnis', true, false);
 $anz_last_turniere = count($turniere);
 $last_turniere = array_slice($turniere, 0, 3);
 
@@ -85,13 +85,14 @@ include '../../templates/header.tmp.php';
                     <h2><?= Form::icon("event", tag: "h2") ?> Turniere</h2>
                 </a>
             </div>
+
             <?php if (empty($next_turniere)){ ?><p class="w3-text-grey">Es liegen keine Ergebnisse vor</p><?php } //end if?>
             <?php $i=0; foreach ($next_turniere as $turnier){  $i++;?>
                 <p class="w3-text-dark-gray">
                     <?=date("d.m", strtotime($turnier['datum']))?>
                     <?=Form::link(
                             'turnier_details.php?turnier_id=' . $turnier['turnier_id'],
-                            ' ' . $turnier['tname'] .' '. $turnier['ort'],
+                            $turnier['ort'],
                             true,
                             "open_in_new")?>
                     <i>(<?=$turnier['tblock']?>)</i>
@@ -107,7 +108,7 @@ include '../../templates/header.tmp.php';
                     <h2><?= Form::icon("sports_hockey", tag: "h2") ?> Ergebnisse</h2>
                 </a>
             </div>
-            <p class="w3-text-grey w3-border-top w3-border-grey"></p>
+
             <?php if (empty($last_turniere)){?>
                 <p class="w3-text-grey">
                     Es liegen keine Ergebnisse vor
@@ -118,7 +119,7 @@ include '../../templates/header.tmp.php';
                     <?=date("d.m", strtotime($turnier['datum']))?>
                     <?= Form::link(
                             'ergebnisse.php#' . $turnier['turnier_id'],
-                            $turnier['tname'] .' '. $turnier['ort'],
+                             $turnier['ort'],
                             true,
                             'open_in_new') ?>
                     <i>(<?=$turnier['tblock']?>)</i>
@@ -193,9 +194,7 @@ include '../../templates/header.tmp.php';
                         <?= Form::icon("assistant_photo") ?> Anzahl gespielter Turniere
                     </span>
                 </div>
-            <?php }else{ ?>
-                <p class="w3-text-grey w3-center">Keine gespielten Turniere</p>
-            <?php } //end if?>
+            <?php } //endif ?>
 
             <!-- Wer hat am meisten Spiele gewonnen? -->
             <?php if (!empty($statistik['max_gew'])) { ?>
@@ -240,16 +239,13 @@ include '../../templates/header.tmp.php';
 
             <p class="w3-text-grey w3-border-top w3-border-grey"><?= Form::icon("bookmark") ?> Förderation</p>
             <p><?=Form::link(Config::LINK_IUF, " International Unicycle Federation", true, "link")?></p>
-
-
         </div>
-
     </div>
 
     <!-- Neuigkeiten-Einträge -->
     <div class="w3-col l8 m7">
         <?php foreach($neuigkeiten as $neuigkeit){ //Schleife für jede Neuigkeit?>
-            <div class='w3-card-4 w3-panel w3-responsive w3-round'>
+            <div class='w3-card-4 w3-panel w3-responsive w3-round w3-bottombar'>
 
                 <!-- Überschrift -->
                 <div class="w3-stretch w3-container w3-primary w3-center">
@@ -257,7 +253,7 @@ include '../../templates/header.tmp.php';
                 </div>
 
                 <!-- Autor -->
-                <p class="w3-text-grey w3-margin-top w3-border-top w3-border-grey">
+                <p class="w3-text-grey w3-margin-top">
                     <?= Form::icon("create") ?> <?= ($neuigkeit['eingetragen_von']) ?>
                 </p>
 
@@ -281,7 +277,7 @@ include '../../templates/header.tmp.php';
                 <?php } //end if?>
 
                 <!-- Zeitstempel -->
-                <div class='w3-text-grey w3-border-bottom w3-border-grey w3-margin-bottom w3-right-align'>
+                <div class='w3-text-grey w3-margin-bottom w3-right-align'>
                     <?= Form::icon("schedule") ?> <?=$neuigkeit['zeit']?>
                 </div>
 

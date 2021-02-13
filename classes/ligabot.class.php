@@ -12,7 +12,7 @@ class LigaBot
     public static function liga_bot()
     {
 
-        db::db_sichern(); // Datenbank wird gesichert
+        dbi::sql_backup(); // Datenbank wird gesichert
 
         $doppel_anmeldungen = self::get_doppel_anmeldungen(); // Doppelt auf Spiele-Liste wird hier erfasst.
         if (!empty($doppel_anmeldungen)) {

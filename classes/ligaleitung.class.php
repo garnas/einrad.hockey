@@ -5,7 +5,6 @@
  */
 class Ligaleitung
 {
-
     /**
      * Gibt die in der DB gespeicherte Ligaleitung aus
      *

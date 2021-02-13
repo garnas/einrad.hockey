@@ -22,7 +22,7 @@ class Config
     /**
      * Mailserver
      */
-    const ACTIVATE_EMAIL = false; //Bei True, werden Emails tatsächlich versendet, bei false wird db::debug($mailer) ausgeführt
+    const ACTIVATE_EMAIL = false; // Bei True, werden Emails tatsächlich versendet, bei false debugging
     const SMTP_HOST = 'HOST';
     const SMTP_USER = 'test@einrad.hockey';
     const SMTP_PW = 'PW';
@@ -101,4 +101,5 @@ class Config
     const LINK_TURNIER = '../dokumente/turniermodi.pdf';
     const LINK_DSGVO = '../dokumente/datenschutz-hinweise.pdf';
     const LINK_SPIELPLAENE_ALT = '../dokumente/alte_spielplan_vorlagen.pdf';
+
 }

@@ -30,7 +30,7 @@ if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
     $turnier = new Turnier((int) $_POST['turnier_id']);
     if (empty($turnier->details)) {
         Form::error("Turnier wurde nicht gefunden");
-        header('Location: ' . db::escape($_SERVER['PHP_SELF']));
+        header('Location: ' . dbi::escape($_SERVER['PHP_SELF']));
         die();
     }
     $array = Kontakt::get_emails_turnier($_POST['turnier_id']);
@@ -51,7 +51,7 @@ if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
 if (isset($_POST['rundmail'])) {
     unset ($_SESSION[$list_id]);
     $_SESSION[$list_id]['type'] = 'Rundmail';
-    $_SESSION[$list_id]['empfaenger'] = Team::get_liste_namen();
+    $_SESSION[$list_id]['empfaenger'] = Team::get_liste();
     $_SESSION[$list_id]['emails'] = Kontakt::get_emails_rundmail();
 
     array_unshift($_SESSION[$list_id]['emails'], Config::LAMAIL);
@@ -132,7 +132,7 @@ if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])) {
         if (MailBot::send_mail($mailer)) {
             Form::affirm("Die E-Mail wurde versandt.");
             unset($_SESSION[$list_id]);
-            header('Location: ' . db::escape($_SERVER['PHP_SELF']));
+            header('Location: ' . dbi::escape($_SERVER['PHP_SELF']));
             die();
         } else {
             Form::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden. Manuell Mail versenden: " . Form::mailto(Config::LAMAIL));

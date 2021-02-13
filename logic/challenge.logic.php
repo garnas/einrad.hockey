@@ -64,7 +64,7 @@ if (isset($_POST['put_challenge']) && $teamcenter) {
     } elseif (empty($spieler_id)) {
         $error = true;
         Form::error("Es wurde kein Spieler ausgewählt.");
-    } elseif ($spieler->get_spieler_details()['team_id'] != $_SESSION['team_id']){ //Spielt die übergebene Spieler_id auch für das eingeloggte Team?
+    } elseif ($spieler->details['team_id'] != $_SESSION['team_id']){ //Spielt die übergebene Spieler_id auch für das eingeloggte Team?
         $error = true; 
         Form::error("Eintragen nicht möglich.");
     }

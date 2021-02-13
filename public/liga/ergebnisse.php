@@ -43,7 +43,7 @@ include '../../templates/header.tmp.php'; ?>
 
     <!--Überschrift-->
     <h1 class="w3-text-primary">
-        Turnierergebnisse
+        <?= Form::icon("emoji_events", tag: "h1") ?> Turnierergebnisse
         <br>
         <span class="w3-text-grey">
             Saison <?= Form::get_saison_string($saison) ?>
@@ -99,6 +99,9 @@ include '../../templates/header.tmp.php'; ?>
                         <?php } //end foreach?>
                     </table>
                 </div>
+                <?php if (in_array('Nein', array_column($ergebnisse, 'ligateam'))) { ?>
+                    <span class="w3-text-grey w3-small">* Nichtligateam</span>
+                <?php } //endif?>
                 <p>
                     <?php if ($saison <= 25) { ?>
                         <?= Form::link('archiv.php', '<i class="material-icons">info</i> Details') ?>
