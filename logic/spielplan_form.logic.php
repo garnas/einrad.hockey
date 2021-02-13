@@ -77,7 +77,7 @@ if (!(new TurnierReport($turnier_id))->kader_check()) {
 }
 
 if(!$spielplan->validate_penalty_ergebnisse()){
-    Form::error("Achtung: Es liegen falsch eingetragene Penaltyergebnisse vor!.");
+    Form::error("Achtung: Es liegen falsch eingetragene Penaltyergebnisse vor.");
 }
 
 // Gibt es eine Diskrepanz zwischen Turnierergebnis und in der Datenbank hinterlegtem Turnierergebnis?
