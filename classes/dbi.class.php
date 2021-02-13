@@ -46,7 +46,9 @@ class dbi
                 $output[$key] = $value;
             }
         } else {
-            $output = (is_string($input)) ? htmlspecialchars($input) : $input;
+            $output = (is_string($input))
+                ? htmlspecialchars($input, ENT_QUOTES, 'UTF-8', false)
+                : $input;
         }
         return $output ?? $input;
     }
