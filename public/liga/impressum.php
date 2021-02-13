@@ -7,9 +7,9 @@ require_once '../../logic/first.logic.php';
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-$titel = "Impressum | Deutsche Einradhockeyliga";
-$page_width = "500px";
-$content = "Das Impressum der Deutschen Einradhockeyliga findet sich hier.";
+Config::$titel = "Impressum | Deutsche Einradhockeyliga";
+Config::$page_width = "500px";
+Config::$content = "Das Impressum der Deutschen Einradhockeyliga findet sich hier.";
 include '../../templates/header.tmp.php';
 ?>
 

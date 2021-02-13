@@ -170,11 +170,10 @@ class Abstimmung
             FROM abstimmung_ergebnisse
             GROUP BY stimme
             ";
-        $ergebnisse = dbi::$db->query($sql)->esc()->fetch('stimme');
+        $ergebnisse = dbi::$db->query($sql)->esc()->list('stimmen', 'stimme');
         $ergebnisse['gesamt'] = 0;
-        foreach ($ergebnisse as $row) {
-            $ergebnisse[$row['stimme']] = $row['stimmen'];
-            $ergebnisse['gesamt'] += $row['stimmen'];
+        foreach ($ergebnisse as $stimmen) {
+            $ergebnisse['gesamt'] += $stimmen;
         }
         // Mindest anzahl an Stimmen muss erreicht werden
         if ($ergebnisse['gesamt'] < $min){

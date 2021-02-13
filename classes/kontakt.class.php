@@ -37,7 +37,7 @@ class Kontakt
                 ON teams_liga.team_id = teams_kontakt.team_id 
                 WHERE teams_liga.aktiv = 'Ja'
                 ";
-        return dbi::$db->query($sql)->esc()->fetch();
+        return dbi::$db->query($sql)->esc()->list('email');
     }
 
     /**

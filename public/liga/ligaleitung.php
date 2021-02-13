@@ -7,8 +7,8 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-$titel = "Ligaleitung | Deutsche Einradhockeyliga";
-$content = "Übersicht über die Ausschüsse der Deutschen Einradhockeyliga, welche die Liga leiten.";
+Config::$titel = "Ligaleitung | Deutsche Einradhockeyliga";
+Config::$content = "Übersicht über die Ausschüsse der Deutschen Einradhockeyliga, welche die Liga leiten.";
 include '../../templates/header.tmp.php';
 ?>
 

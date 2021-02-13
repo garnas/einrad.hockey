@@ -21,6 +21,5 @@ if (!isset($no_redirect) && empty($team->details['ligavertreter'])){
   die();
 }
 
-$titel = $_SESSION['teamname'];
-
+Config::$titel = $_SESSION['teamname'];
 Config::$teamcenter = true; // Dies zeigt allen Dateien (insbeondere .tmp.php) , das man sich im Teamcenter befindet.

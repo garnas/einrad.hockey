@@ -9,8 +9,8 @@ $alle_teamdaten = Team::get_teamdata_all_teams();
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-$titel = "Teamliste | Deutsche Einradhockeyliga";
-$content = "Liste der Teams der Deutschen Einradhockeyliga mit Teamfoto und Kontaktmöglichkeit.";
+Config::$titel = "Teamliste | Deutsche Einradhockeyliga";
+Config::$content = "Liste der Teams der Deutschen Einradhockeyliga mit Teamfoto und Kontaktmöglichkeit.";
 include '../../templates/header.tmp.php';
 ?>
 

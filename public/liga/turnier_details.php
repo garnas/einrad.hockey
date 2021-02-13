@@ -77,8 +77,8 @@ if ($turnier->details['spielplan'] == 'jgj'){
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-$titel = $turnier->details['tname'] ?: $turnier->details['ort'] ." | Deutsche Einradhockeyliga";
-$content = "Alle wichtigen Turnierdetails werden hier angezeigt.";
+Config::$titel = $turnier->details['tname'] ?: $turnier->details['ort'] ." | Deutsche Einradhockeyliga";
+Config::$content = "Alle wichtigen Turnierdetails werden hier angezeigt.";
 include '../../templates/header.tmp.php';
 ?>
 

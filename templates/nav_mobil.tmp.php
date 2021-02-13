@@ -2,7 +2,7 @@
 <div class="w3-sidebar w3-white w3-bar-block" style="opacity: 0.9; display:none;z-index:5; width: 75%; max-width: 360px" id="mySidebar">
     <div class="w3-center w3-text-primary">
         <a href='../liga/neues.php' class='no'>
-            <h3>DEUTSCHE EINRADHOCKEYLIGA</h3>
+            <h3>NAVIGATION</h3>
             <img src="../bilder/logo_kurz_small.png" class="w3-image" alt="kleines Logo" style="max-width: 140px">
         </a>
     </div>
@@ -65,7 +65,7 @@
 <div class="w3-overlay" id="myOverlay" onclick="close_sidebar()" style="cursor:pointer;"></div>
 
 <!--Navigation für Smartphones -->
-<div class="w3-display-container w3-hide-large w3-hide-medium w3-card">
+<div class="w3-display-container w3-hide-large w3-hide-medium">
     <!-- Hintergrundbild -->
     <img src="<?=$_SESSION['hintergrund']?>" class="<?php if (!isset($_SESSION['la_id']) && !isset($_SESSION['team_id'])){?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.4;">
     <div class="w3-display-left w3-margin-left">

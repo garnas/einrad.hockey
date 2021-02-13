@@ -7,8 +7,8 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-$titel = "25 Jahre | Deutsche Einradhockeyliga";
-$content = "Spielerprofile für das 25. Jubiläum der Deutschen Einradhockeyliga";
+Config::$titel = "25 Jahre | Deutsche Einradhockeyliga";
+Config::$content = "Spielerprofile für das 25. Jubiläum der Deutschen Einradhockeyliga";
 include '../../templates/header.tmp.php';
 
 $header = "w3-white w3-padding w3-text-primary w3-large";

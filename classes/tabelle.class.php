@@ -85,7 +85,7 @@ class Tabelle
      * @param int|null $spieltag
      * @return string|int
      */
-    public static function get_team_rang(int $team_id, int $spieltag = NULL): string|int
+    public static function get_team_rang(int $team_id, null|int $spieltag = null): string|int
     {
         // Default: Aktueller Spieltag
         $spieltag = is_null($spieltag) ? self::get_aktuellen_spieltag() - 1 : $spieltag;
@@ -107,10 +107,10 @@ class Tabelle
      * Gibt den Block eines Teams auf Grundlage der Platzierung in der Rangtabelle zurück
      *
      * @param int $team_id
-     * @param string $spieltag
+     * @param int|null $spieltag
      * @return string
      */
-    public static function get_team_block(int $team_id, string $spieltag = ''): string
+    public static function get_team_block(int $team_id, null|int $spieltag = null): string
     {
         $platz = self::get_team_rang($team_id, $spieltag);
         return is_numeric($platz) ? self::platz_to_block($platz) : 'NL';
@@ -120,10 +120,10 @@ class Tabelle
      * Gibt die Wertigkeit eines Teams auf Grundlage der Platzierung in der Rangtabelle zurück
      *
      * @param int $team_id
-     * @param string $spieltag
+     * @param int|null $spieltag
      * @return int|string
      */
-    public static function get_team_wertigkeit(int $team_id, string $spieltag = ''): int|string
+    public static function get_team_wertigkeit(int $team_id, null|int $spieltag = null): int|string
     {
         $platz = self::get_team_rang($team_id, $spieltag);
         return is_numeric($platz) ? self::platz_to_wertigkeit($platz) : 'NL';

@@ -18,9 +18,9 @@ if (isset($_POST['spieler_auswahl'])) {
 //Formular unten nur Anzeigen wenn eine existierende SpielerID übergeben wurde wurde
 
 if (isset($_GET['spieler_id'])) {
-    $spieler_id = (int)$_GET['spieler_id'] ?? 0;
+    $spieler_id = (int) ($_GET['spieler_id'] ?? 0);
     if (array_key_exists($spieler_id, $spieler_liste)) {
-        $spieler = new Spieler($_GET['spieler_id']);
+        $spieler = new Spieler($spieler_id);
         $spieler->details = $spieler->get_details();
         $show_form = true;
     } else {
@@ -122,7 +122,7 @@ include '../../templates/header.tmp.php';
 <?php if ($show_form ?? false) { ?>
     <form class="w3-card-4 w3-panel" method='post'>
         <!-- Spieler-Details -->
-        <h3>Spieler mit der ID <?= $spieler->details['spieler_id'] ?> ändern</h3>
+        <h3>Spieler mit der ID <?= $spieler->id ?> ändern</h3>
         <p>
             <label class="w3-text-primary" for="vorname">Vorname</labeL>
             <input class="w3-input w3-border w3-border-primary"

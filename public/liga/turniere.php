@@ -71,9 +71,9 @@ foreach ($all_anmeldungen as $turnier_id => $liste) {
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-$titel = "Turnierliste | Deutsche Einradhockeyliga";
-$page_width = "800px";
-$content = "Eine Liste aller ausstehenden Spaß-, Final- und Ligaturniere der Deutschen Einradhockeyliga.";
+Config::$titel = "Turnierliste | Deutsche Einradhockeyliga";
+Config::$page_width = "800px";
+Config::$content = "Eine Liste aller ausstehenden Spaß-, Final- und Ligaturniere der Deutschen Einradhockeyliga.";
 include '../../templates/header.tmp.php';
 ?>
 

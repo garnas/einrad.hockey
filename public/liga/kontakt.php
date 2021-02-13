@@ -82,8 +82,8 @@ if (isset($_POST['absenden'])) {
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-$titel = "Kontakt | Deutsche Einradhockeyliga";
-$content = "Kontaktformular der Deutschen Einradhockeyliga";
+Config::$titel = "Kontakt | Deutsche Einradhockeyliga";
+Config::$content = "Kontaktformular der Deutschen Einradhockeyliga";
 include '../../templates/header.tmp.php';
 ?>
 

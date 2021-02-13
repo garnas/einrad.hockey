@@ -1,3 +1,4 @@
+
 <?php
 
 /**
@@ -15,7 +16,7 @@ class Form
      * @param $string
      */
     public static string $confetti = '';
-    
+
     // Fehlermeldungem werden in einer $_SESSION Variable gespeichert
     public static function error($string)
     {
@@ -144,7 +145,7 @@ class Form
     public static function link(string $link, string $bezeichnung = '', bool $extern = false, string $icon = ''): string
     {
         if (empty($link)) return ''; // Für Schleifen
-        $new_tab =  ($extern) ? 'target="_blank" rel="noopener noreferrer"' : '';
+        $new_tab = ($extern) ? 'target="_blank" rel="noopener noreferrer"' : '';
         $bezeichnung = (!empty($icon)) ? self::icon($icon) . ' ' . $bezeichnung : $bezeichnung;
         $bezeichnung = empty($bezeichnung) ? $link : $bezeichnung;
         return "<a href='$link' class='no w3-text-primary w3-hover-text-secondary' style='white-space: nowrap;' $new_tab>$bezeichnung</a>";
@@ -176,7 +177,7 @@ class Form
      */
     public static function mailto(string|array $email, string $name = NULL): string
     {
-        if (empty ($email)){
+        if (empty ($email)) {
             return '';
         }
         if (is_array($email)) {
@@ -212,9 +213,10 @@ class Form
         return (string)(1995 + $saison);
     }
 
-    public static function countdown($date, $id = 'countdown'){ //TODO Return als String
+    public static function countdown($date, $id = 'countdown')
+    { //TODO Return als String
         ?>
-            <div id='countdown' class="w3-xlarge w3-text-primary" style='white-space: nowrap;'>
+        <div id='countdown' class="w3-xlarge w3-text-primary" style='white-space: nowrap;'>
                 <span class="w3-center w3-margin-right" style="display: inline-block">
                     <span id='countdown_days'>--</span>
                     <span class="w3-small w3-text-grey" style="display: block">Tage</span>
@@ -231,12 +233,13 @@ class Form
                     <span id='countdown_seconds'>--</span>
                     <span class="w3-small w3-text-grey" style="display: block">Sekunden</span>
                 </span>
-            </div>
-            <script>countdown('<?=date("Y-m-d\TH:i:s", strtotime($date))?>', '<?=$id?>')</script>
+        </div>
+        <script>countdown('<?=date("Y-m-d\TH:i:s", strtotime($date))?>', '<?=$id?>')</script>
         <?php
     }
 
-    public static function log($file_name, $line){
+    public static function log($file_name, $line)
+    {
         $path = '../../system/logs/';
         //SQL-Logdatei erstellen/beschreiben
         $log_file = fopen($path . $file_name, "a");
@@ -244,7 +247,7 @@ class Form
         fwrite($log_file, $line);
         fclose($log_file);
     }
-    
+
     /** Fügt einen Confetti-Effekt hinzu.
      *
      * Muss vor dem HTML-Code aufgerufen werden.
@@ -257,8 +260,9 @@ class Form
      * @param int $min
      * @param int $max
      */
-    public static function set_confetti(int $min = 40, int $max = 90, $timeout = 0){
-        self::$confetti =   "
+    public static function set_confetti(int $min = 40, int $max = 90, $timeout = 0)
+    {
+        self::$confetti = "
                             <script src = '../javascript/confetti/confetti.js'></script>
                             <script>confetti.start($timeout, $min, $max)</script>
                             ";
@@ -272,16 +276,16 @@ class Form
      * @param string $tag
      * @return string
      */
-    public static function icon(string $icon, int $vertical_align = 0, int $font_size = 0, string $tag = 'p' ): string
+    public static function icon(string $icon, int $vertical_align = 0, int $font_size = 0, string $tag = 'p'): string
     {
         $style = '';
-        if ($tag != 'p'){
-            $style = match($tag) {
+        if ($tag != 'p') {
+            $style = match ($tag) {
                 'h1', 'h2' => 'style="font-size: 31px; vertical-align: -19%;"',
                 'h3' => 'style="vertical-align: -16%;"',
                 default => ''
             };
-        }elseif (!(empty($vertical_align) && empty($font_size))) {
+        } elseif (!(empty($vertical_align) && empty($font_size))) {
             $style = "style='"
                 . (empty($vertical_align) ? "" : "vertical-align: -" . $vertical_align . "%;")
                 . (empty($font_size) ? "" : "font-size: " . $font_size . "px;")

@@ -14,8 +14,8 @@ require_once '../../logic/spielplan.logic.php'; //Erstellt Spielplanobjekt nach 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-$titel = "Spielplan | Einradhockey";
-$content = "Der Spielplan für das Einradhockey-Turnier in ". $spielplan->turnier->details['ort'] . " am " . date("d.m.Y", strtotime($spielplan->turnier->details['datum']));
+Config::$titel = "Spielplan | Einradhockey";
+Config::$content = "Der Spielplan für das Einradhockey-Turnier in ". $spielplan->turnier->details['ort'] . " am " . date("d.m.Y", strtotime($spielplan->turnier->details['datum']));
 include '../../templates/header.tmp.php';
 include '../../templates/spielplan/spielplan_titel.tmp.php';
 include '../../templates/spielplan/spielplan_teamliste.tmp.php'; //Teamliste

@@ -47,7 +47,7 @@ if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
 }
 
 
-//Rundmail wurde ausgewählt
+// Rundmail wurde ausgewählt
 if (isset($_POST['rundmail'])) {
     unset ($_SESSION[$list_id]);
     $_SESSION[$list_id]['type'] = 'Rundmail';
@@ -58,7 +58,7 @@ if (isset($_POST['rundmail'])) {
     array_unshift($_SESSION[$list_id]['empfaenger'], '<b>Ligaausschuss</b>');
 }
 
-//Teams wurden ausgewählt
+// Teams wurden ausgewählt
 if (isset($_POST['teams_emails'])) {
     unset ($_SESSION[$list_id]);
     $_SESSION[$list_id]['type'] = 'Teamauswahl';

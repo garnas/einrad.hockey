@@ -58,9 +58,9 @@ function woerter_zaehlen(max_woerter = 500, id_textarea = 'text', id_counter = '
   document.getElementById(id_counter).innerHTML = anzahl + ' Zeichen übrig';
 
   if(anzahl < 30){
-      document.getElementById(id_counter).style.color="red";
+      document.getElementById(id_counter).style.color = "red";
   }else{
-      document.getElementById(id_counter).style.color="green";}
+      document.getElementById(id_counter).style.color = "green";}
   
   if(anzahl < 0){
       document.getElementById(id_counter).innerHTML = 'Zeichenanzahl wurde überschritten.';

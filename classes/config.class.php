@@ -107,4 +107,14 @@ class Config
      */
     public static bool $ligacenter = false; // Befindet sich der Ligaausschuss im Ligacenter?
     public static bool $teamcenter = false; // Befindet sich das Team im Teamcenter?
+
+    /**
+     * HTML-Anzeige
+     */
+    public static string $page_width = "1020px";
+    public static string $titel = 'Deutsche Einradhockeyliga';
+    public static string $content
+        = 'Jeder Einradhockeybegeisterte soll in der Deutschen Einradhockeyliga die Möglichkeit haben, sein Hobby in '
+        . 'einem sportlichen Rahmen auszuüben. Die Einradhockeyliga hat maßgeblich zur Verbreitung von Einradhockey '
+        . 'beigetragen und ist in ihrer Art und Konstanz weltweit einzigartig.';
 }

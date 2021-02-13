@@ -8,7 +8,7 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 if(isset($_POST['login'])) {
     $teamname = $_POST['teamname'];
     $passwort = $_POST['passwort'];
-    $team_id = Team::teamname_to_teamid ($teamname);
+    $team_id = (int) Team::teamname_to_teamid ($teamname);
     $log_file = "log_login.log";
     
     //Fehlermeldungen
@@ -31,9 +31,9 @@ if(isset($_POST['login'])) {
     if(!($error ?? false)) {
         $team = new Team($team_id);
         if(password_verify($passwort, $team->get_passwort())) {
-            $_SESSION['team_id'] = $team_id;
-            $_SESSION['teamname'] = Team::teamid_to_teamname($team_id); //Ansonsten könnte es zu fehlern der Groß- und Kleinschreibung kommen, da SQL diese in der Suche der Team ID igoniert.
-            $_SESSION['teamblock'] = Tabelle::get_team_block($_SESSION['team_id']);
+            $_SESSION['team_id'] = $team->id;
+            $_SESSION['teamname'] = Team::teamid_to_teamname($team->id); //Ansonsten könnte es zu fehlern der Groß- und Kleinschreibung kommen, da SQL diese in der Suche der Team ID igoniert.
+            $_SESSION['teamblock'] = Tabelle::get_team_block($team->id);
             //Logdatei erstellen/beschreiben
             Form::log($log_file, "Erfolgreich       | Teamname: " . $teamname);
             //Weiterleitung zum in der Session (aus session.logic.php) gespeicherten Pfad oder zu start.php
@@ -63,9 +63,9 @@ if(isset($_POST['login'])) {
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-$page_width = "480px";
-$titel = "Teamcenter | Deutsche Einradhockeyliga";
-$content = "Im Teamcenter können Teams ihren Kader verwalten, ihre Teamdaten ändern und sich zu Turnieren an- und abmelden.";
+Config::$page_width = "480px";
+Config::$titel = "Teamcenter | Deutsche Einradhockeyliga";
+Config::$content = "Im Teamcenter können Teams ihren Kader verwalten, ihre Teamdaten ändern und sich zu Turnieren an- und abmelden.";
 include '../../templates/header.tmp.php';
 ?>
 

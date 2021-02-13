@@ -7,8 +7,8 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-$titel = 'Archiv | Deutschen Einradhockeyliga';
-$content = 'Hier kann man die Ergebnisse und Tabellen seit der ersten Saison im Jahr 1995 sehen.';
+Config::$titel = 'Archiv | Deutschen Einradhockeyliga';
+Config::$content = 'Hier kann man die Ergebnisse und Tabellen seit der ersten Saison im Jahr 1995 sehen.';
 include '../../templates/header.tmp.php';
 ?>
 

@@ -8,8 +8,8 @@ require_once '../../logic/abstimmung.logic.php';
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-$titel = "Saisonrhythmus Abstimmung | Deutsche Einradhockeyliga";
-$content = "Das aktuelle Abstimmungsergebnis der Teams über einen Saisonrhythmus-Wechsel.";
+Config::$titel = "Saisonrhythmus Abstimmung | Deutsche Einradhockeyliga";
+Config::$content = "Das aktuelle Abstimmungsergebnis der Teams über einen Saisonrhythmus-Wechsel.";
 include '../../templates/header.tmp.php';
 ?>
 

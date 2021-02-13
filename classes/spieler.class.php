@@ -16,7 +16,7 @@ class Spieler
      * Spieler constructor.
      * @param $spieler_id
      */
-    function __construct($spieler_id)
+    function __construct(int $spieler_id)
     {
         $this->id = $spieler_id;
         $this->details = $this->get_details();
@@ -103,13 +103,13 @@ class Spieler
         $sql = "
                 SELECT *  
                 FROM spieler 
-                WHERE team_id = '$team_id' 
-                AND letzte_saison = '$saison'
+                WHERE team_id = ? 
+                AND letzte_saison = ?
                 ORDER BY letzte_saison DESC, vorname
                 ";
         $kader = dbi::$db->query($sql, $team_id, $saison)->esc()->fetch('spieler_id');
         foreach ($kader as $id => $spieler) {
-            if (strtotime($kader['zeit'])) $kader[$id]['zeit'] = '--';
+            if (strtotime($spieler['zeit'])) $kader[$id]['zeit'] = '--';
             // Diese Funktion wurde erst am später hinzugefügt.
         }
         return $kader;
@@ -158,7 +158,7 @@ class Spieler
                 FROM spieler 
                 ORDER BY vorname
                 ";
-        $liste = dbi::$db->query($sql)->esc()->fetch();
+        $liste = dbi::$db->query($sql)->esc()->fetch('spieler_id');
         foreach ($liste as $id => $x) {
             $spielerliste[$id] = $x['vorname'] . " " . $x['nachname'];
         }
@@ -189,7 +189,7 @@ class Spieler
      */
     function set_detail(string $entry, mixed $value)
     {
-        $spalten_namen = dbi::$db->query("SHOW FIELDS FROM teams_details")->list('Field');
+        $spalten_namen = dbi::$db->query("SHOW FIELDS FROM spieler")->list('Field');
         if (!in_array($entry, $spalten_namen)) die("Ungültiger Spaltenname");
         $zeit = ($entry == 'team_id' or $entry == 'letzte_saison') ? '' : ', zeit = zeit';
         $entry = "`" . $entry . "`";

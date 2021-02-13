@@ -22,9 +22,8 @@ $centerpanels = array(
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-
-include '../../templates/header.tmp.php';
-?>
+Config::$page_width = "660px";
+include '../../templates/header.tmp.php'; ?>
 
 <h1 class='w3-center w3-text-primary'>Hallo <?=$_SESSION['teamname']?>!</h1>
 <div id="messen" class=""> <!-- Misst die Fensterbreite des Browsers, um die Centerpanels gleichmäßig verteilen zu können -->

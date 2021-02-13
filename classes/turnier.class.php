@@ -52,6 +52,7 @@ class Turnier
      * @param string $organisator
      * @param string $handy
      * @param string $phase
+     * @return Turnier Objekt der Klasse Turnier wird zurückgegeben
      */
     public static function create_turnier(string $tname, string $ausrichter, string $startzeit, string $besprechung,
                                           string $art, string $tblock, string $fixed, string $datum, string $plaetze,
@@ -949,7 +950,7 @@ class Turnier
      */
     function delete($grund = '')
     {
-        dbi::sql_backup();();
+        dbi::sql_backup();
         // Turnier in der Datenbank vermerken
         $sql = "
                 INSERT INTO turniere_geloescht (turnier_id, datum, ort, grund, saison) 
