@@ -258,7 +258,7 @@ include '../../templates/header.tmp.php'; ?>
 
                     <!-- Überschrift -->
                     <div class="w3-stretch w3-container w3-primary w3-center">
-                        <h2><?= Form::icon("post", tag: "h2") ?><?= $neuigkeit['titel'] ?></h2>
+                        <h2><?= $neuigkeit['titel'] ?></h2>
                     </div>
 
                     <!-- Bild -->
