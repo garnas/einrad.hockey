@@ -50,41 +50,32 @@ include '../../templates/header.tmp.php';
 
     <!-- Teams Tabelle -->
     <div id="myDIV" class="w3-responsive w3-card">
-        <table class="w3-table w3-striped ">
+        <table class="w3-table w3-striped">
             <tr class="w3-primary">
                 <th></th>
-                <th>Teamname</th>
-                <th>Ort</th>
-                <th class="w3-hide-small">Verein</th>
-                <th>Ligavertreter</th>
+                <th style="white-space: nowrap;"><?= Form::icon('groups')?> Teamname</th>
+                <th style="white-space: nowrap;"><?= Form::icon('room')?> Ort</th>
+                <th style="white-space: nowrap;"><?= Form::icon('outlined_flag')?> Verein</th>
+                <th style="white-space: nowrap;"><?= Form::icon('account_circle')?> Ligavertreter</th>
+                <th class="w3-center" style="white-space: nowrap;"><?= Form::icon('invert_colors')?> Farben</th>
             </tr>
             <?php foreach ($alle_teamdaten as $team) { ?>
-                <tr>
+                <tr id='<?= $team['team_id'] ?>'>
                     <!-- Icons -->
-                    <td style='vertical-align: middle; text-align: right; white-space: nowrap;'>
+                    <td style='white-space: nowrap;' class="w3-right-align">
                         <?= Form::Link($team['homepage'] ?? '', "", true, "home")?>
                         <?= Form::Link($team['teamfoto'] ?? '', "", true, "group")?>
                         <?= Form::mailto((new Kontakt($team['team_id']))->get_emails('public'), '')?>
                     </td>
                     <!-- Text -->
-                    <td id='<?= $team['team_id'] ?>' style='vertical-align: middle;'><?= $team['teamname'] ?></td>
-                    <td style='vertical-align: middle;'><?= $team['plz'] ?> <?= $team['ort'] ?></td>
-                    <td style='vertical-align: middle;' class='w3-hide-small'><?= $team['verein'] ?></td>
-                    <td style='vertical-align: middle;'><?= $team['ligavertreter'] ?></td>
+                    <td style='white-space: nowrap;'><?= $team['teamname'] ?></td>
+                    <td><?= $team['plz'] ?>&nbsp;<?= $team['ort'] ?></td>
+                    <td><?= $team['verein'] ?></td>
+                    <td><?= $team['ligavertreter'] ?></td>
+                    <td class="w3-center" style="white-space: nowrap;"><?= Form::trikot_punkt($team['trikot_farbe_1'], $team['trikot_farbe_2']) ?></td>
                 </tr>
             <?php } //Ende foreach?>
         </table>
     </div>
 
 <?php include '../../templates/footer.tmp.php';
-
-    
-
-
-
-        
-
-
-
-           
-   
