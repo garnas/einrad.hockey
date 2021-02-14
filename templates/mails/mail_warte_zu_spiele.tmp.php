@@ -5,5 +5,5 @@
     <b>Spielen-Liste</b> aufgerückt.
 </p>
 <p>
-    <a href='<?= Config::BASE_LINK . "/liga/turnier_details?turnier_id=" . $turnier->id ?>'>Link zum Turnier</a>
+    <a href='<?= Config::BASE_URL . "/liga/turnier_details?turnier_id=" . $turnier->id ?>'>Link zum Turnier</a>
 </p>

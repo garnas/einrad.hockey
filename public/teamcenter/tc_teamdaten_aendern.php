@@ -3,18 +3,15 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-$no_redirect = true;
+
+Config::$teamcenter_no_redirect = true; // Verhindert die Endlosschleife, bei der Überprüfung, ob ein LV angegeben ist
+
 require_once '../../logic/session_team.logic.php'; //Auth
-
-
-//$change = false; // Wenn sich in teamdaten_aendern.logic etwas ändert, wird $change auf true gesetzt
 require_once '../../logic/teamdaten_aendern.logic.php';
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 include '../../templates/header.tmp.php';
-if (isset($team)){
-    include '../../templates/teamdaten_aendern.tmp.php';
-}
+if (isset($team)) include '../../templates/teamdaten_aendern.tmp.php';
 include '../../templates/footer.tmp.php';

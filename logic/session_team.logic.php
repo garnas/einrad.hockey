@@ -9,14 +9,16 @@ if(!isset($_SESSION['team_id'])) {
 
 $team = new Team ($_SESSION['team_id']);
 
-if (!isset($no_redirect) && $team->details['passwort_geaendert'] === 'Nein'){
-  Form::info("Bitte ändere zuerst das von uns vergebene Passwort");
+if (Config::$teamcenter_no_redirect && $team->details['passwort_geaendert'] === 'Nein'){
+  Form::info("Bitte ändere zuerst das von uns vergebene Passwort.");
   header('Location: tc_pw_aendern.php');
   die();
 }
 
-if (!isset($no_redirect) && empty($team->details['ligavertreter'])){
-  Form::info("Bitte tragt vor der Nutzung des Teamcenters erneut einen Ligavertreter ein, welcher unsere aktualisierten " . Form::link(Config::LINK_DSGVO,"Datenschutz-Hinweise") . " gelesen und akzeptiert hat. Beachtet bitte, dass jedes Team nur einen Ligavertreter haben kann.");
+if (Config::$teamcenter_no_redirect && empty($team->details['ligavertreter'])){
+  Form::info("Bitte tragt vor der Nutzung des Teamcenters erneut einen Ligavertreter ein, welcher unsere aktualisierten "
+      . Form::link(Config::LINK_DSGVO,"Datenschutz-Hinweise", true, 'security')
+      . " gelesen und akzeptiert hat. Beachtet bitte, dass jedes Team nur einen Ligavertreter haben kann.", esc:false);
   header('Location: tc_teamdaten_aendern.php');
   die();
 }

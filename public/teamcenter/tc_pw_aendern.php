@@ -3,8 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; // autoloader und Session
-
-$no_redirect = true; // Verhindert die Endlosschleife, bei der Überprüfung, ob das Passwort geändert wurde
+Config::$teamcenter_no_redirect = true; // Verhindert die Endlosschleife, bei der Überprüfung, ob das Passwort geändert wurde
 require_once '../../logic/session_team.logic.php'; // Auth
 
 $team = new Team ($_SESSION['team_id']);

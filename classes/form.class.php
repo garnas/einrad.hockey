@@ -8,6 +8,26 @@
 class Form
 {
     /**
+     * Get Pfad fürs Hintergrundbild der Navigation
+     * Nach einiger Zeit ein neues Hintergrundbild in der Navigation anzeigen
+     *
+     * Quelle: https://stackoverflow.com/questions/1761252/how-to-get-random-image-from-directory-using-php
+     */
+    public static function get_hintergrund_bild(): string
+    {
+        $_SESSION['bild_navigation']['zeit'] = ($_SESSION['bild_navigation']['zeit'] ?? time());
+        if (
+            !isset($_SESSION['bild_navigation']['path'])
+            or (time() - $_SESSION['bild_navigation']['zeit']) > 600
+            ){
+            $imagesDir = Config::BASE_PATH . '/public/bilder/hintergrund/';
+            $images = glob($imagesDir . '*.{jpg,JPG,jpeg,png,gif}', GLOB_BRACE);
+            $randomImage = $images[array_rand($images)];
+            $_SESSION['bild_navigation']['path'] = Config::BASE_URL . '/bilder/hintergrund/' . basename($randomImage);
+        }
+        return $_SESSION['bild_navigation']['path'];
+    }
+    /**
      * Fehlermeldungem werden in einer $_SESSION Variable gespeichert und beim nächsten Aufruf der HTML-Navigation
      * angezeigt
      *
@@ -201,7 +221,7 @@ class Form
 
     public static function log($file_name, $line)
     {
-        $path = '../../system/logs/';
+        $path = Config::BASE_PATH . '/system/logs/';
         //SQL-Logdatei erstellen/beschreiben
         $log_file = fopen($path . $file_name, "a");
         $line = date('[Y-M-d H:i:s e]: ') . $line . "\n";
@@ -217,7 +237,7 @@ class Form
      * @param int $min Anzahl der Konfettis liegt zufällig zwischen $min und $max
      * @param int $max
      */
-    public static function show_confetti(int $min = 40, int $max = 90, $timeout = 0)
+    public static function set_confetti(int $min = 40, int $max = 90, $timeout = 0)
     {
         echo "
             <script src = '../javascript/confetti/confetti.js'></script>

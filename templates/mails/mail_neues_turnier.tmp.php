@@ -5,7 +5,7 @@
     am <?= date("d.m.Y", strtotime($turnier->details['datum'])) ?>
 </p>
 <p>
-    <a href='<?= Config::BASE_LINK ?>/liga/turnier_details.php?turnier_id=<?= $turnier->id ?>'>
+    <a href='<?= Config::BASE_URL ?>/liga/turnier_details.php?turnier_id=<?= $turnier->id ?>'>
         Link des neuen Turniers
     </a>
 </p>

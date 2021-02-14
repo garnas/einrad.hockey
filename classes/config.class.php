@@ -3,39 +3,25 @@
 class Config
 {
     /**
-     *  Webroot fürs Erstellen von absoluten Links
+     * Variablen aus Env.php aus dem Root Verzeichnis
+     * Diese stehen nur noch hier für die Kompatibilität
      */
-    const BASE_LINK = 'http://localhost/einrad.hockey/public';
-    /**
-     *  Wurzelverzeichnis in welchem einrad.hockey liegt
-     */
-    const BASE_PATH = 'C:\xampp\htdocs\einrad.hockey';
-
-    /**
-     * SQL-Datenbank Zugangsdaten
-     */
-    const HOST_NAME = 'localhost';
-    const DATABASE = 'dummy-db';
-    const USER_NAME = 'root';
-    const PASSWORD = '';
-
-    /**
-     * Mailserver
-     */
-    const ACTIVATE_EMAIL = false; // Bei True, werden Emails tatsächlich versendet, bei false debugging
-    const SMTP_HOST = 'HOST';
-    const SMTP_USER = 'test@einrad.hockey';
-    const SMTP_PW = 'PW';
-    const SMTP_PORT = 666;
-
-    /**
-     * Mailadressen
-     */
-    const LAMAIL = 'liga@einrad.hockey';
-    const LAMAIL_ANTWORT = 'la2021@einrad.hockey'; // Wird im BCC gesetzt, bei Mails vom Ligaausschuss
-    const TECHNIKMAIL = 'technik@einrad.hockey';
-    const SCHIRIMAIL = 'schiri@einrad.hockey';
-    const OEFFIMAIL = 'oeffentlichkeitsausschuss@einrad.hockey';
+    const BASE_URL = Env::BASE_URL;
+    const BASE_PATH = Env::BASE_PATH;
+    const HOST_NAME = Env::HOST_NAME;
+    const DATABASE = Env::DATABASE;
+    const USER_NAME = Env::USER_NAME;
+    const PASSWORD = Env::PASSWORD;
+    const ACTIVATE_EMAIL = Env::HOST_NAME; // Bei True, werden Emails tatsächlich versendet, bei false debugging
+    const SMTP_HOST = Env::SMTP_HOST;
+    const SMTP_USER = Env::SMTP_USER;
+    const SMTP_PW = Env::SMTP_PW;
+    const SMTP_PORT = Env::SMTP_PORT;
+    const LAMAIL = Env::LAMAIL;
+    const LAMAIL_ANTWORT = Env::LAMAIL_ANTWORT; // Wird im BCC gesetzt, bei Mails vom Ligaausschuss
+    const TECHNIKMAIL = Env::TECHNIKMAIL;
+    const SCHIRIMAIL = Env::SCHIRIMAIL;
+    const OEFFIMAIL = Env::OEFFIMAIL;
 
     /**
      * Ligablöcke
@@ -43,6 +29,13 @@ class Config
      * Reihenfolge bei den Blöcken muss immer hoch -> niedrig sein
      * Für die Block und Wertzuordnung in der Rangtabelle siehe Tabelle::platz_to_block und Tabelle::platz_to_wertigkeit
      */
+
+    /**
+     * Saison
+     */
+    const SAISON = 26; // Saison 0 = Jahr 1995;
+    const SAISON_ANFANG = '15.08.2020';
+    const SAISON_ENDE = '31.10.2021';
 
     /**
      * Mögliche Team-Blöcke
@@ -58,13 +51,6 @@ class Config
      * Ligagebühr
      */
     const LIGAGEBUEHR = "30&nbsp;€";
-
-    /**
-     * Saison
-     */
-    const SAISON = 26; // Saison 0 = Jahr 1995;
-    const SAISON_ANFANG = '15.08.2020';
-    const SAISON_ENDE = '31.10.2021';
 
     /**
      *  Ligalinks
@@ -92,21 +78,28 @@ class Config
     /**
      * Dokumente
      */
-    const LINK_MODUS = '../dokumente/ligamodus.pdf';
-    const LINK_REGELN = '../dokumente/regelwerk.pdf';
-    const LINK_MODUS_KURZ = '../dokumente/zusammenfassung_modus.pdf';
-    const LINK_REGELN_KURZ = '../dokumente/zusammenfassung_regeln.pdf';
-    const LINK_MODUS_KURZ_ENG = '../dokumente/summary_modus.pdf';
-    const LINK_REGELN_IUF = '../dokumente/iuf-rulebook-2019.pdf';
-    const LINK_TURNIER = '../dokumente/turniermodi.pdf';
-    const LINK_DSGVO = '../dokumente/datenschutz-hinweise.pdf';
-    const LINK_SPIELPLAENE_ALT = '../dokumente/alte_spielplan_vorlagen.pdf';
+    const LINK_MODUS = self::BASE_URL . '/dokumente/ligamodus.pdf';
+    const LINK_REGELN = self::BASE_URL . '/dokumente/regelwerk.pdf';
+    const LINK_MODUS_KURZ = self::BASE_URL . '/dokumente/zusammenfassung_modus.pdf';
+    const LINK_REGELN_KURZ = self::BASE_URL . '/dokumente/zusammenfassung_regeln.pdf';
+    const LINK_MODUS_KURZ_ENG = self::BASE_URL . '/dokumente/summary_modus.pdf';
+    const LINK_REGELN_IUF = self::BASE_URL . '/dokumente/iuf-rulebook-2019.pdf';
+    const LINK_TURNIER = self::BASE_URL . '/dokumente/turniermodi.pdf';
+    const LINK_DSGVO = self::BASE_URL . '/dokumente/datenschutz-hinweise.pdf';
+    const LINK_SPIELPLAENE_ALT = self::BASE_URL . '/dokumente/alte_spielplan_vorlagen.pdf';
 
     /**
      * Authentification
+     * $teamcenter und $ligacenter werden in session_*.logic.php ggf überschrieben
      */
     public static bool $ligacenter = false; // Befindet sich der Ligaausschuss im Ligacenter?
     public static bool $teamcenter = false; // Befindet sich das Team im Teamcenter?
+    /**
+     * Teamcenter freischalten? (PW geändert, Ligavertreter angegeben?)
+     * Ansonsten redirect zu Passwort ändern bzw. Ligavertreter eintragen in session_team.logic.php
+     */
+    public static bool $teamcenter_no_redirect = false;
+
 
     /**
      * HTML-Anzeige

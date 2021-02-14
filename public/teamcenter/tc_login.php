@@ -32,12 +32,12 @@ if(isset($_POST['login'])) {
         $team = new Team($team_id);
         if(password_verify($passwort, $team->get_passwort())) {
             $_SESSION['team_id'] = $team->id;
-            $_SESSION['teamname'] = Team::teamid_to_teamname($team->id); //Ansonsten könnte es zu fehlern der Groß- und Kleinschreibung kommen, da SQL diese in der Suche der Team ID igoniert.
+            $_SESSION['teamname'] = Team::teamid_to_teamname($team->id); // Da SQL Groß- / kleinschreibung ignoriert.
             $_SESSION['teamblock'] = Tabelle::get_team_block($team->id);
-            //Logdatei erstellen/beschreiben
+            // Logdatei erstellen/beschreiben
             Form::log($log_file, "Erfolgreich       | Teamname: " . $teamname);
-            //Weiterleitung zum in der Session (aus session.logic.php) gespeicherten Pfad oder zu start.php
-            //Wegen header-injection sollten keine Pfade an den header via Get übergeben werden
+                // Weiterleitung zum in der Session (aus session.logic.php) gespeicherten Pfad oder zu start.php
+                // Wegen header-injection sollten keine Pfade an den header via Get übergeben werden
             if(isset($_GET['redirect']) && isset($_SESSION['tc_redirect'])){
                 $redirect = $_SESSION['tc_redirect'];
                 unset($_SESSION['tc_redirect']);
