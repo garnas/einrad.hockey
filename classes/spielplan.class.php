@@ -66,8 +66,17 @@ class Spielplan
         $this->details = $this->get_details();
         $this->spiele = $this->get_spiele();
 
-        // Turniertabellen
+        if (count($this->spiele) != ($this->anzahl_teams - 1)*($this->anzahl_teams) / 2) // TODO Ordentliche Validierung falls ein Team abgemeldet wird o. ä.
+            die ("Ungültige Anzahl an Teams, Spielplan neu erstellen.");
+
         $this->tore_tabelle = $this->get_toretabelle($penaltys);
+
+        $validate1 = array_keys($this->tore_tabelle);  // TODO Ordentliche Validierung falls ein Team abgemeldet wird o. ä.
+        $validate2 = array_keys($this->teamliste);
+        sort($validate1); sort($validate2);
+        if ($validate1 != $validate2)
+            die("Falscher Spielplan, bitte neu erstellen.");
+
         $this->turnier_tabelle = self::get_sorted_turniertabelle($this->tore_tabelle);
         $this->set_platzierungen($this->tore_tabelle);
         $this->set_wertigkeiten();
