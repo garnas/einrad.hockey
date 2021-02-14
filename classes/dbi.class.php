@@ -82,6 +82,7 @@ class dbi
      */
     public static function debug(mixed $input, $types = false)
     {
+        $input = dbi::escape($input);
         // Show Types?
         if ($types) {
             ob_start();
@@ -91,7 +92,11 @@ class dbi
             $string = print_r($input, true);
         }
         $backtrace = debug_backtrace();
-        Form::info('<p>File: ' . $backtrace[0]['file'] . '<br>Line: ' . $backtrace[0]['line'] . '</p><pre>' . $string . '</pre>');
+        Form::info('<p>File: ' . $backtrace[0]['file']
+            . '<br>Line: ' . $backtrace[0]['line']
+            . '</p><pre>' . $string . '</pre>',
+            'DEBUG',
+            false);
     }
 
     /**
