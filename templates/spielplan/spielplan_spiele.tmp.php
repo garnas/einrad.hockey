@@ -131,11 +131,11 @@
                 <td class="w3-hide-small">
                     <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_a']] ?? '' ?>
                 </td>
-                <td style="white-space: nowrap;" class="w3-right-align w3-hide-small">
+                <td style="white-space: nowrap;" class="w3-hide-small">
                     <?= $spiel["teamname_a"] ?>
                 </td>
                 <td class="w3-hide-small">-</td>
-                <td style="white-space: nowrap;" class="w3-left-align w3-hide-small">
+                <td style="white-space: nowrap;" class="w3-hide-small">
                     <?= $spiel["teamname_b"] ?>
                 </td>
                 <td class="w3-hide-small">
@@ -211,11 +211,13 @@
                         <?= date("H:i", strtotime($spiel["zeit"]) + $spiel_dauer * 60) ?>
                     </td>
                     <td></td>
-                    <td class="w3-center">
+                    <td></td>
+                    <td colspan="3" class="w3-center">
                         <i class="material-icons">schedule</i>
                         <i><?= round($get_pause($spiel) / 60) ?>&nbsp; min Pause</i>
                         <i class="material-icons">schedule</i>
                     </td>
+                    <td></td>
                     <td></td>
                     <?php if ($spielplan->check_penalty_anzeigen()) { ?>
                         <td></td>

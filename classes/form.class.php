@@ -270,4 +270,24 @@ class Form
         }
         return "<span class='material-icons' " . ($style ?? '') . ">$icon</span>";
     }
+
+    /**
+     * Gibt die zwei farbigen Trikotpunkte aus
+     *
+     * @param string|null $color_1
+     * @param string|null $color_2
+     * @return string Html-Code
+     */
+    public static function trikot_punkt(null|string $color_1 = null, null|string $color_2 = null): string
+    {
+        if(!empty($color_1)) $punkt_1 = "
+            <span class = 'w3-card-4'
+                style = 'height:14px;width:14px; background-color:$color_1;border-radius:50%;display:inline-block;'>
+            </span>";
+        if(!empty($color_2)) $punkt_2 = "
+            <span class = 'w3-card-4'
+                style = 'height:14px;width:14px; background-color:$color_2;border-radius:50%;display:inline-block;'>
+            </span>";
+        return ($punkt_1 ?? '') . ($punkt_2 ?? '');
+    }
 }

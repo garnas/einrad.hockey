@@ -824,8 +824,8 @@ class Spielplan
                     if (($max_delta_e ?? 0) > 550) continue; // 550 Threshold inwiefern Trikotfarbe 1 ausreichend ist
                     $max_delta_e = $delta_e;
 
-                    $return[$team_id_a] = "<span class='w3-card-4' style='height:11px;width:11px;background-color:$farbe_a;border-radius:50%;display:inline-block;'></span>";
-                    $return[$team_id_b] = "<span class='w3-card-4' style='height:11px;width:11px;background-color:$farbe_b;border-radius:50%;display:inline-block;'></span>";
+                    $return[$team_id_a] = Form::trikot_punkt($farbe_a);
+                    $return[$team_id_b] = Form::trikot_punkt($farbe_b);
                 }
             }
         }

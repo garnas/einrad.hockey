@@ -34,6 +34,6 @@
 <!-- Penalty-Warnungen -->
 <?php if (!empty($spielplan->get_penalty_warnung())) { ?>
     <div class="pdf-hide">
-        <?php Form::message('attention', $spielplan->get_penalty_warnung(), 'Penalty', false) ?>
+        <?php Form::message('notice', $spielplan->get_penalty_warnung(), 'Penalty', false) ?>
     </div>
 <?php } // endif?>
