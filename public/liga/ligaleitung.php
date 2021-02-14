@@ -29,7 +29,7 @@ include '../../templates/header.tmp.php';
     
 <p>Der Ligaausschuss besteht aus sechs Mitgliedern und dient als Ansprechpartner der Deutschen Einradhockeyliga. Er ist verantwortlich für die Weiterentwicklung der Liga und für den reibungslosen Saisonablauf. Wenn es mehr Bewerber als Ligaausschussplätze gibt, wird er jeweils gegen Ende der Saison von allen Ligateams gewählt.</p>
 
-<p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Config::LAMAIL)?></p>
+<p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Env::LAMAIL)?></p>
 
 <p class="w3-margin" style="max-width: 666px">
     <a href="../bilder/ligaausschuss2020.jpg" class="">
@@ -52,7 +52,7 @@ include '../../templates/header.tmp.php';
     </table>
 </div>
 <p>Der Technikausschuss ist verantwortlich für die Instandhaltung und Weiterentwicklung der IT der Deutschen Einradhockeyliga.</p>
-<p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Config::TECHNIKMAIL)?></p>
+<p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Env::TECHNIKMAIL)?></p>
 
 <!-- Öffntlichkeits-Ausschuss -->
 <h2 class="w3-border-bottom w3-text-primary">Öffentlichkeitsausschuss</h2>
@@ -67,7 +67,7 @@ include '../../templates/header.tmp.php';
     </table>
 </div>
 <p>Der Öffentlichkeitsausschuss ist relativ neu und noch nicht offiziell im Ligamodus verankert. Er soll den Einradhockeysport nach außen hin präsentieren und sich um unsere Socialmedia-Accounts kümmern.</p>
-<p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Config::OEFFIMAIL)?></p>
+<p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Env::OEFFIMAIL)?></p>
 
 <!-- Schiri-Ausschuss -->
 <h2 class="w3-border-bottom w3-text-primary">Schiedsrichterausschuss</h2>
@@ -82,7 +82,7 @@ include '../../templates/header.tmp.php';
     </table>
 </div>
 <p>Der Schiedsrichterausschuss ist für die Organisation der Aus- und Weiterbildung der Schiedsrichter in der Deutschen Einradhockeyliga verantwortlich.</p>
-<p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Config::SCHIRIMAIL)?></p>
+<p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Env::SCHIRIMAIL)?></p>
 <h3 class="w3-border-bottom w3-text-primary">Schiedsrichterausbilder</h3>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">

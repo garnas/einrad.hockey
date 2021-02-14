@@ -15,10 +15,10 @@ class dbi
      * @param string $password
      * @param string $database
      */
-    public static function initialize(string $host = Config::HOST_NAME,
-                                      string $user = Config::USER_NAME,
-                                      string $password = Config::PASSWORD,
-                                      string $database = Config::DATABASE)
+    public static function initialize(string $host = Env::HOST_NAME,
+                                      string $user = Env::USER_NAME,
+                                      string $password = Env::PASSWORD,
+                                      string $database = Env::DATABASE)
     {
         self::$db = new dbWrapper($host, $user, $password, $database);
     }
@@ -107,11 +107,11 @@ class dbi
      */
     public static function sql_backup(): string
     {
-        $dumpfile = "../../system/backups/" . Config::DATABASE . "." . date("Y-m-d_H-i-s") . ".sql"; //Dateiname der Sicherungskopie
-        exec("mysqldump --user=" . Config::USER_NAME
-            . " --password=" . Config::PASSWORD
-            . " --host=" . Config::HOST_NAME
-            . " " . Config::DATABASE . " > " . $dumpfile);
+        $dumpfile = "../../system/backups/" . Env::DATABASE . "." . date("Y-m-d_H-i-s") . ".sql"; //Dateiname der Sicherungskopie
+        exec("mysqldump --user=" . Env::USER_NAME
+            . " --password=" . Env::PASSWORD
+            . " --host=" . Env::HOST_NAME
+            . " " . Env::DATABASE . " > " . $dumpfile);
         Form::info("Datenbank wurde gesichert als " . date("Y-m-d_H-i-s") . ".sql im Ordner system/backup/");
         return $dumpfile;
     }

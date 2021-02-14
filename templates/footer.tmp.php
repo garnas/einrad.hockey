@@ -3,7 +3,7 @@
         </main>
         <footer class="w3-container w3-margin-top w3-center w3-cell-bottom w3-primary">
             <div class="w3-center">
-                <a href="<?= Config::BASE_URL ?>/liga/kontakt.php" class="w3-button">
+                <a href="<?= Env::BASE_URL ?>/liga/kontakt.php" class="w3-button">
                     <?= Form::icon('mail') ?> Kontakt
                 </a>
                 <a href="<?= Config::LINK_FACE ?>" class="w3-button" target="_blank" rel="noopener noreferrer">
@@ -14,13 +14,13 @@
                 </a>
             </div>
             <div class="w3-center">
-                <a href="<?= Config::BASE_URL ?>/liga/ligaleitung.php" class="w3-button">
+                <a href="<?= Env::BASE_URL ?>/liga/ligaleitung.php" class="w3-button">
                     <?= Form::icon('account_box') ?> Ligaleitung
                 </a>
-                <a href="<?= Config::BASE_URL ?>/liga/datenschutz.php" class="w3-button">
+                <a href="<?= Env::BASE_URL ?>/liga/datenschutz.php" class="w3-button">
                     <?= Form::icon('security') ?> Datenschutz
                 </a>
-                <a href="<?= Config::BASE_URL ?>/liga/impressum.php" class="w3-button">
+                <a href="<?= Env::BASE_URL ?>/liga/impressum.php" class="w3-button">
                     <?= Form::icon('view_headline') ?> Impressum
                 </a>
             </div>

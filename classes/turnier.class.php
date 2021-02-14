@@ -692,7 +692,7 @@ class Turnier
     function get_spielplan_link(): string
     {
         return (empty($this->details['link_spielplan']))
-            ? Config::BASE_URL . '/liga/spielplan.php?turnier_id=' . $this->id
+            ? Env::BASE_URL . '/liga/spielplan.php?turnier_id=' . $this->id
             : $this->details['link_spielplan'];
     }
 

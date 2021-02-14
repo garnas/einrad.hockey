@@ -20,7 +20,7 @@ include '../../templates/header.tmp.php'; ?>
     <p>Ansgar Pölking<br>Karlstraße 1<br>64283 Darmstadt</p>
 
     <p class="w3-text-grey">Kontakt</p>
-    <p><?=Form::mailto(Config::LAMAIL)?></p>
+    <p><?=Form::mailto(Env::LAMAIL)?></p>
 </div>
 
 <?php include '../../templates/footer.tmp.php';

@@ -65,7 +65,7 @@ include '../../templates/header.tmp.php';
 <h1 class='w3-border-bottom w3-text-primary'>Karte der Ligateams<span class="w3-right w3-hide-small"><?=Form::get_saison_string()?></span></h1>
 <p>Es spielen zurzeit <?=count(Team::get_liste())?> Teams in der Deutschen Einradhockeyliga. <?=Form::link("teams.php","Hier")?>findest du eine Liste aller Teams mit ihrer hinterlegten E-Mail-Adresse.</p>
   
-<p><i>If your team resides outside of Germany, please contact <?=Form::mailto(Config::TECHNIKMAIL)?> to be included in the map.</i></p>
+<p><i>If your team resides outside of Germany, please contact <?=Form::mailto(Env::TECHNIKMAIL)?> to be included in the map.</i></p>
 
 <div class='w3-card-4' style='height: 70vh; width: 100%; max-height: 800px; margin: auto;' id="map">
 </div>
@@ -75,10 +75,10 @@ include '../../templates/header.tmp.php';
 <button onclick="document.getElementById('gesuch_formular').style.display='block'" class="w3-button w3-tertiary">Mitspielergesuch eintragen</button>
 <div id="gesuch_formular" class="w3-modal">
   <form method="post" class="w3-card-4 w3-panel w3-round w3-container w3-modal-content" autocomplete="off" style="max-width: 400px"
-  onsubmit="return confirm('Alle Daten die du hier eingeben hast werden gespeichert und ein Jahr lang hier veröffentlicht. Wende dich an <?=Config::LAMAIL?> um deinen Eintrag zu löschen.');">
+  onsubmit="return confirm('Alle Daten die du hier eingeben hast werden gespeichert und ein Jahr lang hier veröffentlicht. Wende dich an <?=Env::LAMAIL?> um deinen Eintrag zu löschen.');">
     <span onclick="document.getElementById('gesuch_formular').style.display='none'" class="w3-button w3-large w3-text-secondary w3-display-topright">&times;</span>
     <h3 class="w3-text-primary">Mitspielergesuch eintragen</h3>
-    <p><i>Hinweis: Alle hier eingebenen Daten werden ein Jahr lang veröffentlicht. Schreibe <?=Form::mailto(Config::LAMAIL)?> an, um deinen Eintrag zu löschen.</i></p>
+    <p><i>Hinweis: Alle hier eingebenen Daten werden ein Jahr lang veröffentlicht. Schreibe <?=Form::mailto(Env::LAMAIL)?> an, um deinen Eintrag zu löschen.</i></p>
     <p>
       <label for="kontakt" class="w3-text-primary">Name</label>
       <input required type="text" class="w3-input w3-border-primary" name="name" id="name" value="<?=$_POST['name'] ?? ''?>">

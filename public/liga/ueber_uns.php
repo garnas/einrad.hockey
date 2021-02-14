@@ -45,7 +45,7 @@ include '../../templates/header.tmp.php';
 <p>Jedes Team besteht aus mindestens fünf Einradfahrern. Es gibt keine Alters- oder Geschlechtseinteilung und Teams jeder geographischen Herkunft sind zugelassen. Ein Ligateam anzumelden geht jederzeit und schnell:</p>
 <div class="w3-container">
     <ul class="w3-ul w3-primary w3-card">
-        <li>1. <?=Config::LAMAIL?> anschreiben (Teamname, Ligavertreter, Email-Adresse angeben)</li>
+        <li>1. <?=Env::LAMAIL?> anschreiben (Teamname, Ligavertreter, Email-Adresse angeben)</li>
         <li>2. <?=Config::LIGAGEBUEHR?> Ligagebühr überweisen</li>
         <li>3. Teamcenter-Login erhalten</li>
         <li>4. Im Teamcenter zu Turnieren anmelden</li>
@@ -63,6 +63,6 @@ include '../../templates/header.tmp.php';
     </ul>
 </div>
 
-<p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Config::LAMAIL)?></p>
+<p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Env::LAMAIL)?></p>
         
 <?php include '../../templates/footer.tmp.php';

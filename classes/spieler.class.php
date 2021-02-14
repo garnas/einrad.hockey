@@ -63,7 +63,7 @@ class Spieler
             } else {
                 Form::error("Der Spieler steht bereits im Kader für folgendes Team: "
                     . Team::teamid_to_teamname($result['team_id']) . "<br> Bitte wende dich an den Ligaausschuss ("
-                    . Form::mailto(Config::LAMAIL) . ")", esc:false);
+                    . Form::mailto(Env::LAMAIL) . ")", esc:false);
                 return false;
             }
         } else {

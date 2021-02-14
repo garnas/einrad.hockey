@@ -78,15 +78,15 @@ class Config
     /**
      * Dokumente
      */
-    const LINK_MODUS = self::BASE_URL . '/dokumente/ligamodus.pdf';
-    const LINK_REGELN = self::BASE_URL . '/dokumente/regelwerk.pdf';
-    const LINK_MODUS_KURZ = self::BASE_URL . '/dokumente/zusammenfassung_modus.pdf';
-    const LINK_REGELN_KURZ = self::BASE_URL . '/dokumente/zusammenfassung_regeln.pdf';
-    const LINK_MODUS_KURZ_ENG = self::BASE_URL . '/dokumente/summary_modus.pdf';
-    const LINK_REGELN_IUF = self::BASE_URL . '/dokumente/iuf-rulebook-2019.pdf';
-    const LINK_TURNIER = self::BASE_URL . '/dokumente/turniermodi.pdf';
-    const LINK_DSGVO = self::BASE_URL . '/dokumente/datenschutz-hinweise.pdf';
-    const LINK_SPIELPLAENE_ALT = self::BASE_URL . '/dokumente/alte_spielplan_vorlagen.pdf';
+    const LINK_MODUS = Env::BASE_URL . '/dokumente/ligamodus.pdf';
+    const LINK_REGELN = Env::BASE_URL . '/dokumente/regelwerk.pdf';
+    const LINK_MODUS_KURZ = Env::BASE_URL . '/dokumente/zusammenfassung_modus.pdf';
+    const LINK_REGELN_KURZ = Env::BASE_URL . '/dokumente/zusammenfassung_regeln.pdf';
+    const LINK_MODUS_KURZ_ENG = Env::BASE_URL . '/dokumente/summary_modus.pdf';
+    const LINK_REGELN_IUF = Env::BASE_URL . '/dokumente/iuf-rulebook-2019.pdf';
+    const LINK_TURNIER = Env::BASE_URL . '/dokumente/turniermodi.pdf';
+    const LINK_DSGVO = Env::BASE_URL . '/dokumente/datenschutz-hinweise.pdf';
+    const LINK_SPIELPLAENE_ALT = Env::BASE_URL . '/dokumente/alte_spielplan_vorlagen.pdf';
 
     /**
      * Authentification

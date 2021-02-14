@@ -20,10 +20,10 @@ class Form
             !isset($_SESSION['bild_navigation']['path'])
             or (time() - $_SESSION['bild_navigation']['zeit']) > 600
             ){
-            $imagesDir = Config::BASE_PATH . '/public/bilder/hintergrund/';
+            $imagesDir = Env::BASE_PATH . '/public/bilder/hintergrund/';
             $images = glob($imagesDir . '*.{jpg,JPG,jpeg,png,gif}', GLOB_BRACE);
             $randomImage = $images[array_rand($images)];
-            $_SESSION['bild_navigation']['path'] = Config::BASE_URL . '/bilder/hintergrund/' . basename($randomImage);
+            $_SESSION['bild_navigation']['path'] = Env::BASE_URL . '/bilder/hintergrund/' . basename($randomImage);
         }
         return $_SESSION['bild_navigation']['path'];
     }
@@ -221,7 +221,7 @@ class Form
 
     public static function log($file_name, $line)
     {
-        $path = Config::BASE_PATH . '/system/logs/';
+        $path = Env::BASE_PATH . '/system/logs/';
         //SQL-Logdatei erstellen/beschreiben
         $log_file = fopen($path . $file_name, "a");
         $line = date('[Y-M-d H:i:s e]: ') . $line . "\n";

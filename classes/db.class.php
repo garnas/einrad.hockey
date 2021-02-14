@@ -21,12 +21,12 @@ class db
      * Datenbankname
      * @param string $db
      */
-    function __construct($db = Config::DATABASE)
+    function __construct($db = Env::DATABASE)
     {
-        self::$link = new mysqli(Config::HOST_NAME, Config::USER_NAME, Config::PASSWORD, $db);
+        self::$link = new mysqli(Env::HOST_NAME, Env::USER_NAME, Env::PASSWORD, $db);
         if (self::$link->connect_errno) {
             Form::log(self::$log_file, "Verbindung fehlgeschlagen: " . self::$link->error);
-            die('<h2>Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error() . '<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
+            die('<h2>Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error() . '<br><br>Wende dich bitte an <span style="color:red;">' . Env::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
         }
     }
 
@@ -97,7 +97,7 @@ class db
         Form::error("Es wurde die veraltete DB-Klasse verwendet");
         $sql = "  SELECT AUTO_INCREMENT
             FROM  INFORMATION_SCHEMA.TABLES
-            WHERE TABLE_SCHEMA = '" . Config::DATABASE . "'  
+            WHERE TABLE_SCHEMA = '" . Env::DATABASE . "'  
             AND   TABLE_NAME   = '$tabelle';";
         $auto_incr = self::readdb($sql);
         $auto_incr = mysqli_fetch_assoc($auto_incr);
@@ -117,7 +117,7 @@ class db
         #$before = microtime(true);
         if (mysqli_connect_errno()) {
             Form::log(self::$log_file, "Lesen der Datenbank fehlgeschlagen: " . mysqli_connect_error());
-            die('<h2>Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error() . '<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
+            die('<h2>Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error() . '<br><br>Wende dich bitte an <span style="color:red;">' . Env::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
         }
 
         #$after = microtime(true);
@@ -146,14 +146,14 @@ class db
         if (mysqli_connect_errno()) {
             $error_text = 'Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error();
             Form::log(self::$log_file, $error_text);
-            die('<h2>Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error() . '<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
+            die('<h2>Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error() . '<br><br>Wende dich bitte an <span style="color:red;">' . Env::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
         }
 
         // Beschreiben der Datenbank nicht möglich? $sql wird im if schon ausgeführt
         if (!self::$link->query($sql)) {
             $error_text = 'Fehlgeschlagen: ' . self::$link->error;
             Form::log(self::$log_file, $error_text);
-            Form::error("Fehler beim Beschreiben der Datenbank. " . Form::mailto(Config::TECHNIKMAIL),
+            Form::error("Fehler beim Beschreiben der Datenbank. " . Form::mailto(Env::TECHNIKMAIL),
                 esc:false);
             //Debug Form::error($sql);
             die();

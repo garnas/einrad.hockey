@@ -58,7 +58,7 @@ if(isset($_POST['login'])) {
         }else{
             //Logdatei erstellen/beschreiben
             Form::log($log_file, "Falsches Passwort | Teamname: " . $teamname);
-            Form::error("Falsches Passwort. Schreibe " . Form::mailto(Config::LAMAIL)
+            Form::error("Falsches Passwort. Schreibe " . Form::mailto(Env::LAMAIL)
                 . " um euer Passwort zurückzusetzen", esc:false);
         }
     }

@@ -39,7 +39,7 @@ if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
     $_SESSION[$list_id]['empfaenger'] = $array['teamnamen'];
 
     if (isset($_POST['la'])) {
-        array_unshift($_SESSION[$list_id]['emails'], Config::LAMAIL);
+        array_unshift($_SESSION[$list_id]['emails'], Env::LAMAIL);
         array_unshift($_SESSION[$list_id]['empfaenger'], 'Ligaausschuss');
     }
 
@@ -54,7 +54,7 @@ if (isset($_POST['rundmail'])) {
     $_SESSION[$list_id]['empfaenger'] = Team::get_liste();
     $_SESSION[$list_id]['emails'] = Kontakt::get_emails_rundmail();
 
-    array_unshift($_SESSION[$list_id]['emails'], Config::LAMAIL);
+    array_unshift($_SESSION[$list_id]['emails'], Env::LAMAIL);
     array_unshift($_SESSION[$list_id]['empfaenger'], '<b>Ligaausschuss</b>');
 }
 
@@ -78,7 +78,7 @@ if (isset($_POST['teams_emails'])) {
     $_SESSION[$list_id]['emails'] = $emails;
     $_SESSION[$list_id]['empfaenger'] = $teamnamen;
     if (isset($_POST['la'])) {
-        array_unshift($_SESSION[$list_id]['emails'], Config::LAMAIL);
+        array_unshift($_SESSION[$list_id]['emails'], Env::LAMAIL);
         array_unshift($_SESSION[$list_id]['empfaenger'], '<b>Ligaausschuss</b>');
     }
 
@@ -99,8 +99,8 @@ if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])) {
     if (!$error) {
         $mailer = MailBot::start_mailer();
         if (Config::$ligacenter) {
-            $mailer->setFrom(Config::LAMAIL, 'Ligaausschuss');
-            $mailer->addBCC(Config::LAMAIL_ANTWORT);
+            $mailer->setFrom(Env::LAMAIL, 'Ligaausschuss');
+            $mailer->addBCC(Env::LAMAIL_ANTWORT);
         } elseif (Config::$teamcenter) {
             $akt_kontakt = new Kontakt($_SESSION['team_id']); //Absender Mails bekommen
             $absender = $akt_kontakt->get_emails();
@@ -136,7 +136,7 @@ if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])) {
             die();
         } else {
             Form::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden. Manuell Mail versenden: "
-                . Form::mailto(Config::LAMAIL), esc:false);
+                . Form::mailto(Env::LAMAIL), esc:false);
             Form::error($mailer->ErrorInfo);
         }
     }
@@ -147,7 +147,7 @@ if (isset($_SESSION[$list_id])) {
     $anzahl_emails = count($_SESSION[$list_id]['emails']);
     $adressaten = $bcc = [];
     if (Config::$ligacenter) {
-        $from = Config::LAMAIL;
+        $from = Env::LAMAIL;
         $tos = $_SESSION[$list_id]['emails'];
     } elseif (Config::$teamcenter) {
         $from = $_SESSION['teamname'];

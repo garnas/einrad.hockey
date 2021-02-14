@@ -17,7 +17,7 @@ include '../../templates/spielplan/spielplan_titel.tmp.php'; // Titel
 ?>
 
     <p>
-        <a href="<?=CONFIG::BASE_URL?>/ligacenter/lc_turnier_report.php?turnier_id=<?= $spielplan->turnier_id ?>"
+        <a href="<?=Env::BASE_URL?>/ligacenter/lc_turnier_report.php?turnier_id=<?= $spielplan->turnier_id ?>"
            class="w3-button w3-tertiary w3-block"
         >
             <i class="material-icons">report</i> Turnierreport + Teamkader

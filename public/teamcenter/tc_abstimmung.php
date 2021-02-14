@@ -66,7 +66,7 @@ include '../../templates/header.tmp.php';
             <?php } else { ?>
                 <p id="stimme">Dein Team hat wie folgt abgestimmt:</p>
                 <p>
-                    <?= $display_ergebnisse[$einsicht]['formulierung'] ?? "<span class='w3-text-red'>Fehler, bitte melde dich bei </span>" . Form::mailto(Config::TECHNIKMAIL) ?>
+                    <?= $display_ergebnisse[$einsicht]['formulierung'] ?? "<span class='w3-text-red'>Fehler, bitte melde dich bei </span>" . Form::mailto(Env::TECHNIKMAIL) ?>
                 </p>
             <?php } //endif Team will Stimme einsehen?>
         <?php } //endif Team hat abgestimmt?>

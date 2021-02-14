@@ -10,7 +10,7 @@
     <?= $turnier->details['tblock'] ?>-Turnier in <?= $turnier->details['ort'] ?> verändert.
 </p>
 <p>
-    <a href='<?= Config::BASE_URL . "/ligacenter/lc_turnier_log?turnier_id=" . $turnier->id ?> '>
+    <a href='<?= Env::BASE_URL . "/ligacenter/lc_turnier_log?turnier_id=" . $turnier->id ?> '>
         Link zum Turnier
     </a>
 </p>

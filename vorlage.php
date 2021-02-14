@@ -20,7 +20,7 @@ $teams = Team::get_liste();
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-include Config::BASE_PATH . '/templates/header.tmp.php'; ?>
+include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 
 <h1 class="w3-text-primary">Eine Liste aller Teams</h1>
 
@@ -30,4 +30,4 @@ include Config::BASE_PATH . '/templates/header.tmp.php'; ?>
 
 <p class="w3-text-grey">Ende der Liste</p>
 
-<?php include Config::BASE_PATH . '\templates\footer.tmp.php';
+<?php include Env::BASE_PATH . '\templates\footer.tmp.php';

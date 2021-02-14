@@ -90,10 +90,10 @@ include '../../templates/header.tmp.php';
     </div>
 </div>
     
-<?=Form::message('notice',
+<?php Form::message('notice',
     'Gibt es Probleme beim Eintrag? Dann schickt uns eine Mail an <br>'
-    . Form::mailto(Config::TECHNIKMAIL) . ' oder '
-    . Form::mailto(Config::OEFFIMAIL), '', false)?>
+    . Form::mailto(Env::TECHNIKMAIL) . ' oder '
+    . Form::mailto(Env::Env), '', false) ?>
 
 <?php
 include '../../templates/footer.tmp.php';

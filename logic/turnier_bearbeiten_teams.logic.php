@@ -80,13 +80,13 @@ if (isset($_POST['change_turnier'])) {
     if ($turnier->details['phase'] == 'spielplan'){
         if ($turnier->details['plaetze'] != $plaetze && Config::$teamcenter){
             $error = true;
-            Form::error("Die Anzahl der Plätze kann in der Spielplanphase nicht mehr geändert werden. Bitte wende dich unter ".Config::LAMAIL." an den Ligaaussschuss.");
+            Form::error("Die Anzahl der Plätze kann in der Spielplanphase nicht mehr geändert werden. Bitte wende dich unter ".Env::LAMAIL." an den Ligaaussschuss.");
         }
     }
     // Keine Änderung der Plätze in der Spielplanphase
     if ($turnier->details['phase'] == 'ergebnis' && Config::$teamcenter){
         $error = true;
-        Form::error("Turniere können in der Ergebnisphase nicht mehr geändert werden. Bitte wende dich unter ".Config::LAMAIL." an den Ligaaussschuss.");
+        Form::error("Turniere können in der Ergebnisphase nicht mehr geändert werden. Bitte wende dich unter ".Env::LAMAIL." an den Ligaaussschuss.");
     }
 
     // Block erweitern

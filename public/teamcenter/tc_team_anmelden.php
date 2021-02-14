@@ -66,11 +66,11 @@ if (isset($_POST['anmelden'])){
     }
     //Richtige Phase
     if ($turnier->details['phase'] == 'spielplan'){
-        Form::error ("Das Turnier befindet sich bereits in der Spielplanphase. Anmeldung nur noch über den Ligaausschuss: " . Form::mailto(Config::LAMAIL));
+        Form::error ("Das Turnier befindet sich bereits in der Spielplanphase. Anmeldung nur noch über den Ligaausschuss: " . Form::mailto(Env::LAMAIL));
         $error = true;
     }
     if ($turnier->details['phase'] == 'ergebnis'){
-        Form::error ("Das Turnier ist schon in der Ergebnisphase. Melde dich bei " .Form::mailto(Config::LAMAIL));
+        Form::error ("Das Turnier ist schon in der Ergebnisphase. Melde dich bei " .Form::mailto(Env::LAMAIL));
         $error = true;
     }
     //Test Teamblock
@@ -137,11 +137,11 @@ if (isset($_POST['freilos'])){
         $error = true;
     }
     if ($turnier->details['phase'] == 'spielplan'){
-        Form::error ("Das Turnier befindet sich bereits in der Spielplanphase. Anmeldung nur noch über den Ligaausschuss: " . Form::mailto(Config::LAMAIL));
+        Form::error ("Das Turnier befindet sich bereits in der Spielplanphase. Anmeldung nur noch über den Ligaausschuss: " . Form::mailto(Env::LAMAIL));
         $error = true;
     }
     if ($turnier->details['phase'] == 'ergebnis'){
-        Form::error ("Das Turnier ist schon in der Ergebnisphase. Melde dich bei " .Form::mailto(Config::LAMAIL));
+        Form::error ("Das Turnier ist schon in der Ergebnisphase. Melde dich bei " .Form::mailto(Env::LAMAIL));
         $error = true;
     }
     if ($turnier->details['phase'] == 'melde' && $turnier->check_team_block($_SESSION['team_id'])){
@@ -177,7 +177,7 @@ if (isset($_POST['abmelden']) && isset($_SESSION['team_id'])){
     }
     if (time() > $abmelden_moeglich_bis && $liste == 'spiele'){
         $error = true;
-        Form::error ("Abmeldungen von der Spielen-Liste sind nur bis Freitag 23:59 zwei Wochen vor dem Turnier möglich. Bitte nehmt via Email Kontakt mit dem Ligaausschuss auf: " .Form::mailto(Config::LAMAIL). "");
+        Form::error ("Abmeldungen von der Spielen-Liste sind nur bis Freitag 23:59 zwei Wochen vor dem Turnier möglich. Bitte nehmt via Email Kontakt mit dem Ligaausschuss auf: " .Form::mailto(Env::LAMAIL). "");
     }
     if (!$error){
 

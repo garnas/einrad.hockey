@@ -5,7 +5,7 @@
     die freien Spielen-Plätze wurden nach Modus 4.4.2 verteilt. Euer Team steht nun auf der <b><?= $liste ?></b>
 </p>
 <p>
-    <a href="<?= Config::BASE_URL . "/liga/turnier_details.php?turnier_id=" . $turnier->id ?>">
+    <a href="<?= Env::BASE_URL . "/liga/turnier_details.php?turnier_id=" . $turnier->id ?>">
         Erfahre hier mehr.
     </a>
 </p>

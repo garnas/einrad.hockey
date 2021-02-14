@@ -38,7 +38,7 @@ if (isset($_POST['absenden'])) {
     if ($time < 4) { //Bot, wenn in unter 4 Sekunden das Formular abgeschickt wurde
         Form::error("E-Mail konnte wegen Spamverdacht nicht versendet werden,
          da das Formular zu schnell ausgefüllt wurde. Schreib uns bitte an via "
-            . Form::mailto(Config::LAMAIL), esc:false);
+            . Form::mailto(Env::LAMAIL), esc:false);
         $error = true;
         // Logdatei erstellen/beschreiben
         Form::log($log_file, "Zu schnell: " . $time . " Sekunden\n" . print_r($_POST, true));
@@ -48,7 +48,7 @@ if (isset($_POST['absenden'])) {
         //Mail an die Liga
         $mailer = MailBot::start_mailer();
         $mailer->setFrom($absender, $name); // Absenderemail und -name setzen
-        $mailer->addAddress(Config::LAMAIL); // Empfängeradresse
+        $mailer->addAddress(Env::LAMAIL); // Empfängeradresse
         $mailer->Subject = 'Kontaktformular: ' . $betreff; // Betreff der Email
         $mailer->Body = $text;
 
@@ -58,13 +58,13 @@ if (isset($_POST['absenden'])) {
             $send = true; //Email an den User nur schicken, wenn die Mail an LA rausging
         } else {
             Form::error("Es ist ein Fehler aufgetreten. E-Mail konnte nicht versendet werden.
-             Manuell versenden: " . Form::mailto(Config::LAMAIL), esc:false);
+             Manuell versenden: " . Form::mailto(Env::LAMAIL), esc:false);
             Form::log($log_file, "Error Mail:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
         }
         if ($send) {
             // Confirmation Mail an die angegebene Absendeadresse
             $mailer = MailBot::start_mailer();
-            $mailer->setFrom(Config::LAMAIL); // Absenderemail und -name setzen
+            $mailer->setFrom(Env::LAMAIL); // Absenderemail und -name setzen
             $mailer->addAddress($_POST['absender'], $_POST['name']); // Empfängeradresse
             $mailer->Subject = 'Kontaktformular: ' . $_POST['betreff']; // Betreff der Email
             $mailer->Body = "Danke für deine Mail! Du hast uns folgendes gesendet:\r\n\r\n" . $text;
@@ -97,7 +97,7 @@ include '../../templates/header.tmp.php';
                 <i class="material-icons">info_outline</i> Empfänger
             </span>
             <br>
-            <?= Form::mailto(Config::LAMAIL) ?>
+            <?= Form::mailto(Env::LAMAIL) ?>
         </p>
         <form method="post">
             <input type="hidden"

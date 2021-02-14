@@ -94,7 +94,7 @@
                 </i><div class="w3-row">
             </p>
             <?php if(Config::$ligacenter){ ?>
-                <p><b>+ BCC:</b> <?=Config::LAMAIL_ANTWORT?></p>
+                <p><b>+ BCC:</b> <?=Env::LAMAIL_ANTWORT?></p>
             <?php } //endif?>
             <p>
                 <label class="" for="betreff"><b><i class="material-icons">label_outline</i> Betreff</b></label>

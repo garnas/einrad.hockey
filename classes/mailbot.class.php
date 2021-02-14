@@ -14,12 +14,12 @@ class MailBot
     {
         $mailer = PHPMailer::load_phpmailer();
         $mailer->isSMTP();
-        $mailer->Host = Config::SMTP_HOST;
+        $mailer->Host = Env::SMTP_HOST;
         $mailer->SMTPAuth = true;
-        $mailer->Username = Config::SMTP_USER;
-        $mailer->Password = Config::SMTP_PW;
+        $mailer->Username = Env::SMTP_USER;
+        $mailer->Password = Env::SMTP_PW;
         $mailer->SMTPSecure = 'tls';
-        $mailer->Port = Config::SMTP_PORT;
+        $mailer->Port = Env::SMTP_PORT;
         $mailer->CharSet = 'UTF-8';
         return $mailer;
     }
@@ -34,7 +34,7 @@ class MailBot
      */
     public static function send_mail(\PHPMailer\PHPMailer\PHPMailer $mailer): bool
     {
-        if (Config::ACTIVATE_EMAIL) {
+        if (Env::ACTIVATE_EMAIL) {
             if ($mailer->send()) {
                 Form::log('emails.log', 'Mail erfolgreich versendet');
                 return true;
@@ -104,7 +104,7 @@ class MailBot
      * @param string|array $adressaten
      * @param string $absender
      */
-    public static function add_mail(string $betreff, string $inhalt, string|array $adressaten, string $absender = Config::SMTP_USER)
+    public static function add_mail(string $betreff, string $inhalt, string|array $adressaten, string $absender = Env::SMTP_USER)
     {
         if (!empty($adressaten)) return; //Nur wenn Mailadressen vorhanden sind, wird eine Mail hinzugefügt
 
@@ -288,6 +288,6 @@ class MailBot
         ob_start();
             include(__dir__ . "../templates/mails/mail_turnierdaten_geaendert.tmp.php");
         $inhalt = ob_get_clean();
-        self::add_mail($betreff, $inhalt, Config::LAMAIL);
+        self::add_mail($betreff, $inhalt, Env::LAMAIL);
     }
 }

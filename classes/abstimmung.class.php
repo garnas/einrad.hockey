@@ -124,7 +124,7 @@ class Abstimmung
     function set_stimme($stimme, $crypt)
     {
         if (empty($this->team) xor $this->get_stimme($crypt) === 'none'){
-            Form::error("Fehler, bitte melde dich bei " . Form::mailto(Config::TECHNIKMAIL), esc:false);
+            Form::error("Fehler, bitte melde dich bei " . Form::mailto(Env::TECHNIKMAIL), esc:false);
             return;
         }
         if (empty($this->team)) { // Team stimmt zum ersten mal ab.
