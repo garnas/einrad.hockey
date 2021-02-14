@@ -13,7 +13,7 @@ if (!isset($neuigkeiten[$neuigkeiten_id])){
 //Neuigkeit löschen
 if (isset($_POST['delete_neuigkeit'])){
     Neuigkeit::delete_neuigkeit($neuigkeiten_id);
-    Form::affirm("Neuigkeit wurde gelöscht");
+    Form::info("Neuigkeit wurde gelöscht");
     header('Location: ../liga/neues.php');
     die();
 }
@@ -62,13 +62,13 @@ if (isset($_POST['change_neuigkeit'])){
             //Bild
             if ($_POST['delete_jpg'] == 'Ja' && !empty($neuigkeit['link_jpg'])){
                 unlink ($neuigkeit['link_jpg']);
-                Form::affirm("Bild wurde gelöscht.");
+                Form::info("Bild wurde gelöscht.");
                 if ($neuigkeit['link_jpg'] == $target_file_jpg){$target_file_jpg = '';}
             }
             //PDF
             if ($_POST['delete_pdf'] == 'Ja' && !empty($neuigkeit['link_pdf'])){
                 unlink ($neuigkeit['link_pdf']);
-                Form::affirm("PDF wurde gelöscht.");
+                Form::info("PDF wurde gelöscht.");
                 if ($neuigkeit['link_pdf'] == $target_file_pdf){$target_file_pdf = '';}
             }
 
@@ -81,7 +81,7 @@ if (isset($_POST['change_neuigkeit'])){
             if ($neuigkeit['link_pdf'] != $target_file_pdf && !empty($neuigkeit['link_pdf'])){
                 if (file_exists($neuigkeit['link_pdf'])){unlink ($neuigkeit['link_pdf']);}
             }
-            Form::affirm("Die Neuigkeit wurde bearbeitet.");
+            Form::info("Die Neuigkeit wurde bearbeitet.");
             header('Location: ../liga/neues.php');
             die();
         }else{

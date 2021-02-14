@@ -12,7 +12,7 @@ if(isset($_POST['change'])) {
     if (strlen($passwort_neu) >= 8 && strlen($passwort_neu) < 100){
         if(password_verify($passwort_alt, ligaleitung::get_la_password($_SESSION['la_id']))) {
             ligaleitung::set_la_password($_SESSION['la_id'],$passwort_neu);
-            Form::affirm("Dein Passwort wurde geändert");
+            Form::info("Dein Passwort wurde geändert");
             header('Location: lc_start.php');
             die();
         }else{
@@ -23,7 +23,7 @@ if(isset($_POST['change'])) {
     }    
 }
 
-Form::attention("Dein Passwort wird verschlüsselt gespeichert");
+Form::notice("Dein Passwort wird verschlüsselt gespeichert");
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////

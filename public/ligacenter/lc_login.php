@@ -57,24 +57,44 @@ if(isset($_POST['login'])) {
 /////////////////////////////////////////////////////////////////////////////
 Config::$page_width = "480px";
 Config::$titel = "Ligacenter | Deutsche Einradhockeyliga";
-Config::$content = "Im Ligacenter kann der Ligaausschuss die Liga verwalten. Nur Mitglieder des Ligaausschusses haben einen Login.";
+Config::$content =
+    "Im Ligacenter kann der Ligaausschuss die Liga verwalten. Nur Mitglieder des Ligaausschusses haben einen Login.";
 include '../../templates/header.tmp.php';
 ?>
 
 <form method="post" class="w3-card-4 w3-panel">
     <h1 class="w3-text-primary">Ligacenter</h1>
-    <p class="w3-text-grey">Im Ligacenter kann der Ligaausschuss die Liga verwalten. Nur Mitglieder des Ligaausschusses haben einen Login.</p>
-    <div onclick='document.getElementById("login").value = "";document.getElementById("passwort").value = "";' class="no w3-right w3-text-red w3-hover-text-secondary" style="cursor: pointer;">
+    <p class="w3-text-grey">
+        Im Ligacenter kann der Ligaausschuss die Liga verwalten. Nur Mitglieder des Ligaausschusses haben einen Login.
+    </p>
+    <div onclick='document.getElementById("login").value = "";document.getElementById("passwort").value = "";'
+         class="no w3-right w3-text-red w3-hover-text-secondary" style="cursor: pointer;">
         <i class="material-icons">clear</i>
     </div>
         <label for="login"><i class="material-icons">account_circle</i> Login:</label>
-        <input class="w3-input w3-border-primary" value="<?=$_POST['loginname'] ?? ''?>" type="text" id="login" name="loginname" required>
+        <input class="w3-input w3-border-primary"
+               value="<?=$_POST['loginname'] ?? ''?>"
+               type="text"
+               id="login"
+               name="loginname"
+               required
+        >
     <p>
         <label for="passwort"><i class="material-icons">lock</i> Passwort:</label>
-        <input class="w3-input w3-border-primary" type="password" id="passwort" name="passwort" required>
+        <input class="w3-input w3-border-primary"
+               type="password"
+               id="passwort"
+               name="passwort"
+               required
+        >
     </p>
     <p>
-        <input class="w3-button w3-ripple w3-tertiary" name="login" type="submit" value="Login">
+        <button class="w3-button w3-ripple w3-round w3-tertiary"
+                type="submit"
+                name="login"
+        >
+            <?= Form::icon("login") ?> Login
+        </button>
     </p>
 </form>
 

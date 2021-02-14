@@ -28,7 +28,7 @@ if (
         $team->set_detail('trikot_farbe_1', '');
     if (isset($_POST['no_color_2']))
         $team->set_detail('trikot_farbe_2', '');
-    Form::affirm("Trikotfarbe geändert.");
+    Form::info("Trikotfarbe geändert.");
     header("Location:" . $path);
     die();
 }
@@ -65,13 +65,13 @@ if (isset($_POST['teamdaten_aendern'])) {
         }
         if ("Ja" == ($_POST['delete' . $email['teams_kontakt_id']]) ?? '') {
             if ($kontakte->delete_email($email['teams_kontakt_id'])) {
-                Form::affirm($email['email'] . " wurde gelöscht");
+                Form::info($email['email'] . " wurde gelöscht");
             } else {
                 Form::error("Es muss mindestens eine E-Mail-Adresse hinterlegt sein");
             }
         }
     }
-    Form::affirm("Teamdaten wurden gespeichert.");
+    Form::info("Teamdaten wurden gespeichert.");
     header('Location: ' . $path);
     die();
 }
@@ -84,7 +84,7 @@ if (isset($_POST['neue_email'])) {
 
     if (filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($email)) {
         $kontakte->set_email($email, $public, $infomail);
-        Form::affirm("E-Mail-Adresse wurde hinzugefügt");
+        Form::info("E-Mail-Adresse wurde hinzugefügt");
         header('Location: ' . $path);
         die();
     } else {
@@ -101,7 +101,7 @@ if (isset($_POST['teamfoto'])) {
             Form::error("Fehler beim Fotoupload");
         } else {
             $team->set_detail('teamfoto', $target_file_jpg);
-            Form::affirm("Teamfoto wurde hochgeladen");
+            Form::info("Teamfoto wurde hochgeladen");
             header('Location: ' . $path);
             die();
         }
@@ -111,7 +111,7 @@ if (isset($_POST['teamfoto'])) {
 // Teamfoto löschen
 if (isset($_POST['delete_teamfoto'])) {
     $team->delete_teamfoto();
-    Form::affirm("Teamfoto wurde gelöscht");
+    Form::info("Teamfoto wurde gelöscht");
     header('Location: ' . $path);
     die();
 }

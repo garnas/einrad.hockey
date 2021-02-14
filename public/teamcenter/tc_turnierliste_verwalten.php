@@ -10,7 +10,7 @@ $heute = date("Y-m-d");
 $turniere = Turnier::get_eigene_turniere($_SESSION['team_id']);
 
 if (empty($turniere)){
-    Form::affirm('Dein Team richtet zurzeit kein Turnier aus - Erstelle ein Turnier, um es verwalten zu können');
+    Form::info('Dein Team richtet zurzeit kein Turnier aus - Erstelle ein Turnier, um es verwalten zu können');
     header('Location: tc_turnier_erstellen.php');
     die();
 }

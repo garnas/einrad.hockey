@@ -33,27 +33,27 @@ foreach ($teams as $team_id => $team){
 }
 
 //Hinzufügen des zweiten Freiloses für zwei Schiris zu Saisonbeginn
-$team_liste = '';
-if (isset($_POST['zweites_freilos'])){
-    foreach ($teams as $team_id => $team){
-        if ($team['schiris'] >= 2){
-            Team::add_freilos($team_id);
-            $betreff = 'Zweites Freilos';
-            $text = 
-                "<html>Hallo " . $team['teamname'] . ","
-                ."<br><br>da ihr zwei ausgebildete Schiedsrichter im Kader eingetragen habt, wurde euch euer zweites Freilos gutgeschrieben."
-                ."<br><br>Wir wünschen euch eine schöne Saison " . Form::get_saison_string() . "!"
-                ."<br><br>Eure Einradhockeyliga</html>";
-            $akt_kontakt = new Kontakt ($team_id);
-            $adressaten = $akt_kontakt->get_emails();
-            MailBot::add_mail($betreff, $text, $adressaten);
-            $team_liste .= "<br>" . $team['teamname'];
-        }
-    }
-    Form::affirm("Freilose vergeben an:<br>" . $team_liste);
-    header('Location: lc_teams_uebersicht.php');
-    die();
-}
+//$team_liste = '';
+//if (isset($_POST['zweites_freilos'])){
+//    foreach ($teams as $team_id => $team){
+//        if ($team['schiris'] >= 2){
+//            Team::add_freilos($team_id);
+//            $betreff = 'Zweites Freilos';
+//            $text =
+//                "<html>Hallo " . $team['teamname'] . ","
+//                ."<br><br>da ihr zwei ausgebildete Schiedsrichter im Kader eingetragen habt, wurde euch euer zweites Freilos gutgeschrieben."
+//                ."<br><br>Wir wünschen euch eine schöne Saison " . Form::get_saison_string() . "!"
+//                ."<br><br>Eure Einradhockeyliga</html>";
+//            $akt_kontakt = new Kontakt ($team_id);
+//            $adressaten = $akt_kontakt->get_emails();
+//            MailBot::add_mail($betreff, $text, $adressaten);
+//            $team_liste .= "<br>" . $team['teamname'];
+//        }
+//    }
+//    Form::info("Freilose vergeben an:<br>" . $team_liste);
+//    header('Location: lc_teams_uebersicht.php');
+//    die();
+//}
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////

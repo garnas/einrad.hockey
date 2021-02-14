@@ -1,6 +1,6 @@
 <h1 class="w3-text-primary"><?=date("d.m.Y", strtotime($turnier->details['datum']))?> <?=$turnier->details['ort']?> <i>(<?=$turnier->details['tblock']?>)</i></h1>
 <h2 class="w3-text-grey"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">article</i> Turnier-Report</h2>
-<?php Form::schreibe_attention("Der Turnierreport ist
+<?php Form::message('notice', "Der Turnierreport ist
         nur von andere Ligateams und dem Ligaausschuss der Deutschen Einradhockeyliga einsehbar.") ?>
 <!-- Link Spielplan -->
 <p><?=Form::link('../liga/spielplan.php?turnier_id=' . $turnier_id, '<i class="material-icons">reorder</i> Zum Spielplan')?></p>

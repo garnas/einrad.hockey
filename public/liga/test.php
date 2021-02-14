@@ -11,11 +11,11 @@ function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
 {
     $turnier_id = 860;
     if ($counter + $fehler + $penalty > 1) {
-        Form::attention($penalty . " Penalty");
-        Form::affirm($counter . " Erfolgreiche Durchgänge");
+        Form::notice($penalty . " Penalty");
+        Form::info($counter . " Erfolgreiche Durchgänge");
         Form::error($fehler . " Fehler");
         $delta_load_time = microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"];
-        Form::attention(round($delta_load_time, 3) . ' Sekunden');
+        Form::notice(round($delta_load_time, 3) . ' Sekunden');
         db::debug(memory_get_peak_usage());
         return;
     }
@@ -44,7 +44,7 @@ function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
     }
     $spielplan = new Spielplan((new Turnier($turnier_id)));
     if ($spielplan->out_of_scope) {
-        Form::attention($counter . " Durchgänge");
+        Form::notice($counter . " Durchgänge");
         header('Location: spielplan.php?turnier_id=' . $turnier_id);
         die();
     }
@@ -65,7 +65,7 @@ function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
             or $tabelle_alt[$platz_neu - 1]['punkte'] != $eintrag_neu['statistik']['punkte']
         ) {
             Form::error(Team::teamid_to_teamname($team_id) . " | " . Team::teamid_to_teamname($tabelle_alt[$platz_neu - 1]['team_id_a']));
-            Form::attention($counter . " Durchgänge");
+            Form::notice($counter . " Durchgänge");
             db::debug($tabelle_alt);
             header('Location: spielplan.php?turnier_id=' . $turnier_id);
             die();

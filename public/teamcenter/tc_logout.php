@@ -13,6 +13,6 @@ require_once '../../logic/session_team.logic.php'; //Auth
     unset($_SESSION['teamblock']);
 //}
 
-Form::affirm("Logout erfolgreich");
+Form::info("Logout erfolgreich");
 header('Location: ../teamcenter/tc_login.php');
 die();

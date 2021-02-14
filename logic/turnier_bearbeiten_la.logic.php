@@ -7,7 +7,7 @@ if (isset($_POST['delete_turnier'])) {
         Form::error('Bitte Hinweistext vor dem Löschen des Turnieres lesen.');
     }else{
         $turnier->delete($_POST['delete_turnier_grund']);
-        Form::affirm("Turnier wurde gelöscht");
+        Form::info("Turnier wurde gelöscht");
         header('Location: ../ligacenter/lc_turnierliste.php#deleted');
         die();
     }
@@ -59,7 +59,7 @@ if (isset($_POST['turnier_bearbeiten_la'])) {
     // Ändern der Turnierdaten
     if (!$error){
         $turnier->change_turnier_liga($tname, $ausrichter, $art, $tblock, $fixed, $datum, $phase);
-        Form::affirm("Turnierdaten wurden geändert");
+        Form::info("Turnierdaten wurden geändert");
         header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->details['turnier_id']);
         die();
     }else{

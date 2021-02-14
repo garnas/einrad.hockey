@@ -91,7 +91,7 @@ class dbi
             $string = print_r($input, true);
         }
         $backtrace = debug_backtrace();
-        Form::affirm('<p>File: ' . $backtrace[0]['file'] . '<br>Line: ' . $backtrace[0]['line'] . '</p><pre>' . $string . '</pre>');
+        Form::info('<p>File: ' . $backtrace[0]['file'] . '<br>Line: ' . $backtrace[0]['line'] . '</p><pre>' . $string . '</pre>');
     }
 
     /**
@@ -107,7 +107,7 @@ class dbi
             . " --password=" . Config::PASSWORD
             . " --host=" . Config::HOST_NAME
             . " " . Config::DATABASE . " > " . $dumpfile);
-        Form::affirm("Datenbank wurde gesichert als " . date("Y-m-d_H-i-s") . ".sql im Ordner system/backup/");
+        Form::info("Datenbank wurde gesichert als " . date("Y-m-d_H-i-s") . ".sql im Ordner system/backup/");
         return $dumpfile;
     }
 }

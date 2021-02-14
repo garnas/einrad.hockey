@@ -36,7 +36,7 @@ if (isset($_POST["tore_speichern"])) {
             $_POST["penalty_b"][$spiel_id] ?? ''
         );
     }
-    Form::affirm('Spielergebnisse wurden gespeichert');
+    Form::info('Spielergebnisse wurden gespeichert');
     header('Location: ' . dbi::escape($_SERVER['REQUEST_URI']));
     die();
 }
@@ -64,7 +64,7 @@ if (isset($_POST["turnierergebnis_speichern"])) {
 
     if (!($error ?? false)) {
         $spielplan->turnier->set_ergebnisse($spielplan->platzierungstabelle);
-        Form::affirm("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
+        Form::info("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
         header('Location: ' . dbi::escape($_SERVER['REQUEST_URI']));
         die();
     }
@@ -73,7 +73,9 @@ if (isset($_POST["turnierergebnis_speichern"])) {
 
 // Hinweis Kaderkontrolle und Turnierreport
 if (!(new TurnierReport($turnier_id))->kader_check()) {
-    Form::affirm("Bitte kontrolliert die Teamkader und setzt im " . Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, 'Turnierreport') . " das entsprechende Häkchen.");
+    Form::info("Bitte kontrolliert die Teamkader und setzt im "
+            . Form::link('../teamcenter/tc_turnier_report.php?turnier_id='
+            . $turnier_id, 'Turnierreport') . " das entsprechende Häkchen.", esc:false);
 }
 
 if(!$spielplan->validate_penalty_ergebnisse()){
@@ -97,6 +99,6 @@ if (!empty($vgl_data)) {
         }
     }
     if ($error) {
-        Form::attention("Turnierergebnis stimmt nicht mit dem in der Datenbank hinterlegtem Ergebnis überein.");
+        Form::notice("Turnierergebnis stimmt nicht mit dem in der Datenbank hinterlegtem Ergebnis überein.");
     }
 }

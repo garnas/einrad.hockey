@@ -20,7 +20,7 @@ if (isset($_POST['anmelden'])){
         $_SESSION['team_id'] =  $team_id;
         $_SESSION['teamname'] = $teamname;
         $_SESSION['teamblock'] = Tabelle::get_team_block($team_id);
-        Form::affirm("Login via Ligaausschuss erfolgreich");
+        Form::info("Login via Ligaausschuss erfolgreich");
         header('Location: ../teamcenter/tc_start.php');
         //Logdatei erstellen/beschreiben
         Form::log("log_login.log", "Erfolgreich       | via Ligacenter: " . $_SESSION['la_login_name'] . " als " . $_SESSION['teamname']);
@@ -36,7 +36,7 @@ if (isset($_POST['deaktivieren'])){
     $team_id = Team::teamname_to_teamid($teamname);
     if (Team::is_ligateam($team_id)){
         Team::deactivate_team($team_id);
-        Form::affirm("Das Team $teamname wurde deaktiviert.");
+        Form::info("Das Team $teamname wurde deaktiviert.");
         header('Location: ../ligacenter/lc_admin.php');
         die();
     }else{
@@ -51,7 +51,7 @@ if (isset($_POST['reaktivieren'])){
     
     if (!empty($teamname)){
         Team::activate_team($team_id);
-        Form::affirm("Das Team $teamname wurde reaktiviert.");
+        Form::info("Das Team $teamname wurde reaktiviert.");
         header('Location: ../ligacenter/lc_admin.php');
         die();
     }else{

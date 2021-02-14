@@ -22,8 +22,7 @@
 </head>
 
 <body class="w3-white w3-auto w3-card-4">
-<main id="width_for_confetti" class="content">
-    <?= Form::$confetti ?>
+<main id="main_body" class="content">
     <div class="w3-hide-large w3-hide-medium">
         <?php include "nav_mobil.tmp.php"; ?>
     </div>
@@ -41,6 +40,6 @@
     <div class="w3-content" style="max-width:<?= Config::$page_width ?>;">
         <div class="w3-container">
 <?php // Fehlermeldungen darstellen
-Form::schreibe_meldungen();
+Form::print_messages();
             
             

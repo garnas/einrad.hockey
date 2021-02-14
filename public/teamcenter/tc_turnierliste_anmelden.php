@@ -17,7 +17,7 @@ $turniere = Turnier::get_turniere('ergebnis', false); // wird dem Template über
 // Hinweis Live-Spieltag
 $akt_spieltag = Tabelle::get_aktuellen_spieltag();
 if (Tabelle::check_spieltag_live($akt_spieltag)){
-    Form::attention(
+    Form::notice(
         "Für den aktuelle Spieltag (ein Spieltag ist immer ein ganzes Wochenende) wurden noch nicht alle Ergebnisse eingetragen. Für die Turnieranmeldung gilt immer der Teamblock des letzten vollständigen Spieltages: "
         . Form::link("../liga/tabelle.php?spieltag=" . ($akt_spieltag - 1) . "#rang", "Spieltag " . ($akt_spieltag - 1)));
 }

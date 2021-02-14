@@ -91,7 +91,7 @@ class MailBot
                 Form::error($mailer->ErrorInfo);
             }
         }
-        Form::affirm('Mailbot wurde ausgeführt.');
+        Form::info('Mailbot wurde ausgeführt.');
     }
 
     /**
@@ -146,7 +146,7 @@ class MailBot
             WHERE mail_status = 'fehler'
             ";
         if ($anzahl = dbi::$db->query($sql)->num_rows() > 0)
-            Form::attention("Der Mailbot kann $anzahl Mail(s) nicht versenden - siehe Datenbank.");
+            Form::notice("Der Mailbot kann $anzahl Mail(s) nicht versenden - siehe Datenbank.");
     }
 
     /**

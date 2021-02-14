@@ -13,7 +13,7 @@ $strafen = Team::get_strafen();
 foreach ($strafen as $strafe){
     if(isset($_POST['delete' . $strafe['strafe_id']])){
         Team::strafe_loeschen((int) $strafe['strafe_id']);
-        Form::affirm("Strafe wurde gelöscht.");
+        Form::info("Strafe wurde gelöscht.");
         header ("Location: lc_teamstrafe.php");
         die();
     }
@@ -40,7 +40,7 @@ if (isset($_POST['strafe_eintragen'])){
             (int) $_POST['turnier'] ?? 0,
             $_POST['grund'],
             (int) $_POST['prozent'] ?? 0);
-        Form::affirm("Strafe wurde eingetragen.");
+        Form::info("Strafe wurde eingetragen.");
         header ("Location: ../liga/tabelle.php#pranger");
         die();
     }

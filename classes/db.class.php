@@ -153,7 +153,8 @@ class db
         if (!self::$link->query($sql)) {
             $error_text = 'Fehlgeschlagen: ' . self::$link->error;
             Form::log(self::$log_file, $error_text);
-            Form::error("Fehler beim Beschreiben der Datenbank. " . Form::mailto(Config::TECHNIKMAIL));
+            Form::error("Fehler beim Beschreiben der Datenbank. " . Form::mailto(Config::TECHNIKMAIL),
+                esc:false);
             //Debug Form::error($sql);
             die();
         }
@@ -172,7 +173,7 @@ class db
 //            . " --password=" . Config::PASSWORD
 //            . " --host=" . Config::HOST_NAME
 //            . " " . Config::DATABASE  . " > " . $dumpfile);
-//        Form::affirm("Datenbank wurde gesichert als " . date("Y-m-d_H-i-s") . ".sql im Ordner system/backup/");
+//        Form::info("Datenbank wurde gesichert als " . date("Y-m-d_H-i-s") . ".sql im Ordner system/backup/");
 //        return $dumpfile;
 //    }
 
@@ -198,6 +199,6 @@ class db
         } else {
             $string = print_r($input, true);
         }
-        Form::affirm('<p>File: ' . $backtrace[0]['file'] . '<br>Line: ' . $backtrace[0]['line'] . '</p><pre>' . $string . '</pre>');
+        Form::info('<p>File: ' . $backtrace[0]['file'] . '<br>Line: ' . $backtrace[0]['line'] . '</p><pre>' . $string . '</pre>');
     }
 }

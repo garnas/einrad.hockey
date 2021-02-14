@@ -12,7 +12,7 @@ if ($turnier->details['ausrichter'] == ($_SESSION['team_id'] ?? '') or Config::$
 if (strtotime($turnier->details['datum']) - time() < -3 * 24 * 60 * 60 && !Config::$ligacenter) {
     $change_tbericht = false; //Berechtigung zum Verändern des Reports widerrufen für Ausrichter, wenn das Turnier mehr als zwei Tage zurückliegt.
     if ($turnier->details['ausrichter'] == ($_SESSION['team_id'] ?? '')) {
-        Form::attention("Das Turnier liegt bereits in der Vergangenheit. Bearbeiten des Turnierreports nur noch via den Ligaausschuss möglich.");
+        Form::notice("Das Turnier liegt bereits in der Vergangenheit. Bearbeiten des Turnierreports nur noch via den Ligaausschuss möglich.");
     }
 }
 
@@ -26,7 +26,7 @@ if (empty($turnier->details)) {
 }
 
 if ($turnier->details['art'] == 'spass') {
-    Form::attention("Spaßturniere erfordern keinen Turnierreport.");
+    Form::notice("Spaßturniere erfordern keinen Turnierreport.");
     header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->id);
     die();
 }
@@ -55,7 +55,7 @@ if ($change_tbericht) {
     foreach ($spieler_ausleihen as $ausleihe_id => $ausleihe) {
         if (isset($_POST['del_ausleihe_' . $ausleihe_id])) {
             $tbericht->delete_spieler_ausleihe($ausleihe_id);
-            Form::affirm("Spielerausleihe wurde entfernt.");
+            Form::info("Spielerausleihe wurde entfernt.");
             header('Location:' . dbi::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
             die();
         }
@@ -74,7 +74,7 @@ if ($change_tbericht) {
             die();
         }
         $tbericht->set_spieler_ausleihe($name, $team_auf, $team_ab);
-        Form::affirm("Spielerausleihe wurde hinzugefügt.");
+        Form::info("Spielerausleihe wurde hinzugefügt.");
         header('Location:' . dbi::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
         die();
     }
@@ -85,7 +85,7 @@ if ($change_tbericht) {
     foreach ($zeitstrafen as $zeitstrafe_id => $zeitstrafe) {
         if (isset($_POST['del_zeitstrafe_' . $zeitstrafe_id])) {
             $tbericht->delete_zeitstrafe($zeitstrafe_id);
-            Form::affirm("Zeitstrafe wurde entfernt.");
+            Form::info("Zeitstrafe wurde entfernt.");
             header('Location:' . dbi::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
             die();
         }
@@ -99,7 +99,7 @@ if ($change_tbericht) {
         $team_b = $_POST['zeitstrafe_team_b'];
         $bericht = $_POST['zeitstrafe_bericht'];
         $tbericht->new_zeitstrafe($name, $dauer, $team_a, $team_b, $bericht);
-        Form::affirm("Zeitstrafe wurde hinzugefügt.");
+        Form::info("Zeitstrafe wurde hinzugefügt.");
         header('Location:' . dbi::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
         die();
     }
@@ -113,7 +113,7 @@ if ($change_tbericht) {
         $bericht = $_POST['turnierbericht'];
         $kader_check = $_POST['kader_check'] == "kader_checked";
         $tbericht->set_turnier_bericht($bericht, $kader_check);
-        Form::affirm("Turnierbericht wurde aktualisiert");
+        Form::info("Turnierbericht wurde aktualisiert");
         header("Location:" . dbi::escape($_SERVER['PHP_SELF']) . "?turnier_id=$turnier_id");
         die();
     }

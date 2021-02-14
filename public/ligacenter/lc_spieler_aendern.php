@@ -67,7 +67,7 @@ if (isset($_POST['spieler_aendern'])) {
             $changed = true;
         }
         if ($changed) {
-            Form::affirm("Spielerdaten wurden geändert");
+            Form::info("Spielerdaten wurden geändert");
             header('Location: lc_kader.php?team_id=' . $team_id);
             die();
         } else {
@@ -79,7 +79,7 @@ if (isset($_POST['spieler_aendern'])) {
 //Formularauswertung Spieler löschen
 if (isset($_POST['delete_spieler'])) {
     $spieler->delete_spieler();
-    Form::affirm("Der Spieler " . $spieler->details['vorname'] . " " . $spieler->details['nachname']
+    Form::info("Der Spieler " . $spieler->details['vorname'] . " " . $spieler->details['nachname']
         . " mit der ID " . $spieler->details['spieler_id'] . " wurde gelöscht.");
     header("Location: " . $_SERVER['PHP_SELF']);
     die();

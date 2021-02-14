@@ -40,7 +40,7 @@ foreach ($strafen as $key => $strafe){
     }
 }
 
-//Den Plätzen der Meisterschaftstabelle eine Farbe zuordnen:
+// Den Plätzen der Meisterschaftstabelle eine Farbe zuordnen:
 for ($i = 1; $i < 5; $i++){
     $platz_color[$i] = "w3-text-tertiary";
 }
@@ -57,7 +57,7 @@ for ($i = 23; $i < 29; $i++){
     $platz_color[$i] = "w3-text-green";
 }
 
-//Spieltag wählen:
+// Spieltag wählen:
 for ($spieltag = $akt_spieltag; $spieltag >= 0; $spieltag--){
     if($spieltag == $gew_spieltag){
         $spieltag_color = 'w3-text-white';
@@ -83,8 +83,7 @@ for ($spieltag = $akt_spieltag; $spieltag >= 0; $spieltag--){
 /////////////////////////////////////////////////////////////////////////////
 Config::$titel = "Aktuelle Tabellen der Deutschen Einradhockeyliga";
 Config::$content = "Die Rang- und Meisterschaftstabelle welche aus den Turnieren der Deutschen Einradhockeyliga entstehen.";
-include '../../templates/header.tmp.php';
-?>
+include '../../templates/header.tmp.php';?>
 
 <!-- Erklärungen zur Tabelle -->
 
@@ -100,26 +99,25 @@ include '../../templates/header.tmp.php';
         <h3 class="w3-text-primary w3-border-bottom w3-border-grey">Spieltage</h3>
         <div class="w3-margin-left">
             <ul class="w3-ul w3-leftbar w3-border-tertiary">
-            <li>Alle Turniere welche an einem Wochenende stattfinden, werden einem Spieltag zugeordnet.</li>
-            <li>Oberhalb der jeweiligen Tabelle kann man auch vergangene Spieltage auswählen.</li>
-            <li>Für die Turnieranmeldungen ist jedoch immer der vorherige (und damit vollständige) Spieltag relevant, also nicht der aktuelle Spieltag.</li>
+                <li>Alle Turniere welche an einem Wochenende stattfinden, werden einem Spieltag zugeordnet.</li>
+                <li>Oberhalb der jeweiligen Tabelle kann man auch vergangene Spieltage auswählen.</li>
+                <li>Für die Turnieranmeldungen ist jedoch immer der vorherige (und damit vollständige) Spieltag relevant, also nicht der aktuelle Spieltag.</li>
             </ul>
         </div>
         <h3 class="w3-text-primary w3-border-bottom w3-border-grey">Die Rangtabelle</h3>
         <div class="w3-margin-left">
             <ul class="w3-ul w3-leftbar w3-border-tertiary">
-            <li>Für jedes Team, welches du auf einem Turnier besiegst, bekommt dein Team Punkte. Starke Teams geben die meisten Punkte.</li>
-            <li>Wie viele Punkte du für welches Team bekommst und auf welchen Turnieren du spielen kannst, wird in der Rangtabelle festgelegt.</li>
-            <li>Die Rangtabelle ist nach dem durchschnittlichen Turnierergebnis deiner bis zu fünf letzten Turniere sortiert.</li>
+                <li>Für jedes Team, welches du auf einem Turnier besiegst, bekommt dein Team Punkte. Starke Teams geben die meisten Punkte.</li>
+                <li>Wie viele Punkte du für welches Team bekommst und auf welchen Turnieren du spielen kannst, wird in der Rangtabelle festgelegt.</li>
+                <li>Die Rangtabelle ist nach dem durchschnittlichen Turnierergebnis deiner bis zu fünf letzten Turniere sortiert.</li>
             </ul>
         </div>
-
         <h3 class="w3-text-primary w3-border-bottom w3-border-grey">Die Meisterschaftstabelle</h3>
         <div class="w3-panel w3-container">
             <ul class="w3-ul w3-leftbar w3-border-tertiary">
-            <li>In der Meisterschaftstabelle werden die besten fünf Turnierergebnisse deines Teams in der aktuellen Saison aufaddiert.</li>
-            <li>Der Platz in der Meisterschaftstabelle bestimmt, für welche Meisterschaft sich dein Team qualifizieren kann.</li>
-            <li><b>Meisterschaften</b> <i>(Plätze)</i><br>Deutsche Meisterschaft (<span class="w3-text-tertiary">1-4</span>)<br>Quali zur Deutschen (<span class="w3-text-grey">5-10</span>)<br>B-Meisterschaft (<span class="w3-text-brown">11-16</span>)<br>C-Meisterschaft (<span class="w3-text-primary">17-22</span>)<br>D-Meisterschaft (<span class="w3-text-green">23-28</span>)</li>
+                <li>In der Meisterschaftstabelle werden die besten fünf Turnierergebnisse deines Teams in der aktuellen Saison aufaddiert.</li>
+                <li>Der Platz in der Meisterschaftstabelle bestimmt, für welche Meisterschaft sich dein Team qualifizieren kann.</li>
+                <li><b>Meisterschaften</b> <i>(Plätze)</i><br>Deutsche Meisterschaft (<span class="w3-text-tertiary">1-4</span>)<br>Quali zur Deutschen (<span class="w3-text-grey">5-10</span>)<br>B-Meisterschaft (<span class="w3-text-brown">11-16</span>)<br>C-Meisterschaft (<span class="w3-text-primary">17-22</span>)<br>D-Meisterschaft (<span class="w3-text-green">23-28</span>)</li>
             </ul>
         </div>
     </div>

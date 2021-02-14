@@ -17,7 +17,7 @@ if(isset($_POST['change'])) {
     if (strlen($passwort_neu) >= 6 && strlen($passwort_neu) < 100){ // Zu lange Passwörter sollten ebenfalls verhindert werden, damit keine Fehlermeldungen provoziert werden können
         if(password_verify($passwort_alt, $team->get_passwort())) {
             $team->set_passwort($passwort_neu);
-            Form::affirm("Euer Passwort wurde geändert.");
+            Form::info("Euer Passwort wurde geändert.");
             header('Location: tc_start.php');
             die();
         }else{
@@ -28,7 +28,7 @@ if(isset($_POST['change'])) {
     }
 }
 
-Form::attention("Euer Passwort wird verschlüsselt gespeichert. Es muss mindestens sechs Zeichen lang sein.");
+Form::notice("Euer Passwort wird verschlüsselt gespeichert. Es muss mindestens sechs Zeichen lang sein.");
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////

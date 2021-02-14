@@ -24,7 +24,7 @@ $turnier_ergebnis = $turnier->get_ergebnis();
 if (isset($_POST['ergebnis_loeschen'])) {
     $turnier->delete_ergebnis();
     $turnier->set_phase('spielplan');
-    Form::affirm("Ergebnis wurde gelöscht. Das Turnier wurde in die Spielplanphase versetzt.");
+    Form::info("Ergebnis wurde gelöscht. Das Turnier wurde in die Spielplanphase versetzt.");
     header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->details['turnier_id']);
     die();
 }
@@ -57,7 +57,7 @@ if (isset($_POST['ergebnis_eintragen'])) {
         $turnier->set_ergebnis($_POST['team_id'][$platz], $_POST['ergebnis'][$platz], $platz);
     }
     $turnier->set_phase('ergebnis');
-    Form::affirm("Ergebnisse wurden manuell eingetragen. Das Turnier wurde in die Ergebnisphase versetzt.");
+    Form::info("Ergebnisse wurden manuell eingetragen. Das Turnier wurde in die Ergebnisphase versetzt.");
     header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->details['turnier_id']);
     die();
 }
@@ -79,7 +79,7 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
     }
     if (!$error) {
         if (Spielplan::set_spielplan($turnier))
-            Form::affirm("Das Turnier wurde in die Spielplan-Phase versetzt. Der Spielplan wird jetzt angezeigt.");
+            Form::info("Das Turnier wurde in die Spielplan-Phase versetzt. Der Spielplan wird jetzt angezeigt.");
         header('Location: ../liga/spielplan.php?turnier_id=' . $turnier->id);
         die();
     }
@@ -88,7 +88,7 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
 //Spielplan löschen
 if (isset($_POST['auto_spielplan_loeschen'])) {
     Spielplan::delete_spielplan($turnier);
-    Form::affirm("Der dynamisch erstellte Spielplan wurde gelöscht. Das Turnier wurde in die Meldephase versetzt!");
+    Form::info("Der dynamisch erstellte Spielplan wurde gelöscht. Das Turnier wurde in die Meldephase versetzt!");
     header('Location:' . dbi::escape($_SERVER['REQUEST_URI']));
     die();
 }
@@ -108,10 +108,10 @@ if (isset($_POST['spielplan_hochladen'])) {
         } else {
             if ($_POST['sp_or_erg'] === 'ergebnis') {
                 $turnier->upload_spielplan($target_file_pdf, 'ergebnis');
-                Form::attention("Manueller Spielplan hochgeladen. Das Turnier wurde in die Ergebnis-Phase versetzt.");
+                Form::notice("Manueller Spielplan hochgeladen. Das Turnier wurde in die Ergebnis-Phase versetzt.");
             } else {
                 $turnier->upload_spielplan($target_file_pdf, 'spielplan');
-                Form::attention("Manueller Spielplan hochgeladen. Das Turnier wurde in die Spielplan-Phase versetzt.");
+                Form::notice("Manueller Spielplan hochgeladen. Das Turnier wurde in die Spielplan-Phase versetzt.");
             }
             header("Location: lc_spielplan_verwalten.php?turnier_id=$turnier->id" );
             die();
@@ -124,14 +124,14 @@ if (isset($_POST['spielplan_hochladen'])) {
 // Spielplan löschen
 if (isset($_POST['spielplan_delete'])) {
     $turnier->upload_spielplan('', 'melde');
-    Form::affirm("Spielplan- / Ergebnisdatei wurde gelöscht. Turnier wurde in die Meldephase versetzt.");
+    Form::info("Spielplan- / Ergebnisdatei wurde gelöscht. Turnier wurde in die Meldephase versetzt.");
     header("Location: lc_spielplan_verwalten.php?turnier_id=$turnier->id");
     die();
 }
 
 // Hinweis Finalturniere-Ergebnis
 if ($turnier->details['art'] === 'final') {
-    Form::attention("Beim Eintragen von Finalturnieren kann eine beliebige Punktzahl eingeben werden.");
+    Form::notice("Beim Eintragen von Finalturnieren kann eine beliebige Punktzahl eingeben werden.");
 }
 
 /////////////////////////////////////////////////////////////////////////////

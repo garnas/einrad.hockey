@@ -29,7 +29,7 @@ if (isset($_POST['neuer_eintrag'])) {
     if (!$error) {
         //Spieler Eintragen, wenn der Spieler schon existiert wird false zurückgegeben und eine Fehlermeldung
         if (Spieler::set_new_spieler($vorname, $nachname, $jahrgang, $geschlecht, $team_id)) {
-            Form::affirm("Der Spieler wurde eingetragen");
+            Form::info("Der Spieler wurde eingetragen");
             header('Location: ' . dbi::escape($_SERVER['PHP_SELF']) . '?team_id=' . $team_id);
             die ("Warten..");
         }
@@ -48,7 +48,7 @@ if (isset($_POST['submit_takeover'])) {
             }
         }
         if ($changed ?? false) {
-            Form::affirm("Spieler wurden in die neue Saison übernommen");
+            Form::info("Spieler wurden in die neue Saison übernommen");
             header('Location: ' . dbi::escape($_SERVER['PHP_SELF']) . '?team_id=' . $team_id);
             die ();
         }

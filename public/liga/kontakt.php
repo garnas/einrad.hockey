@@ -36,7 +36,9 @@ if (isset($_POST['absenden'])) {
     Hier dann entschlüsselt. Key ist der Database-Name, welcher nicht auf Github veröffentlicht ist */
     $time = time() - @openssl_decrypt($_POST['no_bot'], 'AES-256-CBC', Config::DATABASE);
     if ($time < 4) { //Bot, wenn in unter 4 Sekunden das Formular abgeschickt wurde
-        Form::error("E-Mail konnte wegen Spamverdacht nicht versendet werden, da das Formular zu schnell ausgefüllt wurde. Schreib uns bitte an via " . Form::mailto(Config::LAMAIL));
+        Form::error("E-Mail konnte wegen Spamverdacht nicht versendet werden,
+         da das Formular zu schnell ausgefüllt wurde. Schreib uns bitte an via "
+            . Form::mailto(Config::LAMAIL), esc:false);
         $error = true;
         // Logdatei erstellen/beschreiben
         Form::log($log_file, "Zu schnell: " . $time . " Sekunden\n" . print_r($_POST, true));
@@ -52,10 +54,11 @@ if (isset($_POST['absenden'])) {
 
         // Email an den Ligaausschuss versenden
         if (MailBot::send_mail($mailer)) {
-            Form::affirm("Die E-Mail wurde versandt.");
+            Form::info("Die E-Mail wurde versandt.");
             $send = true; //Email an den User nur schicken, wenn die Mail an LA rausging
         } else {
-            Form::error("Es ist ein Fehler aufgetreten. E-Mail konnte nicht versendet werden. Manuell versenden: " . Form::mailto(Config::LAMAIL));
+            Form::error("Es ist ein Fehler aufgetreten. E-Mail konnte nicht versendet werden.
+             Manuell versenden: " . Form::mailto(Config::LAMAIL), esc:false);
             Form::log($log_file, "Error Mail:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
         }
         if ($send) {
@@ -67,7 +70,7 @@ if (isset($_POST['absenden'])) {
             $mailer->Body = "Danke für deine Mail! Du hast uns folgendes gesendet:\r\n\r\n" . $text;
             // Email-versenden
             if (MailBot::send_mail($mailer)) {
-                Form::affirm("Es wurde eine Kopie an $absender gesendet.");
+                Form::info("Es wurde eine Kopie an $absender gesendet.");
                 unset($_SESSION['captcha']); // Captcha aus der Session löschen
                 header('Location: ../liga/neues.php');
                 die();

@@ -25,7 +25,7 @@ include '../../templates/header.tmp.php';
     <!-- Nach Beginn der Abstimmung -->
 <?php if (time() > $beginn) { ?>
     <!-- Informationstext für die Abstimmung -->
-    <?php Form::schreibe_attention(
+    <?php Form::message('notice',
         "Die Abstimmung endet am " . date("d.m.Y \u\m H:i", $abschluss) . " Uhr. "
         . "Es haben bisher $abgegebene_stimmen von $anzahl_teams Teams abgestimmt.", ''); ?>
     <!-- Informationstext für die Stimmeinsicht -->

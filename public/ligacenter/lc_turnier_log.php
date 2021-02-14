@@ -14,12 +14,12 @@ $logs = $turnier->get_logs();
 
 // Gelöschtes Turnier
 if (empty($turnier->details) & !empty($logs)){
-    Form::attention("Turnier wurde gelöscht.");
+    Form::notice("Turnier wurde gelöscht.");
 }
 
 // Turnier nicht gefunden
 if (empty($turnier->details) & empty($logs)){
-    Form::attention("Es wurden keine Turnierlogs gefunden");
+    Form::notice("Es wurden keine Turnierlogs gefunden");
     header('Location: lc_turnierliste.php');
     die();
 }

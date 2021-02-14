@@ -11,7 +11,7 @@ require_once '../../logic/turnier_bearbeiten_first.logic.php';
 // Formularauswertung
 require_once '../../logic/turnier_bearbeiten_teams.logic.php';
 
-Form::attention("Achtung - die Teams und der Ligaausschuss müssen angeschrieben werden, sollten wichtige Turnierdaten geändert werden.");
+Form::notice("Achtung - die Teams und der Ligaausschuss müssen angeschrieben werden, sollten wichtige Turnierdaten geändert werden.");
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////

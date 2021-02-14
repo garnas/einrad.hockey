@@ -8,7 +8,7 @@ $saison = (isset($_GET['saison']) && is_numeric($_GET['saison'])) ? (int)$_GET['
 $turnier_ergebnisse = Tabelle::get_all_ergebnisse($saison);
 
 if (empty($turnier_ergebnisse)) {
-    Form::affirm("Es wurden noch keine Turnierergebnisse der Saison " . Form::get_saison_string($saison) . " eingetragen");
+    Form::info("Es wurden noch keine Turnierergebnisse der Saison " . Form::get_saison_string($saison) . " eingetragen");
 }
 $turniere = Turnier::get_turniere('ergebnis', true, false);
 

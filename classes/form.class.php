@@ -12,19 +12,13 @@ class Form
      * angezeigt
      *
      * Text der Fehlermeldung
-     * @param $string
+     * @param string $string Text
+     * @param string $caption Überschrift
+     * @param bool $esc
      */
-    public static string $confetti = '';
-
-    // Fehlermeldungem werden in einer $_SESSION Variable gespeichert
-    public static function error($string)
+    public static function error(string $string, string $caption = "Fehler", bool $esc = true)
     {
-        // Falls $_SESSION noch nicht gesetzt wurde, wird sie als array deklariert
-        if (!isset($_SESSION['e_messages'])) {
-            $_SESSION['e_messages'] = [];
-        }
-        // Argument wird dem array $_SESSION['e_messages'] hinzugefügt
-        array_push($_SESSION['e_messages'], $string);
+        $_SESSION['messages'][] = ['type' => 'error', 'text' => $string, 'caption' => $caption, 'escape' => $esc];
     }
 
     /**
@@ -32,104 +26,72 @@ class Form
      * angezeigt
      *
      * Text der Infomeldung
-     * @param $string
+     * @param string $string Text
+     * @param string $caption Überschrift
+     * @param bool $esc
      */
-    public static function affirm($string)
+    public static function info(string $string, string $caption = "Info", bool $esc = true)
     {
-        if (!isset($_SESSION['a_messages'])) {
-            $_SESSION['a_messages'] = [];
-        }
-        array_push($_SESSION['a_messages'], $string);
+        $_SESSION['messages'][] = ['type' => 'info', 'text' => $string, 'caption' => $caption, 'escape' => $esc];
     }
 
     /**
      * Hinweismeldungen werden in einer $_SESSION Variable gespeichert und beim nächsten Aufruf der HTML-Navigation
      * angezeigt
      *
-     * Text der Hinweismeldung
-     * @param $string
+     * @param string $string Text
+     * @param string $caption Überschrift
+     * @param bool $esc
      */
-    public static function attention($string)
+    public static function notice(string $string, string $caption = "Hinweis", bool $esc = true)
     {
-        if (!isset($_SESSION['w_messages'])) {
-            $_SESSION['w_messages'] = [];
-        }
-        array_push($_SESSION['w_messages'], $string);
+        $_SESSION['messages'][] = ['type' => 'notice', 'text' => $string, 'caption' => $caption, 'escape' => $esc];
     }
 
     /**
-     * Hinweis-Kasten wird ins Html-Dokument geschrieben
+     * Fehler-, Info-, oder Hinweis-Kasten wird ins Html-Dokument geschrieben
      *
-     * Text
+     * @param string $type error || info || notice
      * @param string $message Text
-     * @param string $caption Überschrift
+     * @param string|null $caption Überschrift
+     * @param bool $esc Standardmäßig wird der String gegen XSS escaped
      */
-    public static function schreibe_attention(string $message, string $caption = 'Hinweis') //TODO Return als String
-    { ?>
-        <div class='w3-card w3-panel w3-leftbar w3-border-yellow w3-pale-yellow'>
-            <h3><?= $caption ?></h3>
-            <p><?= $message ?></p>
-        </div>
-    <?php }
-
-    /**
-     * Fehler-Kasten wird ins Html-Dokument geschrieben
-     *
-     * @param string $message Text
-     * @param string $caption Überschrift
-     */
-    public static function schreibe_error(string $message, string $caption = 'Fehler') //TODO Return als String
+    public static function message(string $type, string $message, string|null $caption = null, bool $esc = true)
     {
-        ?>
-        <div class='w3-card w3-panel w3-leftbar w3-border-red w3-pale-red'>
-            <h3><?= $caption ?></h3>
-            <p><?= $message ?></p>
-        </div>
-        <?php
-    }
+        if (is_null($caption)) $caption = match ($type) {
+            'error' => 'Fehler',
+            'info' => 'Info',
+            'notice' => 'Hinweise'
+        };
 
-    /**
-     * Info-Kasten wird ins Html-Dokument geschrieben
-     *
-     * @param string $message Text
-     * @param string $caption Überschrift
-     */
-    public static function schreibe_affirm(string $message, string $caption = 'Info') //TODO Return als String
-    {
-        ?>
-        <div class='w3-card w3-panel w3-leftbar w3-border-green w3-pale-green'>
-            <h3><?= $caption ?></h3>
-            <p><?= $message ?></p>
+        $color = match ($type) {
+            'error' => 'w3-border-red w3-pale-red',
+            'info' => 'w3-border-green w3-pale-green',
+            'notice' => 'w3-border-yellow w3-pale-yellow'
+        };
+
+        $caption = ($esc) ? dbi::escape($caption) : $caption;
+        $message = ($esc) ? dbi::escape($message) : $message;
+
+        echo "
+        <div class='w3-card w3-panel w3-leftbar $color'>
+            <h3>$caption</h3>
+            <div class='w3-section'>$message</div>
         </div>
-        <?php
+        ";
     }
 
     /**
      * Meldungen aus $_SESSION von Form::error etc. werden ins Html-Dokument geschrieben
      */
-    public static function schreibe_meldungen()
+    public static function print_messages()
     {
-        // Hinweise
-        if (isset($_SESSION['w_messages'])) {
-            foreach ($_SESSION['w_messages'] as $message) {
-                self::schreibe_attention($message);
-            }
-            unset($_SESSION['w_messages']);
+        // messages Schreiben
+        if (!isset($_SESSION['messages'])) return;
+        foreach ($_SESSION['messages'] as $message) {
+            self::message($message['type'], $message['text'], $message['caption'], $message['escape']);
         }
-        // Fehler
-        if (isset($_SESSION['e_messages'])) {
-            foreach ($_SESSION['e_messages'] as $message) {
-                self::schreibe_error($message);
-            }
-            unset($_SESSION['e_messages']);
-        }
-        // Infos
-        if (isset($_SESSION['a_messages'])) {
-            foreach ($_SESSION['a_messages'] as $message) {
-                self::schreibe_affirm($message);
-            }
-            unset($_SESSION['a_messages']);
-        }
+        unset($_SESSION['messages']);
     }
 
     /**
@@ -247,24 +209,20 @@ class Form
         fclose($log_file);
     }
 
-    /** Fügt einen Confetti-Effekt hinzu.
+    /**
+     * Fügt einen Confetti-Effekt hinzu.
+     * Muss nach dem HTML-Header-Include aufgerufen werden!
      *
-     * Muss vor dem HTML-Code aufgerufen werden.
-     *
-     * Wie lange soll der Effekt in ms anhalten?
-     * Keine Zeitbegrenzung bei $timeout = 0
-     * @param int $timeout
-     *
-     * Anzahl der Konfettis liegt zufällig zwischen $min und $max
-     * @param int $min
+     * @param int $timeout Wie lange soll der Effekt in ms anhalten? (0: unendlich lange)
+     * @param int $min Anzahl der Konfettis liegt zufällig zwischen $min und $max
      * @param int $max
      */
-    public static function set_confetti(int $min = 40, int $max = 90, $timeout = 0)
+    public static function show_confetti(int $min = 40, int $max = 90, $timeout = 0)
     {
-        self::$confetti = "
-                            <script src = '../javascript/confetti/confetti.js'></script>
-                            <script>confetti.start($timeout, $min, $max)</script>
-                            ";
+        echo "
+            <script src = '../javascript/confetti/confetti.js'></script>
+            <script>confetti.start($timeout, $min, $max)</script>
+            ";
     }
 
     /**

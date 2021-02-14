@@ -6,7 +6,7 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_la.logic.php'; //Auth
 require_once '../../logic/neuigkeit_eintragen.logic.php'; //Formularauswertung
 
-Form::attention("Die Verwendung von Html-Tags ist als Ligaausschuss standardmäßig aktiviert.");
+Form::notice("Die Verwendung von Html-Tags ist als Ligaausschuss standardmäßig aktiviert.");
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////

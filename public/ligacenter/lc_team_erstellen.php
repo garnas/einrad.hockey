@@ -33,7 +33,7 @@ if (isset($_POST['team_erstellen'])) {
     //Team wird erstellt
     if (!$error) {
         Team::set_new_team($teamname, $passwort, $email);
-        Form::affirm("Das Team \"" . dbi::escape($teamname)
+        Form::info("Das Team \"" . dbi::escape($teamname)
             . "\" wurde erfolgreich erstellt.<br> Email: " . dbi::escape($email)
             . "<br> Passwort: " . dbi::escape($passwort));
         header("Location: ../liga/teams.php");

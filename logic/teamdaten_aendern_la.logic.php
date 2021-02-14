@@ -31,15 +31,15 @@ if (isset($_POST['change_la']) && Config::$ligacenter) {
     if (!$error) {
         if ($neuer_teamname != $team->details['teamname']) {
             $team->set_teamname($neuer_teamname);
-            Form::affirm("Der Teamname wurde geändert");
+            Form::info("Der Teamname wurde geändert");
         }
         if ($freilose != $team->details['freilose']) {
             $team->set_freilose($freilose);
-            Form::affirm("Anzahl der Freilose wurde geändert");
+            Form::info("Anzahl der Freilose wurde geändert");
         }
         if (!empty($passwort)) {
             $team->set_passwort($passwort, 'Nein');
-            Form::affirm("Passwort wurde geändert");
+            Form::info("Passwort wurde geändert");
         }
     }
     header('Location: lc_teamdaten_aendern.php?team_id=' . $team->id);

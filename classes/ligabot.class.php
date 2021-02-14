@@ -16,7 +16,7 @@ class LigaBot
 
         $doppel_anmeldungen = self::get_doppel_anmeldungen(); // Doppelt auf Spiele-Liste wird hier erfasst.
         if (!empty($doppel_anmeldungen)) {
-            Form::attention("Doppelt auf Spielen-Liste:");
+            Form::notice("Doppelt auf Spielen-Liste:");
             db::debug($doppel_anmeldungen); // TODO Mail absenden
         }
 
@@ -65,7 +65,7 @@ class LigaBot
             }
         } //end foreach
         unset($_SESSION['ligabot']);
-        Form::affirm("Ligabot erfolgreich ausgeführt");
+        Form::info("Ligabot erfolgreich ausgeführt");
     }
 
     /**
@@ -176,7 +176,7 @@ class LigaBot
     public static function losen(Turnier $turnier): bool
     {
         // Falsche Freilosanmeldungen beim Übergang in die Meldephase abmelden
-        Form::affirm($turnier->id . " wurde gelost.");
+        Form::info($turnier->id . " wurde gelost.");
         $liste = $turnier->get_anmeldungen();
         foreach (($liste['spiele'] ?? []) as $team) {
             // Das Team hat ein Freilos gesetzt, aber den falschen Freilosblock
@@ -229,7 +229,7 @@ class LigaBot
             if ($turnier->check_doppel_anmeldung($team_id)) { //Check ob das Team am Kalendertag des Turnieres schon auf einer Spiele-Liste steht
                 $turnier->log("Doppelanmeldung " . Team::teamid_to_teamname($team_id));
                 $turnier->abmelden($team_id);
-                Form::affirm("Abmeldung Doppelanmeldung im Turnier" . $turnier->id . ": \r\n" . Team::teamid_to_teamname($team_id));
+                Form::info("Abmeldung Doppelanmeldung im Turnier" . $turnier->id . ": \r\n" . Team::teamid_to_teamname($team_id));
             } else {
                 $turnier->set_liste($team_id, 'warte', $pos);
             }

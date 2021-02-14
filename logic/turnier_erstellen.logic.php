@@ -136,7 +136,7 @@ if (isset($_POST['create_turnier'])) {
 
         // Mailbot
         if (Config::$teamcenter) MailBot::mail_neues_turnier($turnier); // Nur wenn Teams turnier erstellen.
-        Form::affirm("Euer Turnier wurde erfolgreich eingetragen!");
+        Form::info("Euer Turnier wurde erfolgreich eingetragen!");
         header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->id);
         die();
     } else {

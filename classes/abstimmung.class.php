@@ -124,7 +124,7 @@ class Abstimmung
     function set_stimme($stimme, $crypt)
     {
         if (empty($this->team) xor $this->get_stimme($crypt) === 'none'){
-            Form::error("Fehler, bitte melde dich bei " . Form::mailto(Config::TECHNIKMAIL));
+            Form::error("Fehler, bitte melde dich bei " . Form::mailto(Config::TECHNIKMAIL), esc:false);
             return;
         }
         if (empty($this->team)) { // Team stimmt zum ersten mal ab.
@@ -138,7 +138,7 @@ class Abstimmung
                 ";
             dbi::$db->query($sql, $this->passwort_hash)->log(true);
             Form::log("abstimmung.log", "$this->team_id hat seine Stimme abgegeben");
-            Form::affirm("Dein Team hat erfolgreich abgestimmt. Vielen Dank!");
+            Form::info("Dein Team hat erfolgreich abgestimmt. Vielen Dank!");
         } else { // Team korrigiert seine Stimme.
             $sql = "
                 UPDATE abstimmung_ergebnisse
@@ -153,7 +153,7 @@ class Abstimmung
                 ";
             dbi::$db->query($sql)->log();
             Form::log("abstimmung.log", "$this->team_id hat seine Stimme geändert");
-            Form::affirm("Dein Team hat erfolgreich neu abgestimmt. Vielen Dank!");
+            Form::info("Dein Team hat erfolgreich neu abgestimmt. Vielen Dank!");
         }
     }
 

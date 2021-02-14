@@ -71,7 +71,7 @@ if (isset($_POST['put_challenge']) && Config::$teamcenter) {
 
     if (!$error) {
         if(Challenge::set_data($spieler_id, $distanz, $radgroesse, $datum)) {
-            Form::affirm("Die Strecke wurde erfolgreich eingetragen!");
+            Form::info("Die Strecke wurde erfolgreich eingetragen!");
             header('Location: tc_challenge_eintraege.php');// Setzt den Html-Header zu einer direkten Weiterleitung, somit wird die Seite neu geladen mit den aktuellen Daten
             die(); // Trotz gesetzten Header würde das Skript noch zu ende ausgeführt werden. Deswegen wird es hier beendet.
         }
@@ -91,7 +91,7 @@ if (isset($_POST['update_challenge']) && Config::$teamcenter) {
     foreach ($team_eintraege as $eintrag){
         if($eintrag['id'] == $eintrag_id){
             Challenge::update_data($eintrag_id);
-            Form::affirm('Dein Eintrag wurde erfolgreich entfernt.');
+            Form::info('Dein Eintrag wurde erfolgreich entfernt.');
             header('Location: tc_challenge_eintraege.php');
             die();
         }

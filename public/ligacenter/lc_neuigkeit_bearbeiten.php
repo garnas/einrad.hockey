@@ -8,7 +8,7 @@ require_once '../../logic/session_la.logic.php'; //Auth
 //Formularauswertung
 require_once '../../logic/neuigkeit_bearbeiten.logic.php';
 
-Form::attention("Die Verwendung von Html-Tags ist als Ligaausschuss standardmäßig aktiviert.");
+Form::notice("Die Verwendung von Html-Tags ist als Ligaausschuss standardmäßig aktiviert.");
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////

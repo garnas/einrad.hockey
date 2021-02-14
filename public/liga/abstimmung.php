@@ -22,7 +22,7 @@ include '../../templates/header.tmp.php';
 if (time() > strtotime(Abstimmung::ENDE)){
     include '../../templates/abstimmung_ergebnis.tmp.php';
 }else{
-    Form::schreibe_attention(
+    Form::message('notice',
             "Das Abstimmungsergebnis wird hier am " . Abstimmung::ENDE . " Uhr veröffentlicht.", "");
 ?>
 

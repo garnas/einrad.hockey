@@ -456,7 +456,7 @@ class SpielplanAlt{
                 foreach($daten as $index=>$date){
                     $this->akt_turnier->set_ergebnis($date["team_id_a"], $date["ligapunkte"], $index + 1);
                 }
-                Form::affirm("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
+                Form::info("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
             }
         }else{
             Form::error("Es sind noch Spiel- oder Penaltyergebnisse offen. Turnierergebnisse wurden nicht übermittelt.");

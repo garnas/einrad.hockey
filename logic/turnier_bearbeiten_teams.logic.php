@@ -138,7 +138,7 @@ if (isset($_POST['change_turnier'])) {
         if ($erweitern){
             $turnier->change_turnier_block($tblock, $fixed, $art);
             $turnier->spieleliste_auffuellen(); // Spielen-Liste auffuellen
-            Form::affirm("Turnier wurde erweitert");
+            Form::info("Turnier wurde erweitert");
         }
 
         // Ändern der Turnierdetails
@@ -150,7 +150,7 @@ if (isset($_POST['change_turnier'])) {
         if (($wichtiges_geaendert or $erweitern)
             && Config::$teamcenter) MailBot::mail_turnierdaten_geaendert($turnier);
 
-        Form::affirm("Turnierdaten wurden geändert");
+        Form::info("Turnierdaten wurden geändert");
         header ('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->id);
         die();
     }else{

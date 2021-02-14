@@ -43,7 +43,7 @@ if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
         array_unshift($_SESSION[$list_id]['empfaenger'], 'Ligaausschuss');
     }
 
-    Form::attention("Achtung: Nichtligateams müssen seperat angeschrieben werden!");
+    Form::notice("Achtung: Nichtligateams müssen seperat angeschrieben werden!");
 }
 
 
@@ -130,12 +130,13 @@ if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])) {
 
         // Email-versenden
         if (MailBot::send_mail($mailer)) {
-            Form::affirm("Die E-Mail wurde versandt.");
+            Form::info("Die E-Mail wurde versandt.");
             unset($_SESSION[$list_id]);
             header('Location: ' . dbi::escape($_SERVER['PHP_SELF']));
             die();
         } else {
-            Form::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden. Manuell Mail versenden: " . Form::mailto(Config::LAMAIL));
+            Form::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden. Manuell Mail versenden: "
+                . Form::mailto(Config::LAMAIL), esc:false);
             Form::error($mailer->ErrorInfo);
         }
     }

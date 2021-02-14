@@ -47,7 +47,7 @@ if (isset($_POST['eintragen'])){
 
     if(!$error){
         LigaKarte::gesuch_eintragen_db($_POST['plz'],$_POST['ort'],$lonlat['LAT'],$lonlat['Lon'],$_POST['name'],$_POST['kontakt']);
-        Form::affirm("Dein Gesuch wurde eingetragen");
+        Form::info("Dein Gesuch wurde eingetragen");
         header("Location: ligakarte.php");
         die();
     }

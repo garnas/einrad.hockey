@@ -45,17 +45,21 @@ if(isset($_POST['login'])) {
                 $redirect = 'tc_start.php';
             }
             if (empty($team->details['trikot_farbe_1']))
-                Form::affirm("Du kannst jetzt  Trikotfarben hinterlegen - diese werden in deinen Spielplänen angezeigt. "
-                    . Form::link("tc_teamdaten_aendern.php", 'Hier kannst du sie eintragen.'));
+                Form::info("Du kannst jetzt  Trikotfarben hinterlegen - diese werden in deinen Spielplänen angezeigt. "
+                    . Form::link("tc_teamdaten_aendern.php", 'Hier kannst du sie eintragen.', icon:"launch"),
+                    esc:false);
             if (empty($team->details['teamfoot']))
-                Form::affirm("Dein Team hat noch kein Teamfoto hinterlegt."
-                    . Form::link("tc_teamdaten_aendern.php", ' Hier kannst du ein Foto hochladen.'));
+                Form::info("Dein Team hat noch kein Teamfoto hinterlegt."
+                    . Form::link("../teamcenter/tc_teamdaten_aendern.php",
+                        ' Hier kannst du ein Foto hochladen.', icon:"launch"),
+                        esc:false);
             header('Location: ' . $redirect);
             die();
         }else{
             //Logdatei erstellen/beschreiben
             Form::log($log_file, "Falsches Passwort | Teamname: " . $teamname);
-            Form::error("Falsches Passwort. Schreibe " . Form::mailto(Config::LAMAIL) . " um euer Passwort zurückzusetzen");
+            Form::error("Falsches Passwort. Schreibe " . Form::mailto(Config::LAMAIL)
+                . " um euer Passwort zurückzusetzen", esc:false);
         }
     }
 }
@@ -65,25 +69,47 @@ if(isset($_POST['login'])) {
 /////////////////////////////////////////////////////////////////////////////
 Config::$page_width = "480px";
 Config::$titel = "Teamcenter | Deutsche Einradhockeyliga";
-Config::$content = "Im Teamcenter können Teams ihren Kader verwalten, ihre Teamdaten ändern und sich zu Turnieren an- und abmelden.";
-include '../../templates/header.tmp.php';
-?>
+Config::$content =
+    "Im Teamcenter können Teams ihren Kader verwalten, ihre Teamdaten ändern, Emails versenden und sich zu Turnieren an-
+     und abmelden.";
+include '../../templates/header.tmp.php'; ?>
 
 <form method="post" class="w3-card-4 w3-panel ">
     <h1 class="w3-text-primary">Teamcenter</h1>
     <p class="w3-text-grey">Im Teamcenter können Teams ihren Kader verwalten, ihre Teamdaten ändern und sich zu Turnieren an- und abmelden.</p>
-        <div onclick='document.getElementById("teamname").value = "";document.getElementById("passwort").value = "";' class="no w3-right w3-text-red w3-hover-text-secondary" style="cursor: pointer;">
+        <div onclick='document.getElementById("teamname").value = "";document.getElementById("passwort").value = "";'
+             class="no w3-right w3-text-red w3-hover-text-secondary" style="cursor: pointer;">
             <i class="material-icons">clear</i>
         </div>
         <label for="teamname"><i class="material-icons">group</i> Team:</label>
-        <input class="w3-input w3-border-primary" value="<?=$_POST['teamname'] ?? ''?>" placeholder="Team eingeben..." type="text" list="teams" id="teamname" name="teamname" required>
+        <input class="w3-input w3-border-primary"
+               value="<?=$_POST['teamname'] ?? ''?>"
+               placeholder="Team"
+               type="text"
+               list="teams"
+               id="teamname"
+               name="teamname"
+               required
+        >
             <?=Form::datalist_teams()?>
     <p>
         <label for="passwort"><i class="material-icons">lock</i> Passwort:</label>
-        <input class="w3-input w3-border-primary" type="password" size="30"  maxlength="200" id="passwort" name="passwort" required>
+        <input class="w3-input w3-border-primary"
+               type="password"
+               size="30"
+               maxlength="200"
+               id="passwort"
+               name="passwort"
+               required
+        >
     </p>
     <p>
-        <input class="w3-button w3-ripple w3-round w3-tertiary" type="submit" name="login" value="Login">
+        <button class="w3-button w3-ripple w3-round w3-tertiary"
+               type="submit"
+               name="login"
+        >
+            <?= Form::icon("login") ?> Login
+        </button>
     </p>
 </form>
 
