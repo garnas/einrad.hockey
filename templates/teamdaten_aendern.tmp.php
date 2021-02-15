@@ -11,7 +11,7 @@
             <input required class="w3-button w3-block w3-primary" type="file" name="jpgupload" id="jpgupload">
         </p>
         <p>
-            <button type="submit" name="teamfoto" class="w3-button w3-tertiary">
+            <button type="submit" name="teamfoto" class="w3-button w3-tertiary w3-block">
                 <?= Form::icon("arrow_circle_up") ?> Teamfoto hochladen
             </button>
         </p>
@@ -223,11 +223,11 @@
         </table>
     </div>
     <p>
-        <button class="w3-button w3-secondary"
+        <button class="w3-button w3-tertiary w3-block"
                type='submit'
                name="teamdaten_aendern"
                >
-            <?= Form::icon("create") ?> Teamdaten ändern
+            <?= Form::icon("save_alt") ?> Teamdaten speichern
         </button>
     </p>
 </form>
@@ -265,7 +265,7 @@
             </select>
         </p>
         <p>
-            <button class='w3-button w3-secondary'
+            <button class='w3-button w3-tertiary w3-block'
                     name='neue_email'
                     type='submit'
                     >

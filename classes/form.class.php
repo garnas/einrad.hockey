@@ -91,11 +91,12 @@ class Form
         };
 
         $caption = ($esc) ? dbi::escape($caption) : $caption;
+        $caption = empty($caption) ? '' : "<h3>$caption</h3>";
         $message = ($esc) ? dbi::escape($message) : $message;
 
         echo "
         <div class='w3-card w3-panel w3-leftbar $color'>
-            <h3>$caption</h3>
+            $caption
             <div class='w3-section'>$message</div>
         </div>
         ";
@@ -257,9 +258,11 @@ class Form
      * @param int $vertical_align
      * @param int $font_size
      * @param string $tag
+     * @param string $class
      * @return string
      */
-    public static function icon(string $icon, int $vertical_align = 0, int $font_size = 0, string $tag = 'p'): string
+    public static function icon(string $icon, int $vertical_align = 0, int $font_size = 0, string $tag = 'p',
+                                string $class = ''): string
     {
         $style = '';
         if ($tag != 'p') {
@@ -274,7 +277,7 @@ class Form
                 . (empty($font_size) ? "" : "font-size: " . $font_size . "px;")
                 . "'";
         }
-        return "<span class='material-icons' " . ($style ?? '') . ">$icon</span>";
+        return "<span class='material-icons $class' " . ($style ?? '') . ">$icon</span>";
     }
 
     /**

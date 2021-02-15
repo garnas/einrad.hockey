@@ -18,7 +18,7 @@ class Abstimmung
     /**
      * Letztmöglicher Zeitpunkt der Stimmabgabe
      */
-    const ENDE = "01.02.2021 23:59";
+    const ENDE = "21.02.2021 23:59";
     /**
      * Verschlüsselungsverfahren für die TeamIDs
      */
@@ -123,7 +123,7 @@ class Abstimmung
      */
     function set_stimme($stimme, $crypt)
     {
-        if (empty($this->team) xor $this->get_stimme($crypt) === 'none'){
+        if (empty($this->team) xor empty($this->get_stimme($crypt))){
             Form::error("Fehler, bitte melde dich bei " . Form::mailto(Env::TECHNIKMAIL), esc:false);
             return;
         }

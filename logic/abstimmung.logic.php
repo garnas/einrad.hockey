@@ -31,8 +31,9 @@ $display_ergebnisse = [
 
 // Höchstes Abstimmungsergebnis oben anzeigen lassen.
 $sort_function = function ($value1, $value2) {
-    return $value1['stimmen'] < $value2['stimmen'];
+    return ($value1['stimmen'] < $value2['stimmen']) ? 1 : -1;
 };
+
 uasort($display_ergebnisse, $sort_function);
 
 // Nur für das Teamcenter und im Zeitraum der Abstimmung
