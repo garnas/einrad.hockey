@@ -6,6 +6,14 @@
             <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz_small.png" class="w3-image" alt="kleines Logo" style="max-width: 140px">
         </a>
     </div>
+    <div class="w3-panel">
+        <div class="w3-margin-left w3-margin-right">
+            <section role="search" data-ss360="true">
+                <input class="searchbox" type="search" placeholder="Suche" />
+                <button class="searchbutton"/>
+            </section>
+        </div>
+    </div>
     <a href="<?= Env::BASE_URL ?>/liga/ueber_uns.php" class="no">
         <h3 class="w3-margin-left w3-text-primary"><i style="vertical-align: -16%" class="material-icons w3-xlarge">info</i> INFO</h3>
     </a>

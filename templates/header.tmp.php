@@ -17,7 +17,7 @@
     <link type="text/css" rel="stylesheet" href="<?= Env::BASE_URL ?>/css/w3.css">
     <link type="text/css" rel="stylesheet" href="<?= Env::BASE_URL ?>/css/style.css?v=20201126">
     <link type="text/css" rel="stylesheet" href="<?= Env::BASE_URL ?>/css/icons/icons.css">
-    <script src="<?= Env::BASE_URL ?>/javascript/script.js?v=20201214"></script>
+    <!-- Javascript is in footer.tmp.php -->
     <title><?= Config::$titel ?></title>
 </head>
 

@@ -117,7 +117,12 @@
 
     <!-- unten rechts -->
     <div class="w3-display-bottomright w3-text-primary w3-margin w3-padding-large w3-large">
-
+        <div style="margin-bottom: 6px;">
+            <section role="search" data-ss360="true">
+                <input class="searchbox" type="search" placeholder="Suche" />
+                <button class="searchbutton"/>
+            </section>
+        </div>
         <!-- Logout -->
         <?php if (isset($_SESSION['team_id'])){?>
         <a href='<?= Env::BASE_URL ?>/teamcenter/tc_logout.php' class="w3-button w3-hover-primary"><i style=""
