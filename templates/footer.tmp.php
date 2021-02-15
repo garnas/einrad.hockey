@@ -27,8 +27,6 @@
         </footer>
     </body>
     <script src="<?= Env::BASE_URL ?>/javascript/360search/360search.js?v=20200215"></script>
-<!--                <script src="https://cdn.sitesearch360.com/v13/sitesearch360-v13.min.js" async></script>-->
-    <script src="<?= Env::BASE_URL ?>/javascript/script.js?v=20200215"></script>
 </html>
 
 <?php
