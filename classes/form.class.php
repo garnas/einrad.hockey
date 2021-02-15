@@ -194,7 +194,13 @@ class Form
         return (string)(1995 + $saison);
     }
 
-    public static function countdown($date, $id = 'countdown')
+    /**
+     * Fügt einen Countdown ein
+     *
+     * @param int $date Zeit als Unix-Time
+     * @param string $id Welche ID das Countdownelement haben soll
+     */
+    public static function countdown(int $date, $id = 'countdown')
     { //TODO Return als String
         ?>
         <div id='countdown' class="w3-xlarge w3-text-primary" style='white-space: nowrap;'>
@@ -215,7 +221,7 @@ class Form
                     <span class="w3-small w3-text-grey" style="display: block">Sekunden</span>
                 </span>
         </div>
-        <script>countdown('<?=date("Y-m-d\TH:i:s", strtotime($date))?>', '<?=$id?>')</script>
+        <script>countdown('<?=date("Y-m-d\TH:i:s", $date)?>', '<?=$id?>')</script>
         <?php
     }
 

@@ -3,7 +3,6 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-
 function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
 {
     $turnier_id = 860;
@@ -73,7 +72,9 @@ function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
     unset ($spielplan_alt);
     test_neue_tabellen($counter + 1, $fehler, $penalty);
 }
-include '../../templates/header.tmp.php'; ?>
+include '../../templates/header.tmp.php';
+
+?>
 <!--    <h1>Test Skript</h1>-->
 <?//= Form::icon("home", font_size: 350) ?>
 <?php include '../../templates/footer.tmp.php';
