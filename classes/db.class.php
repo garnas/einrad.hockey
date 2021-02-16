@@ -28,6 +28,8 @@ class db
             Form::log(self::$log_file, "Verbindung fehlgeschlagen: " . self::$link->error);
             die('<h2>Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error() . '<br><br>Wende dich bitte an <span style="color:red;">' . Env::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
         }
+        // https://www.php.de/forum/webentwicklung/datenbanken/1492164-bestimmt-zum-1000sten-mal-php-mysql-umlaute
+        self::$link->set_charset("utf8mb4");
     }
 
     /**

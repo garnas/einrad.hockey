@@ -18,7 +18,7 @@ class dbi
     public static function initialize(string $host = Env::HOST_NAME,
                                       string $user = Env::USER_NAME,
                                       string $password = Env::PASSWORD,
-                                      string $database = Env::DATABASE)
+                                      string $database = Env::DATABASE): void
     {
         self::$db = new dbWrapper($host, $user, $password, $database);
     }
@@ -26,7 +26,7 @@ class dbi
     /**
      * Terminiert die Datenbankverbindung und ermöglicht eine neue Initialisierung zu einer anderen Datenbank
      */
-    public static function terminate()
+    public static function terminate(): void
     {
         self::$db = NULL;
     }
@@ -58,16 +58,18 @@ class dbi
      * Entfernt voran- oder hintenstehende Leerzeichen für Parameter von Prerpared-Statements
      *
      * @param mixed $params
-     * @return mixed|string
+     * @return mixed
      */
-    public static function trim_params(mixed $params)
+    public static function trim_params(mixed $params): mixed
     {
         if (is_array($params)) {
             foreach ($params as $key => $param) {
-                if (is_string($params)) $params[$key] = trim($param);
+                if (is_string($params)) {
+                    $params[$key] = trim($param);
+                }
             }
-        } else {
-            if (is_string($params)) $params = trim($params);
+        } else if (is_string($params)) {
+            $params = trim($params);
         }
         return $params;
     }
@@ -80,9 +82,9 @@ class dbi
      * @param mixed $input Zu debuggende Variable
      * @param bool $types Sollen Typen angezeigt werden?
      */
-    public static function debug(mixed $input, $types = false)
+    public static function debug(mixed $input, $types = false): void
     {
-        $input = dbi::escape($input);
+        $input = self::escape($input);
         // Show Types?
         if ($types) {
             ob_start();
