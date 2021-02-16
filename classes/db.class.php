@@ -137,7 +137,7 @@ class db
     {
         Form::error("Es wurde die veraltete DB-Klasse verwendet");
         //SQL-Logdatei erstellen/beschreiben
-        $autor_string = implode(" | ", array_filter([$_SESSION['teamname'] ?? '', $_SESSION['la_login_name'] ?? '', $_SESSION['ligabot'] ?? '']));
+        $autor_string = implode(" | ", array_filter([$_SESSION['logins']['team']['name'] ?? '', $_SESSION['la_login_name'] ?? '', $_SESSION['ligabot'] ?? '']));
         $sql = trim(preg_replace("/(^\h+|\h+$)/m",'',$sql)); // Schönere Formatierung
         $log = $autor_string . "\n" . (($anonym) ? 'Anonyme Query' : $sql);
         Form::log(self::$log_file, $log);

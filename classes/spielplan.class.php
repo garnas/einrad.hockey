@@ -615,7 +615,7 @@ class Spielplan
         $ligapunkte = 0;
         foreach ($reverse_tabelle as $team_id => $eintrag) {
             $wert = $this->teamliste[$team_id]['wertigkeit'];
-            $wert = ($wert === 'NL') ? max($werte ?? [max(round($highest_ligateam() / 2) - 1, 14)]) + 1 : $wert;
+            $wert = ($wert === 'NL') ? max($werte ?? [max(round($highest_ligateam() / 2) - 1, 14)]) + 1 : $wert; //TODO NL BLOCK UND WERT AUF NULL
             $werte[] = $wert;
             $ligapunkte += $wert;
             $this->platzierungstabelle[$team_id]['ligapunkte'] = round($ligapunkte * 6 / $this->details['faktor']);
@@ -675,17 +675,21 @@ class Spielplan
             $punkte_pen_team = $this->turnier_tabelle[$team_id]['punkte'];
 
             foreach (array_keys($this->turnier_tabelle) as $vgl_team_id) {
-                if (in_array($vgl_team_id, $team_ids)) continue; // Nicht mit sich selbst vergleichen
+                if (in_array($vgl_team_id, $team_ids, true)) {
+                    continue;
+                } // Nicht mit sich selbst vergleichen
                 // Penaltybegnung vermeidbar, da ein Team die Punktzahl des Penalty-Teams noch erreichen könnte?
                 if (
                     (
-                        $vergleich($vgl_team_id)['punkte_max'] != $vergleich($vgl_team_id)['punkte_min']
-                        && $vergleich($vgl_team_id)['punkte_max'] == $punkte_pen_team
+                        $vergleich($vgl_team_id)['punkte_max'] !== $vergleich($vgl_team_id)['punkte_min']
+                        && $vergleich($vgl_team_id)['punkte_max'] === $punkte_pen_team
                     )
                     && $punkte_pen_team <= $vergleich($vgl_team_id)['punkte_max']
                     && $punkte_pen_team >= $vergleich($vgl_team_id)['punkte_min']
                     && $punkte_pen_team != $vergleich($vgl_team_id)['nicht_erreichbar']
-                ) return false;
+                ) {
+                    return false;
+                }
             } // foreach Teams auf dem Turnier
         } // foreach Penalty-Teams
         return true;
@@ -783,7 +787,7 @@ class Spielplan
      */
     public function get_trikot_colors(array $spiel): array
     {
-        if ($this->turnier->details['phase'] == 'ergebnis') return [];
+        if ($this->turnier->details['phase'] === 'ergebnis') return [];
         $team_id_a = $spiel['team_id_a'];
         $team_id_b = $spiel['team_id_b'];
         $farben = [
@@ -807,7 +811,7 @@ class Spielplan
         ) return [];
 
         // Hexfarbe in RGB umwandeln
-        $get_delta_e = function ($hex_color_1, $hex_color_2) {
+        $get_delta_e = static function ($hex_color_1, $hex_color_2) {
             [$r_1, $g_1, $b_1] = sscanf($hex_color_1, "#%02x%02x%02x");
             [$r_2, $g_2, $b_2] = sscanf($hex_color_2, "#%02x%02x%02x");
             $r_m = ($r_1 + $r_2) / 2;
@@ -817,13 +821,13 @@ class Spielplan
             return ((2 + $r_m / 256) * $r_d ** 2 + 4 * $g_d ** 2 + (2 + (255 - $r_m) / 256) * $b_d ** 2) ** 0.5;
         };
 
+        $max_delta_e = 0;
         foreach($farben[$team_id_a] as $farbe_a){
             foreach ($farben[$team_id_b] as $farbe_b){
                 $delta_e = $get_delta_e($farbe_a, $farbe_b);
-                if ($delta_e > ($max_delta_e ?? 0)){
-                    if (($max_delta_e ?? 0) > 550) continue; // 550 Threshold inwiefern Trikotfarbe 1 ausreichend ist
+                if ($delta_e > $max_delta_e){
+                    if ($max_delta_e > 400) continue; // 400 Threshold inwiefern Trikotfarbe 1 ausreichend ist
                     $max_delta_e = $delta_e;
-
                     $return[$team_id_a] = Form::trikot_punkt($farbe_a);
                     $return[$team_id_b] = Form::trikot_punkt($farbe_b);
                 }

@@ -4,7 +4,7 @@
 // Dies ermöglicht den gleichzeitgen Login von Ligaausschuss und Ligateams in einem Browser
 
 // Autor
-$name = (Config::$ligacenter) ? "Ligaausschuss" : $_SESSION['teamname'];
+$name = (Config::$ligacenter) ? "Ligaausschuss" : $_SESSION['logins']['team']['name'];
 
 
 // Formularauswertung

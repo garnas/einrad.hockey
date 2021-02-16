@@ -2,7 +2,7 @@
 <div class="w3-display-container w3-hide-small">
     
     <!-- Hintergrundbild -->
-    <img src="<?= Form::get_hintergrund_bild() ?>" class="<?php if (!isset($_SESSION['logins']['la']) && !isset($_SESSION['team_id'])){?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.3;">
+    <img src="<?= Form::get_hintergrund_bild() ?>" class="<?php if (!isset($_SESSION['logins']['la']) && !isset($_SESSION['logins']['team'])){?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.3;">
     
     <!-- oben links -->
     <div class="w3-display-topleft w3-margin w3-padding-large">
@@ -50,10 +50,10 @@
                 <span style="font-size: 22px">TEAMCENTER</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php if (!isset($_SESSION['team_id'])){?>
+                <?php if (!isset($_SESSION['logins']['team'])){?>
                     <a href="<?= Env::BASE_URL ?>/teamcenter/tc_login.php" class="w3-bar-item w3-button">Login</a>
                 <?php } // endif?>
-                <?php if (!isset($_SESSION['team_id'])){ $tc_color="w3-text-grey";?><?php } // endif?>
+                <?php if (!isset($_SESSION['logins']['team'])){ $tc_color="w3-text-grey";?><?php } // endif?>
                 <div class="<?=$tc_color ?? ''?>">
                     <a class="w3-bar-item w3-button" href="<?= Env::BASE_URL ?>/teamcenter/tc_start.php">Start</a>
                     <a class="w3-bar-item w3-button" href="<?= Env::BASE_URL ?>/teamcenter/tc_abstimmung.php">Abstimmung</a>
@@ -124,7 +124,7 @@
             </section>
         </div>
         <!-- Logout -->
-        <?php if (isset($_SESSION['team_id'])){?>
+        <?php if (isset($_SESSION['logins']['team'])){?>
         <a href='<?= Env::BASE_URL ?>/teamcenter/tc_logout.php' class="w3-button w3-hover-primary"><i style=""
                 class="material-icons w3-xlarge">block</i> Logout</a>
         <?php }elseif (isset($_SESSION['logins']['la'])){?>

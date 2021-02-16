@@ -6,7 +6,7 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_team.logic.php'; //Auth
 
 // Teamspezifisches
-$team = new Team($_SESSION['team_id']);
+$team = new Team($_SESSION['logins']['team']['id']);
 $turnier_angemeldet = $team->get_turniere_angemeldet();
 $anz_freilose = $team->get_freilose();
 
@@ -35,11 +35,11 @@ foreach ($turniere as $turnier_id => $turnier){
     //Farbe des Turnierblocks festlegen
     $freilos = true;
     $turniere[$turnier_id]['block_color'] = 'w3-text-red';
-    if (Turnier::check_team_block_static($_SESSION['teamblock'],$turnier['tblock'])){
+    if (Turnier::check_team_block_static($_SESSION['logins']['team']['block'],$turnier['tblock'])){
         $turniere[$turnier_id]['block_color'] = 'w3-text-green';
         $freilos = false;
     }
-    if ($freilos && Turnier::check_team_block_freilos_static($_SESSION['teamblock'],$turnier['tblock']) && $anz_freilose>0){
+    if ($freilos && Turnier::check_team_block_freilos_static($_SESSION['logins']['team']['block'],$turnier['tblock']) && $anz_freilose>0){
         $turniere[$turnier_id]['block_color'] = 'w3-text-yellow';
     }
 

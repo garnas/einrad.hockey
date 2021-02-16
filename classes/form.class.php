@@ -36,7 +36,7 @@ class Form
      * @param string $caption Überschrift
      * @param bool $esc
      */
-    public static function error(string $string, string $caption = "Fehler", bool $esc = true)
+    public static function error(string $string, string $caption = "Fehler", bool $esc = true): void
     {
         $_SESSION['messages'][] = ['type' => 'error', 'text' => $string, 'caption' => $caption, 'escape' => $esc];
     }
@@ -50,7 +50,7 @@ class Form
      * @param string $caption Überschrift
      * @param bool $esc
      */
-    public static function info(string $string, string $caption = "Info", bool $esc = true)
+    public static function info(string $string, string $caption = "Info", bool $esc = true): void
     {
         $_SESSION['messages'][] = ['type' => 'info', 'text' => $string, 'caption' => $caption, 'escape' => $esc];
     }
@@ -63,7 +63,7 @@ class Form
      * @param string $caption Überschrift
      * @param bool $esc
      */
-    public static function notice(string $string, string $caption = "Hinweis", bool $esc = true)
+    public static function notice(string $string, string $caption = "Hinweis", bool $esc = true): void
     {
         $_SESSION['messages'][] = ['type' => 'notice', 'text' => $string, 'caption' => $caption, 'escape' => $esc];
     }
@@ -76,13 +76,15 @@ class Form
      * @param string|null $caption Überschrift
      * @param bool $esc Standardmäßig wird der String gegen XSS escaped
      */
-    public static function message(string $type, string $message, string|null $caption = null, bool $esc = true)
+    public static function message(string $type, string $message, string|null $caption = '', bool $esc = true): void
     {
-        if (is_null($caption)) $caption = match ($type) {
-            'error' => 'Fehler',
-            'info' => 'Info',
-            'notice' => 'Hinweise'
-        };
+        if ($caption === '') {
+            $caption = match ($type) {
+                'error' => 'Fehler',
+                'info' => 'Info',
+                'notice' => 'Hinweise'
+            };
+        }
 
         $color = match ($type) {
             'error' => 'w3-border-red w3-pale-red',
@@ -91,7 +93,7 @@ class Form
         };
 
         $caption = ($esc) ? dbi::escape($caption) : $caption;
-        $caption = empty($caption) ? '' : "<h3>$caption</h3>";
+        $caption = is_null($caption) ? '' : "<h3>$caption</h3>";
         $message = ($esc) ? dbi::escape($message) : $message;
 
         echo "
@@ -105,10 +107,12 @@ class Form
     /**
      * Meldungen aus $_SESSION von Form::error etc. werden ins Html-Dokument geschrieben
      */
-    public static function print_messages()
+    public static function print_messages(): void
     {
         // messages Schreiben
-        if (!isset($_SESSION['messages'])) return;
+        if (!isset($_SESSION['messages'])) {
+            return;
+        }
         foreach ($_SESSION['messages'] as $message) {
             self::message($message['type'], $message['text'], $message['caption'], $message['escape']);
         }
@@ -152,23 +156,22 @@ class Form
     /**
      * Erststellt anklickbare Email-Adressen
      *
-     * @param string|array $email Wenn $email ein Array ist, wird es in einen mit "," getrennten String umgewandelt
+     * @param string|array|null $email Wenn $email ein Array ist, wird es in einen mit "," getrennten String umgewandelt
      *                            Wenn $email leer ist, so wird ein leerer String zurückgegeben
      * @param string|null $name Wenn $name nicht übergeben wird ist, dann wird $email als Bezeichner übernommen
      * @return string
      */
-    public static function mailto(string|array $email, string $name = NULL): string
+    public static function mailto(null|string|array $email, null|string $name = NULL): string
     {
         if (empty ($email)) {
-            return '';
+            return $name ?? '';
         }
-        if (is_array($email)) {
-            $email = implode(',', $email);
-        }
-        if ($name === NULL) {
-            $name = $email;
-        }
-        return "<a href='mailto:$email' class='no w3-text-primary w3-hover-text-secondary' style='white-space: nowrap;'><i class='material-icons'>mail</i> $name</a>";
+
+        $email = is_array($email) ? implode(',', $email) : $email;
+
+        return "<a href='mailto:$email' class='no w3-text-primary w3-hover-text-secondary' style='white-space: nowrap;'>"
+            . self::icon("mail") . ' ' . ($name ?? $email)
+            . "</a>";
     }
 
     /**
@@ -178,13 +181,13 @@ class Form
      * 0 = Saison 1995
      * @return string
      */
-    public static function get_saison_string($saison = Config::SAISON): string
+    public static function get_saison_string(int $saison = Config::SAISON): string
     {
         // Sollte keine Saisonzahl übergeben werden, dann wird der Input zurückgegeben.
         if (!is_numeric($saison)) {
             return $saison;
         }
-        if ($saison == 25) {
+        if ($saison === 25) {
             return "2020 (Corona-Saison)";
         }
         if ($saison > 25) {
@@ -192,7 +195,7 @@ class Form
             $saison_jahr_next = $saison_jahr + 1;
             return substr($saison_jahr, -2) . "/" . substr($saison_jahr_next, -2);
         }
-        return (string)(1995 + $saison);
+        return (string) (1995 + $saison);
     }
 
     /**
@@ -201,7 +204,7 @@ class Form
      * @param int $date Zeit als Unix-Time
      * @param string $id Welche ID das Countdownelement haben soll
      */
-    public static function countdown(int $date, $id = 'countdown')
+    public static function countdown(int $date, string $id = 'countdown')
     { //TODO Return als String
         ?>
         <div id='countdown' class="w3-xlarge w3-text-primary" style='white-space: nowrap;'>
@@ -222,15 +225,21 @@ class Form
                     <span class="w3-small w3-text-grey" style="display: block">Sekunden</span>
                 </span>
         </div>
-        <script>countdown('<?=date("Y-m-d\TH:i:s", $date)?>', '<?=$id?>')</script>
+        <script>countdown('<?= date("Y-m-d\TH:i:s", $date) ?>', '<?= $id ?>')</script>
         <?php
     }
 
-    public static function log($file_name, $line)
+    /**
+     * Erstellt einen Log in einer Logdatei im System-Ordner
+     *
+     * @param string $file_name Name der Logdatei
+     * @param string $line Einzutragender Text in die Logdatei
+     */
+    public static function log(string $file_name, string$line)
     {
         $path = Env::BASE_PATH . '/system/logs/';
         //SQL-Logdatei erstellen/beschreiben
-        $log_file = fopen($path . $file_name, "a");
+        $log_file = fopen($path . $file_name, 'ab');
         $line = date('[Y-M-d H:i:s e]: ') . $line . "\n";
         fwrite($log_file, $line);
         fclose($log_file);
@@ -265,7 +274,7 @@ class Form
                                 string $class = ''): string
     {
         $style = '';
-        if ($tag != 'p') {
+        if ($tag !== 'p') {
             $style = match ($tag) {
                 'h1', 'h2' => 'style="font-size: 31px; vertical-align: -19%;"',
                 'h3' => 'style="vertical-align: -16%;"',
@@ -289,14 +298,18 @@ class Form
      */
     public static function trikot_punkt(null|string $color_1 = null, null|string $color_2 = null): string
     {
-        if(!empty($color_1)) $punkt_1 = "
+        if(!empty($color_1)) {
+            $punkt_1 = "
             <span class = 'w3-card-4'
                 style = 'height:14px;width:14px; background-color:$color_1;border-radius:50%;display:inline-block;'>
             </span>";
-        if(!empty($color_2)) $punkt_2 = "
+        }
+        if(!empty($color_2)) {
+            $punkt_2 = "
             <span class = 'w3-card-4'
                 style = 'height:14px;width:14px; background-color:$color_2;border-radius:50%;display:inline-block;'>
             </span>";
+        }
         return ($punkt_1 ?? '') . ($punkt_2 ?? '');
     }
 }

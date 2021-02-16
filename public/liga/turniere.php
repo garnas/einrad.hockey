@@ -205,13 +205,13 @@ include '../../templates/header.tmp.php';
                             <?php if ($turnier['phase_spielplan'] ?? false) { ?>
                                 <p><?= Form::link($turnier['link_spielplan'] ?: ('../liga/spielplan.php?turnier_id=' . $turnier['turnier_id']), '<i class="material-icons">reorder</i> Zum Spielplan') ?></p>
                             <?php } //endif?>
-                            <?php if (isset($_SESSION['team_id'])) { ?>
+                            <?php if (isset($_SESSION['logins']['team'])) { ?>
                                 <p><?= Form::link('../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">how_to_reg</i> Zur Anmeldeseite') ?></p>
                                 <p><?= Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">article</i> Zum Turnierreport') ?></p>
                             <?php } else { ?>
                                 <p><?= Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">lock</i> Zum Turnierreport') ?></p>
                             <?php } //endif?>
-                            <?php if (($_SESSION['team_id'] ?? '') == $turnier['ausrichter']) { ?>
+                            <?php if (($_SESSION['logins']['team']['id'] ?? '') == $turnier['ausrichter']) { ?>
                                 <p><?= Form::link('../teamcenter/tc_turnier_bearbeiten.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">create</i> Turnier als Ausrichter bearbeiten') ?></p>
                             <?php } //endif?>
                             <?php if (isset($_SESSION['logins']['la'])) { ?>

@@ -4,7 +4,7 @@
 
 <!-- Javascript für die Tabs zu finden in script.js -->
 <?php
-if (empty($_SESSION[$list_id]['emails'])){?>
+if (empty($_SESSION[$list_id ?? '']['emails'])){?>
     <p>
         <button style="width: 300px;" class="w3-tertiary w3-button" onclick="openTab('turniere')">Turnierwahl</button>
         <i class="w3-hide-small">Alle Teams welche auf den Listen eines Turniers stehen anschreiben</i>
@@ -83,16 +83,17 @@ if (empty($_SESSION[$list_id]['emails'])){?>
         <h2 class="w3-text-primary">Kontaktformular: <?=$_SESSION[$list_id]['type']?></h2>
         <form method="post" onsubmit="return confirm('Soll die Email wirklich abgeschickt werden?')">
             <p class=""><b><i class=material-icons>mail</i> Absender</b></p>
-            <p><?= $from ?></p>
-            <p class=""><b><i class=material-icons>mail</i> Empfänger <?php if(Config::$ligacenter){?>(<?=$anzahl_emails?>)<?php }//end if?></b></p>
+            <p><?= $from ?? [] ?></p>
+            <p class=""><b><i class=material-icons>mail</i> Empfänger <?php if(Config::$ligacenter){?>(<?=$anzahl_emails ?? []?>)<?php }//end if?></b></p>
             <p>
                 <div class="w3-row"><i>
-                    <?php foreach($tos as $to){?>
+                    <?php foreach($tos ?? [] as $to){?>
                        <div class="w3-col m6 s12">
                             <?=$to?><br>
                         </div>
                     <?php }//end foreach?>
-                </i><div class="w3-row">
+                </i>
+                </div>
             </p>
             <?php if(Config::$ligacenter){ ?>
                 <p><b>+ BCC:</b> <?=Env::LAMAIL_ANTWORT?></p>

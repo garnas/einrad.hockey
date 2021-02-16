@@ -14,12 +14,12 @@
 <!-- Links -->
 <div class="pdf-hide">
     <p><?= Form::link("../liga/turnier_details.php?turnier_id=" . $turnier_id, "<i class='material-icons'>info</i> Alle Turnierdetails") ?></p>
-    <?php if (isset($_SESSION['team_id'])) { ?>
+    <?php if (isset($_SESSION['logins']['team'])) { ?>
         <p><?= Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">article</i> Zum Turnierreport') ?></p>
     <?php } else { ?>
         <p><?= Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">lock</i> Zum Turnierreport') ?></p>
     <?php } // endif?>
-    <?php if (($_SESSION['team_id'] ?? false) == $spielplan->turnier->details['ausrichter'] && !(Config::$teamcenter ?? false) && $spielplan->turnier->details['phase'] == 'spielplan') { ?>
+    <?php if (($_SESSION['logins']['team']['id'] ?? 0) == $spielplan->turnier->details['ausrichter'] && !(Config::$teamcenter ?? false) && $spielplan->turnier->details['phase'] == 'spielplan') { ?>
         <p><?= Form::link($spielplan->turnier->get_spielplan_link_tc(), '<i class="material-icons">create</i> Ergebnisse eintragen') ?></p>
     <?php }// endif?>
     <?php if (isset($_SESSION['logins']['la']) && !(Config::$ligacenter ?? false)) { ?>

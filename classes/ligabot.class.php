@@ -88,18 +88,17 @@ class LigaBot
             $wochentag = date("N", $datum); // Wochentage nummeriert 1 - 7
             // Man muss auch Turniere berücksichtigen, welche nicht am Wochende sind:
             if ($kw != date('W', $datum)) {
-                $spieltag = $spieltag + 1;
+                ++$spieltag;
             }
             $set_spieltag = $spieltag;
-            if ($wochentag < 3) { // Turniere die Mo oder Di stattfinden werden dem vorherigen Spieltag zugeordnet
-                if ((date('W', $datum) - $kw) <= 1) {
-                    if ($spieltag == 0) { // Ansonsten würde Spieltag 0 vergeben, wenn das erste Turnier nicht an einem WE stattfindet
-                        $spieltag = 1;
-                    }
-                    $set_spieltag = $spieltag - 1;
+            // Turniere die Mo oder Di stattfinden werden dem vorherigen Spieltag zugeordnet
+            if (($wochentag < 3) && (date('W', $datum) - $kw) <= 1) {
+                if ($spieltag === 0) { // Ansonsten würde Spieltag 0 vergeben, wenn das erste Turnier nicht an einem WE stattfindet
+                    $spieltag = 1;
                 }
+                $set_spieltag = $spieltag - 1;
             }
-            if ($turnier->details['spieltag'] != $set_spieltag) {// Die Datenbank wird nur beschrieben, wenn sich der Spieltag ändert.
+            if ($turnier->details['spieltag'] != $set_spieltag) { // Die Datenbank wird nur beschrieben, wenn sich der Spieltag ändert.
                 $turnier->set_spieltag($set_spieltag);
             }
             $kw = date('W', $datum); // Kalenderwoche übernehmen für die nächste Iteration
@@ -138,9 +137,8 @@ class LigaBot
         // Faktor 3.93 und strtotime(date("d-M-Y"..)) -> Reset von 12 Uhr Mittags auf Null Uhr, um Winter <-> Sommerzeit korrekt handzuhaben
         if ($tag >= 3) {
             return strtotime(date("d-M-Y", $datum - 3.93 * 7 * 24 * 60 * 60 + (6 - $tag) * 24 * 60 * 60));
-        } else {
-            return strtotime(date("d-M-Y", $datum - 3.93 * 7 * 24 * 60 * 60 - $tag * 24 * 60 * 60));
         }
+        return strtotime(date("d-M-Y", $datum - 3.93 * 7 * 24 * 60 * 60 - $tag * 24 * 60 * 60));
     }
 
     /**

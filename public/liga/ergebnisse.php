@@ -18,7 +18,7 @@ $color[1] = "w3-text-grey";
 $color[2] = "w3-text-brown";
 
 //Turnierreport Icon
-$icon = (isset($_SESSION['team_id'])) ? 'article' : 'lock';
+$icon = (isset($_SESSION['logins']['team'])) ? 'article' : 'lock';
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////

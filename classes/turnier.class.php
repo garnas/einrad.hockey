@@ -615,7 +615,9 @@ class Turnier
      */
     public static function check_team_block_static($team_block, $turnier_block): bool
     {
-        if ($team_block == 'NL') return true; // NL Teams können immer angemeldet werden
+        if ($team_block == 'NL') {
+            return true;
+        } // NL Teams können immer angemeldet werden
 
         // Check ob es sich um ein Block-Turnier handelt (nicht spass oder finale)
         if (in_array($turnier_block, Config::BLOCK_ALL)) {
@@ -635,7 +637,7 @@ class Turnier
      * @param int $team_id
      * @return bool
      */
-    function check_team_block_freilos(int $team_id): bool
+    public function check_team_block_freilos(int $team_id): bool
     {
         return self::check_team_block_freilos_static(Tabelle::get_team_block($team_id), $this->details['tblock']);
     }
@@ -689,7 +691,7 @@ class Turnier
      *
      * @return string
      */
-    function get_spielplan_link(): string
+    public function get_spielplan_link(): string
     {
         return (empty($this->details['link_spielplan']))
             ? Env::BASE_URL . '/liga/spielplan.php?turnier_id=' . $this->id
@@ -700,7 +702,7 @@ class Turnier
      * Gibt den Link zum Teamcenter-Spielplan aus, je nach dem ob er manuell hochgeladen oder automatisch erstellt wurde
      * @return string
      */
-    function get_spielplan_link_tc(): string
+    public function get_spielplan_link_tc(): string
     {
         return (empty($this->details['link_spielplan']))
             ? '../teamcenter/tc_spielplan.php?turnier_id=' . $this->id
@@ -711,7 +713,7 @@ class Turnier
      * Gibt den Link zum Ligacenter-Spielplan aus, je nach dem ob er manuell hochgeladen oder automatisch erstellt wurde
      * @return string
      */
-    function get_spielplan_link_lc(): string
+    public function get_spielplan_link_lc(): string
     {
         return (empty($this->details['link_spielplan']))
             ? '../ligacenter/lc_spielplan.php?turnier_id=' . $this->id
@@ -723,7 +725,7 @@ class Turnier
      *
      * @param string $phase
      */
-    function set_phase(string $phase)
+    public function set_phase(string $phase)
     {
         if ($phase === $this->details['phase']) return;
 
@@ -742,7 +744,7 @@ class Turnier
      *
      * @param string $block
      */
-    function set_block(string $block)
+    public function set_block(string $block)
     {
         $sql = "
                 UPDATE turniere_liga 
@@ -757,9 +759,9 @@ class Turnier
     /**
      * Setzt den Spieltag in der Datenbank fest
      *
-     * @param $spieltag
+     * @param int $spieltag
      */
-    function set_spieltag($spieltag)
+    public function set_spieltag(int $spieltag): void
     {
         $sql = "
                 UPDATE turniere_liga
@@ -767,7 +769,7 @@ class Turnier
                 WHERE turnier_id = $this->id
                 ";
         dbi::$db->query($sql, $spieltag)->log();
-        $this->log("Spieltag: " . $this->details['spieltag'] . " => " . $spieltag);
+        $this->log("Spieltag: " . $spieltag);
         $this->details['spieltag'] = $spieltag;
     }
 
@@ -789,9 +791,9 @@ class Turnier
      * @param string $handy
      * @return bool Wurden wichtige Daten geändert?
      */
-    function change_turnier_details(string $startzeit, string $besprechung, string $plaetze, string $spielplan,
-                                    string $hallenname, string $strasse, string $plz, string $ort, string $haltestellen,
-                                    string $hinweis, string $startgebuehr, string $organisator, string $handy): bool
+    public function change_turnier_details(string $startzeit, string $besprechung, string $plaetze, string $spielplan,
+                                           string $hallenname, string $strasse, string $plz, string $ort, string $haltestellen,
+                                           string $hinweis, string $startgebuehr, string $organisator, string $handy): bool
     {
         $sql = "
                 UPDATE turniere_details 
@@ -804,20 +806,27 @@ class Turnier
         dbi::$db->query($sql, $params)->log();
 
         // Nichts wichtiges geändert, aber trotzdem Log
-        if ($this->details['besprechung'] != $besprechung)
+        if ($this->details['besprechung'] != $besprechung) {
             $this->log("Besprechung: " . $besprechung);
-        if ($this->details['hinweis'] != $hinweis)
+        }
+        if ($this->details['hinweis'] != $hinweis) {
             $this->log("Hinweis:\r\n" . $hinweis);
-        if ($this->details['hallenname'] != $hallenname)
+        }
+        if ($this->details['hallenname'] != $hallenname) {
             $this->log("Hallenname: " . $hallenname);
-        if ($this->details['haltestellen'] != $haltestellen)
+        }
+        if ($this->details['haltestellen'] != $haltestellen) {
             $this->log("Haltestellen: " . $haltestellen);
-        if ($this->details['organisator'] != $organisator)
+        }
+        if ($this->details['organisator'] != $organisator) {
             $this->log("Organisator: " . $startzeit);
-        if ($this->details['handy'] != $handy)
+        }
+        if ($this->details['handy'] != $handy) {
             $this->log("Handy: " . $handy);
-        if ($this->details['startgebuehr'] != $startgebuehr)
+        }
+        if ($this->details['startgebuehr'] != $startgebuehr) {
             $this->log("Startgebühr: " . $startgebuehr);
+        }
 
         // Wichtiges geändert und Log
         $wichtiges_geaendert = false;
@@ -859,8 +868,8 @@ class Turnier
      * @param string $datum
      * @param string $phase
      */
-    function change_turnier_liga(string $tname, string $ausrichter, string $art, string $tblock, string $fixed,
-                                 string $datum, string $phase)
+    public function change_turnier_liga(string $tname, int $ausrichter, string $art, string $tblock, string $fixed,
+                                        string $datum, string $phase): void
     {
         $sql = "
                 UPDATE turniere_liga 
@@ -871,17 +880,30 @@ class Turnier
         dbi::$db->query($sql, $params)->log();
 
         // Turnierlogs schreiben
-        if ($this->details['datum'] != $datum) {
+        if ($this->details['datum'] !== $datum) {
             LigaBot::set_spieltage(); // Spieltage ändern sich eventuell, je nach Datumsveränderung
-            $this->log("Datum: " . $datum);
+            $this->log("Datum geändert: " . $datum);
         }
-        if ($this->details['tname'] != $tname) $this->log("Turniername: " . $tname);
-        if ($this->details['ausrichter'] != $ausrichter)
-            $this->log("Ausrichter: " . Team::id_to_name($ausrichter));
-        if ($this->details['art'] != $art) $this->log("Art: " . $art);
-        if ($this->details['tblock'] != $tblock) $this->log("Turnierblock: " . $tblock);
-        if ($this->details['tblock_fixed'] != $fixed) $this->log("Fixiert: " . $fixed);
-        if ($this->details['phase'] != $phase) $this->log("Phase: " . $phase);
+        if ($this->details['tname'] !== $tname) {
+            $this->log("Turniername geändert: " . $tname);
+        }
+        db::debug($this->details['ausrichter'], true);
+        db::debug($ausrichter, true);
+        if ($this->details['ausrichter'] !== $ausrichter) {
+            $this->log("Ausrichter geändert: " . Team::id_to_name($ausrichter));
+        }
+        if ($this->details['art'] !== $art) {
+            $this->log("Art: " . $art);
+        }
+        if ($this->details['tblock'] !== $tblock) {
+            $this->log("Turnierblock geändert: " . $tblock);
+        }
+        if ($this->details['tblock_fixed'] !== $fixed) {
+            $this->log("Fixiert geändert: " . $fixed);
+        }
+        if ($this->details['phase'] !== $phase) {
+            $this->log("Phase geändert: " . $phase);
+        }
     }
 
     /**
@@ -892,7 +914,7 @@ class Turnier
      * @param $art
      * @return bool
      */
-    function change_turnier_block($tblock, $fixed, $art): bool
+    public function change_turnier_block($tblock, $fixed, $art): bool
     {
         $sql = "
                 UPDATE turniere_liga 
@@ -909,14 +931,14 @@ class Turnier
      *
      * @param string $log_text
      */
-    function log(string $log_text)
+    public function log(string $log_text): void
     {
         if (isset($_SESSION['ligabot'])) {
             $autor = 'Ligabot';
-        } elseif ($GLOBALS['ligacenter']) {
+        } elseif (Config::$ligacenter) {
             $autor = "Ligaausschuss";
-        } elseif ($GLOBALS['teamcenter']) {
-            $autor = $_SESSION['teamname'];
+        } elseif (Config::$teamcenter) {
+            $autor = $_SESSION['logins']['team']['name'];
         } else {
             $autor = 'automatisch';
         }
@@ -932,7 +954,7 @@ class Turnier
      *
      * @return array
      */
-    function get_logs(): array
+    public function get_logs(): array
     {
         $sql = "
                 SELECT * 
@@ -950,7 +972,9 @@ class Turnier
      */
     function delete($grund = '')
     {
+        // Datenbank Backup
         dbi::sql_backup();
+
         // Turnier in der Datenbank vermerken
         $sql = "
                 INSERT INTO turniere_geloescht (turnier_id, datum, ort, grund, saison) 

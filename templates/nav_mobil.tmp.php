@@ -42,7 +42,7 @@
         </a>
     </div>
     <a href="<?= Env::BASE_URL ?>/teamcenter/tc_login.php" class="w3-bar-item w3-button">Login</a>
-    <?php if (!isset($_SESSION['team_id'])){$tc_color = 'w3-text-grey';}?>
+    <?php if (!isset($_SESSION['logins']['team'])){$tc_color = 'w3-text-grey';}?>
     <div class="<?=$tc_color ?? ''?>">
         <a class="w3-bar-item w3-button" href="<?= Env::BASE_URL ?>/teamcenter/tc_start.php">Start</a>
         <a class="w3-bar-item w3-button" href="<?= Env::BASE_URL ?>/teamcenter/tc_abstimmung.php">Abstimmung</a>
@@ -75,7 +75,7 @@
 <!--Navigation für Smartphones -->
 <div class="w3-display-container w3-hide-large w3-hide-medium">
     <!-- Hintergrundbild -->
-    <img src="<?= Form::get_hintergrund_bild() ?>" class="<?php if (!isset($_SESSION['logins']['la']) && !isset($_SESSION['team_id'])){?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.4;">
+    <img src="<?= Form::get_hintergrund_bild() ?>" class="<?php if (!isset($_SESSION['logins']['la']) && !isset($_SESSION['logins']['team'])){?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.4;">
     <div class="w3-display-left w3-margin-left">
         <img src="<?= Env::BASE_URL ?>/bilder/logo_lang_small.png" onclick="open_sidebar()" class="w3-image" alt="langes Logo" style="max-width: 80%; vertical-align: 22%; cursor: pointer">
     </div>
@@ -90,7 +90,7 @@
 
     <!-- Logout Button -->
     <div class="w3-display-bottomright w3-text-primary w3-large">
-        <?php if (isset($_SESSION['team_id'])){?>
+        <?php if (isset($_SESSION['logins']['team'])){?>
             <a href='<?= Env::BASE_URL ?>/teamcenter/tc_logout.php' class="w3-button w3-hover-primary"><i class="material-icons w3-xlarge">block</i> Logout</a>
         <?php }elseif (isset($_SESSION['logins']['la'])){?>
             <a href='<?= Env::BASE_URL ?>/ligacenter/lc_logout.php' class="w3-button w3-hover-primary"><i class="material-icons w3-xlarge">block</i> Logout</a>

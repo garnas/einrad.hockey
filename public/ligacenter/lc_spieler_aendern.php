@@ -70,9 +70,8 @@ if (isset($_POST['spieler_aendern'])) {
             Form::info("Spielerdaten wurden geändert");
             header('Location: lc_kader.php?team_id=' . $team_id);
             die();
-        } else {
-            Form::error("Es wurden keine Daten geändert");
         }
+        Form::error("Es wurden keine Daten geändert");
     }
 }
 
@@ -84,6 +83,7 @@ if (isset($_POST['delete_spieler'])) {
     header("Location: " . $_SERVER['PHP_SELF']);
     die();
 }
+dbi::debug($spieler);
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -94,25 +94,26 @@ include '../../templates/header.tmp.php';
     <!-- Spielerauswahlfeld -->
     <div class="w3-panel w3-card-4">
         <form method="post">
+            <h3 class="w3-text-primary">
+                <label for="spieler">Spieler wählen</label>
+            </h3>
             <p>
-                <label for="spieler">
-            <h3 class="w3-text-primary">Spieler wählen</h3></label>
-            <input onchange="this.form.submit();"
-                   type="text"
-                   placeholder="Spieler eingeben"
-                   style="max-width:400px"
-                   class="w3-input w3-border w3-border-primary"
-                   list="spielerliste"
-                   id="spieler"
-                   name="spieler_auswahl"
-            >
-            <datalist id="spielerliste">
-                <?php foreach ($spieler_liste
+                <input onchange="this.form.submit();"
+                       type="text"
+                       placeholder="Spieler eingeben"
+                       style="max-width:400px"
+                       class="w3-input w3-border w3-border-primary"
+                       list="spielerliste"
+                       id="spieler"
+                       name="spieler_auswahl"
+                >
+                <datalist id="spielerliste">
+                    <?php foreach ($spieler_liste
 
-                as $spieler_id => $name){ ?>
-                <option value='<?= $name . ' ' . $spieler_id ?>'>
-                    <?php } //end foreach ?>
-            </datalist>
+                    as $spieler_id => $name){ ?>
+                    <option value='<?= $name . ' ' . $spieler_id ?>'>
+                        <?php } //end foreach ?>
+                </datalist>
             </p>
             <p>
                 <input type="submit" class="w3-button w3-tertiary" value="Spieler wählen">
@@ -128,6 +129,7 @@ include '../../templates/header.tmp.php';
             <input class="w3-input w3-border w3-border-primary"
                    type="text"
                    name="vorname"
+                   id="vorname"
                    value="<?= $spieler->details['vorname'] ?>"
                    autocomplete="off"
                    required
@@ -138,6 +140,7 @@ include '../../templates/header.tmp.php';
             <input class="w3-input w3-border w3-border-primary"
                    type="text"
                    name="nachname"
+                   id="nachname"
                    value="<?= $spieler->details['nachname'] ?>"
                    autocomplete="off"
                    required>
@@ -147,6 +150,7 @@ include '../../templates/header.tmp.php';
             <input class="w3-input w3-border w3-border-primary"
                    type="number"
                    name="jahrgang"
+                   id="jahrgang"
                    value="<?= $spieler->details['jahrgang'] ?>"
                    autocomplete="off"
                    required>

@@ -9,7 +9,7 @@ require_once '../../logic/kontaktcenter.logic.php';
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = 'Kontaktcenter | ' . $_SESSION['teamname'];
+Config::$titel = 'Kontaktcenter | ' . $_SESSION['logins']['team']['name'];
 include '../../templates/header.tmp.php';
 include '../../templates/kontaktcenter.tmp.php';
 include '../../templates/footer.tmp.php';

@@ -235,7 +235,7 @@ class dbWrapper
     {
         // Wer?
         $autoren = [
-            $_SESSION['teamname'] ?? '',
+            $_SESSION['logins']['team']['name'] ?? '',
             $_SESSION['la_login_name'] ?? '',
             $_SESSION['ligabot'] ?? ''
         ];

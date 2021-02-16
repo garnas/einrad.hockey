@@ -9,88 +9,104 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 /////////////////////////////////////////////////////////////////////////////
 Config::$titel = "Ligaleitung | Deutsche Einradhockeyliga";
 Config::$content = "Übersicht über die Ausschüsse der Deutschen Einradhockeyliga, welche die Liga leiten.";
-include '../../templates/header.tmp.php';
-?>
+include '../../templates/header.tmp.php'; ?>
 
 <h1 class="w3-text-grey">Ligaleitung der Saison <?=Form::get_saison_string()?></h1>
-<p class="w3-text-grey">Die Liga wird von den hier aufgelisteten Gremien geleitet. Wenn du auch in einem der Ausschüsse die Einradhockeyliga weiterentwickeln möchtest, kannst du dich jederzeit beim Ligaauschuss melden.</p> 
-<!--Liga -->
-<h2 class="w3-border-bottom w3-text-primary">Ligaausschuss</h2>
+<p class="w3-text-grey">
+    Die Liga wird von den hier aufgelisteten Gremien geleitet. Wenn du auch in einem der Ausschüsse die Einradhockeyliga
+    weiterentwickeln möchtest, kannst du dich jederzeit beim Ligaauschuss melden.
+</p>
+<!-- Liga -->
+<h2 class="w3-text-primary"><?= Form::icon("gavel", tag:"h2") ?>  Ligaausschuss</h2>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
-        <?php foreach (Ligaleitung::get_la() as $la){?>
-        <tr>
-            <td><?=Form::mailto($la['email'], ' ')?><?=$la['r_name']?></td>
-            <td><i class="w3-text-primary">(<?=Team::id_to_name ($la['team_id']) ?: 'Ehrenamtlich'?>)</i></td>
-        </tr>
+        <?php foreach (LigaLeitung::get_all('ligaausschuss') as $la){?>
+            <tr>
+                <td class="w3-padding-small">
+                    <?= Form::mailto($la['email'], $la ['vorname'] . ' ' . $la['nachname']) ?>
+                </td>
+                <td class="w3-padding-small"><i class="w3-text-grey"><?= $la['teamname'] ?></i></td>
+            </tr>
         <?php } //end foreach?>
     </table>
 </div>
-    
-<p>Der Ligaausschuss besteht aus sechs Mitgliedern und dient als Ansprechpartner der Deutschen Einradhockeyliga. Er ist verantwortlich für die Weiterentwicklung der Liga und für den reibungslosen Saisonablauf. Wenn es mehr Bewerber als Ligaausschussplätze gibt, wird er jeweils gegen Ende der Saison von allen Ligateams gewählt.</p>
 
-<p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Env::LAMAIL)?></p>
+<p>
+    Der Ligaausschuss besteht aus sechs Mitgliedern und dient als Ansprechpartner der Deutschen Einradhockeyliga. Er ist
+    verantwortlich für die Weiterentwicklung der Liga und für den reibungslosen Saisonablauf. Wenn es mehr Bewerber als
+    Ligaausschussplätze gibt, wird er jeweils gegen Ende der Saison von allen Ligateams gewählt.
+</p>
+
+<p class="w3-text-grey">Schreib uns an: <?= Form::mailto(Env::LAMAIL) ?></p>
 
 <p class="w3-margin" style="max-width: 666px">
-    <a href="../bilder/ligaausschuss2020.jpg" class="">
-        <img src="../bilder/ligaausschuss2020.jpg" style="" alt="Ligaausschuss 2020" class="w3-image w3-card-4">
+    <a href="../bilder/ligaausschuss2020.jpg">
+        <img src="../bilder/ligaausschuss2020.jpg" alt="Ligaausschuss 2020" class="w3-image w3-card-4">
     </a>
     Das Bild des Ligaausschusses der Saison 2020.
 </p>
 
 <!-- Technik -->
-<h2 class="w3-border-bottom w3-text-primary">Technikausschuss</h2>
+<h2 class="w3-text-primary"><?= Form::icon("engineering", tag:"h2") ?> Technikausschuss</h2>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
-        <?php foreach (Ligaleitung::get_tk() as $tk){?>
+        <?php foreach (LigaLeitung::get_all('technikausschuss') as $tk){?>
         <tr>
-            <td><?=$tk['r_name']?></td>
-            <td><i class="w3-text-primary">(<?=Team::id_to_name ($tk['team_id']) ?: 'Ehrenamtlich'?>)</i>
+            <td class="w3-padding-small"><?= $tk['vorname'] . ' ' . $tk['nachname'] ?></td>
+            <td class="w3-padding-small"><i class="w3-text-grey"><?= $tk['teamname'] ?></i>
             </td>
         </tr>
         <?php } //end foreach?>
     </table>
 </div>
-<p>Der Technikausschuss ist verantwortlich für die Instandhaltung und Weiterentwicklung der IT der Deutschen Einradhockeyliga.</p>
+<p>
+    Der Technikausschuss ist verantwortlich für die Instandhaltung und Weiterentwicklung der IT der Deutschen
+    Einradhockeyliga.
+</p>
 <p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Env::TECHNIKMAIL)?></p>
 
 <!-- Öffntlichkeits-Ausschuss -->
-<h2 class="w3-border-bottom w3-text-primary">Öffentlichkeitsausschuss</h2>
+<h2 class="w3-text-primary"><?= Form::icon("public", tag:"h2") ?> Öffentlichkeitsausschuss</h2>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
-    <?php foreach (LigaLeitung::get_oa() as $oa){?>
+    <?php foreach (LigaLeitung::get_all('oeffentlichkeitsausschuss') as $oa){?>
         <tr>
-            <td><?=$oa['r_name']?></td>
-            <td><i class="w3-text-primary">(<?=Team::id_to_name ($oa['team_id']) ?: 'Ehrenamtlich'?>)</i></td>
+            <td class="w3-padding-small"><?= $oa['vorname'] . ' ' . $oa['nachname']?></td>
+            <td class="w3-padding-small"><i class="w3-text-grey"><?= $oa['teamname'] ?></i></td>
         </tr>
         <?php } //end foreach?>
     </table>
 </div>
-<p>Der Öffentlichkeitsausschuss ist relativ neu und noch nicht offiziell im Ligamodus verankert. Er soll den Einradhockeysport nach außen hin präsentieren und sich um unsere Socialmedia-Accounts kümmern.</p>
+<p>
+    Der Öffentlichkeitsausschuss ist relativ neu und nicht offiziell im Ligamodus vertreten. Er soll den
+    Einradhockeysport nach außen hin präsentieren und sich um unsere Socialmedia-Accounts kümmern.
+</p>
 <p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Env::OEFFIMAIL)?></p>
 
 <!-- Schiri-Ausschuss -->
-<h2 class="w3-border-bottom w3-text-primary">Schiedsrichterausschuss</h2>
+<h2 class="w3-text-primary"><?= Form::icon("sports", tag:"h2") ?> Schiedsrichterausschuss</h2>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
-    <?php foreach (LigaLeitung::get_sa() as $sa){?>
+    <?php foreach (LigaLeitung::get_all('schiriausschuss') as $sa){?>
         <tr>
-            <td><?=$sa['r_name']?></td>
-            <td><i class="w3-text-primary">(<?=Team::id_to_name ($sa['team_id']) ?: 'Ehrenamtlich'?>)</i></td>
+            <td class="w3-padding-small"><?=$sa['vorname'] . ' ' . $sa['nachname']?></td>
+            <td class="w3-padding-small"><i class="w3-text-grey"><?= $sa['teamname'] ?></i></td>
         </tr>
         <?php } //end foreach?>
     </table>
 </div>
-<p>Der Schiedsrichterausschuss ist für die Organisation der Aus- und Weiterbildung der Schiedsrichter in der Deutschen Einradhockeyliga verantwortlich.</p>
+<p>
+    Der Schiedsrichterausschuss ist für die Organisation der Aus- und Weiterbildung der Schiedsrichter in der Deutschen
+    Einradhockeyliga verantwortlich.
+</p>
 <p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Env::SCHIRIMAIL)?></p>
-<h3 class="w3-border-bottom w3-text-primary">Schiedsrichterausbilder</h3>
+<h2 class="w3-text-primary"><?= Form::icon("school", tag:"h2") ?> Schiedsrichterausbilder</h2>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
-        <?php foreach (Ligaleitung::get_ausbilder() as $ausbilder){?>
+        <?php foreach (Ligaleitung::get_all('schiriausbilder') as $ausbilder){?>
         <tr>
-            <td><?=$ausbilder['vorname'] . ' ' . $ausbilder['nachname']?></td>
-            <td><i class="w3-text-primary">(<?=Team::id_to_name ($ausbilder['team_id']) ?: 'Ehrenamtlich'?>)</i>
-            </td>
+            <td class="w3-padding-small"><?=$ausbilder['vorname'] . ' ' . $ausbilder['nachname']?></td>
+            <td class="w3-padding-small"><i class="w3-text-grey"><?= $ausbilder['teamname'] ?></i></td>
         </tr>
         <?php } //end foreach?>
     </table>

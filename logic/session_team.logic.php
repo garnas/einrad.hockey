@@ -1,13 +1,13 @@
 <?php
 // Dies hier muss in jeder geschützten Seite direkt unterhalb von first.logic.php eingefügt werden!
-if(!isset($_SESSION['team_id'])) {
+if(!isset($_SESSION['logins']['team'])) {
   $_SESSION['tc_redirect'] = dbi::escape($_SERVER['REQUEST_URI']); //Damit man nach dem Login direkt auf die gewünschte Seite geführt wird
   Form::info("Du wirst nach deinem Login weitergeleitet.");
   header('Location: ../teamcenter/tc_login.php?redirect');
   die();
 }
 
-$team = new Team ($_SESSION['team_id']);
+$team = new Team ($_SESSION['logins']['team']['id']);
 
 if (!Config::$teamcenter_no_redirect && $team->details['passwort_geaendert'] === 'Nein'){
   Form::info("Bitte ändere zuerst das von uns vergebene Passwort.");
@@ -23,5 +23,5 @@ if (!Config::$teamcenter_no_redirect && empty($team->details['ligavertreter'])){
   die();
 }
 
-Config::$titel = $_SESSION['teamname'];
+Config::$titel = $_SESSION['logins']['team']['name'];
 Config::$teamcenter = true; // Dies zeigt allen Dateien (insbeondere .tmp.php) , das man sich im Teamcenter befindet.

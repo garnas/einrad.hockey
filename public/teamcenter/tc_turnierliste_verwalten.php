@@ -7,7 +7,7 @@ require_once '../../logic/session_team.logic.php'; //Auth
 
 $heute = date("Y-m-d");
 //wird dem template übergeben
-$turniere = Turnier::get_eigene_turniere($_SESSION['team_id']);
+$turniere = Turnier::get_eigene_turniere($_SESSION['logins']['team']['id']);
 
 if (empty($turniere)){
     Form::info('Dein Team richtet zurzeit kein Turnier aus - Erstelle ein Turnier, um es verwalten zu können');

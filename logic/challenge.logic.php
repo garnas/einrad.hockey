@@ -5,8 +5,8 @@ $abschluss = strtotime($challenge->challenge_end . ' ' . $challenge->challenge_e
 $uhrzeit = strtotime(date('Y-m-d H:i:s'));
 
 // Einträge für das Teamcenter-Dashboard. Diese werden nur "gefüllt", wenn eine TC-Session vorhanden ist.
-if(isset($_SESSION['team_id'])) {
-    $team_id = $_SESSION["team_id"];
+if(isset($_SESSION['logins']['team'])) {
+    $team_id = $_SESSION['logins']['team']['id'];
     $kader = Spieler::get_teamkader($team_id);
     $team_spielerliste = $challenge->get_team_spieler($team_id);
     $team_eintraege = $challenge->get_team_eintraege($team_id); 
@@ -64,7 +64,7 @@ if (isset($_POST['put_challenge']) && Config::$teamcenter) {
     } elseif (empty($spieler_id)) {
         $error = true;
         Form::error("Es wurde kein Spieler ausgewählt.");
-    } elseif ($spieler->details['team_id'] != $_SESSION['team_id']){ //Spielt die übergebene Spieler_id auch für das eingeloggte Team?
+    } elseif ($spieler->details['team_id'] != $_SESSION['logins']['team']['id']){ //Spielt die übergebene Spieler_id auch für das eingeloggte Team?
         $error = true; 
         Form::error("Eintragen nicht möglich.");
     }

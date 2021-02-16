@@ -10,7 +10,7 @@ if (empty($turnier->details)){
 }
 
 //Besteht die Berechtigung das Turnier zu bearbeiten?
-if (Config::$teamcenter && ($_SESSION['team_id'] ?? '') != $turnier->details['ausrichter']){
+if (Config::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $turnier->details['ausrichter']){
     Form::error("Keine Berechtigung das Turnier zu bearbeiten");
     header('Location: ../liga/turniere.php');
     die();

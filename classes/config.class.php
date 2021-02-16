@@ -6,36 +6,36 @@ class Config
      * Variablen aus Env.php aus dem Root Verzeichnis
      * Diese stehen nur noch hier für die Kompatibilität
      */
-    const BASE_URL = Env::BASE_URL;
-    const BASE_PATH = Env::BASE_PATH;
-    const HOST_NAME = Env::HOST_NAME;
-    const DATABASE = Env::DATABASE;
-    const USER_NAME = Env::USER_NAME;
-    const PASSWORD = Env::PASSWORD;
-    const ACTIVATE_EMAIL = Env::HOST_NAME; // Bei True, werden Emails tatsächlich versendet, bei false debugging
-    const SMTP_HOST = Env::SMTP_HOST;
-    const SMTP_USER = Env::SMTP_USER;
-    const SMTP_PW = Env::SMTP_PW;
-    const SMTP_PORT = Env::SMTP_PORT;
-    const LAMAIL = Env::LAMAIL;
-    const LAMAIL_ANTWORT = Env::LAMAIL_ANTWORT; // Wird im BCC gesetzt, bei Mails vom Ligaausschuss
-    const TECHNIKMAIL = Env::TECHNIKMAIL;
-    const SCHIRIMAIL = Env::SCHIRIMAIL;
-    const OEFFIMAIL = Env::OEFFIMAIL;
+    public const BASE_URL = Env::BASE_URL;
+    public const BASE_PATH = Env::BASE_PATH;
+    public const HOST_NAME = Env::HOST_NAME;
+    public const DATABASE = Env::DATABASE;
+    public const USER_NAME = Env::USER_NAME;
+    public const PASSWORD = Env::PASSWORD;
+    public const ACTIVATE_EMAIL = Env::HOST_NAME; // Bei True, werden Emails tatsächlich versendet, bei false debugging
+    public const SMTP_HOST = Env::SMTP_HOST;
+    public const SMTP_USER = Env::SMTP_USER;
+    public const SMTP_PW = Env::SMTP_PW;
+    public const SMTP_PORT = Env::SMTP_PORT;
+    public const LAMAIL = Env::LAMAIL;
+    public const LAMAIL_ANTWORT = Env::LAMAIL_ANTWORT; // Wird im BCC gesetzt, bei Mails vom Ligaausschuss
+    public const TECHNIKMAIL = Env::TECHNIKMAIL;
+    public const SCHIRIMAIL = Env::SCHIRIMAIL;
+    public const OEFFIMAIL = Env::OEFFIMAIL;
 
 
     /**
      * Saison
      */
-    const SAISON = 26; // Saison 0 = Jahr 1995;
-    const SAISON_ANFANG = '15.08.2020';
-    const SAISON_ENDE = '31.10.2021';
+    public const SAISON = 26; // Saison 0 = Jahr 1995;
+    public const SAISON_ANFANG = '15.08.2020';
+    public const SAISON_ENDE = '31.10.2021';
 
     /**
      * Log-Files
      */
-    const LOG_LOGIN = "login.log";
-    const LOG_DB = "db.log";
+    public const LOG_LOGIN = "login.log";
+    public const LOG_DB = "db.log";
 
 
     /**
@@ -46,52 +46,52 @@ class Config
      *
      * Mögliche Team-Blöcke
      */
-    const BLOCK = ['A', 'AB', 'BC', 'CD', 'DE', 'EF', 'F'];
+    public const BLOCK = ['A', 'AB', 'BC', 'CD', 'DE', 'EF', 'F'];
     /**
      * Mögliche Turnier-Blöcke
      */
-    const BLOCK_ALL = ["ABCDEF", 'A', 'AB', 'ABC', 'BC', 'BCD', 'CD', 'CDE', 'DE', 'DEF', 'EF', 'F'];
+    public const BLOCK_ALL = ["ABCDEF", 'A', 'AB', 'ABC', 'BC', 'BCD', 'CD', 'CDE', 'DE', 'DEF', 'EF', 'F'];
 
     /**
      * Ligagebühr
      */
-    const LIGAGEBUEHR = "30&nbsp;€";
+    public const LIGAGEBUEHR = "30&nbsp;€";
 
     /**
      *  Ligalinks
      */
-    const LINK_FORUM = 'https://forum.einrad.hockey/';
-    const LINK_ARCHIV = 'https://archiv.einrad.hockey/archiv/index.html';
-    const LINK_INSTA = 'https://www.instagram.com/einradhockeyde/';
-    const LINK_FACE = 'https://www.facebook.com/DeutscheEinradhockeyliga';
+    public const LINK_FORUM = 'https://forum.einrad.hockey/';
+    public const LINK_ARCHIV = 'https://archiv.einrad.hockey/archiv/index.html';
+    public const LINK_INSTA = 'https://www.instagram.com/einradhockeyde/';
+    public const LINK_FACE = 'https://www.facebook.com/DeutscheEinradhockeyliga';
 
     /**
      * Andere Ligen
      */
-    const LINK_AUSTRALIA = 'https://hockey.unicycling.org.au/';
-    const LINK_SWISS = 'https://www.swiss-iuc.ch/Wettkaempfe/Einradhockey';
-    const LINK_FRANCE = 'https://monocycle.info/ligue-de-monocycle-basket-remaniement-co/';
-    const LINK_IUF = 'https://unicycling.org/';
+    public const LINK_AUSTRALIA = 'https://hockey.unicycling.org.au/';
+    public const LINK_SWISS = 'https://www.swiss-iuc.ch/Wettkaempfe/Einradhockey';
+    public const LINK_FRANCE = 'https://monocycle.info/ligue-de-monocycle-basket-remaniement-co/';
+    public const LINK_IUF = 'https://unicycling.org/';
 
     /**
      * Einradverbände
      */
-    const LINK_EV = 'https://www.einradverband.de/';
-    const LINK_EV_SH = 'https://www.einradverband-sh.de/';
-    const LINK_EV_BY = 'http://einradverband-bayern.de/';
+    public const LINK_EV = 'https://www.einradverband.de/';
+    public const LINK_EV_SH = 'https://www.einradverband-sh.de/';
+    public const LINK_EV_BY = 'http://einradverband-bayern.de/';
 
     /**
      * Dokumente
      */
-    const LINK_MODUS = Env::BASE_URL . '/dokumente/ligamodus.pdf';
-    const LINK_REGELN = Env::BASE_URL . '/dokumente/regelwerk.pdf';
-    const LINK_MODUS_KURZ = Env::BASE_URL . '/dokumente/zusammenfassung_modus.pdf';
-    const LINK_REGELN_KURZ = Env::BASE_URL . '/dokumente/zusammenfassung_regeln.pdf';
-    const LINK_MODUS_KURZ_ENG = Env::BASE_URL . '/dokumente/summary_modus.pdf';
-    const LINK_REGELN_IUF = Env::BASE_URL . '/dokumente/iuf-rulebook-2019.pdf';
-    const LINK_TURNIER = Env::BASE_URL . '/dokumente/turniermodi.pdf';
-    const LINK_DSGVO = Env::BASE_URL . '/dokumente/datenschutz-hinweise.pdf';
-    const LINK_SPIELPLAENE_ALT = Env::BASE_URL . '/dokumente/alte_spielplan_vorlagen.pdf';
+    public const LINK_MODUS = Env::BASE_URL . '/dokumente/ligamodus.pdf';
+    public const LINK_REGELN = Env::BASE_URL . '/dokumente/regelwerk.pdf';
+    public const LINK_MODUS_KURZ = Env::BASE_URL . '/dokumente/zusammenfassung_modus.pdf';
+    public const LINK_REGELN_KURZ = Env::BASE_URL . '/dokumente/zusammenfassung_regeln.pdf';
+    public const LINK_MODUS_KURZ_ENG = Env::BASE_URL . '/dokumente/summary_modus.pdf';
+    public const LINK_REGELN_IUF = Env::BASE_URL . '/dokumente/iuf-rulebook-2019.pdf';
+    public const LINK_TURNIER = Env::BASE_URL . '/dokumente/turniermodi.pdf';
+    public const LINK_DSGVO = Env::BASE_URL . '/dokumente/datenschutz-hinweise.pdf';
+    public const LINK_SPIELPLAENE_ALT = Env::BASE_URL . '/dokumente/alte_spielplan_vorlagen.pdf';
 
     /**
      * Authentification

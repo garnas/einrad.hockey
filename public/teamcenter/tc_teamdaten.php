@@ -5,8 +5,8 @@
 require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_team.logic.php'; //Auth
 
-$team = new Team ($_SESSION['team_id']);
-$emails = (new Kontakt ($_SESSION['team_id']))->get_emails_with_details();
+$team = new Team ($_SESSION['logins']['team']['id']);
+$emails = (new Kontakt ($_SESSION['logins']['team']['id']))->get_emails_with_details();
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////

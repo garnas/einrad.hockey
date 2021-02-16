@@ -38,7 +38,7 @@ uasort($display_ergebnisse, $sort_function);
 
 // Nur für das Teamcenter und im Zeitraum der Abstimmung
 if (Config::$teamcenter) {
-    $abstimmung = new Abstimmung($_SESSION['team_id']);
+    $abstimmung = new Abstimmung($_SESSION['logins']['team']['id']);
     $stimme = '';
 
     // Team will seine Stimme einsehen

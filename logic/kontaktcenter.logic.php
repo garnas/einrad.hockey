@@ -11,7 +11,7 @@ $teams = Tabelle::get_rang_tabelle($akt_spieltag); // Sortierung nach Rangtabell
 
 //Damit sich $_SESSION von team- und ligacenter nicht vermischen
 if (Config::$ligacenter) {
-    $list_id = 'lc_emails' . $_SESSION['logins']['la']['login'];
+    $list_id = 'lc_emails' . $_SESSION['logins']['la']['id'];
 } elseif (Config::$teamcenter) {
     $list_id = 'tc_emails' . $_SESSION['logins']['team']['team_id'];
 }
@@ -70,10 +70,10 @@ if (isset($_POST['teams_emails'])) {
         foreach ($team_emails as $email) {
             //Doppelte Email-Einträge vermeiden
             if (!in_array($email, $emails)) {
-                array_push($emails, $email);
+                $emails[] = $email;
             }
         }
-        array_push($teamnamen, Team::id_to_name($team_id));
+        $teamnamen[] = Team::id_to_name($team_id);
     }
     $_SESSION[$list_id]['emails'] = $emails;
     $_SESSION[$list_id]['empfaenger'] = $teamnamen;
@@ -85,7 +85,7 @@ if (isset($_POST['teams_emails'])) {
 }
 
 //Mailversand
-if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])) {
+if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
     $error = false;
     $emails = $_SESSION[$list_id]['emails'];
     $betreff = $_POST['betreff'];
@@ -102,14 +102,14 @@ if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])) {
             $mailer->setFrom(Env::LAMAIL, 'Ligaausschuss');
             $mailer->addBCC(Env::LAMAIL_ANTWORT);
         } elseif (Config::$teamcenter) {
-            $akt_kontakt = new Kontakt($_SESSION['team_id']); //Absender Mails bekommen
+            $akt_kontakt = new Kontakt($_SESSION['logins']['team']['id']); //Absender Mails bekommen
             $absender = $akt_kontakt->get_emails();
             foreach ($absender as $email) {
-                $mailer->AddReplyTo($email, $_SESSION['teamname']); //Antwort an den Absender
+                $mailer->AddReplyTo($email, $_SESSION['logins']['team']['name']); //Antwort an den Absender
                 if (!in_array($email, $emails)) {
                     $mailer->addBCC($email); //Als Kontroll-Email an den Absender
                 }
-                $mailer->setFrom("noreply@einrad.hockey", $_SESSION['teamname']);
+                $mailer->setFrom("noreply@einrad.hockey", $_SESSION['logins']['team']['name']);
             }
         }
 
@@ -134,11 +134,11 @@ if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])) {
             unset($_SESSION[$list_id]);
             header('Location: ' . dbi::escape($_SERVER['PHP_SELF']));
             die();
-        } else {
-            Form::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden. Manuell Mail versenden: "
-                . Form::mailto(Env::LAMAIL), esc:false);
-            Form::error($mailer->ErrorInfo);
         }
+
+        Form::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden. Manuell Mail versenden: "
+            . Form::mailto(Env::LAMAIL), esc:false);
+        Form::error($mailer->ErrorInfo);
     }
 }
 
@@ -150,7 +150,7 @@ if (isset($_SESSION[$list_id])) {
         $from = Env::LAMAIL;
         $tos = $_SESSION[$list_id]['emails'];
     } elseif (Config::$teamcenter) {
-        $from = $_SESSION['teamname'];
+        $from = $_SESSION['logins']['team']['name'];
         $tos = $_SESSION[$list_id]['empfaenger'];
     }
     if (empty($_SESSION[$list_id]['emails'])) {

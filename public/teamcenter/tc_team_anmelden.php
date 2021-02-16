@@ -6,7 +6,7 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_team.logic.php'; //Auth
 
 //Check ob das Team über fünf Spieler verfügt
-if (count(Spieler::get_teamkader($_SESSION['team_id'])) < 5){
+if (count(Spieler::get_teamkader($_SESSION['logins']['team']['id'])) < 5){
     Form::info('Bitte tragt euren Teamkader ein, um euch zu Turnieren anmelden zu können.');
     header('Location: ../teamcenter/tc_kader.php');
     die();
@@ -37,8 +37,8 @@ if ($turnier->details['art'] == 'spass'){
     die();
 }
 
-$akt_team = new Team($_SESSION['team_id']);
-if ($turnier->check_team_angemeldet($_SESSION['team_id'])){
+$akt_team = new Team($_SESSION['logins']['team']['id']);
+if ($turnier->check_team_angemeldet($_SESSION['logins']['team']['id'])){
     $team_angemeldet = true;
 }else{
     $team_angemeldet = false;
@@ -75,7 +75,7 @@ if (isset($_POST['anmelden'])){
     }
     //Test Teamblock
     /* Enfällt mit Modusänderung
-    if (!$akt_turnier->check_team_block($_SESSION['team_id'])){
+    if (!$akt_turnier->check_team_block($_SESSION['logins']['team']['id'])){
         Form::error ("Falscher Teamblock");
         $error = true;
     }
@@ -89,10 +89,10 @@ if (isset($_POST['anmelden'])){
         }
         if ($turnier->details['phase'] == 'melde'){
             $liste='spiele';
-            if (!($turnier->check_team_block($_SESSION['team_id']))){
+            if (!($turnier->check_team_block($_SESSION['logins']['team']['id']))){
                 Form::info ("Dein Team wurde auf der Warteliste angemeldet, da der Turnierblock ("
                     . $turnier->details['tblock'] . ") nicht zu deinem Teamblock ("
-                    . $_SESSION['teamblock'] . ") passt");
+                    . $_SESSION['logins']['team']['block'] . ") passt");
                 $liste = 'warte';
                 $anzahl_warteliste = count($anmeldungen['warte']);
                 $pos = $anzahl_warteliste+1;
@@ -104,11 +104,11 @@ if (isset($_POST['anmelden'])){
             }
         }
         //Team anmelden
-        if ($turnier->check_doppel_anmeldung($_SESSION['team_id'])){
+        if ($turnier->check_doppel_anmeldung($_SESSION['logins']['team']['id'])){
             Form::error("Dein Team ist bereits auf einer Spiele-Liste am gleichen Kalendertag");
         }else{
-            $turnier->team_anmelden($_SESSION['team_id'], $liste, $pos);
-            $turnier->log("Anmeldung: ". $_SESSION['teamname'] ."\r\nTeamblock: ".$_SESSION['teamblock']. " Turnierblock: " . $turnier->details['tblock'] . "\r\nListe: $liste (WartePos: $pos)", $_SESSION['teamname']);
+            $turnier->team_anmelden($_SESSION['logins']['team']['id'], $liste, $pos);
+            $turnier->log("Anmeldung: ". $_SESSION['logins']['team']['name'] ."\r\nTeamblock: ".$_SESSION['logins']['team']['block']. " Turnierblock: " . $turnier->details['tblock'] . "\r\nListe: $liste (WartePos: $pos)", $_SESSION['logins']['team']['name']);
             Form::info ("Dein Team wurde zum Turnier angemeldet");
             header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier->details['turnier_id']);
             die();
@@ -125,10 +125,10 @@ if (isset($_POST['freilos'])){
         Form::error ("Anmeldungen zu Turnieren dieses Typs sind im Teamcenter nicht möglich.");
         $error = true;
     }
-    if ($turnier->get_liste($_SESSION['team_id']) == 'spiele'){
+    if ($turnier->get_liste($_SESSION['logins']['team']['id']) == 'spiele'){
         Form::error ("Dein Team ist schon auf der Spielen-Liste");
         $error = true;
-    }elseif ($turnier->check_doppel_anmeldung($_SESSION['team_id'])){
+    }elseif ($turnier->check_doppel_anmeldung($_SESSION['logins']['team']['id'])){
         Form::error("Dein Team ist bereits auf einer Spiele-Liste am gleichen Kalendertag");
         $error = true;
     }
@@ -144,11 +144,11 @@ if (isset($_POST['freilos'])){
         Form::error ("Das Turnier ist schon in der Ergebnisphase. Melde dich bei " .Form::mailto(Env::LAMAIL));
         $error = true;
     }
-    if ($turnier->details['phase'] == 'melde' && $turnier->check_team_block($_SESSION['team_id'])){
+    if ($turnier->details['phase'] == 'melde' && $turnier->check_team_block($_SESSION['logins']['team']['id'])){
         Form::error ("Dein Team würde auch ohne Freilos auf die Spielen-Liste gesetzt werden.");
         $error = true;
     }
-    if (!$turnier->check_team_block_freilos($_SESSION['team_id'])){
+    if (!$turnier->check_team_block_freilos($_SESSION['logins']['team']['id'])){
         Form::error ("Turnierblock stimmt nicht. Freilose können nur für Turniere mit höheren oder passenden Block gesetzt werden.");
         $error = true;
     }
@@ -157,8 +157,8 @@ if (isset($_POST['freilos'])){
         $error = true;
     }
     if (!$error){
-        $turnier->abmelden($_SESSION['team_id']);
-        $turnier->freilos($_SESSION['team_id']);
+        $turnier->abmelden($_SESSION['logins']['team']['id']);
+        $turnier->freilos($_SESSION['logins']['team']['id']);
         Form::info ("Dein Team wurde zum Turnier angemeldet");
         header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier->details['turnier_id']);
         die();
@@ -168,9 +168,9 @@ if (isset($_POST['freilos'])){
 }
 
 //Team abmelden
-if (isset($_POST['abmelden']) && isset($_SESSION['team_id'])){
+if (isset($_POST['abmelden']) && isset($_SESSION['logins']['team'])){
     $error = false;
-    $liste = $turnier->get_liste($_SESSION['team_id']);
+    $liste = $turnier->get_liste($_SESSION['logins']['team']['id']);
     if (empty($liste)){
         $error = true;
         Form::error ("Dein Team ist momentan nicht zum Turnier angemeldet");
@@ -181,7 +181,7 @@ if (isset($_POST['abmelden']) && isset($_SESSION['team_id'])){
     }
     if (!$error){
 
-        $turnier->abmelden($_SESSION['team_id']);
+        $turnier->abmelden($_SESSION['logins']['team']['id']);
 
         if ($turnier->get_anzahl_freie_plaetze() > 0 && $turnier->details['phase'] == 'melde')
             $turnier->spieleliste_auffuellen();
@@ -206,7 +206,7 @@ if (isset($_POST['bewerben'])){
         $error = true;
     }
     if (!$error){
-        $turnier->team_anmelden($_SESSION['team_id'],'melde',0);
+        $turnier->team_anmelden($_SESSION['logins']['team']['id'],'melde',0);
         Form::info("Deine Meldung wurde erfolgreich entgegen genommmen.");
         header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier->details['turnier_id']);
         die();
@@ -249,7 +249,7 @@ include '../../templates/header.tmp.php';
             <p>
                 <?php if (!empty($anmeldungen['spiele'])){?>
                     <?php foreach ($anmeldungen['spiele'] as $team){?>
-                        <?php if ($team['teamname'] == $_SESSION['teamname']) {$team['teamname'] = "<span class='w3-text-green'><b>".$team['teamname']."</b></span>";}?>
+                        <?php if ($team['teamname'] == $_SESSION['logins']['team']['name']) {$team['teamname'] = "<span class='w3-text-green'><b>".$team['teamname']."</b></span>";}?>
                         <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span>
                         <br>
                     <?php }//end foreach?>
@@ -261,7 +261,7 @@ include '../../templates/header.tmp.php';
             <?php if (!empty($anmeldungen['melde'])){?>
                 <p class="w3-text-grey w3-border-bottom w3-border-grey">Meldeliste</p>
                     <?php foreach ($anmeldungen['melde'] as $team){?>
-                        <?php if ($team['teamname'] == $_SESSION['teamname']) {$team['teamname'] = "<span class='w3-text-yellow'><b>".$team['teamname']."</b></span>";}?>
+                        <?php if ($team['teamname'] == $_SESSION['logins']['team']['name']) {$team['teamname'] = "<span class='w3-text-yellow'><b>".$team['teamname']."</b></span>";}?>
                         <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span>
                         <br>
                     <?php }//end foreach?>
@@ -273,7 +273,7 @@ include '../../templates/header.tmp.php';
             <?php if (!empty($anmeldungen['warte'])){?>
                 <p class="w3-opacity w3-border-bottom w3-border-black">Warteliste</p>
                 <?php foreach ($anmeldungen['warte'] as $team){?>
-                <?php if ($team['teamname'] == $_SESSION['teamname']) {$team['teamname'] = "<span class='w3-text-primary'><b>".$team['teamname']."</b></span>";}?>
+                <?php if ($team['teamname'] == $_SESSION['logins']['team']['name']) {$team['teamname'] = "<span class='w3-text-primary'><b>".$team['teamname']."</b></span>";}?>
                 <?=$team['position_warteliste'] . ". " . $team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?? 'NL'?>)</span>
                 <br>
                 <?php }//end foreach?>
@@ -294,15 +294,15 @@ include '../../templates/header.tmp.php';
     <?php }else{?>
         <form class="" method="post">
             <p>
-                <input type='submit' class='<?php if ($team_angemeldet){?>w3-opacity<?php } //endif?> w3-button w3-margin-bottom w3-block w3-tertiary w3-right' name='anmelden' value='Anmelden <?php if (!$turnier->check_team_block($_SESSION['team_id']) && $turnier->details['phase'] == 'melde'){?>(Warteliste)<?php } //endif?>'>
+                <input type='submit' class='<?php if ($team_angemeldet){?>w3-opacity<?php } //endif?> w3-button w3-margin-bottom w3-block w3-tertiary w3-right' name='anmelden' value='Anmelden <?php if (!$turnier->check_team_block($_SESSION['logins']['team']['id']) && $turnier->details['phase'] == 'melde'){?>(Warteliste)<?php } //endif?>'>
             </p>
         </form>
         <form method="post" onsubmit="return confirm('Freilose setzen dein Team direkt auf die Spielen-Liste. Beim Übergang in die Meldephase wirst du auf die Warteliste gesetzt, wenn dein Teamblock höher ist als der Turnierblock. Das Freilos wird euch dann erstattet.');">
             <p>
                 <input type='submit'
                     class='w3-button w3-margin-bottom w3-block w3-tertiary
-                    <?php if (($turnier->get_liste($_SESSION['team_id']) == 'spiele') or
-                                !$turnier->check_team_block_freilos($_SESSION['team_id']) or
+                    <?php if (($turnier->get_liste($_SESSION['logins']['team']['id']) == 'spiele') or
+                                !$turnier->check_team_block_freilos($_SESSION['logins']['team']['id']) or
                                 $akt_team->get_freilose() <= 0){?>w3-opacity
                                 <?php }//endif?>'
                     name='freilos' value='Freilos setzen (<?=$akt_team->get_freilose()?> vorhanden)'>

@@ -16,7 +16,7 @@ class Spieler
      * Spieler constructor.
      * @param $spieler_id
      */
-    function __construct(int $spieler_id)
+    public function __construct(int $spieler_id)
     {
         $this->id = $spieler_id;
         $this->details = $this->get_details();
@@ -35,7 +35,6 @@ class Spieler
     public static function set_new_spieler(string $vorname, string $nachname, string $jahrgang, string $geschlecht,
                                            int $team_id): bool
     {
-        $saison = Config::SAISON;
         // Es wird getestet, ob der Spieler bereits existiert:
         $sql = "
                 SELECT spieler_id, team_id, letzte_saison 
@@ -50,32 +49,32 @@ class Spieler
         $spieler_id = $result['spieler_id'] ?? 0;
 
         if ($spieler_id > 0) { // Testen ob der Spieler schon existiert
-            if ($result['letzte_saison'] < $saison) { // Testet ob der Spieler aus der Datenbank übernommen werden kann
+            if ($result['letzte_saison'] < Config::SAISON) { // Testet ob der Spieler aus der Datenbank übernommen werden kann
                 $sql = "
                         UPDATE spieler 
                         SET team_id = ?, letzte_saison = ?
                         WHERE spieler_id = ?
                         ";
-                $params = [$team_id, $saison, $spieler_id];
+                $params = [$team_id, Config::SAISON, $spieler_id];
                 dbi::$db->query($sql, $params)->log();
                 Form::info("Der Spieler wurde vom Team " . Team::id_to_name($result['team_id']) . " übernommen.");
                 return true;
-            } else {
-                Form::error("Der Spieler steht bereits im Kader für folgendes Team: "
-                    . Team::id_to_name($result['team_id']) . "<br> Bitte wende dich an den Ligaausschuss ("
-                    . Form::mailto(Env::LAMAIL) . ")", esc:false);
-                return false;
             }
-        } else {
-            // Spieler wird in Spieler-Datenbank eingetragen
-            $sql = "
-                    INSERT INTO spieler(vorname, nachname, jahrgang, geschlecht, team_id, letzte_saison) 
-                    VALUES (?, ?, ?, ?, ?, ?)
-                    ";
-            $params = [$vorname, $nachname, $jahrgang, $geschlecht, $team_id, Config::SAISON];
-            dbi::$db->query($sql, $params)->log();
-            return true;
+
+            Form::error("Der Spieler steht bereits im Kader für folgendes Team: "
+                . Team::id_to_name($result['team_id']) . "<br> Bitte wende dich an den Ligaausschuss ("
+                . Form::mailto(Env::LAMAIL) . ")", esc:false);
+            return false;
         }
+
+        // Spieler wird in Spieler-Datenbank eingetragen
+        $sql = "
+                INSERT INTO spieler(vorname, nachname, jahrgang, geschlecht, team_id, letzte_saison) 
+                VALUES (?, ?, ?, ?, ?, ?)
+                ";
+        $params = [$vorname, $nachname, $jahrgang, $geschlecht, $team_id, Config::SAISON];
+        dbi::$db->query($sql, $params)->log();
+        return true;
     }
 
     /**
@@ -87,10 +86,7 @@ class Spieler
     {
         $saison_ende = strtotime(Config::SAISON_ENDE) + 25 * 60 * 60 - 1; // 23:59:59 am Saisonende
         $heute = time();
-        if ($saison_ende > $heute) {
-            return true;
-        }
-        return false;
+        return $saison_ende > $heute;
     }
 
     /**
@@ -132,13 +128,14 @@ class Spieler
      *
      * @return int
      */
-    public static function get_spieler_anzahl(): int
+    public static function get_anzahl(): int
     {
         $saison = Config::SAISON - 1;
         $sql = "
                 SELECT count(*) 
                 FROM spieler 
                 WHERE letzte_saison >= '$saison'
+                AND team_id IS NOT NULL
                 ";
         return dbi::$db->query($sql)->fetch_one() ?? 0;
     }
@@ -167,12 +164,12 @@ class Spieler
      *
      * @return array
      */
-    function get_details(): array
+    public function get_details(): array
     {
         $sql = "
                 SELECT spieler.*, tl.teamname  
                 FROM spieler 
-                INNER JOIN teams_liga tl on spieler.team_id = tl.team_id
+                LEFT JOIN teams_liga tl on spieler.team_id = tl.team_id
                 WHERE spieler_id = $this->id
                 ";
         return dbi::$db->query($sql)->esc()->fetch_row();
@@ -188,7 +185,7 @@ class Spieler
     {
         $spalten_namen = dbi::$db->query("SHOW FIELDS FROM spieler")->list('Field');
         if (!in_array($entry, $spalten_namen)) die("Ungültiger Spaltenname");
-        $zeit = ($entry == 'team_id' or $entry == 'letzte_saison') ? '' : ', zeit = zeit';
+        $zeit = ($entry === 'team_id' or $entry === 'letzte_saison') ? '' : ', zeit = zeit';
         $entry = "`" . $entry . "`";
         $sql = "
                 UPDATE spieler 
@@ -203,7 +200,7 @@ class Spieler
     /**
      * Der Spieler wird aus der Datenbank gelöscht
      */
-    function delete_spieler()
+    public function delete_spieler(): void
     {
         $sql = "
                 DELETE FROM spieler 

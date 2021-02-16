@@ -17,7 +17,7 @@ class Team
      * Team constructor.
      * @param $team_id
      */
-    function __construct($team_id)
+    public function __construct($team_id)
     {
         $this->id = $team_id;
         $this->details = $this->get_details();
@@ -65,7 +65,7 @@ class Team
      *
      * @param $team_id
      */
-    public static function deactivate(int $team_id)
+    public static function deactivate(int $team_id): void
     {
         $sql = "
                 UPDATE teams_liga
@@ -96,7 +96,7 @@ class Team
      *
      * @param $team_id
      */
-    public static function activate(int $team_id)
+    public static function activate(int $team_id): void
     {
         $sql = "
                 UPDATE teams_liga 
@@ -210,7 +210,7 @@ class Team
      *
      * @param $team_id
      */
-    public static function add_freilos($team_id)
+    public static function add_freilos($team_id): void
     {
         $sql = "
                 UPDATE teams_liga 
@@ -231,7 +231,7 @@ class Team
      * @param string $saison
      */
     public static function set_strafe(int $team_id, string $verwarnung, int $turnier_id, string $grund,
-                                            int $prozentsatz, $saison = Config::SAISON)
+                                      int $prozentsatz, $saison = Config::SAISON): void
     {
         $sql = "
                 INSERT INTO teams_strafen (team_id, verwarnung, turnier_id, grund, prozentsatz, saison)
@@ -246,7 +246,7 @@ class Team
      *
      * @param int $strafe_id
      */
-    public static function unset_strafe(int $strafe_id)
+    public static function unset_strafe(int $strafe_id): void
     {
         $sql = "
                 DELETE FROM teams_strafen
@@ -283,7 +283,7 @@ class Team
      *
      * @return array
      */
-    function get_details(): array
+    public function get_details(): array
     {
         $sql = "
                 SELECT *  
@@ -300,7 +300,7 @@ class Team
      *
      * @param string $name
      */
-    function set_name(string $name)
+    public function set_name(string $name): void
     {
         $sql = "
                 UPDATE teams_liga
@@ -310,44 +310,13 @@ class Team
         dbi::$db->query($sql, $name)->log();
     }
 
-    /**
-     * Gibt Passworthash zurück
-     *
-     * @return string|bool
-     */
-    function get_passwort(): string|bool
-    {
-        $sql = "
-                SELECT passwort
-                FROM teams_liga
-                WHERE team_id = $this->id
-                ";
-        return dbi::$db->query($sql)->log()->fetch_one();
-    }
-
-    /**
-     * Setzt Passwort
-     *
-     * @param string $passwort
-     * @param string $pw_geaendert
-     */
-    function set_passwort(string $passwort, string $pw_geaendert = 'Ja')
-    {
-        $passwort = password_hash($passwort, PASSWORD_DEFAULT);
-        $sql = "
-                UPDATE teams_liga
-                SET passwort = ?, passwort_geaendert = ?
-                WHERE team_id = $this->id
-                ";
-        dbi::$db->query($sql, $passwort, $pw_geaendert)->log();
-    }
 
     /**
      * Gibt Anzahl der Freilose des Teams zurück
      *
      * @return int
      */
-    function get_freilose(): int
+    public function get_freilose(): int
     {
         $sql = "
                 SELECT freilose
@@ -362,7 +331,7 @@ class Team
      *
      * @param $anzahl
      */
-    function set_freilose(int $anzahl)
+    public function set_freilose(int $anzahl): void
     {
         $sql = "
                 UPDATE teams_liga
@@ -380,11 +349,13 @@ class Team
      * Wert der in die Datenbank für das Team eingefügt werden soll
      * @param mixed $value
      */
-    function set_detail(string $spalten_name, mixed $value)
+    public function set_detail(string $spalten_name, mixed $value): void
     {
         // Validieren, ob der Spaltenname ein echter Spaltenname ist
         $spalten_namen = dbi::$db->query("SHOW FIELDS FROM teams_details")->list('Field');
-        if (!in_array($spalten_name, $spalten_namen)) die("Ungültiger Spaltenname");
+        if (!in_array($spalten_name, $spalten_namen, true)) {
+            die("Ungültiger Spaltenname");
+        }
         $spalten_name = "`" . $spalten_name . "`";
 
         $sql = "
@@ -400,7 +371,7 @@ class Team
      *
      * @return array
      */
-    function get_turniere_angemeldet(): array
+    public function get_turniere_angemeldet(): array
     {
         $sql = "
                 SELECT turnier_id, liste 
@@ -414,7 +385,7 @@ class Team
      * Teamfoto löschen
      *
      */
-    function delete_foto()
+    public function delete_foto(): void
     {
         // Foto löschen
         if (file_exists($this->details['teamfoto'])) {
@@ -427,5 +398,73 @@ class Team
                 WHERE team_id = $this->id
                 ";
         dbi::$db->query($sql)->log();
+    }
+
+    /**
+     * Set nach dem Login die Session des Teamcenters.
+     *
+     * @param Team $team
+     */
+    public static function set_team_session(Team $team): void
+    {
+        $_SESSION['logins']['team']['id'] = $team->id;
+        $_SESSION['logins']['team']['name'] = $team->details['teamname'];
+        $_SESSION['logins']['team']['block'] = Tabelle::get_team_block($team->id);
+    }
+    /**
+     * Login Teamcenter
+     *
+     * @param string $teamname
+     * @param string $passwort
+     * @return bool
+     */
+    public static function login(string $teamname, string $passwort): bool
+    {
+        // Existenz prüfen
+        $team_id = self::name_to_id($teamname);
+
+        if (!self::is_ligateam($team_id)) {
+            Form::error("Falscher Loginname");
+            Form::log(Config::LOG_LOGIN, "Falscher TC-Login | Teamname: " . $teamname);
+            return false;
+        }
+
+        $team = new Team ($team_id);
+        // Passwort prüfen
+        if (password_verify($passwort, $team->details['passwort'])) {
+            self::set_team_session($team);
+            Form::log(Config::LOG_LOGIN, "Erfolgreich       | Teamname: " . $teamname);
+            return true;
+        }
+
+        // Passwort falsch
+        Form::log(Config::LOG_LOGIN, "Falsches Passwort | Teamname: " . $teamname);
+        Form::error("Falsches Passwort");
+        return false;
+    }
+
+    /**
+     * Setzt Passwort des Teams
+     *
+     * @param string $passwort
+     */
+    public function set_passwort(string $passwort): void
+    {
+        // Passwort hashen
+        $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
+        if (!is_string($passwort)) {
+            die("Es ist ein Fehler aufgetreten.");
+        }
+
+        // Befindet sich das Team im Teamcenter ihr Passwort geändert?
+        $pw_geaendert = (Config::$teamcenter) ? 'Ja' : 'Nein';
+
+        // Passwort in die Datenbank
+        $sql = "
+                UPDATE teams_liga
+                SET passwort = ?, passwort_geaendert = ?
+                WHERE team_id = $this->id
+                ";
+        dbi::$db->query($sql, $passwort_hash, $pw_geaendert)->log();
     }
 }

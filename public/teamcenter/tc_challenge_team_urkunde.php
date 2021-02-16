@@ -10,7 +10,7 @@ require_once '../../logic/challenge.logic.php'; // Logic der Challenge
 
 $team_id = $_GET['team_id'] ?? 0;
 
-if ($_GET['team_id'] != $_SESSION['team_id']) die("Ungültige Team-ID"); // Keine Urkunde für falsche Team-IDs
+if ($_GET['team_id'] != $_SESSION['logins']['team']['id']) die("Ungültige Team-ID"); // Keine Urkunde für falsche Team-IDs
 
 $urkunden_daten = $challenge->get_team_result($team_id);
 
