@@ -110,7 +110,7 @@ if (isset($_POST['teamfoto'])) {
 
 // Teamfoto löschen
 if (isset($_POST['delete_teamfoto'])) {
-    $team->delete_teamfoto();
+    $team->delete_foto();
     Form::info("Teamfoto wurde gelöscht");
     header('Location: ' . $path);
     die();

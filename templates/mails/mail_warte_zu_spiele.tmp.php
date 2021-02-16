@@ -1,4 +1,4 @@
-<p>Hallo <?= Team::teamid_to_teamname($team_id) ?>, </p>
+<p>Hallo <?= Team::id_to_name($team_id) ?>, </p>
 <p>
     dein Team ist auf dem <?= $turnier->details['tblock'] ?>-Turnier in <?= $turnier->details['ort'] ?>
     am <?= date("d.m.Y", strtotime($turnier->details['datum'])) ?> von der Warteliste auf die

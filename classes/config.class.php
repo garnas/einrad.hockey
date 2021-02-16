@@ -23,12 +23,6 @@ class Config
     const SCHIRIMAIL = Env::SCHIRIMAIL;
     const OEFFIMAIL = Env::OEFFIMAIL;
 
-    /**
-     * Ligablöcke
-     *
-     * Reihenfolge bei den Blöcken muss immer hoch -> niedrig sein
-     * Für die Block und Wertzuordnung in der Rangtabelle siehe Tabelle::platz_to_block und Tabelle::platz_to_wertigkeit
-     */
 
     /**
      * Saison
@@ -38,10 +32,21 @@ class Config
     const SAISON_ENDE = '31.10.2021';
 
     /**
+     * Log-Files
+     */
+    const LOG_LOGIN = "login.log";
+    const LOG_DB = "db.log";
+
+
+    /**
+     * Ligablöcke
+     *
+     * Reihenfolge bei den Blöcken muss immer hoch -> niedrig sein
+     * Für die Block und Wertzuordnung in der Rangtabelle siehe Tabelle::platz_to_block und Tabelle::platz_to_wertigkeit
+     *
      * Mögliche Team-Blöcke
      */
     const BLOCK = ['A', 'AB', 'BC', 'CD', 'DE', 'EF', 'F'];
-
     /**
      * Mögliche Turnier-Blöcke
      */

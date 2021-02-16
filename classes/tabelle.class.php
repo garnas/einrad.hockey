@@ -248,7 +248,7 @@ class Tabelle
             foreach ($list_of_teamids as $team_id) {
                 if (!array_key_exists($team_id, $return)) {
                     $return[$team_id] = [];
-                    $return[$team_id]['teamname'] = Team::teamid_to_teamname($team_id); //Ansonsten doppel dbi::escape --> fehler in der Darstellung
+                    $return[$team_id]['teamname'] = Team::id_to_name($team_id); //Ansonsten doppel dbi::escape --> fehler in der Darstellung
                     $return[$team_id]['team_id'] = $team_id;
                     $return[$team_id]['string'] = '';
                     $return[$team_id]['summe'] = 0;

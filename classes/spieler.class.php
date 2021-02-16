@@ -58,11 +58,11 @@ class Spieler
                         ";
                 $params = [$team_id, $saison, $spieler_id];
                 dbi::$db->query($sql, $params)->log();
-                Form::info("Der Spieler wurde vom Team " . Team::teamid_to_teamname($result['team_id']) . " übernommen.");
+                Form::info("Der Spieler wurde vom Team " . Team::id_to_name($result['team_id']) . " übernommen.");
                 return true;
             } else {
                 Form::error("Der Spieler steht bereits im Kader für folgendes Team: "
-                    . Team::teamid_to_teamname($result['team_id']) . "<br> Bitte wende dich an den Ligaausschuss ("
+                    . Team::id_to_name($result['team_id']) . "<br> Bitte wende dich an den Ligaausschuss ("
                     . Form::mailto(Env::LAMAIL) . ")", esc:false);
                 return false;
             }

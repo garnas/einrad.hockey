@@ -33,7 +33,7 @@
 
     <?php
     // Hiermit wird die Leiste angezeigt, wenn man eingeloggt ist
-    if (isset($_SESSION['la_id'])) include 'nav_ligacenter.tmp.php';
+    if (isset($_SESSION['logins']['la'])) include 'nav_ligacenter.tmp.php';
     if (isset($_SESSION['team_id'])) include 'nav_teamcenter.tmp.php';
     ?>
 

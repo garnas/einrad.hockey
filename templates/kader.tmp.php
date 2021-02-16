@@ -1,4 +1,4 @@
-<h3 class="w3-text-primary">Teamkader der <?=Team::teamid_to_teamname($team_id);?></h3>
+<h3 class="w3-text-primary">Teamkader der <?=Team::id_to_name($team_id);?></h3>
 <!-- Aktuelle Saison -->
 <div class="w3-responsive w3-section w3-card">
     <table class="w3-table w3-striped">

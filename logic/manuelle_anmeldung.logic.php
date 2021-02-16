@@ -54,7 +54,7 @@ if (isset($_POST['abmelden'])){
 if (isset($_POST['team_anmelden'])){
     $liste = $_POST['liste'];
     $teamname = $_POST['teamname'];
-    $team_id = Team::teamname_to_teamid($teamname);
+    $team_id = Team::name_to_id($teamname);
     $error = false;
 
     //Postion auf der Warteliste
@@ -97,7 +97,7 @@ if (isset($_POST['nl_anmelden'])){
 
     //Check ob schon ein Nichtligateam mit diesem Namen in der Datenbank existiert
     //Nichtligateams bekommen immer einen Stern hinter ihrem Namen
-    $team_id = Team::teamname_to_teamid($teamname . '*');
+    $team_id = Team::name_to_id($teamname . '*');
     if (!$turnier->check_team_angemeldet($team_id ?? 0)){
         $turnier->nl_anmelden($teamname, $liste, $pos);
         Form::info("$teamname wurde angemeldet auf Liste: $liste");

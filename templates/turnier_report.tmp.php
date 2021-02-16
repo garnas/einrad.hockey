@@ -16,7 +16,7 @@
     <h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">school</i> Schiedsrichter-Ausbilder</h2>
     <ul class='w3-ul w3-margin-left w3-leftbar w3-border-tertiary'>
         <?php foreach ($ausbilder_liste as $spieler){?>
-            <li><?=$spieler['vorname'] . ' ' . $spieler['nachname']?> (<i><?=Team::teamid_to_teamname($spieler['team_id'])?></i>)</li>
+            <li><?=$spieler['vorname'] . ' ' . $spieler['nachname']?> (<i><?=Team::id_to_name($spieler['team_id'])?></i>)</li>
         <?php }//end foreach?>
     </ul>
 <?php }//endif?>
@@ -26,7 +26,7 @@
 <ul class='w3-ul w3-margin-left w3-leftbar w3-border-primary'>
     <?php foreach ($kader_array as $team_id => $kader){?>
         <li class="w3-hover-primary" style="cursor: pointer;" onclick="openTab('<?=$team_id?>')">
-            <?= Form::icon('launch', class:'w3-text-tertiary') ?> <?=Team::teamid_to_teamname($team_id)?>
+            <?= Form::icon('launch', class:'w3-text-tertiary') ?> <?=Team::id_to_name($team_id)?>
         </li>
     <?php }//end foreach?>
 </ul>
@@ -35,7 +35,7 @@
     <?php foreach ($kader_array as $team_id => $kader){?>
         <div id="<?=$team_id?>" class="tab" style="display:none; max-width: 600px">
             <?php if(!empty($kader)){?>
-                <h3><?=Team::teamid_to_teamname($team_id)?></h3>
+                <h3><?=Team::id_to_name($team_id)?></h3>
                 <div class="w3-responsive w3-card">
                     <table class="w3-table w3-striped">
                         <tr class="w3-primary">
@@ -216,7 +216,7 @@
                     <datalist id="spielerliste">
                         <?php
                         foreach ($spieler_liste as $spieler_id => $spieler){ ?>
-                            <option value='<?=$spieler['vorname'] . ' ' .  mb_substr($spieler['nachname'],0,1, "utf-8") . '.' . ' | ' . Team::teamid_to_teamname($spieler['team_id'])?>'>
+                            <option value='<?=$spieler['vorname'] . ' ' .  mb_substr($spieler['nachname'],0,1, "utf-8") . '.' . ' | ' . Team::id_to_name($spieler['team_id'])?>'>
                         <?php } //end foreach ?>
                     </datalist>
             </p>

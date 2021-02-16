@@ -8,8 +8,8 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 if(isset($_POST['login'])) {
     $teamname = $_POST['teamname'];
     $passwort = $_POST['passwort'];
-    $team_id = (int) Team::teamname_to_teamid ($teamname);
-    $log_file = "log_login.log";
+    $team_id = (int) Team::name_to_id ($teamname);
+    $log_file = "login.log";
     
     //Fehlermeldungen
     if(strlen($teamname) == 0) {
@@ -32,7 +32,7 @@ if(isset($_POST['login'])) {
         $team = new Team($team_id);
         if(password_verify($passwort, $team->get_passwort())) {
             $_SESSION['team_id'] = $team->id;
-            $_SESSION['teamname'] = Team::teamid_to_teamname($team->id); // Da SQL Groß- / kleinschreibung ignoriert.
+            $_SESSION['teamname'] = Team::id_to_name($team->id); // Da SQL Groß- / kleinschreibung ignoriert.
             $_SESSION['teamblock'] = Tabelle::get_team_block($team->id);
             // Logdatei erstellen/beschreiben
             Form::log($log_file, "Erfolgreich       | Teamname: " . $teamname);

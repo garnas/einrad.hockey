@@ -110,7 +110,7 @@ include '../../templates/header.tmp.php'; ?>
                         <?= Form::link($turniere[$turnier_id]['link_spielplan'] ?: ('spielplan.php?turnier_id=' . $turnier_id), '<i class="material-icons">info</i> Spielergebnisse') ?>
                     </span>
                         <?= Form::link("../teamcenter/tc_turnier_report.php?turnier_id=$turnier_id", ' <i class="material-icons">' . $icon . '</i> Turnierreport') ?>
-                        <?php if (isset($_SESSION['la_id'])) { ?>
+                        <?php if (isset($_SESSION['logins']['la'])) { ?>
                             <?= Form::link("../ligacenter/lc_turnier_report.php?turnier_id=$turnier_id", '<i class="material-icons">article</i> Turnierreport (Ligaausschuss)') ?>
                             <?= Form::link("../ligacenter/lc_spielplan.php?turnier_id=$turnier_id", '<i class="material-icons">info</i> Spielergebnisse verwalten (Ligaausschuss)') ?>
                         <?php }//endif?>

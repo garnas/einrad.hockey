@@ -17,7 +17,7 @@ if (isset($_POST['delete_turnier'])) {
 if (isset($_POST['turnier_bearbeiten_la'])) {  
     $error = false;
     //Ausrichter setzen
-    $ausrichter = Team::teamname_to_teamid($_POST['ausrichter']);
+    $ausrichter = Team::name_to_id($_POST['ausrichter']);
     if (!Team::is_ligateam($ausrichter)){
         $error = true;
         Form::error ("Ausrichter wurde nicht gefunden");

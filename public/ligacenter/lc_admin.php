@@ -5,25 +5,25 @@
 require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_la.logic.php'; //Auth
 
-$deaktivierte_teams = Team::get_deactive_teams();
+$deaktivierte_teams = Team::get_deactive();
 
 //Formularauswertung
 
 //Als Ligateam anmelden
 if (isset($_POST['anmelden'])){
     $teamname = dbi::escape($_POST['teamname']);
-    $team_id = Team::teamname_to_teamid($teamname);
+    $team_id = Team::name_to_id($teamname);
     
     if (Team::is_ligateam($team_id)){
-        //unset($_SESSION['la_login_name']); 
-        //unset($_SESSION['la_id']);
+        //unset($_SESSION['la_login_name']);
+        //unset($_SESSION['logins']['la']);
         $_SESSION['team_id'] =  $team_id;
         $_SESSION['teamname'] = $teamname;
         $_SESSION['teamblock'] = Tabelle::get_team_block($team_id);
         Form::info("Login via Ligaausschuss erfolgreich");
         header('Location: ../teamcenter/tc_start.php');
         //Logdatei erstellen/beschreiben
-        Form::log("log_login.log", "Erfolgreich       | via Ligacenter: " . $_SESSION['la_login_name'] . " als " . $_SESSION['teamname']);
+        Form::log("login.log", "Erfolgreich       | via Ligacenter: " . $_SESSION['la_login_name'] . " als " . $_SESSION['teamname']);
         die();
     }else{
         Form::error("Anmeldung als Team nicht möglich, da der Teamname keinem Ligateam zugeordnet werden konnte.");
@@ -33,9 +33,9 @@ if (isset($_POST['anmelden'])){
 //Ligateam deativieren
 if (isset($_POST['deaktivieren'])){
     $teamname = $_POST['teamname'] ?? '';
-    $team_id = Team::teamname_to_teamid($teamname);
+    $team_id = Team::name_to_id($teamname);
     if (Team::is_ligateam($team_id)){
-        Team::deactivate_team($team_id);
+        Team::deactivate($team_id);
         Form::info("Das Team $teamname wurde deaktiviert.");
         header('Location: ../ligacenter/lc_admin.php');
         die();
@@ -47,10 +47,10 @@ if (isset($_POST['deaktivieren'])){
 //Ligateam reaktivieren
 if (isset($_POST['reaktivieren'])){
     $team_id = $_POST['team_id'] ?? '';
-    $teamname = Team::teamid_to_teamname($team_id);
+    $teamname = Team::id_to_name($team_id);
     
     if (!empty($teamname)){
-        Team::activate_team($team_id);
+        Team::activate($team_id);
         Form::info("Das Team $teamname wurde reaktiviert.");
         header('Location: ../ligacenter/lc_admin.php');
         die();

@@ -1,4 +1,4 @@
-<p>Hallo <?= Team::teamid_to_teamname($team_id) ?>,</p>
+<p>Hallo <?= Team::id_to_name($team_id) ?>,</p>
 <p>
     es wurde ein neues Turnier eingetragen, für welches ihr euch anmelden könnt:
     <?= $turnier->details['tblock'] ?>-Turnier in <?= $turnier->details['ort'] ?>

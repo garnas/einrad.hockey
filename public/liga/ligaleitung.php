@@ -21,7 +21,7 @@ include '../../templates/header.tmp.php';
         <?php foreach (Ligaleitung::get_la() as $la){?>
         <tr>
             <td><?=Form::mailto($la['email'], ' ')?><?=$la['r_name']?></td>
-            <td><i class="w3-text-primary">(<?=Team::teamid_to_teamname ($la['team_id']) ?: 'Ehrenamtlich'?>)</i></td>
+            <td><i class="w3-text-primary">(<?=Team::id_to_name ($la['team_id']) ?: 'Ehrenamtlich'?>)</i></td>
         </tr>
         <?php } //end foreach?>
     </table>
@@ -45,7 +45,7 @@ include '../../templates/header.tmp.php';
         <?php foreach (Ligaleitung::get_tk() as $tk){?>
         <tr>
             <td><?=$tk['r_name']?></td>
-            <td><i class="w3-text-primary">(<?=Team::teamid_to_teamname ($tk['team_id']) ?: 'Ehrenamtlich'?>)</i>
+            <td><i class="w3-text-primary">(<?=Team::id_to_name ($tk['team_id']) ?: 'Ehrenamtlich'?>)</i>
             </td>
         </tr>
         <?php } //end foreach?>
@@ -61,7 +61,7 @@ include '../../templates/header.tmp.php';
     <?php foreach (LigaLeitung::get_oa() as $oa){?>
         <tr>
             <td><?=$oa['r_name']?></td>
-            <td><i class="w3-text-primary">(<?=Team::teamid_to_teamname ($oa['team_id']) ?: 'Ehrenamtlich'?>)</i></td>
+            <td><i class="w3-text-primary">(<?=Team::id_to_name ($oa['team_id']) ?: 'Ehrenamtlich'?>)</i></td>
         </tr>
         <?php } //end foreach?>
     </table>
@@ -76,7 +76,7 @@ include '../../templates/header.tmp.php';
     <?php foreach (LigaLeitung::get_sa() as $sa){?>
         <tr>
             <td><?=$sa['r_name']?></td>
-            <td><i class="w3-text-primary">(<?=Team::teamid_to_teamname ($sa['team_id']) ?: 'Ehrenamtlich'?>)</i></td>
+            <td><i class="w3-text-primary">(<?=Team::id_to_name ($sa['team_id']) ?: 'Ehrenamtlich'?>)</i></td>
         </tr>
         <?php } //end foreach?>
     </table>
@@ -89,7 +89,7 @@ include '../../templates/header.tmp.php';
         <?php foreach (Ligaleitung::get_ausbilder() as $ausbilder){?>
         <tr>
             <td><?=$ausbilder['vorname'] . ' ' . $ausbilder['nachname']?></td>
-            <td><i class="w3-text-primary">(<?=Team::teamid_to_teamname ($ausbilder['team_id']) ?: 'Ehrenamtlich'?>)</i>
+            <td><i class="w3-text-primary">(<?=Team::id_to_name ($ausbilder['team_id']) ?: 'Ehrenamtlich'?>)</i>
             </td>
         </tr>
         <?php } //end foreach?>

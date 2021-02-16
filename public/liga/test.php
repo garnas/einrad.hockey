@@ -3,6 +3,9 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
+
+//Ligaleitung::umzug();
+
 function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
 {
     $turnier_id = 860;
@@ -61,7 +64,7 @@ function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
             or abs($eintrag_neu['ligapunkte'] - $tabelle_alt[$platz_neu - 1]['ligapunkte']) > 1
             or $tabelle_alt[$platz_neu - 1]['punkte'] != $eintrag_neu['statistik']['punkte']
         ) {
-            Form::error(Team::teamid_to_teamname($team_id) . " | " . Team::teamid_to_teamname($tabelle_alt[$platz_neu - 1]['team_id_a']));
+            Form::error(Team::id_to_name($team_id) . " | " . Team::id_to_name($tabelle_alt[$platz_neu - 1]['team_id_a']));
             Form::notice($counter . " Durchgänge");
             db::debug($tabelle_alt);
             header('Location: spielplan.php?turnier_id=' . $turnier_id);
@@ -75,7 +78,6 @@ function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
 include '../../templates/header.tmp.php';
 
 ?>
-<!--    <h1>Test Skript</h1>-->
-<?//= Form::icon("home", font_size: 350) ?>
+
 <?php include '../../templates/footer.tmp.php';
 

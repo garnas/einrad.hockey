@@ -8,7 +8,7 @@ require_once '../../logic/la_team_waehlen.logic.php'; //Auswahlfeld für ein Tea
 
 if (isset($_GET['team_id'])){
     $team_id = $_GET['team_id'];
-    if (empty(Team::teamid_to_teamname($team_id))){
+    if (empty(Team::id_to_name($team_id))){
         Form::error("Team wurde nicht gefunden");
     }else{
         $kader = Spieler::get_teamkader($team_id); //wird an Kader-Template übergeben

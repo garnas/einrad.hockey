@@ -11,9 +11,9 @@ $teams = Tabelle::get_rang_tabelle($akt_spieltag); // Sortierung nach Rangtabell
 
 //Damit sich $_SESSION von team- und ligacenter nicht vermischen
 if (Config::$ligacenter) {
-    $list_id = 'lc_emails' . $_SESSION['la_id'];
+    $list_id = 'lc_emails' . $_SESSION['logins']['la']['login'];
 } elseif (Config::$teamcenter) {
-    $list_id = 'tc_emails' . $_SESSION['team_id'];
+    $list_id = 'tc_emails' . $_SESSION['logins']['team']['team_id'];
 }
 
 
@@ -73,7 +73,7 @@ if (isset($_POST['teams_emails'])) {
                 array_push($emails, $email);
             }
         }
-        array_push($teamnamen, Team::teamid_to_teamname($team_id));
+        array_push($teamnamen, Team::id_to_name($team_id));
     }
     $_SESSION[$list_id]['emails'] = $emails;
     $_SESSION[$list_id]['empfaenger'] = $teamnamen;

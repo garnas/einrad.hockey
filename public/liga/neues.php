@@ -218,7 +218,7 @@ include '../../templates/header.tmp.php'; ?>
                                 foreach ($statistik['max_gew'] as $team_id => $gew_spiele) { ?>
                                     <tr class="<?= $colors[$i] ?>">
                                         <td><?= Form::icon($icons[$i++]) ?></td>
-                                        <td style="white-space: nowrap;" class="w3-small"><?= Team::teamid_to_teamname($team_id) ?></td>
+                                        <td style="white-space: nowrap;" class="w3-small"><?= Team::id_to_name($team_id) ?></td>
                                         <td><?= $gew_spiele ?></td>
                                     </tr>
                                 <?php } //end foreach?>
@@ -291,7 +291,7 @@ include '../../templates/header.tmp.php'; ?>
                     </div>
 
                     <!-- Link zum Bearbeiten falls man im Ligacenter oder Teamcenter eingeloggt ist -->
-                    <?php if (isset($_SESSION['la_id'])) { ?>
+                    <?php if (isset($_SESSION['logins']['la'])) { ?>
                         <p>
                             <a href='../ligacenter/lc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>' class='no'>
                                 <button class="w3-button w3-block w3-tertiary">

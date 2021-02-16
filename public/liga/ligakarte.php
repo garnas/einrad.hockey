@@ -182,7 +182,7 @@ function initMap() {
     '<div id="content">'+
         '<div id="siteNotice">'+
         '</div>'+
-        '<h5 class="w3-text-primary"><?=Team::teamid_to_teamname(435)?></h5>'+
+        '<h5 class="w3-text-primary"><?=Team::id_to_name(435)?></h5>'+
         '<div class="w3-bottombar"></div>'+
             '<p>412 01 Litoměřice, Tschechien</p>'+
             '<?=str_replace("'",'"',Form::link("teams.php#435", 'Zur Kontaktliste'))?>'+
@@ -206,7 +206,7 @@ function initMap() {
     '<div id="content">'+
         '<div id="siteNotice">'+
         '</div>'+
-        '<h5 class="w3-text-primary"><?=Team::teamid_to_teamname(262)?></h5>'+
+        '<h5 class="w3-text-primary"><?=Team::id_to_name(262)?></h5>'+
         '<div class="w3-bottombar"></div>'+
             '<p>Prag, Tschechien</p>'+
             '<?=str_replace("'",'"',Form::link("teams.php#262", 'Zur Kontaktliste'))?>'+

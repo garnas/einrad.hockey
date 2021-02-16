@@ -227,7 +227,7 @@ include '../../templates/header.tmp.php';
     <p><?=Form::link('../teamcenter/tc_turnier_bearbeiten.php?turnier_id=' . $turnier->details['turnier_id'], '<i class="material-icons">create</i> Turnier als Ausrichter bearbeiten')?></p>
 <?php } //endif?>
 
-<?php if (isset($_SESSION['la_id'])){?> 
+<?php if (isset($_SESSION['logins']['la'])){?>
     <p><?=Form::link('../ligacenter/lc_turnier_bearbeiten.php?turnier_id=' . $turnier->details['turnier_id'], 'Turnier bearbeiten (Ligaausschuss)')?></p>
     <p><?=Form::link('../ligacenter/lc_team_anmelden.php?turnier_id=' . $turnier->details['turnier_id'], 'Teams anmelden (Ligaausschuss)')?></p>
     <p><?=Form::link('../ligacenter/lc_turnier_log.php?turnier_id=' . $turnier->details['turnier_id'], 'Turnierlog einsehen (Ligaausschuss)')?></p>

@@ -22,10 +22,10 @@
     <?php if (($_SESSION['team_id'] ?? false) == $spielplan->turnier->details['ausrichter'] && !(Config::$teamcenter ?? false) && $spielplan->turnier->details['phase'] == 'spielplan') { ?>
         <p><?= Form::link($spielplan->turnier->get_spielplan_link_tc(), '<i class="material-icons">create</i> Ergebnisse eintragen') ?></p>
     <?php }// endif?>
-    <?php if (isset($_SESSION['la_id']) && !(Config::$ligacenter ?? false)) { ?>
+    <?php if (isset($_SESSION['logins']['la']) && !(Config::$ligacenter ?? false)) { ?>
         <p><?= Form::link($spielplan->turnier->get_spielplan_link_lc(), '<i class="material-icons">create</i> Ergebnisse eintragen (Ligaausschuss)') ?></p>
     <?php }// endif?>
-    <?php if (isset($_SESSION['la_id'])) { ?>
+    <?php if (isset($_SESSION['logins']['la'])) { ?>
         <p><?= Form::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">create</i> Turnierreport ausfüllen (Ligaausschuss)') ?></p>
     <?php }// endif?>
     <p><?= Form::link("../liga/spielplan_pdf.php?turnier_id=" . $turnier_id, "<i class='material-icons'>print</i> PDF-Version anzeigen", true) ?></p>

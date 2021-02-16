@@ -12,7 +12,7 @@ $strafen = Team::get_strafen();
 //Formularauswertung
 foreach ($strafen as $strafe){
     if(isset($_POST['delete' . $strafe['strafe_id']])){
-        Team::strafe_loeschen((int) $strafe['strafe_id']);
+        Team::unset_strafe((int) $strafe['strafe_id']);
         Form::info("Strafe wurde gelöscht.");
         header ("Location: lc_teamstrafe.php");
         die();
@@ -29,13 +29,13 @@ if (isset($_POST['strafe_eintragen'])){
         $error = true;
         Form::error("Prozentstrafen sind bei Vewarnungen nicht möglich.");
     }
-    $team_id = Team::teamname_to_teamid($_POST['teamname']);
+    $team_id = Team::name_to_id($_POST['teamname']);
     if (!Team::is_ligateam($team_id)){
         $error = true;
         Form::error("Teamname gehört zu keinem Ligateam");
     }
     if (!$error){
-        Team::strafe_eintragen($team_id,
+        Team::set_strafe($team_id,
             $_POST['verwarnung'] ?? 'Nein',
             (int) $_POST['turnier'] ?? 0,
             $_POST['grund'],

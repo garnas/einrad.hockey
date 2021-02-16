@@ -227,9 +227,9 @@ class LigaBot
         foreach ($los_ges as $team_id) {
             $pos += 1;
             if ($turnier->check_doppel_anmeldung($team_id)) { //Check ob das Team am Kalendertag des Turnieres schon auf einer Spiele-Liste steht
-                $turnier->log("Doppelanmeldung " . Team::teamid_to_teamname($team_id));
+                $turnier->log("Doppelanmeldung " . Team::id_to_name($team_id));
                 $turnier->abmelden($team_id);
-                Form::info("Abmeldung Doppelanmeldung im Turnier" . $turnier->id . ": \r\n" . Team::teamid_to_teamname($team_id));
+                Form::info("Abmeldung Doppelanmeldung im Turnier" . $turnier->id . ": \r\n" . Team::id_to_name($team_id));
             } else {
                 $turnier->set_liste($team_id, 'warte', $pos);
             }

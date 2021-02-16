@@ -65,7 +65,7 @@ class Team
      *
      * @param $team_id
      */
-    public static function deactivate_team(int $team_id)
+    public static function deactivate(int $team_id)
     {
         $sql = "
                 UPDATE teams_liga
@@ -80,7 +80,7 @@ class Team
      *
      * @return array
      */
-    public static function get_deactive_teams(): array
+    public static function get_deactive(): array
     {
         $sql = "
                 SELECT * 
@@ -96,7 +96,7 @@ class Team
      *
      * @param $team_id
      */
-    public static function activate_team(int $team_id)
+    public static function activate(int $team_id)
     {
         $sql = "
                 UPDATE teams_liga 
@@ -112,7 +112,7 @@ class Team
      * @param $teamname
      * @return int|null
      */
-    public static function teamname_to_teamid($teamname): null|int
+    public static function name_to_id($teamname): null|int
     {
         $sql = " 
                 SELECT team_id 
@@ -128,7 +128,7 @@ class Team
      * @param $team_id
      * @return string|null
      */
-    public static function teamid_to_teamname($team_id): null|string
+    public static function id_to_name($team_id): null|string
     {
         $sql = "
                 SELECT teamname 
@@ -192,7 +192,7 @@ class Team
      *
      * @return array key: team_id
      */
-    public static function get_teamdata_all_teams(): array
+    public static function get_teams(): array
     {
         $sql = "
                 SELECT * 
@@ -230,7 +230,7 @@ class Team
      * @param int $prozentsatz
      * @param string $saison
      */
-    public static function strafe_eintragen(int $team_id, string $verwarnung, int $turnier_id, string $grund,
+    public static function set_strafe(int $team_id, string $verwarnung, int $turnier_id, string $grund,
                                             int $prozentsatz, $saison = Config::SAISON)
     {
         $sql = "
@@ -246,7 +246,7 @@ class Team
      *
      * @param int $strafe_id
      */
-    public static function strafe_loeschen(int $strafe_id)
+    public static function unset_strafe(int $strafe_id)
     {
         $sql = "
                 DELETE FROM teams_strafen
@@ -300,7 +300,7 @@ class Team
      *
      * @param string $name
      */
-    function set_teamname(string $name)
+    function set_name(string $name)
     {
         $sql = "
                 UPDATE teams_liga
@@ -414,7 +414,7 @@ class Team
      * Teamfoto löschen
      *
      */
-    function delete_teamfoto()
+    function delete_foto()
     {
         // Foto löschen
         if (file_exists($this->details['teamfoto'])) {

@@ -41,7 +41,7 @@ if (isset($_POST['spieler_aendern'])) {
         Form::error("Bitte Formular ausfüllen");
         $error = true;
     }
-    $team_id = Team::teamname_to_teamid($teamname);
+    $team_id = Team::name_to_id($teamname);
     if (empty($team_id)) {
         Form::error("Das Team $teamname wurde nicht gefunden");
         $error = true;

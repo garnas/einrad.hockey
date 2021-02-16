@@ -66,8 +66,8 @@ if ($change_tbericht) {
         $name = $_POST['ausleihe_name'];
         $team_ab = $_POST['ausleihe_team_ab'];
         $team_auf = $_POST['ausleihe_team_auf'];
-        $team_id_ab = Team::teamname_to_teamid($team_ab);
-        $team_id_auf = Team::teamname_to_teamid($team_auf);
+        $team_id_ab = Team::name_to_id($team_ab);
+        $team_id_auf = Team::name_to_id($team_auf);
         if (!(Team::is_ligateam($team_id_ab) && Team::is_ligateam($team_id_auf))) {
             Form::error("Ligateams der Spielerausleihe wurden nicht gefunden");
             header('Location:' . dbi::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);

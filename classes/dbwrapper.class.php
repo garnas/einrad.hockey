@@ -9,10 +9,7 @@
  */
 class dbWrapper
 {
-    /**
-     * @var string
-     */
-    private static string $log_file = "log_db.log";
+
     private false|mysqli $link;
     private false|mysqli_stmt $stmt;
     private false|mysqli_result $result;
@@ -37,7 +34,7 @@ class dbWrapper
     {
         $this->link = new mysqli($host, $user, $password, $database);
         if ($this->link->connect_errno) {
-            Form::log(self::$log_file, "ERROR Verbindung: " . mysqli_connect_error());
+            Form::log(Config::LOG_DB, "ERROR Verbindung: " . mysqli_connect_error());
             die("Verbindung zur Datenbank nicht möglich.");
         }
         $this->link->set_charset("utf-8");
@@ -59,7 +56,7 @@ class dbWrapper
 
         // Prepare
         if (!$this->stmt = $this->link->prepare($sql)){
-            Form::log(self::$log_file, "ERROR " . dbi::escape($this->link->error));
+            Form::log(Config::LOG_DB, "ERROR " . dbi::escape($this->link->error));
 //            die(dbi::escape($this->link->error));
         }
         // Parameter übergeben
@@ -71,7 +68,7 @@ class dbWrapper
                 $this->sql = $sql;
                 $this->params = $params;
                 $this->log();
-                Form::log(self::$log_file, "ERROR Falsche Anzahl an Parametern für Mysqli-Prepare");
+                Form::log(Config::LOG_DB, "ERROR Falsche Anzahl an Parametern für Mysqli-Prepare");
 //                die("Falsche Anzahl an Parametern für Mysqli-Prepare");
             }
             $params = dbi::trim_params($params);
@@ -80,7 +77,7 @@ class dbWrapper
 
         // Ausführen
         if (!$this->stmt->execute()){
-            Form::log(self::$log_file, "ERROR " . dbi::escape($this->stmt->error));
+            Form::log(Config::LOG_DB, "ERROR " . dbi::escape($this->stmt->error));
 //            die(dbi::escape($this->stmt->error));
         }
         $this->result = $this->stmt->get_result();
@@ -229,7 +226,7 @@ class dbWrapper
     }
 
     /**
-     * Log für die Query in self::$log_file
+     * Log für die Query in Config::LOG_DB
      *
      * @param bool $anonym Anonyme Params (zB. für Abstimmungen)
      * @return $this
@@ -254,7 +251,7 @@ class dbWrapper
 
         // Log-Text
         $log = $autoren . "\n" . $sql . ($params ?? '') . "\n";
-        Form::log(self::$log_file, $log);
+        Form::log(Config::LOG_DB, $log);
         return $this;
     }
 

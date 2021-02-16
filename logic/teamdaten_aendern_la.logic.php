@@ -14,7 +14,7 @@ if (isset($_POST['change_la']) && Config::$ligacenter) {
         $error = true;
     }
     if (
-        !empty(Team::teamname_to_teamid($neuer_teamname))
+        !empty(Team::name_to_id($neuer_teamname))
         && $neuer_teamname != htmlspecialchars_decode($team->details['teamname'])
     ) {
         Form::error("Der Teamname existiert bereits.");
@@ -30,7 +30,7 @@ if (isset($_POST['change_la']) && Config::$ligacenter) {
 
     if (!$error) {
         if ($neuer_teamname != $team->details['teamname']) {
-            $team->set_teamname($neuer_teamname);
+            $team->set_name($neuer_teamname);
             Form::info("Der Teamname wurde geändert");
         }
         if ($freilose != $team->details['freilose']) {

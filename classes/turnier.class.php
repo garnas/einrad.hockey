@@ -92,12 +92,12 @@ class Turnier
 
         // Turnierlogs
         $turnier = new Turnier($turnier_id);
-        $turnier->log("Turnier wurde erstellt\r\nTurniername: $tname\r\nAusrichter: " . Team::teamid_to_teamname($ausrichter)
+        $turnier->log("Turnier wurde erstellt\r\nTurniername: $tname\r\nAusrichter: " . Team::id_to_name($ausrichter)
             . "\r\nStartzeit: $startzeit\r\nBesprechung: $besprechung\r\nArt: $art\r\nBlock: $tblock\r\n"
             . "Fixiert: $fixed\r\nDatum: $datum \r\nPlätze: $plaetze\r\nSpielplan: $spielplan\r\nHallenname: $hallenname\r\n"
             . "Straße: $strasse\r\nPlz: $plz\r\nOrt: $ort\r\nHaltestellen: $haltestellen\r\nHinweis:\r\n$hinweis\r\nStartgebühr: $startgebuehr\r\n"
             . "Organisator: $organisator\r\nHandy: $handy");
-        $turnier->log("Anmeldung:\r\n" . Team::teamid_to_teamname($ausrichter) . " (spiele)");
+        $turnier->log("Anmeldung:\r\n" . Team::id_to_name($ausrichter) . " (spiele)");
 
         return $turnier;
     }
@@ -361,7 +361,7 @@ class Turnier
                 ";
         dbi::$db->query($sql, $team_id, $liste, $pos)->log();
         $this->log(
-            "Anmeldung:\r\n" . Team::teamid_to_teamname($team_id) . " ($liste)"
+            "Anmeldung:\r\n" . Team::id_to_name($team_id) . " ($liste)"
             . (($liste == 'warte') ? "\r\nWartepos: $pos" : '')
             . "\r\nTeamb.: " . Tabelle::get_team_block($team_id) . " | Turnierb. " . $this->details['tblock']);
         if ($affected_rows > 0) $this->log("Warteliste aktualisiert");
@@ -382,7 +382,7 @@ class Turnier
     function nl_anmelden($teamname, $liste, $pos = 0)
     {
         $teamname .= "*"; // Nichtligateams haben einen Stern hinter dem Namen
-        if (empty(Team::teamname_to_teamid($teamname))) {
+        if (empty(Team::name_to_id($teamname))) {
             $sql = "
                     INSERT INTO teams_liga (teamname, ligateam) 
                     VALUES (?, 'Nein')
@@ -390,7 +390,7 @@ class Turnier
             dbi::$db->query($sql, $teamname)->log();
             $nl_team_id = dbi::$db->get_last_insert_id();
         } else {
-            $nl_team_id = Team::teamname_to_teamid($teamname);
+            $nl_team_id = Team::name_to_id($teamname);
         }
         $this->team_anmelden($nl_team_id, $liste, $pos);
     }
@@ -414,7 +414,7 @@ class Turnier
         dbi::$db->query($sql, $team_id)->log();
 
         $this->log(
-            "Freilos:\r\n" . Team::teamid_to_teamname($team_id) . " (spiele)"
+            "Freilos:\r\n" . Team::id_to_name($team_id) . " (spiele)"
             . "\r\nTeamb.: " . Tabelle::get_team_block($team_id) . " | Turnierb. " . $this->details['tblock']);
     }
 
@@ -430,7 +430,7 @@ class Turnier
                 AND team_id = ?
                 ";
         dbi::$db->query($sql, $team_id)->log();
-        if (dbi::$db->affected_rows() > 0) $this->log("Abmeldung:\r\n" . Team::teamid_to_teamname($team_id));
+        if (dbi::$db->affected_rows() > 0) $this->log("Abmeldung:\r\n" . Team::id_to_name($team_id));
     }
 
     /**
@@ -466,7 +466,7 @@ class Turnier
                     ";
             dbi::$db->query($sql, $pos, $team['team_id'])->log();
             if (dbi::$db->affected_rows() > 0) $write_log = true;
-            $logs[] = $pos . ". " . Team::teamid_to_teamname($team['team_id']);
+            $logs[] = $pos . ". " . Team::id_to_name($team['team_id']);
         }
         if ($write_log) $this->log("Warteliste aktualisiert:\r\n" . implode("\r\n", $logs ?? []));
     }
@@ -534,7 +534,7 @@ class Turnier
                 ";
         dbi::$db->query($sql, [$liste, $pos, $team_id]);
         $this->log("Listenwechsel:\r\n"
-            . Team::teamid_to_teamname($team_id) . " ($liste)"
+            . Team::id_to_name($team_id) . " ($liste)"
             . (($liste == 'warte') ? "\r\nWartepos: $pos" : ''));
     }
 
@@ -877,7 +877,7 @@ class Turnier
         }
         if ($this->details['tname'] != $tname) $this->log("Turniername: " . $tname);
         if ($this->details['ausrichter'] != $ausrichter)
-            $this->log("Ausrichter: " . Team::teamid_to_teamname($ausrichter));
+            $this->log("Ausrichter: " . Team::id_to_name($ausrichter));
         if ($this->details['art'] != $art) $this->log("Art: " . $art);
         if ($this->details['tblock'] != $tblock) $this->log("Turnierblock: " . $tblock);
         if ($this->details['tblock_fixed'] != $fixed) $this->log("Fixiert: " . $fixed);

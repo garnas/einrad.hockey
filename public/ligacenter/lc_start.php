@@ -28,7 +28,7 @@ $centerpanels = [
 Config::$page_width = "660px";
 include '../../templates/header.tmp.php'; ?>
 
-<h1 class='w3-center w3-text-primary'>Hallo <?= ligaleitung::get_la_name($_SESSION['la_id']); ?>!</h1>
+<h1 class='w3-center w3-text-primary'>Hallo <?= $_SESSION['logins']['la']['vorname'] ?>!</h1>
 <div id="messen" class="">
     <!-- Misst die Fensterbreite des Browsers, um die Centerpanels gleichmäßig verteilen zu können -->
     <div id="apps" class="w3-content">
