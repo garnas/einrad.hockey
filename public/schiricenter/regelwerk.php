@@ -31,7 +31,8 @@ foreach ($regeln as $regel_id => $regel) {
     $text = $regel['regeltext'];
     // Buchstaben für Unterpunkte anzeigen:
     $text = preg_replace('/<p part="([a-z])">/', '<p><b>($1)</b> ', $text);
-    Form::message('notice', $text, $regel['regelnummer'] . ": " . $regel['regeltitel']);
+    Form::message('info', $text, $regel['regelnummer'] . ": " . $regel['regeltitel'],
+              esc:false);
 }
 
 include '../../templates/footer.tmp.php';

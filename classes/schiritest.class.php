@@ -19,7 +19,7 @@ class SchiriTest
             ORDER BY RAND()
             LIMIT ?
             ";
-            $result = dbi::$db->query($sql, $anzahl)->esc()->fetch();
+            $result = dbi::$db->query($sql, $anzahl)->fetch();
         }else{
             $sql = "
             SELECT *
@@ -28,7 +28,7 @@ class SchiriTest
             ORDER BY RAND()
             LIMIT ?
             ";
-            $result = dbi::$db->query($sql, $kategorie, $anzahl)->esc()->fetch();
+            $result = dbi::$db->query($sql, $kategorie, $anzahl)->fetch();
         }
         if ($fragenr>0){
             $sql = "
@@ -37,19 +37,19 @@ class SchiriTest
             WHERE frage_id = ?
             LIMIT ?
             ";
-            $result = dbi::$db->query($sql, $fragenr, $anzahl)->esc()->fetch();
+            $result = dbi::$db->query($sql, $fragenr, $anzahl)->fetch();
         }
-//        $result = db::readdb($sql); // Mysqli Objekt
-//        while ($row = mysqli_fetch_assoc($result)) {
-//            $row['richtig'] = preg_split('/[\s#\s]+/', $row['richtig']); // String in ein Array parsen
-//            for ($index = 1; $index <= 6; $index++){ //Index für die Antwortmöglichkeiten
-//                if (!empty($row['antwort_' . $index])){
-//                    $row['antworten'][$index] = $row['antwort_' . $index]; // Wird zum Array hinzugefügt
-//                    unset($row['antwort_' . $index]); // Wird nicht mehr gebraucht
-//                }
-//            }
-//            $fragen[$row['frage_id']] = $row;
-//        }
+        //        $result = db::readdb($sql); // Mysqli Objekt
+        //        while ($row = mysqli_fetch_assoc($result)) {
+        //            $row['richtig'] = preg_split('/[\s#\s]+/', $row['richtig']); // String in ein Array parsen
+        //            for ($index = 1; $index <= 6; $index++){ //Index für die Antwortmöglichkeiten
+        //                if (!empty($row['antwort_' . $index])){
+        //                    $row['antworten'][$index] = $row['antwort_' . $index]; // Wird zum Array hinzugefügt
+        //                    unset($row['antwort_' . $index]); // Wird nicht mehr gebraucht
+        //                }
+        //            }
+        //            $fragen[$row['frage_id']] = $row;
+        //        }
         foreach ($result as $row) {
             $row['richtig'] = preg_split('/[\s#\s]+/', $row['richtig']); // String in ein Array parsen
             for ($index = 1; $index <= 6; $index++){ // Index für die Antwortmöglichkeiten
@@ -78,7 +78,7 @@ class SchiriTest
 //            $regeln[$row['regelnummer']] = $row;
 //        }
 //        return $regeln;
-        return dbi::$db->query($sql)->esc()->fetch('regelnummer');
+        return dbi::$db->query($sql)->fetch('regelnummer');
     }
 
     /**
@@ -120,9 +120,9 @@ class SchiriTest
             FROM schiri_test
             WHERE frage_id = ?
         ";
-//        $result = db::readdb($sql);
-//        $richtig = mysqli_fetch_assoc($result)['richtig']; // String, # als Trennzeichen
-        $richtig = dbi::$db->query($sql, $frage_id)->esc()->fetch_one();
+        //        $result = db::readdb($sql);
+        //        $richtig = mysqli_fetch_assoc($result)['richtig']; // String, # als Trennzeichen
+        $richtig = dbi::$db->query($sql, $frage_id)->fetch_one();
 
         $richtig = preg_split('/[\s#\s]+/', $richtig); // Array mit den Nummern der richtigen Antwort
 
@@ -150,9 +150,9 @@ class SchiriTest
             FROM schiri_test
             WHERE frage_id = ?
         ";
-//        $result = db::readdb($sql);
-//        $richtig = mysqli_fetch_assoc($result)['richtig']; // String, # als Trennzeichen
-        $richtig = dbi::$db->query($sql, $frage_id)->esc()->fetch_one(); // String, # als Trennzeichen
+        //        $result = db::readdb($sql);
+        //        $richtig = mysqli_fetch_assoc($result)['richtig']; // String, # als Trennzeichen
+        $richtig = dbi::$db->query($sql, $frage_id)->fetch_one(); // String, # als Trennzeichen
 
         $richtig = preg_split('/[\s#\s]+/', $richtig); // Array mit den Nummern der richtigen Antwort
         sort($richtig); // Sortieren, damit beide Arrays die gleiche Reihenfolge haben
@@ -165,7 +165,7 @@ class SchiriTest
     static function frage_anzeigen(int $frage_id, array $frage)
     { ?>
     <h3 class="w3-bottombar">Schiritest (Frage Nr. <?= $frage_id ?>)</h3>
-    <p><h4><?= $frage['frage'] ?></h4></p>
+    <h4><?= $frage['frage'] ?></h4>
     <?php if(!empty($frage['name_video'])){?>
         <!-- Video zur Frage -->
         <div style="max-width: 500px"> <!-- Damit das Video nicht zu groß wird -->

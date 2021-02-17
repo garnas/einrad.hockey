@@ -9,9 +9,14 @@ require_once '../../logic/first.logic.php'; // Autoloader und Session, muss imme
 if (isset($_POST['beantworten'])){
     $fragen = $_SESSION['sc_test_fragen'];
 }else{
-    if (ctype_digit($_POST['ausgewaehlte_nummer'])){ // Input enthält nur Ziffern
+    if (isset($_POST['ausgewaehlte_nummer'])){
+        $ausgewaehlte_nummer = $_POST['ausgewaehlte_nummer'];
+    }else{
+        $ausgewaehlte_nummer = '42';
+    }
+    if (ctype_digit($ausgewaehlte_nummer)){ // Input enthält nur Ziffern
         // eingetippte Nummer auswählen:
-        $fragen = SchiriTest::get_fragen('*', 1, $_POST['ausgewaehlte_nummer']);
+        $fragen = SchiriTest::get_fragen('*', 1, $ausgewaehlte_nummer);
     }elseif (isset($_POST['neue_fragen'])){
         // zufällige Frage auswählen:
         $fragen = SchiriTest::get_fragen('*', 1);
@@ -70,7 +75,7 @@ include '../../templates/header.tmp.php'; // Html-header und Navigation
                 <?php $richtig = SchiriTest::get_richtig($frage_id) ?>
                 <?php foreach ($frage['antworten'] as $index => $antwort){ ?>
                     <p>
-                        <?php $antwort_user = $_POST['abgabe'][$frage_id][$index]; ?>
+                        <?php $antwort_user = isset($_POST['abgabe'][$frage_id][$index]); ?>
                         <?php if ($antwort_user){ ?>
                             <i class="material-icons">check_circle_outline</i>
                         <?php }else{?>
@@ -126,8 +131,8 @@ include '../../templates/header.tmp.php'; // Html-header und Navigation
                             Form::message('error',
                                 'Regel |' . $regelnr1 . '| nicht in der Datenbank.');
                         }else{
-                            Form::message('info',
-                                $text, "Offizielle Regel " . $nr . ": " . $titel); 
+                            Form::message('info', $text,
+                                "Offizielle Regel " . $nr . ": " . $titel, esc:false);
                         }
                     }
                 }                    
@@ -165,6 +170,7 @@ $debuginfo .= "<BR>Regelnummer:   " . $frage['regelnr'];
 $debuginfo .= "<BR>Punkte:        " . $frage['punkte'];
 $debuginfo .= "<BR>bestätigt:     " . $frage['bestaetigt'];
 $debuginfo .= "<BR>interne Notiz: " . $frage['interne_notiz'];
-Form::message('error', $debuginfo, "Infos zu Frage Nr. " . $frage_id . " (Debug Modus):", esc:false);
+Form::message('error', $debuginfo, "Infos zu Frage Nr. " . $frage_id . " (Debug Modus):",
+              esc:false);
 // Ende Debug Modus 
 ?>
