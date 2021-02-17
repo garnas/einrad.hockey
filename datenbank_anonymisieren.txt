@@ -7,7 +7,7 @@ UPDATE `turniere_details` SET `organisator`= 'Vorname Nachname', `handy`='1234 5
 UPDATE `turniere_log` SET `log_text`='Anonymisiert',`autor`='Anonymisiert';
 INSERT INTO `spieler` (`spieler_id`, `team_id`, `vorname`, `nachname`, `jahrgang`, `geschlecht`, `schiri`, `junior`, `letzte_saison`, `zeit`) VALUES ('3', NULL, 'Hallo', 'Entwickler', '1234', 'd', '', 'Nein', '26', current_timestamp());
 INSERT INTO `ligaleitung`(`funktion`, `login`, `passwort`, spieler_id) VALUES ('ligaausschuss', 'entwickler', 'einrad', '3');
-UPDATE `ligaleitung` SET `passwort`='$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue';
+UPDATE `ligaleitung` SET `passwort`='$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e';
 DELETE FROM `neuigkeiten`;
 DELETE FROM `ligakarte_gesuch`;
 INSERT INTO `neuigkeiten` (`neuigkeiten_id`, `titel`, `inhalt`, `link_pdf`, `link_jpg`, `bild_verlinken`, `eingetragen_von`, `zeit`) VALUES (NULL, 'Passwörter für die Logins', 'Alles Passwörter für das Teamcenter sind: <b>test</b>\r\n\r\nLoginname für Ligacenter: <b>entwickler</b> Passwort: <b>einrad</b>', '', '', '', 'Ligaausschuss', current_timestamp());
