@@ -73,10 +73,10 @@ if (isset($_POST['absenden'])) {
                 unset($_SESSION['captcha']); // Captcha aus der Session löschen
                 header('Location: ../liga/neues.php');
                 die();
-            } else {
-                Form::error("Es ist ein Fehler aufgetreten: Eine Kopie der E-Mail wurde nicht an dich versendet! Stimmt \"$absender\"?");
-                Form::log(Config::LOG_KONTAKTFORMULAR, "Error Mailback:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
             }
+
+            Form::error("Es ist ein Fehler aufgetreten: Eine Kopie der E-Mail wurde nicht an dich versendet! Stimmt \"$absender\"?");
+            Form::log(Config::LOG_KONTAKTFORMULAR, "Error Mailback:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
         } // send
     } // error
 } // Form
@@ -152,7 +152,7 @@ include '../../templates/header.tmp.php';
                           id="text"
                           name="text"
                           required
-                ><?= $_POST['text'] ?></textarea>
+                ><?= $_POST['text'] ?? '' ?></textarea>
             </p>
             <!-- Captcha -->
             <p>
