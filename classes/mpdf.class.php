@@ -19,14 +19,6 @@ class mpdf
             [
                 'mode' => 'utf-8',
                 'format' => 'A4-P',
-                'fontDir' => array_merge($fontDirs, [__DIR__ . '/../public/css/MaterialIcons-Regular.ttf']),
-                'fontdata' => $fontData +
-                    ['Material Icons' => [
-                                    'R' => 'MaterialIcons-Regular.ttf',
-                                    'I' => 'MaterialIcons-Regular.ttf',
-                                    ]
-                    ],
-                'default_font' => 'Material Icons'
             ]);
     }
 }

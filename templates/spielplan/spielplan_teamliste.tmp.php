@@ -11,7 +11,7 @@
                 <?php if($spielplan->turnier->details['phase'] != 'ergebnis') { ?>
                     <th><!--<span class="pdf-hide"><i class="material-icons">accessibility</i><br>Trikots</span>--></th>
                 <?php } //endif?>
-                <th><i class="material-icons">account_circle</i><br>Ligavertreter</th>
+                <th><span class="pdf-hide"><i class="material-icons">account_circle</i><br>Ligavertreter</span></th>
                 <th><span class="pdf-hide"><i class="material-icons">help_outline</i><br>Kontakt</span></th>
             </tr>
             <?php foreach ($spielplan->teamliste as $team_id => $team) { ?>
@@ -27,7 +27,7 @@
                             </span>
                         </td>
                     <?php } // end if ?>
-                    <td><?= $team["ligavertreter"] ?></td>
+                    <td><span class="pdf-hide"><?= $team["ligavertreter"] ?></span></td>
                     <td>
                         <span class="pdf-hide">
                             <?=Form::mailto((new Kontakt($team_id))->get_emails('public'),'E-Mail')?>
