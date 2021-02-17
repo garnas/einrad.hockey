@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 17. Feb 2021 um 02:30
+-- Erstellungszeit: 17. Feb 2021 um 03:22
 -- Server-Version: 10.4.17-MariaDB
 -- PHP-Version: 8.0.0
 
@@ -74,7 +74,7 @@ CREATE TABLE `ligaleitung` (
   `email` varchar(255) DEFAULT NULL,
   `login` varchar(255) DEFAULT NULL,
   `passwort` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Daten für Tabelle `ligaleitung`
@@ -120,7 +120,7 @@ INSERT INTO `ligaleitung` (`ligaleitung_id`, `spieler_id`, `funktion`, `email`, 
 (37, 1005, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
 (38, 1093, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
 (39, 1573, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
-(46, 3, 'ligaausschuss', NULL, 'entwickler', '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e');
+(666, 3, 'ligaausschuss', NULL, 'entwickler', '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e');
 
 -- --------------------------------------------------------
 
@@ -12862,7 +12862,7 @@ ALTER TABLE `ligakarte_gesuch`
 -- AUTO_INCREMENT für Tabelle `ligaleitung`
 --
 ALTER TABLE `ligaleitung`
-  MODIFY `ligaleitung_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `ligaleitung_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=667;
 
 --
 -- AUTO_INCREMENT für Tabelle `mailbot`
@@ -12957,6 +12957,12 @@ ALTER TABLE `turniere_log`
 --
 ALTER TABLE `abstimmung_teams`
   ADD CONSTRAINT `abstimmung_teams_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams_liga` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints der Tabelle `ligaleitung`
+--
+ALTER TABLE `ligaleitung`
+  ADD CONSTRAINT `ligaleitung_ibfk_1` FOREIGN KEY (`spieler_id`) REFERENCES `spieler` (`spieler_id`);
 
 --
 -- Constraints der Tabelle `oeffi_challenge`

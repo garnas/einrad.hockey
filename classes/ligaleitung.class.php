@@ -33,10 +33,10 @@ class Ligaleitung
     public static function get_details(string $login): array
     {
         $sql = "
-                SELECT *, spieler.vorname, spieler.nachname, teams_liga.teamname
+                SELECT ligaleitung.*, spieler.vorname, spieler.nachname, teams_liga.teamname
                 FROM ligaleitung
                 INNER JOIN spieler on ligaleitung.spieler_id = spieler.spieler_id 
-                INNER JOIN teams_liga on spieler.team_id = teams_liga.team_id
+                LEFT JOIN teams_liga on spieler.team_id = teams_liga.team_id
                 WHERE login = ?
                 ";
         return dbi::$db->query($sql, $login)->esc()->fetch_row();
