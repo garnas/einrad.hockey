@@ -85,16 +85,13 @@ if (empty($_SESSION[$list_id ?? '']['emails'])){?>
             <p class=""><b><i class=material-icons>mail</i> Absender</b></p>
             <p><?= $from ?? [] ?></p>
             <p class=""><b><i class=material-icons>mail</i> Empfänger <?php if(Config::$ligacenter){?>(<?=$anzahl_emails ?? []?>)<?php }//end if?></b></p>
-            <p>
-                <div class="w3-row"><i>
+            <div class="w3-row w3-section">
+                <i>
                     <?php foreach($tos ?? [] as $to){?>
-                       <div class="w3-col m6 s12">
-                            <?=$to?><br>
-                        </div>
+                       <div class="w3-col m6 s12"><?= $to ?><br></div>
                     <?php }//end foreach?>
                 </i>
-                </div>
-            </p>
+            </div>
             <?php if(Config::$ligacenter){ ?>
                 <p><b>+ BCC:</b> <?=Env::LAMAIL_ANTWORT?></p>
             <?php } //endif?>
@@ -104,7 +101,7 @@ if (empty($_SESSION[$list_id ?? '']['emails'])){?>
             </p>
             <p>
                 <label class="" for="text"><b><i class="material-icons">subject</i> Text</b></label>
-                <textarea class="w3-input w3-border w3-border-primary" rows="10" type="text" id="text" name="text" required><?=stripcslashes($_POST['text'] ?? '')?></textarea>
+                <textarea class="w3-input w3-border w3-border-primary" rows="10" type="text" id="text" name="text" required><?=stripcslashes($_POST['text'] ?? $signatur ?? '')?></textarea>
             </p>
             <?php if(Config::$teamcenter){ ?>
                 <p class="w3-text-green">Es wird ebenfalls eine Email an dein Team gesendet, falls ihr nicht schon auf der Empfängerliste steht.</p>
