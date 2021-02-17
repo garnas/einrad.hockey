@@ -3,11 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
-<<<<<<< Updated upstream
--- Erstellungszeit: 21. Jan 2021 um 18:56
-=======
--- Erstellungszeit: 17. Feb 2021 um 02:16
->>>>>>> Stashed changes
+-- Erstellungszeit: 17. Feb 2021 um 02:30
 -- Server-Version: 10.4.17-MariaDB
 -- PHP-Version: 8.0.0
 
@@ -85,46 +81,46 @@ CREATE TABLE `ligaleitung` (
 --
 
 INSERT INTO `ligaleitung` (`ligaleitung_id`, `spieler_id`, `funktion`, `email`, `login`, `passwort`) VALUES
-(1, 120, 'schiriausschuss', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(2, 171, 'schiriausschuss', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(3, 245, 'schiriausschuss', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(4, 297, 'schiriausschuss', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(5, 1573, 'schiriausschuss', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(6, 64, 'ligaausschuss', 'ole@einrad.hockey', 'Ole', '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(7, 120, 'ligaausschuss', 'larissa@einrad.hockey', 'Larissa', '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(8, 240, 'ligaausschuss', 'ansgar@einrad.hockey', 'Ansgar', '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(9, 245, 'ligaausschuss', 'max@einrad.hockey', 'Max', '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(10, 297, 'ligaausschuss', 'malte@einrad.hockey', 'Malte', '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(11, 874, 'ligaausschuss', 'philipp@einrad.hockey', 'Philipp', '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(12, 548, 'oeffentlichkeitsausschuss', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(13, 874, 'oeffentlichkeitsausschuss', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(14, 1274, 'oeffentlichkeitsausschuss', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(15, 240, 'technikausschuss', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(16, 287, 'technikausschuss', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(17, 380, 'technikausschuss', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(18, 874, 'technikausschuss', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(19, 31, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(20, 64, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(21, 109, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(22, 154, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(23, 183, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(24, 184, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(25, 245, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(26, 258, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(27, 297, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(28, 306, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(29, 335, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(30, 388, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(31, 390, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(32, 514, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(33, 548, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(34, 560, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(35, 706, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(36, 874, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(37, 1005, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(38, 1093, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(39, 1573, 'schiriausbilder', NULL, NULL, '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue'),
-(46, 3, 'ligaausschuss', NULL, 'entwickler', '$2y$10$j09Nl.ykoi4dBkDo2389lepAKEafXRXBxTOThHUImam20SWfZrOue');
+(1, 120, 'schiriausschuss', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(2, 171, 'schiriausschuss', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(3, 245, 'schiriausschuss', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(4, 297, 'schiriausschuss', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(5, 1573, 'schiriausschuss', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(6, 64, 'ligaausschuss', 'ole@einrad.hockey', 'Ole', '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(7, 120, 'ligaausschuss', 'larissa@einrad.hockey', 'Larissa', '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(8, 240, 'ligaausschuss', 'ansgar@einrad.hockey', 'Ansgar', '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(9, 245, 'ligaausschuss', 'max@einrad.hockey', 'Max', '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(10, 297, 'ligaausschuss', 'malte@einrad.hockey', 'Malte', '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(11, 874, 'ligaausschuss', 'philipp@einrad.hockey', 'Philipp', '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(12, 548, 'oeffentlichkeitsausschuss', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(13, 874, 'oeffentlichkeitsausschuss', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(14, 1274, 'oeffentlichkeitsausschuss', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(15, 240, 'technikausschuss', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(16, 287, 'technikausschuss', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(17, 380, 'technikausschuss', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(18, 874, 'technikausschuss', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(19, 31, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(20, 64, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(21, 109, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(22, 154, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(23, 183, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(24, 184, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(25, 245, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(26, 258, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(27, 297, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(28, 306, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(29, 335, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(30, 388, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(31, 390, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(32, 514, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(33, 548, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(34, 560, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(35, 706, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(36, 874, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(37, 1005, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(38, 1093, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(39, 1573, 'schiriausbilder', NULL, NULL, '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e'),
+(46, 3, 'ligaausschuss', NULL, 'entwickler', '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e');
 
 -- --------------------------------------------------------
 
@@ -8597,8 +8593,6 @@ CREATE TABLE `schiri_test` (
   `interne_notiz` varchar(234) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-<<<<<<< Updated upstream
-=======
 --
 -- Daten für Tabelle `schiri_test`
 --
@@ -8789,7 +8783,6 @@ INSERT INTO `schiri_test` (`frage_id`, `kategorie`, `LJBF`, `frage`, `antwort_1`
 (181, '3', 'L', 'Was bedeutet dieses Handzeichen des Schiedsrichters?', 'Feldverweis für 2 min', '5 min Pause', 'Mehr als 5 Spieler auf dem Feld', 'Fünffaches Handspiel', 'Bully', NULL, '5', '10.7b', NULL, 1, 'frage_0181.png', NULL, NULL, NULL, 'nein', NULL),
 (182, NULL, 'LJB', 'Schaue Dir das Video an. Wie entscheidest du?', 'Tor', 'Ecke', 'Torab', '6.50 m', NULL, NULL, '1', '9.3', 'Am Anfang der Szene hält sich der Torwart am Tor fest. Das sollte wegen Vorteil nicht gepfiffen werden. Dann hält der Torwart einen Ball, der sicher ins Tor gegangen wäre. Dafür gibt es ein Straftor.', 1, NULL, 'frage_0182.mp4', NULL, NULL, NULL, NULL);
 
->>>>>>> Stashed changes
 -- --------------------------------------------------------
 
 --
@@ -12887,17 +12880,7 @@ ALTER TABLE `neuigkeiten`
 -- AUTO_INCREMENT für Tabelle `oeffi_challenge`
 --
 ALTER TABLE `oeffi_challenge`
-<<<<<<< Updated upstream
-  MODIFY `id` smallint(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=436;
-
---
--- AUTO_INCREMENT für Tabelle `schiri_test`
---
-ALTER TABLE `schiri_test`
-  MODIFY `frage_id` int(11) NOT NULL AUTO_INCREMENT;
-=======
   MODIFY `id` smallint(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=597;
->>>>>>> Stashed changes
 
 --
 -- AUTO_INCREMENT für Tabelle `spieler`

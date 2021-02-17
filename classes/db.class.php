@@ -10,7 +10,7 @@
 class db
 {
 
-    public static string $log_file = "db.log";
+    public static string $log_file = "db_alt.log";
     public static mysqli $link; //Verbindung zur Datenbank
 
     /**
