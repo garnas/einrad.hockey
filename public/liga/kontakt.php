@@ -12,7 +12,6 @@ $_SESSION['captcha'] = $captcha->getPhrase();
 $error = false;
 $send = false; // Email wurde abgesendet
 if (isset($_POST['absenden'])) {
-    $log_file = "log_kontaktformular.log";
     $absender = $_POST['absender'];
     $name = $_POST['name'];
     $betreff = $_POST['betreff'];
@@ -28,7 +27,7 @@ if (isset($_POST['absenden'])) {
         Form::error("Falsches Captcha, bitte versuche es erneut.");
         $error = true;
         // Logdatei erstellen/beschreiben
-        Form::log($log_file, "Falsches Captcha: " . $_SESSION['captcha'] . "\n" . print_r($_POST, true));
+        Form::log(Config::LOG_KONTAKTFORMULAR, "Falsches Captcha: " . $_SESSION['captcha'] . "\n" . print_r($_POST, true));
     }
 
     // Zeitmessung vs Bots
@@ -41,7 +40,7 @@ if (isset($_POST['absenden'])) {
             . Form::mailto(Env::LAMAIL), esc:false);
         $error = true;
         // Logdatei erstellen/beschreiben
-        Form::log($log_file, "Zu schnell: " . $time . " Sekunden\n" . print_r($_POST, true));
+        Form::log(Config::LOG_KONTAKTFORMULAR, "Zu schnell: " . $time . " Sekunden\n" . print_r($_POST, true));
     }
 
     if (!$error) {
@@ -59,7 +58,7 @@ if (isset($_POST['absenden'])) {
         } else {
             Form::error("Es ist ein Fehler aufgetreten. E-Mail konnte nicht versendet werden.
              Manuell versenden: " . Form::mailto(Env::LAMAIL), esc:false);
-            Form::log($log_file, "Error Mail:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
+            Form::log(Config::LOG_KONTAKTFORMULAR, "Error Mail:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
         }
         if ($send) {
             // Confirmation Mail an die angegebene Absendeadresse
@@ -76,7 +75,7 @@ if (isset($_POST['absenden'])) {
                 die();
             } else {
                 Form::error("Es ist ein Fehler aufgetreten: Eine Kopie der E-Mail wurde nicht an dich versendet! Stimmt \"$absender\"?");
-                Form::log($log_file, "Error Mailback:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
+                Form::log(Config::LOG_KONTAKTFORMULAR, "Error Mailback:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
             }
         } // send
     } // error

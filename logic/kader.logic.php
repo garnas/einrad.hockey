@@ -8,37 +8,37 @@ if (isset($_POST['neuer_eintrag'])) {
     $jahrgang = $_POST['jahrgang'];
     $geschlecht = $_POST['geschlecht'];
 
-    if (($_POST['dsgvo'] ?? '') != 'zugestimmt') {
+    if (($_POST['dsgvo'] ?? '') !== 'zugestimmt') {
         $error = true;
         Form::error("Den Datenschutz-Hiweisen muss zugestimmt werden, um in einem Ligateam spielen zu können");
     }
-    if (empty($vorname) or empty($nachname) or empty($jahrgang) or empty($geschlecht)) {
+    if (empty($vorname) || empty($nachname) || empty($jahrgang) || empty($geschlecht)) {
         $error = true;
         Form::error("Bitte Felder ausfüllen");
     }
-    if (1900 > $jahrgang or $jahrgang > date('Y')) {
+    if (1900 > $jahrgang || $jahrgang > date('Y')) {
         $error = true;
         Form::error("Ungültiger Jahrgang: Bitte als Jahreszahl ausschreiben.");
     }
-    //Ist der Zeitraum richtig um Spieler hinzuzufügen?
-    if (!Spieler::check_timing() && !Config::$ligacenter) {
+    // Ist der Zeitraum richtig um Spieler hinzuzufügen?
+    if (!Config::$ligacenter && !Spieler::check_timing()) {
         Form::error("Spieler können nur bis zum Ende der Saison hinzugefügt werden.");
         return false;
     }
 
     if (!$error) {
-        //Spieler Eintragen, wenn der Spieler schon existiert wird false zurückgegeben und eine Fehlermeldung
+        // Spieler Eintragen, wenn der Spieler schon existiert wird false zurückgegeben und eine Fehlermeldung
         if (Spieler::set_new_spieler($vorname, $nachname, $jahrgang, $geschlecht, $team_id)) {
             Form::info("Der Spieler wurde eingetragen");
             header('Location: ' . dbi::escape($_SERVER['PHP_SELF']) . '?team_id=' . $team_id);
-            die ("Warten..");
+            die ();
         }
     }
 }
 
-//Spieler aus der Vorsaison übernehmen
+// Spieler aus der Vorsaison übernehmen
 if (isset($_POST['submit_takeover'])) {
-    if (($_POST['dsgvo'] ?? '') != 'zugestimmt') {
+    if (($_POST['dsgvo'] ?? '') !== 'zugestimmt') {
         Form::error("Den Datenschutz-Hiweisen muss zugestimmt werden, um in einem Ligateam spielen zu können");
     } else {
         foreach (($_POST['takeover'] ?? []) as $spieler_id) {

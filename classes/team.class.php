@@ -142,10 +142,10 @@ class Team
     /**
      * Prüft ob die TeamID zu einem aktiven Ligateam gehört
      *
-     * @param $team_id
+     * @param null|int $team_id
      * @return bool
      */
-    public static function is_ligateam($team_id): bool
+    public static function is_ligateam(null|int $team_id): bool
     {
         $sql = "
                 SELECT team_id

@@ -177,11 +177,11 @@ class Form
     /**
      * Wandelt eine Saisonnummer in einen Jahreszahl-Saisonstring um
      *
-     * @param int $saison
+     * @param int|string $saison
      * 0 = Saison 1995
      * @return string
      */
-    public static function get_saison_string(int $saison = Config::SAISON): string
+    public static function get_saison_string(int|string $saison = Config::SAISON): string
     {
         // Sollte keine Saisonzahl übergeben werden, dann wird der Input zurückgegeben.
         if (!is_numeric($saison)) {

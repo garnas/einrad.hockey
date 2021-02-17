@@ -16,10 +16,6 @@ require_once '../../logic/kader.logic.php';
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 include '../../templates/header.tmp.php';
-
-if (isset($team_id)){
-    include '../../templates/kader.tmp.php';
-}
-
+include '../../templates/kader.tmp.php';
 include '../../templates/footer.tmp.php';
 

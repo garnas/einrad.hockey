@@ -5,9 +5,9 @@ if(isset($_POST['la_team_waehlen'])){
     if (Team::is_ligateam($team_id)){
         header("Location: " . dbi::escape($_SERVER['PHP_SELF']) . "?team_id=$team_id");
         die();
-    }else{
-        Form::error ("Team wurde nicht gefunden oder ist kein aktives Ligateam.");
-        header("Location: " . dbi::escape($_SERVER['PHP_SELF']));
-        die();
     }
+
+    Form::error ("Team wurde nicht gefunden oder ist kein aktives Ligateam.");
+    header("Location: " . dbi::escape($_SERVER['PHP_SELF']));
+    die();
 }
