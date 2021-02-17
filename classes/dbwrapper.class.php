@@ -37,7 +37,7 @@ class dbWrapper
             Form::log(Config::LOG_DB, "ERROR Verbindung: " . mysqli_connect_error());
             die("Verbindung zur Datenbank nicht möglich.");
         }
-        $this->link->set_charset("utf-8");
+        $this->link->set_charset("utf8mb4");
     }
 
     /**

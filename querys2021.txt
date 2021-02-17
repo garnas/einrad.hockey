@@ -1,3 +1,7 @@
+
+Regelwerk in DB und Schiritest in DB übertragen
+
+
 ALTER TABLE `turniere_liga` CHANGE `spieltag` `spieltag` INT(11) NOT NULL DEFAULT '0';
 ALTER TABLE `turniere_details` CHANGE `link_spielplan` `link_spielplan` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;
 ALTER TABLE `turniere_details` CHANGE `link_spielplan` `link_spielplan` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL;

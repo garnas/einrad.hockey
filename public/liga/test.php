@@ -4,11 +4,11 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 
-Ligaleitung::umzug2('ausschuss_schiri', "schiriausschuss");
-Ligaleitung::umzug2('ausschuss_liga', "ligaausschuss");
-Ligaleitung::umzug2('ausschuss_oeffi', "oeffentlichkeitsausschuss");
-Ligaleitung::umzug2('ausschuss_technik', "technikausschuss");
-Ligaleitung::umzug3();
+//Ligaleitung::umzug2('ausschuss_schiri', "schiriausschuss");
+//Ligaleitung::umzug2('ausschuss_liga', "ligaausschuss");
+//Ligaleitung::umzug2('ausschuss_oeffi', "oeffentlichkeitsausschuss");
+//Ligaleitung::umzug2('ausschuss_technik', "technikausschuss");
+//Ligaleitung::umzug3();
 
 function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
 {

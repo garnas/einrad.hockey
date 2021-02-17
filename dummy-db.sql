@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 21. Jan 2021 um 18:56
+-- Erstellungszeit: 21. Jan 2021 um 19:08
 -- Server-Version: 10.4.17-MariaDB
 -- PHP-Version: 8.0.0
 
@@ -11036,6 +11036,16 @@ CREATE TABLE `schiri_test` (
   `autor` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Daten für Tabelle `schiri_test`
+--
+
+INSERT INTO `schiri_test` (`frage_id`, `kategorie`, `titel`, `frage`, `antwort_1`, `antwort_2`, `antwort_3`, `antwort_4`, `antwort_5`, `antwort_6`, `richtige_antworten`, `erklaerung`, `punkte`, `name_bild`, `name_video`, `autor`) VALUES
+(1, 'grundlagen', 'Grundlagenwissen Einrad', 'Welche Teile gehören zum Einrad?', 'Ball', 'Speiche', 'Sattel', 'Reifen', 'Schläger', 'Tor', '2#3#4', 'Einradteile sind im Einrad verbaut.', 3, '', '', 'Ansgar Pölking'),
+(2, 'grundlagen', 'Sicherheitsregeln', 'Welches Foul lag im gezeigten Video vor?', 'nicht-regelkonforme Trikots der Teams.', 'SUB des gelben Spielers', 'Hoher Schläger des gelben Spielers.', '', '', '', '3', 'Der Schläger wurde bewusst über der Hüfthöhe geführt. Da dies zu Gefährdungen anderer Spieler führen kann, ist dies verboten.', 3, '', 'szene-0003.mp4', 'Ansgar Pölking'),
+(3, 'grundlagen', 'Foulspiel?', 'Wie entscheidest du als Schiedsrichter im Video richtig?', 'Da ich nicht absolut sicher sein kann, ob der Spieler vom Schläger getroffen wurde, lasse ich weiterspielen.', 'Ich kann sicher davon ausgehen, dass der Spieler getroffen wurde und pfeife ab und gebe einen Freistoß.', 'Ich kann sicher davon ausgehen, dass der Spieler getroffen wurde und Rufe laut Vorteil und lasse den Vorteil ausspielen. Sollte das blaue Team am Ende des Videos den Ball verlieren, pfeife ich das ursprüngliche Vergehen ab.', 'Ich kann davon ausgehen, das der Spieler getroffen wurde. Aber da die Situation das weitere Spielgeschehen nicht beeinflusst, lasse ich das Spiel weiterlaufen.', '', '', '3', 'Spieler dürfen nicht vom Schläger getroffen werden. Es ist mit gesunden Menschenverstand davon auszugehen, dass der Spieler getroffen wurde. Da der gefoulte Spieler weiter im Ballbesitz ist, gilt die Vorteilsregel.', 0, '', 'szene-schweiz.mp4', ''),
+(6, 'grundlagen', 'Körperkontakt', 'Wie entscheidest du als Schiedsrichter auf Grundlage dieses Bildes richtig?', 'Ich pfeife ab und gebe einen Bully.', 'Ich gebe einen Freistoß für das rote Team.', 'Ich gebe einen Freistoß für das blaue Team.', 'Da der Körperkontakt von beiden hervorgerufen wurde, lass ich das Spiel weiterlaufen.', '', '', '1', 'Einradhockey ist ein kontaktloser Sport. Damit harte Spiele nicht eskalieren, pfeife ich ab. Ich gebe einen Bully, da ich nicht klar erkennen konnte, wer den Körperkontakt herbeigeführt hatte.', 3, 'DSC_3124.jpg', '', 'Ansgar Pölking');
+
 -- --------------------------------------------------------
 
 --
@@ -15073,7 +15083,7 @@ ALTER TABLE `oeffi_challenge`
 -- AUTO_INCREMENT für Tabelle `schiri_test`
 --
 ALTER TABLE `schiri_test`
-  MODIFY `frage_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `frage_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT für Tabelle `spieler`

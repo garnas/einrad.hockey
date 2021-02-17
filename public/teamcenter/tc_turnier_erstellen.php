@@ -16,7 +16,7 @@ $ausrichter_team_id = $_SESSION['logins']['team']['id'];
 $ausrichter_name = $_SESSION['logins']['team']['name'];
 $ausrichter_block = $_SESSION['logins']['team']['block'];
 
-//Formularauswertung
+// Formularauswertung
 require_once '../../logic/turnier_erstellen.logic.php';
 
 /////////////////////////////////////////////////////////////////////////////
