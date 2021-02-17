@@ -82,7 +82,7 @@ class Form
             $caption = match ($type) {
                 'error' => 'Fehler',
                 'info' => 'Info',
-                'notice' => 'Hinweise'
+                'notice' => 'Hinweis'
             };
         }
 
