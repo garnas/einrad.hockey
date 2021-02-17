@@ -57,7 +57,7 @@
                 <td class="w3-hide-small"><?= $x['statistik']["tordifferenz"] ?? '--' ?></td>
                 <td class="w3-hide-small"><?= $x['statistik']["tore"] ?? '--' ?></td>
                 <td class="w3-hide-small"><?= $x['statistik']["gegentore"] ?? '--' ?></td>
-                <td><?= ($spielplan->check_penalty_team($team_id) or !$spielplan->check_tabelle_einblenden()) ? '--' : $x["ligapunkte"] ?></td>
+                <td><?= ($spielplan->check_penalty_team($team_id) || !$spielplan->check_tabelle_einblenden()) ? '--' : $x["ligapunkte"] ?></td>
             </tr>
         <?php }//end foreach?>
     </table>

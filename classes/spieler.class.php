@@ -188,7 +188,7 @@ class Spieler
         if (!in_array($entry, $spalten_namen, true)) {
             die("Ungültiger Spaltenname");
         }
-        $zeit = ($entry === 'team_id' or $entry === 'letzte_saison') ? '' : ', zeit = zeit';
+        $zeit = ($entry === 'team_id' || $entry === 'letzte_saison') ? '' : ', zeit = zeit';
         $entry = "`" . $entry . "`";
         $sql = "
                 UPDATE spieler 

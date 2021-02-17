@@ -18,7 +18,7 @@ class Form
         $_SESSION['bild_navigation']['zeit'] = ($_SESSION['bild_navigation']['zeit'] ?? time());
         if (
             !isset($_SESSION['bild_navigation']['path'])
-            or (time() - $_SESSION['bild_navigation']['zeit']) > 600
+            || (time() - $_SESSION['bild_navigation']['zeit']) > 600
             ){
             $imagesDir = Env::BASE_PATH . '/public/bilder/hintergrund/';
             $images = glob($imagesDir . '*.{jpg,JPG,jpeg,png,gif}', GLOB_BRACE);

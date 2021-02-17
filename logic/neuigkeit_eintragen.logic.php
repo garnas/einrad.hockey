@@ -10,7 +10,7 @@ $name = (Config::$ligacenter) ? "Ligaausschuss" : $_SESSION['logins']['team']['n
 // Formularauswertung
 if (isset($_POST['create_neuigkeit'])) {
 
-    if (empty($_POST['titel']) or empty($_POST['text'])) {
+    if (empty($_POST['titel']) || empty($_POST['text'])) {
         Form::error("Bitte Titel und Text eingeben.");
     } else {
 

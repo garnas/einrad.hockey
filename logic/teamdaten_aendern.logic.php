@@ -16,9 +16,9 @@ $path = (Config::$ligacenter) ? '../ligacenter/lc_teamdaten_aendern.php?team_id=
 // Trikotfarben verwalten
 if (
     isset($_POST['color_1'])
-    or isset($_POST['color_2'])
-    or isset($_POST['no_color_2'])
-    or isset($_POST['no_color_1'])
+    || isset($_POST['color_2'])
+    || isset($_POST['no_color_2'])
+    || isset($_POST['no_color_1'])
 ) {
     if (isset($_POST['color_1']))
         $team->set_detail('trikot_farbe_1', $_POST['color_1']);

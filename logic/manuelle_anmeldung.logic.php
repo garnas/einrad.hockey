@@ -10,7 +10,7 @@ if (empty($turnier->details)){
     die();
 }
 //im Teamcenter testen, ob es sich um den Ausrichter handelt
-if (Config::$teamcenter && ($turnier->details['ausrichter'] != $_SESSION['logins']['team']['id'] or $turnier->details['art'] != 'spass')){
+if (Config::$teamcenter && ($turnier->details['ausrichter'] != $_SESSION['logins']['team']['id'] || $turnier->details['art'] != 'spass')){
     Form::error("Fehlende Berechtigung Teams zu diesem Turnier anzumelden");
     header('Location: ../liga/turniere.php');
     die();

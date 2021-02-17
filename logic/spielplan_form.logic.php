@@ -88,7 +88,7 @@ $vgl_data = $spielplan->turnier->get_ergebnis();
 if (!empty($vgl_data)) {
     if (
         !$spielplan->check_turnier_beendet()
-        or count($vgl_data) != $spielplan->anzahl_teams
+        || count($vgl_data) != $spielplan->anzahl_teams
     ) {
         $error = true;
     } else {

@@ -22,7 +22,7 @@ if (isset($_POST['change_la']) && Config::$ligacenter) {
     }
     if (
         empty($neuer_teamname)
-        or $freilose < 0
+        || $freilose < 0
     ) {
         Form::error("Felder dürfen nicht leer sein");
         $error = true;

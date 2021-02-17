@@ -1,12 +1,12 @@
 <?php
 // Kann das Turnier erweitert werden?
-if ($turnier->details['phase'] == 'melde' && strlen($turnier->details['tblock']) < 3 && $turnier->details['tblock'] != 'AB' && $turnier->details['tblock'] != 'A' && ($turnier->details['art'] == 'I' or $turnier->details['art'] == 'II')){
+if ($turnier->details['phase'] == 'melde' && strlen($turnier->details['tblock']) < 3 && $turnier->details['tblock'] != 'AB' && $turnier->details['tblock'] != 'A' && ($turnier->details['art'] == 'I' || $turnier->details['art'] == 'II')){
     $blockhoch = true;
 }else{
     $blockhoch = false;
 }
 // Kann das Turnier auf ABCDEF erweitert werden?
-if ($turnier->details['phase'] == 'melde' && $turnier->details['art'] != 'III' && ($turnier->details['art'] == 'I' or $turnier->details['art'] == 'II')){
+if ($turnier->details['phase'] == 'melde' && $turnier->details['art'] != 'III' && ($turnier->details['art'] == 'I' || $turnier->details['art'] == 'II')){
     $blockfrei = true;
 }else{
     $blockfrei = false;
@@ -47,7 +47,7 @@ if (isset($_POST['change_turnier'])) {
     }
 
     // Leere Felder können eigentlich nicht auftreten (nur durch html-Manipulation), aber sicherheitshalber dass hier...
-    if (empty($plaetze) or empty($startzeit) or empty($hallenname) or empty($strasse) or empty($plz) or empty($ort) or empty($hinweis) or empty($organisator) or empty($handy)){
+    if (empty($plaetze) || empty($startzeit) || empty($hallenname) || empty($strasse) || empty($plz) || empty($ort) || empty($hinweis) || empty($organisator) || empty($handy)){
         $error = true;
         Form::error("Bitte alle nicht optionalen Felder ausfüllen.");
     }
@@ -58,7 +58,7 @@ if (isset($_POST['change_turnier'])) {
             $error = true;
             Form::error("Die Startzeit bei Abschlussturnieren kann nur vom Ligaausschuss geändert werden.");
         }
-        if ($startzeit != $turnier->details['startzeit'] && (date("H", strtotime($startzeit)) < 9 or date("H", strtotime($startzeit)) > 14) && Config::$teamcenter){
+        if ($startzeit != $turnier->details['startzeit'] && (date("H", strtotime($startzeit)) < 9 || date("H", strtotime($startzeit)) > 14) && Config::$teamcenter){
             $error = true;
             Form::error("Turniere dürfen frühestens um 9:00&nbsp;Uhr beginnen und müssen spätestens um 20:00&nbsp;Uhr beendet sein");
         }
@@ -70,7 +70,7 @@ if (isset($_POST['change_turnier'])) {
             Form::error("Das Ändern der Anzahl der Plätze ist bei Abschlussturnieren können nur vom Ligaausschuss geändert werden.");
             $error = true;
         }
-        if ($plaetze < 5 or $plaetze > 8){
+        if ($plaetze < 5 || $plaetze > 8){
             $error = true; // 4er nur via Ligaausschuss
             Form::error("Ungültige Anzahl an Turnierplätzen");
         }
@@ -147,7 +147,7 @@ if (isset($_POST['change_turnier'])) {
                 $plz, $ort, $haltestellen, $hinweis, $startgebuehr, $organisator, $handy);
 
         // Mail an den Ligaausschuss?
-        if (($wichtiges_geaendert or $erweitern)
+        if (($wichtiges_geaendert || $erweitern)
             && Config::$teamcenter) MailBot::mail_turnierdaten_geaendert($turnier);
 
         Form::info("Turnierdaten wurden geändert");
