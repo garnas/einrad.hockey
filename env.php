@@ -29,6 +29,7 @@ class env
      * Mailserver
      *
      * Bei ACTIVATE_EMAIL = true wird versucht Emails zu versenden, bei false werden Debugging-Infos ausgegeben
+     * In der Regel unwichtig für Localhost.
      */
     public const ACTIVATE_EMAIL = false;
     public const SMTP_HOST = '--';
