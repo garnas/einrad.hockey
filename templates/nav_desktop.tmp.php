@@ -118,10 +118,13 @@
     <!-- unten rechts -->
     <div class="w3-display-bottomright w3-text-primary w3-margin w3-padding-large w3-large">
         <div style="margin-bottom: 6px;">
-            <section role="search" data-ss360="true">
-                <input class="searchbox" type="search" placeholder="Suche" />
-                <button class="searchbutton"/>
-            </section>
+            <div class="w3-margin-left w3-margin-right">
+                <div role="search" data-ss360="true">
+                    <label for="suche_desktop"></label>
+                    <input class="searchbox" id="suche_desktop" type="search" placeholder="Suche" />
+                    <button class="searchbutton"></button>
+                </div>
+            </div>
         </div>
         <!-- Logout -->
         <?php if (isset($_SESSION['logins']['team'])){?>

@@ -8,10 +8,11 @@
     </div>
     <div class="w3-panel">
         <div class="w3-margin-left w3-margin-right">
-            <section role="search" data-ss360="true">
-                <input class="searchbox" type="search" placeholder="Suche" />
-                <button class="searchbutton"/>
-            </section>
+            <div role="search" data-ss360="true">
+                <label for="suche_mobil"></label>
+                <input class="searchbox" id="suche_mobil" type="search" placeholder="Suche" />
+                <button class="searchbutton"></button>
+            </div>
         </div>
     </div>
     <a href="<?= Env::BASE_URL ?>/liga/ueber_uns.php" class="no">
