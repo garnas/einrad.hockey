@@ -13,7 +13,7 @@ $teams = Tabelle::get_rang_tabelle($akt_spieltag); // Sortierung nach Rangtabell
 if (Config::$ligacenter) {
     $list_id = 'lc_emails' . $_SESSION['logins']['la']['id'];
 } elseif (Config::$teamcenter) {
-    $list_id = 'tc_emails' . $_SESSION['logins']['team']['team_id'];
+    $list_id = 'tc_emails' . $_SESSION['logins']['team']['id'];
 }
 
 
@@ -126,7 +126,7 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
 
         // Text und Betreff hinzufügen
         $mailer->Subject = $betreff;
-        $mailer->Body = $text . "\r\n\r\nVersendet aus dem Kontaktcenter von einrad.hockey";
+        $mailer->Body = $text . "\r\nVersendet aus dem Kontaktcenter von einrad.hockey";
 
         // Email-versenden
         if (MailBot::send_mail($mailer)) {
@@ -135,10 +135,7 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
             header('Location: ' . dbi::escape($_SERVER['PHP_SELF']));
             die();
         }
-
-        Form::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden. Manuell Mail versenden: "
-            . Form::mailto(Env::LAMAIL), esc:false);
-        Form::error($mailer->ErrorInfo);
+        Form::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden.");
     }
 }
 
@@ -158,3 +155,11 @@ if (isset($_SESSION[$list_id])) {
     }
 }
 
+if (Config::$ligacenter){
+    $las = Ligaleitung::get_all('ligaausschuss');
+    $signatur = "\r\n\r\n\r\nDein Ligaausschuss\r\n--\r\n";
+    foreach ($las as $la){
+        $signatur .= $la['vorname'] . ' ' . $la['nachname']
+            . (!empty($la['teamname']) ? ' (' . $la['teamname'] . ')' : '') . "\r\n";
+    }
+}

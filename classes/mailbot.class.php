@@ -36,21 +36,21 @@ class MailBot
     {
         if (Env::ACTIVATE_EMAIL) {
             if ($mailer->send()) {
-                Form::log('emails.log', 'Mail erfolgreich versendet');
+                Form::log(Config::LOG_EMAILS, 'Mail erfolgreich versendet');
                 return true;
-            } else {
-                Form::log('emails.log', 'Fehler:' . $mailer->ErrorInfo);
-                return false;
             }
-        } else { // Debugging
-            if (!(Config::$ligacenter ?? false)) {
-                $mailer->Password = '***********'; // Passwort verstecken
-                $mailer->ClearAllRecipients();
-                Form::log('emails.log', 'Mail erfolgreich versendet');
-            }
-            db::debug($mailer);
+            Form::log(Config::LOG_EMAILS, 'Fehler: ' . $mailer->ErrorInfo);
             return false;
         }
+
+        // Debugging
+        if (!Config::$ligacenter) {
+            $mailer->Password = '***********'; // Passwort verstecken
+            $mailer->ClearAllRecipients();
+        }
+        Form::log(Config::LOG_EMAILS, 'E-Mail-Debug-Pseudo-Versand erfolgreich');
+        dbi::debug($mailer);
+        return false;
     }
 
     /**
