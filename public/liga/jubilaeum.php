@@ -259,7 +259,7 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
 <p>Fernschüsse erlauben.</p>
 
 <!-- Vierter Spielerabschnitt -->
-<h1 id="adrian" class="w3-text-primary">Jan</h1>
+<h1 id="jan" class="w3-text-primary">Jan</h1>
 <div class="w3-primary w3-display-container">  
     <div class="slideshow4" style="padding: 8px 48px;">
         <p style="display: inline-block" class="<?=$header?>">Kurze Fakten</p>
