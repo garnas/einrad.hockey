@@ -23,7 +23,7 @@ if (isset($_POST['absenden'])) {
     }
 
     // Captcha validieren
-    if (!$captcha->testPhrase($user_captcha)){
+    if (!$captcha->testPhrase($user_captcha)) {
         Form::error("Falsches Captcha, bitte versuche es erneut.");
         $error = true;
         // Logdatei erstellen/beschreiben
@@ -37,7 +37,7 @@ if (isset($_POST['absenden'])) {
     if ($time < 4) { //Bot, wenn in unter 4 Sekunden das Formular abgeschickt wurde
         Form::error("E-Mail konnte wegen Spamverdacht nicht versendet werden,
          da das Formular zu schnell ausgefüllt wurde. Schreib uns bitte an via "
-            . Form::mailto(Env::LAMAIL), esc:false);
+            . Form::mailto(Env::LAMAIL), esc: false);
         $error = true;
         // Logdatei erstellen/beschreiben
         Form::log(Config::LOG_KONTAKTFORMULAR, "Zu schnell: " . $time . " Sekunden\n" . print_r($_POST, true));
@@ -57,7 +57,7 @@ if (isset($_POST['absenden'])) {
             $send = true; //Email an den User nur schicken, wenn die Mail an LA rausging
         } else {
             Form::error("Es ist ein Fehler aufgetreten. E-Mail konnte nicht versendet werden.
-             Manuell versenden: " . Form::mailto(Env::LAMAIL), esc:false);
+             Manuell versenden: " . Form::mailto(Env::LAMAIL), esc: false);
             Form::log(Config::LOG_KONTAKTFORMULAR, "Error Mail:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
         }
         if ($send) {
@@ -186,8 +186,8 @@ include '../../templates/header.tmp.php';
             <?php } //endif?>
             <p>
                 <button type="submit"
-                       name="absenden"
-                       class="w3-tertiary w3-ripple w3-round w3-button"
+                        name="absenden"
+                        class="w3-tertiary w3-ripple w3-round w3-button"
                 >
                     <i class="material-icons">send</i> Senden
                 </button>

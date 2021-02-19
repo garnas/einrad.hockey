@@ -3,7 +3,7 @@
 /**
  * Class Ligaleitung
  */
-class Ligaleitung
+class LigaLeitung
 {
     /**
      * Gibt ein Array der Ligaleitung aus

@@ -1,6 +1,6 @@
 <?php
 
-class mpdf
+class mPDF
 {
     /**
      * Lädt das Mpdf-Framework und erstellt ein mpdf-Objekt
