@@ -18,7 +18,7 @@ ini_set('max_execution_time', '90');
 ini_set('error_reporting', E_ALL);
 ini_set('log_errors', 'On');
 ini_set('display_errors', 'Off');
-ini_set('error_log', __DIR__ . '\logs\log_php.log');
+ini_set('error_log', __DIR__ . '\logs\php_error.log');
 
 // Sprache für Zeitformate in Deutsch --> strftime()
 setlocale(LC_TIME, 'de_DE@euro', 'de_DE', 'de', 'ge');
@@ -27,4 +27,6 @@ setlocale(LC_TIME, 'de_DE@euro', 'de_DE', 'de', 'ge');
 if (
     file_exists(__DIR__ . '/../ini_set_localhost_nicht_hochladen.php')
     && in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])
-) require_once __DIR__ . '/../ini_set_localhost_nicht_hochladen.php';
+) {
+    require_once __DIR__ . '/../ini_set_localhost_nicht_hochladen.php';
+}

@@ -26,7 +26,7 @@ class Nav
         ];
     }
 
-    public static function get_modus()
+    public static function get_modus(): array
     {
         return [
             [Env::BASE_URL . "/liga/dokumente.php", "Dokumente"],
