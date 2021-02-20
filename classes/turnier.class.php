@@ -225,7 +225,7 @@ class Turnier
      *
      * @return array
      */
-    function get_liste_spielplan(): array
+    public function get_liste_spielplan(): array
     {
         $sql = "
                 SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam,
@@ -260,7 +260,7 @@ class Turnier
      *
      * @return array
      */
-    function get_kader_kontrolle(): array
+    public function get_kader_kontrolle(): array
     {
         $spielen_liste = $this->get_liste_spielplan();
         foreach ($spielen_liste as $team) {
@@ -272,7 +272,7 @@ class Turnier
     /**
      * Löscht Turnierergebnisse des Turnieres aus der DB
      */
-    function delete_ergebnis()
+    public function delete_ergebnis()
     {
         $sql = "
                 DELETE FROM turniere_ergebnisse 
@@ -286,7 +286,7 @@ class Turnier
      * Get Turnierergebnis des Turnieres
      * @return array
      */
-    function get_ergebnis(): array
+    public function get_ergebnis(): array
     {
         $sql = "
                 SELECT * 
@@ -302,12 +302,14 @@ class Turnier
      * Schreibt ein Ergebnis eines Teams in die Datenbank
      *
      * @param int $team_id
-     * @param int $ergebnis
+     * @param int|null $ergebnis
      * @param int $platz
      */
-    function set_ergebnis(int $team_id, int $ergebnis, int $platz)
+    public function set_ergebnis(int $team_id, int|null $ergebnis, int $platz): void
     {
-        if (!in_array($this->details['art'], ['I', 'II', 'III'])) $ergebnis = 'NULL';
+        if (!in_array($this->details['art'], ['I', 'II', 'III'])) {
+            $ergebnis = NULL;
+        }
         $sql = "
                 INSERT INTO turniere_ergebnisse (turnier_id, team_id, ergebnis, platz) 
                 VALUES ($this->id, ?, ?, ?);
@@ -323,7 +325,9 @@ class Turnier
     public function set_ergebnisse(array $platzierungstabelle)
     {
         // Ergebns eintragen
-        if (!empty($this->get_ergebnis())) $this->delete_ergebnis();
+        if (!empty($this->get_ergebnis())) {
+            $this->delete_ergebnis();
+        }
         foreach ($platzierungstabelle as $team_id => $ergebnis) {
             $this->set_ergebnis($team_id, $ergebnis['ligapunkte'], $ergebnis['platz']);
         }
@@ -342,10 +346,10 @@ class Turnier
      * @param int $pos
      */
 
-    function team_anmelden(int $team_id, string $liste, int $pos = 0)
+    public function team_anmelden(int $team_id, string $liste, int $pos = 0): void
     {
         // Update der Wartelistepositionen
-        if ($liste == 'warte') {
+        if ($liste === 'warte') {
             $sql = "
                     UPDATE turniere_liste 
                     SET position_warteliste = position_warteliste + 1 
@@ -362,9 +366,11 @@ class Turnier
         dbi::$db->query($sql, $team_id, $liste, $pos)->log();
         $this->log(
             "Anmeldung:\r\n" . Team::id_to_name($team_id) . " ($liste)"
-            . (($liste == 'warte') ? "\r\nWartepos: $pos" : '')
+            . (($liste === 'warte') ? "\r\nWartepos: $pos" : '')
             . "\r\nTeamb.: " . Tabelle::get_team_block($team_id) . " | Turnierb. " . $this->details['tblock']);
-        if ($affected_rows > 0) $this->log("Warteliste aktualisiert");
+        if ($affected_rows > 0) {
+            $this->log("Warteliste aktualisiert");
+        }
     }
 
     /**
@@ -379,10 +385,10 @@ class Turnier
      * @param $liste
      * @param int $pos
      */
-    function nl_anmelden($teamname, $liste, $pos = 0)
+    public function nl_anmelden($teamname, $liste, $pos = 0): void
     {
         $teamname .= "*"; // Nichtligateams haben einen Stern hinter dem Namen
-        if (empty(Team::name_to_id($teamname))) {
+        if (empty(Team::name_to_id($teamname))) { //TODO === NULL testen
             $sql = "
                     INSERT INTO teams_liga (teamname, ligateam) 
                     VALUES (?, 'Nein')
@@ -399,7 +405,7 @@ class Turnier
      * Team via Freilos anmelden
      * @param int $team_id
      */
-    function freilos(int $team_id)
+    public function freilos(int $team_id): void
     {
         // Freilos abziehen
         $team = new Team($team_id);
@@ -422,7 +428,7 @@ class Turnier
      * Team wird von einem Turnier abgemeldet
      * @param int $team_id
      */
-    function abmelden(int $team_id)
+    public function abmelden(int $team_id): void
     {
         $sql = "
                 DELETE FROM turniere_liste 
@@ -440,7 +446,7 @@ class Turnier
      * Bsp: Position auf der Warteliste: 2 4 5 wird zu 1 2 3
      *
      */
-    function warteliste_aktualisieren()
+    public function warteliste_aktualisieren(): void
     {
         // Warteliste holen
         $sql = "
@@ -456,7 +462,7 @@ class Turnier
         $pos = 0;
         $write_log = false;
         foreach ($liste as $team) {
-            $pos += 1;
+            ++$pos;
             $sql = "
                     UPDATE turniere_liste 
                     SET position_warteliste = ?
@@ -465,10 +471,14 @@ class Turnier
                     AND team_id = ?;
                     ";
             dbi::$db->query($sql, $pos, $team['team_id'])->log();
-            if (dbi::$db->affected_rows() > 0) $write_log = true;
+            if (dbi::$db->affected_rows() > 0) {
+                $write_log = true;
+            }
             $logs[] = $pos . ". " . Team::id_to_name($team['team_id']);
         }
-        if ($write_log) $this->log("Warteliste aktualisiert:\r\n" . implode("\r\n", $logs ?? []));
+        if ($write_log) {
+            $this->log("Warteliste aktualisiert:\r\n" . implode("\r\n", $logs ?? []));
+        }
     }
 
     /**
@@ -483,21 +493,25 @@ class Turnier
     {
         $freie_plaetze = $this->get_anzahl_freie_plaetze();
         $log = false;
-        if ($this->details['phase'] == 'melde' && $freie_plaetze > 0) {
+        if ($this->details['phase'] === 'melde' && $freie_plaetze > 0) {
             $liste = $this->get_anmeldungen();// Order by Warteliste weshalb die Teams in der foreach schleife in der Richtigen reihenfolge behandelt werden
             foreach ($liste['warte'] as $team) {
                 if ($this->check_team_block($team['team_id']) && $freie_plaetze > 0) {
                     if (!$this->check_doppel_anmeldung($team['team_id'])) { // Das Team wird abgemeldet, wenn es schon am Turnierdatum auf einer Spielen-Liste steht
                         $this->set_liste($team['team_id'], 'spiele');
-                        if ($send_mail) MailBot::mail_warte_zu_spiele($this, $team['team_id']);
-                        $freie_plaetze -= 1;
+                        if ($send_mail) {
+                            MailBot::mail_warte_zu_spiele($this, $team['team_id']);
+                        }
+                        --$freie_plaetze;
                         $log = true;
                     } else {
                         $this->abmelden($team['team_id']);
                     }
                 }
             }
-            if ($log) $this->log("Spielen-Liste aufgefüllt");
+            if ($log) {
+                $this->log("Spielen-Liste aufgefüllt");
+            }
             $this->warteliste_aktualisieren();
         }
     }
@@ -506,7 +520,7 @@ class Turnier
      * Get Anzahl der freien Plätze auf dem Turnier
      * @return string
      */
-    function get_anzahl_freie_plaetze(): string
+    public function get_anzahl_freie_plaetze(): string
     {
         $sql = "
                 SELECT 
@@ -524,7 +538,7 @@ class Turnier
      * @param string $liste
      * @param int $pos
      */
-    function set_liste(int $team_id, string $liste, $pos = 0)
+    public function set_liste(int $team_id, string $liste, $pos = 0): void
     {
         $sql = "
                 UPDATE turniere_liste 
@@ -535,7 +549,7 @@ class Turnier
         dbi::$db->query($sql, [$liste, $pos, $team_id]);
         $this->log("Listenwechsel:\r\n"
             . Team::id_to_name($team_id) . " ($liste)"
-            . (($liste == 'warte') ? "\r\nWartepos: $pos" : ''));
+            . (($liste === 'warte') ? "\r\nWartepos: $pos" : ''));
     }
 
     /**
@@ -544,7 +558,7 @@ class Turnier
      * @param int $team_id
      * @return bool
      */
-    function check_team_angemeldet(int $team_id): bool
+    public function check_team_angemeldet(int $team_id): bool
     {
         $sql = "
                 SELECT liste 
@@ -560,7 +574,7 @@ class Turnier
      * @param int $team_id
      * @return bool
      */
-    function check_doppel_anmeldung(int $team_id): bool
+    public function check_doppel_anmeldung(int $team_id): bool
     {
         $sql = "
                 SELECT liste_id
@@ -581,7 +595,7 @@ class Turnier
      * @param int $team_id
      * @return string
      */
-    function get_liste(int $team_id): string
+    public function get_liste(int $team_id): string
     {
         $sql = "
                 SELECT liste 
@@ -598,10 +612,12 @@ class Turnier
      * @param $team_id
      * @return bool
      */
-    function check_team_block(int $team_id): bool
+    public function check_team_block(int $team_id): bool
     {
         // Falsche Turnierart für Blockcheck
-        if (!in_array($this->details['art'], ['I', 'II', 'III'])) return false;
+        if (!in_array($this->details['art'], ['I', 'II', 'III'])) {
+            return false;
+        }
 
         return self::check_team_block_static(Tabelle::get_team_block($team_id), $this->details['tblock']);
     }
@@ -613,9 +629,9 @@ class Turnier
      * @param string $turnier_block
      * @return bool
      */
-    public static function check_team_block_static($team_block, $turnier_block): bool
+    public static function check_team_block_static(string $team_block, string $turnier_block): bool
     {
-        if ($team_block == 'NL') {
+        if ($team_block === 'NL') {
             return true;
         } // NL Teams können immer angemeldet werden
 
@@ -626,7 +642,9 @@ class Turnier
             $team_block = str_split($team_block);
             // Check ob ein Buchstabe des Team-Blocks im Turnier-Block vorkommt
             foreach ($team_block as $buchstabe) {
-                if (in_array($buchstabe, $turnier_block)) return true;
+                if (in_array($buchstabe, $turnier_block)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -672,7 +690,7 @@ class Turnier
      * @param string $link
      * @param string $phase
      */
-    function upload_spielplan(string $link, string $phase)
+    public function upload_spielplan(string $link, string $phase): void
     {
         $sql = "
                 UPDATE turniere_details
@@ -725,9 +743,11 @@ class Turnier
      *
      * @param string $phase
      */
-    public function set_phase(string $phase)
+    public function set_phase(string $phase): void
     {
-        if ($phase === $this->details['phase']) return;
+        if ($phase === $this->details['phase']) {
+            return;
+        }
 
         $sql = "
                 UPDATE turniere_liga 
@@ -744,7 +764,7 @@ class Turnier
      *
      * @param string $block
      */
-    public function set_block(string $block)
+    public function set_block(string $block): void
     {
         $sql = "
                 UPDATE turniere_liga 
@@ -861,7 +881,7 @@ class Turnier
      * Update der Turnier-Ligadaten
      *
      * @param string $tname
-     * @param string $ausrichter
+     * @param int $ausrichter
      * @param string $art
      * @param string $tblock
      * @param string $fixed
@@ -887,8 +907,7 @@ class Turnier
         if ($this->details['tname'] !== $tname) {
             $this->log("Turniername geändert: " . $tname);
         }
-        db::debug($this->details['ausrichter'], true);
-        db::debug($ausrichter, true);
+
         if ($this->details['ausrichter'] !== $ausrichter) {
             $this->log("Ausrichter geändert: " . Team::id_to_name($ausrichter));
         }

@@ -63,10 +63,6 @@ td > * {
     vertical-align: middle;
 }
 
-.pdfvert {
-    vertical-align: middle;
-}
-
 h1 {
   font-size:30px;
 }

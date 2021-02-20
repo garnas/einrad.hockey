@@ -124,16 +124,18 @@
                         >
                     </td>
                 </tr>
-                <?php if ($get_pause($spiel) > 0) { ?>
+                <?php if ($spielplan->get_pause($spiel_id) > 0) { ?>
                     <!-- Spielpause -->
                     <tr>
                         <td>
-                            <?= date("H:i", strtotime($spiel["zeit"]) + $spiel_dauer * 60) ?>
+                            <?= date("H:i",
+                                strtotime($spielplan->spiele[$spiel_id+1]['zeit'])
+                                - $spielplan->get_pause($spiel_id) * 60) ?>
                         </td>
                         <td></td>
                         <td class="w3-center">
                             <i class="material-icons">schedule</i>
-                            <i><?= round($get_pause($spiel) / 60) ?>&nbsp; min Pause</i>
+                            <i><?= $spielplan->get_pause($spiel_id) ?>&nbsp; min Pause</i>
                             <i class="material-icons">schedule</i>
                         </td>
                         <td colspan="2"></td>

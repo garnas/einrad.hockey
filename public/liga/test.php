@@ -4,11 +4,29 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 
-Ligaleitung::umzug2('ausschuss_schiri', "schiriausschuss");
-Ligaleitung::umzug2('ausschuss_liga', "ligaausschuss");
-Ligaleitung::umzug2('ausschuss_oeffi', "oeffentlichkeitsausschuss");
-Ligaleitung::umzug2('ausschuss_technik', "technikausschuss");
-Ligaleitung::umzug3();
+dbi::$db->query("UPDATE turniere_details SET set_spielplan = NULL");
+function umsch (){
+    $sql ="SELECT * FROM turniere_details WHERE spielplan='jgj'";
+    $return = dbi::$db->query($sql)->fetch();
+    foreach ($return as $t){
+        $sql = "SELECT count(*) FROM turniere_liste WHERE turnier_id = ? AND liste='spiele'";
+        $ret = dbi::$db->query($sql, $t['turnier_id'])->fetch_one();
+
+        if ($ret < 4) continue;
+        $sql ="UPDATE turniere_details 
+                INNER JOIN turniere_liga on turniere_details.turnier_id = turniere_liga.turnier_id
+                SET set_spielplan = ? 
+                WHERE turniere_details.turnier_id = ? AND turniere_liga.saison = 26";
+        $params = [$ret . "er_jgj_default", $t['turnier_id']];
+        dbi::$db->query($sql, $params)->log();
+    }
+}
+umsch();
+//Ligaleitung::umzug2('ausschuss_schiri', "schiriausschuss");
+//Ligaleitung::umzug2('ausschuss_liga', "ligaausschuss");
+//Ligaleitung::umzug2('ausschuss_oeffi', "oeffentlichkeitsausschuss");
+//Ligaleitung::umzug2('ausschuss_technik', "technikausschuss");
+//Ligaleitung::umzug3();
 
 function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
 {

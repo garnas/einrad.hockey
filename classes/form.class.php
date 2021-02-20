@@ -168,7 +168,7 @@ class Form
     public static function mailto(null|string|array $email, null|string $name = NULL): string
     {
         if (empty ($email)) {
-            return $name ?? '';
+            return '';
         }
 
         $email = is_array($email) ? implode(',', $email) : $email;

@@ -8,7 +8,7 @@
                 <th><i class="material-icons">group</i><br>Team</th>
                 <th><i class="material-icons">reorder</i><br>Block</th>
                 <th><i class="material-icons">arrow_circle_up</i><br>Wertigkeit</th>
-                <?php if($spielplan->turnier->details['phase'] != 'ergebnis') { ?>
+                <?php if($spielplan->turnier->details['phase'] !== 'ergebnis') { ?>
                     <th><!--<span class="pdf-hide"><i class="material-icons">accessibility</i><br>Trikots</span>--></th>
                 <?php } //endif?>
                 <th><span class="pdf-hide"><i class="material-icons">account_circle</i><br>Ligavertreter</span></th>
@@ -20,7 +20,7 @@
                     <td><?= $team["teamname"] ?></td>
                     <td><?= $team["tblock"] ?></td>
                     <td><?= $team["wertigkeit"] ?></td>
-                    <?php if ($spielplan->turnier->details['phase'] != 'ergebnis') { ?>
+                    <?php if ($spielplan->turnier->details['phase'] !== 'ergebnis') { ?>
                         <td>
                             <span class="pdf-hide">
                                 <?= Form::trikot_punkt($team['trikot_farbe_1'], $team['trikot_farbe_2']) ?>
@@ -37,7 +37,7 @@
             <?php }//end foreach?>
         </table>
     </div>
-    <?php if (in_array('NL', array_column($spielplan->teamliste, 'tblock'))) { ?>
+    <?php if (in_array('NL', array_column($spielplan->teamliste, 'tblock'), true)) { ?>
         <span class="w3-text-grey">* Nichtligateam</span>
     <?php } //endif?>
 </div>
