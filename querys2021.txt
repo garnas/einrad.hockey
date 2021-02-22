@@ -160,3 +160,5 @@ ALTER TABLE `spielplan_paarungen`
 
 ALTER TABLE `spielplan_details`
   ADD CONSTRAINT `spielplan_details_ibfk_1` FOREIGN KEY (`spielplan_paarung`) REFERENCES `spielplan_paarungen` (`spielplan_paarung`);
+
+ALTER TABLE `mailbot` CHANGE `inhalt` `inhalt` VARCHAR(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;

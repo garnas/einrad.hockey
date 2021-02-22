@@ -497,15 +497,15 @@ class Turnier
             $liste = $this->get_anmeldungen();// Order by Warteliste weshalb die Teams in der foreach schleife in der Richtigen reihenfolge behandelt werden
             foreach ($liste['warte'] as $team) {
                 if ($this->check_team_block($team['team_id']) && $freie_plaetze > 0) {
-                    if (!$this->check_doppel_anmeldung($team['team_id'])) { // Das Team wird abgemeldet, wenn es schon am Turnierdatum auf einer Spielen-Liste steht
+                    if ($this->check_doppel_anmeldung($team['team_id'])) {
+                        $this->abmelden($team['team_id']);
+                    } else { // Das Team wird abgemeldet, wenn es schon am Turnierdatum auf einer Spielen-Liste steht
                         $this->set_liste($team['team_id'], 'spiele');
                         if ($send_mail) {
                             MailBot::mail_warte_zu_spiele($this, $team['team_id']);
                         }
                         --$freie_plaetze;
                         $log = true;
-                    } else {
-                        $this->abmelden($team['team_id']);
                     }
                 }
             }
@@ -931,9 +931,9 @@ class Turnier
      * @param $tblock
      * @param $fixed
      * @param $art
-     * @return bool
+     * @return void
      */
-    public function change_turnier_block($tblock, $fixed, $art): bool
+    public function change_turnier_block($tblock, $fixed, $art): void
     {
         $sql = "
                 UPDATE turniere_liga 

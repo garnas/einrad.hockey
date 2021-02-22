@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 
-$turnier_id = (int) $_GET['turnier_id'] ?? 0;
+$turnier_id = (int) $_GET['turnier_id'];
 $turnier = new Turnier ($turnier_id);
 
 if (empty($turnier->details)){
@@ -18,7 +18,7 @@ $kontakt = new Kontakt ($turnier->details['ausrichter']);
 // Email-Adressen hinzufügen
 $turnier->details['email'] = implode(',', $kontakt->get_emails('public'));
 
-$liste = $turnier->get_anmeldungen(); //Anmeldungen für dieses Turnier Form: $liste['warte'] = Array([0] => Array['teamname','team_id','tblock', etc])
+$liste = $turnier->get_anmeldungen(); // Anmeldungen für dieses Turnier Form: $liste['warte'] = Array([0] => Array['teamname','team_id','tblock', etc])
 
 // Parsing
 if(in_array($turnier->details['art'],['I','II','III'])){
@@ -98,7 +98,17 @@ include '../../templates/header.tmp.php';
                 <?=$turnier->details['hallenname']?><br>
                 <?=$turnier->details['strasse']?><br>
                 <?=$turnier->details['plz'].' '.$turnier->details['ort']?><br>
-                <?=Form::link(str_replace(' ', '%20', 'https://www.google.de/maps/search/' . $turnier->details['hallenname'] ."+". $turnier->details['strasse'] ."+" . $turnier->details['plz'] ."+". $turnier->details['ort'] .'/'), 'Google Maps', true);?>
+                <?=Form::link(
+                        str_replace(' '
+                            , '%20'
+                            , 'https://www.google.de/maps/search/' . $turnier->details['hallenname']
+                                . "+" . $turnier->details['strasse']
+                                . "+" . $turnier->details['plz']
+                                . "+" . $turnier->details['ort']
+                                . '/'),
+                        'Google Maps',
+                        true,
+                        'launch')?>
                 <?php if (!empty($turnier->details['haltestellen'])){?><p style="white-space: normal;"><i>Haltestellen: <?=$turnier->details['haltestellen']?></i></p> <?php } // endif?>
             </td>
         </tr>
@@ -140,8 +150,8 @@ include '../../templates/header.tmp.php';
         </tr>
     </table>
 </div>
-<!--Anmeldungen / Listen -->
 
+<!--Anmeldungen / Listen -->
 <p class="w3-text-grey w3-border-bottom w3-border-grey">Spielen-Liste</p> 
 <p><i>
     <?php if (!empty($liste['spiele'])){?>

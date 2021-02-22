@@ -133,7 +133,9 @@ if (isset($_POST['change_turnier'])) {
     }
 
     // Ändern der Turnierdaten
-    if (!$error){
+    if ($error) {
+        Form::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht geändert - alle Änderungen bitte neu eingeben.");
+    } else {
         // Turnierblock erweitern
         if ($erweitern){
             $turnier->change_turnier_block($tblock, $fixed, $art);
@@ -153,7 +155,5 @@ if (isset($_POST['change_turnier'])) {
         Form::info("Turnierdaten wurden geändert");
         header ('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->id);
         die();
-    }else{
-        Form::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht geändert - alle Änderungen bitte neu eingeben.");
     }
 }

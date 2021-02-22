@@ -36,7 +36,6 @@ class MailBot
     {
         if (Env::ACTIVATE_EMAIL) {
             if ($mailer->send()) {
-                Form::log(Config::LOG_EMAILS, 'Mail erfolgreich versendet');
                 return true;
             }
             Form::log(Config::LOG_EMAILS, 'Fehler: ' . $mailer->ErrorInfo);
@@ -139,8 +138,7 @@ class MailBot
             SET mail_status = ?, zeit = zeit, fehler = ? 
             WHERE mail_id = ?
             ";
-        dbi::$db->query($sql, $mail_id, $mail_status, $fehler)->log();
-
+        dbi::$db->query($sql, $mail_status, $fehler, $mail_id)->log();
     }
 
     /**

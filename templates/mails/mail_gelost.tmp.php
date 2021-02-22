@@ -6,6 +6,6 @@
 </p>
 <p>
     <a href="<?= Env::BASE_URL . "/liga/turnier_details.php?turnier_id=" . $turnier->id ?>">
-        Erfahre hier mehr.
+        Link des Turnieres
     </a>
 </p>
