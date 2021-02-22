@@ -39,9 +39,9 @@ if (isset($_POST['ergebnis_eintragen'])) {
         Form::error("Es wurden Teams doppelt eingetragen!");
         $error = true;
     }
-
-    for ($platz = 1; $platz <= count($teamliste); $platz++) {
-        if (empty($_POST['team_id'][$platz]) or empty($_POST['ergebnis'][$platz])) {
+    $anzahl_teams = count($teamliste);
+    for ($platz = 1; $platz <= $anzahl_teams; $platz++) {
+        if (empty($_POST['team_id'][$platz]) || empty($_POST['ergebnis'][$platz])) {
             $error = true;
             Form::error("Formular wurde unvollständig übermittelt");
             break;
@@ -53,7 +53,7 @@ if (isset($_POST['ergebnis_eintragen'])) {
     }
     // Kein Fehler
     $turnier->delete_ergebnis();
-    for ($platz = 1; $platz <= count($teamliste); $platz++) {
+    for ($platz = 1; $platz <= $anzahl_teams; $platz++) {
         $turnier->set_ergebnis($_POST['team_id'][$platz], $_POST['ergebnis'][$platz], $platz);
     }
     $turnier->set_phase('ergebnis');
@@ -78,8 +78,11 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
         $error = true;
     }
     if (!$error) {
-        if (Spielplan::set_spielplan($turnier))
+        if (Spielplan::set_spielplan($turnier)){
             Form::info("Das Turnier wurde in die Spielplan-Phase versetzt. Der Spielplan wird jetzt angezeigt.");
+        } else {
+            Form::error("Spielplan konnte nicht erstellt werden.");
+        }
         header('Location: ../liga/spielplan.php?turnier_id=' . $turnier->id);
         die();
     }

@@ -11,5 +11,4 @@ if (!Spielplan::check_exist($turnier_id)) {
 }
 
 // Spielplan laden
-$spielplan = new Spielplan((new Turnier ($turnier_id)));
-
+$spielplan = new Spielplan_JgJ((new Turnier ($turnier_id)));

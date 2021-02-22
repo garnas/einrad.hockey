@@ -3,8 +3,15 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
+function test (?int $test) {
+    return $test;
+}
+dbi::debug([] ?? 'TESST');
+dbi::debug(test((int) "0"),true);
+dbi::debug(test((int) NULL),true);
+dbi::debug(test((int) ''),true);
 
-dbi::$db->query("UPDATE turniere_details SET set_spielplan = NULL");
+//dbi::$db->query("UPDATE turniere_details SET set_spielplan = NULL");
 function umsch (){
     $sql ="SELECT * FROM turniere_details WHERE spielplan='jgj'";
     $return = dbi::$db->query($sql)->fetch();
@@ -12,7 +19,9 @@ function umsch (){
         $sql = "SELECT count(*) FROM turniere_liste WHERE turnier_id = ? AND liste='spiele'";
         $ret = dbi::$db->query($sql, $t['turnier_id'])->fetch_one();
 
-        if ($ret < 4) continue;
+        if ($ret < 4) {
+            continue;
+        }
         $sql ="UPDATE turniere_details 
                 INNER JOIN turniere_liga on turniere_details.turnier_id = turniere_liga.turnier_id
                 SET set_spielplan = ? 
@@ -21,7 +30,8 @@ function umsch (){
         dbi::$db->query($sql, $params)->log();
     }
 }
-umsch();
+//umsch();
+
 //Ligaleitung::umzug2('ausschuss_schiri', "schiriausschuss");
 //Ligaleitung::umzug2('ausschuss_liga', "ligaausschuss");
 //Ligaleitung::umzug2('ausschuss_oeffi', "oeffentlichkeitsausschuss");

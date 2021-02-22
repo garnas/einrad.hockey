@@ -30,3 +30,9 @@ CREATE TABLE `ligaleitung` (
  KEY `spieler_id` (`spieler_id`),
  CONSTRAINT `ligaleitung_ibfk_1` FOREIGN KEY (`spieler_id`) REFERENCES `spieler` (`spieler_id`)
 );
+
+DELETE s FROM `spiele` as s LEFT JOIN turniere_liga as t on t.turnier_id = s.turnier_id WHERE t.turnier_id is NULL
+ALTER TABLE `spiele` ADD FOREIGN KEY (`team_id_a`) REFERENCES `teams_liga`(`team_id`) ON DELETE RESTRICT ON UPDATE RESTRICT; ALTER TABLE `spiele` ADD FOREIGN KEY (`team_id_b`) REFERENCES `teams_liga`(`team_id`) ON DELETE RESTRICT ON UPDATE RESTRICT; ALTER TABLE `spiele` ADD FOREIGN KEY (`schiri_team_id_a`) REFERENCES `teams_liga`(`team_id`) ON DELETE RESTRICT ON UPDATE RESTRICT; ALTER TABLE `spiele` ADD FOREIGN KEY (`schiri_team_id_b`) REFERENCES `teams_liga`(`team_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `spiele` ADD FOREIGN KEY (`turnier_id`) REFERENCES `turniere_liga`(`turnier_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
