@@ -27,7 +27,7 @@ $statistik['ges_tore'] = Neuigkeit::get_alle_tore();
 $statistik['ges_spiele'] = Neuigkeit::get_alle_spiele();
 
 // Zeitanzeige der Neuigkeiteneinträge verschönern
-foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit) {
+foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit) { //Todo in get_neuikgeiten rein
     $delta_zeit = (time() - strtotime($neuigkeiten[$neuigkeiten_id]['zeit'])) / (60 * 60); //in Stunden
     if ($delta_zeit < 24) {
         $zeit = ($delta_zeit <= 1.5) ? "gerade eben" : "vor " . round($delta_zeit) . " Stunden";

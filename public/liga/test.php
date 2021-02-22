@@ -3,15 +3,8 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
-function test (?int $test) {
-    return $test;
-}
-dbi::debug([] ?? 'TESST');
-dbi::debug(test((int) "0"),true);
-dbi::debug(test((int) NULL),true);
-dbi::debug(test((int) ''),true);
 
-//dbi::$db->query("UPDATE turniere_details SET set_spielplan = NULL");
+
 function umsch (){
     $sql ="SELECT * FROM turniere_details WHERE spielplan='jgj'";
     $return = dbi::$db->query($sql)->fetch();
@@ -32,11 +25,11 @@ function umsch (){
 }
 //umsch();
 
-//Ligaleitung::umzug2('ausschuss_schiri', "schiriausschuss");
-//Ligaleitung::umzug2('ausschuss_liga', "ligaausschuss");
-//Ligaleitung::umzug2('ausschuss_oeffi', "oeffentlichkeitsausschuss");
-//Ligaleitung::umzug2('ausschuss_technik', "technikausschuss");
-//Ligaleitung::umzug3();
+Ligaleitung::umzug2('ausschuss_schiri', "schiriausschuss");
+Ligaleitung::umzug2('ausschuss_liga', "ligaausschuss");
+Ligaleitung::umzug2('ausschuss_oeffi', "oeffentlichkeitsausschuss");
+Ligaleitung::umzug2('ausschuss_technik', "technikausschuss");
+Ligaleitung::umzug3(); //Ausbilder
 
 function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
 {

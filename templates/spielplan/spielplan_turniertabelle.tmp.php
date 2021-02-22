@@ -15,7 +15,7 @@
                 <i class="material-icons">sports_hockey</i>
                 <br>Spiele
             </th>
-            <th class="w3-hide-small">
+            <th>
                 <i class="material-icons">workspaces</i>
                 <br>Punkte
             </th>
@@ -31,10 +31,12 @@
                 <i class="material-icons">remove</i>
                 <br>Gegentore
             </th>
-            <th>
-                <i class="material-icons">emoji_events</i>
-                <br>Ligapunkte
-            </th>
+            <?php if (in_array($spielplan->turnier->details['art'], ['I', 'II', 'III'])) { ?>
+                <th>
+                    <i class="material-icons">emoji_events</i>
+                    <br>Ligapunkte
+                </th>
+            <?php } //end if ?>
         </tr>
         <?php foreach ($spielplan->platzierungstabelle as $team_id => $x) { ?>
             <tr>
@@ -53,11 +55,17 @@
                     <?= $x["teamname"] ?>
                 </td>
                 <td class="w3-hide-small"><?= $x['statistik']["spiele"] ?></td>
-                <td class="w3-hide-small"><?= $x['statistik']["punkte"] ?? '--' ?></td>
+                <td><?= $x['statistik']["punkte"] ?? '--' ?></td>
                 <td class="w3-hide-small"><?= $x['statistik']["tordifferenz"] ?? '--' ?></td>
                 <td class="w3-hide-small"><?= $x['statistik']["tore"] ?? '--' ?></td>
                 <td class="w3-hide-small"><?= $x['statistik']["gegentore"] ?? '--' ?></td>
-                <td><?= ($spielplan->check_penalty_team($team_id) || !$spielplan->check_tabelle_einblenden()) ? '--' : $x["ligapunkte"] ?></td>
+                <?php if (in_array($spielplan->turnier->details['art'], ['I', 'II', 'III'])) { ?>
+                    <td>
+                        <?= ($spielplan->check_penalty_team($team_id) || !$spielplan->check_tabelle_einblenden())
+                            ? '--'
+                        : $x["ligapunkte"] ?>
+                    </td>
+                <?php } //end if ?>
             </tr>
         <?php }//end foreach?>
     </table>
@@ -100,10 +108,12 @@
                         <i class="material-icons">remove</i>
                         <br>Gegentore
                     </th>
-                    <th>
-                        <i class="material-icons">emoji_events</i>
-                        <br>Ligapunkte
-                    </th>
+                    <?php if (in_array($spielplan->turnier->details['art'], ['I', 'II', 'III'])) { ?>
+                        <th>
+                            <i class="material-icons">emoji_events</i>
+                            <br>Ligapunkte
+                        </th>
+                    <?php } //end if ?>
                 </tr>
                 <?php foreach ($spielplan->platzierungstabelle as $team_id => $x) { ?>
                     <tr>
@@ -114,7 +124,13 @@
                         <td><?= $x['statistik']["tordifferenz"] ?? '--' ?></td>
                         <td><?= $x['statistik']["tore"] ?? '--' ?></td>
                         <td><?= $x['statistik']["gegentore"] ?? '--' ?></td>
-                        <td><?= $x["ligapunkte"] ?></td>
+                        <?php if (in_array($spielplan->turnier->details['art'], ['I', 'II', 'III'])) { ?>
+                            <td>
+                                <?= ($spielplan->check_penalty_team($team_id) || !$spielplan->check_tabelle_einblenden())
+                                    ? '--'
+                                    : $x["ligapunkte"] ?>
+                            </td>
+                        <?php } //end if ?>
                     </tr>
                 <?php }//end foreach?>
             </table>
@@ -123,13 +139,10 @@
 </div>
 
 <script>
-    // Get the modal
-    var modal = document.getElementById('tabelle_details_mobile');
-
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+        if (event.target == document.getElementById('tabelle_details_mobile')) {
+            document.getElementById('tabelle_details_mobile').style.display = "none";
         }
     }
 </script>

@@ -115,20 +115,6 @@ class LigaLeitung
         return false;
     }
 
-    static function umzug()
-    {
-        $sql = "
-                SELECT * 
-                FROM ausschuss_liga";
-        $data = dbi::$db->query($sql)->fetch();
-
-        foreach ($data as $x) {
-            $sql = "INSERT INTO ligaleitung (spieler_id, funktion, login, passwort, email)
-                   Values(?,?,?,?,?)";
-            dbi::$db->query($sql, $i++, 'ligaausschuss', $x['login_name'], $x['passwort'], $x['email'])->log();
-        }
-    }
-
     static function umzug2($table, $funktion)
     {
         $sql = "

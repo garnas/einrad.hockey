@@ -104,7 +104,8 @@
                                value='<?= $spiel["penalty_a"] ?>'
                                class='w3-input w3-border w3-round w3-center w3-text-secondary'
                                style='padding: 2px; width: 65px; display: inline-block;'
-                               <?= ($spielplan->check_penalty_spiel($spiel_id) || $spielplan->validate_penalty_spiel($spiel)) ?: 'disabled placeholder = "/"' ?>
+                               <?= !($spielplan->check_penalty_spiel($spiel_id)
+                                   || $spielplan->validate_penalty_spiel($spiel)) ? 'disabled placeholder = "/"' : '' ?>
                                type='number'
                                autocomplete='off'
                                min='0'
@@ -116,7 +117,8 @@
                                value='<?= $spiel["penalty_b"] ?>'
                                class='w3-input w3-border w3-round w3-center w3-text-secondary'
                                style='padding: 2px; width: 65px; display: inline-block;'
-                               <?= ($spielplan->check_penalty_spiel($spiel_id) || $spielplan->validate_penalty_spiel($spiel)) ?: 'disabled placeholder = "/"' ?>
+                                <?= !($spielplan->check_penalty_spiel($spiel_id)
+                                    || $spielplan->validate_penalty_spiel($spiel)) ? 'disabled placeholder = "/"' : '' ?>
                                type='number'
                                autocomplete='off'
                                min='0'

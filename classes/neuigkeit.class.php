@@ -98,8 +98,8 @@ class Neuigkeit
         }
         foreach ($neuigkeiten as $key => $neuigkeit) {
             if ($neuigkeit['eingetragen_von'] == 'Ligaausschuss') {
-                $neuigkeiten[$key]['inhalt'] = htmlspecialchars_decode($neuigkeit['inhalt']);
-                $neuigkeiten[$key]['titel'] = htmlspecialchars_decode($neuigkeit['titel']);
+                $neuigkeiten[$key]['inhalt'] = htmlspecialchars_decode($neuigkeit['inhalt'], ENT_QUOTES);
+                $neuigkeiten[$key]['titel'] = htmlspecialchars_decode($neuigkeit['titel'], ENT_QUOTES);
             }
         }
         return $neuigkeiten; // Escaping in Funktion, nicht bei Ligaausschuss als Autor

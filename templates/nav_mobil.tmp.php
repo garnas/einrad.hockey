@@ -58,7 +58,7 @@
         <h3 class="w3-margin-left"><i style="vertical-align: -16%" class="material-icons w3-xlarge">format_list_bulleted</i> SONSTIGES</h3>
     </div>
     <?php foreach(Nav::get_sonstiges() as $link){ ?>
-        <a href="<?= $link[0] ?>" class="w3-bar-item w3-button <?= $link[2] ?>"><?= $link[1] ?></a>
+        <a href="<?= $link[0] ?>" class="w3-bar-item w3-button <?= $link[2] ?? '' ?>"><?= $link[1] ?></a>
     <?php } //end for ?>
     <a href="#" class="w3-bar-item w3-button"></a>
 </div>

@@ -69,7 +69,7 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
         Form::error("Das Turnier muss in der Meldephase sein.");
         $error = true;
     }
-    if (3 > count($teamliste) or count($teamliste) > 7) {
+    if (3 > count($teamliste) || count($teamliste) > 8) {
         Form::error("Falsche Anzahl an Teams. Nur 4er - 7er Jeder-gegen-Jeden Spielpläne können erstellt werden.");
         $error = true;
     }
@@ -106,9 +106,7 @@ if (isset($_POST['spielplan_hochladen'])) {
         $target_dir = "../uploads/s/spielplan/";
         // PDF wird hochgeladen, target_file_pdf = false, falls fehlgeschlagen.
         $target_file_pdf = Neuigkeit::upload_dokument($_FILES["spielplan_file"], $target_dir);
-        if ($target_file_pdf === false) {
-            Form::error("Fehler beim Upload");
-        } else {
+        if ($target_file_pdf !== false) {
             if ($_POST['sp_or_erg'] === 'ergebnis') {
                 $turnier->upload_spielplan($target_file_pdf, 'ergebnis');
                 Form::notice("Manueller Spielplan hochgeladen. Das Turnier wurde in die Ergebnis-Phase versetzt.");
@@ -119,6 +117,8 @@ if (isset($_POST['spielplan_hochladen'])) {
             header("Location: lc_spielplan_verwalten.php?turnier_id=$turnier->id" );
             die();
         }
+        Form::error("Fehler beim Upload");
+
     } else {
         Form::error("Es wurde kein Spielplan gefunden");
     }

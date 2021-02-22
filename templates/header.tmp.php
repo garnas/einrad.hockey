@@ -37,11 +37,26 @@
     if (isset($_SESSION['logins']['la'])) include 'nav_ligacenter.tmp.php';
     if (isset($_SESSION['logins']['team'])) include 'nav_teamcenter.tmp.php';
     ?>
-
     <!-- Zentrierung der Webseite und Breite mit welcher diese dargestellt werden soll -->
     <div class="w3-content" style="max-width:<?= Config::$page_width ?>;">
         <div class="w3-container">
-<?php // Fehlermeldungen darstellen
-Form::print_messages();
-            
-            
+<!--            --><?php //if (!empty($_SESSION['messages'])) { ?>
+<!--            <div class="w3-modal" id="meldungen" style="display: block; cursor: pointer;">-->
+<!--                    <div class="w3-modal-content" style="background-color: transparent">-->
+<!--                        <span onclick="document.getElementById('meldungen').style.display='none'"-->
+<!--                              class="w3-button w3-large w3-display-topright"-->
+<!--                              style="background-color: transparent">-->
+<!--                            &times;-->
+<!--                        </span>-->
+                        <?php Form::print_messages(); ?>
+<!--                    </div>-->
+<!--            </div>-->
+<!--                <script>-->
+<!--                    // When the user clicks anywhere outside of the modal, close it-->
+<!--                    window.addEventListener("click", function(event) {-->
+<!--                        if (event.target === document.getElementById('meldungen')) {-->
+<!--                            document.getElementById('meldungen').style.display = "none";-->
+<!--                        }-->
+<!--                    });-->
+<!--                </script>-->
+<!--            --><?php //} // end if ?>
