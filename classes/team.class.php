@@ -156,7 +156,7 @@ class Team
     }
 
     /**
-     * Gibt ein Array mit allen aktiven Teamnamen zurück
+     * Gibt ein Array mit allen aktiven Teamnamen zurück (team_id => teamname)
      *
      * @return array
      */

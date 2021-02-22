@@ -6,7 +6,7 @@ if(!isset($_SESSION['logins']['la'])) {
   header('Location: ../ligacenter/lc_login.php?redirect');
   die();
 }
-MailBot::warning_mail(); // Sendet eine Warnung, wenn Mails nicht versendet werden konnten.
+MailBot::warning(); // Sendet eine Warnung, wenn Mails nicht versendet werden konnten.
 
 $titel = 'Ligacenter';
 
