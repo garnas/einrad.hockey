@@ -18,8 +18,8 @@ if (empty($turnier->details)) {
 
 //Vorhandenes Ergebnis anzeigen
 $teamliste = $turnier->get_liste_spielplan();
+$anzahl_teams = count($teamliste);
 $turnier_ergebnis = $turnier->get_ergebnis();
-
 //Ergebnis löschen
 if (isset($_POST['ergebnis_loeschen'])) {
     $turnier->delete_ergebnis();
@@ -39,7 +39,6 @@ if (isset($_POST['ergebnis_eintragen'])) {
         Form::error("Es wurden Teams doppelt eingetragen!");
         $error = true;
     }
-    $anzahl_teams = count($teamliste);
     for ($platz = 1; $platz <= $anzahl_teams; $platz++) {
         if (empty($_POST['team_id'][$platz]) || empty($_POST['ergebnis'][$platz])) {
             $error = true;
@@ -69,8 +68,8 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
         Form::error("Das Turnier muss in der Meldephase sein.");
         $error = true;
     }
-    if (3 > count($teamliste) || count($teamliste) > 8) {
-        Form::error("Falsche Anzahl an Teams. Nur 4er - 7er Jeder-gegen-Jeden Spielpläne können erstellt werden.");
+    if ($anzahl_teams < 4 || $anzahl_teams > 8) {
+        Form::error("Falsche Anzahl an Teams. Nur 4er - 8er Jeder-gegen-Jeden Spielpläne können erstellt werden.");
         $error = true;
     }
     if (!empty($turnier->details['spielplan_link'])) {
@@ -80,11 +79,11 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
     if (!$error) {
         if (Spielplan::fill_spielplan($turnier)){
             Form::info("Das Turnier wurde in die Spielplan-Phase versetzt. Der Spielplan wird jetzt angezeigt.");
-        } else {
-            Form::error("Spielplan konnte nicht erstellt werden.");
+            header('Location: ../liga/spielplan.php?turnier_id=' . $turnier->id);
+            die();
         }
-        header('Location: ../liga/spielplan.php?turnier_id=' . $turnier->id);
-        die();
+
+        Form::error("Spielplan konnte nicht erstellt werden.");
     }
 }
 
@@ -146,16 +145,16 @@ include '../../templates/header.tmp.php';
 ?>
 
     <!-- Überschrift -->
-    <h2 class="w3-text-primary">
+    <h1 class="w3-text-primary">
         <span class="w3-text-grey">Spielplan/Ergebnis</span>
         <br>
         <?= $turnier->details['datum'] ?> <?= $turnier->details['tname'] ?> <?= $turnier->details['ort'] ?>
         (<?= $turnier->details['tblock'] ?>)
         <br>
-        <span class="w3-text-secondary">(<?= $turnier->details['phase'] ?>)</span>
-    </h2>
+    </h1>
 
     <!-- Teamliste -->
+    <h3>Spielen-Liste</h3>
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped">
             <thead class="w3-primary">
@@ -178,18 +177,21 @@ include '../../templates/header.tmp.php';
     </div>
 
     <!-- Dynamischer Spielplan erstellen -->
-    <h2 class="w3-text-primary w3-bottombar">Automatischen Spielplan erstellen</h2>
-
+    <h2 class="w3-text-primary w3-bottombar">JgJ-Spielplan erstellen</h2>
     <?php if (empty($turnier->details['link_spielplan'])) { ?>
         <form method="post">
             <?php if (Spielplan::check_exist($turnier->id)) { ?>
                 <p>
-                    <input type="submit" name="auto_spielplan_loeschen" value="Dynamischen Spielplan löschen"
+                    <input type="submit"
+                           name="auto_spielplan_loeschen"
+                           value="JgJ-Spielplan löschen"
                            class="w3-button w3-secondary">
                 </p>
             <?php } else { ?>
                 <p>
-                    <input type="submit" name="auto_spielplan_erstellen" value="Dynamischen Spielplan erstellen"
+                    <input type="submit"
+                           name="auto_spielplan_erstellen"
+                           value="JgJ-Spielplan erstellen"
                            class="w3-button w3-tertiary">
                 </p>
             <?php } // endif ?>
@@ -204,7 +206,7 @@ include '../../templates/header.tmp.php';
     <form method="post" enctype="multipart/form-data">
 
         <?php if (Spielplan::check_exist($turnier->id)) { ?>
-            <p>Bitte zuerst dynamischen Spielplan löschen.</p>
+            <p>Bitte zuerst den dynamischen Spielplan löschen.</p>
         <?php } else { ?>
 
             <?php if (empty($turnier->details['link_spielplan'])) { ?>
@@ -236,7 +238,9 @@ include '../../templates/header.tmp.php';
                 <?= Form::link($turnier->details['link_spielplan'], 'Spielplan/Ergebnis herunterladen', true); ?>
             </p>
             <p>
-                <input type="submit" name="spielplan_delete" value="Vorhandene Spielplandatei löschen"
+                <input type="submit"
+                       name="spielplan_delete"
+                       value="Vorhandene Spielplandatei löschen"
                        class="w3-button w3-secondary">
             </p>
         <?php } //end if?>
@@ -254,7 +258,7 @@ include '../../templates/header.tmp.php';
                 <th>Turnierergebnis</th>
             </tr>
             </thead>
-            <?php for ($platz = 1; $platz <= count($teamliste); $platz++) { ?>
+            <?php for ($platz = 1; $platz <= $anzahl_teams; $platz++) { ?>
                 <tr>
                     <td><?= $platz ?></td>
                     <td>

@@ -161,4 +161,8 @@ ALTER TABLE `spielplan_paarungen`
 ALTER TABLE `spielplan_details`
   ADD CONSTRAINT `spielplan_details_ibfk_1` FOREIGN KEY (`spielplan_paarung`) REFERENCES `spielplan_paarungen` (`spielplan_paarung`);
 
+ALTER TABLE `turniere_details` ADD FOREIGN KEY (`set_spielplan`) REFERENCES `spielplan_details`(`spielplan`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
 ALTER TABLE `mailbot` CHANGE `inhalt` `inhalt` VARCHAR(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+
+ALTER TABLE `turniere_details` ADD `set_spielplan` VARCHAR(30) NULL AFTER `startgebuehr`;

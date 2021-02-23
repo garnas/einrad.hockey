@@ -56,11 +56,11 @@ class Spielplan
         $this->anzahl_spiele = $this->anzahl_teams - 1;
 
         // Passen die angemeldeten Teams zu den im Spielplan hinterlegten Teams?
-        foreach ($this->spiele as $spiel){
+        foreach ($this->spiele as $spiel) {
             if (
                 !array_key_exists($spiel['team_id_a'], $this->teamliste)
                 || !array_key_exists($spiel['team_id_b'], $this->teamliste)
-            ){
+            ) {
                 trigger_error("Teams und Spielplan passen nicht zusammen.", E_USER_ERROR);
             }
         }
@@ -73,11 +73,11 @@ class Spielplan
      */
     public function get_pausen(): array
     {
-        if (empty($this->details['pausen'])){
+        if (empty($this->details['pausen'])) {
             return [];
         }
 
-        foreach (explode('#',$this->details['pausen']) as $pause){
+        foreach (explode('#', $this->details['pausen']) as $pause) {
             $pause = explode(',', $pause);
             $pausen[$pause[0]] = $pause[1]; // Spiel-ID => Minuten an Pause nach dieser Spiel-ID
         }
@@ -116,7 +116,7 @@ class Spielplan
 
         $spielplan_art = self::get_vorlage($turnier);
 
-        if ($spielplan_art === false){
+        if ($spielplan_art === false) {
             Form::error("Es konnte keine Spielplanvorlage ermittelt werden.");
             return false;
         }
@@ -136,7 +136,7 @@ class Spielplan
         }
 
         // Spielplan erstellen
-        foreach ($paarungen as $spiel){
+        foreach ($paarungen as $spiel) {
             $sql = "
                     INSERT INTO spiele (turnier_id, spiel_id, team_id_a, team_id_b, schiri_team_id_a, schiri_team_id_b)
                     VALUES (?,?,?,?,?,?)
@@ -148,13 +148,15 @@ class Spielplan
                 $teamliste[$spiel["team_b"]]["team_id"],
                 $teamliste[$spiel["schiri_a"]]["team_id"],
                 $teamliste[$spiel["schiri_b"]]["team_id"]
-                ];
+            ];
             dbi::$db->query($sql, $params)->log();
         }
 
         // Turnierlog
-        $turnier->log("Automatischer Spielplan (" . $spielplan_art . ") erstellt.");
+        $turnier->log("Automatischer Jgj-Spielplan erstellt.");
         $turnier->set_phase('spielplan');
+        $turnier->set('set_spielplan', $spielplan_art);
+
         return true;
     }
 
@@ -168,33 +170,31 @@ class Spielplan
     public static function get_vorlage(Turnier $turnier, ?int $anzahl_teams = NULL): false|string
     {
         // Wurde ein spezieller Spielplan angenommen?
-        if (!empty($turnier->details['set_spielplan'])){
+        if (!empty($turnier->details['set_spielplan'])) {
             return $turnier->details['set_spielplan'];
         }
 
         // Wie viele Teams sind angemeldet?
-        if (is_null($anzahl_teams)){
+        if (is_null($anzahl_teams)) {
             $anzahl_teams = count($turnier->get_liste_spielplan());
         }
 
         // Handelt es sich um einen jgj Spielplan?
-        if ($turnier->details['spielplan'] !== 'jgj' && $anzahl_teams === 8){
+        if ($turnier->details['spielplan'] !== 'jgj' && $anzahl_teams === 8) {
             return false;
         }
 
         // Default Spielplan zurückgeben, wenn keiner Vorhanden, dann false
-        $vorlage = match($anzahl_teams){
+        $vorlage = match ($anzahl_teams) {
             4 => '4er_jgj_default',
             5 => '5er_jgj_default',
             6 => '6er_jgj_default',
             7 => '7er_jgj_default',
             8 => '8er_jgj_versetzt',
-            DEFAULT => false,
+            default => false,
         };
-        if ($vorlage) {
-            $turnier->set('set_spielplan', $vorlage);
-            return $vorlage;
-        }
+
+        return false;
     }
 
     /**
@@ -259,7 +259,7 @@ class Spielplan
         $spielzeit = ($this->details["anzahl_halbzeiten"] * $this->details["halbzeit_laenge"]
                 + $this->details["puffer"]) * 60; // In Sekunden für Unixzeit
         $startzeit = strtotime($this->turnier->details["startzeit"]);
-        foreach($spiele as $spiel_id => $spiel) {
+        foreach ($spiele as $spiel_id => $spiel) {
             $spiele[$spiel_id]["zeit"] = date("H:i", $startzeit);
             // 4er Spielplan Extrapause nach geraden Spielen
             $startzeit += $spielzeit + $this->get_pause($spiel_id) * 60;
@@ -287,10 +287,10 @@ class Spielplan
 
         // Damit die nicht eingetragene Tore nicht als 0 : 0 gewertet werden, müssen '' --> NULL werden
         $params = [
-            !is_numeric($tore_a) ? NULL : (int) $tore_a,
-            !is_numeric($tore_b) ? NULL : (int) $tore_b,
-            !is_numeric($penalty_a) ? NULL : (int) $penalty_a,
-            !is_numeric($penalty_b) ? NULL : (int) $penalty_b,
+            !is_numeric($tore_a) ? NULL : (int)$tore_a,
+            !is_numeric($tore_b) ? NULL : (int)$tore_b,
+            !is_numeric($penalty_a) ? NULL : (int)$penalty_a,
+            !is_numeric($penalty_b) ? NULL : (int)$penalty_b,
             $spiel_id
         ];
         dbi::$db->query($sql, $params)->log();
@@ -346,7 +346,7 @@ class Spielplan
         $team_id_a = $spiel['team_id_a'];
         $team_id_b = $spiel['team_id_b'];
         $farben = [
-            $team_id_a  => [
+            $team_id_a => [
                 1 => $this->teamliste[$spiel['team_id_a']]['trikot_farbe_1'],
                 2 => $this->teamliste[$spiel['team_id_a']]['trikot_farbe_2']
             ],
@@ -379,10 +379,10 @@ class Spielplan
         };
 
         $max_delta_e = 0;
-        foreach($farben[$team_id_a] as $farbe_a){
-            foreach ($farben[$team_id_b] as $farbe_b){
+        foreach ($farben[$team_id_a] as $farbe_a) {
+            foreach ($farben[$team_id_b] as $farbe_b) {
                 $delta_e = $get_delta_e($farbe_a, $farbe_b);
-                if ($delta_e > $max_delta_e){
+                if ($delta_e > $max_delta_e) {
                     if ($max_delta_e > 400) { // 400 Threshold inwiefern Trikotfarbe 1 ausreichend ist
                         continue;
                     }
