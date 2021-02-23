@@ -18,7 +18,7 @@ if (isset($_POST['spieler_auswahl'])) {
 //Formular unten nur Anzeigen wenn eine existierende SpielerID übergeben wurde wurde
 
 if (isset($_GET['spieler_id'])) {
-    $spieler_id = (int) ($_GET['spieler_id'] ?? 0);
+    $spieler_id = (int) $_GET['spieler_id'];
     if (array_key_exists($spieler_id, $spieler_liste)) {
         $spieler = new Spieler($spieler_id);
         $spieler->details = $spieler->get_details();
@@ -42,7 +42,7 @@ if (isset($_POST['spieler_aendern'])) {
         $error = true;
     }
     $team_id = Team::name_to_id($teamname);
-    if (Team::is_ligateam($team_id)) {
+    if (!Team::is_ligateam($team_id)) {
         Form::error("Das Team $teamname wurde nicht gefunden");
         $error = true;
     }
