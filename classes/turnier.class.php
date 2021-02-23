@@ -23,7 +23,7 @@ class Turnier
      * Turnier constructor.
      * @param $turnier_id
      */
-    function __construct($turnier_id)
+    public function __construct($turnier_id)
     {
         $this->id = $turnier_id;
         $this->details = $this->get_turnier_details();
@@ -58,7 +58,7 @@ class Turnier
                                           string $art, string $tblock, string $fixed, string $datum, string $plaetze,
                                           string $spielplan, string $hallenname, string $strasse, string $plz,
                                           string $ort, string $haltestellen, string $hinweis, string $startgebuehr,
-                                          string $organisator, string $handy, string $phase)
+                                          string $organisator, string $handy, string $phase): Turnier
     {
         // turniere_liga füllen
         $params = [$tname, $ausrichter, $art, $tblock, $fixed, $datum, $phase, Config::SAISON];
@@ -147,7 +147,7 @@ class Turnier
      *
      * @return array
      */
-    function get_turnier_details(): array
+    public function get_turnier_details(): array
     {
         $sql = "
                 SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname
@@ -196,7 +196,7 @@ class Turnier
      * Format: zb. $liste['liste'][Array der Anmeldedaten der Angemeldeten Teams auf der entsprechenden Liste]
      * @return array
      */
-    function get_anmeldungen(): array
+    public function get_anmeldungen(): array
     {
         $sql = "
                 SELECT turniere_liste.*, teams_liga.teamname, teams_liga.ligateam
@@ -215,10 +215,6 @@ class Turnier
         }
         return $liste;
     }
-
-    /********************
-     * Turnierdatenergebnisse
-     *******************/
 
     /**
      * Get alle Turnieranmeldungen des Turniers für den Spielplan nach Wertigkeit sortiert.
@@ -248,8 +244,8 @@ class Turnier
         }
         if (!empty($spielen_liste)) {
             // Array nach Wertigkeit sortieren
-            uasort($spielen_liste, function ($team_a, $team_b) {
-                return ((int)$team_b['wertigkeit'] <=> (int)$team_a['wertigkeit']);
+            uasort($spielen_liste, static function ($team_a, $team_b) {
+                return ((int) $team_b['wertigkeit'] <=> (int) $team_a['wertigkeit']);
             });
         }
         return $spielen_liste ?? [];
@@ -272,7 +268,7 @@ class Turnier
     /**
      * Löscht Turnierergebnisse des Turnieres aus der DB
      */
-    public function delete_ergebnis()
+    public function delete_ergebnis(): void
     {
         $sql = "
                 DELETE FROM turniere_ergebnisse 
@@ -322,7 +318,7 @@ class Turnier
      *
      * @param array $platzierungstabelle
      */
-    public function set_ergebnisse(array $platzierungstabelle)
+    public function set_ergebnisse(array $platzierungstabelle): void
     {
         // Ergebns eintragen
         if (!empty($this->get_ergebnis())) {
@@ -388,7 +384,7 @@ class Turnier
     public function nl_anmelden($teamname, $liste, $pos = 0): void
     {
         $teamname .= "*"; // Nichtligateams haben einen Stern hinter dem Namen
-        if (empty(Team::name_to_id($teamname))) { //TODO === NULL testen
+        if (Team::name_to_id($teamname) === NULL) { //TODO === NULL testen
             $sql = "
                     INSERT INTO teams_liga (teamname, ligateam) 
                     VALUES (?, 'Nein')
@@ -403,6 +399,7 @@ class Turnier
 
     /**
      * Team via Freilos anmelden
+     *
      * @param int $team_id
      */
     public function freilos(int $team_id): void
@@ -459,10 +456,8 @@ class Turnier
         $liste = dbi::$db->query($sql)->fetch('team_id');
 
         // Warteliste korrigieren
-        $pos = 0;
-        $write_log = false;
+        $pos = $affected_rows = 0;
         foreach ($liste as $team) {
-            ++$pos;
             $sql = "
                     UPDATE turniere_liste 
                     SET position_warteliste = ?
@@ -471,12 +466,10 @@ class Turnier
                     AND team_id = ?;
                     ";
             dbi::$db->query($sql, $pos, $team['team_id'])->log();
-            if (dbi::$db->affected_rows() > 0) {
-                $write_log = true;
-            }
-            $logs[] = $pos . ". " . Team::id_to_name($team['team_id']);
+            $affected_rows += dbi::$db->affected_rows();
+            $logs[] = $pos++ . ". " . Team::id_to_name($team['team_id']);
         }
-        if ($write_log) {
+        if ($affected_rows > 0) {
             $this->log("Warteliste aktualisiert:\r\n" . implode("\r\n", $logs ?? []));
         }
     }
@@ -489,7 +482,7 @@ class Turnier
      *
      * @param bool $send_mail
      */
-    function spieleliste_auffuellen($send_mail = true) //TODO Keine NLs nachrücken, wenn < 4 Ligateams, aber dann wieder NL mitrücken wenn ok
+    public function spieleliste_auffuellen($send_mail = true): void //TODO Keine NLs nachrücken, wenn < 4 Ligateams, aber dann wieder NL mitrücken wenn ok
     {
         $freie_plaetze = $this->get_anzahl_freie_plaetze();
         $log = false;
@@ -702,6 +695,44 @@ class Turnier
         $this->set_phase($phase);
         $this->log("Manuelle Spielplan- oder Ergebnisdatei wurde hochgeladen.");
 
+    }
+
+    /**
+     * Beschreibt die Datenbank der Turniere
+     *
+     * Methode noch nicht vollständig implementiert
+     *
+     * @param string $entry Spaltenname
+     * @param mixed $value  Wert
+     * @return Turnier
+     */
+    public function set(string $entry, mixed $value): Turnier
+    {
+        $spalten_namen = dbi::$db->query("SHOW FIELDS FROM turniere_liga")->list('Field');
+        if (in_array($entry, $spalten_namen, true)) {
+            $sql = "
+                    UPDATE turniere_liga 
+                    SET $entry = ?
+                    WHERE turnier_id = $this->id
+                    ";
+            dbi::$db->query($sql, $value)->log();
+            $this->log(ucfirst($entry) . " => " . $value ?? 'DELETED');
+            $this->details[$entry] = $value;
+            return $this;
+        }
+        $spalten_namen = dbi::$db->query("SHOW FIELDS FROM turniere_details")->list('Field');
+        if (in_array($entry, $spalten_namen, true)) {
+            $sql = "
+                    UPDATE turniere_details
+                    SET $entry = ?
+                    WHERE turnier_id = $this->id
+                    ";
+            dbi::$db->query($sql, $value)->log();
+            $this->log(ucfirst($entry) . " => " . $value ?? 'DELETED');
+            $this->details[$entry] = $value;
+            return $this;
+        }
+        trigger_error("Ungültiger Spaltenname mit Col $entry, Val $value", E_USER_ERROR);
     }
 
     /**
@@ -999,7 +1030,7 @@ class Turnier
                 INSERT INTO turniere_geloescht (turnier_id, datum, ort, grund, saison) 
                 VALUES ($this->id, ?, ?, ?, ?)
                 ";
-        $params = [$this->details['datum'],$this->details['ort'], $grund, $this->details['saison']];
+        $params = [$this->details['datum'], $this->details['ort'], $grund, $this->details['saison']];
         dbi::$db->query($sql, $params)->log();
 
         // Turnier aus der Datenbank löschen

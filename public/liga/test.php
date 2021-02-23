@@ -18,18 +18,20 @@ function umsch (){
         $sql ="UPDATE turniere_details 
                 INNER JOIN turniere_liga on turniere_details.turnier_id = turniere_liga.turnier_id
                 SET set_spielplan = ? 
-                WHERE turniere_details.turnier_id = ? AND turniere_liga.saison = 26";
+                WHERE turniere_details.turnier_id = ? AND turniere_liga.saison = 26
+                AND (turniere_liga.phase = 'spielplan' or turniere_liga.phase = 'ergebnis')
+                ";
         $params = [$ret . "er_jgj_default", $t['turnier_id']];
         dbi::$db->query($sql, $params)->log();
     }
 }
-//umsch();
+umsch();
 
-Ligaleitung::umzug2('ausschuss_schiri', "schiriausschuss");
-Ligaleitung::umzug2('ausschuss_liga', "ligaausschuss");
-Ligaleitung::umzug2('ausschuss_oeffi', "oeffentlichkeitsausschuss");
-Ligaleitung::umzug2('ausschuss_technik', "technikausschuss");
-Ligaleitung::umzug3(); //Ausbilder
+//Ligaleitung::umzug2('ausschuss_schiri', "schiriausschuss");
+//Ligaleitung::umzug2('ausschuss_liga', "ligaausschuss");
+//Ligaleitung::umzug2('ausschuss_oeffi', "oeffentlichkeitsausschuss");
+//Ligaleitung::umzug2('ausschuss_technik', "technikausschuss");
+//Ligaleitung::umzug3(); //Ausbilder
 
 function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
 {

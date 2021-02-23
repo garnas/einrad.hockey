@@ -101,7 +101,7 @@ class Spielplan
      * @param Turnier $turnier
      * @return bool Erfolgreich / Nicht erfolgreich estellt
      */
-    public static function set_spielplan(Turnier $turnier): bool
+    public static function fill_spielplan(Turnier $turnier): bool
     {
         if (self::check_exist($turnier->id)) {
             Form::error("Es existiert bereits ein Spielplan");
@@ -172,18 +172,18 @@ class Spielplan
             return $turnier->details['set_spielplan'];
         }
 
-        // Handelt es sich um einen jgj Spielplan?
-        if ($turnier->details['spielplan'] !== 'jgj'){
-            return false;
-        }
-
         // Wie viele Teams sind angemeldet?
         if (is_null($anzahl_teams)){
             $anzahl_teams = count($turnier->get_liste_spielplan());
         }
 
+        // Handelt es sich um einen jgj Spielplan?
+        if ($turnier->details['spielplan'] !== 'jgj' && $anzahl_teams === 8){
+            return false;
+        }
+
         // Default Spielplan zurückgeben, wenn keiner Vorhanden, dann false
-        return match($anzahl_teams){
+        $vorlage = match($anzahl_teams){
             4 => '4er_jgj_default',
             5 => '5er_jgj_default',
             6 => '6er_jgj_default',
@@ -191,6 +191,10 @@ class Spielplan
             8 => '8er_jgj_versetzt',
             DEFAULT => false,
         };
+        if ($vorlage) {
+            $turnier->set('set_spielplan', $vorlage);
+            return $vorlage;
+        }
     }
 
     /**
@@ -200,6 +204,9 @@ class Spielplan
      */
     public static function delete_spielplan(Turnier $turnier): void
     {
+        if (!empty($turnier->details['set_spielplan'])) {
+            $turnier->set('set_spielplan', null);
+        }
         // Es existiert kein dynamischer Spielplan
         if (!self::check_exist($turnier->id)) {
             return;

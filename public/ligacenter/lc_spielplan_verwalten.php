@@ -78,7 +78,7 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
         $error = true;
     }
     if (!$error) {
-        if (Spielplan::set_spielplan($turnier)){
+        if (Spielplan::fill_spielplan($turnier)){
             Form::info("Das Turnier wurde in die Spielplan-Phase versetzt. Der Spielplan wird jetzt angezeigt.");
         } else {
             Form::error("Spielplan konnte nicht erstellt werden.");
@@ -109,10 +109,10 @@ if (isset($_POST['spielplan_hochladen'])) {
         if ($target_file_pdf !== false) {
             if ($_POST['sp_or_erg'] === 'ergebnis') {
                 $turnier->upload_spielplan($target_file_pdf, 'ergebnis');
-                Form::notice("Manueller Spielplan hochgeladen. Das Turnier wurde in die Ergebnis-Phase versetzt.");
+                Form::info("Manueller Spielplan hochgeladen. Das Turnier wurde in die Ergebnis-Phase versetzt.");
             } else {
                 $turnier->upload_spielplan($target_file_pdf, 'spielplan');
-                Form::notice("Manueller Spielplan hochgeladen. Das Turnier wurde in die Spielplan-Phase versetzt.");
+                Form::info("Manueller Spielplan hochgeladen. Das Turnier wurde in die Spielplan-Phase versetzt.");
             }
             header("Location: lc_spielplan_verwalten.php?turnier_id=$turnier->id" );
             die();
@@ -126,6 +126,7 @@ if (isset($_POST['spielplan_hochladen'])) {
 
 // Spielplan löschen
 if (isset($_POST['spielplan_delete'])) {
+    unlink($turnier->details['link_spielplan']);
     $turnier->upload_spielplan('', 'melde');
     Form::info("Spielplan- / Ergebnisdatei wurde gelöscht. Turnier wurde in die Meldephase versetzt.");
     header("Location: lc_spielplan_verwalten.php?turnier_id=$turnier->id");
@@ -202,7 +203,9 @@ include '../../templates/header.tmp.php';
 
     <form method="post" enctype="multipart/form-data">
 
-        <?php if (!Spielplan::check_exist($turnier->id)) { ?>
+        <?php if (Spielplan::check_exist($turnier->id)) { ?>
+            <p>Bitte zuerst dynamischen Spielplan löschen.</p>
+        <?php } else { ?>
 
             <?php if (empty($turnier->details['link_spielplan'])) { ?>
                 <p class="w3-text-grey">Nur .pdf oder .xlsx Format</p>
@@ -211,9 +214,12 @@ include '../../templates/header.tmp.php';
                 </p>
                 <p>
                     <label class="w3-text-grey" for="sp_or_erg">Spielplan oder Ergebnis?</label><br>
-                    <select required id="sp_or_erg" name="sp_or_erg" class="w3-select w3-border w3-border-primary"
+                    <select required
+                            id="sp_or_erg"
+                            name="sp_or_erg"
+                            class="w3-select w3-border w3-border-primary"
                             style="max-width: 200px">
-                        <option selected disabled>Bitte wählen</option>
+                        <option value="" selected disabled>Bitte wählen</option>
                         <option value="spielplan">Spielplan</option>
                         <option value="ergebnis">Ergebnis</option>
                     </select>
@@ -223,8 +229,6 @@ include '../../templates/header.tmp.php';
                 </p>
             <?php } //end if?>
 
-        <?php } else { ?>
-            <p>Bitte zuerst dynamischen Spielplan löschen.</p>
         <?php } //end if?>
 
         <?php if (!empty($turnier->details['link_spielplan'])) { ?>

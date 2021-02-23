@@ -37,9 +37,9 @@ if (isset($_POST['strafe_eintragen'])){
     if (!$error){
         Team::set_strafe($team_id,
             $_POST['verwarnung'] ?? 'Nein',
-            (int) $_POST['turnier'] ?? 0,
+            (int) $_POST['turnier'],
             $_POST['grund'],
-            (int) $_POST['prozent'] ?? 0);
+            (int) $_POST['prozent']);
         Form::info("Strafe wurde eingetragen.");
         header ("Location: ../liga/tabelle.php#pranger");
         die();

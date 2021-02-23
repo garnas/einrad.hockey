@@ -80,7 +80,7 @@ class Neuigkeit
      */
     public static function get_neuigkeiten(int $neuigkeiten_id = 0): array
     {
-        if (empty($neuigkeiten_id)) { // Alle
+        if (empty($neuigkeiten_id)) { // Alle Neuigkeiten
             $sql = "
                 SELECT * 
                 FROM neuigkeiten 
@@ -88,7 +88,7 @@ class Neuigkeit
                 LIMIT 10
                 "; // Es werden max. 10 Neuigkeiten angezeigt
             $neuigkeiten = dbi::$db->query($sql)->esc()->fetch('neuigkeiten_id');
-        } else { // Eine
+        } else { // Eine Neuigkeit
             $sql = "
                 SELECT * 
                 FROM neuigkeiten 
@@ -169,7 +169,7 @@ class Neuigkeit
      * @param int $quality
      * @param int $max_pix
      */
-    public static function compress_image(string $source, int $quality, int $max_pix)
+    public static function compress_image(string $source, int $quality, int $max_pix): void
     {
         if (!(extension_loaded('gd') && function_exists('gd_info'))) {
             Form::error("Bild konnte nicht kompressiert werden - keine GD-Extension.");
@@ -406,12 +406,34 @@ class Neuigkeit
                 ";
         return dbi::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
     }
+
+    /**
+     * Wie viele Spiele wurden gespielt?
+     *
+     * @param int $saison
+     * @return int
+     */
     public static function get_alle_spiele(int $saison = Config::SAISON): int
     {
         $sql = "
                 SELECT count(*) AS spiele
                 FROM spiele
                 INNER JOIN turniere_liga tl on spiele.turnier_id = tl.turnier_id
+                WHERE tl.saison = ?
+                AND tore_b IS NOT NULL
+                AND tore_a IS NOT NULL
+                ";
+        return dbi::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
+    }
+
+    public static function get_spielminuten(int $saison = Config::SAISON): int
+    {
+        $sql = "
+                SELECT sum(sd.anzahl_halbzeiten * sd.halbzeit_laenge) as minuten
+                FROM spiele
+                INNER JOIN turniere_liga tl on spiele.turnier_id = tl.turnier_id
+                INNER JOIN turniere_details td on spiele.turnier_id = td.turnier_id
+                INNER JOIN spielplan_details sd on td.set_spielplan = sd.spielplan
                 WHERE tl.saison = ?
                 AND tore_b IS NOT NULL
                 AND tore_a IS NOT NULL

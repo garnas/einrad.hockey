@@ -2,7 +2,7 @@
 
 // Inititalisierung
 
-$team_id = (Config::$teamcenter) ? $_SESSION['logins']['team']['id'] : (int) ($_GET['team_id'] ?? 0);
+$team_id = (Config::$teamcenter) ? $_SESSION['logins']['team']['id'] : (int) $_GET['team_id'];
 if (Team::is_ligateam($team_id)){
     $team = new Team ($team_id);
     $kontakte = new Kontakt ($team->id);

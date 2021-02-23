@@ -25,6 +25,7 @@ $statistik['max_gew'] = Neuigkeit::get_statistik_gew_spiele();
 $statistik['max_turniere'] = Neuigkeit::get_statistik_turniere();
 $statistik['ges_tore'] = Neuigkeit::get_alle_tore();
 $statistik['ges_spiele'] = Neuigkeit::get_alle_spiele();
+$statistik['spielminuten'] = Neuigkeit::get_spielminuten();
 
 // Zeitanzeige der Neuigkeiteneinträge verschönern
 foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit) { //Todo in get_neuikgeiten rein
@@ -140,6 +141,7 @@ include '../../templates/header.tmp.php'; ?>
                 <div class="w3-stretch w3-container w3-primary">
                     <h3><?= Form::icon("insert_chart_outlined", tag: "h2") ?> Statistik</h3>
                 </div>
+                <span class="w3-text-grey w3-small">Saison <?= Form::get_saison_string() ?></span>
 
                 <!-- Allgemeine Statistik -->
                 <div class="w3-section">
@@ -170,12 +172,11 @@ include '../../templates/header.tmp.php'; ?>
                             </tr>
                             <tr>
                                 <td class="w3-text-primary"><?= Form::icon("schedule") ?></td>
-                                <td style="white-space: nowrap;"><?= $statistik['ges_spiele'] * (30 + 24 + 18) / 3 ?></td>
-                                <td class="w3-small">Spielminuten*</td>
+                                <td style="white-space: nowrap;"><?= $statistik['spielminuten'] ?></td>
+                                <td class="w3-small">Spielminuten</td>
                             </tr>
                         </table>
                     </div>
-                    <span class="w3-text-grey w3-small">* geschätzt</span>
                 </div>
 
                 <!-- Wer hat am meisten Turniere gespielt? -->
