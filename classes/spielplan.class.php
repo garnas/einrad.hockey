@@ -55,11 +55,6 @@ class Spielplan
         $this->spiele = $this->get_spiele();
         $this->anzahl_spiele = $this->anzahl_teams - 1;
 
-        // Sollte bei JgJ-Spielplänen der Fall sein
-        if ($this->anzahl_spiele * $this->anzahl_teams/2 !== count($this->spiele)) {
-            trigger_error("Teams und Spielplan passen nicht zusammen.", E_USER_ERROR);
-        }
-
         // Passen die angemeldeten Teams zu den im Spielplan hinterlegten Teams?
         foreach ($this->spiele as $spiel) {
             if (
