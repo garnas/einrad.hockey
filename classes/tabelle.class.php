@@ -7,14 +7,19 @@
  */
 class Tabelle
 {
+
+    /**
+     * Speichert die Erstellten Rangtabellen, damit diese nicht mehrfach erstellt werden müssen.
+     * @var array
+     */
+    public static array $rangtabellen = [];
+
     /**
      * Übergibt den Spieltag, bis zu welchem Ergebnisse eingetragen worden sind.
      *
      * @param int $saison
      * @return int
      */
-    public static array $rangtabellen = [];
-
     public static function get_aktuellen_spieltag(int $saison = Config::SAISON): int
     {
         $sql = "
@@ -305,6 +310,8 @@ class Tabelle
     }
 
     /**
+     * Gibt die Rangtabelle als Array aus
+     *
      * @param int $spieltag
      * @param int $saison
      * @return array
@@ -312,7 +319,7 @@ class Tabelle
     public static function get_rang_tabelle(int $spieltag, int $saison = Config::SAISON): array
     {
 
-        $ausnahme = ($saison == 26) ? 'OR turniere_liga.saison = 24' : '';
+        $ausnahme = ($saison === 26) ? 'OR turniere_liga.saison = 24' : '';
 
         $sql = "
                 SELECT turniere_ergebnisse.ergebnis, turniere_ergebnisse.turnier_id, turniere_liga.datum, 

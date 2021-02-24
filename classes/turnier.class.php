@@ -342,7 +342,7 @@ class Turnier
      * @param int $pos
      */
 
-    public function team_anmelden(int $team_id, string $liste, int $pos = 0): void
+    public function anmelden(int $team_id, string $liste, int $pos = 0): void
     {
         // Update der Wartelistepositionen
         if ($liste === 'warte') {
@@ -353,7 +353,9 @@ class Turnier
                     AND liste = 'warte' 
                     AND position_warteliste >= ?";
             dbi::$db->query($sql, $pos)->log();
-            $affected_rows = dbi::$db->affected_rows();
+            if (dbi::$db->affected_rows() > 0) {
+                $this->log("Warteliste aktualisiert");
+            }
         }
         $sql = "
                 INSERT INTO turniere_liste (turnier_id, team_id, liste, position_warteliste) 
@@ -364,9 +366,6 @@ class Turnier
             "Anmeldung:\r\n" . Team::id_to_name($team_id) . " ($liste)"
             . (($liste === 'warte') ? "\r\nWartepos: $pos" : '')
             . "\r\nTeamb.: " . Tabelle::get_team_block($team_id) . " | Turnierb. " . $this->details['tblock']);
-        if ($affected_rows > 0) {
-            $this->log("Warteliste aktualisiert");
-        }
     }
 
     /**
@@ -394,7 +393,7 @@ class Turnier
         } else {
             $nl_team_id = Team::name_to_id($teamname);
         }
-        $this->team_anmelden($nl_team_id, $liste, $pos);
+        $this->anmelden($nl_team_id, $liste, $pos);
     }
 
     /**
@@ -465,9 +464,9 @@ class Turnier
                     AND liste = 'warte'
                     AND team_id = ?;
                     ";
-            dbi::$db->query($sql, $pos, $team['team_id'])->log();
+            dbi::$db->query($sql, ++$pos, $team['team_id'])->log();
             $affected_rows += dbi::$db->affected_rows();
-            $logs[] = $pos++ . ". " . Team::id_to_name($team['team_id']);
+            $logs[] = $pos . ". " . Team::id_to_name($team['team_id']);
         }
         if ($affected_rows > 0) {
             $this->log("Warteliste aktualisiert:\r\n" . implode("\r\n", $logs ?? []));

@@ -1,15 +1,15 @@
 <?php
-//Max Anzahl bevor alle im BCC angeschrieben werden
-$grenze_bcc = 12;
+// Max Anzahl bevor alle im BCC angeschrieben werden
+$grenze_bcc = 12; //TODO in Config oder Env
 
-//Für die Turnierauswahl
+// Für die Turnierauswahl
 $turniere = Turnier::get_turniere('alle', false, false);
 
-//Für Sortierung der Teams nach Blöcken
+// Für Sortierung der Teams nach Blöcken
 $akt_spieltag = Tabelle::get_aktuellen_spieltag();
 $teams = Tabelle::get_rang_tabelle($akt_spieltag); // Sortierung nach Rangtabelle
 
-//Damit sich $_SESSION von team- und ligacenter nicht vermischen
+// Damit sich $_SESSION von team- und ligacenter nicht vermischen
 if (Config::$ligacenter) {
     $list_id = 'lc_emails' . $_SESSION['logins']['la']['id'];
 } elseif (Config::$teamcenter) {
@@ -17,9 +17,9 @@ if (Config::$ligacenter) {
 }
 
 
-//Formularauswertung Emailauswahl
+// Formularauswertung Emailauswahl
 
-//Emails zurücksetzen
+// Emails zurücksetzen
 if (isset($_POST['reset'])) {
     unset ($_SESSION[$list_id]);
 }
@@ -68,7 +68,7 @@ if (isset($_POST['teams_emails'])) {
         $akt_team = new Kontakt($team_id);
         $team_emails = $akt_team->get_emails();
         foreach ($team_emails as $email) {
-            //Doppelte Email-Einträge vermeiden
+            // Doppelte Email-Einträge vermeiden
             if (!in_array($email, $emails)) {
                 $emails[] = $email;
             }
@@ -89,7 +89,7 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
     $error = false;
     $emails = $_SESSION[$list_id]['emails'];
     $betreff = $_POST['betreff'];
-    $text = stripcslashes($_POST['text']); //stripcslashes: \r\n für newline-chars wieder escaped, $_POST wird ausnahmsweise nicht in db gespeichert.
+    $text = $_POST['text'];
 
     if (empty($emails) || empty($betreff) || empty($text)) {
         Form::error("Kontaktformular unvollständig");
@@ -129,17 +129,24 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
         $mailer->Body = $text . "\r\nVersendet aus dem Kontaktcenter von einrad.hockey";
 
         // Email-versenden
+        Form::log(
+            Config::LOG_EMAILS, "Betreff: $betreff"
+            . " von " .(Config::$teamcenter) ? $_SESSION['team']['name'] : 'Ligaausschuss')
+            . " an " . implode(',', $emails
+        );
+
         if (MailBot::send_mail($mailer)) {
             Form::info("Die E-Mail wurde versandt.");
             unset($_SESSION[$list_id]);
             header('Location: ' . dbi::escape($_SERVER['PHP_SELF']));
             die();
         }
+
         Form::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden.");
     }
 }
 
-//Zum Ausfüllen des Absendeforumulars
+// Zum Ausfüllen des Absendeforumulars
 if (isset($_SESSION[$list_id])) {
     $anzahl_emails = count($_SESSION[$list_id]['emails']);
     $adressaten = $bcc = [];

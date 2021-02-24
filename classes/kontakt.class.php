@@ -15,9 +15,10 @@ class Kontakt
 
     /**
      * Kontakt constructor.
+     *
      * @param int $team_id
      */
-    function __construct(int $team_id)
+    public function __construct(int $team_id)
     {
         $this->team_id = $team_id;
     }
@@ -48,7 +49,6 @@ class Kontakt
      */
     public static function get_emails_turnier(int $turnier_id): array
     {
-        // distinct email funktioniert nicht, da sonst Teamnamen fehlen oder doppelt vorkommen.
         $sql = "
                 SELECT teams_kontakt.email, teams_liga.teamname 
                 FROM teams_kontakt
@@ -59,12 +59,16 @@ class Kontakt
                 WHERE teams_liga.aktiv = 'Ja' 
                 AND turniere_liste.turnier_id = ?
                 ";
+
         $return['emails'] = $return['teamnamen'] = [];
+        // Doppelte Teamnamen und Email-Adressen filtern
         foreach (dbi::$db->query($sql, $turnier_id)->esc()->fetch() as $x){
-            if (!in_array($x['teamname'], $return['teamnamen']))
+            if (!in_array($x['teamname'], $return['teamnamen'])) {
                 $return['teamnamen'][] = $x['teamname'];
-            if (!in_array($x['email'], $return['emails']))
+            }
+            if (!in_array($x['email'], $return['emails'])){
                 $return['emails'][] = $x['email'];
+            }
         }
         return $return;
     }
@@ -75,7 +79,7 @@ class Kontakt
      * @param string $public
      * @param string $infomail
      */
-    function set_email(string $email, string $public, string $infomail) //TODO Umbenennen
+    public function set_email(string $email, string $public, string $infomail): void
     {
         $email = strtolower($email);
         $sql = "
@@ -92,7 +96,7 @@ class Kontakt
      *                      $scope = 'public' => Nur öffentliche Emails
      * @return array
      */
-    function get_emails(string $scope = ''): array
+    public function get_emails(string $scope = ''): array
     {
         $and_clause = match ($scope) {
             '' => '',
@@ -114,7 +118,7 @@ class Kontakt
      *
      * @return array der Form [teams_kontakt_id][email, public, get_info_mail]
      */
-    function get_emails_with_details(): array
+    public function get_emails_with_details(): array
     {
         $sql = "
                 SELECT * 
@@ -130,7 +134,7 @@ class Kontakt
      * @param $teams_kontakt_id
      * @param $value
      */
-    function set_public(int $teams_kontakt_id, string $value)
+    public function set_public(int $teams_kontakt_id, string $value): void
     {
         $sql = "
                 UPDATE teams_kontakt 
@@ -148,7 +152,7 @@ class Kontakt
      * @param $teams_kontakt_id
      * @param $value
      */
-    function set_info(int $teams_kontakt_id, string $value)
+    public function set_info(int $teams_kontakt_id, string $value): void
     {
         $sql = "
                 UPDATE teams_kontakt 
@@ -165,7 +169,7 @@ class Kontakt
      * @param $teams_kontakt_id
      * @return bool
      */
-    function delete_email(int $teams_kontakt_id): bool
+    public function delete_email(int $teams_kontakt_id): bool
     {
         if (count($this->get_emails()) > 1) {
             $sql = "

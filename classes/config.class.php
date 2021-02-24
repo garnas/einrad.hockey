@@ -111,7 +111,7 @@ class Config
     /**
      * HTML-Anzeige
      */
-    public static string $page_width = "1020px";
+    public static string $page_width = "980px";
     public static string $titel = 'Deutsche Einradhockeyliga';
     public static string $content
         = 'Jeder Einradhockeybegeisterte soll in der Deutschen Einradhockeyliga die Möglichkeit haben, sein Hobby in '

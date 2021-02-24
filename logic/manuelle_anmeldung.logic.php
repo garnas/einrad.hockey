@@ -77,7 +77,7 @@ if (isset($_POST['team_anmelden'])){
     }
 
     if (!$error){
-        $turnier->team_anmelden($team_id, $liste, $pos);
+        $turnier->anmelden($team_id, $liste, $pos);
         Form::info ("$teamname wurde angemeldet");
         header('Location: ' . dbi::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
         die();

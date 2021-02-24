@@ -138,7 +138,13 @@ class Form
         $bezeichnung = (!empty($icon)) ? self::icon($icon) . ' ' . $bezeichnung : $bezeichnung;
         $bezeichnung = empty($bezeichnung) ? $link : $bezeichnung;
 
-        return "<a href='$link' class='no w3-text-primary w3-hover-text-secondary' style='white-space: nowrap;' $new_tab>$bezeichnung</a>";
+        return
+            "<a href='$link' 
+               class='no w3-text-primary w3-hover-text-secondary' 
+               style='white-space: nowrap;' 
+               $new_tab>
+               $bezeichnung
+            </a>";
     }
 
     /**
@@ -208,7 +214,7 @@ class Form
      * @param int $date Zeit als Unix-Time
      * @param string $id Welche ID das Countdownelement haben soll
      */
-    public static function countdown(int $date, string $id = 'countdown')
+    public static function countdown(int $date, string $id = 'countdown'): void
     { //TODO Return als String
         ?>
         <div id='countdown' class="w3-xlarge w3-text-primary" style='white-space: nowrap;'>
@@ -239,7 +245,7 @@ class Form
      * @param string $file_name Name der Logdatei
      * @param string $line Einzutragender Text in die Logdatei
      */
-    public static function log(string $file_name, string$line)
+    public static function log(string $file_name, string$line): void
     {
         $path = Env::BASE_PATH . '/system/logs/';
         //SQL-Logdatei erstellen/beschreiben
@@ -257,7 +263,7 @@ class Form
      * @param int $min Anzahl der Konfettis liegt zufällig zwischen $min und $max
      * @param int $max
      */
-    public static function set_confetti(int $min = 40, int $max = 90, $timeout = 0)
+    public static function set_confetti(int $min = 40, int $max = 90, $timeout = 0): void
     {
         echo "
             <script src = '../javascript/confetti/confetti.js'></script>

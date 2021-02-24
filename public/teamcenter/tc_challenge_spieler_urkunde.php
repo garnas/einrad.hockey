@@ -14,6 +14,9 @@ $spieler_id = (int) $_GET['spieler_id'];
 if (!in_array($_GET['spieler_id'], array_column($team_spielerliste, 'spieler_id'))) die("Ungültige Spieler-Id");
 
 $urkunden_daten = $challenge->get_spieler_result($spieler_id);
+if (empty($urkunden_daten['kilometer'])) {
+    die("Dieses Team hat nicht an der Challenge teilgenommen.");
+}
 
 if ($urkunden_daten['geschlecht'] == "m") {
     $anrede = "Der Spieler";

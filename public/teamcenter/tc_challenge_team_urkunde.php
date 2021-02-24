@@ -13,6 +13,9 @@ $team_id = (int) $_GET['team_id'];
 if ($_GET['team_id'] != $_SESSION['logins']['team']['id']) die("Ungültige Team-ID"); // Keine Urkunde für falsche Team-IDs
 
 $urkunden_daten = $challenge->get_team_result($team_id);
+if (empty($urkunden_daten['kilometer'])) {
+    die("Dieses Team hat nicht an der Challenge teilgenommen.");
+}
 
 $css_style = '
 .standard {
@@ -75,4 +78,3 @@ $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
 
 // Output des Dokuments
 $mpdf->Output('Urkunde_' . $urkunden_daten['teamname'] . '.pdf', 'I');
-?>
