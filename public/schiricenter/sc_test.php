@@ -21,8 +21,14 @@ if (isset($_POST['beantworten'])){
         // zufällige Frage auswählen:
         $fragen = SchiriTest::get_fragen('*', 1);
     }else{
-        // nächste Frage (n+1) auswählen:
-        $fragen = SchiriTest::get_fragen('*', 1, $_SESSION['frage_id']+1);
+        if (isset($_SESSION['frage_id'])){
+            // nächste Frage (n+1) auswählen:
+            $naechste_frage = $_SESSION['frage_id']+1;
+        }else{
+            // start bei Nr. 1:
+            $naechste_frage = 1;
+        }
+        $fragen = SchiriTest::get_fragen('*', 1, $naechste_frage);
     }
     $_SESSION['sc_test_fragen'] = $fragen;
 }
@@ -96,11 +102,15 @@ include '../../templates/header.tmp.php'; // Html-header und Navigation
                 <?php } //end foreach antworten?>
                 <?php $antworten_user = $_POST['abgabe'][$frage_id] ?? []; // Leer, falls keine Antwort abgegeben. ?> 
                 <?php if (SchiriTest::validate_frage($frage_id, $antworten_user)){?>
-                    <h3 class="w3-bottombar">Alles korrekt beantwortet!
-                        <span class="w3-text-green"><i class="material-icons">thumb_up</i></span></h3>
+                    <h3 class="w3-bottombar">
+                        <span size="50" class="w3-text-green">
+                            <i class="material-icons md-36">thumb_up</i>
+                            Alles korrekt beantwortet!</span></h3>
                 <?php }else{?>
-                    <h3 class="w3-bottombar">Da war etwas falsch!
-                        <span class="w3-text-red"><i class="material-icons">thumb_down</i></span></h3>
+                    <h3 class="w3-bottombar">
+                        <span class="w3-text-red">
+                            <i class="material-icons md-36">thumb_down</i>
+                            Da war etwas falsch!</span></h3>
                 <?php } //endif?>
 
                 <p><b>Erklärung:</b> <?= $fragen[$frage_id]['erklaerung'] ?></p>
