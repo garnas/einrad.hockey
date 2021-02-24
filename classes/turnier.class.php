@@ -74,7 +74,7 @@ class Turnier
             $besprechung, $hinweis, $organisator, $handy, $startgebuehr];
         $sql = "
                 INSERT INTO turniere_details (turnier_id, hallenname, strasse, plz, ort, haltestellen, plaetze,
-                spielplan, startzeit, besprechung, hinweis, organisator, handy, startgebuehr)
+                format, startzeit, besprechung, hinweis, organisator, handy, startgebuehr)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  ?,  ?, ?);
                 ";
         dbi::$db->query($sql, $params)->log();
@@ -838,7 +838,7 @@ class Turnier
     {
         $sql = "
                 UPDATE turniere_details 
-                SET hallenname = ?, strasse = ?, plz = ?, ort = ?, haltestellen = ?, plaetze = ?, spielplan = ?,
+                SET hallenname = ?, strasse = ?, plz = ?, ort = ?, haltestellen = ?, plaetze = ?, format = ?,
                     startzeit = ?, besprechung = ?, hinweis = ?, organisator = ?, handy = ?, startgebuehr = ?
                 WHERE turnier_id = $this->id
                 ";
