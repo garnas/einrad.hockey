@@ -16,7 +16,7 @@ class Neuigkeit
      * @param string $link_pdf
      * @param string $bild_verlinken
      */
-    public static function create_neuigkeit(string $titel, string $text, string $name, string $link_jpg = '', string $link_pdf = '', string $bild_verlinken = '')
+    public static function create(string $titel, string $text, string $name, string $link_jpg = '', string $link_pdf = '', string $bild_verlinken = '')
     {
         $sql = "
                 INSERT INTO neuigkeiten (titel, inhalt, eingetragen_von, link_jpg, link_pdf, bild_verlinken) 
@@ -31,7 +31,7 @@ class Neuigkeit
      *
      * @param $neuigkeiten_id
      */
-    public static function delete_neuigkeit($neuigkeiten_id)
+    public static function delete($neuigkeiten_id): void
     {
         // Bilder und Dokumente der Neuigkeit löschen
         $neuigkeit = self::get_neuigkeiten($neuigkeiten_id);
@@ -120,14 +120,16 @@ class Neuigkeit
         if (self::check_error_image($file)) {
             return false;
         }
+
         // Gibt den Pfad mit neuem unix-time Namen zurück, wo die hochgeladene Datei gespeichert werden soll.
         $file_type = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
         // Speicherpfad des Uploads mit neuem Dateinamen
         $file_dir = $target_dir . date("Y_m_d_H_i_s") . "." . $file_type;
 
         // Datei wird vom temporären Ordner in den richtigen Ordner verschoben
         if (move_uploaded_file($file["tmp_name"], $file_dir)) {
-            // Bild wird kompressiert //Sehr hoher Memory Bedarf...
+            // Bild wird kompressiert // Sehr hoher Memory-Bedarf
             self::compress_image($file_dir, $quality, $pix);
         } else {
             Form::error("Bild konnte nicht hochgeladen werden.");
@@ -149,8 +151,10 @@ class Neuigkeit
         if (!self::check_pdf($file)) {
             return false;
         }
+
         // Gibt den Pfad mit neuem unix-time Namen zurück, wo die hochgeladene Datei gespeichert werden soll.
         $file_type = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
         // Speicherpfad des Uploads mit neuem Dateinamen
         $file_dir = $target_dir . date("Y_m_d_H_i_s") . "." . $file_type;
 
@@ -187,8 +191,7 @@ class Neuigkeit
             return;
         }
 
-        $width = $info[0];
-        $height = $info[1];
+        [$width, $height] = $info;
         $ratio = $width / $height;
         // Bild skalieren // hohe Belastung für das PHP memory_limit
         if (max($width, $height) > $max_pix) {
@@ -426,14 +429,20 @@ class Neuigkeit
         return dbi::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
     }
 
+    /**
+     * Wie viele Spielminuten wurden in der Saison gespielt?
+     *
+     * @param int $saison
+     * @return int
+     */
     public static function get_spielminuten(int $saison = Config::SAISON): int
     {
         $sql = "
-                SELECT sum(sd.anzahl_halbzeiten * sd.halbzeit_laenge) as minuten
+                SELECT sum(sd.anzahl_halbzeiten * sd.halbzeit_laenge)
                 FROM spiele
                 INNER JOIN turniere_liga tl on spiele.turnier_id = tl.turnier_id
                 INNER JOIN turniere_details td on spiele.turnier_id = td.turnier_id
-                INNER JOIN spielplan_details sd on td.set_spielplan = sd.spielplan
+                INNER JOIN spielplan_details sd on tl.spielplan_vorlage = sd.spielplan
                 WHERE tl.saison = ?
                 AND tore_b IS NOT NULL
                 AND tore_a IS NOT NULL

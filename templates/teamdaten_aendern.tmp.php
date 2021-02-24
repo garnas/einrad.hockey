@@ -106,7 +106,8 @@
         </div>
     </div>
     <p class="w3-text-grey">
-        Eure Trikotfarben werden im Spielplan angezeigt. Sie helfen anderen Teams bei der Wahl ihrer Trikots und Zuschauern dein Team zu identifizieren.
+        Eure Trikotfarben werden im Spielplan angezeigt. Sie helfen anderen Teams bei der Wahl ihrer Trikots und
+        Zuschauern dein Team zu identifizieren. Die Farbe eures 1. Trikots wird bevorzugt im Spielplan angegeben.
     </p>
 </div>
 <form method='post' class="w3-panel w3-card">

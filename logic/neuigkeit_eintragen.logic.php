@@ -48,7 +48,7 @@ if (isset($_POST['create_neuigkeit'])) {
         $bild_verlinken = $_POST['bild_verlinken'] ?? '';
 
         if (!$error) {
-            Neuigkeit::create_neuigkeit($titel, $text, $name, $target_file_jpg, $target_file_pdf, $bild_verlinken);
+            Neuigkeit::create($titel, $text, $name, $target_file_jpg, $target_file_pdf, $bild_verlinken);
             Form::info("Deine Neuigkeit wurde erfolgreich eingetragen");
             header('Location: ../liga/neues.php');
             die(); // Damit das Skript nicht zu auf dem Server zu ende ausgeführt wird.

@@ -686,12 +686,12 @@ class Turnier
     public function upload_spielplan(string $link, string $phase): void
     {
         $sql = "
-                UPDATE turniere_details
-                SET link_spielplan = ?
+                UPDATE turniere_liga
+                SET spielplan_datei = ?
                 WHERE turnier_id = $this->id;
                 ";
         dbi::$db->query($sql, $link)->log();
-        $this->details['link_spielplan'] = $link;
+        $this->details['spielplan_datei'] = $link;
         $this->set_phase($phase);
         $this->log("Manuelle Spielplan- oder Ergebnisdatei wurde hochgeladen.");
 
@@ -738,35 +738,26 @@ class Turnier
     /**
      * Gibt den Link zum Liga-Spielplan aus, je nach dem ob er manuell hochgeladen oder automatisch erstellt wurde
      *
-     * @return string
+     * @param string $scope default: allgemein, lc => ligacenter tc => teamcenter
+     * @return false|string
      */
-    public function get_spielplan_link(): string
+    public function get_spielplan_link(string $scope = ''): false|string
     {
-        return (empty($this->details['link_spielplan']))
-            ? Env::BASE_URL . '/liga/spielplan.php?turnier_id=' . $this->id
-            : $this->details['link_spielplan'];
-    }
+        // Es existiert ein manuell hochgeladener Spielplan
+        if (!empty($this->details['spielplan_datei'])){
+            return $this->details['spielplan_datei'];
+        }
 
-    /**
-     * Gibt den Link zum Teamcenter-Spielplan aus, je nach dem ob er manuell hochgeladen oder automatisch erstellt wurde
-     * @return string
-     */
-    public function get_spielplan_link_tc(): string
-    {
-        return (empty($this->details['link_spielplan']))
-            ? '../teamcenter/tc_spielplan.php?turnier_id=' . $this->id
-            : $this->details['link_spielplan'];
-    }
+        // Es existiert ein automatisch erstellter Spielplan
+        if (!empty($this->details['spielplan_vorlage'])) {
+            return match ($scope) {
+                'lc'    => Env::BASE_URL . '/ligacenter/lc_spielplan.php?turnier_id=' . $this->id,
+                'tc'    => Env::BASE_URL . '/teamcenter/tc_spielplan.php?turnier_id=' . $this->id,
+                DEFAULT => Env::BASE_URL . '/liga/spielplan.php?turnier_id=' . $this->id
+            };
+        }
 
-    /**
-     * Gibt den Link zum Ligacenter-Spielplan aus, je nach dem ob er manuell hochgeladen oder automatisch erstellt wurde
-     * @return string
-     */
-    public function get_spielplan_link_lc(): string
-    {
-        return (empty($this->details['link_spielplan']))
-            ? '../ligacenter/lc_spielplan.php?turnier_id=' . $this->id
-            : $this->details['link_spielplan'];
+        return false;
     }
 
     /**
@@ -881,7 +872,7 @@ class Turnier
 
         // Wichtiges geändert und Log
         $wichtiges_geaendert = false;
-        if ($this->details['spielplan'] != $spielplan) {
+        if ($this->details['format'] != $spielplan) {
             $this->log("Spielplan: " . $spielplan);
             $wichtiges_geaendert = true;
         }

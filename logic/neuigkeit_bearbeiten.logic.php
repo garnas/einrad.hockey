@@ -12,7 +12,7 @@ $neuigkeit = $neuigkeiten[$neuigkeiten_id];
 
 // Neuigkeit löschen
 if (isset($_POST['delete_neuigkeit'])) {
-    Neuigkeit::delete_neuigkeit($neuigkeiten_id);
+    Neuigkeit::delete($neuigkeiten_id);
     Form::info("Neuigkeit wurde gelöscht");
     header('Location: ../liga/neues.php');
     die();

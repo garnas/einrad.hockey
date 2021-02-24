@@ -77,7 +77,7 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
         $error = true;
     }
     if (!$error) {
-        if (Spielplan::fill_spielplan($turnier)){
+        if (Spielplan::fill_vorlage($turnier)){
             Form::info("Das Turnier wurde in die Spielplan-Phase versetzt. Der Spielplan wird jetzt angezeigt.");
             header('Location: ../liga/spielplan.php?turnier_id=' . $turnier->id);
             die();
@@ -89,7 +89,7 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
 
 //Spielplan löschen
 if (isset($_POST['auto_spielplan_loeschen'])) {
-    Spielplan::delete_spielplan($turnier);
+    Spielplan::delete($turnier);
     Form::info("Der dynamisch erstellte Spielplan wurde gelöscht. Das Turnier wurde in die Meldephase versetzt!");
     header('Location:' . dbi::escape($_SERVER['REQUEST_URI']));
     die();
@@ -125,7 +125,7 @@ if (isset($_POST['spielplan_hochladen'])) {
 
 // Spielplan löschen
 if (isset($_POST['spielplan_delete'])) {
-    unlink($turnier->details['link_spielplan']);
+    unlink($turnier->details['spielplan_datei']);
     $turnier->upload_spielplan('', 'melde');
     Form::info("Spielplan- / Ergebnisdatei wurde gelöscht. Turnier wurde in die Meldephase versetzt.");
     header("Location: lc_spielplan_verwalten.php?turnier_id=$turnier->id");
@@ -178,7 +178,7 @@ include '../../templates/header.tmp.php';
 
     <!-- Dynamischer Spielplan erstellen -->
     <h2 class="w3-text-primary w3-bottombar">JgJ-Spielplan erstellen</h2>
-    <?php if (empty($turnier->details['link_spielplan'])) { ?>
+    <?php if (empty($turnier->details['spielplan_datei'])) { ?>
         <form method="post">
             <?php if (Spielplan::check_exist($turnier->id)) { ?>
                 <p>
@@ -209,7 +209,7 @@ include '../../templates/header.tmp.php';
             <p>Bitte zuerst den dynamischen Spielplan löschen.</p>
         <?php } else { ?>
 
-            <?php if (empty($turnier->details['link_spielplan'])) { ?>
+            <?php if (empty($turnier->details['spielplan_datei'])) { ?>
                 <p class="w3-text-grey">Nur .pdf oder .xlsx Format</p>
                 <p>
                     <input required type="file" name="spielplan_file" id="spielplan_file" class="w3-button w3-tertiary">
@@ -233,9 +233,9 @@ include '../../templates/header.tmp.php';
 
         <?php } //end if?>
 
-        <?php if (!empty($turnier->details['link_spielplan'])) { ?>
+        <?php if (!empty($turnier->details['spielplan_datei'])) { ?>
             <p>
-                <?= Form::link($turnier->details['link_spielplan'], 'Spielplan/Ergebnis herunterladen', true); ?>
+                <?= Form::link($turnier->details['spielplan_datei'], 'Spielplan/Ergebnis herunterladen', true); ?>
             </p>
             <p>
                 <input type="submit"

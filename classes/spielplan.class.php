@@ -55,6 +55,11 @@ class Spielplan
         $this->spiele = $this->get_spiele();
         $this->anzahl_spiele = $this->anzahl_teams - 1;
 
+        // Sollte bei JgJ-Spielplänen der Fall sein
+        if ($this->anzahl_spiele * $this->anzahl_teams/2 !== count($this->spiele)) {
+            trigger_error("Teams und Spielplan passen nicht zusammen.", E_USER_ERROR);
+        }
+
         // Passen die angemeldeten Teams zu den im Spielplan hinterlegten Teams?
         foreach ($this->spiele as $spiel) {
             if (
@@ -101,7 +106,7 @@ class Spielplan
      * @param Turnier $turnier
      * @return bool Erfolgreich / Nicht erfolgreich estellt
      */
-    public static function fill_spielplan(Turnier $turnier): bool
+    public static function fill_vorlage(Turnier $turnier): bool
     {
         if (self::check_exist($turnier->id)) {
             Form::error("Es existiert bereits ein Spielplan");
@@ -114,9 +119,9 @@ class Spielplan
         array_unshift($teamliste, '');
         unset($teamliste[0]);
 
-        $spielplan_art = self::get_vorlage($turnier);
+        $vorlage = self::get_vorlage($turnier);
 
-        if ($spielplan_art === false) {
+        if ($vorlage === false) {
             Form::error("Es konnte keine Spielplanvorlage ermittelt werden.");
             return false;
         }
@@ -127,7 +132,7 @@ class Spielplan
                 FROM spielplan_paarungen 
                 WHERE spielplan_paarung = ?
                 ";
-        $paarungen = dbi::$db->query($sql, $spielplan_art)->fetch();
+        $paarungen = dbi::$db->query($sql, $vorlage)->fetch();
 
         // Wurde eine Paarung gefunden?
         if (empty($paarungen)) {
@@ -155,7 +160,7 @@ class Spielplan
         // Turnierlog
         $turnier->log("Automatischer Jgj-Spielplan erstellt.");
         $turnier->set_phase('spielplan');
-        $turnier->set('set_spielplan', $spielplan_art);
+        $turnier->set('spielplan_vorlage', $vorlage);
 
         return true;
     }
@@ -169,9 +174,14 @@ class Spielplan
      */
     public static function get_vorlage(Turnier $turnier, ?int $anzahl_teams = NULL): false|string
     {
-        // Wurde ein spezieller Spielplan angenommen?
-        if (!empty($turnier->details['set_spielplan'])) {
-            return $turnier->details['set_spielplan'];
+        // Existiert ein manuell hochgeladener Spielplan?
+        if (!empty($turnier->details['spielplan_datei'])) {
+            return false;
+        }
+
+        // Wurde schon ein Spielplan gesetzt?
+        if (!empty($turnier->details['spielplan_vorlage'])) {
+            return $turnier->details['spielplan_vorlage'];
         }
 
         // Wie viele Teams sind angemeldet?
@@ -179,13 +189,13 @@ class Spielplan
             $anzahl_teams = count($turnier->get_liste_spielplan());
         }
 
-        // Handelt es sich um einen jgj Spielplan?
-        if ($turnier->details['spielplan'] !== 'jgj' && $anzahl_teams === 8) {
+        // Nur JgJ-Spielpläne sind in der Datenbank hinterlegt.
+        if ($turnier->details['format'] !== 'jgj') {
             return false;
         }
 
-        // Default Spielplan zurückgeben, wenn keiner Vorhanden, dann false
-        $vorlage = match ($anzahl_teams) {
+        // Richtigen Spielplan ermitteln, wenn keiner vorhanden, dann false
+        return match ($anzahl_teams) {
             4 => '4er_jgj_default',
             5 => '5er_jgj_default',
             6 => '6er_jgj_default',
@@ -193,8 +203,6 @@ class Spielplan
             8 => '8er_jgj_versetzt',
             default => false,
         };
-
-        return false;
     }
 
     /**
@@ -202,10 +210,10 @@ class Spielplan
      *
      * @param Turnier $turnier
      */
-    public static function delete_spielplan(Turnier $turnier): void
+    public static function delete(Turnier $turnier): void
     {
-        if (!empty($turnier->details['set_spielplan'])) {
-            $turnier->set('set_spielplan', null);
+        if (!empty($turnier->details['spielplan_vorlage'])) {
+            $turnier->set('spielplan_vorlage', null);
         }
         // Es existiert kein dynamischer Spielplan
         if (!self::check_exist($turnier->id)) {
@@ -256,12 +264,16 @@ class Spielplan
         $spiele = dbi::$db->query($sql)->esc()->fetch('spiel_id');
 
         // Uhrzeiten berechnen
-        $spielzeit = ($this->details["anzahl_halbzeiten"] * $this->details["halbzeit_laenge"]
-                + $this->details["puffer"]) * 60; // In Sekunden für Unixzeit
+        $spielzeit = (
+                $this->details["anzahl_halbzeiten"]
+                * $this->details["halbzeit_laenge"]
+                + $this->details["puffer"]
+            ) * 60; // In Sekunden für Unixzeit
+
         $startzeit = strtotime($this->turnier->details["startzeit"]);
+
         foreach ($spiele as $spiel_id => $spiel) {
             $spiele[$spiel_id]["zeit"] = date("H:i", $startzeit);
-            // 4er Spielplan Extrapause nach geraden Spielen
             $startzeit += $spielzeit + $this->get_pause($spiel_id) * 60;
         }
 

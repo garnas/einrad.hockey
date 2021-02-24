@@ -161,8 +161,23 @@ ALTER TABLE `spielplan_paarungen`
 ALTER TABLE `spielplan_details`
   ADD CONSTRAINT `spielplan_details_ibfk_1` FOREIGN KEY (`spielplan_paarung`) REFERENCES `spielplan_paarungen` (`spielplan_paarung`);
 
-ALTER TABLE `turniere_details` ADD FOREIGN KEY (`set_spielplan`) REFERENCES `spielplan_details`(`spielplan`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
 ALTER TABLE `mailbot` CHANGE `inhalt` `inhalt` VARCHAR(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 
 ALTER TABLE `turniere_details` ADD `set_spielplan` VARCHAR(30) NULL AFTER `startgebuehr`;
+
+ALTER TABLE `turniere_details` CHANGE `spielplan` `format` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+
+ALTER TABLE `turniere_liga` ADD `spielplan_vorlage` VARCHAR(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL AFTER `phase`, ADD `spielplan_datei` VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL AFTER `spielplan_vorlage`;
+
+UPDATE turniere_liga as tl
+INNER JOIN turniere_details as td on td.turnier_id = tl.turnier_id
+SET tl.spielplan_vorlage = td.set_spielplan, tl.spielplan_datei = td.link_spielplan
+WHERE tl.turnier_id = td.turnier_id;
+
+ALTER TABLE `turniere_liga` ADD FOREIGN KEY (`spielplan_vorlage`) REFERENCES `spielplan_details`(`spielplan`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `turniere_details`
+  DROP `set_spielplan`,
+  DROP `link_spielplan`;
+
+UPDATE `turniere_liga` SET `spielplan_datei`= NULL WHERE spielplan_datei = ''

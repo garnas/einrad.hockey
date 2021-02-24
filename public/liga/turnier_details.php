@@ -66,12 +66,12 @@ if ($turnier->details['phase'] == 'spielplan'){
     $turnier->details['phase'] = 'Spielplanphase';
 }
 //Spielmodus
-if ($turnier->details['spielplan'] == 'jgj'){
-    $turnier->details['spielplan'] = 'Jeder-gegen-Jeden';
-}elseif($turnier->details['spielplan'] == 'dko'){
-    $turnier->details['spielplan'] = 'Doppel-KO bei acht Teams, sonst Jeder-gegen-Jeden';
-}elseif($turnier->details['spielplan'] == 'gruppen'){
-    $turnier->details['spielplan'] = 'Zwei Gruppen bei acht Teams, sonst Jeder-gegen-Jeden';
+if ($turnier->details['format'] == 'jgj'){
+    $turnier->details['format'] = 'Jeder-gegen-Jeden';
+}elseif($turnier->details['format'] == 'dko'){
+    $turnier->details['format'] = 'Doppel-KO bei acht Teams, sonst Jeder-gegen-Jeden';
+}elseif($turnier->details['format'] == 'gruppen'){
+    $turnier->details['format'] = 'Zwei Gruppen bei acht Teams, sonst Jeder-gegen-Jeden';
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -138,7 +138,7 @@ include '../../templates/header.tmp.php';
         <tr>
             <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;"><i class="material-icons">format_align_center</i> Spielplan</td>
             <td>
-                <?=$turnier->details['spielplan']?>
+                <?= $turnier->details['format'] ?>
                 <?php if($turnier->details['phase'] == 'Spielplanphase'){?>
                     <br><?=Form::link($turnier->get_spielplan_link(), 'Zum Spielplan', true, "reorder")?>
                 <?php }//end if?>
