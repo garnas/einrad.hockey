@@ -21,9 +21,9 @@ class env
      * SQL-Datenbank Zugangsdaten
      */
     public const HOST_NAME = 'localhost';
-    public const DATABASE = 'sys';
-    public const USER_NAME = 'sander';
-    public const PASSWORD = 'mysqlpwd';
+    public const DATABASE = 'dummy-db';
+    public const USER_NAME = 'root';
+    public const PASSWORD = '';
 
     /**
      * Mailserver

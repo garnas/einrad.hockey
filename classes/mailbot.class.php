@@ -36,29 +36,28 @@ class MailBot
     {
         if (Env::ACTIVATE_EMAIL) {
             if ($mailer->send()) {
-                Form::log('emails.log', 'Mail erfolgreich versendet');
                 return true;
-            } else {
-                Form::log('emails.log', 'Fehler:' . $mailer->ErrorInfo);
-                return false;
             }
-        } else { // Debugging
-            if (!(Config::$ligacenter ?? false)) {
-                $mailer->Password = '***********'; // Passwort verstecken
-                $mailer->ClearAllRecipients();
-                Form::log('emails.log', 'Mail erfolgreich versendet');
-            }
-            db::debug($mailer);
+            Form::log(Config::LOG_EMAILS, 'Fehler: ' . $mailer->ErrorInfo);
             return false;
         }
+
+        // Debugging
+        if (!Config::$ligacenter) {
+            $mailer->Password = '***********'; // Passwort verstecken
+            $mailer->ClearAllRecipients();
+        }
+
+        Form::log(Config::LOG_EMAILS, 'E-Mail-Debug-Pseudo-Versand erfolgreich');
+        dbi::debug($mailer);
+        return false;
     }
 
     /**
      * Der Mailbot nimmt Emails aus der Datenbank und versendet diese
      *
-     * @throws \PHPMailer\PHPMailer\Exception
      */
-    public static function mail_bot()
+    public static function mail_bot(): void
     {
         $sql = "
                 SELECT * 
@@ -104,11 +103,19 @@ class MailBot
      * @param string|array $adressaten
      * @param string $absender
      */
-    public static function add_mail(string $betreff, string $inhalt, string|array $adressaten, string $absender = Env::SMTP_USER)
+    public static function add_mail(string $betreff, string $inhalt, string|array $adressaten,
+                                    string $absender = Env::SMTP_USER): void
     {
-        if (!empty($adressaten)) return; //Nur wenn Mailadressen vorhanden sind, wird eine Mail hinzugefügt
+        // Nur wenn Mailadressen vorhanden sind, wird eine Mail hinzugefügt
+        if (empty($adressaten)){
+            return;
+        }
 
-        if (is_array($adressaten)) $adressaten = implode(",", $adressaten); // in String umwandeln
+        // In String umwandeln
+        if (is_array($adressaten)){
+            $adressaten = implode(",", $adressaten);
+        }
+
         $sql = "
                 INSERT INTO mailbot (betreff, inhalt, adressat, absender, mail_status)
                 VALUES (?, ?, ?, ?, 'warte')
@@ -124,29 +131,29 @@ class MailBot
      * @param string $mail_status
      * @param string|null $fehler
      */
-    public static function set_status(int $mail_id, string $mail_status, string $fehler = NULL)
+    public static function set_status(int $mail_id, string $mail_status, string $fehler = NULL): void
     {
         $sql = "
             UPDATE mailbot 
             SET mail_status = ?, zeit = zeit, fehler = ? 
             WHERE mail_id = ?
             ";
-        dbi::$db->query($sql, $mail_id, $mail_status, $fehler)->log();
-
+        dbi::$db->query($sql, $mail_status, $fehler, $mail_id)->log();
     }
 
     /**
      * Erstellt eine Warnung im Ligacenter, wenn der Mailbot manche mails nicht versenden kann.
      */
-    public static function warning_mail()
+    public static function warning(): void
     {
         $sql = "
             SELECT mail_id
             FROM mailbot 
             WHERE mail_status = 'fehler'
             ";
-        if ($anzahl = dbi::$db->query($sql)->num_rows() > 0)
+        if (($anzahl = dbi::$db->query($sql)->num_rows()) > 0) {
             Form::notice("Der Mailbot kann $anzahl Mail(s) nicht versenden - siehe Datenbank.");
+        }
     }
 
     /**
@@ -155,7 +162,7 @@ class MailBot
      *
      * @param Turnier $turnier
      */
-    public static function mail_plaetze_frei(Turnier $turnier)
+    public static function mail_plaetze_frei(Turnier $turnier): void
     {
         if ($turnier->get_anzahl_freie_plaetze() > 0 && in_array($turnier->details['art'], ['I', 'II', 'III'])) {
             $team_ids = Team::get_liste_ids();
@@ -168,9 +175,9 @@ class MailBot
                 ) {
                     $betreff = "Freie Plätze: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
                     ob_start();
-                        include(__dir__ . "../templates/mails/mail_anfang.tmp.php");
-                        include(__dir__ . "../templates/mails/mail_plaetze_frei.tmp.php");
-                        include(__dir__ . "../templates/mails/mail_ende.tmp.php");
+                        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+                        include(Env::BASE_PATH . "/templates/mails/mail_plaetze_frei.tmp.php");
+                        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
                     $inhalt = ob_get_clean();
                     $emails = (new Kontakt ($team_id))->get_emails('info');
                     self::add_mail($betreff, $inhalt, $emails);
@@ -185,13 +192,13 @@ class MailBot
      * @param Turnier $turnier
      * @param int $team_id
      */
-    public static function mail_warte_zu_spiele(Turnier $turnier, int $team_id)
+    public static function mail_warte_zu_spiele(Turnier $turnier, int $team_id): void
     {
         $betreff = "Spielen-Liste: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
         ob_start();
-            include(__dir__ . "../templates/mails/mail_anfang.tmp.php");
-            include(__dir__ . "../templates/mails/mail_warte_zu_spiele.tmp.php");
-            include(__dir__ . "../templates/mails/mail_ende.tmp.php");
+            include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+            include(Env::BASE_PATH . "/templates/mails/mail_warte_zu_spiele.tmp.php");
+            include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
         $inhalt = ob_get_clean();
         $akt_kontakt = new Kontakt ($team_id);
         $emails = $akt_kontakt->get_emails('info');
@@ -203,7 +210,7 @@ class MailBot
      *
      * @param Turnier $turnier
      */
-    public static function mail_gelost(Turnier $turnier)
+    public static function mail_gelost(Turnier $turnier): void
     {
         if (in_array($turnier->details['art'], ['I', 'II', 'III'])) {
             $team_ids = Team::get_liste_ids();
@@ -221,9 +228,9 @@ class MailBot
                     }
                     $betreff = "$liste: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
                     ob_start();
-                        include(__dir__ . "../templates/mails/mail_anfang.tmp.php");
-                        include(__dir__ . "../templates/mails/mail_gelost.tmp.php");
-                        include(__dir__ . "../templates/mails/mail_ende.tmp.php");
+                        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+                        include(Env::BASE_PATH . "/templates/mails/mail_gelost.tmp.php");
+                        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
                     $inhalt = ob_get_clean();
                     $emails = (new Kontakt ($team_id))->get_emails('info');
                     self::add_mail($betreff, $inhalt, $emails);
@@ -237,7 +244,7 @@ class MailBot
      *
      * @param Turnier $turnier
      */
-    public static function mail_neues_turnier(Turnier $turnier)
+    public static function mail_neues_turnier(Turnier $turnier): void
     {
         if (in_array($turnier->details['art'], ['I', 'II', 'III'])) {
             $team_ids = Team::get_liste_ids();
@@ -246,9 +253,9 @@ class MailBot
                 if ($turnier->check_team_block($team_id) && !$turnier->check_doppel_anmeldung($team_id)) {
                     $betreff = "Neues " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
                     ob_start();
-                        include(__dir__ . "../templates/mails/mail_anfang.tmp.php");
-                        include(__dir__ . "../templates/mails/mail_neues_turnier.tmp.php");
-                        include(__dir__ . "../templates/mails/mail_ende.tmp.php");
+                        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+                        include(Env::BASE_PATH . "/templates/mails/mail_neues_turnier.tmp.php");
+                        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
                     $inhalt = ob_get_clean();
                     $emails = (new Kontakt ($team_id))->get_emails('info');
                     self::add_mail($betreff, $inhalt, $emails);
@@ -263,18 +270,19 @@ class MailBot
      * @param Turnier $turnier
      * @param int $team_id
      */
-    public static function mail_freilos_abmeldung(Turnier $turnier, int $team_id)
+    public static function mail_freilos_abmeldung(Turnier $turnier, int $team_id): void
     {
-        if (in_array($turnier->details['art'], ['I', 'II', 'III'])) {
-            $betreff = "Falscher Freilosblock: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
-            ob_start();
-                include(__dir__ . "../templates/mails/mail_anfang.tmp.php");
-                include(__dir__ . "../templates/mails/mail_freilos_abmeldung.tmp.php");
-                include(__dir__ . "../templates/mails/mail_ende.tmp.php");
-            $inhalt = ob_get_clean();
-            $emails = (new Kontakt ($team_id))->get_emails('info');
-            self::add_mail($betreff, $inhalt, $emails);
-        }
+        if (!in_array($turnier->details['art'], ['I', 'II', 'III'])) return;
+
+        $betreff = "Falscher Freilosblock: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
+        ob_start();
+            include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+            include(Env::BASE_PATH . "/templates/mails/mail_freilos_abmeldung.tmp.php");
+            include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+        $inhalt = ob_get_clean();
+        $emails = (new Kontakt ($team_id))->get_emails('info');
+
+        self::add_mail($betreff, $inhalt, $emails);
     }
 
     /**
@@ -282,11 +290,11 @@ class MailBot
      *
      * @param Turnier $turnier
      */
-    public static function mail_turnierdaten_geaendert(Turnier $turnier)
+    public static function mail_turnierdaten_geaendert(Turnier $turnier): void
     {
         $betreff = "Turnierdaten geändert: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
         ob_start();
-            include(__dir__ . "../templates/mails/mail_turnierdaten_geaendert.tmp.php");
+            include(Env::BASE_PATH . "/templates/mails/mail_turnierdaten_geaendert.tmp.php");
         $inhalt = ob_get_clean();
         self::add_mail($betreff, $inhalt, Env::LAMAIL);
     }

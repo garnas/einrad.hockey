@@ -12,7 +12,6 @@ $_SESSION['captcha'] = $captcha->getPhrase();
 $error = false;
 $send = false; // Email wurde abgesendet
 if (isset($_POST['absenden'])) {
-    $log_file = "log_kontaktformular.log";
     $absender = $_POST['absender'];
     $name = $_POST['name'];
     $betreff = $_POST['betreff'];
@@ -24,11 +23,11 @@ if (isset($_POST['absenden'])) {
     }
 
     // Captcha validieren
-    if (!$captcha->testPhrase($user_captcha)){
+    if (!$captcha->testPhrase($user_captcha)) {
         Form::error("Falsches Captcha, bitte versuche es erneut.");
         $error = true;
         // Logdatei erstellen/beschreiben
-        Form::log($log_file, "Falsches Captcha: " . $_SESSION['captcha'] . "\n" . print_r($_POST, true));
+        Form::log(Config::LOG_KONTAKTFORMULAR, "Falsches Captcha: " . $_SESSION['captcha'] . "\n" . print_r($_POST, true));
     }
 
     // Zeitmessung vs Bots
@@ -38,10 +37,10 @@ if (isset($_POST['absenden'])) {
     if ($time < 4) { //Bot, wenn in unter 4 Sekunden das Formular abgeschickt wurde
         Form::error("E-Mail konnte wegen Spamverdacht nicht versendet werden,
          da das Formular zu schnell ausgefüllt wurde. Schreib uns bitte an via "
-            . Form::mailto(Env::LAMAIL), esc:false);
+            . Form::mailto(Env::LAMAIL), esc: false);
         $error = true;
         // Logdatei erstellen/beschreiben
-        Form::log($log_file, "Zu schnell: " . $time . " Sekunden\n" . print_r($_POST, true));
+        Form::log(Config::LOG_KONTAKTFORMULAR, "Zu schnell: " . $time . " Sekunden\n" . print_r($_POST, true));
     }
 
     if (!$error) {
@@ -58,8 +57,8 @@ if (isset($_POST['absenden'])) {
             $send = true; //Email an den User nur schicken, wenn die Mail an LA rausging
         } else {
             Form::error("Es ist ein Fehler aufgetreten. E-Mail konnte nicht versendet werden.
-             Manuell versenden: " . Form::mailto(Env::LAMAIL), esc:false);
-            Form::log($log_file, "Error Mail:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
+             Manuell versenden: " . Form::mailto(Env::LAMAIL), esc: false);
+            Form::log(Config::LOG_KONTAKTFORMULAR, "Error Mail:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
         }
         if ($send) {
             // Confirmation Mail an die angegebene Absendeadresse
@@ -74,10 +73,10 @@ if (isset($_POST['absenden'])) {
                 unset($_SESSION['captcha']); // Captcha aus der Session löschen
                 header('Location: ../liga/neues.php');
                 die();
-            } else {
-                Form::error("Es ist ein Fehler aufgetreten: Eine Kopie der E-Mail wurde nicht an dich versendet! Stimmt \"$absender\"?");
-                Form::log($log_file, "Error Mailback:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
             }
+
+            Form::error("Es ist ein Fehler aufgetreten: Eine Kopie der E-Mail wurde nicht an dich versendet! Stimmt \"$absender\"?");
+            Form::log(Config::LOG_KONTAKTFORMULAR, "Error Mailback:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
         } // send
     } // error
 } // Form
@@ -153,7 +152,7 @@ include '../../templates/header.tmp.php';
                           id="text"
                           name="text"
                           required
-                ><?= $_POST['text'] ?></textarea>
+                ><?= $_POST['text'] ?? '' ?></textarea>
             </p>
             <!-- Captcha -->
             <p>
@@ -187,8 +186,8 @@ include '../../templates/header.tmp.php';
             <?php } //endif?>
             <p>
                 <button type="submit"
-                       name="absenden"
-                       class="w3-tertiary w3-ripple w3-round w3-button"
+                        name="absenden"
+                        class="w3-tertiary w3-ripple w3-round w3-button"
                 >
                     <i class="material-icons">send</i> Senden
                 </button>

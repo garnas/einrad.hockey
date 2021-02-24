@@ -15,21 +15,13 @@ if (isset($_POST['login'])) {
         Form::error("Bitte Logins ausfüllen.");
     }
 
-    //Passwort überprüfen
+    // Passwort überprüfen
     if (Team::login($teamname, $passwort)) {
         if (isset($_SESSION['tc_redirect'], $_GET['redirect'])) {
             $redirect = $_SESSION['tc_redirect'];
             unset($_SESSION['tc_redirect']);
         } else {
             $redirect = 'tc_start.php';
-        }
-        if (empty($team->details['trikot_farbe_1'])) {
-            $link = Form::link("tc_teamdaten_aendern.php", ' Link.', icon: "launch");
-            Form::info("Hier kannst du deine Trikotfarben eintragen - " . $link, ' ', esc: false);
-        }
-        if (empty($team->details['teamfoto'])) {
-            $link = Form::link("../teamcenter/tc_teamdaten_aendern.php", ' Link.', icon: "launch");
-            Form::info("Hier kannst du dein Teamfoto hochladen - " . $link, ' ', esc: false);
         }
         header('Location: ' . $redirect);
         die();

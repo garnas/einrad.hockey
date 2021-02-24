@@ -23,11 +23,13 @@ if (isset($_POST["tore_speichern"])) {
     // Neu eingetragene Tore speichern
     foreach ($spielplan->spiele as $spiel_id => $spiel) {
         if (
-            $spiel['tore_a'] == ($_POST["tore_a"][$spiel_id] ?? '')
-            && $spiel['tore_b'] == ($_POST["tore_b"][$spiel_id] ?? '')
-            && $spiel['penalty_a'] == ($_POST["penalty_a"][$spiel_id] ?? '')
-            && $spiel['penalty_b'] == ($_POST["penalty_b"][$spiel_id] ?? '')
-        ) continue;
+            (string) $spiel['tore_a'] === ($_POST["tore_a"][$spiel_id] ?? '')
+            && (string) $spiel['tore_b'] === ($_POST["tore_b"][$spiel_id] ?? '')
+            && (string) $spiel['penalty_a'] === ($_POST["penalty_a"][$spiel_id] ?? '')
+            && (string) $spiel['penalty_b'] === ($_POST["penalty_b"][$spiel_id] ?? '')
+        ) {
+            continue;
+        }
         $spielplan->set_tore(
             $spiel['spiel_id'],
             $_POST["tore_a"][$spiel_id] ?? '',
@@ -52,7 +54,7 @@ if (isset($_POST["turnierergebnis_speichern"])) {
 
     // Testen ob Turnier tabellentechnisch eingetragen werden darf.
     if (!Tabelle::check_ergebnis_eintragbar($spielplan->turnier)) {
-        Form::error("Turnierergebnis konnte nicht eingetragen werden. Kontaktiere bitte den Ligaausschuss.");
+        Form::error("Turnierergebnis kann nicht eingetragen werden. Kontaktiere bitte den Ligaausschuss.");
         $error = true;
     }
 
@@ -88,7 +90,7 @@ $vgl_data = $spielplan->turnier->get_ergebnis();
 if (!empty($vgl_data)) {
     if (
         !$spielplan->check_turnier_beendet()
-        or count($vgl_data) != $spielplan->anzahl_teams
+        || count($vgl_data) != $spielplan->anzahl_teams
     ) {
         $error = true;
     } else {

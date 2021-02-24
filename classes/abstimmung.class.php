@@ -14,20 +14,20 @@ class Abstimmung
     /**
      * Frühstmöglicher Zeitpunkt der Stimmabgabe
      */
-    const BEGINN = "19.01.2021 17:15";
+    public const BEGINN = "19.01.2021 17:15";
     /**
      * Letztmöglicher Zeitpunkt der Stimmabgabe
      */
-    const ENDE = "21.02.2021 23:59";
+    public const ENDE = "21.02.2021 23:59";
     /**
      * Verschlüsselungsverfahren für die TeamIDs
      */
-    const CIPHER = 'AES-256-CBC';
+    private const CIPHER = 'AES-256-CBC';
     /**
      * Verhindert, dass bei einer neuen Abstimmung der gleiche Crypt bei gleichen Passwort und TeamID entsteht.
      * Muss für jede Liga-Abstimmung erneuert werden.
      */
-    const IV = 'ZUEvrHAovY29t/bA';
+    private const IV = 'ZUEvrHAovY29t/bA';
     /**
      * @var array|string[] Daten aus der DB-Tabelle abstimmung_teams
      */
@@ -49,10 +49,12 @@ class Abstimmung
      *
      * @param $team_id
      */
-    function __construct($team_id)
+    public function __construct($team_id)
     {
         $this->team_id = $team_id;
-        if (!Team::is_ligateam($team_id)) die("Ungültige Team-ID");
+        if (!Team::is_ligateam($team_id)) {
+            die("Ungültige Team-ID");
+        }
         // Details aus abstimmung_teams bekommen
         $sql = "
                 SELECT *
@@ -63,7 +65,7 @@ class Abstimmung
 
         // Beim ersten Mal Abstimmen den für die Verschlüsselung benutzen Passwort-Hash speichern.
         if (empty($this->team)) {
-            $this->passwort_hash = (new Team($team_id))->get_passwort();
+            $this->passwort_hash = (new Team($team_id))->details['passwort'];
         } else {
             $this->passwort_hash = $this->team['passwort'];
         }
@@ -77,7 +79,7 @@ class Abstimmung
      * @param $crypt
      * @return string
      */
-    function crypt_to_teamid($passwort, $crypt): string
+    public function crypt_to_teamid($passwort, $crypt): string
     {
         // Verwendete password-based key derivation, das User-Passwort kein geeigner Key ist zum verschlüsseln.
         $key = hash_pbkdf2("sha256", $passwort, $this->passwort_hash, 8000);
@@ -90,7 +92,7 @@ class Abstimmung
      * @param string $passwort
      * @return string
      */
-    function teamid_to_crypt(string $passwort): string
+    public function teamid_to_crypt(string $passwort): string
     {
         // Verwendete password-based key derivation, das User-Passwort kein geeigner Key ist zum verschlüsseln.
         $key = hash_pbkdf2("sha256", $passwort, $this->passwort_hash, 8000);
@@ -103,7 +105,7 @@ class Abstimmung
      * @param string $crypt
      * @return string
      */
-    function get_stimme(string $crypt): string
+    public function get_stimme(string $crypt): string
     {
         $sql = "
             SELECT stimme 
@@ -121,12 +123,15 @@ class Abstimmung
      * @param $stimme
      * @param $crypt // Verschlüsselte TeamID
      */
-    function set_stimme($stimme, $crypt)
+    public function set_stimme($stimme, $crypt)
     {
+        // Validierung
         if (empty($this->team) xor empty($this->get_stimme($crypt))){
             Form::error("Fehler, bitte melde dich bei " . Form::mailto(Env::TECHNIKMAIL), esc:false);
+            Form::log("abstimmung.log", "Fehler: $this->team_id | $crypt");
             return;
         }
+
         if (empty($this->team)) { // Team stimmt zum ersten mal ab.
             $sql = "
                 INSERT INTO abstimmung_teams (team_id, passwort)
@@ -163,7 +168,7 @@ class Abstimmung
      * @param int $min Minimale anzahl an Stimmen bis zur Veröffentlichung
      * @return array Array mit den Ergebnissen der Abstimmung
      */
-    static function get_ergebnisse($min = 0): array
+    public static function get_ergebnisse($min = 0): array
     {
         $sql = "
             SELECT stimme, COUNT(stimme) AS stimmen 
@@ -179,8 +184,8 @@ class Abstimmung
         if ($ergebnisse['gesamt'] < $min){
             $array['gesamt'] = $ergebnisse['gesamt'];
             return $array;
-        } else {
-            return $ergebnisse;
         }
+
+        return $ergebnisse;
     }
 }

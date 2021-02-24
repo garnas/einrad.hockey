@@ -36,10 +36,6 @@ if (isset($_POST['beantworten'])){
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-?>
-
-
-<?php
 Config::$titel = 'Multiple-Choice Schiritest der Deutschen Einradhockeyliga';
 include '../../templates/header.tmp.php'; // Html-header und Navigation
 ?>
@@ -100,7 +96,7 @@ include '../../templates/header.tmp.php'; // Html-header und Navigation
                         <?php } //endif?>
                     </p>
                 <?php } //end foreach antworten?>
-                <?php $antworten_user = $_POST['abgabe'][$frage_id] ?? []; // Leer, falls keine Antwort abgegeben. ?> 
+                <?php $antworten_user = $_POST['abgabe'][$frage_id] ?? []; // Leer, falls keine Antwort abgegeben. ?>
                 <?php if (SchiriTest::validate_frage($frage_id, $antworten_user)){?>
                     <h3 class="w3-bottombar">
                         <span size="50" class="w3-text-green">
@@ -129,7 +125,7 @@ include '../../templates/header.tmp.php'; // Html-header und Navigation
                              src="bilder/<?=$frage['erklaerung_bild']?>">
                     </div>
                 <?php } //endif?>
-                
+
                 <?php
                 $regelnr = $fragen[$frage_id]['regelnr'];
                 if ($regelnr == ''){
@@ -145,9 +141,9 @@ include '../../templates/header.tmp.php'; // Html-header und Navigation
                                 "Offizielle Regel " . $nr . ": " . $titel, esc:false);
                         }
                     }
-                }                    
+                }
                 ?>
-                
+
             <?php } //endif?>
 
         </div>

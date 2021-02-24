@@ -16,7 +16,7 @@ class Neuigkeit
      * @param string $link_pdf
      * @param string $bild_verlinken
      */
-    public static function create_neuigkeit(string $titel, string $text, string $name, string $link_jpg = '', string $link_pdf = '', string $bild_verlinken = '')
+    public static function create(string $titel, string $text, string $name, string $link_jpg = '', string $link_pdf = '', string $bild_verlinken = '')
     {
         $sql = "
                 INSERT INTO neuigkeiten (titel, inhalt, eingetragen_von, link_jpg, link_pdf, bild_verlinken) 
@@ -31,7 +31,7 @@ class Neuigkeit
      *
      * @param $neuigkeiten_id
      */
-    public static function delete_neuigkeit($neuigkeiten_id)
+    public static function delete($neuigkeiten_id): void
     {
         // Bilder und Dokumente der Neuigkeit löschen
         $neuigkeit = self::get_neuigkeiten($neuigkeiten_id);
@@ -80,7 +80,7 @@ class Neuigkeit
      */
     public static function get_neuigkeiten(int $neuigkeiten_id = 0): array
     {
-        if (empty($neuigkeiten_id)) { // Alle
+        if (empty($neuigkeiten_id)) { // Alle Neuigkeiten
             $sql = "
                 SELECT * 
                 FROM neuigkeiten 
@@ -88,7 +88,7 @@ class Neuigkeit
                 LIMIT 10
                 "; // Es werden max. 10 Neuigkeiten angezeigt
             $neuigkeiten = dbi::$db->query($sql)->esc()->fetch('neuigkeiten_id');
-        } else { // Eine
+        } else { // Eine Neuigkeit
             $sql = "
                 SELECT * 
                 FROM neuigkeiten 
@@ -98,8 +98,8 @@ class Neuigkeit
         }
         foreach ($neuigkeiten as $key => $neuigkeit) {
             if ($neuigkeit['eingetragen_von'] == 'Ligaausschuss') {
-                $neuigkeiten[$key]['inhalt'] = htmlspecialchars_decode($neuigkeit['inhalt']);
-                $neuigkeiten[$key]['titel'] = htmlspecialchars_decode($neuigkeit['titel']);
+                $neuigkeiten[$key]['inhalt'] = htmlspecialchars_decode($neuigkeit['inhalt'], ENT_QUOTES);
+                $neuigkeiten[$key]['titel'] = htmlspecialchars_decode($neuigkeit['titel'], ENT_QUOTES);
             }
         }
         return $neuigkeiten; // Escaping in Funktion, nicht bei Ligaausschuss als Autor
@@ -120,14 +120,16 @@ class Neuigkeit
         if (self::check_error_image($file)) {
             return false;
         }
+
         // Gibt den Pfad mit neuem unix-time Namen zurück, wo die hochgeladene Datei gespeichert werden soll.
         $file_type = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
         // Speicherpfad des Uploads mit neuem Dateinamen
         $file_dir = $target_dir . date("Y_m_d_H_i_s") . "." . $file_type;
 
         // Datei wird vom temporären Ordner in den richtigen Ordner verschoben
         if (move_uploaded_file($file["tmp_name"], $file_dir)) {
-            // Bild wird kompressiert //Sehr hoher Memory Bedarf...
+            // Bild wird kompressiert // Sehr hoher Memory-Bedarf
             self::compress_image($file_dir, $quality, $pix);
         } else {
             Form::error("Bild konnte nicht hochgeladen werden.");
@@ -149,8 +151,10 @@ class Neuigkeit
         if (!self::check_pdf($file)) {
             return false;
         }
+
         // Gibt den Pfad mit neuem unix-time Namen zurück, wo die hochgeladene Datei gespeichert werden soll.
         $file_type = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
         // Speicherpfad des Uploads mit neuem Dateinamen
         $file_dir = $target_dir . date("Y_m_d_H_i_s") . "." . $file_type;
 
@@ -169,7 +173,7 @@ class Neuigkeit
      * @param int $quality
      * @param int $max_pix
      */
-    public static function compress_image(string $source, int $quality, int $max_pix)
+    public static function compress_image(string $source, int $quality, int $max_pix): void
     {
         if (!(extension_loaded('gd') && function_exists('gd_info'))) {
             Form::error("Bild konnte nicht kompressiert werden - keine GD-Extension.");
@@ -187,8 +191,7 @@ class Neuigkeit
             return;
         }
 
-        $width = $info[0];
-        $height = $info[1];
+        [$width, $height] = $info;
         $ratio = $width / $height;
         // Bild skalieren // hohe Belastung für das PHP memory_limit
         if (max($width, $height) > $max_pix) {
@@ -406,12 +409,40 @@ class Neuigkeit
                 ";
         return dbi::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
     }
+
+    /**
+     * Wie viele Spiele wurden gespielt?
+     *
+     * @param int $saison
+     * @return int
+     */
     public static function get_alle_spiele(int $saison = Config::SAISON): int
     {
         $sql = "
                 SELECT count(*) AS spiele
                 FROM spiele
                 INNER JOIN turniere_liga tl on spiele.turnier_id = tl.turnier_id
+                WHERE tl.saison = ?
+                AND tore_b IS NOT NULL
+                AND tore_a IS NOT NULL
+                ";
+        return dbi::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
+    }
+
+    /**
+     * Wie viele Spielminuten wurden in der Saison gespielt?
+     *
+     * @param int $saison
+     * @return int
+     */
+    public static function get_spielminuten(int $saison = Config::SAISON): int
+    {
+        $sql = "
+                SELECT sum(sd.anzahl_halbzeiten * sd.halbzeit_laenge)
+                FROM spiele
+                INNER JOIN turniere_liga tl on spiele.turnier_id = tl.turnier_id
+                INNER JOIN turniere_details td on spiele.turnier_id = td.turnier_id
+                INNER JOIN spielplan_details sd on tl.spielplan_vorlage = sd.spielplan
                 WHERE tl.saison = ?
                 AND tore_b IS NOT NULL
                 AND tore_a IS NOT NULL

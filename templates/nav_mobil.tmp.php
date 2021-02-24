@@ -6,66 +6,60 @@
             <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz_small.png" class="w3-image" alt="kleines Logo" style="max-width: 140px">
         </a>
     </div>
+    <!-- Searchbox -->
     <div class="w3-panel">
         <div class="w3-margin-left w3-margin-right">
-            <section role="search" data-ss360="true">
-                <input class="searchbox" type="search" placeholder="Suche" />
-                <button class="searchbutton"/>
-            </section>
+            <div role="search" data-ss360="true">
+                <label for="suche_mobil"></label>
+                <input class="searchbox" id="suche_mobil" type="search" placeholder="Suche" />
+                <button class="searchbutton"></button>
+            </div>
         </div>
     </div>
+
+    <!-- Info -->
     <a href="<?= Env::BASE_URL ?>/liga/ueber_uns.php" class="no">
         <h3 class="w3-margin-left w3-text-primary"><i style="vertical-align: -16%" class="material-icons w3-xlarge">info</i> INFO</h3>
     </a>
-    <a href="<?= Env::BASE_URL ?>/liga/neues.php" class="w3-bar-item w3-button">Neuigkeiten</a>
-    <a href="<?= Env::BASE_URL ?>/liga/ueber_uns.php" class="w3-bar-item w3-button">Interesse?</a>
-    <a href="<?= Env::BASE_URL ?>/liga/teams.php" class="w3-bar-item w3-button">Teams</a>
-    <a href="<?= Env::BASE_URL ?>/liga/ligakarte.php" class="w3-bar-item w3-button">Ligakarte</a>
-    <a href="https://forum.einrad.hockey/" class="w3-bar-item w3-button">Forum</a>
+    <?php foreach(Nav::get_info() as $link){ ?>
+        <a href="<?= $link[0] ?>" class="w3-bar-item w3-button"><?= $link[1] ?></a>
+    <?php } //end for ?>
+
+    <!-- Liga -->
     <div class="w3-text-black">
-        <h3 class="w3-margin-left w3-text-primary"><i style="vertical-align: -16%" class="material-icons w3-xlarge">emoji_events</i> LIGA</h3>
+        <h3 class="w3-margin-left w3-text-primary">
+            <?= Form::icon("emoji_events", tag:"h3") ?> LIGA
+        </h3>
     </div>
-    <a href="<?= Env::BASE_URL ?>/liga/jubilaeum.php" class="w3-bar-item w3-button">25 Jahre Liga</a>
-    <a href="<?= Env::BASE_URL ?>/liga/turniere.php" class="w3-bar-item w3-button">Turniere</a>
-    <a href="<?= Env::BASE_URL ?>/liga/ergebnisse.php" class="w3-bar-item w3-button">Ergebnisse</a>
-    <a href="<?= Env::BASE_URL ?>/liga/teams.php" class="w3-bar-item w3-button">Teams</a>
-    <a href="<?= Env::BASE_URL ?>/liga/tabelle.php#meister" class="w3-bar-item w3-button">Meisterschaftstabelle</a>
-    <a href="<?= Env::BASE_URL ?>/liga/tabelle.php#rang" class="w3-bar-item w3-button">Rangtabelle</a>
+    <?php foreach(Nav::get_liga() as $link){ ?>
+        <a href="<?= $link[0] ?>" class="w3-bar-item w3-button"><?= $link[1] ?></a>
+    <?php } //end for ?>
+
+    <!-- Modus -->
     <div class="w3-text-primary">
         <h3 class="w3-margin-left"><i style="vertical-align: -16%" class="material-icons">settings</i> MODUS</h3>
     </div>
-    <a href="<?= Env::BASE_URL ?>/liga/dokumente.php" class="w3-bar-item w3-button">Dokumente</a>
-    <a href="<?= Env::BASE_URL ?>/liga/ligaleitung.php" class="w3-bar-item w3-button">Ligaleitung</a>
+    <?php foreach(Nav::get_modus() as $link){ ?>
+        <a href="<?= $link[0] ?>" class="w3-bar-item w3-button"><?= $link[1] ?></a>
+    <?php } //end for ?>
+
+    <!-- Teamcenter -->
     <div class="w3-text-primary">
         <a style="text-decoration: none" href="<?= Env::BASE_URL ?>/teamcenter/tc_start.php">
             <h3 class="w3-margin-left"><i style="vertical-align: -20%" class="material-icons w3-xlarge">group</i> TEAMCENTER</h3>
         </a>
     </div>
-    <a href="<?= Env::BASE_URL ?>/teamcenter/tc_login.php" class="w3-bar-item w3-button">Login</a>
-    <?php if (!isset($_SESSION['logins']['team'])){$tc_color = 'w3-text-grey';}?>
-    <div class="<?=$tc_color ?? ''?>">
-        <a class="w3-bar-item w3-button" href="<?= Env::BASE_URL ?>/teamcenter/tc_start.php">Start</a>
-        <a class="w3-bar-item w3-button" href="<?= Env::BASE_URL ?>/teamcenter/tc_abstimmung.php">Abstimmung</a>
-        <a class="w3-bar-item w3-button" href="<?= Env::BASE_URL ?>/teamcenter/tc_turnierliste_anmelden.php">Turnieranmeldung</a>
-        <a class="w3-bar-item w3-button" href="<?= Env::BASE_URL ?>/teamcenter/tc_turnier_erstellen.php">Turnier erstellen</a>
-        <a class="w3-bar-item w3-button" href="<?= Env::BASE_URL ?>/teamcenter/tc_turnierliste_verwalten.php">Eigene Turniere</a>
-        <a class="w3-bar-item w3-button" href="<?= Env::BASE_URL ?>/teamcenter/tc_neuigkeit_eintragen.php">Neuigkeiten eintragen</a>
-        <a class="w3-bar-item w3-button" href="<?= Env::BASE_URL ?>/teamcenter/tc_neuigkeit_liste.php">Neuigkeit bearbeiten</a>
-        <a class="w3-bar-item w3-button" href="<?= Env::BASE_URL ?>/teamcenter/tc_kontaktcenter.php">Kontaktcenter</a>
-        <a class="w3-bar-item w3-button" href="<?= Env::BASE_URL ?>/teamcenter/tc_teamdaten.php">Teamdaten</a>
-        <a class="w3-bar-item w3-button" href="<?= Env::BASE_URL ?>/teamcenter/tc_kader.php">Kader</a>
-        <a class="w3-bar-item w3-button" href="<?= Env::BASE_URL ?>/teamcenter/tc_pw_aendern.php">Passwort ändern</a>
-        <a class="w3-bar-item w3-button" href="<?= Env::BASE_URL ?>/teamcenter/tc_logout.php">Logout</a>
-    </div>
+    <?php foreach(Nav::get_teamcenter() as $link){ ?>
+        <a href="<?= $link[0] ?>" class="w3-bar-item w3-button <?= $link[2] ?>"><?= $link[1] ?></a>
+    <?php } //end for ?>
+
+    <!-- Sonstiges -->
     <div class="w3-text-primary">
         <h3 class="w3-margin-left"><i style="vertical-align: -16%" class="material-icons w3-xlarge">format_list_bulleted</i> SONSTIGES</h3>
     </div>
-    <a href="<?= Env::BASE_URL ?>/liga/ueber_uns.php" class="w3-bar-item w3-button">Über uns</a>
-    <a href="<?= Env::BASE_URL ?>/liga/archiv.php" class="w3-bar-item w3-button">Archiv</a>
-    <a href="<?= Env::BASE_URL ?>/ligacenter/lc_login.php" class="w3-bar-item w3-button">Ligacenter</a>
-    <a href="<?= Env::BASE_URL ?>/liga/kontakt.php" class="w3-bar-item w3-button">Kontakt</a>
-    <a href="<?= Env::BASE_URL ?>/liga/datenschutz.php" class="w3-bar-item w3-button">Datenschutz</a>
-    <a href="<?= Env::BASE_URL ?>/liga/impressum.php" class="w3-bar-item w3-button">Impressum</a>
+    <?php foreach(Nav::get_sonstiges() as $link){ ?>
+        <a href="<?= $link[0] ?>" class="w3-bar-item w3-button <?= $link[2] ?? '' ?>"><?= $link[1] ?></a>
+    <?php } //end for ?>
     <a href="#" class="w3-bar-item w3-button"></a>
 </div>
 

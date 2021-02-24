@@ -104,7 +104,8 @@
                                value='<?= $spiel["penalty_a"] ?>'
                                class='w3-input w3-border w3-round w3-center w3-text-secondary'
                                style='padding: 2px; width: 65px; display: inline-block;'
-                               <?= ($spielplan->check_penalty_spiel($spiel_id) or $spielplan->validate_penalty_spiel($spiel)) ?: 'disabled placeholder = "/"' ?>
+                               <?= !($spielplan->check_penalty_spiel($spiel_id)
+                                   || $spielplan->validate_penalty_spiel($spiel)) ? 'disabled placeholder = "/"' : '' ?>
                                type='number'
                                autocomplete='off'
                                min='0'
@@ -116,7 +117,8 @@
                                value='<?= $spiel["penalty_b"] ?>'
                                class='w3-input w3-border w3-round w3-center w3-text-secondary'
                                style='padding: 2px; width: 65px; display: inline-block;'
-                               <?= ($spielplan->check_penalty_spiel($spiel_id) or $spielplan->validate_penalty_spiel($spiel)) ?: 'disabled placeholder = "/"' ?>
+                                <?= !($spielplan->check_penalty_spiel($spiel_id)
+                                    || $spielplan->validate_penalty_spiel($spiel)) ? 'disabled placeholder = "/"' : '' ?>
                                type='number'
                                autocomplete='off'
                                min='0'
@@ -124,16 +126,18 @@
                         >
                     </td>
                 </tr>
-                <?php if ($get_pause($spiel) > 0) { ?>
+                <?php if ($spielplan->get_pause($spiel_id) > 0) { ?>
                     <!-- Spielpause -->
                     <tr>
                         <td>
-                            <?= date("H:i", strtotime($spiel["zeit"]) + $spiel_dauer * 60) ?>
+                            <?= date("H:i",
+                                strtotime($spielplan->spiele[$spiel_id+1]['zeit'])
+                                - $spielplan->get_pause($spiel_id) * 60) ?>
                         </td>
                         <td></td>
                         <td class="w3-center">
                             <i class="material-icons">schedule</i>
-                            <i><?= round($get_pause($spiel) / 60) ?>&nbsp; min Pause</i>
+                            <i><?= $spielplan->get_pause($spiel_id) ?>&nbsp; min Pause</i>
                             <i class="material-icons">schedule</i>
                         </td>
                         <td colspan="2"></td>

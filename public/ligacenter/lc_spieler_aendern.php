@@ -18,7 +18,7 @@ if (isset($_POST['spieler_auswahl'])) {
 //Formular unten nur Anzeigen wenn eine existierende SpielerID übergeben wurde wurde
 
 if (isset($_GET['spieler_id'])) {
-    $spieler_id = (int) ($_GET['spieler_id'] ?? 0);
+    $spieler_id = (int) $_GET['spieler_id'];
     if (array_key_exists($spieler_id, $spieler_liste)) {
         $spieler = new Spieler($spieler_id);
         $spieler->details = $spieler->get_details();
@@ -37,16 +37,16 @@ if (isset($_POST['spieler_aendern'])) {
     $teamname = $_POST['teamname'];
     $letzter_saison = (int)$_POST['letzte_saison'];
     $error = false;
-    if (empty($vorname) or empty($nachname) or empty($jahrgang) or empty($geschlecht) or empty($teamname)) {
+    if (empty($vorname) || empty($nachname) || empty($jahrgang) || empty($geschlecht) || empty($teamname)) {
         Form::error("Bitte Formular ausfüllen");
         $error = true;
     }
     $team_id = Team::name_to_id($teamname);
-    if (empty($team_id)) {
+    if (!Team::is_ligateam($team_id)) {
         Form::error("Das Team $teamname wurde nicht gefunden");
         $error = true;
     }
-    if (1900 > $jahrgang or $jahrgang > date('Y')) {
+    if (1900 > $jahrgang || $jahrgang > date('Y')) {
         Form::error("Ungültiger Jahrgang (Jahreszahl vierstellig ausschreiben)");
         $error = true;
     }
@@ -83,7 +83,6 @@ if (isset($_POST['delete_spieler'])) {
     header("Location: " . $_SERVER['PHP_SELF']);
     die();
 }
-dbi::debug($spieler);
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -158,9 +157,9 @@ include '../../templates/header.tmp.php';
         <p>
             <label class="w3-text-primary" for="geschlecht">Geschlecht</labeL>
             <select style="height:40px" class='w3-input w3-border w3-border-primary' name='geschlecht'>
-                <option <?php if ($spieler->details['geschlecht'] == 'm'){ ?>selected<?php } ?> value='m'>m</option>
-                <option <?php if ($spieler->details['geschlecht'] == 'w'){ ?>selected<?php } ?> value='w'>w</option>
-                <option <?php if ($spieler->details['geschlecht'] == 'd') { ?>selected<?php } ?>value='d'>d</option>
+                <option <?php if ($spieler->details['geschlecht'] === 'm'){ ?>selected<?php } ?> value='m'>m</option>
+                <option <?php if ($spieler->details['geschlecht'] === 'w'){ ?>selected<?php } ?> value='w'>w</option>
+                <option <?php if ($spieler->details['geschlecht'] === 'd') { ?>selected<?php } ?>value='d'>d</option>
             </select>
         </p>
         <p>
@@ -175,7 +174,7 @@ include '../../templates/header.tmp.php';
                 <option <?php if (empty($spieler->details['schiri'])){ ?>selected<?php } ?>
                         value=''>kein Schiri
                 </option>
-                <option <?php if (($spieler->details['schiri']) == 'Ausbilder/in'){ ?>selected<?php } ?>
+                <option <?php if (($spieler->details['schiri']) === 'Ausbilder/in'){ ?>selected<?php } ?>
                         value='Ausbilder/in'>Ausbilder/in
                 </option>
             </select>
@@ -184,7 +183,7 @@ include '../../templates/header.tmp.php';
             <input class="w3-check"
                    type="checkbox"
                    id="junior"
-                   name="junior" <?php if ($spieler->details['junior'] == "Ja") { ?> checked <?php } //endif?>
+                   name="junior" <?php if ($spieler->details['junior'] === "Ja") { ?> checked <?php } //endif?>
                    value="Ja"
             >
             <label for="junior">
@@ -225,10 +224,12 @@ include '../../templates/header.tmp.php';
             <input class="w3-button w3-tertiary w3-block" type="submit" name="spieler_aendern" value="Spieler ändern">
         </p>
     </form>
-    <form onsubmit="return confirm('Der Spieler mit der ID <?= $spieler->details['spieler_id'] ?> <?= $spieler->details['vorname'] . ' ' . $spieler->details['nachname'] ?>) wird gelöscht werden.');"
+    <form onsubmit="return confirm(
+                'Der Spieler mit der ID <?= $spieler->details['spieler_id'] ?> <?= $spieler->details['vorname'] . ' '
+                . $spieler->details['nachname'] ?>) wird gelöscht werden.'
+            );"
           class="w3-container w3-card-4 w3-panel"
-          method="POST"
-    >
+          method="POST">
         <p>
             <input class="w3-button w3-secondary w3-block" type="submit" name="delete_spieler" value="Spieler löschen">
         </p>

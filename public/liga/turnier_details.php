@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 
-$turnier_id = (int) $_GET['turnier_id'] ?? 0;
+$turnier_id = (int) $_GET['turnier_id'];
 $turnier = new Turnier ($turnier_id);
 
 if (empty($turnier->details)){
@@ -18,7 +18,7 @@ $kontakt = new Kontakt ($turnier->details['ausrichter']);
 // Email-Adressen hinzufügen
 $turnier->details['email'] = implode(',', $kontakt->get_emails('public'));
 
-$liste = $turnier->get_anmeldungen(); //Anmeldungen für dieses Turnier Form: $liste['warte'] = Array([0] => Array['teamname','team_id','tblock', etc])
+$liste = $turnier->get_anmeldungen(); // Anmeldungen für dieses Turnier Form: $liste['warte'] = Array([0] => Array['teamname','team_id','tblock', etc])
 
 // Parsing
 if(in_array($turnier->details['art'],['I','II','III'])){
@@ -66,12 +66,12 @@ if ($turnier->details['phase'] == 'spielplan'){
     $turnier->details['phase'] = 'Spielplanphase';
 }
 //Spielmodus
-if ($turnier->details['spielplan'] == 'jgj'){
-    $turnier->details['spielplan'] = 'Jeder-gegen-Jeden';
-}elseif($turnier->details['spielplan'] == 'dko'){
-    $turnier->details['spielplan'] = 'Doppel-KO bei acht Teams, sonst Jeder-gegen-Jeden';
-}elseif($turnier->details['spielplan'] == 'gruppen'){
-    $turnier->details['spielplan'] = 'Zwei Gruppen bei acht Teams, sonst Jeder-gegen-Jeden';
+if ($turnier->details['format'] == 'jgj'){
+    $turnier->details['format'] = 'Jeder-gegen-Jeden';
+}elseif($turnier->details['format'] == 'dko'){
+    $turnier->details['format'] = 'Doppel-KO bei acht Teams, sonst Jeder-gegen-Jeden';
+}elseif($turnier->details['format'] == 'gruppen'){
+    $turnier->details['format'] = 'Zwei Gruppen bei acht Teams, sonst Jeder-gegen-Jeden';
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -98,7 +98,17 @@ include '../../templates/header.tmp.php';
                 <?=$turnier->details['hallenname']?><br>
                 <?=$turnier->details['strasse']?><br>
                 <?=$turnier->details['plz'].' '.$turnier->details['ort']?><br>
-                <?=Form::link(str_replace(' ', '%20', 'https://www.google.de/maps/search/' . $turnier->details['hallenname'] ."+". $turnier->details['strasse'] ."+" . $turnier->details['plz'] ."+". $turnier->details['ort'] .'/'), 'Google Maps', true);?>
+                <?=Form::link(
+                        str_replace(' '
+                            , '%20'
+                            , 'https://www.google.de/maps/search/' . $turnier->details['hallenname']
+                                . "+" . $turnier->details['strasse']
+                                . "+" . $turnier->details['plz']
+                                . "+" . $turnier->details['ort']
+                                . '/'),
+                        'Google Maps',
+                        true,
+                        'launch')?>
                 <?php if (!empty($turnier->details['haltestellen'])){?><p style="white-space: normal;"><i>Haltestellen: <?=$turnier->details['haltestellen']?></i></p> <?php } // endif?>
             </td>
         </tr>
@@ -128,7 +138,7 @@ include '../../templates/header.tmp.php';
         <tr>
             <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;"><i class="material-icons">format_align_center</i> Spielplan</td>
             <td>
-                <?=$turnier->details['spielplan']?>
+                <?= $turnier->details['format'] ?>
                 <?php if($turnier->details['phase'] == 'Spielplanphase'){?>
                     <br><?=Form::link($turnier->get_spielplan_link(), 'Zum Spielplan', true, "reorder")?>
                 <?php }//end if?>
@@ -140,8 +150,8 @@ include '../../templates/header.tmp.php';
         </tr>
     </table>
 </div>
-<!--Anmeldungen / Listen -->
 
+<!--Anmeldungen / Listen -->
 <p class="w3-text-grey w3-border-bottom w3-border-grey">Spielen-Liste</p> 
 <p><i>
     <?php if (!empty($liste['spiele'])){?>

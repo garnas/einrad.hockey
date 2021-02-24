@@ -3,7 +3,7 @@
 /**
  * Class Ligaleitung
  */
-class Ligaleitung
+class LigaLeitung
 {
     /**
      * Gibt ein Array der Ligaleitung aus
@@ -113,20 +113,6 @@ class Ligaleitung
         Form::log(Config::LOG_LOGIN, "Falsches Passwort | Loginname: " . $login);
         Form::error("Falsches Passwort");
         return false;
-    }
-
-    static function umzug()
-    {
-        $sql = "
-                SELECT * 
-                FROM ausschuss_liga";
-        $data = dbi::$db->query($sql)->fetch();
-
-        foreach ($data as $x) {
-            $sql = "INSERT INTO ligaleitung (spieler_id, funktion, login, passwort, email)
-                   Values(?,?,?,?,?)";
-            dbi::$db->query($sql, $i++, 'ligaausschuss', $x['login_name'], $x['passwort'], $x['email'])->log();
-        }
     }
 
     static function umzug2($table, $funktion)

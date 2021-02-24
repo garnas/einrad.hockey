@@ -8,10 +8,10 @@
                 <th><i class="material-icons">group</i><br>Team</th>
                 <th><i class="material-icons">reorder</i><br>Block</th>
                 <th><i class="material-icons">arrow_circle_up</i><br>Wertigkeit</th>
-                <?php if($spielplan->turnier->details['phase'] != 'ergebnis') { ?>
-                    <th><!--<span class="pdf-hide"><i class="material-icons">accessibility</i><br>Trikots</span>--></th>
+                <?php if($spielplan->turnier->details['phase'] !== 'ergebnis') { ?>
+                    <th><span class="pdf-hide"><i class="material-icons">invert_colors</i><br>Trikots</span></th>
                 <?php } //endif?>
-                <th><i class="material-icons">account_circle</i><br>Ligavertreter</th>
+<!--                <th><span class="pdf-hide"><i class="material-icons">account_circle</i><br>Ligavertreter</span></th>-->
                 <th><span class="pdf-hide"><i class="material-icons">help_outline</i><br>Kontakt</span></th>
             </tr>
             <?php foreach ($spielplan->teamliste as $team_id => $team) { ?>
@@ -20,14 +20,14 @@
                     <td><?= $team["teamname"] ?></td>
                     <td><?= $team["tblock"] ?></td>
                     <td><?= $team["wertigkeit"] ?></td>
-                    <?php if ($spielplan->turnier->details['phase'] != 'ergebnis') { ?>
+                    <?php if ($spielplan->turnier->details['phase'] !== 'ergebnis') { ?>
                         <td>
                             <span class="pdf-hide">
                                 <?= Form::trikot_punkt($team['trikot_farbe_1'], $team['trikot_farbe_2']) ?>
                             </span>
                         </td>
                     <?php } // end if ?>
-                    <td><?= $team["ligavertreter"] ?></td>
+<!--                    <td><span class="pdf-hide">--><?//= $team["ligavertreter"] ?><!--</span></td>-->
                     <td>
                         <span class="pdf-hide">
                             <?=Form::mailto((new Kontakt($team_id))->get_emails('public'),'E-Mail')?>
@@ -37,7 +37,7 @@
             <?php }//end foreach?>
         </table>
     </div>
-    <?php if (in_array('NL', array_column($spielplan->teamliste, 'tblock'))) { ?>
+    <?php if (in_array('NL', array_column($spielplan->teamliste, 'tblock'), true)) { ?>
         <span class="w3-text-grey">* Nichtligateam</span>
     <?php } //endif?>
 </div>

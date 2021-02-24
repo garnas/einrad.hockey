@@ -25,9 +25,10 @@ $statistik['max_gew'] = Neuigkeit::get_statistik_gew_spiele();
 $statistik['max_turniere'] = Neuigkeit::get_statistik_turniere();
 $statistik['ges_tore'] = Neuigkeit::get_alle_tore();
 $statistik['ges_spiele'] = Neuigkeit::get_alle_spiele();
+$statistik['spielminuten'] = Neuigkeit::get_spielminuten();
 
 // Zeitanzeige der Neuigkeiteneinträge verschönern
-foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit) {
+foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit) { //Todo in get_neuikgeiten rein
     $delta_zeit = (time() - strtotime($neuigkeiten[$neuigkeiten_id]['zeit'])) / (60 * 60); //in Stunden
     if ($delta_zeit < 24) {
         $zeit = ($delta_zeit <= 1.5) ? "gerade eben" : "vor " . round($delta_zeit) . " Stunden";
@@ -78,7 +79,7 @@ include '../../templates/header.tmp.php'; ?>
             <div class="w3-panel w3-card-4 w3-responsive w3-round w3-bottombar">
                 <div class="w3-stretch w3-container w3-primary w3-hover-tertiary">
                     <a href='ueber_uns.php' class="no">
-                        <h1><?= Form::icon("help_outline", tag: "h1") ?> Interesse</h1>
+                        <h3><?= Form::icon("help_outline", tag: "h1") ?> Interesse</h3>
                     </a>
                 </div>
                 <p>Die Einradhockeyliga steht jedem Einradhockeybegeisterten offen!</p>
@@ -89,7 +90,7 @@ include '../../templates/header.tmp.php'; ?>
             <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
                 <div class="w3-stretch w3-container w3-primary w3-hover-tertiary">
                     <a href='turniere.php' class="no">
-                        <h2><?= Form::icon("event", tag: "h2") ?> Turniere</h2>
+                        <h3><?= Form::icon("event", tag: "h2") ?> Turniere</h3>
                     </a>
                 </div>
 
@@ -113,7 +114,7 @@ include '../../templates/header.tmp.php'; ?>
             <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
                 <div class="w3-stretch w3-container w3-primary w3-hover-tertiary">
                     <a href='ergebnisse.php' class="no">
-                        <h2><?= Form::icon("sports_hockey", tag: "h2") ?> Ergebnisse</h2>
+                        <h3><?= Form::icon("sports_hockey", tag: "h2") ?> Ergebnisse</h3>
                     </a>
                 </div>
 
@@ -138,8 +139,9 @@ include '../../templates/header.tmp.php'; ?>
             <!-- Statistik -->
             <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
                 <div class="w3-stretch w3-container w3-primary">
-                    <h2><?= Form::icon("insert_chart_outlined", tag: "h2") ?> Statistik</h2>
+                    <h3><?= Form::icon("insert_chart_outlined", tag: "h2") ?> Statistik</h3>
                 </div>
+                <span class="w3-text-grey w3-small">Saison <?= Form::get_saison_string() ?></span>
 
                 <!-- Allgemeine Statistik -->
                 <div class="w3-section">
@@ -170,12 +172,11 @@ include '../../templates/header.tmp.php'; ?>
                             </tr>
                             <tr>
                                 <td class="w3-text-primary"><?= Form::icon("schedule") ?></td>
-                                <td style="white-space: nowrap;"><?= $statistik['ges_spiele'] * (30 + 24 + 18) / 3 ?></td>
-                                <td class="w3-small">Spielminuten*</td>
+                                <td style="white-space: nowrap;"><?= $statistik['spielminuten'] ?></td>
+                                <td class="w3-small">Spielminuten</td>
                             </tr>
                         </table>
                     </div>
-                    <span class="w3-text-grey w3-small">* geschätzt</span>
                 </div>
 
                 <!-- Wer hat am meisten Turniere gespielt? -->
@@ -234,7 +235,7 @@ include '../../templates/header.tmp.php'; ?>
             <!-- Links -->
             <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
                 <div class="w3-stretch w3-container w3-primary">
-                    <h2><?= Form::icon("public", tag: "h2") ?> Links</h2>
+                    <h3><?= Form::icon("public", tag: "h2") ?> Links</h3>
                 </div>
                 <p class="w3-text-grey w3-border-top w3-border-grey"><?= Form::icon("bookmark") ?> Ligen</p>
                 <p><?= Form::link(Config::LINK_SWISS, " Schweizer Einradhockeyliga", true, "link") ?></p>
@@ -258,7 +259,7 @@ include '../../templates/header.tmp.php'; ?>
 
                     <!-- Überschrift -->
                     <div class="w3-stretch w3-container w3-primary w3-center">
-                        <h2><?= $neuigkeit['titel'] ?></h2>
+                        <h3><?= $neuigkeit['titel'] ?></h3>
                     </div>
 
                     <!-- Bild -->

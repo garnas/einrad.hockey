@@ -107,7 +107,7 @@ include '../../templates/header.tmp.php'; ?>
                         <?= Form::link('archiv.php', '<i class="material-icons">info</i> Details') ?>
                     <?php } else { ?>
                         <span>
-                        <?= Form::link($turniere[$turnier_id]['link_spielplan'] ?: ('spielplan.php?turnier_id=' . $turnier_id), '<i class="material-icons">info</i> Spielergebnisse') ?>
+                        <?= Form::link($turniere[$turnier_id]['spielplan_datei'] ?: ('spielplan.php?turnier_id=' . $turnier_id), '<i class="material-icons">info</i> Spielergebnisse') ?>
                     </span>
                         <?= Form::link("../teamcenter/tc_turnier_report.php?turnier_id=$turnier_id", ' <i class="material-icons">' . $icon . '</i> Turnierreport') ?>
                         <?php if (isset($_SESSION['logins']['la'])) { ?>

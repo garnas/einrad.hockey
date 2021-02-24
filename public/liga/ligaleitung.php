@@ -37,7 +37,7 @@ include '../../templates/header.tmp.php'; ?>
     Ligaausschussplätze gibt, wird er jeweils gegen Ende der Saison von allen Ligateams gewählt.
 </p>
 
-<p class="w3-text-grey">Schreib uns an: <?= Form::mailto(Env::LAMAIL) ?></p>
+<p class="w3-text-grey">Kontakt: <?= Form::mailto(Env::LAMAIL) ?></p>
 
 <p class="w3-margin" style="max-width: 666px">
     <a href="../bilder/ligaausschuss2020.jpg">
@@ -63,7 +63,7 @@ include '../../templates/header.tmp.php'; ?>
     Der Technikausschuss ist verantwortlich für die Instandhaltung und Weiterentwicklung der IT der Deutschen
     Einradhockeyliga.
 </p>
-<p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Env::TECHNIKMAIL)?></p>
+<p class="w3-text-grey">Kontakt: <?=Form::mailto(Env::TECHNIKMAIL)?></p>
 
 <!-- Öffntlichkeits-Ausschuss -->
 <h2 class="w3-text-primary"><?= Form::icon("public", tag:"h2") ?> Öffentlichkeitsausschuss</h2>
@@ -81,7 +81,7 @@ include '../../templates/header.tmp.php'; ?>
     Der Öffentlichkeitsausschuss ist relativ neu und nicht offiziell im Ligamodus vertreten. Er soll den
     Einradhockeysport nach außen hin präsentieren und sich um unsere Socialmedia-Accounts kümmern.
 </p>
-<p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Env::OEFFIMAIL)?></p>
+<p class="w3-text-grey">Kontakt: <?=Form::mailto(Env::OEFFIMAIL)?></p>
 
 <!-- Schiri-Ausschuss -->
 <h2 class="w3-text-primary"><?= Form::icon("sports", tag:"h2") ?> Schiedsrichterausschuss</h2>
@@ -99,8 +99,8 @@ include '../../templates/header.tmp.php'; ?>
     Der Schiedsrichterausschuss ist für die Organisation der Aus- und Weiterbildung der Schiedsrichter in der Deutschen
     Einradhockeyliga verantwortlich.
 </p>
-<p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Env::SCHIRIMAIL)?></p>
-<h2 class="w3-text-primary"><?= Form::icon("school", tag:"h2") ?> Schiedsrichterausbilder</h2>
+<p class="w3-text-grey">Kontakt: <?=Form::mailto(Env::SCHIRIMAIL)?></p>
+<h3 class="w3-text-primary"><?= Form::icon("school", tag:"h3") ?> Schiedsrichterausbilder</h3>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
         <?php foreach (Ligaleitung::get_all('schiriausbilder') as $ausbilder){?>

@@ -60,7 +60,7 @@ if (isset($_POST['create_turnier'])) {
     }
 
     // Validierung des Turnierblocks
-    if (!($tblock == "final" or $tblock == "ABCDEF" or $tblock == "spass" or in_array($tblock, Config::BLOCK))) {
+    if (!($tblock == "final" || $tblock == "ABCDEF" || $tblock == "spass" || in_array($tblock, Config::BLOCK))) {
         $error = true;
         Form::error("Das Turnier hat einen ungültigen Turnierblock");
     }
@@ -78,7 +78,7 @@ if (isset($_POST['create_turnier'])) {
     }
 
     // Validierung der Plätze
-    if ($plaetze < 4 or $plaetze > 8) {
+    if ($plaetze < 4 || $plaetze > 8) {
         $error = true;
         Form::error("Ungültige Anzahl an Turnierplätzen");
     }
@@ -92,9 +92,9 @@ if (isset($_POST['create_turnier'])) {
     $startzeit = $_POST['startzeit'];
 
     // Validierung des ausgewählten Turnierdatums, falls man nicht als la_eingeloggt ist.
-    if (!(Config::$ligacenter or $art == "spass")) {
+    if (!(Config::$ligacenter || $art == "spass")) {
         $datum_unix = strtotime($datum);
-        if ($datum_unix < strtotime(Config::SAISON_ANFANG) or $datum_unix > strtotime(Config::SAISON_ENDE)) {
+        if ($datum_unix < strtotime(Config::SAISON_ANFANG) || $datum_unix > strtotime(Config::SAISON_ENDE)) {
             $error = true;
             Form::error("Das Datum liegt außerhalb der Saison");
         }
@@ -110,7 +110,7 @@ if (isset($_POST['create_turnier'])) {
             // }
         }
         // Validierung Startzeit:
-        if ((date("H", strtotime($startzeit)) < 9 or date("H", strtotime($startzeit)) > 14) and !Config::$ligacenter) {
+        if ((date("H", strtotime($startzeit)) < 9 || date("H", strtotime($startzeit)) > 14) and !Config::$ligacenter) {
             $error = true;
             Form::error("Turniere dürfen frühestens um 9:00&nbsp;Uhr beginnen und müssen spätestens um 20:00&nbsp;Uhr beendet sein");
         }

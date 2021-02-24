@@ -107,7 +107,7 @@ if (isset($_POST['anmelden'])){
         if ($turnier->check_doppel_anmeldung($_SESSION['logins']['team']['id'])){
             Form::error("Dein Team ist bereits auf einer Spiele-Liste am gleichen Kalendertag");
         }else{
-            $turnier->team_anmelden($_SESSION['logins']['team']['id'], $liste, $pos);
+            $turnier->anmelden($_SESSION['logins']['team']['id'], $liste, $pos);
             $turnier->log("Anmeldung: ". $_SESSION['logins']['team']['name'] ."\r\nTeamblock: ".$_SESSION['logins']['team']['block']. " Turnierblock: " . $turnier->details['tblock'] . "\r\nListe: $liste (WartePos: $pos)", $_SESSION['logins']['team']['name']);
             Form::info ("Dein Team wurde zum Turnier angemeldet");
             header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier->details['turnier_id']);
@@ -206,7 +206,7 @@ if (isset($_POST['bewerben'])){
         $error = true;
     }
     if (!$error){
-        $turnier->team_anmelden($_SESSION['logins']['team']['id'],'melde',0);
+        $turnier->anmelden($_SESSION['logins']['team']['id'],'melde',0);
         Form::info("Deine Meldung wurde erfolgreich entgegen genommmen.");
         header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier->details['turnier_id']);
         die();

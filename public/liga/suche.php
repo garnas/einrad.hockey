@@ -23,4 +23,4 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 <!--    <input id="searchBox" type="search" placeholder="Suche" />-->
 <!---->
 
-<?php include Env::BASE_PATH . '\templates\footer.tmp.php';
+<?php include Env::BASE_PATH . '/templates/footer.tmp.php';

@@ -18,7 +18,7 @@ class Form
         $_SESSION['bild_navigation']['zeit'] = ($_SESSION['bild_navigation']['zeit'] ?? time());
         if (
             !isset($_SESSION['bild_navigation']['path'])
-            or (time() - $_SESSION['bild_navigation']['zeit']) > 600
+            || (time() - $_SESSION['bild_navigation']['zeit']) > 600
             ){
             $imagesDir = Env::BASE_PATH . '/public/bilder/hintergrund/';
             $images = glob($imagesDir . '*.{jpg,JPG,jpeg,png,gif}', GLOB_BRACE);
@@ -82,7 +82,7 @@ class Form
             $caption = match ($type) {
                 'error' => 'Fehler',
                 'info' => 'Info',
-                'notice' => 'Hinweise'
+                'notice' => 'Hinweis'
             };
         }
 
@@ -130,11 +130,21 @@ class Form
      */
     public static function link(string $link, string $bezeichnung = '', bool $extern = false, string $icon = ''): string
     {
-        if (empty($link)) return ''; // Für Schleifen
+        if (empty($link)) {
+            return '';
+        } // Für Schleifen
+
         $new_tab = ($extern) ? 'target="_blank" rel="noopener noreferrer"' : '';
         $bezeichnung = (!empty($icon)) ? self::icon($icon) . ' ' . $bezeichnung : $bezeichnung;
         $bezeichnung = empty($bezeichnung) ? $link : $bezeichnung;
-        return "<a href='$link' class='no w3-text-primary w3-hover-text-secondary' style='white-space: nowrap;' $new_tab>$bezeichnung</a>";
+
+        return
+            "<a href='$link' 
+               class='no w3-text-primary w3-hover-text-secondary' 
+               style='white-space: nowrap;' 
+               $new_tab>
+               $bezeichnung
+            </a>";
     }
 
     /**
@@ -164,7 +174,7 @@ class Form
     public static function mailto(null|string|array $email, null|string $name = NULL): string
     {
         if (empty ($email)) {
-            return $name ?? '';
+            return '';
         }
 
         $email = is_array($email) ? implode(',', $email) : $email;
@@ -177,11 +187,11 @@ class Form
     /**
      * Wandelt eine Saisonnummer in einen Jahreszahl-Saisonstring um
      *
-     * @param int $saison
+     * @param int|string $saison
      * 0 = Saison 1995
      * @return string
      */
-    public static function get_saison_string(int $saison = Config::SAISON): string
+    public static function get_saison_string(int|string $saison = Config::SAISON): string
     {
         // Sollte keine Saisonzahl übergeben werden, dann wird der Input zurückgegeben.
         if (!is_numeric($saison)) {
@@ -204,7 +214,7 @@ class Form
      * @param int $date Zeit als Unix-Time
      * @param string $id Welche ID das Countdownelement haben soll
      */
-    public static function countdown(int $date, string $id = 'countdown')
+    public static function countdown(int $date, string $id = 'countdown'): void
     { //TODO Return als String
         ?>
         <div id='countdown' class="w3-xlarge w3-text-primary" style='white-space: nowrap;'>
@@ -235,7 +245,7 @@ class Form
      * @param string $file_name Name der Logdatei
      * @param string $line Einzutragender Text in die Logdatei
      */
-    public static function log(string $file_name, string$line)
+    public static function log(string $file_name, string$line): void
     {
         $path = Env::BASE_PATH . '/system/logs/';
         //SQL-Logdatei erstellen/beschreiben
@@ -253,7 +263,7 @@ class Form
      * @param int $min Anzahl der Konfettis liegt zufällig zwischen $min und $max
      * @param int $max
      */
-    public static function set_confetti(int $min = 40, int $max = 90, $timeout = 0)
+    public static function set_confetti(int $min = 40, int $max = 90, $timeout = 0): void
     {
         echo "
             <script src = '../javascript/confetti/confetti.js'></script>

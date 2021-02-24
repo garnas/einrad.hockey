@@ -77,4 +77,4 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
         </p>
     </form>
 
-<?php include Env::BASE_PATH . '\templates\footer.tmp.php';
+<?php include Env::BASE_PATH . '/templates/footer.tmp.php';

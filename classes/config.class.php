@@ -36,6 +36,8 @@ class Config
      */
     public const LOG_LOGIN = "login.log";
     public const LOG_DB = "db.log";
+    public const LOG_KONTAKTFORMULAR = "kontakt.log";
+    public const LOG_EMAILS = "emails.log";
 
 
     /**
@@ -109,7 +111,7 @@ class Config
     /**
      * HTML-Anzeige
      */
-    public static string $page_width = "1020px";
+    public static string $page_width = "980px";
     public static string $titel = 'Deutsche Einradhockeyliga';
     public static string $content
         = 'Jeder Einradhockeybegeisterte soll in der Deutschen Einradhockeyliga die Möglichkeit haben, sein Hobby in '

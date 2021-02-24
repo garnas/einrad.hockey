@@ -4,7 +4,7 @@
 <!-- Spielzeiten -->
 <p class="w3-text-grey">
     Spielzeit: <?= $spielplan->details['anzahl_halbzeiten'] ?> x <?= $spielplan->details['halbzeit_laenge'] ?>&nbsp;min
-    | Puffer: <?= $spielplan->details['pause'] ?>&nbsp;min
+    | Puffer: <?= $spielplan->details['puffer'] ?>&nbsp;min
 </p>
 
 <div class="w3-responsive w3-card">
@@ -13,7 +13,7 @@
             <th>
                 <i class="material-icons">schedule</i>
                 <br>
-                Zeit
+                Uhr
             </th>
             <th class="w3-hide-small">
                 <i class="material-icons">sports</i>
@@ -73,15 +73,17 @@
         </tr>
         <?php if ($spielplan->turnier->details['besprechung'] === 'Ja') { ?>
             <tr class="w3-primary-3">
-                <td colspan="<?= ($spielplan->check_penalty_anzeigen()) ? 10 : 8 ?>">
-                    Alle Teams sollen sich um <?= date('H:i', strtotime($spielplan->turnier->details['startzeit']) - 15 * 60) ?>&nbsp;Uhr zu einer gemeinsamen Turnierbesprechung einfinden.
+                <td colspan="<?= ($spielplan->check_penalty_anzeigen()) ? 14 : 12 ?>">
+                    Alle Teams sollen sich um
+                    <?= date('H:i', strtotime($spielplan->turnier->details['startzeit']) - 15 * 60)
+                    ?>&nbsp;Uhr zu einer gemeinsamen Turnierbesprechung einfinden.
                 </td>
             </tr>
         <?php }//endif?>
         <?php foreach ($spielplan->spiele as $spiel_id => $spiel) { ?>
             <tr>
                 <td><?= $spiel["zeit"] ?></td>
-                <!-- Dekstop -->
+                <!-- Desktop -->
                 <td class="w3-hide-small">
                     <table class="w3-table w3-centered" style="width: auto; margin: auto;">
                         <tr>
@@ -205,16 +207,18 @@
                     </td>
                 <?php }// endif?>
             </tr>
-            <?php if ($get_pause($spiel) > 0) { ?>
+            <?php if ($spielplan->get_pause($spiel_id) > 0) { ?>
                 <tr>
                     <td>
-                        <?= date("H:i", strtotime($spiel["zeit"]) + $spiel_dauer * 60) ?>
+                        <?= date("H:i",
+                            strtotime($spielplan->spiele[$spiel_id+1]['zeit'])
+                                        - $spielplan->get_pause($spiel_id) * 60) ?>
                     </td>
                     <td></td>
                     <td></td>
                     <td colspan="3" class="w3-center">
                         <i class="material-icons">schedule</i>
-                        <i><?= round($get_pause($spiel) / 60) ?>&nbsp; min Pause</i>
+                        <i><?= $spielplan->get_pause($spiel_id) ?>&nbsp; min Pause</i>
                         <i class="material-icons">schedule</i>
                     </td>
                     <td></td>

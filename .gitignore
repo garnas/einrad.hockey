@@ -11,3 +11,6 @@ public/xml/test.php
 # Bilder und Videos ignorieren:
 public/schiricenter/bilder/*
 public/schiricenter/videos/*
+
+# Enviroment
+env.php

@@ -142,10 +142,10 @@ class Team
     /**
      * Prüft ob die TeamID zu einem aktiven Ligateam gehört
      *
-     * @param $team_id
+     * @param null|int $team_id
      * @return bool
      */
-    public static function is_ligateam($team_id): bool
+    public static function is_ligateam(null|int $team_id): bool
     {
         $sql = "
                 SELECT team_id
@@ -156,7 +156,7 @@ class Team
     }
 
     /**
-     * Gibt ein Array mit allen aktiven Teamnamen zurück
+     * Gibt ein Array mit allen aktiven Teamnamen zurück (team_id => teamname)
      *
      * @return array
      */
@@ -434,6 +434,16 @@ class Team
         if (password_verify($passwort, $team->details['passwort'])) {
             self::set_team_session($team);
             Form::log(Config::LOG_LOGIN, "Erfolgreich       | Teamname: " . $teamname);
+
+            if (empty($team->details['trikot_farbe_1'])) {
+                $link = Form::link("tc_teamdaten_aendern.php", ' Link.', icon: "launch");
+                Form::info("Ihr könnt jetzt eure Trikotfarben hinzufügen - " . $link, ' ', esc: false);
+            }
+            if (empty($team->details['teamfoto'])) {
+                $link = Form::link("../teamcenter/tc_teamdaten_aendern.php", ' Link.', icon: "launch");
+                Form::info("Hier könnt ihr noch ein Teamfoto hochladen - " . $link, ' ', esc: false);
+            }
+
             return true;
         }
 

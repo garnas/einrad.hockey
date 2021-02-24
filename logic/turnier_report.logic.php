@@ -3,7 +3,7 @@
 $turnier_id = (int)$_GET['turnier_id'] ?? 0;
 $turnier = new Turnier ($turnier_id);
 
-if ($turnier->details['ausrichter'] == ($_SESSION['logins']['team']['id'] ?? '') or Config::$ligacenter) {
+if ($turnier->details['ausrichter'] == ($_SESSION['logins']['team']['id'] ?? '') || Config::$ligacenter) {
     $change_tbericht = true; // Berechtigung zum Verändern des Reports
 } else {
     $change_tbericht = false;
@@ -107,8 +107,8 @@ if ($change_tbericht) {
     //Turnierbericht
     if (
         isset($_POST['set_turnierbericht'])
-        or isset($_POST['kader_check'])
-        or isset($_POST['turnierbericht'])
+        || isset($_POST['kader_check'])
+        || isset($_POST['turnierbericht'])
     ) {
         $bericht = $_POST['turnierbericht'];
         $kader_check = $_POST['kader_check'] == "kader_checked";

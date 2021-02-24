@@ -26,12 +26,11 @@
             </div>
         </footer>
     </body>
-    <script src="<?= Env::BASE_URL ?>/javascript/360search/360search.js?v=20200215"></script>
 </html>
 
 <?php
 // Logs der Besucher
-Form::log("log_visits.log",
+Form::log("user.log",
     $_SERVER['REQUEST_URI']
         . " | " . round(microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"], 3) . " s (Load)"
         . " | " . dbi::$db->query_count . " (Querys)");

@@ -4,33 +4,33 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 
-$daten = Turnier::get_turniere('ergebnis', false);
+$turniere = Turnier::get_turniere('ergebnis', false);
 
-if (empty($daten)) Form::info("Es wurden noch keine Turniere eingetragen.");
+if (empty($turniere)) Form::info("Es wurden noch keine Turniere eingetragen.");
 
 $all_anmeldungen = Turnier::get_all_anmeldungen();
 
 //Turnierdarten parsen
-foreach ($daten as $turnier_id => $turnier) {
-    $daten[$turnier_id]['wochentag'] = strftime("%A", strtotime($daten[$turnier_id]['datum']));
-    $daten[$turnier_id]['datum'] = strftime("%d.%m.", strtotime($daten[$turnier_id]['datum']));
-    $daten[$turnier_id]['startzeit'] = substr($daten[$turnier_id]['startzeit'], 0, -3);
+foreach ($turniere as $turnier_id => $turnier) {
+    $turniere[$turnier_id]['wochentag'] = strftime("%A", strtotime($turniere[$turnier_id]['datum']));
+    $turniere[$turnier_id]['datum'] = strftime("%d.%m.", strtotime($turniere[$turnier_id]['datum']));
+    $turniere[$turnier_id]['startzeit'] = substr($turniere[$turnier_id]['startzeit'], 0, -3);
 
-    if ($daten[$turnier_id]['art'] == 'spass') {
-        $daten[$turnier_id]['tblock'] = 'Spaß';
+    if ($turniere[$turnier_id]['art'] == 'spass') {
+        $turniere[$turnier_id]['tblock'] = 'Spaß';
     }
-    if ($daten[$turnier_id]['besprechung'] == 'Ja') {
-        $daten[$turnier_id]['besprechung'] = 'Gemeinsame Teambesprechung um ' . date('H:i', strtotime($daten[$turnier_id]['startzeit']) - 15 * 60) . '&nbsp;Uhr';
+    if ($turniere[$turnier_id]['besprechung'] == 'Ja') {
+        $turniere[$turnier_id]['besprechung'] = 'Gemeinsame Teambesprechung um ' . date('H:i', strtotime($turniere[$turnier_id]['startzeit']) - 15 * 60) . '&nbsp;Uhr';
     } else {
-        $daten[$turnier_id]['besprechung'] = '';
+        $turniere[$turnier_id]['besprechung'] = '';
     }
     //Spielmodus
-    if ($daten[$turnier_id]['spielplan'] == 'jgj') {
-        $daten[$turnier_id]['spielplan'] = 'Jeder-gegen-Jeden';
-    } elseif ($daten[$turnier_id]['spielplan'] == 'dko') {
-        $daten[$turnier_id]['spielplan'] = 'Doppel-KO';
-    } elseif ($daten[$turnier_id]['spielplan'] == 'gruppen') {
-        $daten[$turnier_id]['spielplan'] = 'zwei Gruppen';
+    if ($turniere[$turnier_id]['format'] == 'jgj') {
+        $turniere[$turnier_id]['format'] = 'Jeder-gegen-Jeden';
+    } elseif ($turniere[$turnier_id]['format'] == 'dko') {
+        $turniere[$turnier_id]['format'] = 'Doppel-KO';
+    } elseif ($turniere[$turnier_id]['format'] == 'gruppen') {
+        $turniere[$turnier_id]['format'] = 'zwei Gruppen';
     }
 }
 
@@ -43,27 +43,27 @@ foreach ($all_anmeldungen as $turnier_id => $liste) {
     $anz_spieleliste[$turnier_id] = count($liste['spiele'] ?? []);
     $anz_meldeliste[$turnier_id] = count($liste['melde'] ?? []);
 
-    $freie_plaetze = $daten[$turnier_id]['plaetze'] - $anz_spieleliste[$turnier_id] - $anz_meldeliste[$turnier_id] - $anz_warteliste[$turnier_id];
+    $freie_plaetze = $turniere[$turnier_id]['plaetze'] - $anz_spieleliste[$turnier_id] - $anz_meldeliste[$turnier_id] - $anz_warteliste[$turnier_id];
 
     //Oben rechts Plätze frei
     if ($freie_plaetze > 0) {
-        $daten[$turnier_id]['plaetze_frei'] = '<span class="w3-text-green">frei</span>';
-    } elseif ($freie_plaetze < 0 && $daten[$turnier_id]['phase'] == 'offen' && $daten[$turnier_id]['plaetze'] - $anz_spieleliste[$turnier_id] > 0) {
-        $daten[$turnier_id]['plaetze_frei'] = '<span class="w3-text-yellow">losen</span>';
-    } elseif (($daten[$turnier_id]['plaetze'] - $anz_spieleliste[$turnier_id]) <= 0) {
-        $daten[$turnier_id]['plaetze_frei'] = '<span class="w3-text-red">voll</span>';
+        $turniere[$turnier_id]['plaetze_frei'] = '<span class="w3-text-green">frei</span>';
+    } elseif ($freie_plaetze < 0 && $turniere[$turnier_id]['phase'] == 'offen' && $turniere[$turnier_id]['plaetze'] - $anz_spieleliste[$turnier_id] > 0) {
+        $turniere[$turnier_id]['plaetze_frei'] = '<span class="w3-text-yellow">losen</span>';
+    } elseif (($turniere[$turnier_id]['plaetze'] - $anz_spieleliste[$turnier_id]) <= 0) {
+        $turniere[$turnier_id]['plaetze_frei'] = '<span class="w3-text-red">voll</span>';
     }
 
-    if ($daten[$turnier_id]['art'] == 'final') {
-        $daten[$turnier_id]['phase'] = 'Finale';
+    if ($turniere[$turnier_id]['art'] == 'final') {
+        $turniere[$turnier_id]['phase'] = 'Finale';
     }
-    if ($daten[$turnier_id]['art'] == 'spass') {
-        $daten[$turnier_id]['phase'] = 'Nichtligaturnier';
+    if ($turniere[$turnier_id]['art'] == 'spass') {
+        $turniere[$turnier_id]['phase'] = 'Nichtligaturnier';
     }
 
-    if ($daten[$turnier_id]['phase'] == 'spielplan') {
-        $daten[$turnier_id]['phase'] = Form::link($daten[$turnier_id]['link_spielplan'] ?: ('spielplan.php?turnier_id=' . $turnier_id), 'Spielplan');
-        $daten[$turnier_id]['phase_spielplan'] = true;
+    if ($turniere[$turnier_id]['phase'] == 'spielplan') {
+        $turniere[$turnier_id]['phase'] = Form::link($turniere[$turnier_id]['spielplan_datei'] ?: ('spielplan.php?turnier_id=' . $turnier_id), 'Spielplan', true, 'sports_hockey');
+        $turniere[$turnier_id]['phase_spielplan'] = true;
     }
 
 }
@@ -99,7 +99,7 @@ include '../../templates/header.tmp.php';
 
     <div id="myDIV"><!-- zu durchsuchendes div -->
                     <!--Turnierpanels -->
-        <?php foreach ($daten as $turnier) { ?>
+        <?php foreach ($turniere as $turnier) { ?>
             <section onclick="modal('modal<?= $turnier['turnier_id'] ?>')"
                      class='w3-display-container w3-panel <?php if ($turnier['art'] == 'final') { ?>w3-pale-red<?php } ?> w3-card'
                      style='cursor: pointer'
@@ -140,7 +140,7 @@ include '../../templates/header.tmp.php';
                                     <i>leer</i> <?php }//end if?>
                             </div>
                             <div class='w3-half'>
-                                <?php if ($turnier['phase'] == 'offen' or $turnier['art'] == 'final') { ?>
+                                <?php if ($turnier['phase'] == 'offen' || $turnier['art'] == 'final') { ?>
                                     <?php if (!empty($all_anmeldungen[$turnier['turnier_id']]['melde'])) { ?>
                                         <h4 class='w3-text-primary'><span>Meldeliste</span></h4>
                                         <p>
@@ -179,7 +179,7 @@ include '../../templates/header.tmp.php';
                             <table class="w3-table">
                                 <tr style="white-space: nowrap;">
                                     <td class="w3-text-primary" style="width: 150px"><?= Form::link('../liga/turnier_details.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">pending</i> Plätze') ?></td>
-                                    <td><?= $turnier['plaetze'] ?> (<?= $turnier['spielplan'] ?>)</td>
+                                    <td><?= $turnier['plaetze'] ?> (<?= $turnier['format'] ?>)</td>
                                 </tr>
                                 <tr style="white-space: nowrap;">
                                     <td class="w3-text-primary"><?= Form::link('../liga/turnier_details.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">schedule</i> Beginn') ?></td>
@@ -201,24 +201,24 @@ include '../../templates/header.tmp.php';
                         <!-- Links -->
                         <div style="margin-bottom: 24px;">
                             <p class="w3-text-grey w3-border-bottom w3-border-grey">Links</p>
-                            <p><?= Form::link('../liga/turnier_details.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">info</i> Alle Turnierdetails') ?></p>
+                            <p><?= Form::link('../liga/turnier_details.php?turnier_id=' . $turnier['turnier_id'], 'Alle Turnierdetails', icon:'info') ?></p>
                             <?php if ($turnier['phase_spielplan'] ?? false) { ?>
-                                <p><?= Form::link($turnier['link_spielplan'] ?: ('../liga/spielplan.php?turnier_id=' . $turnier['turnier_id']), '<i class="material-icons">reorder</i> Zum Spielplan') ?></p>
+                                <p><?= Form::link($turnier['spielplan_datei'] ?? ('../liga/spielplan.php?turnier_id=' . $turnier['turnier_id']), 'Zum Spielplan', icon:'reorder') ?></p>
                             <?php } //endif?>
                             <?php if (isset($_SESSION['logins']['team'])) { ?>
-                                <p><?= Form::link('../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">how_to_reg</i> Zur Anmeldeseite') ?></p>
-                                <p><?= Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">article</i> Zum Turnierreport') ?></p>
+                                <p><?= Form::link('../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier['turnier_id'], 'Zur Anmeldeseite', icon:'how_to_reg') ?></p>
+                                <p><?= Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier['turnier_id'], 'Zum Turnierreport', icon:'article') ?></p>
                             <?php } else { ?>
-                                <p><?= Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">lock</i> Zum Turnierreport') ?></p>
+                                <p><?= Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier['turnier_id'], 'Zum Turnierreport', icon:'lock') ?></p>
                             <?php } //endif?>
-                            <?php if (($_SESSION['logins']['team']['id'] ?? '') == $turnier['ausrichter']) { ?>
-                                <p><?= Form::link('../teamcenter/tc_turnier_bearbeiten.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">create</i> Turnier als Ausrichter bearbeiten') ?></p>
+                            <?php if (($_SESSION['logins']['team']['id'] ?? 0) === $turnier['ausrichter']) { ?>
+                                <p><?= Form::link('../teamcenter/tc_turnier_bearbeiten.php?turnier_id=' . $turnier['turnier_id'], 'Turnier als Ausrichter bearbeiten', icon:'create') ?></p>
                             <?php } //endif?>
                             <?php if (isset($_SESSION['logins']['la'])) { ?>
                                 <p><?= Form::link('../ligacenter/lc_turnier_bearbeiten.php?turnier_id=' . $turnier['turnier_id'], 'Turnier bearbeiten (Ligaausschuss)') ?></p>
                                 <p><?= Form::link('../ligacenter/lc_team_anmelden.php?turnier_id=' . $turnier['turnier_id'], 'Teams anmelden (Ligaausschuss)') ?></p>
                                 <p><?= Form::link('../ligacenter/lc_turnier_log.php?turnier_id=' . $turnier['turnier_id'], 'Turnierlog einsehen (Ligaausschuss)') ?></p>
-                                <p><?= Form::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">article</i> Zum Turnierreport (Ligaausschuss)') ?></p>
+                                <p><?= Form::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $turnier['turnier_id'], 'Zum Turnierreport (Ligaausschuss)', icon:'article') ?></p>
                             <?php } //endif?>
                         </div>
                     </div>

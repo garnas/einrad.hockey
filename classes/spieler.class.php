@@ -117,7 +117,8 @@ class Spieler
     public static function get_teamkader_vorsaison(int $team_id): array
     {
         $kader_vorsaison = self::get_teamkader($team_id, Config::SAISON - 1);
-        $kader_vorvorsaison = self::get_teamkader($team_id, Config::SAISON - 2); // Ausnahme für die Saison 20/21, da viele Teams ihre Spieler in der Corona_Saison nicht zurückgemeldet haben
+        $kader_vorvorsaison = self::get_teamkader($team_id, Config::SAISON - 2);
+            // Ausnahme für die Saison 20/21, da Teams ihre Spieler wegen Corona nicht zurückgemeldet wurden
         return $kader_vorsaison + $kader_vorvorsaison;
     }
 
@@ -148,7 +149,7 @@ class Spieler
     public static function get_spielerliste(): array
     {
         $sql = "
-                SELECT vorname,nachname,spieler_id 
+                SELECT vorname, nachname, spieler_id 
                 FROM spieler 
                 ORDER BY vorname
                 ";
@@ -181,11 +182,13 @@ class Spieler
      * @param string $entry
      * @param mixed $value
      */
-    function set_detail(string $entry, mixed $value)
+    public function set_detail(string $entry, mixed $value): void
     {
         $spalten_namen = dbi::$db->query("SHOW FIELDS FROM spieler")->list('Field');
-        if (!in_array($entry, $spalten_namen)) die("Ungültiger Spaltenname");
-        $zeit = ($entry === 'team_id' or $entry === 'letzte_saison') ? '' : ', zeit = zeit';
+        if (!in_array($entry, $spalten_namen, true)) {
+            die("Ungültiger Spaltenname");
+        }
+        $zeit = ($entry === 'team_id' || $entry === 'letzte_saison') ? '' : ', zeit = zeit';
         $entry = "`" . $entry . "`";
         $sql = "
                 UPDATE spieler 

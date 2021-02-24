@@ -6,6 +6,6 @@
 </p>
 <p>
     <a href='<?= Env::BASE_URL ?>/liga/turnier_details.php?turnier_id=<?= $turnier->id ?>'>
-        Link des neuen Turniers
+        Link zum Turnier
     </a>
 </p>

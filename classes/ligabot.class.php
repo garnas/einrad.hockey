@@ -17,7 +17,7 @@ class LigaBot
         $doppel_anmeldungen = self::get_doppel_anmeldungen(); // Doppelt auf Spiele-Liste wird hier erfasst.
         if (!empty($doppel_anmeldungen)) {
             Form::notice("Doppelt auf Spielen-Liste:");
-            db::debug($doppel_anmeldungen); // TODO Mail absenden
+            db::debug($doppel_anmeldungen); // TODO Mail absenden?
         }
 
         $_SESSION['ligabot'] = 'Ligabot'; // Wird in den logs als Autor verwendet
@@ -37,12 +37,21 @@ class LigaBot
             $pos_ausrichter = array_search($ausrichter_block, Config::BLOCK_ALL);
             $pos_turnier = array_search($turnier_block, Config::BLOCK_ALL);
 
-            if ($turnier->details['art'] == 'I' && $turnier->details['phase'] == 'offen' && $turnier->details['tblock_fixed'] != 'Ja' && $turnier_block != $ausrichter_block) {
+            if (
+                $turnier->details['art'] === 'I'
+                && $turnier->details['phase'] === 'offen'
+                && $turnier->details['tblock_fixed'] !== 'Ja'
+                && $turnier_block != $ausrichter_block
+            ) {
                 if (($pos_ausrichter - 1) != $pos_turnier) { // Um einen Block vom Ausrichterblock aus erweiterte Turniere sollen nicht wandern...
                     $turnier->set_block($ausrichter_block);
                 }
             }
-            if ($turnier->details['art'] == 'II' && $turnier->details['tblock_fixed'] != 'Ja' && $turnier->details['phase'] == 'offen') {
+            if (
+                $turnier->details['art'] === 'II'
+                && $turnier->details['tblock_fixed'] !== 'Ja'
+                && $turnier->details['phase'] === 'offen'
+            ) {
                 if ($pos_ausrichter < $pos_turnier) {
                     $turnier->set_block($ausrichter_block);
                 }
@@ -52,7 +61,10 @@ class LigaBot
              * Phasenwechsel von Offene Phase in die Meldephase
              */
             // Prüft, ob wir uns vier Wochen vor dem Spieltag befinden und ob das Turnier in der offenen Phase ist.
-            if (self::time_offen_melde($turnier->details['datum']) <= time() && $turnier->details['phase'] == 'offen') {
+            if (
+                $turnier->details['phase'] === 'offen'
+                && self::time_offen_melde($turnier->details['datum']) <= time()
+            ) {
                 $turnier->set_phase("melde"); //Aktualisiert auch $turnier->get_details()
                 // Losen setzt alle Teams in richtiger Reihenfolge auf die Warteliste.
                 self::losen($turnier);
@@ -132,13 +144,13 @@ class LigaBot
      */
     public static function time_offen_melde(string $datum): int
     {
-        $datum = strtotime($datum);
-        $tag = date("N", $datum); // Numerische Zahl des Wochentages 1-7
+        $unix = strtotime($datum);
+        $tag = date("N", $unix); // Numerische Zahl des Wochentages 1-7
         // Faktor 3.93 und strtotime(date("d-M-Y"..)) -> Reset von 12 Uhr Mittags auf Null Uhr, um Winter <-> Sommerzeit korrekt handzuhaben
         if ($tag >= 3) {
-            return strtotime(date("d-M-Y", $datum - 3.93 * 7 * 24 * 60 * 60 + (6 - $tag) * 24 * 60 * 60));
+            return strtotime(date("d-M-Y", $unix - 3.93 * 7 * 24 * 60 * 60 + (6 - $tag) * 24 * 60 * 60));
         }
-        return strtotime(date("d-M-Y", $datum - 3.93 * 7 * 24 * 60 * 60 - $tag * 24 * 60 * 60));
+        return strtotime(date("d-M-Y", $unix - 3.93 * 7 * 24 * 60 * 60 - $tag * 24 * 60 * 60));
     }
 
     /**
@@ -178,7 +190,7 @@ class LigaBot
         $liste = $turnier->get_anmeldungen();
         foreach (($liste['spiele'] ?? []) as $team) {
             // Das Team hat ein Freilos gesetzt, aber den falschen Freilosblock
-            if ($team['freilos_gesetzt'] == 'Ja' && !$turnier->check_team_block_freilos($team['team_id'])) {
+            if ($team['freilos_gesetzt'] === 'Ja' && !$turnier->check_team_block_freilos($team['team_id'])) {
                 $turnier->log("Falscher Freilos-Block: " . $team['teamname']
                     . "\r\nTeamb. " . Tabelle::get_team_block($team['team_id']) . " | Turnierb. " . $turnier->details['tblock']
                     . "\r\nFreilos wird erstattet");
@@ -205,12 +217,12 @@ class LigaBot
                                                     // Teams mit falschem Block
         // Aufteilung der Teams in die Lostöpf, Teams mit falschem Freilos wurden schon abgemeldet
         foreach ($liste['melde'] as $team) {
-            if ($team['ligateam'] == 'Nein') {
-                array_push($los_nl, $team['team_id']);
+            if ($team['ligateam'] === 'Nein') {
+                $los_nl[] = $team['team_id'];
             } elseif ($turnier->check_team_block($team['team_id'])) {
-                array_push($los_rblock, $team['team_id']);
+                $los_rblock[] = $team['team_id'];
             } else {
-                array_push($los_fblock, $team['team_id']);
+                $los_fblock[] = $team['team_id'];
             }
         }
 
@@ -223,7 +235,7 @@ class LigaBot
         $los_ges = array_merge($los_rblock, $los_nl, $los_fblock);
         $pos = 0;
         foreach ($los_ges as $team_id) {
-            $pos += 1;
+            $pos++;
             if ($turnier->check_doppel_anmeldung($team_id)) { //Check ob das Team am Kalendertag des Turnieres schon auf einer Spiele-Liste steht
                 $turnier->log("Doppelanmeldung " . Team::id_to_name($team_id));
                 $turnier->abmelden($team_id);

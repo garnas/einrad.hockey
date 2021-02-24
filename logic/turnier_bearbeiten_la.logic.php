@@ -51,7 +51,7 @@ if (isset($_POST['turnier_bearbeiten_la'])) {
     $datum = $_POST['datum'];
     $phase = $_POST['phase'];
     $tname = $_POST['tname'];
-    if (empty($datum) or empty($phase)){
+    if (empty($datum) || empty($phase)){
         Form::error('Datum und/oder Phase sind leer');
         $error = true;
     }
