@@ -33,7 +33,8 @@ final class Spielplan_JgJ extends Spielplan {
 
         // Sollte bei JgJ-Spielplänen der Fall sein
         if ($this->anzahl_spiele * $this->anzahl_teams/2 !== count($this->spiele)) {
-            Handler::error("Teams und Spielplan passen nicht zusammen. (Turnier-ID $this->turnier_id)");
+            trigger_error("Teams und Spielplan passen nicht zusammen. (Turnier-ID $this->turnier_id)",
+            E_USER_ERROR);
         }
 
         $this->tore_tabelle = $this->get_toretabelle($penaltys);

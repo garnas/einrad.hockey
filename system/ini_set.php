@@ -31,14 +31,4 @@ if (
     && in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])
 ) {
     require_once __DIR__ . '/../ini_set_localhost_nicht_hochladen.php';
-}else{
-    // Fehlerseite für Production
-    register_shutdown_function(static function ()
-    {
-        $error = error_get_last();
-        if ($error !== null) {
-            header("Location: " . Env::BASE_URL . "/errors/500.php");
-        }
-    });
-    // https://phpdelusions.net/articles/error_reporting#error_page
 }

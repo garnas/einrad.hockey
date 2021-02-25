@@ -1,7 +1,6 @@
 <?php
-/**
- * Dieses Dokument muss immer als Erstes für die Logik geladen werden
- */
+
+// Dieses Dokument muss immer als Erstes für die Logik geladen werden
 
 /**
  * php.ini Einstellungen
@@ -19,11 +18,10 @@ require_once __DIR__ . '/../env.php';
 session_start();
 session_regenerate_id();
 
-
 /**
  * Autoloader der Klassen
  *
- * Quelle: https://www.php.net/manual/de/language.oop5.autoload.php
+ * https://www.php.net/manual/de/language.oop5.autoload.php
  */
 spl_autoload_register(
     static function ($class) {
@@ -33,7 +31,35 @@ spl_autoload_register(
 );
 
 /**
+ * Diese Funktion wird nach beendigung des Skriptes ausgeführt.
+ * Sie logt User und gibt Fehlerseiten aus.
+ *
+ * https://phpdelusions.net/articles/error_reporting#error_page
+ */
+register_shutdown_function(static function () {
+
+    // Fehlerseite nur bei Fatal Errors
+    $error = error_get_last();
+
+    if (
+        $error !== null
+        && ($error['type'] === E_USER_ERROR || $error['type'] === E_ERROR)
+    ) {
+        if ($error['type'] === E_USER_ERROR) {
+            $text = $error['message']; // Nur selbst erstellte Fehlertexte mit trigger_error(...) werden angezeigt
+        }
+        include(Env::BASE_PATH . '/templates/errors/error.tmp.php');
+    }
+
+    // Logs der Besucher
+    Handler::log("user.log",
+        $_SERVER['REQUEST_URI']
+        . " | " . round(microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"], 3) . " s (Load)"
+        . " | " . dbi::$db->query_count . " (Querys)");
+
+});
+
+/**
  * Verbindung zur Datenbank
  */
-$verbindung_zur_datenbank = new db; // Alte DB
 dbi::initialize(); // Neue DB-Verbindung mit Prepared-Statements

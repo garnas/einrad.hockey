@@ -59,7 +59,7 @@ class dbWrapper
         // Prepare
         if (!$this->stmt = $this->link->prepare($sql)){
             Handler::log(Config::LOG_DB, "ERROR " . dbi::escape($this->link->error));
-            Handler::error($this->link->error);
+            trigger_error($this->link->error, E_USER_ERROR);
         }
         // Parameter übergeben
         if ($this->stmt->param_count > 0) { // Alternativ if (!empty($params))
@@ -71,7 +71,7 @@ class dbWrapper
                 $this->params = $params;
                 $this->log();
                 Handler::log(Config::LOG_DB, "ERROR Falsche Anzahl an Parametern für Mysqli-Prepare");
-                Handler::error($this->link->error);
+                trigger_error($this->link->error, E_USER_ERROR);
             }
             $params = dbi::trim_params($params);
             $this->bind($params);
@@ -80,7 +80,8 @@ class dbWrapper
         // Ausführen
         if (!$this->stmt->execute()){
             Handler::log(Config::LOG_DB, "ERROR " . dbi::escape($this->stmt->error));
-            Handler::error($this->link->error);
+            trigger_error($this->link->error, E_USER_ERROR);
+
 
         }
         $this->result = $this->stmt->get_result();

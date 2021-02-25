@@ -2,12 +2,6 @@
 
 class Handler
 {
-    public static function error(string $text, $type = E_USER_ERROR): void
-    {
-        include (Env::BASE_PATH . '/templates/errors/error.tmp.php');
-        trigger_error($text, $type);
-    }
-
     public static function reload($path = null): void
     {
         $url = ($path === null) ? dbi::escape($_SERVER['PHP_SELF']) : Env::BASE_URL . $path;
@@ -19,6 +13,7 @@ class Handler
     {
         include (Env::BASE_PATH . '/templates/errors/error.tmp.php');
         trigger_error($text, E_USER_NOTICE);
+        die();
     }
 
     /**

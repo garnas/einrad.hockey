@@ -1,4 +1,6 @@
 <?php
+$verbindung_zur_datenbank = new db; // Alte DB
+
 $challenge = new Challenge();
 
 $abschluss = strtotime($challenge->challenge_end . ' ' . $challenge->challenge_end_time);
