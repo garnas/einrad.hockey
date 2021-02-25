@@ -38,7 +38,7 @@ class MailBot
             if ($mailer->send()) {
                 return true;
             }
-            Form::log(Config::LOG_EMAILS, 'Fehler: ' . $mailer->ErrorInfo);
+            Handler::log(Config::LOG_EMAILS, 'Fehler: ' . $mailer->ErrorInfo);
             return false;
         }
 
@@ -48,9 +48,9 @@ class MailBot
             $mailer->ClearAllRecipients();
         }
 
-        Form::log(Config::LOG_EMAILS, 'E-Mail-Debug-Pseudo-Versand erfolgreich');
+        Handler::log(Config::LOG_EMAILS, 'E-Mail-Debug-Pseudo-Versand erfolgreich');
         dbi::debug($mailer);
-        return false;
+        return true;
     }
 
     /**

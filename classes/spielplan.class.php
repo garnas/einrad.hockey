@@ -48,7 +48,7 @@ class Spielplan
 
         $this->details = $this->get_details();
         if (empty($this->details)) {
-            trigger_error("Spielplan konnte nicht ermittelt werden.", E_USER_ERROR);
+            Handler::error("Spielplan konnte nicht ermittelt werden. (Turnier-ID $this->turnier_id)" );
         }
 
         $this->pausen = $this->get_pausen();
@@ -61,7 +61,7 @@ class Spielplan
                 !array_key_exists($spiel['team_id_a'], $this->teamliste)
                 || !array_key_exists($spiel['team_id_b'], $this->teamliste)
             ) {
-                trigger_error("Teams und Spielplan passen nicht zusammen.", E_USER_ERROR);
+                Handler::error("Teams und Spielplan passen nicht zusammen. (Turnier-ID $this->turnier_id)");
             }
         }
     }

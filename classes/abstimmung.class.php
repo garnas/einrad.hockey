@@ -128,7 +128,7 @@ class Abstimmung
         // Validierung
         if (empty($this->team) xor empty($this->get_stimme($crypt))){
             Form::error("Fehler, bitte melde dich bei " . Form::mailto(Env::TECHNIKMAIL), esc:false);
-            Form::log("abstimmung.log", "Fehler: $this->team_id | $crypt");
+            Handler::log("abstimmung.log", "Fehler: $this->team_id | $crypt");
             return;
         }
 
@@ -142,7 +142,7 @@ class Abstimmung
                 VALUES ('$stimme', '$crypt')
                 ";
             dbi::$db->query($sql, $this->passwort_hash)->log(true);
-            Form::log("abstimmung.log", "$this->team_id hat seine Stimme abgegeben");
+            Handler::log("abstimmung.log", "$this->team_id hat seine Stimme abgegeben");
             Form::info("Dein Team hat erfolgreich abgestimmt. Vielen Dank!");
         } else { // Team korrigiert seine Stimme.
             $sql = "
@@ -157,7 +157,7 @@ class Abstimmung
                 WHERE team_id = $this->team_id
                 ";
             dbi::$db->query($sql)->log();
-            Form::log("abstimmung.log", "$this->team_id hat seine Stimme geändert");
+            Handler::log("abstimmung.log", "$this->team_id hat seine Stimme geändert");
             Form::info("Dein Team hat erfolgreich neu abgestimmt. Vielen Dank!");
         }
     }

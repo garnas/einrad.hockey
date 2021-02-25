@@ -129,7 +129,7 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
         $mailer->Body = $text . "\r\nVersendet aus dem Kontaktcenter von einrad.hockey";
 
         // Email-versenden
-        Form::log(
+        Handler::log(
             Config::LOG_EMAILS, "Betreff: $betreff"
             . " von " .(Config::$teamcenter) ? $_SESSION['team']['name'] : 'Ligaausschuss')
             . " an " . implode(',', $emails

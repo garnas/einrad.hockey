@@ -17,14 +17,14 @@ foreach ($koordinaten as $keya => $teama){
     foreach ($koordinaten_hilf as $keyb => $teamb){
         $latlngb = array($teamb['LAT'], $teamb['Lon']);
         if ($latlnga == $latlngb){
-            array_push($array_hilf,$teamb);
+            $array_hilf[] = $teamb;
             $teama['teamname'] .= "</h5><h5 class=\"w3-text-primary\">" . $teamb['teamname'];
             unset($koordinaten_hilf[$keyb]);
             $doppelt = true;
         }
     }
     if (!in_array($teama,$array_hilf)){
-    array_push($array,$teama);
+    $array[] = $teama;
     }
 }
 

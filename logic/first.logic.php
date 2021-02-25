@@ -26,9 +26,9 @@ session_regenerate_id();
  * Quelle: https://www.php.net/manual/de/language.oop5.autoload.php
  */
 spl_autoload_register(
-    function ($class) {
+    static function ($class) {
         $class = strtolower($class);
-        include __DIR__ . '/../classes/' . $class . '.class.php';
+        include Env::BASE_PATH . '/classes/' . $class . '.class.php';
     }
 );
 
@@ -37,6 +37,3 @@ spl_autoload_register(
  */
 $verbindung_zur_datenbank = new db; // Alte DB
 dbi::initialize(); // Neue DB-Verbindung mit Prepared-Statements
-
-
-

@@ -17,7 +17,7 @@ if (isset($_POST['anmelden'])){
     if (Team::is_ligateam($team_id)){
         unset($_SESSION['logins']['team']);
         Team::set_team_session(new Team($team_id));
-        Form::log("login.log", "Erfolgreich       | via Ligacenter: " . $_SESSION['logins']['la']['login']
+        Handler::log("login.log", "Erfolgreich       | via Ligacenter: " . $_SESSION['logins']['la']['login']
             . " als " . $_SESSION['logins']['team']['name']);
         Form::info("Login via Ligaausschuss erfolgreich");
         header('Location: ' . Env::BASE_URL . '/teamcenter/tc_start.php');

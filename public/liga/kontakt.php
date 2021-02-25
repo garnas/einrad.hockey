@@ -17,7 +17,7 @@ if (isset($_POST['absenden'])) {
     $betreff = $_POST['betreff'];
     $text = $_POST['text'];
     $user_captcha = $_POST['captcha'];
-    if (empty($absender) or empty($betreff) or empty($text)) {
+    if (empty($absender) || empty($betreff) || empty($text)) {
         Form::error("Bitte Formular ausfüllen");
         $error = true;
     }
@@ -27,7 +27,7 @@ if (isset($_POST['absenden'])) {
         Form::error("Falsches Captcha, bitte versuche es erneut.");
         $error = true;
         // Logdatei erstellen/beschreiben
-        Form::log(Config::LOG_KONTAKTFORMULAR, "Falsches Captcha: " . $_SESSION['captcha'] . "\n" . print_r($_POST, true));
+        Handler::log(Config::LOG_KONTAKTFORMULAR, "Falsches Captcha: " . $_SESSION['captcha'] . "\n" . print_r($_POST, true));
     }
 
     // Zeitmessung vs Bots
@@ -40,7 +40,7 @@ if (isset($_POST['absenden'])) {
             . Form::mailto(Env::LAMAIL), esc: false);
         $error = true;
         // Logdatei erstellen/beschreiben
-        Form::log(Config::LOG_KONTAKTFORMULAR, "Zu schnell: " . $time . " Sekunden\n" . print_r($_POST, true));
+        Handler::log(Config::LOG_KONTAKTFORMULAR, "Zu schnell: " . $time . " Sekunden\n" . print_r($_POST, true));
     }
 
     if (!$error) {
@@ -58,7 +58,7 @@ if (isset($_POST['absenden'])) {
         } else {
             Form::error("Es ist ein Fehler aufgetreten. E-Mail konnte nicht versendet werden.
              Manuell versenden: " . Form::mailto(Env::LAMAIL), esc: false);
-            Form::log(Config::LOG_KONTAKTFORMULAR, "Error Mail:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
+            Handler::log(Config::LOG_KONTAKTFORMULAR, "Error Mail:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
         }
         if ($send) {
             // Confirmation Mail an die angegebene Absendeadresse
@@ -71,12 +71,10 @@ if (isset($_POST['absenden'])) {
             if (MailBot::send_mail($mailer)) {
                 Form::info("Es wurde eine Kopie an $absender gesendet.");
                 unset($_SESSION['captcha']); // Captcha aus der Session löschen
-                header('Location: ../liga/neues.php');
-                die();
+                Handler::reload('/liga/neues.php');
             }
-
             Form::error("Es ist ein Fehler aufgetreten: Eine Kopie der E-Mail wurde nicht an dich versendet! Stimmt \"$absender\"?");
-            Form::log(Config::LOG_KONTAKTFORMULAR, "Error Mailback:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
+            Handler::log(Config::LOG_KONTAKTFORMULAR, "Error Mailback:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
         } // send
     } // error
 } // Form

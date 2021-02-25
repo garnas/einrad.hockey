@@ -425,7 +425,7 @@ class Team
 
         if (!self::is_ligateam($team_id)) {
             Form::error("Falscher Loginname");
-            Form::log(Config::LOG_LOGIN, "Falscher TC-Login | Teamname: " . $teamname);
+            Handler::log(Config::LOG_LOGIN, "Falscher TC-Login | Teamname: " . $teamname);
             return false;
         }
 
@@ -433,7 +433,7 @@ class Team
         // Passwort prüfen
         if (password_verify($passwort, $team->details['passwort'])) {
             self::set_team_session($team);
-            Form::log(Config::LOG_LOGIN, "Erfolgreich       | Teamname: " . $teamname);
+            Handler::log(Config::LOG_LOGIN, "Erfolgreich       | Teamname: " . $teamname);
 
             if (empty($team->details['trikot_farbe_1'])) {
                 $link = Form::link("tc_teamdaten_aendern.php", ' Link.', icon: "launch");
@@ -448,7 +448,7 @@ class Team
         }
 
         // Passwort falsch
-        Form::log(Config::LOG_LOGIN, "Falsches Passwort | Teamname: " . $teamname);
+        Handler::log(Config::LOG_LOGIN, "Falsches Passwort | Teamname: " . $teamname);
         Form::error("Falsches Passwort");
         return false;
     }

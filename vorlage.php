@@ -30,4 +30,4 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 
 <p class="w3-text-grey">Ende der Liste</p>
 
-<?php include Env::BASE_PATH . '\templates\footer.tmp.php';
+<?php include Env::BASE_PATH . '/templates/footer.tmp.php';

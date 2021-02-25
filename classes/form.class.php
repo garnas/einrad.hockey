@@ -240,22 +240,6 @@ class Form
     }
 
     /**
-     * Erstellt einen Log in einer Logdatei im System-Ordner
-     *
-     * @param string $file_name Name der Logdatei
-     * @param string $line Einzutragender Text in die Logdatei
-     */
-    public static function log(string $file_name, string$line): void
-    {
-        $path = Env::BASE_PATH . '/system/logs/';
-        //SQL-Logdatei erstellen/beschreiben
-        $log_file = fopen($path . $file_name, 'ab');
-        $line = date('[Y-M-d H:i:s e]: ') . $line . "\n";
-        fwrite($log_file, $line);
-        fclose($log_file);
-    }
-
-    /**
      * Fügt einen Confetti-Effekt hinzu.
      * Muss nach dem HTML-Header-Include aufgerufen werden!
      *
@@ -322,4 +306,6 @@ class Form
         }
         return ($punkt_1 ?? '') . ($punkt_2 ?? '');
     }
+
+
 }

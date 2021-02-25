@@ -44,12 +44,12 @@ if (Config::$teamcenter) {
     // Team will seine Stimme einsehen
     if (isset($_POST['stimme_einsehen'])) {
         if (!password_verify($_POST['passwort'], $abstimmung->passwort_hash)) {
-            Form::log("abstimmung.log", "$abstimmung->team_id Ungültiges Passwort (Stimme einsehen)");
+            Handler::log("abstimmung.log", "$abstimmung->team_id Ungültiges Passwort (Stimme einsehen)");
             Form::error("Ungültiges Passwort.");
         } else {
             $crypt = $abstimmung->teamid_to_crypt($_POST['passwort']);
             $einsicht = $abstimmung->get_stimme($crypt);
-            Form::log("abstimmung.log", "$abstimmung->team_id hat seine Stimme eingesehen");
+            Handler::log("abstimmung.log", "$abstimmung->team_id hat seine Stimme eingesehen");
             // Keinen Header einbauen, da $stimme sonst verloren geht.
         }
     }
@@ -60,17 +60,17 @@ if (Config::$teamcenter) {
         $stimme = $_POST['abstimmung'];
         if (time() < $beginn or time() > $abschluss) {
             $error = true;
-            Form::log("abstimmung.log", "$abstimmung->team_id Falscher Zeitraum");
+            Handler::log("abstimmung.log", "$abstimmung->team_id Falscher Zeitraum");
             Form::error("Die Abstimmung ist zurzeit nicht aktiv.");
         }
         if (!in_array($stimme, ['winterpause', 'sommerpause', 'enthaltung'])) {
             $error = true;
-            Form::log("abstimmung.log", "$abstimmung->team_id HTML-Manipulation");
+            Handler::log("abstimmung.log", "$abstimmung->team_id HTML-Manipulation");
             Form::error("Ungültige Formularübermittlung");
         }
         if (!password_verify($_POST['passwort'], $abstimmung->passwort_hash)) {
             $error = true;
-            Form::log("abstimmung.log", "$abstimmung->team_id Ungültiges Passwort (Abstimmen)");
+            Handler::log("abstimmung.log", "$abstimmung->team_id Ungültiges Passwort (Abstimmen)");
             Form::error("Ungültiges Passwort.");
         }
         if (!$error) {
