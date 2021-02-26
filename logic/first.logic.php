@@ -31,7 +31,7 @@ spl_autoload_register(
 );
 
 /**
- * Diese Funktion wird nach beendigung des Skriptes ausgeführt.
+ * Diese Funktion wird nach Beendigung des Skriptes ausgeführt.
  * Sie logt User und gibt Fehlerseiten aus.
  *
  * https://phpdelusions.net/articles/error_reporting#error_page
@@ -40,7 +40,6 @@ register_shutdown_function(static function () {
 
     // Fehlerseite nur bei Fatal Errors
     $error = error_get_last();
-
     if (
         $error !== null
         && ($error['type'] === E_USER_ERROR || $error['type'] === E_ERROR)
@@ -48,7 +47,7 @@ register_shutdown_function(static function () {
         if ($error['type'] === E_USER_ERROR) {
             $text = $error['message']; // Nur selbst erstellte Fehlertexte mit trigger_error(...) werden angezeigt
         }
-        include(Env::BASE_PATH . '/templates/errors/error.tmp.php');
+        include Env::BASE_PATH . '/templates/errors/error.tmp.php';
     }
 
     // Logs der Besucher
@@ -63,3 +62,7 @@ register_shutdown_function(static function () {
  * Verbindung zur Datenbank
  */
 dbi::initialize(); // Neue DB-Verbindung mit Prepared-Statements
+
+if(Env::WARTUNGSMODUS && !isset($_SESSION['wartungsmodus'])){
+    trigger_error("Die Seite befindet sich im Wartungsmodus", E_USER_ERROR);
+}

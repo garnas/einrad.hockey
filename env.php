@@ -52,5 +52,5 @@ class env
      * Bei true wird die Seite wird für Besucher gesperrt. Wenn man freeme.php im public-Ordner aufruft, wird die Seite
      * über den Sessions-Cookie für einen Besucher freigeschaltet.
      */
-    public const WARTUNGSMODUS = true;
+    public const WARTUNGSMODUS = false;
 }
