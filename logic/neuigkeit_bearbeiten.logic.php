@@ -21,7 +21,7 @@ if (isset($_POST['delete_neuigkeit'])) {
 // Neuigkeiten verändern
 if (isset($_POST['change_neuigkeit'])) {
 
-    if (!empty($_POST['titel']) && !empty($_POST['text'])) {
+    if (empty($_POST['titel']) || empty($_POST['text'])) {
         Form::error("Bitte Titel- und Textfeld ausfüllen.");
         $error = true;
     }
