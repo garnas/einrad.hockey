@@ -1,6 +1,6 @@
-<?php include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
+<?php include_once Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 
-    <div class="w3-center">
+    <div class="w3-center" style="display:block!important;">
         <h1 class="w3-text-primary">Hier hat etwas nicht funktioniert!</h1>
 
         <p class="w3-text-red">
@@ -12,4 +12,4 @@
         </p>
     </div>
 
-<?php include Env::BASE_PATH . '/templates/footer.tmp.php';
+<?php include_once Env::BASE_PATH . '/templates/footer.tmp.php';

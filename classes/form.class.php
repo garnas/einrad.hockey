@@ -34,7 +34,7 @@ class Form
      * Text der Fehlermeldung
      * @param string $string Text
      * @param string $caption Überschrift
-     * @param bool $esc
+     * @param bool $esc false: Inhalt wird nicht escaped
      */
     public static function error(string $string, string $caption = "Fehler", bool $esc = true): void
     {
@@ -48,7 +48,7 @@ class Form
      * Text der Infomeldung
      * @param string $string Text
      * @param string $caption Überschrift
-     * @param bool $esc
+     * @param bool $esc false: Inhalt wird nicht escaped
      */
     public static function info(string $string, string $caption = "Info", bool $esc = true): void
     {
@@ -61,7 +61,7 @@ class Form
      *
      * @param string $string Text
      * @param string $caption Überschrift
-     * @param bool $esc
+     * @param bool $esc false: Inhalt wird nicht escaped
      */
     public static function notice(string $string, string $caption = "Hinweis", bool $esc = true): void
     {
