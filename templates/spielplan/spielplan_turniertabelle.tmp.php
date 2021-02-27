@@ -97,7 +97,17 @@
                 </tr>
                 <?php foreach ($spielplan->platzierungstabelle as $team_id => $x) { ?>
                     <tr>
-                        <td><?= ($spielplan->check_tabelle_einblenden()) ? $x['platz'] : '--' ?></td>
+                        <td style="white-space: nowrap;">
+                            <?php if (!$spielplan->check_tabelle_einblenden()) { ?>
+                                <span>--</span>
+                            <?php } elseif ($spielplan->check_penalty_team($team_id)) { ?>
+                                <span class='w3-text-secondary'>
+                            <?= Form::icon("priority_high") ?>PENALTY
+                        </span>
+                            <?php } else { ?>
+                                <?= $x['platz'] ?>
+                            <?php } // end if ?>
+                        </td>
                         <td style="white-space: nowrap;"><?= $x["teamname"] ?></td>
                         <td><?= $x['statistik']["spiele"] ?></td>
                         <td><?= $x['statistik']["punkte"] ?? '--' ?></td>

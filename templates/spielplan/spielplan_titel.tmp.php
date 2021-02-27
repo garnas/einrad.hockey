@@ -13,22 +13,22 @@
 } // end if?>
 <!-- Links -->
 <div class="pdf-hide">
-    <p><?= Form::link("../liga/turnier_details.php?turnier_id=" . $turnier_id, "<i class='material-icons'>info</i> Alle Turnierdetails") ?></p>
+    <?= Form::link("../liga/turnier_details.php?turnier_id=" . $turnier_id, "Alle Turnierdetails", true, 'launch') ?>
     <?php if (isset($_SESSION['logins']['team'])) { ?>
-        <p><?= Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">article</i> Zum Turnierreport') ?></p>
+        <?= Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, 'Zum Turnierreport', true, 'launch') ?>
     <?php } else { ?>
-        <p><?= Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">lock</i> Zum Turnierreport') ?></p>
+        <?= Form::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, 'Zum Turnierreport', true, 'launch') ?>
     <?php } // endif?>
     <?php if (($_SESSION['logins']['team']['id'] ?? 0) == $spielplan->turnier->details['ausrichter'] && !(Config::$teamcenter ?? false) && $spielplan->turnier->details['phase'] == 'spielplan') { ?>
-        <p><?= Form::link($spielplan->turnier->get_spielplan_link('tc'), '<i class="material-icons">create</i> Ergebnisse eintragen') ?></p>
+        <?= Form::link($spielplan->turnier->get_spielplan_link('tc'), 'Ergebnisse eintragen', true, 'launch') ?>
     <?php }// endif?>
     <?php if (isset($_SESSION['logins']['la']) && !(Config::$ligacenter ?? false)) { ?>
-        <p><?= Form::link($spielplan->turnier->get_spielplan_link('lc'), '<i class="material-icons">create</i> Ergebnisse eintragen (Ligaausschuss)') ?></p>
+        <?= Form::link($spielplan->turnier->get_spielplan_link('lc'), 'Ergebnisse eintragen (Ligaausschuss)', true, 'launch') ?>
     <?php }// endif?>
     <?php if (isset($_SESSION['logins']['la'])) { ?>
-        <p><?= Form::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">create</i> Turnierreport ausfüllen (Ligaausschuss)') ?></p>
+        <?= Form::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $turnier_id, 'Turnierreport ausfüllen (Ligaausschuss)', true, 'launch') ?>
     <?php }// endif?>
-    <p><?= Form::link("../liga/spielplan_pdf.php?turnier_id=" . $turnier_id, "<i class='material-icons'>print</i> PDF-Version anzeigen", true) ?></p>
+    <?= Form::link("../liga/spielplan_pdf.php?turnier_id=" . $turnier_id, "PDF-Version", true, 'print') ?>
 </div>
 
 <!-- Penalty-Warnungen -->

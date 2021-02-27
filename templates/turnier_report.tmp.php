@@ -10,28 +10,26 @@
             "") ?>
 <!-- Link Spielplan -->
 <p><?=Form::link('../liga/spielplan.php?turnier_id=' . $turnier_id, '<i class="material-icons">reorder</i> Zum Spielplan')?></p>
+<?php if (time() - strtotime($turnier->details['datum']) > 8 * 24 * 60 *60){ ?>
+    <!-- Ausbilder -->
+    <?php if (!empty($ausbilder_liste)){?>
+        <h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">school</i> Schiedsrichter-Ausbilder</h2>
+        <ul class='w3-ul w3-margin-left w3-leftbar w3-border-tertiary'>
+            <?php foreach ($ausbilder_liste as $spieler){?>
+                <li><?=$spieler['vorname'] . ' ' . $spieler['nachname']?> (<i><?=Team::id_to_name($spieler['team_id'])?></i>)</li>
+            <?php }//end foreach?>
+        </ul>
+    <?php }//endif?>
 
-<!-- Ausbilder -->
-<?php if (!empty($ausbilder_liste)){?>
-    <h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">school</i> Schiedsrichter-Ausbilder</h2>
-    <ul class='w3-ul w3-margin-left w3-leftbar w3-border-tertiary'>
-        <?php foreach ($ausbilder_liste as $spieler){?>
-            <li><?=$spieler['vorname'] . ' ' . $spieler['nachname']?> (<i><?=Team::id_to_name($spieler['team_id'])?></i>)</li>
+    <!-- Kader -->
+    <h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">groups</i> Kader und Schiedsrichter</h2>
+    <ul class='w3-ul w3-margin-left w3-leftbar w3-border-primary'>
+        <?php foreach ($kader_array as $team_id => $kader){?>
+            <li class="w3-hover-primary" style="cursor: pointer;" onclick="openTab('<?=$team_id?>')">
+                <?= Form::icon('launch', class:'w3-text-tertiary') ?> <?=Team::id_to_name($team_id)?>
+            </li>
         <?php }//end foreach?>
     </ul>
-<?php }//endif?>
-
-<!-- Kader -->
-<h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">groups</i> Kader und Schiedsrichter</h2>
-<ul class='w3-ul w3-margin-left w3-leftbar w3-border-primary'>
-    <?php foreach ($kader_array as $team_id => $kader){?>
-        <li class="w3-hover-primary" style="cursor: pointer;" onclick="openTab('<?=$team_id?>')">
-            <?= Form::icon('launch', class:'w3-text-tertiary') ?> <?=Team::id_to_name($team_id)?>
-        </li>
-    <?php }//end foreach?>
-</ul>
-
-<?php if (time() - strtotime($turnier->details['datum']) > 4 * 24 * 60 *60){ ?>
     <?php foreach ($kader_array as $team_id => $kader){?>
         <div id="<?=$team_id?>" class="tab" style="display:none; max-width: 600px">
             <?php if(!empty($kader)){?>

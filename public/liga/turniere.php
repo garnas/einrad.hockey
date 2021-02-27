@@ -62,7 +62,7 @@ foreach ($all_anmeldungen as $turnier_id => $liste) {
     }
 
     if ($turniere[$turnier_id]['phase'] == 'spielplan') {
-        $turniere[$turnier_id]['phase'] = Form::link($turniere[$turnier_id]['spielplan_datei'] ?: ('spielplan.php?turnier_id=' . $turnier_id), 'Spielplan', true, 'sports_hockey');
+        $turniere[$turnier_id]['phase'] = Form::link($turniere[$turnier_id]['spielplan_datei'] ?: ('spielplan.php?turnier_id=' . $turnier_id), 'Spielplan', true);
         $turniere[$turnier_id]['phase_spielplan'] = true;
     }
 
