@@ -6,11 +6,11 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 
 $saison = (isset($_GET['saison']) && is_numeric($_GET['saison'])) ? (int)$_GET['saison'] : Config::SAISON;
 $turnier_ergebnisse = Tabelle::get_all_ergebnisse($saison);
-
+dbi::debug($turnier_ergebnisse);
 if (empty($turnier_ergebnisse)) {
     Form::info("Es wurden noch keine Turnierergebnisse der Saison " . Form::get_saison_string($saison) . " eingetragen");
 }
-$turniere = Turnier::get_turniere('ergebnis', true, false);
+$turniere = Turnier::get_turniere('', false, false);
 
 //Farbe für die Plätze auf dem Turnier
 $color[0] = "w3-text-tertiary";

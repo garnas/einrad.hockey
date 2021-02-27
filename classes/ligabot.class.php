@@ -42,19 +42,17 @@ class LigaBot
                 && $turnier->details['phase'] === 'offen'
                 && $turnier->details['tblock_fixed'] !== 'Ja'
                 && $turnier_block != $ausrichter_block
-            ) {
-                if (($pos_ausrichter - 1) != $pos_turnier) { // Um einen Block vom Ausrichterblock aus erweiterte Turniere sollen nicht wandern...
-                    $turnier->set_block($ausrichter_block);
-                }
+                && ($pos_ausrichter - 1) != $pos_turnier
+            ) { // Um einen Block vom Ausrichterblock aus erweiterte Turniere sollen nicht wandern...
+                $turnier->set_block($ausrichter_block);
             }
             if (
                 $turnier->details['art'] === 'II'
                 && $turnier->details['tblock_fixed'] !== 'Ja'
                 && $turnier->details['phase'] === 'offen'
+                && $pos_ausrichter < $pos_turnier
             ) {
-                if ($pos_ausrichter < $pos_turnier) {
-                    $turnier->set_block($ausrichter_block);
-                }
+                $turnier->set_block($ausrichter_block);
             }
 
             /**
@@ -83,7 +81,7 @@ class LigaBot
     /**
      * Geht alle Turniere durch und schreibt den jeweiligen Spieltag in die Datenbank
      */
-    public static function set_spieltage()
+    public static function set_spieltage(): void
     {
         $liste = self::get_turnier_ids(); // Liste aller relevanten Turnierids sortiert nach Turnierdatum
 

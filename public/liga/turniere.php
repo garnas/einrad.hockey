@@ -132,7 +132,7 @@ include '../../templates/header.tmp.php';
                                         <i>
                                             <?php foreach ($all_anmeldungen[$turnier['turnier_id']]['spiele'] as $team) { ?>
                                                 <?= $team['teamname'] ?><span class="w3-text-primary">
-                                                (<?= $team['tblock'] ?: 'NL' ?>)</span><br>
+                                                (<?= $team['tblock'] ?? 'NL' ?>)</span><br>
                                             <?php }//end foreach?>
                                         </i>
                                     </p>

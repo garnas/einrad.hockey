@@ -250,7 +250,7 @@ include '../../templates/header.tmp.php';
                 <?php if (!empty($anmeldungen['spiele'])){?>
                     <?php foreach ($anmeldungen['spiele'] as $team){?>
                         <?php if ($team['teamname'] == $_SESSION['logins']['team']['name']) {$team['teamname'] = "<span class='w3-text-green'><b>".$team['teamname']."</b></span>";}?>
-                        <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span>
+                        <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?? 'NL'?>)</span>
                         <br>
                     <?php }//end foreach?>
                 <?php }else{ ?><i>leer</i><?php } //endif?>
@@ -262,7 +262,7 @@ include '../../templates/header.tmp.php';
                 <p class="w3-text-grey w3-border-bottom w3-border-grey">Meldeliste</p>
                     <?php foreach ($anmeldungen['melde'] as $team){?>
                         <?php if ($team['teamname'] == $_SESSION['logins']['team']['name']) {$team['teamname'] = "<span class='w3-text-yellow'><b>".$team['teamname']."</b></span>";}?>
-                        <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span>
+                        <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?? 'NL'?>)</span>
                         <br>
                     <?php }//end foreach?>
             <?php } //endif?>

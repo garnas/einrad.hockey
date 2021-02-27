@@ -186,24 +186,24 @@ window.onclick = function(event) {
         <thead class="w3-primary">
             <tr>
                 <th><b>#</b></th>
-                <th><b>Block</b></th>
-                <th><b>Wertung</b></th>
+                <th class="w3-center"><b>Block</b></th>
+                <th class="w3-center"><b>Wertung</b></th>
                 <th><b>Team</b></th>
                 <th><b>Turnierergebnisse</b></th>
-                <th><b>&empty;</b></th>
+                <th class="w3-center"><b>&empty;</b></th>
             </tr>
         </thead>
         <?php foreach ($rang_tabelle as $spalte){?>
             <tr>
-                <td><span class="w3-text-grey"><?=$spalte['platz']?></span></td>
-                <td class="w3-center"><?=Tabelle::platz_to_block($spalte['platz'])?></td>
-                <td class="w3-center"><?=Tabelle::platz_to_wertigkeit($spalte['platz'])?></td>
+                <td><span class="w3-text-grey"><?=$spalte['rang']?></span></td>
+                <td class="w3-center"><?=Tabelle::rang_to_block($spalte['rang'])?></td>
+                <td class="w3-center"><?=Tabelle::rang_to_wertigkeit($spalte['rang'])?></td>
                 <td style="white-space: nowrap"><?=$spalte['teamname']?></td>
                 <td><?=htmlspecialchars_decode($spalte['string'])?></td>
-                <td><?=$spalte['avg'] ?: 0?></td>
+                <td class="w3-center"><?=$spalte['avg'] ?: 0?></td>
             </tr>
         <?php } //end foreach?>
-    </table>    
+    </table>
 </div>
 
 

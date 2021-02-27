@@ -162,7 +162,7 @@ include '../../templates/header.tmp.php';
                 <th>Team ID</th>
                 <th>Teamname</th>
                 <th class="w3-center">Teamblock</th>
-                <th class="w3-center">Wertigkeit</th>
+                <th class="w3-center">Wertung</th>
             </tr>
             </thead>
             <?php foreach ($teamliste as $team) { ?>

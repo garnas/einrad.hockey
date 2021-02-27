@@ -7,7 +7,7 @@
                 <th><?= Form::icon("info_outline") ?><br>Team-ID</th>
                 <th><?= Form::icon("group") ?><br>Team</th>
                 <th><?= Form::icon("reorder") ?><br>Block</th>
-                <th class="w3-hide-small"><?= Form::icon("arrow_circle_up") ?><br>Wertigkeit</th>
+                <th class="w3-hide-small"><?= Form::icon("arrow_circle_up") ?><br>Wertung</th>
             </tr>
             <?php foreach ($spielplan->teamliste as $team_id => $team) { ?>
                 <tr>
@@ -19,7 +19,7 @@
             <?php }//end foreach?>
         </table>
     </div>
-    <?php if (in_array('NL', array_column($spielplan->teamliste, 'tblock'), true)) { ?>
+    <?php if (in_array(NULL, array_column($spielplan->teamliste, 'tblock'), true)) { ?>
         <span class="w3-text-grey">* Nichtligateam</span>
     <?php } //endif?>
     <!-- Modal-Button -->
@@ -39,7 +39,7 @@
                     <th><?= Form::icon("info_outline") ?><br>Team-ID</th>
                     <th><?= Form::icon("group") ?><br>Team</th>
                     <th><?= Form::icon("reorder") ?><br>Block</th>
-                    <th><?= Form::icon("arrow_circle_up") ?><br>Wertigkeit</th>
+                    <th><?= Form::icon("arrow_circle_up") ?><br>Wertung</th>
                     <?php if ($spielplan->turnier->details['phase'] !== 'ergebnis') { ?>
                         <th><span class="pdf-hide"><?= Form::icon("invert_colors") ?><br>Trikots</span></th>
                     <?php } //endif?>

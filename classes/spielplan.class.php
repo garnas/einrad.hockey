@@ -521,23 +521,28 @@ class Spielplan
 //            }
 //        }
 
-        $reverse_tabelle = array_reverse($this->platzierungstabelle, true);
 
-        $highest_ligateam = function () use ($reverse_tabelle) {
+
+        // Gibt die Wertung des schlechtplatziertesten Ligateams aus
+        $reverse_tabelle = array_reverse($this->platzierungstabelle, true);
+        $last_ligateam = function () use ($reverse_tabelle) {
             foreach ($reverse_tabelle as $team_id => $eintrag) {
-                if ($this->teamliste[$team_id]['wertigkeit'] !== 'NL') {
+                if ($this->teamliste[$team_id]['wertigkeit'] !== NULL) {
                     return $this->teamliste[$team_id]['wertigkeit'];
                 }
             }
-            return 0;
+            return NULL;
         };
 
         $ligapunkte = 0;
         foreach ($reverse_tabelle as $team_id => $eintrag) {
-            $wert = $this->teamliste[$team_id]['wertigkeit'];
-            $wert = ($wert === 'NL')
-                ? max($werte ?? [max(round($highest_ligateam() / 2) - 1, 14)]) + 1
-                : $wert; //TODO NL BLOCK UND WERT AUF NULL
+            if (is_null($this->teamliste[$team_id]['wertigkeit'])){
+                // Es handelt sich um ein Nichtligateam // max($werte) + 1 wenn nicht Letzter.
+                $wert = max($werte ?? [round($last_ligateam() / 2 - 1), 14]) + 1;
+            } else {
+                // Normales Ligateam
+                $wert = $this->teamliste[$team_id]['wertigkeit'];
+            }
             $werte[] = $wert;
             $ligapunkte += $wert;
             $this->platzierungstabelle[$team_id]['ligapunkte'] = round($ligapunkte * 6 / $this->details['faktor']);

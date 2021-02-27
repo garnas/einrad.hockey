@@ -4,9 +4,8 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 
-$sql = "SELECT * FROM oeffi_challenge";
-$result = dbi::$db->query($sql)->fetch();
-dbi::debug($result, true);
+
+dbi::debug($RANG_TO_BLOCK, true);
 function umsch (){
     $sql ="SELECT * FROM turniere_details WHERE format='jgj'";
     $return = dbi::$db->query($sql)->fetch();
@@ -27,15 +26,14 @@ function umsch (){
         dbi::$db->query($sql, $params)->log();
     }
 }
-umsch();
-Ligaleitung::umzug2('ausschuss_schiri', "schiriausschuss");
-Ligaleitung::umzug2('ausschuss_liga', "ligaausschuss");
-Ligaleitung::umzug2('ausschuss_oeffi', "oeffentlichkeitsausschuss");
-Ligaleitung::umzug2('ausschuss_technik', "technikausschuss");
-Ligaleitung::umzug3(); //Ausbilder
-
-$sql = 'DROP TABLE ausschuss_liga, ausschuss_oeffi, ausschuss_schiri, ausschuss_technik';
-dbi::$db->query($sql)->log();
+//umsch();
+//Ligaleitung::umzug2('ausschuss_schiri', "schiriausschuss");
+//Ligaleitung::umzug2('ausschuss_liga', "ligaausschuss");
+//Ligaleitung::umzug2('ausschuss_oeffi', "oeffentlichkeitsausschuss");
+//Ligaleitung::umzug2('ausschuss_technik', "technikausschuss");
+//Ligaleitung::umzug3(); //Ausbilder
+//$sql = 'DROP TABLE ausschuss_liga, ausschuss_oeffi, ausschuss_schiri, ausschuss_technik';
+//dbi::$db->query($sql)->log();
 
 function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
 {

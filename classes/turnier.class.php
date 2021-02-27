@@ -217,7 +217,7 @@ class Turnier
     }
 
     /**
-     * Get alle Turnieranmeldungen des Turniers für den Spielplan nach Wertigkeit sortiert.
+     * Get alle Turnieranmeldungen des Turniers für den Spielplan nach Wertung sortiert.
      *
      * @return array
      */
@@ -235,7 +235,7 @@ class Turnier
                 AND turniere_liste.liste = 'spiele'
                 ";
         $spielen_liste = dbi::$db->query($sql)->esc()->fetch('team_id');
-        // Blöcke und Wertigkeiten hinzufügen
+        // Blöcke und Wertungen hinzufügen
         foreach ($spielen_liste as $team_id => $anmeldung) {
             $spielen_liste[$team_id]['tblock']
                 = Tabelle::get_team_block($anmeldung['team_id'], $this->details['spieltag'] - 1);
@@ -243,7 +243,7 @@ class Turnier
                 = Tabelle::get_team_wertigkeit($anmeldung['team_id'], $this->details['spieltag'] - 1);
         }
         if (!empty($spielen_liste)) {
-            // Array nach Wertigkeit sortieren
+            // Array nach Wertung sortieren
             uasort($spielen_liste, static function ($team_a, $team_b) {
                 return ((int) $team_b['wertigkeit'] <=> (int) $team_a['wertigkeit']);
             });
