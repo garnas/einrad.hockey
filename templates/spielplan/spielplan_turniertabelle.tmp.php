@@ -1,40 +1,24 @@
 <!-- ABSCHLUSSTABELLE -->
-<h3 class="w3-text-secondary w3-margin-top">Tabelle</h3>
+<h2 class="w3-text-secondary w3-margin-top">Tabelle</h2>
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-centered w3-striped">
         <tr class="w3-primary">
             <th>
-                <i class="material-icons">bar_chart</i>
+                <?= Form::icon("bar_chart") ?>
                 <br>Platz
             </th>
             <th>
-                <i class="material-icons">group</i>
+                <?= Form::icon("group") ?>
                 <br>Team
             </th>
             <th class="w3-hide-small">
-                <i class="material-icons">sports_hockey</i>
-                <br>Spiele
-            </th>
-            <th>
-                <i class="material-icons">workspaces</i>
+                <?= Form::icon("workspaces") ?>
                 <br>Punkte
-            </th>
-            <th class="w3-hide-small">
-                <i class="material-icons">drag_handle</i>
-                <br>Differenz
-            </th>
-            <th class="w3-hide-small">
-                <i class="material-icons">add</i>
-                <br>Tore
-            </th>
-            <th class="w3-hide-small">
-                <i class="material-icons">remove</i>
-                <br>Gegentore
             </th>
             <?php if (in_array($spielplan->turnier->details['art'], ['I', 'II', 'III'])) { ?>
                 <th>
-                    <i class="material-icons">emoji_events</i>
-                    <br>Ligapunkte
+                    <?= Form::icon("emoji_events") ?>
+                    <br>Ergebnis
                 </th>
             <?php } //end if ?>
         </tr>
@@ -45,7 +29,7 @@
                         <span>--</span>
                     <?php } elseif ($spielplan->check_penalty_team($team_id)) { ?>
                         <span class='w3-text-secondary'>
-                            <i class='material-icons'>priority_high</i>PENALTY
+                            <?= Form::icon("priority_high") ?>PENALTY
                         </span>
                     <?php } else { ?>
                         <?= $x['platz'] ?>
@@ -54,11 +38,7 @@
                 <td style="white-space: nowrap;">
                     <?= $x["teamname"] ?>
                 </td>
-                <td class="w3-hide-small"><?= $x['statistik']["spiele"] ?></td>
-                <td><?= $x['statistik']["punkte"] ?? '--' ?></td>
-                <td class="w3-hide-small"><?= $x['statistik']["tordifferenz"] ?? '--' ?></td>
-                <td class="w3-hide-small"><?= $x['statistik']["tore"] ?? '--' ?></td>
-                <td class="w3-hide-small"><?= $x['statistik']["gegentore"] ?? '--' ?></td>
+                <td class="w3-hide-small"><?= $x['statistik']["punkte"] ?? '--' ?></td>
                 <?php if (in_array($spielplan->turnier->details['art'], ['I', 'II', 'III'])) { ?>
                     <td>
                         <?= ($spielplan->check_penalty_team($team_id) || !$spielplan->check_tabelle_einblenden())
@@ -72,7 +52,7 @@
 </div>
 
 <!-- Modal -->
-<span class="w3-button w3-hide-large w3-hide-medium w3-text-primary" onclick="document.getElementById('tabelle_details_mobile').style.display='block'">
+<span class="w3-button w3-text-primary" onclick="document.getElementById('tabelle_details_mobile').style.display='block'">
     <i class='material-icons'>info</i> Details anzeigen
 </span>
 <div id="tabelle_details_mobile" class="w3-modal">
@@ -81,37 +61,37 @@
             <table class="w3-table w3-centered w3-striped">
                 <tr class="w3-primary">
                     <th>
-                        <i class="material-icons">bar_chart</i>
+                        <?= Form::icon("bar_chart") ?>
                         <br>Platz
                     </th>
                     <th>
-                        <i class="material-icons">group</i>
+                        <?= Form::icon("group") ?>
                         <br>Team
                     </th>
                     <th>
-                        <i class="material-icons">sports_hockey</i>
+                        <?= Form::icon("sports_hockey") ?>
                         <br>Spiele
                     </th>
                     <th>
-                        <i class="material-icons">workspaces</i>
+                        <?= Form::icon("workspaces") ?>
                         <br>Punkte
                     </th>
                     <th>
-                        <i class="material-icons">drag_handle</i>
+                        <?= Form::icon("drag_handle") ?>
                         <br>Differenz
                     </th>
                     <th>
-                        <i class="material-icons">add</i>
+                        <?= Form::icon("add") ?>
                         <br>Tore
                     </th>
                     <th>
-                        <i class="material-icons">remove</i>
+                        <?= Form::icon("remove") ?>
                         <br>Gegentore
                     </th>
                     <?php if (in_array($spielplan->turnier->details['art'], ['I', 'II', 'III'])) { ?>
                         <th>
-                            <i class="material-icons">emoji_events</i>
-                            <br>Ligapunkte
+                            <?= Form::icon("emoji_events") ?>
+                            <br>Ergebnis
                         </th>
                     <?php } //end if ?>
                 </tr>

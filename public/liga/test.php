@@ -27,12 +27,15 @@ function umsch (){
         dbi::$db->query($sql, $params)->log();
     }
 }
-//umsch();
-//Ligaleitung::umzug2('ausschuss_schiri', "schiriausschuss");
-//Ligaleitung::umzug2('ausschuss_liga', "ligaausschuss");
-//Ligaleitung::umzug2('ausschuss_oeffi', "oeffentlichkeitsausschuss");
-//Ligaleitung::umzug2('ausschuss_technik', "technikausschuss");
-//Ligaleitung::umzug3(); //Ausbilder
+umsch();
+Ligaleitung::umzug2('ausschuss_schiri', "schiriausschuss");
+Ligaleitung::umzug2('ausschuss_liga', "ligaausschuss");
+Ligaleitung::umzug2('ausschuss_oeffi', "oeffentlichkeitsausschuss");
+Ligaleitung::umzug2('ausschuss_technik', "technikausschuss");
+Ligaleitung::umzug3(); //Ausbilder
+
+$sql = 'DROP TABLE ausschuss_liga, ausschuss_oeffi, ausschuss_schiri, ausschuss_technik';
+dbi::$db->query($sql)->log();
 
 function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
 {

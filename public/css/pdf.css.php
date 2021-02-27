@@ -32,17 +32,13 @@ h1,h2,h3,h4,h5,h6{font-family:"Segoe UI",Arial,sans-serif;font-weight:400;margin
 .w3-responsive{
     display: block;
     overflow-x: visible}
-.pdf-hide {
-    display: none!important;
-}
+{
 
 .w3-hide-small{
     display: block;
 }
-.w3-hide-large{
-    display: none!important;
-}
-.w3-hide-medium{
+
+.pdf-hide, .material-icons,  .w3-text, .w3-modal, .w3-hide-medium, .w3-hide-large {
     display: none!important;
 }
 
@@ -73,8 +69,4 @@ h1 {
 
 .w3-right{
     float:right!important
-}
-
-.material-icons {
-    display: none; /* Können nicht angezeigt werden */
 }

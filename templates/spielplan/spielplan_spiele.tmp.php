@@ -1,24 +1,21 @@
-<h3 class="w3-text-secondary w3-margin-top">Spiele</h3>
-<!-- Teambesprechung -->
-
+<h2 class="w3-text-secondary w3-margin-top">Spiele</h2>
 <!-- Spielzeiten -->
-<p class="w3-text-grey">
+<span class="w3-text-grey w3-margin-top">
     Spielzeit: <?= $spielplan->details['anzahl_halbzeiten'] ?> x <?= $spielplan->details['halbzeit_laenge'] ?>&nbsp;min
     | Puffer: <?= $spielplan->details['puffer'] ?>&nbsp;min
-</p>
-
+</span>
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-centered w3-striped">
         <tr class="w3-primary">
             <!-- DM Uhr -->
             <th>
-                <i class="material-icons">schedule</i>
+                <?= Form::icon("schedule") ?>
                 <br>
                 Uhr
             </th>
             <!-- DM Schiri -->
             <th>
-                <i class="material-icons">sports</i>
+                <?= Form::icon("sports") ?>
                 <br>
                 Schiri
             </th>
@@ -28,7 +25,7 @@
             <th class="w3-hide-small"></th>
             <!-- D - -->
             <th class="w3-hide-small">
-                <i class="material-icons">sports_hockey</i>
+                <?= Form::icon("sports_hockey") ?>
                 <br>
                 Spiele
             </th>
@@ -41,20 +38,20 @@
             <!-- 3xM Teams -->
             <th colspan="3" class="w3-hide-large w3-hide-medium">
                 <span class="pdf-hide">
-                    <i class="material-icons">sports_hockey</i>
+                    <?= Form::icon("sports_hockey") ?>
                     <br>
                     Spiele
                 </span>
             </th>
             <!-- DM Tore -->
             <th>
-                <i class="material-icons">sports_baseball</i>
+                <?= Form::icon("sports_baseball") ?>
                 <br>
                 Tore
             </th>
             <?php if ($spielplan->check_penalty_anzeigen()) { ?>
                 <th>
-                    <i class="material-icons">priority_high</i>
+                    <?= Form::icon("priority_high") ?>
                     <br>
                     Penalty
                 </th>
@@ -83,7 +80,7 @@
                 <td>
                     <div class="w3-tooltip" style="cursor: help;">
                         <!-- Desktop -->
-                        <table class="w3-table w3-centered w3-hide-small w3-hover-text-secondary" style="width: auto; margin: auto;">
+                        <table class="w3-table w3-centered w3-hide-small" style="width: auto; margin: auto;">
                             <tr>
                                 <td style="width: 30px; padding:0;">
                                     <i class="w3-text-primary"><?= $spiel["schiri_team_id_b"] ?></i>
@@ -198,9 +195,9 @@
                     <td></td>
                     <td></td>
                     <td style="white-space: nowrap;" colspan="3">
-                        <i class="material-icons">schedule</i>
+                        <?= Form::icon("schedule") ?>
                         <i><?= $spielplan->get_pause($spiel_id) ?>&nbsp; min Pause</i>
-                        <i class="material-icons">schedule</i>
+                        <?= Form::icon("schedule") ?>
                     </td>
                     <td></td>
                     <td class="w3-hide-small"></td>

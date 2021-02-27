@@ -51,12 +51,12 @@
                         <?php Form::print_messages(); ?>
 <!--                    </div>-->
 <!--            </div>-->
-<!--                <script>-->
-<!--                    // When the user clicks anywhere outside of the modal, close it-->
-<!--                    window.addEventListener("click", function(event) {-->
-<!--                        if (event.target === document.getElementById('meldungen')) {-->
-<!--                            document.getElementById('meldungen').style.display = "none";-->
-<!--                        }-->
-<!--                    });-->
-<!--                </script>-->
+                <script>
+                    // When the user clicks anywhere outside of the modal, close it
+                    window.addEventListener("click", function(event) {
+                        if (event.target === document.getElementById('meldungen')) {
+                            document.getElementById('meldungen').style.display = "none";
+                        }
+                    });
+                </script>
 <!--            --><?php //} // end if ?>

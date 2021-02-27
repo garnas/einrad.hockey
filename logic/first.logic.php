@@ -54,7 +54,8 @@ register_shutdown_function(static function () {
     Handler::log("user.log",
         $_SERVER['REQUEST_URI']
         . " | " . round(microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"], 3) . " s (Load)"
-        . " | " . dbi::$db->query_count . " (Querys)");
+        . " | " . dbi::$db->query_count . " (Querys)"
+        . " | " . ($_SERVER['HTTP_REFERER'] ?? '') . "(Ref)");
 
 });
 

@@ -252,7 +252,9 @@ class Spielplan
         $sql = "
                 SELECT spiel_id, team_id_a, t1.teamname AS teamname_a, team_id_b, t2.teamname AS teamname_b,
                 schiri_team_id_a, schiri_team_id_b, tore_a, tore_b, penalty_a, penalty_b
-                FROM spiele sp, teams_liga t1, teams_liga t2
+                FROM spiele AS sp
+                INNER JOIN teams_liga as t1 on t1.team_id = sp.team_id_a
+                INNER JOIN teams_liga as t2 on t2.team_id = sp.team_id_b
                 WHERE turnier_id = $this->turnier_id
                 AND team_id_a = t1.team_id
                 AND team_id_b = t2.team_id
