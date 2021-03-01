@@ -485,8 +485,10 @@ class Turnier
     {
         $freie_plaetze = $this->get_anzahl_freie_plaetze();
         $log = false;
+
         if ($this->details['phase'] === 'melde' && $freie_plaetze > 0) {
             $liste = $this->get_anmeldungen();// Order by Warteliste weshalb die Teams in der foreach schleife in der Richtigen reihenfolge behandelt werden
+
             foreach ($liste['warte'] as $team) {
                 if ($this->check_team_block($team['team_id']) && $freie_plaetze > 0) {
                     if ($this->check_doppel_anmeldung($team['team_id'])) {
@@ -501,9 +503,11 @@ class Turnier
                     }
                 }
             }
+
             if ($log) {
                 $this->log("Spielen-Liste aufgefüllt");
             }
+
             $this->warteliste_aktualisieren();
         }
     }
@@ -623,18 +627,18 @@ class Turnier
      */
     public static function check_team_block_static(string $team_block, string $turnier_block): bool
     {
-        if ($team_block === 'NL') {
+        if ($team_block === NULL) {
             return true;
         } // NL Teams können immer angemeldet werden
 
         // Check ob es sich um ein Block-Turnier handelt (nicht spass oder finale)
         if (in_array($turnier_block, Config::BLOCK_ALL)) {
             // Block-String in Array auflösen
-            $turnier_block = str_split($turnier_block);
-            $team_block = str_split($team_block);
+            $turnier_buchstaben = str_split($turnier_block);
+            $team_buchstaben = str_split($team_block);
             // Check ob ein Buchstabe des Team-Blocks im Turnier-Block vorkommt
-            foreach ($team_block as $buchstabe) {
-                if (in_array($buchstabe, $turnier_block)) {
+            foreach ($team_buchstaben as $buchstabe) {
+                if (in_array($buchstabe, $turnier_buchstaben)) {
                     return true;
                 }
             }
@@ -973,19 +977,11 @@ class Turnier
      */
     public function log(string $log_text): void
     {
-        if (isset($_SESSION['ligabot'])) {
-            $autor = 'Ligabot';
-        } elseif (Config::$ligacenter) {
-            $autor = "Ligaausschuss";
-        } elseif (Config::$teamcenter) {
-            $autor = $_SESSION['logins']['team']['name'];
-        } else {
-            $autor = 'automatisch';
-        }
         $sql = "
                 INSERT INTO turniere_log (turnier_id, log_text, autor) 
                 VALUES ($this->id, ?, ?);
                 ";
+        $autor = Handler::get_akteur(true);
         dbi::$db->query($sql, $log_text, $autor)->log();
     }
 
