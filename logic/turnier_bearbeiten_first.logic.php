@@ -1,12 +1,10 @@
 <?php
 // Turnier und $daten-Array erstellen
-$turnier = new Turnier((int) $_GET['turnier_id']);
+$turnier = new Turnier((int) @$_GET['turnier_id']);
 
 //Existiert das Turnier?
 if (empty($turnier->details)){
-    Form::error("Turnier wurde nicht gefunden");
-    header('Location: ../liga/turniere.php');
-    die();
+    Handler::not_found("Das Turnier konnte nicht gefunden werden.");
 }
 
 //Besteht die Berechtigung das Turnier zu bearbeiten?

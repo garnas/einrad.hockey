@@ -8,10 +8,10 @@ require_once '../../logic/first.logic.php'; // Autoloader und Session
 require_once '../../logic/session_team.logic.php'; //Auth
 require_once '../../logic/challenge.logic.php'; // Logic der Challenge
 
-$spieler_id = (int) $_GET['spieler_id'];
+$spieler_id = (int) @$_GET['spieler_id'];
 
 // Überprüfung, ob die SpielerID auch zum Team gehört
-if (!in_array($_GET['spieler_id'], array_column($team_spielerliste, 'spieler_id'))) die("Ungültige Spieler-Id");
+if (!in_array($spieler_id, array_column($team_spielerliste, 'spieler_id'))) die("Ungültige Spieler-Id");
 
 $urkunden_daten = $challenge->get_spieler_result($spieler_id);
 if (empty($urkunden_daten['kilometer'])) {
@@ -85,4 +85,3 @@ $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
 
 // Output des Dokuments
 $mpdf->Output('Urkunde_' . $urkunden_daten['vorname'] . '_' . $urkunden_daten['nachname'] . '.pdf', 'I');
-?>

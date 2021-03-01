@@ -4,13 +4,11 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 
-$turnier_id = (int) $_GET['turnier_id'];
+$turnier_id = (int) @$_GET['turnier_id'];
 $turnier = new Turnier ($turnier_id);
 
 if (empty($turnier->details)){
-    Form::error("Das Turnier existiert nicht");
-    header('Location: turniere.php');
-    die();
+    Handler::not_found("Das Turnier konnte nicht gefunden werden.");
 }
 
 $kontakt = new Kontakt ($turnier->details['ausrichter']);

@@ -35,9 +35,11 @@ class MailBot
     public static function send_mail(\PHPMailer\PHPMailer\PHPMailer $mailer): bool
     {
         if (Env::ACTIVATE_EMAIL) {
+
             if ($mailer->send()) {
                 return true;
             }
+
             Handler::log(Config::LOG_EMAILS, 'Fehler: ' . $mailer->ErrorInfo);
             return false;
         }

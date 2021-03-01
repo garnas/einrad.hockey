@@ -235,24 +235,16 @@ class dbWrapper
      */
     public function log(bool $anonym = false): dbWrapper
     {
-        // Wer?
-        $autoren = [
-            $_SESSION['logins']['team']['name'] ?? '',
-            $_SESSION['la_login_name'] ?? '',
-            $_SESSION['ligabot'] ?? ''
-        ];
-        $autoren = implode(" | ", array_filter($autoren));
-
-        // Welche Query?
+        // Query formatieren
         $sql = trim(preg_replace("/(^\h+|\h+$)/m", '', $this->sql)); // Schönere Formatierung
 
-        // Welche Werte?
+        // Parameter formatieren
         if (!empty($this->params)){
             $params = ($anonym) ? "\nAnonyme Query" :  "\n?: " . implode("\n?: ", $this->params);
         }
 
         // Log-Text
-        $log = $autoren . "\n" . $sql . ($params ?? '') . "\n";
+        $log = $sql . ($params ?? '');
         Handler::log(Config::LOG_DB, $log);
         return $this;
     }

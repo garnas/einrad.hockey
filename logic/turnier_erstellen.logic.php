@@ -6,9 +6,9 @@ $block_higher_str = ''; //  String der möglichen höheren Turnierblöcke
 // Position des eigenen Blockes im Array der Blöcke
 $chosen = array_search($ausrichter_block, Config::BLOCK);
 while ($chosen >= 0) {
-    array_push($block_higher, Config::BLOCK[$chosen]);
+    $block_higher[] = Config::BLOCK[$chosen];
     $block_higher_str .= Config::BLOCK[$chosen] . ', ';
-    $chosen = $chosen - 1;
+    --$chosen;
 }
 $block_higher_str = substr($block_higher_str, 0, -2);
 
@@ -128,7 +128,9 @@ if (isset($_POST['create_turnier'])) {
     $handy = $_POST['handy'];
 
     // Eintragen des Turnieres
-    if (!$error) {
+    if ($error) {
+        Form::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht erstellt.");
+    } else {
         // Turnier erstellen
         $turnier = Turnier::create_turnier($tname, $ausrichter_team_id, $startzeit, $besprechung, $art, $tblock, $fixed, $datum,
             $plaetze, $spielplan, $hallenname, $strasse, $plz, $ort, $haltestellen, $hinweis, $startgebuehr,
@@ -139,7 +141,5 @@ if (isset($_POST['create_turnier'])) {
         Form::info("Euer Turnier wurde erfolgreich eingetragen!");
         header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->id);
         die();
-    } else {
-        Form::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht erstellt.");
     }
 }

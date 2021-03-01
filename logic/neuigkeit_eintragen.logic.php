@@ -5,7 +5,7 @@
 
 // Autor
 $name = (Config::$ligacenter) ? "Ligaausschuss" : $_SESSION['logins']['team']['name'];
-
+$error = false;
 
 // Formularauswertung
 if (isset($_POST['create_neuigkeit'])) {
@@ -47,16 +47,16 @@ if (isset($_POST['create_neuigkeit'])) {
         $text = $_POST['text'];
         $bild_verlinken = $_POST['bild_verlinken'] ?? '';
 
-        if (!$error) {
-            Neuigkeit::create($titel, $text, $name, $target_file_jpg, $target_file_pdf, $bild_verlinken);
-            Form::info("Deine Neuigkeit wurde erfolgreich eingetragen");
-            header('Location: ../liga/neues.php');
-            die(); // Damit das Skript nicht zu auf dem Server zu ende ausgeführt wird.
-        } else {
+        if ($error) {
             // evtl hochgeladene Dateien löschen.
             if (($target_file_pdf ?? false) !== false) unlink($target_file_pdf);
             if (($target_file_jpg ?? false) !== false) unlink($target_file_jpg);
             Form::error("Neuigkeit wurde nicht erstellt, eventuell hochgeladene Dateien müssen erneut hochgeladen werden.");
+        } else {
+            Neuigkeit::create($titel, $text, $name, $target_file_jpg, $target_file_pdf, $bild_verlinken);
+            Form::info("Deine Neuigkeit wurde erfolgreich eingetragen");
+            header('Location: ../liga/neues.php');
+            die(); // Damit das Skript nicht zu auf dem Server zu ende ausgeführt wird.
         }
     }
 }

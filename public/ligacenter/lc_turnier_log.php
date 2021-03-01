@@ -7,7 +7,7 @@ require_once '../../logic/session_la.logic.php'; //Auth
 
 // Turnierobjekt erstellen
 
-$turnier = new Turnier ((int) $_GET['turnier_id']);
+$turnier = new Turnier ((int) @$_GET['turnier_id']);
 
 // Logs des Turnieres bekommen
 $logs = $turnier->get_logs();

@@ -6,14 +6,12 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 require_once '../../logic/session_la.logic.php'; //Auth
 
 //Turnierklasse erstellen
-$turnier_id = (int)$_GET['turnier_id'];
+$turnier_id = (int)@$_GET['turnier_id'];
 $turnier = new Turnier($turnier_id);
 
 //Existiert das Turnier?
 if (empty($turnier->details)) {
-    Form::error("Turnier wurde nicht gefunden");
-    header('Location: lc_turnierliste.php');
-    die();
+    Handler::not_found("Turnier konnte nicht gefunden werden.");
 }
 
 //Vorhandenes Ergebnis anzeigen
@@ -77,7 +75,7 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
         $error = true;
     }
     if (!$error) {
-        if (Spielplan::fill_vorlage($turnier)){
+        if (Spielplan::fill_vorlage($turnier)) {
             Form::info("Das Turnier wurde in die Spielplan-Phase versetzt. Der Spielplan wird jetzt angezeigt.");
             header('Location: ../liga/spielplan.php?turnier_id=' . $turnier->id);
             die();
@@ -113,7 +111,7 @@ if (isset($_POST['spielplan_hochladen'])) {
                 $turnier->upload_spielplan($target_file_pdf, 'spielplan');
                 Form::info("Manueller Spielplan hochgeladen. Das Turnier wurde in die Spielplan-Phase versetzt.");
             }
-            header("Location: lc_spielplan_verwalten.php?turnier_id=$turnier->id" );
+            header("Location: lc_spielplan_verwalten.php?turnier_id=$turnier->id");
             die();
         }
         Form::error("Fehler beim Upload");
@@ -178,27 +176,27 @@ include '../../templates/header.tmp.php';
 
     <!-- Dynamischer Spielplan erstellen -->
     <h2 class="w3-text-primary w3-bottombar">JgJ-Spielplan erstellen</h2>
-    <?php if (empty($turnier->details['spielplan_datei'])) { ?>
-        <form method="post">
-            <?php if (Spielplan::check_exist($turnier->id)) { ?>
-                <p>
-                    <input type="submit"
-                           name="auto_spielplan_loeschen"
-                           value="JgJ-Spielplan löschen"
-                           class="w3-button w3-secondary">
-                </p>
-            <?php } else { ?>
-                <p>
-                    <input type="submit"
-                           name="auto_spielplan_erstellen"
-                           value="JgJ-Spielplan erstellen"
-                           class="w3-button w3-tertiary">
-                </p>
-            <?php } // endif ?>
-        </form>
-    <?php } else { ?>
-        <p>Bitte zuerst den manuell hochgeladenen Spielplan löschen.</p>
-    <?php } // endif ?>
+<?php if (empty($turnier->details['spielplan_datei'])) { ?>
+    <form method="post">
+        <?php if (Spielplan::check_exist($turnier->id)) { ?>
+            <p>
+                <input type="submit"
+                       name="auto_spielplan_loeschen"
+                       value="JgJ-Spielplan löschen"
+                       class="w3-button w3-secondary">
+            </p>
+        <?php } else { ?>
+            <p>
+                <input type="submit"
+                       name="auto_spielplan_erstellen"
+                       value="JgJ-Spielplan erstellen"
+                       class="w3-button w3-tertiary">
+            </p>
+        <?php } // endif ?>
+    </form>
+<?php } else { ?>
+    <p>Bitte zuerst den manuell hochgeladenen Spielplan löschen.</p>
+<?php } // endif ?>
 
     <!-- Manuellen Spielplan hochladen -->
     <h2 class="w3-text-primary w3-bottombar">oder PDF- oder XLSX-Spielplan hochladen</h2>
@@ -295,7 +293,7 @@ include '../../templates/header.tmp.php';
             <input type="submit"
                    name="ergebnis_loeschen"
                    value="Ergebnis löschen"
-                    <?= (empty($turnier_ergebnis) ? 'disabled' : '')?>
+                <?= (empty($turnier_ergebnis) ? 'disabled' : '') ?>
                    class="w3-button w3-secondary"
             >
         </p>

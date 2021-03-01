@@ -13,19 +13,15 @@ if (count(Spieler::get_teamkader($_SESSION['logins']['team']['id'])) < 5){
 }
 
 //Turnierobjekt erstellen
-$turnier_id = $_GET['turnier_id'];
+$turnier_id = (int) @$_GET['turnier_id'];
 $turnier = new Turnier ($turnier_id);
 
 //Existiert das Turnier?
 if (empty($turnier->details)){
-    Form::error("Turnier wurde nicht gefunden");
-    header('Location: ../teamcenter/tc_turnierliste_anmelden.php');
-    die();
+    Handler::not_found("Turnier wurde nicht gefunden.");
 }
-if (strtotime($turnier->details['datum']) < time()){
-    Form::error ("Das Turnier liegt in der Vergangenheit.");
-    header('Location: ../teamcenter/tc_turnierliste_anmelden.php');
-    die();
+if (strtotime($turnier->details['datum']) < time()) {
+    trigger_error("Das Turnier liegt in der Vergangenheit.", E_USER_ERROR);
 }
 
 if ($turnier->details['art'] == 'spass'){

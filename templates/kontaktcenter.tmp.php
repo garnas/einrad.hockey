@@ -40,7 +40,7 @@ if (empty($_SESSION[$list_id ?? '']['emails'])){?>
             <select required class="w3-select w3-border w3-border-primary" name="turnier_id" id="turnier" onchange="this.form.submit()">
                 <option disabled <?php if(empty($_GET['turnier_id'])){?>selected<?php }?>></option>
                 <?php foreach ($turniere as $turnier_id => $turnier){?>
-                    <option <?php if($turnier_id == ($_GET['turnier_id'] ?? '')){?>selected<?php }?> value="<?=$turnier_id?>">
+                    <option <?php if($turnier_id === (int) @$_GET['turnier_id']){?>selected<?php }?> value="<?=$turnier_id?>">
                     <?=$turnier['datum'] .' '.$turnier['ort']. ' ' . $turnier['tname'] . ' (' . $turnier['tblock'] . ')'?>
                     </option>
                 <?php } //end foreach?>

@@ -1,7 +1,8 @@
 <?php
 // Turnierobjekt erstellen
-$turnier_id = (int)$_GET['turnier_id'] ?? 0;
+$turnier_id = (int) @$_GET['turnier_id'];
 $turnier = new Turnier ($turnier_id);
+if ()
 
 if ($turnier->details['ausrichter'] == ($_SESSION['logins']['team']['id'] ?? '') || Config::$ligacenter) {
     $change_tbericht = true; // Berechtigung zum Verändern des Reports

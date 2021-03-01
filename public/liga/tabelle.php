@@ -11,11 +11,11 @@ if (Tabelle::check_spieltag_live($akt_spieltag)){
     $live_spieltag = $akt_spieltag;
 }else{
     $live_spieltag = -1;
-    $akt_spieltag -= 1;
+    $akt_spieltag--;
 }
 
-if (isset($_GET['spieltag']) && is_numeric($_GET['spieltag'])){
-    $gew_spieltag=$_GET['spieltag'];
+if (isset($_GET['spieltag'])){
+    $gew_spieltag = (int)$_GET['spieltag'];
 }else{
     $gew_spieltag = $akt_spieltag;
 }

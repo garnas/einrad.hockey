@@ -1,14 +1,14 @@
 <?php
-$neuigkeiten_id = $_GET['neuigkeiten_id'];
+$neuigkeiten_id = (int) @$_GET['neuigkeiten_id'];
 $neuigkeiten = Neuigkeit::get_neuigkeiten($neuigkeiten_id);
-$error = false;
+
+
 if (!isset($neuigkeiten[$neuigkeiten_id])) {
-    Form::error("Der Neuigkeiteneintrag wurde nicht gefunden");
-    header("Location: ../liga/neues.php");
-    die();
+    Handler::not_found("Neuigkeiteneintrag konnte nicht gefunden werden.");
 }
 
 $neuigkeit = $neuigkeiten[$neuigkeiten_id];
+$error = false;
 
 // Neuigkeit löschen
 if (isset($_POST['delete_neuigkeit'])) {

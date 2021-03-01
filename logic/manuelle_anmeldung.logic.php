@@ -1,6 +1,6 @@
 <?php
 //Turnierobjekt erstellen
-$turnier_id = (int) $_GET['turnier_id'];
+$turnier_id = (int) @$_GET['turnier_id'];
 $turnier = new Turnier ($turnier_id);
 
 //Existiert das Turnier?
