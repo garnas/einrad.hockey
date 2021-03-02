@@ -44,7 +44,7 @@
                             name="no_color_1"
                             style='cursor: pointer; border: 0px;'
                     >
-                        <i class="material-icons">delete</i>
+                        <?= Html::icon('delete') ?>
                     </button>
                 </p>
             </form>
@@ -79,7 +79,7 @@
                             name="no_color_2"
                             style='cursor: pointer; border: 0px;'
                     >
-                        <i class="material-icons">delete</i>
+                        <?= Html::icon('delete') ?>
                     </button>
                 </p>
             </form>

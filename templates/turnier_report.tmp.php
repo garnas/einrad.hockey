@@ -13,7 +13,7 @@
 <?php if (time() - strtotime($turnier->details['datum']) > 8 * 24 * 60 *60){ ?>
     <!-- Ausbilder -->
     <?php if (!empty($ausbilder_liste)){?>
-        <h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">school</i> Schiedsrichter-Ausbilder</h2>
+        <h2 class="w3-text-primary"><?= Html::icon('school', tag:'h2') ?> Schiedsrichter-Ausbilder</h2>
         <ul class='w3-ul w3-margin-left w3-leftbar w3-border-tertiary'>
             <?php foreach ($ausbilder_liste as $spieler){?>
                 <li><?=$spieler['vorname'] . ' ' . $spieler['nachname']?> (<i><?=Team::id_to_name($spieler['team_id'])?></i>)</li>
@@ -22,7 +22,7 @@
     <?php }//endif?>
 
     <!-- Kader -->
-    <h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">groups</i> Kader und Schiedsrichter</h2>
+    <h2 class="w3-text-primary"><?= Html::icon('groups', tag:'h2') ?> Kader und Schiedsrichter</h2>
     <ul class='w3-ul w3-margin-left w3-leftbar w3-border-primary'>
         <?php foreach ($kader_array as $team_id => $kader){?>
             <li class="w3-hover-primary" style="cursor: pointer;" onclick="openTab('<?=$team_id?>')">
@@ -152,7 +152,7 @@
 <?php }//endif?>
 
 <!-- Zeitstrafen -->
-<h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">schedule</i> Zeitstrafen</h2>
+<h2 class="w3-text-primary"><?= Html::icon('schedule', tag:'h2') ?> Zeitstrafen</h2>
 <span class="w3-text-grey">
     Auffällige Situationen oder zerstrittene Spiele sollten auch immer dem Ligaausschuss gemeldet werden. Dieser kann
     mit den Teams reden und dafür sorgen, dass zukünftig ausgewählte Schiedsrichter die Begegnung pfeifen.
@@ -255,7 +255,7 @@
 <?php }//endif?>
 
 <!-- Turnierbericht -->
-<h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">info</i> Turnierbericht</h2>
+<h2 class="w3-text-primary"><?= Html::icon('info', tag:'h2') ?> Turnierbericht</h2>
 <?php if($change_tbericht){ ?>
     <form method="post">
         <p>

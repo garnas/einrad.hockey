@@ -91,7 +91,7 @@ include '../../templates/header.tmp.php';
         <h1 class="w3-text-primary">Kontaktformular </h1>
         <p>
             <span class="w3-text-grey">
-                <i class="material-icons">info_outline</i> Empfänger
+                <?= Html::icon("info_outline") ?> Empfänger
             </span>
             <br>
             <?= Html::mailto(Env::LAMAIL) ?>
@@ -103,7 +103,7 @@ include '../../templates/header.tmp.php';
             >
             <p>
                 <label class="w3-text-grey" for="name">
-                    <i class="material-icons">perm_identity</i>
+                    <?= Html::icon("perm_identity") ?>
                     Name
                 </label>
                 <input class="w3-input w3-border w3-border-primary"
@@ -116,7 +116,7 @@ include '../../templates/header.tmp.php';
             </p>
             <p>
                 <label class="w3-text-grey" for="absender">
-                    <i class="material-icons">alternate_email</i>
+                    <?= Html::icon("alternate_email") ?>
                     Email
                 </label>
                 <input class="w3-input w3-border w3-border-primary"
@@ -129,7 +129,7 @@ include '../../templates/header.tmp.php';
             </p>
             <p>
                 <label class="w3-text-grey" for="betreff">
-                    <i class="material-icons">label_outline</i>
+                    <?= Html::icon('label_outline') ?>
                     Betreff
                 </label>
                 <input class="w3-input w3-border w3-border-primary"
@@ -142,7 +142,7 @@ include '../../templates/header.tmp.php';
             </p>
             <p>
                 <label class="w3-text-grey" for="text">
-                    <i class="material-icons">subject</i>
+                    <?= Html::icon('subject') ?>
                     Text
                 </label>
                 <textarea class="w3-input w3-border w3-border-primary"
@@ -155,7 +155,7 @@ include '../../templates/header.tmp.php';
             <!-- Captcha -->
             <p>
                 <label class="w3-text-grey" for="captcha">
-                    <i class="material-icons">lock</i>Captcha
+                    <?= Html::icon("lock") ?> Captcha
                     <br>
                     <img class="w3-card w3-image" alt='captcha' src="<?= $captcha->inline() ?>">
                 </label>
@@ -166,7 +166,7 @@ include '../../templates/header.tmp.php';
                         name="reload_captcha"
                         formnovalidate
                 >
-                    <i class="material-icons">refresh</i>
+                    <?= Html::icon('refresh') ?>
                 </button>
                 <input class="w3-input"
                        type="text"
@@ -187,7 +187,7 @@ include '../../templates/header.tmp.php';
                         name="absenden"
                         class="w3-tertiary w3-ripple w3-round w3-button"
                 >
-                    <i class="material-icons">send</i> Senden
+                    <?= Html::icon('send') ?> Senden
                 </button>
             </p>
         </form>

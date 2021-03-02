@@ -104,15 +104,15 @@ include '../../templates/header.tmp.php'; ?>
                 <?php } //endif?>
                 <p>
                     <?php if ($saison <= 25) { ?>
-                        <?= Html::link('archiv.php', '<i class="material-icons">info</i> Details') ?>
+                        <?= Html::link('archiv.php', 'Details', icon:'info') ?>
                     <?php } else { ?>
                         <span>
-                        <?= Html::link($turniere[$turnier_id]['spielplan_datei'] ?: ('spielplan.php?turnier_id=' . $turnier_id), '<i class="material-icons">info</i> Spielergebnisse') ?>
+                        <?= Html::link($turniere[$turnier_id]['spielplan_datei'] ?: ('spielplan.php?turnier_id=' . $turnier_id), 'Spielergebnisse', icon:'info') ?>
                     </span>
-                        <?= Html::link("../teamcenter/tc_turnier_report.php?turnier_id=$turnier_id", ' <i class="material-icons">' . $icon . '</i> Turnierreport') ?>
+                        <?= Html::link("../teamcenter/tc_turnier_report.php?turnier_id=$turnier_id", 'Turnierreport', icon:$icon) ?>
                         <?php if (isset($_SESSION['logins']['la'])) { ?>
-                            <?= Html::link("../ligacenter/lc_turnier_report.php?turnier_id=$turnier_id", '<i class="material-icons">article</i> Turnierreport (Ligaausschuss)') ?>
-                            <?= Html::link("../ligacenter/lc_spielplan.php?turnier_id=$turnier_id", '<i class="material-icons">info</i> Spielergebnisse verwalten (Ligaausschuss)') ?>
+                            <?= Html::link("../ligacenter/lc_turnier_report.php?turnier_id=$turnier_id", 'Turnierreport (Ligaausschuss)', icon:'article') ?>
+                            <?= Html::link("../ligacenter/lc_spielplan.php?turnier_id=$turnier_id", 'Spielergebnisse verwalten (Ligaausschuss)', icon:'info') ?>
                         <?php }//endif?>
                     <?php }//end if?>
                 </p>

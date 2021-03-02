@@ -16,7 +16,12 @@ include '../../templates/header.tmp.php';
 <h1 class="w3-text-primary">Abstimmung Saisonwechsel</h1>
 
 <p>Schon häufig gab es in der Liga Stimmen, welche sich für eine Änderung des Saisonrhythmus einsetzten. Darüber lässt der Ligaausschuss nun unter den Ligavertretern abstimmen.</p>
-    <p>Mehr Infos: <?=Html::link("../dokumente/rundmails/rundmail_saisonwechsel.pdf", "<i class='material-icons'>insert_drive_file</i> Rundmail bezüglich der Abstimmung", true)?></p>
+    <p>
+        Mehr Infos: <?=Html::link("../dokumente/rundmails/rundmail_saisonwechsel.pdf",
+            "Rundmail bezüglich der Abstimmung",
+            true,
+            "insert_drive_file")?>
+    </p>
 
 <?php
 if (time() > strtotime(Abstimmung::ENDE)){
@@ -27,7 +32,7 @@ if (time() > strtotime(Abstimmung::ENDE)){
 ?>
 
     <a href="../teamcenter/tc_abstimmung.php" class="w3-button w3-section w3-block w3-primary">
-        <i class="material-icons">how_to_vote</i> Jetzt abstimmen!
+        <?= Html::icon("how_to_vote") ?> Jetzt abstimmen!
     </a>
 
 <?php } //end if
