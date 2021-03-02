@@ -259,7 +259,7 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
 <p>Fernschüsse erlauben.</p>
 
 <!-- Vierter Spielerabschnitt -->
-<h1 id="adrian" class="w3-text-primary">Jan</h1>
+<h1 id="jan" class="w3-text-primary">Jan</h1>
 <div class="w3-primary w3-display-container">  
     <div class="slideshow4" style="padding: 8px 48px;">
         <p style="display: inline-block" class="<?=$header?>">Kurze Fakten</p>
@@ -342,14 +342,75 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
 <p class="w3-text-secondary"><b>Wenn du eine Regel im Einradhockey verändern dürftest, welche wäre es?</b></p>
 <p>Der hohe Schläger. Bälle sollten aus der Luft geholt werden dürfen, wenn keine Gefährdung vorliegt. <br> Das setzt aber leider gute Schiedsrichter und empfindliche Strafen voraus.</p>
 
+<!-- Vierter Spielerabschnitt -->
+<h1 id="gaby" class="w3-text-primary">Gaby</h1>
+<div class="w3-primary w3-display-container">  
+    <div class="slideshow5" style="padding: 8px 48px;">
+        <p style="display: inline-block" class="<?=$header?>">Kurze Fakten</p>
+        <table class="w3-hide-small">
+            <tr>
+                <td style="vertical-align: top; width: 200px;">Spielt seit:</td>
+                <td style="vertical-align: top;">1998</td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top; width: 200px;">An welches Spiel sie sich noch bestens erinnert:</td>
+                <td style="vertical-align: top;">WM Endspiel in Neuseeland</td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top; width: 200px;">Gespielte Turniere:</td>
+                <td style="vertical-align: top;">ca. 250 inkl. EM & WM</td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top; width: 200px;">Erstes Team:</td>
+                <td style="vertical-align: top;">LaHiMo II</td>
+            </tr>
+        </table>
+        <p class="w3-hide-medium w3-hide-large"><i>Spielt seit:</i><br>1998</p>
+        <p class="w3-hide-medium w3-hide-large"><i>An welches Spiel sie sich noch bestens erinnert:</i><br>WM Endspiel in Neuseeland</p>
+        <p class="w3-hide-medium w3-hide-large"><i>Gespielte Turniere:</i><br>ca. 250 inkl. EM & WM</p>
+        <p class="w3-hide-medium w3-hide-large"><i>Erstes Team:</i><br>LaHiMo II</p>
+        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 4)">&#10094;</button>
+        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 4)">&#10095;</button>
+    </div>
+    <div class="slideshow5" style="padding: 8px 48px;">
+        <p style="display: inline-block" class="<?=$header?>">Der lustigste Teamname?</p>
+        <p>Ötte Trüffel Bielefeld. Ich habe leider nie erfahren, wie der zu Stande kam.</p>
+        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 4)">&#10094;</button>
+        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 4)">&#10095;</button>
+    </div>
+    <div class="slideshow5" style="padding: 8px 48px;">
+        <p style="display: inline-block" class="<?=$header?>">Wie bist du zum Einradfahren gekommen?</p>
+        <p>Durch meinen Sohn. Er hatte Takafumi Ogasawara fahren gesehen und wollte das auch. Dann habe ich ihn zum Training gefahren und misste immer warten. Ich habe dann einfach mit geübt.</p>
+        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 4)">&#10094;</button>
+        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 4)">&#10095;</button>
+    </div>
+    <div class="slideshow5" style="padding: 8px 48px;">
+        <p style="display: inline-block" class="<?=$header?>">Wenn du dir nochmal ein komplett neues Team aussuchen müsstest, mit wem würdest du spielen?</p>
+        <p>Das hab' ich schon einmal gemacht und habe dann die Deserteure gegründet. Der Name war Programm. 😊<br>In meinem bin ich glücklich. Das bringt mich auch immer wieder aufs Einrad.</p>
+        <button class="w3-button w3-light-grey w3-display-left w3-opacity" onclick="plusDivs(-1, 4)">&#10094;</button>
+        <button class="w3-button w3-light-grey w3-display-right w3-opacity" onclick="plusDivs(1, 4)">&#10095;</button>
+    </div>
+</div>
+
+<!-- Für mobile Darstellung -->
+<img alt="Gaby" src="../bilder/spielerprofile/Gaby_Scherer2.jpg" style="width: 100%; margin-left: auto; margin-right: auto;" class="w3-hide-large w3-hide-medium w3-section">
+
+<!-- Für Desktop Darstellung -->
+<img alt="Gaby" src="../bilder/spielerprofile/Gaby_Scherer2.jpg" style="width: 350px; float: right;" class="w3-section w3-hide-small w3-margin-left">
+
+<!-- Antworten vierter Abschnitt -->
+<p class="w3-text-secondary"><b>Wie lange willst du noch spielen?</b></p>
+<p>Tja, schwer zu sagen, solange ich kann und nicht zur Gefahr für andere werde. Lieber nur manchmal für einige ein Ärgernis bleiben. </p>
+
 <!-- Script für die Slideshow -->
 <script>
-var slideIndex = [1, 1, 1, 1];
-var slideId = ["slideshow1", "slideshow2", "slideshow3", "slideshow4"];
+var slideIndex = [1, 1, 1, 1, 1];
+var slideId = ["slideshow1", "slideshow2", "slideshow3", "slideshow4", "slideshow5"];
 showDivs(1,0);
 showDivs(1,1);
 showDivs(1,2);
 showDivs(1,3);
+showDivs(1,4);
 
 function plusDivs(n, no) {
   showDivs(slideIndex[no] += n, no);
