@@ -19,7 +19,7 @@
     <link type="text/css" rel="stylesheet" href="<?= Env::BASE_URL ?>/css/icons/icons.css">
     <script src="<?= Env::BASE_URL ?>/javascript/script.js?v=20200215" async></script>
     <script src="<?= Env::BASE_URL ?>/javascript/360search/360search.js?v=20200215" async></script>
-    <!-- Javascript für Searchbox in footer.tmp.php -->
+
     <title><?= Config::$titel ?></title>
 </head>
 
