@@ -5,17 +5,17 @@
     | Puffer: <?= $spielplan->details['puffer'] ?>&nbsp;min
 </span>
 <div class="w3-responsive w3-card">
-    <table class="w3-table w3-centered w3-striped">
+    <table class="w3-table w3-centered w3-striped" border="1">
         <tr class="w3-primary">
             <!-- DM Uhr -->
             <th>
-                <?= Form::icon("schedule") ?>
+                <?= Html::icon("schedule") ?>
                 <br>
                 Uhr
             </th>
             <!-- DM Schiri -->
             <th>
-                <?= Form::icon("sports") ?>
+                <?= Html::icon("sports") ?>
                 <br>
                 Schiri
             </th>
@@ -25,7 +25,7 @@
             <th class="w3-hide-small"></th>
             <!-- D - -->
             <th class="w3-hide-small">
-                <?= Form::icon("sports_hockey") ?>
+                <?= Html::icon("sports_hockey") ?>
                 <br>
                 Spiele
             </th>
@@ -38,20 +38,20 @@
             <!-- 3xM Teams -->
             <th colspan="3" class="w3-hide-large w3-hide-medium">
                 <span class="pdf-hide">
-                    <?= Form::icon("sports_hockey") ?>
+                    <?= Html::icon("sports_hockey") ?>
                     <br>
                     Spiele
                 </span>
             </th>
             <!-- DM Tore -->
             <th>
-                <?= Form::icon("sports_baseball") ?>
+                <?= Html::icon("sports_baseball") ?>
                 <br>
                 Tore
             </th>
             <?php if ($spielplan->check_penalty_anzeigen()) { ?>
                 <th>
-                    <?= Form::icon("priority_high") ?>
+                    <?= Html::icon("priority_high") ?>
                     <br>
                     Penalty
                 </th>
@@ -93,10 +93,10 @@
                         </table>
                         <span style="white-space: nowrap; position:absolute; left:38px; bottom:8px;" class="w3-text w3-small w3-primary w3-container">
                             <span class="w3-hide-small">
-                               <?= Form::icon("keyboard_arrow_down") ?>
+                               <?= Html::icon("keyboard_arrow_down") ?>
                             </span>
                             <span class="w3-hide-large w3-hide-medium">
-                               <?= Form::icon("keyboard_arrow_left") ?>
+                               <?= Html::icon("keyboard_arrow_left") ?>
                             </span>
                             <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_a"]]['teamname'] ?>
                             |
@@ -195,9 +195,9 @@
                     <td></td>
                     <td></td>
                     <td style="white-space: nowrap;" colspan="3">
-                        <?= Form::icon("schedule") ?>
+                        <?= Html::icon("schedule") ?>
                         <i><?= $spielplan->get_pause($spiel_id) ?>&nbsp; min Pause</i>
-                        <?= Form::icon("schedule") ?>
+                        <?= Html::icon("schedule") ?>
                     </td>
                     <td></td>
                     <td class="w3-hide-small"></td>

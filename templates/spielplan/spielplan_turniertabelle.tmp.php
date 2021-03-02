@@ -4,20 +4,20 @@
     <table class="w3-table w3-centered w3-striped">
         <tr class="w3-primary">
             <th>
-                <?= Form::icon("bar_chart") ?>
+                <?= Html::icon("bar_chart") ?>
                 <br>Platz
             </th>
             <th>
-                <?= Form::icon("group") ?>
+                <?= Html::icon("group") ?>
                 <br>Team
             </th>
             <th class="w3-hide-small">
-                <?= Form::icon("workspaces") ?>
+                <?= Html::icon("workspaces") ?>
                 <br>Punkte
             </th>
             <?php if (in_array($spielplan->turnier->details['art'], ['I', 'II', 'III'])) { ?>
                 <th>
-                    <?= Form::icon("emoji_events") ?>
+                    <?= Html::icon("emoji_events") ?>
                     <br>Ergebnis
                 </th>
             <?php } //end if ?>
@@ -29,7 +29,7 @@
                         <span>--</span>
                     <?php } elseif ($spielplan->check_penalty_team($team_id)) { ?>
                         <span class='w3-text-secondary'>
-                            <?= Form::icon("priority_high") ?>PENALTY
+                            <?= Html::icon("priority_high") ?>PENALTY
                         </span>
                     <?php } else { ?>
                         <?= $x['platz'] ?>
@@ -61,36 +61,36 @@
             <table class="w3-table w3-centered w3-striped">
                 <tr class="w3-primary">
                     <th>
-                        <?= Form::icon("bar_chart") ?>
+                        <?= Html::icon("bar_chart") ?>
                         <br>Platz
                     </th>
                     <th>
-                        <?= Form::icon("group") ?>
+                        <?= Html::icon("group") ?>
                         <br>Team
                     </th>
                     <th>
-                        <?= Form::icon("sports_hockey") ?>
+                        <?= Html::icon("sports_hockey") ?>
                         <br>Spiele
                     </th>
                     <th>
-                        <?= Form::icon("workspaces") ?>
+                        <?= Html::icon("workspaces") ?>
                         <br>Punkte
                     </th>
                     <th>
-                        <?= Form::icon("drag_handle") ?>
+                        <?= Html::icon("drag_handle") ?>
                         <br>Differenz
                     </th>
                     <th>
-                        <?= Form::icon("add") ?>
+                        <?= Html::icon("add") ?>
                         <br>Tore
                     </th>
                     <th>
-                        <?= Form::icon("remove") ?>
+                        <?= Html::icon("remove") ?>
                         <br>Gegentore
                     </th>
                     <?php if (in_array($spielplan->turnier->details['art'], ['I', 'II', 'III'])) { ?>
                         <th>
-                            <?= Form::icon("emoji_events") ?>
+                            <?= Html::icon("emoji_events") ?>
                             <br>Ergebnis
                         </th>
                     <?php } //end if ?>
@@ -102,7 +102,7 @@
                                 <span>--</span>
                             <?php } elseif ($spielplan->check_penalty_team($team_id)) { ?>
                                 <span class='w3-text-secondary'>
-                            <?= Form::icon("priority_high") ?>PENALTY
+                            <?= Html::icon("priority_high") ?>PENALTY
                         </span>
                             <?php } else { ?>
                                 <?= $x['platz'] ?>

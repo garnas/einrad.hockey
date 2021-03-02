@@ -29,23 +29,23 @@ include '../../templates/header.tmp.php';
 
     <h1 class='w3-text-primary w3-border-bottom w3-border-grey'>
         Ligateams
-        <span class="w3-right w3-hide-small">Saison <?= Form::get_saison_string() ?></span>
+        <span class="w3-right w3-hide-small">Saison <?= Html::get_saison_string() ?></span>
     </h1>
     <!-- Legende -->
     <p>
         <span class="w3-right w3-text-primary">
-          <?= Form::icon("home") ?>&nbsp;Homepage
-          <?= Form::icon("group") ?>&nbsp;Teamfoto
-          <?= Form::icon("mail") ?>&nbsp;Email
+          <?= Html::icon("home") ?>&nbsp;Homepage
+          <?= Html::icon("group") ?>&nbsp;Teamfoto
+          <?= Html::icon("mail") ?>&nbsp;Email
         </span>
     </p>
     <br class="w3-hide-large w3-hide-medium">
-    <p><?= Form::link("ligakarte.php", 'Ligakarte aller Teams', true, 'place') ?></p>
+    <p><?= Html::link("ligakarte.php", 'Ligakarte aller Teams', true, 'place') ?></p>
 
     <!-- Team suchen -->
     <div class="w3-section w3-text-grey w3-border-bottom" style="width: 250px;">
-        <?= Form::icon("search") ?><input id="myInput" class='w3-padding w3-border-0' style="width: 225px;"
-                                                   type="text" placeholder="Team suchen">
+        <?= Html::icon("search") ?><input id="myInput" class='w3-padding w3-border-0' style="width: 225px;"
+                                          type="text" placeholder="Team suchen">
     </div>
 
     <!-- Teams Tabelle -->
@@ -53,26 +53,26 @@ include '../../templates/header.tmp.php';
         <table class="w3-table w3-striped">
             <tr class="w3-primary">
                 <th></th>
-                <th style="white-space: nowrap;"><?= Form::icon('groups')?> Teamname</th>
-                <th style="white-space: nowrap;"><?= Form::icon('room')?> Ort</th>
-                <th style="white-space: nowrap;"><?= Form::icon('outlined_flag')?> Verein</th>
-                <th style="white-space: nowrap;"><?= Form::icon('account_circle')?> Ligavertreter</th>
-                <th class="w3-center" style="white-space: nowrap;"><?= Form::icon('invert_colors')?> Farben</th>
+                <th style="white-space: nowrap;"><?= Html::icon('groups')?> Teamname</th>
+                <th style="white-space: nowrap;"><?= Html::icon('room')?> Ort</th>
+                <th style="white-space: nowrap;"><?= Html::icon('outlined_flag')?> Verein</th>
+                <th style="white-space: nowrap;"><?= Html::icon('account_circle')?> Ligavertreter</th>
+                <th class="w3-center" style="white-space: nowrap;"><?= Html::icon('invert_colors')?> Farben</th>
             </tr>
             <?php foreach ($alle_teamdaten as $team) { ?>
                 <tr id='<?= $team['team_id'] ?>'>
                     <!-- Icons -->
                     <td style='white-space: nowrap;' class="w3-right-align">
-                        <?= Form::Link($team['homepage'] ?? '', "", true, "home")?>
-                        <?= Form::Link($team['teamfoto'] ?? '', "", true, "group")?>
-                        <?= Form::mailto((new Kontakt($team['team_id']))->get_emails('public'), '')?>
+                        <?= Html::Link($team['homepage'] ?? '', "", true, "home")?>
+                        <?= Html::Link($team['teamfoto'] ?? '', "", true, "group")?>
+                        <?= Html::mailto((new Kontakt($team['team_id']))->get_emails('public'), '')?>
                     </td>
                     <!-- Text -->
                     <td style='white-space: nowrap;'><?= $team['teamname'] ?></td>
                     <td><?= $team['plz'] ?>&nbsp;<?= $team['ort'] ?></td>
                     <td><?= $team['verein'] ?></td>
                     <td><?= $team['ligavertreter'] ?></td>
-                    <td class="w3-center" style="white-space: nowrap;"><?= Form::trikot_punkt($team['trikot_farbe_1'], $team['trikot_farbe_2']) ?></td>
+                    <td class="w3-center" style="white-space: nowrap;"><?= Html::trikot_punkt($team['trikot_farbe_1'], $team['trikot_farbe_2']) ?></td>
                 </tr>
             <?php } //Ende foreach?>
         </table>

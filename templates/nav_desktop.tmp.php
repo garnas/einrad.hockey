@@ -2,7 +2,7 @@
 <div class="w3-display-container w3-hide-small">
     
     <!-- Hintergrundbild -->
-    <img src="<?= Form::get_hintergrund_bild() ?>" 
+    <img src="<?= Html::get_hintergrund_bild() ?>"
          class="<?php if (!isset($_SESSION['logins']['la']) && !isset($_SESSION['logins']['team'])){?>w3-card-4<?php } ?>" 
          alt="Hintergrundbild" 
          style="width:100%; opacity: 0.3;">
@@ -106,11 +106,11 @@
         <!-- Logout -->
         <?php if (isset($_SESSION['logins']['team'])){?>
             <a href='<?= Env::BASE_URL ?>/teamcenter/tc_logout.php' class="w3-button w3-right w3-hover-primary">
-                <?= Form::icon("logout", 24, 26) ?> Logout
+                <?= Html::icon("logout", 24, 26) ?> Logout
             </a>
         <?php }elseif (isset($_SESSION['logins']['la'])){?>
             <a href='<?= Env::BASE_URL ?>/ligacenter/lc_logout.php' class="w3-button w3-right w3-hover-primary">
-                <?= Form::icon("logout", tag:"h3") ?> Logout
+                <?= Html::icon("logout", tag:"h3") ?> Logout
             </a>
         <?php } //end if?>
 

@@ -106,7 +106,7 @@ class Spielplan
     public static function fill_vorlage(Turnier $turnier): bool
     {
         if (self::check_exist($turnier->id)) {
-            Form::error("Es existiert bereits ein Spielplan");
+            Html::error("Es existiert bereits ein Spielplan");
             return false;
         }
 
@@ -119,7 +119,7 @@ class Spielplan
         $vorlage = self::get_vorlage($turnier);
 
         if ($vorlage === false) {
-            Form::error("Es konnte keine Spielplanvorlage ermittelt werden.");
+            Html::error("Es konnte keine Spielplanvorlage ermittelt werden.");
             return false;
         }
 
@@ -133,7 +133,7 @@ class Spielplan
 
         // Wurde eine Paarung gefunden?
         if (empty($paarungen)) {
-            Form::error("Es konnte keine Spielreihenfolge aus dem Spielplan ermittelt werden");
+            Html::error("Es konnte keine Spielreihenfolge aus dem Spielplan ermittelt werden");
             return false;
         }
 
@@ -398,8 +398,8 @@ class Spielplan
                         continue;
                     }
                     $max_delta_e = $delta_e;
-                    $return[$team_id_a] = Form::trikot_punkt($farbe_a);
-                    $return[$team_id_b] = Form::trikot_punkt($farbe_b);
+                    $return[$team_id_a] = Html::trikot_punkt($farbe_a);
+                    $return[$team_id_b] = Html::trikot_punkt($farbe_b);
                 }
             }
         }

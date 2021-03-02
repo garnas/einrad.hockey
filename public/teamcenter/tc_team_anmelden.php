@@ -7,7 +7,7 @@ require_once '../../logic/session_team.logic.php'; //Auth
 
 //Check ob das Team über fünf Spieler verfügt
 if (count(Spieler::get_teamkader($_SESSION['logins']['team']['id'])) < 5){
-    Form::info('Bitte tragt euren Teamkader ein, um euch zu Turnieren anmelden zu können.');
+    Html::info('Bitte tragt euren Teamkader ein, um euch zu Turnieren anmelden zu können.');
     header('Location: ../teamcenter/tc_kader.php');
     die();
 }
@@ -18,7 +18,7 @@ $turnier = new Turnier ($turnier_id);
 
 //Existiert das Turnier?
 if (empty($turnier->details)){
-    Handler::not_found("Turnier wurde nicht gefunden.");
+    Helper::not_found("Turnier wurde nicht gefunden.");
 }
 if (strtotime($turnier->details['datum']) < time()) {
     trigger_error("Das Turnier liegt in der Vergangenheit.", E_USER_ERROR);
@@ -27,8 +27,8 @@ if (strtotime($turnier->details['datum']) < time()) {
 if ($turnier->details['art'] == 'spass'){
     $kontakt = new Kontakt ($turnier->details['ausrichter']);
     $email = $kontakt->get_emails();
-    Form::notice("Anmeldung zu Spass-Turnieren erfolgt über den Ausrichter: "
-        . Form::mailto($email, Team::id_to_name($turnier->details['ausrichter'])), esc:false);
+    Html::notice("Anmeldung zu Spass-Turnieren erfolgt über den Ausrichter: "
+        . Html::mailto($email, Team::id_to_name($turnier->details['ausrichter'])), esc:false);
     header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->id);
     die();
 }
@@ -52,21 +52,21 @@ $abmelden_moeglich_bis = LigaBot::time_offen_melde($turnier->details['datum']) +
 if (isset($_POST['anmelden'])){
     $error = false;
     if (!($turnier->details['art'] == 'I' or $turnier->details['art'] == 'II' or $turnier->details['art'] == 'III')){
-        Form::error ("Anmeldungen zu Turnieren dieses Typs sind im Teamcenter nicht möglich.");
+        Html::error ("Anmeldungen zu Turnieren dieses Typs sind im Teamcenter nicht möglich.");
         $error = true;
     }
     //Test schon angemeldet
     if ($team_angemeldet){
-        Form::error ("Dein Team ist schon zum Turnier angemeldet");
+        Html::error ("Dein Team ist schon zum Turnier angemeldet");
         $error = true;
     }
     //Richtige Phase
     if ($turnier->details['phase'] == 'spielplan'){
-        Form::error ("Das Turnier befindet sich bereits in der Spielplanphase. Anmeldung nur noch über den Ligaausschuss: " . Form::mailto(Env::LAMAIL));
+        Html::error ("Das Turnier befindet sich bereits in der Spielplanphase. Anmeldung nur noch über den Ligaausschuss: " . Html::mailto(Env::LAMAIL));
         $error = true;
     }
     if ($turnier->details['phase'] == 'ergebnis'){
-        Form::error ("Das Turnier ist schon in der Ergebnisphase. Melde dich bei " .Form::mailto(Env::LAMAIL));
+        Html::error ("Das Turnier ist schon in der Ergebnisphase. Melde dich bei " .Html::mailto(Env::LAMAIL));
         $error = true;
     }
     //Test Teamblock
@@ -86,14 +86,14 @@ if (isset($_POST['anmelden'])){
         if ($turnier->details['phase'] == 'melde'){
             $liste='spiele';
             if (!($turnier->check_team_block($_SESSION['logins']['team']['id']))){
-                Form::info ("Dein Team wurde auf der Warteliste angemeldet, da der Turnierblock ("
+                Html::info ("Dein Team wurde auf der Warteliste angemeldet, da der Turnierblock ("
                     . $turnier->details['tblock'] . ") nicht zu deinem Teamblock ("
                     . $_SESSION['logins']['team']['block'] . ") passt");
                 $liste = 'warte';
                 $anzahl_warteliste = count($anmeldungen['warte']);
                 $pos = $anzahl_warteliste+1;
             }elseif ($turnier->get_anzahl_freie_plaetze() <= 0){
-                Form::info ("Dein Team wurde auf der Warteliste angemeldet, da das Turnier voll ist");
+                Html::info ("Dein Team wurde auf der Warteliste angemeldet, da das Turnier voll ist");
                 $liste = 'warte';
                 $anzahl_warteliste = count($anmeldungen['warte']);
                 $pos = $anzahl_warteliste + 1;
@@ -101,16 +101,16 @@ if (isset($_POST['anmelden'])){
         }
         //Team anmelden
         if ($turnier->check_doppel_anmeldung($_SESSION['logins']['team']['id'])){
-            Form::error("Dein Team ist bereits auf einer Spiele-Liste am gleichen Kalendertag");
+            Html::error("Dein Team ist bereits auf einer Spiele-Liste am gleichen Kalendertag");
         }else{
             $turnier->anmelden($_SESSION['logins']['team']['id'], $liste, $pos);
             $turnier->log("Anmeldung: ". $_SESSION['logins']['team']['name'] ."\r\nTeamblock: ".$_SESSION['logins']['team']['block']. " Turnierblock: " . $turnier->details['tblock'] . "\r\nListe: $liste (WartePos: $pos)", $_SESSION['logins']['team']['name']);
-            Form::info ("Dein Team wurde zum Turnier angemeldet");
+            Html::info ("Dein Team wurde zum Turnier angemeldet");
             header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier->details['turnier_id']);
             die();
         }
     }else{
-        Form::error ("Dein Team wurde nicht angemeldet.");
+        Html::error ("Dein Team wurde nicht angemeldet.");
     }
 }
 
@@ -118,48 +118,48 @@ if (isset($_POST['anmelden'])){
 if (isset($_POST['freilos'])){
     $error = false;
     if (!($turnier->details['art'] == 'I' or $turnier->details['art'] == 'II' or $turnier->details['art'] == 'III')){
-        Form::error ("Anmeldungen zu Turnieren dieses Typs sind im Teamcenter nicht möglich.");
+        Html::error ("Anmeldungen zu Turnieren dieses Typs sind im Teamcenter nicht möglich.");
         $error = true;
     }
     if ($turnier->get_liste($_SESSION['logins']['team']['id']) == 'spiele'){
-        Form::error ("Dein Team ist schon auf der Spielen-Liste");
+        Html::error ("Dein Team ist schon auf der Spielen-Liste");
         $error = true;
     }elseif ($turnier->check_doppel_anmeldung($_SESSION['logins']['team']['id'])){
-        Form::error("Dein Team ist bereits auf einer Spiele-Liste am gleichen Kalendertag");
+        Html::error("Dein Team ist bereits auf einer Spiele-Liste am gleichen Kalendertag");
         $error = true;
     }
     if ($akt_team->get_freilose() <= 0){
-        Form::error ("Du hast kein Freilos mehr");
+        Html::error ("Du hast kein Freilos mehr");
         $error = true;
     }
     if ($turnier->details['phase'] == 'spielplan'){
-        Form::error ("Das Turnier befindet sich bereits in der Spielplanphase. Anmeldung nur noch über den Ligaausschuss: " . Form::mailto(Env::LAMAIL));
+        Html::error ("Das Turnier befindet sich bereits in der Spielplanphase. Anmeldung nur noch über den Ligaausschuss: " . Html::mailto(Env::LAMAIL));
         $error = true;
     }
     if ($turnier->details['phase'] == 'ergebnis'){
-        Form::error ("Das Turnier ist schon in der Ergebnisphase. Melde dich bei " .Form::mailto(Env::LAMAIL));
+        Html::error ("Das Turnier ist schon in der Ergebnisphase. Melde dich bei " .Html::mailto(Env::LAMAIL));
         $error = true;
     }
     if ($turnier->details['phase'] == 'melde' && $turnier->check_team_block($_SESSION['logins']['team']['id'])){
-        Form::error ("Dein Team würde auch ohne Freilos auf die Spielen-Liste gesetzt werden.");
+        Html::error ("Dein Team würde auch ohne Freilos auf die Spielen-Liste gesetzt werden.");
         $error = true;
     }
     if (!$turnier->check_team_block_freilos($_SESSION['logins']['team']['id'])){
-        Form::error ("Turnierblock stimmt nicht. Freilose können nur für Turniere mit höheren oder passenden Block gesetzt werden.");
+        Html::error ("Turnierblock stimmt nicht. Freilose können nur für Turniere mit höheren oder passenden Block gesetzt werden.");
         $error = true;
     }
     if ($turnier->get_anzahl_freie_plaetze() <= 0 ){
-        Form::error ("Die Spielen-Liste ist schon voll");
+        Html::error ("Die Spielen-Liste ist schon voll");
         $error = true;
     }
     if (!$error){
         $turnier->abmelden($_SESSION['logins']['team']['id']);
         $turnier->freilos($_SESSION['logins']['team']['id']);
-        Form::info ("Dein Team wurde zum Turnier angemeldet");
+        Html::info ("Dein Team wurde zum Turnier angemeldet");
         header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier->details['turnier_id']);
         die();
     }else{
-        Form::error ("Dein Team wurde nicht angemeldet.");
+        Html::error ("Dein Team wurde nicht angemeldet.");
     }
 }
 
@@ -169,11 +169,11 @@ if (isset($_POST['abmelden']) && isset($_SESSION['logins']['team'])){
     $liste = $turnier->get_liste($_SESSION['logins']['team']['id']);
     if (empty($liste)){
         $error = true;
-        Form::error ("Dein Team ist momentan nicht zum Turnier angemeldet");
+        Html::error ("Dein Team ist momentan nicht zum Turnier angemeldet");
     }
     if (time() > $abmelden_moeglich_bis && $liste == 'spiele'){
         $error = true;
-        Form::error ("Abmeldungen von der Spielen-Liste sind nur bis Freitag 23:59 zwei Wochen vor dem Turnier möglich. Bitte nehmt via Email Kontakt mit dem Ligaausschuss auf: " .Form::mailto(Env::LAMAIL). "");
+        Html::error ("Abmeldungen von der Spielen-Liste sind nur bis Freitag 23:59 zwei Wochen vor dem Turnier möglich. Bitte nehmt via Email Kontakt mit dem Ligaausschuss auf: " .Html::mailto(Env::LAMAIL). "");
     }
     if (!$error){
 
@@ -185,7 +185,7 @@ if (isset($_POST['abmelden']) && isset($_SESSION['logins']['team'])){
         if ($liste == 'warte' && $turnier->details['phase'] != 'offen')
             $turnier->warteliste_aktualisieren();
 
-        Form::info ("Dein Team wurde erfolgreich abgemeldet");
+        Html::info ("Dein Team wurde erfolgreich abgemeldet");
         header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier->details['turnier_id']);
         die();
     }
@@ -194,16 +194,16 @@ if (isset($_POST['abmelden']) && isset($_SESSION['logins']['team'])){
 // Für Abschlussturnier bewerben
 if (isset($_POST['bewerben'])){
     if ($turnier->details['art'] != 'final'){
-        Form::error ("Anmeldung fehlgeschlagen.");
+        Html::error ("Anmeldung fehlgeschlagen.");
         $error = true;
     }
     if ($team_angemeldet){
-        Form::error ("Dein Team ist schon angemeldet.");
+        Html::error ("Dein Team ist schon angemeldet.");
         $error = true;
     }
     if (!$error){
         $turnier->anmelden($_SESSION['logins']['team']['id'],'melde',0);
-        Form::info("Deine Meldung wurde erfolgreich entgegen genommmen.");
+        Html::info("Deine Meldung wurde erfolgreich entgegen genommmen.");
         header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier->details['turnier_id']);
         die();
     }
@@ -211,8 +211,8 @@ if (isset($_POST['bewerben'])){
 
 // Hinweis Live-Spieltag
 if (Tabelle::check_spieltag_live(Tabelle::get_aktuellen_spieltag())){
-    Form::notice("Für den aktuelle Spieltag (ein Spieltag ist immer ein ganzes Wochenende) wurden noch nicht alle Ergebnisse eingetragen. Für die Turnieranmeldung gilt immer der Teamblock des letzten vollständigen Spieltages: "
-        . Form::link("../liga/tabelle.php?spieltag=" . ($akt_spieltag - 1) . "#rang", "Spieltag " . ($akt_spieltag - 1)));
+    Html::notice("Für den aktuelle Spieltag (ein Spieltag ist immer ein ganzes Wochenende) wurden noch nicht alle Ergebnisse eingetragen. Für die Turnieranmeldung gilt immer der Teamblock des letzten vollständigen Spieltages: "
+        . Html::link("../liga/tabelle.php?spieltag=" . ($akt_spieltag - 1) . "#rang", "Spieltag " . ($akt_spieltag - 1)));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -225,11 +225,11 @@ include '../../templates/header.tmp.php';
 <h3 class="w3-text-grey"><?=$turnier->details['tname'] ?: 'Turnier'?> in <?=$turnier->details['ort']?>, <?=strftime("%d.%m.%Y (%A)", strtotime($turnier->details['datum']))?>(<?=$turnier->details['tblock']?>)</h3>
 
 <!-- Weiterführende Links -->
-<?= Form::link('../liga/turnier_details.php?turnier_id=' . $turnier->details['turnier_id'],
+<?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->details['turnier_id'],
     "Turnierdetails",
     false,
     "keyboard_arrow_left") ?>
-<?= Form::link('../liga/tc_turnierliste_anmelden.php?turnier_id=' . $turnier->details['turnier_id'],
+<?= Html::link('../liga/tc_turnierliste_anmelden.php?turnier_id=' . $turnier->details['turnier_id'],
     "Turnieranmeldeliste",
     false,
     "keyboard_arrow_right") ?>

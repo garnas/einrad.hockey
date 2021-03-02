@@ -12,7 +12,7 @@ if (isset($_GET['team_id'])) {
         $kader = Spieler::get_teamkader($team_id); //wird an Kader-Template übergeben
         $kader_vorsaison = Spieler::get_teamkader_vorsaison($team_id); //wird an kader.logic und an template übergeben
     } else {
-        Form::error("Team wurde nicht gefunden");
+        Html::error("Team wurde nicht gefunden");
     }
 }
 

@@ -4,5 +4,5 @@ require_once '../../logic/session_la.logic.php'; //Auth
 
 unset($_SESSION['logins']['la']);
 
-Form::info("Logout erfolgreich");
-Handler::reload('/liga/neues.php');
+Html::info("Logout erfolgreich");
+Helper::reload('/liga/neues.php');

@@ -4,7 +4,7 @@ $neuigkeiten = Neuigkeit::get_neuigkeiten($neuigkeiten_id);
 
 
 if (!isset($neuigkeiten[$neuigkeiten_id])) {
-    Handler::not_found("Neuigkeiteneintrag konnte nicht gefunden werden.");
+    Helper::not_found("Neuigkeiteneintrag konnte nicht gefunden werden.");
 }
 
 $neuigkeit = $neuigkeiten[$neuigkeiten_id];
@@ -13,7 +13,7 @@ $error = false;
 // Neuigkeit löschen
 if (isset($_POST['delete_neuigkeit'])) {
     Neuigkeit::delete($neuigkeiten_id);
-    Form::info("Neuigkeit wurde gelöscht");
+    Html::info("Neuigkeit wurde gelöscht");
     header('Location: ../liga/neues.php');
     die();
 }
@@ -22,7 +22,7 @@ if (isset($_POST['delete_neuigkeit'])) {
 if (isset($_POST['change_neuigkeit'])) {
 
     if (empty($_POST['titel']) || empty($_POST['text'])) {
-        Form::error("Bitte Titel- und Textfeld ausfüllen.");
+        Html::error("Bitte Titel- und Textfeld ausfüllen.");
         $error = true;
     }
 
@@ -62,7 +62,7 @@ if (isset($_POST['change_neuigkeit'])) {
         // Bild
         if ($_POST['delete_jpg'] === 'Ja' && !empty($neuigkeit['link_jpg'])) {
             unlink($neuigkeit['link_jpg']);
-            Form::info("Bild wurde gelöscht.");
+            Html::info("Bild wurde gelöscht.");
             if ($neuigkeit['link_jpg'] === $target_file_jpg) {
                 $target_file_jpg = '';
             }
@@ -70,7 +70,7 @@ if (isset($_POST['change_neuigkeit'])) {
         // Dokument
         if ($_POST['delete_pdf'] === 'Ja' && !empty($neuigkeit['link_pdf'])) {
             unlink($neuigkeit['link_pdf']);
-            Form::info("PDF wurde gelöscht.");
+            Html::info("PDF wurde gelöscht.");
             if ($neuigkeit['link_pdf'] === $target_file_pdf) {
                 $target_file_pdf = '';
             }
@@ -93,9 +93,9 @@ if (isset($_POST['change_neuigkeit'])) {
         ) {
             unlink($neuigkeit['link_pdf']);
         }
-        Form::info("Die Neuigkeit wurde bearbeitet.");
+        Html::info("Die Neuigkeit wurde bearbeitet.");
         header('Location: ../liga/neues.php');
         die();
     }
-    Form::error("Es wurden keine Änderungen vorgenommen."); // Fehler bei JPG oder PDF Upload
+    Html::error("Es wurden keine Änderungen vorgenommen."); // Fehler bei JPG oder PDF Upload
 }

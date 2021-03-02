@@ -10,7 +10,7 @@ $show_form = false;
 if (isset($_GET['team_id'])){
     $ausrichter_team_id = $_GET['team_id'];
     if (Team::is_ligateam($ausrichter_team_id)) {
-        Form::error("Ungültige TeamID");
+        Html::error("Ungültige TeamID");
         header('Location: lc_turnier_erstellen.php');
         die();
     }

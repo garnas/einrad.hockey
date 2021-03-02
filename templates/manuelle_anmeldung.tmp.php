@@ -8,16 +8,16 @@
 
 <!-- Links -->
 <p>
-    <?= Form::link('../liga/turnier_details.php?turnier_id=' . $turnier->details['turnier_id'],
+    <?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->details['turnier_id'],
         'Turnierdetails', icon:'info') ?>
 </p>
 <?php if (Config::$ligacenter){ ?>
     <p>
-        <?= Form::link('../ligacenter/lc_turnier_bearbeiten.php?turnier_id=' . $turnier->details['turnier_id'],
+        <?= Html::link('../ligacenter/lc_turnier_bearbeiten.php?turnier_id=' . $turnier->details['turnier_id'],
             'Turnier bearbeiten (Ligaausschuss)', icon:'create') ?>
     </p>
     <p>
-        <?= Form::link('../ligacenter/lc_turnier_log.php?turnier_id=' . $turnier->details['turnier_id'],
+        <?= Html::link('../ligacenter/lc_turnier_log.php?turnier_id=' . $turnier->details['turnier_id'],
             'Turnierlog einsehen (Ligaausschuss)', icon:'list') ?>
     </p>
 <?php }//endif?>
@@ -94,7 +94,7 @@
         <p>
             <label for="teamname" class='w3-text-primary'>Team wählen:</label><br>
             <input required type="text" style="max-width:400px" placeholder="Ligateam eingeben" class="w3-input w3-border w3-border-primary" list="teams" id="teamname" name="teamname">
-            <?= Form::datalist_teams() ?>
+            <?= Html::datalist_teams() ?>
         </p>
         <p>
             <label for="liste" class='w3-text-primary'>Liste wählen:</label>

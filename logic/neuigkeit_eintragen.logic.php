@@ -11,7 +11,7 @@ $error = false;
 if (isset($_POST['create_neuigkeit'])) {
 
     if (empty($_POST['titel']) || empty($_POST['text'])) {
-        Form::error("Bitte Titel und Text eingeben.");
+        Html::error("Bitte Titel und Text eingeben.");
     } else {
 
         // Fileupload
@@ -51,10 +51,10 @@ if (isset($_POST['create_neuigkeit'])) {
             // evtl hochgeladene Dateien löschen.
             if (($target_file_pdf ?? false) !== false) unlink($target_file_pdf);
             if (($target_file_jpg ?? false) !== false) unlink($target_file_jpg);
-            Form::error("Neuigkeit wurde nicht erstellt, eventuell hochgeladene Dateien müssen erneut hochgeladen werden.");
+            Html::error("Neuigkeit wurde nicht erstellt, eventuell hochgeladene Dateien müssen erneut hochgeladen werden.");
         } else {
             Neuigkeit::create($titel, $text, $name, $target_file_jpg, $target_file_pdf, $bild_verlinken);
-            Form::info("Deine Neuigkeit wurde erfolgreich eingetragen");
+            Html::info("Deine Neuigkeit wurde erfolgreich eingetragen");
             header('Location: ../liga/neues.php');
             die(); // Damit das Skript nicht zu auf dem Server zu ende ausgeführt wird.
         }

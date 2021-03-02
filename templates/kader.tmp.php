@@ -17,7 +17,7 @@
                 <td><?= $eintrag['spieler_id'] ?></td>
                 <?php if (Config::$ligacenter) { //Direktverlinkung zum Bearbeiten eines Spielers Config::$ligacenter wird definiert in session_la.logic.php?>
                     <td>
-                        <?= Form::link('lc_spieler_aendern.php?spieler_id=' . $eintrag['spieler_id'],
+                        <?= Html::link('lc_spieler_aendern.php?spieler_id=' . $eintrag['spieler_id'],
                             $eintrag['vorname'] . " " . $eintrag['nachname']) ?>
                     </td>
                 <?php } else { ?>
@@ -30,7 +30,7 @@
                 </td>
                 <?php if (!empty($eintrag['schiri'])) { //Häkchen Setzten wenn gültiger Schirieintrag?>
                     <td class='w3-center'>
-                        <?= Form::icon("check_circle_outline") . ' ' . Form::get_saison_string($eintrag['schiri']) ?>
+                        <?= Html::icon("check_circle_outline") . ' ' . Html::get_saison_string($eintrag['schiri']) ?>
                         <?php if ($eintrag['junior'] === 'Ja') { ?>
                             <i class="w3-text-grey">junior</i><?php }//endif?>
                     </td>
@@ -65,7 +65,7 @@
                         <td><?= $eintrag['spieler_id'] ?></td>
                         <?php if (Config::$ligacenter) { ?>
                             <td>
-                                <?= Form::link('lc_spieler_aendern.php?spieler_id=' . $eintrag['spieler_id'],
+                                <?= Html::link('lc_spieler_aendern.php?spieler_id=' . $eintrag['spieler_id'],
                                     $eintrag['vorname'] . " " . $eintrag['nachname']) ?>
                             </td>
                         <?php } else { ?>
@@ -78,7 +78,7 @@
                         </td>
                         <?php if (!empty($eintrag['schiri'])) { //Häkchen Setzten wenn gültiger Schirieintrag?>
                             <td class='w3-center'>
-                                <?= Form::icon("check_circle_outline") . Form::get_saison_string($eintrag['schiri']) ?>
+                                <?= Html::icon("check_circle_outline") . Html::get_saison_string($eintrag['schiri']) ?>
                                 <?php if ($eintrag['junior'] === 'Ja') { ?>
                                     <i class="w3-text-primary">junior</i>
                                 <?php }//endif?></td>
@@ -104,7 +104,7 @@
         <p>
             <input type="checkbox" class="w3-check" value="zugestimmt" name="dsgvo" id="dsgvo">
             <label for="dsgvo" style="cursor: pointer;" class="w3-text-black">
-                Alle ausgewählten Spieler haben dien aktuellen <?= Form::link(Config::LINK_DSGVO, 'Datenschutz-Hinweise') ?>
+                Alle ausgewählten Spieler haben dien aktuellen <?= Html::link(Config::LINK_DSGVO, 'Datenschutz-Hinweise') ?>
                 gelesen und ihnen zugestimmt.
             </label>
         </p>
@@ -170,7 +170,7 @@
             <p>
                 <input type="checkbox" class="w3-check" value="zugestimmt" name="dsgvo" id="dsgvo_neu">
                 <label for="dsgvo_neu" style="cursor: pointer;" class="">
-                    Der Spieler hat die aktuellen <?= Form::link(Config::LINK_DSGVO, "Datenschutz-Hinweise", true) ?>
+                    Der Spieler hat die aktuellen <?= Html::link(Config::LINK_DSGVO, "Datenschutz-Hinweise", true) ?>
                     gelesen und der Verwendung seiner Daten zugestimmt.
                 </label>
             </p>

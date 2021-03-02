@@ -14,7 +14,7 @@ include '../../templates/header.tmp.php';
     <h1 class="w3-text-grey">Dokumente</h1>
     <div class="w3-panel w3-card">
         <h2 class="w3-text-primary">Modus</h2>
-        <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Form::get_saison_string() ?></p>
+        <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
         <a class="no w3-hover-text-secondary" href="<?= Config::LINK_MODUS ?>">
             <p>
                 <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i>
@@ -37,7 +37,7 @@ include '../../templates/header.tmp.php';
     </div>
     <div class="w3-panel w3-card">
         <h2 class="w3-text-primary">Regeln</h2>
-        <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Form::get_saison_string() ?></p>
+        <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
         <a class="no w3-hover-text-secondary" href="<?= Config::LINK_REGELN ?>">
             <p>
                 <i
@@ -61,7 +61,7 @@ include '../../templates/header.tmp.php';
     </div>
     <div class="w3-panel w3-card">
         <h2 class="w3-text-primary">Englisch</h2>
-        <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Form::get_saison_string() ?></p>
+        <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
         <a class="no w3-hover-text-secondary" href="<?= Config::LINK_REGELN_IUF ?>">
             <p>
                 <i
@@ -85,7 +85,7 @@ include '../../templates/header.tmp.php';
     </div>
     <div class="w3-panel w3-card">
         <h2 class="w3-text-primary">Sonstiges</h2>
-        <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Form::get_saison_string() ?></p>
+        <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
         <a class="no w3-hover-text-secondary" href="<?= Config::LINK_DSGVO ?>">
             <p>
                 <i

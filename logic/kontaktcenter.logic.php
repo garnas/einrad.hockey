@@ -29,7 +29,7 @@ if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
     unset ($_SESSION[$list_id]);
     $turnier = new Turnier((int) $_POST['turnier_id']);
     if (empty($turnier->details)) {
-        Form::error("Turnier wurde nicht gefunden");
+        Html::error("Turnier wurde nicht gefunden");
         header('Location: ' . dbi::escape($_SERVER['PHP_SELF']));
         die();
     }
@@ -43,7 +43,7 @@ if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
         array_unshift($_SESSION[$list_id]['empfaenger'], 'Ligaausschuss');
     }
 
-    Form::notice("Achtung: Nichtligateams müssen seperat angeschrieben werden!");
+    Html::notice("Achtung: Nichtligateams müssen seperat angeschrieben werden!");
 }
 
 
@@ -92,7 +92,7 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
     $text = $_POST['text'];
 
     if (empty($emails) || empty($betreff) || empty($text)) {
-        Form::error("Kontaktformular unvollständig");
+        Html::error("Kontaktformular unvollständig");
         $error = true;
     }
 
@@ -129,16 +129,16 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
         $mailer->Body = $text . "\r\nVersendet aus dem Kontaktcenter von einrad.hockey";
 
 
-        Handler::log(Config::LOG_EMAILS, "Betreff: $betreff" . " an " . implode(',', $emails));
+        Helper::log(Config::LOG_EMAILS, "Betreff: $betreff" . " an " . implode(',', $emails));
         // Email-versenden
         if (MailBot::send_mail($mailer)) {
-            Form::info("Die E-Mail wurde versandt.");
+            Html::info("Die E-Mail wurde versandt.");
             unset($_SESSION[$list_id]);
             header('Location: ' . dbi::escape($_SERVER['PHP_SELF']));
             die();
         }
 
-        Form::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden.");
+        Html::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden.");
     }
 }
 
@@ -154,7 +154,7 @@ if (isset($_SESSION[$list_id])) {
         $tos = $_SESSION[$list_id]['empfaenger'];
     }
     if (empty($_SESSION[$list_id]['emails'])) {
-        Form::error("Es wurden keine E-Mail-Adressen gefunden.");
+        Html::error("Es wurden keine E-Mail-Adressen gefunden.");
     }
 }
 

@@ -26,13 +26,13 @@ include '../../templates/header.tmp.php';
     </h2>
 
     <p>
-        <?= Form::link('../liga/turnier_details.php?turnier_id=' . $turnier->details['turnier_id'],
+        <?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->details['turnier_id'],
             'Alle Turnierdetails',
             icon: 'info') ?>
     </p>
 
 <?php
-Form::message('notice',
+Html::message('notice',
     "Bitte schreibt die Teams und den Ligaausschuss an, wenn wichtige Turnierdaten geändert werden.",
     '');
 include '../../templates/turnier_bearbeiten_teams.tmp.php';

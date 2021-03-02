@@ -4,10 +4,10 @@
     <div class="w3-responsive w3-card-4">
         <table class="w3-table w3-striped w3-centered" style="white-space: nowrap;">
             <tr class="w3-primary">
-                <th><?= Form::icon("info_outline") ?><br>Team-ID</th>
-                <th><?= Form::icon("group") ?><br>Team</th>
-                <th><?= Form::icon("reorder") ?><br>Block</th>
-                <th class="w3-hide-small"><?= Form::icon("arrow_circle_up") ?><br>Wertung</th>
+                <th><?= Html::icon("info_outline") ?><br>Team-ID</th>
+                <th><?= Html::icon("group") ?><br>Team</th>
+                <th><?= Html::icon("reorder") ?><br>Block</th>
+                <th class="w3-hide-small"><?= Html::icon("arrow_circle_up") ?><br>Wertung</th>
             </tr>
             <?php foreach ($spielplan->teamliste as $team_id => $team) { ?>
                 <tr>
@@ -25,7 +25,7 @@
     <!-- Modal-Button -->
     <span class="w3-button pdf-hide w3-text-primary"
           onclick="document.getElementById('teamliste_details').style.display='block'">
-        <?= Form::icon("info") ?> Details anzeigen
+        <?= Html::icon("info") ?> Details anzeigen
     </span>
 
 </div>
@@ -36,15 +36,15 @@
         <div class="w3-responsive w3-card">
             <table class="w3-table w3-striped w3-centered" style="white-space: nowrap;">
                 <tr class="w3-primary">
-                    <th><?= Form::icon("info_outline") ?><br>Team-ID</th>
-                    <th><?= Form::icon("group") ?><br>Team</th>
-                    <th><?= Form::icon("reorder") ?><br>Block</th>
-                    <th><?= Form::icon("arrow_circle_up") ?><br>Wertung</th>
+                    <th><?= Html::icon("info_outline") ?><br>Team-ID</th>
+                    <th><?= Html::icon("group") ?><br>Team</th>
+                    <th><?= Html::icon("reorder") ?><br>Block</th>
+                    <th><?= Html::icon("arrow_circle_up") ?><br>Wertung</th>
                     <?php if ($spielplan->turnier->details['phase'] !== 'ergebnis') { ?>
-                        <th><span class="pdf-hide"><?= Form::icon("invert_colors") ?><br>Trikots</span></th>
+                        <th><span class="pdf-hide"><?= Html::icon("invert_colors") ?><br>Trikots</span></th>
                     <?php } //endif?>
-                    <th><span class="pdf-hide"><?= Form::icon("account_circle") ?><br>Ligavertreter</span></th>
-                    <th><span class="pdf-hide"><?= Form::icon("help_outline") ?><br>Kontakt</span></th>
+                    <th><span class="pdf-hide"><?= Html::icon("account_circle") ?><br>Ligavertreter</span></th>
+                    <th><span class="pdf-hide"><?= Html::icon("help_outline") ?><br>Kontakt</span></th>
                 </tr>
                 <?php foreach ($spielplan->teamliste as $team_id => $team) { ?>
                     <tr>
@@ -55,7 +55,7 @@
                         <?php if ($spielplan->turnier->details['phase'] !== 'ergebnis') { ?>
                             <td>
                                 <span class="pdf-hide">
-                                    <?= Form::trikot_punkt($team['trikot_farbe_1'], $team['trikot_farbe_2']) ?>
+                                    <?= Html::trikot_punkt($team['trikot_farbe_1'], $team['trikot_farbe_2']) ?>
                                 </span>
                             </td>
                         <?php } // end if ?>
@@ -64,7 +64,7 @@
                         </td>
                         <td>
                             <span class="pdf-hide">
-                                <?= Form::mailto((new Kontakt($team_id))->get_emails('public'), 'E-Mail') ?>
+                                <?= Html::mailto((new Kontakt($team_id))->get_emails('public'), 'E-Mail') ?>
                             </span>
                         </td>
                     </tr>

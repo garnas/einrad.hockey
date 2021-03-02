@@ -12,7 +12,7 @@ if (isset($_POST['login'])) {
     // Fehlermeldungen
     if (empty($teamname) || empty($passwort)) {
         $error = true;
-        Form::error("Bitte Logins ausfüllen.");
+        Html::error("Bitte Logins ausfüllen.");
     }
 
     // Passwort überprüfen
@@ -58,10 +58,10 @@ include '../../templates/header.tmp.php'; ?>
                name="teamname"
                required
         >
-        <?= Form::datalist_teams() ?>
+        <?= Html::datalist_teams() ?>
         <p>
             <label for="passwort">
-                <?=Form::icon("account_circle")?> Passwort:</label>
+                <?=Html::icon("account_circle")?> Passwort:</label>
             <input class="w3-input w3-border-primary"
                    type="password"
                    size="30"
@@ -76,7 +76,7 @@ include '../../templates/header.tmp.php'; ?>
                     type="submit"
                     name="login"
             >
-                <?= Form::icon("login") ?> Login
+                <?= Html::icon("login") ?> Login
             </button>
         </p>
     </form>

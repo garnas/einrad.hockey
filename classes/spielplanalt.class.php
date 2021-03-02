@@ -447,7 +447,7 @@ class SpielplanAlt{
         if(empty($result) && empty($this->penalty_warning) && $this->check_alles_gespielt($daten)){
             //Testen ob Turnier eingetragen werden darf
             if (!Tabelle::check_ergebnis_eintragbar($this->akt_turnier)){
-                Form::error("Turnierergebnis konnte nicht eingetragen werden. Kontaktiere bitte den Ligaausschuss.");
+                Html::error("Turnierergebnis konnte nicht eingetragen werden. Kontaktiere bitte den Ligaausschuss.");
                 header("Location: " . dbi::escape($_SERVER['REQUEST_URI']));
                 die();
             }else{
@@ -456,10 +456,10 @@ class SpielplanAlt{
                 foreach($daten as $index=>$date){
                     $this->akt_turnier->set_ergebnis($date["team_id_a"], $date["ligapunkte"], $index + 1);
                 }
-                Form::info("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
+                Html::info("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
             }
         }else{
-            Form::error("Es sind noch Spiel- oder Penaltyergebnisse offen. Turnierergebnisse wurden nicht übermittelt.");
+            Html::error("Es sind noch Spiel- oder Penaltyergebnisse offen. Turnierergebnisse wurden nicht übermittelt.");
         }
     }
 

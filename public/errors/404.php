@@ -17,19 +17,20 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 
     <div class="w3-center">
         <h1 class="w3-text-primary">Diese Seite konnte nicht gefunden werden</h1>
+
         <?php if (!empty($link)) { ?>
             <p class="grey">
                 <?= $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . $link ?>
             </p>
             <p>
-                <?= Form::link($link, 'Erneut versuchen', icon:'settings_backup_restore') ?>
+                <?= Html::link($link, 'Erneut versuchen', icon:'settings_backup_restore') ?>
             </p>
         <?php } // end if ?>
 
         <p class="w3-text-grey">
             E-Mail-Adresse Technikausschuss
             <br>
-            <?= Form::mailto(ENV::TECHNIKMAIL) ?>
+            <?= Html::mailto(ENV::TECHNIKMAIL) ?>
         </p>
     </div>
 

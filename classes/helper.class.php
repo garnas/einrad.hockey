@@ -1,6 +1,6 @@
 <?php
 
-class Handler
+class Helper
 {
     public static function reload($path = null): void
     {
@@ -12,7 +12,7 @@ class Handler
     public static function not_found($text): void
     {
         trigger_error($text, E_USER_NOTICE);
-        $_SESSION['error']['text'] = $text ?? "Ungültiger Link";
+        $_SESSION['error']['text'] = $text;
         $_SESSION['error']['url'] = $_SERVER['REQUEST_URI'];
         self::reload('/errors/404.php');
     }

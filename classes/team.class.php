@@ -424,8 +424,8 @@ class Team
         $team_id = self::name_to_id($teamname);
 
         if (!self::is_ligateam($team_id)) {
-            Form::error("Falscher Loginname");
-            Handler::log(Config::LOG_LOGIN, "Falscher TC-Login | Teamname: " . $teamname);
+            Html::error("Falscher Loginname");
+            Helper::log(Config::LOG_LOGIN, "Falscher TC-Login | Teamname: " . $teamname);
             return false;
         }
 
@@ -433,23 +433,23 @@ class Team
         // Passwort prüfen
         if (password_verify($passwort, $team->details['passwort'])) {
             self::set_team_session($team);
-            Handler::log(Config::LOG_LOGIN, "Erfolgreich       | Teamname: " . $teamname);
+            Helper::log(Config::LOG_LOGIN, "Erfolgreich       | Teamname: " . $teamname);
 
             if (empty($team->details['trikot_farbe_1'])) {
-                $link = Form::link("tc_teamdaten_aendern.php", ' Link.', icon: "launch");
-                Form::info("Ihr könnt jetzt eure Trikotfarben hinzufügen - " . $link, ' ', esc: false);
+                $link = Html::link("tc_teamdaten_aendern.php", ' Link.', icon: "launch");
+                Html::info("Ihr könnt jetzt eure Trikotfarben hinzufügen - " . $link, ' ', esc: false);
             }
             if (empty($team->details['teamfoto'])) {
-                $link = Form::link("../teamcenter/tc_teamdaten_aendern.php", ' Link.', icon: "launch");
-                Form::info("Hier könnt ihr noch ein Teamfoto hochladen - " . $link, ' ', esc: false);
+                $link = Html::link("../teamcenter/tc_teamdaten_aendern.php", ' Link.', icon: "launch");
+                Html::info("Hier könnt ihr noch ein Teamfoto hochladen - " . $link, ' ', esc: false);
             }
 
             return true;
         }
 
         // Passwort falsch
-        Handler::log(Config::LOG_LOGIN, "Falsches Passwort | Teamname: " . $teamname);
-        Form::error("Falsches Passwort");
+        Helper::log(Config::LOG_LOGIN, "Falsches Passwort | Teamname: " . $teamname);
+        Html::error("Falsches Passwort");
         return false;
     }
 

@@ -62,25 +62,25 @@ if (isset($_POST['put_challenge']) && Config::$teamcenter) {
     // Datums vergleich, Startdatum, Enddatum, liegt in der Zunkunft 
     if (strtotime($datum) < strtotime($start) || strtotime($datum) > strtotime($end) || strtotime($datum) > strtotime(date('Y-m-d'))) {
         $error = true;
-        Form::error("Das ausgewählt Datum liegt nicht im Bereich.");
+        Html::error("Das ausgewählt Datum liegt nicht im Bereich.");
     } elseif (empty($spieler_id)) {
         $error = true;
-        Form::error("Es wurde kein Spieler ausgewählt.");
+        Html::error("Es wurde kein Spieler ausgewählt.");
     } elseif ($spieler->details['team_id'] != $_SESSION['logins']['team']['id']){ //Spielt die übergebene Spieler_id auch für das eingeloggte Team?
         $error = true; 
-        Form::error("Eintragen nicht möglich.");
+        Html::error("Eintragen nicht möglich.");
     }
 
     if (!$error) {
         if(Challenge::set_data($spieler_id, $distanz, $radgroesse, $datum)) {
-            Form::info("Die Strecke wurde erfolgreich eingetragen!");
+            Html::info("Die Strecke wurde erfolgreich eingetragen!");
             header('Location: tc_challenge_eintraege.php');// Setzt den Html-Header zu einer direkten Weiterleitung, somit wird die Seite neu geladen mit den aktuellen Daten
             die(); // Trotz gesetzten Header würde das Skript noch zu ende ausgeführt werden. Deswegen wird es hier beendet.
         }
     }
 
     if ($error) {
-        Form::error("Die Strecke konnte nicht eingetragen werden!");
+        Html::error("Die Strecke konnte nicht eingetragen werden!");
     }
 
 }
@@ -93,12 +93,12 @@ if (isset($_POST['update_challenge']) && Config::$teamcenter) {
     foreach ($team_eintraege as $eintrag){
         if($eintrag['id'] == $eintrag_id){
             Challenge::update_data($eintrag_id);
-            Form::info('Dein Eintrag wurde erfolgreich entfernt.');
+            Html::info('Dein Eintrag wurde erfolgreich entfernt.');
             header('Location: tc_challenge_eintraege.php');
             die();
         }
     }
-    Form::error("Eintrag konnte nicht entfernt werden");
+    Html::error("Eintrag konnte nicht entfernt werden");
 }
 
 // Breite für die ProgressBar

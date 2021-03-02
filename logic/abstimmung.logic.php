@@ -44,12 +44,12 @@ if (Config::$teamcenter) {
     // Team will seine Stimme einsehen
     if (isset($_POST['stimme_einsehen'])) {
         if (!password_verify($_POST['passwort'], $abstimmung->passwort_hash)) {
-            Handler::log("abstimmung.log", "$abstimmung->team_id Ungültiges Passwort (Stimme einsehen)");
-            Form::error("Ungültiges Passwort.");
+            Helper::log("abstimmung.log", "$abstimmung->team_id Ungültiges Passwort (Stimme einsehen)");
+            Html::error("Ungültiges Passwort.");
         } else {
             $crypt = $abstimmung->teamid_to_crypt($_POST['passwort']);
             $einsicht = $abstimmung->get_stimme($crypt);
-            Handler::log("abstimmung.log", "$abstimmung->team_id hat seine Stimme eingesehen");
+            Helper::log("abstimmung.log", "$abstimmung->team_id hat seine Stimme eingesehen");
             // Keinen Header einbauen, da $stimme sonst verloren geht.
         }
     }
@@ -60,18 +60,18 @@ if (Config::$teamcenter) {
         $stimme = $_POST['abstimmung'];
         if (time() < $beginn or time() > $abschluss) {
             $error = true;
-            Handler::log("abstimmung.log", "$abstimmung->team_id Falscher Zeitraum");
-            Form::error("Die Abstimmung ist zurzeit nicht aktiv.");
+            Helper::log("abstimmung.log", "$abstimmung->team_id Falscher Zeitraum");
+            Html::error("Die Abstimmung ist zurzeit nicht aktiv.");
         }
         if (!in_array($stimme, ['winterpause', 'sommerpause', 'enthaltung'])) {
             $error = true;
-            Handler::log("abstimmung.log", "$abstimmung->team_id HTML-Manipulation");
-            Form::error("Ungültige Formularübermittlung");
+            Helper::log("abstimmung.log", "$abstimmung->team_id HTML-Manipulation");
+            Html::error("Ungültige Formularübermittlung");
         }
         if (!password_verify($_POST['passwort'], $abstimmung->passwort_hash)) {
             $error = true;
-            Handler::log("abstimmung.log", "$abstimmung->team_id Ungültiges Passwort (Abstimmen)");
-            Form::error("Ungültiges Passwort.");
+            Helper::log("abstimmung.log", "$abstimmung->team_id Ungültiges Passwort (Abstimmen)");
+            Html::error("Ungültiges Passwort.");
         }
         if (!$error) {
             $crypt = $abstimmung->teamid_to_crypt($_POST['passwort']);

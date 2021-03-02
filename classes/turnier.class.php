@@ -981,7 +981,7 @@ class Turnier
                 INSERT INTO turniere_log (turnier_id, log_text, autor) 
                 VALUES ($this->id, ?, ?);
                 ";
-        $autor = Handler::get_akteur(true);
+        $autor = Helper::get_akteur(true);
         dbi::$db->query($sql, $log_text, $autor)->log();
     }
 

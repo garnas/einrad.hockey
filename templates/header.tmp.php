@@ -48,7 +48,7 @@
 <!--                              style="background-color: transparent">-->
 <!--                            &times;-->
 <!--                        </span>-->
-                        <?php Form::print_messages(); ?>
+                        <?php Html::print_messages(); ?>
 <!--                    </div>-->
 <!--            </div>-->
                 <script>

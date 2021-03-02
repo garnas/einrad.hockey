@@ -25,7 +25,7 @@ class db
     {
         self::$link = new mysqli(Env::HOST_NAME, Env::USER_NAME, Env::PASSWORD, $db);
         if (self::$link->connect_errno) {
-            Handler::log(self::$log_file, "Verbindung fehlgeschlagen: " . self::$link->error);
+            Helper::log(self::$log_file, "Verbindung fehlgeschlagen: " . self::$link->error);
             die('<h2>Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error() . '<br><br>Wende dich bitte an <span style="color:red;">' . Env::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
         }
         // https://www.php.de/forum/webentwicklung/datenbanken/1492164-bestimmt-zum-1000sten-mal-php-mysql-umlaute
@@ -96,7 +96,7 @@ class db
      */
     public static function get_auto_increment($tabelle): int
     {
-        Form::error("Es wurde die veraltete DB-Klasse verwendet");
+        Html::error("Es wurde die veraltete DB-Klasse verwendet");
         $sql = "  SELECT AUTO_INCREMENT
             FROM  INFORMATION_SCHEMA.TABLES
             WHERE TABLE_SCHEMA = '" . Env::DATABASE . "'  
@@ -115,10 +115,10 @@ class db
      */
     public static function readdb(string $sql): mysqli_result|bool
     {
-        Form::error("Es wurde die veraltete DB-Klasse verwendet");
+        Html::error("Es wurde die veraltete DB-Klasse verwendet");
         #$before = microtime(true);
         if (mysqli_connect_errno()) {
-            Handler::log(self::$log_file, "Lesen der Datenbank fehlgeschlagen: " . mysqli_connect_error());
+            Helper::log(self::$log_file, "Lesen der Datenbank fehlgeschlagen: " . mysqli_connect_error());
             die('<h2>Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error() . '<br><br>Wende dich bitte an <span style="color:red;">' . Env::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
         }
 
@@ -137,25 +137,25 @@ class db
      */
     public static function writedb(string $sql, $anonym = false)
     {
-        Form::error("Es wurde die veraltete DB-Klasse verwendet");
+        Html::error("Es wurde die veraltete DB-Klasse verwendet");
         //SQL-Logdatei erstellen/beschreiben
         $autor_string = implode(" | ", array_filter([$_SESSION['logins']['team']['name'] ?? '', $_SESSION['la_login_name'] ?? '', $_SESSION['ligabot'] ?? '']));
         $sql = trim(preg_replace("/(^\h+|\h+$)/m",'',$sql)); // Schönere Formatierung
         $log = $autor_string . "\n" . (($anonym) ? 'Anonyme Query' : $sql);
-        Handler::log(self::$log_file, $log);
+        Helper::log(self::$log_file, $log);
 
         //Keine Verbindung zum SQL-Server möglich
         if (mysqli_connect_errno()) {
             $error_text = 'Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error();
-            Handler::log(self::$log_file, $error_text);
+            Helper::log(self::$log_file, $error_text);
             die('<h2>Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error() . '<br><br>Wende dich bitte an <span style="color:red;">' . Env::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
         }
 
         // Beschreiben der Datenbank nicht möglich? $sql wird im if schon ausgeführt
         if (!self::$link->query($sql)) {
             $error_text = 'Fehlgeschlagen: ' . self::$link->error;
-            Handler::log(self::$log_file, $error_text);
-            Form::error("Fehler beim Beschreiben der Datenbank. " . Form::mailto(Env::TECHNIKMAIL),
+            Helper::log(self::$log_file, $error_text);
+            Html::error("Fehler beim Beschreiben der Datenbank. " . Html::mailto(Env::TECHNIKMAIL),
                 esc:false);
             //Debug Form::error($sql);
             die();
@@ -201,6 +201,6 @@ class db
         } else {
             $string = print_r($input, true);
         }
-        Form::info('<p>File: ' . $backtrace[0]['file'] . '<br>Line: ' . $backtrace[0]['line'] . '</p><pre>' . $string . '</pre>');
+        Html::info('<p>File: ' . $backtrace[0]['file'] . '<br>Line: ' . $backtrace[0]['line'] . '</p><pre>' . $string . '</pre>');
     }
 }

@@ -28,7 +28,7 @@ if (
         $team->set_detail('trikot_farbe_1', '');
     if (isset($_POST['no_color_2']))
         $team->set_detail('trikot_farbe_2', '');
-    Form::info("Trikotfarbe geändert.");
+    Html::info("Trikotfarbe geändert.");
     header("Location:" . $path);
     die();
 }
@@ -38,11 +38,11 @@ if (isset($_POST['teamdaten_aendern'])) {
 
     $error = false;
     if (empty($_POST['ligavertreter'])) {
-        Form::error('Es muss ein Ligavertreter angegeben werden');
+        Html::error('Es muss ein Ligavertreter angegeben werden');
         $error = true;
     }
     if (empty($_POST['dsgvo'])) {
-        Form::error('Der Ligavertreter muss den Datenschutz-Hinweisen zustimmen.');
+        Html::error('Der Ligavertreter muss den Datenschutz-Hinweisen zustimmen.');
         $error = true;
     }
 
@@ -65,13 +65,13 @@ if (isset($_POST['teamdaten_aendern'])) {
         }
         if ("Ja" == ($_POST['delete' . $email['teams_kontakt_id']]) ?? '') {
             if ($kontakte->delete_email($email['teams_kontakt_id'])) {
-                Form::info($email['email'] . " wurde gelöscht");
+                Html::info($email['email'] . " wurde gelöscht");
             } else {
-                Form::error("Es muss mindestens eine E-Mail-Adresse hinterlegt sein");
+                Html::error("Es muss mindestens eine E-Mail-Adresse hinterlegt sein");
             }
         }
     }
-    Form::info("Teamdaten wurden gespeichert.");
+    Html::info("Teamdaten wurden gespeichert.");
     header('Location: ' . $path);
     die();
 }
@@ -84,11 +84,11 @@ if (isset($_POST['neue_email'])) {
 
     if (filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($email)) {
         $kontakte->set_email($email, $public, $infomail);
-        Form::info("E-Mail-Adresse wurde hinzugefügt");
+        Html::info("E-Mail-Adresse wurde hinzugefügt");
         header('Location: ' . $path);
         die();
     } else {
-        Form::error("E-Mail-Adresse wurde nicht akzeptiert");
+        Html::error("E-Mail-Adresse wurde nicht akzeptiert");
     }
 }
 
@@ -98,10 +98,10 @@ if (isset($_POST['teamfoto'])) {
         //Bild wird hochgeladen, target_file_jpg = false, falls fehlgeschlagen.
         $target_file_jpg = Neuigkeit::upload_bild($_FILES["jpgupload"]);
         if ($target_file_jpg === false) {
-            Form::error("Fehler beim Fotoupload");
+            Html::error("Fehler beim Fotoupload");
         } else {
             $team->set_detail('teamfoto', $target_file_jpg);
-            Form::info("Teamfoto wurde hochgeladen");
+            Html::info("Teamfoto wurde hochgeladen");
             header('Location: ' . $path);
             die();
         }
@@ -111,7 +111,7 @@ if (isset($_POST['teamfoto'])) {
 // Teamfoto löschen
 if (isset($_POST['delete_teamfoto'])) {
     $team->delete_foto();
-    Form::info("Teamfoto wurde gelöscht");
+    Html::info("Teamfoto wurde gelöscht");
     header('Location: ' . $path);
     die();
 }

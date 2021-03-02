@@ -2,7 +2,7 @@
 
 
 <form class="w3-card w3-panel" method="post" enctype="multipart/form-data">
-    <h2 class="w3-text-primary"><?= Form::icon("group", 16,28 ) ?> Teamfoto</h2>
+    <h2 class="w3-text-primary"><?= Html::icon("group", 16,28 ) ?> Teamfoto</h2>
     <?php if (empty($team->details['teamfoto'])) { ?>
         <p>
             <i>Es können Bilder im <b>.jpg, .jpeg, .gif, .png</b> Format mit bis zu 11,9 Megabyte hochgeladen werden.</i>
@@ -12,7 +12,7 @@
         </p>
         <p>
             <button type="submit" name="teamfoto" class="w3-button w3-tertiary w3-block">
-                <?= Form::icon("arrow_circle_up") ?> Teamfoto hochladen
+                <?= Html::icon("arrow_circle_up") ?> Teamfoto hochladen
             </button>
         </p>
     <?php } else { ?>
@@ -26,13 +26,13 @@
         </p>
     <?php }  //end if?>
     <p class="w3-text-grey">
-        Das Teamfoto kann öffentlich <?= Form::link('../liga/teams.php#' . $team->id, 'auf der Teams-Seite') ?>
+        Das Teamfoto kann öffentlich <?= Html::link('../liga/teams.php#' . $team->id, 'auf der Teams-Seite') ?>
         eingesehen werden.
     </p>
 </form>
 <div class="w3-card-4 w3-panel">
     <h2 id="trikotfarbe" class="w3-text-primary">
-        <?= Form::icon("brush", 16,28 ) ?> Trikotfarben
+        <?= Html::icon("brush", 16,28 ) ?> Trikotfarben
     </h2>
     <div class="w3-row-padding w3-center w3-strech">
         <div class="w3-half">
@@ -51,7 +51,7 @@
             <form method="post">
                 <label for="color_1" style="cursor:pointer;">
                     <span class="w3-card-4" style="height:70px;width:70px;background-color:<?= empty($team->details['trikot_farbe_1']) ? '#bbb' : $team->details['trikot_farbe_1']?>;border-radius:50%;display:inline-block;">
-                        <br><?= (empty($team->details['trikot_farbe_1'])) ? Form::icon('not_interested') : '' ?>
+                        <br><?= (empty($team->details['trikot_farbe_1'])) ? Html::icon('not_interested') : '' ?>
                     </span>
 
                 </label>
@@ -65,7 +65,7 @@
                            onchange="this.form.submit()"
                     >
                     <label class="w3-text-primary w3-hover-text-secondary" for="color_1" style="cursor:pointer">
-                        <?= Form::icon("brush") ?> 1. Farbe wählen
+                        <?= Html::icon("brush") ?> 1. Farbe wählen
                     </label>
                 </p>
             </form>
@@ -86,7 +86,7 @@
             <form method="post">
                 <label for="color_2" style="cursor:pointer;">
                     <span class="w3-card-4" style="height:70px;width:70px; background-color:<?= empty($team->details['trikot_farbe_2']) ? '#bbb' : $team->details['trikot_farbe_2'] ?>;border-radius:50%;display:inline-block;">
-                        <br><?= (empty($team->details['trikot_farbe_2'])) ? Form::icon('not_interested') : '' ?>
+                        <br><?= (empty($team->details['trikot_farbe_2'])) ? Html::icon('not_interested') : '' ?>
                     </span>
                 </label>
                 <p>
@@ -99,7 +99,7 @@
                            onchange="this.form.submit()"
                     >
                     <label class="w3-text-primary w3-hover-text-secondary" for="color_2" style="cursor:pointer">
-                        <?= Form::icon("brush") ?> 2. Farbe wählen
+                        <?= Html::icon("brush") ?> 2. Farbe wählen
                     </label>
                 </p>
             </form>
@@ -111,7 +111,7 @@
     </p>
 </div>
 <form method='post' class="w3-panel w3-card">
-    <h2 class="w3-text-primary"><?= Form::icon("info", 16,28 ) ?> Teamdetails</h2>
+    <h2 class="w3-text-primary"><?= Html::icon("info", 16,28 ) ?> Teamdetails</h2>
     <p>
         <label for='ligavertreter' class="w3-text-primary">Ligavertreter</label>
         <input class='w3-input w3-border w3-border-primary'
@@ -133,7 +133,7 @@
                name="dsgvo"
                id="dsgvo">
         <label for="dsgvo" style="cursor: pointer">
-            Der Ligavertreter hat die <?= Form::link(Config::LINK_DSGVO, "Datenschutz-Hinweise") ?>
+            Der Ligavertreter hat die <?= Html::link(Config::LINK_DSGVO, "Datenschutz-Hinweise") ?>
             gelesen und ihnen zugestimmt.
         </label>
     </p>
@@ -228,13 +228,13 @@
                type='submit'
                name="teamdaten_aendern"
                >
-            <?= Form::icon("save_alt") ?> Teamdaten speichern
+            <?= Html::icon("save_alt") ?> Teamdaten speichern
         </button>
     </p>
 </form>
 
 <form method='post' class="w3-card-4 w3-panel">
-    <h2 class="w3-text-primary"><?= Form::icon("mail", 16,28 ) ?> Email hinzufügen</h2>
+    <h2 class="w3-text-primary"><?= Html::icon("mail", 16,28 ) ?> Email hinzufügen</h2>
         <p>
             <label for='email' class="w3-text-primary">Email</label>
             <input class='w3-input w3-border w3-border-primary'
@@ -270,12 +270,12 @@
                     name='neue_email'
                     type='submit'
                     >
-                <?= Form::icon("add") ?> Email hinzufügen
+                <?= Html::icon("add") ?> Email hinzufügen
             </button>
         </p>
     <p>
         <b>Öffentlich*</b>: Deine Email-Adresse wird in der Teamsliste
-        <?= Form::link('../liga/teams.php', 'hier') ?> angezeigt. Andere Ligateams können nicht-öffentliche
+        <?= Html::link('../liga/teams.php', 'hier') ?> angezeigt. Andere Ligateams können nicht-öffentliche
         Emails auf der Webseite nicht einsehen, dafür aber im Kontaktcenter anschreiben.
     </p>
     <p class="">

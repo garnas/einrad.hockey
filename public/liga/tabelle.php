@@ -89,7 +89,7 @@ include '../../templates/header.tmp.php';?>
 
 <!-- Trigger/Open the Modal -->
 <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-text-primary">
-    <?= Form::icon("info") ?> Infos zu den Tabellen
+    <?= Html::icon("info") ?> Infos zu den Tabellen
 </button>
 <!-- The Modal -->
 <div id="id01" class="w3-modal">
@@ -137,7 +137,7 @@ window.onclick = function(event) {
 
 <!-- Meisterschaftstabelle -->
 <h1 class="w3-text-primary w3-border-primary" id='meister'>Meisterschaftstabelle</h1>
-<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#rang" class="no w3-hover-text-secondary">Zur Rangtabelle</a><span class="w3-right">Saison <?=Form::get_saison_string()?></span></p>
+<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#rang" class="no w3-hover-text-secondary">Zur Rangtabelle</a><span class="w3-right">Saison <?=Html::get_saison_string()?></span></p>
 
 <!-- Spieltag wählen -->
 <div class="w3-bar">
@@ -170,7 +170,7 @@ window.onclick = function(event) {
 
 <!--Rangtabelle-->
 <h1 id="rang" class="w3-text-primary w3-border-primary">Rangtabelle</h1>
-<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#meister" class="no w3-hover-text-secondary">Zur Meisterschaftstabelle</a><span class="w3-right">Saison <?=Form::get_saison_string()?></span></p>
+<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#meister" class="no w3-hover-text-secondary">Zur Meisterschaftstabelle</a><span class="w3-right">Saison <?=Html::get_saison_string()?></span></p>
 
 <!-- Spieltag wählen -->
 <div class="w3-bar">

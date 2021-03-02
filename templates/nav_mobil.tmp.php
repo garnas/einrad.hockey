@@ -28,7 +28,7 @@
     <!-- Liga -->
     <div class="w3-text-black">
         <h3 class="w3-margin-left w3-text-primary">
-            <?= Form::icon("emoji_events", tag:"h3") ?> LIGA
+            <?= Html::icon("emoji_events", tag:"h3") ?> LIGA
         </h3>
     </div>
     <?php foreach(Nav::get_liga() as Nav::$link){ ?>
@@ -69,7 +69,7 @@
 <!--Navigation für Smartphones -->
 <div class="w3-display-container w3-hide-large w3-hide-medium">
     <!-- Hintergrundbild -->
-    <img src="<?= Form::get_hintergrund_bild() ?>" class="<?php if (!isset($_SESSION['logins']['la']) && !isset($_SESSION['logins']['team'])){?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.4;">
+    <img src="<?= Html::get_hintergrund_bild() ?>" class="<?php if (!isset($_SESSION['logins']['la']) && !isset($_SESSION['logins']['team'])){?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.4;">
     <div class="w3-display-left w3-margin-left">
         <img src="<?= Env::BASE_URL ?>/bilder/logo_lang_small.png" onclick="open_sidebar()" class="w3-image" alt="langes Logo" style="max-width: 80%; vertical-align: 22%; cursor: pointer">
     </div>

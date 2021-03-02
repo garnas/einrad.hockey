@@ -35,9 +35,9 @@ include '../../templates/header.tmp.php';
 
 <div class="w3-container">
     <ul class="w3-ul w3-leftbar w3-border-tertiary">
-        <li><?=Form::link(Config::LINK_REGELN_KURZ, 'Die wichtigsten Regeln', false, "sports")?></li>
-        <li><?=Form::link("ligakarte.php", "Deutschlandkarte aller Ligateams", false, "flag")?></li>
-        <li><?=Form::link("teams.php","Kontaktliste aller Ligateams", false, "mail")?></li>
+        <li><?=Html::link(Config::LINK_REGELN_KURZ, 'Die wichtigsten Regeln', false, "sports")?></li>
+        <li><?=Html::link("ligakarte.php", "Deutschlandkarte aller Ligateams", false, "flag")?></li>
+        <li><?=Html::link("teams.php","Kontaktliste aller Ligateams", false, "mail")?></li>
     </ul>
 </div>
 
@@ -57,12 +57,12 @@ include '../../templates/header.tmp.php';
 
 <div class="w3-container">
     <ul class="w3-ul w3-leftbar w3-border-tertiary">
-        <li><?=Form::link(Config::LINK_FORUM, 'Forum')?></li>
-        <li><?=Form::link('dokumente.php', 'Modus & Regeln')?></li>
-        <li><?=Form::link('ligaleitung.php', 'Ligaleitung')?></li>
+        <li><?=Html::link(Config::LINK_FORUM, 'Forum')?></li>
+        <li><?=Html::link('dokumente.php', 'Modus & Regeln')?></li>
+        <li><?=Html::link('ligaleitung.php', 'Ligaleitung')?></li>
     </ul>
 </div>
 
-<p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Env::LAMAIL)?></p>
+<p class="w3-text-grey">Schreib uns an: <?=Html::mailto(Env::LAMAIL)?></p>
         
 <?php include '../../templates/footer.tmp.php';

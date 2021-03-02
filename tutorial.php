@@ -27,7 +27,7 @@ $teams = Team::get_liste(); // $teams wird jetzt ans Layout übergeben.
 
 // (7) Formularverarbeitung findet hier statt.
 if (isset($_POST['mein_formular'])) {
-    Form::info("Formular abgesendet. Dein Text: " . $_POST['mein_text']);
+    Html::info("Formular abgesendet. Dein Text: " . $_POST['mein_text']);
 }
 
 // (8) Debuggen von Arrays:
@@ -50,7 +50,7 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 
     <!-- (11) Dein HTML-Code: Ab hier PHP nur noch als Templating-Engine verwenden. -->
     <h1 class="w3-text-primary">
-        <?= Form::icon("list", tag:"h1") ?> Eine Liste aller Teams
+        <?= Html::icon("list", tag:"h1") ?> Eine Liste aller Teams
     </h1>
     <p>
         <?php foreach ($teams as $teamname) { ?>
@@ -75,13 +75,13 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
                    required
             >
             <button type="submit" name="mein_formular" class="w3-button w3-primary w3-section">
-                <?= Form::icon("create") ?> Formular absenden
+                <?= Html::icon("create") ?> Formular absenden
             </button>
         </form>
     </div>
 
     <!-- (13) Ein Beispiellink -->
-    <?= Form::link("https://www.google.de", "Beispiellink", true, 'launch') ?>
+    <?= Html::link("https://www.google.de", "Beispiellink", true, 'launch') ?>
 
 <?php
 // (14) Einfügen des Footers

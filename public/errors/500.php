@@ -23,13 +23,13 @@ include_once Env::BASE_PATH . '/templates/header.tmp.php'; ?>
         </p>
 
         <p>
-            <?= Form::link($link, 'Erneut versuchen', icon:'settings_backup_restore') ?>
+            <?= Html::link($link, 'Erneut versuchen', icon:'settings_backup_restore') ?>
         </p>
 
         <p class="w3-text-grey">
             E-Mail-Adresse Technikausschuss
             <br>
-            <?= Form::mailto(ENV::TECHNIKMAIL) ?>
+            <?= Html::mailto(ENV::TECHNIKMAIL) ?>
         </p>
     </div>
 

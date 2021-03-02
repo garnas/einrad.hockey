@@ -25,7 +25,7 @@ include '../../templates/header.tmp.php';
     <!-- Nach Beginn der Abstimmung -->
 <?php if (time() > $beginn) { ?>
     <!-- Informationstext für die Abstimmung -->
-    <?php Form::message('notice',
+    <?php Html::message('notice',
         "Die Abstimmung endet am " . date("d.m.Y \u\m H:i", $abschluss) . " Uhr. "
         . "Es haben bisher $abgegebene_stimmen von $anzahl_teams Teams abgestimmt.", ''); ?>
     <!-- Informationstext für die Stimmeinsicht -->
@@ -66,7 +66,7 @@ include '../../templates/header.tmp.php';
             <?php } else { ?>
                 <p id="stimme">Dein Team hat wie folgt abgestimmt:</p>
                 <p>
-                    <?= $display_ergebnisse[$einsicht]['formulierung'] ?? "<span class='w3-text-red'>Fehler, bitte melde dich bei </span>" . Form::mailto(Env::TECHNIKMAIL) ?>
+                    <?= $display_ergebnisse[$einsicht]['formulierung'] ?? "<span class='w3-text-red'>Fehler, bitte melde dich bei </span>" . Html::mailto(Env::TECHNIKMAIL) ?>
                 </p>
             <?php } //endif Team will Stimme einsehen?>
         <?php } //endif Team hat abgestimmt?>
@@ -181,7 +181,7 @@ include '../../templates/header.tmp.php';
 <?php if (time() > $abschluss) { ?>
     <div class="w3-panel w3-light-grey">
         <p class="w3-large">Die Abstimmung ist beendet.</p>
-        <p><?= Form::link('../liga/abstimmung.php', "<i class='material-icons'>info</i> Zu den Ergebnissen") ?></p>
+        <p><?= Html::link('../liga/abstimmung.php', "<i class='material-icons'>info</i> Zu den Ergebnissen") ?></p>
     </div>
 <?php } //endif?>
 

@@ -61,7 +61,7 @@ foreach ($teams as $team_id => $team){
 include '../../templates/header.tmp.php';
 ?>
 <h1 class="w3-text-primary">Übersicht Ligateams</h1>
-<span class="w3-text-grey">Saison <?=Form::get_saison_string()?></span>
+<span class="w3-text-grey">Saison <?=Html::get_saison_string()?></span>
 
 <!-- Infobox -->
 <b>
@@ -97,7 +97,7 @@ include '../../templates/header.tmp.php';
         <?php foreach ($teams as $team_id => $team){?>
             <tr class="w3-center <?php if($team['schiris'] >= 2){?>w3-pale-green<?php }elseif($team['schiris'] + $team['schiris_alt'] >= 2){?>w3-pale-red<?php }//endif?>">
                 <td><?=$team['team_id']?></td>
-                <td><?=Form::link('lc_kader.php?team_id='. $team_id, $team['teamname'])?></td>
+                <td><?=Html::link('lc_kader.php?team_id='. $team_id, $team['teamname'])?></td>
                 <td><?=$team['freilose']?></td>
                 <td><?=$team['kader']?></td>
                 <td><?=$team['schiris']?></td>

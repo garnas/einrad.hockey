@@ -11,19 +11,19 @@ Config::$titel = "Ligaleitung | Deutsche Einradhockeyliga";
 Config::$content = "Übersicht über die Ausschüsse der Deutschen Einradhockeyliga, welche die Liga leiten.";
 include '../../templates/header.tmp.php'; ?>
 
-<h1 class="w3-text-grey">Ligaleitung der Saison <?=Form::get_saison_string()?></h1>
+<h1 class="w3-text-grey">Ligaleitung der Saison <?=Html::get_saison_string()?></h1>
 <p class="w3-text-grey">
     Die Liga wird von den hier aufgelisteten Gremien geleitet. Wenn du auch in einem der Ausschüsse die Einradhockeyliga
     weiterentwickeln möchtest, kannst du dich jederzeit beim Ligaauschuss melden.
 </p>
 <!-- Liga -->
-<h2 class="w3-text-primary"><?= Form::icon("gavel", tag:"h2") ?>  Ligaausschuss</h2>
+<h2 class="w3-text-primary"><?= Html::icon("gavel", tag:"h2") ?>  Ligaausschuss</h2>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
         <?php foreach (LigaLeitung::get_all('ligaausschuss') as $la){?>
             <tr>
                 <td class="w3-padding-small">
-                    <?= Form::mailto($la['email'], $la ['vorname'] . ' ' . $la['nachname']) ?>
+                    <?= Html::mailto($la['email'], $la ['vorname'] . ' ' . $la['nachname']) ?>
                 </td>
                 <td class="w3-padding-small"><i class="w3-text-grey"><?= $la['teamname'] ?></i></td>
             </tr>
@@ -37,7 +37,7 @@ include '../../templates/header.tmp.php'; ?>
     Ligaausschussplätze gibt, wird er jeweils gegen Ende der Saison von allen Ligateams gewählt.
 </p>
 
-<p class="w3-text-grey">Kontakt: <?= Form::mailto(Env::LAMAIL) ?></p>
+<p class="w3-text-grey">Kontakt: <?= Html::mailto(Env::LAMAIL) ?></p>
 
 <p class="w3-margin" style="max-width: 666px">
     <a href="../bilder/ligaausschuss2020.jpg">
@@ -47,7 +47,7 @@ include '../../templates/header.tmp.php'; ?>
 </p>
 
 <!-- Technik -->
-<h2 class="w3-text-primary"><?= Form::icon("engineering", tag:"h2") ?> Technikausschuss</h2>
+<h2 class="w3-text-primary"><?= Html::icon("engineering", tag:"h2") ?> Technikausschuss</h2>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
         <?php foreach (LigaLeitung::get_all('technikausschuss') as $tk){?>
@@ -63,10 +63,10 @@ include '../../templates/header.tmp.php'; ?>
     Der Technikausschuss ist verantwortlich für die Instandhaltung und Weiterentwicklung der IT der Deutschen
     Einradhockeyliga.
 </p>
-<p class="w3-text-grey">Kontakt: <?=Form::mailto(Env::TECHNIKMAIL)?></p>
+<p class="w3-text-grey">Kontakt: <?=Html::mailto(Env::TECHNIKMAIL)?></p>
 
 <!-- Öffntlichkeits-Ausschuss -->
-<h2 class="w3-text-primary"><?= Form::icon("public", tag:"h2") ?> Öffentlichkeitsausschuss</h2>
+<h2 class="w3-text-primary"><?= Html::icon("public", tag:"h2") ?> Öffentlichkeitsausschuss</h2>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
     <?php foreach (LigaLeitung::get_all('oeffentlichkeitsausschuss') as $oa){?>
@@ -81,10 +81,10 @@ include '../../templates/header.tmp.php'; ?>
     Der Öffentlichkeitsausschuss ist relativ neu und nicht offiziell im Ligamodus vertreten. Er soll den
     Einradhockeysport nach außen hin präsentieren und sich um unsere Socialmedia-Accounts kümmern.
 </p>
-<p class="w3-text-grey">Kontakt: <?=Form::mailto(Env::OEFFIMAIL)?></p>
+<p class="w3-text-grey">Kontakt: <?=Html::mailto(Env::OEFFIMAIL)?></p>
 
 <!-- Schiri-Ausschuss -->
-<h2 class="w3-text-primary"><?= Form::icon("sports", tag:"h2") ?> Schiedsrichterausschuss</h2>
+<h2 class="w3-text-primary"><?= Html::icon("sports", tag:"h2") ?> Schiedsrichterausschuss</h2>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
     <?php foreach (LigaLeitung::get_all('schiriausschuss') as $sa){?>
@@ -99,8 +99,8 @@ include '../../templates/header.tmp.php'; ?>
     Der Schiedsrichterausschuss ist für die Organisation der Aus- und Weiterbildung der Schiedsrichter in der Deutschen
     Einradhockeyliga verantwortlich.
 </p>
-<p class="w3-text-grey">Kontakt: <?=Form::mailto(Env::SCHIRIMAIL)?></p>
-<h3 class="w3-text-primary"><?= Form::icon("school", tag:"h3") ?> Schiedsrichterausbilder</h3>
+<p class="w3-text-grey">Kontakt: <?=Html::mailto(Env::SCHIRIMAIL)?></p>
+<h3 class="w3-text-primary"><?= Html::icon("school", tag:"h3") ?> Schiedsrichterausbilder</h3>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
         <?php foreach (Ligaleitung::get_all('schiriausbilder') as $ausbilder){?>

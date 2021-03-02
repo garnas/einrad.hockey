@@ -37,7 +37,7 @@ class dbWrapper
     {
         $this->link = new mysqli($host, $user, $password, $database);
         if ($this->link->connect_errno) {
-            Handler::log(Config::LOG_DB, "ERROR Verbindung: " . mysqli_connect_error());
+            Helper::log(Config::LOG_DB, "ERROR Verbindung: " . mysqli_connect_error());
             die("Verbindung zur Datenbank nicht möglich.");
         }
         $this->link->set_charset("utf-8mb4");
@@ -58,7 +58,7 @@ class dbWrapper
 
         // Prepare
         if (!$this->stmt = $this->link->prepare($sql)){
-            Handler::log(Config::LOG_DB, "ERROR " . dbi::escape($this->link->error));
+            Helper::log(Config::LOG_DB, "ERROR " . dbi::escape($this->link->error));
         }
         // Parameter übergeben
         if ($this->stmt->param_count > 0) { // Alternativ if (!empty($params))
@@ -69,7 +69,7 @@ class dbWrapper
                 $this->sql = $sql;
                 $this->params = $params;
                 $this->log();
-                Handler::log(Config::LOG_DB, "ERROR Falsche Anzahl an Parametern für Mysqli-Prepare");
+                Helper::log(Config::LOG_DB, "ERROR Falsche Anzahl an Parametern für Mysqli-Prepare");
             }
             $params = dbi::trim_params($params);
             $this->bind($params);
@@ -77,7 +77,7 @@ class dbWrapper
 
         // Ausführen
         if (!$this->stmt->execute()){
-            Handler::log(Config::LOG_DB, "ERROR " . dbi::escape($this->stmt->error));
+            Helper::log(Config::LOG_DB, "ERROR " . dbi::escape($this->stmt->error));
         }
         $this->result = $this->stmt->get_result();
 
@@ -245,7 +245,7 @@ class dbWrapper
 
         // Log-Text
         $log = $sql . ($params ?? '');
-        Handler::log(Config::LOG_DB, $log);
+        Helper::log(Config::LOG_DB, $log);
         return $this;
     }
 

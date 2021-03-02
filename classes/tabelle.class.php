@@ -67,7 +67,7 @@ class Tabelle
     public static function check_ergebnis_eintragbar(Turnier $turnier): bool
     {
         if (!in_array($turnier->details['art'], ['I', 'II', 'III', 'final'])) {
-            Form::error("Für diesen Turniertyp können keine Ergebnisse eingetragen werden.");
+            Html::error("Für diesen Turniertyp können keine Ergebnisse eingetragen werden.");
             // TODO ist der Check hier an der besten Stelle?
             return false;
         }
@@ -227,7 +227,7 @@ class Tabelle
             if (isset($return[$team_id])) {
                 if ($counter[$team_id] <= 5) {
                     $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
-                    $return[$team_id]['string'] .= "+" . Form::link("ergebnisse.php#" . $eintrag['turnier_id'], $eintrag['ergebnis']);
+                    $return[$team_id]['string'] .= "+" . Html::link("ergebnisse.php#" . $eintrag['turnier_id'], $eintrag['ergebnis']);
                     $return[$team_id]['summe'] += $eintrag['ergebnis'];
                 }
             } else {
@@ -235,7 +235,7 @@ class Tabelle
                 $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
                 $return[$team_id]['team_id'] = $team_id;
                 $return[$team_id]['teamname'] = $eintrag['teamname'];
-                $return[$team_id]['string'] = Form::link("ergebnisse.php#" . $eintrag['turnier_id'], $eintrag['ergebnis']);
+                $return[$team_id]['string'] = Html::link("ergebnisse.php#" . $eintrag['turnier_id'], $eintrag['ergebnis']);
                 $return[$team_id]['summe'] = $eintrag['ergebnis'];
                 $counter[$team_id] = 1;
             }

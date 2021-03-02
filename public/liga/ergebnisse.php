@@ -8,7 +8,7 @@ $saison = (isset($_GET['saison'])) ? (int)$_GET['saison'] : Config::SAISON;
 $turnier_ergebnisse = Tabelle::get_all_ergebnisse($saison);
 
 if (empty($turnier_ergebnisse)) {
-    Form::info("Es wurden keine Turnierergebnisse der Saison " . Form::get_saison_string($saison) . " eingetragen");
+    Html::info("Es wurden keine Turnierergebnisse der Saison " . Html::get_saison_string($saison) . " eingetragen");
 }
 $turniere = Turnier::get_turniere('', false, false);
 
@@ -23,8 +23,8 @@ $icon = (isset($_SESSION['logins']['team'])) ? 'article' : 'lock';
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = "Turnierergebnisse " . Form::get_saison_string($saison) . " | Deutsche Einradhockeyliga";
-Config::$content = 'Hier kann man die Ergebnisse und Tabellen der Saison ' . Form::get_saison_string($saison) . ' sehen.';
+Config::$titel = "Turnierergebnisse " . Html::get_saison_string($saison) . " | Deutsche Einradhockeyliga";
+Config::$content = 'Hier kann man die Ergebnisse und Tabellen der Saison ' . Html::get_saison_string($saison) . ' sehen.';
 include '../../templates/header.tmp.php'; ?>
 
     <!--Javascript für Suchfunktion-->
@@ -43,16 +43,16 @@ include '../../templates/header.tmp.php'; ?>
 
     <!--Überschrift-->
     <h1 class="w3-text-primary">
-        <?= Form::icon("emoji_events", tag: "h1") ?> Turnierergebnisse
+        <?= Html::icon("emoji_events", tag: "h1") ?> Turnierergebnisse
         <br>
         <span class="w3-text-grey">
-            Saison <?= Form::get_saison_string($saison) ?>
+            Saison <?= Html::get_saison_string($saison) ?>
         </span>
     </h1>
 
     <!-- Ergebnis suchen -->
     <div class="w3-section w3-text-grey w3-border-bottom" style="width: 250px;">
-        <label for="myInput" class="w3-left"><?= Form::icon("search", 70) ?></label>
+        <label for="myInput" class="w3-left"><?= Html::icon("search", 70) ?></label>
         <input id="myInput"
                class='w3-padding w3-border-0'
                style="width: 225px; display: inline-block;"
@@ -78,15 +78,15 @@ include '../../templates/header.tmp.php'; ?>
                     <table class="w3-table w3-centered w3-striped w3-leftbar w3-border-tertiary">
                         <tr class="w3-primary">
                             <th>
-                                <?= Form::icon("bar_chart") ?>
+                                <?= Html::icon("bar_chart") ?>
                                 <br>Platz
                             </th>
                             <th>
-                                <?= Form::icon("group") ?>
+                                <?= Html::icon("group") ?>
                                 <br>Team
                             </th>
                             <th class="w3-center">
-                                <?= Form::icon("emoji_events") ?>
+                                <?= Html::icon("emoji_events") ?>
                                 <br>Punkte
                             </th>
                         </tr>
@@ -104,15 +104,15 @@ include '../../templates/header.tmp.php'; ?>
                 <?php } //endif?>
                 <p>
                     <?php if ($saison <= 25) { ?>
-                        <?= Form::link('archiv.php', '<i class="material-icons">info</i> Details') ?>
+                        <?= Html::link('archiv.php', '<i class="material-icons">info</i> Details') ?>
                     <?php } else { ?>
                         <span>
-                        <?= Form::link($turniere[$turnier_id]['spielplan_datei'] ?: ('spielplan.php?turnier_id=' . $turnier_id), '<i class="material-icons">info</i> Spielergebnisse') ?>
+                        <?= Html::link($turniere[$turnier_id]['spielplan_datei'] ?: ('spielplan.php?turnier_id=' . $turnier_id), '<i class="material-icons">info</i> Spielergebnisse') ?>
                     </span>
-                        <?= Form::link("../teamcenter/tc_turnier_report.php?turnier_id=$turnier_id", ' <i class="material-icons">' . $icon . '</i> Turnierreport') ?>
+                        <?= Html::link("../teamcenter/tc_turnier_report.php?turnier_id=$turnier_id", ' <i class="material-icons">' . $icon . '</i> Turnierreport') ?>
                         <?php if (isset($_SESSION['logins']['la'])) { ?>
-                            <?= Form::link("../ligacenter/lc_turnier_report.php?turnier_id=$turnier_id", '<i class="material-icons">article</i> Turnierreport (Ligaausschuss)') ?>
-                            <?= Form::link("../ligacenter/lc_spielplan.php?turnier_id=$turnier_id", '<i class="material-icons">info</i> Spielergebnisse verwalten (Ligaausschuss)') ?>
+                            <?= Html::link("../ligacenter/lc_turnier_report.php?turnier_id=$turnier_id", '<i class="material-icons">article</i> Turnierreport (Ligaausschuss)') ?>
+                            <?= Html::link("../ligacenter/lc_spielplan.php?turnier_id=$turnier_id", '<i class="material-icons">info</i> Spielergebnisse verwalten (Ligaausschuss)') ?>
                         <?php }//endif?>
                     <?php }//end if?>
                 </p>

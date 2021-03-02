@@ -132,7 +132,7 @@ class Neuigkeit
             // Bild wird kompressiert // Sehr hoher Memory-Bedarf
             self::compress_image($file_dir, $quality, $pix);
         } else {
-            Form::error("Bild konnte nicht hochgeladen werden.");
+            Html::error("Bild konnte nicht hochgeladen werden.");
             return false;
         }
         return $file_dir;
@@ -160,7 +160,7 @@ class Neuigkeit
 
         // Datei wird vom temporären Ordner in den richtigen Ordner verschoben
         if (!move_uploaded_file($file["tmp_name"], $file_dir)) {
-            Form::error("PDF konnte nicht hochgeladen werden.");
+            Html::error("PDF konnte nicht hochgeladen werden.");
             return false;
         }
         return $file_dir;
@@ -176,7 +176,7 @@ class Neuigkeit
     public static function compress_image(string $source, int $quality, int $max_pix): void
     {
         if (!(extension_loaded('gd') && function_exists('gd_info'))) {
-            Form::error("Bild konnte nicht kompressiert werden - keine GD-Extension.");
+            Html::error("Bild konnte nicht kompressiert werden - keine GD-Extension.");
             return;
         }
         $info = getimagesize($source);
@@ -187,7 +187,7 @@ class Neuigkeit
         } elseif ($info['mime'] == 'image/png') {
             $image = imagecreatefrompng($source);
         } else {
-            Form::error("Bildformat konnte nicht ermittelt werden.");
+            Html::error("Bildformat konnte nicht ermittelt werden.");
             return;
         }
 
@@ -229,25 +229,25 @@ class Neuigkeit
 
         // Test auf Filegröße
         if ($file["size"] > 12582912) {
-            Form::error("Das Bild ist mit über 11,9 Megabyte zu groß. Der Arbeitsspeicher des Servers reicht nicht aus, um es zu kompressieren");
+            Html::error("Das Bild ist mit über 11,9 Megabyte zu groß. Der Arbeitsspeicher des Servers reicht nicht aus, um es zu kompressieren");
             return true;
         }
 
         if (!file_exists($file['tmp_name'])) {
-            Form::error("Bild konnte nicht überprüft werden");
+            Html::error("Bild konnte nicht überprüft werden");
             return true;
         }
 
         // Test ob es ein fake image ist
         $check = getimagesize($file["tmp_name"]);
         if ($check == false) {
-            Form::error("Die Datei konnte nicht als Bild identifiziert werden.");
+            Html::error("Die Datei konnte nicht als Bild identifiziert werden.");
             return true;
         }
 
         // Test auf richtigen Dateityp
         if (!in_array($imageFileType, ["jpg", "jpeg", "png", "gif"])) {
-            Form::error("Für das Bild können nur die Formate JPG, JPEG, PNG & GIF verwendet werden.");
+            Html::error("Für das Bild können nur die Formate JPG, JPEG, PNG & GIF verwendet werden.");
             return true;
         }
 
@@ -263,20 +263,20 @@ class Neuigkeit
     public static function check_pdf($file): bool
     {
         if (!file_exists($file['tmp_name'])) {
-            Form::error("PDF konnte nicht überprüft werden");
+            Html::error("PDF konnte nicht überprüft werden");
             return false;
         }
 
         // Test auf Filegröße
         if ($file["size"] > 3100000) {
-            Form::error("Das PDF-Dokument darf nicht größer als drei Megabyte sein.");
+            Html::error("Das PDF-Dokument darf nicht größer als drei Megabyte sein.");
             return false;
         }
 
         $pdfFileType = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         // Test auf richtigen Dateityp
         if ($pdfFileType != "pdf" && $pdfFileType != "xlsx") {
-            Form::error("Ungültiger Dateityp");
+            Html::error("Ungültiger Dateityp");
             return false;
         }
 

@@ -5,6 +5,6 @@ require_once '../../logic/session_team.logic.php'; //Auth
 
 unset($_SESSION['logins']['team']);
 
-Form::info("Logout erfolgreich");
+Html::info("Logout erfolgreich");
 header('Location: ../teamcenter/tc_login.php');
 die();

@@ -55,7 +55,7 @@ class LigaLeitung
         $details = self::get_details($login);
         // Überprüfung des PWs
         if (!password_verify($passwort_alt, $details['passwort'])) {
-            Form::error("Falsches Passwort");
+            Html::error("Falsches Passwort");
             return false;
         }
 
@@ -90,14 +90,14 @@ class LigaLeitung
 
         // Existenz prüfen
         if (empty($details)) {
-            Form::error("Unbekannter Loginname");
-            Handler::log(Config::LOG_LOGIN, "Falscher LC-Login | Loginname: " . $login);
+            Html::error("Unbekannter Loginname");
+            Helper::log(Config::LOG_LOGIN, "Falscher LC-Login | Loginname: " . $login);
             return false;
         }
 
         // Funktion prüfen
         if ($funktion !== $details['funktion']) {
-            Form::error("Fehlende Berichtigung");
+            Html::error("Fehlende Berichtigung");
             return false;
         }
 
@@ -105,13 +105,13 @@ class LigaLeitung
         if (password_verify($passwort, $details['passwort'])) {
             $_SESSION['logins']['la']['id'] = $details['ligaleitung_id'];
             $_SESSION['logins']['la']['login'] = $details['login'];
-            Handler::log(Config::LOG_LOGIN, "Erfolgreich       | Loginname: " . $login);
+            Helper::log(Config::LOG_LOGIN, "Erfolgreich       | Loginname: " . $login);
             return true;
         }
 
         // Passwort falsch
-        Handler::log(Config::LOG_LOGIN, "Falsches Passwort | Loginname: " . $login);
-        Form::error("Falsches Passwort");
+        Helper::log(Config::LOG_LOGIN, "Falsches Passwort | Loginname: " . $login);
+        Html::error("Falsches Passwort");
         return false;
     }
 

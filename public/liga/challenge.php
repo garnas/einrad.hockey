@@ -17,7 +17,7 @@ $color[3] = "background-color: #cad0e8;";
 
 // Fügt Confetti-Effekt hinzu
 if ($akt_kilometerstand >= $challenge->ziel_kilometer) {
-    Form::set_confetti(40,90,7000); 
+    Html::set_confetti(40,90,7000);
     $color[0] = "background-color: rgb(189, 107, 153);";
     $ziel_text = 'Geschafft! Zusammen sind wir bis nach Sydney (16098,4&nbsp;km) geradelt. Zum am weitesten entfernten Einradhockeyteam.';
 } else {

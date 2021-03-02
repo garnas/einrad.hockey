@@ -17,9 +17,9 @@ $turniere = Turnier::get_turniere('ergebnis', false); // wird dem Template über
 // Hinweis Live-Spieltag
 $akt_spieltag = Tabelle::get_aktuellen_spieltag();
 if (Tabelle::check_spieltag_live($akt_spieltag)){
-    Form::notice(
+    Html::notice(
         "Für den aktuelle Spieltag (ein Spieltag ist immer ein ganzes Wochenende) wurden noch nicht alle Ergebnisse eingetragen. Für die Turnieranmeldung gilt immer der Teamblock des letzten vollständigen Spieltages: "
-        . Form::link("../liga/tabelle.php?spieltag=" . ($akt_spieltag - 1) . "#rang", "Spieltag " . ($akt_spieltag - 1)));
+        . Html::link("../liga/tabelle.php?spieltag=" . ($akt_spieltag - 1) . "#rang", "Spieltag " . ($akt_spieltag - 1)));
 }
 
 // Füge Links zum Weiterverarbeiten der ausgewählten Turniere hinzu
@@ -28,8 +28,8 @@ foreach ($turniere as $turnier_id => $turnier){
     //Links
     $turniere[$turnier_id]['links'] = 
         array(
-            Form::link("tc_team_anmelden.php?turnier_id=".$turnier_id,'Zur Ab- / Anmeldung', false , 'how_to_reg'),
-            Form::link("../liga/turnier_details.php?turnier_id=".$turnier_id, 'Zu den Turnierdetails', false, 'info')
+            Html::link("tc_team_anmelden.php?turnier_id=".$turnier_id,'Zur Ab- / Anmeldung', false , 'how_to_reg'),
+            Html::link("../liga/turnier_details.php?turnier_id=".$turnier_id, 'Zu den Turnierdetails', false, 'info')
         );
         
     //Farbe des Turnierblocks festlegen
@@ -68,7 +68,7 @@ include '../../templates/header.tmp.php';?>
 <!-- Trigger/Open the Modal -->
 <p>
     <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-text-primary">
-        <?= Form::icon("help") ?> Legende
+        <?= Html::icon("help") ?> Legende
     </button>
 </p>
 <!-- The Modal -->

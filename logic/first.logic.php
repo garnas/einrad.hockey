@@ -48,7 +48,7 @@ register_shutdown_function(static function () {
             $_SESSION['error']['text'] = $error['message']; // Nur selbst erstellte Fehlertexte mit trigger_error(...) werden angezeigt
             $_SESSION['error']['url'] = $_SERVER['REQUEST_URI'];
         }
-        Handler::reload("/errors/500.php");
+        Helper::reload("/errors/500.php");
     }
 
     // Logs der Besucher
@@ -57,7 +57,7 @@ register_shutdown_function(static function () {
     } else {
         $referrer = '';
     }
-    Handler::log("user.log",
+    Helper::log("user.log",
         $_SERVER['REQUEST_URI']
         . " | " . round(microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"], 3) . " s (Load)"
         . " | " . dbi::$db->query_count . " (Querys)"

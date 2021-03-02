@@ -4,17 +4,17 @@
         <div id='button_da'>
             <button  class="w3-primary w3-block w3-button"
                      onclick='modal("vergleichs_tabellen");modal("button_da");modal("button_weg");'>
-                <?= Form::icon("keyboard_arrow_down") ?>
+                <?= Html::icon("keyboard_arrow_down") ?>
                 Direkter Vergleich
-                <?= Form::icon("keyboard_arrow_down") ?>
+                <?= Html::icon("keyboard_arrow_down") ?>
             </button>
         </div>
         <div id='button_weg' style='display: none;'>
             <button class="w3-primary w3-card-4 w3-block w3-button"
                     onclick='modal("vergleichs_tabellen");modal("button_da");modal("button_weg");'>
-                <?= Form::icon("keyboard_arrow_up") ?>
+                <?= Html::icon("keyboard_arrow_up") ?>
                 Direkter Vergleich
-                <?= Form::icon("keyboard_arrow_up") ?>
+                <?= Html::icon("keyboard_arrow_up") ?>
             </button>
         </div>
     </div>
@@ -28,37 +28,37 @@
             <table class="w3-table w3-centered">
                 <tr class="w3-primary">
                     <th>
-                        <?= Form::icon("bar_chart") ?>
+                        <?= Html::icon("bar_chart") ?>
                         <br>
                         Platz
                     </th>
                     <th>
-                        <?= Form::icon("group") ?>
+                        <?= Html::icon("group") ?>
                         <br>
                         Team
                     </th>
                     <th>
-                        <?= Form::icon("sports_hockey") ?>
+                        <?= Html::icon("sports_hockey") ?>
                         <br>
                         Spiele
                     </th>
                     <th>
-                        <?= Form::icon("workspaces") ?>
+                        <?= Html::icon("workspaces") ?>
                         <br>
                         Punkte
                     </th>
                     <th>
-                        <?= Form::icon("drag_handle") ?>
+                        <?= Html::icon("drag_handle") ?>
                         <br>
                         Differenz
                     </th>
                     <th>
-                        <?= Form::icon("add") ?>
+                        <?= Html::icon("add") ?>
                         <br>
                         Tore
                     </th>
                     <th>
-                        <?= Form::icon("remove") ?>
+                        <?= Html::icon("remove") ?>
                         <br>Gegentore
                     </th>
                 </tr>
@@ -85,37 +85,37 @@
             <table class="w3-table w3-centered">
                 <tr class="w3-primary">
                     <th>
-                        <?= Form::icon("bar_chart") ?>
+                        <?= Html::icon("bar_chart") ?>
                         <br>
                         Platz
                     </th>
                     <th>
-                        <?= Form::icon("group") ?>
+                        <?= Html::icon("group") ?>
                         <br>
                         Team
                     </th>
                     <th>
-                        <?= Form::icon("sports_hockey") ?>
+                        <?= Html::icon("sports_hockey") ?>
                         <br>
                         Penaltys
                     </th>
                     <th>
-                        <?= Form::icon("priority_high") ?>
+                        <?= Html::icon("priority_high") ?>
                         <br>
                         Punkte
                     </th>
                     <th>
-                        <?= Form::icon("priority_high") ?>
+                        <?= Html::icon("priority_high") ?>
                         <br>
                         Differenz
                     </th>
                     <th>
-                        <?= Form::icon("priority_high") ?>
+                        <?= Html::icon("priority_high") ?>
                         <br>
                         Tore
                     </th>
                     <th>
-                        <?= Form::icon("priority_high") ?>
+                        <?= Html::icon("priority_high") ?>
                         <br>
                         Gegentore
                     </th>

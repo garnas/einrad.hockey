@@ -42,7 +42,7 @@ $mpdf->SetHTMLHeader('<img src="../bilder/logo_lang_small.png" style="margin-top
 $mpdf->SetHTMLFooter(
     '<table style="width: 100%">
         <tr>
-            <td>' . Form::link('https://www.einrad.hockey/liga/spielplan?turnier_id=' . $turnier_id,'www.einrad.hockey').'</td>
+            <td>' . Html::link('https://www.einrad.hockey/liga/spielplan?turnier_id=' . $turnier_id,'www.einrad.hockey').'</td>
             <td class="w3-right-align">'.date("d.m.Y").'</td>
         </tr>
     </table>'

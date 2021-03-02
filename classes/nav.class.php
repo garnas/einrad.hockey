@@ -59,11 +59,11 @@ class Nav
         ];
         if (isset($_SESSION['logins']['team'])) {
             $links[] =
-                [Env::BASE_URL . "/teamcenter/tc_logout.php", Form::icon("logout") . " Logout", $class_text_color];
+                [Env::BASE_URL . "/teamcenter/tc_logout.php", Html::icon("logout") . " Logout", $class_text_color];
         }else{
             array_unshift(
                 $links,
-                [Env::BASE_URL . "/teamcenter/tc_login.php", Form::icon("login") . " Login", "w3-text-black"]
+                [Env::BASE_URL . "/teamcenter/tc_login.php", Html::icon("login") . " Login", "w3-text-black"]
             );
         }
         return $links;

@@ -5,7 +5,7 @@
  *
  * Für die Erstellung von Format-Elementen
  */
-class Form
+class Html
 {
     /**
      * Get Pfad fürs Hintergrundbild der Navigation
