@@ -2,6 +2,12 @@
 
 class Nav
 {
+    /**
+     * Iterator für die Navigation, um globale Variablen zu verhindern.
+     * @var array
+     */
+    public static array $link;
+
     public static function get_liga(): array
     {
         return [

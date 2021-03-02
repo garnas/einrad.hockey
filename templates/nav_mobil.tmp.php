@@ -21,8 +21,8 @@
     <a href="<?= Env::BASE_URL ?>/liga/ueber_uns.php" class="no">
         <h3 class="w3-margin-left w3-text-primary"><i style="vertical-align: -16%" class="material-icons w3-xlarge">info</i> INFO</h3>
     </a>
-    <?php foreach(Nav::get_info() as $link){ ?>
-        <a href="<?= $link[0] ?>" class="w3-bar-item w3-button"><?= $link[1] ?></a>
+    <?php foreach(Nav::get_info() as Nav::$link){ ?>
+        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
     <?php } //end for ?>
 
     <!-- Liga -->
@@ -31,16 +31,16 @@
             <?= Form::icon("emoji_events", tag:"h3") ?> LIGA
         </h3>
     </div>
-    <?php foreach(Nav::get_liga() as $link){ ?>
-        <a href="<?= $link[0] ?>" class="w3-bar-item w3-button"><?= $link[1] ?></a>
+    <?php foreach(Nav::get_liga() as Nav::$link){ ?>
+        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
     <?php } //end for ?>
 
     <!-- Modus -->
     <div class="w3-text-primary">
         <h3 class="w3-margin-left"><i style="vertical-align: -16%" class="material-icons">settings</i> MODUS</h3>
     </div>
-    <?php foreach(Nav::get_modus() as $link){ ?>
-        <a href="<?= $link[0] ?>" class="w3-bar-item w3-button"><?= $link[1] ?></a>
+    <?php foreach(Nav::get_modus() as Nav::$link){ ?>
+        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
     <?php } //end for ?>
 
     <!-- Teamcenter -->
@@ -49,16 +49,16 @@
             <h3 class="w3-margin-left"><i style="vertical-align: -20%" class="material-icons w3-xlarge">group</i> TEAMCENTER</h3>
         </a>
     </div>
-    <?php foreach(Nav::get_teamcenter() as $link){ ?>
-        <a href="<?= $link[0] ?>" class="w3-bar-item w3-button <?= $link[2] ?>"><?= $link[1] ?></a>
+    <?php foreach(Nav::get_teamcenter() as Nav::$link){ ?>
+        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button <?= Nav::$link[2] ?>"><?= Nav::$link[1] ?></a>
     <?php } //end for ?>
 
     <!-- Sonstiges -->
     <div class="w3-text-primary">
         <h3 class="w3-margin-left"><i style="vertical-align: -16%" class="material-icons w3-xlarge">format_list_bulleted</i> SONSTIGES</h3>
     </div>
-    <?php foreach(Nav::get_sonstiges() as $link){ ?>
-        <a href="<?= $link[0] ?>" class="w3-bar-item w3-button <?= $link[2] ?? '' ?>"><?= $link[1] ?></a>
+    <?php foreach(Nav::get_sonstiges() as Nav::$link){ ?>
+        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button <?= Nav::$link[2] ?? '' ?>"><?= Nav::$link[1] ?></a>
     <?php } //end for ?>
     <a href="#" class="w3-bar-item w3-button"></a>
 </div>

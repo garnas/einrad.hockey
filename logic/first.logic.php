@@ -45,17 +45,23 @@ register_shutdown_function(static function () {
         && ($error['type'] === E_USER_ERROR || $error['type'] === E_ERROR)
     ) {
         if ($error['type'] === E_USER_ERROR) {
-            $text = $error['message']; // Nur selbst erstellte Fehlertexte mit trigger_error(...) werden angezeigt
+            $_SESSION['error']['text'] = $error['message']; // Nur selbst erstellte Fehlertexte mit trigger_error(...) werden angezeigt
+            $_SESSION['error']['url'] = $_SERVER['REQUEST_URI'];
         }
-        include Env::BASE_PATH . '/templates/errors/error.tmp.php';
+        Handler::reload("/errors/500.php");
     }
 
     // Logs der Besucher
+    if (strpos(Env::BASE_URL, $_SERVER['SERVER_NAME']) > 0){
+        $referrer = " | " . ($_SERVER['HTTP_REFERER'] ?? '') . " (Referrer)";
+    } else {
+        $referrer = '';
+    }
     Handler::log("user.log",
         $_SERVER['REQUEST_URI']
         . " | " . round(microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"], 3) . " s (Load)"
         . " | " . dbi::$db->query_count . " (Querys)"
-        . " | " . ($_SERVER['HTTP_REFERER'] ?? '') . "(Ref)");
+        . $referrer);
 
 });
 
@@ -64,6 +70,8 @@ register_shutdown_function(static function () {
  */
 dbi::initialize(); // Neue DB-Verbindung mit Prepared-Statements
 
-if(Env::WARTUNGSMODUS && !isset($_SESSION['wartungsmodus'])){
-    trigger_error("Die Seite befindet sich im Wartungsmodus", E_USER_ERROR);
+if((Env::WARTUNGSMODUS) && !isset($_SESSION['wartungsmodus'])){
+    $text = "Die Seite befindet sich im Wartungsmodus";
+    include Env::BASE_PATH . '/templates/errors/error.tmp.php';
+    die();
 }

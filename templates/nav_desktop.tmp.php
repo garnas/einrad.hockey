@@ -2,14 +2,19 @@
 <div class="w3-display-container w3-hide-small">
     
     <!-- Hintergrundbild -->
-    <img src="<?= Form::get_hintergrund_bild() ?>" class="<?php if (!isset($_SESSION['logins']['la']) && !isset($_SESSION['logins']['team'])){?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.3;">
+    <img src="<?= Form::get_hintergrund_bild() ?>" 
+         class="<?php if (!isset($_SESSION['logins']['la']) && !isset($_SESSION['logins']['team'])){?>w3-card-4<?php } ?>" 
+         alt="Hintergrundbild" 
+         style="width:100%; opacity: 0.3;">
     
     <!-- oben links -->
     <div class="w3-display-topleft w3-margin w3-padding-large">
         <!--Logo (nur large) -->
         <div class="w3-hide-medium">
             <a href="<?= Env::BASE_URL ?>/liga/neues.php">
-                <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz_small.png" alt="kurzes Logo" class="w3-image w3-left w3-bar-item" style="margin-top: 30px; max-width: 200px;">
+                <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz_small.png" 
+                     alt="kurzes Logo" class="w3-image w3-left w3-bar-item" 
+                     style="margin-top: 30px; max-width: 200px;">
             </a>
         </div>
     </div>
@@ -19,7 +24,10 @@
         <!--Logo (nur medium) -->
         <div class="w3-hide-large">
             <a href="<?= Env::BASE_URL ?>/liga/neues.php">
-                <img src="<?= Env::BASE_URL ?>/bilder/logo_lang_small.png" class="w3-image w3-left w3-bar-item" alt="langes Logo" style="max-width: 70%;">
+                <img src="<?= Env::BASE_URL ?>/bilder/logo_lang_small.png" 
+                     class="w3-image w3-left w3-bar-item" 
+                     alt="langes Logo" 
+                     style="max-width: 70%;">
             </a>
         </div>
     </div>
@@ -34,8 +42,8 @@
                 <span style="font-size: 22px">SONSTIGES</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach(Nav::get_sonstiges() as $link){ ?>
-                    <a href="<?= $link[0] ?>" class="w3-bar-item w3-button"><?= $link[1] ?></a>
+                <?php foreach(Nav::get_sonstiges() as Nav::$link){ ?>
+                    <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
                 <?php } //end for ?>
             </div>
         </div>
@@ -47,8 +55,8 @@
                 <span style="font-size: 22px">TEAMCENTER</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach(Nav::get_teamcenter() as $link){ ?>
-                    <a href="<?= $link[0] ?>" class="w3-bar-item w3-button <?= $link[2] ?>"><?= $link[1] ?></a>
+                <?php foreach(Nav::get_teamcenter() as Nav::$link){ ?>
+                    <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button <?= Nav::$link[2] ?>"><?= Nav::$link[1] ?></a>
                 <?php } //end for ?>
             </div>
         </div>
@@ -60,8 +68,8 @@
                 <span style="font-size: 22px">MODUS</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach(Nav::get_modus() as $link){ ?>
-                    <a href="<?= $link[0] ?>" class="w3-bar-item w3-button"><?= $link[1] ?></a>
+                <?php foreach(Nav::get_modus() as Nav::$link){ ?>
+                    <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
                 <?php } //end for ?>
             </div>
         </div>
@@ -73,8 +81,8 @@
                 <span style="font-size: 22px">LIGA</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach(Nav::get_liga() as $link){ ?>
-                    <a href="<?= $link[0] ?>" class="w3-bar-item w3-button"><?= $link[1] ?></a>
+                <?php foreach(Nav::get_liga() as Nav::$link){ ?>
+                    <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
                 <?php } //end for ?>
             </div>
         </div>
@@ -86,8 +94,8 @@
                 <span style="font-size: 22px">INFO</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach(Nav::get_info() as $link){ ?>
-                    <a href="<?= $link[0] ?>" class="w3-bar-item w3-button"><?= $link[1] ?></a>
+                <?php foreach(Nav::get_info() as Nav::$link){ ?>
+                    <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
                 <?php } //end for ?>
             </div>
         </div>
