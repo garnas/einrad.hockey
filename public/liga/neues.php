@@ -3,11 +3,12 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
+
+// Todo eigene Funktion
 $fortschritt = round(100 * (time() - strtotime(Config::SAISON_ANFANG)) / (strtotime(Config::SAISON_ENDE) - strtotime(Config::SAISON_ANFANG)));
 $tage = round((strtotime(Config::SAISON_ANFANG) - time()) / (24 * 60 * 60));
 
-$neuigkeiten = Neuigkeit::get_neuigkeiten(); //Alle Neuigkeiten werden übergeben, da kein Argument überliefert
-//Es werden die 10 letzten Neuigkeiten angzeigt
+$neuigkeiten = Neuigkeit::get_neuigkeiten();
 
 $turniere = Turnier::get_turniere('ergebnis', false, true);
 $anz_next_turniere = count($turniere);
