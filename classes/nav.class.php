@@ -28,6 +28,7 @@ class Nav
             [Env::BASE_URL . "/liga/ueber_uns.php", "Interesse?"],
             [Env::BASE_URL . "/liga/teams.php", "Teams"],
             [Env::BASE_URL . "/liga/ligakarte.php", "Ligakarte"],
+            [Config::LINK_FORUM . "index.php/board,7.0.html", "Rundschreibenarchiv"],
             [Config::LINK_FORUM, "Forum"]
         ];
     }

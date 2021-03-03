@@ -12,6 +12,9 @@
                 <a href="<?= Config::LINK_INSTA ?>" class="w3-button" target="_blank" rel="noopener noreferrer">
                     <?= Html::icon('camera_alt') ?> Instagram
                 </a>
+                <a href="<?= Config::LINK_FORUM ?>/liga/impressum.php" class="w3-button">
+                    <?= Html::icon('chat') ?> Forum
+                </a>
             </div>
             <div class="w3-center">
                 <a href="<?= Env::BASE_URL ?>/liga/ligaleitung.php" class="w3-button">

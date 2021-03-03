@@ -71,7 +71,9 @@ register_shutdown_function(static function () {
 dbi::initialize(); // Neue DB-Verbindung mit Prepared-Statements
 
 if((Env::WARTUNGSMODUS) && !isset($_SESSION['wartungsmodus'])){
-    $text = "Die Seite befindet sich im Wartungsmodus";
-    include Env::BASE_PATH . '/templates/errors/error.tmp.php';
-    die();
+    die(
+        "Wir sind gerade im Wartungsmodus."
+        . "<br><br>Ligaausschuss:<br> " . Env::LAMAIL
+        . "<br><br>Technikausschuss:<br> " . Env::TECHNIKMAIL
+    );
 }

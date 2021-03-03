@@ -24,7 +24,7 @@
     <!-- Tabellen für den direkten Vergleich -->
     <h3 class="w3-text-secondary">Direkter Vergleich</h3>
     <?php foreach ($spielplan->direkter_vergleich_tabellen as $direkter_vergleich) { ?>
-        <div class="w3-card w3-responsive">
+        <div class="w3-card-4 w3-responsive w3-section">
             <table class="w3-table w3-centered">
                 <tr class="w3-primary">
                     <th>
@@ -81,7 +81,7 @@
         <h3 class="w3-text-secondary">Penalty Vergleich</h3>
     <?php }//end if ?>
     <?php foreach ($spielplan->penalty_tabellen as $penalty) { ?>
-        <div class="w3-card w3-responsive">
+        <div class="w3-card-4 w3-responsive w3-section">
             <table class="w3-table w3-centered">
                 <tr class="w3-primary">
                     <th>

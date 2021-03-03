@@ -20,10 +20,20 @@ if (
     || isset($_POST['no_color_2'])
     || isset($_POST['no_color_1'])
 ) {
-    if (isset($_POST['color_1']))
-        $team->set_detail('trikot_farbe_1', $_POST['color_1']);
-    if (isset($_POST['color_2']))
-        $team->set_detail('trikot_farbe_2', $_POST['color_2']);
+    if (isset($_POST['color_1'])) {
+        if (preg_match('/^#[a-f0-9]{6}$/i', $_POST['color_1'])) {
+            $team->set_detail('trikot_farbe_1', $_POST['color_1']);
+        } else {
+            Html::error("Es konnte keine Farbe fürs erste Trikot ermittelt werden.");
+        }
+    }
+    if (isset($_POST['color_2'])) {
+        if (preg_match('/^#[a-f0-9]{6}$/i', $_POST['color_2'])) {
+            $team->set_detail('trikot_farbe_2', $_POST['color_2']);
+        } else {
+            Html::error("Es konnte keine Farbe fürs zweite Trikot ermittelt werden.");
+        }
+    }
     if (isset($_POST['no_color_1']))
         $team->set_detail('trikot_farbe_1', '');
     if (isset($_POST['no_color_2']))
@@ -38,11 +48,11 @@ if (isset($_POST['teamdaten_aendern'])) {
 
     $error = false;
     if (empty($_POST['ligavertreter'])) {
-        Html::error('Es muss ein Ligavertreter angegeben werden');
+        Html::error('Bitte gebt einen Ligavertreter an.');
         $error = true;
     }
     if (empty($_POST['dsgvo'])) {
-        Html::error('Der Ligavertreter muss den Datenschutz-Hinweisen zustimmen.');
+        Html::error('Der Ligavertreter hat noch nicht den Datenschutz-Hinweisen zugestimmt.');
         $error = true;
     }
 
@@ -87,31 +97,30 @@ if (isset($_POST['neue_email'])) {
         Html::info("E-Mail-Adresse wurde hinzugefügt");
         header('Location: ' . $path);
         die();
-    } else {
-        Html::error("E-Mail-Adresse wurde nicht akzeptiert");
     }
+
+    Html::error("E-Mail-Adresse wurde nicht akzeptiert");
 }
 
 // Teamfoto hochladen
-if (isset($_POST['teamfoto'])) {
-    if (!empty($_FILES["jpgupload"]["tmp_name"])) {
-        //Bild wird hochgeladen, target_file_jpg = false, falls fehlgeschlagen.
-        $target_file_jpg = Neuigkeit::upload_bild($_FILES["jpgupload"]);
-        if ($target_file_jpg === false) {
-            Html::error("Fehler beim Fotoupload");
-        } else {
-            $team->set_detail('teamfoto', $target_file_jpg);
-            Html::info("Teamfoto wurde hochgeladen");
-            header('Location: ' . $path);
-            die();
-        }
+if (isset($_POST['teamfoto']) && !empty($_FILES["jpgupload"]["tmp_name"])) {
+    // Bild wird hochgeladen, target_file_jpg = false, falls fehlgeschlagen.
+    $target_file_jpg = Neuigkeit::upload_bild($_FILES["jpgupload"]);
+
+    if ($target_file_jpg !== false) {
+        $team->set_detail('teamfoto', $target_file_jpg);
+        Html::info("Teamfoto wurde hochgeladen.");
+        header('Location: ' . $path);
+        die();
     }
+
+    Html::error("Es ist ein Fehler beim Fotoupload aufgetreten.");
 }
 
 // Teamfoto löschen
 if (isset($_POST['delete_teamfoto'])) {
     $team->delete_foto();
-    Html::info("Teamfoto wurde gelöscht");
+    Html::info("Teamfoto wurde gelöscht.");
     header('Location: ' . $path);
     die();
 }

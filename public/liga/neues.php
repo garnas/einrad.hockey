@@ -50,22 +50,22 @@ include '../../templates/header.tmp.php'; ?>
 
     <!-- Links (u. a zum Ein- und Ausblenden der Infobar bei Mobils) -->
     <div class="w3-hide-large w3-hide-medium">
-        <button id="einblenden"
-                class="w3-left w3-left-align w3-hide-large w3-hide-medium w3-button w3-text-primary"
+        <span id="einblenden"
+                class="w3-left w3-left-align w3-hide-large w3-hide-medium w3-hover-text-secondary w3-text-primary"
                 onclick="einblenden()"
                 style="width:50%;"
         >
             <?= Html::icon("visibility") ?> Infobar
-        </button>
-        <button id="ausblenden"
-                class="w3-left w3-left-align  w3-hide w3-hide-large w3-hide-medium w3-button w3-text-primary"
+        </span>
+        <span id="ausblenden"
+                class="w3-left w3-left-align  w3-hide w3-hide-large w3-hide-medium w3-hover-text-secondary w3-text-primary"
                 onclick="ausblenden()"
                 style="width:50%;"
         >
             <?= Html::icon("visibility_off") ?> Infobar
-        </button>
+        </span>
 
-        <a href="ueber_uns.php" class="w3-button w3-text-primary w3-right w3-right-align " style="width:50%;">
+        <a href="ueber_uns.php" class="w3-hover-text-secondary w3-text-primary no w3-right w3-right-align" style="width:50%;">
             <?= Html::icon("help_outline") ?> Über uns
         </a>
     </div>

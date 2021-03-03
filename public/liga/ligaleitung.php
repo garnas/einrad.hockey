@@ -17,7 +17,7 @@ include '../../templates/header.tmp.php'; ?>
     weiterentwickeln möchtest, kannst du dich jederzeit beim Ligaauschuss melden.
 </p>
 <!-- Liga -->
-<h2 class="w3-text-primary"><?= Html::icon("gavel", tag:"h2") ?>  Ligaausschuss</h2>
+<h2 class="w3-text-primary"><?= Html::icon("perm_identity", tag:"h2") ?>  Ligaausschuss</h2>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
         <?php foreach (LigaLeitung::get_all('ligaausschuss') as $la){?>

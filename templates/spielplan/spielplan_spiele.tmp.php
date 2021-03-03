@@ -5,7 +5,7 @@
     | Puffer: <?= $spielplan->details['puffer'] ?>&nbsp;min
 </span>
 <div class="w3-responsive w3-card">
-    <table class="w3-table w3-centered w3-striped" border="1">
+    <table class="w3-table w3-centered w3-striped">
         <tr class="w3-primary">
             <!-- DM Uhr -->
             <th>

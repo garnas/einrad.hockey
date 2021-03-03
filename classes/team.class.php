@@ -437,7 +437,7 @@ class Team
 
             if (empty($team->details['trikot_farbe_1'])) {
                 $link = Html::link("tc_teamdaten_aendern.php", ' Link.', icon: "launch");
-                Html::info("Ihr könnt jetzt eure Trikotfarben hinzufügen - " . $link, ' ', esc: false);
+                Html::info("Ihr könnt nun eure Trikotfarben hinzufügen - " . $link, ' ', esc: false);
             }
             if (empty($team->details['teamfoto'])) {
                 $link = Html::link("../teamcenter/tc_teamdaten_aendern.php", ' Link.', icon: "launch");

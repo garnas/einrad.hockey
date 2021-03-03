@@ -170,7 +170,8 @@
                type='url'
                id='homepage'
                name='homepage'
-               value='<?= empty($team->details['homepage']) ? 'http://' : $team->details['homepage'] ?>'>
+               placeholder='Muss mit https:// oder http:// beginnen.'
+               value='<?= $team->details['homepage'] ?>'>
     </p>
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped w3-centered">
