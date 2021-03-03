@@ -27,8 +27,8 @@ if ($akt_kilometerstand >= $challenge->ziel_kilometer) {
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = "km-Challenge | Deutsche Einradhockeyliga";
-Config::$content = 'Hier sind die aktuellen Ergebnisse der Kilometer-Challenge zu sehen.';
+Html::$titel = "km-Challenge | Deutsche Einradhockeyliga";
+Html::$content = 'Hier sind die aktuellen Ergebnisse der Kilometer-Challenge zu sehen.';
 include '../../templates/header.tmp.php';
 ?>
 

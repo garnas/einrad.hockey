@@ -45,7 +45,7 @@ class MailBot
         }
 
         // Debugging
-        if (!Config::$ligacenter) {
+        if (!Helper::$ligacenter) {
             $mailer->Password = '***********'; // Passwort verstecken
             $mailer->ClearAllRecipients();
         }

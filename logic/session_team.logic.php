@@ -9,13 +9,13 @@ if(!isset($_SESSION['logins']['team'])) {
 
 $team = new Team ($_SESSION['logins']['team']['id']);
 
-if (!Config::$teamcenter_no_redirect && $team->details['passwort_geaendert'] === 'Nein'){
+if (!Helper::$teamcenter_no_redirect && $team->details['passwort_geaendert'] === 'Nein'){
   Html::info("Bitte ändere zuerst das von uns vergebene Passwort.");
   header('Location: tc_pw_aendern.php');
   die();
 }
 
-if (!Config::$teamcenter_no_redirect && empty($team->details['ligavertreter'])){
+if (!Helper::$teamcenter_no_redirect && empty($team->details['ligavertreter'])){
   Html::info("Bitte tragt vor der Nutzung des Teamcenters erneut einen Ligavertreter ein, welcher unsere aktuellen "
       . Html::link(Config::LINK_DSGVO,"Datenschutz-Hinweise", true, 'security')
       . " gelesen und akzeptiert hat. Beachtet bitte, dass jedes Team nur einen Ligavertreter haben kann.", esc:false);
@@ -23,5 +23,5 @@ if (!Config::$teamcenter_no_redirect && empty($team->details['ligavertreter'])){
   die();
 }
 
-Config::$titel = $_SESSION['logins']['team']['name'];
-Config::$teamcenter = true; // Dies zeigt allen Dateien (insbeondere .tmp.php) , das man sich im Teamcenter befindet.
+Html::$titel = $_SESSION['logins']['team']['name'];
+Helper::$teamcenter = true; // Dies zeigt allen Dateien (insbeondere .tmp.php) , das man sich im Teamcenter befindet.

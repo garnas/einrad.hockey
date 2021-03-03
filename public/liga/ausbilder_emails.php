@@ -7,7 +7,7 @@ require_once '../../logic/session_la.logic.php';
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = "Ausbilder E-Mail-Verteiler | Deutsche Einradhockeyliga";
+Html::$titel = "Ausbilder E-Mail-Verteiler | Deutsche Einradhockeyliga";
 include '../../templates/header.tmp.php';
 ?>
 <h2>Eintragung in den E-Mailverteiler der Schiedsrichterausbilder</h2>

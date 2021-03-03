@@ -2,6 +2,19 @@
 
 class Helper
 {
+    /**
+     * Authentification
+     * $teamcenter und $ligacenter werden in session_*.logic.php ggf überschrieben
+     */
+    public static bool $ligacenter = false; // Befindet sich der Ligaausschuss auf einer Seite im Ligacenter?
+    public static bool $teamcenter = false; // Befindet sich das Team auf einer Seite im Teamcenter?
+
+    /**
+     * Teamcenter freischalten? (PW geändert, Ligavertreter angegeben?)
+     * Ansonsten redirect zu Passwort ändern bzw. Ligavertreter eintragen in session_team.logic.php
+     */
+    public static bool $teamcenter_no_redirect = false;
+
     public static function reload($path = null): void
     {
         $url = ($path === null) ? dbi::escape($_SERVER['PHP_SELF']) : Env::BASE_URL . $path;
@@ -42,11 +55,11 @@ class Helper
      */
     public static function get_akteur(bool $hide_la_name = false): string
     {
-        if (Config::$ligacenter){
+        if (self::$ligacenter){
             return ($hide_la_name) ? "Ligaausschuss" : $_SESSION['logins']['la']['login'];
         }
 
-        if (Config::$teamcenter) {
+        if (self::$teamcenter) {
             return $_SESSION['logins']['team']['name'];
         }
 

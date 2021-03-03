@@ -7,8 +7,8 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = "Über uns | Deutsche Einradhockeyliga";
-Config::$content = "Infos und aktuelle Daten der Deutsche Einradhockeyliga für Interessierte. Erster Schritt zum Gründen eines Teams.";
+Html::$titel = "Über uns | Deutsche Einradhockeyliga";
+Html::$content = "Infos und aktuelle Daten der Deutsche Einradhockeyliga für Interessierte. Erster Schritt zum Gründen eines Teams.";
 include '../../templates/header.tmp.php';
 ?>
 

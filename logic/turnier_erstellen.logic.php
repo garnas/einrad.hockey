@@ -46,11 +46,11 @@ if (isset($_POST['create_turnier'])) {
         $tblock = "spass";
         $phase = "";
         $fixed = "Ja";
-    } elseif (Config::$ligacenter && $art == "fixed" && isset($_POST['block_fixed'])) {
+    } elseif (Helper::$ligacenter && $art == "fixed" && isset($_POST['block_fixed'])) {
         $tblock = $_POST['block_fixed'];
         $phase = "offen";
         $fixed = "Ja";
-    } elseif (Config::$ligacenter && $art == "final") {
+    } elseif (Helper::$ligacenter && $art == "final") {
         $tblock = "final";
         $phase = "";
         $fixed = "Ja";
@@ -83,7 +83,7 @@ if (isset($_POST['create_turnier'])) {
         Html::error("Ungültige Anzahl an Turnierplätzen");
     }
     // 4er Turniere nur über den LA
-    if ($plaetze == 4 && Config::$teamcenter) {
+    if ($plaetze == 4 && Helper::$teamcenter) {
         $error = true;
         Html::error("Ungültige Anzahl an Turnierplätzen");
     }
@@ -92,7 +92,7 @@ if (isset($_POST['create_turnier'])) {
     $startzeit = $_POST['startzeit'];
 
     // Validierung des ausgewählten Turnierdatums, falls man nicht als la_eingeloggt ist.
-    if (!(Config::$ligacenter || $art == "spass")) {
+    if (!(Helper::$ligacenter || $art == "spass")) {
         $datum_unix = strtotime($datum);
         if ($datum_unix < strtotime(Config::SAISON_ANFANG) || $datum_unix > strtotime(Config::SAISON_ENDE)) {
             $error = true;
@@ -110,7 +110,7 @@ if (isset($_POST['create_turnier'])) {
             // }
         }
         // Validierung Startzeit:
-        if ((date("H", strtotime($startzeit)) < 9 || date("H", strtotime($startzeit)) > 14) and !Config::$ligacenter) {
+        if ((date("H", strtotime($startzeit)) < 9 || date("H", strtotime($startzeit)) > 14) and !Helper::$ligacenter) {
             $error = true;
             Html::error("Turniere dürfen frühestens um 9:00&nbsp;Uhr beginnen und müssen spätestens um 20:00&nbsp;Uhr beendet sein");
         }
@@ -137,7 +137,7 @@ if (isset($_POST['create_turnier'])) {
             $organisator, $handy, $phase); // Vom Typ Turnier
 
         // Mailbot
-        if (Config::$teamcenter) MailBot::mail_neues_turnier($turnier); // Nur wenn Teams turnier erstellen.
+        if (Helper::$teamcenter) MailBot::mail_neues_turnier($turnier); // Nur wenn Teams turnier erstellen.
         Html::info("Euer Turnier wurde erfolgreich eingetragen!");
         header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->id);
         die();

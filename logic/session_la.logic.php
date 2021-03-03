@@ -10,4 +10,4 @@ MailBot::warning(); // Sendet eine Warnung, wenn Mails nicht versendet werden ko
 
 $titel = 'Ligacenter';
 
-Config::$ligacenter = true; // Dies zeigt allen Dateien (insbeondere .tmp.php) , das man sich im Ligacenter befindet.
+Helper::$ligacenter = true; // Dies zeigt allen Dateien (insbeondere .tmp.php) , das man sich im Ligacenter befindet.

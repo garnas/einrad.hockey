@@ -57,14 +57,14 @@ class Config
      * Rangtabellen-Zuordnung
      */
     public const RANG_TO_BLOCK = [
-            "A" => [1, 6],
-            "AB" => [7, 13],
-            "BC" => [14, 21],
-            "CD" => [22, 31],
-            "DE" => [32, 43],
-            "EF" => [44, 57],
-            "F"  => [58, INF]
-        ];
+        "A" => [1, 6],
+        "AB" => [7, 13],
+        "BC" => [14, 21],
+        "CD" => [22, 31],
+        "DE" => [32, 43],
+        "EF" => [44, 57],
+        "F" => [58, INF]
+    ];
 
     /**
      * Ligagebühr
@@ -107,26 +107,4 @@ class Config
     public const LINK_DSGVO = Env::BASE_URL . '/dokumente/datenschutz-hinweise.pdf';
     public const LINK_SPIELPLAENE_ALT = Env::BASE_URL . '/dokumente/alte_spielplan_vorlagen.pdf';
 
-    /**
-     * Authentification
-     * $teamcenter und $ligacenter werden in session_*.logic.php ggf überschrieben
-     */
-    public static bool $ligacenter = false; // Befindet sich der Ligaausschuss im Ligacenter?
-    public static bool $teamcenter = false; // Befindet sich das Team im Teamcenter?
-    /**
-     * Teamcenter freischalten? (PW geändert, Ligavertreter angegeben?)
-     * Ansonsten redirect zu Passwort ändern bzw. Ligavertreter eintragen in session_team.logic.php
-     */
-    public static bool $teamcenter_no_redirect = false;
-
-
-    /**
-     * HTML-Anzeige
-     */
-    public static string $page_width = "980px";
-    public static string $titel = 'Deutsche Einradhockeyliga';
-    public static string $content
-        = 'Jeder Einradhockeybegeisterte soll in der Deutschen Einradhockeyliga die Möglichkeit haben, sein Hobby in '
-        . 'einem sportlichen Rahmen auszuüben. Die Einradhockeyliga hat maßgeblich zur Verbreitung von Einradhockey '
-        . 'beigetragen und ist in ihrer Art und Konstanz weltweit einzigartig.';
 }

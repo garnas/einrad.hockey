@@ -23,8 +23,8 @@ $icon = (isset($_SESSION['logins']['team'])) ? 'article' : 'lock';
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = "Turnierergebnisse " . Html::get_saison_string($saison) . " | Deutsche Einradhockeyliga";
-Config::$content = 'Hier kann man die Ergebnisse und Tabellen der Saison ' . Html::get_saison_string($saison) . ' sehen.';
+Html::$titel = "Turnierergebnisse " . Html::get_saison_string($saison) . " | Deutsche Einradhockeyliga";
+Html::$content = 'Hier kann man die Ergebnisse und Tabellen der Saison ' . Html::get_saison_string($saison) . ' sehen.';
 include '../../templates/header.tmp.php'; ?>
 
     <!--Javascript für Suchfunktion-->

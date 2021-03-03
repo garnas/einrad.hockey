@@ -8,14 +8,14 @@ if (empty($turnier->details)){
 }
 
 //Besteht die Berechtigung das Turnier zu bearbeiten?
-if (Config::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $turnier->details['ausrichter']){
+if (Helper::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $turnier->details['ausrichter']){
     Html::error("Keine Berechtigung das Turnier zu bearbeiten");
     header('Location: ../liga/turniere.php');
     die();
 }
 
 //Turniere in der Vergangenheit können von Teams nicht mehr verändert werden
-if (Config::$teamcenter && strtotime($turnier->details['datum']) < time()){
+if (Helper::$teamcenter && strtotime($turnier->details['datum']) < time()){
     Html::error("Das Turnier liegt bereits in der Vergangenheit und kann nicht bearbeitet werden");
     header('Location: ../liga/turniere.php');
     die();

@@ -7,8 +7,8 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = "Dokumente | Deutsche Einradhockeyliga";
-Config::$content = 'Die wichtigsten Dokumente für den Betrieb der deutschen Einradhockeyliga können hier eingesehen werden.';
+Html::$titel = "Dokumente | Deutsche Einradhockeyliga";
+Html::$content = 'Die wichtigsten Dokumente für den Betrieb der deutschen Einradhockeyliga können hier eingesehen werden.';
 include '../../templates/header.tmp.php';
 ?>
     <h1 class="w3-text-grey">Dokumente</h1>

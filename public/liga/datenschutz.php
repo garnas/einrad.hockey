@@ -7,8 +7,8 @@ require_once '../../logic/first.logic.php'; //autoloader und Session
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = "Datenschutzerklärung | Deutsche Einradhockeyliga";
-Config::$content = 'Datenschutzerklärung der Deutschen Eirnadhockeyliga';
+Html::$titel = "Datenschutzerklärung | Deutsche Einradhockeyliga";
+Html::$content = 'Datenschutzerklärung der Deutschen Eirnadhockeyliga';
 include '../../templates/header.tmp.php';
 ?>
 

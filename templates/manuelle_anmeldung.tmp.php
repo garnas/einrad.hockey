@@ -11,7 +11,7 @@
     <?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->details['turnier_id'],
         'Turnierdetails', icon:'info') ?>
 </p>
-<?php if (Config::$ligacenter){ ?>
+<?php if (Helper::$ligacenter){ ?>
     <p>
         <?= Html::link('../ligacenter/lc_turnier_bearbeiten.php?turnier_id=' . $turnier->details['turnier_id'],
             'Turnier bearbeiten (Ligaausschuss)', icon:'create') ?>
@@ -75,7 +75,7 @@
     </form>
 
     <!-- Spielen-Liste auffuellen und Warteliste aktualisieren -->
-    <?php if (Config::$ligacenter) { ?>
+    <?php if (Helper::$ligacenter) { ?>
         <form method='post'>
             <p>
                 <input type='submit' class='w3-button w3-block w3-tertiary' name='warteliste_aktualisieren' value='Warteliste aktualisieren'>

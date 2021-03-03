@@ -44,8 +44,8 @@ foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit) { //Todo in get_neuikgei
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = "Neuigkeiten | Deutsche Einradhockeyliga";
-Config::$content = "Hier findet man die Neuigkeiteneinträge des Ligaausschusses und der Teams der Deutschen Einradhockeyliga.";
+Html::$titel = "Neuigkeiten | Deutsche Einradhockeyliga";
+Html::$content = "Hier findet man die Neuigkeiteneinträge des Ligaausschusses und der Teams der Deutschen Einradhockeyliga.";
 include '../../templates/header.tmp.php'; ?>
 
     <!-- Links (u. a zum Ein- und Ausblenden der Infobar bei Mobils) -->

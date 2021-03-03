@@ -57,8 +57,8 @@ $gesuche = LigaKarte::get_all_gesuche();
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = 'Ligakarte | Deutsche Einradhockeyliga';
-Config::$content = "Deutschlandkarte der Deutschen Einradhockeyliga, in der alle Teams mit ihren Einradfahrern eingetragen sind.";
+Html::$titel = 'Ligakarte | Deutsche Einradhockeyliga';
+Html::$content = "Deutschlandkarte der Deutschen Einradhockeyliga, in der alle Teams mit ihren Einradfahrern eingetragen sind.";
 include '../../templates/header.tmp.php';
 ?>
 

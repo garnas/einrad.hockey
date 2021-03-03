@@ -31,9 +31,9 @@ if (isset($_POST['login'])) {
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$page_width = "480px";
-Config::$titel = "Teamcenter | Deutsche Einradhockeyliga";
-Config::$content =
+Html::$page_width = "480px";
+Html::$titel = "Teamcenter | Deutsche Einradhockeyliga";
+Html::$content =
     "Im Teamcenter können Teams ihren Kader verwalten, ihre Teamdaten ändern, Emails versenden und sich zu Turnieren an-
      und abmelden.";
 include '../../templates/header.tmp.php'; ?>

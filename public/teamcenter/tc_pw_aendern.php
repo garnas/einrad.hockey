@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; // autoloader und Session
-Config::$teamcenter_no_redirect = true; // Verhindert die Endlosschleife, bei der Überprüfung, ob Passwort erneurt wurde
+Helper::$teamcenter_no_redirect = true; // Verhindert die Endlosschleife, bei der Überprüfung, ob Passwort erneurt wurde
 require_once '../../logic/session_team.logic.php'; // Auth
 
 // Formularauswertung
@@ -41,7 +41,7 @@ Html::notice("Euer Passwort wird verschlüsselt gespeichert. Es muss mindestens 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$page_width = "480px";
+Html::$page_width = "480px";
 include '../../templates/header.tmp.php';
 ?>
 

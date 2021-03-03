@@ -81,8 +81,8 @@ for ($spieltag = $akt_spieltag; $spieltag >= 0; $spieltag--){
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = "Aktuelle Tabellen der Deutschen Einradhockeyliga";
-Config::$content = "Die Rang- und Meisterschaftstabelle welche aus den Turnieren der Deutschen Einradhockeyliga entstehen.";
+Html::$titel = "Aktuelle Tabellen der Deutschen Einradhockeyliga";
+Html::$content = "Die Rang- und Meisterschaftstabelle welche aus den Turnieren der Deutschen Einradhockeyliga entstehen.";
 include '../../templates/header.tmp.php';?>
 
 <!-- Erklärungen zur Tabelle -->

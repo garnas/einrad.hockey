@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="Einradhockey, Einrad, Einradfahren, Einradhockeyliga, Hockey, Sport, ungewöhnlich, kreativ">
-    <meta name="description" content="<?= Config::$content ?>">
+    <meta name="description" content="<?= Html::$content ?>">
     <link rel="shortcut icon" href="<?= Env::BASE_URL ?>/bilder/favicon/favicon.png">
     <link rel="icon" type="image/png" href="<?= Env::BASE_URL ?>/bilder/favicon/favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="<?= Env::BASE_URL ?>/bilder/favicon/favicon-96x96.png" sizes="96x96">
@@ -20,7 +20,7 @@
     <script src="<?= Env::BASE_URL ?>/javascript/script.js?v=20200215" async></script>
     <script src="<?= Env::BASE_URL ?>/javascript/360search/360search.js?v=20200215" async></script>
 
-    <title><?= Config::$titel ?></title>
+    <title><?= Html::$titel ?></title>
 </head>
 
 <body class="w3-white w3-auto w3-card-4">
@@ -38,7 +38,7 @@
     if (isset($_SESSION['logins']['team'])) include 'nav_teamcenter.tmp.php';
     ?>
     <!-- Zentrierung der Webseite und Breite mit welcher diese dargestellt werden soll -->
-    <div class="w3-content" style="max-width:<?= Config::$page_width ?>;">
+    <div class="w3-content" style="max-width:<?= Html::$page_width ?>;">
         <div class="w3-container">
 <!--            --><?php //if (!empty($_SESSION['messages'])) { ?>
 <!--            <div class="w3-modal" id="meldungen" style="display: block; cursor: pointer;">-->

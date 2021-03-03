@@ -30,9 +30,9 @@ if (isset($_POST['login'])) {
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$page_width = "480px";
-Config::$titel = "Ligacenter | Deutsche Einradhockeyliga";
-Config::$content =
+Html::$page_width = "480px";
+Html::$titel = "Ligacenter | Deutsche Einradhockeyliga";
+Html::$content =
     "Im Ligacenter kann der Ligaausschuss die Liga verwalten. Nur Mitglieder des Ligaausschusses haben einen Login.";
 include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 

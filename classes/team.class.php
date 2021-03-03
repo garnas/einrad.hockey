@@ -467,7 +467,7 @@ class Team
         }
 
         // Befindet sich das Team im Teamcenter ihr Passwort geändert?
-        $pw_geaendert = (Config::$teamcenter) ? 'Ja' : 'Nein';
+        $pw_geaendert = (Helper::$teamcenter) ? 'Ja' : 'Nein';
 
         // Passwort in die Datenbank
         $sql = "

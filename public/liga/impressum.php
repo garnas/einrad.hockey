@@ -7,8 +7,8 @@ require_once '../../logic/first.logic.php';
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = "Impressum | Deutsche Einradhockeyliga";
-Config::$content = "Das Impressum der Deutschen Einradhockeyliga findet sich hier.";
+Html::$titel = "Impressum | Deutsche Einradhockeyliga";
+Html::$content = "Das Impressum der Deutschen Einradhockeyliga findet sich hier.";
 include '../../templates/header.tmp.php'; ?>
 
 <div class="w3-panel w3-center">

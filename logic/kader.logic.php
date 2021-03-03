@@ -21,7 +21,7 @@ if (isset($_POST['neuer_eintrag'])) {
         Html::error("Ungültiger Jahrgang: Bitte als Jahreszahl ausschreiben.");
     }
     // Ist der Zeitraum richtig um Spieler hinzuzufügen?
-    if (!Config::$ligacenter && !Spieler::check_timing()) {
+    if (!Helper::$ligacenter && !Spieler::check_timing()) {
         Html::error("Spieler können nur bis zum Ende der Saison hinzugefügt werden.");
         return false;
     }

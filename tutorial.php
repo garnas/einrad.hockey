@@ -32,7 +32,7 @@ if (isset($_POST['mein_formular'])) {
 
 // (8) Debuggen von Arrays:
 #dbi::debug($teams);
-#dbi::debug(Config::$teamcenter, true);
+#dbi::debug(Html::$teamcenter, true);
 #dbi::debug([1.2234, 1, 'hallo', [false, true]], true);
 
 
@@ -44,8 +44,8 @@ if (isset($_POST['mein_formular'])) {
 /////////////////////////////////////////////////////////////////////////////
 
 // (10) HTML-Header und Navigation laden. Titel- und Content-Tags ans Template übergeben.
-Config::$titel = "Tutorial";
-Config::$content = "Dieses Tutorial soll dabei helfen, die Seite zu verstehen.";
+Html::$titel = "Tutorial";
+Html::$content = "Dieses Tutorial soll dabei helfen, die Seite zu verstehen.";
 include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 
     <!-- (11) Dein HTML-Code: Ab hier PHP nur noch als Templating-Engine verwenden. -->

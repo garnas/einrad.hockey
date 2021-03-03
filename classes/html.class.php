@@ -7,6 +7,15 @@
  */
 class Html
 {
+    public static string $titel = 'Deutsche Einradhockeyliga';
+    public static string $content = 'Jeder Einradhockeybegeisterte soll in der Deutschen Einradhockeyliga die Möglichkeit haben, sein Hobby in '
+    . 'einem sportlichen Rahmen auszuüben. Die Einradhockeyliga hat maßgeblich zur Verbreitung von Einradhockey '
+    . 'beigetragen und ist in ihrer Art und Konstanz weltweit einzigartig.';
+    /**
+     * HTML-Anzeige
+     */
+    public static string $page_width = "980px";
+
     /**
      * Get Pfad fürs Hintergrundbild der Navigation
      * Nach einiger Zeit ein neues Hintergrundbild in der Navigation anzeigen

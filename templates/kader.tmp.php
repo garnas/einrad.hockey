@@ -8,14 +8,14 @@
             <th class="w3-primary">Name</th>
             <th class="w3-primary w3-center">J/G</th>
             <th class="w3-primary w3-center">Schiri</th>
-            <?php if (Config::$ligacenter) { ?>
+            <?php if (Helper::$ligacenter) { ?>
                 <th class="w3-primary w3-center">Hinzugefügt am:</th><?php }//endif?>
         </tr>
         </thead>
         <?php foreach ($kader as $eintrag) { ?>
             <tr>
                 <td><?= $eintrag['spieler_id'] ?></td>
-                <?php if (Config::$ligacenter) { //Direktverlinkung zum Bearbeiten eines Spielers Config::$ligacenter wird definiert in session_la.logic.php?>
+                <?php if (Helper::$ligacenter) { //Direktverlinkung zum Bearbeiten eines Spielers Config::$ligacenter wird definiert in session_la.logic.php?>
                     <td>
                         <?= Html::link('lc_spieler_aendern.php?spieler_id=' . $eintrag['spieler_id'],
                             $eintrag['vorname'] . " " . $eintrag['nachname']) ?>
@@ -37,7 +37,7 @@
                 <?php } else { ?>
                     <td class='w3-center'></td>
                 <?php } //ende if?>
-                <?php if (Config::$ligacenter) { ?>
+                <?php if (Helper::$ligacenter) { ?>
                     <td class="w3-center">
                         <?= $eintrag['zeit'] ?>
                     </td>
@@ -63,7 +63,7 @@
                 <?php foreach ($kader_vorsaison as $eintrag) { ?>
                     <tr>
                         <td><?= $eintrag['spieler_id'] ?></td>
-                        <?php if (Config::$ligacenter) { ?>
+                        <?php if (Helper::$ligacenter) { ?>
                             <td>
                                 <?= Html::link('lc_spieler_aendern.php?spieler_id=' . $eintrag['spieler_id'],
                                     $eintrag['vorname'] . " " . $eintrag['nachname']) ?>

@@ -19,10 +19,10 @@
     <?php } else { ?>
         <?= Html::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, 'Zum Turnierreport', true, 'launch') ?>
     <?php } // endif?>
-    <?php if (($_SESSION['logins']['team']['id'] ?? 0) == $spielplan->turnier->details['ausrichter'] && !(Config::$teamcenter ?? false) && $spielplan->turnier->details['phase'] == 'spielplan') { ?>
+    <?php if (($_SESSION['logins']['team']['id'] ?? 0) == $spielplan->turnier->details['ausrichter'] && !(Helper::$teamcenter ?? false) && $spielplan->turnier->details['phase'] == 'spielplan') { ?>
         <?= Html::link($spielplan->turnier->get_spielplan_link('tc'), 'Ergebnisse eintragen', true, 'launch') ?>
     <?php }// endif?>
-    <?php if (isset($_SESSION['logins']['la']) && !(Config::$ligacenter ?? false)) { ?>
+    <?php if (isset($_SESSION['logins']['la']) && !(Helper::$ligacenter ?? false)) { ?>
         <?= Html::link($spielplan->turnier->get_spielplan_link('lc'), 'Ergebnisse eintragen (Ligaausschuss)', true, 'launch') ?>
     <?php }// endif?>
     <?php if (isset($_SESSION['logins']['la'])) { ?>
