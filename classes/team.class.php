@@ -55,7 +55,7 @@ class Team
         // Eintrag in teams_kontakt
         $sql = "
                 INSERT INTO teams_kontakt (team_id, email, public, get_info_mail) 
-                VALUES (?, ?, 'Ja', 'Nein')";
+                VALUES (?, ?, 'Nein', 'Nein')";
         dbi::$db->query($sql, $team_id, $email)->log();
         return $team_id;
     }
