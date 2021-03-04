@@ -28,8 +28,11 @@ header('Referrer-Policy: no-referrer-when-downgrade');
 session_start();
 
 /**
+ * Session-Hijacking erschweren
  * https://owasp.org/www-community/attacks/Session_fixation
  * https://www.php.net/session_regenerate_id
+ *
+ * Bei mangelnder Performance session_regenerate_id nur bei Login und Logout einrichten.
  */
 if (
     isset($_SESSION['destroyed'])
@@ -40,7 +43,9 @@ if (
 }
 
 $_SESSION['destroyed'] = time(); // Legt den Destroy-Zeitstempel fest
-session_regenerate_id();
+
+session_regenerate_id(); // Kopiert die bestehende Session
+
 unset($_SESSION['destroyed']); // Die neue Session braucht keinen Destroy-Zeitstempel
 
 /**
@@ -60,11 +65,13 @@ spl_autoload_register(
  * Wartungsmodus
  */
 if ((Env::WARTUNGSMODUS) && !isset($_SESSION['wartungsmodus'])) {
+    $_SESSION['error']['text'] = 'Die Seite befindet sich im Wartungsmodus';
+    Helper::reload('errors/500.php');
     die(
         "<div style='text-align:center'>"
-        . "<h1>" . Env::BASE_URL . " ist im Wartungsmodus.</h1>"
-        . "<p>Ligaausschuss:<br> " . Env::LAMAIL . "</p>"
-        . "<p>Technikausschuss:<br> " . Env::TECHNIKMAIL . "</p>"
+            . "<h1>" . Env::BASE_URL . " ist im Wartungsmodus.</h1>"
+            . "<p>Ligaausschuss:<br> " . Env::LAMAIL . "</p>"
+            . "<p>Technikausschuss:<br> " . Env::TECHNIKMAIL . "</p>"
         . "</div>"
     );
 }

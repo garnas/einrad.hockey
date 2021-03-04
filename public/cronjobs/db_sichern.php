@@ -4,10 +4,16 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../logic/first.logic.php'; //autoloader und Session
 
+$_SESSION['logins']['cronjob'] = 'Cronjob';
+
 dbi::sql_backup();
+
 //Meldungen protokollieren
 ?>
+
 <pre>
     <?php print_r($_SESSION['messages']) ?>
 </pre>
+
+<?php
 session_destroy();

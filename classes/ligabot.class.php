@@ -20,7 +20,7 @@ class LigaBot
             db::debug($doppel_anmeldungen); // TODO Mail absenden?
         }
 
-        $_SESSION['ligabot'] = 'Ligabot'; // Wird in den logs als Autor verwendet
+        $_SESSION['logins']['ligabot'] = 'Ligabot'; // Wird in den logs als Autor verwendet
 
         self::set_spieltage(); // Setzt alle Spieltage der Turniere
 
@@ -74,7 +74,7 @@ class LigaBot
                 MailBot::mail_plaetze_frei($turnier);
             }
         } //end foreach
-        unset($_SESSION['ligabot']);
+        unset($_SESSION['logins']['ligabot']);
         Html::info("Ligabot erfolgreich ausgeführt");
     }
 

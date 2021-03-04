@@ -2,8 +2,10 @@
 <div class="w3-sidebar w3-white w3-bar-block" style="opacity: 0.9; display:none;z-index:5; width: 75%; max-width: 360px" id="mySidebar">
     <div class="w3-center w3-text-primary">
         <a href='<?= Env::BASE_URL ?>/liga/neues.php' class='no'>
-            <h3>NAVIGATION</h3>
-            <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz_small.png" class="w3-image" alt="kleines Logo" style="max-width: 140px">
+            <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz_small.png"
+                 class="w3-image w3-margin-top"
+                 alt="kleines Logo"
+                 style="max-width: 140px">
         </a>
     </div>
     <!-- Searchbox -->
