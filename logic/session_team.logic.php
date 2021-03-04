@@ -17,7 +17,7 @@ if (!Helper::$teamcenter_no_redirect && $team->details['passwort_geaendert'] ===
 
 if (!Helper::$teamcenter_no_redirect && empty($team->details['ligavertreter'])){
   Html::info("Bitte tragt vor der Nutzung des Teamcenters erneut einen Ligavertreter ein, welcher unsere aktuellen "
-      . Html::link(Config::LINK_DSGVO,"Datenschutz-Hinweise", true, 'security')
+      . Html::link(Nav::LINK_DSGVO,"Datenschutz-Hinweise", true, 'security')
       . " gelesen und akzeptiert hat. Beachtet bitte, dass jedes Team nur einen Ligavertreter haben kann.", esc:false);
   header('Location: tc_teamdaten_aendern.php');
   die();

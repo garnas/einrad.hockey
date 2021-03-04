@@ -104,7 +104,7 @@
         <p>
             <input type="checkbox" class="w3-check" value="zugestimmt" name="dsgvo" id="dsgvo">
             <label for="dsgvo" style="cursor: pointer;" class="w3-text-black">
-                Alle ausgewählten Spieler haben dien aktuellen <?= Html::link(Config::LINK_DSGVO, 'Datenschutz-Hinweise') ?>
+                Alle ausgewählten Spieler haben dien aktuellen <?= Html::link(Nav::LINK_DSGVO, 'Datenschutz-Hinweise') ?>
                 gelesen und ihnen zugestimmt.
             </label>
         </p>
@@ -170,7 +170,7 @@
             <p>
                 <input type="checkbox" class="w3-check" value="zugestimmt" name="dsgvo" id="dsgvo_neu">
                 <label for="dsgvo_neu" style="cursor: pointer;" class="">
-                    Der Spieler hat die aktuellen <?= Html::link(Config::LINK_DSGVO, "Datenschutz-Hinweise", true) ?>
+                    Der Spieler hat die aktuellen <?= Html::link(Nav::LINK_DSGVO, "Datenschutz-Hinweise", true) ?>
                     gelesen und der Verwendung seiner Daten zugestimmt.
                 </label>
             </p>

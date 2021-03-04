@@ -133,7 +133,7 @@
                name="dsgvo"
                id="dsgvo">
         <label for="dsgvo" style="cursor: pointer">
-            Der Ligavertreter hat die <?= Html::link(Config::LINK_DSGVO, "Datenschutz-Hinweise") ?>
+            Der Ligavertreter hat die <?= Html::link(Nav::LINK_DSGVO, "Datenschutz-Hinweise") ?>
             gelesen und ihnen zugestimmt.
         </label>
     </p>

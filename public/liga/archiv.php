@@ -16,6 +16,6 @@ include '../../templates/header.tmp.php';
 <h1 class="w3-text-primary">Archiv</h1>
 <!-- iframes sind ein sonderfall, html5 depreciated -->
 
-<iframe src="<?=Config::LINK_ARCHIV?>" style="width:100%;height:800px;" class="archiv w3-border-0" title="Archiv der Deutschen Einradhockeyliga"></iframe>
+<iframe src="<?= Nav::LINK_ARCHIV ?>" style="width:100%;height:800px;" class="archiv w3-border-0" title="Archiv der Deutschen Einradhockeyliga"></iframe>
 
 <?php include '../../templates/footer.tmp.php';

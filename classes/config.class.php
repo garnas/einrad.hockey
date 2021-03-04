@@ -23,7 +23,6 @@ class Config
     public const SCHIRIMAIL = Env::SCHIRIMAIL;
     public const OEFFIMAIL = Env::OEFFIMAIL;
 
-
     /**
      * Saison
      */
@@ -46,13 +45,18 @@ class Config
      * Reihenfolge bei den Blöcken muss immer hoch -> niedrig sein
      * Für die Block und Wertzuordnung in der Rangtabelle siehe Tabelle::rang_to_block und Tabelle::rang_to_wertigkeit
      *
+     */
+
+     /**
      * Mögliche Team-Blöcke
      */
     public const BLOCK = ['A', 'AB', 'BC', 'CD', 'DE', 'EF', 'F'];
+
     /**
      * Mögliche Turnier-Blöcke
      */
     public const BLOCK_ALL = ["ABCDEF", 'A', 'AB', 'ABC', 'BC', 'BCD', 'CD', 'CDE', 'DE', 'DEF', 'EF', 'F'];
+
     /**
      * Rangtabellen-Zuordnung
      */
@@ -70,41 +74,5 @@ class Config
      * Ligagebühr
      */
     public const LIGAGEBUEHR = "30&nbsp;€";
-
-    /**
-     *  Ligalinks
-     */
-    public const LINK_FORUM = 'https://forum.einrad.hockey/';
-    public const LINK_ARCHIV = 'https://archiv.einrad.hockey/archiv/index.html';
-    public const LINK_INSTA = 'https://www.instagram.com/einradhockeyde/';
-    public const LINK_FACE = 'https://www.facebook.com/DeutscheEinradhockeyliga';
-
-    /**
-     * Andere Ligen
-     */
-    public const LINK_AUSTRALIA = 'https://hockey.unicycling.org.au/';
-    public const LINK_SWISS = 'https://www.swiss-iuc.ch/Wettkaempfe/Einradhockey';
-    public const LINK_FRANCE = 'https://monocycle.info/ligue-de-monocycle-basket-remaniement-co/';
-    public const LINK_IUF = 'https://unicycling.org/';
-
-    /**
-     * Einradverbände
-     */
-    public const LINK_EV = 'https://www.einradverband.de/';
-    public const LINK_EV_SH = 'https://www.einradverband-sh.de/';
-    public const LINK_EV_BY = 'http://einradverband-bayern.de/';
-
-    /**
-     * Dokumente
-     */
-    public const LINK_MODUS = Env::BASE_URL . '/dokumente/ligamodus.pdf';
-    public const LINK_REGELN = Env::BASE_URL . '/dokumente/regelwerk.pdf';
-    public const LINK_MODUS_KURZ = Env::BASE_URL . '/dokumente/zusammenfassung_modus.pdf';
-    public const LINK_REGELN_KURZ = Env::BASE_URL . '/dokumente/zusammenfassung_regeln.pdf';
-    public const LINK_MODUS_KURZ_ENG = Env::BASE_URL . '/dokumente/summary_modus.pdf';
-    public const LINK_REGELN_IUF = Env::BASE_URL . '/dokumente/iuf-rulebook-2019.pdf';
-    public const LINK_TURNIER = Env::BASE_URL . '/dokumente/turniermodi.pdf';
-    public const LINK_DSGVO = Env::BASE_URL . '/dokumente/datenschutz-hinweise.pdf';
-    public const LINK_SPIELPLAENE_ALT = Env::BASE_URL . '/dokumente/alte_spielplan_vorlagen.pdf';
 
 }

@@ -239,17 +239,17 @@ include '../../templates/header.tmp.php'; ?>
                     <h3><?= Html::icon("public", tag: "h2") ?> Links</h3>
                 </div>
                 <p class="w3-text-grey w3-border-top w3-border-grey"><?= Html::icon("bookmark") ?> Ligen</p>
-                <p><?= Html::link(Config::LINK_SWISS, " Schweizer Einradhockeyliga", true, "link") ?></p>
-                <p><?= Html::link(Config::LINK_AUSTRALIA, " Australische Einradhockeyliga", true, "link") ?></p>
-                <p><?= Html::link(Config::LINK_FRANCE, " Französische Einradbasketballliga", true, "link") ?></p>
+                <p><?= Html::link(Nav::LINK_SWISS, " Schweizer Einradhockeyliga", true, "link") ?></p>
+                <p><?= Html::link(Nav::LINK_AUSTRALIA, " Australische Einradhockeyliga", true, "link") ?></p>
+                <p><?= Html::link(Nav::LINK_FRANCE, " Französische Einradbasketballliga", true, "link") ?></p>
 
                 <p class="w3-text-grey w3-border-top w3-border-grey"><?= Html::icon("bookmark") ?> Verbände</p>
-                <p><?= Html::link(Config::LINK_EV, " Einradverband Deutschland", true, "link") ?></p>
-                <p><?= Html::link(Config::LINK_EV_SH, " Einradverband Schleswig-Holstein", true, "link") ?></p>
-                <p><?= Html::link(Config::LINK_EV_BY, " Einradverband Bayern", true, "link") ?></p>
+                <p><?= Html::link(Nav::LINK_EV, " Einradverband Deutschland", true, "link") ?></p>
+                <p><?= Html::link(Nav::LINK_EV_SH, " Einradverband Schleswig-Holstein", true, "link") ?></p>
+                <p><?= Html::link(Nav::LINK_EV_BY, " Einradverband Bayern", true, "link") ?></p>
 
                 <p class="w3-text-grey w3-border-top w3-border-grey"><?= Html::icon("bookmark") ?> Förderation</p>
-                <p><?= Html::link(Config::LINK_IUF, " International Unicycle Federation", true, "link") ?></p>
+                <p><?= Html::link(Nav::LINK_IUF, " International Unicycle Federation", true, "link") ?></p>
             </div>
         </div>
 

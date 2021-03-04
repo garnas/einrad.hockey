@@ -15,19 +15,19 @@ include '../../templates/header.tmp.php';
     <div class="w3-panel w3-card">
         <h2 class="w3-text-primary">Modus</h2>
         <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
-        <a class="no w3-hover-text-secondary" href="<?= Config::LINK_MODUS ?>">
+        <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS ?>">
             <p>
                 <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i>
                 Ligamodus
             </p>
         </a>
-        <a class="no w3-hover-text-secondary" href="<?= Config::LINK_TURNIER ?>">
+        <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_TURNIER ?>">
             <p>
                 <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i>
                 Turniermodi
             </p>
         </a>
-        <a class="no w3-hover-text-secondary" href="<?= Config::LINK_MODUS_KURZ ?>">
+        <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS_KURZ ?>">
             <p>
                 <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file</i>
                 Zusammenfassung Ligamodus
@@ -38,7 +38,7 @@ include '../../templates/header.tmp.php';
     <div class="w3-panel w3-card">
         <h2 class="w3-text-primary">Regeln</h2>
         <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
-        <a class="no w3-hover-text-secondary" href="<?= Config::LINK_REGELN ?>">
+        <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_REGELN ?>">
             <p>
                 <i
                         class="w3-xxlarge w3-text-primary material-icons"
@@ -47,7 +47,7 @@ include '../../templates/header.tmp.php';
                 Regelwerk
             </p>
         </a>
-        <a class="no w3-hover-text-secondary" href="<?= Config::LINK_REGELN_KURZ ?>">
+        <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_REGELN_KURZ ?>">
             <p>
                 <i
                         class="w3-xxlarge w3-text-tertiary material-icons"
@@ -62,7 +62,7 @@ include '../../templates/header.tmp.php';
     <div class="w3-panel w3-card">
         <h2 class="w3-text-primary">Englisch</h2>
         <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
-        <a class="no w3-hover-text-secondary" href="<?= Config::LINK_REGELN_IUF ?>">
+        <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_REGELN_IUF ?>">
             <p>
                 <i
                         class="w3-xxlarge w3-text-primary material-icons"
@@ -72,7 +72,7 @@ include '../../templates/header.tmp.php';
                 international competitions)
             </p>
         </a>
-        <a class="no w3-hover-text-secondary" href="<?= Config::LINK_MODUS_KURZ_ENG ?>">
+        <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS_KURZ_ENG ?>">
             <p>
                 <i
                         class="w3-xxlarge w3-text-tertiary material-icons"
@@ -86,7 +86,7 @@ include '../../templates/header.tmp.php';
     <div class="w3-panel w3-card">
         <h2 class="w3-text-primary">Sonstiges</h2>
         <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
-        <a class="no w3-hover-text-secondary" href="<?= Config::LINK_DSGVO ?>">
+        <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_DSGVO ?>">
             <p>
                 <i
                         class="w3-xxlarge w3-text-primary material-icons"
@@ -95,7 +95,7 @@ include '../../templates/header.tmp.php';
                 Datenschutzhinweise
             </p>
         </a>
-        <a class="no w3-hover-text-secondary" href="<?= Config::LINK_SPIELPLAENE_ALT ?>">
+        <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_SPIELPLAENE_ALT ?>">
             <p>
                 <i
                         class="w3-xxlarge w3-text-primary material-icons"
