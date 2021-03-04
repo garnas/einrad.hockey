@@ -1,10 +1,11 @@
 <?php
 /*
- * Etwas wurde nicht gefunden.
+ * Es ist ein Konflikt aufgetreten. Also: Irgendwas passt nicht zusammen.
+ * ==> trigger_error(..., E_USER_ERROR)
  */
 require_once '../../logic/first.logic.php'; //autoloader und Session
 
-$text = $_SESSION['error']['text'] ?? 'Es ist ein interner Fehler aufgetreten.';
+$text = $_SESSION['error']['text'] ?? 'Es ist ein Konflikt aufgetreten.';
 $link = $_SESSION['error']['url'] ?? '';
 
 unset ($_SESSION['error']);
@@ -16,12 +17,12 @@ unset ($_SESSION['error']);
 include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 
     <div class="w3-center">
-        <h1 class="w3-text-primary">Diese Seite konnte nicht gefunden werden</h1>
+        <h1 class="w3-text-primary">Hier passte etwas nicht</h1>
+        <p class="w3-text-red">
+            <?= $text ?>
+        </p>
 
         <?php if (!empty($link)) { ?>
-            <p class="grey">
-                <?= $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . $link ?>
-            </p>
             <p>
                 <?= Html::link($link, 'Erneut versuchen', icon:'settings_backup_restore') ?>
             </p>

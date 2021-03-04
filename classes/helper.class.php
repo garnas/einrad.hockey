@@ -71,5 +71,6 @@ class Helper
         ];
         return implode(" | ", array_filter($akteure)) ?: 'Unbekannt';
     }
+
 }
 

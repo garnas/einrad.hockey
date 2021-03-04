@@ -7,6 +7,7 @@
  */
 require_once __DIR__ . '/../system/ini_set.php';
 
+
 /**
  * Enviroment-Variablen laden
  */
@@ -16,7 +17,22 @@ require_once __DIR__ . '/../env.php';
  * Session starten
  */
 session_start();
+
+/**
+ * https://owasp.org/www-community/attacks/Session_fixation
+ * https://www.php.net/session_regenerate_id
+ */
+if (
+    isset($_SESSION['destroyed'])
+    && $_SESSION['destroyed'] < time() - 15
+) {
+    unset ($_SESSION['logins']);
+    trigger_error("Zugriff auf ungültige Session-ID.", E_USER_ERROR);
+}
+
+$_SESSION['destroyed'] = time(); // Legt den Destroy-Zeitstempel fest
 session_regenerate_id();
+unset($_SESSION['destroyed']); // Die neue Session braucht keinen Destroy-Zeitstempel
 
 /**
  * Autoloader der Klassen
@@ -30,6 +46,20 @@ spl_autoload_register(
     }
 );
 
+
+/**
+ * Wartungsmodus
+ */
+if ((Env::WARTUNGSMODUS) && !isset($_SESSION['wartungsmodus'])) {
+    die(
+        "<div style='text-align:center'>"
+        . "<h1>" . Env::BASE_URL . " ist im Wartungsmodus.</h1>"
+        . "<p>Ligaausschuss:<br> " . Env::LAMAIL . "</p>"
+        . "<p>Technikausschuss:<br> " . Env::TECHNIKMAIL . "</p>"
+        . "</div>"
+    );
+}
+
 /**
  * Diese Funktion wird nach Beendigung des Skriptes ausgeführt.
  * Sie logt User und gibt Fehlerseiten aus.
@@ -38,42 +68,51 @@ spl_autoload_register(
  */
 register_shutdown_function(static function () {
 
-    // Fehlerseite nur bei Fatal Errors
-    $error = error_get_last();
-    if (
-        $error !== null
-        && ($error['type'] === E_USER_ERROR || $error['type'] === E_ERROR)
-    ) {
-        if ($error['type'] === E_USER_ERROR) {
-            $_SESSION['error']['text'] = $error['message']; // Nur selbst erstellte Fehlertexte mit trigger_error(...) werden angezeigt
-            $_SESSION['error']['url'] = $_SERVER['REQUEST_URI'];
-        }
-        Helper::reload("/errors/500.php");
-    }
+    // Fehlerseiten aufrufen
 
+    if (
+        // Kein Fehlerhandling für localhost (Debugging)
+        !(
+            file_exists(__DIR__ . '/../nur_localhost_nicht_hochladen.php')
+            && in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])
+        )
+        // Es lag ein Fehler vor
+        && ($error = error_get_last()) !== null
+    ) {
+
+        if ($error['type'] === E_USER_ERROR) {
+            $_SESSION['error']['text'] = $error['message'];
+            $_SESSION['error']['url'] = $_SERVER['REQUEST_URI'];
+            Helper::reload("/errors/409.php");
+        } else if (
+            $error['type'] === E_ERROR
+        ) {
+            $_SESSION['error']['url'] = $_SERVER['REQUEST_URI'];
+            Helper::reload("/errors/500.php");
+        }
+
+    }
     // Logs der Besucher
-    if (strpos(Env::BASE_URL, $_SERVER['SERVER_NAME']) > 0){
+
+    // Referrer falls relevant
+    if (strpos(Env::BASE_URL, $_SERVER['SERVER_NAME']) > 0) {
         $referrer = " | " . ($_SERVER['HTTP_REFERER'] ?? '') . " (Referrer)";
     } else {
         $referrer = '';
     }
+
+    // Logs schreiben
     Helper::log("user.log",
         $_SERVER['REQUEST_URI']
         . " | " . round(microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"], 3) . " s (Load)"
-        . " | " . dbi::$db->query_count . " (Querys)"
+        . " | " . dbWrapper::$query_count . " (Querys)"
         . $referrer);
 
 });
+
 
 /**
  * Verbindung zur Datenbank
  */
 dbi::initialize(); // Neue DB-Verbindung mit Prepared-Statements
 
-if((Env::WARTUNGSMODUS) && !isset($_SESSION['wartungsmodus'])){
-    die(
-        "Wir sind gerade im Wartungsmodus."
-        . "<br><br>Ligaausschuss:<br> " . Env::LAMAIL
-        . "<br><br>Technikausschuss:<br> " . Env::TECHNIKMAIL
-    );
-}

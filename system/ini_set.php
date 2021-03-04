@@ -27,8 +27,8 @@ setlocale(LC_TIME, 'de_DE@euro', 'de_DE', 'de', 'ge');
 
 // Nur für Localhost-Einstellungen
 if (
-    file_exists(__DIR__ . '/../ini_set_localhost_nicht_hochladen.php')
+    file_exists(__DIR__ . '/../nur_localhost_nicht_hochladen.php')
     && in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])
 ) {
-    require_once __DIR__ . '/../ini_set_localhost_nicht_hochladen.php';
+    require_once __DIR__ . '/../nur_localhost_nicht_hochladen.php';
 }

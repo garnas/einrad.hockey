@@ -18,7 +18,7 @@ class dbWrapper
     /**
      * Nur für Logs verwendet
      */
-    public int $query_count = 0;
+    public static int $query_count = 0;
     private string $sql;
     private mixed $params;
 
@@ -38,7 +38,6 @@ class dbWrapper
         $this->link = new mysqli($host, $user, $password, $database);
         if ($this->link->connect_errno) {
             Helper::log(Config::LOG_DB, "ERROR Verbindung: " . mysqli_connect_error());
-            die("Verbindung zur Datenbank nicht möglich.");
         }
         $this->link->set_charset("utf-8mb4");
     }
@@ -84,7 +83,7 @@ class dbWrapper
         // Für Logs
         $this->sql = $sql;
         $this->params = $params;
-        $this->query_count++;
+        self::$query_count++;
 
         return $this;
     }
@@ -94,7 +93,7 @@ class dbWrapper
      *
      * @param $params
      */
-    function bind($params)
+    private function bind($params): void
     {
         $args_ref = [];
         $types = '';

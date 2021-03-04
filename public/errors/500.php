@@ -1,8 +1,10 @@
 <?php
-/////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////LOGIK////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+/*
+ * PHP ist hat einen Fehler oder es liegt ein anderer Server-Fehler vor.
+ */
+require_once __DIR__ . "/../../system/ini_set.php";
+require_once __DIR__ . "/../../env.php";
+session_start();
 
 $text = $_SESSION['error']['text'] ?? 'Es ist ein interner Fehler aufgetreten.';
 $link = $_SESSION['error']['url'] ?? Env::BASE_URL;
@@ -12,25 +14,27 @@ unset ($_SESSION['error']);
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+?>
 
-include_once Env::BASE_PATH . '/templates/header.tmp.php'; ?>
+<div style="text-align: center;">
+    <h1>Hier hat etwas nicht funktioniert</h1>
 
-    <div class="w3-center" style="display:block!important;">
-        <h1 class="w3-text-primary">Hier hat etwas nicht funktioniert!</h1>
+    <p style="color: red;">
+        <b><?= $text ?></b>
+    </p>
 
-        <p class="w3-text-red">
-            <b><?= $text ?></b>
-        </p>
+    <p>
+        <a href="<?= $link ?>">Erneut versuchen</a>
+    </p>
 
-        <p>
-            <?= Html::link($link, 'Erneut versuchen', icon:'settings_backup_restore') ?>
-        </p>
-
-        <p class="w3-text-grey">
-            E-Mail-Adresse Technikausschuss
-            <br>
-            <?= Html::mailto(ENV::TECHNIKMAIL) ?>
-        </p>
-    </div>
-
-<?php include_once Env::BASE_PATH . '/templates/footer.tmp.php';
+    <p>
+        Technikausschuss
+        <br>
+        <?= ENV::TECHNIKMAIL ?>
+    </p>
+    <p>
+        Ligaausschuss
+        <br>
+        <?= ENV::LAMAIL ?>
+    </p>
+</div>
