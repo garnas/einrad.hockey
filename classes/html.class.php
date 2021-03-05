@@ -28,7 +28,7 @@ class Html
         if (
             !isset($_SESSION['bild_navigation']['path'])
             || (time() - $_SESSION['bild_navigation']['zeit']) > 600
-            ){
+        ){
             $imagesDir = Env::BASE_PATH . '/public/bilder/hintergrund/';
             $images = glob($imagesDir . '*.{jpg,JPG,jpeg,png,gif}', GLOB_BRACE);
             $randomImage = $images[array_rand($images)];

@@ -66,14 +66,7 @@ spl_autoload_register(
  */
 if ((Env::WARTUNGSMODUS) && !isset($_SESSION['wartungsmodus'])) {
     $_SESSION['error']['text'] = 'Die Seite befindet sich im Wartungsmodus';
-    Helper::reload('errors/500.php');
-    die(
-        "<div style='text-align:center'>"
-            . "<h1>" . Env::BASE_URL . " ist im Wartungsmodus.</h1>"
-            . "<p>Ligaausschuss:<br> " . Env::LAMAIL . "</p>"
-            . "<p>Technikausschuss:<br> " . Env::TECHNIKMAIL . "</p>"
-        . "</div>"
-    );
+    Helper::reload('/errors/500.php');
 }
 
 /**
@@ -111,18 +104,22 @@ register_shutdown_function(static function () {
     // Logs der Besucher
 
     // Referrer falls relevant
-    if (strpos(Env::BASE_URL, $_SERVER['SERVER_NAME']) > 0) {
-        $referrer = " | " . ($_SERVER['HTTP_REFERER'] ?? '') . " (Referrer)";
-    } else {
+    if (
+        empty($_SERVER['HTTP_REFERER'])
+        || str_contains($_SERVER['HTTP_REFERER'], $_SERVER['SERVER_NAME'])
+    ) {
         $referrer = '';
+    } else {
+        $referrer = " | " . ($_SERVER['HTTP_REFERER'] ?? '') . " (Referrer)";
     }
 
     // Logs schreiben
     Helper::log("user.log",
         $_SERVER['REQUEST_URI']
-        . " | " . round(microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"], 3) . " s (Load)"
-        . " | " . dbWrapper::$query_count . " (Querys)"
-        . $referrer);
+            . " | " . round(microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"], 3) . " s (Load)"
+            . " | " . dbWrapper::$query_count . " (Querys)"
+            . $referrer,
+        true);
 
 });
 
@@ -131,4 +128,3 @@ register_shutdown_function(static function () {
  * Verbindung zur Datenbank
  */
 dbi::initialize(); // Neue DB-Verbindung mit Prepared-Statements
-

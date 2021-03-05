@@ -186,7 +186,7 @@ class Spieler
     {
         $spalten_namen = dbi::$db->query("SHOW FIELDS FROM spieler")->list('Field');
         if (!in_array($entry, $spalten_namen, true)) {
-            die("Ungültiger Spaltenname");
+            trigger_error("Ungültiger Spaltenname", E_USER_ERROR);
         }
         $zeit = ($entry === 'team_id' || $entry === 'letzte_saison') ? '' : ', zeit = zeit';
         $entry = "`" . $entry . "`";

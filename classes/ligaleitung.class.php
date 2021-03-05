@@ -62,7 +62,7 @@ class LigaLeitung
         // Passwort Hashen
         $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
         if (!is_string($passwort_hash)) {
-            die("Ein Fehler ist aufgetreten");
+            trigger_error("set_passwort fehlgeschlagen.", E_USER_ERROR);
         }
 
         // Neues Passwort in die Datenbank schreiben

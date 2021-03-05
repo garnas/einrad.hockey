@@ -52,12 +52,14 @@ class Helper
      *
      * @param string $file_name Name der Logdatei
      * @param string $line Einzutragender Text in die Logdatei
+     * @param bool $hide_akteur Soll ein Name hinterlegt werden?
      */
-    public static function log(string $file_name, string$line): void
+    public static function log(string $file_name, string $line, $hide_akteur = false): void
     {
         $path = Env::BASE_PATH . '/system/logs/';
         $log_file = fopen($path . $file_name, 'ab');
-        $line = date('[Y-M-d\TH:i:s] [') . self::get_akteur() . "]:\n" . $line . "\n\n";
+        $akteur = ($hide_akteur) ? '' : ' [' . self::get_akteur() . ']';
+        $line = date('[Y-m-d\TH:i:s]') . $akteur . ":\n" . $line . "\n\n";
 
         fwrite($log_file, $line);
         fclose($log_file);

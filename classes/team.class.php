@@ -310,7 +310,6 @@ class Team
         dbi::$db->query($sql, $name)->log();
     }
 
-
     /**
      * Gibt Anzahl der Freilose des Teams zurück
      *
@@ -354,7 +353,7 @@ class Team
         // Validieren, ob der Spaltenname ein echter Spaltenname ist
         $spalten_namen = dbi::$db->query("SHOW FIELDS FROM teams_details")->list('Field');
         if (!in_array($spalten_name, $spalten_namen, true)) {
-            die("Ungültiger Spaltenname");
+            trigger_error("Ungültiger Spaltenname", E_USER_ERROR);
         }
         $spalten_name = "`" . $spalten_name . "`";
 
@@ -411,6 +410,7 @@ class Team
         $_SESSION['logins']['team']['name'] = $team->details['teamname'];
         $_SESSION['logins']['team']['block'] = Tabelle::get_team_block($team->id);
     }
+
     /**
      * Login Teamcenter
      *
@@ -463,7 +463,7 @@ class Team
         // Passwort hashen
         $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
         if (!is_string($passwort)) {
-            die("Es ist ein Fehler aufgetreten.");
+            trigger_error("set_passwort fehlgeschlagen.", E_USER_ERROR);
         }
 
         // Befindet sich das Team im Teamcenter ihr Passwort geändert?

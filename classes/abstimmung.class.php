@@ -53,7 +53,7 @@ class Abstimmung
     {
         $this->team_id = $team_id;
         if (!Team::is_ligateam($team_id)) {
-            die("Ungültige Team-ID");
+            trigger_error("Ungültige Team-ID", E_USER_ERROR);
         }
         // Details aus abstimmung_teams bekommen
         $sql = "
