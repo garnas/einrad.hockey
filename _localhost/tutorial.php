@@ -54,7 +54,7 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 
     <!-- (11) Dein HTML-Code: Ab hier PHP nur noch als Templating-Engine verwenden. -->
     <h1 class="w3-text-primary">
-        <?= Html::icon("list", tag:"h1") ?> Eine Liste aller Teams
+        <?= Html::icon("info", tag:"h1") ?> Eine Liste aller Teams
     </h1>
     <p>
         <?php foreach ($teams as $teamname) { ?>
@@ -85,7 +85,7 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
     </div>
 
     <!-- (13) Ein Beispiellink -->
-    <?= Html::link("https://www.google.de", "Beispiellink", true, 'launch') ?>
+    <?= Html::link("https://phpdelusions.net/", "Beispiellink", true, 'launch') ?>
 
 <?php
 // (14) Einfügen des Footers
