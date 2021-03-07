@@ -1,8 +1,7 @@
 <?php
 
 // Diese Datei schaltet bei Aufruf die Seite im Wartungsmodus für den jeweiligen Nutzer frei.
-require_once '../env.php';
-require_once Env::BASE_PATH . '/system/ini_set.php';
+require_once '../init.php';
 
 session_start();
 
