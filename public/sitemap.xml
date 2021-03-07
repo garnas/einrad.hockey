@@ -11,11 +11,6 @@
   <priority>1.00</priority>
 </url>
 <url>
-  <loc>https://einrad.hockey/liga/challenge</loc>
-  <lastmod>2021-01-15T17:48:57+00:00</lastmod>
-  <priority>0.90</priority>
-</url>
-<url>
   <loc>https://einrad.hockey/liga/abstimmung</loc>
   <lastmod>2021-03-03T01:30:00+00:00</lastmod>
   <priority>1</priority>

@@ -30,7 +30,7 @@ $display_ergebnisse = [
 ];
 
 // Höchstes Abstimmungsergebnis oben anzeigen lassen.
-$sort_function = function ($value1, $value2) {
+$sort_function = static function ($value1, $value2) {
     return ($value1['stimmen'] < $value2['stimmen']) ? 1 : -1;
 };
 
@@ -43,14 +43,14 @@ if (Helper::$teamcenter) {
 
     // Team will seine Stimme einsehen
     if (isset($_POST['stimme_einsehen'])) {
-        if (!password_verify($_POST['passwort'], $abstimmung->passwort_hash)) {
-            Helper::log("abstimmung.log", "$abstimmung->team_id Ungültiges Passwort (Stimme einsehen)");
-            Html::error("Ungültiges Passwort.");
-        } else {
+        if (password_verify($_POST['passwort'], $abstimmung->passwort_hash)) {
             $crypt = $abstimmung->teamid_to_crypt($_POST['passwort']);
             $einsicht = $abstimmung->get_stimme($crypt);
             Helper::log("abstimmung.log", "$abstimmung->team_id hat seine Stimme eingesehen");
             // Keinen Header einbauen, da $stimme sonst verloren geht.
+        } else {
+            Helper::log("abstimmung.log", "$abstimmung->team_id Ungültiges Passwort (Stimme einsehen)");
+            Html::error("Ungültiges Passwort.");
         }
     }
 
