@@ -16,7 +16,7 @@ unset ($_SESSION['error']);
 include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 
     <div class="w3-center">
-        <h1 class="w3-text-primary">Diese Seite konnte nicht gefunden werden</h1>
+        <h1 class="w3-text-primary">Diese Seite konnte nicht gefunden werden.</h1>
 
         <?php if (!empty($link)) { ?>
             <p class="grey">
