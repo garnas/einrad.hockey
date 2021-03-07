@@ -30,10 +30,10 @@ ini_set('error_log', __DIR__ . '/logs/errors.log');
 
 // Nur für Localhost-Einstellungen
 if (
-    file_exists(__DIR__ . '/nur_localhost.php')
+    file_exists(__DIR__ . '/_localhost/nur_localhost.php')
     && in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])
 ) {
-    require_once __DIR__ . '/nur_localhost.php';
+    require_once __DIR__ . '/_localhost/nur_localhost.php';
 }
 
 /**

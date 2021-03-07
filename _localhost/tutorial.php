@@ -1,43 +1,47 @@
 <?php
-// (1) Diese Datei kommt in den Public-Ordner und wird vom User aufgerufen.
+// (1) Die angezeigte Datei kommt in den Public-Ordner und wird vom User aufgerufen.
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-// (2) first.logic muss immer als Erstes geladen werden.
-// Pfad der first.logic.php im logic Ordner muss angepasst werden.
-require_once 'logic/first.logic.php'; //autoloader und Session
+// (2) init.php muss immer als Erstes geladen werden.
+// Pfad zur init.php muss angepasst werden.
+// Diese Datei lädt wichtige PHP-Einstellungen und Sachen wie zB Autoloader der Klassen und Session-Handling
+require_once '../init.php';
 
 // (3) Authentifikation
 # require_once Env::BASE_PATH . '/logic/session_la.logic.php'; // Zugriff nur mit LA-Login
 # require_once Env::BASE_PATH . '/logic/session_team.logic.php'; // Zugriff nur mit Team-Login
 
-// (4) Beispiel-Meldungen, diese werden nach dem Laden der Navigation ausgegeben.
-#Form::info("Alles gut");
-#Form::error("Ein Fehler");
-#Form::notice("Ein Hinweis");
+// (4) Beispiel-Meldungen, diese werden nach dem Laden der Navigation ausgegeben und vorher in der Session gespeichert.
+# Form::info("Alles gut");
+# Form::error("Ein Fehler");
+# Form::notice("Ein Hinweis");
 
 
-// (5) Datenbankabfragen sollen in einer .class.php im classes Ordner getätigt werden. Die Klasse wird
+// (5) Datenbankabfragen sollen in einer *.class.php im classes Ordner getätigt werden. Die Klasse wird
 // dann hier aufgerufen.
 
-// (6) Beispiel: Liste aller Teams wird an den HTML-Code übergeben
-$teams = Team::get_liste(); // $teams wird jetzt ans Layout übergeben.
+// (6) Beispiel: Liste aller Teams, welche an den HTML-Code übergeben wird
+$teams = Team::get_liste();
 
-// (7) Formularverarbeitung findet hier statt.
+// (7) Formularverarbeitung findet hier im Logikteil statt.
 if (isset($_POST['mein_formular'])) {
     Html::info("Formular abgesendet. Dein Text: " . $_POST['mein_text']);
+    // Weitere Formularverarbeitung
+    Helper::reload(); // Lädt das Skript neu nach der Formularverarbeitung.
 }
 
 // (8) Debuggen von Arrays:
-#dbi::debug($teams);
-#dbi::debug(Html::$teamcenter, true);
-#dbi::debug([1.2234, 1, 'hallo', [false, true]], true);
+# dbi::debug($teams);
+# dbi::debug(Html::$teamcenter, true);
+# dbi::debug([1.2234, 1, 'hallo', [false, true]], true);
 
 
-// (9) Beispiel Fehler, welcher das Skript beendet und eine Fehlerseite aufruft.
-#trigger_error("Dies ist ein Beispielfehler.", E_USER_ERROR);
+// (9) Beispiel Fehler, welche das Skript beenden und eine Fehlerseite aufrufen.
+# trigger_error("Dies ist ein Beispielfehler.", E_USER_ERROR);
+# Helper::not_found("Die Teamliste konnte nicht gefunden werden");
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -54,7 +58,7 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
     </h1>
     <p>
         <?php foreach ($teams as $teamname) { ?>
-            <?= $teamname ?><br>
+            <?= $teamname // Html-Code in Strings soll vermieden werden ?><br>
         <?php } // end foreach ?>
     </p>
     <p class="w3-text-grey">Ende der Liste</p>
