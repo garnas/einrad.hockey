@@ -16,7 +16,7 @@ class db
     /**
      * db constructor.
      *
-     * Verbindung wird bei der Erstellung des Objektes geöffnet. Das erste db-Objekt wird in first.logic.php erstellt.
+     * Verbindung wird bei der Erstellung des Objektes geöffnet. Das erste db-Objekt wird in init.php erstellt.
      *
      * Datenbankname
      * @param string $db

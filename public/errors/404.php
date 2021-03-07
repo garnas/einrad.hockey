@@ -2,7 +2,7 @@
 /*
  * Etwas wurde nicht gefunden.
  */
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 
 $text = $_SESSION['error']['text'] ?? 'Es ist ein interner Fehler aufgetreten.';
 $link = $_SESSION['error']['url'] ?? '';

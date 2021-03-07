@@ -1,5 +1,5 @@
 <?php
-require_once '../../logic/first.logic.php';
+require_once '../../init.php';
 Helper::$teamcenter_no_redirect = true; // Verhindert Weiterleitung, bei der Überprüfung, ob das Passwort geändert wurde
 require_once '../../logic/session_team.logic.php'; //Auth
 

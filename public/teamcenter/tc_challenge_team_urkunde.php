@@ -4,7 +4,7 @@
 header('Location: tc_start.php');
 die();
 
-require_once '../../logic/first.logic.php'; // Autoloader und Session
+require_once '../../init.php'; // Autoloader und Session
 require_once '../../logic/session_team.logic.php'; //Auth
 require_once '../../logic/challenge.logic.php'; // Logic der Challenge
 

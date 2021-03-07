@@ -50,7 +50,7 @@ if (
     (Env::WARTUNGSMODUS)
     && !isset($_SESSION['wartungsmodus'])
 ) {
-    require(Env::BASE_PATH . '/public/errors/wartungsmodus.php');
+    require(__DIR__ . '/public/errors/wartungsmodus.php');
     die();
 }
 
@@ -65,8 +65,8 @@ header('Referrer-Policy: no-referrer-when-downgrade');
 
 
 /**
- * Session starten
- * Session-Hijacking erschweren
+ * Session starten und Session-Hijacking erschweren
+ *
  * https://owasp.org/www-community/attacks/Session_fixation
  * https://www.php.net/session_regenerate_id
  *
@@ -84,6 +84,7 @@ if (
 $_SESSION['destroyed'] = time(); // Legt den Destroy-Zeitstempel fest
 session_regenerate_id(); // Kopiert die bestehende Session
 unset($_SESSION['destroyed']); // Die neue Session braucht keinen Destroy-Zeitstempel
+
 
 /**
  * Autoloader der Klassen
@@ -159,5 +160,3 @@ dbi::initialize(); // Neue DB-Verbindung mit Prepared-Statements
  * Sprache für Zeitformate in Deutsch --> strftime()
  */
 setlocale(LC_TIME, 'de_DE@euro', 'de_DE', 'de', 'ge');
-
-//phpinfo();

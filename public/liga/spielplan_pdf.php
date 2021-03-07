@@ -1,5 +1,5 @@
 <?php
-require_once '../../logic/first.logic.php'; // Autoloader und Session
+require_once '../../init.php'; // Autoloader und Session
 require_once '../../logic/spielplan.logic.php'; // Erstellt Spielplanobjekt nach Validation
 
 // Legt die Schriftgrößen fest je nach Teamanzahl

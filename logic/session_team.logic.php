@@ -1,5 +1,5 @@
 <?php
-// Dies hier muss in jeder geschützten Seite direkt unterhalb von first.logic.php eingefügt werden!
+// Dies hier muss in jeder geschützten Seite direkt nach von init.php eingefügt werden!
 if(!isset($_SESSION['logins']['team'])) {
   $_SESSION['tc_redirect'] = dbi::escape($_SERVER['REQUEST_URI']); //Damit man nach dem Login direkt auf die gewünschte Seite geführt wird
   Html::info("Du wirst nach deinem Login weitergeleitet.");

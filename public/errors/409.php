@@ -3,7 +3,7 @@
  * Es ist ein Konflikt aufgetreten. Also: Irgendwas passt nicht zusammen.
  * ==> trigger_error(..., E_USER_ERROR)
  */
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 
 $text = $_SESSION['error']['text'] ?? 'Es ist ein Konflikt aufgetreten.';
 $link = $_SESSION['error']['url'] ?? '';

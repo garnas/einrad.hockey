@@ -7,7 +7,7 @@
 header('Location: neues.php');
 die();
 
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 require_once '../../logic/challenge.logic.php'; //Erstellt Challenge-Objekt nach der Validation
 
 $color[0] = "background-color: rgb(189, 148, 107);";
