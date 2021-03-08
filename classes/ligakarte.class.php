@@ -24,7 +24,7 @@ class LigaKarte
                 VALUES (?, ?, ?, ?, ?, ?)
                 ";
         $params = [$plz, $ort, $LAT, $Lon, $name, $kontakt];
-        return dbi::$db->query($sql, $params)->log();
+        return db::$db->query($sql, $params)->log();
     }
 
     /**
@@ -38,7 +38,7 @@ class LigaKarte
                 FROM ligakarte_gesuch
                 WHERE DATE(zeit) >  CURDATE() - INTERVAL 365 DAY
                 ";
-        return dbi::$db->query($sql)->esc()->fetch();
+        return db::$db->query($sql)->esc()->fetch();
     }
 
     /**
@@ -54,7 +54,7 @@ class LigaKarte
                 FROM ligakarte_gesuch 
                 WHERE PLZ = ?
                 ";
-        return dbi::$db->query($sql, $plz)->num_rows() > 0;
+        return db::$db->query($sql, $plz)->num_rows() > 0;
     }
 
     /**
@@ -74,7 +74,7 @@ class LigaKarte
                 WHERE teams_liga.aktiv = 'Ja'
                 ORDER BY teams_liga.teamname
                 ";
-        return dbi::$db->query($sql)->esc()->fetch();
+        return db::$db->query($sql)->esc()->fetch();
     }
 
     /**
@@ -90,6 +90,6 @@ class LigaKarte
                 FROM plz 
                 WHERE PLZ = ?
                 ";
-        return dbi::$db->query($sql, $plz)->esc()->fetch_row();
+        return db::$db->query($sql, $plz)->esc()->fetch_row();
     }
 }

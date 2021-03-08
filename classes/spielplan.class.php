@@ -129,7 +129,7 @@ class Spielplan
                 FROM spielplan_paarungen 
                 WHERE spielplan_paarung = ?
                 ";
-        $paarungen = dbi::$db->query($sql, $vorlage)->fetch();
+        $paarungen = db::$db->query($sql, $vorlage)->fetch();
 
         // Wurde eine Paarung gefunden?
         if (empty($paarungen)) {
@@ -151,7 +151,7 @@ class Spielplan
                 $teamliste[$spiel["schiri_a"]]["team_id"],
                 $teamliste[$spiel["schiri_b"]]["team_id"]
             ];
-            dbi::$db->query($sql, $params)->log();
+            db::$db->query($sql, $params)->log();
         }
 
         // Turnierlog
@@ -222,7 +222,7 @@ class Spielplan
                 DELETE FROM spiele 
                 WHERE turnier_id = $turnier->id
                 ";
-        dbi::$db->query($sql)->log();
+        db::$db->query($sql)->log();
         $turnier->log("Automatischer JgJ-Spielplan gelöscht.");
         $turnier->set_phase('melde');
     }
@@ -239,7 +239,7 @@ class Spielplan
                 FROM spielplan_details 
                 WHERE spielplan = ?
                 ";
-        return dbi::$db->query($sql, self::get_vorlage($this->turnier, $this->anzahl_teams))->esc()->fetch_row();
+        return db::$db->query($sql, self::get_vorlage($this->turnier, $this->anzahl_teams))->esc()->fetch_row();
     }
 
     /**
@@ -260,7 +260,7 @@ class Spielplan
                 AND team_id_b = t2.team_id
                 ORDER BY spiel_id
                 ";
-        $spiele = dbi::$db->query($sql)->esc()->fetch('spiel_id');
+        $spiele = db::$db->query($sql)->esc()->fetch('spiel_id');
 
         // Uhrzeiten berechnen
         $spielzeit = (
@@ -304,7 +304,7 @@ class Spielplan
             !is_numeric($penalty_b) ? NULL : (int)$penalty_b,
             $spiel_id
         ];
-        dbi::$db->query($sql, $params)->log();
+        db::$db->query($sql, $params)->log();
     }
 
     /**
@@ -339,7 +339,7 @@ class Spielplan
                 FROM spiele
                 WHERE turnier_id = ?;
                 ";
-        return dbi::$db->query($sql, $turnier_id)->num_rows() > 0;
+        return db::$db->query($sql, $turnier_id)->num_rows() > 0;
     }
 
     /**

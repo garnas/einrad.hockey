@@ -45,7 +45,7 @@ class Spieler
                 AND geschlecht = ?
                 ";
         $params = [$vorname, $nachname, $jahrgang, $geschlecht];
-        $result = dbi::$db->query($sql, $params)->fetch_row();
+        $result = db::$db->query($sql, $params)->fetch_row();
         $spieler_id = $result['spieler_id'] ?? 0;
 
         if ($spieler_id > 0) { // Testen ob der Spieler schon existiert
@@ -56,7 +56,7 @@ class Spieler
                         WHERE spieler_id = ?
                         ";
                 $params = [$team_id, Config::SAISON, $spieler_id];
-                dbi::$db->query($sql, $params)->log();
+                db::$db->query($sql, $params)->log();
                 Html::info("Der Spieler wurde vom Team " . Team::id_to_name($result['team_id']) . " übernommen.");
                 return true;
             }
@@ -73,7 +73,7 @@ class Spieler
                 VALUES (?, ?, ?, ?, ?, ?)
                 ";
         $params = [$vorname, $nachname, $jahrgang, $geschlecht, $team_id, Config::SAISON];
-        dbi::$db->query($sql, $params)->log();
+        db::$db->query($sql, $params)->log();
         return true;
     }
 
@@ -105,7 +105,7 @@ class Spieler
                 AND letzte_saison = ?
                 ORDER BY letzte_saison DESC, vorname
                 ";
-        return dbi::$db->query($sql, $team_id, $saison)->esc()->fetch('spieler_id');
+        return db::$db->query($sql, $team_id, $saison)->esc()->fetch('spieler_id');
     }
 
     /**
@@ -138,7 +138,7 @@ class Spieler
                 WHERE letzte_saison >= '$saison'
                 AND team_id IS NOT NULL
                 ";
-        return dbi::$db->query($sql)->fetch_one() ?? 0;
+        return db::$db->query($sql)->fetch_one() ?? 0;
     }
 
     /**
@@ -153,7 +153,7 @@ class Spieler
                 FROM spieler 
                 ORDER BY vorname
                 ";
-        $liste = dbi::$db->query($sql)->esc()->fetch('spieler_id');
+        $liste = db::$db->query($sql)->esc()->fetch('spieler_id');
         foreach ($liste as $id => $x) {
             $spielerliste[$id] = $x['vorname'] . " " . $x['nachname'];
         }
@@ -173,7 +173,7 @@ class Spieler
                 LEFT JOIN teams_liga tl on spieler.team_id = tl.team_id
                 WHERE spieler_id = $this->id
                 ";
-        return dbi::$db->query($sql)->esc()->fetch_row();
+        return db::$db->query($sql)->esc()->fetch_row();
     }
 
     /**
@@ -184,7 +184,7 @@ class Spieler
      */
     public function set_detail(string $entry, mixed $value): void
     {
-        $spalten_namen = dbi::$db->query("SHOW FIELDS FROM spieler")->list('Field');
+        $spalten_namen = db::$db->query("SHOW FIELDS FROM spieler")->list('Field');
         if (!in_array($entry, $spalten_namen, true)) {
             trigger_error("Ungültiger Spaltenname", E_USER_ERROR);
         }
@@ -196,7 +196,7 @@ class Spieler
                 $zeit 
                 WHERE spieler_id = $this->id
                 ";
-        dbi::$db->query($sql, $value)->log();
+        db::$db->query($sql, $value)->log();
     }
 
 
@@ -209,7 +209,7 @@ class Spieler
                 DELETE FROM spieler 
                 WHERE spieler_id = $this->id
                 ";
-        dbi::$db->query($sql)->log();
+        db::$db->query($sql)->log();
     }
 
     /**
@@ -229,6 +229,6 @@ class Spieler
                 AND spieler.schiri >= $saison 
                 OR spieler.schiri = 'Ausbilder/in'
                 ";
-        return dbi::$db->query($sql)->esc()->fetch_one() ?? 0;
+        return db::$db->query($sql)->esc()->fetch_one() ?? 0;
     }
 }

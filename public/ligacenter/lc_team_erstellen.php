@@ -33,9 +33,9 @@ if (isset($_POST['team_erstellen'])) {
     //Team wird erstellt
     if (!$error) {
         Team::set_new_team($teamname, $passwort, $email);
-        Html::info("Das Team \"" . dbi::escape($teamname)
-            . "\" wurde erfolgreich erstellt. Email: " . dbi::escape($email)
-            . " Passwort: " . dbi::escape($passwort));
+        Html::info("Das Team \"" . db::escape($teamname)
+            . "\" wurde erfolgreich erstellt. Email: " . db::escape($email)
+            . " Passwort: " . db::escape($passwort));
         header("Location: ../liga/teams.php");
         die();
     }

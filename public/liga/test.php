@@ -5,13 +5,13 @@
 require_once '../../init.php';
 
 
-dbi::debug($RANG_TO_BLOCK, true);
+db::debug($RANG_TO_BLOCK, true);
 function umsch (){
     $sql ="SELECT * FROM turniere_details WHERE format='jgj'";
-    $return = dbi::$db->query($sql)->fetch();
+    $return = db::$db->query($sql)->fetch();
     foreach ($return as $t){
         $sql = "SELECT count(*) FROM turniere_liste WHERE turnier_id = ? AND liste='spiele'";
-        $ret = dbi::$db->query($sql, $t['turnier_id'])->fetch_one();
+        $ret = db::$db->query($sql, $t['turnier_id'])->fetch_one();
 
         if ($ret < 4) {
             continue;
@@ -23,7 +23,7 @@ function umsch (){
                 AND (turniere_liga.phase = 'spielplan' or turniere_liga.phase = 'ergebnis')
                 ";
         $params = [$ret . "er_jgj_default", $t['turnier_id']];
-        dbi::$db->query($sql, $params)->log();
+        db::$db->query($sql, $params)->log();
     }
 }
 //umsch();
@@ -44,12 +44,12 @@ function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
         Html::error($fehler . " Fehler");
         $delta_load_time = microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"];
         Html::notice(round($delta_load_time, 3) . ' Sekunden');
-        dbi::debug(memory_get_peak_usage());
+        db::debug(memory_get_peak_usage());
         return;
     }
 
-    dbi::$db->query("UPDATE `spiele` SET `tore_a` = 4*ROUND(RAND(),0) ,`tore_b`= 4*ROUND(RAND(),0) WHERE turnier_id = $turnier_id");
-    dbi::$db->query("UPDATE `spiele` SET `penalty_a` = NULL ,`penalty_b`= NULL WHERE turnier_id = $turnier_id");
+    db::$db->query("UPDATE `spiele` SET `tore_a` = 4*ROUND(RAND(),0) ,`tore_b`= 4*ROUND(RAND(),0) WHERE turnier_id = $turnier_id");
+    db::$db->query("UPDATE `spiele` SET `penalty_a` = NULL ,`penalty_b`= NULL WHERE turnier_id = $turnier_id");
 
     // Neu
     $spielplan = new Spielplan((new Turnier($turnier_id)));
@@ -65,7 +65,7 @@ function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
         $tore_b = random_int(0, 3);
         $tore_b = (abs($tore_b - $tore_a) > 2) ? max($tore_a + 1, 0) : $tore_b;
         $tore_b = ($tore_a == $tore_b) ? $tore_a + 1 : $tore_b;
-        dbi::$db->query("
+        db::$db->query("
                         UPDATE `spiele` SET `penalty_a` = $tore_a, `penalty_b`= $tore_b
                         WHERE turnier_id = $turnier_id
                         AND ((team_id_a = $team_id_a AND team_id_b = $team_id_b) OR (team_id_a = $team_id_b AND team_id_b = $team_id_a))

@@ -12,7 +12,7 @@ class LigaBot
     public static function liga_bot()
     {
 
-        dbi::sql_backup(); // Datenbank wird gesichert
+        db::sql_backup(); // Datenbank wird gesichert
 
         $doppel_anmeldungen = self::get_doppel_anmeldungen(); // Doppelt auf Spiele-Liste wird hier erfasst.
         if (!empty($doppel_anmeldungen)) {
@@ -130,7 +130,7 @@ class LigaBot
                 AND (art='I' OR art='II' OR art='III') 
                 ORDER BY datum
                 ";
-        return dbi::$db->query($sql, $saison)->esc()->list('turnier_id');
+        return db::$db->query($sql, $saison)->esc()->list('turnier_id');
     }
 
 
@@ -170,7 +170,7 @@ class LigaBot
                 GROUP BY turniere_liga.datum, turniere_liste.team_id 
                 HAVING (COUNT(*) > 1)
                 ";
-        return dbi::$db->query($sql)->esc()->fetch();
+        return db::$db->query($sql)->esc()->fetch();
     }
 
     /**

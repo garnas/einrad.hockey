@@ -23,7 +23,7 @@ class Neuigkeit
                 VALUES (?, ?, ?, ?, ?, ?)
                 ";
         $params = [$titel, $text, $name, $link_jpg, $link_pdf, $bild_verlinken];
-        dbi::$db->query($sql, $params)->log();
+        db::$db->query($sql, $params)->log();
     }
 
     /**
@@ -45,7 +45,7 @@ class Neuigkeit
                 DELETE FROM neuigkeiten
                 WHERE neuigkeiten_id = ?
                 ";
-        dbi::$db->query($sql, $neuigkeiten_id)->log();
+        db::$db->query($sql, $neuigkeiten_id)->log();
 
     }
 
@@ -68,7 +68,7 @@ class Neuigkeit
                 WHERE neuigkeiten_id = '$neuigkeiten_id'
                 "; // zeit=zeit, damit der timestamp nicht erneuert wird
         $params = [$titel, $inhalt, $link_jpg, $link_pdf, $bild_verlinken];
-        dbi::$db->query($sql, $params)->log();
+        db::$db->query($sql, $params)->log();
     }
 
     /**
@@ -87,14 +87,14 @@ class Neuigkeit
                 ORDER BY zeit DESC 
                 LIMIT 10
                 "; // Es werden max. 10 Neuigkeiten angezeigt
-            $neuigkeiten = dbi::$db->query($sql)->esc()->fetch('neuigkeiten_id');
+            $neuigkeiten = db::$db->query($sql)->esc()->fetch('neuigkeiten_id');
         } else { // Eine Neuigkeit
             $sql = "
                 SELECT * 
                 FROM neuigkeiten 
                 WHERE neuigkeiten_id = ? 
                 ";
-            $neuigkeiten = dbi::$db->query($sql, $neuigkeiten_id)->esc()->fetch('neuigkeiten_id');
+            $neuigkeiten = db::$db->query($sql, $neuigkeiten_id)->esc()->fetch('neuigkeiten_id');
         }
         foreach ($neuigkeiten as $key => $neuigkeit) {
             if ($neuigkeit['eingetragen_von'] == 'Ligaausschuss') {
@@ -308,7 +308,7 @@ class Neuigkeit
                 ORDER BY gespielt desc, rand()
                 LIMIT 3
                 ";
-        return dbi::$db->query($sql, $saison)->esc()->fetch();
+        return db::$db->query($sql, $saison)->esc()->fetch();
     }
 
     public static function get_statistik_gew_spiele(int $saison = Config::SAISON): array
@@ -325,7 +325,7 @@ class Neuigkeit
                 ORDER BY gew, RAND()
                 ";
         $gew = [];
-        foreach (dbi::$db->query($sqla, $saison)->esc()->fetch() as $x) {
+        foreach (db::$db->query($sqla, $saison)->esc()->fetch() as $x) {
             $gew[$x['team_id_a']] = $x['gew'];
         }
         // Addition der Tore Team B
@@ -339,7 +339,7 @@ class Neuigkeit
                 GROUP BY team_id_b
                 ORDER BY RAND()
                 ";
-        foreach (dbi::$db->query($sqlb, $saison)->esc()->fetch() as $x) {
+        foreach (db::$db->query($sqlb, $saison)->esc()->fetch() as $x) {
             if (isset($gew[$x['team_id_b']])) {
                 $gew[$x['team_id_b']] += $x['gew'];
             } else {
@@ -368,7 +368,7 @@ class Neuigkeit
                 GROUP BY team_id_a
                 ORDER BY RAND()
                 ";
-        foreach(dbi::$db->query($sqla, $saison)->esc()->fetch() as $x) {
+        foreach(db::$db->query($sqla, $saison)->esc()->fetch() as $x) {
             $tore[$x['team_id_a']] = $x['tore'];
         }
         // Addition der Tore Team B
@@ -382,7 +382,7 @@ class Neuigkeit
                 GROUP BY team_id_b
                 ORDER BY RAND()
                 ";
-        foreach(dbi::$db->query($sqlb, $saison)->esc()->fetch() as $x) {
+        foreach(db::$db->query($sqlb, $saison)->esc()->fetch() as $x) {
             if (isset($tore[$x['team_id_b']])) {
                 $tore[$x['team_id_b']] += $x['tore'];
             } else {
@@ -407,7 +407,7 @@ class Neuigkeit
                 INNER JOIN turniere_liga tl on spiele.turnier_id = tl.turnier_id
                 WHERE tl.saison = ?
                 ";
-        return dbi::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
+        return db::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
     }
 
     /**
@@ -426,7 +426,7 @@ class Neuigkeit
                 AND tore_b IS NOT NULL
                 AND tore_a IS NOT NULL
                 ";
-        return dbi::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
+        return db::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
     }
 
     /**
@@ -447,6 +447,6 @@ class Neuigkeit
                 AND tore_b IS NOT NULL
                 AND tore_a IS NOT NULL
                 ";
-        return dbi::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
+        return db::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
     }
 }

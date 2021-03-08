@@ -1,6 +1,6 @@
 <?php
 
-class dbi
+class db
 {
     public static null|dbWrapper $db;
 
@@ -109,12 +109,15 @@ class dbi
      */
     public static function sql_backup(): string
     {
-        $dumpfile = "../../system/backups/" . Env::DATABASE . "." . date("Y-m-d_H-i-s") . ".sql"; //Dateiname der Sicherungskopie
+        // Dateiname der Sicherungskopie
+        $dumpfile = "../../system/backups/" . Env::DATABASE . "." . date("Y-m-d_H-i-s") . ".sql";
+
         exec("mysqldump --user=" . Env::USER_NAME
             . " --password=" . Env::PASSWORD
             . " --host=" . Env::HOST_NAME
             . " " . Env::DATABASE . " > " . $dumpfile);
-        Html::info("Datenbank wurde gesichert als " . date("Y-m-d_H-i-s") . ".sql im Ordner system/backup/");
+
+        Html::info("Datenbank wurde gesichert als " . date("Y-m-d_H-i-s") . ".sql in system/backup/");
         return $dumpfile;
     }
 }

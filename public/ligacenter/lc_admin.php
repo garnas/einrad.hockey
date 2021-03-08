@@ -61,7 +61,7 @@ if (isset($_POST['ligabot'])){
 
 //Datenbank sichern
 if (isset($_POST['sichern'])){
-    dbi::sql_backup();
+    db::sql_backup();
 }
 
 //Datenbank sichern

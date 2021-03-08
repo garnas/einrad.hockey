@@ -141,7 +141,7 @@ register_shutdown_function(static function () {
 /**
  * Verbindung zur Datenbank
  */
-dbi::initialize(); // Neue DB-Verbindung mit Prepared-Statements
+db::initialize(); // Neue DB-Verbindung mit Prepared-Statements
 
 
 /**

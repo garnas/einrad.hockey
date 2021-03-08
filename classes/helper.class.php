@@ -27,7 +27,7 @@ class Helper
      */
     public static function reload(?string $path = null): void
     {
-        $url = ($path === null) ? dbi::escape($_SERVER['PHP_SELF']) : Env::BASE_URL . $path;
+        $url = ($path === null) ? db::escape($_SERVER['PHP_SELF']) : Env::BASE_URL . $path;
         header("Location: $url");
         die();
     }
@@ -75,7 +75,7 @@ class Helper
     public static function get_akteur(bool $hide_la_name = false): string
     {
         // Sind wir im Ligacenter?
-        if (self::$ligacenter){
+        if (self::$ligacenter) {
             return ($hide_la_name) ? "Ligaausschuss" : $_SESSION['logins']['la']['login'];
         }
 

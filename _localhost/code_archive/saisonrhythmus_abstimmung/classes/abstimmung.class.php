@@ -61,7 +61,7 @@ class Abstimmung
                 FROM abstimmung_teams
                 WHERE team_id = ?
                 ";
-        $this->team = dbi::$db->query($sql, $this->team_id)->esc()->fetch_row();
+        $this->team = db::$db->query($sql, $this->team_id)->esc()->fetch_row();
 
         // Beim ersten Mal Abstimmen den für die Verschlüsselung benutzen Passwort-Hash speichern.
         if (empty($this->team)) {
@@ -112,7 +112,7 @@ class Abstimmung
             FROM abstimmung_ergebnisse
             WHERE crypt = ?
             ";
-        return dbi::$db->query($sql, $crypt)->esc()->fetch_one() ?? '';
+        return db::$db->query($sql, $crypt)->esc()->fetch_one() ?? '';
     }
 
     /**
@@ -136,12 +136,12 @@ class Abstimmung
             $sql = "
                 INSERT INTO abstimmung_teams (team_id, passwort)
                 VALUES ($this->team_id, ?)";
-            dbi::$db->query($sql, $this->passwort_hash)->log();
+            db::$db->query($sql, $this->passwort_hash)->log();
             $sql = "
                 INSERT INTO abstimmung_ergebnisse (stimme, crypt) 
                 VALUES ('$stimme', '$crypt')
                 ";
-            dbi::$db->query($sql, $this->passwort_hash)->log(true);
+            db::$db->query($sql, $this->passwort_hash)->log(true);
             Helper::log("abstimmung.log", "$this->team_id hat seine Stimme abgegeben");
             Html::info("Dein Team hat erfolgreich abgestimmt. Vielen Dank!");
         } else { // Team korrigiert seine Stimme.
@@ -150,13 +150,13 @@ class Abstimmung
                 SET stimme = ?
                 WHERE crypt = ?
                 ";
-            dbi::$db->query($sql, $stimme, $crypt)->log();
+            db::$db->query($sql, $stimme, $crypt)->log();
             $sql = "
                 UPDATE abstimmung_teams
                 SET aenderungen = aenderungen + 1
                 WHERE team_id = $this->team_id
                 ";
-            dbi::$db->query($sql)->log();
+            db::$db->query($sql)->log();
             Helper::log("abstimmung.log", "$this->team_id hat seine Stimme geändert");
             Html::info("Dein Team hat erfolgreich neu abgestimmt. Vielen Dank!");
         }
@@ -175,7 +175,7 @@ class Abstimmung
             FROM abstimmung_ergebnisse
             GROUP BY stimme
             ";
-        $ergebnisse = dbi::$db->query($sql)->esc()->list('stimmen', 'stimme');
+        $ergebnisse = db::$db->query($sql)->esc()->list('stimmen', 'stimme');
         $ergebnisse['gesamt'] = 0;
         foreach ($ergebnisse as $stimmen) {
             $ergebnisse['gesamt'] += $stimmen;

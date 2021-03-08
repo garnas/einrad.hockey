@@ -89,7 +89,7 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
 if (isset($_POST['auto_spielplan_loeschen'])) {
     Spielplan::delete($turnier);
     Html::info("Der dynamisch erstellte Spielplan wurde gelöscht. Das Turnier wurde in die Meldephase versetzt!");
-    header('Location:' . dbi::escape($_SERVER['REQUEST_URI']));
+    header('Location:' . db::escape($_SERVER['REQUEST_URI']));
     die();
 }
 
