@@ -43,18 +43,6 @@ require_once __DIR__ . '/env.php';
 
 
 /**
- * Wartungsmodus
- * Besuche freeme.php, um die Seite im Wartungsmodus trotzdem verwenden zu können.
- */
-if (
-    (Env::WARTUNGSMODUS)
-    && !isset($_SESSION['wartungsmodus'])
-) {
-    require(__DIR__ . '/public/errors/wartungsmodus.php');
-    die();
-}
-
-/**
  * Security-Header
  */
 header('X-Frame-Options: DENY');
@@ -160,3 +148,16 @@ dbi::initialize(); // Neue DB-Verbindung mit Prepared-Statements
  * Sprache für Zeitformate in Deutsch --> strftime()
  */
 setlocale(LC_TIME, 'de_DE@euro', 'de_DE', 'de', 'ge');
+
+
+/**
+ * Wartungsmodus
+ * Besuche freeme.php, um die Seite im Wartungsmodus trotzdem verwenden zu können.
+ */
+if (
+    (Env::WARTUNGSMODUS)
+    && !isset($_SESSION['wartungsmodus'])
+) {
+    require(__DIR__ . '/public/errors/wartungsmodus.php');
+    die();
+}
