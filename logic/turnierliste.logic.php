@@ -1,14 +1,14 @@
 <?php
-//include in turnier schleife!
+
 $anmeldungen = Turnier::get_all_anmeldungen();
 foreach ($turniere as $turnier_id => $turnier){
-    //Plätze frei?
+    // Plätze frei?
     if ($turnier['plaetze'] > count($anmeldungen[$turnier['turnier_id']]['spiele'] ?? array())){
         $turniere[$turnier_id]['freivoll'] = '<span class="w3-text-green">frei</span>';
     }else{
         $turniere[$turnier_id]['freivoll'] = '<span class="w3-text-red">voll</span>';
     }
-    //Turnierart
+    // Turnierart
     if (!in_array($turnier['art'],array('I','II','III'))){
         $turniere[$turnier_id]['block_color'] = "w3-text-primary";
     }

@@ -2,10 +2,10 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 
 //Assoziatives Array aller Turniere der Aktuellen Saison
- $turniere = Turnier::get_all_turniere("WHERE saison='".Config::SAISON."' AND datum >= DATE(NOW())");
+$turniere = Turnier::get_turniere('alle', false);
 
 $xml = new SimpleXMLElement('<turniere/>');
 

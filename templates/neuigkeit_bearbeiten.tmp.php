@@ -1,6 +1,6 @@
 
 <!-- Neuigkeit bearbeiten -->
-<h3>Neuigkeit bearbeiten<?php if($ligacenter){?> (als Ligaausschuss)<?php }?></h3>
+<h3>Neuigkeit bearbeiten<?php if(Helper::$ligacenter){?> (als Ligaausschuss)<?php }?></h3>
 <p id="counter"><i>Es dürfen 750 Zeichen verwendet werden. Für mehr Infos kannst du ein Bild und/oder ein PDF hochladen.</i><p>
 <form action="" method="post" enctype="multipart/form-data">
     <p>
@@ -18,7 +18,7 @@
             <p>
                 <input class="w3-button w3-block w3-primary" type="file" name="jpgupload" id="jpgupload">
             </p>
-            <?php if($ligacenter){?>
+            <?php if(Helper::$ligacenter){?>
                 <p>
                     <label class="" for="bild_verlinken">Bild verlinken (optional) | nur Ligaausschuss</label>
                     <input class="w3-input w3-border w3-border-primary" placeholder="Link angeben" type="url" id="bild_verlinken" name="bild_verlinken" value="<?=$neuigkeit['bild_verlinken'] ?: ''?>" >

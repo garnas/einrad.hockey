@@ -87,7 +87,7 @@ var confetti = {
 	}
 
 	function startConfetti(timeout, min, max) {
-		var width = document.getElementById("width_for_confetti").offsetWidth; // Geändert von Ansgar, anstelle von window.innerWidth;
+		var width = document.getElementById("main_body").offsetWidth; // Geändert von Ansgar, anstelle von window.innerWidth;
 		var height = window.innerHeight;
 		window.requestAnimationFrame = (function() {
 			return window.requestAnimationFrame ||
@@ -108,7 +108,7 @@ var confetti = {
 			canvas.width = width;
 			canvas.height = height;
 			window.addEventListener("resize", function() {
-				canvas.width = document.getElementById("width_for_confetti").offsetWidth; // Geändert von Ansgar, anstelle von window.innerWidth;
+				canvas.width = document.getElementById("main_body").offsetWidth; // Geändert von Ansgar, anstelle von window.innerWidth;
 				canvas.height = window.innerHeight;
 			}, true);
 			context = canvas.getContext("2d");

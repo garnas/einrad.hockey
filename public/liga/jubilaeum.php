@@ -2,13 +2,13 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-$titel = "25 Jahre | Deutsche Einradhockeyliga";
-$content = "Spielerprofile für das 25. Jubiläum der Deutschen Einradhockeyliga";
+Html::$titel = "25 Jahre | Deutsche Einradhockeyliga";
+Html::$content = "Spielerprofile für das 25. Jubiläum der Deutschen Einradhockeyliga";
 include '../../templates/header.tmp.php';
 
 $header = "w3-white w3-padding w3-text-primary w3-large";
@@ -25,7 +25,7 @@ $answer = "w3-margin w3-display-bottomleft";
 
 <p>Wir wollten uns dies zum Anlass nehmen mit ein paar Spielerinnen und Spielern zu sprechen, die schon länger Einradhockey spielen, als es die Deutsche Einradhockeyliga gibt. Andere sind kurz nach dem Start hinzugekommen oder haben den Sport in besonderer Art gefördert. Uns interessierte ihre Geschichte, wie sie von diesem Sport erfahren haben, wollten Erinnerungen an „alte Zeiten“ hervorrufen und einen Rückblick auf die vergangenen 25 Jahre werfen.</p>
 
-<p>Einen Teil dieser Interviews haben wir bereits auf <?=Form::link(Config::LINK_FACE, '<b>Facebook</b>', true)?> und <?=Form::link(Config::LINK_INSTA, '<b>Instagramm</b>', true)?> veröffentlich. Und nun in ausführlicher Form auch hier. Schaut gerne immer mal wieder auf dieser Seite oder auf unseren Social-Media-Kanälen vorbei, um die weiteren Interviews nicht zu verpassen!</p>
+<p>Einen Teil dieser Interviews haben wir bereits auf <?=Html::link(Nav::LINK_FACE, '<b>Facebook</b>', true)?> und <?=Html::link(Nav::LINK_INSTA, '<b>Instagramm</b>', true)?> veröffentlich. Und nun in ausführlicher Form auch hier. Schaut gerne immer mal wieder auf dieser Seite oder auf unseren Social-Media-Kanälen vorbei, um die weiteren Interviews nicht zu verpassen!</p>
 
 <!-- Erster Spielerabschnitt -->
 <h1 id="guenther" class="w3-text-primary">Günther</h1>

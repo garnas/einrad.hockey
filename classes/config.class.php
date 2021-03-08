@@ -1,94 +1,78 @@
-<?php 
-class Config {
-    
-    //Fürs Debugging kann hier die Zeit verändert werden, mit der die Ligalogik arbeitet
-    //Dies hat keine Auswirkung auf Benennung der Uploads und auf die Log-Dateien
-    public static function time_offset()
-    {
-        return time() + 0; // Offset in Sekunden: 31 Tage: time() + 31*24*60*60
-    }
-    
-    ///////////////////////////////////////////////////////////////
-    ///////////////////////////Saison Jahr/////////////////////////
-    ///////////////////////////////////////////////////////////////
+<?php
 
-    const SAISON = '26'; //Saison Nummer Saison 0 = Saison 1995;
-    const SAISON_ANFANG = '15.08.2020';
-    const SAISON_ENDE = '31.10.2021';
+class Config
+{
+    /**
+     * Variablen aus Env.php aus dem Root Verzeichnis
+     * Diese stehen nur noch hier für die Kompatibilität
+     */
+    public const BASE_URL = Env::BASE_URL;
+    public const BASE_PATH = Env::BASE_PATH;
+    public const HOST_NAME = Env::HOST_NAME;
+    public const DATABASE = Env::DATABASE;
+    public const USER_NAME = Env::USER_NAME;
+    public const PASSWORD = Env::PASSWORD;
+    public const ACTIVATE_EMAIL = Env::HOST_NAME; // Bei True, werden Emails tatsächlich versendet, bei false debugging
+    public const SMTP_HOST = Env::SMTP_HOST;
+    public const SMTP_USER = Env::SMTP_USER;
+    public const SMTP_PW = Env::SMTP_PW;
+    public const SMTP_PORT = Env::SMTP_PORT;
+    public const LAMAIL = Env::LAMAIL;
+    public const LAMAIL_ANTWORT = Env::LAMAIL_ANTWORT; // Wird im BCC gesetzt, bei Mails vom Ligaausschuss
+    public const TECHNIKMAIL = Env::TECHNIKMAIL;
+    public const SCHIRIMAIL = Env::SCHIRIMAIL;
+    public const OEFFIMAIL = Env::OEFFIMAIL;
 
-    ///////////////////////////////////////////////////////////////
-    ////////////////////////SQL Zugangsdaten///////////////////////
-    ///////////////////////////////////////////////////////////////
+    /**
+     * Saison
+     */
+    public const SAISON = 26; // Saison 0 = Jahr 1995;
+    public const SAISON_ANFANG = '15.08.2020';
+    public const SAISON_ENDE = '31.10.2021';
 
-    const HOST_NAME = 'localhost';
-    const DATABASE = 'dummy-db';
-    const USER_NAME = 'root';
-    const PASSWORD = '';
+    /**
+     * Log-Files
+     */
+    public const LOG_LOGIN = "login.log";
+    public const LOG_DB = "db.log";
+    public const LOG_KONTAKTFORMULAR = "kontakt.log";
+    public const LOG_EMAILS = "emails.log";
 
-    ///////////////////////////////////////////////////////////////
-    /////////////////////////Absolute Links////////////////////////
-    ///////////////////////////////////////////////////////////////
 
-    const LINK_FORUM = 'https://forum.einrad.hockey/';
-    const LINK_ARCHIV = 'https://archiv.einrad.hockey/archiv/index.html';
-    const LINK_INSTA = 'https://www.instagram.com/einradhockeyde/';
-    const LINK_FACE = 'https://www.facebook.com/DeutscheEinradhockeyliga';
+    /**
+     * Ligablöcke
+     *
+     * Reihenfolge bei den Blöcken muss immer hoch -> niedrig sein
+     * Für die Block und Wertzuordnung in der Rangtabelle siehe Tabelle::rang_to_block und Tabelle::rang_to_wertigkeit
+     *
+     */
 
-    const LINK_AUSTRALIA = 'https://hockey.unicycling.org.au/';
-    const LINK_SWISS = 'https://www.swiss-iuc.ch/Wettkaempfe/Einradhockey';
-    const LINK_FRANCE = 'https://monocycle.info/ligue-de-monocycle-basket-remaniement-co/';
-    const LINK_IUF = 'https://unicycling.org/';
-    
-    const LINK_EV = 'https://www.einradverband.de/';
-    const LINK_EV_SH = 'https://www.einradverband-sh.de/';
-    const LINK_EV_BY = 'http://einradverband-bayern.de/';
+     /**
+     * Mögliche Team-Blöcke
+     */
+    public const BLOCK = ['A', 'AB', 'BC', 'CD', 'DE', 'EF', 'F'];
 
-    ///////////////////////////////////////////////////////////////
-    ////////////////////////Dokumenten-Links///////////////////////
-    ///////////////////////////////////////////////////////////////
+    /**
+     * Mögliche Turnier-Blöcke
+     */
+    public const BLOCK_ALL = ["ABCDEF", 'A', 'AB', 'ABC', 'BC', 'BCD', 'CD', 'CDE', 'DE', 'DEF', 'EF', 'F'];
 
-    const LINK_MODUS = '../dokumente/ligamodus.pdf';
-    const LINK_REGELN = '../dokumente/regelwerk.pdf';
-    const LINK_MODUS_KURZ = '../dokumente/zusammenfassung_modus.pdf';
-    const LINK_REGELN_KURZ = '../dokumente/zusammenfassung_regeln.pdf';
-    const LINK_MODUS_KURZ_ENG = '../dokumente/summary_modus.pdf';
-    const LINK_REGELN_IUF = '../dokumente/iuf-rulebook-2019.pdf';
-    const LINK_TURNIER = '../dokumente/turniermodi.pdf';
-    const LINK_DSGVO = '../dokumente/datenschutz-hinweise.pdf';
-    const LINK_SPIELPLAENE_ALT = '../dokumente/alte_spielplan_vorlagen.pdf';
+    /**
+     * Rangtabellen-Zuordnung
+     */
+    public const RANG_TO_BLOCK = [
+        "A" => [1, 6],
+        "AB" => [7, 13],
+        "BC" => [14, 21],
+        "CD" => [22, 31],
+        "DE" => [32, 43],
+        "EF" => [44, 57],
+        "F" => [58, INF]
+    ];
 
-    ///////////////////////////////////////////////////////////////
-    //////////////////////////Mailadressen/////////////////////////
-    ///////////////////////////////////////////////////////////////
+    /**
+     * Ligagebühr
+     */
+    public const LIGAGEBUEHR = "30&nbsp;€";
 
-    const LAMAIL = 'liga@einrad.hockey';
-    const LAMAIL_ANTWORT = 'la2021@einrad.hockey';
-    const TECHNIKMAIL = 'technik@einrad.hockey';
-    const SCHIRIMAIL = 'schiri@einrad.hockey';
-    const OEFFIMAIL = 'oeffentlichkeitsausschuss@einrad.hockey';
-
-    ///////////////////////////////////////////////////////////////
-    ///////////////////////Mailversand Server//////////////////////
-    ///////////////////////////////////////////////////////////////
-
-    const ACTIVATE_EMAIL = false; //Bei True, werden Emails tatsächlich versendet, bei false wird db::debug($mailer) ausgeführt
-    const SMTP_HOST = 'HOST';
-    const SMTP_USER = 'test@einrad.hockey';
-    const SMTP_PW = 'PW';
-    const SMTP_PORT = 666;
-
-    ///////////////////////////////////////////////////////////////
-    ///////////////////////////Teamblöcke//////////////////////////
-    ///////////////////////////////////////////////////////////////
-    //Für die Block und Wertzuordnung in der Rangtabelle siehe Tabelle::platz_to_block und Tabelle::platz_to_wertigkeit
-    //Reihenfolge bei den Blöcken muss immer hoch -> niedrig sein
-
-    //Mögliche Team-Blöcke
-    const BLOCK = array('A','AB','BC','CD','DE','EF','F');
-
-    //Mögliche Turnier-Blöcke
-    const BLOCK_ALL =  array("ABCDEF",'A','AB','ABC','BC','BCD','CD','CDE','DE','DEF','EF','F');
-    
-    //Ligagebühr
-    const LIGAGEBUEHR = "30&nbsp;€";
 }

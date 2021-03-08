@@ -1,5 +1,5 @@
 <!-- Formular Turnier löschen -->
-<form method="post" onsubmit="return confirm('Das Turnier in <?=$daten['ort']?> am <?=$daten['datum']?> (<?=$daten['tblock']?>) mit der ID <?=$daten['turnier_id']?> wird gelöscht werden.');">
+<form method="post" onsubmit="return confirm('Das Turnier in <?=$turnier->details['ort']?> am <?=$turnier->details['datum']?> (<?=$turnier->details['tblock']?>) mit der ID <?=$turnier->details['turnier_id']?> wird gelöscht werden.');">
     <div class="w3-panel w3-card-4">
         <h3>Turnier löschen <span class="w3-text-gray">- nur Ligaausschuss</span></h3>
         <p>
@@ -9,14 +9,13 @@
         </p>
         <p>
             <label for='delete_turnier_grund' class="w3-text-primary">Grund der Turnierabsage</label>
-            <input required list="browsers" id="delete_turnier_grund" name="delete_turnier_grund" placeholder="Bitte eingeben.." class="w3-input w3-border w3-border-primary">
+            <input list="browsers" id="delete_turnier_grund" name="delete_turnier_grund" placeholder="Bitte eingeben.." class="w3-input w3-border w3-border-primary">
                 <datalist id="browsers">
                     <option value="Zu wenig spielberechtigte Ligateams">
                     <option value="Vom Ausrichter im Vorfeld abgesagt">
                     <option value="Spaßturnier">
                     <option value="Corona-Pandemie">
                     <option value="Fehler beim Eintragen">
-                    <option value="Dritter Weltkrieg">
                 </datalist>
         </p>
         <p>
@@ -31,43 +30,43 @@
         <h3>Turnierdaten <span class="w3-text-gray">- nur Ligaausschuss</span></h3>
         <p>
             <label for="ausrichter" class='w3-text-primary'>Ausrichter ändern</label><br>
-            <input type="text" class="w3-input w3-border w3-border-primary" value="<?=$daten['teamname']?>" list="teams" id="ausrichter" name="ausrichter">
-                <?=Form::datalist_teams()?>
+            <input type="text" class="w3-input w3-border w3-border-primary" value="<?=$turnier->details['teamname']?>" list="teams" id="ausrichter" name="ausrichter">
+                <?=Html::datalist_teams()?>
         </p>
         <p>
             <label class="w3-text-primary" for="tname">Turniername <i class="w3-small">(optional)</i></label>
-            <input type="text" maxlength="25" value="<?=$daten['tname'];?>" class="w3-input w3-border w3-border-primary" id="tname" name="tname">
+            <input type="text" maxlength="25" value="<?=$turnier->details['tname'];?>" class="w3-input w3-border w3-border-primary" id="tname" name="tname">
         </p>
         <p>
             <label class="w3-text-primary" for="datum">Datum</label>
-            <input required type="date" value="<?=$daten['datum'];?>" class="w3-input w3-border w3-border-primary" style="max-width: 320px" id="datum" name="datum">
+            <input required type="date" value="<?=$turnier->details['datum'];?>" class="w3-input w3-border w3-border-primary" style="max-width: 320px" id="datum" name="datum">
         </p>
         <h3>Ligalogik <span class="w3-text-gray">- nur Ligaausschuss</span></h3>
         <p>
             <label class="w3-text-primary" for="phase">Phase</label>
-            <select required type="date" value="<?=$daten['phase'];?>" class="w3-input w3-border w3-border-primary" id="phase" name="phase">
-                <option <?php if($daten['phase'] == 'offen'){?> selected <?php }?> value="offen">Offene Phase</option>
-                <option <?php if($daten['phase'] == 'melde'){?> selected <?php }?>   value="melde">Meldephase</option>
-                <option <?php if($daten['phase'] == 'spielplan'){?> selected <?php }?> value="spielplan">Spielplan</option>
-                <option <?php if($daten['phase'] == 'ergebnis'){?> selected <?php }?> value="ergebnis">Ergebnis</option>
+            <select required type="date" value="<?=$turnier->details['phase'];?>" class="w3-input w3-border w3-border-primary" id="phase" name="phase">
+                <option <?php if($turnier->details['phase'] == 'offen'){?> selected <?php }?> value="offen">Offene Phase</option>
+                <option <?php if($turnier->details['phase'] == 'melde'){?> selected <?php }?>   value="melde">Meldephase</option>
+                <option <?php if($turnier->details['phase'] == 'spielplan'){?> selected <?php }?> value="spielplan">Spielplan</option>
+                <option <?php if($turnier->details['phase'] == 'ergebnis'){?> selected <?php }?> value="ergebnis">Ergebnis</option>
             </select>
         </p>
         <p>
             <label class="w3-text-primary" for="art">Turnierart</label>
             <select required class="w3-select w3-border w3-border-primary" id="art" name="art">
-                <option <?php if($daten['art'] == 'I'){?> selected <?php }?> value="I">I: Blockeigenes Turnier</option>
-                <option <?php if($daten['art'] == 'II'){?> selected <?php }?> value="II">II: Blockhöheres Turnier</option>
-                <option <?php if($daten['art'] == 'III'){?> selected <?php }?> value="III">III: Blockfreies Turnier (ABCDEF)</option>
-                <option <?php if($daten['art'] == 'spass'){?> selected <?php }?> value="spass">Spaßturnier</option>
-                <option <?php if($daten['art'] == 'final'){?> selected <?php }?> value='final'>Abschlussturnier</option>
-                <option <?php if($daten['art'] == 'fixed'){?> selected <?php }?> value='fixed'>Manuelles (fixed) Turnier</option>
+                <option <?php if($turnier->details['art'] == 'I'){?> selected <?php }?> value="I">I: Blockeigenes Turnier</option>
+                <option <?php if($turnier->details['art'] == 'II'){?> selected <?php }?> value="II">II: Blockhöheres Turnier</option>
+                <option <?php if($turnier->details['art'] == 'III'){?> selected <?php }?> value="III">III: Blockfreies Turnier (ABCDEF)</option>
+                <option <?php if($turnier->details['art'] == 'spass'){?> selected <?php }?> value="spass">Spaßturnier</option>
+                <option <?php if($turnier->details['art'] == 'final'){?> selected <?php }?> value='final'>Abschlussturnier</option>
+                <option <?php if($turnier->details['art'] == 'fixed'){?> selected <?php }?> value='fixed'>Manuelles (fixed) Turnier</option>
             </select>
         </p>
         <p>
         <label class="w3-text-primary" for="block">Turnierblock</label>
         <select required class="w3-select w3-border w3-border-primary" id="block" name="block">';
         <?php foreach (Config::BLOCK_ALL as $block){?>
-            <option <?php if ($daten['tblock'] == $block){?> selected <?php }?> value='<?=$block?>'><?=$block?></option>
+            <option <?php if ($turnier->details['tblock'] == $block){?> selected <?php }?> value='<?=$block?>'><?=$block?></option>
         <?php } //end foreach?>
         </select>
         <i class="w3-text-primary">Nach ändern des Blockes sollten die Anmeldelisten kontrolliert werden.</i>

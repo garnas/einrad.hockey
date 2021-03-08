@@ -1,96 +1,164 @@
 <?php
-class Ligaleitung {
-    //Ligaausschuss
-    public static function get_all_la()
+
+/**
+ * Class Ligaleitung
+ */
+class LigaLeitung
+{
+    /**
+     * Gibt ein Array der Ligaleitung aus
+     *
+     * @param string $funktion
+     * @return array
+     */
+    public static function get_all(string $funktion): array
     {
-        $sql="SELECT r_name, team_id, email FROM ausschuss_liga ORDER BY RAND()";
-        $result = db::readdb($sql);
-        $return = array();
-        while ($x = mysqli_fetch_assoc($result)){
-            array_push($return,$x);
-        }
-        return db::escape($return);
-    }
-    //Technikausschuss
-    public static function get_all_tk()
-    {
-        $sql="SELECT r_name, team_id FROM ausschuss_technik";
-        $result = db::readdb($sql);
-        $return = array();
-        while ($x = mysqli_fetch_assoc($result)){
-            array_push($return,$x);
-        }
-        return db::escape($return);
-    }
-    //Schiriausschuss
-    public static function get_all_sa()
-    {
-        $sql="SELECT r_name, team_id FROM ausschuss_schiri";
-        $result = db::readdb($sql);
-        $return = array();
-        while ($x = mysqli_fetch_assoc($result)){
-            array_push($return,$x);
-        }
-        return db::escape($return);
-    }
-    //Öffentlichkeitsausschuss
-    public static function get_all_oa()
-    {
-        $sql="SELECT r_name, team_id FROM ausschuss_oeffi";
-        $result = db::readdb($sql);
-        $return = array();
-        while ($x = mysqli_fetch_assoc($result)){
-            array_push($return,$x);
-        }
-        return db::escape($return);
-    }
-    //Liste der Schiriausbilder
-    public static function get_all_ausbilder()
-    {
-        $sql="SELECT vorname, nachname, team_id FROM spieler WHERE schiri = 'Ausbilder/in'";
-        $result = db::readdb($sql);
-        $return = array();
-        while ($x = mysqli_fetch_assoc($result)){
-            array_push($return, $x);
-        }
-        return db::escape($return);
-    }
-    public static function get_la_id($name)
-    {
-        $sql = "SELECT ligaausschuss_id  FROM ausschuss_liga WHERE login_name = '$name'";
-        $result = db::readdb($sql);
-        $result = mysqli_fetch_assoc($result);
-        return $result['ligaausschuss_id'] ?? '';
+        $sql = "
+                SELECT ligaleitung.*, spieler.vorname, spieler.nachname, teams_liga.teamname
+                FROM ligaleitung
+                INNER JOIN spieler on ligaleitung.spieler_id = spieler.spieler_id 
+                LEFT JOIN teams_liga on spieler.team_id = teams_liga.team_id
+                WHERE funktion = ?
+                ORDER BY spieler.vorname
+                ";
+        return dbi::$db->query($sql, $funktion)->esc()->fetch('spieler_id');
     }
 
-    public static function get_la_password ($la_id)
+    /**
+     * Gibt die Details eines Loginnamens aus
+     *
+     * @param string $login
+     * @return array
+     */
+    public static function get_details(string $login): array
     {
-        $sql = "SELECT passwort FROM ausschuss_liga WHERE ligaausschuss_id = '$la_id'";
-        $result = db::readdb($sql);
-        $result = mysqli_fetch_assoc($result);
-        return $result['passwort'] ?? '';
+        $sql = "
+                SELECT ligaleitung.*, spieler.vorname, spieler.nachname, teams_liga.teamname
+                FROM ligaleitung
+                INNER JOIN spieler on ligaleitung.spieler_id = spieler.spieler_id 
+                LEFT JOIN teams_liga on spieler.team_id = teams_liga.team_id
+                WHERE login = ?
+                ";
+        return dbi::$db->query($sql, $login)->esc()->fetch_row();
     }
 
-    public static function get_la_name ($la_id)
+    /**
+     * Erneuert das Passwort einer Ligaleitung
+     *
+     * @param string $login
+     * @param string $passwort
+     * @param string $passwort_alt
+     * @return bool
+     */
+    public static function set_passwort(string $login, string $passwort, string $passwort_alt): bool
     {
-        $sql = "SELECT r_name  FROM ausschuss_liga WHERE ligaausschuss_id = '$la_id'";
-        $result = db::readdb($sql);
-        $result = mysqli_fetch_assoc($result);
-        return db::escape($result['r_name']);
-    }
+        $details = self::get_details($login);
+        // Überprüfung des PWs
+        if (!password_verify($passwort_alt, $details['passwort'])) {
+            Html::error("Falsches Passwort");
+            return false;
+        }
 
-    public static function set_la_password ($la_id, $passwort)
-    {
+        // Passwort Hashen
         $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
-        $sql = "UPDATE ausschuss_liga SET passwort = '$passwort_hash' WHERE  ligaausschuss_id = '$la_id'";
-        db::writedb($sql);
+        if (!is_string($passwort_hash)) {
+            trigger_error("set_passwort fehlgeschlagen.", E_USER_ERROR);
+        }
+
+        // Neues Passwort in die Datenbank schreiben
+        $sql = "
+                UPDATE ligaleitung 
+                SET passwort = ?
+                WHERE login = ?
+                ";
+        dbi::$db->query($sql, $passwort_hash, $login)->log();
+        $_SESSION['logins']['la']['passwort'] = $passwort_hash;
+        return true;
     }
 
-    public static function create_new_la ($login_name, $name, $passwort, $email, $team_id)
+    /**
+     * Login der Ligaleitung
+     *
+     * @param string $login
+     * @param string $passwort
+     * @param string $funktion 'ligaausschuss', 'schiriausschuss', 'oeffentlichkeitsausschuss', 'technikausschuss', 'ausbilder
+     * @return bool
+     */
+    public static function login(string $login, string $passwort, string $funktion): bool
     {
-        $passwort = password_hash($passwort, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO ausschuss_liga(login_name, r_name, passwort, email, team_id) VALUES ('$login_name','$name','$passwort', '$email', '$team_id')";
-        db::writedb($sql);
+        $details = self::get_details($login);
+
+        // Existenz prüfen
+        if (empty($details)) {
+            Html::error("Unbekannter Loginname");
+            Helper::log(Config::LOG_LOGIN, "Falscher LC-Login | Loginname: " . $login);
+            return false;
+        }
+
+        // Funktion prüfen
+        if ($funktion !== $details['funktion']) {
+            Html::error("Fehlende Berichtigung");
+            return false;
+        }
+
+        // Passwort prüfen
+        if (password_verify($passwort, $details['passwort'])) {
+            $_SESSION['logins']['la']['id'] = $details['ligaleitung_id'];
+            $_SESSION['logins']['la']['login'] = $details['login'];
+            Helper::log(Config::LOG_LOGIN, "Erfolgreich       | Loginname: " . $login);
+            return true;
+        }
+
+        // Passwort falsch
+        Helper::log(Config::LOG_LOGIN, "Falsches Passwort | Loginname: " . $login);
+        Html::error("Falsches Passwort");
+        return false;
+    }
+
+    static function umzug2($table, $funktion)
+    {
+        $sql = "
+                SELECT * 
+                FROM $table
+                ";
+        $la = dbi::$db->query($sql)->fetch();
+
+        $sql = "SELECT * FROM spieler";
+        $spieler = dbi::$db->query($sql)->fetch();
+        $i = 0;
+        foreach ($spieler as $s) {
+            foreach ($la as $l) {
+                if (str_contains($l['r_name'], $s['vorname']) && str_contains($l['r_name'], $s['nachname'])) {
+                    if ($funktion === "ligaausschuss") {
+                        $sql = "INSERT INTO ligaleitung (spieler_id, funktion, login, passwort, email)
+                            Values(?,?,?,?,?)";
+                        dbi::$db->query($sql, $s['spieler_id'], $funktion, $s['vorname'], $l['passwort'], $l['email'])->log();
+                        $i++;
+                    } else {
+                        $sql = "INSERT INTO ligaleitung (spieler_id, funktion)
+                            Values(?,?)";
+                        dbi::$db->query($sql, $s['spieler_id'], $funktion)->log();
+                        $i++;
+                    }
+                }
+            }
+        }
+        dbi::debug([$i, $table, $funktion]);
+    }
+    static function umzug3()
+    {
+        $sql = "SELECT * FROM spieler";
+        $spieler = dbi::$db->query($sql)->fetch();
+        $i = 0;
+        foreach ($spieler as $s) {
+            if ($s['schiri'] === "Ausbilder/in") {
+                $sql = "INSERT INTO ligaleitung (spieler_id, funktion)
+                            Values(?,?)";
+                dbi::$db->query($sql, $s['spieler_id'], 'schiriausbilder')->log();
+                $i++;
+            }
+        }
+        dbi::debug([$i, 'ausbilder']);
     }
 }
 

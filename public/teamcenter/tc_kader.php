@@ -2,10 +2,10 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth
 
-$team_id = $_SESSION['team_id']; //wird an Template und kader.logic übergeben
+$team_id = $_SESSION['logins']['team']['id']; //wird an Template und kader.logic übergeben
 $kader = Spieler::get_teamkader($team_id); //wird an Template übergeben
 $kader_vorsaison = Spieler::get_teamkader_vorsaison($team_id); //wird an kader.logic und an template übergeben
 
@@ -16,10 +16,6 @@ require_once '../../logic/kader.logic.php';
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 include '../../templates/header.tmp.php';
-
-if (isset($team_id)){
-    include '../../templates/kader.tmp.php';
-}
-
+include '../../templates/kader.tmp.php';
 include '../../templates/footer.tmp.php';
 

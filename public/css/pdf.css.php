@@ -7,7 +7,7 @@ html{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
 
 html,body{font-family:Verdana,sans-serif;font-size:<?=$font_size?>px;line-height:1}html{overflow-x:hidden}
 
-h1{font-size:30px}h2{font-size:30px}h3{font-size:24px}h4{font-size:20px}h5{font-size:18px}h6{font-size:16px}.w3-serif{font-family:serif}
+h1{font-size:30px}h2{font-size:24px}h3{font-size:24px}h4{font-size:20px}h5{font-size:18px}h6{font-size:16px}.w3-serif{font-family:serif}
 
 h1,h2,h3,h4,h5,h6{font-family:"Segoe UI",Arial,sans-serif;font-weight:400;margin:10px 0}.w3-wide{letter-spacing:4px}
 
@@ -32,12 +32,14 @@ h1,h2,h3,h4,h5,h6{font-family:"Segoe UI",Arial,sans-serif;font-weight:400;margin
 .w3-responsive{
     display: block;
     overflow-x: visible}
-.pdf-hide {
-    display: none;
-}
+{
 
 .w3-hide-small{
-    display: block!important;
+    display: block;
+}
+
+.pdf-hide, .material-icons,  .w3-text, .w3-modal, .w3-hide-medium, .w3-hide-large {
+    display: none!important;
 }
 
 .w3-table {
@@ -57,10 +59,6 @@ td > * {
     vertical-align: middle;
 }
 
-.pdfvert {
-    vertical-align: middle;
-}
-
 h1 {
   font-size:30px;
 }
@@ -69,4 +67,6 @@ h1 {
     text-decoration: none;
 }
 
-.w3-right{float:right!important}
+.w3-right{
+    float:right!important
+}

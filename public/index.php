@@ -1,6 +1,7 @@
 <?php 
 //Weiterleitung auf Landingpage
-header("Location: /liga/neues");
+include '../init.php';
+header("Location: " . Env::BASE_URL . "/liga/neues.php");
 die();
 ?>
 <div style="margin:50px">

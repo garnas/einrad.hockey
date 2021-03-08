@@ -1,598 +1,1048 @@
 <?php
 
-class Turnier {
+/**
+ * Class Turnier
+ *
+ * Alles für die Verwaltung und zum Anzeigen von Turnieren
+ */
+class Turnier
+{
 
-    public $turnier_id;
-    function __construct($turnier_id)
+    /**
+     * Einrdeutige TurnierID
+     * @var int
+     */
+    public int $id;
+    /**
+     * Array aller Turnierdaten
+     * @var array
+     */
+    public array $details;
+
+    /**
+     * Turnier constructor.
+     * @param $turnier_id
+     */
+    public function __construct($turnier_id)
     {
-        $this->turnier_id = $turnier_id;
-        $this->daten = $this->get_turnier_details();
+        $this->id = $turnier_id;
+        $this->details = $this->get_turnier_details();
     }
 
-    //Erstellt ein neues Turnier in der Datenbank
-    public static function create_turnier($tname, $ausrichter, $startzeit, $besprechung = "Nein", 
-        $art, $tblock, $fixed="Nein", $datum ,$plaetze, $spielplan, $hallenname, $strasse, $plz, $ort, $haltestellen = '', $hinweis,
-        $startgebuehr, $name, $handy, $phase)
+    /**
+     * Erstellt ein neues Turnier in die Datenbank
+     *
+     * @param string $tname
+     * @param string $ausrichter
+     * @param string $startzeit
+     * @param string $besprechung
+     * @param string $art
+     * @param string $tblock
+     * @param string $fixed
+     * @param string $datum
+     * @param string $plaetze
+     * @param string $spielplan
+     * @param string $hallenname
+     * @param string $strasse
+     * @param string $plz
+     * @param string $ort
+     * @param string $haltestellen
+     * @param string $hinweis
+     * @param string $startgebuehr
+     * @param string $organisator
+     * @param string $handy
+     * @param string $phase
+     * @return Turnier Objekt der Klasse Turnier wird zurückgegeben
+     */
+    public static function create_turnier(string $tname, string $ausrichter, string $startzeit, string $besprechung,
+                                          string $art, string $tblock, string $fixed, string $datum, string $plaetze,
+                                          string $spielplan, string $hallenname, string $strasse, string $plz,
+                                          string $ort, string $haltestellen, string $hinweis, string $startgebuehr,
+                                          string $organisator, string $handy, string $phase): Turnier
     {
-        $saison = Config::SAISON;
-        $turnier_id = db::get_auto_increment('turniere_liga');
-        $sql= "INSERT INTO turniere_liga (tname, ausrichter, art, tblock, tblock_fixed, datum, phase, saison) 
-                    VALUES ('$tname','$ausrichter','$art','$tblock', '$fixed', '$datum', '$phase', '$saison')";
-        db::writedb($sql);
-        $sql="INSERT INTO turniere_details (turnier_id, hallenname, strasse, plz, ort, haltestellen, plaetze, spielplan, startzeit, besprechung, hinweis, organisator, handy, startgebuehr)
-                    VALUES ('$turnier_id','$hallenname','$strasse','$plz','$ort','$haltestellen','$plaetze','$spielplan','$startzeit','$besprechung','$hinweis', '$name', '$handy', '$startgebuehr');";
-        db::writedb($sql);
-        //Anmeldung des Ausrichters auf die Spielen-Liste
-        $sql = "INSERT INTO turniere_liste (turnier_id, team_id, liste, freilos_gesetzt) VALUES ('$turnier_id','$ausrichter','spiele','Nein')";
-        db::writedb($sql);
+        // turniere_liga füllen
+        $params = [$tname, $ausrichter, $art, $tblock, $fixed, $datum, $phase, Config::SAISON];
+        $sql = "
+                INSERT INTO turniere_liga (tname, ausrichter, art, tblock, tblock_fixed, datum, phase, saison) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ";
+        dbi::$db->query($sql, $params)->log();
 
-        //Spieltag in Abhängigkeit aller anderen Turniere bestimmen zu bestimmen
+        // turniere_details füllen
+        $turnier_id = dbi::$db->get_last_insert_id();
+        $params = [$turnier_id, $hallenname, $strasse, $plz, $ort, $haltestellen, $plaetze, $spielplan, $startzeit,
+            $besprechung, $hinweis, $organisator, $handy, $startgebuehr];
+        $sql = "
+                INSERT INTO turniere_details (turnier_id, hallenname, strasse, plz, ort, haltestellen, plaetze,
+                format, startzeit, besprechung, hinweis, organisator, handy, startgebuehr)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  ?,  ?, ?);
+                ";
+        dbi::$db->query($sql, $params)->log();
+
+        // Anmeldung des Ausrichters auf die Spielen-Liste
+        $params = [$turnier_id, $ausrichter];
+        $sql = "
+                INSERT INTO turniere_liste (turnier_id, team_id, liste, freilos_gesetzt) 
+                VALUES (?, ?, 'spiele', 'Nein')
+                ";
+        dbi::$db->query($sql, $params)->log();
+
+        // Spieltage in Abhängigkeit aller anderen Turniere aktualisieren
         Ligabot::set_spieltage();
-        return true;
+
+        // Turnierlogs
+        $turnier = new Turnier($turnier_id);
+        $turnier->log("Turnier wurde erstellt\r\nTurniername: $tname\r\nAusrichter: " . Team::id_to_name($ausrichter)
+            . "\r\nStartzeit: $startzeit\r\nBesprechung: $besprechung\r\nArt: $art\r\nBlock: $tblock\r\n"
+            . "Fixiert: $fixed\r\nDatum: $datum \r\nPlätze: $plaetze\r\nSpielplan: $spielplan\r\nHallenname: $hallenname\r\n"
+            . "Straße: $strasse\r\nPlz: $plz\r\nOrt: $ort\r\nHaltestellen: $haltestellen\r\nHinweis:\r\n$hinweis\r\nStartgebühr: $startgebuehr\r\n"
+            . "Organisator: $organisator\r\nHandy: $handy");
+        $turnier->log("Anmeldung:\r\n" . Team::id_to_name($ausrichter) . " (spiele)");
+
+        return $turnier;
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////TURNIERDATEN BEKOMMEN///////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //Alle Turnierdaten auf einmal um die Datenbank zu schonen:
-    //Format: $return[turnier_id][daten]
-    public static function get_all_turniere($where = '', $asc = 'asc')
+    /**
+     * Alle Turnierdaten auf einmal
+     *
+     * Where-Klause für SQl-Query
+     * @param string $phase
+     * @param bool $equal
+     * @param bool $asc
+     * @return array
+     */
+    public static function get_turniere(string $phase, bool $equal = true, bool $asc = true): array
     {
-        $sql = "SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname FROM turniere_liga 
+        $sql = "
+                SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname 
+                FROM turniere_liga 
                 INNER JOIN turniere_details 
                 ON turniere_liga.turnier_id = turniere_details.turnier_id
                 INNER JOIN teams_liga
-                ON teams_liga.team_id = turniere_liga.ausrichter "
-                . $where .
-                 "ORDER BY turniere_liga.datum $asc";
-        $result = db::readdb($sql);
-        $return = array();
-        while ($x = mysqli_fetch_assoc($result)){
-            $return[$x['turnier_id']] = $x;
-        }
-        return db::escape($return); //array
+                ON teams_liga.team_id = turniere_liga.ausrichter
+                WHERE phase " . ($equal ? "=" : "!=") . " ?
+                AND saison = " . Config::SAISON . "
+                ORDER BY turniere_liga.datum " . ($asc ? "asc" : "desc");
+        return dbi::$db->query($sql, $phase)->esc()->fetch('turnier_id');
     }
 
-    //Turnierdetails von nur dem Objekt Turnier erstellen
-    function get_turnier_details()
+    public static function get_eigene_turniere(int $team_id): array
     {
-        $turnier_id = $this->turnier_id;
-        $sql = "SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname
-        FROM turniere_liga 
-        INNER JOIN turniere_details 
-        ON turniere_liga.turnier_id = turniere_details.turnier_id
-        INNER JOIN teams_liga
-        ON turniere_liga.ausrichter = teams_liga.team_id
-        WHERE turniere_liga.turnier_id = '$turnier_id'";
-        $result = db::readdb($sql);
-        $return = mysqli_fetch_assoc($result);
-        return db::escape($return); //array
+        $sql = "
+                SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname 
+                FROM turniere_liga 
+                INNER JOIN turniere_details 
+                ON turniere_liga.turnier_id = turniere_details.turnier_id
+                INNER JOIN teams_liga
+                ON teams_liga.team_id = turniere_liga.ausrichter
+                AND ausrichter = ?
+                AND saison >= " . Config::SAISON - 1 . " 
+                ORDER BY turniere_liga.datum desc
+                ";
+        return dbi::$db->query($sql, $team_id)->esc()->fetch('turnier_id');
     }
 
-    //Alle Turnieranmeldelisten auf einmal um die Datenbank zu schonen: 
-    //Format: $turnierlisten[turnier_id][liste] => Array der Anmeldedaten
-    public static function get_all_anmeldungen($saison = Config::SAISON)
+    /**
+     * Turnierdetails von nur einem Turnier erhalten
+     *
+     * @return array
+     */
+    public function get_turnier_details(): array
     {
-        $sql=
-        "SELECT turniere_liste.*, teams_liga.teamname, teams_liga.ligateam
-        FROM turniere_liste
-        LEFT JOIN teams_liga
-        ON turniere_liste.team_id = teams_liga.team_id
-        INNER JOIN turniere_liga
-        ON turniere_liga.turnier_id = turniere_liste.turnier_id
-        WHERE turniere_liga.saison = '$saison'
-        AND turniere_liga.phase != 'ergebnis'
-        ORDER BY turniere_liste.position_warteliste ASC";
-        $result = db::readdb($sql);
-        $turnier_listen = array();
-        while ($anmeldung = mysqli_fetch_assoc($result)){
-            if (empty($turnier_listen[$anmeldung['turnier_id']][$anmeldung['liste']])){
-                $turnier_listen[$anmeldung['turnier_id']][$anmeldung['liste']] = array(); //Damit diverse Arrayfunktionen ordentlich funktionieren, auch bei leeren Listen.
-            }                
-                $turnier_listen[$anmeldung['turnier_id']][$anmeldung['liste']][$anmeldung['team_id']] = $anmeldung;
-                $turnier_listen[$anmeldung['turnier_id']][$anmeldung['liste']][$anmeldung['team_id']]['tblock'] = Tabelle::get_team_block($anmeldung['team_id']);
-                $turnier_listen[$anmeldung['turnier_id']][$anmeldung['liste']][$anmeldung['team_id']]['wertigkeit'] = Tabelle::get_team_wertigkeit($anmeldung['team_id']);
-        }
-        return db::escape($turnier_listen); //array
+        $sql = "
+                SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname
+                FROM turniere_liga 
+                INNER JOIN turniere_details 
+                ON turniere_liga.turnier_id = turniere_details.turnier_id
+                INNER JOIN teams_liga
+                ON turniere_liga.ausrichter = teams_liga.team_id
+                WHERE turniere_liga.turnier_id = $this->id
+                ";
+        return dbi::$db->query($sql)->esc()->fetch_row();
+
     }
 
-    //Nur die Anmeldungen der Warte-, Melde-, Spielen-Liste des aktuellen Objektes
-    //Format: zb. $liste['warte'] => Array der Anmeldedaten der Angemeldeten Teams auf der Warteliste
-    function get_anmeldungen()
+    /**
+     * Alle Turnieranmeldelisten auf einmal
+     *
+     * @param int $saison
+     * @return array [turnier_id][liste][team_id]
+     */
+    public static function get_all_anmeldungen(int $saison = Config::SAISON): array
     {
-        $turnier_id = $this->turnier_id;
-        $sql=
-        "SELECT turniere_liste.*, teams_liga.teamname, teams_liga.ligateam
-        FROM turniere_liste
-        LEFT JOIN teams_liga
-        ON turniere_liste.team_id = teams_liga.team_id
-        WHERE turniere_liste.turnier_id='$turnier_id'
-        ORDER BY turniere_liste.position_warteliste ASC";
-        $result = db::readdb($sql);
-        $liste = array();
-        $liste['team_ids'] = $liste['teamnamen'] = $liste['spiele'] = $liste['melde'] = $liste['warte'] = array();
-        while ($anmeldung = mysqli_fetch_assoc($result)){
-            //Für Turnierlisten
-            $liste[$anmeldung['liste']][$anmeldung['team_id']] = $anmeldung;
-            $liste[$anmeldung['liste']][$anmeldung['team_id']]['tblock'] = Tabelle::get_team_block($anmeldung['team_id']);
-            $liste[$anmeldung['liste']][$anmeldung['team_id']]['wertigkeit'] = Tabelle::get_team_wertigkeit($anmeldung['team_id']);
+        $sql = "
+                SELECT turniere_liste.*, teams_liga.teamname, teams_liga.ligateam
+                FROM turniere_liste
+                LEFT JOIN teams_liga
+                ON turniere_liste.team_id = teams_liga.team_id
+                INNER JOIN turniere_liga
+                ON turniere_liga.turnier_id = turniere_liste.turnier_id
+                WHERE turniere_liga.saison = ?
+                AND turniere_liga.phase != 'ergebnis'
+                ORDER BY turniere_liste.position_warteliste
+                ";
+        $anmeldungen = dbi::$db->query($sql, $saison)->esc()->fetch();
+        $spieltag = Tabelle::get_aktuellen_spieltag();
+        foreach ($anmeldungen as $a) {
+            $turnier_listen[$a['turnier_id']][$a['liste']][$a['team_id']] = $a;
+            $turnier_listen[$a['turnier_id']][$a['liste']][$a['team_id']]['tblock'] = Tabelle::get_team_block($a['team_id'], $spieltag);
+            $turnier_listen[$a['turnier_id']][$a['liste']][$a['team_id']]['wertigkeit'] = Tabelle::get_team_wertigkeit($a['team_id'], $spieltag);
         }
-        return db::escape($liste); //array
+        return $turnier_listen ?? [];
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////ERGEBNISSE//////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //Bekommt alle Turnieranmeldungen für den Spielplan nach wertigkeit sortiert.
-    function get_liste_spielplan()
+    /**
+     * Anmeldungen der Warte-, Melde-, Spielen-Liste eines Turnieres
+     * Format: zb. $liste['liste'][Array der Anmeldedaten der Angemeldeten Teams auf der entsprechenden Liste]
+     * @return array
+     */
+    public function get_anmeldungen(): array
     {
-        $turnier_id = $this->turnier_id;
-        $sql=
-        "SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam
-        FROM turniere_liste
-        LEFT JOIN teams_liga
-        ON turniere_liste.team_id = teams_liga.team_id
-        WHERE turniere_liste.turnier_id='$turnier_id' AND turniere_liste.liste='spiele'";
-        $result = db::readdb($sql);
-        $index = 1;
-        $liste = array();
-        //Welcher Spieltag ist relevant?
-        while ($anmeldung = mysqli_fetch_assoc($result)){
-                $liste[$index] = $anmeldung;
-                $liste[$index]['tblock'] = Tabelle::get_team_block($anmeldung['team_id'], $this->daten['spieltag'] - 1);
-                $liste[$index]['wertigkeit'] = Tabelle::get_team_wertigkeit($anmeldung['team_id'], $this->daten['spieltag'] - 1);
-                $index++;
+        $sql = "
+                SELECT turniere_liste.*, teams_liga.teamname, teams_liga.ligateam
+                FROM turniere_liste
+                LEFT JOIN teams_liga
+                ON turniere_liste.team_id = teams_liga.team_id
+                WHERE turniere_liste.turnier_id = $this->id
+                ORDER BY turniere_liste.position_warteliste
+                ";
+        $anmeldungen = dbi::$db->query($sql)->esc()->fetch();
+        $liste['team_ids'] = $liste['teamnamen'] = $liste['spiele'] = $liste['melde'] = $liste['warte'] = [];
+        foreach ($anmeldungen as $a) {
+            $liste[$a['liste']][$a['team_id']] = $a;
+            $liste[$a['liste']][$a['team_id']]['tblock'] = Tabelle::get_team_block($a['team_id']);
+            $liste[$a['liste']][$a['team_id']]['wertigkeit'] = Tabelle::get_team_wertigkeit($a['team_id']);
         }
-        if (!empty($liste)){
-            //Array nach Wertigkeit sortieren
-            $sortkey = array_column($liste, 'wertigkeit');
-            array_multisort($sortkey, SORT_DESC, $liste);
-
-            //Indexierung mit 1 beginnen lassen für Spielplanerstellung
-            $liste = array_combine(range(1, count($liste)), array_values($liste));
-        }
-        return db::escape($liste); //array
+        return $liste;
     }
-    //Kaderliste für die Kaderkontrolle auf einem Turnier;
-    function get_kader_kontrolle(){
-        $teams = $this->get_liste_spielplan();
-        foreach ($teams as $team){
+
+    /**
+     * Get alle Turnieranmeldungen des Turniers für den Spielplan nach Wertung sortiert.
+     *
+     * @return array
+     */
+    public function get_liste_spielplan(): array
+    {
+        $sql = "
+                SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam,
+                    teams_details.ligavertreter, teams_details.trikot_farbe_1, teams_details.trikot_farbe_2
+                FROM turniere_liste
+                LEFT JOIN teams_liga
+                ON turniere_liste.team_id = teams_liga.team_id
+                LEFT JOIN teams_details
+                ON turniere_liste.team_id = teams_details.team_id
+                WHERE turniere_liste.turnier_id = $this->id 
+                AND turniere_liste.liste = 'spiele'
+                ";
+        $spielen_liste = dbi::$db->query($sql)->esc()->fetch('team_id');
+        // Blöcke und Wertungen hinzufügen
+        foreach ($spielen_liste as $team_id => $anmeldung) {
+            $spielen_liste[$team_id]['tblock']
+                = Tabelle::get_team_block($anmeldung['team_id'], $this->details['spieltag'] - 1);
+            $spielen_liste[$team_id]['wertigkeit']
+                = Tabelle::get_team_wertigkeit($anmeldung['team_id'], $this->details['spieltag'] - 1);
+        }
+        if (!empty($spielen_liste)) {
+            // Array nach Wertung sortieren
+            uasort($spielen_liste, static function ($team_a, $team_b) {
+                return ((int) $team_b['wertigkeit'] <=> (int) $team_a['wertigkeit']);
+            });
+        }
+        return $spielen_liste ?? [];
+    }
+
+    /**
+     * Kaderliste für die Kaderkontrolle des Turniers
+     *
+     * @return array
+     */
+    public function get_kader_kontrolle(): array
+    {
+        $spielen_liste = $this->get_liste_spielplan();
+        foreach ($spielen_liste as $team) {
             $return[$team['team_id']] = Spieler::get_teamkader($team['team_id']);
         }
-        return $return ?? array();
+        return $return ?? [];
     }
 
-    function delete_ergebnis()
+    /**
+     * Löscht Turnierergebnisse des Turnieres aus der DB
+     */
+    public function delete_ergebnis(): void
     {
-        $turnier_id = $this->turnier_id;
-        $sql = "DELETE FROM turniere_ergebnisse WHERE turnier_id = $turnier_id";
-        db::writedb($sql);
+        $sql = "
+                DELETE FROM turniere_ergebnisse 
+                WHERE turnier_id = $this->id
+                ";
+        dbi::$db->query($sql)->log();
+        if (dbi::$db->affected_rows() > 0) $this->log("Turnierergebnisse wurden gelöscht.");
     }
 
-    function get_ergebnis()
+    /**
+     * Get Turnierergebnis des Turnieres
+     * @return array
+     */
+    public function get_ergebnis(): array
     {
-        $turnier_id = $this->turnier_id;
-        $sql = "SELECT * FROM turniere_ergebnisse WHERE turnier_id = $turnier_id ORDER BY platz ASC";
-        $result = db::readdb($sql);
-        $index = 1;
-        while ($eintrag = mysqli_fetch_assoc($result)){
-            $return[$index] = $eintrag;
-            $index++;
+        $sql = "
+                SELECT * 
+                FROM turniere_ergebnisse 
+                WHERE turnier_id = $this->id
+                ORDER BY platz
+                ";
+
+        return dbi::$db->query($sql)->esc()->fetch('platz');
+    }
+
+    /**
+     * Schreibt ein Ergebnis eines Teams in die Datenbank
+     *
+     * @param int $team_id
+     * @param int|null $ergebnis
+     * @param int $platz
+     */
+    public function set_ergebnis(int $team_id, int|null $ergebnis, int $platz): void
+    {
+        if (!in_array($this->details['art'], ['I', 'II', 'III'])) {
+            $ergebnis = NULL;
         }
-        return db::escape($return ?? array());
+        $sql = "
+                INSERT INTO turniere_ergebnisse (turnier_id, team_id, ergebnis, platz) 
+                VALUES ($this->id, ?, ?, ?);
+                ";
+        dbi::$db->query($sql, $team_id, $ergebnis, $platz)->log();
     }
 
-    function set_ergebnis($team_id, $ergebnis, $platz)
+    /**
+     * Überträgt das Turnierergebnis der Platzierungstabelle in die Datenbank
+     *
+     * @param array $platzierungstabelle
+     */
+    public function set_ergebnisse(array $platzierungstabelle): void
     {
-        $turnier_id = $this->turnier_id;
-        $sql = "INSERT INTO turniere_ergebnisse (turnier_id, team_id, ergebnis, platz) VALUES ('$turnier_id', '$team_id', '$ergebnis', '$platz');";
-        db::writedb($sql);
+        // Ergebns eintragen
+        if (!empty($this->get_ergebnis())) {
+            $this->delete_ergebnis();
+        }
+        foreach ($platzierungstabelle as $team_id => $ergebnis) {
+            $this->set_ergebnis($team_id, $ergebnis['ligapunkte'], $ergebnis['platz']);
+        }
+        $this->set_phase('ergebnis');
+        $this->log("Turnierergebnis wurde in die Datenbank eingetragen");
     }
-        
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////TEAM AN- UND ABMELDUNG////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //Ein Team zum Turnier anmelden
-    //Bei Anmeldung auf die Warteliste sollte $pos als die jeweilige Wartelistenposition übergeben werden
-    //Könnnte man das auch mit nl_anmelden für nichtligateams zusammenlegen?
-    //TODO #10
-    function team_anmelden($team_id, $liste, $pos = 0)
+    /**
+     * Ein Team zum Turnier anmelden
+     *
+     * Bei Anmeldung auf die Warteliste sollte $pos als die jeweilige Wartelistenposition übergeben werden
+     * Könnnte man das auch mit nl_anmelden für nichtligateams zusammenlegen?
+     *
+     * @param int $team_id
+     * @param string $liste
+     * @param int $pos
+     */
+
+    public function anmelden(int $team_id, string $liste, int $pos = 0): void
     {
-        $turnier_id = $this->turnier_id;
-        $freilos_gesetzt = 'Nein';
-        //Handhabung der Warteliste, bei einer Anmeldung durch den LA nicht ans Ende der Warteliste... todo? Gehört das hier rein? Wird das überhaupt jemals benutzt werden?
-        if ($liste == 'warte'){
-            //Schreiben der Logs
-            $teamname = Team::teamid_to_teamname($team_id);
-            $sql = "SELECT team_id, position_warteliste FROM turniere_liste WHERE turnier_id = $turnier_id AND position_warteliste >= $pos";
-            $result = db::readdb($sql);
-            while ($team = mysqli_fetch_assoc($result)){
-                $this->schreibe_log("Warteliste: \r\n". Team::teamid_to_teamname($team['team_id']) ." ". $team['position_warteliste'] ." -> ". ($team['position_warteliste']+1), "automatisch");
+        // Update der Wartelistepositionen
+        if ($liste === 'warte') {
+            $sql = "
+                    UPDATE turniere_liste 
+                    SET position_warteliste = position_warteliste + 1 
+                    WHERE turnier_id = $this->id 
+                    AND liste = 'warte' 
+                    AND position_warteliste >= ?";
+            dbi::$db->query($sql, $pos)->log();
+            if (dbi::$db->affected_rows() > 0) {
+                $this->log("Warteliste aktualisiert");
             }
-            //Update der Wartelistepositionen
-            $sql = "UPDATE turniere_liste SET position_warteliste = position_warteliste + 1 WHERE turnier_id = '$turnier_id' AND liste = 'warte' AND position_warteliste >= '$pos'";
-            db::writedb($sql);
         }
-        $sql = "INSERT INTO turniere_liste (turnier_id, team_id, liste, position_warteliste) VALUES ('$turnier_id', '$team_id','$liste', '$pos')";
-        db::writedb($sql);
+        $sql = "
+                INSERT INTO turniere_liste (turnier_id, team_id, liste, position_warteliste) 
+                VALUES ($this->id, ?, ?, ?)
+                ";
+        dbi::$db->query($sql, $team_id, $liste, $pos)->log();
+        $this->log(
+            "Anmeldung:\r\n" . Team::id_to_name($team_id) . " ($liste)"
+            . (($liste === 'warte') ? "\r\nWartepos: $pos" : '')
+            . "\r\nTeamb.: " . Tabelle::get_team_block($team_id) . " | Turnierb. " . $this->details['tblock']);
     }
 
-    //Meldet ein Nichtligateam an
-    //Existiert bereits ein Nichtligateam mit gleichem Namen in der Datenbank, so wird dieses angemeldet
-    //es wird also kein neues Nichtligateam erstellt
-    //Nichtligateams bekommen immer einen Stern hinter ihrem Namen
-    function nl_anmelden($teamname, $liste, $pos = 0)
+    /**
+     * Meldet ein Nichtligateam an
+     *
+     * Existiert bereits ein Nichtligateam mit gleichem Namen in der Datenbank, so wird dieses angemeldet es wird also
+     * kein neues Nichtligateam erstellt
+     *
+     * Nichtligateams bekommen automatisch einen Stern hinter ihrem Namen
+     *
+     * @param $teamname
+     * @param $liste
+     * @param int $pos
+     */
+    public function nl_anmelden($teamname, $liste, $pos = 0): void
     {
-        $turnier_id = $this->turnier_id;     
-        $freilos_gesetzt = 'Nein';
-        $teamname .= "*"; //Nichtligateams haben einen Stern hinter dem Namen
-        if (empty(Team::teamname_to_teamid($teamname))){
-            $nl_team_id = db::get_auto_increment('teams_liga');
-            $sql = "INSERT INTO teams_liga (teamname, ligateam) VALUES ('$teamname','Nein')";
-            db::writedb($sql);
-        }else{
-            $nl_team_id = Team::teamname_to_teamid($teamname);
+        $teamname .= "*"; // Nichtligateams haben einen Stern hinter dem Namen
+        if (Team::name_to_id($teamname) === NULL) { //TODO === NULL testen
+            $sql = "
+                    INSERT INTO teams_liga (teamname, ligateam) 
+                    VALUES (?, 'Nein')
+                    ";
+            dbi::$db->query($sql, $teamname)->log();
+            $nl_team_id = dbi::$db->get_last_insert_id();
+        } else {
+            $nl_team_id = Team::name_to_id($teamname);
         }
-        if ($liste == 'warte'){
-            //Schreiben der Logs für die Warteliste //Siehe auch team_anmelden()
-            $teamname = 
-            $sql = "SELECT team_id, position_warteliste FROM turniere_liste WHERE turnier_id = $turnier_id AND position_warteliste >= $pos";
-            $result = db::readdb($sql);
-            while ($team = mysqli_fetch_assoc($result)){
-                $this->schreibe_log("Warteliste: \r\n". Team::teamid_to_teamname($team['team_id']) ." ". $team['position_warteliste'] ." -> ". ($team['position_warteliste']+1), "automatisch");
-            }
-            $sql = "UPDATE turniere_liste SET position_warteliste = position_warteliste + 1 WHERE turnier_id = '$turnier_id' AND liste = 'warte' AND position_warteliste >= '$pos'";
-            db::writedb($sql);
-        }
-        $sql = "INSERT INTO turniere_liste (turnier_id, team_id, liste, position_warteliste) VALUES ('$turnier_id', '$nl_team_id','$liste', '$pos')";
-        db::writedb($sql);
+        $this->anmelden($nl_team_id, $liste, $pos);
     }
 
-    //Team setzt freilos
-    function freilos($team_id)
+    /**
+     * Team via Freilos anmelden
+     *
+     * @param int $team_id
+     */
+    public function freilos(int $team_id): void
     {
-        $turnier_id = $this->turnier_id;
+        // Freilos abziehen
         $team = new Team($team_id);
         $freilose = $team->get_freilose();
-        $sql = "INSERT INTO turniere_liste (turnier_id, team_id, liste, freilos_gesetzt) VALUES ('$turnier_id','$team_id','spiele','Ja')";
-        db::writedb($sql);
-        $team->set_freilose($freilose-1);
+        $team->set_freilose($freilose - 1);
+
+        // Auf die Spielenliste setzen
+        $sql = "
+                INSERT INTO turniere_liste (turnier_id, team_id, liste, freilos_gesetzt) 
+                VALUES ($this->id, ?, 'spiele', 'Ja')
+                ";
+        dbi::$db->query($sql, $team_id)->log();
+
+        $this->log(
+            "Freilos:\r\n" . Team::id_to_name($team_id) . " (spiele)"
+            . "\r\nTeamb.: " . Tabelle::get_team_block($team_id) . " | Turnierb. " . $this->details['tblock']);
     }
 
-    //Team wird abgemeldet, bei Mehrfachanmeldungen werden alle Anmeldungen entfernt
-    function abmelden($team_id)
+    /**
+     * Team wird von einem Turnier abgemeldet
+     * @param int $team_id
+     */
+    public function abmelden(int $team_id): void
     {
-        $turnier_id = $this->turnier_id;
-        $sql = "DELETE FROM turniere_liste WHERE turnier_id = '$turnier_id' AND team_id = '$team_id'";
-        db::writedb($sql);
+        $sql = "
+                DELETE FROM turniere_liste 
+                WHERE turnier_id = $this->id
+                AND team_id = ?
+                ";
+        dbi::$db->query($sql, $team_id)->log();
+        if (dbi::$db->affected_rows() > 0) $this->log("Abmeldung:\r\n" . Team::id_to_name($team_id));
     }
 
-    //Sucht alle Wartelisteneinträge und sortiert diese der größe ihrer Position auf der Warteliste. Anschließend
-    //weren die Wartelistenpostionen von eins auf wieder vergeben
-    //Bsp: position auf der warteliste: 2 4 5 wird zu 1 2 3
-    function warteliste_aktualisieren($autor = 'automatisch')
+    /**
+     * Sucht alle Wartelisteneinträge und sortiert diese der größe ihrer Position auf der Warteliste. Anschließend
+     * werden die Wartelistenpostionen von 1 auf wieder vergeben
+     *
+     * Bsp: Position auf der Warteliste: 2 4 5 wird zu 1 2 3
+     *
+     */
+    public function warteliste_aktualisieren(): void
     {
-        //Für den Turnierlog
-        $listen_vorher = $this->get_anmeldungen();
-        $turnier_id = $this->turnier_id;
-        //Warteliste korrigieren, wenn sich das Team von der Warteliste abmeldet
-        $sql = "SELECT * FROM turniere_liste WHERE turnier_id = '$turnier_id' AND liste = 'warte' ORDER BY position_warteliste";
-        $result = db::readdb ($sql);
-        $pos = 0;
-        while ($team = mysqli_fetch_assoc($result)){
-            $pos += 1;
-            $team_id = $team['team_id'];
-            $sql = 
-            "UPDATE turniere_liste 
-            SET position_warteliste = '$pos' 
-            WHERE turnier_id = '$turnier_id'
-            AND liste = 'warte'
-            AND team_id = '$team_id'; ";
-            db::writedb($sql);
+        // Warteliste holen
+        $sql = "
+                SELECT * 
+                FROM turniere_liste 
+                WHERE turnier_id = $this->id 
+                AND liste = 'warte' 
+                ORDER BY position_warteliste
+                ";
+        $liste = dbi::$db->query($sql)->fetch('team_id');
+
+        // Warteliste korrigieren
+        $pos = $affected_rows = 0;
+        foreach ($liste as $team) {
+            $sql = "
+                    UPDATE turniere_liste 
+                    SET position_warteliste = ?
+                    WHERE turnier_id = $this->id
+                    AND liste = 'warte'
+                    AND team_id = ?;
+                    ";
+            dbi::$db->query($sql, ++$pos, $team['team_id'])->log();
+            $affected_rows += dbi::$db->affected_rows();
+            $logs[] = $pos . ". " . Team::id_to_name($team['team_id']);
         }
-        //Turnierlog schreiben
-        $listen_nachher = $this->get_anmeldungen();
-        foreach (($listen_vorher['warte'] ?? array()) as $key => $team_vorher){
-            $team_nachher = $listen_nachher['warte'][$key];
-            //Die Reihenfolge sollte sich nicht ändern dürfen, da get_anmeldungen nach der position auf der Warteliste sortiert
-            if ($team_vorher['position_warteliste'] !=  $team_nachher['position_warteliste']){
-                $this->schreibe_log("Warteliste aktualisieren: \r\n". $team_vorher['teamname'] ." ". $team_vorher['position_warteliste'] ." -> ". $team_nachher['position_warteliste'], $autor);
-            }
+        if ($affected_rows > 0) {
+            $this->log("Warteliste aktualisiert:\r\n" . implode("\r\n", $logs ?? []));
         }
     }
 
-    //Füllt freie Plätze auf der Spielen-Liste von der Warteliste aus wieder auf,
-    //wenn der Teamblock des Wartelisteneintrags zum Turnier passt
-    //wenn das Turnier nicht in der offenen Phase ist
-    //wenn das Turnier noch freie Plätze hat
-    function spieleliste_auffuellen ($autor = 'automatisch', $send_mail = true)
+    /**
+     * Füllt freie Plätze auf der Spielen-Liste von der Warteliste aus wieder auf,
+     * wenn der Teamblock des Wartelisteneintrags zum Turnier passt,
+     * wenn das Turnier nicht in der offenen Phase ist,
+     * wenn das Turnier noch freie Plätze hat.
+     *
+     * @param bool $send_mail
+     */
+    public function spieleliste_auffuellen($send_mail = true): void //TODO Keine NLs nachrücken, wenn < 4 Ligateams, aber dann wieder NL mitrücken wenn ok
     {
-        $daten = $this->daten;
-        $freie_plaetze = $this->anzahl_freie_plaetze();
-        if ($daten['phase'] != 'offen' && $freie_plaetze > 0){
-            $liste = $this->get_anmeldungen(); //Order by Warteliste weshalb die Teams in der foreach schleife in der Richtigen reihenfolge behandelt werden
-            foreach ($liste['warte'] as $team){
-                if ($this->check_team_block($team['team_id']) && $freie_plaetze > 0){ //Das Team wird abgemeldet, wenn es schon am Turnierdatum auf einer Spielen-Liste steht
-                    if (!$this->check_doppel_anmeldung($team['team_id'])){
-                        $this->liste_wechsel($team['team_id'], 'spiele'); //von Warteliste abmelden
-                        $this->schreibe_log("Spielen-Liste auffüllen: \r\n" . $team['teamname'] . " warte -> spiele", $autor);
-                        if($send_mail){
+        $freie_plaetze = $this->get_anzahl_freie_plaetze();
+        $log = false;
+
+        if ($this->details['phase'] === 'melde' && $freie_plaetze > 0) {
+            $liste = $this->get_anmeldungen();// Order by Warteliste weshalb die Teams in der foreach schleife in der Richtigen reihenfolge behandelt werden
+
+            foreach ($liste['warte'] as $team) {
+                if ($this->check_team_block($team['team_id']) && $freie_plaetze > 0) {
+                    if ($this->check_doppel_anmeldung($team['team_id'])) {
+                        $this->abmelden($team['team_id']);
+                    } else { // Das Team wird abgemeldet, wenn es schon am Turnierdatum auf einer Spielen-Liste steht
+                        $this->set_liste($team['team_id'], 'spiele');
+                        if ($send_mail) {
                             MailBot::mail_warte_zu_spiele($this, $team['team_id']);
                         }
-                        $freie_plaetze -= 1;
-                    }else{
-                        $this->abmelden($team['team_id']);
-                        $this->schreibe_log("Abgemeldet: \r\n" . $team['teamname'] . "Doppelanmeldung", $autor);
+                        --$freie_plaetze;
+                        $log = true;
                     }
                 }
             }
+
+            if ($log) {
+                $this->log("Spielen-Liste aufgefüllt");
+            }
+
             $this->warteliste_aktualisieren();
         }
     }
 
-    //Findet die Anzahl der freien Plätze auf dem Turnier
-    function anzahl_freie_plaetze()
+    /**
+     * Get Anzahl der freien Plätze auf dem Turnier
+     * @return string
+     */
+    public function get_anzahl_freie_plaetze(): string
     {
-        $turnier_id = $this->turnier_id;
-        $sql=
-        "SELECT 
-        (SELECT plaetze FROM turniere_details WHERE turnier_id='$turnier_id')
-         - 
-        (SELECT COUNT(liste_id) FROM turniere_liste WHERE turnier_id='$turnier_id' AND liste='spiele')
-        AS freie_plaetze";
-        $result = db::readdb($sql);
-        $return = mysqli_fetch_assoc($result);
-        return db::escape($return['freie_plaetze']);
+        $sql = "
+                SELECT 
+                (SELECT plaetze FROM turniere_details WHERE turnier_id = $this->id)
+                 - 
+                (SELECT COUNT(liste_id) FROM turniere_liste WHERE turnier_id = $this->id AND liste = 'spiele')
+                ";
+        return dbi::$db->query($sql)->esc()->fetch_one();
     }
 
-    //Ändert die Liste auf der sich ein Team befindet (Warte-, Melde- oder Spielen-Liste)
-    function liste_wechsel($team_id, $liste, $pos = 0)
+    /**
+     * Ändert die Liste auf der sich ein Team befindet (Warte-, Melde- oder Spielen-Liste)
+     *
+     * @param int $team_id
+     * @param string $liste
+     * @param int $pos
+     */
+    public function set_liste(int $team_id, string $liste, $pos = 0): void
     {
-        $turnier_id = $this->turnier_id;
-        $sql = "UPDATE turniere_liste SET liste='$liste', position_warteliste='$pos'  WHERE turnier_id='$turnier_id' AND team_id = '$team_id'";
-        db::writedb($sql);
+        $sql = "
+                UPDATE turniere_liste 
+                SET liste = ?, position_warteliste = ? 
+                WHERE turnier_id = $this->id 
+                AND team_id = ?
+                ";
+        dbi::$db->query($sql, [$liste, $pos, $team_id]);
+        $this->log("Listenwechsel:\r\n"
+            . Team::id_to_name($team_id) . " ($liste)"
+            . (($liste === 'warte') ? "\r\nWartepos: $pos" : ''));
     }
 
-    //True, wenn das Team bereits zum Turnier angemeldet ist, sonst false
-    function check_team_angemeldet($team_id)
+    /**
+     * Gibt true aus, wenn das Team bereits zum Turnier angemeldet ist, sonst false
+     *
+     * @param int $team_id
+     * @return bool
+     */
+    public function check_team_angemeldet(int $team_id): bool
     {
-        $turnier_id = $this->turnier_id;
-        $sql = "SELECT liste FROM turniere_liste WHERE team_id='$team_id' AND turnier_id='$turnier_id'";
-        $result = db::readdb($sql);
-        $result = mysqli_fetch_assoc($result);
-        if (!empty($result['liste'])){
-            return true;
-        }
-        return false;
-    }
-    //True, wenn das Team am Kalendertag des Turnieres bereits bei einem Turnier auf der Spielen-Liste steht
-    function check_doppel_anmeldung($team_id)
-    {
-        $datum = $this->daten['datum'];
-        $sql = 
-        "SELECT liste_id
-        FROM turniere_liste
-        INNER JOIN turniere_liga
-        ON turniere_liste.turnier_id = turniere_liga.turnier_id
-        WHERE team_id='$team_id' AND datum='$datum' AND liste='spiele'
-        AND (turniere_liga.art='I' OR turniere_liga.art='II' OR turniere_liga.art='III')";
-        $result = db::readdb($sql);
-        if (mysqli_num_rows($result) > 0){
-            return true;
-        }
-        return false;
+        $sql = "
+                SELECT liste 
+                FROM turniere_liste 
+                WHERE team_id = ? AND turnier_id = $this->id
+                ";
+        return (dbi::$db->query($sql, $team_id)->num_rows() > 0);
     }
 
-    function get_team_liste($team_id)
+    /**
+     * Gibt true aus, wenn das Team am Kalendertag des Turnieres bereits bei einem Turnier auf der Spielen-Liste steht
+     *
+     * @param int $team_id
+     * @return bool
+     */
+    public function check_doppel_anmeldung(int $team_id): bool
     {
-        $turnier_id = $this->turnier_id;
-        $sql = "SELECT liste FROM turniere_liste WHERE team_id='$team_id' AND turnier_id='$turnier_id'";
-        $result = db::readdb($sql);
-        $result = mysqli_fetch_assoc($result);
-        return db::escape($result['liste'] ?? '');
-    
+        $sql = "
+                SELECT liste_id
+                FROM turniere_liste
+                INNER JOIN turniere_liga
+                ON turniere_liste.turnier_id = turniere_liga.turnier_id
+                WHERE team_id = ? 
+                AND datum = ? 
+                AND liste = 'spiele'
+                AND (turniere_liga.art = 'I' OR turniere_liga.art = 'II' OR turniere_liga.art = 'III')
+                ";
+        return dbi::$db->query($sql, $team_id, $this->details['datum'])->num_rows() > 0;
     }
 
-    //True, wenn der Teamblock in das Turnier passt.
-    //Um die DB zu schonen, können teamblock und turnierblock auch manuell übergeben werden
-    function check_team_block($team_id)
-    {   
-        if (!in_array($this->daten['art'],array('I','II','III'))){
+    /**
+     * Get Liste eines angemeldeten Teams auf einem Turnier
+     *
+     * @param int $team_id
+     * @return string
+     */
+    public function get_liste(int $team_id): string
+    {
+        $sql = "
+                SELECT liste 
+                FROM turniere_liste 
+                WHERE team_id = ? 
+                AND turnier_id = $this->id
+                ";
+        return dbi::$db->query($sql, $team_id)->esc()->fetch_one() ?? '';
+    }
+
+    /**
+     * Gibt true aus, wenn der Teamblock in das Turnier passt.
+     *
+     * @param $team_id
+     * @return bool
+     */
+    public function check_team_block(int $team_id): bool
+    {
+        // Falsche Turnierart für Blockcheck
+        if (!in_array($this->details['art'], ['I', 'II', 'III'])) {
             return false;
         }
-        $team_block = Tabelle::get_team_block($team_id);
-        $turnier_block = $this->daten['tblock'];
-        return self::check_team_block_static($team_block, $turnier_block);
+
+        return self::check_team_block_static(Tabelle::get_team_block($team_id), $this->details['tblock']);
     }
 
-    //statische check team block ohne auf die db zugreifen
-    public static function check_team_block_static($team_block, $turnier_block)
+    /**
+     * Statischer Check  des Teamblocks/Turnierblocks
+     *
+     * @param string $team_block
+     * @param string $turnier_block
+     * @return bool
+     */
+    public static function check_team_block_static(string $team_block, string $turnier_block): bool
     {
-        if ($team_block == 'NL'){ //NL Teams können auch zu final, spass, fixed Turnieren angemeldet werden
+        if ($team_block === NULL) {
             return true;
-        }else{
-            //Check ob es sich um ein Block-Turnier handelt (nicht spass oder finale)
-            if (in_array($turnier_block, Config::BLOCK_ALL)){
-                //Block-String in Array auflösen
-                $turnier_block = str_split($turnier_block);
-                $team_block = str_split($team_block);
-                //Check ob ein Buchstabe des Team-Blocks im Turnier-Block vorkommt
-                foreach ($team_block as $buchstabe){
-                    if (in_array($buchstabe,$turnier_block)){
-                        return true;
-                    }     
+        } // NL Teams können immer angemeldet werden
+
+        // Check ob es sich um ein Block-Turnier handelt (nicht spass oder finale)
+        if (in_array($turnier_block, Config::BLOCK_ALL)) {
+            // Block-String in Array auflösen
+            $turnier_buchstaben = str_split($turnier_block);
+            $team_buchstaben = str_split($team_block);
+            // Check ob ein Buchstabe des Team-Blocks im Turnier-Block vorkommt
+            foreach ($team_buchstaben as $buchstabe) {
+                if (in_array($buchstabe, $turnier_buchstaben)) {
+                    return true;
                 }
             }
         }
         return false;
     }
 
-    //True wenn das Team für das Turnier ein freilos setzten darf
-    function check_team_block_freilos($team_id)
+    /**
+     * Gibt true aus, wenn das Team für das Turnier ein Ffreilos setzten darf
+     * @param int $team_id
+     * @return bool
+     */
+    public function check_team_block_freilos(int $team_id): bool
     {
-        $team_block = Tabelle::get_team_block($team_id);
-        $turnier_block = $this->daten['tblock'];
-        return self::check_team_block_freilos_static($team_block, $turnier_block);
+        return self::check_team_block_freilos_static(Tabelle::get_team_block($team_id), $this->details['tblock']);
     }
 
-    //statische check team block freilos ohne auf die db zugreifen
-    public static function check_team_block_freilos_static($team_block, $turnier_block)
+    /**
+     * Statischer Check Teamblock/Turnierblock bei Freilosen
+     *
+     * @param string $team_block
+     * @param string $turnier_block
+     * @return bool
+     */
+    public static function check_team_block_freilos_static(string $team_block, string $turnier_block): bool
     {
-        //Check ob es sich um einen Block-Turnier handelt (nicht spass, finale, oder fix)
-        if (in_array($turnier_block, Config::BLOCK_ALL)){
+        // Check ob es sich um einen Block-Turnier handelt (nicht spass, finale, oder fix)
+        if (in_array($turnier_block, Config::BLOCK_ALL)) {
             $pos_turnier = array_search($turnier_block, Config::BLOCK_ALL, true);
             $team_block = str_split($team_block);
-            for ($i = $pos_turnier; $i <= (count(Config::BLOCK_ALL)-1); $i++){
-                foreach ($team_block as $buchstabe){
+            for ($i = $pos_turnier; $i <= (count(Config::BLOCK_ALL) - 1); $i++) {
+                foreach ($team_block as $buchstabe) {
                     $turnier_block = str_split(Config::BLOCK_ALL[$i]);
-                    if (in_array($buchstabe,$turnier_block)){
-                        return true;
-                    }
+                    if (in_array($buchstabe, $turnier_block)) return true;
                 }
             }
         }
         return false;
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////TURNIERDATEN ÄNDERN///////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-    function set_link_spielplan($link)
+    /**
+     * Hinterlegt zu einem Turnier einen Link zu einem manuelle hochgeladenen Spielplan
+     *
+     * Pfad zum Spielplan
+     * @param string $link
+     * @param string $phase
+     */
+    public function upload_spielplan(string $link, string $phase): void
     {
-        $turnier_id = $this->turnier_id;
-        $sql = "UPDATE turniere_details SET link_spielplan='$link' WHERE turnier_id='$turnier_id'";
-        db::writedb($sql);
-        $this->daten['link_spielplan'] = $link;
+        $sql = "
+                UPDATE turniere_liga
+                SET spielplan_datei = ?
+                WHERE turnier_id = $this->id;
+                ";
+        dbi::$db->query($sql, $link)->log();
+        $this->details['spielplan_datei'] = $link;
+        $this->set_phase($phase);
+        $this->log("Manuelle Spielplan- oder Ergebnisdatei wurde hochgeladen.");
+
     }
-    function get_spielplan(){
-        if (empty($this->daten['link_spielplan'])){
-            return '../liga/spielplan.php?turnier_id=' . $this->turnier_id;
-        }else{
-            return $this->daten['link_spielplan'];
+
+    /**
+     * Beschreibt die Datenbank der Turniere
+     *
+     * Methode noch nicht vollständig implementiert
+     *
+     * @param string $entry Spaltenname
+     * @param mixed $value  Wert
+     * @return Turnier
+     */
+    public function set(string $entry, mixed $value): Turnier
+    {
+        $spalten_namen = dbi::$db->query("SHOW FIELDS FROM turniere_liga")->list('Field');
+        if (in_array($entry, $spalten_namen, true)) {
+            $sql = "
+                    UPDATE turniere_liga 
+                    SET $entry = ?
+                    WHERE turnier_id = $this->id
+                    ";
+            dbi::$db->query($sql, $value)->log();
+            $this->log(ucfirst($entry) . " => " . $value ?? 'DELETED');
+            $this->details[$entry] = $value;
+            return $this;
+        }
+        $spalten_namen = dbi::$db->query("SHOW FIELDS FROM turniere_details")->list('Field');
+        if (in_array($entry, $spalten_namen, true)) {
+            $sql = "
+                    UPDATE turniere_details
+                    SET $entry = ?
+                    WHERE turnier_id = $this->id
+                    ";
+            dbi::$db->query($sql, $value)->log();
+            $this->log(ucfirst($entry) . " => " . $value ?? 'DELETED');
+            $this->details[$entry] = $value;
+            return $this;
+        }
+        trigger_error("Ungültiger Spaltenname mit Col $entry, Val $value", E_USER_ERROR);
+    }
+
+    /**
+     * Gibt den Link zum Liga-Spielplan aus, je nach dem ob er manuell hochgeladen oder automatisch erstellt wurde
+     *
+     * @param string $scope default: allgemein, lc => ligacenter tc => teamcenter
+     * @return false|string
+     */
+    public function get_spielplan_link(string $scope = ''): false|string
+    {
+        // Es existiert ein manuell hochgeladener Spielplan
+        if (!empty($this->details['spielplan_datei'])){
+            return $this->details['spielplan_datei'];
+        }
+
+        // Es existiert ein automatisch erstellter Spielplan
+        if (!empty($this->details['spielplan_vorlage'])) {
+            return match ($scope) {
+                'lc'    => Env::BASE_URL . '/ligacenter/lc_spielplan.php?turnier_id=' . $this->id,
+                'tc'    => Env::BASE_URL . '/teamcenter/tc_spielplan.php?turnier_id=' . $this->id,
+                DEFAULT => Env::BASE_URL . '/liga/spielplan.php?turnier_id=' . $this->id
+            };
+        }
+
+        return false;
+    }
+
+    /**
+     * Ändert die Phase in der sich das Turnier befindet
+     *
+     * @param string $phase
+     */
+    public function set_phase(string $phase): void
+    {
+        if ($phase === $this->details['phase']) {
+            return;
+        }
+
+        $sql = "
+                UPDATE turniere_liga 
+                SET phase = ? 
+                WHERE turnier_id = $this->id
+                ";
+        dbi::$db->query($sql, $phase)->log();
+        $this->log("Phase: " . $this->details['phase'] . " => " . $phase);
+        $this->details['phase'] = $phase;
+    }
+
+    /**
+     * Ändert den Turnierblock
+     *
+     * @param string $block
+     */
+    public function set_block(string $block): void
+    {
+        $sql = "
+                UPDATE turniere_liga 
+                SET tblock = ?
+                WHERE turnier_id = $this->id
+                ";
+        dbi::$db->query($sql, $block)->log();
+        $this->log("Block: " . $this->details['tblock'] . " => " . $block);
+        $this->details['tblock'] = $block;
+    }
+
+    /**
+     * Setzt den Spieltag in der Datenbank fest
+     *
+     * @param int $spieltag
+     */
+    public function set_spieltag(int $spieltag): void
+    {
+        $sql = "
+                UPDATE turniere_liga
+                SET spieltag = ?
+                WHERE turnier_id = $this->id
+                ";
+        dbi::$db->query($sql, $spieltag)->log();
+        $this->log("Spieltag: " . $spieltag);
+        $this->details['spieltag'] = $spieltag;
+    }
+
+    /**
+     * Update der Turnierdetails
+     *
+     * @param string $startzeit
+     * @param string $besprechung
+     * @param string $plaetze
+     * @param string $spielplan
+     * @param string $hallenname
+     * @param string $strasse
+     * @param string $plz
+     * @param string $ort
+     * @param string $haltestellen
+     * @param string $hinweis
+     * @param string $startgebuehr
+     * @param string $organisator
+     * @param string $handy
+     * @return bool Wurden wichtige Daten geändert?
+     */
+    public function change_turnier_details(string $startzeit, string $besprechung, string $plaetze, string $spielplan,
+                                           string $hallenname, string $strasse, string $plz, string $ort, string $haltestellen,
+                                           string $hinweis, string $startgebuehr, string $organisator, string $handy): bool
+    {
+        $sql = "
+                UPDATE turniere_details 
+                SET hallenname = ?, strasse = ?, plz = ?, ort = ?, haltestellen = ?, plaetze = ?, format = ?,
+                    startzeit = ?, besprechung = ?, hinweis = ?, organisator = ?, handy = ?, startgebuehr = ?
+                WHERE turnier_id = $this->id
+                ";
+        $params = [$hallenname, $strasse, $plz, $ort, $haltestellen, $plaetze, $spielplan, $startzeit, $besprechung,
+            $hinweis, $organisator, $handy, $startgebuehr];
+        dbi::$db->query($sql, $params)->log();
+
+        // Nichts wichtiges geändert, aber trotzdem Log
+        if ($this->details['besprechung'] != $besprechung) {
+            $this->log("Besprechung: " . $besprechung);
+        }
+        if ($this->details['hinweis'] != $hinweis) {
+            $this->log("Hinweis:\r\n" . $hinweis);
+        }
+        if ($this->details['hallenname'] != $hallenname) {
+            $this->log("Hallenname: " . $hallenname);
+        }
+        if ($this->details['haltestellen'] != $haltestellen) {
+            $this->log("Haltestellen: " . $haltestellen);
+        }
+        if ($this->details['organisator'] != $organisator) {
+            $this->log("Organisator: " . $startzeit);
+        }
+        if ($this->details['handy'] != $handy) {
+            $this->log("Handy: " . $handy);
+        }
+        if ($this->details['startgebuehr'] != $startgebuehr) {
+            $this->log("Startgebühr: " . $startgebuehr);
+        }
+
+        // Wichtiges geändert und Log
+        $wichtiges_geaendert = false;
+        if ($this->details['format'] != $spielplan) {
+            $this->log("Spielplan: " . $spielplan);
+            $wichtiges_geaendert = true;
+        }
+        if ($this->details['plz'] != $plz) {
+            $this->log("PLZ: " . $plz);
+            $wichtiges_geaendert = true;
+        }
+        if ($this->details['strasse'] != $strasse) {
+            $this->log("Straße: " . $strasse);
+            $wichtiges_geaendert = true;
+        }
+        if ($this->details['ort'] != $ort) {
+            $this->log("Ort: " . $ort);
+            $wichtiges_geaendert = true;
+        }
+        if ($this->details['startzeit'] != $startzeit) {
+            $this->log("Startzeit: " . $startzeit);
+            $wichtiges_geaendert = true;
+        }
+        if ($this->details['plaetze'] != $plaetze) {
+            $this->log("Plätze: " . $plaetze);
+            $wichtiges_geaendert = true;
+        }
+        return $wichtiges_geaendert;
+    }
+
+    /**
+     * Update der Turnier-Ligadaten
+     *
+     * @param string $tname
+     * @param int $ausrichter
+     * @param string $art
+     * @param string $tblock
+     * @param string $fixed
+     * @param string $datum
+     * @param string $phase
+     */
+    public function change_turnier_liga(string $tname, int $ausrichter, string $art, string $tblock, string $fixed,
+                                        string $datum, string $phase): void
+    {
+        $sql = "
+                UPDATE turniere_liga 
+                SET tname = ?, phase = ?, ausrichter = ?, art = ?, tblock = ?, tblock_fixed = ?, datum = ?
+                WHERE turnier_id = $this->id
+                ";
+        $params = [$tname, $phase, $ausrichter, $art, $tblock, $fixed, $datum];
+        dbi::$db->query($sql, $params)->log();
+
+        // Turnierlogs schreiben
+        if ($this->details['datum'] !== $datum) {
+            LigaBot::set_spieltage(); // Spieltage ändern sich eventuell, je nach Datumsveränderung
+            $this->log("Datum geändert: " . $datum);
+        }
+        if ($this->details['tname'] !== $tname) {
+            $this->log("Turniername geändert: " . $tname);
+        }
+
+        if ($this->details['ausrichter'] !== $ausrichter) {
+            $this->log("Ausrichter geändert: " . Team::id_to_name($ausrichter));
+        }
+        if ($this->details['art'] !== $art) {
+            $this->log("Art: " . $art);
+        }
+        if ($this->details['tblock'] !== $tblock) {
+            $this->log("Turnierblock geändert: " . $tblock);
+        }
+        if ($this->details['tblock_fixed'] !== $fixed) {
+            $this->log("Fixiert geändert: " . $fixed);
+        }
+        if ($this->details['phase'] !== $phase) {
+            $this->log("Phase geändert: " . $phase);
         }
     }
-    function get_tc_spielplan(){
-        if (empty($this->daten['link_spielplan'])){
-            return '../teamcenter/tc_spielplan.php?turnier_id=' . $this->turnier_id;
-        }else{
-            return $this->daten['link_spielplan'];
-        }
-    }
-    function get_lc_spielplan(){
-        if (empty($this->daten['link_spielplan'])){
-            return '../ligacenter/lc_spielplan.php?turnier_id=' . $this->turnier_id;
-        }else{
-            return $this->daten['link_spielplan'];
-        }
-    }
-    //Ändert die Phase in der sich das Turnier befindet
-    function set_phase($phase)
+
+    /**
+     * Ändert den Turnierblock
+     *
+     * @param $tblock
+     * @param $fixed
+     * @param $art
+     * @return void
+     */
+    public function change_turnier_block($tblock, $fixed, $art): void
     {
-        $turnier_id = $this->turnier_id;
-        $sql = "UPDATE turniere_liga SET phase='$phase' WHERE turnier_id='$turnier_id'";
-        db::writedb($sql);
-        $this->daten['phase'] = $phase;
-    }
-    function set_turnier_block($block)
-    {
-        $turnier_id = $this->turnier_id;
-        $sql = "UPDATE turniere_liga SET tblock='$block' WHERE turnier_id='$turnier_id'";
-        db::writedb($sql);
-        $this->daten['tblock'] = $block;
+        $sql = "
+                UPDATE turniere_liga 
+                SET tblock = ?, tblock_fixed = ?, art = ?
+                WHERE turnier_id = $this->id
+                ";
+        dbi::$db->query($sql, [$tblock, $fixed, $art])->log();
+        $this->details['tblock'] = $tblock;
+        $this->log("Turnierblock: $tblock\r\n(Art: $art, Fixed: $fixed");
     }
 
-    function set_spieltag($spieltag)
+    /**
+     * Schreibt in den Turnierlog
+     *
+     * @param string $log_text
+     */
+    public function log(string $log_text): void
     {
-        $turnier_id = $this->turnier_id;
-        $sql = "UPDATE turniere_liga SET spieltag='$spieltag' WHERE turnier_id='$turnier_id'";
-        db::writedb($sql);
-        $this->daten['spieltag'] = $spieltag;
+        $sql = "
+                INSERT INTO turniere_log (turnier_id, log_text, autor) 
+                VALUES ($this->id, ?, ?);
+                ";
+        $autor = Helper::get_akteur(true);
+        dbi::$db->query($sql, $log_text, $autor)->log();
     }
 
-    function change_turnier_details($startzeit, $besprechung, $plaetze, $spielplan, $hallenname, $strasse, $plz, $ort, $haltestellen, $hinweis, $startgebuehr, $name, $handy)
+    /**
+     * Get Turnierlogs
+     *
+     * @return array
+     */
+    public function get_logs(): array
     {
-        $turnier_id = $this->turnier_id;
-        $sql=
-        "UPDATE turniere_details 
-        SET hallenname='$hallenname', strasse='$strasse', plz='$plz', ort='$ort', haltestellen='$haltestellen', plaetze='$plaetze', spielplan='$spielplan', startzeit='$startzeit', besprechung='$besprechung', hinweis='$hinweis', organisator='$name', handy='$handy', startgebuehr='$startgebuehr'
-        WHERE turnier_id = '$turnier_id'";
-        db::writedb($sql);
-        return true;
+        $sql = "
+                SELECT * 
+                FROM turniere_log 
+                WHERE turnier_id = $this->id
+                ";
+        return dbi::$db->query($sql)->esc()->fetch();
     }
 
-    function change_turnier_liga($tname, $ausrichter, $art, $tblock, $fixed, $datum, $phase)
-    {
-        $turnier_id = $this->turnier_id;
-        $sql= 
-        "UPDATE turniere_liga 
-        SET tname='$tname', phase='$phase', ausrichter='$ausrichter', art='$art', tblock='$tblock', tblock_fixed='$fixed', datum='$datum'
-        WHERE turnier_id = '$turnier_id'";
-        db::writedb($sql);
-        return true;
-    }
-
-    function change_turnier_block($tblock, $fixed, $art)
-    {
-        $turnier_id = $this->turnier_id;
-        $sql=
-        "UPDATE turniere_liga 
-        SET tblock = '$tblock', tblock_fixed = '$fixed', art = '$art'
-        WHERE turnier_id = '$turnier_id'";
-        db::writedb($sql);
-        return true;
-    }
-
-    //Schreibt in den Turnierlog
-    function schreibe_log($log_text,$autor)
-    {
-        $turnier_id = $this->turnier_id;
-        $sql= "INSERT INTO turniere_log (turnier_id, log_text, autor) VALUES ('$turnier_id','$log_text', '$autor');";
-        db::writedb($sql);
-    }
-
-    //Schreibt in den Turnierlog
-    function get_logs()
-    {
-        $turnier_id = $this->turnier_id;
-        $sql= "SELECT * FROM turniere_log WHERE turnier_id = '$turnier_id'";
-        $result = db::readdb($sql);
-        $logs = array();
-        while ($x = mysqli_fetch_assoc($result)){
-            array_push($logs, $x);
-        }
-        return db::escape($logs);
-    }
-
-    //Löscht das Turnier
+    /**
+     * Löscht das Turnier aus der DB und vermerkt das Turnier in der Tabelle gelöschte TUrniere
+     *
+     * Grund des Löschens
+     * @param string $grund
+     */
     function delete($grund = '')
-    {   
-        db::db_sichern();
-        $turnier_id = $this->turnier_id;
-        $ort = $this->daten['ort'];
-        $datum = $this->daten['datum'];
-        $saison = $this->daten['saison'];
+    {
+        // Datenbank Backup
+        dbi::sql_backup();
 
-        //Turnier in der Datenbank vermerken
-        $sql = "INSERT INTO turniere_geloescht (turnier_id, datum, ort, grund, saison) VALUES ('$turnier_id','$datum','$ort','$grund','$saison')";
-        db::writedb($sql);
-        
-        //Turnier aus der Datenbank löschen
-        $sql = "DELETE FROM turniere_liga WHERE turnier_id = $turnier_id";
-        db::writedb($sql);
+        // Turnier in der Datenbank vermerken
+        $sql = "
+                INSERT INTO turniere_geloescht (turnier_id, datum, ort, grund, saison) 
+                VALUES ($this->id, ?, ?, ?, ?)
+                ";
+        $params = [$this->details['datum'], $this->details['ort'], $grund, $this->details['saison']];
+        dbi::$db->query($sql, $params)->log();
 
-        //Spieltage neu sortieren
+        // Turnier aus der Datenbank löschen
+        $sql = "
+                DELETE FROM turniere_liga 
+                WHERE turnier_id = $this->id
+                ";
+        dbi::$db->query($sql)->log();
+        $this->log("Turnier wurde gelöscht");
+        // Spieltage neu sortieren
         Ligabot::set_spieltage();
-        return true;
     }
-    public static function get_deleted_turniere(){
-        $sql = "SELECT * FROM turniere_geloescht WHERE saison = '" . Config::SAISON . "' ORDER BY datum DESC";
-        $result = db::readdb($sql);
-        while ($x = mysqli_fetch_assoc($result)){
-            $turniere_deleted[$x['turnier_id']] = $x;
-        }
-        return $turniere_deleted;
+
+    /**
+     * Liste an gelöschten Turnieren
+     *
+     * @return array
+     */
+    public static function get_deleted_turniere(): array
+    {
+        $sql = "
+                SELECT * 
+                FROM turniere_geloescht 
+                WHERE saison = '" . Config::SAISON . "' 
+                ORDER BY datum DESC
+                ";
+        return dbi::$db->query($sql)->esc()->fetch('turnier_id');
     }
 }

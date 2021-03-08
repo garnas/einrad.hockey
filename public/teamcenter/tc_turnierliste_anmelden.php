@@ -2,44 +2,44 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth
 
-//Teamspezifisches
-$akt_team = new Team($_SESSION['team_id']);
-$turnier_angemeldet = $akt_team->get_turniere_angemeldet();
-$anz_freilose = $akt_team->get_freilose();
+// Teamspezifisches
+$team = new Team($_SESSION['logins']['team']['id']);
+$turnier_angemeldet = $team->get_turniere_angemeldet();
+$anz_freilose = $team->get_freilose();
 
-//Relevante Turniere finden
-$heute = date("Y-m-d", Config::time_offset());
-$turniere = Turnier::get_all_turniere("WHERE turniere_liga.datum > '$heute'"); //wird dem Template übergeben
+// Relevante Turniere finden
+$heute = date("Y-m-d");
+$turniere = Turnier::get_turniere('ergebnis', false); // wird dem Template übergeben
 
-//Hinweis Live-Spieltag
+// Hinweis Live-Spieltag
 $akt_spieltag = Tabelle::get_aktuellen_spieltag();
 if (Tabelle::check_spieltag_live($akt_spieltag)){
-    Form::attention(
+    Html::notice(
         "Für den aktuelle Spieltag (ein Spieltag ist immer ein ganzes Wochenende) wurden noch nicht alle Ergebnisse eingetragen. Für die Turnieranmeldung gilt immer der Teamblock des letzten vollständigen Spieltages: "
-        . Form::link("../liga/tabelle.php?spieltag=" . ($akt_spieltag - 1) . "#rang", "Spieltag " . ($akt_spieltag - 1)));
+        . Html::link("../liga/tabelle.php?spieltag=" . ($akt_spieltag - 1) . "#rang", "Spieltag " . ($akt_spieltag - 1)));
 }
 
-//Füge Links zum Weiterverarbeiten der ausgewählten Turniere hinzu
-//diese werden dem Teamplate übergeben
+// Füge Links zum Weiterverarbeiten der ausgewählten Turniere hinzu
+// diese werden dem Teamplate übergeben
 foreach ($turniere as $turnier_id => $turnier){
     //Links
     $turniere[$turnier_id]['links'] = 
         array(
-            Form::link("tc_team_anmelden.php?turnier_id=".$turnier_id,'<i class="material-icons">how_to_reg</i> ' . $_SESSION['teamname'] . ' an/abmelden (Zur Anmeldeseite)'), 
-            Form::link("../liga/turnier_details.php?turnier_id=".$turnier_id, '<i class="material-icons">info</i> Zu den Turnierdetails')
+            Html::link("tc_team_anmelden.php?turnier_id=".$turnier_id,'Zur Ab- / Anmeldung', false , 'how_to_reg'),
+            Html::link("../liga/turnier_details.php?turnier_id=".$turnier_id, 'Zu den Turnierdetails', false, 'info')
         );
         
     //Farbe des Turnierblocks festlegen
     $freilos = true;
     $turniere[$turnier_id]['block_color'] = 'w3-text-red';
-    if (Turnier::check_team_block_static($_SESSION['teamblock'],$turnier['tblock'])){
+    if (Turnier::check_team_block_static($_SESSION['logins']['team']['block'],$turnier['tblock'])){
         $turniere[$turnier_id]['block_color'] = 'w3-text-green';
         $freilos = false;
     }
-    if ($freilos && Turnier::check_team_block_freilos_static($_SESSION['teamblock'],$turnier['tblock']) && $anz_freilose>0){
+    if ($freilos && Turnier::check_team_block_freilos_static($_SESSION['logins']['team']['block'],$turnier['tblock']) && $anz_freilose>0){
         $turniere[$turnier_id]['block_color'] = 'w3-text-yellow';
     }
 
@@ -66,9 +66,11 @@ include '../../templates/header.tmp.php';?>
 
 <h2 class="w3-text-primary" style='display: inline;'>Turnieranmeldung und -abmeldung</h2>
 <!-- Trigger/Open the Modal -->
-<button onclick="document.getElementById('id01').style.display='block'"
-class="w3-button w3-text-blue w3-right" style='display: inline;'>Legende</button>
-
+<p>
+    <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-text-primary">
+        <?= Html::icon("help") ?> Legende
+    </button>
+</p>
 <!-- The Modal -->
 <div id="id01" class="w3-modal">
   <div class="w3-modal-content" style="max-width:400px">
