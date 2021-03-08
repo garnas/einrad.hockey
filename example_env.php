@@ -2,7 +2,13 @@
 
 /**
  * Klasse für Enviroment-Variablen
- * wird in first.logic vor dem Autoloader required
+ * wird in init.php vor dem Autoloader required
+ *
+ * ANLEITUNG
+ * (1) Erstelle eine Datei env.php im selben Verzeichnis wie diese Datei (dies ist unser Root-Verzeichnis)
+ * (2) Kopiere den Code dieser Datei hier in deine neue env.php
+ * (3) Passe die Einstellungen in env.php entsprechend deiner Entwicklungsumgebung an (Mailsachen erstmal unwichtig).
+ * (4) Deine Einstellungen in env.php liegen im Gitignore und werden nicht auf Github hochgeladen.
  */
 class env
 {
@@ -14,8 +20,9 @@ class env
 
     /**
      * Basispfad für includes, requires
+     * Root-Pfad von deinem System in den Ordner dieser Datei
      */
-    public const BASE_PATH = __DIR__; // Das Verzeichnis dieser Datei ist der BASE_PATH
+    public const BASE_PATH = __DIR__;
 
     /**
      * SQL-Datenbank Zugangsdaten
@@ -49,8 +56,8 @@ class env
     /**
      * Wartungsmodus
      *
-     * Bei true wird die Seite wird für Besucher gesperrt. Wenn man freeme.php im public-Ordner aufruft, wird die Seite
-     * über den Sessions-Cookie für einen Besucher freigeschaltet.
+     * Bei true wird die Seite wird für Besucher gesperrt. Wenn du freeme.php im public-Ordner aufrufst, wird die
+     * Webseite über die Session für dich freigeschaltet.
      */
     public const WARTUNGSMODUS = false;
 }
