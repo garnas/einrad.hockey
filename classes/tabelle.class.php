@@ -31,7 +31,7 @@ class Tabelle
                 ORDER BY spieltag
                 LIMIT 1
                 ";
-        return dbi::$db->query($sql, $saison)->fetch_one() ?? 1;
+        return db::$db->query($sql, $saison)->fetch_one() ?? 1;
     }
 
     /**
@@ -51,7 +51,7 @@ class Tabelle
                 AND saison = ?
                 GROUP BY phase
                 ";
-        $result = dbi::$db->query($sql, $spieltag, $saison)->list('count(phase)','phase');
+        $result = db::$db->query($sql, $spieltag, $saison)->list('count(phase)','phase');
         return (
                 isset($result['spielplan']) or isset($result['melde']) or isset($result ['offen'])
                 )
@@ -80,7 +80,7 @@ class Tabelle
                 AND saison = ?
                 AND phase != 'ergebnis'
                 ";
-        return dbi::$db->query($sql, $turnier->details['spieltag'], $turnier->details['saison'])->num_rows() === 0;
+        return db::$db->query($sql, $turnier->details['spieltag'], $turnier->details['saison'])->num_rows() === 0;
     }
 
     /**
@@ -189,7 +189,7 @@ class Tabelle
                 AND phase = 'ergebnis'
                 ORDER BY turniere_liga.datum DESC, platz
                 ";
-        $result = dbi::$db->query($sql)->esc()->fetch();
+        $result = db::$db->query($sql)->esc()->fetch();
         foreach ($result as $ergebnis){
             $return[$ergebnis['turnier_id']][] = $ergebnis;
         }
@@ -220,7 +220,7 @@ class Tabelle
                 AND (turniere_liga.spieltag <= ?)
                 ORDER BY ergebnis DESC, RAND()
                 ";
-        $result = dbi::$db->query($sql, $saison, $spieltag)->esc()->fetch('team_id');
+        $result = db::$db->query($sql, $saison, $spieltag)->esc()->fetch('team_id');
 
         $counter = $return = [];
         foreach($result as $team_id => $eintrag){
@@ -335,7 +335,7 @@ class Tabelle
                     $ausnahme)
                     )
                 ORDER BY turniere_liga.saison DESC, turniere_liga.datum DESC";
-        $result = dbi::$db->query($sql, $spieltag, $saison, $saison)->esc()->fetch('team_id');
+        $result = db::$db->query($sql, $spieltag, $saison, $saison)->esc()->fetch('team_id');
         $return = [];
         $counter = [];
 

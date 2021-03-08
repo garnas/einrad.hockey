@@ -11,7 +11,7 @@ $spieler_liste = Spieler::get_spielerliste(); //Liste aller Spielernamen und IDs
 if (isset($_POST['spieler_auswahl'])) {
     $pos = count(explode(" ", $_POST['spieler_auswahl'])) - 1; //Postion der SpielerID finden
     $spieler_id = explode(" ", $_POST['spieler_auswahl'])[$pos]; //SpielerID extrahieren
-    header('Location: ' . dbi::escape($_SERVER['PHP_SELF']) . '?spieler_id=' . $spieler_id);
+    header('Location: ' . db::escape($_SERVER['PHP_SELF']) . '?spieler_id=' . $spieler_id);
     die();
 }
 

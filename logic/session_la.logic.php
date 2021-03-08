@@ -1,7 +1,7 @@
 <?php
 // Dies hier muss in jeder geschützten Seite direkt nach von init.php eingefügt werden!
 if(!isset($_SESSION['logins']['la'])) {
-  $_SESSION['lc_redirect'] = dbi::escape($_SERVER['REQUEST_URI']); //Damit man nach dem Login direkt auf die gewünschte Seite geführt wird
+  $_SESSION['lc_redirect'] = db::escape($_SERVER['REQUEST_URI']); //Damit man nach dem Login direkt auf die gewünschte Seite geführt wird
   Html::info("Du wirst nach deinem Login weitergeleitet.");
   header('Location: ../ligacenter/lc_login.php?redirect');
   die();

@@ -6,7 +6,7 @@ require_once '../../init.php';
 
 $_SESSION['logins']['cronjob'] = 'Cronjob';
 
-dbi::sql_backup();
+db::sql_backup();
 
 //Meldungen protokollieren
 ?>

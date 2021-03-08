@@ -51,7 +51,7 @@ class MailBot
         }
 
         Helper::log(Config::LOG_EMAILS, 'E-Mail-Debug-Pseudo-Versand erfolgreich');
-        dbi::debug($mailer);
+        db::debug($mailer);
         return true;
     }
 
@@ -68,7 +68,7 @@ class MailBot
                 ORDER BY zeit 
                 LIMIT 50
                 ";
-        $mails = dbi::$db->query($sql)->fetch();
+        $mails = db::$db->query($sql)->fetch();
         foreach($mails as $mail){
             $mailer = self::start_mailer();
             $mailer->isHTML(true); // Für die Links
@@ -123,7 +123,7 @@ class MailBot
                 VALUES (?, ?, ?, ?, 'warte')
                 ";
         $params = [$betreff, $inhalt, $adressaten, $absender];
-        dbi::$db->query($sql, $params)->log();
+        db::$db->query($sql, $params)->log();
     }
 
     /**
@@ -140,7 +140,7 @@ class MailBot
             SET mail_status = ?, zeit = zeit, fehler = ? 
             WHERE mail_id = ?
             ";
-        dbi::$db->query($sql, $mail_status, $fehler, $mail_id)->log();
+        db::$db->query($sql, $mail_status, $fehler, $mail_id)->log();
     }
 
     /**
@@ -153,7 +153,7 @@ class MailBot
             FROM mailbot 
             WHERE mail_status = 'fehler'
             ";
-        if (($anzahl = dbi::$db->query($sql)->num_rows()) > 0) {
+        if (($anzahl = db::$db->query($sql)->num_rows()) > 0) {
             Html::notice("Der Mailbot kann $anzahl Mail(s) nicht versenden - siehe Datenbank.");
         }
     }

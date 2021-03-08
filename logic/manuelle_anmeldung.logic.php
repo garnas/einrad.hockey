@@ -42,7 +42,7 @@ if (isset($_POST['abmelden'])){
                     $turnier->warteliste_aktualisieren();
                 }
                 Html::info ($team['teamname'] . " wurde abgemeldet");
-                header('Location: ' . dbi::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
+                header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
                 die();
             }
         }
@@ -79,7 +79,7 @@ if (isset($_POST['team_anmelden'])){
     if (!$error){
         $turnier->anmelden($team_id, $liste, $pos);
         Html::info ("$teamname wurde angemeldet");
-        header('Location: ' . dbi::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
+        header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
         die();
     }
 }
@@ -101,7 +101,7 @@ if (isset($_POST['nl_anmelden'])){
     if (!$turnier->check_team_angemeldet($team_id ?? 0)){
         $turnier->nl_anmelden($teamname, $liste, $pos);
         Html::info("$teamname wurde angemeldet auf Liste: $liste");
-        header('Location: ' . dbi::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
+        header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
         die();
     }else{
         Html::error("Ein Nichtligateam mit diesem Namen ist bereits angemeldet");
@@ -115,7 +115,7 @@ if (isset($_POST['warteliste_aktualisieren'])){
     //Log wird automatisch in der Funktion geschrieben, Argument: Autor
 
     Html::info("Warteliste wurde aktualisiert");
-    header('Location: ' . dbi::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
+    header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
     die();
 }
 
@@ -138,7 +138,7 @@ if (isset($_POST['spieleliste_auffuellen'])){
     if (!$error){
         $turnier->spieleliste_auffuellen("Ligaausschuss");
         Html::info("Spielen-Liste wurde aufgefüllt");
-        header('Location: ' . dbi::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
+        header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
         die();
     }else{
         Html::error('Spielen-Liste wurde nicht aufgefüllt');

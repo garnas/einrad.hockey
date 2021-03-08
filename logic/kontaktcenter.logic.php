@@ -30,7 +30,7 @@ if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
     $turnier = new Turnier((int) $_POST['turnier_id']);
     if (empty($turnier->details)) {
         Html::error("Turnier wurde nicht gefunden");
-        header('Location: ' . dbi::escape($_SERVER['PHP_SELF']));
+        header('Location: ' . db::escape($_SERVER['PHP_SELF']));
         die();
     }
     $array = Kontakt::get_emails_turnier($_POST['turnier_id']);
@@ -134,7 +134,7 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
         if (MailBot::send_mail($mailer)) {
             Html::info("Die E-Mail wurde versandt.");
             unset($_SESSION[$list_id]);
-            header('Location: ' . dbi::escape($_SERVER['PHP_SELF']));
+            header('Location: ' . db::escape($_SERVER['PHP_SELF']));
             die();
         }
 

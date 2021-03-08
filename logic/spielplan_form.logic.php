@@ -39,7 +39,7 @@ if (isset($_POST["tore_speichern"])) {
         );
     }
     Html::info('Spielergebnisse wurden gespeichert');
-    header('Location: ' . dbi::escape($_SERVER['REQUEST_URI']));
+    header('Location: ' . db::escape($_SERVER['REQUEST_URI']));
     die();
 }
 
@@ -67,7 +67,7 @@ if (isset($_POST["turnierergebnis_speichern"])) {
     if (!($error ?? false)) {
         $spielplan->turnier->set_ergebnisse($spielplan->platzierungstabelle);
         Html::info("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
-        header('Location: ' . dbi::escape($_SERVER['REQUEST_URI']));
+        header('Location: ' . db::escape($_SERVER['REQUEST_URI']));
         die();
     }
 

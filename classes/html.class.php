@@ -101,9 +101,9 @@ class Html
             'notice' => 'w3-border-yellow w3-pale-yellow'
         };
 
-        $caption = ($esc) ? dbi::escape($caption) : $caption;
+        $caption = ($esc) ? db::escape($caption) : $caption;
         $caption = is_null($caption) ? '' : "<h3>$caption</h3>";
-        $message = ($esc) ? dbi::escape($message) : $message;
+        $message = ($esc) ? db::escape($message) : $message;
 
         echo "
         <div class='w3-card w3-panel w3-leftbar $color'>

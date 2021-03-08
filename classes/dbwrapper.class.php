@@ -56,27 +56,27 @@ class dbWrapper
         unset($this->result, $this->stmt, $this->sql, $this->params);
 
         // Prepare
-        if (!$this->stmt = $this->link->prepare($sql)){
-            Helper::log(Config::LOG_DB, "ERROR " . dbi::escape($this->link->error));
+        if (!$this->stmt = $this->link->prepare($sql)) {
+            Helper::log(Config::LOG_DB, "ERROR " . db::escape($this->link->error));
         }
         // Parameter übergeben
         if ($this->stmt->param_count > 0) { // Alternativ if (!empty($params))
             if (is_array($params[array_key_first($params)])) {
                 $params = $params[array_key_first($params)];
             }
-            if ($this->stmt->param_count != count($params)){
+            if ($this->stmt->param_count != count($params)) {
                 $this->sql = $sql;
                 $this->params = $params;
                 $this->log();
                 Helper::log(Config::LOG_DB, "ERROR Falsche Anzahl an Parametern für Mysqli-Prepare");
             }
-            $params = dbi::trim_params($params);
+            $params = db::trim_params($params);
             $this->bind($params);
         }
 
         // Ausführen
-        if (!$this->stmt->execute()){
-            Helper::log(Config::LOG_DB, "ERROR " . dbi::escape($this->stmt->error));
+        if (!$this->stmt->execute()) {
+            Helper::log(Config::LOG_DB, "ERROR " . db::escape($this->stmt->error));
         }
         $this->result = $this->stmt->get_result();
 
@@ -114,7 +114,7 @@ class dbWrapper
      */
     public function fetch_one(): mixed
     {
-        if ($this->escape_result) return dbi::escape($this->result->fetch_array()[0] ?? null);
+        if ($this->escape_result) return db::escape($this->result->fetch_array()[0] ?? null);
         return $this->result->fetch_array()[0] ?? null;
     }
 
@@ -125,7 +125,7 @@ class dbWrapper
      */
     public function fetch_row(): array
     {
-        if ($this->escape_result) return dbi::escape($this->result->fetch_assoc() ?? []);
+        if ($this->escape_result) return db::escape($this->result->fetch_assoc() ?? []);
         return $this->result->fetch_assoc() ?? [];
     }
 
@@ -147,7 +147,7 @@ class dbWrapper
                 $return[$x[$key]] = $x[$spalte];
             }
         }
-        return ($this->escape_result) ? dbi::escape($return ?? []) : $return ?? [];
+        return ($this->escape_result) ? db::escape($return ?? []) : $return ?? [];
     }
 
     /**
@@ -167,7 +167,7 @@ class dbWrapper
                 $return[$x[$key]] = $x;
             }
         }
-        return ($this->escape_result) ? dbi::escape($return ?? []) : $return ?? [];
+        return ($this->escape_result) ? db::escape($return ?? []) : $return ?? [];
     }
 
     /**
@@ -197,7 +197,7 @@ class dbWrapper
      */
     public function get_last_insert_id(): int
     {
-        return dbi::$db->link->insert_id;
+        return db::$db->link->insert_id;
     }
 
     /**
@@ -238,8 +238,8 @@ class dbWrapper
         $sql = trim(preg_replace("/(^\h+|\h+$)/m", '', $this->sql)); // Schönere Formatierung
 
         // Parameter formatieren
-        if (!empty($this->params)){
-            $params = ($anonym) ? "\nAnonyme Query" :  "\n?: " . implode("\n?: ", $this->params);
+        if (!empty($this->params)) {
+            $params = ($anonym) ? "\nAnonyme Query" : "\n?: " . implode("\n?: ", $this->params);
         }
 
         // Log-Text

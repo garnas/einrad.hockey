@@ -31,7 +31,7 @@ class TurnierReport
                 FROM spieler_zeitstrafen 
                 WHERE turnier_id = $this->turnier_id
                 ";
-        return dbi::$db->query($sql)->esc()->fetch('zeitstrafe_id');
+        return db::$db->query($sql)->esc()->fetch('zeitstrafe_id');
     }
 
     /**
@@ -50,7 +50,7 @@ class TurnierReport
                 VALUES ($this->turnier_id, ?, ?, ?, ?, ?)
                 ";
         $params = [$spieler_name, $dauer, $team_a, $team_b, $grund];
-        dbi::$db->query($sql,$params)->log();
+        db::$db->query($sql,$params)->log();
     }
 
     /**
@@ -65,7 +65,7 @@ class TurnierReport
                 WHERE zeitstrafe_id = ? 
                 AND turnier_id = $this->turnier_id
                 ";
-        dbi::$db->query($sql, $zeitstrafe_id)->log();
+        db::$db->query($sql, $zeitstrafe_id)->log();
     }
 
     /**
@@ -79,7 +79,7 @@ class TurnierReport
                 FROM spieler_ausleihen 
                 WHERE turnier_id = $this->turnier_id
                 ";
-        return dbi::$db->query($sql)->esc()->fetch('ausleihe_id');
+        return db::$db->query($sql)->esc()->fetch('ausleihe_id');
 
     }
 
@@ -96,7 +96,7 @@ class TurnierReport
                 INSERT INTO spieler_ausleihen (turnier_id, spieler, team_auf, team_ab) 
                 VALUES ($this->turnier_id, ?, ?, ?)
                 ";
-        dbi::$db->query($sql,$spieler, $team_auf, $team_ab)->log();
+        db::$db->query($sql,$spieler, $team_auf, $team_ab)->log();
     }
 
     /**
@@ -111,7 +111,7 @@ class TurnierReport
                 WHERE ausleihe_id = ?
                 AND turnier_id = $this->turnier_id
                 ";
-        dbi::$db->query($sql, $ausleihe_id)->log();
+        db::$db->query($sql, $ausleihe_id)->log();
     }
 
     /**
@@ -126,7 +126,7 @@ class TurnierReport
             FROM turniere_berichte 
             WHERE turnier_id = $this->turnier_id
             ";
-        return dbi::$db->query($sql)->esc()->fetch_one() ?? '';
+        return db::$db->query($sql)->esc()->fetch_one() ?? '';
     }
 
     /**
@@ -141,7 +141,7 @@ class TurnierReport
                 FROM turniere_berichte 
                 WHERE turnier_id = $this->turnier_id
                 ";
-        return dbi::$db->query($sql)->fetch_one() === "Ja";
+        return db::$db->query($sql)->fetch_one() === "Ja";
     }
 
     /**
@@ -158,7 +158,7 @@ class TurnierReport
                 SELECT * FROM turniere_berichte 
                 WHERE turnier_id = $this->turnier_id
                 ";
-        if (dbi::$db->query($sql)->num_rows() === 0) {
+        if (db::$db->query($sql)->num_rows() === 0) {
             $sql = "
                     INSERT INTO turniere_berichte (turnier_id, bericht, kader_ueberprueft)
                     VALUES ($this->turnier_id, ?, ?)
@@ -171,6 +171,6 @@ class TurnierReport
                     ";
         }
         $params = [$bericht, $kader_check];
-        dbi::$db->query($sql, $params)->log();
+        db::$db->query($sql, $params)->log();
     }
 }

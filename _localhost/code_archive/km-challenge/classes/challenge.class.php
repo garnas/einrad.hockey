@@ -45,7 +45,7 @@ class Challenge {
         $result = db::readdb($sql);
         $daten = mysqli_fetch_assoc($result);
 
-        return dbi::escape($daten['kilometer']);
+        return db::escape($daten['kilometer']);
     }
 
     // Erhalte die einzelnen Einträge
@@ -74,7 +74,7 @@ class Challenge {
             $index++;
         }
 
-        return dbi::escape($daten);
+        return db::escape($daten);
     }
 
     // Erhalte alle einzelnen Einträge für ein Team
@@ -103,7 +103,7 @@ class Challenge {
             $index++;
         }
 
-        return dbi::escape($daten);
+        return db::escape($daten);
     }
 
     // Erhalte Ergebnisse der Spieler für das einzelne Team (inkl. Platzierung)
@@ -127,7 +127,7 @@ class Challenge {
             array_push($daten, $row);
         }
 
-        return dbi::escape($daten);
+        return db::escape($daten);
     }
 
     // Erhalte den erfolgreichsten Spieler unter 16 Jahren
@@ -152,7 +152,7 @@ class Challenge {
             array_push($daten, $row);
         }
 
-        return dbi::escape($daten);
+        return db::escape($daten);
     }
 
     // Erhalte den erfolgreichsten Spieler älter oder gleich 50 Jahre
@@ -186,7 +186,7 @@ class Challenge {
             array_push($daten, $row);
         }
 
-        return dbi::escape($daten);
+        return db::escape($daten);
     }
 
     // Erhalte den Spieler, der die meisten Kilometer auf einem Rad zurück gelegt hat, welches für Einradhockey zugelassen ist
@@ -209,7 +209,7 @@ class Challenge {
         $result = db::readdb($sql);
         $daten = mysqli_fetch_assoc($result);
 
-        return dbi::escape($daten);
+        return db::escape($daten);
     }
 
     // Schreibe einen Eintrag in die Datenbank
@@ -232,7 +232,7 @@ class Challenge {
         $result = db::readdb($sql);
         $daten = mysqli_fetch_assoc($result);
 
-        return dbi::escape($daten);
+        return db::escape($daten);
     }
 
     // Flagge einen Datensatz als gelöscht
@@ -256,7 +256,7 @@ class Challenge {
         $result = db::readdb($sql);
         $daten = mysqli_fetch_assoc($result);
 
-        return dbi::escape($daten);
+        return db::escape($daten);
     }
     
     // Erhalte das Gesamtergebnis für einen einzelnen Spieler
@@ -282,7 +282,7 @@ class Challenge {
         $result = db::readdb($sql);
         $daten = mysqli_fetch_assoc($result);
 
-        return dbi::escape($daten);
+        return db::escape($daten);
     }
 
     //Erhalte das Gesamtergebnis für ein einziges Team
@@ -308,6 +308,6 @@ class Challenge {
         $result = db::readdb($sql);
         $daten = mysqli_fetch_assoc($result);
 
-        return dbi::escape($daten);
+        return db::escape($daten);
     }
 }
