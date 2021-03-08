@@ -1,0 +1,5 @@
+<url>
+  <loc>https://einrad.hockey/liga/challenge</loc>
+  <lastmod>2021-01-15T17:48:57+00:00</lastmod>
+  <priority>0.90</priority>
+</url>

@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 
 $koordinaten = LigaKarte::get_all_team_koordinaten();
 
@@ -17,14 +17,14 @@ foreach ($koordinaten as $keya => $teama){
     foreach ($koordinaten_hilf as $keyb => $teamb){
         $latlngb = array($teamb['LAT'], $teamb['Lon']);
         if ($latlnga == $latlngb){
-            array_push($array_hilf,$teamb);
+            $array_hilf[] = $teamb;
             $teama['teamname'] .= "</h5><h5 class=\"w3-text-primary\">" . $teamb['teamname'];
             unset($koordinaten_hilf[$keyb]);
             $doppelt = true;
         }
     }
     if (!in_array($teama,$array_hilf)){
-    array_push($array,$teama);
+    $array[] = $teama;
     }
 }
 
@@ -32,22 +32,22 @@ foreach ($koordinaten as $keya => $teama){
 if (isset($_POST['eintragen'])){
     $error = false;
     if (empty($_POST['name']) or empty($_POST['kontakt']) or empty($_POST['plz']) or empty($_POST['ort'])){
-        Form::error("Bitte Formular vollständig ausfüllen");
+        Html::error("Bitte Formular vollständig ausfüllen");
         $error = true;
     }
     if (LigaKarte::check_gesuch_for_plz_exists($_POST['plz'])){
-        Form::error("Es existiert bereits ein Teamgesuch für diese PLZ, bitte wähle eine andere PLZ in der Nähe.");
+        Html::error("Es existiert bereits ein Teamgesuch für diese PLZ, bitte wähle eine andere PLZ in der Nähe.");
         $error = true;
     }
     $lonlat = LigaKarte::plz_to_lonlat($_POST['plz']);
     if(empty($lonlat)){
-        Form::error("Deine eingegebene Postleitzahl wurde nicht gefunden.");
+        Html::error("Deine eingegebene Postleitzahl wurde nicht gefunden.");
         $error = true;
     }
 
     if(!$error){
         LigaKarte::gesuch_eintragen_db($_POST['plz'],$_POST['ort'],$lonlat['LAT'],$lonlat['Lon'],$_POST['name'],$_POST['kontakt']);
-        Form::info("Dein Gesuch wurde eingetragen");
+        Html::info("Dein Gesuch wurde eingetragen");
         header("Location: ligakarte.php");
         die();
     }
@@ -57,15 +57,15 @@ $gesuche = LigaKarte::get_all_gesuche();
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = 'Ligakarte | Deutsche Einradhockeyliga';
-Config::$content = "Deutschlandkarte der Deutschen Einradhockeyliga, in der alle Teams mit ihren Einradfahrern eingetragen sind.";
+Html::$titel = 'Ligakarte | Deutsche Einradhockeyliga';
+Html::$content = "Deutschlandkarte der Deutschen Einradhockeyliga, in der alle Teams mit ihren Einradfahrern eingetragen sind.";
 include '../../templates/header.tmp.php';
 ?>
 
-<h1 class='w3-border-bottom w3-text-primary'>Karte der Ligateams<span class="w3-right w3-hide-small"><?=Form::get_saison_string()?></span></h1>
-<p>Es spielen zurzeit <?=count(Team::get_liste())?> Teams in der Deutschen Einradhockeyliga. <?=Form::link("teams.php","Hier")?>findest du eine Liste aller Teams mit ihrer hinterlegten E-Mail-Adresse.</p>
+<h1 class='w3-border-bottom w3-text-primary'>Karte der Ligateams<span class="w3-right w3-hide-small"><?=Html::get_saison_string()?></span></h1>
+<p>Es spielen zurzeit <?=count(Team::get_liste())?> Teams in der Deutschen Einradhockeyliga. <?=Html::link("teams.php","Hier")?>findest du eine Liste aller Teams mit ihrer hinterlegten E-Mail-Adresse.</p>
   
-<p><i>If your team resides outside of Germany, please contact <?=Form::mailto(Env::TECHNIKMAIL)?> to be included in the map.</i></p>
+<p><i>If your team resides outside of Germany, please contact <?=Html::mailto(Env::TECHNIKMAIL)?> to be included in the map.</i></p>
 
 <div class='w3-card-4' style='height: 70vh; width: 100%; max-height: 800px; margin: auto;' id="map">
 </div>
@@ -78,7 +78,7 @@ include '../../templates/header.tmp.php';
   onsubmit="return confirm('Alle Daten die du hier eingeben hast werden gespeichert und ein Jahr lang hier veröffentlicht. Wende dich an <?=Env::LAMAIL?> um deinen Eintrag zu löschen.');">
     <span onclick="document.getElementById('gesuch_formular').style.display='none'" class="w3-button w3-large w3-text-secondary w3-display-topright">&times;</span>
     <h3 class="w3-text-primary">Mitspielergesuch eintragen</h3>
-    <p><i>Hinweis: Alle hier eingebenen Daten werden ein Jahr lang veröffentlicht. Schreibe <?=Form::mailto(Env::LAMAIL)?> an, um deinen Eintrag zu löschen.</i></p>
+    <p><i>Hinweis: Alle hier eingebenen Daten werden ein Jahr lang veröffentlicht. Schreibe <?=Html::mailto(Env::LAMAIL)?> an, um deinen Eintrag zu löschen.</i></p>
     <p>
       <label for="kontakt" class="w3-text-primary">Name</label>
       <input required type="text" class="w3-input w3-border-primary" name="name" id="name" value="<?=$_POST['name'] ?? ''?>">
@@ -122,7 +122,7 @@ function initMap() {
         '<h5 class="w3-text-primary"><?=$team['teamname']?></h5>'+
         '<div class="w3-bottombar"></div>'+
             '<p><?=$team['plz'] . " " .  $team['ort']?></p>'+
-            '<?=str_replace("'",'"',Form::link("teams.php#".$team['team_id'], 'Zur Kontaktliste'))?>'+
+            '<?=str_replace("'",'"',Html::link("teams.php#".$team['team_id'], 'Zur Kontaktliste'))?>'+
         '</div>';
 
     var infowindow<?=$team['team_id']?> = new google.maps.InfoWindow({
@@ -185,7 +185,7 @@ function initMap() {
         '<h5 class="w3-text-primary"><?=Team::id_to_name(435)?></h5>'+
         '<div class="w3-bottombar"></div>'+
             '<p>412 01 Litoměřice, Tschechien</p>'+
-            '<?=str_replace("'",'"',Form::link("teams.php#435", 'Zur Kontaktliste'))?>'+
+            '<?=str_replace("'",'"',Html::link("teams.php#435", 'Zur Kontaktliste'))?>'+
         '</div>';
 
     var infowindow435 = new google.maps.InfoWindow({
@@ -209,7 +209,7 @@ function initMap() {
         '<h5 class="w3-text-primary"><?=Team::id_to_name(262)?></h5>'+
         '<div class="w3-bottombar"></div>'+
             '<p>Prag, Tschechien</p>'+
-            '<?=str_replace("'",'"',Form::link("teams.php#262", 'Zur Kontaktliste'))?>'+
+            '<?=str_replace("'",'"',Html::link("teams.php#262", 'Zur Kontaktliste'))?>'+
         '</div>';
 
     var infowindow262 = new google.maps.InfoWindow({

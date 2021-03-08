@@ -7,7 +7,7 @@ if(isset($_POST['la_team_waehlen'])){
         die();
     }
 
-    Form::error ("Team wurde nicht gefunden oder ist kein aktives Ligateam.");
+    Html::error ("Team wurde nicht gefunden oder ist kein aktives Ligateam.");
     header("Location: " . dbi::escape($_SERVER['PHP_SELF']));
     die();
 }

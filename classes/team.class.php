@@ -55,7 +55,7 @@ class Team
         // Eintrag in teams_kontakt
         $sql = "
                 INSERT INTO teams_kontakt (team_id, email, public, get_info_mail) 
-                VALUES (?, ?, 'Ja', 'Nein')";
+                VALUES (?, ?, 'Nein', 'Nein')";
         dbi::$db->query($sql, $team_id, $email)->log();
         return $team_id;
     }
@@ -310,7 +310,6 @@ class Team
         dbi::$db->query($sql, $name)->log();
     }
 
-
     /**
      * Gibt Anzahl der Freilose des Teams zurück
      *
@@ -354,7 +353,7 @@ class Team
         // Validieren, ob der Spaltenname ein echter Spaltenname ist
         $spalten_namen = dbi::$db->query("SHOW FIELDS FROM teams_details")->list('Field');
         if (!in_array($spalten_name, $spalten_namen, true)) {
-            die("Ungültiger Spaltenname");
+            trigger_error("Ungültiger Spaltenname", E_USER_ERROR);
         }
         $spalten_name = "`" . $spalten_name . "`";
 
@@ -411,6 +410,7 @@ class Team
         $_SESSION['logins']['team']['name'] = $team->details['teamname'];
         $_SESSION['logins']['team']['block'] = Tabelle::get_team_block($team->id);
     }
+
     /**
      * Login Teamcenter
      *
@@ -424,8 +424,8 @@ class Team
         $team_id = self::name_to_id($teamname);
 
         if (!self::is_ligateam($team_id)) {
-            Form::error("Falscher Loginname");
-            Form::log(Config::LOG_LOGIN, "Falscher TC-Login | Teamname: " . $teamname);
+            Html::error("Falscher Loginname");
+            Helper::log(Config::LOG_LOGIN, "Falscher TC-Login | Teamname: " . $teamname);
             return false;
         }
 
@@ -433,23 +433,23 @@ class Team
         // Passwort prüfen
         if (password_verify($passwort, $team->details['passwort'])) {
             self::set_team_session($team);
-            Form::log(Config::LOG_LOGIN, "Erfolgreich       | Teamname: " . $teamname);
+            Helper::log(Config::LOG_LOGIN, "Erfolgreich       | Teamname: " . $teamname);
 
             if (empty($team->details['trikot_farbe_1'])) {
-                $link = Form::link("tc_teamdaten_aendern.php", ' Link.', icon: "launch");
-                Form::info("Ihr könnt jetzt eure Trikotfarben hinzufügen - " . $link, ' ', esc: false);
+                $link = Html::link("tc_teamdaten_aendern.php", ' Link.', icon: "launch");
+                Html::info("Ihr könnt nun eure Trikotfarben hinzufügen - " . $link, ' ', esc: false);
             }
             if (empty($team->details['teamfoto'])) {
-                $link = Form::link("../teamcenter/tc_teamdaten_aendern.php", ' Link.', icon: "launch");
-                Form::info("Hier könnt ihr noch ein Teamfoto hochladen - " . $link, ' ', esc: false);
+                $link = Html::link("../teamcenter/tc_teamdaten_aendern.php", ' Link.', icon: "launch");
+                Html::info("Hier könnt ihr noch ein Teamfoto hochladen - " . $link, ' ', esc: false);
             }
 
             return true;
         }
 
         // Passwort falsch
-        Form::log(Config::LOG_LOGIN, "Falsches Passwort | Teamname: " . $teamname);
-        Form::error("Falsches Passwort");
+        Helper::log(Config::LOG_LOGIN, "Falsches Passwort | Teamname: " . $teamname);
+        Html::error("Falsches Passwort");
         return false;
     }
 
@@ -463,11 +463,11 @@ class Team
         // Passwort hashen
         $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
         if (!is_string($passwort)) {
-            die("Es ist ein Fehler aufgetreten.");
+            trigger_error("set_passwort fehlgeschlagen.", E_USER_ERROR);
         }
 
         // Befindet sich das Team im Teamcenter ihr Passwort geändert?
-        $pw_geaendert = (Config::$teamcenter) ? 'Ja' : 'Nein';
+        $pw_geaendert = (Helper::$teamcenter) ? 'Ja' : 'Nein';
 
         // Passwort in die Datenbank
         $sql = "

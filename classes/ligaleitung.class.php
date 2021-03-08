@@ -14,7 +14,7 @@ class LigaLeitung
     public static function get_all(string $funktion): array
     {
         $sql = "
-                SELECT *, spieler.vorname, spieler.nachname, teams_liga.teamname
+                SELECT ligaleitung.*, spieler.vorname, spieler.nachname, teams_liga.teamname
                 FROM ligaleitung
                 INNER JOIN spieler on ligaleitung.spieler_id = spieler.spieler_id 
                 LEFT JOIN teams_liga on spieler.team_id = teams_liga.team_id
@@ -55,14 +55,14 @@ class LigaLeitung
         $details = self::get_details($login);
         // Überprüfung des PWs
         if (!password_verify($passwort_alt, $details['passwort'])) {
-            Form::error("Falsches Passwort");
+            Html::error("Falsches Passwort");
             return false;
         }
 
         // Passwort Hashen
         $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
         if (!is_string($passwort_hash)) {
-            die("Ein Fehler ist aufgetreten");
+            trigger_error("set_passwort fehlgeschlagen.", E_USER_ERROR);
         }
 
         // Neues Passwort in die Datenbank schreiben
@@ -90,14 +90,14 @@ class LigaLeitung
 
         // Existenz prüfen
         if (empty($details)) {
-            Form::error("Unbekannter Loginname");
-            Form::log(Config::LOG_LOGIN, "Falscher LC-Login | Loginname: " . $login);
+            Html::error("Unbekannter Loginname");
+            Helper::log(Config::LOG_LOGIN, "Falscher LC-Login | Loginname: " . $login);
             return false;
         }
 
         // Funktion prüfen
         if ($funktion !== $details['funktion']) {
-            Form::error("Fehlende Berichtigung");
+            Html::error("Fehlende Berichtigung");
             return false;
         }
 
@@ -105,13 +105,13 @@ class LigaLeitung
         if (password_verify($passwort, $details['passwort'])) {
             $_SESSION['logins']['la']['id'] = $details['ligaleitung_id'];
             $_SESSION['logins']['la']['login'] = $details['login'];
-            Form::log(Config::LOG_LOGIN, "Erfolgreich       | Loginname: " . $login);
+            Helper::log(Config::LOG_LOGIN, "Erfolgreich       | Loginname: " . $login);
             return true;
         }
 
         // Passwort falsch
-        Form::log(Config::LOG_LOGIN, "Falsches Passwort | Loginname: " . $login);
-        Form::error("Falsches Passwort");
+        Helper::log(Config::LOG_LOGIN, "Falsches Passwort | Loginname: " . $login);
+        Html::error("Falsches Passwort");
         return false;
     }
 

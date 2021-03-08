@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 
 // Captcha erstellen
 $captcha = Captcha::load();
@@ -17,17 +17,17 @@ if (isset($_POST['absenden'])) {
     $betreff = $_POST['betreff'];
     $text = $_POST['text'];
     $user_captcha = $_POST['captcha'];
-    if (empty($absender) or empty($betreff) or empty($text)) {
-        Form::error("Bitte Formular ausfüllen");
+    if (empty($absender) || empty($betreff) || empty($text)) {
+        Html::error("Bitte Formular ausfüllen");
         $error = true;
     }
 
     // Captcha validieren
     if (!$captcha->testPhrase($user_captcha)) {
-        Form::error("Falsches Captcha, bitte versuche es erneut.");
+        Html::error("Falsches Captcha, bitte versuche es erneut.");
         $error = true;
         // Logdatei erstellen/beschreiben
-        Form::log(Config::LOG_KONTAKTFORMULAR, "Falsches Captcha: " . $_SESSION['captcha'] . "\n" . print_r($_POST, true));
+        Helper::log(Config::LOG_KONTAKTFORMULAR, "Falsches Captcha: " . $_SESSION['captcha'] . "\n" . print_r($_POST, true));
     }
 
     // Zeitmessung vs Bots
@@ -35,12 +35,12 @@ if (isset($_POST['absenden'])) {
     Hier dann entschlüsselt. Key ist der Database-Name, welcher nicht auf Github veröffentlicht ist */
     $time = time() - @openssl_decrypt($_POST['no_bot'], 'AES-256-CBC', Env::DATABASE);
     if ($time < 4) { //Bot, wenn in unter 4 Sekunden das Formular abgeschickt wurde
-        Form::error("E-Mail konnte wegen Spamverdacht nicht versendet werden,
+        Html::error("E-Mail konnte wegen Spamverdacht nicht versendet werden,
          da das Formular zu schnell ausgefüllt wurde. Schreib uns bitte an via "
-            . Form::mailto(Env::LAMAIL), esc: false);
+            . Html::mailto(Env::LAMAIL), esc: false);
         $error = true;
         // Logdatei erstellen/beschreiben
-        Form::log(Config::LOG_KONTAKTFORMULAR, "Zu schnell: " . $time . " Sekunden\n" . print_r($_POST, true));
+        Helper::log(Config::LOG_KONTAKTFORMULAR, "Zu schnell: " . $time . " Sekunden\n" . print_r($_POST, true));
     }
 
     if (!$error) {
@@ -53,12 +53,12 @@ if (isset($_POST['absenden'])) {
 
         // Email an den Ligaausschuss versenden
         if (MailBot::send_mail($mailer)) {
-            Form::info("Die E-Mail wurde versandt.");
+            Html::info("Die E-Mail wurde versandt.");
             $send = true; //Email an den User nur schicken, wenn die Mail an LA rausging
         } else {
-            Form::error("Es ist ein Fehler aufgetreten. E-Mail konnte nicht versendet werden.
-             Manuell versenden: " . Form::mailto(Env::LAMAIL), esc: false);
-            Form::log(Config::LOG_KONTAKTFORMULAR, "Error Mail:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
+            Html::error("Es ist ein Fehler aufgetreten. E-Mail konnte nicht versendet werden.
+             Manuell versenden: " . Html::mailto(Env::LAMAIL), esc: false);
+            Helper::log(Config::LOG_KONTAKTFORMULAR, "Error Mail:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
         }
         if ($send) {
             // Confirmation Mail an die angegebene Absendeadresse
@@ -69,14 +69,12 @@ if (isset($_POST['absenden'])) {
             $mailer->Body = "Danke für deine Mail! Du hast uns folgendes gesendet:\r\n\r\n" . $text;
             // Email-versenden
             if (MailBot::send_mail($mailer)) {
-                Form::info("Es wurde eine Kopie an $absender gesendet.");
+                Html::info("Es wurde eine Kopie an $absender gesendet.");
                 unset($_SESSION['captcha']); // Captcha aus der Session löschen
-                header('Location: ../liga/neues.php');
-                die();
+                Helper::reload('/liga/neues.php');
             }
-
-            Form::error("Es ist ein Fehler aufgetreten: Eine Kopie der E-Mail wurde nicht an dich versendet! Stimmt \"$absender\"?");
-            Form::log(Config::LOG_KONTAKTFORMULAR, "Error Mailback:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
+            Html::error("Es ist ein Fehler aufgetreten: Eine Kopie der E-Mail wurde nicht an dich versendet! Stimmt \"$absender\"?");
+            Helper::log(Config::LOG_KONTAKTFORMULAR, "Error Mailback:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
         } // send
     } // error
 } // Form
@@ -84,8 +82,8 @@ if (isset($_POST['absenden'])) {
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = "Kontakt | Deutsche Einradhockeyliga";
-Config::$content = "Kontaktformular der Deutschen Einradhockeyliga";
+Html::$titel = "Kontakt | Deutsche Einradhockeyliga";
+Html::$content = "Kontaktformular der Deutschen Einradhockeyliga";
 include '../../templates/header.tmp.php';
 ?>
 
@@ -93,10 +91,10 @@ include '../../templates/header.tmp.php';
         <h1 class="w3-text-primary">Kontaktformular </h1>
         <p>
             <span class="w3-text-grey">
-                <i class="material-icons">info_outline</i> Empfänger
+                <?= Html::icon("info_outline") ?> Empfänger
             </span>
             <br>
-            <?= Form::mailto(Env::LAMAIL) ?>
+            <?= Html::mailto(Env::LAMAIL) ?>
         </p>
         <form method="post">
             <input type="hidden"
@@ -105,7 +103,7 @@ include '../../templates/header.tmp.php';
             >
             <p>
                 <label class="w3-text-grey" for="name">
-                    <i class="material-icons">perm_identity</i>
+                    <?= Html::icon("perm_identity") ?>
                     Name
                 </label>
                 <input class="w3-input w3-border w3-border-primary"
@@ -118,7 +116,7 @@ include '../../templates/header.tmp.php';
             </p>
             <p>
                 <label class="w3-text-grey" for="absender">
-                    <i class="material-icons">alternate_email</i>
+                    <?= Html::icon("alternate_email") ?>
                     Email
                 </label>
                 <input class="w3-input w3-border w3-border-primary"
@@ -131,7 +129,7 @@ include '../../templates/header.tmp.php';
             </p>
             <p>
                 <label class="w3-text-grey" for="betreff">
-                    <i class="material-icons">label_outline</i>
+                    <?= Html::icon('label_outline') ?>
                     Betreff
                 </label>
                 <input class="w3-input w3-border w3-border-primary"
@@ -144,7 +142,7 @@ include '../../templates/header.tmp.php';
             </p>
             <p>
                 <label class="w3-text-grey" for="text">
-                    <i class="material-icons">subject</i>
+                    <?= Html::icon('subject') ?>
                     Text
                 </label>
                 <textarea class="w3-input w3-border w3-border-primary"
@@ -157,7 +155,7 @@ include '../../templates/header.tmp.php';
             <!-- Captcha -->
             <p>
                 <label class="w3-text-grey" for="captcha">
-                    <i class="material-icons">lock</i>Captcha
+                    <?= Html::icon("lock") ?> Captcha
                     <br>
                     <img class="w3-card w3-image" alt='captcha' src="<?= $captcha->inline() ?>">
                 </label>
@@ -168,7 +166,7 @@ include '../../templates/header.tmp.php';
                         name="reload_captcha"
                         formnovalidate
                 >
-                    <i class="material-icons">refresh</i>
+                    <?= Html::icon('refresh') ?>
                 </button>
                 <input class="w3-input"
                        type="text"
@@ -189,7 +187,7 @@ include '../../templates/header.tmp.php';
                         name="absenden"
                         class="w3-tertiary w3-ripple w3-round w3-button"
                 >
-                    <i class="material-icons">send</i> Senden
+                    <?= Html::icon('send') ?> Senden
                 </button>
             </p>
         </form>

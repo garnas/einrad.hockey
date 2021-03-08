@@ -7,8 +7,8 @@
 class env
 {
     /**
-     * Webadresse für Verlinkungen, unabhängig der Ordnerstruktur
-     * Auf dem Server ist der Public Ordner mit der Domain verknüpft
+     * Webadresse für Verlinkungen, unabhängig der Ordnerstruktur.
+     * Auf dem Server ist der public-Ordner mit der Domain verknüpft.
      */
     public const BASE_URL = 'http://localhost/einrad.hockey/public';
 
@@ -21,15 +21,15 @@ class env
      * SQL-Datenbank Zugangsdaten
      */
     public const HOST_NAME = 'localhost';
-    public const DATABASE = 'dummy-db';
+    public const DATABASE = 'db_localhost';
     public const USER_NAME = 'root';
     public const PASSWORD = '';
 
     /**
      * Mailserver
      *
-     * Bei ACTIVATE_EMAIL = true wird versucht Emails zu versenden, bei false werden Debugging-Infos ausgegeben
-     * In der Regel unwichtig für Localhost.
+     * Bei ACTIVATE_EMAIL = true wird versucht Emails zu versenden, bei false werden Debugging-Infos ausgegeben.
+     * Dies ist zum Testen der Mailfunktion auf test.einrad.hockey.
      */
     public const ACTIVATE_EMAIL = false;
     public const SMTP_HOST = '--';
@@ -45,4 +45,12 @@ class env
     public const TECHNIKMAIL = 'test@einrad.hockey';
     public const SCHIRIMAIL = 'test@einrad.hockey';
     public const OEFFIMAIL = 'test@einrad.hockey';
+
+    /**
+     * Wartungsmodus
+     *
+     * Bei true wird die Seite wird für Besucher gesperrt. Wenn man freeme.php im public-Ordner aufruft, wird die Seite
+     * über den Sessions-Cookie für einen Besucher freigeschaltet.
+     */
+    public const WARTUNGSMODUS = false;
 }

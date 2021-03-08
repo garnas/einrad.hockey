@@ -2,13 +2,13 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = 'Archiv | Deutschen Einradhockeyliga';
-Config::$content = 'Hier kann man die Ergebnisse und Tabellen seit der ersten Saison im Jahr 1995 sehen.';
+Html::$titel = 'Archiv | Deutschen Einradhockeyliga';
+Html::$content = 'Hier kann man die Ergebnisse und Tabellen seit der ersten Saison im Jahr 1995 sehen.';
 include '../../templates/header.tmp.php';
 ?>
 
@@ -16,6 +16,6 @@ include '../../templates/header.tmp.php';
 <h1 class="w3-text-primary">Archiv</h1>
 <!-- iframes sind ein sonderfall, html5 depreciated -->
 
-<iframe src="<?=Config::LINK_ARCHIV?>" style="width:100%;height:800px;" class="archiv w3-border-0" title="Archiv der Deutschen Einradhockeyliga"></iframe>
+<iframe src="<?= Nav::LINK_ARCHIV ?>" style="width:100%;height:800px;" class="archiv w3-border-0" title="Archiv der Deutschen Einradhockeyliga"></iframe>
 
 <?php include '../../templates/footer.tmp.php';

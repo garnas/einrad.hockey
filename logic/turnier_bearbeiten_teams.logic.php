@@ -49,44 +49,44 @@ if (isset($_POST['change_turnier'])) {
     // Leere Felder können eigentlich nicht auftreten (nur durch html-Manipulation), aber sicherheitshalber dass hier...
     if (empty($plaetze) || empty($startzeit) || empty($hallenname) || empty($strasse) || empty($plz) || empty($ort) || empty($hinweis) || empty($organisator) || empty($handy)){
         $error = true;
-        Form::error("Bitte alle nicht optionalen Felder ausfüllen.");
+        Html::error("Bitte alle nicht optionalen Felder ausfüllen.");
     }
 
     // Validierung Startzeit:
-    if ($startzeit != $turnier->details['startzeit']  && Config::$teamcenter){
+    if ($startzeit != $turnier->details['startzeit']  && Helper::$teamcenter){
         if ($turnier->details['art'] == 'final'){
             $error = true;
-            Form::error("Die Startzeit bei Abschlussturnieren kann nur vom Ligaausschuss geändert werden.");
+            Html::error("Die Startzeit bei Abschlussturnieren kann nur vom Ligaausschuss geändert werden.");
         }
-        if ($startzeit != $turnier->details['startzeit'] && (date("H", strtotime($startzeit)) < 9 || date("H", strtotime($startzeit)) > 14) && Config::$teamcenter){
+        if ($startzeit != $turnier->details['startzeit'] && (date("H", strtotime($startzeit)) < 9 || date("H", strtotime($startzeit)) > 14) && Helper::$teamcenter){
             $error = true;
-            Form::error("Turniere dürfen frühestens um 9:00&nbsp;Uhr beginnen und müssen spätestens um 20:00&nbsp;Uhr beendet sein");
+            Html::error("Turniere dürfen frühestens um 9:00&nbsp;Uhr beginnen und müssen spätestens um 20:00&nbsp;Uhr beendet sein");
         }
     }
 
     // Validierung der Plätze
-    if ($plaetze != $turnier->details['plaetze']  && Config::$teamcenter){
+    if ($plaetze != $turnier->details['plaetze']  && Helper::$teamcenter){
         if ($turnier->details['art'] == 'final'){ //Anzahl der Plätze darf nur geändert werden, wenn es sich nicht um ein Finalturnier handelt
-            Form::error("Das Ändern der Anzahl der Plätze ist bei Abschlussturnieren können nur vom Ligaausschuss geändert werden.");
+            Html::error("Das Ändern der Anzahl der Plätze ist bei Abschlussturnieren können nur vom Ligaausschuss geändert werden.");
             $error = true;
         }
         if ($plaetze < 5 || $plaetze > 8){
             $error = true; // 4er nur via Ligaausschuss
-            Form::error("Ungültige Anzahl an Turnierplätzen");
+            Html::error("Ungültige Anzahl an Turnierplätzen");
         }
     }
 
     // Keine Änderung der Plätze in der Spielplanphase
     if ($turnier->details['phase'] == 'spielplan'){
-        if ($turnier->details['plaetze'] != $plaetze && Config::$teamcenter){
+        if ($turnier->details['plaetze'] != $plaetze && Helper::$teamcenter){
             $error = true;
-            Form::error("Die Anzahl der Plätze kann in der Spielplanphase nicht mehr geändert werden. Bitte wende dich unter ".Env::LAMAIL." an den Ligaaussschuss.");
+            Html::error("Die Anzahl der Plätze kann in der Spielplanphase nicht mehr geändert werden. Bitte wende dich unter ".Env::LAMAIL." an den Ligaaussschuss.");
         }
     }
     // Keine Änderung der Plätze in der Spielplanphase
-    if ($turnier->details['phase'] == 'ergebnis' && Config::$teamcenter){
+    if ($turnier->details['phase'] == 'ergebnis' && Helper::$teamcenter){
         $error = true;
-        Form::error("Turniere können in der Ergebnisphase nicht mehr geändert werden. Bitte wende dich unter ".Env::LAMAIL." an den Ligaaussschuss.");
+        Html::error("Turniere können in der Ergebnisphase nicht mehr geändert werden. Bitte wende dich unter ".Env::LAMAIL." an den Ligaaussschuss.");
     }
 
     // Block erweitern
@@ -94,7 +94,7 @@ if (isset($_POST['change_turnier'])) {
     // Es wurden beide Häkchen gesetzt
     if (isset($_POST['block_frei']) && isset($_POST['block_erweitern'])){
         $error = true;
-        Form::error ("Bitte entweder um den nächsthöheren Block oder auf ABCDEF öffnen");
+        Html::error ("Bitte entweder um den nächsthöheren Block oder auf ABCDEF öffnen");
     }
     
     $tblock = $turnier->details['tblock'];
@@ -113,7 +113,7 @@ if (isset($_POST['change_turnier'])) {
             }
         }else{
             $error = true;
-            Form::error ("Das Turnier kann nicht um den nächsthöheren Block erweitert werden.");
+            Html::error ("Das Turnier kann nicht um den nächsthöheren Block erweitert werden.");
         }
     }
 
@@ -128,19 +128,19 @@ if (isset($_POST['change_turnier'])) {
             }
         }else{
             $error = true;
-            Form::error ("Das Turnier kann nicht auf ABCDEF erweitert werden.");
+            Html::error ("Das Turnier kann nicht auf ABCDEF erweitert werden.");
         }
     }
 
     // Ändern der Turnierdaten
     if ($error) {
-        Form::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht geändert - alle Änderungen bitte neu eingeben.");
+        Html::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht geändert - alle Änderungen bitte neu eingeben.");
     } else {
         // Turnierblock erweitern
         if ($erweitern){
             $turnier->change_turnier_block($tblock, $fixed, $art);
             $turnier->spieleliste_auffuellen(); // Spielen-Liste auffuellen
-            Form::info("Turnier wurde erweitert");
+            Html::info("Turnier wurde erweitert");
         }
 
         // Ändern der Turnierdetails
@@ -150,9 +150,9 @@ if (isset($_POST['change_turnier'])) {
 
         // Mail an den Ligaausschuss?
         if (($wichtiges_geaendert || $erweitern)
-            && Config::$teamcenter) MailBot::mail_turnierdaten_geaendert($turnier);
+            && Helper::$teamcenter) MailBot::mail_turnierdaten_geaendert($turnier);
 
-        Form::info("Turnierdaten wurden geändert");
+        Html::info("Turnierdaten wurden geändert");
         header ('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->id);
         die();
     }

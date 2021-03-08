@@ -67,7 +67,7 @@ class Tabelle
     public static function check_ergebnis_eintragbar(Turnier $turnier): bool
     {
         if (!in_array($turnier->details['art'], ['I', 'II', 'III', 'final'])) {
-            Form::error("Für diesen Turniertyp können keine Ergebnisse eingetragen werden.");
+            Html::error("Für diesen Turniertyp können keine Ergebnisse eingetragen werden.");
             // TODO ist der Check hier an der besten Stelle?
             return false;
         }
@@ -88,24 +88,19 @@ class Tabelle
      *
      * @param int $team_id
      * @param int|null $spieltag
-     * @return string|int
+     * @return int|null
      */
-    public static function get_team_rang(int $team_id, null|int $spieltag = null): string|int
+    public static function get_team_rang(int $team_id, NULL|int $spieltag = NULL): ?int
     {
-        // Default: Aktueller Spieltag
-        $spieltag = is_null($spieltag) ? self::get_aktuellen_spieltag() - 1 : $spieltag;
-        // -1, da immer der Spieltag zählt, für den alle Ergebnisse eingetragen sind
+        // Default: Aktueller Spieltag - 1 = Spieltag mit allen eingetragenen Ergebnissen
+        $spieltag = $spieltag ?? (self::get_aktuellen_spieltag() - 1);
 
-        // Rangtabelle muss nicht jedes mal neu berechnet werden müssen
-        if (!isset(self::$rangtabellen[$spieltag]))
-            self::$rangtabellen[$spieltag] = Tabelle::get_rang_tabelle($spieltag);
-
-        $key = array_search($team_id, array_column(self::$rangtabellen[$spieltag], 'team_id'));
-        // $key = false, wenn nicht gefunden, ansonsten Position
-        // 0 wird aber auch als false interpretiert, deswegen is_numeric und nicht ($key)
-
-        return is_numeric($key) ? self::$rangtabellen[$spieltag][$key]['platz'] : 'NL';
-        // TODO Wie können NL-Teams besser abgehandelt werden?
+        // Rangtabelle soll nicht jedes mal neu berechnet werden müssen
+        if (!isset(self::$rangtabellen[$spieltag])){
+            self::$rangtabellen[$spieltag] = self::get_rang_tabelle($spieltag);
+        }
+        // Nichtligateam haben den Rang NULL
+        return self::$rangtabellen[$spieltag][$team_id]['rang'] ?? NULL;
     }
 
     /**
@@ -113,65 +108,66 @@ class Tabelle
      *
      * @param int $team_id
      * @param int|null $spieltag
-     * @return string
+     * @return string|null
      */
-    public static function get_team_block(int $team_id, null|int $spieltag = null): string
+    public static function get_team_block(int $team_id, NULL|int $spieltag = NULL): ?string
     {
-        $platz = self::get_team_rang($team_id, $spieltag);
-        return is_numeric($platz) ? self::platz_to_block($platz) : 'NL';
+        $rang = self::get_team_rang($team_id, $spieltag);
+        return self::rang_to_block($rang);
     }
 
     /**
-     * Gibt die Wertigkeit eines Teams auf Grundlage der Platzierung in der Rangtabelle zurück
+     * Gibt die Wertung eines Teams auf Grundlage der Platzierung in der Rangtabelle zurück
      *
      * @param int $team_id
      * @param int|null $spieltag
-     * @return int|string
+     * @return int|null
      */
-    public static function get_team_wertigkeit(int $team_id, null|int $spieltag = null): int|string
+    public static function get_team_wertigkeit(int $team_id, null|int $spieltag = null): ?int
     {
-        $platz = self::get_team_rang($team_id, $spieltag);
-        return is_numeric($platz) ? self::platz_to_wertigkeit($platz) : 'NL';
+        $rang = self::get_team_rang($team_id, $spieltag);
+        return self::rang_to_wertigkeit($rang);
     }
 
     /**
      * Weist dem Platz in der Rangtabelle einen Block zu
      *
-     * @param $platz
-     * @return string
+     * @param int|null $rang
+     * @return string|null
      */
-    public static function platz_to_block($platz): string
+    public static function rang_to_block(?int $rang): ?string
     {
-        if (empty($platz)) {
-            return '';
+        // Nichtligateam
+        if (is_null($rang)) return NULL;
+
+        // Blockzuordnung
+        foreach (Config::RANG_TO_BLOCK as $block => $range) {
+            if ($range[0] <= $rang && $range[1] >= $rang){
+                return $block;
+            }
         }
-        //Blockzuordnung
-        $blocks = [
-            "A" => range(1, 6),
-            "AB" => range(7, 13),
-            "BC" => range(13, 21),
-            "CD" => range(21, 31),
-            "DE" => range(31, 43),
-            "EF" => range(43, 57),
-        ];
-        foreach ($blocks as $block => $platzierung) {
-            if (in_array($platz, $platzierung)) return $block;
-        }
-        return "F";
     }
 
     /**
-     * Weist dem Platz in der Rangtabelle eine Wertigkeit zu
+     * Weist dem Platz in der Rangtabelle eine Wertung zu
      *
-     * @param int $platz
-     * @return int
+     * @param int|null $rang
+     * @return int|null
      */
-    public static function platz_to_wertigkeit(int $platz): int
+    public static function rang_to_wertigkeit(?int $rang): ?int
     {
-        if (empty($platz)) return 0;
-        $platzierung = range(1, 43);
-        if (in_array($platz, $platzierung)) return round(250 * 0.955 ** ($platz - 1));
-        return max([round(250 * 0.955 ** (43) * 0.97 ** ($platz - 1 - 43)), 15]);
+        // Nichtligateam
+        if (is_null($rang)){
+            return NULL;
+        }
+
+        // Platz 1 bis 43;
+        if (1 <= $rang && 43 >= $rang){
+            return round(250 * 0.955 ** ($rang - 1));
+        }
+
+        // Platz 44 bis Rest
+        return max([round(250 * 0.955 ** (43) * 0.97 ** ($rang - 1 - 43)), 15]);
     }
 
     /**
@@ -224,26 +220,26 @@ class Tabelle
                 AND (turniere_liga.spieltag <= ?)
                 ORDER BY ergebnis DESC, RAND()
                 ";
-        $result = dbi::$db->query($sql, $saison, $spieltag)->esc()->fetch();
+        $result = dbi::$db->query($sql, $saison, $spieltag)->esc()->fetch('team_id');
 
         $counter = $return = [];
-        foreach($result as $eintrag){
-            if (!isset($return[$eintrag['team_id']])) {
-                $return[$eintrag['team_id']]['einzel_ergebnisse'] = [];
-                $return[$eintrag['team_id']]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
-                $return[$eintrag['team_id']]['team_id'] = $eintrag['team_id'];
-                $return[$eintrag['team_id']]['teamname'] = $eintrag['teamname'];
-                $return[$eintrag['team_id']]['string'] = Form::link("ergebnisse.php#" . $eintrag['turnier_id'], $eintrag['ergebnis']);
-                $return[$eintrag['team_id']]['summe'] = $eintrag['ergebnis'];
-                $counter[$eintrag['team_id']] = 1;
-            } else {
-                if ($counter[$eintrag['team_id']] <= 5) {
-                    $return[$eintrag['team_id']]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
-                    $return[$eintrag['team_id']]['string'] .= "+" . Form::link("ergebnisse.php#" . $eintrag['turnier_id'], $eintrag['ergebnis']);
-                    $return[$eintrag['team_id']]['summe'] += $eintrag['ergebnis'];
+        foreach($result as $team_id => $eintrag){
+            if (isset($return[$team_id])) {
+                if ($counter[$team_id] <= 5) {
+                    $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
+                    $return[$team_id]['string'] .= "+" . Html::link("ergebnisse.php#" . $eintrag['turnier_id'], $eintrag['ergebnis']);
+                    $return[$team_id]['summe'] += $eintrag['ergebnis'];
                 }
+            } else {
+                $return[$team_id]['einzel_ergebnisse'] = [];
+                $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
+                $return[$team_id]['team_id'] = $team_id;
+                $return[$team_id]['teamname'] = $eintrag['teamname'];
+                $return[$team_id]['string'] = Html::link("ergebnisse.php#" . $eintrag['turnier_id'], $eintrag['ergebnis']);
+                $return[$team_id]['summe'] = $eintrag['ergebnis'];
+                $counter[$team_id] = 1;
             }
-            $counter[$eintrag['team_id']]++;
+            $counter[$team_id]++;
         }
 
         // Tabelle mit aktiven Teams ohne Ergebnis auffüllen
@@ -266,10 +262,10 @@ class Tabelle
         $strafen = Team::get_strafen();
         foreach ($strafen as $strafe) {
             // Hinzufügen des Sterns
-            if (!isset($return[$strafe['team_id']]['strafe_stern'])) {
-                $return[$strafe['team_id']]['strafe_stern'] = '*';
-            } else {
+            if (isset($return[$strafe['team_id']]['strafe_stern'])) {
                 $return[$strafe['team_id']]['strafe_stern'] .= '*';
+            } else {
+                $return[$strafe['team_id']]['strafe_stern'] = '*';
             }
             // Addieren der Prozentstrafen
             if ($strafe['verwarnung'] == 'Nein' && !empty($strafe['prozentsatz'])) {
@@ -284,7 +280,7 @@ class Tabelle
         }
 
         // Nach Summe der Ergebnisse sortieren mit der Funktion "sortieren_summe" die eine public static function in dieser Klasse Tabelle ist
-        usort($return, ["Tabelle", "sortieren_summe"]);
+        uasort($return, ["Tabelle", "sortieren_summe"]);
 
         // Zuordnen der Plätze
         // Teams mit gleicher Summe und gleichem höchsten Einzelergebnis bekommen den selben Platz
@@ -294,8 +290,8 @@ class Tabelle
         foreach ($return as $key => $zeile) {
             $zeile['max_einzel'] = max($zeile['einzel_ergebnisse']);
             if (
-                ($zeile_vorher['summe'] ?? false) == $zeile['summe']
-                && ($zeile_vorher['max_einzel'] ?? false) == $zeile['max_einzel']
+                $zeile_vorher['summe'] === $zeile['summe']
+                && $zeile_vorher['max_einzel'] === $zeile['max_einzel']
             ) {
                 $return[$key]['platz'] = $zeile_vorher['platz'];
             } else {
@@ -339,11 +335,11 @@ class Tabelle
                     $ausnahme)
                     )
                 ORDER BY turniere_liga.saison DESC, turniere_liga.datum DESC";
-        $result = dbi::$db->query($sql, $spieltag, $saison, $saison)->esc()->fetch();
+        $result = dbi::$db->query($sql, $spieltag, $saison, $saison)->esc()->fetch('team_id');
         $return = [];
         $counter = [];
 
-        foreach($result as $eintrag) {
+        foreach($result as $team_id => $eintrag) {
 
             //Farbe des Ergebnisses in der Rangtabelle festlegen.
             $color =  ($eintrag['saison'] != $saison) ? "w3-text-green" : 'w3-text-primary';
@@ -352,28 +348,26 @@ class Tabelle
             $link = "ergebnisse.php?saison=" . $eintrag['saison'] . "#" . $eintrag['turnier_id'];
 
             //Initialisierung
-            if (!isset($return[$eintrag['team_id']])) {
+            if (!isset($return[$team_id])) {
                 //Zähler der Ergebnisse (Max 5)
-                $counter[$eintrag['team_id']] = 1;
-                $return[$eintrag['team_id']]['summe'] = $eintrag['ergebnis'];
-                $return[$eintrag['team_id']]['einzel_ergebnisse'] = [];
-                array_push($return[$eintrag['team_id']]['einzel_ergebnisse'], $eintrag['ergebnis']);
+                $counter[$team_id] = 1;
+                $return[$team_id]['summe'] = $eintrag['ergebnis'];
+                $return[$team_id]['einzel_ergebnisse'] = [];
+                $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
 
-                $return[$eintrag['team_id']]['team_id'] = $eintrag['team_id']; //Wichtig, da bei Sortierung die $eintrag['team_id] überschrieben wird
-                $return[$eintrag['team_id']]['teamname'] = $eintrag['teamname'];
-                $return[$eintrag['team_id']]['string'] =
+                $return[$team_id]['team_id'] = $team_id; //Wichtig, da bei Sortierung die $eintrag['team_id] überschrieben wird
+                $return[$team_id]['teamname'] = $eintrag['teamname'];
+                $return[$team_id]['string'] =
                     "<a href='$link' class='no $color w3-hover-text-secondary'>" . $eintrag['ergebnis'] . "</a>";
 
-            } else {
-                if ($counter[$eintrag['team_id']] <= 5) {
-                    array_push($return[$eintrag['team_id']]['einzel_ergebnisse'], $eintrag['ergebnis']);
-                    $return[$eintrag['team_id']]['string'] .=
-                        "+<a href='$link' class='no $color w3-hover-text-secondary'>" . $eintrag['ergebnis'] . "</a>";
-                    $return[$eintrag['team_id']]['summe'] += $eintrag['ergebnis'];
-                }
+            } else if ($counter[$team_id] <= 5) {
+                $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
+                $return[$team_id]['string'] .=
+                    "+<a href='$link' class='no $color w3-hover-text-secondary'>" . $eintrag['ergebnis'] . "</a>";
+                $return[$team_id]['summe'] += $eintrag['ergebnis'];
             }
-            $counter[$eintrag['team_id']]++;
-            $return[$eintrag['team_id']]['avg'] = round($return[$eintrag['team_id']]['summe'] / count($return[$eintrag['team_id']]['einzel_ergebnisse']), 1);
+            $counter[$team_id]++;
+            $return[$team_id]['avg'] = round($return[$team_id]['summe'] / count($return[$team_id]['einzel_ergebnisse']), 1);
         }
 
         // Tabelle mit aktiven Teams ohne Ergebnis auffüllen
@@ -394,25 +388,27 @@ class Tabelle
         }
 
         // Nach Summe der Ergebnisse sortieren mit der Funktion "sortieren_avg"
-        usort($return, ["Tabelle", "sortieren_avg"]); //Sortieren nach der static function sortieren_avg in der Klasse Tabelle...
+        uasort($return, ["Tabelle", "sortieren_avg"]); //Sortieren nach der static function sortieren_avg in der Klasse Tabelle...
 
         // Zuordnen der Blöcke
         // Teams mit gleicher Summe und gleichem höchsten Einzelergebnis bekommen den selben Platz
-        $platz = 1;
-        $zeile_vorher['platz'] = 1;
+        $rang = 1;
+        $zeile_vorher['rang'] = 1;
         $zeile_vorher['summe'] = 0;
         foreach ($return as $key => $zeile) {
-
             $zeile['max_einzel'] = max($zeile['einzel_ergebnisse']);
-            if (($zeile_vorher['summe'] ?? false) == $zeile['summe'] && ($zeile_vorher['max_einzel'] ?? false) == $zeile['max_einzel']) {
-                $return[$key]['platz'] = $zeile_vorher['platz'];
+            if (
+                $zeile_vorher['summe'] == $zeile['summe']
+                && $zeile_vorher['max_einzel'] == $zeile['max_einzel']
+            ) {
+                $return[$key]['rang'] = $zeile_vorher['rang'];
             } else {
-                $return[$key]['platz'] = $platz;
+                $return[$key]['rang'] = $rang;
             }
             $zeile_vorher['summe'] = $zeile['summe'];
             $zeile_vorher['max_einzel'] = $zeile['max_einzel'];
-            $zeile_vorher['platz'] = $return[$key]['platz'];
-            $platz++;
+            $zeile_vorher['rang'] = $return[$key]['rang'];
+            $rang++;
         }
         return $return;
     }

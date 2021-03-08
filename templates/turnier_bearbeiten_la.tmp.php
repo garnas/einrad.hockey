@@ -31,7 +31,7 @@
         <p>
             <label for="ausrichter" class='w3-text-primary'>Ausrichter ändern</label><br>
             <input type="text" class="w3-input w3-border w3-border-primary" value="<?=$turnier->details['teamname']?>" list="teams" id="ausrichter" name="ausrichter">
-                <?=Form::datalist_teams()?>
+                <?=Html::datalist_teams()?>
         </p>
         <p>
             <label class="w3-text-primary" for="tname">Turniername <i class="w3-small">(optional)</i></label>

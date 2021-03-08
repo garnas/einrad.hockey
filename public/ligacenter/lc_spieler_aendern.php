@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
 $spieler_liste = Spieler::get_spielerliste(); //Liste aller Spielernamen und IDs [0] => vorname nachname [1] => spieler_id
@@ -24,7 +24,7 @@ if (isset($_GET['spieler_id'])) {
         $spieler->details = $spieler->get_details();
         $show_form = true;
     } else {
-        Form::error("Spieler wurde nicht gefunden");
+        Html::error("Spieler wurde nicht gefunden");
     }
 }
 
@@ -38,16 +38,16 @@ if (isset($_POST['spieler_aendern'])) {
     $letzter_saison = (int)$_POST['letzte_saison'];
     $error = false;
     if (empty($vorname) || empty($nachname) || empty($jahrgang) || empty($geschlecht) || empty($teamname)) {
-        Form::error("Bitte Formular ausfüllen");
+        Html::error("Bitte Formular ausfüllen");
         $error = true;
     }
     $team_id = Team::name_to_id($teamname);
     if (!Team::is_ligateam($team_id)) {
-        Form::error("Das Team $teamname wurde nicht gefunden");
+        Html::error("Das Team $teamname wurde nicht gefunden");
         $error = true;
     }
     if (1900 > $jahrgang || $jahrgang > date('Y')) {
-        Form::error("Ungültiger Jahrgang (Jahreszahl vierstellig ausschreiben)");
+        Html::error("Ungültiger Jahrgang (Jahreszahl vierstellig ausschreiben)");
         $error = true;
     }
 
@@ -67,18 +67,18 @@ if (isset($_POST['spieler_aendern'])) {
             $changed = true;
         }
         if ($changed) {
-            Form::info("Spielerdaten wurden geändert");
+            Html::info("Spielerdaten wurden geändert");
             header('Location: lc_kader.php?team_id=' . $team_id);
             die();
         }
-        Form::error("Es wurden keine Daten geändert");
+        Html::error("Es wurden keine Daten geändert");
     }
 }
 
 //Formularauswertung Spieler löschen
 if (isset($_POST['delete_spieler'])) {
     $spieler->delete_spieler();
-    Form::info("Der Spieler " . $spieler->details['vorname'] . " " . $spieler->details['nachname']
+    Html::info("Der Spieler " . $spieler->details['vorname'] . " " . $spieler->details['nachname']
         . " mit der ID " . $spieler->details['spieler_id'] . " wurde gelöscht.");
     header("Location: " . $_SERVER['PHP_SELF']);
     die();
@@ -166,11 +166,11 @@ include '../../templates/header.tmp.php';
             <label class="w3-text-primary" for="schiri">Schiri</labeL>
             <select style="height:40px" class='w3-input w3-border w3-border-primary' name='schiri'>
                 <option <?php if ($spieler->details['schiri'] == Config::SAISON + 2){ ?>selected<?php } ?>
-                        value='<?= Config::SAISON + 2 ?>'><?= Form::get_saison_string(Config::SAISON + 2) ?></option>
+                        value='<?= Config::SAISON + 2 ?>'><?= Html::get_saison_string(Config::SAISON + 2) ?></option>
                 <option <?php if ($spieler->details['schiri'] == Config::SAISON + 1){ ?>selected<?php } ?>
-                        value='<?= Config::SAISON + 1 ?>'><?= Form::get_saison_string(Config::SAISON + 1) ?></option>
+                        value='<?= Config::SAISON + 1 ?>'><?= Html::get_saison_string(Config::SAISON + 1) ?></option>
                 <option <?php if ($spieler->details['schiri'] == Config::SAISON){ ?>selected<?php } ?>
-                        value='<?= Config::SAISON ?>'><?= Form::get_saison_string() ?></option>
+                        value='<?= Config::SAISON ?>'><?= Html::get_saison_string() ?></option>
                 <option <?php if (empty($spieler->details['schiri'])){ ?>selected<?php } ?>
                         value=''>kein Schiri
                 </option>
@@ -200,8 +200,8 @@ include '../../templates/header.tmp.php';
                    list="teams"
                    id="teamname"
                    name="teamname">
-            <?= Form::datalist_teams() ?>
-            <?= Form::link("lc_kader.php?team_id=" . $spieler->details['team_id'],
+            <?= Html::datalist_teams() ?>
+            <?= Html::link("lc_kader.php?team_id=" . $spieler->details['team_id'],
                 'Zum Teamkader der ' . $spieler->details['teamname'],
                 true,
                 'group') ?>
@@ -217,7 +217,7 @@ include '../../templates/header.tmp.php';
                    required>
             <span class="w3-text-grey">
                 (Saison Nr. <?= $spieler->details['letzte_saison'] ?> entspricht Saison
-                <?= Form::get_saison_string($spieler->details['letzte_saison']) ?>)
+                <?= Html::get_saison_string($spieler->details['letzte_saison']) ?>)
             </span>
         </p>
         <p>

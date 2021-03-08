@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
 $deaktivierte_teams = Team::get_deactive();
@@ -17,13 +17,13 @@ if (isset($_POST['anmelden'])){
     if (Team::is_ligateam($team_id)){
         unset($_SESSION['logins']['team']);
         Team::set_team_session(new Team($team_id));
-        Form::log("login.log", "Erfolgreich       | via Ligacenter: " . $_SESSION['logins']['la']['login']
+        Helper::log("login.log", "Erfolgreich       | via Ligacenter: " . $_SESSION['logins']['la']['login']
             . " als " . $_SESSION['logins']['team']['name']);
-        Form::info("Login via Ligaausschuss erfolgreich");
+        Html::info("Login via Ligaausschuss erfolgreich");
         header('Location: ' . Env::BASE_URL . '/teamcenter/tc_start.php');
         die();
     }
-    Form::error("Anmeldung als Team nicht möglich, da der Teamname keinem Ligateam zugeordnet werden konnte.");
+    Html::error("Anmeldung als Team nicht möglich, da der Teamname keinem Ligateam zugeordnet werden konnte.");
 }
 
 // Ligateam deativieren
@@ -33,11 +33,11 @@ if (isset($_POST['deaktivieren'])){
 
     if (Team::is_ligateam($team_id)){
         Team::deactivate($team_id);
-        Form::info("Das Team $teamname wurde deaktiviert.");
+        Html::info("Das Team $teamname wurde deaktiviert.");
         header('Location: ../ligacenter/lc_admin.php');
         die();
     }
-    Form::error("Teamname wurde nicht gefunden. Team wurde nicht deaktiviert.");
+    Html::error("Teamname wurde nicht gefunden. Team wurde nicht deaktiviert.");
 }
 
 // Ligateam reaktivieren
@@ -47,11 +47,11 @@ if (isset($_POST['reaktivieren'])){
     
     if (!empty($teamname)){
         Team::activate($team_id);
-        Form::info("Das Team $teamname wurde reaktiviert.");
+        Html::info("Das Team $teamname wurde reaktiviert.");
         header('Location: ../ligacenter/lc_admin.php');
         die();
     }
-    Form::error("Teamname wurde nicht gefunden. Team wurde nicht deaktiviert.");
+    Html::error("Teamname wurde nicht gefunden. Team wurde nicht deaktiviert.");
 }
 
 //Ligabot ausführen
@@ -83,7 +83,7 @@ include '../../templates/header.tmp.php';?>
            list="teams"
            id="teamname"
            name="teamname">
-        <?= Form::datalist_teams() ?>
+        <?= Html::datalist_teams() ?>
     <p>
         <input type='submit' name='anmelden' value='Als Ligateam anmelden' class="w3-button w3-secondary">
     </p>
@@ -98,7 +98,7 @@ include '../../templates/header.tmp.php';?>
            list="teams"
            id="teamname"
            name="teamname">
-        <?= Form::datalist_teams() ?>
+        <?= Html::datalist_teams() ?>
     <p>
         <input type='submit' name='deaktivieren' value='Team deaktivieren' class="w3-button w3-secondary">
     </p>

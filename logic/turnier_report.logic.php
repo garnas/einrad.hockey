@@ -1,18 +1,18 @@
 <?php
 // Turnierobjekt erstellen
-$turnier_id = (int)$_GET['turnier_id'] ?? 0;
+$turnier_id = (int) @$_GET['turnier_id'];
 $turnier = new Turnier ($turnier_id);
 
-if ($turnier->details['ausrichter'] == ($_SESSION['logins']['team']['id'] ?? '') || Config::$ligacenter) {
+if ($turnier->details['ausrichter'] == ($_SESSION['logins']['team']['id'] ?? '') || Helper::$ligacenter) {
     $change_tbericht = true; // Berechtigung zum Verändern des Reports
 } else {
     $change_tbericht = false;
 }
 
-if (strtotime($turnier->details['datum']) - time() < -3 * 24 * 60 * 60 && !Config::$ligacenter) {
+if (strtotime($turnier->details['datum']) - time() < -3 * 24 * 60 * 60 && !Helper::$ligacenter) {
     $change_tbericht = false; //Berechtigung zum Verändern des Reports widerrufen für Ausrichter, wenn das Turnier mehr als zwei Tage zurückliegt.
     if ($turnier->details['ausrichter'] == ($_SESSION['logins']['team']['id'] ?? '')) {
-        Form::notice("Das Turnier liegt bereits in der Vergangenheit. Bearbeiten des Turnierreports nur noch via den Ligaausschuss möglich.");
+        Html::notice("Das Turnier liegt bereits in der Vergangenheit. Bearbeiten des Turnierreports nur noch via den Ligaausschuss möglich.");
     }
 }
 
@@ -20,13 +20,13 @@ $tbericht = new TurnierReport ($turnier_id);
 
 // Existiert das Turnier?
 if (empty($turnier->details)) {
-    Form::error("Turnier wurde nicht gefunden");
+    Html::error("Turnier wurde nicht gefunden");
     header('Location: ../liga/turniere.php');
     die();
 }
 
 if ($turnier->details['art'] == 'spass') {
-    Form::notice("Spaßturniere erfordern keinen Turnierreport.");
+    Html::notice("Spaßturniere erfordern keinen Turnierreport.");
     header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->id);
     die();
 }
@@ -55,7 +55,7 @@ if ($change_tbericht) {
     foreach ($spieler_ausleihen as $ausleihe_id => $ausleihe) {
         if (isset($_POST['del_ausleihe_' . $ausleihe_id])) {
             $tbericht->delete_spieler_ausleihe($ausleihe_id);
-            Form::info("Spielerausleihe wurde entfernt.");
+            Html::info("Spielerausleihe wurde entfernt.");
             header('Location:' . dbi::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
             die();
         }
@@ -69,12 +69,12 @@ if ($change_tbericht) {
         $team_id_ab = Team::name_to_id($team_ab);
         $team_id_auf = Team::name_to_id($team_auf);
         if (!(Team::is_ligateam($team_id_ab) && Team::is_ligateam($team_id_auf))) {
-            Form::error("Ligateams der Spielerausleihe wurden nicht gefunden");
+            Html::error("Ligateams der Spielerausleihe wurden nicht gefunden");
             header('Location:' . dbi::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
             die();
         }
         $tbericht->set_spieler_ausleihe($name, $team_auf, $team_ab);
-        Form::info("Spielerausleihe wurde hinzugefügt.");
+        Html::info("Spielerausleihe wurde hinzugefügt.");
         header('Location:' . dbi::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
         die();
     }
@@ -85,7 +85,7 @@ if ($change_tbericht) {
     foreach ($zeitstrafen as $zeitstrafe_id => $zeitstrafe) {
         if (isset($_POST['del_zeitstrafe_' . $zeitstrafe_id])) {
             $tbericht->delete_zeitstrafe($zeitstrafe_id);
-            Form::info("Zeitstrafe wurde entfernt.");
+            Html::info("Zeitstrafe wurde entfernt.");
             header('Location:' . dbi::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
             die();
         }
@@ -99,7 +99,7 @@ if ($change_tbericht) {
         $team_b = $_POST['zeitstrafe_team_b'];
         $bericht = $_POST['zeitstrafe_bericht'];
         $tbericht->new_zeitstrafe($name, $dauer, $team_a, $team_b, $bericht);
-        Form::info("Zeitstrafe wurde hinzugefügt.");
+        Html::info("Zeitstrafe wurde hinzugefügt.");
         header('Location:' . dbi::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
         die();
     }
@@ -113,7 +113,7 @@ if ($change_tbericht) {
         $bericht = $_POST['turnierbericht'];
         $kader_check = $_POST['kader_check'] == "kader_checked";
         $tbericht->set_turnier_bericht($bericht, $kader_check);
-        Form::info("Turnierbericht wurde aktualisiert");
+        Html::info("Turnierbericht wurde aktualisiert");
         header("Location:" . dbi::escape($_SERVER['PHP_SELF']) . "?turnier_id=$turnier_id");
         die();
     }

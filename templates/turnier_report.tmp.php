@@ -3,35 +3,33 @@
     <?=$turnier->details['ort']?> <i>(<?=$turnier->details['tblock']?>)</i>
 </h1>
 <h2 class="w3-text-grey">
-    <?= Form::icon('article', tag:'h2') ?> Turnier-Report
+    <?= Html::icon('article', tag:'h2') ?> Turnier-Report
 </h2>
-<?php Form::message('notice',
+<?php Html::message('notice',
             "Der Turnierreport ist nur von andere Ligateams und dem Ligaausschuss einsehbar.",
             "") ?>
 <!-- Link Spielplan -->
-<p><?=Form::link('../liga/spielplan.php?turnier_id=' . $turnier_id, '<i class="material-icons">reorder</i> Zum Spielplan')?></p>
+<p><?=Html::link('../liga/spielplan.php?turnier_id=' . $turnier_id, '<i class="material-icons">reorder</i> Zum Spielplan')?></p>
+<?php if (time() - strtotime($turnier->details['datum']) > 8 * 24 * 60 *60){ ?>
+    <!-- Ausbilder -->
+    <?php if (!empty($ausbilder_liste)){?>
+        <h2 class="w3-text-primary"><?= Html::icon('school', tag:'h2') ?> Schiedsrichter-Ausbilder</h2>
+        <ul class='w3-ul w3-margin-left w3-leftbar w3-border-tertiary'>
+            <?php foreach ($ausbilder_liste as $spieler){?>
+                <li><?=$spieler['vorname'] . ' ' . $spieler['nachname']?> (<i><?=Team::id_to_name($spieler['team_id'])?></i>)</li>
+            <?php }//end foreach?>
+        </ul>
+    <?php }//endif?>
 
-<!-- Ausbilder -->
-<?php if (!empty($ausbilder_liste)){?>
-    <h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">school</i> Schiedsrichter-Ausbilder</h2>
-    <ul class='w3-ul w3-margin-left w3-leftbar w3-border-tertiary'>
-        <?php foreach ($ausbilder_liste as $spieler){?>
-            <li><?=$spieler['vorname'] . ' ' . $spieler['nachname']?> (<i><?=Team::id_to_name($spieler['team_id'])?></i>)</li>
+    <!-- Kader -->
+    <h2 class="w3-text-primary"><?= Html::icon('groups', tag:'h2') ?> Kader und Schiedsrichter</h2>
+    <ul class='w3-ul w3-margin-left w3-leftbar w3-border-primary'>
+        <?php foreach ($kader_array as $team_id => $kader){?>
+            <li class="w3-hover-primary" style="cursor: pointer;" onclick="openTab('<?=$team_id?>')">
+                <?= Html::icon('launch', class:'w3-text-tertiary') ?> <?=Team::id_to_name($team_id)?>
+            </li>
         <?php }//end foreach?>
     </ul>
-<?php }//endif?>
-
-<!-- Kader -->
-<h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">groups</i> Kader und Schiedsrichter</h2>
-<ul class='w3-ul w3-margin-left w3-leftbar w3-border-primary'>
-    <?php foreach ($kader_array as $team_id => $kader){?>
-        <li class="w3-hover-primary" style="cursor: pointer;" onclick="openTab('<?=$team_id?>')">
-            <?= Form::icon('launch', class:'w3-text-tertiary') ?> <?=Team::id_to_name($team_id)?>
-        </li>
-    <?php }//end foreach?>
-</ul>
-
-<?php if (time() - strtotime($turnier->details['datum']) > 4 * 24 * 60 *60){ ?>
     <?php foreach ($kader_array as $team_id => $kader){?>
         <div id="<?=$team_id?>" class="tab" style="display:none; max-width: 600px">
             <?php if(!empty($kader)){?>
@@ -39,9 +37,9 @@
                 <div class="w3-responsive w3-card">
                     <table class="w3-table w3-striped">
                         <tr class="w3-primary">
-                            <th><?= Form::icon("tag") ?> ID</th>
-                            <th><?= Form::icon("account_circle") ?> Spieler</th>
-                            <th><?= Form::icon("sports") ?> Schiri</th>
+                            <th><?= Html::icon("tag") ?> ID</th>
+                            <th><?= Html::icon("account_circle") ?> Spieler</th>
+                            <th><?= Html::icon("sports") ?> Schiri</th>
                         </tr>
                         <?php foreach ($kader as $spieler_id => $spieler){?>
                             <tr class="<?php if(!empty($spieler['schiri'])){?>w3-pale-green<?php } //endif?>">
@@ -52,7 +50,7 @@
                                 </td>
                                 <td>
                                     <?php if (!empty($spieler['schiri'])){?>
-                                        <?= Form::icon('check_circle') ?> <?= Form::get_saison_string($spieler['schiri']) ?>
+                                        <?= Html::icon('check_circle') ?> <?= Html::get_saison_string($spieler['schiri']) ?>
                                     <?php } //endif?>
                                 </td>
                             </tr>
@@ -71,14 +69,14 @@
 
 <!-- Spielerausleihe -->
 <h2 class="w3-text-primary">
-    <?= Form::icon('accessibility', tag:'h2') ?>Spielerausleihe</h2>
+    <?= Html::icon('accessibility', tag:'h2') ?>Spielerausleihe</h2>
 <?php if(!empty($spieler_ausleihen)){?>
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped w3-centered">
             <tr class="w3-primary">
-                <th><?= Form::icon("account_circle") ?> Spieler</th>
-                <th><?= Form::icon("add") ?> Aufnehmendes Team</th>
-                <th><?= Form::icon("remove") ?> Abgebendes Team</th>
+                <th><?= Html::icon("account_circle") ?> Spieler</th>
+                <th><?= Html::icon("add") ?> Aufnehmendes Team</th>
+                <th><?= Html::icon("remove") ?> Abgebendes Team</th>
                 <?php if($change_tbericht){ ?>
                     <th>Löschen</th>
                 <?php }//endif?>
@@ -94,7 +92,7 @@
                                 <button type="submit"
                                        class="w3-button w3-text-secondary"
                                        name="del_ausleihe_<?=$ausleihe['ausleihe_id']?>">
-                                    <?= Form::icon("delete") ?>
+                                    <?= Html::icon("delete") ?>
                                 </button>
                             </form>
                         </td>
@@ -111,7 +109,7 @@
 <?php if($change_tbericht){ ?> 
     <button onclick="document.getElementById('modal_ausleihe').style.display='block'"
             class="w3-section w3-button w3-tertiary">
-        <?= Form::icon("save_alt") ?> Spielerausleihe hinzufügen
+        <?= Html::icon("save_alt") ?> Spielerausleihe hinzufügen
     </button>
     <div id="modal_ausleihe" class="w3-modal">
         <form method="post" class="w3-card-4 w3-panel w3-round w3-container w3-modal-content">
@@ -144,7 +142,7 @@
             <p>
                 <label for="ausleihe_team_ab">Abgebendes Team</label>
                 <input class="w3-input w3-border w3-border-primary" placeholder="Team eingeben" type="text" list="teams" id="ausleihe_team_ab" name="ausleihe_team_ab" required>
-                <?=Form::datalist_teams()?>
+                <?=Html::datalist_teams()?>
             </p>
             <p>
                 <input type="submit" value="Hinzufügen" name="new_ausleihe" class="w3-button w3-tertiary">
@@ -154,7 +152,7 @@
 <?php }//endif?>
 
 <!-- Zeitstrafen -->
-<h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">schedule</i> Zeitstrafen</h2>
+<h2 class="w3-text-primary"><?= Html::icon('schedule', tag:'h2') ?> Zeitstrafen</h2>
 <span class="w3-text-grey">
     Auffällige Situationen oder zerstrittene Spiele sollten auch immer dem Ligaausschuss gemeldet werden. Dieser kann
     mit den Teams reden und dafür sorgen, dass zukünftig ausgewählte Schiedsrichter die Begegnung pfeifen.
@@ -163,9 +161,9 @@
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped w3-centered">
             <tr class="w3-primary">
-                <th><?= Form::icon("account_circle") ?> Spieler</th>
-                <th><?= Form::icon("schedule") ?> Dauer</th>
-                <th><?= Form::icon("sports_hockey") ?> Spielpaarung</th>
+                <th><?= Html::icon("account_circle") ?> Spieler</th>
+                <th><?= Html::icon("schedule") ?> Dauer</th>
+                <th><?= Html::icon("sports_hockey") ?> Spielpaarung</th>
                 <?php if($change_tbericht){ ?>
                     <th>Löschen</th>
                 <?php }//endif?>
@@ -182,7 +180,7 @@
                                        class="w3-button w3-text-secondary"
                                        name="del_zeitstrafe_<?=$zeitstrafe['zeitstrafe_id']?>"
                                 >
-                                    <?= Form::icon("delete") ?>
+                                    <?= Html::icon("delete") ?>
                                 </button>
                             </form>
                         </td>
@@ -204,7 +202,7 @@
 <?php if($change_tbericht){ ?>
     <button onclick="document.getElementById('modal_zeitstrafe').style.display='block'"
             class="w3-section w3-button w3-tertiary">
-        <?= Form::icon("save_alt") ?> Zeitstrafe hinzufügen
+        <?= Html::icon("save_alt") ?> Zeitstrafe hinzufügen
     </button>
     <div id="modal_zeitstrafe" class="w3-modal">
         <form method="post" class="w3-card-4 w3-panel w3-round w3-container w3-modal-content">
@@ -257,7 +255,7 @@
 <?php }//endif?>
 
 <!-- Turnierbericht -->
-<h2 class="w3-text-primary"><i style="font-size: 36px; vertical-align: -20%" class="material-icons">info</i> Turnierbericht</h2>
+<h2 class="w3-text-primary"><?= Html::icon('info', tag:'h2') ?> Turnierbericht</h2>
 <?php if($change_tbericht){ ?>
     <form method="post">
         <p>

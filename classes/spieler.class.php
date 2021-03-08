@@ -57,13 +57,13 @@ class Spieler
                         ";
                 $params = [$team_id, Config::SAISON, $spieler_id];
                 dbi::$db->query($sql, $params)->log();
-                Form::info("Der Spieler wurde vom Team " . Team::id_to_name($result['team_id']) . " übernommen.");
+                Html::info("Der Spieler wurde vom Team " . Team::id_to_name($result['team_id']) . " übernommen.");
                 return true;
             }
 
-            Form::error("Der Spieler steht bereits im Kader für folgendes Team: "
+            Html::error("Der Spieler steht bereits im Kader für folgendes Team: "
                 . Team::id_to_name($result['team_id']) . "<br> Bitte wende dich an den Ligaausschuss ("
-                . Form::mailto(Env::LAMAIL) . ")", esc:false);
+                . Html::mailto(Env::LAMAIL) . ")", esc:false);
             return false;
         }
 
@@ -186,7 +186,7 @@ class Spieler
     {
         $spalten_namen = dbi::$db->query("SHOW FIELDS FROM spieler")->list('Field');
         if (!in_array($entry, $spalten_namen, true)) {
-            die("Ungültiger Spaltenname");
+            trigger_error("Ungültiger Spaltenname", E_USER_ERROR);
         }
         $zeit = ($entry === 'team_id' || $entry === 'letzte_saison') ? '' : ', zeit = zeit';
         $entry = "`" . $entry . "`";

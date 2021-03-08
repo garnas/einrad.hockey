@@ -15,3 +15,7 @@ AddOutputFilterByType DEFLATE text/html
 AddOutputFilterByType DEFLATE text/css
 AddOutputFilterByType DEFLATE application/javascript
 </IfModule>
+
+# Fehlerseiten
+ErrorDocument 404 /errors/404.php
+ErrorDocument 500 /errors/500.html

@@ -74,7 +74,7 @@ class Turnier
             $besprechung, $hinweis, $organisator, $handy, $startgebuehr];
         $sql = "
                 INSERT INTO turniere_details (turnier_id, hallenname, strasse, plz, ort, haltestellen, plaetze,
-                spielplan, startzeit, besprechung, hinweis, organisator, handy, startgebuehr)
+                format, startzeit, besprechung, hinweis, organisator, handy, startgebuehr)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  ?,  ?, ?);
                 ";
         dbi::$db->query($sql, $params)->log();
@@ -217,7 +217,7 @@ class Turnier
     }
 
     /**
-     * Get alle Turnieranmeldungen des Turniers für den Spielplan nach Wertigkeit sortiert.
+     * Get alle Turnieranmeldungen des Turniers für den Spielplan nach Wertung sortiert.
      *
      * @return array
      */
@@ -235,7 +235,7 @@ class Turnier
                 AND turniere_liste.liste = 'spiele'
                 ";
         $spielen_liste = dbi::$db->query($sql)->esc()->fetch('team_id');
-        // Blöcke und Wertigkeiten hinzufügen
+        // Blöcke und Wertungen hinzufügen
         foreach ($spielen_liste as $team_id => $anmeldung) {
             $spielen_liste[$team_id]['tblock']
                 = Tabelle::get_team_block($anmeldung['team_id'], $this->details['spieltag'] - 1);
@@ -243,7 +243,7 @@ class Turnier
                 = Tabelle::get_team_wertigkeit($anmeldung['team_id'], $this->details['spieltag'] - 1);
         }
         if (!empty($spielen_liste)) {
-            // Array nach Wertigkeit sortieren
+            // Array nach Wertung sortieren
             uasort($spielen_liste, static function ($team_a, $team_b) {
                 return ((int) $team_b['wertigkeit'] <=> (int) $team_a['wertigkeit']);
             });
@@ -485,8 +485,10 @@ class Turnier
     {
         $freie_plaetze = $this->get_anzahl_freie_plaetze();
         $log = false;
+
         if ($this->details['phase'] === 'melde' && $freie_plaetze > 0) {
             $liste = $this->get_anmeldungen();// Order by Warteliste weshalb die Teams in der foreach schleife in der Richtigen reihenfolge behandelt werden
+
             foreach ($liste['warte'] as $team) {
                 if ($this->check_team_block($team['team_id']) && $freie_plaetze > 0) {
                     if ($this->check_doppel_anmeldung($team['team_id'])) {
@@ -501,9 +503,11 @@ class Turnier
                     }
                 }
             }
+
             if ($log) {
                 $this->log("Spielen-Liste aufgefüllt");
             }
+
             $this->warteliste_aktualisieren();
         }
     }
@@ -623,18 +627,18 @@ class Turnier
      */
     public static function check_team_block_static(string $team_block, string $turnier_block): bool
     {
-        if ($team_block === 'NL') {
+        if ($team_block === NULL) {
             return true;
         } // NL Teams können immer angemeldet werden
 
         // Check ob es sich um ein Block-Turnier handelt (nicht spass oder finale)
         if (in_array($turnier_block, Config::BLOCK_ALL)) {
             // Block-String in Array auflösen
-            $turnier_block = str_split($turnier_block);
-            $team_block = str_split($team_block);
+            $turnier_buchstaben = str_split($turnier_block);
+            $team_buchstaben = str_split($team_block);
             // Check ob ein Buchstabe des Team-Blocks im Turnier-Block vorkommt
-            foreach ($team_block as $buchstabe) {
-                if (in_array($buchstabe, $turnier_block)) {
+            foreach ($team_buchstaben as $buchstabe) {
+                if (in_array($buchstabe, $turnier_buchstaben)) {
                     return true;
                 }
             }
@@ -838,7 +842,7 @@ class Turnier
     {
         $sql = "
                 UPDATE turniere_details 
-                SET hallenname = ?, strasse = ?, plz = ?, ort = ?, haltestellen = ?, plaetze = ?, spielplan = ?,
+                SET hallenname = ?, strasse = ?, plz = ?, ort = ?, haltestellen = ?, plaetze = ?, format = ?,
                     startzeit = ?, besprechung = ?, hinweis = ?, organisator = ?, handy = ?, startgebuehr = ?
                 WHERE turnier_id = $this->id
                 ";
@@ -973,19 +977,11 @@ class Turnier
      */
     public function log(string $log_text): void
     {
-        if (isset($_SESSION['ligabot'])) {
-            $autor = 'Ligabot';
-        } elseif (Config::$ligacenter) {
-            $autor = "Ligaausschuss";
-        } elseif (Config::$teamcenter) {
-            $autor = $_SESSION['logins']['team']['name'];
-        } else {
-            $autor = 'automatisch';
-        }
         $sql = "
                 INSERT INTO turniere_log (turnier_id, log_text, autor) 
                 VALUES ($this->id, ?, ?);
                 ";
+        $autor = Helper::get_akteur(true);
         dbi::$db->query($sql, $log_text, $autor)->log();
     }
 

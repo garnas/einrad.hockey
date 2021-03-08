@@ -1,6 +1,6 @@
 <?php 
 //Weiterleitung auf Landingpage
-include '../logic/first.logic.php';
+include '../init.php';
 header("Location: " . Env::BASE_URL . "/liga/neues.php");
 die();
 ?>

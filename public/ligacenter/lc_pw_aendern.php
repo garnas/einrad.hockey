@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
 //Formularauswertung
@@ -11,13 +11,13 @@ if(isset($_POST['change'])) {
     $passwort_neu = $_POST['passwort_neu'];
     if (strlen($passwort_neu) > 8){
         if(LigaLeitung::set_passwort($_SESSION['logins']['la']['login'], $passwort_neu, $passwort_alt)) {
-            Form::info("Dein Passwort wurde geändert");
+            Html::info("Dein Passwort wurde geändert");
             header('Location: lc_start.php');
             die();
         }
-        Form::error("Falsches Passwort");
+        Html::error("Falsches Passwort");
     }else{
-        Form::error("Das Passwort muss mindestens acht Zeichen lang sein.");
+        Html::error("Das Passwort muss mindestens acht Zeichen lang sein.");
     }    
 }
 
@@ -26,12 +26,12 @@ if(isset($_POST['change'])) {
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$page_width = "500px";
+Html::$page_width = "500px";
 include '../../templates/header.tmp.php'; ?>
 
 <form method="post" class="w3-panel w3-card-4">
     <h3> Ligacenter-Passwort ändern </h3>
-        <?php Form::message('notice', 'Dein Passwort wird verschlüsselt gespeichert', null); ?>
+        <?php Html::message('notice', 'Dein Passwort wird verschlüsselt gespeichert', null); ?>
         <label class="w3-text-primary" for="passwort_alt">Altes Passwort:</label>
         <input required
                class="w3-input w3-border w3-border-primary"

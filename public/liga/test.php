@@ -2,11 +2,10 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 
-$sql = "SELECT * FROM oeffi_challenge";
-$result = dbi::$db->query($sql)->fetch();
-dbi::debug($result, true);
+
+dbi::debug($RANG_TO_BLOCK, true);
 function umsch (){
     $sql ="SELECT * FROM turniere_details WHERE format='jgj'";
     $return = dbi::$db->query($sql)->fetch();
@@ -33,16 +32,18 @@ function umsch (){
 //Ligaleitung::umzug2('ausschuss_oeffi', "oeffentlichkeitsausschuss");
 //Ligaleitung::umzug2('ausschuss_technik', "technikausschuss");
 //Ligaleitung::umzug3(); //Ausbilder
+//$sql = 'DROP TABLE ausschuss_liga, ausschuss_oeffi, ausschuss_schiri, ausschuss_technik';
+//dbi::$db->query($sql)->log();
 
 function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
 {
     $turnier_id = 860;
     if ($counter + $fehler + $penalty > 100) {
-        Form::notice($penalty . " Penalty");
-        Form::info($counter . " Erfolgreiche Durchgänge");
-        Form::error($fehler . " Fehler");
+        Html::notice($penalty . " Penalty");
+        Html::info($counter . " Erfolgreiche Durchgänge");
+        Html::error($fehler . " Fehler");
         $delta_load_time = microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"];
-        Form::notice(round($delta_load_time, 3) . ' Sekunden');
+        Html::notice(round($delta_load_time, 3) . ' Sekunden');
         dbi::debug(memory_get_peak_usage());
         return;
     }
@@ -72,7 +73,7 @@ function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
     }
     $spielplan = new Spielplan((new Turnier($turnier_id)));
     if ($spielplan->out_of_scope) {
-        Form::notice($counter . " Durchgänge");
+        Html::notice($counter . " Durchgänge");
         header('Location: spielplan.php?turnier_id=' . $turnier_id);
         die();
     }
@@ -92,8 +93,8 @@ function test_neue_tabellen($counter = 0, $fehler = 0, $penalty = 0)
             or abs($eintrag_neu['ligapunkte'] - $tabelle_alt[$platz_neu - 1]['ligapunkte']) > 1
             or $tabelle_alt[$platz_neu - 1]['punkte'] != $eintrag_neu['statistik']['punkte']
         ) {
-            Form::error(Team::id_to_name($team_id) . " | " . Team::id_to_name($tabelle_alt[$platz_neu - 1]['team_id_a']));
-            Form::notice($counter . " Durchgänge");
+            Html::error(Team::id_to_name($team_id) . " | " . Team::id_to_name($tabelle_alt[$platz_neu - 1]['team_id_a']));
+            Html::notice($counter . " Durchgänge");
             db::debug($tabelle_alt);
             header('Location: spielplan.php?turnier_id=' . $turnier_id);
             die();

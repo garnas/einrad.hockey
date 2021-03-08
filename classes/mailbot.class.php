@@ -35,22 +35,24 @@ class MailBot
     public static function send_mail(\PHPMailer\PHPMailer\PHPMailer $mailer): bool
     {
         if (Env::ACTIVATE_EMAIL) {
+
             if ($mailer->send()) {
                 return true;
             }
-            Form::log(Config::LOG_EMAILS, 'Fehler: ' . $mailer->ErrorInfo);
+
+            Helper::log(Config::LOG_EMAILS, 'Fehler: ' . $mailer->ErrorInfo);
             return false;
         }
 
         // Debugging
-        if (!Config::$ligacenter) {
+        if (!Helper::$ligacenter) {
             $mailer->Password = '***********'; // Passwort verstecken
             $mailer->ClearAllRecipients();
         }
 
-        Form::log(Config::LOG_EMAILS, 'E-Mail-Debug-Pseudo-Versand erfolgreich');
+        Helper::log(Config::LOG_EMAILS, 'E-Mail-Debug-Pseudo-Versand erfolgreich');
         dbi::debug($mailer);
-        return false;
+        return true;
     }
 
     /**
@@ -87,10 +89,10 @@ class MailBot
                 self::set_status($mail['mail_id'], 'versendet');
             } else {
                 self::set_status($mail['mail_id'], 'Fehler', $mailer->ErrorInfo);
-                Form::error($mailer->ErrorInfo);
+                Html::error($mailer->ErrorInfo);
             }
         }
-        Form::info('Mailbot wurde ausgeführt.');
+        Html::info('Mailbot wurde ausgeführt.');
     }
 
     /**
@@ -152,7 +154,7 @@ class MailBot
             WHERE mail_status = 'fehler'
             ";
         if (($anzahl = dbi::$db->query($sql)->num_rows()) > 0) {
-            Form::notice("Der Mailbot kann $anzahl Mail(s) nicht versenden - siehe Datenbank.");
+            Html::notice("Der Mailbot kann $anzahl Mail(s) nicht versenden - siehe Datenbank.");
         }
     }
 

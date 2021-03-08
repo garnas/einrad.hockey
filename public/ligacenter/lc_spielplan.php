@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 require_once '../../logic/session_la.logic.php';//Auth
 require_once '../../logic/spielplan.logic.php'; //Erstellt Spielplanobjekt nach Validation
 require_once '../../logic/spielplan_form.logic.php'; //Wertet Formular aus
@@ -10,8 +10,8 @@ require_once '../../logic/spielplan_form.logic.php'; //Wertet Formular aus
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = "Ergebnisse eintragen | Ligacenter";
-Config::$content = "Der Spielplan für das Einradhockey-Turnier in ". $spielplan->turnier->details['ort'] . " am " . date("d.m.Y", strtotime($spielplan->turnier->details['datum']));
+Html::$titel = "Ergebnisse eintragen | Ligacenter";
+Html::$content = "Der Spielplan für das Einradhockey-Turnier in ". $spielplan->turnier->details['ort'] . " am " . date("d.m.Y", strtotime($spielplan->turnier->details['datum']));
 include '../../templates/header.tmp.php';
 include '../../templates/spielplan/spielplan_titel.tmp.php'; // Titel
 ?>

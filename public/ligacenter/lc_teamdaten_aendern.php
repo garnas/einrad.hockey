@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; // Autoloader und Session
+require_once '../../init.php'; // Autoloader und Session
 require_once '../../logic/session_la.logic.php'; // Auth
 require_once '../../logic/la_team_waehlen.logic.php'; // Team wählen
 require_once '../../logic/teamdaten_aendern.logic.php'; // Formularverarbeitung
