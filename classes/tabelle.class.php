@@ -220,10 +220,11 @@ class Tabelle
                 AND (turniere_liga.spieltag <= ?)
                 ORDER BY ergebnis DESC, RAND()
                 ";
-        $result = db::$db->query($sql, $saison, $spieltag)->esc()->fetch('team_id');
+        $result = db::$db->query($sql, $saison, $spieltag)->esc()->fetch();
 
         $counter = $return = [];
-        foreach($result as $team_id => $eintrag){
+        foreach($result as $eintrag){
+            $team_id = $eintrag['team_id'];
             if (isset($return[$team_id])) {
                 if ($counter[$team_id] <= 5) {
                     $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
@@ -335,11 +336,13 @@ class Tabelle
                     $ausnahme)
                     )
                 ORDER BY turniere_liga.saison DESC, turniere_liga.datum DESC";
-        $result = db::$db->query($sql, $spieltag, $saison, $saison)->esc()->fetch('team_id');
+        $result = db::$db->query($sql, $spieltag, $saison, $saison)->esc()->fetch();
         $return = [];
         $counter = [];
 
-        foreach($result as $team_id => $eintrag) {
+        foreach($result as $eintrag) {
+
+            $team_id = $eintrag['team_id'];
 
             //Farbe des Ergebnisses in der Rangtabelle festlegen.
             $color =  ($eintrag['saison'] != $saison) ? "w3-text-green" : 'w3-text-primary';
