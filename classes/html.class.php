@@ -33,6 +33,7 @@ class Html
             $images = glob($imagesDir . '*.{jpg,JPG,jpeg,png,gif}', GLOB_BRACE);
             $randomImage = $images[array_rand($images)];
             $_SESSION['bild_navigation']['path'] = Env::BASE_URL . '/bilder/hintergrund/' . basename($randomImage);
+            $_SESSION['bild_navigation']['zeit'] = time();
         }
         return $_SESSION['bild_navigation']['path'];
     }
