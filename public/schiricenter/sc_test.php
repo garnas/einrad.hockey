@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; // Autoloader und Session, muss immer geladen werden!
+require_once '../../init.php'; // Autoloader und Session, muss immer geladen werden!
 # require_once '../../logic/session_team.logic.php'; // Nur im Teamcenter zugreifbar
 
 // Antwort auswerten oder neue Frage stellen?
@@ -36,7 +36,7 @@ if (isset($_POST['beantworten'])){
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = 'Multiple-Choice Schiritest der Deutschen Einradhockeyliga';
+Html::$titel = 'Multiple-Choice Schiritest der Deutschen Einradhockeyliga';
 include '../../templates/header.tmp.php'; // Html-header und Navigation
 ?>
 
@@ -129,15 +129,15 @@ include '../../templates/header.tmp.php'; // Html-header und Navigation
                 <?php
                 $regelnr = $fragen[$frage_id]['regelnr'];
                 if ($regelnr == ''){
-                    Form::message('notice', '(Keine Regelnummer für diese Frage)');
+                    Html::message('notice', '(Keine Regelnummer für diese Frage)');
                 }else{
                     foreach (preg_split('/[\s#\s]+/', $regelnr) as $regelnr1){
                         list($nr, $part, $titel, $text) = SchiriTest::get_regel($regelnr1);
                         if ($nr == ''){
-                            Form::message('error',
+                            Html::message('error',
                                 'Regel |' . $regelnr1 . '| nicht in der Datenbank.');
                         }else{
-                            Form::message('info', $text,
+                            Html::message('info', $text,
                                 "Offizielle Regel " . $nr . ": " . $titel, esc:false);
                         }
                     }
@@ -176,7 +176,7 @@ $debuginfo .= "<BR>Regelnummer:   " . $frage['regelnr'];
 $debuginfo .= "<BR>Punkte:        " . $frage['punkte'];
 $debuginfo .= "<BR>bestätigt:     " . $frage['bestaetigt'];
 $debuginfo .= "<BR>interne Notiz: " . $frage['interne_notiz'];
-Form::message('error', $debuginfo, "Infos zu Frage Nr. " . $frage_id . " (Debug Modus):",
+Html::message('error', $debuginfo, "Infos zu Frage Nr. " . $frage_id . " (Debug Modus):",
               esc:false);
 // Ende Debug Modus 
 ?>
