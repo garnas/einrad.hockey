@@ -17,5 +17,5 @@ AddOutputFilterByType DEFLATE application/javascript
 </IfModule>
 
 # Fehlerseiten
-ErrorDocument 404 /einrad.hockey/public/errors/404.php
-ErrorDocument 500 /einrad.hockey/public/errors/500.html
+ErrorDocument 404 /errors/404.php
+ErrorDocument 500 /errors/500.html
