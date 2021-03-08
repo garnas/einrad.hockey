@@ -26,7 +26,7 @@ ini_set('max_execution_time', '90');
 ini_set('error_reporting', E_ALL);
 ini_set('log_errors', 'On');
 ini_set('display_errors', 'Off');
-ini_set('error_log', __DIR__ . '/logs/errors.log');
+ini_set('error_log', __DIR__ . '/system/logs/errors.log');
 
 // Nur für Localhost-Einstellungen
 if (

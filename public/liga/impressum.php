@@ -21,7 +21,7 @@ include '../../templates/header.tmp.php'; ?>
         <p class="w3-text-grey">Kontakt</p>
         <p><?= Html::mailto(Env::LAMAIL) ?></p>
 
-        <h3>Du hast Lust an der Webseite mitzuwirken?</h3>
+        <h3>Du hast Lust an der Website mitzuwirken?</h3>
         <p><?= Html::link(Nav::LINK_GIT, 'Github-Account', true, 'launch') ?></p>
         <p><?= Html::mailto(Env::TECHNIKMAIL) ?></p>
     </div>
