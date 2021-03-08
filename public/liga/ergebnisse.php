@@ -10,7 +10,7 @@ $turnier_ergebnisse = Tabelle::get_all_ergebnisse($saison);
 if (empty($turnier_ergebnisse)) {
     Html::info("Es wurden keine Turnierergebnisse der Saison " . Html::get_saison_string($saison) . " eingetragen");
 }
-$turniere = Turnier::get_turniere('', false, false);
+$turniere = Turnier::get_turniere('', false, false, $saison);
 
 //Farbe für die Plätze auf dem Turnier
 $color[0] = "w3-text-tertiary";

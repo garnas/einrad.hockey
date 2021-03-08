@@ -109,9 +109,13 @@ class Turnier
      * @param string $phase
      * @param bool $equal
      * @param bool $asc
+     * @param int $saison
      * @return array
      */
-    public static function get_turniere(string $phase, bool $equal = true, bool $asc = true): array
+    public static function get_turniere(string $phase,
+                                        bool $equal = true,
+                                        bool $asc = true,
+                                        int $saison = Config::SAISON): array
     {
         $sql = "
                 SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname 
@@ -121,9 +125,9 @@ class Turnier
                 INNER JOIN teams_liga
                 ON teams_liga.team_id = turniere_liga.ausrichter
                 WHERE phase " . ($equal ? "=" : "!=") . " ?
-                AND saison = " . Config::SAISON . "
+                AND saison = ?
                 ORDER BY turniere_liga.datum " . ($asc ? "asc" : "desc");
-        return db::$db->query($sql, $phase)->esc()->fetch('turnier_id');
+        return db::$db->query($sql, $phase, $saison)->esc()->fetch('turnier_id');
     }
 
     public static function get_eigene_turniere(int $team_id): array
