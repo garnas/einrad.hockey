@@ -19,7 +19,7 @@ class SchiriTest
             ORDER BY RAND()
             LIMIT ?
             ";
-            $result = dbi::$db->query($sql, $anzahl)->fetch();
+            $result = db::$db->query($sql, $anzahl)->fetch();
         }else{
             $sql = "
             SELECT *
@@ -28,7 +28,7 @@ class SchiriTest
             ORDER BY RAND()
             LIMIT ?
             ";
-            $result = dbi::$db->query($sql, $kategorie, $anzahl)->fetch();
+            $result = db::$db->query($sql, $kategorie, $anzahl)->fetch();
         }
         if ($fragenr>0){
             $sql = "
@@ -37,7 +37,7 @@ class SchiriTest
             WHERE frage_id = ?
             LIMIT ?
             ";
-            $result = dbi::$db->query($sql, $fragenr, $anzahl)->fetch();
+            $result = db::$db->query($sql, $fragenr, $anzahl)->fetch();
         }
         //        $result = db::readdb($sql); // Mysqli Objekt
         //        while ($row = mysqli_fetch_assoc($result)) {
@@ -78,7 +78,7 @@ class SchiriTest
 //            $regeln[$row['regelnummer']] = $row;
 //        }
 //        return $regeln;
-        return dbi::$db->query($sql)->fetch('regelnummer');
+        return db::$db->query($sql)->fetch('regelnummer');
     }
 
     /**
@@ -122,7 +122,7 @@ class SchiriTest
         ";
         //        $result = db::readdb($sql);
         //        $richtig = mysqli_fetch_assoc($result)['richtig']; // String, # als Trennzeichen
-        $richtig = dbi::$db->query($sql, $frage_id)->fetch_one();
+        $richtig = db::$db->query($sql, $frage_id)->fetch_one();
 
         $richtig = preg_split('/[\s#\s]+/', $richtig); // Array mit den Nummern der richtigen Antwort
 
@@ -152,7 +152,7 @@ class SchiriTest
         ";
         //        $result = db::readdb($sql);
         //        $richtig = mysqli_fetch_assoc($result)['richtig']; // String, # als Trennzeichen
-        $richtig = dbi::$db->query($sql, $frage_id)->fetch_one(); // String, # als Trennzeichen
+        $richtig = db::$db->query($sql, $frage_id)->fetch_one(); // String, # als Trennzeichen
 
         $richtig = preg_split('/[\s#\s]+/', $richtig); // Array mit den Nummern der richtigen Antwort
         sort($richtig); // Sortieren, damit beide Arrays die gleiche Reihenfolge haben
