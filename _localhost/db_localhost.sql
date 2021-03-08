@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 27. Feb 2021 um 07:42
+-- Erstellungszeit: 08. Mrz 2021 um 01:33
 -- Server-Version: 10.4.17-MariaDB
 -- PHP-Version: 8.0.0
 
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `abstimmung_ergebnisse` (
   `crypt` varchar(255) NOT NULL,
   `stimme` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -42,7 +42,7 @@ CREATE TABLE `abstimmung_teams` (
   `team_id` int(11) NOT NULL,
   `aenderungen` int(8) NOT NULL DEFAULT 0,
   `passwort` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -155,14 +155,14 @@ CREATE TABLE `neuigkeiten` (
   `bild_verlinken` varchar(255) NOT NULL,
   `eingetragen_von` varchar(255) NOT NULL,
   `zeit` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `neuigkeiten`
 --
 
 INSERT INTO `neuigkeiten` (`neuigkeiten_id`, `titel`, `inhalt`, `link_pdf`, `link_jpg`, `bild_verlinken`, `eingetragen_von`, `zeit`) VALUES
-(1, 'Passwörter für die Logins', 'Alle Passwörter für das Teamcenter sind: <b>test</b>\r\n\r\nLoginname für Ligacenter: <b>entwickler</b> Passwort: <b>einrad</b>', '', '', '', 'Ligaausschuss', '2021-02-27 06:40:52');
+(1, 'Passwörter für die Logins', 'Alle Passwörter für das Teamcenter sind: <b>test</b>\r\n\r\nLoginname für Ligacenter: <b>entwickler</b> Passwort: <b>einrad</b>\r\n\r\nIm _localhost-Ordner befindet sich ein Tutorial, wie man eine Seite für die Website erstellt.\r\n\r\n\r\n', '', '', '', 'Ligaausschuss', '2021-03-08 00:28:55');
 
 -- --------------------------------------------------------
 
@@ -178,7 +178,7 @@ CREATE TABLE `oeffi_challenge` (
   `datum` date NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `count` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -187,11 +187,11 @@ CREATE TABLE `oeffi_challenge` (
 --
 
 CREATE TABLE `plz` (
-  `PLZ` varchar(5) CHARACTER SET utf8mb4 NOT NULL,
-  `Ort` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `PLZ` varchar(5) NOT NULL,
+  `Ort` text DEFAULT NULL,
   `Lon` double DEFAULT NULL,
   `LAT` double DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `plz`
@@ -8552,21 +8552,16 @@ INSERT INTO `spiele` (`turnier_id`, `spiel_id`, `team_id_a`, `team_id_b`, `schir
 (885, 8, 86, 837, 706, 2, 14, 3, NULL, NULL),
 (885, 9, 2, 633, 86, 837, 8, 0, NULL, NULL),
 (885, 10, 86, 706, 2, 633, 22, 7, NULL, NULL),
-(895, 1, 857, 863, 831, 312, 23, 3, NULL, NULL),
-(895, 2, 831, 862, 857, 863, 23, 3, NULL, NULL),
-(895, 3, 312, 853, 862, 831, 23, 3, NULL, NULL),
-(895, 4, 831, 857, 312, 853, 23, 3, NULL, NULL),
-(895, 5, 853, 863, 831, 857, 3, 3, 2, 1),
-(895, 6, 312, 862, 853, 863, 23, 3, NULL, NULL),
-(895, 7, 831, 853, 862, 312, 23, 3, NULL, NULL),
-(895, 8, 857, 862, 853, 831, 23, 3, NULL, NULL),
-(895, 9, 312, 863, 862, 857, 23, 3, NULL, NULL),
-(895, 10, 853, 862, 312, 863, 3, 3, 2, 1),
-(895, 11, 831, 863, 862, 853, 23, 3, NULL, NULL),
-(895, 12, 312, 857, 831, 863, 1, 3, NULL, NULL),
-(895, 13, 862, 863, 312, 857, 3, 3, 2, 1),
-(895, 14, 857, 853, 862, 863, 23, 3, NULL, NULL),
-(895, 15, 312, 831, 857, 853, 23, 23, NULL, NULL),
+(895, 1, 610, 853, 857, 312, 4, 11, NULL, NULL),
+(895, 2, 312, 857, 853, 610, 11, 1, NULL, NULL),
+(895, 3, 831, 853, 610, 312, 8, 4, NULL, NULL),
+(895, 4, 610, 857, 853, 831, 3, 8, NULL, NULL),
+(895, 5, 312, 831, 610, 857, 5, 7, NULL, NULL),
+(895, 6, 857, 853, 312, 831, 4, 7, NULL, NULL),
+(895, 7, 610, 831, 857, 853, 2, 10, NULL, NULL),
+(895, 8, 312, 853, 610, 831, 10, 4, NULL, NULL),
+(895, 9, 831, 857, 312, 853, 8, 5, NULL, NULL),
+(895, 10, 312, 610, 831, 857, 16, 1, NULL, NULL),
 (896, 1, 21, 87, 154, 16, 12, 6, NULL, NULL),
 (896, 2, 154, 37, 21, 87, 3, 5, NULL, NULL),
 (896, 3, 16, 42, 37, 154, 8, 1, NULL, NULL),
@@ -8658,23 +8653,7 @@ INSERT INTO `spiele` (`turnier_id`, `spiel_id`, `team_id_a`, `team_id_b`, `schir
 (920, 12, 27, 423, 533, 852, 9, 3, NULL, NULL),
 (920, 13, 321, 852, 27, 423, 1, 12, NULL, NULL),
 (920, 14, 423, 529, 321, 852, 2, 8, NULL, NULL),
-(920, 15, 27, 533, 423, 529, 10, 0, NULL, NULL),
-(931, 1, 30, 423, 534, 529, 1, 1, NULL, NULL),
-(931, 2, 534, 529, 30, 423, 1, 1, NULL, NULL),
-(931, 3, 30, 529, 534, 423, 11, 1, NULL, NULL),
-(931, 4, 534, 423, 30, 529, 1, 1, NULL, NULL),
-(931, 5, 423, 529, 534, 30, 1, 1, NULL, NULL),
-(931, 6, 534, 30, 423, 529, 1, 1, NULL, NULL),
-(938, 1, 534, 633, 2, 16, 2, 2, NULL, NULL),
-(938, 2, 16, 2, 633, 534, 1, 1, NULL, NULL),
-(938, 3, 37, 633, 534, 16, 1, 2, NULL, NULL),
-(938, 4, 534, 2, 633, 37, 3, 4, NULL, NULL),
-(938, 5, 16, 37, 534, 2, 2, 2, NULL, NULL),
-(938, 6, 2, 633, 16, 37, 1, 2, NULL, NULL),
-(938, 7, 534, 37, 2, 633, 4, 2, NULL, NULL),
-(938, 8, 16, 633, 534, 37, 2, 2, NULL, NULL),
-(938, 9, 37, 2, 16, 633, 2, 2, NULL, NULL),
-(938, 10, 16, 534, 37, 2, 2, 2, NULL, NULL);
+(920, 15, 27, 533, 423, 529, 10, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -8685,15 +8664,15 @@ INSERT INTO `spiele` (`turnier_id`, `spiel_id`, `team_id_a`, `team_id_b`, `schir
 CREATE TABLE `spieler` (
   `spieler_id` int(11) NOT NULL,
   `team_id` int(11) DEFAULT NULL,
-  `vorname` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
-  `nachname` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+  `vorname` varchar(255) NOT NULL,
+  `nachname` varchar(255) NOT NULL,
   `jahrgang` int(11) NOT NULL,
-  `geschlecht` enum('m','w','d') CHARACTER SET utf8mb4 NOT NULL,
-  `schiri` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
-  `junior` enum('Ja','Nein','') CHARACTER SET utf8mb4 NOT NULL DEFAULT 'Nein',
+  `geschlecht` enum('m','w','d') NOT NULL,
+  `schiri` varchar(255) NOT NULL DEFAULT '',
+  `junior` enum('Ja','Nein','') NOT NULL DEFAULT 'Nein',
   `letzte_saison` int(11) DEFAULT NULL,
   `zeit` timestamp NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `spieler`
@@ -8702,7 +8681,7 @@ CREATE TABLE `spieler` (
 INSERT INTO `spieler` (`spieler_id`, `team_id`, `vorname`, `nachname`, `jahrgang`, `geschlecht`, `schiri`, `junior`, `letzte_saison`, `zeit`) VALUES
 (1, 20, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
 (2, 20, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
-(3, NULL, 'Vorname', 'Entwickler', 1234, 'd', '', 'Nein', 26, '2021-02-27 06:40:52'),
+(3, NULL, 'Vorname', 'Entwickler', 1234, 'd', '', 'Nein', 26, '2021-03-08 00:28:55'),
 (5, 87, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
 (9, 535, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
 (12, 535, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
@@ -9706,7 +9685,7 @@ CREATE TABLE `spieler_ausleihen` (
   `spieler` varchar(255) NOT NULL,
   `team_auf` varchar(255) NOT NULL,
   `team_ab` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -9722,7 +9701,7 @@ CREATE TABLE `spieler_zeitstrafen` (
   `team_a` varchar(255) NOT NULL,
   `team_b` varchar(255) NOT NULL,
   `grund` varchar(350) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -9872,7 +9851,7 @@ CREATE TABLE `teams_details` (
   `teamfoto` varchar(255) DEFAULT NULL,
   `trikot_farbe_1` varchar(9) DEFAULT NULL,
   `trikot_farbe_2` varchar(9) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `teams_details`
@@ -9884,7 +9863,7 @@ INSERT INTO `teams_details` (`team_id`, `plz`, `ort`, `verein`, `homepage`, `lig
 (11, '30449', 'Hannover', 'CatchArt e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (12, '12207', 'Berlin', 'FSG SC Lilienthal e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (14, '40229', 'Düsseldorf', 'Vanny UCTD', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
-(16, '64546', 'Mörfelden', 'SKV Mörfelden', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, '#ff9500', '#0a2575'),
+(16, '64546', 'Mörfelden', 'SKV Mörfelden', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, '#ffffff', '#4a55a5'),
 (18, '64546', 'Mörfelden', 'SKV Mörfelden', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (20, '42699', 'Solingen', 'TSV Solingen-Aufderhöhe 1877 e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (21, '27321', 'Thedinghausen', 'Hochschulsport Bremen', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
@@ -9941,7 +9920,7 @@ INSERT INTO `teams_details` (`team_id`, `plz`, `ort`, `verein`, `homepage`, `lig
 (529, '27321', 'Thedinghausen', 'LaFaretti Unicorns', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (530, '48703', 'Stadtlohn', 'Djk Eintracht Stadtlohn', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (533, '01099', 'Dresden', 'SV TuR, Sport & Jugend Dresden e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
-(534, '46240', 'Bottrop', '', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, '#be2727', '#1e1010'),
+(534, '46240', 'Bottrop', '', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (535, '44623', 'Herne', 'Baukauer TC 1879 e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (610, '23564', 'Lübeck', 'Lübecker Einradfüchse', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (611, '48703', 'Stadtlohn', 'Djk Eintracht Stadtlohn', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
@@ -9985,7 +9964,7 @@ CREATE TABLE `teams_kontakt` (
   `email` varchar(255) NOT NULL,
   `public` enum('Ja','Nein') NOT NULL DEFAULT 'Ja',
   `get_info_mail` enum('Ja','Nein') NOT NULL DEFAULT 'Ja'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `teams_kontakt`
@@ -10116,10 +10095,8 @@ INSERT INTO `teams_kontakt` (`teams_kontakt_id`, `team_id`, `email`, `public`, `
 (138, 435, 'test@einrad.hockey', 'Ja', 'Ja'),
 (139, 307, 'test@einrad.hockey', 'Ja', 'Ja'),
 (140, 37, 'test@einrad.hockey', 'Ja', 'Ja'),
-(141, 16, 'test@einrad.hockey', 'Ja', 'Ja'),
 (142, 26, 'test@einrad.hockey', 'Ja', 'Ja'),
 (143, 32, 'test@einrad.hockey', 'Ja', 'Ja'),
-(144, 393, 'test@einrad.hockey', 'Nein', 'Ja'),
 (145, 633, 'test@einrad.hockey', 'Nein', 'Ja'),
 (146, 690, 'test@einrad.hockey', 'Ja', 'Ja'),
 (147, 535, 'test@einrad.hockey', 'Ja', 'Ja'),
@@ -10130,7 +10107,9 @@ INSERT INTO `teams_kontakt` (`teams_kontakt_id`, `team_id`, `email`, `public`, `
 (152, 178, 'test@einrad.hockey', 'Ja', 'Ja'),
 (153, 11, 'test@einrad.hockey', 'Ja', 'Ja'),
 (154, 34, 'test@einrad.hockey', 'Ja', 'Ja'),
-(156, 16, 'test@einrad.hockey', 'Nein', 'Ja');
+(156, 16, 'test@einrad.hockey', 'Ja', 'Ja'),
+(157, 393, 'test@einrad.hockey', 'Nein', 'Ja'),
+(158, 16, 'test@einrad.hockey', 'Nein', 'Nein');
 
 -- --------------------------------------------------------
 
@@ -10146,7 +10125,7 @@ CREATE TABLE `teams_liga` (
   `passwort_geaendert` enum('Ja','Nein') NOT NULL DEFAULT 'Nein',
   `freilose` int(11) DEFAULT NULL,
   `aktiv` enum('Ja','Nein') NOT NULL DEFAULT 'Ja'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Teamdaten, welche nur vom LA geändert werden können';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Teamdaten, welche nur vom LA geändert werden können';
 
 --
 -- Daten für Tabelle `teams_liga`
@@ -10333,9 +10312,7 @@ INSERT INTO `teams_liga` (`team_id`, `teamname`, `ligateam`, `passwort`, `passwo
 (858, 'MJC Trier - Die Gladiatoren*', 'Nein', '$2y$10$PCOkOZQw6wut4uRCQyLWgup7nFn6Gv0zbqJ8ZhEds7wZ753Ba7wd6', 'Ja', 2, 'Ja'),
 (859, 'Kunterbunt-Mix*', 'Nein', '$2y$10$PCOkOZQw6wut4uRCQyLWgup7nFn6Gv0zbqJ8ZhEds7wZ753Ba7wd6', 'Ja', 2, 'Ja'),
 (860, 'Maikes Mixteam*', 'Nein', '$2y$10$PCOkOZQw6wut4uRCQyLWgup7nFn6Gv0zbqJ8ZhEds7wZ753Ba7wd6', 'Ja', 2, 'Ja'),
-(861, 'Mixteam*', 'Nein', '$2y$10$PCOkOZQw6wut4uRCQyLWgup7nFn6Gv0zbqJ8ZhEds7wZ753Ba7wd6', 'Ja', 2, 'Ja'),
-(862, 'Testtesam*', 'Nein', '$2y$10$PCOkOZQw6wut4uRCQyLWgup7nFn6Gv0zbqJ8ZhEds7wZ753Ba7wd6', 'Ja', 2, 'Ja'),
-(863, 'Ansdlkfas*', 'Nein', '$2y$10$PCOkOZQw6wut4uRCQyLWgup7nFn6Gv0zbqJ8ZhEds7wZ753Ba7wd6', 'Ja', 2, 'Ja');
+(861, 'Mixteam*', 'Nein', '$2y$10$PCOkOZQw6wut4uRCQyLWgup7nFn6Gv0zbqJ8ZhEds7wZ753Ba7wd6', 'Ja', 2, 'Ja');
 
 -- --------------------------------------------------------
 
@@ -10364,7 +10341,7 @@ CREATE TABLE `turniere_berichte` (
   `turnier_id` int(11) NOT NULL,
   `bericht` varchar(1900) NOT NULL,
   `kader_ueberprueft` enum('Ja','Nein') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -10387,7 +10364,7 @@ CREATE TABLE `turniere_details` (
   `organisator` varchar(255) NOT NULL,
   `handy` varchar(255) NOT NULL,
   `startgebuehr` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `turniere_details`
@@ -10495,13 +10472,8 @@ INSERT INTO `turniere_details` (`turnier_id`, `hallenname`, `strasse`, `plz`, `o
 (915, 'Wolfsberghalle', 'Montessoriweg 11', 54295, 'Trier', 'Waldorfschule', 4, 'jgj', '16:00:00', 'Ja', 'Beispieltext', 'Vorname Nachname', '1234 56789', '10 Euro'),
 (916, 'Gustav England Halle', 'Lehmstraße', 27321, 'Thedinghausen', '', 6, 'jgj', '10:00:00', 'Nein', 'Beispieltext', 'Vorname Nachname', '1234 56789', '5 Euro'),
 (920, 'Sporthalle Marie-Curie-Gymnasium', 'Zirkusstraße 7', 1069, 'Dresden', 'Pirnaischer Platz', 6, 'jgj', '09:00:00', 'Ja', 'Beispieltext', 'Vorname Nachname', '1234 56789', '10 Euro'),
-(929, 'Sporthalle Marie-Curie-Gymnasium', 'Zirkusstraße 7', 1069, 'Dresden', 'Pirnaischer Platz', 5, 'jgj', '14:30:00', 'Ja', 'Beispieltext', 'Vorname Nachname', '1234 56789', '10 Euro'),
-(931, 'Sporthalle Marie-Curie-Gymnasium', 'Zirkusstraße 7', 1069, 'Dresden', 'Pirnaischer Platz', 5, 'jgj', '09:00:00', 'Ja', 'Beispieltext', 'Vorname Nachname', '1234 56789', '10 Euro'),
 (934, 'Gustav-England-Halle', 'Lehmstrasse', 27321, 'Thedinghausen', '', 5, 'jgj', '10:00:00', 'Nein', 'Beispieltext', 'Vorname Nachname', '1234 56789', '5 Euro'),
 (935, 'Gustav-England-Halle', 'Lehmstrasse', 27321, 'Thedinghausen', '', 5, 'jgj', '10:00:00', 'Nein', 'Beispieltext', 'Vorname Nachname', '1234 56789', '5 Euro'),
-(938, 'Röntgen Gymnasium', 'Christhauser Straße 8', 42897, 'Remscheid', '', 5, 'jgj', '10:00:00', 'Ja', 'Beispieltext', 'Vorname Nachname', '1234 56789', '5 Euro'),
-(939, 'Röntgen Gymnasium', 'Christhauser Straße 8', 42897, 'Remscheid', '', 5, 'jgj', '10:00:00', 'Nein', 'Beispieltext', 'Vorname Nachname', '1234 56789', '5 Euro'),
-(940, 'Sporthalle am Heinrich-Heine-Gymnasium Bottrop', 'Gustav-Ohm-Straße 65', 46236, 'Bottrop', '', 5, 'jgj', '10:00:00', 'Ja', 'Beispieltext', 'Vorname Nachname', '1234 56789', '10 Euro'),
 (941, 'Sporthalle am Heinrich-Heine-Gymnasium Bottrop', 'Gustav-Ohm-Straße 65', 46236, 'Bottrop', '', 5, 'jgj', '10:00:00', 'Ja', 'Beispieltext', 'Vorname Nachname', '1234 56789', '10 Euro'),
 (942, 'Sporthalle am Heinrich-Heine-Gymnasium Bottrop', 'Gustav-Ohm-Straße 65', 46236, 'Bottrop', '', 5, 'jgj', '10:00:00', 'Ja', 'Beispieltext', 'Vorname Nachname', '1234 56789', '10 Euro'),
 (943, 'Sporthalle am Heinrich-Heine-Gymnasium Bottrop', 'Gustav-Ohm-Straße 65', 46236, 'Bottrop', '', 5, 'jgj', '10:00:00', 'Ja', 'Beispieltext', 'Vorname Nachname', '1234 56789', '10 Euro');
@@ -10518,7 +10490,7 @@ CREATE TABLE `turniere_ergebnisse` (
   `turnier_id` int(11) NOT NULL,
   `ergebnis` int(11) DEFAULT NULL,
   `platz` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `turniere_ergebnisse`
@@ -11124,7 +11096,7 @@ INSERT INTO `turniere_ergebnisse` (`turnier_ergebnis_id`, `team_id`, `turnier_id
 (618, 312, 860, 115, 2),
 (619, 829, 860, 89, 3),
 (620, 831, 860, 67, 4),
-(621, 637, 860, 39, 5),
+(621, 637, 860, 39, 6),
 (622, 837, 860, 36, 6),
 (623, 610, 860, 21, 7),
 (630, 44, 916, 313, 1),
@@ -11145,12 +11117,11 @@ INSERT INTO `turniere_ergebnisse` (`turnier_ergebnis_id`, `team_id`, `turnier_id
 (645, 852, 920, 213, 4),
 (646, 321, 920, 125, 5),
 (647, 533, 920, 87, 6),
-(669, 831, 895, 114, 1),
-(670, 857, 895, 98, 2),
-(671, 312, 895, 83, 3),
-(672, 853, 895, 51, 4),
-(673, 862, 895, 33, 5),
-(674, 863, 895, 16, 6);
+(648, 831, 895, 138, 1),
+(649, 312, 895, 113, 2),
+(650, 853, 895, 74, 3),
+(651, 857, 895, 46, 4),
+(652, 610, 895, 28, 5);
 
 -- --------------------------------------------------------
 
@@ -11164,7 +11135,7 @@ CREATE TABLE `turniere_geloescht` (
   `ort` varchar(255) NOT NULL,
   `grund` varchar(255) NOT NULL,
   `saison` int(8) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -11182,10 +11153,10 @@ CREATE TABLE `turniere_liga` (
   `datum` date NOT NULL,
   `spieltag` int(11) NOT NULL DEFAULT 0,
   `phase` enum('offen','melde','spielplan','ergebnis') NOT NULL,
-  `spielplan_vorlage` varchar(30) CHARACTER SET utf8mb4 DEFAULT NULL,
-  `spielplan_datei` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `spielplan_vorlage` varchar(30) DEFAULT NULL,
+  `spielplan_datei` varchar(255) DEFAULT NULL,
   `saison` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `turniere_liga`
@@ -11284,25 +11255,20 @@ INSERT INTO `turniere_liga` (`turnier_id`, `tname`, `ausrichter`, `art`, `tblock
 (860, '', 610, 'III', 'ABCDEF', 'Ja', '2020-09-26', 3, 'ergebnis', '7er_jgj_default', NULL, 26),
 (882, '', 443, 'III', 'ABCDEF', 'Ja', '2020-03-08', 0, 'ergebnis', NULL, NULL, 25),
 (885, '', 2, 'II', 'DEF', 'Nein', '2020-09-05', 2, 'ergebnis', '5er_jgj_default', NULL, 26),
-(895, '', 831, 'II', 'EF', 'Nein', '2020-10-24', 6, 'ergebnis', '6er_jgj_default', NULL, 26),
+(895, '', 831, 'II', 'EF', 'Nein', '2020-10-24', 6, 'ergebnis', '5er_jgj_default', NULL, 26),
 (896, '', 37, 'II', 'AB', 'Nein', '2020-09-06', 2, 'ergebnis', '6er_jgj_default', NULL, 26),
 (899, '', 12, 'III', 'ABCDEF', 'Ja', '2020-09-05', 2, 'ergebnis', '4er_jgj_default', NULL, 26),
 (905, '', 32, 'II', 'A', 'Nein', '2020-10-10', 5, 'ergebnis', '6er_jgj_default', NULL, 26),
 (913, '', 44, 'I', 'BC', 'Nein', '2020-08-22', 1, 'ergebnis', '5er_jgj_default', NULL, 26),
 (914, 'Römer-Cup', 86, 'I', 'BCD', 'Nein', '2020-08-23', 1, 'ergebnis', '5er_jgj_default', NULL, 26),
-(915, '', 244, 'I', 'EF', 'Nein', '2020-08-23', 1, 'ergebnis', '4er_jgj_default', NULL, 26),
+(915, '', 244, 'I', 'EF', 'Nein', '2020-08-23', 1, 'ergebnis', '4er_jgj_2_12_6', NULL, 26),
 (916, '', 529, 'III', 'ABCDEF', 'Ja', '2020-10-03', 4, 'ergebnis', '6er_jgj_default', NULL, 26),
 (920, 'Tiger-Turnier', 423, 'III', 'ABCDEF', 'Ja', '2020-10-10', 5, 'ergebnis', '6er_jgj_default', NULL, 26),
-(929, 'Löwen-Turnier', 27, 'I', 'BC', 'Nein', '2021-03-27', 7, 'offen', NULL, NULL, 26),
-(931, 'Tiger-Turnier', 423, 'III', 'ABCDEF', 'Ja', '2021-03-27', 7, 'spielplan', '4er_jgj_default', NULL, 26),
-(934, '', 529, 'III', 'ABCDEF', 'Ja', '2021-04-17', 8, 'offen', NULL, NULL, 26),
-(935, '', 529, 'III', 'ABCDEF', 'Ja', '2021-06-05', 11, 'offen', NULL, NULL, 26),
-(938, '', 37, 'III', 'ABCDEF', 'Ja', '2021-03-27', 7, 'spielplan', '5er_jgj_default', NULL, 26),
-(939, '', 37, 'III', 'ABCDEF', 'Ja', '2021-03-28', 7, 'offen', NULL, NULL, 26),
-(940, '', 44, 'I', 'BC', 'Nein', '2021-03-27', 7, 'offen', NULL, NULL, 26),
-(941, '', 44, 'I', 'BC', 'Nein', '2021-04-17', 8, 'offen', NULL, NULL, 26),
-(942, '', 44, 'I', 'BC', 'Nein', '2021-05-08', 9, 'offen', NULL, NULL, 26),
-(943, '', 44, 'I', 'BC', 'Nein', '2021-05-29', 10, 'offen', NULL, NULL, 26);
+(934, '', 529, 'III', 'ABCDEF', 'Ja', '2021-04-17', 7, 'offen', NULL, NULL, 26),
+(935, '', 529, 'III', 'ABCDEF', 'Ja', '2021-06-05', 10, 'offen', NULL, NULL, 26),
+(941, '', 44, 'I', 'BC', 'Nein', '2021-04-17', 7, 'offen', NULL, NULL, 26),
+(942, '', 44, 'I', 'BC', 'Nein', '2021-05-08', 8, 'offen', NULL, NULL, 26),
+(943, '', 44, 'I', 'BC', 'Nein', '2021-05-29', 9, 'offen', NULL, NULL, 26);
 
 -- --------------------------------------------------------
 
@@ -11317,7 +11283,7 @@ CREATE TABLE `turniere_liste` (
   `liste` enum('spiele','warte','melde') NOT NULL DEFAULT 'melde',
   `position_warteliste` int(11) DEFAULT NULL,
   `freilos_gesetzt` enum('Ja','Nein') NOT NULL DEFAULT 'Nein'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `turniere_liste`
@@ -11428,29 +11394,18 @@ INSERT INTO `turniere_liste` (`liste_id`, `turnier_id`, `team_id`, `liste`, `pos
 (199, 920, 852, 'spiele', 0, 'Nein'),
 (206, 905, 855, 'spiele', 0, 'Nein'),
 (209, 905, 856, 'spiele', 0, 'Nein'),
-(214, 929, 27, 'spiele', 0, 'Nein'),
-(216, 931, 423, 'spiele', 0, 'Nein'),
+(218, 895, 610, 'spiele', 0, 'Nein'),
 (232, 934, 529, 'spiele', 0, 'Nein'),
 (233, 935, 529, 'spiele', 0, 'Nein'),
 (241, 895, 857, 'spiele', 0, 'Nein'),
-(249, 931, 529, 'spiele', 0, 'Ja'),
-(252, 938, 37, 'spiele', 0, 'Nein'),
-(253, 939, 37, 'spiele', 0, 'Nein'),
-(254, 940, 44, 'spiele', 0, 'Nein'),
 (255, 941, 44, 'spiele', 0, 'Nein'),
 (256, 942, 44, 'spiele', 0, 'Nein'),
 (257, 943, 44, 'spiele', 0, 'Nein'),
-(260, 940, 87, 'melde', 0, 'Nein'),
 (261, 942, 87, 'melde', 0, 'Nein'),
 (262, 943, 87, 'melde', 0, 'Nein'),
-(265, 931, 534, 'spiele', 0, 'Nein'),
-(266, 931, 30, 'spiele', 0, 'Nein'),
-(267, 938, 16, 'spiele', 0, 'Nein'),
-(268, 938, 2, 'spiele', 0, 'Nein'),
-(269, 938, 534, 'spiele', 0, 'Nein'),
-(270, 938, 633, 'spiele', 0, 'Nein'),
-(271, 895, 862, 'spiele', 0, 'Nein'),
-(272, 895, 863, 'spiele', 0, 'Nein');
+(263, 935, 837, 'melde', 0, 'Nein'),
+(264, 934, 837, 'melde', 0, 'Nein'),
+(265, 934, 689, 'melde', 0, 'Nein');
 
 -- --------------------------------------------------------
 
@@ -11464,7 +11419,7 @@ CREATE TABLE `turniere_log` (
   `log_text` varchar(9000) NOT NULL,
   `autor` varchar(255) NOT NULL,
   `zeit` timestamp(1) NOT NULL DEFAULT current_timestamp(1)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indizes der exportierten Tabellen
@@ -11696,13 +11651,13 @@ ALTER TABLE `spieler_zeitstrafen`
 -- AUTO_INCREMENT für Tabelle `teams_kontakt`
 --
 ALTER TABLE `teams_kontakt`
-  MODIFY `teams_kontakt_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=157;
+  MODIFY `teams_kontakt_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=159;
 
 --
 -- AUTO_INCREMENT für Tabelle `teams_liga`
 --
 ALTER TABLE `teams_liga`
-  MODIFY `team_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=864;
+  MODIFY `team_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=862;
 
 --
 -- AUTO_INCREMENT für Tabelle `teams_strafen`
@@ -11720,7 +11675,7 @@ ALTER TABLE `turniere_berichte`
 -- AUTO_INCREMENT für Tabelle `turniere_ergebnisse`
 --
 ALTER TABLE `turniere_ergebnisse`
-  MODIFY `turnier_ergebnis_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=675;
+  MODIFY `turnier_ergebnis_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=653;
 
 --
 -- AUTO_INCREMENT für Tabelle `turniere_liga`
@@ -11732,7 +11687,7 @@ ALTER TABLE `turniere_liga`
 -- AUTO_INCREMENT für Tabelle `turniere_liste`
 --
 ALTER TABLE `turniere_liste`
-  MODIFY `liste_id` int(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=273;
+  MODIFY `liste_id` int(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=266;
 
 --
 -- AUTO_INCREMENT für Tabelle `turniere_log`

@@ -30,4 +30,4 @@ UPDATE teams_details SET ligavertreter='Vorname Nachname', homepage='https://tes
 UPDATE teams_kontakt SET email='test@einrad.hockey';
 
 -- Neuigkeiten
-INSERT INTO neuigkeiten (neuigkeiten_id, titel, inhalt, link_pdf, link_jpg, bild_verlinken, eingetragen_von, zeit) VALUES (NULL, 'Passwörter für die Logins', 'Alle Passwörter für das Teamcenter sind: <b>test</b>\r\n\r\nLoginname für Ligacenter: <b>entwickler</b> Passwort: <b>einrad</b>', '', '', '', 'Ligaausschuss', current_timestamp());
+INSERT INTO neuigkeiten (neuigkeiten_id, titel, inhalt, link_pdf, link_jpg, bild_verlinken, eingetragen_von, zeit) VALUES (NULL, 'Passwörter für die Logins', 'Alle Passwörter für das Teamcenter sind: <b>test</b>\r\n\r\nLoginname für Ligacenter: <b>entwickler</b> Passwort: <b>einrad</b>\r\n\r\nIm _localhost-Ordner befindet sich ein Tutorial, wie man eine Seite erstellt.', '', '', '', 'Ligaausschuss', current_timestamp());
