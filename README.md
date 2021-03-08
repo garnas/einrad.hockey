@@ -3,6 +3,10 @@
 
 Dies ist der Code der Webseite [einrad.hockey](https://einrad.hockey) der Deutschen Einradhockeyliga.
 
+einrad.hockey verwendet sein eigenes Framework. Dieses wurde von mir entwickelt, um Interessierten im Einradhockey 
+nach einer möglichst kurzen Einrichtungs- und Einarbeitungsphase die Möglichkeit zu geben, an der Website mitzuarbeiten. 
+Dafür sind nur grundlegende PHP- und/oder HTML/CSS-Kenntnisse notwendig, welche man sich schnell aneignen kann.
+
 Du hast Lust mitzuwirken? Melde dich bei ansgar@einrad.hockey!
 
 ## Was kann einrad.hockey?
@@ -10,6 +14,7 @@ Du hast Lust mitzuwirken? Melde dich bei ansgar@einrad.hockey!
 * Einstellen von Turnieren 
 * Anmeldung von Teams zu Turnieren
 * Automatische Erstellung von Spielplänen und Turnierreports
+* Spiel- und Turnierergebnissen live eintragen
 * Turnierergebnisse und Ligatabellen
 * Teamdatenverwaltung
 * Teamkaderverwaltung
