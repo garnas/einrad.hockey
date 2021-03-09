@@ -12,7 +12,7 @@
                 <a href="<?= Nav::LINK_INSTA ?>" class="w3-button" target="_blank" rel="noopener noreferrer">
                     <?= Html::icon('camera_alt') ?> Instagram
                 </a>
-                <a href="<?= Nav::LINK_FORUM ?>/liga/impressum.php" class="w3-button">
+                <a href="<?= Nav::LINK_FORUM ?>" class="w3-button">
                     <?= Html::icon('chat') ?> Forum
                 </a>
             </div>
