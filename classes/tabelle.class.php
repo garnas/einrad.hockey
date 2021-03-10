@@ -288,6 +288,7 @@ class Tabelle
         $platz = 1;
         $zeile_vorher['platz'] = 1;
         $zeile_vorher['summe'] = 0;
+        $zeile_vorher['max_einzel'] = 0;
         foreach ($return as $key => $zeile) {
             $zeile['max_einzel'] = max($zeile['einzel_ergebnisse']);
             if (
@@ -398,6 +399,7 @@ class Tabelle
         $rang = 1;
         $zeile_vorher['rang'] = 1;
         $zeile_vorher['summe'] = 0;
+        $zeile_vorher['max_einzel'] = 0;
         foreach ($return as $key => $zeile) {
             $zeile['max_einzel'] = max($zeile['einzel_ergebnisse']);
             if (
