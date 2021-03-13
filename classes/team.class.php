@@ -255,24 +255,32 @@ class Team
         db::$db->query($sql, $strafe_id)->log();
     }
 
-    function set_terminplaner()
+    /**
+     * Hinterlegt, dass das Team den Terminplaner nutzt.
+     */
+    public function set_terminplaner(): void
     {
-        $team_id = $this->team_id;
-        $passwort = password_hash($passwort, PASSWORD_DEFAULT);
-        $sql = "UPDATE teams_liga SET terminplaner = 'Ja' WHERE team_id='$team_id'";
-        db::writedb($sql);
+        $sql = "
+                UPDATE teams_liga 
+                SET terminplaner = 'Ja'
+                WHERE team_id = $this->id
+                ";
+        db::$db->query($sql)->log();
     }
 
-    function get_terminplaner()
+    /**
+     * True, wenn das Team bereits einen Terminplaner-Account hat.
+     *
+     * @return bool
+     */
+    public function check_terminplaner(): bool
     {
-        $team_id = $this->team_id;
-        $sql = "SELECT terminplaner FROM teams_liga WHERE team_id='$team_id'";
-        $result = db::readdb($sql);
-        $result = mysqli_fetch_assoc($result);
-        if ($result['terminplaner'] === 'Ja'){
-            return true;
-        }
-        return false;
+        $sql = "
+                SELECT terminplaner 
+                FROM teams_liga 
+                WHERE team_id = $this->id
+                ";
+        return db::$db->query($sql)->fetch_one() === 'Ja';
     }
     
     /**

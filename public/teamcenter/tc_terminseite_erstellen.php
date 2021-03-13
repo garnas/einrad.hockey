@@ -2,17 +2,17 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
-require_once '../../logic/session_team.logic.php'; //Auth
+require_once '../../init.php';
+require_once Env::BASE_PATH . '/logic/session_team.logic.php'; //Auth
 
-$liga_team_id = $_SESSION['team_id'];
+$liga_team_id = $_SESSION['logins']['team']['id'];
 
-$akt_team = new Team ($_SESSION['team_id']);
-$akt_team_kontakte = new Kontakt ($_SESSION['team_id']);
+$team = new Team ($liga_team_id);
+$kontakte = new Kontakt ($liga_team_id);
 
 //Werden an terminseite_erstellen.tmp.php übergeben
-$emails = $akt_team_kontakte->get_all_emails();
-$daten = $akt_team ->daten();
+$emails = $kontakte->get_emails();
+$daten = $team->details;
 
 require_once '../../logic/terminseite_erstellen.logic.php';
 

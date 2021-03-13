@@ -1,34 +1,35 @@
 <?php
-//Formularauswertung
-if (isset($_POST['create_team']) && !$akt_team->get_terminplaner()) {
+// Formularauswertung
+if (isset($_POST['create_team']) && !$akt_team->check_terminplaner()) {
     $error = false;
-    //Validierung alle Eingaben gemacht
-    if ($_POST['gruppenname']==false) {
+    // Validierung alle Eingaben gemacht
+    if ($_POST['gruppenname'] == false) {
         $error = true;
-        Form::error ("Gruppenname fehlt");
+        Html::error("Gruppenname fehlt");
     }
-    if ($_POST['alias']==false) {
+    if ($_POST['alias'] == false) {
         $error = true;
-        Form::error ("Alias fehlt");
+        Html::error("Alias fehlt");
     }
-    if ($_POST['vorname']==false) {
+    if ($_POST['vorname'] == false) {
         $error = true;
-        Form::error ("Vorname fehlt");
+        Html::error("Vorname fehlt");
     }
-    if ($_POST['nachname']==false) {
+    if ($_POST['nachname'] == false) {
         $error = true;
-        Form::error ("Nachname fehlt");
+        Html::error("Nachname fehlt");
     }
-    if ($_POST['email']==false) {
+    if ($_POST['email'] == false) {
         $error = true;
-        Form::error ("Emailadresse fehlt");
+        Html::error("E-Mail-Adresse fehlt");
     }
 
-    //Eintragen des Turnieres
-    if (!$error){
-        Form::affirm("Du hast eine Email mit weiteren Instruktionen erhalten");
-        $akt_team->set_terminplaner();
-    }else{
-        Form::error("Es ist ein Fehler aufgetreten. Gruppe wurde nicht erstellt.");
+    // Eintragen des Turnieres
+    if ($error) {
+        Html::error("Es ist ein Fehler aufgetreten. Gruppe wurde nicht erstellt.");
+    } else {
+        Html::info("Du hast eine Email mit weiteren Instruktionen erhalten.");
+        $team->set_terminplaner();
+        Helper::reload();
     }
 }
