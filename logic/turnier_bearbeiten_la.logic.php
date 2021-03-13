@@ -3,11 +3,12 @@
 
 //Formularauswertung Turnier löschen
 if (isset($_POST['delete_turnier'])) {
-    if($akt_turnier->delete()){
-        $akt_turnier->schreibe_log("Turnier wurde gelöscht", "Ligaausschuss");
-        Ligabot::liga_bot(); //Um die Spieltage neu zu verteilen
-        Form::affirm("Turnier wurde gelöscht");
-        header('Location: ../liga/turniere.php');
+    if ($_POST['delete_turnier_check'] !== 'checked'){
+        Html::error('Bitte Hinweistext vor dem Löschen des Turnieres lesen.');
+    }else{
+        $turnier->delete($_POST['delete_turnier_grund']);
+        Html::info("Turnier wurde gelöscht");
+        header('Location: ../ligacenter/lc_turnierliste.php#deleted');
         die();
     }
 }
@@ -16,14 +17,13 @@ if (isset($_POST['delete_turnier'])) {
 if (isset($_POST['turnier_bearbeiten_la'])) {  
     $error = false;
     //Ausrichter setzen
-    if (isset($_POST['ausrichter'])){
-        $ausrichter = Team::teamname_to_teamid($_POST['ausrichter']);
-        if (empty($ausrichter)){
-            $error = true;
-            Form::error ("Ausrichter wurde nicht gefunden");
-        }
+    $ausrichter = Team::name_to_id($_POST['ausrichter']);
+    if (!Team::is_ligateam($ausrichter)){
+        $error = true;
+        Html::error ("Ausrichter wurde nicht gefunden");
     }
-    //Turnierblock ändern:
+
+    // Turnierblock ändern:
     $art = $_POST['art']; 
     if ($art == "III"){
         $tblock = $_POST['block'];
@@ -45,48 +45,24 @@ if (isset($_POST['turnier_bearbeiten_la'])) {
         $tblock = $_POST['block'];
     }else{
         $error = true;
-        Form::error("Ungültiger Turnierblock");
+        Html::error("Ungültiger Turnierblock");
     }
-    //Restliche Daten:
+    // Restliche Daten:
     $datum = $_POST['datum'];
     $phase = $_POST['phase'];
     $tname = $_POST['tname'];
-    if (empty($datum) or empty($phase)){
-        Form::error('Datum und/oder Phase sind leer');
+    if (empty($datum) || empty($phase)){
+        Html::error('Datum und/oder Phase sind leer');
         $error = true;
     }
 
-    //Ändern der Turnierdaten
+    // Ändern der Turnierdaten
     if (!$error){
-        if ($akt_turnier->change_turnier_liga($tname, $ausrichter, $art, $tblock, $fixed, $datum, $phase)){
-            Form::affirm("Turnierdaten wurden geändert");
-            if ($daten['tname'] != $tname){
-                $akt_turnier->schreibe_log("Turniername: " . $daten['tname'] ." -> ". $tname, "Ligaausschuss");
-            }
-            if ($daten['ausrichter'] != $ausrichter){
-                $akt_turnier->schreibe_log("Ausrichter: " . $daten['teamname'] ." -> ". Team::teamid_to_teamname($ausrichter), "Ligaausschuss");
-            }
-            if ($daten['art'] != $art){
-                $akt_turnier->schreibe_log("Art: " . $daten['art'] ." -> ". $art, "Ligaausschuss");
-            }
-            if ($daten['tblock'] != $tblock){
-                $akt_turnier->schreibe_log("Turnierblock: " . $daten['tblock'] ." -> ". $tblock, "Ligaausschuss");
-            }
-            if ($daten['tblock_fixed'] != $fixed){
-                $akt_turnier->schreibe_log("Fixiert: " . $daten['tblock_fixed'] ." -> ". $fixed, "Ligaausschuss");
-            }
-            if ($daten['datum'] != $datum){
-                $akt_turnier->schreibe_log("Datum: " . $daten['datum'] ." -> ". $datum, "Ligaausschuss", "Ligaausschuss");
-            }
-            if ($daten['phase'] != $phase){
-                $akt_turnier->schreibe_log("Phase: " . $daten['phase'] ." -> ". $phase, "Ligaausschuss");
-            }
-            header('Location: ../liga/turnier_details.php?turnier_id=' . $daten['turnier_id']);
-            die();
-        }else{
-            $akt_turnier->schreibe_log("Fehler beim Schreiben der Datenbank", "Ligaausschuss");
-        }
+        $turnier->change_turnier_liga($tname, $ausrichter, $art, $tblock, $fixed, $datum, $phase);
+        Html::info("Turnierdaten wurden geändert");
+        header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->details['turnier_id']);
+        die();
     }else{
-        Form::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht geändert - alle Änderungen bitte neu eingeben.");
+        Html::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht geändert - alle Änderungen bitte neu eingeben.");
     }
 }

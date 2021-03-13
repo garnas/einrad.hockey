@@ -16,6 +16,12 @@
             <p>
                 <input class="w3-button w3-block w3-primary" type="file" name="jpgupload" id="jpgupload">
             </p>
+            <?php if(Helper::$ligacenter){?>
+                <p>
+                    <label class="" for="bild_verlinken">Bild verlinken (optional) | nur Ligaausschuss</label>
+                    <input class="w3-input w3-border w3-border-primary" placeholder="Link angeben" type="url" id="bild_verlinken" name="bild_verlinken" value="<?=$_POST['bild_verlinken'] ?? ''?>" >
+                </p>
+            <?php } //endif?>
         </div>
         <div class="w3-panel">
             <h3>Dokument anhängen</h3>
@@ -26,6 +32,6 @@
         </div>
     </div>
     <p>
-        <input type="submit" class="w3-secondary w3-block w3-button" id="submit" value="Neuigkeit eintragen">
+        <input type="submit" class="w3-secondary w3-block w3-button" id="submit" name="create_neuigkeit" value="Neuigkeit eintragen">
     </p>
 </form>

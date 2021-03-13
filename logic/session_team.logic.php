@@ -1,27 +1,27 @@
 <?php
-//Dies hier muss in jeder geschützten Seite direkt unterhalb von first.logic.php eingefügt werden!
-if(!isset($_SESSION['team_id'])) {
-  $redirect = db::escape($_SERVER['REQUEST_URI']); //Damit man nach dem Login direkt auf die gewünschte Seite geführt wird
-  Form::affirm("Bitte zuerst einloggen");
-  header('Location: ../teamcenter/tc_login.php?redirect=' . $redirect);
+// Dies hier muss in jeder geschützten Seite direkt nach von init.php eingefügt werden!
+if(!isset($_SESSION['logins']['team'])) {
+  $_SESSION['tc_redirect'] = db::escape($_SERVER['REQUEST_URI']); //Damit man nach dem Login direkt auf die gewünschte Seite geführt wird
+  Html::info("Du wirst nach deinem Login weitergeleitet.");
+  header('Location: ../teamcenter/tc_login.php?redirect');
   die();
 }
 
-$akt_team = new Team ($_SESSION['team_id']);
-$daten = $akt_team->daten();
+$team = new Team ($_SESSION['logins']['team']['id']);
 
-if (!isset($no_redirect) && $daten['passwort_geaendert'] == 'Nein'){
-  Form::affirm("Bitte ändere zuerst das von uns vergebene Passwort");
+if (!Helper::$teamcenter_no_redirect && $team->details['passwort_geaendert'] === 'Nein'){
+  Html::info("Bitte ändere zuerst das von uns vergebene Passwort.");
   header('Location: tc_pw_aendern.php');
   die();
 }
 
-if (!isset($no_redirect) && $daten['ligavertreter'] == ''){
-  Form::affirm("Bitte tragt vor der Nutzung des Teamcenters erneut einen Ligavertreter ein, welcher unsere aktualisierten " . Form::link(Config::LINK_DSGVO,"Datenschutz-Hinweise") . " gelesen und akzeptiert hat. Beachtet bitte, dass jedes Team in der Saison " . Form::get_saison_string() . " nur noch einen Ligavertreter haben kann.");
+if (!Helper::$teamcenter_no_redirect && empty($team->details['ligavertreter'])){
+  Html::info("Bitte tragt vor der Nutzung des Teamcenters erneut einen Ligavertreter ein, welcher unsere aktuellen "
+      . Html::link(Nav::LINK_DSGVO,"Datenschutz-Hinweise", true, 'security')
+      . " gelesen und akzeptiert hat. Beachtet bitte, dass jedes Team nur einen Ligavertreter haben kann.", esc:false);
   header('Location: tc_teamdaten_aendern.php');
   die();
 }
 
-$titel = $_SESSION['teamname'];
-$ligacenter = false; //Man kann sich gleichzeitig im Liga- und Teamcenter anmelden
-$teamcenter = true; //Hiermit erkennt man, ob man sich gerade im Team- oder Ligacenter befindet, da Session-Variablen seitenübergreifend existieren
+Html::$titel = $_SESSION['logins']['team']['name'];
+Helper::$teamcenter = true; // Dies zeigt allen Dateien (insbeondere .tmp.php) , das man sich im Teamcenter befindet.

@@ -1,12 +1,12 @@
 RewriteEngine On
 
-# www und php weg
-RewriteCond %{THE_REQUEST} ^\w+\ /(.*)\.php(\?.*)?\ HTTP/
-RewriteRule ^ https://einrad.hockey/%1 [R=301]
-
 # https erzwingen
 RewriteCond %{SERVER_PORT} !=443
 RewriteRule ^(.*)$ https://einrad.hockey/$1 [R=301]
+
+# www und php weg
+RewriteCond %{THE_REQUEST} ^\w+\ /(.*)\.php(\?.*)?\ HTTP/
+RewriteRule ^ https://einrad.hockey/%1 [R=301]
 
 # gzip aktivieren
 <IfModule mod_deflate.c>
@@ -15,3 +15,7 @@ AddOutputFilterByType DEFLATE text/html
 AddOutputFilterByType DEFLATE text/css
 AddOutputFilterByType DEFLATE application/javascript
 </IfModule>
+
+# Fehlerseiten
+ErrorDocument 404 /errors/404.php
+ErrorDocument 500 /errors/500.html

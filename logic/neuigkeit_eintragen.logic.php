@@ -1,64 +1,62 @@
 <?php
-//Autor festlegen - $ligacenter und $teamcenter werden als boolean in session_la.logic.php bzw session_team.logic.php festgelegt
-//Dadurch weiß man, ob vom Teamcenter oder vom Ligacenter auf dieses Skript zugegriffen wird
-//Dies ermöglicht den gleichzeitgen Login von Ligaausschuss und Ligateams in einem Browser
-if ($ligacenter){
-    $name = "Ligaausschuss";
-}
-if ($teamcenter){
-    $name = htmlspecialchars_decode($_SESSION['teamname']);
-}
+// Autor festlegen - Config::$ligacenter und Html::$teamcenter werden als boolean in session_la.logic.php bzw session_team.logic.php festgelegt
+// Dadurch weiß man, ob vom Teamcenter oder vom Ligacenter auf dieses Skript zugegriffen wird
+// Dies ermöglicht den gleichzeitgen Login von Ligaausschuss und Ligateams in einem Browser
 
-//Formularauswertung
-if (isset($_POST['titel'])){
+// Autor
+$name = (Helper::$ligacenter) ? "Ligaausschuss" : $_SESSION['logins']['team']['name'];
+$error = false;
 
-    if (empty($_POST['titel']) or empty($_POST['text'])){
-        Form::error("Bitte Titel und Text eingeben.");
-    }else{
+// Formularauswertung
+if (isset($_POST['create_neuigkeit'])) {
 
-        /////Fileupload//////
+    if (empty($_POST['titel']) || empty($_POST['text'])) {
+        Html::error("Bitte Titel und Text eingeben.");
+    } else {
 
-        //image
-        if (!empty($_FILES["jpgupload"]["tmp_name"])){
-            
-            //Bild wird hochgeladen, target_file_jpg = false, falls fehlgeschlagen.
-            $target_file_jpg = Neuigkeit::upload_image($_FILES["jpgupload"]);
-        
-            if($target_file_jpg === false){
-                $error = true;
-            }
-            
-        }else{
-            //Wert aus der Datenbank wird übernommen
-            $target_file_jpg=$neuigkeit['link_jpg'];
-        }
-        //pdf
-        if (!empty($_FILES["pdfupload"]["tmp_name"])){
-            
-            //Bild wird hochgeladen, target_file_jpg = false, falls fehlgeschlagen.
-            $target_file_pdf = Neuigkeit::upload_pdf($_FILES["pdfupload"]);
-            if($target_file_pdf === false){
+        // Fileupload
+
+        // Bild
+        if (!empty($_FILES["jpgupload"]["tmp_name"])) {
+
+            // Bild wird hochgeladen, target_file_jpg = false, falls fehlgeschlagen.
+            $target_file_jpg = Neuigkeit::upload_bild($_FILES["jpgupload"]);
+
+            if ($target_file_jpg === false) {
                 $error = true;
             }
 
-        }else{
-            $target_file_pdf=$neuigkeit['link_pdf'];
+        } else {
+            $target_file_jpg = '';
+        }
+        // Dokument
+        if (!empty($_FILES["pdfupload"]["tmp_name"])) {
+
+            // Bild wird hochgeladen, target_file_jpg = false, falls fehlgeschlagen.
+            $target_file_pdf = Neuigkeit::upload_dokument($_FILES["pdfupload"]);
+            if ($target_file_pdf === false) {
+                $error = true;
+            }
+
+        } else {
+            $target_file_pdf = '';
         }
 
-        //////Titel, Text und Verlinkungen werden in die Datenbank eingetragen//////
+        // Titel, Text und Verlinkungen werden in die Datenbank eingetragen//////
         $titel = $_POST['titel'];
         $text = $_POST['text'];
-        //$text = preg_replace("/[\r\n]+/", "\n", $text); //Entfernt doppelte Newline-Characters (Absätze) - ansonsten wäre es möglich einen Neuigkeiteseintrag mit 200 neuen Zeilen zu erstellen
-        if (!$error) {
-            Neuigkeit::create_neuigkeit($titel,$text,$name,$target_file_jpg ?? '',$target_file_pdf ?? '');
-            Form::affirm("Deine Neuigkeit wurde erfolgreich eingetragen");
-            header ('Location: ../liga/neues.php');
-            die(); //Damit das Skript nicht zu auf dem Server zu ende ausgeführt wird.
-        }else{
-            //evtl hochgeladene Dateien löschen.
-            if (($target_file_pdf ?? false) !== false){unlink($target_file_pdf);}
-            if (($target_file_jpg ?? false) !== false){unlink($target_file_jpg);}
-            Form::error("Neuigkeit wurde nicht erstellt, eventuell hochgeladene Dateien müssen erneut hochgeladen werden.");
+        $bild_verlinken = $_POST['bild_verlinken'] ?? '';
+
+        if ($error) {
+            // evtl hochgeladene Dateien löschen.
+            if (($target_file_pdf ?? false) !== false) unlink($target_file_pdf);
+            if (($target_file_jpg ?? false) !== false) unlink($target_file_jpg);
+            Html::error("Neuigkeit wurde nicht erstellt, eventuell hochgeladene Dateien müssen erneut hochgeladen werden.");
+        } else {
+            Neuigkeit::create($titel, $text, $name, $target_file_jpg, $target_file_pdf, $bild_verlinken);
+            Html::info("Deine Neuigkeit wurde erfolgreich eingetragen");
+            header('Location: ../liga/neues.php');
+            die(); // Damit das Skript nicht zu auf dem Server zu ende ausgeführt wird.
         }
     }
 }

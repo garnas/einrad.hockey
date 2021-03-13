@@ -1,225 +1,303 @@
 <?php
-// PHP-Mailer hinzufügen //QUELLE: https://www.html-seminar.de/forum/thread/6852-kontaktformular-tutorial/
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-require_once '../../frameworks/phpmailer/src/Exception.php';
-require_once '../../frameworks/phpmailer/src/PHPMailer.php';
-require_once '../../frameworks/phpmailer/src/SMTP.php';
 
-class MailBot {
-
-    //Mailversand mit PHPMailer initieren
-    public static function start_mailer(){
-        $mailer = new PHPMailer();
+/**
+ * Class MailBot
+ */
+class MailBot
+{
+    /**
+     * Initiert den PHP-Mailer mit Grundlegende Einstellungen für den Mailversand
+     *
+     * @return \PHPMailer\PHPMailer\PHPMailer
+     */
+    public static function start_mailer(): \PHPMailer\PHPMailer\PHPMailer
+    {
+        $mailer = PHPMailer::load_phpmailer();
         $mailer->isSMTP();
-        $mailer->Host = Config::SMTP_HOST;
+        $mailer->Host = Env::SMTP_HOST;
         $mailer->SMTPAuth = true;
-        $mailer->Username = Config::SMTP_USER;
-        $mailer->Password = Config::SMTP_PW;
+        $mailer->Username = Env::SMTP_USER;
+        $mailer->Password = Env::SMTP_PW;
         $mailer->SMTPSecure = 'tls';
-        $mailer->Port = Config::SMTP_PORT;
+        $mailer->Port = Env::SMTP_PORT;
         $mailer->CharSet = 'UTF-8';
         return $mailer;
     }
 
-    //Der Mailbot nimmt Emails aus der Datenbank und versendet diese 
-    public static function mail_bot()
+    /**
+     * Versendet eine Mail mit dem PHPMailer
+     *
+     * @param \PHPMailer\PHPMailer\PHPMailer $mailer PHPMailer Objekt
+     * @return bool Wurde die Mail erfolgreich versendet?
+     *
+     * @throws \PHPMailer\PHPMailer\Exception
+     */
+    public static function send_mail(\PHPMailer\PHPMailer\PHPMailer $mailer): bool
     {
-        $sql = "SELECT * FROM mailbot WHERE mail_status = 'warte' ORDER BY zeit ASC LIMIT 50";
-        $result = db::readdb($sql);
-        while ($mail = mysqli_fetch_assoc($result)){
-            $mailer = self::start_mailer();
-            $mailer->isHTML(true); // Für die Links
-            $mailer->setFrom($mail['absender'], 'Einradhockeyliga'); // Absenderemail und -name setzen
+        if (Env::ACTIVATE_EMAIL) {
 
-            $mail_addresses = explode(',',$mail['adressat']); //Aus der Datenbank rausholen
-            $anz_mail_addresses = count($mail_addresses);
-            foreach ($mail_addresses as $mail_address){
-                if ($anz_mail_addresses > 15){
-                    $mailer->addBCC($mail_address);
-                }
-                    $mailer->addAddress($mail_address); // Empfängeradresse
+            if ($mailer->send()) {
+                return true;
             }
 
+            Helper::log(Config::LOG_EMAILS, 'Fehler: ' . $mailer->ErrorInfo);
+            return false;
+        }
+
+        // Debugging
+        if (!Helper::$ligacenter) {
+            $mailer->Password = '***********'; // Passwort verstecken
+            $mailer->ClearAllRecipients();
+        }
+
+        Helper::log(Config::LOG_EMAILS, 'E-Mail-Debug-Pseudo-Versand erfolgreich');
+        db::debug($mailer);
+        return true;
+    }
+
+    /**
+     * Der Mailbot nimmt Emails aus der Datenbank und versendet diese
+     *
+     */
+    public static function mail_bot(): void
+    {
+        $sql = "
+                SELECT * 
+                FROM mailbot 
+                WHERE mail_status = 'warte'
+                ORDER BY zeit 
+                LIMIT 50
+                ";
+        $mails = db::$db->query($sql)->fetch();
+        foreach($mails as $mail){
+            $mailer = self::start_mailer();
+            $mailer->isHTML(true); // Für die Links
+            $mailer->setFrom($mail['absender'], 'Einradhockey-Mailbot'); // Absenderemail und -name setzen
+            $mail_addresses = explode(',', $mail['adressat']); // Aus der Datenbank rausholen
+            $anz_mail_addresses = count($mail_addresses);
+            foreach ($mail_addresses as $mail_address) {
+                if ($anz_mail_addresses > 15) {
+                    $mailer->addBCC($mail_address);
+                }
+                $mailer->addAddress($mail_address); // Empfängeradresse
+            }
             $mailer->Subject = $mail['betreff']; // Betreff der Email
             $mailer->Body = $mail['inhalt']; // Inhalt der Email
 
-            //Email-versenden
-            if (Config::ACTIVATE_EMAIL){
-                if ($mailer->send()){
-                    self::set_status($mail['mail_id'], 'versendet');
-                }else{
-                    self::set_status($mail['mail_id'], 'Fehler', $mailer->ErrorInfo);
-                    Form::error($mailer->ErrorInfo);
-                }
-            }else{ //Debugging
-                if (!($ligacenter ?? false)){
-                    $mailer->Password = '***********'; //Passwort verstecken
-                    $mailer->ClearAllRecipients(); 
-                }
-                db::debug($mailer);
+            // Email-versenden
+            if (self::send_mail($mailer)) {
+                self::set_status($mail['mail_id'], 'versendet');
+            } else {
+                self::set_status($mail['mail_id'], 'Fehler', $mailer->ErrorInfo);
+                Html::error($mailer->ErrorInfo);
             }
         }
-        Form::affirm('Mailbot wurde ausgeführt.');
+        Html::info('Mailbot wurde ausgeführt.');
     }
 
-    //Fügt eine Email zur Datenbank hinzu
-    //Nur für automatische Emails verwenden!
-    public static function add_mail($betreff, $inhalt ,$adressaten, $absender = Config::SMTP_USER)
-    {   
-        if (!empty($adressaten)){ //Nur wenn Mailadressen vorhanden sind, wird eine Mail hinzugefügt
-            $betreff = db::sanitize($betreff);
-            $inhalt = db::sanitize($inhalt);
-            if (is_array($adressaten)){
-                $adressaten=implode(",",$adressaten); // in String umwandeln
-            }
-            $sql = "INSERT INTO mailbot (betreff, inhalt, adressat, absender, mail_status)
-                    VALUES ('$betreff', '$inhalt', '$adressaten', '$absender', 'warte')";
-            db::writedb($sql);
-        } 
-    }
-
-    //Ändert den Status einer Email in der Datenbank
-    public static function set_status($mail_id, $mail_status, $fehler = '')
+    /**
+     * Fügt eine Email zur Datenbank hinzu
+     *
+     * Nur für automatische Emails verwenden. Die Mails werden erst bei der nächsten Ausführung des Mailbots versendet.
+     *
+     * @param string $betreff
+     * @param string $inhalt
+     * @param string|array $adressaten
+     * @param string $absender
+     */
+    public static function add_mail(string $betreff, string $inhalt, string|array $adressaten,
+                                    string $absender = Env::SMTP_USER): void
     {
-        if (empty($fehler)){
-            $sql = "UPDATE mailbot SET mail_status = '$mail_status', zeit = zeit WHERE mail_id = '$mail_id'";
-        }else{
-            $sql = "UPDATE mailbot SET mail_status = '$mail_status', zeit = zeit, fehler = '$fehler' WHERE mail_id = '$mail_id'";
+        // Nur wenn Mailadressen vorhanden sind, wird eine Mail hinzugefügt
+        if (empty($adressaten)){
+            return;
         }
-        db::writedb($sql);
+
+        // In String umwandeln
+        if (is_array($adressaten)){
+            $adressaten = implode(",", $adressaten);
+        }
+
+        $sql = "
+                INSERT INTO mailbot (betreff, inhalt, adressat, absender, mail_status)
+                VALUES (?, ?, ?, ?, 'warte')
+                ";
+        $params = [$betreff, $inhalt, $adressaten, $absender];
+        db::$db->query($sql, $params)->log();
     }
 
-    //Erstellt eine Warnung im Ligacenter, wenn der Mailbot manche mails nicht versenden kann.
-    public static function warning_mail()
+    /**
+     * Ändert den Status einer Email in der Datenbank
+     *
+     * @param int $mail_id
+     * @param string $mail_status
+     * @param string|null $fehler
+     */
+    public static function set_status(int $mail_id, string $mail_status, string $fehler = NULL): void
     {
-        $sql = "SELECT count(*) FROM mailbot WHERE mail_status = 'fehler'";
-        $result = db::readdb($sql);
-        $result = mysqli_fetch_assoc($result);
-        if ($result['count(*)'] > 0){
-            Form::attention("Der Mailbot kann manche Mails nicht versenden - siehe Datenbank.");
+        $sql = "
+            UPDATE mailbot 
+            SET mail_status = ?, zeit = zeit, fehler = ? 
+            WHERE mail_id = ?
+            ";
+        db::$db->query($sql, $mail_status, $fehler, $mail_id)->log();
+    }
+
+    /**
+     * Erstellt eine Warnung im Ligacenter, wenn der Mailbot manche mails nicht versenden kann.
+     */
+    public static function warning(): void
+    {
+        $sql = "
+            SELECT mail_id
+            FROM mailbot 
+            WHERE mail_status = 'fehler'
+            ";
+        if (($anzahl = db::$db->query($sql)->num_rows()) > 0) {
+            Html::notice("Der Mailbot kann $anzahl Mail(s) nicht versenden - siehe Datenbank.");
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////Automatische Infomails/////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////
-
-    //Erstellt eine Mail in der Datenbank an alle spielberechtigten Teams, wenn es zum Übergang zur Meldephase noch freie Plätze gibt
-    public static function mail_plaetze_frei($akt_turnier)
-    {   
-        if ($akt_turnier->anzahl_freie_plaetze() > 0 && in_array($akt_turnier->daten['art'], array('I','II','III'))){
-            $team_ids = Team::get_all_teamids();
-            foreach ($team_ids as $team_id){
-                //Noch Plätze frei
-                if (!$akt_turnier->check_team_angemeldet($team_id) && $akt_turnier->check_team_block($team_id) && !$akt_turnier->check_doppel_anmeldung($team_id)){
-                    $betreff = $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . " hat noch freie Plätze";
-                    $inhalt = "<html>Hallo " . Team::teamid_to_teamname($team_id) . ","
-                        . "<br><br>das " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->daten['datum'])) . " ist in die Meldephase übergegangen und hat noch freie Spielen-Plätze"
-                        ."(<a href='https://einrad.hockey/liga/turnier_details?turnier_id=" . $akt_turnier->daten['turnier_id'] . "'>Link zum Turnier</a>). Ihr erhaltet diese automatische E-Mail, weil Ihr einen passenden Turnierblock habt."
-                        . "<br><br>Falls du keine automatischen E-Mails mehr von der Einradhockeyliga erhalten willst, kannst du dies <a href='https://einrad.hockey/teamcenter/tc_teamdaten_aendern'>hier</a> deaktivieren."
-                        . "<br><br>Bis zum nächsten Mal"
-                        . "<br>Eure Einradhockeyliga</html>";
-                    $akt_kontakt = new Kontakt ($team_id);
-                    $emails = $akt_kontakt->get_emails_info();
+    /**
+     * Schreibt eine Mail in die Datenbank an alle spielberechtigten Teams, wenn es (zum Übergang zur Meldephase) noch
+     * freie Plätze gibt.
+     *
+     * @param Turnier $turnier
+     */
+    public static function mail_plaetze_frei(Turnier $turnier): void
+    {
+        if ($turnier->get_anzahl_freie_plaetze() > 0 && in_array($turnier->details['art'], ['I', 'II', 'III'])) {
+            $team_ids = Team::get_liste_ids();
+            foreach ($team_ids as $team_id) {
+                // Noch Plätze frei
+                if (
+                    !$turnier->check_team_angemeldet($team_id)
+                    && $turnier->check_team_block($team_id)
+                    && !$turnier->check_doppel_anmeldung($team_id)
+                ) {
+                    $betreff = "Freie Plätze: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
+                    ob_start();
+                        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+                        include(Env::BASE_PATH . "/templates/mails/mail_plaetze_frei.tmp.php");
+                        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+                    $inhalt = ob_get_clean();
+                    $emails = (new Kontakt ($team_id))->get_emails('info');
                     self::add_mail($betreff, $inhalt, $emails);
                 }
             }
         }
     }
-    //Erstellt eine Mail in der Datenbank an Teams, welche in von der Warteliste aufgerückt sind
-    public static function mail_warte_zu_spiele($akt_turnier, $team_id)
-    {   
-        $betreff = $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . ": Auf Spielen-Liste aufgerückt";
-        $inhalt = "<html>Hallo " . Team::teamid_to_teamname($team_id) . ","
-            . "<br><br>dein Team ist auf dem " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->daten['datum'])) . " von der Warteliste auf die Spielen-Liste aufgerückt."
-            . "<br><br><a href='https://einrad.hockey/liga/turnier_details?turnier_id=" . $akt_turnier->daten['turnier_id'] . "'>Link zum Turnier</a>"
-            . "<br><br>Falls du keine automatischen E-Mails mehr von der Einradhockeyliga erhalten willst, kannst du dies <a href='https://einrad.hockey/teamcenter/tc_teamdaten_aendern'>hier</a> deaktivieren."
-            . "<br><br>Bis zum nächsten Mal"
-            . "<br>Eure Einradhockeyliga</html>";
+
+    /**
+     * Erstellt eine Mail in der Datenbank an Teams, welche in von der Warteliste aufgerückt sind
+     *
+     * @param Turnier $turnier
+     * @param int $team_id
+     */
+    public static function mail_warte_zu_spiele(Turnier $turnier, int $team_id): void
+    {
+        $betreff = "Spielen-Liste: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
+        ob_start();
+            include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+            include(Env::BASE_PATH . "/templates/mails/mail_warte_zu_spiele.tmp.php");
+            include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+        $inhalt = ob_get_clean();
         $akt_kontakt = new Kontakt ($team_id);
-        $emails = $akt_kontakt->get_emails_info();
+        $emails = $akt_kontakt->get_emails('info');
         self::add_mail($betreff, $inhalt, $emails);
     }
-    //Erstellt eine Mail in der Datenbank an alle vom Losen betroffenen Teams
-    public static function mail_gelost($akt_turnier)
-    {   
-        if (in_array($akt_turnier->daten['art'], array('I','II','III'))){
-            $team_ids = Team::get_all_teamids();
-            foreach ($team_ids as $team_id){
-                //Team angemeldet?
-                if ($akt_turnier->check_team_angemeldet($team_id)){
-                    //Auf Warteliste gelandet
-                    if ($akt_turnier->get_team_liste($team_id) == 'warte'){
-                        $betreff = "Warteliste: " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'];
-                        $inhalt = "<html>Hallo " . Team::teamid_to_teamname($team_id) . ","
-                            . "<br><br>das " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->daten['datum'])) . " ist in die Meldephase übergegangen und die freien Spielen-Plätze wurden nach Modus 4.4.2 verteilt. Euer Team steht nun auf der <b>Warteliste</b>."
-                            . " Erfahre <a href='https://einrad.hockey/liga/turnier_details?turnier_id=" . $akt_turnier->daten['turnier_id'] . "'>hier</a> mehr."
-                            . "<br><br>Falls es nicht gewünscht ist automatische E-Mails durch die Webseite der Einradhockeyliga zu erhalten, kannst du dies <a href='https://einrad.hockey/teamcenter/tc_teamdaten_aendern'>hier</a> deaktivieren."
-                            . "<br><br>Bis zum nächsten Mal"
-                            . "<br><br>Eure Einradhockeyliga</html>";
-                    //Auf Spielen-Liste gelandet
-                    }elseif ($akt_turnier->get_team_liste($team_id) == 'spiele'){
-                        $betreff = "Spielen-Liste: " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'];
-                        $inhalt = "<html>Hallo " . Team::teamid_to_teamname($team_id) . ","
-                            . "<br><br>das " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->daten['datum'])) . " ist in die Meldephase übergegangen und die freien Spielen-Plätze wurden nach Modus 4.4.2 verteilt. Euer Team steht auf der <b>Spielen-Liste</b>."
-                            . " Erfahre <a href='https://einrad.hockey/liga/turnier_details?turnier_id=" . $akt_turnier->daten['turnier_id'] . "'>hier</a> mehr."
-                            . "<br><br>Falls es nicht gewünscht ist automatische E-Mails durch die Webseite der Einradhockeyliga zu erhalten, kannst du dies <a href='https://einrad.hockey/teamcenter/tc_teamdaten_aendern'>hier</a> deaktivieren."
-                            . "<br><br>Bis zum nächsten Mal"
-                            . "<br>Eure Einradhockeyliga<html>";
-                     }
-                    $akt_kontakt = new Kontakt ($team_id);
-                    $emails = $akt_kontakt->get_emails_info();
+
+    /**
+     * Erstellt eine Mail in der Datenbank an alle vom Losen betroffenen Teams
+     *
+     * @param Turnier $turnier
+     */
+    public static function mail_gelost(Turnier $turnier): void
+    {
+        if (in_array($turnier->details['art'], ['I', 'II', 'III'])) {
+            $team_ids = Team::get_liste_ids();
+            foreach ($team_ids as $team_id) {
+                // Team angemeldet?
+                if ($turnier->check_team_angemeldet($team_id)) {
+                    // Auf Warteliste gelandet
+                    if ($turnier->get_liste($team_id) == 'warte') {
+                        $liste = "Warteliste";
+                        // Auf Spielen-Liste gelandet
+                    } elseif ($turnier->get_liste($team_id) == 'spiele') {
+                        $liste = "Spielen-Liste";
+                    } else {
+                        return;
+                    }
+                    $betreff = "$liste: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
+                    ob_start();
+                        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+                        include(Env::BASE_PATH . "/templates/mails/mail_gelost.tmp.php");
+                        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+                    $inhalt = ob_get_clean();
+                    $emails = (new Kontakt ($team_id))->get_emails('info');
                     self::add_mail($betreff, $inhalt, $emails);
                 }
             }
         }
     }
-    //Erstellt eine Mail in der Datenbank an alle spielberechtigten Teams, wenn ein neues Turnier eingetragen wird
-    public static function mail_neues_turnier($akt_turnier)
-    {   
-        if (in_array($akt_turnier->daten['art'], array('I','II','III'))){
-            $team_ids = Team::get_all_teamids();
-            foreach ($team_ids as $team_id){
-                //Noch Plätze frei
-                if ($akt_turnier->check_team_block($team_id) && !$akt_turnier->check_doppel_anmeldung($team_id)){
-                    $betreff = "Neues " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'];
-                    $inhalt = "<html>Hallo " . Team::teamid_to_teamname($team_id) . ","
-                        . "<br><br>es wurde ein neues Turnier eingetragen, für welches ihr euch anmelden könnt: " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->daten['datum']))
-                        . " (<a href='https://einrad.hockey/liga/turnier_details?turnier_id=" . $akt_turnier->daten['turnier_id'] . "'>Link des neuen Turniers</a>)"
-                        . "<br><br>Falls es nicht gewünscht ist automatische E-Mails durch die Webseite der Einradhockeyliga zu erhalten, kannst du dies <a href='https://einrad.hockey/teamcenter/tc_teamdaten_aendern'>hier</a> deaktivieren."
-                        . "<br><br>Bis zum nächsten Mal"
-                        . "<br>Eure Einradhockeyliga</html>";
-                    $akt_kontakt = new Kontakt ($team_id);
-                    $emails = $akt_kontakt->get_emails_info();
+
+    /**
+     * Erstellt eine Mail in der Datenbank an alle spielberechtigten Teams, wenn ein neues Turnier eingetragen wird
+     *
+     * @param Turnier $turnier
+     */
+    public static function mail_neues_turnier(Turnier $turnier): void
+    {
+        if (in_array($turnier->details['art'], ['I', 'II', 'III'])) {
+            $team_ids = Team::get_liste_ids();
+            foreach ($team_ids as $team_id) {
+                // Noch Plätze frei?
+                if ($turnier->check_team_block($team_id) && !$turnier->check_doppel_anmeldung($team_id)) {
+                    $betreff = "Neues " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
+                    ob_start();
+                        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+                        include(Env::BASE_PATH . "/templates/mails/mail_neues_turnier.tmp.php");
+                        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+                    $inhalt = ob_get_clean();
+                    $emails = (new Kontakt ($team_id))->get_emails('info');
                     self::add_mail($betreff, $inhalt, $emails);
                 }
             }
         }
     }
-    //Erstellt eine Mail in der Datenbank, wenn ein Team trotz Freilos beim übergang in die Datenbank abgemeldet wird.
-    public static function mail_freilos_abmeldung($akt_turnier, $team_id)
-    {   
-        if (in_array($akt_turnier->daten['art'], array('I','II','III'))){
-            $betreff = "Falscher Freilosblock: " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'];
-            $inhalt = "<html>Hallo " . Team::teamid_to_teamname($team_id) . ","
-                . "<br><br>Ihr hattet für das " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . " am " . date("d.m.Y", strtotime($akt_turnier->daten['datum']))
-                . " (<a href='https://einrad.hockey/liga/turnier_details?turnier_id=" . $akt_turnier->daten['turnier_id'] . "'>Link zum Turnier</a>) ein Freilos gesetzt. Da euer Teamblock höher war als der des Turnierblocks, wurdet ihr von der Spielen-Liste abgemeldet und seid nun auf der Warteliste. Das Freilos wurde euch erstattet."
-                . "<br><br>Falls es nicht gewünscht ist automatische E-Mails durch die Webseite der Einradhockeyliga zu erhalten, kannst du dies <a href='https://einrad.hockey/teamcenter/tc_teamdaten_aendern'>hier</a> deaktivieren."
-                . "<br><br>Bis zum nächsten Mal"
-                . "<br>Eure Einradhockeyliga</html>";
-            $akt_kontakt = new Kontakt ($team_id);
-            $emails = $akt_kontakt->get_emails_info();
-            self::add_mail($betreff, $inhalt, $emails);
-        }
+
+    /**
+     * Erstellt eine Mail in der Datenbank, wenn ein Team trotz Freilos beim übergang in die Datenbank abgemeldet wird.
+     *
+     * @param Turnier $turnier
+     * @param int $team_id
+     */
+    public static function mail_freilos_abmeldung(Turnier $turnier, int $team_id): void
+    {
+        if (!in_array($turnier->details['art'], ['I', 'II', 'III'])) return;
+
+        $betreff = "Falscher Freilosblock: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
+        ob_start();
+            include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+            include(Env::BASE_PATH . "/templates/mails/mail_freilos_abmeldung.tmp.php");
+            include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+        $inhalt = ob_get_clean();
+        $emails = (new Kontakt ($team_id))->get_emails('info');
+
+        self::add_mail($betreff, $inhalt, $emails);
     }
-    //Erstellt eine Mail in der Datenbank an den Ligaausschuss, wenn ein Team Turnierdaten ändert.
-    public static function mail_turnierdaten_geaendert($akt_turnier){
-        $betreff = "Turnierdaten geändert: " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'];
-        $inhalt = "<html>Hallo Ligaausschuss,"
-            . "<br><br>". $akt_turnier->daten["teamname"] ." hat als Ausrichter seine Turnierdaten vom " . $akt_turnier->daten['tblock'] . "-Turnier in " . $akt_turnier->daten['ort'] . " verändert: <a href='https://einrad.hockey/ligacenter/lc_turnier_log?turnier_id=" . $akt_turnier->daten['turnier_id'] . "'>Link zum Turnier</a>"
-            . "<br><br><b>Teams werden nicht mehr automatisch benachrichtigt.</b>"
-            . "<br>Euer Mailbot</html>";
-        self::add_mail($betreff, $inhalt, Config::LAMAIL, Config::SMTP_USER);
+
+    /**
+     * Erstellt eine Mail in der Datenbank an den Ligaausschuss, wenn ein Team Turnierdaten ändert.
+     *
+     * @param Turnier $turnier
+     */
+    public static function mail_turnierdaten_geaendert(Turnier $turnier): void
+    {
+        $betreff = "Turnierdaten geändert: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
+        ob_start();
+            include(Env::BASE_PATH . "/templates/mails/mail_turnierdaten_geaendert.tmp.php");
+        $inhalt = ob_get_clean();
+        self::add_mail($betreff, $inhalt, Env::LAMAIL);
     }
 }

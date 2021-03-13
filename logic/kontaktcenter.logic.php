@@ -1,167 +1,168 @@
 <?php
-//Max Anzahl bevor alle im BCC angeschrieben werden
-$grenze_bcc = 12;
+// Max Anzahl bevor alle im BCC angeschrieben werden
+$grenze_bcc = 12; //TODO in Config oder Env
 
-//Für die Turnierauswahl
-$turniere = Turnier::get_all_turniere("WHERE saison='".Config::SAISON."'");
+// Für die Turnierauswahl
+$turniere = Turnier::get_turniere('alle', false, false);
 
-//Für Sortierung der Teams nach Blöcken
+// Für Sortierung der Teams nach Blöcken
 $akt_spieltag = Tabelle::get_aktuellen_spieltag();
-$teams = Tabelle::get_rang_tabelle($akt_spieltag); //Sortierung nach Rangtabelle
+$teams = Tabelle::get_rang_tabelle($akt_spieltag); // Sortierung nach Rangtabelle
 
-//Damit sich $_SESSION von team- und ligacenter nicht vermischen
-if($ligacenter){
-    $list_id = 'lc_emails' . $_SESSION['la_id']; 
-}elseif($teamcenter){
-    $list_id = 'tc_emails' . $_SESSION['team_id']; 
+// Damit sich $_SESSION von team- und ligacenter nicht vermischen
+if (Helper::$ligacenter) {
+    $list_id = 'lc_emails' . $_SESSION['logins']['la']['id'];
+} elseif (Helper::$teamcenter) {
+    $list_id = 'tc_emails' . $_SESSION['logins']['team']['id'];
 }
 
 
-//Formularauswertung Emailauswahl
+// Formularauswertung Emailauswahl
 
-//Emails zurücksetzen
-if (isset($_POST['reset'])){
+// Emails zurücksetzen
+if (isset($_POST['reset'])) {
     unset ($_SESSION[$list_id]);
 }
 
 //Turnier wurde ausgewählt
-if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])){
+if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
     unset ($_SESSION[$list_id]);
-    $akt_turnier = new Turnier($_POST['turnier_id']);
-    if (empty($akt_turnier->daten)){
-        Form::error("Turnier wurde nicht gefunden");
+    $turnier = new Turnier((int) $_POST['turnier_id']);
+    if (empty($turnier->details)) {
+        Html::error("Turnier wurde nicht gefunden");
         header('Location: ' . db::escape($_SERVER['PHP_SELF']));
         die();
     }
     $array = Kontakt::get_emails_turnier($_POST['turnier_id']);
-    $_SESSION[$list_id]['type'] = 'Turnier in ' . $akt_turnier->daten['ort'] . ' (' . date("d.m.Y", strtotime($akt_turnier->daten['datum'])) .', ' . $akt_turnier->daten['tblock'] . ')';
+    $_SESSION[$list_id]['type'] = 'Turnier in ' . $turnier->details['ort'] . ' (' . date("d.m.Y", strtotime($turnier->details['datum'])) . ', ' . $turnier->details['tblock'] . ')';
     $_SESSION[$list_id]['emails'] = $array['emails'];
     $_SESSION[$list_id]['empfaenger'] = $array['teamnamen'];
 
-    if (isset($_POST['la'])){
-        array_unshift($_SESSION[$list_id]['emails'], Config::LAMAIL);
+    if (isset($_POST['la'])) {
+        array_unshift($_SESSION[$list_id]['emails'], Env::LAMAIL);
         array_unshift($_SESSION[$list_id]['empfaenger'], 'Ligaausschuss');
     }
 
-    Form::attention("Achtung: Nichtligateams müssen seperat angeschrieben werden!");
+    Html::notice("Achtung: Nichtligateams müssen seperat angeschrieben werden!");
 }
 
 
-//Rundmail wurde ausgewählt
-if (isset($_POST['rundmail'])){
+// Rundmail wurde ausgewählt
+if (isset($_POST['rundmail'])) {
     unset ($_SESSION[$list_id]);
     $_SESSION[$list_id]['type'] = 'Rundmail';
-    $_SESSION[$list_id]['empfaenger'] = Team::list_of_all_teams();
+    $_SESSION[$list_id]['empfaenger'] = Team::get_liste();
     $_SESSION[$list_id]['emails'] = Kontakt::get_emails_rundmail();
 
-    array_unshift($_SESSION[$list_id]['emails'], Config::LAMAIL);
+    array_unshift($_SESSION[$list_id]['emails'], Env::LAMAIL);
     array_unshift($_SESSION[$list_id]['empfaenger'], '<b>Ligaausschuss</b>');
 }
 
-//Teams wurden ausgewählt
-if (isset($_POST['teams_emails'])){
+// Teams wurden ausgewählt
+if (isset($_POST['teams_emails'])) {
     unset ($_SESSION[$list_id]);
     $_SESSION[$list_id]['type'] = 'Teamauswahl';
-    
-    $emails = $teamnamen = array();
-    foreach (($_POST['team'] ?? array()) as $team_id){
+
+    $emails = $teamnamen = [];
+    foreach (($_POST['team'] ?? []) as $team_id) {
         $akt_team = new Kontakt($team_id);
         $team_emails = $akt_team->get_emails();
-        foreach ($team_emails as $email){
-            //Doppelte Email-Einträge vermeiden
-            if (!in_array($email,$emails)){
-                array_push($emails,$email);
+        foreach ($team_emails as $email) {
+            // Doppelte Email-Einträge vermeiden
+            if (!in_array($email, $emails)) {
+                $emails[] = $email;
             }
         }
-        array_push($teamnamen, Team::teamid_to_teamname($team_id));
+        $teamnamen[] = Team::id_to_name($team_id);
     }
     $_SESSION[$list_id]['emails'] = $emails;
     $_SESSION[$list_id]['empfaenger'] = $teamnamen;
-    if (isset($_POST['la'])){
-        array_unshift($_SESSION[$list_id]['emails'], Config::LAMAIL);
+    if (isset($_POST['la'])) {
+        array_unshift($_SESSION[$list_id]['emails'], Env::LAMAIL);
         array_unshift($_SESSION[$list_id]['empfaenger'], '<b>Ligaausschuss</b>');
     }
-    
+
 }
 
 //Mailversand
-if (isset($_POST['send_mail']) && isset($_SESSION[$list_id])){
+if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
     $error = false;
     $emails = $_SESSION[$list_id]['emails'];
     $betreff = $_POST['betreff'];
-    $text = stripcslashes($_POST['text']); //stripcslashes: \r\n für newline-chars wieder escaped, $_POST wird ausnahmsweise nicht in db gespeichert.
-    
-    if (empty($emails) or empty($betreff) or empty($text)){
-        Form::error("Kontaktformular unvollständig");
+    $text = $_POST['text'];
+
+    if (empty($emails) || empty($betreff) || empty($text)) {
+        Html::error("Kontaktformular unvollständig");
         $error = true;
     }
 
-    if (!$error){
+    if (!$error) {
         $mailer = MailBot::start_mailer();
-        if ($ligacenter){
-            $mailer->setFrom(Config::LAMAIL, 'Ligaausschuss');
-            $mailer->addBCC(Config::LAMAIL_ANTWORT);
-        }elseif ($teamcenter){
-            $akt_kontakt = new Kontakt($_SESSION['team_id']); //Absender Mails bekommen
+        if (Helper::$ligacenter) {
+            $mailer->setFrom(Env::LAMAIL, 'Ligaausschuss');
+            $mailer->addBCC(Env::LAMAIL_ANTWORT);
+        } elseif (Helper::$teamcenter) {
+            $akt_kontakt = new Kontakt($_SESSION['logins']['team']['id']); //Absender Mails bekommen
             $absender = $akt_kontakt->get_emails();
-            foreach($absender as $email){
-                $mailer->AddReplyTo($email, $_SESSION['teamname']); //Antwort an den Absender
-                if (!in_array($email, $emails)){
+            foreach ($absender as $email) {
+                $mailer->AddReplyTo($email, $_SESSION['logins']['team']['name']); //Antwort an den Absender
+                if (!in_array($email, $emails)) {
                     $mailer->addBCC($email); //Als Kontroll-Email an den Absender
                 }
-                $mailer->setFrom("noreply@einrad.hockey", $_SESSION['teamname']);
+                $mailer->setFrom("noreply@einrad.hockey", $_SESSION['logins']['team']['name']);
             }
         }
 
         //BCC oder Adressat?
-        if (count($emails) > $grenze_bcc){
-            foreach ($emails as $email){
+        if (count($emails) > $grenze_bcc) {
+            foreach ($emails as $email) {
                 $mailer->addBCC($email);
             }
-        }else{
-            foreach ($emails as $email){
+        } else {
+            foreach ($emails as $email) {
                 $mailer->addAddress($email);
             }
         }
-        
-        //Text und Betreff hinzufügen
-        $mailer->Subject = $betreff;
-        $mailer->Body = $text . "\r\n\r\nVersendet aus dem Kontaktcenter von einrad.hockey";
 
-        //Email-versenden
-        if (Config::ACTIVATE_EMAIL){
-            if ($mailer->send()){
-                Form::affirm("Die E-Mail wurde versandt.");
-                unset($_SESSION[$list_id]);
-                header('Location: ' . db::escape($_SERVER['PHP_SELF']));
-                die();
-            }else{
-                Form::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden. Manuell Mail versenden: " . Form::mailto(Config::LAMAIL));
-                Form::error($mailer->ErrorInfo);
-            }
-        }else{ //Debugging
-            if (!($ligacenter ?? false)){
-                $mailer->Password = '***********'; //Passwort verstecken
-                $mailer->ClearAllRecipients(); 
-            }
-            db::debug($mailer);
+        // Text und Betreff hinzufügen
+        $mailer->Subject = $betreff;
+        $mailer->Body = $text . "\r\nVersendet aus dem Kontaktcenter von einrad.hockey";
+
+
+        Helper::log(Config::LOG_EMAILS, "Betreff: $betreff" . " an " . implode(',', $emails));
+        // Email-versenden
+        if (MailBot::send_mail($mailer)) {
+            Html::info("Die E-Mail wurde versandt.");
+            unset($_SESSION[$list_id]);
+            header('Location: ' . db::escape($_SERVER['PHP_SELF']));
+            die();
         }
+
+        Html::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden.");
     }
 }
 
-//Zum Ausfüllen des Absendeforumulars
-if (isset($_SESSION[$list_id])){
+// Zum Ausfüllen des Absendeforumulars
+if (isset($_SESSION[$list_id])) {
     $anzahl_emails = count($_SESSION[$list_id]['emails']);
-    $adressaten = $bcc = array();
-    if ($ligacenter){
-        $from = Config::LAMAIL;
+    $adressaten = $bcc = [];
+    if (Helper::$ligacenter) {
+        $from = Env::LAMAIL;
         $tos = $_SESSION[$list_id]['emails'];
-    }elseif ($teamcenter){
-        $from = $_SESSION['teamname'];
+    } elseif (Helper::$teamcenter) {
+        $from = $_SESSION['logins']['team']['name'];
         $tos = $_SESSION[$list_id]['empfaenger'];
     }
-    if (empty($_SESSION[$list_id]['emails'])){
-        Form::error("Es wurden keine E-Mail-Adressen gefunden.");
+    if (empty($_SESSION[$list_id]['emails'])) {
+        Html::error("Es wurden keine E-Mail-Adressen gefunden.");
     }
 }
 
+if (Helper::$ligacenter){
+    $las = Ligaleitung::get_all('ligaausschuss');
+    $signatur = "\r\n\r\n\r\nDein Ligaausschuss\r\n--\r\n";
+    foreach ($las as $la){
+        $signatur .= $la['vorname'] . ' ' . $la['nachname']
+            . (!empty($la['teamname']) ? ' (' . $la['teamname'] . ')' : '') . "\r\n";
+    }
+}

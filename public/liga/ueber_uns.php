@@ -2,13 +2,13 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-$titel = "Über uns | Deutsche Einradhockeyliga";
-$content = "Infos und aktuelle Daten der Deutsche Einradhockeyliga für Interessierte. Erster Schritt zum Gründen eines Teams.";
+Html::$titel = "Über uns | Deutsche Einradhockeyliga";
+Html::$content = "Infos und aktuelle Daten der Deutsche Einradhockeyliga für Interessierte. Erster Schritt zum Gründen eines Teams.";
 include '../../templates/header.tmp.php';
 ?>
 
@@ -22,9 +22,9 @@ include '../../templates/header.tmp.php';
 <h3 class="w3-text-grey">Ligadaten</h3>
 <div class="w3-container">
     <ul class="w3-ul w3-leftbar w3-border-tertiary">
-        <li><?=count(Team::list_of_all_teams())?> Teams mit <?=Spieler::count_spieler()?> Spieler</li>
+        <li><?=count(Team::get_liste())?> Teams mit <?=Spieler::get_anzahl()?> Spieler</li>
         <li><?=count(Config::BLOCK)?> Spielstärken (<?=implode(", ", Config::BLOCK)?>)</li>
-        <li><?=Spieler::get_anz_schiris()?> Schiedsrichter</li>
+        <li><?=Spieler::get_schiris_anzahl()?> Schiedsrichter</li>
         <li>Saison: <?=Config::SAISON_ANFANG . ' - ' . Config::SAISON_ENDE?></li>
         <li><?=Config::LIGAGEBUEHR?> Ligagebühr</li>
     </ul>
@@ -35,9 +35,9 @@ include '../../templates/header.tmp.php';
 
 <div class="w3-container">
     <ul class="w3-ul w3-leftbar w3-border-tertiary">
-        <li><?=Form::link(Config::LINK_REGELN_KURZ, 'Die wichtigsten Regeln')?></li>
-        <li><a href="ligakarte.php" class="no w3-text-blue w3-hover-text-secondary">Deutschlandkarte aller Ligateams</a></li>
-        <li><a href="teams.php" class="no w3-text-blue w3-hover-text-secondary">Kontaktliste aller Ligateams</a></li>
+        <li><?=Html::link(Nav::LINK_REGELN_KURZ, 'Die wichtigsten Regeln', false, "sports")?></li>
+        <li><?=Html::link("ligakarte.php", "Deutschlandkarte aller Ligateams", false, "flag")?></li>
+        <li><?=Html::link("teams.php","Kontaktliste aller Ligateams", false, "mail")?></li>
     </ul>
 </div>
 
@@ -45,7 +45,7 @@ include '../../templates/header.tmp.php';
 <p>Jedes Team besteht aus mindestens fünf Einradfahrern. Es gibt keine Alters- oder Geschlechtseinteilung und Teams jeder geographischen Herkunft sind zugelassen. Ein Ligateam anzumelden geht jederzeit und schnell:</p>
 <div class="w3-container">
     <ul class="w3-ul w3-primary w3-card">
-        <li>1. <?=Config::LAMAIL?> anschreiben (Teamname, Ligavertreter, Email-Adresse angeben)</li>
+        <li>1. <?=Env::LAMAIL?> anschreiben (Teamname, Ligavertreter, Email-Adresse angeben)</li>
         <li>2. <?=Config::LIGAGEBUEHR?> Ligagebühr überweisen</li>
         <li>3. Teamcenter-Login erhalten</li>
         <li>4. Im Teamcenter zu Turnieren anmelden</li>
@@ -57,12 +57,12 @@ include '../../templates/header.tmp.php';
 
 <div class="w3-container">
     <ul class="w3-ul w3-leftbar w3-border-tertiary">
-        <li><?=Form::link(Config::LINK_FORUM, 'Forum')?></li>
-        <li><?=Form::link('dokumente.php', 'Modus & Regeln')?></li>
-        <li><?=Form::link('ligaleitung.php', 'Ligaleitung')?></li>
+        <li><?=Html::link(Nav::LINK_FORUM, 'Forum')?></li>
+        <li><?=Html::link('dokumente.php', 'Modus & Regeln')?></li>
+        <li><?=Html::link('ligaleitung.php', 'Ligaleitung')?></li>
     </ul>
 </div>
 
-<p class="w3-text-grey">Schreib uns an: <?=Form::mailto(Config::LAMAIL)?></p>
+<p class="w3-text-grey">Schreib uns an: <?=Html::mailto(Env::LAMAIL)?></p>
         
 <?php include '../../templates/footer.tmp.php';

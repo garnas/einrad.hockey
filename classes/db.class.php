@@ -1,133 +1,123 @@
 <?php
-//Datenbank-Zugangsdaten können in config.class.php geändert werden!
 
-//$sql = Sql-Befehl als Text
-class db {
-  
-  public static $link; //Verbindung zur Datenbank
-  
-  //Verbindung wird bei der Erstellung des Objektes geöffnet. Das erste db-Objekt wird in first.logic.php erstellt.
-  function __construct($db = Config::DATABASE)
-  {
-    self::$link = new mysqli(Config::HOST_NAME, Config::USER_NAME, Config::PASSWORD, $db);
-    if (self::$link -> connect_errno) {
-      die('<h2>Verbindung zum MySQL Server fehlgeschlagen: '.mysqli_connect_error().'<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
-    }
-  }
+class db
+{
+    public static null|dbWrapper $db;
 
-  /*Verbindung wird bei der Zerstörung des Objektes geschlossen
-  Sinnvoll, da __destruct automatisch aufgerufen wird, wenn auf das Objekt nicht mehr referenziert wird.
-  Dadurch werden DB-Verbindungen nur solange wie nötig aufrecht erhalten.*/
-  function __destruct()
-  {
-    self::$link->close();
-  }
-
-  /*Sanitizing eines gesamten Arrays - In der Regel $_POST / $_GET in first.logic.php
-  Siehe https://www.php.net/manual/de/mysqli.real-escape-string.php*/
-  public static function sanitize($input)
-  {
-    if (is_array($input)){
-      foreach ($input as $key => $value){
-          $input[$key] = self::sanitize($value); //Rekursion
-      }
-    }else{
-      $input = trim($input);
-      $input = self::$link->real_escape_string($input);
-    }
-    return $input;
-  }
-
-  //Verhindert XSS durch das einbringen html-Entities
-  public static function escape($input)
-  {
-    if (empty($input)){
-      return $input;
-    }
-    if (is_array($input)){
-      foreach ($input as $key => $value){
-          $key = self::escape($key);
-          $value = self::escape($value);
-          $output[$key] = $value; //Rekursion
-      }
-    }else{
-      $output = htmlspecialchars($input);
-    }
-    return $output;
-  }
-
-  /*auto_increment wert einer Sql-Tabelle erkennen. Alle IDs werden über auto_increment erstellt
-  $tabelle ist der name der Tabelle in der SQL datenbank*/
-  public static function get_auto_increment ($tabelle)
-  {
-    $sql="  SELECT AUTO_INCREMENT
-            FROM  INFORMATION_SCHEMA.TABLES
-            WHERE TABLE_SCHEMA = '" . Config::DATABASE . "'  
-            AND   TABLE_NAME   = '$tabelle';";
-    $auto_incr = self::readdb($sql);
-    $auto_incr = mysqli_fetch_assoc($auto_incr);
-    $auto_incr = $auto_incr["AUTO_INCREMENT"];
-    return $auto_incr;
-  }
-
-  //funktion zum lesen der sql datenbank, sie gibt ein mysqli-objekt zurück
-  //dieses mysqli-objekt muss immer in assoziatives array umgewandelt werden
-  public static function readdb($sql)
-  {
-    if (mysqli_connect_errno()) {
-      die('<h2>Verbindung zum MySQL Server fehlgeschlagen: '.mysqli_connect_error().'<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
-    }
-    return self::$link->query($sql);
-  }
-
-  //funktion zum schreiben in die sql datenbank
-  public static function writedb($sql)
-  {
-    //SQL-Logdatei erstellen/beschreiben
-    $log_sql = fopen('../../system/logs/log_db.txt', "a") or die("Logdatei konnte nicht erstellt/geöffnet werden");
-    $log = "\n" . date('Y-m-d H:i:s') . " " . ($_SESSION['teamname'] ?? '') . " " . ($_SESSION['la_login_name'] ?? '') . " " . ($_SESSION['ligabot'] ?? '') . "\n" . $sql;
-    fwrite($log_sql, $log);
-
-    if (mysqli_connect_errno()) {
-      $error = 'Verbindung zum MySQL Server fehlgeschlagen: ' . mysqli_connect_error();
-      fwrite($log_sql, "\n" . $error);
-      die('<h2>Verbindung zum MySQL Server fehlgeschlagen: '.mysqli_connect_error().'<br><br>Wende dich bitte an <span style="color:red;">' . Config::TECHNIKMAIL . '</span> wenn dieser Fehler auch in den nächsten Stunden noch besteht.</h2>');
+    /**
+     * Stellt die Verbindung zur Datenbank her
+     *
+     * Hiermit kann von überall her auf den dbWrapper zugegriffen werden ohne das Datenbank-Klassenobjekt
+     * immer übergeben zu müssen.
+     *
+     * @param string $host
+     * @param string $user
+     * @param string $password
+     * @param string $database
+     */
+    public static function initialize(string $host = Env::HOST_NAME,
+                                      string $user = Env::USER_NAME,
+                                      string $password = Env::PASSWORD,
+                                      string $database = Env::DATABASE): void
+    {
+        self::$db = new dbWrapper($host, $user, $password, $database);
     }
 
-    if (!self::$link->query($sql) === TRUE) {
-        $error = 'Fehlgeschlagen: '.self::$link->error;
-        fwrite($log_sql, "\n" . $error);
-        Form::error("SQL: " . $error);
-        Form::error($sql);
-        die();
+    /**
+     * Terminiert die Datenbankverbindung und ermöglicht eine neue Initialisierung zu einer anderen Datenbank
+     */
+    public static function terminate(): void
+    {
+        self::$db = NULL;
     }
 
-    fwrite($log_sql, "\n -------------");
-    fclose($log_sql);
-  }
-  
-  public static function db_sichern()
-  {
-    $dbname = Config::DATABASE;
-    $dbuser = Config::USER_NAME;
-    $dbpassword = Config::PASSWORD;
-    $dbhost = Config::HOST_NAME;
-    $dumpfile = "../../system/backups/" . $dbname . "." . date("Y-m-d_H-i-s") . ".sql"; //Dateiname der Sicherungskopie
-    exec("mysqldump --user=$dbuser --password=$dbpassword --host=$dbhost $dbname > $dumpfile");
-    Form::affirm("Datenbank wurde gesichert als " . date("Y-m-d_H-i-s") .".sql im Ordner system/backup/");
-    return $dumpfile;
-  }
-
-  //Schreibt alle deklarierten Variablen ins Dokument //true=1 false=0
-  //Gibt auch das Dokument und Zeile der Variablen aus
-  public static function debug($input = "all")
-  {
-    if ($input === "all"){
-      $input = $GLOBALS;
+    /**
+     * Escaped mit htmlspecialchars Strings um XSS zu verhindern.
+     * Auch rekursiv für ganze Arrays.
+     *
+     * @param mixed $input
+     * @return mixed
+     */
+    public static function escape(mixed $input): mixed
+    {
+        if (is_array($input)) {
+            foreach ($input as $key => $value) { // Rekursion
+                $key = self::escape($key);
+                $value = self::escape($value);
+                $output[$key] = $value;
+            }
+        } else {
+            $output = (is_string($input))
+                ? htmlspecialchars($input, ENT_QUOTES, 'UTF-8', false)
+                : $input;
+        }
+        return $output ?? $input;
     }
-    $backtrace = debug_backtrace();
-    Form::affirm('<p>File: ' . $backtrace[0]['file'] . '<br>Line: ' . $backtrace[0]['line'] . '</p><pre>' . print_r($input, true) . '</pre>');
-  }
+
+    /**
+     * Entfernt voran- oder hintenstehende Leerzeichen für Parameter von Prerpared-Statements
+     *
+     * @param mixed $params
+     * @return mixed
+     */
+    public static function trim_params(mixed $params): mixed
+    {
+        if (is_array($params)) {
+            foreach ($params as $key => $param) {
+                if (is_string($params)) {
+                    $params[$key] = trim($param);
+                }
+            }
+        } else if (is_string($params)) {
+            $params = trim($params);
+        }
+        return $params;
+    }
+
+    /**
+     * Schreibt alle deklarierten Variablen unter die Navigation in HTML //true=1 false=0
+     * Schreibt auch das Dokument und Zeile der Variablen aus
+     * z.B. db::debug(get_defined_vars(), true); oder db::debug($GLOBALS);
+     *
+     * @param mixed $input Zu debuggende Variable
+     * @param bool $types Sollen Typen angezeigt werden?
+     */
+    public static function debug(mixed $input, $types = false): void
+    {
+        $input = self::escape($input);
+        // Show Types?
+        if ($types) {
+            ob_start();
+            var_dump($input);
+            $string = ob_get_clean();
+        } else {
+            $string = print_r($input, true);
+        }
+        $backtrace = debug_backtrace();
+        Html::info('<p>File: ' . $backtrace[0]['file']
+            . '<br>Line: ' . $backtrace[0]['line']
+            . '</p><pre>' . $string . '</pre>',
+            'DEBUG',
+            false);
+    }
+
+    /**
+     * Sichert die Datenbank
+     *
+     * Name der Sicherung
+     * @return string
+     */
+    public static function sql_backup(): string
+    {
+        // Dateiname der Sicherungskopie
+        $dumpfile = "../../system/backups/" . Env::DATABASE . "." . date("Y-m-d_H-i-s") . ".sql";
+
+        exec("mysqldump --user=" . Env::USER_NAME
+            . " --password=" . Env::PASSWORD
+            . " --host=" . Env::HOST_NAME
+            . " " . Env::DATABASE . " > " . $dumpfile);
+
+        Html::info("Datenbank wurde gesichert als " . date("Y-m-d_H-i-s") . ".sql in system/backup/");
+        return $dumpfile;
+    }
 }
-
-

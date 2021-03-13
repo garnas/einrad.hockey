@@ -1,6 +1,6 @@
 /*Positionierung von Footer und Nav*/
 nav {
-  margin-top: 0px;
+  margin-top: 0;
 }
 footer {
   margin-bottom: 0;
@@ -20,12 +20,10 @@ footer {
 th { /*Keine fetten Tableheads*/
   font-weight: normal;
 }
+
 td {
   vertical-align: middle!important;
 }
-
-/*Positionierung der eingepflegten Icons von Google*/
-.material-icons {vertical-align:-27.5%}
 
 /*Für die Auswahlquadrate auf der Startseite des Team- und Ligacenters*/
 .centerpanels {
@@ -61,11 +59,7 @@ td {
 h1 {
   font-size:30px;
 }
-@media print {
-  .nicht-drucken{
-    display: none;
-  }
-}
+
 /*hide arrows on inputs type number*/
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
@@ -78,18 +72,23 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
-td {
-  vertical-align: middle;
-}
-/*Links*/
-.w3-blue,.w3-hover-primary:hover{color:#ffffff!important;background-color:#6c7fbe!important}
-.w3-text-blue,.w3-hover-text-primary:hover{color:#6c7fbe!important}
-.w3-border-blue,.w3-hover-border-primary:hover{border-color:#6c7fbe!important}
 
 /*Primärfarbe*/
 .w3-primary,.w3-hover-primary:hover{color:#ffffff!important;background-color:#6c7fbe!important}
 .w3-text-primary,.w3-hover-text-primary:hover{color:#6c7fbe!important}
 .w3-border-primary,.w3-hover-border-primary:hover{border-color:#6c7fbe!important}
+
+.w3-primary-2,.w3-hover-primary-2:hover{color:#000000!important;background-color: #a6b2d8 !important}
+.w3-text-primary-2,.w3-hover-text-primary-2:hover{color: #a6b2d8 !important}
+.w3-border-primary-2,.w3-hover-border-primary-2:hover{color: #a6b2d8!important}
+
+.w3-primary-3,.w3-hover-primary-3:hover{color:#000000!important;background-color:#cad0e8!important}
+.w3-text-primary-3,.w3-hover-text-primary-3:hover{color:#cad0e8!important}
+.w3-border-primary-3,.w3-hover-border-primary-3:hover{border-color:#cad0e8!important}
+/*$color[0] = "background-color: rgb(189, 148, 107);";*/
+/*$color[1] = "background-color: #a6b2d8;";*/
+/*$color[2] = "background-color: #b8c1e0;";*/
+/*$color[3] = "background-color: #cad0e8;";*/
 
 /*Sekundärfarbe*/
 .w3-secondary,.w3-hover-secondary:hover{color:#000000!important;background-color:#FB775C!important}

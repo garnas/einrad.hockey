@@ -1,138 +1,234 @@
 <?php
-class Spieler {
-    function __construct($spieler_id)
+
+/**
+ * Class Spieler
+ */
+class Spieler
+{
+    /**
+     * Eindeutige ID eines Spielers
+     * @var int
+     */
+    public int $id;
+    public array $details;
+
+    /**
+     * Spieler constructor.
+     * @param $spieler_id
+     */
+    public function __construct(int $spieler_id)
     {
-        $this->spieler_id = $spieler_id;
+        $this->id = $spieler_id;
+        $this->details = $this->get_details();
     }
 
-    //Erstellt einen neuen Spieler in der Datenbank
-    public static function create_new_spieler($vorname,$nachname,$jahrgang,$geschlecht,$team_id)
+    /**
+     * Fügt einen neuen Spieler in die Datenbank ein
+     *
+     * @param string $vorname
+     * @param string $nachname
+     * @param string $jahrgang
+     * @param string $geschlecht
+     * @param int $team_id
+     * @return bool
+     */
+    public static function set_new_spieler(string $vorname, string $nachname, string $jahrgang, string $geschlecht,
+                                           int $team_id): bool
     {
-        $saison = Config::SAISON;
-        //Es wird getestet, ob der Spieler bereits existiert:
-        $sql="SELECT spieler_id, team_id, letzte_saison FROM spieler WHERE vorname='$vorname' AND nachname='$nachname' AND jahrgang='$jahrgang' AND geschlecht='$geschlecht'";
-        $result=db::readdb ($sql);
-        $result=mysqli_fetch_assoc($result);
+        // Es wird getestet, ob der Spieler bereits existiert:
+        $sql = "
+                SELECT spieler_id, team_id, letzte_saison 
+                FROM spieler 
+                WHERE vorname = ? 
+                AND nachname = ?
+                AND jahrgang = ? 
+                AND geschlecht = ?
+                ";
+        $params = [$vorname, $nachname, $jahrgang, $geschlecht];
+        $result = db::$db->query($sql, $params)->fetch_row();
         $spieler_id = $result['spieler_id'] ?? 0;
-        
-        if ($spieler_id>0){ //Testen ob der Spieler schon existiert
-            if ($result['letzte_saison'] <  $saison){ //Testet ob der Spieler aus der Datenbank übernommen werden kann
-                $sql="UPDATE spieler SET team_id = '$team_id', letzte_saison = ' $saison' WHERE spieler_id = '$spieler_id'";
-                db::writedb($sql);
-                Form::affirm ("Der Spieler wurde vom Team ".Team::teamid_to_teamname($result['team_id'])." übernommen.");
+
+        if ($spieler_id > 0) { // Testen ob der Spieler schon existiert
+            if ($result['letzte_saison'] < Config::SAISON) { // Testet ob der Spieler aus der Datenbank übernommen werden kann
+                $sql = "
+                        UPDATE spieler 
+                        SET team_id = ?, letzte_saison = ?
+                        WHERE spieler_id = ?
+                        ";
+                $params = [$team_id, Config::SAISON, $spieler_id];
+                db::$db->query($sql, $params)->log();
+                Html::info("Der Spieler wurde vom Team " . Team::id_to_name($result['team_id']) . " übernommen.");
                 return true;
-            }else{
-                Form::error ("Der Spieler steht bereits im Kader für folgendes Team: " . Team::teamid_to_teamname($result['team_id']) . "<br> Bitte wende dich an den Ligaausschuss (" . Form::mailto(Config::LAMAIL) . ")");
-                return false;
             }
-        }else{
-            //Spieler wird in Spieler-Datenbank eingetragen
-            $sql="INSERT INTO spieler(vorname, nachname, jahrgang, geschlecht, team_id, letzte_saison) VALUES ('$vorname','$nachname','$jahrgang','$geschlecht','$team_id','".Config::SAISON."')";
-            db::writedb ($sql);
-            return true;
-        } 
-    }
 
-    //Check ob der Spieler dem Kader hinzugefügt werden darf
-    public static function check_timing()
-    {
-        //23:59:59 am Saisonende
-        $saison_ende = strtotime(Config::SAISON_ENDE) + 25*60*60 - 1;
-        $heute = Config::time_offset();
-        if ($saison_ende > $heute ){
-            return true;
+            Html::error("Der Spieler steht bereits im Kader für folgendes Team: "
+                . Team::id_to_name($result['team_id']) . "<br> Bitte wende dich an den Ligaausschuss ("
+                . Html::mailto(Env::LAMAIL) . ")", esc:false);
+            return false;
         }
-        return false;
+
+        // Spieler wird in Spieler-Datenbank eingetragen
+        $sql = "
+                INSERT INTO spieler(vorname, nachname, jahrgang, geschlecht, team_id, letzte_saison) 
+                VALUES (?, ?, ?, ?, ?, ?)
+                ";
+        $params = [$vorname, $nachname, $jahrgang, $geschlecht, $team_id, Config::SAISON];
+        db::$db->query($sql, $params)->log();
+        return true;
     }
 
-    //Gibt den Teamkader des Teams mit der entsprechenden TeamID zurück
-    public static function get_teamkader($team_id, $saison = Config::SAISON)
+    /**
+     * Check, ob der Spieler dem Kader hinzugefügt werden darf
+     *
+     * @return bool
+     */
+    public static function check_timing(): bool
     {
-        $sql = "SELECT *  
-            FROM spieler 
-            WHERE team_id='$team_id' 
-            AND letzte_saison = '$saison'
-            ORDER BY letzte_saison DESC, vorname ASC";
-        $result = db::readdb($sql);
-        while ($x = mysqli_fetch_assoc($result)){
-            if (strtotime($x['zeit']) < 0){
-                $x['zeit'] = '--'; //Diese Funktion wurde erst am später hinzugefügt.
-            }
-            $return[$x['spieler_id']] = $x;
-
-        }
-        return db::escape($return ?? array()); //Array 
+        $saison_ende = strtotime(Config::SAISON_ENDE) + 25 * 60 * 60 - 1; // 23:59:59 am Saisonende
+        $heute = time();
+        return $saison_ende > $heute;
     }
 
-    //Ausnahme für die Saison 20/21, da viele Teams ihre Spieler in der Corona_Saison nicht zurückgemeldet haben
-    public static function get_teamkader_vorsaison($team_id)
-    {   
+    /**
+     * Gibt den Teamkader des Teams mit der entsprechenden TeamID zurück
+     *
+     * @param int $team_id
+     * @param int $saison
+     * @return array
+     */
+    public static function get_teamkader(int $team_id, int $saison = Config::SAISON): array
+    {
+        $sql = "
+                SELECT *  
+                FROM spieler 
+                WHERE team_id = ? 
+                AND letzte_saison = ?
+                ORDER BY letzte_saison DESC, vorname
+                ";
+        return db::$db->query($sql, $team_id, $saison)->esc()->fetch('spieler_id');
+    }
+
+    /**
+     * Alte Teamkadereinträge für die Rückmeldung von Spielern
+     *
+     * @param int $team_id
+     * @return array
+     */
+    public static function get_teamkader_vorsaison(int $team_id): array
+    {
         $kader_vorsaison = self::get_teamkader($team_id, Config::SAISON - 1);
         $kader_vorvorsaison = self::get_teamkader($team_id, Config::SAISON - 2);
-        $return = $kader_vorsaison + $kader_vorvorsaison;
-        return db::escape($return ?? array()); //Array 
+            // Ausnahme für die Saison 20/21, da Teams ihre Spieler wegen Corona nicht zurückgemeldet wurden
+        return $kader_vorsaison + $kader_vorvorsaison;
     }
 
-    //Anzahl der Spieler in der Datenbank
-    public static function count_spieler()
-    {   
-        $saison = Config::SAISON - 1; //Zählt die Spieler welche in dieser oder in der letzten Saison in einem Kader waren
-        $sql = "SELECT count(*) FROM spieler WHERE letzte_saison >= '$saison'";
-        $result = db::readdb($sql);
-        $return = mysqli_fetch_assoc($result);
-        return db::escape($return['count(*)']);
-    }
-
-    //Gibt ein Spielerlisten Array aus mit [0] => Vorname Nachname  und [1] => Spieler_id
-    public static function get_spielerliste()
+    /**
+     * Anzahl der Spieler in der Datenbank
+     *
+     * Zählt die Spieler welche in dieser oder in der letzten Saison in einem Kader waren
+     *
+     * @return int
+     */
+    public static function get_anzahl(): int
     {
-        $sql = "SELECT vorname,nachname,spieler_id FROM spieler ORDER BY vorname ASC";
-        $result = db::readdb($sql);
-        while ($x = mysqli_fetch_assoc($result)){
-            $spielerliste[$x['spieler_id']] = $x['vorname']." ".$x['nachname'];
+        $saison = Config::SAISON - 1;
+        $sql = "
+                SELECT count(*) 
+                FROM spieler 
+                WHERE letzte_saison >= '$saison'
+                AND team_id IS NOT NULL
+                ";
+        return db::$db->query($sql)->fetch_one() ?? 0;
+    }
+
+    /**
+     * Gibt ein Spielerlisten Array aus aller in der DB hinterlegten Spieler mit [Spieler_id] => Vorname Nachname
+     *
+     * @return array
+     */
+    public static function get_spielerliste(): array
+    {
+        $sql = "
+                SELECT vorname, nachname, spieler_id 
+                FROM spieler 
+                ORDER BY vorname
+                ";
+        $liste = db::$db->query($sql)->esc()->fetch('spieler_id');
+        foreach ($liste as $id => $x) {
+            $spielerliste[$id] = $x['vorname'] . " " . $x['nachname'];
         }
-        return db::escape($spielerliste); //Array
-    }
-    
-    //Alle Details eines Spielers werden in einem Array zusammen übergeben
-    function get_spieler_details()
-    {
-        $spieler_id = $this->spieler_id;
-        $sql = "SELECT *  FROM spieler WHERE spieler_id='$spieler_id'";
-        $result = db::readdb($sql);
-        $result = mysqli_fetch_assoc($result);
-        return db::escape($result); //array
+        return $spielerliste ?? [];
     }
 
-    //Ein Spieler Detail verändern: $entry -> Spaltenname in der Datenbank, $value->Wert der in die Datenbank eingetragen werden soll
-    function set_spieler_detail($entry, $value)
+    /**
+     * Alle Details eines Spielers werden in einem Array zusammen übergeben
+     *
+     * @return array
+     */
+    public function get_details(): array
     {
-        $spieler_id = $this->spieler_id;
-        if ($entry == 'team_id' or $entry == 'letzte_saison'){
-            $zeit = '';
-        }else{
-            $zeit = ', zeit=zeit';
+        $sql = "
+                SELECT spieler.*, tl.teamname  
+                FROM spieler 
+                LEFT JOIN teams_liga tl on spieler.team_id = tl.team_id
+                WHERE spieler_id = $this->id
+                ";
+        return db::$db->query($sql)->esc()->fetch_row();
+    }
+
+    /**
+     * Ein Spieler Detail verändern: $entry -> Spaltenname in der Datenbank, $value->Wert der in die Datenbank eingetragen werden soll
+     *
+     * @param string $entry
+     * @param mixed $value
+     */
+    public function set_detail(string $entry, mixed $value): void
+    {
+        $spalten_namen = db::$db->query("SHOW FIELDS FROM spieler")->list('Field');
+        if (!in_array($entry, $spalten_namen, true)) {
+            trigger_error("Ungültiger Spaltenname", E_USER_ERROR);
         }
-        $sql = "UPDATE spieler SET $entry = '$value'$zeit WHERE spieler_id='$spieler_id'";
-        db::writedb($sql);
+        $zeit = ($entry === 'team_id' || $entry === 'letzte_saison') ? '' : ', zeit = zeit';
+        $entry = "`" . $entry . "`";
+        $sql = "
+                UPDATE spieler 
+                SET $entry = ?
+                $zeit 
+                WHERE spieler_id = $this->id
+                ";
+        db::$db->query($sql, $value)->log();
     }
 
-    //Der Spieler wird aus der Datenbank gelöscht
-    function delete_spieler()
+
+    /**
+     * Der Spieler wird aus der Datenbank gelöscht
+     */
+    public function delete_spieler(): void
     {
-        $spieler_id = $this->spieler_id;
-        $sql = "DELETE FROM spieler WHERE spieler_id='$spieler_id'";
-        db::writedb($sql);
+        $sql = "
+                DELETE FROM spieler 
+                WHERE spieler_id = $this->id
+                ";
+        db::$db->query($sql)->log();
     }
-    public static function get_anz_schiris()
-    {   
+
+    /**
+     * Anzahl der gültigen Schiedsrichter in aktiven Teams
+     *
+     * @return int
+     */
+    public static function get_schiris_anzahl(): int
+    {
         $saison = Config::SAISON;
-        $sql = "SELECT count(*) 
-            FROM `spieler` 
-            INNER JOIN teams_liga 
-            ON teams_liga.team_id = spieler.team_id 
-            WHERE teams_liga.aktiv = 'Ja' 
-            AND spieler.schiri >= '$saison' OR spieler.schiri = 'Ausbilder/in'";
-        return mysqli_fetch_assoc(db::readdb($sql))['count(*)'];
+        $sql = "
+                SELECT count(*) 
+                FROM `spieler` 
+                INNER JOIN teams_liga 
+                ON teams_liga.team_id = spieler.team_id 
+                WHERE teams_liga.aktiv = 'Ja' 
+                AND spieler.schiri >= $saison 
+                OR spieler.schiri = 'Ausbilder/in'
+                ";
+        return db::$db->query($sql)->esc()->fetch_one() ?? 0;
     }
 }

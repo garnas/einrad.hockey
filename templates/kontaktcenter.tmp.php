@@ -3,7 +3,8 @@
 <p class="w3-text-grey">Das Kontaktcenter kann dazu verwendet werden, um anderen Teams Emails zu senden.</p>
 
 <!-- Javascript für die Tabs zu finden in script.js -->
-<?php if (empty($_SESSION[$list_id]['emails'])){?>
+<?php
+if (empty($_SESSION[$list_id ?? '']['emails'])){?>
     <p>
         <button style="width: 300px;" class="w3-tertiary w3-button" onclick="openTab('turniere')">Turnierwahl</button>
         <i class="w3-hide-small">Alle Teams welche auf den Listen eines Turniers stehen anschreiben</i>
@@ -39,7 +40,7 @@
             <select required class="w3-select w3-border w3-border-primary" name="turnier_id" id="turnier" onchange="this.form.submit()">
                 <option disabled <?php if(empty($_GET['turnier_id'])){?>selected<?php }?>></option>
                 <?php foreach ($turniere as $turnier_id => $turnier){?>
-                    <option <?php if($turnier_id == ($_GET['turnier_id'] ?? '')){?>selected<?php }?> value="<?=$turnier_id?>">
+                    <option <?php if($turnier_id === (int) @$_GET['turnier_id']){?>selected<?php }?> value="<?=$turnier_id?>">
                     <?=$turnier['datum'] .' '.$turnier['ort']. ' ' . $turnier['tname'] . ' (' . $turnier['tblock'] . ')'?>
                     </option>
                 <?php } //end foreach?>
@@ -82,19 +83,17 @@
         <h2 class="w3-text-primary">Kontaktformular: <?=$_SESSION[$list_id]['type']?></h2>
         <form method="post" onsubmit="return confirm('Soll die Email wirklich abgeschickt werden?')">
             <p class=""><b><i class=material-icons>mail</i> Absender</b></p>
-            <p><?=$from?></p>
-            <p class=""><b><i class=material-icons>mail</i> Empfänger <?php if($ligacenter){?>(<?=$anzahl_emails?>)<?php }//end if?></b></p>
-            <p>
-                <div class="w3-row"><i>
-                    <?php foreach($tos as $to){?>
-                       <div class="w3-col m6 s12">
-                            <?=$to?><br>
-                        </div>
+            <p><?= $from ?? [] ?></p>
+            <p class=""><b><i class=material-icons>mail</i> Empfänger <?php if(Helper::$ligacenter){?>(<?=$anzahl_emails ?? []?>)<?php }//end if?></b></p>
+            <div class="w3-row w3-section">
+                <i>
+                    <?php foreach($tos ?? [] as $to){?>
+                       <div class="w3-col m6 s12"><?= $to ?><br></div>
                     <?php }//end foreach?>
-                </i><div class="w3-row">
-            </p>
-            <?php if($ligacenter){ ?>
-                <p><b>+ BCC:</b> <?=Config::LAMAIL_ANTWORT?></p>
+                </i>
+            </div>
+            <?php if(Helper::$ligacenter){ ?>
+                <p><b>+ BCC:</b> <?=Env::LAMAIL_ANTWORT?></p>
             <?php } //endif?>
             <p>
                 <label class="" for="betreff"><b><i class="material-icons">label_outline</i> Betreff</b></label>
@@ -102,9 +101,9 @@
             </p>
             <p>
                 <label class="" for="text"><b><i class="material-icons">subject</i> Text</b></label>
-                <textarea class="w3-input w3-border w3-border-primary" rows="10" type="text" id="text" name="text" required><?=stripcslashes($_POST['text'] ?? '')?></textarea>
+                <textarea class="w3-input w3-border w3-border-primary" rows="10" type="text" id="text" name="text" required><?=stripcslashes($_POST['text'] ?? $signatur ?? '')?></textarea>
             </p>
-            <?php if($teamcenter){ ?>
+            <?php if(Helper::$teamcenter){ ?>
                 <p class="w3-text-green">Es wird ebenfalls eine Email an dein Team gesendet, falls ihr nicht schon auf der Empfängerliste steht.</p>
             <?php } //endif?>
             <?php if ($anzahl_emails > $grenze_bcc){?>

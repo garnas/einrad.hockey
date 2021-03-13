@@ -1,12 +1,25 @@
 <?php
 
+/**
+ * Class xml
+ *
+ * Kreiert die XML-Schnittstelle der Liga
+ *
+ */
 class xml
 {
-    //function defination to convert array to xml
-    public static function array_to_xml($array, $xml, $ebene1="node1", $ebene3="node3")
+    /**
+     * Function definition to convert array to xml
+     *
+     * @param $array
+     * @param $xml
+     * @param string $ebene1
+     * @param string $ebene3
+     */
+    public static function array_to_xml($array, $xml, $ebene1 = "node1", $ebene3 = "node3")
     {
         foreach ($array as $key1 => $value1) {
-            if ($ebene1=="meldungen") {
+            if ($ebene1 == "meldungen") {
                 $subnode1 = $xml->addChild("turnier_id_$key1");
             } else {
                 $subnode1 = $xml->addChild("$ebene1");
@@ -20,8 +33,7 @@ class xml
                             if (is_array($value3)) {
                                 $subnode3 = $subnode2->addChild("$ebene3");
                                 foreach ($value3 as $key4 => $value4) {
-                                    if (is_array($value4)) {
-                                    } else {
+                                    if (!is_array($value4)) {
                                         if (is_numeric($key4)) {
                                             $subnode3->addChild("_$key4", htmlspecialchars("$value4"));
                                         } else {
@@ -40,14 +52,13 @@ class xml
                     } else {
                         if (is_numeric($key2)) {
                             $subnode1->addChild("_$key2", htmlspecialchars("$value2"));
-                        } elseif ($key2=="string") {
-                        } else {
+                        } elseif ($key2 !== "string") {
                             $subnode1->addChild("$key2", htmlspecialchars("$value2"));
                         }
                     }
                 }
-                if ($ebene1=="platz") {
-                    $block = Tabelle::platz_to_block($subnode1->platz);
+                if ($ebene1 == "platz") {
+                    $block = Tabelle::rang_to_block((int)$subnode1->rang);
                     $subnode1->addChild("block", htmlspecialchars("$block"));
                 }
             } else {
