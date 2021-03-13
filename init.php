@@ -86,7 +86,6 @@ spl_autoload_register(
     }
 );
 
-
 /**
  * Diese Funktion wird nach Beendigung des Skriptes ausgeführt.
  * Sie logt User und gibt Fehlerseiten aus.
@@ -128,7 +127,7 @@ register_shutdown_function(static function () {
     }
 
     // Logs schreiben
-    Helper::log("user.log",
+    Helper::log(Config::LOG_USER,
         $_SERVER['REQUEST_URI']
         . " | " . round(microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"], 3) . " s (Load)"
         . " | " . dbWrapper::$query_count . " (Querys)"
