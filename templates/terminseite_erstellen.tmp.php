@@ -73,13 +73,19 @@
                        name="nachname">
             </div>
             <div class="w3-section">
-                <label class="w3-text-primary" for="email">Emailadresse</label>
+                <label class="w3-text-primary" for="email">E-Mail-Adresse des Admins</label>
                 <input required
                        type="email"
+                       list="emails"
                        class="w3-input w3-border w3-border-primary"
-                       value="<?= $emails[0] ?>"
                        id="email"
                        name="email">
+                <datalist id="emails">
+                    <?php foreach ($emails as $email) { ?>
+                        <option value="<?= $email ?>">
+                    <?php } // end foreach?>
+                    </datalist>
+                </datalist>
             </div>
         </div>
 
