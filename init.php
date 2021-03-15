@@ -121,6 +121,7 @@ register_shutdown_function(static function () {
  * https://www.php.net/session_regenerate_id
  *
  * Bei mangelnder Performance session_regenerate_id nur bei Login und Logout einrichten.
+ * Bei häufigen ungültigen Sessions wegen einer schlechten Inet-Verbindung von 15 Sekunden hoch gehen.
  */
 session_start();
 if (
