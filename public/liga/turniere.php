@@ -4,11 +4,12 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
-$turniere = Turnier::get_turniere('ergebnis', false);
+$saison = (int) ($_GET['saison'] ?? Config::SAISON);
+$saison_switch = ($saison > Config::SAISON) ? Config::SAISON : Config::SAISON + 1;
 
-if (empty($turniere)) Html::info("Es wurden noch keine Turniere eingetragen.");
+$turniere = Turnier::get_turniere('ergebnis', false, saison:$saison);
 
-$all_anmeldungen = Turnier::get_all_anmeldungen();
+$all_anmeldungen = Turnier::get_all_anmeldungen($saison);
 
 //Turnierdarten parsen
 foreach ($turniere as $turnier_id => $turnier) {
@@ -24,7 +25,7 @@ foreach ($turniere as $turnier_id => $turnier) {
     } else {
         $turniere[$turnier_id]['besprechung'] = '';
     }
-    //Spielmodus
+    // Spielmodus
     if ($turniere[$turnier_id]['format'] == 'jgj') {
         $turniere[$turnier_id]['format'] = 'Jeder-gegen-Jeden';
     } elseif ($turniere[$turnier_id]['format'] == 'dko') {
@@ -90,15 +91,20 @@ include '../../templates/header.tmp.php';
         });
     </script>
 
-    <h1 class="w3-text-primary">Ausstehende Turniere</h1>
+    <h1 class="w3-text-primary">Turniere der Saison <?= Html::get_saison_string($saison) ?></h1>
 
     <!-- Turnier suchen -->
     <div class="w3-section w3-text-grey w3-border-bottom" style="width: 250px;">
         <?= Html::icon("search") ?><input id="myInput" class='w3-padding w3-border-0' style="width: 225px;" type="text" placeholder="Turnier suchen">
     </div>
 
-    <div id="myDIV"><!-- zu durchsuchendes div -->
-                    <!--Turnierpanels -->
+   <?php if (empty($turniere)) {
+        Html::message('info', "Keine Turniere gefunden.", NULL);
+    } // end if ?>
+
+    <!-- zu durchsuchendes div -->
+    <div id="myDIV">
+        <!--Turnierpanels -->
         <?php foreach ($turniere as $turnier) { ?>
             <section onclick="modal('modal<?= $turnier['turnier_id'] ?>')"
                      class='w3-display-container w3-panel <?php if ($turnier['art'] == 'final') { ?>w3-pale-red<?php } ?> w3-card'
@@ -226,6 +232,12 @@ include '../../templates/header.tmp.php';
             </section>
         <?php } //end foreach?>
     </div>
+    <p>
+        <?= Html::link(
+            'turniere.php?saison=' . $saison_switch,
+            'Zu den Turnieren der Saison ' . Html::get_saison_string($saison_switch),
+            icon:'launch') ?>
+    </p>
 <?php include '../../templates/footer.tmp.php';
 
 

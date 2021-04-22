@@ -55,6 +55,35 @@ class db
     }
 
     /**
+     * Validiert ob eine Spalte einer Tabelle wirklich die Spalte einer Tabelle ist
+     *
+     * @param string $table
+     * @param string $column
+     * @return string
+     */
+    public static function escape_column(string $table, string $column): string
+    {
+        $sql = "
+                SELECT TABLE_NAME 
+                FROM INFORMATION_SCHEMA.TABLES
+                WHERE TABLE_TYPE = 'BASE TABLE' 
+                AND TABLE_SCHEMA = ?
+                ";
+        $tables = self::$db->query($sql, ENV::DATABASE)->list('TABLE_NAME');
+        if (!in_array($table, $tables, true)) {
+            trigger_error("Ungültiger Tabellenname $table", E_USER_ERROR);
+        }
+
+        // Validieren, ob der Spaltenname ein echter Spaltenname ist
+        $sql = "SHOW FIELDS FROM $table";
+        $columns = self::$db->query($sql)->list('Field');
+        if (!in_array($column, $columns, true)) {
+            trigger_error("Ungültiger Spaltenname $column", E_USER_ERROR);
+        }
+        return "`" . $column . "`";
+    }
+
+    /**
      * Entfernt voran- oder hintenstehende Leerzeichen für Parameter von Prerpared-Statements
      *
      * @param mixed $params

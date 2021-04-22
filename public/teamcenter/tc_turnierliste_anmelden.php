@@ -12,7 +12,8 @@ $anz_freilose = $team->get_freilose();
 
 // Relevante Turniere finden
 $heute = date("Y-m-d");
-$turniere = Turnier::get_turniere('ergebnis', false); // wird dem Template übergeben
+$turniere = Turnier::get_turniere('ergebnis', false)
+                + Turnier::get_turniere('ergebnis', false, saison:Config::SAISON + 1);
 
 // Hinweis Live-Spieltag
 $akt_spieltag = Tabelle::get_aktuellen_spieltag();

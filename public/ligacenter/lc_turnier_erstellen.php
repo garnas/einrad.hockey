@@ -9,7 +9,7 @@ require_once '../../logic/la_team_waehlen.logic.php';
 $show_form = false;
 if (isset($_GET['team_id'])){
     $ausrichter_team_id = $_GET['team_id'];
-    if (Team::is_ligateam($ausrichter_team_id)) {
+    if (!Team::is_ligateam($ausrichter_team_id)) {
         Html::error("Ungültige TeamID");
         header('Location: lc_turnier_erstellen.php');
         die();
