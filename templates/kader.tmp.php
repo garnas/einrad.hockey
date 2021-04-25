@@ -104,7 +104,7 @@
         <p>
             <input type="checkbox" class="w3-check" value="zugestimmt" name="dsgvo" id="dsgvo">
             <label for="dsgvo" style="cursor: pointer;" class="w3-text-black">
-                Alle ausgewählten Spieler haben dien aktuellen <?= Html::link(Nav::LINK_DSGVO, 'Datenschutz-Hinweise') ?>
+                Alle ausgewählten Spieler haben die aktuellen <?= Html::link(Nav::LINK_DSGVO, 'Datenschutz-Hinweise') ?>
                 gelesen und ihnen zugestimmt.
             </label>
         </p>
