@@ -1,15 +1,20 @@
-# einrad.hockey-Webseite
+# einrad.hockey-Website
 ![Logo der Einradhockeyliga](https://einrad.hockey/bilder/logo_lang_small.png)
 
-Dies ist der Code der Webseite [einrad.hockey](https://einrad.hockey) der Deutschen Einradhockeyliga.
+Dies ist der Code der Website [einrad.hockey](https://einrad.hockey) der Deutschen Einradhockeyliga.
 
-Du hast Lust mitzuwirken? Melde dich bei ansgar@einrad.hockey!
+einrad.hockey verwendet sein eigenes Framework. Dieses wurde von mir entwickelt, um Interessierten im Einradhockey 
+nach einer möglichst kurzen Einrichtungs- und Einarbeitungsphase die Möglichkeit zu geben, an der Website mitzuarbeiten. 
+Dafür sind nur grundlegende PHP- und/oder HTML/CSS-Kenntnisse notwendig, welche man sich schnell aneignen kann.
+
+Du hast Lust mitzuwirken? Oder Fragen darüber, wie die Webseite funktioniert? Melde dich gerne bei ansgar@einrad.hockey
 
 ## Was kann einrad.hockey?
 
 * Einstellen von Turnieren 
 * Anmeldung von Teams zu Turnieren
 * Automatische Erstellung von Spielplänen und Turnierreports
+* Spiel- und Turnierergebnissen live eintragen
 * Turnierergebnisse und Ligatabellen
 * Teamdatenverwaltung
 * Teamkaderverwaltung
@@ -26,9 +31,7 @@ Du hast Lust mitzuwirken? Melde dich bei ansgar@einrad.hockey!
 
 * [Entwicklungsumgebung erstellen](http://einrad.hockey/dokumente/dokumetation/entwicklungsumgebung_erstellen.pdf)
 
-* [Baustellen und Projekte](http://einrad.hockey/dokumente/dokumetation/baustellen_und_projekte.pdf)
-
-## xml-Schnittstelle:
+## xml-Schnittstelle
 
 * [https://www.einrad.hockey/xml/turnierliste.php](https://www.einrad.hockey/xml/turnierliste.php)
 * [https://www.einrad.hockey/xml/turnieranmeldungen.php](https://www.einrad.hockey/xml/turnieranmeldungen.php)

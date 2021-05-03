@@ -53,28 +53,6 @@ header('Referrer-Policy: no-referrer-when-downgrade');
 
 
 /**
- * Session starten und Session-Hijacking erschweren
- *
- * https://owasp.org/www-community/attacks/Session_fixation
- * https://www.php.net/session_regenerate_id
- *
- * Bei mangelnder Performance session_regenerate_id nur bei Login und Logout einrichten.
- */
-session_start();
-if (
-    isset($_SESSION['destroyed'])
-    && $_SESSION['destroyed'] < time() - 15
-) {
-    unset ($_SESSION['logins']);
-    trigger_error("Ungültige Session-ID.", E_USER_ERROR);
-}
-
-$_SESSION['destroyed'] = time(); // Legt den Destroy-Zeitstempel fest
-session_regenerate_id(); // Kopiert die bestehende Session
-unset($_SESSION['destroyed']); // Die neue Session braucht keinen Destroy-Zeitstempel
-
-
-/**
  * Autoloader der Klassen
  *
  * https://www.php.net/manual/de/language.oop5.autoload.php
@@ -85,7 +63,6 @@ spl_autoload_register(
         include Env::BASE_PATH . '/classes/' . $class . '.class.php';
     }
 );
-
 
 /**
  * Diese Funktion wird nach Beendigung des Skriptes ausgeführt.
@@ -100,7 +77,7 @@ register_shutdown_function(static function () {
     if (
         // Kein Fehlerhandling für localhost (Debugging)
         !(
-            file_exists(__DIR__ . '/nur_localhost.php')
+            file_exists(__DIR__ . '/_localhost/nur_localhost.php')
             && in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])
         )
         // Es lag ein Fehler vor
@@ -128,7 +105,7 @@ register_shutdown_function(static function () {
     }
 
     // Logs schreiben
-    Helper::log("user.log",
+    Helper::log(Config::LOG_USER,
         $_SERVER['REQUEST_URI']
         . " | " . round(microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"], 3) . " s (Load)"
         . " | " . dbWrapper::$query_count . " (Querys)"
@@ -137,6 +114,27 @@ register_shutdown_function(static function () {
 
 });
 
+/**
+ * Session starten und Session-Hijacking erschweren
+ *
+ * https://owasp.org/www-community/attacks/Session_fixation
+ * https://www.php.net/session_regenerate_id
+ *
+ * Bei mangelnder Performance session_regenerate_id nur bei Login und Logout einrichten.
+ * Bei häufigen ungültigen Sessions wegen einer schlechten Inet-Verbindung von 15 Sekunden hoch gehen.
+ */
+session_start();
+if (
+    isset($_SESSION['destroyed'])
+    && $_SESSION['destroyed'] < time()  - 15
+) {
+    session_unset();
+    trigger_error("Ungültige Session-ID.", E_USER_ERROR);
+}
+
+$_SESSION['destroyed'] = time(); // Legt den Destroy-Zeitstempel fest
+session_regenerate_id(); // Kopiert die bestehende Session
+unset($_SESSION['destroyed']); // Die neue Session braucht keinen Destroy-Zeitstempel
 
 /**
  * Verbindung zur Datenbank

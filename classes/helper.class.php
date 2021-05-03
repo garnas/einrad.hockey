@@ -9,6 +9,8 @@ class Helper
     public static bool $ligacenter = false; // Befindet sich der Ligaausschuss auf einer Seite im Ligacenter?
     public static bool $teamcenter = false; // Befindet sich das Team auf einer Seite im Teamcenter?
 
+    public static $log_user = true; // Soll der User geloggt werden? // false für XML
+
 
     /**
      * Teamcenter freischalten? (PW geändert, Ligavertreter angegeben?)
@@ -56,6 +58,8 @@ class Helper
      */
     public static function log(string $file_name, string $line, $hide_akteur = false): void
     {
+        if (!self::$log_user) return;
+
         $path = Env::BASE_PATH . '/system/logs/';
         $log_file = fopen($path . $file_name, 'ab');
         $akteur = ($hide_akteur) ? '' : ' [' . self::get_akteur() . ']';

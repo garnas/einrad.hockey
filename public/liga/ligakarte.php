@@ -122,7 +122,7 @@ function initMap() {
         '<h5 class="w3-text-primary"><?=$team['teamname']?></h5>'+
         '<div class="w3-bottombar"></div>'+
             '<p><?=$team['plz'] . " " .  $team['ort']?></p>'+
-            '<?=str_replace("'",'"',Html::link("teams.php#".$team['team_id'], 'Zur Kontaktliste'))?>'+
+            '<a href="teams.php#<?=$team['team_id']?>" class="no w3-text-primary w3-hover-text-secondary" style="white-space: nowrap;" >Zur Kontaktliste </a>'+
         '</div>';
 
     var infowindow<?=$team['team_id']?> = new google.maps.InfoWindow({
@@ -185,7 +185,7 @@ function initMap() {
         '<h5 class="w3-text-primary"><?=Team::id_to_name(435)?></h5>'+
         '<div class="w3-bottombar"></div>'+
             '<p>412 01 Litoměřice, Tschechien</p>'+
-            '<?=str_replace("'",'"',Html::link("teams.php#435", 'Zur Kontaktliste'))?>'+
+            '<a href="teams.php#435" class="no w3-text-primary w3-hover-text-secondary" style="white-space: nowrap;" >Zur Kontaktliste </a>'+
         '</div>';
 
     var infowindow435 = new google.maps.InfoWindow({
@@ -209,7 +209,7 @@ function initMap() {
         '<h5 class="w3-text-primary"><?=Team::id_to_name(262)?></h5>'+
         '<div class="w3-bottombar"></div>'+
             '<p>Prag, Tschechien</p>'+
-            '<?=str_replace("'",'"',Html::link("teams.php#262", 'Zur Kontaktliste'))?>'+
+            '<a href="teams.php#262" class="no w3-text-primary w3-hover-text-secondary" style="white-space: nowrap;" >Zur Kontaktliste </a>'+
         '</div>';
 
     var infowindow262 = new google.maps.InfoWindow({

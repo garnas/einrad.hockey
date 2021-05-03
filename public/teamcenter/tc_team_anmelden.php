@@ -40,15 +40,13 @@ if ($turnier->check_team_angemeldet($_SESSION['logins']['team']['id'])){
     $team_angemeldet = false;
 }
 
-//Turnieranmeldungen bekommen
+// Turnieranmeldungen bekommen
 $anmeldungen = $turnier->get_anmeldungen();
 
-//Abmeldung möglich bis Freitag abend zwei Wochen vor dem Spieltag. Das Bedeutet zwei Wochen nach dem Loszeitpunkt:
-$abmelden_moeglich_bis = LigaBot::time_offen_melde($turnier->details['datum']) + 2*7*24*60*60;
+// Abmeldung möglich bis Freitag abend zwei Wochen vor dem Spieltag. Das Bedeutet zwei Wochen nach dem Loszeitpunkt:
+$abmelden_moeglich_bis = LigaBot::time_offen_melde($turnier->details['datum']) + 2*7*24*60*60; // Todo in Funktion
 
-/////////////Formularauswertung der Turnieranmeldung/////////////
-
-//Reguläres Anmelden
+// Reguläres Anmelden
 if (isset($_POST['anmelden'])){
     $error = false;
     if (!($turnier->details['art'] == 'I' or $turnier->details['art'] == 'II' or $turnier->details['art'] == 'III')){
@@ -69,14 +67,10 @@ if (isset($_POST['anmelden'])){
         Html::error ("Das Turnier ist schon in der Ergebnisphase. Melde dich bei " .Html::mailto(Env::LAMAIL));
         $error = true;
     }
-    //Test Teamblock
-    /* Enfällt mit Modusänderung
-    if (!$akt_turnier->check_team_block($_SESSION['logins']['team']['id'])){
-        Form::error ("Falscher Teamblock");
-        $error = true;
-    }
-    */
-    if (!$error){
+
+    if ($error) {
+        Html::error ("Dein Team wurde nicht angemeldet.");
+    } else {
         //Position auf der Warteliste
         $pos = 0;
         //Richtige Liste finden
@@ -104,13 +98,10 @@ if (isset($_POST['anmelden'])){
             Html::error("Dein Team ist bereits auf einer Spiele-Liste am gleichen Kalendertag");
         }else{
             $turnier->anmelden($_SESSION['logins']['team']['id'], $liste, $pos);
-            $turnier->log("Anmeldung: ". $_SESSION['logins']['team']['name'] ."\r\nTeamblock: ".$_SESSION['logins']['team']['block']. " Turnierblock: " . $turnier->details['tblock'] . "\r\nListe: $liste (WartePos: $pos)", $_SESSION['logins']['team']['name']);
             Html::info ("Dein Team wurde zum Turnier angemeldet");
             header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier->details['turnier_id']);
             die();
         }
-    }else{
-        Html::error ("Dein Team wurde nicht angemeldet.");
     }
 }
 
@@ -152,14 +143,14 @@ if (isset($_POST['freilos'])){
         Html::error ("Die Spielen-Liste ist schon voll");
         $error = true;
     }
-    if (!$error){
+    if ($error) {
+        Html::error ("Dein Team wurde nicht angemeldet.");
+    } else {
         $turnier->abmelden($_SESSION['logins']['team']['id']);
         $turnier->freilos($_SESSION['logins']['team']['id']);
         Html::info ("Dein Team wurde zum Turnier angemeldet");
         header('Location: ../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier->details['turnier_id']);
         die();
-    }else{
-        Html::error ("Dein Team wurde nicht angemeldet.");
     }
 }
 
@@ -252,6 +243,7 @@ include '../../templates/header.tmp.php';
                 <?php }else{ ?><i>leer</i><?php } //endif?>
             </p>
         </div>
+
         <!--Meldeliste-->
         <div class="w3-section">
             <?php if (!empty($anmeldungen['melde'])){?>

@@ -4,6 +4,8 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
+Helper::$log_user = false; // Keine User-Logs
+
 //Assoziatives Array der Rangtabelle
 $rang_tabelle = tabelle::get_rang_tabelle(Tabelle::get_aktuellen_spieltag()-1);
 

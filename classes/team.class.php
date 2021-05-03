@@ -322,7 +322,7 @@ class Team
                 FROM teams_liga
                 WHERE team_id = $this->id
                 ";
-        return db::$db->query($sql)->log()->fetch_one();
+        return db::$db->query($sql)->esc()->fetch_one();
     }
 
     /**

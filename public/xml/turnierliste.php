@@ -4,7 +4,9 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
-//Assoziatives Array aller Turniere der Aktuellen Saison
+Helper::$log_user = false; // Keine User-Logs
+
+// Assoziatives Array aller Turniere der Aktuellen Saison
 $turniere = Turnier::get_turniere('alle', false);
 
 $xml = new SimpleXMLElement('<turniere/>');
