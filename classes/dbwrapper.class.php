@@ -18,7 +18,7 @@ class dbWrapper
     /**
      * Nur für Logs verwendet
      */
-    public int $query_count = 0;
+    public static int $query_count = 0;
     private string $sql;
     private mixed $params;
 
@@ -37,8 +37,7 @@ class dbWrapper
     {
         $this->link = new mysqli($host, $user, $password, $database);
         if ($this->link->connect_errno) {
-            Form::log(Config::LOG_DB, "ERROR Verbindung: " . mysqli_connect_error());
-            die("Verbindung zur Datenbank nicht möglich.");
+            Helper::log(Config::LOG_DB, "ERROR Verbindung: " . mysqli_connect_error());
         }
         $this->link->set_charset("utf8mb4");
     }
@@ -57,38 +56,34 @@ class dbWrapper
         unset($this->result, $this->stmt, $this->sql, $this->params);
 
         // Prepare
-        if (!$this->stmt = $this->link->prepare($sql)){
-            Form::log(Config::LOG_DB, "ERROR " . dbi::escape($this->link->error));
-            trigger_error($this->link->error, E_USER_ERROR);
+        if (!$this->stmt = $this->link->prepare($sql)) {
+            Helper::log(Config::LOG_DB, "ERROR " . db::escape($this->link->error));
         }
         // Parameter übergeben
         if ($this->stmt->param_count > 0) { // Alternativ if (!empty($params))
             if (is_array($params[array_key_first($params)])) {
                 $params = $params[array_key_first($params)];
             }
-            if ($this->stmt->param_count != count($params)){
+            if ($this->stmt->param_count != count($params)) {
                 $this->sql = $sql;
                 $this->params = $params;
                 $this->log();
-                Form::log(Config::LOG_DB, "ERROR Falsche Anzahl an Parametern für Mysqli-Prepare");
-                trigger_error($this->link->error, E_USER_ERROR);
+                Helper::log(Config::LOG_DB, "ERROR Falsche Anzahl an Parametern für Mysqli-Prepare");
             }
-            $params = dbi::trim_params($params);
+            $params = db::trim_params($params);
             $this->bind($params);
         }
 
         // Ausführen
-        if (!$this->stmt->execute()){
-            Form::log(Config::LOG_DB, "ERROR " . dbi::escape($this->stmt->error));
-            trigger_error($this->link->error, E_USER_ERROR);
-
+        if (!$this->stmt->execute()) {
+            Helper::log(Config::LOG_DB, "ERROR " . db::escape($this->stmt->error));
         }
         $this->result = $this->stmt->get_result();
 
         // Für Logs
         $this->sql = $sql;
         $this->params = $params;
-        $this->query_count++;
+        self::$query_count++;
 
         return $this;
     }
@@ -98,7 +93,7 @@ class dbWrapper
      *
      * @param $params
      */
-    function bind($params)
+    private function bind($params): void
     {
         $args_ref = [];
         $types = '';
@@ -119,7 +114,7 @@ class dbWrapper
      */
     public function fetch_one(): mixed
     {
-        if ($this->escape_result) return dbi::escape($this->result->fetch_array()[0] ?? null);
+        if ($this->escape_result) return db::escape($this->result->fetch_array()[0] ?? null);
         return $this->result->fetch_array()[0] ?? null;
     }
 
@@ -130,7 +125,7 @@ class dbWrapper
      */
     public function fetch_row(): array
     {
-        if ($this->escape_result) return dbi::escape($this->result->fetch_assoc() ?? []);
+        if ($this->escape_result) return db::escape($this->result->fetch_assoc() ?? []);
         return $this->result->fetch_assoc() ?? [];
     }
 
@@ -152,7 +147,7 @@ class dbWrapper
                 $return[$x[$key]] = $x[$spalte];
             }
         }
-        return ($this->escape_result) ? dbi::escape($return ?? []) : $return ?? [];
+        return ($this->escape_result) ? db::escape($return ?? []) : $return ?? [];
     }
 
     /**
@@ -172,7 +167,7 @@ class dbWrapper
                 $return[$x[$key]] = $x;
             }
         }
-        return ($this->escape_result) ? dbi::escape($return ?? []) : $return ?? [];
+        return ($this->escape_result) ? db::escape($return ?? []) : $return ?? [];
     }
 
     /**
@@ -202,7 +197,7 @@ class dbWrapper
      */
     public function get_last_insert_id(): int
     {
-        return dbi::$db->link->insert_id;
+        return db::$db->link->insert_id;
     }
 
     /**
@@ -239,25 +234,17 @@ class dbWrapper
      */
     public function log(bool $anonym = false): dbWrapper
     {
-        // Wer?
-        $autoren = [
-            $_SESSION['logins']['team']['name'] ?? '',
-            $_SESSION['la_login_name'] ?? '',
-            $_SESSION['ligabot'] ?? ''
-        ];
-        $autoren = implode(" | ", array_filter($autoren));
-
-        // Welche Query?
+        // Query formatieren
         $sql = trim(preg_replace("/(^\h+|\h+$)/m", '', $this->sql)); // Schönere Formatierung
 
-        // Welche Werte?
-        if (!empty($this->params)){
-            $params = ($anonym) ? "\nAnonyme Query" :  "\n?: " . implode("\n?: ", $this->params);
+        // Parameter formatieren
+        if (!empty($this->params)) {
+            $params = ($anonym) ? "\nAnonyme Query" : "\n?: " . implode("\n?: ", $this->params);
         }
 
         // Log-Text
-        $log = $autoren . "\n" . $sql . ($params ?? '') . "\n";
-        Form::log(Config::LOG_DB, $log);
+        $log = $sql . ($params ?? '');
+        Helper::log(Config::LOG_DB, $log);
         return $this;
     }
 

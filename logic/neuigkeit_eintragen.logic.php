@@ -1,17 +1,17 @@
 <?php
-// Autor festlegen - Config::$ligacenter und Config::Config::$teamcenter werden als boolean in session_la.logic.php bzw session_team.logic.php festgelegt
+// Autor festlegen - Config::$ligacenter und Html::$teamcenter werden als boolean in session_la.logic.php bzw session_team.logic.php festgelegt
 // Dadurch weiß man, ob vom Teamcenter oder vom Ligacenter auf dieses Skript zugegriffen wird
 // Dies ermöglicht den gleichzeitgen Login von Ligaausschuss und Ligateams in einem Browser
 
 // Autor
-$name = (Config::$ligacenter) ? "Ligaausschuss" : $_SESSION['logins']['team']['name'];
-
+$name = (Helper::$ligacenter) ? "Ligaausschuss" : $_SESSION['logins']['team']['name'];
+$error = false;
 
 // Formularauswertung
 if (isset($_POST['create_neuigkeit'])) {
 
     if (empty($_POST['titel']) || empty($_POST['text'])) {
-        Form::error("Bitte Titel und Text eingeben.");
+        Html::error("Bitte Titel und Text eingeben.");
     } else {
 
         // Fileupload
@@ -47,16 +47,16 @@ if (isset($_POST['create_neuigkeit'])) {
         $text = $_POST['text'];
         $bild_verlinken = $_POST['bild_verlinken'] ?? '';
 
-        if (!$error) {
-            Neuigkeit::create($titel, $text, $name, $target_file_jpg, $target_file_pdf, $bild_verlinken);
-            Form::info("Deine Neuigkeit wurde erfolgreich eingetragen");
-            header('Location: ../liga/neues.php');
-            die(); // Damit das Skript nicht zu auf dem Server zu ende ausgeführt wird.
-        } else {
+        if ($error) {
             // evtl hochgeladene Dateien löschen.
             if (($target_file_pdf ?? false) !== false) unlink($target_file_pdf);
             if (($target_file_jpg ?? false) !== false) unlink($target_file_jpg);
-            Form::error("Neuigkeit wurde nicht erstellt, eventuell hochgeladene Dateien müssen erneut hochgeladen werden.");
+            Html::error("Neuigkeit wurde nicht erstellt, eventuell hochgeladene Dateien müssen erneut hochgeladen werden.");
+        } else {
+            Neuigkeit::create($titel, $text, $name, $target_file_jpg, $target_file_pdf, $bild_verlinken);
+            Html::info("Deine Neuigkeit wurde erfolgreich eingetragen");
+            header('Location: ../liga/neues.php');
+            die(); // Damit das Skript nicht zu auf dem Server zu ende ausgeführt wird.
         }
     }
 }

@@ -2,18 +2,16 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
 //Turnierklasse erstellen
-$turnier_id = (int)$_GET['turnier_id'];
+$turnier_id = (int)@$_GET['turnier_id'];
 $turnier = new Turnier($turnier_id);
 
 //Existiert das Turnier?
 if (empty($turnier->details)) {
-    Form::error("Turnier wurde nicht gefunden");
-    header('Location: lc_turnierliste.php');
-    die();
+    Helper::not_found("Turnier konnte nicht gefunden werden.");
 }
 
 //Vorhandenes Ergebnis anzeigen
@@ -24,7 +22,7 @@ $turnier_ergebnis = $turnier->get_ergebnis();
 if (isset($_POST['ergebnis_loeschen'])) {
     $turnier->delete_ergebnis();
     $turnier->set_phase('spielplan');
-    Form::info("Ergebnis wurde gelöscht. Das Turnier wurde in die Spielplanphase versetzt.");
+    Html::info("Ergebnis wurde gelöscht. Das Turnier wurde in die Spielplanphase versetzt.");
     header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->details['turnier_id']);
     die();
 }
@@ -32,17 +30,17 @@ if (isset($_POST['ergebnis_loeschen'])) {
 //Ergebnis eintragen
 if (isset($_POST['ergebnis_eintragen'])) {
     if (!Tabelle::check_ergebnis_eintragbar($turnier)) {
-        Form::error("Turnierergebnis wurde nicht eingetragen");
+        Html::error("Turnierergebnis wurde nicht eingetragen");
         $error = true;
     }
     if (count(array_unique($_POST['team_id'])) != count($_POST['team_id'])) {
-        Form::error("Es wurden Teams doppelt eingetragen!");
+        Html::error("Es wurden Teams doppelt eingetragen!");
         $error = true;
     }
     for ($platz = 1; $platz <= $anzahl_teams; $platz++) {
         if (empty($_POST['team_id'][$platz]) || empty($_POST['ergebnis'][$platz])) {
             $error = true;
-            Form::error("Formular wurde unvollständig übermittelt");
+            Html::error("Formular wurde unvollständig übermittelt");
             break;
         }
     }
@@ -56,7 +54,7 @@ if (isset($_POST['ergebnis_eintragen'])) {
         $turnier->set_ergebnis($_POST['team_id'][$platz], $_POST['ergebnis'][$platz], $platz);
     }
     $turnier->set_phase('ergebnis');
-    Form::info("Ergebnisse wurden manuell eingetragen. Das Turnier wurde in die Ergebnisphase versetzt.");
+    Html::info("Ergebnisse wurden manuell eingetragen. Das Turnier wurde in die Ergebnisphase versetzt.");
     header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->details['turnier_id']);
     die();
 }
@@ -65,33 +63,33 @@ if (isset($_POST['ergebnis_eintragen'])) {
 if (isset($_POST['auto_spielplan_erstellen'])) {
     $error = false;
     if ($turnier->details['phase'] != "melde") {
-        Form::error("Das Turnier muss in der Meldephase sein.");
+        Html::error("Das Turnier muss in der Meldephase sein.");
         $error = true;
     }
     if ($anzahl_teams < 4 || $anzahl_teams > 8) {
-        Form::error("Falsche Anzahl an Teams. Nur 4er - 8er Jeder-gegen-Jeden Spielpläne können erstellt werden.");
+        Html::error("Falsche Anzahl an Teams. Nur 4er - 8er Jeder-gegen-Jeden Spielpläne können erstellt werden.");
         $error = true;
     }
     if (!empty($turnier->details['spielplan_link'])) {
-        Form::error("Spielplan konnte nicht erstellt werden. Es existiert ein manuell hochgeladener Spielplan.");
+        Html::error("Spielplan konnte nicht erstellt werden. Es existiert ein manuell hochgeladener Spielplan.");
         $error = true;
     }
     if (!$error) {
-        if (Spielplan::fill_vorlage($turnier)){
-            Form::info("Das Turnier wurde in die Spielplan-Phase versetzt. Der Spielplan wird jetzt angezeigt.");
+        if (Spielplan::fill_vorlage($turnier)) {
+            Html::info("Das Turnier wurde in die Spielplan-Phase versetzt. Der Spielplan wird jetzt angezeigt.");
             header('Location: ../liga/spielplan.php?turnier_id=' . $turnier->id);
             die();
         }
 
-        Form::error("Spielplan konnte nicht erstellt werden.");
+        Html::error("Spielplan konnte nicht erstellt werden.");
     }
 }
 
 //Spielplan löschen
 if (isset($_POST['auto_spielplan_loeschen'])) {
     Spielplan::delete($turnier);
-    Form::info("Der dynamisch erstellte Spielplan wurde gelöscht. Das Turnier wurde in die Meldephase versetzt!");
-    header('Location:' . dbi::escape($_SERVER['REQUEST_URI']));
+    Html::info("Der dynamisch erstellte Spielplan wurde gelöscht. Das Turnier wurde in die Meldephase versetzt!");
+    header('Location:' . db::escape($_SERVER['REQUEST_URI']));
     die();
 }
 
@@ -99,7 +97,7 @@ if (isset($_POST['auto_spielplan_loeschen'])) {
 if (isset($_POST['spielplan_hochladen'])) {
     if (Spielplan::check_exist($turnier->id)) {
         $error = true;
-        Form::error("Hochladen nicht möglich. Es existiert bereits ein dynamisch erstellter Spielplan.");
+        Html::error("Hochladen nicht möglich. Es existiert bereits ein dynamisch erstellter Spielplan.");
     }
     if (!empty($_FILES["spielplan_file"]["tmp_name"])) {
         $target_dir = "../uploads/s/spielplan/";
@@ -108,18 +106,18 @@ if (isset($_POST['spielplan_hochladen'])) {
         if ($target_file_pdf !== false) {
             if ($_POST['sp_or_erg'] === 'ergebnis') {
                 $turnier->upload_spielplan($target_file_pdf, 'ergebnis');
-                Form::info("Manueller Spielplan hochgeladen. Das Turnier wurde in die Ergebnis-Phase versetzt.");
+                Html::info("Manueller Spielplan hochgeladen. Das Turnier wurde in die Ergebnis-Phase versetzt.");
             } else {
                 $turnier->upload_spielplan($target_file_pdf, 'spielplan');
-                Form::info("Manueller Spielplan hochgeladen. Das Turnier wurde in die Spielplan-Phase versetzt.");
+                Html::info("Manueller Spielplan hochgeladen. Das Turnier wurde in die Spielplan-Phase versetzt.");
             }
-            header("Location: lc_spielplan_verwalten.php?turnier_id=$turnier->id" );
+            header("Location: lc_spielplan_verwalten.php?turnier_id=$turnier->id");
             die();
         }
-        Form::error("Fehler beim Upload");
+        Html::error("Fehler beim Upload");
 
     } else {
-        Form::error("Es wurde kein Spielplan gefunden");
+        Html::error("Es wurde kein Spielplan gefunden");
     }
 }
 
@@ -127,14 +125,14 @@ if (isset($_POST['spielplan_hochladen'])) {
 if (isset($_POST['spielplan_delete'])) {
     unlink($turnier->details['spielplan_datei']);
     $turnier->upload_spielplan('', 'melde');
-    Form::info("Spielplan- / Ergebnisdatei wurde gelöscht. Turnier wurde in die Meldephase versetzt.");
+    Html::info("Spielplan- / Ergebnisdatei wurde gelöscht. Turnier wurde in die Meldephase versetzt.");
     header("Location: lc_spielplan_verwalten.php?turnier_id=$turnier->id");
     die();
 }
 
 // Hinweis Finalturniere-Ergebnis
 if ($turnier->details['art'] === 'final') {
-    Form::notice("Beim Eintragen von Finalturnieren kann eine beliebige Punktzahl eingeben werden.");
+    Html::notice("Beim Eintragen von Finalturnieren kann eine beliebige Punktzahl eingeben werden.");
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -162,7 +160,7 @@ include '../../templates/header.tmp.php';
                 <th>Team ID</th>
                 <th>Teamname</th>
                 <th class="w3-center">Teamblock</th>
-                <th class="w3-center">Wertigkeit</th>
+                <th class="w3-center">Wertung</th>
             </tr>
             </thead>
             <?php foreach ($teamliste as $team) { ?>
@@ -178,27 +176,27 @@ include '../../templates/header.tmp.php';
 
     <!-- Dynamischer Spielplan erstellen -->
     <h2 class="w3-text-primary w3-bottombar">JgJ-Spielplan erstellen</h2>
-    <?php if (empty($turnier->details['spielplan_datei'])) { ?>
-        <form method="post">
-            <?php if (Spielplan::check_exist($turnier->id)) { ?>
-                <p>
-                    <input type="submit"
-                           name="auto_spielplan_loeschen"
-                           value="JgJ-Spielplan löschen"
-                           class="w3-button w3-secondary">
-                </p>
-            <?php } else { ?>
-                <p>
-                    <input type="submit"
-                           name="auto_spielplan_erstellen"
-                           value="JgJ-Spielplan erstellen"
-                           class="w3-button w3-tertiary">
-                </p>
-            <?php } // endif ?>
-        </form>
-    <?php } else { ?>
-        <p>Bitte zuerst den manuell hochgeladenen Spielplan löschen.</p>
-    <?php } // endif ?>
+<?php if (empty($turnier->details['spielplan_datei'])) { ?>
+    <form method="post">
+        <?php if (Spielplan::check_exist($turnier->id)) { ?>
+            <p>
+                <input type="submit"
+                       name="auto_spielplan_loeschen"
+                       value="JgJ-Spielplan löschen"
+                       class="w3-button w3-secondary">
+            </p>
+        <?php } else { ?>
+            <p>
+                <input type="submit"
+                       name="auto_spielplan_erstellen"
+                       value="JgJ-Spielplan erstellen"
+                       class="w3-button w3-tertiary">
+            </p>
+        <?php } // endif ?>
+    </form>
+<?php } else { ?>
+    <p>Bitte zuerst den manuell hochgeladenen Spielplan löschen.</p>
+<?php } // endif ?>
 
     <!-- Manuellen Spielplan hochladen -->
     <h2 class="w3-text-primary w3-bottombar">oder PDF- oder XLSX-Spielplan hochladen</h2>
@@ -235,7 +233,7 @@ include '../../templates/header.tmp.php';
 
         <?php if (!empty($turnier->details['spielplan_datei'])) { ?>
             <p>
-                <?= Form::link($turnier->details['spielplan_datei'], 'Spielplan/Ergebnis herunterladen', true); ?>
+                <?= Html::link($turnier->details['spielplan_datei'], 'Spielplan/Ergebnis herunterladen', true); ?>
             </p>
             <p>
                 <input type="submit"
@@ -295,7 +293,7 @@ include '../../templates/header.tmp.php';
             <input type="submit"
                    name="ergebnis_loeschen"
                    value="Ergebnis löschen"
-                    <?= (empty($turnier_ergebnis) ? 'disabled' : '')?>
+                <?= (empty($turnier_ergebnis) ? 'disabled' : '') ?>
                    class="w3-button w3-secondary"
             >
         </p>

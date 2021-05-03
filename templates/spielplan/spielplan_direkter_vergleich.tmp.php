@@ -1,47 +1,70 @@
+<?php if (!empty($spielplan->direkter_vergleich_tabellen)){ ?>
+    <!-- Buttons zum Ein/Ausblenden der Vergleiche -->
+    <div class="w3-section w3-margin-top">
+        <div id='button_da'>
+            <button  class="w3-primary w3-block w3-button"
+                     onclick='modal("vergleichs_tabellen");modal("button_da");modal("button_weg");'>
+                <?= Html::icon("keyboard_arrow_down") ?>
+                Direkter Vergleich
+                <?= Html::icon("keyboard_arrow_down") ?>
+            </button>
+        </div>
+        <div id='button_weg' style='display: none;'>
+            <button class="w3-primary w3-card-4 w3-block w3-button"
+                    onclick='modal("vergleichs_tabellen");modal("button_da");modal("button_weg");'>
+                <?= Html::icon("keyboard_arrow_up") ?>
+                Direkter Vergleich
+                <?= Html::icon("keyboard_arrow_up") ?>
+            </button>
+        </div>
+    </div>
+<?php } //endif ?>
+
+<div id="vergleichs_tabellen" style="display: none">
+    <!-- Tabellen für den direkten Vergleich -->
+    <h3 class="w3-text-secondary">Direkter Vergleich</h3>
     <?php foreach ($spielplan->direkter_vergleich_tabellen as $direkter_vergleich) { ?>
-        <!-- Tabellen für den direkten Vergleich -->
-        <h4 class="w3-text-secondary">Direkter Vergleich</h4>
-        <div class="w3-card w3-responsive">
+        <div class="w3-card-4 w3-responsive w3-section">
             <table class="w3-table w3-centered">
                 <tr class="w3-primary">
                     <th>
-                        <i class="material-icons">bar_chart</i>
+                        <?= Html::icon("bar_chart") ?>
                         <br>
                         Platz
                     </th>
                     <th>
-                        <i class="material-icons">group</i>
+                        <?= Html::icon("group") ?>
                         <br>
                         Team
                     </th>
                     <th>
-                        <i class="material-icons">sports_hockey</i>
+                        <?= Html::icon("sports_hockey") ?>
                         <br>
                         Spiele
                     </th>
                     <th>
-                        <i class="material-icons">workspaces</i>
+                        <?= Html::icon("workspaces") ?>
                         <br>
                         Punkte
                     </th>
                     <th>
-                        <i class="material-icons">drag_handle</i>
+                        <?= Html::icon("drag_handle") ?>
                         <br>
                         Differenz
                     </th>
                     <th>
-                        <i class="material-icons">add</i>
+                        <?= Html::icon("add") ?>
                         <br>
                         Tore
                     </th>
                     <th>
-                        <i class="material-icons">remove</i>
+                        <?= Html::icon("remove") ?>
                         <br>Gegentore
                     </th>
                 </tr>
                 <?php foreach ($direkter_vergleich as $team_id => $ergebnis) { ?>
                     <tr>
-                        <td><?= $spielplan->platzierungstabelle[$team_id]['platz']?></td>
+                        <td><?= $spielplan->platzierungstabelle[$team_id]['platz'] ?></td>
                         <td style="white-space: nowrap"><?= $spielplan->teamliste[$team_id]['teamname'] ?></td>
                         <td><?= $ergebnis['spiele'] ?></td>
                         <td><?= $ergebnis['punkte'] ?></td>
@@ -53,51 +76,53 @@
             </table>
         </div>
     <?php }//end foreach ?>
+    <!-- Tabellen für den direkten Vergleich -->
+    <?php if (!empty($spielplan->penalty_tabellen)){ ?>
+        <h3 class="w3-text-secondary">Penalty Vergleich</h3>
+    <?php }//end if ?>
     <?php foreach ($spielplan->penalty_tabellen as $penalty) { ?>
-        <!-- Tabellen für den direkten Vergleich -->
-        <h4 class="w3-text-secondary">Penalty Vergleich</h4>
-        <div class="w3-card w3-responsive">
+        <div class="w3-card-4 w3-responsive w3-section">
             <table class="w3-table w3-centered">
                 <tr class="w3-primary">
                     <th>
-                        <i class="material-icons">bar_chart</i>
+                        <?= Html::icon("bar_chart") ?>
                         <br>
                         Platz
                     </th>
                     <th>
-                        <i class="material-icons">group</i>
+                        <?= Html::icon("group") ?>
                         <br>
                         Team
                     </th>
                     <th>
-                        <i class="material-icons">sports_hockey</i>
+                        <?= Html::icon("sports_hockey") ?>
                         <br>
                         Penaltys
                     </th>
                     <th>
-                        <i class="material-icons">priority_high</i>
+                        <?= Html::icon("priority_high") ?>
                         <br>
                         Punkte
                     </th>
                     <th>
-                        <i class="material-icons">priority_high</i>
+                        <?= Html::icon("priority_high") ?>
                         <br>
                         Differenz
                     </th>
                     <th>
-                        <i class="material-icons">priority_high</i>
+                        <?= Html::icon("priority_high") ?>
                         <br>
                         Tore
                     </th>
                     <th>
-                        <i class="material-icons">priority_high</i>
+                        <?= Html::icon("priority_high") ?>
                         <br>
                         Gegentore
                     </th>
                 </tr>
                 <?php foreach ($penalty as $team_id => $ergebnis) { ?>
                     <tr>
-                        <td><?= $spielplan->platzierungstabelle[$team_id]['platz']?></td>
+                        <td><?= $spielplan->platzierungstabelle[$team_id]['platz'] ?></td>
                         <td style="white-space: nowrap"><?= $spielplan->teamliste[$team_id]['teamname'] ?></td>
                         <td><?= $ergebnis['penalty_spiele'] ?></td>
                         <td>
@@ -116,3 +141,4 @@
             </table>
         </div>
     <?php }//end foreach ?>
+</div>

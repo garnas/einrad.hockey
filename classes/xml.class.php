@@ -58,7 +58,7 @@ class xml
                     }
                 }
                 if ($ebene1 == "platz") {
-                    $block = Tabelle::platz_to_block($subnode1->platz);
+                    $block = Tabelle::rang_to_block($subnode1->platz);
                     $subnode1->addChild("block", htmlspecialchars("$block"));
                 }
             } else {

@@ -40,7 +40,7 @@ if (empty($_SESSION[$list_id ?? '']['emails'])){?>
             <select required class="w3-select w3-border w3-border-primary" name="turnier_id" id="turnier" onchange="this.form.submit()">
                 <option disabled <?php if(empty($_GET['turnier_id'])){?>selected<?php }?>></option>
                 <?php foreach ($turniere as $turnier_id => $turnier){?>
-                    <option <?php if($turnier_id == ($_GET['turnier_id'] ?? '')){?>selected<?php }?> value="<?=$turnier_id?>">
+                    <option <?php if($turnier_id === (int) @$_GET['turnier_id']){?>selected<?php }?> value="<?=$turnier_id?>">
                     <?=$turnier['datum'] .' '.$turnier['ort']. ' ' . $turnier['tname'] . ' (' . $turnier['tblock'] . ')'?>
                     </option>
                 <?php } //end foreach?>
@@ -84,7 +84,7 @@ if (empty($_SESSION[$list_id ?? '']['emails'])){?>
         <form method="post" onsubmit="return confirm('Soll die Email wirklich abgeschickt werden?')">
             <p class=""><b><i class=material-icons>mail</i> Absender</b></p>
             <p><?= $from ?? [] ?></p>
-            <p class=""><b><i class=material-icons>mail</i> Empfänger <?php if(Config::$ligacenter){?>(<?=$anzahl_emails ?? []?>)<?php }//end if?></b></p>
+            <p class=""><b><i class=material-icons>mail</i> Empfänger <?php if(Helper::$ligacenter){?>(<?=$anzahl_emails ?? []?>)<?php }//end if?></b></p>
             <div class="w3-row w3-section">
                 <i>
                     <?php foreach($tos ?? [] as $to){?>
@@ -92,7 +92,7 @@ if (empty($_SESSION[$list_id ?? '']['emails'])){?>
                     <?php }//end foreach?>
                 </i>
             </div>
-            <?php if(Config::$ligacenter){ ?>
+            <?php if(Helper::$ligacenter){ ?>
                 <p><b>+ BCC:</b> <?=Env::LAMAIL_ANTWORT?></p>
             <?php } //endif?>
             <p>
@@ -103,7 +103,7 @@ if (empty($_SESSION[$list_id ?? '']['emails'])){?>
                 <label class="" for="text"><b><i class="material-icons">subject</i> Text</b></label>
                 <textarea class="w3-input w3-border w3-border-primary" rows="10" type="text" id="text" name="text" required><?=stripcslashes($_POST['text'] ?? $signatur ?? '')?></textarea>
             </p>
-            <?php if(Config::$teamcenter){ ?>
+            <?php if(Helper::$teamcenter){ ?>
                 <p class="w3-text-green">Es wird ebenfalls eine Email an dein Team gesendet, falls ihr nicht schon auf der Empfängerliste steht.</p>
             <?php } //endif?>
             <?php if ($anzahl_emails > $grenze_bcc){?>

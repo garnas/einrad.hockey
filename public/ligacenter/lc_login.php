@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 
 // Formularauswertung
 if (isset($_POST['login'])) {
@@ -12,7 +12,7 @@ if (isset($_POST['login'])) {
 
     if (empty($login) || empty($passwort)) {
         $error = true;
-        Form::error("Bitte beide Felder ausfüllen");
+        Html::error("Bitte beide Felder ausfüllen");
     }
     // Login Check
     if (!$error && Ligaleitung::login($login, $passwort, 'ligaausschuss')) {
@@ -30,9 +30,9 @@ if (isset($_POST['login'])) {
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$page_width = "480px";
-Config::$titel = "Ligacenter | Deutsche Einradhockeyliga";
-Config::$content =
+Html::$page_width = "480px";
+Html::$titel = "Ligacenter | Deutsche Einradhockeyliga";
+Html::$content =
     "Im Ligacenter kann der Ligaausschuss die Liga verwalten. Nur Mitglieder des Ligaausschusses haben einen Login.";
 include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 
@@ -47,7 +47,7 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
             <i class="material-icons">clear</i>
         </div>
         <label for="login">
-            <?=Form::icon("account_circle")?> Login
+            <?=Html::icon("account_circle")?> Login
         </label>
         <input class="w3-input w3-border-primary"
                value="<?= $_POST['loginname'] ?? '' ?>"
@@ -58,7 +58,7 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
         >
         <p>
             <label for="passwort">
-                <?=Form::icon("lock")?> Passwort
+                <?=Html::icon("lock")?> Passwort
             </label>
             <input class="w3-input w3-border-primary"
                    type="password"
@@ -72,7 +72,7 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
                     type="submit"
                     name="login"
             >
-                <?= Form::icon("login") ?> Login
+                <?= Html::icon("login") ?> Login
             </button>
         </p>
     </form>

@@ -2,24 +2,24 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
 // Turnierobjekt erstellen
 
-$turnier = new Turnier ((int) $_GET['turnier_id']);
+$turnier = new Turnier ((int) @$_GET['turnier_id']);
 
 // Logs des Turnieres bekommen
 $logs = $turnier->get_logs();
 
 // Gelöschtes Turnier
 if (empty($turnier->details) & !empty($logs)){
-    Form::notice("Turnier wurde gelöscht.");
+    Html::notice("Turnier wurde gelöscht.");
 }
 
 // Turnier nicht gefunden
 if (empty($turnier->details) & empty($logs)){
-    Form::notice("Es wurden keine Turnierlogs gefunden");
+    Html::notice("Es wurden keine Turnierlogs gefunden");
     header('Location: lc_turnierliste.php');
     die();
 }

@@ -38,7 +38,7 @@ class Kontakt
                 ON teams_liga.team_id = teams_kontakt.team_id 
                 WHERE teams_liga.aktiv = 'Ja'
                 ";
-        return dbi::$db->query($sql)->esc()->list('email');
+        return db::$db->query($sql)->esc()->list('email');
     }
 
     /**
@@ -62,7 +62,7 @@ class Kontakt
 
         $return['emails'] = $return['teamnamen'] = [];
         // Doppelte Teamnamen und Email-Adressen filtern
-        foreach (dbi::$db->query($sql, $turnier_id)->esc()->fetch() as $x){
+        foreach (db::$db->query($sql, $turnier_id)->esc()->fetch() as $x){
             if (!in_array($x['teamname'], $return['teamnamen'])) {
                 $return['teamnamen'][] = $x['teamname'];
             }
@@ -86,7 +86,7 @@ class Kontakt
                 INSERT INTO teams_kontakt (team_id, email, public, get_info_mail) 
                 VALUES ($this->team_id, ?, ?, ?)
                 ";
-        dbi::$db->query($sql, [$email, $public, $infomail])->log();
+        db::$db->query($sql, [$email, $public, $infomail])->log();
     }
 
     /**
@@ -108,7 +108,7 @@ class Kontakt
                 FROM teams_kontakt 
                 WHERE team_id = $this->team_id
                 " . $and_clause;
-        return dbi::$db->query($sql)->esc()->list('email');
+        return db::$db->query($sql)->esc()->list('email');
     }
 
     /**
@@ -125,7 +125,7 @@ class Kontakt
                 FROM teams_kontakt 
                 WHERE team_id = $this->team_id
                 ";
-        return dbi::$db->query($sql)->esc()->fetch('teams_kontakt_id');
+        return db::$db->query($sql)->esc()->fetch('teams_kontakt_id');
     }
 
     /**
@@ -142,7 +142,7 @@ class Kontakt
                 WHERE teams_kontakt_id = ?
                 AND team_id = $this->team_id
                 ";
-        dbi::$db->query($sql, [$value, $teams_kontakt_id])->log();
+        db::$db->query($sql, [$value, $teams_kontakt_id])->log();
 
     }
 
@@ -160,7 +160,7 @@ class Kontakt
                 WHERE teams_kontakt_id = ?
                 AND team_id = $this->team_id
                 ";
-        dbi::$db->query($sql, [$value, $teams_kontakt_id])->log();
+        db::$db->query($sql, [$value, $teams_kontakt_id])->log();
     }
 
     /**
@@ -177,7 +177,7 @@ class Kontakt
                     WHERE teams_kontakt_id = ?
                     AND team_id = $this->team_id
                     ";
-            dbi::$db->query($sql, $teams_kontakt_id)->log();
+            db::$db->query($sql, $teams_kontakt_id)->log();
             return true;
         }
         return false;

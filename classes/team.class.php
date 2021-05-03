@@ -43,20 +43,20 @@ class Team
                 INSERT INTO teams_liga (teamname, passwort, freilose) 
                 VALUES (?, ?, 2)
                 ";
-        dbi::$db->query($sql, $teamname, $passwort)->log();
+        db::$db->query($sql, $teamname, $passwort)->log();
 
         // Eintrag in teams_details
-        $team_id = dbi::$db->get_last_insert_id();
+        $team_id = db::$db->get_last_insert_id();
         $sql = "
                 INSERT INTO teams_details (team_id) 
                 VALUES (?)";
-        dbi::$db->query($sql, $team_id)->log();
+        db::$db->query($sql, $team_id)->log();
 
         // Eintrag in teams_kontakt
         $sql = "
                 INSERT INTO teams_kontakt (team_id, email, public, get_info_mail) 
-                VALUES (?, ?, 'Ja', 'Nein')";
-        dbi::$db->query($sql, $team_id, $email)->log();
+                VALUES (?, ?, 'Nein', 'Nein')";
+        db::$db->query($sql, $team_id, $email)->log();
         return $team_id;
     }
 
@@ -72,7 +72,7 @@ class Team
                 SET aktiv = 'Nein'
                 WHERE team_id = ?
                 ";
-        dbi::$db->query($sql, $team_id)->log();
+        db::$db->query($sql, $team_id)->log();
     }
 
     /**
@@ -88,7 +88,7 @@ class Team
                 WHERE aktiv = 'Nein' AND ligateam = 'Ja' 
                 ORDER BY teamname
                 ";
-        return dbi::$db->query($sql)->esc()->fetch();
+        return db::$db->query($sql)->esc()->fetch();
     }
 
     /**
@@ -103,7 +103,7 @@ class Team
                 SET aktiv = 'Ja' 
                 WHERE team_id = ?
                 ";
-        dbi::$db->query($sql, $team_id);
+        db::$db->query($sql, $team_id);
     }
 
     /**
@@ -119,7 +119,7 @@ class Team
                 FROM teams_liga 
                 WHERE teamname = ?
                 ";
-        return dbi::$db->query($sql, $teamname)->esc()->fetch_one();
+        return db::$db->query($sql, $teamname)->esc()->fetch_one();
     }
 
     /**
@@ -135,7 +135,7 @@ class Team
                 FROM teams_liga 
                 WHERE team_id = ?
                 ";
-        return dbi::$db->query($sql, $team_id)->esc()->fetch_one();
+        return db::$db->query($sql, $team_id)->esc()->fetch_one();
 
     }
 
@@ -152,7 +152,7 @@ class Team
                 FROM teams_liga
                 WHERE team_id = ? AND ligateam = 'Ja' AND aktiv = 'Ja'
                 ";
-        return dbi::$db->query($sql, $team_id)->num_rows() > 0;
+        return db::$db->query($sql, $team_id)->num_rows() > 0;
     }
 
     /**
@@ -168,7 +168,7 @@ class Team
                 WHERE ligateam = 'Ja' AND aktiv = 'Ja' 
                 ORDER BY teamname
                 ";
-        return dbi::$db->query($sql)->esc()->list('teamname', 'team_id');
+        return db::$db->query($sql)->esc()->list('teamname', 'team_id');
     }
 
     /**
@@ -184,7 +184,7 @@ class Team
                 WHERE ligateam = 'Ja' AND aktiv = 'Ja' 
                 ORDER BY team_id 
                 "; //TODO Früher nach RAND() für Abhandlung Ligabot, jetzt besser shuffle() einbauen
-        return dbi::$db->query($sql)->esc()->list('team_id');
+        return db::$db->query($sql)->esc()->list('team_id');
     }
 
     /**
@@ -202,7 +202,7 @@ class Team
                 WHERE teams_liga.ligateam = 'Ja' AND teams_liga.aktiv = 'Ja'
                 ORDER BY teams_liga.teamname
                 ";
-        return dbi::$db->query($sql)->esc()->fetch('team_id');
+        return db::$db->query($sql)->esc()->fetch('team_id');
     }
 
     /**
@@ -217,7 +217,7 @@ class Team
                 SET freilose = freilose + 1 
                 WHERE team_id = ?
                 ";
-        dbi::$db->query($sql, $team_id)->log();
+        db::$db->query($sql, $team_id)->log();
     }
 
     /**
@@ -238,7 +238,7 @@ class Team
                 VALUES (?, ?, ?, ?, ?, ?)
                 ";
         $params = [$team_id, $verwarnung, $turnier_id, $grund, $prozentsatz, $saison];
-        dbi::$db->query($sql, $params)->log();
+        db::$db->query($sql, $params)->log();
     }
 
     /**
@@ -252,7 +252,7 @@ class Team
                 DELETE FROM teams_strafen
                 WHERE strafe_id = ?
                 ";
-        dbi::$db->query($sql, $strafe_id)->log();
+        db::$db->query($sql, $strafe_id)->log();
     }
 
     /**
@@ -275,7 +275,7 @@ class Team
                 AND teams_liga.aktiv = 'Ja'
                 ORDER BY turniere_liga.datum DESC
                 ";
-        return dbi::$db->query($sql)->esc()->fetch('strafe_id');
+        return db::$db->query($sql)->esc()->fetch('strafe_id');
     }
 
     /**
@@ -292,7 +292,7 @@ class Team
                 ON teams_details.team_id = teams_liga.team_id
                 WHERE teams_liga.team_id = $this->id
                 ";
-        return dbi::$db->query($sql)->esc()->fetch_row();
+        return db::$db->query($sql)->esc()->fetch_row();
     }
 
     /**
@@ -307,9 +307,8 @@ class Team
                 SET teamname = ?
                 WHERE team_id = $this->id
                 ";
-        dbi::$db->query($sql, $name)->log();
+        db::$db->query($sql, $name)->log();
     }
-
 
     /**
      * Gibt Anzahl der Freilose des Teams zurück
@@ -323,7 +322,7 @@ class Team
                 FROM teams_liga
                 WHERE team_id = $this->id
                 ";
-        return dbi::$db->query($sql)->log()->fetch_one();
+        return db::$db->query($sql)->log()->fetch_one();
     }
 
     /**
@@ -338,7 +337,7 @@ class Team
                 SET freilose = ?
                 WHERE team_id = $this->id
                 ";
-        dbi::$db->query($sql, $anzahl)->log();
+        db::$db->query($sql, $anzahl)->log();
     }
 
     /**
@@ -352,9 +351,9 @@ class Team
     public function set_detail(string $spalten_name, mixed $value): void
     {
         // Validieren, ob der Spaltenname ein echter Spaltenname ist
-        $spalten_namen = dbi::$db->query("SHOW FIELDS FROM teams_details")->list('Field');
+        $spalten_namen = db::$db->query("SHOW FIELDS FROM teams_details")->list('Field');
         if (!in_array($spalten_name, $spalten_namen, true)) {
-            die("Ungültiger Spaltenname");
+            trigger_error("Ungültiger Spaltenname", E_USER_ERROR);
         }
         $spalten_name = "`" . $spalten_name . "`";
 
@@ -363,7 +362,7 @@ class Team
                 SET $spalten_name = ?
                 WHERE team_id = $this->id
                 ";
-        dbi::$db->query($sql, $value)->log();
+        db::$db->query($sql, $value)->log();
     }
 
     /**
@@ -378,7 +377,7 @@ class Team
                 FROM turniere_liste 
                 WHERE team_id = $this->id
                 ";
-        return dbi::$db->query($sql)->list('liste', 'turnier_id');
+        return db::$db->query($sql)->list('liste', 'turnier_id');
     }
 
     /**
@@ -397,7 +396,7 @@ class Team
                 SET teamfoto = ''
                 WHERE team_id = $this->id
                 ";
-        dbi::$db->query($sql)->log();
+        db::$db->query($sql)->log();
     }
 
     /**
@@ -411,6 +410,7 @@ class Team
         $_SESSION['logins']['team']['name'] = $team->details['teamname'];
         $_SESSION['logins']['team']['block'] = Tabelle::get_team_block($team->id);
     }
+
     /**
      * Login Teamcenter
      *
@@ -424,8 +424,8 @@ class Team
         $team_id = self::name_to_id($teamname);
 
         if (!self::is_ligateam($team_id)) {
-            Form::error("Falscher Loginname");
-            Form::log(Config::LOG_LOGIN, "Falscher TC-Login | Teamname: " . $teamname);
+            Html::error("Falscher Loginname");
+            Helper::log(Config::LOG_LOGIN, "Falscher TC-Login | Teamname: " . $teamname);
             return false;
         }
 
@@ -433,23 +433,23 @@ class Team
         // Passwort prüfen
         if (password_verify($passwort, $team->details['passwort'])) {
             self::set_team_session($team);
-            Form::log(Config::LOG_LOGIN, "Erfolgreich       | Teamname: " . $teamname);
+            Helper::log(Config::LOG_LOGIN, "Erfolgreich       | Teamname: " . $teamname);
 
             if (empty($team->details['trikot_farbe_1'])) {
-                $link = Form::link("tc_teamdaten_aendern.php", ' Link.', icon: "launch");
-                Form::info("Ihr könnt jetzt eure Trikotfarben hinzufügen - " . $link, ' ', esc: false);
+                $link = Html::link("tc_teamdaten_aendern.php", ' Link.', icon: "launch");
+                Html::info("Ihr könnt nun eure Trikotfarben hinzufügen - " . $link, ' ', esc: false);
             }
             if (empty($team->details['teamfoto'])) {
-                $link = Form::link("../teamcenter/tc_teamdaten_aendern.php", ' Link.', icon: "launch");
-                Form::info("Hier könnt ihr noch ein Teamfoto hochladen - " . $link, ' ', esc: false);
+                $link = Html::link("../teamcenter/tc_teamdaten_aendern.php", ' Link.', icon: "launch");
+                Html::info("Hier könnt ihr noch ein Teamfoto hochladen - " . $link, ' ', esc: false);
             }
 
             return true;
         }
 
         // Passwort falsch
-        Form::log(Config::LOG_LOGIN, "Falsches Passwort | Teamname: " . $teamname);
-        Form::error("Falsches Passwort");
+        Helper::log(Config::LOG_LOGIN, "Falsches Passwort | Teamname: " . $teamname);
+        Html::error("Falsches Passwort");
         return false;
     }
 
@@ -463,11 +463,11 @@ class Team
         // Passwort hashen
         $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
         if (!is_string($passwort)) {
-            die("Es ist ein Fehler aufgetreten.");
+            trigger_error("set_passwort fehlgeschlagen.", E_USER_ERROR);
         }
 
         // Befindet sich das Team im Teamcenter ihr Passwort geändert?
-        $pw_geaendert = (Config::$teamcenter) ? 'Ja' : 'Nein';
+        $pw_geaendert = (Helper::$teamcenter) ? 'Ja' : 'Nein';
 
         // Passwort in die Datenbank
         $sql = "
@@ -475,6 +475,6 @@ class Team
                 SET passwort = ?, passwort_geaendert = ?
                 WHERE team_id = $this->id
                 ";
-        dbi::$db->query($sql, $passwort_hash, $pw_geaendert)->log();
+        db::$db->query($sql, $passwort_hash, $pw_geaendert)->log();
     }
 }

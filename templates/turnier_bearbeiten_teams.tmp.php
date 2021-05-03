@@ -30,7 +30,7 @@
         <p>
             <label class="w3-text-primary" for="plaetze">Plätze</label>
             <select required class="w3-select w3-border w3-border-primary" id="plaetze" name="plaetze">
-            <option <?php if($turnier->details['plaetze'] == '4'){?>selected<?php }elseif(Config::$teamcenter){?>disabled<?php }?> value="4">4 Teams (nur in Absprache mit dem Ligaausschuss)</option>
+            <option <?php if($turnier->details['plaetze'] == '4'){?>selected<?php }elseif(Helper::$teamcenter){?>disabled<?php }?>value="4">4 Teams (nur in Absprache mit dem Ligaausschuss)</option>
                 <option <?php if($turnier->details['plaetze'] == '5'){?>selected<?php }?> value="5">5 Teams</option>
                 <option <?php if($turnier->details['plaetze'] == '6'){?>selected<?php }?> value="6">6 Teams</option>
                 <option <?php if($turnier->details['plaetze'] == '7'){?>selected<?php }?> value="7">7 Teams</option>
@@ -73,7 +73,7 @@
         </p>
         <p>
             <label class="w3-text-primary" for="startgebuehr">Startgebühr</label>
-            <?php if(Config::$ligacenter){?>
+            <?php if(Helper::$ligacenter){?>
                 <input type="text" class="w3-input w3-border w3-border-primary" placeholder="z. B. 5 Euro" value="<?=$turnier->details['startgebuehr']?>" id="startgebuehr" name="startgebuehr">
             <?php }else{ ?>
                 <select class="w3-input w3-border w3-border-primary" id="startgebuehr" name="startgebuehr">

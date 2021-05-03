@@ -10,9 +10,9 @@ $akt_spieltag = Tabelle::get_aktuellen_spieltag();
 $teams = Tabelle::get_rang_tabelle($akt_spieltag); // Sortierung nach Rangtabelle
 
 // Damit sich $_SESSION von team- und ligacenter nicht vermischen
-if (Config::$ligacenter) {
+if (Helper::$ligacenter) {
     $list_id = 'lc_emails' . $_SESSION['logins']['la']['id'];
-} elseif (Config::$teamcenter) {
+} elseif (Helper::$teamcenter) {
     $list_id = 'tc_emails' . $_SESSION['logins']['team']['id'];
 }
 
@@ -29,8 +29,8 @@ if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
     unset ($_SESSION[$list_id]);
     $turnier = new Turnier((int) $_POST['turnier_id']);
     if (empty($turnier->details)) {
-        Form::error("Turnier wurde nicht gefunden");
-        header('Location: ' . dbi::escape($_SERVER['PHP_SELF']));
+        Html::error("Turnier wurde nicht gefunden");
+        header('Location: ' . db::escape($_SERVER['PHP_SELF']));
         die();
     }
     $array = Kontakt::get_emails_turnier($_POST['turnier_id']);
@@ -43,7 +43,7 @@ if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
         array_unshift($_SESSION[$list_id]['empfaenger'], 'Ligaausschuss');
     }
 
-    Form::notice("Achtung: Nichtligateams müssen seperat angeschrieben werden!");
+    Html::notice("Achtung: Nichtligateams müssen seperat angeschrieben werden!");
 }
 
 
@@ -92,16 +92,16 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
     $text = $_POST['text'];
 
     if (empty($emails) || empty($betreff) || empty($text)) {
-        Form::error("Kontaktformular unvollständig");
+        Html::error("Kontaktformular unvollständig");
         $error = true;
     }
 
     if (!$error) {
         $mailer = MailBot::start_mailer();
-        if (Config::$ligacenter) {
+        if (Helper::$ligacenter) {
             $mailer->setFrom(Env::LAMAIL, 'Ligaausschuss');
             $mailer->addBCC(Env::LAMAIL_ANTWORT);
-        } elseif (Config::$teamcenter) {
+        } elseif (Helper::$teamcenter) {
             $akt_kontakt = new Kontakt($_SESSION['logins']['team']['id']); //Absender Mails bekommen
             $absender = $akt_kontakt->get_emails();
             foreach ($absender as $email) {
@@ -128,21 +128,17 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
         $mailer->Subject = $betreff;
         $mailer->Body = $text . "\r\nVersendet aus dem Kontaktcenter von einrad.hockey";
 
-        // Email-versenden
-        Form::log(
-            Config::LOG_EMAILS, "Betreff: $betreff"
-            . " von " .(Config::$teamcenter) ? $_SESSION['team']['name'] : 'Ligaausschuss')
-            . " an " . implode(',', $emails
-        );
 
+        Helper::log(Config::LOG_EMAILS, "Betreff: $betreff" . " an " . implode(',', $emails));
+        // Email-versenden
         if (MailBot::send_mail($mailer)) {
-            Form::info("Die E-Mail wurde versandt.");
+            Html::info("Die E-Mail wurde versandt.");
             unset($_SESSION[$list_id]);
-            header('Location: ' . dbi::escape($_SERVER['PHP_SELF']));
+            header('Location: ' . db::escape($_SERVER['PHP_SELF']));
             die();
         }
 
-        Form::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden.");
+        Html::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden.");
     }
 }
 
@@ -150,19 +146,19 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
 if (isset($_SESSION[$list_id])) {
     $anzahl_emails = count($_SESSION[$list_id]['emails']);
     $adressaten = $bcc = [];
-    if (Config::$ligacenter) {
+    if (Helper::$ligacenter) {
         $from = Env::LAMAIL;
         $tos = $_SESSION[$list_id]['emails'];
-    } elseif (Config::$teamcenter) {
+    } elseif (Helper::$teamcenter) {
         $from = $_SESSION['logins']['team']['name'];
         $tos = $_SESSION[$list_id]['empfaenger'];
     }
     if (empty($_SESSION[$list_id]['emails'])) {
-        Form::error("Es wurden keine E-Mail-Adressen gefunden.");
+        Html::error("Es wurden keine E-Mail-Adressen gefunden.");
     }
 }
 
-if (Config::$ligacenter){
+if (Helper::$ligacenter){
     $las = Ligaleitung::get_all('ligaausschuss');
     $signatur = "\r\n\r\n\r\nDein Ligaausschuss\r\n--\r\n";
     foreach ($las as $la){

@@ -4,23 +4,23 @@
                name="turnierergebnis_speichern"
                class="w3-block w3-button w3-tertiary <?= $spielplan->check_turnier_beendet() ?: 'w3-opacity' ?>"
         >
-            <i class="material-icons">send</i> In die Ligatabellen eintragen
+            <?= Html::icon('send') ?> In die Ligatabellen eintragen
         </button>
     </p>
     <?php if ($spielplan->turnier->details['phase'] == 'ergebnis') { ?>
         <p class="w3-text-green">
-            <span class="material-icons">check_circle</span>
+            <?= Html::icon('check_circle') ?>
             Dem Ligaausschuss liegt ein Turnierergebnis vor.
         </p>
         <p class="w3-text-green">
-            <span class="material-icons">info</span>
+            <?= Html::icon('info') ?>
             Durch erneutes Übermitteln kann das Turnierergebnis korrigiert werden.
         </p>
     <?php } //end if?>
 
     <?php if ($spielplan->turnier->details['phase'] != 'ergebnis') { ?>
         <p class="w3-text-grey">
-            <span class="material-icons">info</span>
+            <?= Html::icon('info') ?>
             Dem Ligaausschuss liegt noch kein Turnierergebnis vor.
         </p>
     <?php } // endif?>

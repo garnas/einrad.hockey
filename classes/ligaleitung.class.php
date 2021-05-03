@@ -14,14 +14,14 @@ class LigaLeitung
     public static function get_all(string $funktion): array
     {
         $sql = "
-                SELECT *, spieler.vorname, spieler.nachname, teams_liga.teamname
+                SELECT ligaleitung.*, spieler.vorname, spieler.nachname, teams_liga.teamname
                 FROM ligaleitung
                 INNER JOIN spieler on ligaleitung.spieler_id = spieler.spieler_id 
                 LEFT JOIN teams_liga on spieler.team_id = teams_liga.team_id
                 WHERE funktion = ?
                 ORDER BY spieler.vorname
                 ";
-        return dbi::$db->query($sql, $funktion)->esc()->fetch('spieler_id');
+        return db::$db->query($sql, $funktion)->esc()->fetch('spieler_id');
     }
 
     /**
@@ -39,7 +39,7 @@ class LigaLeitung
                 LEFT JOIN teams_liga on spieler.team_id = teams_liga.team_id
                 WHERE login = ?
                 ";
-        return dbi::$db->query($sql, $login)->esc()->fetch_row();
+        return db::$db->query($sql, $login)->esc()->fetch_row();
     }
 
     /**
@@ -55,14 +55,14 @@ class LigaLeitung
         $details = self::get_details($login);
         // Überprüfung des PWs
         if (!password_verify($passwort_alt, $details['passwort'])) {
-            Form::error("Falsches Passwort");
+            Html::error("Falsches Passwort");
             return false;
         }
 
         // Passwort Hashen
         $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
         if (!is_string($passwort_hash)) {
-            die("Ein Fehler ist aufgetreten");
+            trigger_error("set_passwort fehlgeschlagen.", E_USER_ERROR);
         }
 
         // Neues Passwort in die Datenbank schreiben
@@ -71,7 +71,7 @@ class LigaLeitung
                 SET passwort = ?
                 WHERE login = ?
                 ";
-        dbi::$db->query($sql, $passwort_hash, $login)->log();
+        db::$db->query($sql, $passwort_hash, $login)->log();
         $_SESSION['logins']['la']['passwort'] = $passwort_hash;
         return true;
     }
@@ -90,14 +90,14 @@ class LigaLeitung
 
         // Existenz prüfen
         if (empty($details)) {
-            Form::error("Unbekannter Loginname");
-            Form::log(Config::LOG_LOGIN, "Falscher LC-Login | Loginname: " . $login);
+            Html::error("Unbekannter Loginname");
+            Helper::log(Config::LOG_LOGIN, "Falscher LC-Login | Loginname: " . $login);
             return false;
         }
 
         // Funktion prüfen
         if ($funktion !== $details['funktion']) {
-            Form::error("Fehlende Berichtigung");
+            Html::error("Fehlende Berichtigung");
             return false;
         }
 
@@ -105,13 +105,13 @@ class LigaLeitung
         if (password_verify($passwort, $details['passwort'])) {
             $_SESSION['logins']['la']['id'] = $details['ligaleitung_id'];
             $_SESSION['logins']['la']['login'] = $details['login'];
-            Form::log(Config::LOG_LOGIN, "Erfolgreich       | Loginname: " . $login);
+            Helper::log(Config::LOG_LOGIN, "Erfolgreich       | Loginname: " . $login);
             return true;
         }
 
         // Passwort falsch
-        Form::log(Config::LOG_LOGIN, "Falsches Passwort | Loginname: " . $login);
-        Form::error("Falsches Passwort");
+        Helper::log(Config::LOG_LOGIN, "Falsches Passwort | Loginname: " . $login);
+        Html::error("Falsches Passwort");
         return false;
     }
 
@@ -121,10 +121,10 @@ class LigaLeitung
                 SELECT * 
                 FROM $table
                 ";
-        $la = dbi::$db->query($sql)->fetch();
+        $la = db::$db->query($sql)->fetch();
 
         $sql = "SELECT * FROM spieler";
-        $spieler = dbi::$db->query($sql)->fetch();
+        $spieler = db::$db->query($sql)->fetch();
         $i = 0;
         foreach ($spieler as $s) {
             foreach ($la as $l) {
@@ -132,33 +132,33 @@ class LigaLeitung
                     if ($funktion === "ligaausschuss") {
                         $sql = "INSERT INTO ligaleitung (spieler_id, funktion, login, passwort, email)
                             Values(?,?,?,?,?)";
-                        dbi::$db->query($sql, $s['spieler_id'], $funktion, $s['vorname'], $l['passwort'], $l['email'])->log();
+                        db::$db->query($sql, $s['spieler_id'], $funktion, $s['vorname'], $l['passwort'], $l['email'])->log();
                         $i++;
                     } else {
                         $sql = "INSERT INTO ligaleitung (spieler_id, funktion)
                             Values(?,?)";
-                        dbi::$db->query($sql, $s['spieler_id'], $funktion)->log();
+                        db::$db->query($sql, $s['spieler_id'], $funktion)->log();
                         $i++;
                     }
                 }
             }
         }
-        dbi::debug([$i, $table, $funktion]);
+        db::debug([$i, $table, $funktion]);
     }
     static function umzug3()
     {
         $sql = "SELECT * FROM spieler";
-        $spieler = dbi::$db->query($sql)->fetch();
+        $spieler = db::$db->query($sql)->fetch();
         $i = 0;
         foreach ($spieler as $s) {
             if ($s['schiri'] === "Ausbilder/in") {
                 $sql = "INSERT INTO ligaleitung (spieler_id, funktion)
                             Values(?,?)";
-                dbi::$db->query($sql, $s['spieler_id'], 'schiriausbilder')->log();
+                db::$db->query($sql, $s['spieler_id'], 'schiriausbilder')->log();
                 $i++;
             }
         }
-        dbi::debug([$i, 'ausbilder']);
+        db::debug([$i, 'ausbilder']);
     }
 }
 

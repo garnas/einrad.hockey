@@ -2,12 +2,13 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
+
+// Todo eigene Funktion
 $fortschritt = round(100 * (time() - strtotime(Config::SAISON_ANFANG)) / (strtotime(Config::SAISON_ENDE) - strtotime(Config::SAISON_ANFANG)));
 $tage = round((strtotime(Config::SAISON_ANFANG) - time()) / (24 * 60 * 60));
 
-$neuigkeiten = Neuigkeit::get_neuigkeiten(); //Alle Neuigkeiten werden übergeben, da kein Argument überliefert
-//Es werden die 10 letzten Neuigkeiten angzeigt
+$neuigkeiten = Neuigkeit::get_neuigkeiten();
 
 $turniere = Turnier::get_turniere('ergebnis', false, true);
 $anz_next_turniere = count($turniere);
@@ -43,29 +44,29 @@ foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit) { //Todo in get_neuikgei
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = "Neuigkeiten | Deutsche Einradhockeyliga";
-Config::$content = "Hier findet man die Neuigkeiteneinträge des Ligaausschusses und der Teams der Deutschen Einradhockeyliga.";
+Html::$titel = "Neuigkeiten | Deutsche Einradhockeyliga";
+Html::$content = "Hier findet man die Neuigkeiteneinträge des Ligaausschusses und der Teams der Deutschen Einradhockeyliga.";
 include '../../templates/header.tmp.php'; ?>
 
     <!-- Links (u. a zum Ein- und Ausblenden der Infobar bei Mobils) -->
     <div class="w3-hide-large w3-hide-medium">
-        <button id="einblenden"
-                class="w3-left w3-left-align w3-hide-large w3-hide-medium w3-button w3-text-primary"
+        <span id="einblenden"
+                class="w3-left w3-left-align w3-hide-large w3-hide-medium w3-hover-text-secondary w3-text-primary"
                 onclick="einblenden()"
                 style="width:50%;"
         >
-            <?= Form::icon("visibility") ?> Infobar
-        </button>
-        <button id="ausblenden"
-                class="w3-left w3-left-align  w3-hide w3-hide-large w3-hide-medium w3-button w3-text-primary"
+            <?= Html::icon("visibility") ?> Infobar
+        </span>
+        <span id="ausblenden"
+                class="w3-left w3-left-align  w3-hide w3-hide-large w3-hide-medium w3-hover-text-secondary w3-text-primary"
                 onclick="ausblenden()"
                 style="width:50%;"
         >
-            <?= Form::icon("visibility_off") ?> Infobar
-        </button>
+            <?= Html::icon("visibility_off") ?> Infobar
+        </span>
 
-        <a href="ueber_uns.php" class="w3-button w3-text-primary w3-right w3-right-align " style="width:50%;">
-            <?= Form::icon("help_outline") ?> Über uns
+        <a href="ueber_uns.php" class="w3-hover-text-secondary w3-text-primary no w3-right w3-right-align" style="width:50%;">
+            <?= Html::icon("help_outline") ?> Über uns
         </a>
     </div>
 
@@ -79,18 +80,18 @@ include '../../templates/header.tmp.php'; ?>
             <div class="w3-panel w3-card-4 w3-responsive w3-round w3-bottombar">
                 <div class="w3-stretch w3-container w3-primary w3-hover-tertiary">
                     <a href='ueber_uns.php' class="no">
-                        <h3><?= Form::icon("help_outline", tag: "h1") ?> Interesse</h3>
+                        <h3><?= Html::icon("help_outline", tag: "h1") ?> Interesse</h3>
                     </a>
                 </div>
                 <p>Die Einradhockeyliga steht jedem Einradhockeybegeisterten offen!</p>
-                <p><?= Form::link("ueber_uns.php", " Mehr Infos", false, "info") ?></p>
+                <p><?= Html::link("ueber_uns.php", " Mehr Infos", false, "info") ?></p>
             </div>
 
             <!-- Anstehende Turniere -->
             <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
                 <div class="w3-stretch w3-container w3-primary w3-hover-tertiary">
                     <a href='turniere.php' class="no">
-                        <h3><?= Form::icon("event", tag: "h2") ?> Turniere</h3>
+                        <h3><?= Html::icon("event", tag: "h2") ?> Turniere</h3>
                     </a>
                 </div>
 
@@ -100,7 +101,7 @@ include '../../templates/header.tmp.php'; ?>
                 <?php foreach ($next_turniere as $turnier) { ?>
                     <p class="w3-text-dark-gray">
                         <?= date("d.m", strtotime($turnier['datum'])) ?>
-                        <?= Form::link(
+                        <?= Html::link(
                             'turnier_details.php?turnier_id=' . $turnier['turnier_id'],
                             $turnier['ort'],
                             false,
@@ -114,7 +115,7 @@ include '../../templates/header.tmp.php'; ?>
             <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
                 <div class="w3-stretch w3-container w3-primary w3-hover-tertiary">
                     <a href='ergebnisse.php' class="no">
-                        <h3><?= Form::icon("sports_hockey", tag: "h2") ?> Ergebnisse</h3>
+                        <h3><?= Html::icon("sports_hockey", tag: "h2") ?> Ergebnisse</h3>
                     </a>
                 </div>
 
@@ -126,7 +127,7 @@ include '../../templates/header.tmp.php'; ?>
                 <?php foreach ($last_turniere as $turnier) { ?>
                     <p class="w3-text-dark-gray">
                         <?= date("d.m", strtotime($turnier['datum'])) ?>
-                        <?= Form::link(
+                        <?= Html::link(
                             'ergebnisse.php#' . $turnier['turnier_id'],
                             $turnier['ort'],
                             false,
@@ -139,39 +140,39 @@ include '../../templates/header.tmp.php'; ?>
             <!-- Statistik -->
             <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
                 <div class="w3-stretch w3-container w3-primary">
-                    <h3><?= Form::icon("insert_chart_outlined", tag: "h2") ?> Statistik</h3>
+                    <h3><?= Html::icon("insert_chart_outlined", tag: "h2") ?> Statistik</h3>
                 </div>
-                <span class="w3-text-grey w3-small">Saison <?= Form::get_saison_string() ?></span>
+                <span class="w3-text-grey w3-small">Saison <?= Html::get_saison_string() ?></span>
 
                 <!-- Allgemeine Statistik -->
                 <div class="w3-section">
                     <div class="w3-responsive">
                         <table class="w3-table w3-bordered">
                             <tr class="w3-bottombar w3-text-grey w3-large w3-border-primary">
-                                <td colspan="3"><?= Form::icon("insert_chart_outlined") ?> Allgemein</td>
+                                <td colspan="3"><?= Html::icon("insert_chart_outlined") ?> Allgemein</td>
                             </tr>
                             <tr>
-                                <td class="w3-text-primary"><?= Form::icon("check") ?></td>
+                                <td class="w3-text-primary"><?= Html::icon("check") ?></td>
                                 <td><?= $anz_last_turniere ?></td>
                                 <td class="w3-small">gespielte Turniere</td>
                             </tr>
                             <tr>
-                                <td class="w3-text-primary"><?= Form::icon("double_arrow") ?></td>
+                                <td class="w3-text-primary"><?= Html::icon("double_arrow") ?></td>
                                 <td><?= $anz_next_turniere ?></td>
                                 <td class="w3-small">anstehende Turniere</td>
                             </tr>
                             <tr>
-                                <td class="w3-text-primary"><?= Form::icon("sports_baseball") ?></td>
+                                <td class="w3-text-primary"><?= Html::icon("sports_baseball") ?></td>
                                 <td><?= $statistik['ges_tore'] ?></td>
                                 <td class="w3-small">Tore</td>
                             </tr>
                             <tr>
-                                <td class="w3-text-primary"><?= Form::icon("sports_hockey") ?></td>
+                                <td class="w3-text-primary"><?= Html::icon("sports_hockey") ?></td>
                                 <td><?= $statistik['ges_spiele'] ?></td>
                                 <td class="w3-small">Spiele</td>
                             </tr>
                             <tr>
-                                <td class="w3-text-primary"><?= Form::icon("schedule") ?></td>
+                                <td class="w3-text-primary"><?= Html::icon("schedule") ?></td>
                                 <td style="white-space: nowrap;"><?= $statistik['spielminuten'] ?></td>
                                 <td class="w3-small">Spielminuten</td>
                             </tr>
@@ -185,14 +186,14 @@ include '../../templates/header.tmp.php'; ?>
                         <div class="w3-responsive">
                             <table class="w3-table w3-centered w3-bordered">
                                 <tr class="w3-bottombar w3-text-grey w3-large w3-border-primary">
-                                    <td><?= Form::icon("leaderboard") ?></td>
+                                    <td><?= Html::icon("leaderboard") ?></td>
                                     <td>Turnierspieler</td>
-                                    <td><?= Form::icon("assistant_photo") ?></td>
+                                    <td><?= Html::icon("assistant_photo") ?></td>
                                 </tr>
                                 <?php $i = 0;
                                 foreach ($statistik['max_turniere'] as $team) { ?>
                                     <tr class="<?= $colors[$i] ?>">
-                                        <td><?= Form::icon($icons[$i++]) ?></td>
+                                        <td><?= Html::icon($icons[$i++]) ?></td>
                                         <td style="white-space: nowrap;" class="w3-small"><?= $team['teamname'] ?></td>
                                         <td><?= $team['gespielt'] ?></td>
                                     </tr>
@@ -200,7 +201,7 @@ include '../../templates/header.tmp.php'; ?>
                             </table>
                         </div>
                         <span class="w3-text-grey w3-small">
-                        <?= Form::icon("assistant_photo") ?> Anzahl gespielter Turniere
+                        <?= Html::icon("assistant_photo") ?> Anzahl gespielter Turniere
                     </span>
                     </div>
                 <?php } //endif ?>
@@ -211,14 +212,14 @@ include '../../templates/header.tmp.php'; ?>
                         <div class="w3-responsive">
                             <table class="w3-table w3-centered w3-bordered">
                                 <tr class="w3-bottombar w3-text-grey w3-large w3-border-primary">
-                                    <td><?= Form::icon("leaderboard") ?></td>
+                                    <td><?= Html::icon("leaderboard") ?></td>
                                     <td>Spielgewinner</td>
-                                    <td><?= Form::icon("sports_hockey") ?></td>
+                                    <td><?= Html::icon("sports_hockey") ?></td>
                                 </tr>
                                 <?php $i = 0;
                                 foreach ($statistik['max_gew'] as $team_id => $gew_spiele) { ?>
                                     <tr class="<?= $colors[$i] ?>">
-                                        <td><?= Form::icon($icons[$i++]) ?></td>
+                                        <td><?= Html::icon($icons[$i++]) ?></td>
                                         <td style="white-space: nowrap;" class="w3-small"><?= Team::id_to_name($team_id) ?></td>
                                         <td><?= $gew_spiele ?></td>
                                     </tr>
@@ -226,7 +227,7 @@ include '../../templates/header.tmp.php'; ?>
                             </table>
                         </div>
                         <span class="w3-text-grey w3-small">
-                        <?= Form::icon("sports_hockey") ?> Anzahl gewonnener Spiele
+                        <?= Html::icon("sports_hockey") ?> Anzahl gewonnener Spiele
                         </span>
                     </div>
                 <?php }//endif?>
@@ -235,20 +236,20 @@ include '../../templates/header.tmp.php'; ?>
             <!-- Links -->
             <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
                 <div class="w3-stretch w3-container w3-primary">
-                    <h3><?= Form::icon("public", tag: "h2") ?> Links</h3>
+                    <h3><?= Html::icon("public", tag: "h2") ?> Links</h3>
                 </div>
-                <p class="w3-text-grey w3-border-top w3-border-grey"><?= Form::icon("bookmark") ?> Ligen</p>
-                <p><?= Form::link(Config::LINK_SWISS, " Schweizer Einradhockeyliga", true, "link") ?></p>
-                <p><?= Form::link(Config::LINK_AUSTRALIA, " Australische Einradhockeyliga", true, "link") ?></p>
-                <p><?= Form::link(Config::LINK_FRANCE, " Französische Einradbasketballliga", true, "link") ?></p>
+                <p class="w3-text-grey w3-border-top w3-border-grey"><?= Html::icon("bookmark") ?> Ligen</p>
+                <p><?= Html::link(Nav::LINK_SWISS, " Schweizer Einradhockeyliga", true, "link") ?></p>
+                <p><?= Html::link(Nav::LINK_AUSTRALIA, " Australische Einradhockeyliga", true, "link") ?></p>
+                <p><?= Html::link(Nav::LINK_FRANCE, " Französische Einradbasketballliga", true, "link") ?></p>
 
-                <p class="w3-text-grey w3-border-top w3-border-grey"><?= Form::icon("bookmark") ?> Verbände</p>
-                <p><?= Form::link(Config::LINK_EV, " Einradverband Deutschland", true, "link") ?></p>
-                <p><?= Form::link(Config::LINK_EV_SH, " Einradverband Schleswig-Holstein", true, "link") ?></p>
-                <p><?= Form::link(Config::LINK_EV_BY, " Einradverband Bayern", true, "link") ?></p>
+                <p class="w3-text-grey w3-border-top w3-border-grey"><?= Html::icon("bookmark") ?> Verbände</p>
+                <p><?= Html::link(Nav::LINK_EV, " Einradverband Deutschland", true, "link") ?></p>
+                <p><?= Html::link(Nav::LINK_EV_SH, " Einradverband Schleswig-Holstein", true, "link") ?></p>
+                <p><?= Html::link(Nav::LINK_EV_BY, " Einradverband Bayern", true, "link") ?></p>
 
-                <p class="w3-text-grey w3-border-top w3-border-grey"><?= Form::icon("bookmark") ?> Förderation</p>
-                <p><?= Form::link(Config::LINK_IUF, " International Unicycle Federation", true, "link") ?></p>
+                <p class="w3-text-grey w3-border-top w3-border-grey"><?= Html::icon("bookmark") ?> Förderation</p>
+                <p><?= Html::link(Nav::LINK_IUF, " International Unicycle Federation", true, "link") ?></p>
             </div>
         </div>
 
@@ -278,16 +279,16 @@ include '../../templates/header.tmp.php'; ?>
 
                     <!-- PDF -->
                     <?php if ($neuigkeit['link_pdf'] != '') { ?>
-                        <?= Form::link($neuigkeit['link_pdf'], "PDF-Anhang", true, "insert_drive_file") ?>
+                        <?= Html::link($neuigkeit['link_pdf'], "PDF-Anhang", true, "insert_drive_file") ?>
                     <?php } //end if?>
 
                     <!-- Autor + Zeitstempel -->
                     <div class='w3-text-grey'>
                         <p class="w3-left">
-                            <?= Form::icon("create") ?> <?= ($neuigkeit['eingetragen_von']) ?>
+                            <?= Html::icon("create") ?> <?= ($neuigkeit['eingetragen_von']) ?>
                         </p>
                         <p class='w3-right'>
-                            <?= Form::icon("schedule") ?> <?= $neuigkeit['zeit'] ?>
+                            <?= Html::icon("schedule") ?> <?= $neuigkeit['zeit'] ?>
                         </p>
                     </div>
 
@@ -296,7 +297,7 @@ include '../../templates/header.tmp.php'; ?>
                         <p>
                             <a href='../ligacenter/lc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>' class='no'>
                                 <button class="w3-button w3-block w3-tertiary">
-                                    <?= Form::icon("create") ?> Bearbeiten
+                                    <?= Html::icon("create") ?> Bearbeiten
                                 </button>
                             </a>
                         </p>
@@ -304,7 +305,7 @@ include '../../templates/header.tmp.php'; ?>
                         <p>
                             <a href='../teamcenter/tc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>' class='no'>
                                 <button class="w3-button w3-block w3-tertiary">
-                                    <?= Form::icon("create") ?> Bearbeiten
+                                    <?= Html::icon("create") ?> Bearbeiten
                                 </button>
                             </a>
                         </p>

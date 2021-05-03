@@ -1,135 +1,116 @@
-<h3 class="w3-text-secondary w3-margin-top">Spiele</h3>
-<!-- Teambesprechung -->
-
+<h2 class="w3-text-secondary w3-margin-top">Spiele</h2>
 <!-- Spielzeiten -->
-<p class="w3-text-grey">
+<span class="w3-text-grey w3-margin-top">
     Spielzeit: <?= $spielplan->details['anzahl_halbzeiten'] ?> x <?= $spielplan->details['halbzeit_laenge'] ?>&nbsp;min
     | Puffer: <?= $spielplan->details['puffer'] ?>&nbsp;min
-</p>
-
+</span>
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-centered w3-striped">
         <tr class="w3-primary">
+            <!-- DM Uhr -->
             <th>
-                <i class="material-icons">schedule</i>
+                <?= Html::icon("schedule") ?>
                 <br>
                 Uhr
             </th>
-            <th class="w3-hide-small">
-                <i class="material-icons">sports</i>
+            <!-- DM Schiri -->
+            <th>
+                <?= Html::icon("sports") ?>
                 <br>
                 Schiri
             </th>
-            <th class="w3-hide-large w3-hide-medium pdf-hide">
-                <span class="pdf-hide">
-                    <i class="material-icons">sports</i>
-                    <br>
-                    Schiri
-                </span>
-            </th>
+            <!-- D Farbe A -->
             <th class="w3-hide-small"></th>
+            <!-- D Team A -->
             <th class="w3-hide-small"></th>
+            <!-- D - -->
             <th class="w3-hide-small">
-                <i class="material-icons">sports_hockey</i>
+                <?= Html::icon("sports_hockey") ?>
                 <br>
                 Spiele
             </th>
+            <!-- D Team B -->
             <th class="w3-hide-small"></th>
+            <!-- D Farbe B -->
             <th class="w3-hide-small"></th>
+            <!-- M Farben -->
             <th class="w3-hide-large w3-hide-medium"></th>
-            <th class="w3-hide-large w3-hide-medium"></th>
-            <th class="w3-hide-large w3-hide-medium">
+            <!-- 3xM Teams -->
+            <th colspan="3" class="w3-hide-large w3-hide-medium">
                 <span class="pdf-hide">
-                    <i class="material-icons">sports_hockey</i>
+                    <?= Html::icon("sports_hockey") ?>
                     <br>
                     Spiele
                 </span>
             </th>
-            <th class="w3-hide-small">
-                <i class="material-icons">sports_baseball</i>
+            <!-- DM Tore -->
+            <th>
+                <?= Html::icon("sports_baseball") ?>
                 <br>
                 Tore
             </th>
-            <th class="w3-hide-large w3-hide-medium">
-                <span class="pdf-hide">
-                    <i class="material-icons">sports_baseball</i>
-                    <br>Tore
-                </span>
-            </th>
             <?php if ($spielplan->check_penalty_anzeigen()) { ?>
-                <th class="w3-hide-small">
-                    <i class="material-icons">priority_high</i>
+                <th>
+                    <?= Html::icon("priority_high") ?>
                     <br>
                     Penalty
-                </th>
-                <th class="w3-hide-large w3-hide-medium">
-                    <span class="pdf-hide">
-                        <i class="material-icons">priority_high</i>
-                        <br>
-                        Penalty
-                    </span>
                 </th>
             <?php }//endif?>
         </tr>
         <?php if ($spielplan->turnier->details['besprechung'] === 'Ja') { ?>
             <tr class="w3-primary-3">
-                <td colspan="<?= ($spielplan->check_penalty_anzeigen()) ? 14 : 12 ?>">
-                    Alle Teams sollen sich um
-                    <?= date('H:i', strtotime($spielplan->turnier->details['startzeit']) - 15 * 60)
-                    ?>&nbsp;Uhr zu einer gemeinsamen Turnierbesprechung einfinden.
+                <td><?= date('H:i', strtotime($spielplan->turnier->details['startzeit']) - 15 * 60) ?></td>
+                <td></td>
+                <td></td>
+                <td colspan="3">
+                    <i><span class="w3-hide-small">Gemeinsame </span>Turnierbesprechung</i>
                 </td>
+                <td></td>
+                <td class="w3-hide-small"></td>
+                <?php if ($spielplan->check_penalty_anzeigen()) { ?>
+                    <td></td>
+                <?php } //endif ?>
             </tr>
         <?php }//endif?>
         <?php foreach ($spielplan->spiele as $spiel_id => $spiel) { ?>
             <tr>
+                <!-- Uhrzeit -->
                 <td><?= $spiel["zeit"] ?></td>
-                <!-- Desktop -->
-                <td class="w3-hide-small">
-                    <table class="w3-table w3-centered" style="width: auto; margin: auto;">
-                        <tr>
-                            <td style="width: 30px; padding:0;">
-                                <span class="w3-tooltip" style="cursor: help;">
+                <!-- Schiri -->
+                <td>
+                    <div class="w3-tooltip" style="cursor: help;">
+                        <!-- Desktop -->
+                        <table class="w3-table w3-centered w3-hide-small" style="width: auto; margin: auto;">
+                            <tr>
+                                <td style="width: 30px; padding:0;">
                                     <i class="w3-text-primary"><?= $spiel["schiri_team_id_b"] ?></i>
-                                    <span style="white-space: nowrap; position:absolute;right:30px;top:0"
-                                          class="w3-text w3-small w3-primary w3-tag pdf-hide">
-                                        <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_b"]]['teamname'] ?>
-                                    </span>
-                                </span>
-                            </td>
-                            <td style="width: 30px; padding:0;">|</td>
-                            <td style="width: 30px; padding:0;">
-                                <span class="w3-tooltip" style="cursor: help;">
+                                </td>
+                                <td style="width: 30px; padding:0;">|</td>
+                                <td style="width: 30px; padding:0;">
                                     <i class="w3-text-primary"><?= $spiel["schiri_team_id_a"] ?></i>
-                                    <span style="white-space: nowrap; position:absolute;left:30px;top:0"
-                                          class="w3-text w3-small w3-primary w3-tag pdf-hide">
-                                        <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_a"]]['teamname'] ?>
-                                    </span>
-                                </span>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-                <!-- Mobil -->
-                <td class="w3-center w3-hide-large w3-hide-medium w3-text-primary">
-                    <span class="w3-tooltip pdf-hide">
-                        <i><?= $spiel["schiri_team_id_b"] ?></i>
-                        <span style="white-space: nowrap; position:absolute;left:0;bottom:15px"
-                              class="w3-text w3-small w3-primary w3-tag">
-                            <i class="material-icons" style="vertical-align: -30%">keyboard_arrow_down</i>
+                                </td>
+                            </tr>
+                        </table>
+                        <span style="white-space: nowrap; position:absolute; left:38px; bottom:8px;" class="w3-text w3-small w3-primary w3-container">
+                            <span class="w3-hide-small">
+                               <?= Html::icon("keyboard_arrow_down") ?>
+                            </span>
+                            <span class="w3-hide-large w3-hide-medium">
+                               <?= Html::icon("keyboard_arrow_left") ?>
+                            </span>
+                            <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_a"]]['teamname'] ?>
+                            |
                             <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_b"]]['teamname'] ?>
                         </span>
-                    </span>
-                    <br class="pdf-hide">
-                    <span class="w3-tooltip pdf-hide">
-                        <i><?= $spiel["schiri_team_id_a"] ?></i>
-                        <span style="white-space: nowrap; position:absolute;left:0;top:15px"
-                              class="w3-text w3-small w3-primary w3-tag">
-                            <i class="material-icons" style="vertical-align: -30%">keyboard_arrow_up</i>
-                            <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_a"]]['teamname'] ?>
+                        <!-- Mobil -->
+                        <span class="pdf-hide w3-hide-medium w3-hide-large w3-text-primary w3-hover-text-secondary">
+                            <i><?= $spiel["schiri_team_id_b"] ?></i>
+                            <br class="pdf-hide">
+                            <i><?= $spiel["schiri_team_id_a"] ?></i>
                         </span>
-                    </span>
+                    </div>
                 </td>
-                <!-- Dekstop -->
+                <!-- Teams Desktop -->
                 <td class="w3-hide-small">
                     <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_a']] ?? '' ?>
                 </td>
@@ -143,69 +124,66 @@
                 <td class="w3-hide-small">
                     <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_b']] ?? '' ?>
                 </td>
-                <!-- Mobil -->
-                <td class="w3-hide-large w3-hide-medium"></td>
+                <!-- Teams Mobil -->
                 <td class="w3-center w3-hide-large w3-hide-medium">
                     <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_a']]  ?? '' ?>
-                    <br>
                     <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_b']]  ?? '' ?>
-                <td class="w3-center w3-hide-large w3-hide-medium" style="white-space: nowrap;">
+                </td>
+                <td colspan="3" class="w3-hide-large w3-hide-medium" style="white-space: nowrap;">
                     <span class="pdf-hide"><?= $spiel["teamname_a"] ?></span>
                     <br class="pdf-hide">
                     <span class="pdf-hide"><?= $spiel["teamname_b"] ?></span>
                 </td>
-                <!-- Tore Dekstop -->
-                <td class="w3-hide-small">
-                    <table class="w3-table w3-centered" style="width: auto; margin: auto;">
+                <td>
+                    <!-- Tore Desktop -->
+                    <table class="w3-table w3-centered w3-hide-small" style="width: auto; margin: auto;">
                         <tr>
                             <td style="width: 30px; padding:0;">
-                                <b><?= $spiel["tore_a"] ?></b>
+                                <?= $spiel["tore_a"] ?>
                             </td>
                             <td style="width: 30px; padding:0;">:</td>
                             <td style="width: 30px; padding:0;">
-                                <b><?= $spiel["tore_b"] ?></b>
+                                <?= $spiel["tore_b"] ?>
                             </td>
                         </tr>
                     </table>
-                </td>
-                <!-- Tore Mobil -->
-                <td class="w3-center w3-hide-large w3-hide-medium">
-                    <span class="pdf-hide">
-                            <b><?= $spiel["tore_a"] ?></b>
+                    <!-- Tore Mobil -->
+                    <span class="w3-center w3-hide-large w3-hide-medium">
+                        <span class="pdf-hide">
+                                <?= $spiel["tore_a"] ?>
+                        </span>
+                        <br class="pdf-hide">
+                        <span class="pdf-hide">
+                                <?= $spiel["tore_b"] ?>
+                        </span>
                     </span>
-                    <br class="pdf-hide">
-                    <span class="pdf-hide">
-                            <b><?= $spiel["tore_b"] ?></b>
-                    </span>
                 </td>
-                <!-- Penalty -->
                 <?php if ($spielplan->check_penalty_anzeigen()) { ?>
-                    <!-- Penalty Dekstop -->
-                    <td class="w3-hide-small">
-                        <table class="w3-table w3-centered" style="width: auto; margin: auto;">
+                    <!-- Pen Dekstop -->
+                    <td>
+                        <table class="w3-table w3-centered w3-hide-small w3-text-secondary" style="width: auto; margin: auto;">
                             <tr>
-                                <td class="w3-text-secondary" style="width: 30px; padding:0;">
-                                    <b><?= $spiel["penalty_a"] ?></b>
+                                <td style="width: 30px; padding:0;">
+                                    <?= $spiel["penalty_a"] ?>
                                 </td>
-                                <td style="width: 30px; padding:0;">:</td>
-                                <td class="w3-text-secondary" style="width: 30px; padding:0;">
-                                    <b><?= $spiel["penalty_b"] ?></b>
+                                <td style="width: 30px; padding:0;" class="w3-text-black">:</td>
+                                <td style="width: 30px; padding:0;">
+                                   <?= $spiel["penalty_b"] ?>
                                 </td>
                             </tr>
                         </table>
-                    </td>
-                    <!-- Penalty Mobil -->
-                    <td class="w3-center w3-hide-large w3-hide-medium">
-                        <span class="pdf-hide w3-text-secondary">
-                            <!-- Penaltystand -->
-                            <?= $spiel["penalty_a"] ?>
-                        </span>
-                        <br class="pdf-hide">
-                        <span class="pdf-hide w3-text-secondary">
+                        <!-- Tore Mobil -->
+                        <span class="w3-hide-large w3-hide-medium w3-text-secondary">
+                            <span class="pdf-hide">
+                                <?= $spiel["penalty_a"] ?>
+                            </span>
+                            <br class="pdf-hide">
+                            <span class="pdf-hide">
                                 <?= $spiel["penalty_b"] ?>
                             </span>
+                        </span>
                     </td>
-                <?php }// endif?>
+                <?php }//endif?>
             </tr>
             <?php if ($spielplan->get_pause($spiel_id) > 0) { ?>
                 <tr>
@@ -216,27 +194,18 @@
                     </td>
                     <td></td>
                     <td></td>
-                    <td colspan="3" class="w3-center">
-                        <i class="material-icons">schedule</i>
+                    <td style="white-space: nowrap;" colspan="3">
+                        <?= Html::icon("schedule") ?>
                         <i><?= $spielplan->get_pause($spiel_id) ?>&nbsp; min Pause</i>
-                        <i class="material-icons">schedule</i>
+                        <?= Html::icon("schedule") ?>
                     </td>
                     <td></td>
-                    <td></td>
+                    <td class="w3-hide-small"></td>
                     <?php if ($spielplan->check_penalty_anzeigen()) { ?>
                         <td></td>
-                    <?php }// end if ?>
+                    <?php } //endif ?>
                 </tr>
             <?php }// endif?>
         <?php }// end foreach?>
     </table>
 </div>
-
-<script>
-    // Deaktiviert Veränderung der Number-Inputs beim Scrollen
-    document.addEventListener("wheel", function (event) {
-        if (document.activeElement.type === "number") {
-            document.activeElement.blur();
-        }
-    });
-</script>

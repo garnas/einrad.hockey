@@ -2,9 +2,9 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 
-Config::$teamcenter_no_redirect = true; // Verhindert die Endlosschleife, bei der Überprüfung, ob ein LV angegeben ist
+Helper::$teamcenter_no_redirect = true; // Verhindert die Endlosschleife, bei der Überprüfung, ob ein LV angegeben ist
 
 require_once '../../logic/session_team.logic.php'; //Auth
 require_once '../../logic/teamdaten_aendern.logic.php';

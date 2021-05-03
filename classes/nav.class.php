@@ -2,6 +2,19 @@
 
 class Nav
 {
+
+    /**
+     * Iterator für die Navigation, um globale Variablen zu verhindern.
+     *
+     * @var array
+     */
+    public static array $link;
+
+    /**
+     * Alle Links die mit dem Betrieb der Liga zu tun haben.
+     *
+     * @return string[][]
+     */
     public static function get_liga(): array
     {
         return [
@@ -15,6 +28,11 @@ class Nav
         ];
     }
 
+    /**
+     * Links für allgemeine Informationen über die Liga
+     *
+     * @return string[][]
+     */
     public static function get_info(): array
     {
         return [
@@ -22,10 +40,16 @@ class Nav
             [Env::BASE_URL . "/liga/ueber_uns.php", "Interesse?"],
             [Env::BASE_URL . "/liga/teams.php", "Teams"],
             [Env::BASE_URL . "/liga/ligakarte.php", "Ligakarte"],
-            [Config::LINK_FORUM, "Forum"]
+            [self::LINK_FORUM . "index.php/board,7.0.html", "Rundschreibenarchiv"],
+            [self::LINK_FORUM, "Forum"]
         ];
     }
 
+    /**
+     * Links für den Modus und die Funktionsweise der Liga
+     *
+     * @return string[][]
+     */
     public static function get_modus(): array
     {
         return [
@@ -35,12 +59,16 @@ class Nav
     }
 
 
+    /**
+     * Teamcenterlinks für die Navigation
+     *
+     * @return string[][]
+     */
     public static function get_teamcenter(): array
     {
         $class_text_color = (isset($_SESSION['logins']['team'])) ? "" : "w3-text-grey";
         $links = [
             [Env::BASE_URL . "/teamcenter/tc_start.php", "Start", $class_text_color],
-            [Env::BASE_URL . "/teamcenter/tc_abstimmung.php", "Abstimmung", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_anmelden.php", "Turnieranmeldung", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_turnier_erstellen.php", "Turnier erstellen", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_verwalten.php", "Eigene Turniere", $class_text_color],
@@ -53,16 +81,21 @@ class Nav
         ];
         if (isset($_SESSION['logins']['team'])) {
             $links[] =
-                [Env::BASE_URL . "/teamcenter/tc_logout.php", Form::icon("logout") . " Logout", $class_text_color];
+                [Env::BASE_URL . "/teamcenter/tc_logout.php", Html::icon("logout") . " Logout", $class_text_color];
         }else{
             array_unshift(
                 $links,
-                [Env::BASE_URL . "/teamcenter/tc_login.php", Form::icon("login") . " Login", "w3-text-black"]
+                [Env::BASE_URL . "/teamcenter/tc_login.php", Html::icon("login") . " Login", "w3-text-black"]
             );
         }
         return $links;
     }
 
+    /**
+     * Sonstige Links
+     *
+     * @return string[][]
+     */
     public static function get_sonstiges(): array
     {
         return [
@@ -75,6 +108,11 @@ class Nav
         ];
     }
 
+    /**
+     * Links für die Startseite des Ligacenters
+     *
+     * @return string[][]
+     */
     public static function get_lc_start(): array
     {
         return [
@@ -95,10 +133,14 @@ class Nav
         ];
     }
 
+    /**
+     * Links für die Startseite des Teamcenters
+     *
+     * @return string[][]
+     */
     public static function get_tc_start(): array
     {
         return [
-            [Env::BASE_URL . "/teamcenter/tc_abstimmung.php", "Abstimmung", "w3-teal"],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_anmelden.php", "Turnier- anmeldung", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_turnier_erstellen.php", "Turnier erstellen", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_verwalten.php", "Eigene Turniere", "w3-primary"],
@@ -112,4 +154,37 @@ class Nav
         ];
     }
 
+    /**
+     *  Ligalinks
+     */
+    public const LINK_FORUM = 'https://forum.einrad.hockey/';
+    public const LINK_FACE = 'https://www.facebook.com/DeutscheEinradhockeyliga';
+    public const LINK_GIT = 'https://github.com/garnas/einrad.hockey';
+    /**
+     * Andere Ligen
+     */
+    public const LINK_AUSTRALIA = 'https://hockey.unicycling.org.au/';
+    public const LINK_REGELN_IUF = Env::BASE_URL . '/dokumente/iuf-rulebook-2019.pdf';
+    public const LINK_REGELN = Env::BASE_URL . '/dokumente/regelwerk.pdf';
+    /**
+     * Einradverbände
+     */
+    public const LINK_EV = 'https://www.einradverband.de/';
+    public const LINK_ARCHIV = 'https://archiv.einrad.hockey/archiv/index.html';
+    public const LINK_INSTA = 'https://www.instagram.com/einradhockeyde/';
+    public const LINK_EV_BY = 'http://einradverband-bayern.de/';
+    public const LINK_REGELN_KURZ = Env::BASE_URL . '/dokumente/zusammenfassung_regeln.pdf';
+    public const LINK_MODUS_KURZ = Env::BASE_URL . '/dokumente/zusammenfassung_modus.pdf';
+    public const LINK_TURNIER = Env::BASE_URL . '/dokumente/turniermodi.pdf';
+    /**
+     * Dokumente
+     */
+    public const LINK_MODUS = Env::BASE_URL . '/dokumente/ligamodus.pdf';
+    public const LINK_DSGVO = Env::BASE_URL . '/dokumente/datenschutz-hinweise.pdf';
+    public const LINK_FRANCE = 'https://monocycle.info/ligue-de-monocycle-basket-remaniement-co/';
+    public const LINK_SPIELPLAENE_ALT = Env::BASE_URL . '/dokumente/alte_spielplan_vorlagen.pdf';
+    public const LINK_EV_SH = 'https://www.einradverband-sh.de/';
+    public const LINK_IUF = 'https://unicycling.org/';
+    public const LINK_MODUS_KURZ_ENG = Env::BASE_URL . '/dokumente/summary_modus.pdf';
+    public const LINK_SWISS = 'https://www.swiss-iuc.ch/Wettkaempfe/Einradhockey';
 }

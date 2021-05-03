@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 
 //Aktuellen Spieltag bekommen. Der aktuelle Spieltag ist der Spieltag, an dem das nächste Turnier eingetragen wird.
 $akt_spieltag = Tabelle::get_aktuellen_spieltag();
@@ -11,11 +11,11 @@ if (Tabelle::check_spieltag_live($akt_spieltag)){
     $live_spieltag = $akt_spieltag;
 }else{
     $live_spieltag = -1;
-    $akt_spieltag -= 1;
+    $akt_spieltag--;
 }
 
-if (isset($_GET['spieltag']) && is_numeric($_GET['spieltag'])){
-    $gew_spieltag=$_GET['spieltag'];
+if (isset($_GET['spieltag'])){
+    $gew_spieltag = (int)$_GET['spieltag'];
 }else{
     $gew_spieltag = $akt_spieltag;
 }
@@ -81,15 +81,15 @@ for ($spieltag = $akt_spieltag; $spieltag >= 0; $spieltag--){
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Config::$titel = "Aktuelle Tabellen der Deutschen Einradhockeyliga";
-Config::$content = "Die Rang- und Meisterschaftstabelle welche aus den Turnieren der Deutschen Einradhockeyliga entstehen.";
+Html::$titel = "Aktuelle Tabellen der Deutschen Einradhockeyliga";
+Html::$content = "Die Rang- und Meisterschaftstabelle welche aus den Turnieren der Deutschen Einradhockeyliga entstehen.";
 include '../../templates/header.tmp.php';?>
 
 <!-- Erklärungen zur Tabelle -->
 
 <!-- Trigger/Open the Modal -->
 <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-text-primary">
-    <?= Form::icon("info") ?> Infos zu den Tabellen
+    <?= Html::icon("info") ?> Infos zu den Tabellen
 </button>
 <!-- The Modal -->
 <div id="id01" class="w3-modal">
@@ -137,7 +137,7 @@ window.onclick = function(event) {
 
 <!-- Meisterschaftstabelle -->
 <h1 class="w3-text-primary w3-border-primary" id='meister'>Meisterschaftstabelle</h1>
-<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#rang" class="no w3-hover-text-secondary">Zur Rangtabelle</a><span class="w3-right">Saison <?=Form::get_saison_string()?></span></p>
+<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#rang" class="no w3-hover-text-secondary">Zur Rangtabelle</a><span class="w3-right">Saison <?=Html::get_saison_string()?></span></p>
 
 <!-- Spieltag wählen -->
 <div class="w3-bar">
@@ -170,7 +170,7 @@ window.onclick = function(event) {
 
 <!--Rangtabelle-->
 <h1 id="rang" class="w3-text-primary w3-border-primary">Rangtabelle</h1>
-<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#meister" class="no w3-hover-text-secondary">Zur Meisterschaftstabelle</a><span class="w3-right">Saison <?=Form::get_saison_string()?></span></p>
+<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#meister" class="no w3-hover-text-secondary">Zur Meisterschaftstabelle</a><span class="w3-right">Saison <?=Html::get_saison_string()?></span></p>
 
 <!-- Spieltag wählen -->
 <div class="w3-bar">
@@ -186,24 +186,24 @@ window.onclick = function(event) {
         <thead class="w3-primary">
             <tr>
                 <th><b>#</b></th>
-                <th><b>Block</b></th>
-                <th><b>Wertung</b></th>
+                <th class="w3-center"><b>Block</b></th>
+                <th class="w3-center"><b>Wertung</b></th>
                 <th><b>Team</b></th>
                 <th><b>Turnierergebnisse</b></th>
-                <th><b>&empty;</b></th>
+                <th class="w3-center"><b>&empty;</b></th>
             </tr>
         </thead>
         <?php foreach ($rang_tabelle as $spalte){?>
             <tr>
-                <td><span class="w3-text-grey"><?=$spalte['platz']?></span></td>
-                <td class="w3-center"><?=Tabelle::platz_to_block($spalte['platz'])?></td>
-                <td class="w3-center"><?=Tabelle::platz_to_wertigkeit($spalte['platz'])?></td>
+                <td><span class="w3-text-grey"><?=$spalte['rang']?></span></td>
+                <td class="w3-center"><?=Tabelle::rang_to_block($spalte['rang'])?></td>
+                <td class="w3-center"><?=Tabelle::rang_to_wertigkeit($spalte['rang'])?></td>
                 <td style="white-space: nowrap"><?=$spalte['teamname']?></td>
                 <td><?=htmlspecialchars_decode($spalte['string'])?></td>
-                <td><?=$spalte['avg'] ?: 0?></td>
+                <td class="w3-center"><?=$spalte['avg'] ?: 0?></td>
             </tr>
         <?php } //end foreach?>
-    </table>    
+    </table>
 </div>
 
 

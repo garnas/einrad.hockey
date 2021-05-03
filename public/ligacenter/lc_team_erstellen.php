@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
 //Formularauswertung
@@ -14,28 +14,28 @@ if (isset($_POST['team_erstellen'])) {
 
     //Felder dürfen nicht leer sein
     if (empty($teamname) or empty($email) or empty($passwort)) {
-        Form::error("Bitte alle Felder ausfüllen");
+        Html::error("Bitte alle Felder ausfüllen");
         $error = true;
     }
 
     //Email wird auf gültigkeit überprüft
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        Form::error("Ungültige Email");
+        Html::error("Ungültige Email");
         $error = true;
     }
 
     //Nichtligateams bekommen ein Stern hinter ihrem Namen, damit sie nicht Teamnamen für Ligateams wegnehmen.
     if (!empty(Team::name_to_id($teamname))) {
-        Form::error("Der Teamname existiert bereits");
+        Html::error("Der Teamname existiert bereits");
         $error = true;
     }
 
     //Team wird erstellt
     if (!$error) {
         Team::set_new_team($teamname, $passwort, $email);
-        Form::info("Das Team \"" . dbi::escape($teamname)
-            . "\" wurde erfolgreich erstellt.<br> Email: " . dbi::escape($email)
-            . "<br> Passwort: " . dbi::escape($passwort));
+        Html::info("Das Team \"" . db::escape($teamname)
+            . "\" wurde erfolgreich erstellt. Email: " . db::escape($email)
+            . " Passwort: " . db::escape($passwort));
         header("Location: ../liga/teams.php");
         die();
     }

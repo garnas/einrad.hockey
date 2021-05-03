@@ -12,15 +12,15 @@ class LigaBot
     public static function liga_bot()
     {
 
-        dbi::sql_backup(); // Datenbank wird gesichert
+        db::sql_backup(); // Datenbank wird gesichert
 
         $doppel_anmeldungen = self::get_doppel_anmeldungen(); // Doppelt auf Spiele-Liste wird hier erfasst.
         if (!empty($doppel_anmeldungen)) {
-            Form::notice("Doppelt auf Spielen-Liste:");
+            Html::notice("Doppelt auf Spielen-Liste:");
             db::debug($doppel_anmeldungen); // TODO Mail absenden?
         }
 
-        $_SESSION['ligabot'] = 'Ligabot'; // Wird in den logs als Autor verwendet
+        $_SESSION['logins']['ligabot'] = 'Ligabot'; // Wird in den logs als Autor verwendet
 
         self::set_spieltage(); // Setzt alle Spieltage der Turniere
 
@@ -42,19 +42,17 @@ class LigaBot
                 && $turnier->details['phase'] === 'offen'
                 && $turnier->details['tblock_fixed'] !== 'Ja'
                 && $turnier_block != $ausrichter_block
-            ) {
-                if (($pos_ausrichter - 1) != $pos_turnier) { // Um einen Block vom Ausrichterblock aus erweiterte Turniere sollen nicht wandern...
-                    $turnier->set_block($ausrichter_block);
-                }
+                && ($pos_ausrichter - 1) != $pos_turnier
+            ) { // Um einen Block vom Ausrichterblock aus erweiterte Turniere sollen nicht wandern...
+                $turnier->set_block($ausrichter_block);
             }
             if (
                 $turnier->details['art'] === 'II'
                 && $turnier->details['tblock_fixed'] !== 'Ja'
                 && $turnier->details['phase'] === 'offen'
+                && $pos_ausrichter < $pos_turnier
             ) {
-                if ($pos_ausrichter < $pos_turnier) {
-                    $turnier->set_block($ausrichter_block);
-                }
+                $turnier->set_block($ausrichter_block);
             }
 
             /**
@@ -76,14 +74,14 @@ class LigaBot
                 MailBot::mail_plaetze_frei($turnier);
             }
         } //end foreach
-        unset($_SESSION['ligabot']);
-        Form::info("Ligabot erfolgreich ausgeführt");
+        unset($_SESSION['logins']['ligabot']);
+        Html::info("Ligabot erfolgreich ausgeführt");
     }
 
     /**
      * Geht alle Turniere durch und schreibt den jeweiligen Spieltag in die Datenbank
      */
-    public static function set_spieltage()
+    public static function set_spieltage(): void
     {
         $liste = self::get_turnier_ids(); // Liste aller relevanten Turnierids sortiert nach Turnierdatum
 
@@ -132,7 +130,7 @@ class LigaBot
                 AND (art='I' OR art='II' OR art='III') 
                 ORDER BY datum
                 ";
-        return dbi::$db->query($sql, $saison)->esc()->list('turnier_id');
+        return db::$db->query($sql, $saison)->esc()->list('turnier_id');
     }
 
 
@@ -172,7 +170,7 @@ class LigaBot
                 GROUP BY turniere_liga.datum, turniere_liste.team_id 
                 HAVING (COUNT(*) > 1)
                 ";
-        return dbi::$db->query($sql)->esc()->fetch();
+        return db::$db->query($sql)->esc()->fetch();
     }
 
     /**
@@ -186,7 +184,7 @@ class LigaBot
     public static function losen(Turnier $turnier): bool
     {
         // Falsche Freilosanmeldungen beim Übergang in die Meldephase abmelden
-        Form::info($turnier->id . " wurde gelost.");
+        Html::info($turnier->id . " wurde gelost.");
         $liste = $turnier->get_anmeldungen();
         foreach (($liste['spiele'] ?? []) as $team) {
             // Das Team hat ein Freilos gesetzt, aber den falschen Freilosblock
@@ -239,7 +237,7 @@ class LigaBot
             if ($turnier->check_doppel_anmeldung($team_id)) { //Check ob das Team am Kalendertag des Turnieres schon auf einer Spiele-Liste steht
                 $turnier->log("Doppelanmeldung " . Team::id_to_name($team_id));
                 $turnier->abmelden($team_id);
-                Form::info("Abmeldung Doppelanmeldung im Turnier" . $turnier->id . ": \r\n" . Team::id_to_name($team_id));
+                Html::info("Abmeldung Doppelanmeldung im Turnier" . $turnier->id . ": \r\n" . Team::id_to_name($team_id));
             } else {
                 $turnier->set_liste($team_id, 'warte', $pos);
             }

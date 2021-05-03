@@ -2,12 +2,18 @@
 /////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////DB SICHERN/////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../logic/first.logic.php'; //autoloader und Session
+require_once '../../init.php';
 
-dbi::sql_backup();
+$_SESSION['logins']['cronjob'] = 'Cronjob';
+
+db::sql_backup();
+
 //Meldungen protokollieren
 ?>
+
 <pre>
     <?php print_r($_SESSION['messages']) ?>
 </pre>
+
+<?php
 session_destroy();
