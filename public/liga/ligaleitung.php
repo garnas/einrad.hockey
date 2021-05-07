@@ -40,10 +40,10 @@ include '../../templates/header.tmp.php'; ?>
 <p class="w3-text-grey">Kontakt: <?= Html::mailto(Env::LAMAIL) ?></p>
 
 <p class="w3-margin" style="max-width: 666px">
-    <a href="../bilder/ligaausschuss2020.jpg">
-        <img src="../bilder/ligaausschuss2020.jpg" alt="Ligaausschuss 2020" class="w3-image w3-card-4">
+    <a href="<?= Env::BASE_URL ?>/bilder/ligaausschuss.jpg">
+        <img src="<?= Env::BASE_URL ?>/bilder/ligaausschuss.jpg" alt="Ligaausschuss" class="w3-image w3-card-4">
     </a>
-    Das Bild des Ligaausschusses der Saison 2020.
+    Das Bild des Ligaausschusses der Saison <?= Html::get_saison_string() ?>.
 </p>
 
 <!-- Technik -->
@@ -51,11 +51,10 @@ include '../../templates/header.tmp.php'; ?>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
         <?php foreach (LigaLeitung::get_all('technikausschuss') as $tk){?>
-        <tr>
-            <td class="w3-padding-small"><?= $tk['vorname'] . ' ' . $tk['nachname'] ?></td>
-            <td class="w3-padding-small"><i class="w3-text-grey"><?= $tk['teamname'] ?></i>
-            </td>
-        </tr>
+            <tr>
+                <td class="w3-padding-small"><?= $tk['vorname'] . ' ' . $tk['nachname'] ?></td>
+                <td class="w3-padding-small"><i class="w3-text-grey"><?= $tk['teamname'] ?></i></td>
+            </tr>
         <?php } //end foreach?>
     </table>
 </div>
@@ -69,11 +68,11 @@ include '../../templates/header.tmp.php'; ?>
 <h2 class="w3-text-primary"><?= Html::icon("public", tag:"h2") ?> Öffentlichkeitsausschuss</h2>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
-    <?php foreach (LigaLeitung::get_all('oeffentlichkeitsausschuss') as $oa){?>
-        <tr>
-            <td class="w3-padding-small"><?= $oa['vorname'] . ' ' . $oa['nachname']?></td>
-            <td class="w3-padding-small"><i class="w3-text-grey"><?= $oa['teamname'] ?></i></td>
-        </tr>
+        <?php foreach (LigaLeitung::get_all('oeffentlichkeitsausschuss') as $oa){?>
+            <tr>
+                <td class="w3-padding-small"><?= $oa['vorname'] . ' ' . $oa['nachname']?></td>
+                <td class="w3-padding-small"><i class="w3-text-grey"><?= $oa['teamname'] ?></i></td>
+            </tr>
         <?php } //end foreach?>
     </table>
 </div>
@@ -87,11 +86,11 @@ include '../../templates/header.tmp.php'; ?>
 <h2 class="w3-text-primary"><?= Html::icon("sports", tag:"h2") ?> Schiedsrichterausschuss</h2>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
-    <?php foreach (LigaLeitung::get_all('schiriausschuss') as $sa){?>
-        <tr>
-            <td class="w3-padding-small"><?=$sa['vorname'] . ' ' . $sa['nachname']?></td>
-            <td class="w3-padding-small"><i class="w3-text-grey"><?= $sa['teamname'] ?></i></td>
-        </tr>
+        <?php foreach (LigaLeitung::get_all('schiriausschuss') as $sa){?>
+            <tr>
+                <td class="w3-padding-small"><?=$sa['vorname'] . ' ' . $sa['nachname']?></td>
+                <td class="w3-padding-small"><i class="w3-text-grey"><?= $sa['teamname'] ?></i></td>
+            </tr>
         <?php } //end foreach?>
     </table>
 </div>
@@ -104,10 +103,10 @@ include '../../templates/header.tmp.php'; ?>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
         <?php foreach (Ligaleitung::get_all('schiriausbilder') as $ausbilder){?>
-        <tr>
-            <td class="w3-padding-small"><?=$ausbilder['vorname'] . ' ' . $ausbilder['nachname']?></td>
-            <td class="w3-padding-small"><i class="w3-text-grey"><?= $ausbilder['teamname'] ?></i></td>
-        </tr>
+            <tr>
+                <td class="w3-padding-small"><?=$ausbilder['vorname'] . ' ' . $ausbilder['nachname']?></td>
+                <td class="w3-padding-small"><i class="w3-text-grey"><?= $ausbilder['teamname'] ?></i></td>
+            </tr>
         <?php } //end foreach?>
     </table>
 </div>
