@@ -39,17 +39,6 @@ class SchiriTest
             ";
             $result = db::$db->query($sql, $fragenr, $anzahl)->fetch();
         }
-        //        $result = db::readdb($sql); // Mysqli Objekt
-        //        while ($row = mysqli_fetch_assoc($result)) {
-        //            $row['richtig'] = preg_split('/[\s#\s]+/', $row['richtig']); // String in ein Array parsen
-        //            for ($index = 1; $index <= 6; $index++){ //Index für die Antwortmöglichkeiten
-        //                if (!empty($row['antwort_' . $index])){
-        //                    $row['antworten'][$index] = $row['antwort_' . $index]; // Wird zum Array hinzugefügt
-        //                    unset($row['antwort_' . $index]); // Wird nicht mehr gebraucht
-        //                }
-        //            }
-        //            $fragen[$row['frage_id']] = $row;
-        //        }
         foreach ($result as $row) {
             $row['richtig'] = preg_split('/[\s#\s]+/', $row['richtig']); // String in ein Array parsen
             for ($index = 1; $index <= 6; $index++){ // Index für die Antwortmöglichkeiten
@@ -73,11 +62,11 @@ class SchiriTest
             SELECT *
             FROM regelwerk
         ";
-//        $result = db::readdb($sql); // Mysqli Objekt
-//        while ($row = mysqli_fetch_assoc($result)) {
-//            $regeln[$row['regelnummer']] = $row;
-//        }
-//        return $regeln;
+        //        $result = db::readdb($sql); // Mysqli Objekt
+        //        while ($row = mysqli_fetch_assoc($result)) {
+        //            $regeln[$row['regelnummer']] = $row;
+        //        }
+        //        return $regeln;
         return db::$db->query($sql)->fetch('regelnummer');
     }
 
@@ -162,9 +151,9 @@ class SchiriTest
     /**
      * Frage anzeigen
      */
-    static function frage_anzeigen(int $frage_id, array $frage)
+    static function frage_anzeigen(int $index, array $frage)
     { ?>
-    <h3 class="w3-bottombar">Schiritest (Frage Nr. <?= $frage_id ?>)</h3>
+    <h3 class="w3-topbar">Frage Nr. <?= $index ?></h3>
     <h4><?= $frage['frage'] ?></h4>
     <?php if(!empty($frage['name_video'])){?>
         <!-- Video zur Frage -->
@@ -181,6 +170,28 @@ class SchiriTest
                  src="bilder/<?=$frage['name_bild']?>">
         </div>
     <?php } //endif?>
-    <?php }
+<?php }
+
+/**
+ * Antwort anzeigen
+ */
+static function antworten_anzeigen(int $frage_id, array $frage)
+{
+    foreach ($frage['antworten'] as $index => $antwort){ ?>
+    <p>
+        <!-- Input als Array -->
+        <input name="abgabe[<?= $frage_id ?>][<?= $index ?>]"
+               value="<?= $index ?>"
+               id="<?= $frage_id . '*' . $index ?>"
+               type="checkbox"
+               class="w3-check"
+               style="cursor: pointer;">
+        <label for="<?= $frage_id . '*' . $index ?>"
+               class="w3-hover-text-primary" style="cursor: pointer;">
+            <?= $antwort ?>
+        </label>
+    </p>
+    <?php } //end foreach antworten
+    }
 
 } ?>

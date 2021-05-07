@@ -40,7 +40,6 @@ Html::$titel = 'Multiple-Choice Schiritest der Deutschen Einradhockeyliga';
 include '../../templates/header.tmp.php'; // Html-header und Navigation
 ?>
 
-<!-- Nach unten verschoben, da kleine Probleme mit den Headern (Ansgar) -->
 <!-- Start Debug Modus -->
 <form method="post">
     <div class='w3-card w3-panel w3-leftbar w3-border-red w3-pale-red'>
@@ -48,10 +47,11 @@ include '../../templates/header.tmp.php'; // Html-header und Navigation
         <input type="text" size="3" name="ausgewaehlte_nummer">
         <input type="submit" value="auswählen">
         (leere Eingabe erhöht Fragennummer um 1)
+        (Debug Modus)
     </div>
 </form>
-
 <!-- Ende Debug Modus -->
+
 <form method="post">
     <?php foreach ($fragen as $frage_id => $frage) { ?>
         <!-- Einzelne Frage -->
