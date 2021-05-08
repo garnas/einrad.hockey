@@ -1,15 +1,16 @@
-<?php
+<?php # -*- php -*-
 
 class SchiriTest
 {
-    /**
-     * Get eine bestimmte Anzahl an zufälligen Fragen einer Kategorie für den Schiritest
-     * aus der Datenbank.
-     *
-     * @param $kategorie // Kategorie aus welcher die Fragen geholt werden sollen
-     * @param $anzahl // Anzahl der Fragen die geholt werden sollen
-     * @return array // Fragen die zurückgegeben werden
-     */
+
+    #-------------------------------------------------------------------------
+    
+    # Get eine bestimmte Anzahl an zufälligen Fragen einer Kategorie für den Schiritest
+    # aus der Datenbank.
+    # @param $kategorie # Kategorie aus welcher die Fragen geholt werden sollen
+    # @param $anzahl    # Anzahl der Fragen die geholt werden sollen
+    # @param $fragenr   # Nummer einer bestimmten Frage, die geholt werden soll
+    # @return array     # Fragen die zurückgegeben werden
     static function get_fragen(string $kategorie, int $anzahl, int $fragenr=0): array
     {
         if ($kategorie=='*'){
@@ -40,39 +41,41 @@ class SchiriTest
             $result = db::$db->query($sql, $fragenr, $anzahl)->fetch();
         }
         foreach ($result as $row) {
-            $row['richtig'] = preg_split('/[\s#\s]+/', $row['richtig']); // String in ein Array parsen
-            for ($index = 1; $index <= 6; $index++){ // Index für die Antwortmöglichkeiten
+            # String in ein Array parsen:
+            $row['richtig'] = preg_split('/[\s#\s]+/', $row['richtig']);
+            for ($index = 1; $index <= 6; $index++){ # Index für die Antwortmöglichkeiten
                 if (!empty($row['antwort_' . $index])){
-                    $row['antworten'][$index] = $row['antwort_' . $index]; // Wird zum Array hinzugefügt
-                    unset($row['antwort_' . $index]); // Wird nicht mehr gebraucht
+                    # zum Array "row" hinzufügen:
+                    $row['antworten'][$index] = $row['antwort_' . $index];
+                    unset($row['antwort_' . $index]); # wird nicht mehr gebraucht
                 }
             }
             $fragen[$row['frage_id']] = $row;
         }
 
-        return $fragen ?? []; // Rückgabe muss Array sein, falls $fragen nicht definiert ist, wird deswegen ein leeres
+        return $fragen ?? []; # Rückgabe muss Array sein (leer falls $fragen undefiniert)
     }
 
-    /**
-     * Lade Regelwerk aus der Datenbank
-     */
+    #-------------------------------------------------------------------------
+    
+    # Lade Regelwerk aus der Datenbank
     static function get_regelwerk(): array
     {
         $sql = "
             SELECT *
             FROM regelwerk
         ";
-        //        $result = db::readdb($sql); // Mysqli Objekt
-        //        while ($row = mysqli_fetch_assoc($result)) {
-        //            $regeln[$row['regelnummer']] = $row;
-        //        }
-        //        return $regeln;
+        #        $result = db::readdb($sql); # Mysqli Objekt
+        #        while ($row = mysqli_fetch_assoc($result)) {
+        #            $regeln[$row['regelnummer']] = $row;
+        #        }
+        #        return $regeln;
         return db::$db->query($sql)->fetch('regelnummer');
     }
 
-    /**
-     * Lade eine Regel aus der Datenbank
-     */
+    #-------------------------------------------------------------------------
+    
+    # Lade eine Regel aus der Datenbank
     static function get_regel(string $nummer0): array
     {
         $regeln = self::get_regelwerk();
@@ -85,8 +88,8 @@ class SchiriTest
         } else {
             $text = '...';
             foreach (str_split($part) as $onepart){
-                // U=non-greedy
-                // https://www.php.net/manual/de/reference.pcre.pattern.modifiers.php
+                # U=non-greedy
+                # https://www.php.net/manual/de/reference.pcre.pattern.modifiers.php
                 preg_match('|<p part="' . $onepart . '">(.*)</p>|U', $fulltext, $textpart);
                 $text .= '<br>' . $textpart[1] . '<br>...';
             }
@@ -94,29 +97,29 @@ class SchiriTest
         return array($nummer, $part, $regeln[$nummer]['regeltitel'], $text);
     }
 
-    /**
-     * Stimmen die gegebenen Antworten als Array mit den richtigen Antworten aus der DB überein?
-     *
-     * @param int $frage_id
-     * @param array $user_antworten
-     * @return bool
-     */
+    #-------------------------------------------------------------------------
+    
+    # Stimmen die gegebenen Antworten als Array mit den richtigen
+    # Antworten aus der DB überein?
+    #
+    # @param int $frage_id
+    # @param array $user_antworten
+    # @return bool
     static function validate_frage(int $frage_id, array $user_antworten): bool
     {
-        // Antworten aus der Datenbank lesen
+        # Antworten aus der Datenbank lesen
         $sql = "
             SELECT richtig
             FROM schiri_test
             WHERE frage_id = ?
         ";
-        //        $result = db::readdb($sql);
-        //        $richtig = mysqli_fetch_assoc($result)['richtig']; // String, # als Trennzeichen
+        # $result = db::readdb($sql);
+        # $richtig = mysqli_fetch_assoc($result)['richtig']; # String, # als Trennzeichen
         $richtig = db::$db->query($sql, $frage_id)->fetch_one();
-
-        $richtig = preg_split('/[\s#\s]+/', $richtig); // Array mit den Nummern der richtigen Antwort
-
-        // Vergleich der Arrays $richtig und $antworten
-        sort($richtig); // Sortieren, damit beide Arrays die gleiche Reihenfolge haben
+        # Array mit den Nummern der richtigen Antwort:
+        $richtig = preg_split('/[\s#\s]+/', $richtig);
+        # Vergleich der Arrays $richtig und $antworten
+        sort($richtig); # Sortieren, damit beide Arrays die gleiche Reihenfolge haben
         sort($user_antworten);
         if ($richtig == $user_antworten) {
             return true;
@@ -125,61 +128,55 @@ class SchiriTest
         }
     }
 
-    /**
-     * Was sind die richtigen Antworten?
-     *
-     * @param int $frage_id
-     * @return array
-     */
+    #-------------------------------------------------------------------------
+    
+    # Was sind die richtigen Antworten?
+    #
+    # @param int $frage_id
+    # @return array
     static function get_richtig(int $frage_id): array
     {
-        // Antworten aus der Datenbank lesen
+        # Antworten aus der Datenbank lesen
         $sql = "
             SELECT richtig
             FROM schiri_test
             WHERE frage_id = ?
         ";
-        //        $result = db::readdb($sql);
-        //        $richtig = mysqli_fetch_assoc($result)['richtig']; // String, # als Trennzeichen
-        $richtig = db::$db->query($sql, $frage_id)->fetch_one(); // String, # als Trennzeichen
-
-        $richtig = preg_split('/[\s#\s]+/', $richtig); // Array mit den Nummern der richtigen Antwort
-        sort($richtig); // Sortieren, damit beide Arrays die gleiche Reihenfolge haben
+        # $result = db::readdb($sql);
+        # $richtig = mysqli_fetch_assoc($result)['richtig']; # String, # als Trennzeichen
+        $richtig = db::$db->query($sql, $frage_id)->fetch_one(); # String, # als Trennzeichen
+        # Array mit den Nummern der richtigen Antwort:
+        $richtig = preg_split('/[\s#\s]+/', $richtig);
+        sort($richtig); # Sortieren, damit beide Arrays die gleiche Reihenfolge haben
         return $richtig;
     }
 
-    /**
-     * Frage anzeigen
-     */
+    #-------------------------------------------------------------------------
+    
+    # Frage anzeigen:
     static function frage_anzeigen(int $index, array $frage)
-    { ?>
-    <h3 class="w3-topbar">Frage Nr. <?= $index ?></h3>
-    <h4><?= $frage['frage'] ?></h4>
-    <?php if(!empty($frage['name_video'])){?>
-        <!-- Video zur Frage -->
-        <div style="max-width: 500px"> <!-- Damit das Video nicht zu groß wird -->
-            <video class="w3-image w3-card" src="videos/<?=$frage['name_video']?>"
-                   controls playsinline > Video zur Frage
-            </video>
-        </div>
-    <?php } //endif?>
-    <?php if(!empty($frage['name_bild'])){?>
-        <!-- Bild zur Frage -->
-        <div style="max-width: 500px"> <!-- Damit das Bild nicht zu groß wird -->
-            <img alt="Bild zur Frage" class="w3-image w3-card"
-                 src="bilder/<?=$frage['name_bild']?>">
-        </div>
-    <?php } //endif?>
-<?php }
+    {
+        echo '<h3 class="w3-topbar">Frage Nr. ' . $index . '</h3>';
+        echo '<h4>' . $frage['frage'] . '</h4>';
+        if(!empty($frage['name_video'])){ # Video zur Frage:
+            echo '<div style="max-width: 500px">';
+            echo '<video class="w3-image w3-card" src="videos/' . $frage['name_video'] . '"';
+            echo '       controls playsinline> Video zur Frage </video></div>';
+        }
+        if(!empty($frage['name_bild'])){ # Bild zur Frage:
+            echo '<div style="max-width: 500px">';
+            echo '<img alt="Bild zur Frage" class="w3-image w3-card"';
+            echo '     src="bilder/' . $frage['name_bild'] . '"></div>';
+        }
+    }
 
-/**
- * Antwort anzeigen
- */
-static function antworten_anzeigen(int $frage_id, array $frage)
-{
+    #-------------------------------------------------------------------------
+    
+    # Antwortmöglichkeiten anzeigen:
+    static function antworten_anzeigen(int $frage_id, array $frage)
+    {
     foreach ($frage['antworten'] as $index => $antwort){ ?>
     <p>
-        <!-- Input als Array -->
         <input name="abgabe[<?= $frage_id ?>][<?= $index ?>]"
                value="<?= $index ?>"
                id="<?= $frage_id . '*' . $index ?>"
@@ -191,7 +188,78 @@ static function antworten_anzeigen(int $frage_id, array $frage)
             <?= $antwort ?>
         </label>
     </p>
-    <?php } //end foreach antworten
+    <?php } # end foreach antworten
     }
 
+    #-------------------------------------------------------------------------
+    
+    # Auswertung anzeigen
+    static function auswertung_anzeigen(int $frage_id, array $frage)
+    {
+        $richtig = SchiriTest::get_richtig($frage_id);
+        foreach ($frage['antworten'] as $index => $antwort){
+            $antwort_user = isset($_POST['abgabe'][$frage_id][$index]);
+            if ($antwort_user){ # diese Antwort angeklickt?
+                echo '<p><i class="material-icons">check_circle_outline</i>';
+            }else{
+                echo '<p><i class="material-icons">radio_button_unchecked</i>';
+            }
+            $antwort_richtig = in_array($index, $richtig);
+            if ($antwort_user xor $antwort_richtig){ # richtig beantwortet?
+                echo '<span class="w3-text-red">';
+                echo '<i class="material-icons">thumb_down</i></span>';
+            }else{
+                echo '<span class="w3-text-green">';
+                echo '<i class="material-icons">thumb_up</i></span>';
+            }
+            if ($antwort_richtig) { # ist diese Antwort richtig?
+                echo '<b>' . $antwort . '</b></p>';
+            }else{
+                echo '<span class="w3-text-grey"><s><i>' . $antwort .
+                    '</i></s></span></p>';
+            }
+        }
+        $antworten_user = $_POST['abgabe'][$frage_id] ?? []; # leer, wenn keine Antwort
+        if (SchiriTest::validate_frage($frage_id, $antworten_user)){
+            echo '<h3 class="w3-border-bottom">' .
+                '<span size="50" class="w3-text-green">' .
+                '<i class="material-icons md-36">thumb_up</i>' .
+                'Alles korrekt beantwortet!</span></h3>';
+        }else{
+            echo '<h3 class="w3-border-bottom">' .
+                '<span class="w3-text-red">' .
+                '<i class="material-icons md-36">thumb_down</i>' .
+                'Da war etwas falsch!</span></h3>';
+        }
+        echo '<p><b>Erklärung: </b>' . $frage['erklaerung'] . '</p>';
+        if(!empty($frage['erklaerung_video'])){ # Video zur Frage:
+            echo '<div style="max-width: 500px"><video class="w3-image w3-card"' .
+                ' src="videos/'. $frage['erklaerung_video'] . '" controls playsinline>' .
+                '</video></div>';
+        }
+        if(!empty($frage['erklaerung_bild'])){ # Bild zur Frage:
+            echo '<div style="max-width: 500px">' .
+                '<img alt="Bild zur Frage" class="w3-image w3-card"' .
+                'src="bilder/' . $frage['erklaerung_bild'] . '"></div>';
+        }
+        
+        $regelnr = $frage['regelnr'];
+        if ($regelnr == ''){
+            Html::message('notice', '(Keine Regelnummer für diese Frage)');
+        }else{
+            foreach (preg_split('/[\s#\s]+/', $regelnr) as $regelnr1){
+                list($nr, $part, $titel, $text) = SchiriTest::get_regel($regelnr1);
+                if ($nr == ''){
+                    Html::message('error',
+                    'Regel |' . $regelnr1 . '| nicht in der Datenbank.');
+                }else{
+                    Html::message('info',
+                    $text, 'Offizielle Regel ' . $nr . ": " . $titel, esc:false);
+                }
+            }
+        }
+    }
+
+    #-------------------------------------------------------------------------
+    
 } ?>

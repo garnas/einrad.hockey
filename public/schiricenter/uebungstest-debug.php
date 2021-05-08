@@ -1,4 +1,4 @@
 <?php # -*- php -*-
 $DEBUGMODUS = TRUE;
-include 'basistest.php';
+include 'uebungstest.php';
 ?>
