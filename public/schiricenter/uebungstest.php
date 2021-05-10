@@ -18,9 +18,9 @@ if (isset($_POST['beantworten'])){
                 $naechste_frage = '42';
             }
         }
-        $fragen = SchiriTest::get_fragen('*', 1, $naechste_frage);
+        $fragen = SchiriTest::get_fragen('L', '*', 1, $naechste_frage);
     }else{
-        $fragen = SchiriTest::get_fragen('*', 1); # zufällige Frage
+        $fragen = SchiriTest::get_fragen('L', '*', 1); # zufällige Frage
     }
     $_SESSION['sc_test_fragen'] = $fragen;
 }

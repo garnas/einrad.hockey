@@ -7,29 +7,32 @@ class SchiriTest
     
     # Get eine bestimmte Anzahl an zufälligen Fragen einer Kategorie für den Schiritest
     # aus der Datenbank.
+    # @param $LJBF      # Lehrgang, Junior, Basis oder Fortgeschrittene?
     # @param $kategorie # Kategorie aus welcher die Fragen geholt werden sollen
     # @param $anzahl    # Anzahl der Fragen die geholt werden sollen
     # @param $fragenr   # Nummer einer bestimmten Frage, die geholt werden soll
     # @return array     # Fragen die zurückgegeben werden
-    static function get_fragen(string $kategorie, int $anzahl, int $fragenr=0): array
+    static function get_fragen(string $LJBF, string $kategorie,
+                               int $anzahl, int $fragenr=0): array
     {
         if ($kategorie=='*'){
             $sql = "
             SELECT *
             FROM schiri_test
+            WHERE INSTR(LJBF, ?) > 0
             ORDER BY RAND()
             LIMIT ?
             ";
-            $result = db::$db->query($sql, $anzahl)->fetch();
+            $result = db::$db->query($sql, $LJBF, $anzahl)->fetch();
         }else{
             $sql = "
             SELECT *
             FROM schiri_test
-            WHERE kategorie = ?
+            WHERE INSTR(LJBF, ?) > 0 AND kategorie = ?
             ORDER BY RAND()
             LIMIT ?
             ";
-            $result = db::$db->query($sql, $kategorie, $anzahl)->fetch();
+            $result = db::$db->query($sql, $LJBF, $kategorie, $anzahl)->fetch();
         }
         if ($fragenr>0){
             $sql = "

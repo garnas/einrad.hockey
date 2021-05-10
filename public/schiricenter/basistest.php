@@ -16,17 +16,17 @@ if (isset($_POST['beantworten'])){
         }
     }
 }else{
-    $fragen01 = SchiriTest::get_fragen( '1', 2); # 16* Vor dem Spiel / Rund ums Spiel
-    $fragen02 = SchiriTest::get_fragen( '2', 3); # 27* Schiedsrichterverhalten
-    $fragen03 = SchiriTest::get_fragen( '3', 1); # 13* Handzeichen
-    $fragen04 = SchiriTest::get_fragen( '4', 1); # 13* Penaltyschießen
-    $fragen05 = SchiriTest::get_fragen( '5', 3); #  8* Vorfahrt
-    $fragen06 = SchiriTest::get_fragen( '6', 3); #  5* Übertriebene Härte
-    $fragen07 = SchiriTest::get_fragen( '7', 3); # 18* Eingriff ins Spiel
-    $fragen08 = SchiriTest::get_fragen( '8', 6); # 35* Sonstige Fouls
-    $fragen09 = SchiriTest::get_fragen( '9', 4); # 16* Torschüsse
-    $fragen10 = SchiriTest::get_fragen('10', 1); # 16* Zeitstrafen / Unsportlichkeiten
-    $fragen11 = SchiriTest::get_fragen('11', 3); # 22* Strafen
+    $fragen01 = SchiriTest::get_fragen('B',  '1', 2); # 16* Vor dem Spiel / Rund ums Spiel
+    $fragen02 = SchiriTest::get_fragen('B',  '2', 3); # 27* Schiedsrichterverhalten
+    $fragen03 = SchiriTest::get_fragen('B',  '3', 1); # 13* Handzeichen
+    $fragen04 = SchiriTest::get_fragen('B',  '4', 1); # 13* Penaltyschießen
+    $fragen05 = SchiriTest::get_fragen('B',  '5', 3); #  8* Vorfahrt
+    $fragen06 = SchiriTest::get_fragen('B',  '6', 3); #  5* Übertriebene Härte
+    $fragen07 = SchiriTest::get_fragen('B',  '7', 3); # 18* Eingriff ins Spiel
+    $fragen08 = SchiriTest::get_fragen('B',  '8', 6); # 35* Sonstige Fouls
+    $fragen09 = SchiriTest::get_fragen('B',  '9', 4); # 16* Torschüsse
+    $fragen10 = SchiriTest::get_fragen('B', '10', 1); # 16* Zeitstrafen / Unsportlichkeiten
+    $fragen11 = SchiriTest::get_fragen('B', '11', 3); # 22* Strafen
     $fragen = $fragen01 + $fragen02 + $fragen03 + $fragen04 + $fragen05 + $fragen06 +
               $fragen07 + $fragen08 + $fragen09 + $fragen10 + $fragen11;
     $_SESSION['sc_test_fragen'] = $fragen;
@@ -41,8 +41,21 @@ include '../../templates/header.tmp.php'; # Html-header und Navigation
 # Start Debug Modus
 echo '<H4><form method="post">' .
     '<input type="submit" class="w3-btn w3-block w3-pale-red"' .
-    'value="DEBUG MODUS: Neuen Test erzeugen"></form></H4>';
+    'value="Neuen Test erzeugen"></form></H4>';
 # Ende Debug Modus
+if (isset($DEBUGMODUS)){ # Start Debug Modus
+    $index = 0;
+    echo '<table border="5" cellpadding="5" class="w3-block w3-pale-red">';
+    echo '<tr><td>Nr.</td><td>id</td><td>Kat.</td><td>Level</td><td>Frage</td></tr>';
+    foreach ($fragen as $frage) {
+        echo '<tr><td>' . ++$index            . '</td>';
+        echo '<td>'     . $frage['frage_id']  . '</td>';
+        echo '<td>'     . $frage['kategorie'] . '</td>';
+        echo '<td>'     . $frage['LJBF']      . '</td>';
+        echo '<td>'     . $frage['frage']     . '</td></tr>';
+    }
+    echo '</table>';
+} # Ende Debug Modus
 
 if (!isset($_POST['beantworten'])){ # Test anzeigen:
     echo '<H2>Multiple-Choice Basis Schiritest</H2>';
