@@ -12,7 +12,7 @@ if (isset($_POST['beantworten'])) {
     foreach ($fragen as $frage_id => $frage) {
         $antworten_user = $_POST['abgabe'][$frage_id] ?? [];
         if (SchiriTest::validate_frage($frage_id, $antworten_user)) {
-            $richtig += 1;
+            $richtig++;
         }
     }
 } else {
