@@ -12,8 +12,8 @@ class SchiriTest
     # @param $anzahl    # Anzahl der Fragen die geholt werden sollen
     # @param $fragenr   # Nummer einer bestimmten Frage, die geholt werden soll
     # @return array     # Fragen die zurückgegeben werden
-    static function get_fragen(string $LJBF, string $kategorie,
-                               int $anzahl, int $fragenr=0): array
+    public static function get_fragen(string $LJBF, string $kategorie,
+                                      int $anzahl, int $fragenr=0): array
     {
         if ($kategorie=='*'){
             $sql = "
@@ -62,7 +62,7 @@ class SchiriTest
     #-------------------------------------------------------------------------
     
     # Lade Regelwerk aus der Datenbank
-    static function get_regelwerk(): array
+    public static function get_regelwerk(): array
     {
         $sql = "
             SELECT *
@@ -79,7 +79,7 @@ class SchiriTest
     #-------------------------------------------------------------------------
     
     # Lade eine Regel aus der Datenbank
-    static function get_regel(string $nummer0): array
+    public static function get_regel(string $nummer0): array
     {
         $regeln = self::get_regelwerk();
         preg_match('/([0-9.]+)([a-z]*)/', $nummer0, $matches);
@@ -108,7 +108,7 @@ class SchiriTest
     # @param int $frage_id
     # @param array $user_antworten
     # @return bool
-    static function validate_frage(int $frage_id, array $user_antworten): bool
+    public static function validate_frage(int $frage_id, array $user_antworten): bool
     {
         # Antworten aus der Datenbank lesen
         $sql = "
@@ -137,7 +137,7 @@ class SchiriTest
     #
     # @param int $frage_id
     # @return array
-    static function get_richtig(int $frage_id): array
+    public static function get_richtig(int $frage_id): array
     {
         # Antworten aus der Datenbank lesen
         $sql = "
@@ -157,7 +157,7 @@ class SchiriTest
     #-------------------------------------------------------------------------
     
     # Frage anzeigen:
-    static function frage_anzeigen(int $index, array $frage)
+    public static function frage_anzeigen(int $index, array $frage): void
     {
         echo '<h3 class="w3-topbar">Frage Nr. ' . $index . '</h3>';
         echo '<h4>' . $frage['frage'] . '</h4>';
@@ -176,7 +176,7 @@ class SchiriTest
     #-------------------------------------------------------------------------
     
     # Antwortmöglichkeiten anzeigen:
-    static function antworten_anzeigen(int $frage_id, array $frage)
+    public static function antworten_anzeigen(int $frage_id, array $frage): void
     {
     foreach ($frage['antworten'] as $index => $antwort){ ?>
     <p>
@@ -197,7 +197,7 @@ class SchiriTest
     #-------------------------------------------------------------------------
     
     # Auswertung anzeigen
-    static function auswertung_anzeigen(int $frage_id, array $frage)
+    public static function auswertung_anzeigen(int $frage_id, array $frage): void
     {
         $richtig = self::get_richtig($frage_id);
         foreach ($frage['antworten'] as $index => $antwort){
