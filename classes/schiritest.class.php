@@ -134,15 +134,13 @@ class SchiriTest
         }
         $antworten_user = $_POST['abgabe'][$frage_id] ?? []; # leer, wenn keine Antwort
         if (self::validate_frage($frage_id, $antworten_user)) {
-            echo '<h3 class="w3-border-bottom">' .
-                '<span size="50" class="w3-text-green">' .
-                '<i class="material-icons md-36">thumb_up</i>' .
-                'Alles korrekt beantwortet!</span></h3>';
+            echo '<h3 class="w3-border-bottom w3-text-green">' .
+                Html::icon("thumb_up", class:"md-36") .
+                'Alles korrekt beantwortet!</h3>';
         } else {
-            echo '<h3 class="w3-border-bottom">' .
-                '<span class="w3-text-red">' .
-                '<i class="material-icons md-36">thumb_down</i>' .
-                'Da war etwas falsch!</span></h3>';
+            echo '<h3 class="w3-border-bottom w3-text-red">' .
+                Html::icon("thumb_down", class: "md-36") .
+                'Da war etwas falsch!</h3>';
         }
         echo '<p><b>Erklärung: </b>' . $frage['erklaerung'] . '</p>';
         if (!empty($frage['erklaerung_video'])) { # Video zur Frage:
@@ -153,7 +151,7 @@ class SchiriTest
         if (!empty($frage['erklaerung_bild'])) { # Bild zur Frage:
             echo '<div style="max-width: 500px">' .
                 '<img alt="Bild zur Frage" class="w3-image w3-card"' .
-                'src="bilder/' . $frage['erklaerung_bild'] . '"></div>';
+                ' src="bilder/' . $frage['erklaerung_bild'] . '"></div>';
         }
 
         $regelnr = $frage['regelnr'];
