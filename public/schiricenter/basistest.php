@@ -114,4 +114,3 @@ if (!isset($_POST['beantworten'])) {
 <?php } # endif
 echo '</form>';
 include '../../templates/footer.tmp.php';
-?>
