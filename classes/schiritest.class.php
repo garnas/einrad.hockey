@@ -155,12 +155,12 @@ class SchiriTest
         }
 
         $regelnr = $frage['regelnr'];
-        if ($regelnr == '') {
+        if (empty($regelnr)) {
             Html::message('notice', '(Keine Regelnummer für diese Frage)');
         } else {
             foreach (preg_split('/[\s#\s]+/', $regelnr) as $regelnr1) {
                 [$nr, $part, $titel, $text] = self::get_regel($regelnr1);
-                if ($nr == '') {
+                if (empty($nr)) {
                     Html::message('error',
                         'Regel |' . $regelnr1 . '| nicht in der Datenbank.');
                 } else {
@@ -225,7 +225,7 @@ class SchiriTest
         $nummer = $matches[1];
         $part = $matches[2];
         $fulltext = $regeln[$nummer]['regeltext'];
-        if ($part == '') {
+        if (empty($part)) {
             $text = $fulltext;
         } else {
             $text = '...';
