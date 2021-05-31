@@ -82,5 +82,3 @@ if (isset($DEBUGMODUS)) { # Start Debug Modus
 } # Ende Debug Modus
 
 include '../../templates/footer.tmp.php';
-
-?>
