@@ -199,7 +199,7 @@ class SchiriTest
     # Auswertung anzeigen
     static function auswertung_anzeigen(int $frage_id, array $frage)
     {
-        $richtig = SchiriTest::get_richtig($frage_id);
+        $richtig = self::get_richtig($frage_id);
         foreach ($frage['antworten'] as $index => $antwort){
             $antwort_user = isset($_POST['abgabe'][$frage_id][$index]);
             if ($antwort_user){ # diese Antwort angeklickt?
@@ -223,7 +223,7 @@ class SchiriTest
             }
         }
         $antworten_user = $_POST['abgabe'][$frage_id] ?? []; # leer, wenn keine Antwort
-        if (SchiriTest::validate_frage($frage_id, $antworten_user)){
+        if (self::validate_frage($frage_id, $antworten_user)){
             echo '<h3 class="w3-border-bottom">' .
                 '<span size="50" class="w3-text-green">' .
                 '<i class="material-icons md-36">thumb_up</i>' .
@@ -251,7 +251,7 @@ class SchiriTest
             Html::message('notice', '(Keine Regelnummer für diese Frage)');
         }else{
             foreach (preg_split('/[\s#\s]+/', $regelnr) as $regelnr1){
-                list($nr, $part, $titel, $text) = SchiriTest::get_regel($regelnr1);
+                list($nr, $part, $titel, $text) = self::get_regel($regelnr1);
                 if ($nr == ''){
                     Html::message('error',
                     'Regel |' . $regelnr1 . '| nicht in der Datenbank.');
