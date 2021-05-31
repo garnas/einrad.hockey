@@ -15,7 +15,7 @@ class SchiriTest
     public static function get_fragen(string $LJBF, string $kategorie,
                                       int $anzahl, int $fragenr = 0): array
     {
-        if ($kategorie == '*') {
+        if ($kategorie === '*') {
             $sql = "
                 SELECT *
                 FROM schiri_test
