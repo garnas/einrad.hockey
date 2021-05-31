@@ -41,11 +41,11 @@ include '../../templates/header.tmp.php'; # Html-header und Navigation
 # Start Debug Modus
 echo '<H4><form method="post">' .
     '<input type="submit" class="w3-btn w3-block w3-pale-red"' .
-    'value="Neuen Test erzeugen"></form></H4>';
+    ' value="Neuen Test erzeugen"></form></H4>';
 # Ende Debug Modus
 if (isset($DEBUGMODUS)) { # Start Debug Modus
     $index = 0;
-    echo '<table border="5" cellpadding="5" class="w3-block w3-pale-red">';
+    echo '<table class="w3-table-all">';
     echo '<tr><td>Nr.</td><td>id</td><td>Kat.</td><td>Level</td><td>Frage</td></tr>';
     foreach ($fragen as $frage) {
         echo '<tr><td>' . ++$index . '</td>';
