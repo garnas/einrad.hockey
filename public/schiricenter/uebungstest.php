@@ -46,10 +46,10 @@ echo '<form method="post">';
 foreach ($fragen as $frage_id => $frage) { # Schleife über alle Fragen:
     echo '<div class="w3-section w3-display-container">';
     SchiriTest::frage_anzeigen($frage_id, $frage);
-    if (!isset($_POST['beantworten'])) { # Test anzeigen:
-        SchiriTest::antworten_anzeigen($frage_id, $frage);
-    } else { # Test auswerten:
+    if (isset($_POST['beantworten'])) { # Test auswerten:
         SchiriTest::auswertung_anzeigen($frage_id, $frage);
+    } else { # Test anzeigen:
+        SchiriTest::antworten_anzeigen($frage_id, $frage);
     }
     echo '</div>';
 }
