@@ -211,11 +211,7 @@ class SchiriTest
         # Vergleich der Arrays $richtig und $antworten
         sort($richtig); # Sortieren, damit beide Arrays die gleiche Reihenfolge haben
         sort($user_antworten);
-        if ($richtig == $user_antworten) {
-            return true;
-        } else {
-            return false;
-        }
+        return $richtig == $user_antworten;
     }
 
     #-------------------------------------------------------------------------
@@ -240,7 +236,7 @@ class SchiriTest
                 $text .= '<br>' . $textpart[1] . '<br>...';
             }
         }
-        return array($nummer, $part, $regeln[$nummer]['regeltitel'], $text);
+        return [$nummer, $part, $regeln[$nummer]['regeltitel'], $text];
     }
 
     #-------------------------------------------------------------------------
