@@ -187,8 +187,6 @@ class SchiriTest
             FROM schiri_test
             WHERE frage_id = ?
         ";
-        # $result = db::readdb($sql);
-        # $richtig = mysqli_fetch_assoc($result)['richtig']; # String, # als Trennzeichen
         $richtig = db::$db->query($sql, $frage_id)->fetch_one(); # String, # als Trennzeichen
         # Array mit den Nummern der richtigen Antwort:
         $richtig = preg_split('/[\s#\s]+/', $richtig);
@@ -257,11 +255,6 @@ class SchiriTest
             SELECT *
             FROM regelwerk
         ";
-        #        $result = db::readdb($sql); # Mysqli Objekt
-        #        while ($row = mysqli_fetch_assoc($result)) {
-        #            $regeln[$row['regelnummer']] = $row;
-        #        }
-        #        return $regeln;
         return db::$db->query($sql)->fetch('regelnummer');
     }
 
