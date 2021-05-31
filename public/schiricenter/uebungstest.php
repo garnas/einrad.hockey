@@ -9,10 +9,15 @@ require_once '../../init.php'; # Autoloader und Session, muss immer geladen werd
 if (isset($_POST['beantworten'])) {
     $fragen = $_SESSION['sc_test_fragen'];
 } else {
-    if (isset($_POST['ausgewaehlte_nummer'])) {
+    // Für Debug-Modus
+    if (isset($_POST['ausgewaehlte_nummer'])
+        ) {
         $naechste_frage = $_POST['ausgewaehlte_nummer'];
         if (!ctype_digit($naechste_frage)) { # Input enthält nicht nur Ziffern
-            if ((isset($_SESSION['frage_id'])) && ($naechste_frage == '')) {
+            if (
+                isset($_SESSION['frage_id'])
+                && empty($naechste_frage)
+            ) {
                 $naechste_frage = $_SESSION['frage_id'] + 1; # (n+1) auswählen
             } else {
                 $naechste_frage = '42';
