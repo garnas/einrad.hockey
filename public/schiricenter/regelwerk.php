@@ -36,4 +36,3 @@ foreach ($regeln as $regel_id => $regel) {
 }
 
 include '../../templates/footer.tmp.php';
-?>
