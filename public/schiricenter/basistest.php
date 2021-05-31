@@ -57,13 +57,7 @@ if (isset($DEBUGMODUS)) { # Start Debug Modus
     echo '</table>';
 } # Ende Debug Modus
 
-if (!isset($_POST['beantworten'])) { # Test anzeigen:
-    echo '<H2>Multiple-Choice Basis Schiritest</H2>';
-    echo '<UL><LI>Der Test besteht aus ' . count($fragen) . ' Fragen.</LI>';
-    echo '<LI>Es können mehrere Antwortmöglichkeiten richtig sein.</LI>';
-    echo '<LI>Mindestens 1 Antwort ist immer richtig.</LI>';
-    echo '<LI>Du hast 45 Minuten Zeit.</LI></UL>';
-} else { # Test auswerten:
+if (isset($_POST['beantworten'])) { # Test auswerten:
     echo '<H2>Ergebnis: Du hast ' . $richtig . ' von ' . count($fragen) . ' Fragen ';
     echo 'richtig beantwortet.</H2>';
     echo 'Danke für das Ausfüllen des Schiritests, deine Antworten sind an den ';
@@ -74,6 +68,12 @@ if (!isset($_POST['beantworten'])) { # Test anzeigen:
     echo 'sind grau und durchgestrichen.</LI>';
     echo '<LI>Die entsprechende Regel wird in einem grünen Kasten angezeigt. Bei ';
     echo 'manchen Fragen gibt es auch noch eine zusätzliche Erklärung.</LI></UL>';
+} else { # Test anzeigen:
+    echo '<H2>Multiple-Choice Basis Schiritest</H2>';
+    echo '<UL><LI>Der Test besteht aus ' . count($fragen) . ' Fragen.</LI>';
+    echo '<LI>Es können mehrere Antwortmöglichkeiten richtig sein.</LI>';
+    echo '<LI>Mindestens 1 Antwort ist immer richtig.</LI>';
+    echo '<LI>Du hast 45 Minuten Zeit.</LI></UL>';
 }
 
 echo '<form method="post">';
@@ -82,10 +82,10 @@ foreach ($fragen as $frage_id => $frage) { # Schleife über alle Fragen:
     echo '<div class="w3-section w3-display-container">';
     $frage_index++;
     SchiriTest::frage_anzeigen($frage_index, $frage);
-    if (!isset($_POST['beantworten'])) { # Test anzeigen:
-        SchiriTest::antworten_anzeigen($frage_id, $frage);
-    } else { # Test auswerten:
+    if (isset($_POST['beantworten'])) { # Test auswerten:
         SchiriTest::auswertung_anzeigen($frage_id, $frage);
+    } else { # Test anzeigen:
+        SchiriTest::antworten_anzeigen($frage_id, $frage);
     }
     echo '</div>';
     if (isset($DEBUGMODUS)) { # Start Debug Modus
