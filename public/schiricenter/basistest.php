@@ -45,7 +45,7 @@ echo '<H4><form method="post">' .
 # Ende Debug Modus
 if (isset($DEBUGMODUS)) { # Start Debug Modus
     $index = 0;
-    echo '<table class="w3-table-all">';
+    echo '<table class="w3-table w3-pale-red w3-bordered">';
     echo '<tr><td>Nr.</td><td>id</td><td>Kat.</td><td>Level</td><td>Frage</td></tr>';
     foreach ($fragen as $frage) {
         echo '<tr><td>' . ++$index . '</td>';

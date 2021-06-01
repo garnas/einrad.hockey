@@ -61,7 +61,7 @@ class SchiriTest
 
     #-------------------------------------------------------------------------
 
-    # Lade Regelwerk aus der Datenbank
+    # Frage anzeigen:
     public static function frage_anzeigen(int $index, array $frage): void
     {
         echo '<h3 class="w3-topbar">Frage Nr. ' . $index . '</h3>';
@@ -80,7 +80,7 @@ class SchiriTest
 
     #-------------------------------------------------------------------------
 
-    # Lade eine Regel aus der Datenbank
+    # Antwortmöglichkeiten anzeigen:
     public static function antworten_anzeigen(int $frage_id, array $frage): void
     {
         foreach ($frage['antworten'] as $index => $antwort) { ?>
@@ -103,10 +103,6 @@ class SchiriTest
 
     # Stimmen die gegebenen Antworten als Array mit den richtigen
     # Antworten aus der DB überein?
-    #
-    # @param int $frage_id
-    # @param array $user_antworten
-    # @return bool
     public static function auswertung_anzeigen(int $frage_id, array $frage): void
     {
         $richtig = self::get_richtig($frage_id);
@@ -194,7 +190,12 @@ class SchiriTest
 
     #-------------------------------------------------------------------------
 
-    # Frage anzeigen:
+    # Stimmen die gegebenen Antworten als Array mit den richtigen
+    # Antworten aus der DB überein?
+    #
+    # @param int $frage_id
+    # @param array $user_antworten
+    # @return bool
     public static function validate_frage(int $frage_id, array $user_antworten): bool
     {
         # Antworten aus der Datenbank lesen
@@ -216,8 +217,7 @@ class SchiriTest
 
     #-------------------------------------------------------------------------
 
-    # Antwortmöglichkeiten anzeigen:
-
+    # Lade eine Regel aus der Datenbank:
     public static function get_regel(string $nummer0): array
     {
         $regeln = self::get_regelwerk();
@@ -241,8 +241,7 @@ class SchiriTest
 
     #-------------------------------------------------------------------------
 
-    # Auswertung anzeigen
-
+    # Lade Regelwerk aus der Datenbank:
     public static function get_regelwerk(): array
     {
         $sql = "
