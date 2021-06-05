@@ -10,12 +10,12 @@ class Tabelle
 
     /**
      * Speichert die Erstellten Rangtabellen, damit diese nicht mehrfach erstellt werden müssen.
-     * @var array
      */
     public static array $rangtabellen = [];
 
     /**
      * Übergibt den Spieltag, bis zu welchem Ergebnisse eingetragen worden sind.
+     * Also den nächsten, nicht vollendeten, noch zu spielenden Spieltag.
      *
      * @param int $saison
      * @return int
@@ -23,13 +23,11 @@ class Tabelle
     public static function get_aktuellen_spieltag(int $saison = Config::SAISON): int
     {
         $sql = "
-                SELECT spieltag
+                SELECT max(spieltag) + 1 
                 FROM turniere_liga 
                 WHERE saison = ?
-                AND (art='I' OR art = 'II' OR art='III')
-                AND phase != 'ergebnis'
-                ORDER BY spieltag
-                LIMIT 1
+                AND (art = 'I' OR art = 'II' OR art = 'III')
+                AND phase = 'ergebnis'
                 ";
         return db::$db->query($sql, $saison)->fetch_one() ?? 1;
     }
@@ -41,7 +39,7 @@ class Tabelle
      * @param int $saison
      * @return bool
      */
-    public static function check_spieltag_live(int $spieltag, $saison = Config::SAISON): bool
+    public static function check_spieltag_live(int $spieltag, int $saison = Config::SAISON): bool
     {
         $sql = "
                 SELECT phase, count(phase)
