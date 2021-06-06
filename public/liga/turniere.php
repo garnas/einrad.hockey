@@ -4,12 +4,9 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
-$saison = (int) ($_GET['saison'] ?? Config::SAISON);
-$saison_switch = ($saison > Config::SAISON) ? Config::SAISON : Config::SAISON + 1;
+$turniere = Turnier::get_turniere('ergebnis', false);
 
-$turniere = Turnier::get_turniere('ergebnis', false, saison:$saison);
-
-$all_anmeldungen = Turnier::get_all_anmeldungen($saison);
+$all_anmeldungen = Turnier::get_all_anmeldungen();
 
 //Turnierdarten parsen
 foreach ($turniere as $turnier_id => $turnier) {
@@ -91,7 +88,7 @@ include '../../templates/header.tmp.php';
         });
     </script>
 
-    <h1 class="w3-text-primary">Turniere der Saison <?= Html::get_saison_string($saison) ?></h1>
+    <h1 class="w3-text-primary">Turniere der Saison <?= Html::get_saison_string() ?></h1>
 
     <!-- Turnier suchen -->
     <div class="w3-section w3-text-grey w3-border-bottom" style="width: 250px;">
@@ -232,12 +229,6 @@ include '../../templates/header.tmp.php';
             </section>
         <?php } //end foreach?>
     </div>
-    <p>
-        <?= Html::link(
-            'turniere.php?saison=' . $saison_switch,
-            'Zu den Turnieren der Saison ' . Html::get_saison_string($saison_switch),
-            icon:'launch') ?>
-    </p>
 <?php include '../../templates/footer.tmp.php';
 
 

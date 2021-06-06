@@ -39,12 +39,14 @@ if (isset($_POST['create_turnier'])) {
         }
     } elseif ($art === 'III') {
         $tblock = 'ABCDEF';
-    } elseif ($art === 'final' || $art === 'spass' || $art = 'fixed') {
+    } elseif ($art === 'fixed') {
         $tblock = $_POST['tblock'];
         if (!in_array($tblock, Config::BLOCK_ALL, true)) {
             $error = true;
             Html::error("Ungültiger Turnierblock.");
         }
+    } elseif ($art === 'spass' || $art === 'final') {
+        $tblock = '';
     } else {
         $error = true;
         Html::error("Es konnte kein Turnierblock bestimmt werden.");
@@ -81,11 +83,11 @@ if (isset($_POST['create_turnier'])) {
     ) {
         // Validierung Datum
         if (
-            ($datum < strtotime(Config::SAISON_ANFANG) || $datum > strtotime(Config::SAISON_ENDE))
-            && ($datum < strtotime(Config::SAISON_NEXT[0]) || $datum > strtotime(Config::SAISON_NEXT[1]))
+            $datum < strtotime(Config::SAISON_ANFANG)
+            || $datum > strtotime(Config::SAISON_ENDE)
         ) {
             $error = true;
-            Html::error("Das Datum liegt außerhalb dieser Saison und der nächsten Saison.");
+            Html::error("Das Datum liegt außerhalb der Saison.");
         }
         $feiertage = Feiertage::finden(date("Y", $datum));
         if (!in_array($datum, $feiertage) && date('N', $datum) < 6) {
@@ -109,11 +111,6 @@ if (isset($_POST['create_turnier'])) {
     }
 
     $datum = date("Y-m-d", $datum);
-
-    $saison = ($datum > strtotime(Config::SAISON_NEXT[0]) || $datum < strtotime(Config::SAISON_NEXT[1]))
-        ? Config::SAISON + 1
-        : Config::SAISON;
-
     $tname = (string)$_POST['tname'];
     $hallenname = (string)$_POST['hallenname'];
     $strasse = (string)$_POST['strasse'];
@@ -149,7 +146,7 @@ if (isset($_POST['create_turnier'])) {
             ->set_liga('tname', $tname)
             ->set_liga('tblock', $tblock)
             ->set_liga('datum', $datum)
-            ->set_liga('saison', $saison)
+            ->set_liga('saison', Config::SAISON)
             ->set('startzeit', $startzeit)
             ->set('besprechung', $besprechung)
             ->set('hinweis', $hinweis)
@@ -169,7 +166,7 @@ if (isset($_POST['create_turnier'])) {
         if (Helper::$teamcenter) MailBot::mail_neues_turnier($turnier); // Nur wenn Teams Turniere erstellen.
 
         // Turnier wurde erfolgreich erstellt - Weiterleitung zu Turnierdetails
-        Html::info("Euer Turnier wurde erfolgreich eingetragen!");
+        Html::info("Euer Turnier wurde erfolgreich eingetragen.");
         Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id);
     }
 }

@@ -1,27 +1,22 @@
 <?php
+
 // Kann das Turnier erweitert werden?
-if (
-    $turnier->details['phase'] === 'melde'
-    && strlen($turnier->details['tblock']) < 3
-    && $turnier->details['tblock'] !== 'AB'
-    && $turnier->details['tblock'] !== 'A'
-    && ($turnier->details['art'] === 'I' || $turnier->details['art'] === 'II')
-) {
-    $blockhoch = true;
-} else {
-    $blockhoch = false;
-}
+$blockhoch =
+    (
+        $turnier->details['phase'] === 'melde'
+        && strlen($turnier->details['tblock']) < 3
+        && $turnier->details['tblock'] !== 'AB'
+        && $turnier->details['tblock'] !== 'A'
+        && ($turnier->details['art'] === 'I' || $turnier->details['art'] === 'II')
+    );
 
 // Kann das Turnier auf ABCDEF erweitert werden?
-if (
-    $turnier->details['phase'] === 'melde'
-    && $turnier->details['art'] !== 'III'
-    && ($turnier->details['art'] === 'I' || $turnier->details['art'] === 'II')
-) {
-    $blockfrei = true;
-} else {
-    $blockfrei = false;
-}
+$blockfrei =
+    (
+        $turnier->details['phase'] === 'melde'
+        && $turnier->details['art'] !== 'III'
+        && ($turnier->details['art'] === 'I' || $turnier->details['art'] === 'II')
+    );
 
 // Formularauswertung
 if (isset($_POST['change_turnier'])) {

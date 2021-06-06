@@ -145,7 +145,7 @@
         </p>
         <p>
             <label class="w3-text-primary" for="handy">Handynummer</label>
-            <input required value="<?=$_POST['handy'] ?? ''?>" type="number" class="w3-input w3-border w3-border-primary" id="handy" name="handy">
+            <input required value="<?=$_POST['handy'] ?? ''?>" type="text" class="w3-input w3-border w3-border-primary" id="handy" name="handy">
             <i class="w3-text-grey">Das Handy muss während des Turniertages erreichbar sein</i>
         </p>
     </div>
@@ -153,7 +153,7 @@
     <!-- Submit -->
     <div class="w3-panel w3-card-4">
         <p>
-            <input type="submit" value="Turnier eintragen!" name="create_turnier" class="w3-secondary w3-button w3-block">
+            <input type="submit" value="Turnier eintragen" name="create_turnier" class="w3-secondary w3-button w3-block">
         </p>
     </div>
 </form>
