@@ -19,6 +19,7 @@ class Nav
     {
         return [
             [Env::BASE_URL . "/liga/jubilaeum.php", "25 Jahre Liga"],
+            [Env::BASE_URL . "/liga/saisontermine.php", "Saisontermine"],
             [Env::BASE_URL . "/liga/turniere.php", "Turniere"],
             [Env::BASE_URL . "/liga/ergebnisse.php", "Ergebnisse"],
             [Env::BASE_URL . "/liga/teams.php", "Teams"],
