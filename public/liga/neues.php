@@ -96,7 +96,7 @@ include '../../templates/header.tmp.php'; ?>
                 </div>
 
                 <?php if (empty($next_turniere)) { ?>
-                    <p class="w3-text-grey">Es sind keine Turniere eingetragen</p>
+                    <p class="w3-text-grey">Es sind keine Turniere eingetragen.</p>
                 <?php } //end if?>
                 <?php foreach ($next_turniere as $turnier) { ?>
                     <p class="w3-text-dark-gray">
@@ -121,7 +121,7 @@ include '../../templates/header.tmp.php'; ?>
 
                 <?php if (empty($last_turniere)) { ?>
                     <p class="w3-text-grey">
-                        Es liegen keine Ergebnisse vor
+                        Es liegen keine Ergebnisse vor.
                     </p>
                 <?php } //end if?>
                 <?php foreach ($last_turniere as $turnier) { ?>
