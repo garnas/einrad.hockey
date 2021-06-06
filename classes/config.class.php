@@ -3,33 +3,11 @@
 class Config
 {
     /**
-     * Variablen aus Env.php aus dem Root Verzeichnis
-     * Diese stehen nur noch hier für die Kompatibilität
-     */
-    public const BASE_URL = Env::BASE_URL;
-    public const BASE_PATH = Env::BASE_PATH;
-    public const HOST_NAME = Env::HOST_NAME;
-    public const DATABASE = Env::DATABASE;
-    public const USER_NAME = Env::USER_NAME;
-    public const PASSWORD = Env::PASSWORD;
-    public const ACTIVATE_EMAIL = Env::HOST_NAME; // Bei True, werden Emails tatsächlich versendet, bei false debugging
-    public const SMTP_HOST = Env::SMTP_HOST;
-    public const SMTP_USER = Env::SMTP_USER;
-    public const SMTP_PW = Env::SMTP_PW;
-    public const SMTP_PORT = Env::SMTP_PORT;
-    public const LAMAIL = Env::LAMAIL;
-    public const LAMAIL_ANTWORT = Env::LAMAIL_ANTWORT; // Wird im BCC gesetzt, bei Mails vom Ligaausschuss
-    public const TECHNIKMAIL = Env::TECHNIKMAIL;
-    public const SCHIRIMAIL = Env::SCHIRIMAIL;
-    public const OEFFIMAIL = Env::OEFFIMAIL;
-
-    /**
      * Saison
      */
-    public const SAISON = 26; // Saison 0 = Jahr 1995;
-    public const SAISON_ANFANG = '15.08.2020';
-    public const SAISON_ENDE = '31.10.2021';
-
+    public const SAISON = 27; // Saison 0 = Jahr 1995;
+    public const SAISON_ANFANG = '14.08.2021';
+    public const SAISON_ENDE = '29.05.2022';
     /**
      * Log-Files
      */
@@ -55,6 +33,7 @@ class Config
 
     /**
      * Mögliche Turnier-Blöcke
+     * Reihenfolge ist wichtig!
      */
     public const BLOCK_ALL = ["ABCDEF", 'A', 'AB', 'ABC', 'BC', 'BCD', 'CD', 'CDE', 'DE', 'DEF', 'EF', 'F'];
 

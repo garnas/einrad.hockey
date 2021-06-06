@@ -9,15 +9,24 @@ class Turnier
 {
 
     /**
-     * Einrdeutige TurnierID
+     * Eindeutige Turnier-ID
      * @var int
      */
     public int $id;
+    /**
+     * Unixdatum
+     * @var int
+     */
+    public int $unix;
     /**
      * Array aller Turnierdaten
      * @var array
      */
     public array $details;
+    /**
+     * Logtext
+     */
+    private string $log = '';
 
     /**
      * Turnier constructor.
@@ -26,80 +35,102 @@ class Turnier
     public function __construct($turnier_id)
     {
         $this->id = $turnier_id;
-        $this->details = $this->get_turnier_details();
+        $this->details = $this->get_details();
+        $this->unix = strtotime($this->details['datum']);
     }
 
     /**
-     * Erstellt ein neues Turnier in die Datenbank
-     *
-     * @param string $tname
-     * @param string $ausrichter
-     * @param string $startzeit
-     * @param string $besprechung
-     * @param string $art
-     * @param string $tblock
-     * @param string $fixed
-     * @param string $datum
-     * @param string $plaetze
-     * @param string $spielplan
-     * @param string $hallenname
-     * @param string $strasse
-     * @param string $plz
-     * @param string $ort
-     * @param string $haltestellen
-     * @param string $hinweis
-     * @param string $startgebuehr
-     * @param string $organisator
-     * @param string $handy
-     * @param string $phase
-     * @return Turnier Objekt der Klasse Turnier wird zurückgegeben
+     * Schreibt den Turnierlog bei Zerstörung des Objektes
      */
-    public static function create_turnier(string $tname, string $ausrichter, string $startzeit, string $besprechung,
-                                          string $art, string $tblock, string $fixed, string $datum, string $plaetze,
-                                          string $spielplan, string $hallenname, string $strasse, string $plz,
-                                          string $ort, string $haltestellen, string $hinweis, string $startgebuehr,
-                                          string $organisator, string $handy, string $phase): Turnier
+    public function __destruct()
     {
-        // turniere_liga füllen
-        $params = [$tname, $ausrichter, $art, $tblock, $fixed, $datum, $phase, Config::SAISON];
-        $sql = "
-                INSERT INTO turniere_liga (tname, ausrichter, art, tblock, tblock_fixed, datum, phase, saison) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        if (!empty($this->log)) {
+            $sql = "
+                INSERT INTO turniere_log (turnier_id, log_text, autor) 
+                VALUES ($this->id, ?, ?);
                 ";
-        db::$db->query($sql, $params)->log();
+            $autor = Helper::get_akteur(true);
+            db::$db->query($sql, trim($this->log), $autor)->log();
+        }
+    }
 
-        // turniere_details füllen
+    /**
+     * Erstellt eine Turniervorlage zum Ausfüllen in der Datenbank
+     *
+     * @param int $ausrichter
+     * @return Turnier
+     */
+    public static function new_turnier(int $ausrichter): Turnier
+    {
+        $sql = "
+                INSERT INTO turniere_liga (ausrichter, phase) 
+                VALUES (?, 'offen')
+                ";
+        db::$db->query($sql, $ausrichter)->log();
+
         $turnier_id = db::$db->get_last_insert_id();
-        $params = [$turnier_id, $hallenname, $strasse, $plz, $ort, $haltestellen, $plaetze, $spielplan, $startzeit,
-            $besprechung, $hinweis, $organisator, $handy, $startgebuehr];
+
         $sql = "
-                INSERT INTO turniere_details (turnier_id, hallenname, strasse, plz, ort, haltestellen, plaetze,
-                format, startzeit, besprechung, hinweis, organisator, handy, startgebuehr)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,  ?,  ?, ?);
+                INSERT INTO turniere_details (turnier_id) 
+                VALUES (?)
                 ";
-        db::$db->query($sql, $params)->log();
+        db::$db->query($sql, $turnier_id)->log();
 
-        // Anmeldung des Ausrichters auf die Spielen-Liste
-        $params = [$turnier_id, $ausrichter];
-        $sql = "
-                INSERT INTO turniere_liste (turnier_id, team_id, liste, freilos_gesetzt) 
-                VALUES (?, ?, 'spiele', 'Nein')
-                ";
-        db::$db->query($sql, $params)->log();
-
-        // Spieltage in Abhängigkeit aller anderen Turniere aktualisieren
-        Ligabot::set_spieltage();
-
-        // Turnierlogs
-        $turnier = new Turnier($turnier_id);
-        $turnier->log("Turnier wurde erstellt\r\nTurniername: $tname\r\nAusrichter: " . Team::id_to_name($ausrichter)
-            . "\r\nStartzeit: $startzeit\r\nBesprechung: $besprechung\r\nArt: $art\r\nBlock: $tblock\r\n"
-            . "Fixiert: $fixed\r\nDatum: $datum \r\nPlätze: $plaetze\r\nSpielplan: $spielplan\r\nHallenname: $hallenname\r\n"
-            . "Straße: $strasse\r\nPlz: $plz\r\nOrt: $ort\r\nHaltestellen: $haltestellen\r\nHinweis:\r\n$hinweis\r\nStartgebühr: $startgebuehr\r\n"
-            . "Organisator: $organisator\r\nHandy: $handy");
-        $turnier->log("Anmeldung:\r\n" . Team::id_to_name($ausrichter) . " (spiele)");
-
+        $turnier = new Turnier ($turnier_id);
+        $turnier->log("Turnier wurde erstellt. (Ausrichter $ausrichter)");
+        $turnier->anmelden($ausrichter, 'spiele');
         return $turnier;
+    }
+
+    /**
+     * Schreibt einen Eintrag in die turniere_liga Tabelle
+     *
+     * @param string $column
+     * @param mixed $value
+     * @return $this
+     */
+    public function set_liga(string $column, mixed $value): Turnier
+    {
+        if ($this->details[$column] === $value) {
+            return $this;
+        }
+        $column_esc = db::escape_column('turniere_liga', $column);
+        $sql = "
+                UPDATE turniere_liga
+                SET $column_esc = ?
+                WHERE turnier_id = $this->id
+                ";
+
+        db::$db->query($sql, $value)->log();
+        $this->details[$column] = $value;
+        $this->log(ucfirst($column) . ": $value");
+        return $this;
+    }
+
+    /**
+     * Schreibt einen Eintrag in die turniere_details Tabelle
+     *
+     * @param string $column
+     * @param mixed $value
+     * @return $this
+     */
+    public function set(string $column, mixed $value): Turnier
+    {
+        if ($this->details[$column] === $value) {
+            return $this;
+        }
+        $column_esc = db::escape_column('turniere_details', $column);
+        $sql = "
+                UPDATE turniere_details
+                SET $column_esc = ?
+                WHERE turnier_id = $this->id
+                ";
+
+        db::$db->query($sql, $value)->log();
+        $this->details[$column] = $value;
+        $this->log(ucfirst($column) . ": $value");
+
+        return $this;
     }
 
     /**
@@ -130,6 +161,12 @@ class Turnier
         return db::$db->query($sql, $phase, $saison)->esc()->fetch('turnier_id');
     }
 
+    /**
+     * Get Turniere, welche ein Team ausrichtet.
+     *
+     * @param int $team_id Ausrichter
+     * @return array
+     */
     public static function get_eigene_turniere(int $team_id): array
     {
         $sql = "
@@ -151,7 +188,7 @@ class Turnier
      *
      * @return array
      */
-    public function get_turnier_details(): array
+    public function get_details(): array
     {
         $sql = "
                 SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname
@@ -249,7 +286,7 @@ class Turnier
         if (!empty($spielen_liste)) {
             // Array nach Wertung sortieren
             uasort($spielen_liste, static function ($team_a, $team_b) {
-                return ((int) $team_b['wertigkeit'] <=> (int) $team_a['wertigkeit']);
+                return ((int)$team_b['wertigkeit'] <=> (int)$team_a['wertigkeit']);
             });
         }
         return $spielen_liste ?? [];
@@ -331,7 +368,7 @@ class Turnier
         foreach ($platzierungstabelle as $team_id => $ergebnis) {
             $this->set_ergebnis($team_id, $ergebnis['ligapunkte'], $ergebnis['platz']);
         }
-        $this->set_phase('ergebnis');
+        $this->set_liga('phase', 'ergebnis');
         $this->log("Turnierergebnis wurde in die Datenbank eingetragen");
     }
 
@@ -699,47 +736,9 @@ class Turnier
                 ";
         db::$db->query($sql, $link)->log();
         $this->details['spielplan_datei'] = $link;
-        $this->set_phase($phase);
+        $this->set_liga('phase', $phase);
         $this->log("Manuelle Spielplan- oder Ergebnisdatei wurde hochgeladen.");
 
-    }
-
-    /**
-     * Beschreibt die Datenbank der Turniere
-     *
-     * Methode noch nicht vollständig implementiert
-     *
-     * @param string $entry Spaltenname
-     * @param mixed $value  Wert
-     * @return Turnier
-     */
-    public function set(string $entry, mixed $value): Turnier
-    {
-        $spalten_namen = db::$db->query("SHOW FIELDS FROM turniere_liga")->list('Field');
-        if (in_array($entry, $spalten_namen, true)) {
-            $sql = "
-                    UPDATE turniere_liga 
-                    SET $entry = ?
-                    WHERE turnier_id = $this->id
-                    ";
-            db::$db->query($sql, $value)->log();
-            $this->log(ucfirst($entry) . " => " . $value ?? 'DELETED');
-            $this->details[$entry] = $value;
-            return $this;
-        }
-        $spalten_namen = db::$db->query("SHOW FIELDS FROM turniere_details")->list('Field');
-        if (in_array($entry, $spalten_namen, true)) {
-            $sql = "
-                    UPDATE turniere_details
-                    SET $entry = ?
-                    WHERE turnier_id = $this->id
-                    ";
-            db::$db->query($sql, $value)->log();
-            $this->log(ucfirst($entry) . " => " . $value ?? 'DELETED');
-            $this->details[$entry] = $value;
-            return $this;
-        }
-        trigger_error("Ungültiger Spaltenname mit Col $entry, Val $value", E_USER_ERROR);
     }
 
     /**
@@ -751,16 +750,16 @@ class Turnier
     public function get_spielplan_link(string $scope = ''): false|string
     {
         // Es existiert ein manuell hochgeladener Spielplan
-        if (!empty($this->details['spielplan_datei'])){
+        if (!empty($this->details['spielplan_datei'])) {
             return $this->details['spielplan_datei'];
         }
 
         // Es existiert ein automatisch erstellter Spielplan
         if (!empty($this->details['spielplan_vorlage'])) {
             return match ($scope) {
-                'lc'    => Env::BASE_URL . '/ligacenter/lc_spielplan.php?turnier_id=' . $this->id,
-                'tc'    => Env::BASE_URL . '/teamcenter/tc_spielplan.php?turnier_id=' . $this->id,
-                DEFAULT => Env::BASE_URL . '/liga/spielplan.php?turnier_id=' . $this->id
+                'lc' => Env::BASE_URL . '/ligacenter/lc_spielplan.php?turnier_id=' . $this->id,
+                'tc' => Env::BASE_URL . '/teamcenter/tc_spielplan.php?turnier_id=' . $this->id,
+                default => Env::BASE_URL . '/liga/spielplan.php?turnier_id=' . $this->id
             };
         }
 
@@ -768,225 +767,15 @@ class Turnier
     }
 
     /**
-     * Ändert die Phase in der sich das Turnier befindet
+     * Schreibt in den Turnierlog.
      *
-     * @param string $phase
-     */
-    public function set_phase(string $phase): void
-    {
-        if ($phase === $this->details['phase']) {
-            return;
-        }
-
-        $sql = "
-                UPDATE turniere_liga 
-                SET phase = ? 
-                WHERE turnier_id = $this->id
-                ";
-        db::$db->query($sql, $phase)->log();
-        $this->log("Phase: " . $this->details['phase'] . " => " . $phase);
-        $this->details['phase'] = $phase;
-    }
-
-    /**
-     * Ändert den Turnierblock
-     *
-     * @param string $block
-     */
-    public function set_block(string $block): void
-    {
-        $sql = "
-                UPDATE turniere_liga 
-                SET tblock = ?
-                WHERE turnier_id = $this->id
-                ";
-        db::$db->query($sql, $block)->log();
-        $this->log("Block: " . $this->details['tblock'] . " => " . $block);
-        $this->details['tblock'] = $block;
-    }
-
-    /**
-     * Setzt den Spieltag in der Datenbank fest
-     *
-     * @param int $spieltag
-     */
-    public function set_spieltag(int $spieltag): void
-    {
-        $sql = "
-                UPDATE turniere_liga
-                SET spieltag = ?
-                WHERE turnier_id = $this->id
-                ";
-        db::$db->query($sql, $spieltag)->log();
-        $this->log("Spieltag: " . $spieltag);
-        $this->details['spieltag'] = $spieltag;
-    }
-
-    /**
-     * Update der Turnierdetails
-     *
-     * @param string $startzeit
-     * @param string $besprechung
-     * @param string $plaetze
-     * @param string $spielplan
-     * @param string $hallenname
-     * @param string $strasse
-     * @param string $plz
-     * @param string $ort
-     * @param string $haltestellen
-     * @param string $hinweis
-     * @param string $startgebuehr
-     * @param string $organisator
-     * @param string $handy
-     * @return bool Wurden wichtige Daten geändert?
-     */
-    public function change_turnier_details(string $startzeit, string $besprechung, string $plaetze, string $spielplan,
-                                           string $hallenname, string $strasse, string $plz, string $ort, string $haltestellen,
-                                           string $hinweis, string $startgebuehr, string $organisator, string $handy): bool
-    {
-        $sql = "
-                UPDATE turniere_details 
-                SET hallenname = ?, strasse = ?, plz = ?, ort = ?, haltestellen = ?, plaetze = ?, format = ?,
-                    startzeit = ?, besprechung = ?, hinweis = ?, organisator = ?, handy = ?, startgebuehr = ?
-                WHERE turnier_id = $this->id
-                ";
-        $params = [$hallenname, $strasse, $plz, $ort, $haltestellen, $plaetze, $spielplan, $startzeit, $besprechung,
-            $hinweis, $organisator, $handy, $startgebuehr];
-        db::$db->query($sql, $params)->log();
-
-        // Nichts wichtiges geändert, aber trotzdem Log
-        if ($this->details['besprechung'] != $besprechung) {
-            $this->log("Besprechung: " . $besprechung);
-        }
-        if ($this->details['hinweis'] != $hinweis) {
-            $this->log("Hinweis:\r\n" . $hinweis);
-        }
-        if ($this->details['hallenname'] != $hallenname) {
-            $this->log("Hallenname: " . $hallenname);
-        }
-        if ($this->details['haltestellen'] != $haltestellen) {
-            $this->log("Haltestellen: " . $haltestellen);
-        }
-        if ($this->details['organisator'] != $organisator) {
-            $this->log("Organisator: " . $startzeit);
-        }
-        if ($this->details['handy'] != $handy) {
-            $this->log("Handy: " . $handy);
-        }
-        if ($this->details['startgebuehr'] != $startgebuehr) {
-            $this->log("Startgebühr: " . $startgebuehr);
-        }
-
-        // Wichtiges geändert und Log
-        $wichtiges_geaendert = false;
-        if ($this->details['format'] != $spielplan) {
-            $this->log("Spielplan: " . $spielplan);
-            $wichtiges_geaendert = true;
-        }
-        if ($this->details['plz'] != $plz) {
-            $this->log("PLZ: " . $plz);
-            $wichtiges_geaendert = true;
-        }
-        if ($this->details['strasse'] != $strasse) {
-            $this->log("Straße: " . $strasse);
-            $wichtiges_geaendert = true;
-        }
-        if ($this->details['ort'] != $ort) {
-            $this->log("Ort: " . $ort);
-            $wichtiges_geaendert = true;
-        }
-        if ($this->details['startzeit'] != $startzeit) {
-            $this->log("Startzeit: " . $startzeit);
-            $wichtiges_geaendert = true;
-        }
-        if ($this->details['plaetze'] != $plaetze) {
-            $this->log("Plätze: " . $plaetze);
-            $wichtiges_geaendert = true;
-        }
-        return $wichtiges_geaendert;
-    }
-
-    /**
-     * Update der Turnier-Ligadaten
-     *
-     * @param string $tname
-     * @param int $ausrichter
-     * @param string $art
-     * @param string $tblock
-     * @param string $fixed
-     * @param string $datum
-     * @param string $phase
-     */
-    public function change_turnier_liga(string $tname, int $ausrichter, string $art, string $tblock, string $fixed,
-                                        string $datum, string $phase): void
-    {
-        $sql = "
-                UPDATE turniere_liga 
-                SET tname = ?, phase = ?, ausrichter = ?, art = ?, tblock = ?, tblock_fixed = ?, datum = ?
-                WHERE turnier_id = $this->id
-                ";
-        $params = [$tname, $phase, $ausrichter, $art, $tblock, $fixed, $datum];
-        db::$db->query($sql, $params)->log();
-
-        // Turnierlogs schreiben
-        if ($this->details['datum'] !== $datum) {
-            LigaBot::set_spieltage(); // Spieltage ändern sich eventuell, je nach Datumsveränderung
-            $this->log("Datum geändert: " . $datum);
-        }
-        if ($this->details['tname'] !== $tname) {
-            $this->log("Turniername geändert: " . $tname);
-        }
-
-        if ($this->details['ausrichter'] !== $ausrichter) {
-            $this->log("Ausrichter geändert: " . Team::id_to_name($ausrichter));
-        }
-        if ($this->details['art'] !== $art) {
-            $this->log("Art: " . $art);
-        }
-        if ($this->details['tblock'] !== $tblock) {
-            $this->log("Turnierblock geändert: " . $tblock);
-        }
-        if ($this->details['tblock_fixed'] !== $fixed) {
-            $this->log("Fixiert geändert: " . $fixed);
-        }
-        if ($this->details['phase'] !== $phase) {
-            $this->log("Phase geändert: " . $phase);
-        }
-    }
-
-    /**
-     * Ändert den Turnierblock
-     *
-     * @param $tblock
-     * @param $fixed
-     * @param $art
-     * @return void
-     */
-    public function change_turnier_block($tblock, $fixed, $art): void
-    {
-        $sql = "
-                UPDATE turniere_liga 
-                SET tblock = ?, tblock_fixed = ?, art = ?
-                WHERE turnier_id = $this->id
-                ";
-        db::$db->query($sql, [$tblock, $fixed, $art])->log();
-        $this->details['tblock'] = $tblock;
-        $this->log("Turnierblock: $tblock\r\n(Art: $art, Fixed: $fixed");
-    }
-
-    /**
-     * Schreibt in den Turnierlog
+     * Turnierlogs werden bei Zerstörung des Objektes in die DB geschrieben.
      *
      * @param string $log_text
      */
     public function log(string $log_text): void
     {
-        $sql = "
-                INSERT INTO turniere_log (turnier_id, log_text, autor) 
-                VALUES ($this->id, ?, ?);
-                ";
-        $autor = Helper::get_akteur(true);
-        db::$db->query($sql, $log_text, $autor)->log();
+        $this->log .= "\r\n" . $log_text;
     }
 
     /**
@@ -1010,7 +799,7 @@ class Turnier
      * Grund des Löschens
      * @param string $grund
      */
-    function delete($grund = '')
+    public function delete($grund = ''): void
     {
         // Datenbank Backup
         db::sql_backup();
@@ -1029,7 +818,7 @@ class Turnier
                 WHERE turnier_id = $this->id
                 ";
         db::$db->query($sql)->log();
-        $this->log("Turnier wurde gelöscht");
+        $this->log("Turnier wurde gelöscht.");
         // Spieltage neu sortieren
         Ligabot::set_spieltage();
     }
@@ -1048,5 +837,46 @@ class Turnier
                 ORDER BY datum DESC
                 ";
         return db::$db->query($sql)->esc()->fetch('turnier_id');
+    }
+
+    public function parse(array $string, $short = false): array
+    {
+        foreach ($this->details as $detail){
+            $this->details['wochentag'] = strftime("%A", strtotime($this->details['datum']));
+
+            $turniere[$turnier_id]['datum'] = strftime("%d.%m.", strtotime($turniere[$turnier_id]['datum']));
+        }
+//        return match ($string){
+//            'spass' => 'Spaßturnier',
+//            'final' => 'Finalturnier',
+//            'spass' => 'Spaßturnier',
+//            'spass' => 'Spaßturnier',
+//            'spass' => 'Spaßturnier',
+//            'spass' => 'Spaßturnier',
+//        };
+
+        //Turnierdarten parsen
+        foreach ($turniere as $turnier_id => $turnier) {
+            $turniere[$turnier_id]['wochentag'] =
+
+            $turniere[$turnier_id]['startzeit'] = substr($turniere[$turnier_id]['startzeit'], 0, -3);
+
+            if ($turniere[$turnier_id]['art'] == 'spass') {
+                $turniere[$turnier_id]['tblock'] = 'Spaß';
+            }
+            if ($turniere[$turnier_id]['besprechung'] == 'Ja') {
+                $turniere[$turnier_id]['besprechung'] = 'Gemeinsame Teambesprechung um ' . date('H:i', strtotime($turniere[$turnier_id]['startzeit']) - 15 * 60) . '&nbsp;Uhr';
+            } else {
+                $turniere[$turnier_id]['besprechung'] = '';
+            }
+            // Spielmodus
+            if ($turniere[$turnier_id]['format'] == 'jgj') {
+                $turniere[$turnier_id]['format'] = 'Jeder-gegen-Jeden';
+            } elseif ($turniere[$turnier_id]['format'] == 'dko') {
+                $turniere[$turnier_id]['format'] = 'Doppel-KO';
+            } elseif ($turniere[$turnier_id]['format'] == 'gruppen') {
+                $turniere[$turnier_id]['format'] = 'zwei Gruppen';
+            }
+        }
     }
 }

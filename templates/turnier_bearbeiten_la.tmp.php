@@ -46,7 +46,7 @@
             <label class="w3-text-primary" for="phase">Phase</label>
             <select required type="date" value="<?=$turnier->details['phase'];?>" class="w3-input w3-border w3-border-primary" id="phase" name="phase">
                 <option <?php if($turnier->details['phase'] == 'offen'){?> selected <?php }?> value="offen">Offene Phase</option>
-                <option <?php if($turnier->details['phase'] == 'melde'){?> selected <?php }?>   value="melde">Meldephase</option>
+                <option <?php if($turnier->details['phase'] == 'melde'){?> selected <?php }?> value="melde">Meldephase</option>
                 <option <?php if($turnier->details['phase'] == 'spielplan'){?> selected <?php }?> value="spielplan">Spielplan</option>
                 <option <?php if($turnier->details['phase'] == 'ergebnis'){?> selected <?php }?> value="ergebnis">Ergebnis</option>
             </select>

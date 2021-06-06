@@ -4,8 +4,10 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
+$saison = (int) ($_GET['saison'] ?? Config::SAISON);
+
 //Aktuellen Spieltag bekommen. Der aktuelle Spieltag ist der Spieltag, an dem das nächste Turnier eingetragen wird.
-$akt_spieltag = Tabelle::get_aktuellen_spieltag();
+$akt_spieltag = Tabelle::get_aktuellen_spieltag($saison);
 
 if (Tabelle::check_spieltag_live($akt_spieltag)){
     $live_spieltag = $akt_spieltag;
@@ -20,10 +22,12 @@ if (isset($_GET['spieltag'])){
     $gew_spieltag = $akt_spieltag;
 }
 
+
+
 //Tabellen und Strafen, um sie an das Layout zu übergeben
-$meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag);
-$rang_tabelle = Tabelle::get_rang_tabelle($gew_spieltag);
-$strafen = Team::get_strafen();
+$meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag,$saison);
+$rang_tabelle = Tabelle::get_rang_tabelle($gew_spieltag,$saison);
+$strafen = Team::get_strafen($saison);
 
 //Testen ob Verwarnungen oder Strafen existieren.
 $verwarnung_not_empty = $strafe_not_empty = false;
