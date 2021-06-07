@@ -116,7 +116,7 @@ class Turnier
      */
     public function set(string $column, mixed $value): Turnier
     {
-        if ($this->details[$column] === $value) {
+        if ($this->details[$column] == $value) {
             return $this;
         }
         $column_esc = db::escape_column('turniere_details', $column);
