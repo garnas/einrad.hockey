@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 08. Mrz 2021 um 01:33
+-- Erstellungszeit: 07. Jun 2021 um 02:39
 -- Server-Version: 10.4.17-MariaDB
 -- PHP-Version: 8.0.0
 
@@ -20,29 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Datenbank: `db_localhost`
 --
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `abstimmung_ergebnisse`
---
-
-CREATE TABLE `abstimmung_ergebnisse` (
-  `crypt` varchar(255) NOT NULL,
-  `stimme` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `abstimmung_teams`
---
-
-CREATE TABLE `abstimmung_teams` (
-  `team_id` int(11) NOT NULL,
-  `aenderungen` int(8) NOT NULL DEFAULT 0,
-  `passwort` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -95,7 +72,6 @@ INSERT INTO `ligaleitung` (`ligaleitung_id`, `spieler_id`, `funktion`, `email`, 
 (12, 874, 'ligaausschuss', 'test@einrad.hockey', 'Philipp', NULL),
 (13, 548, 'oeffentlichkeitsausschuss', 'test@einrad.hockey', NULL, NULL),
 (14, 874, 'oeffentlichkeitsausschuss', 'test@einrad.hockey', NULL, NULL),
-(15, 1274, 'oeffentlichkeitsausschuss', 'test@einrad.hockey', NULL, NULL),
 (16, 240, 'technikausschuss', 'test@einrad.hockey', NULL, NULL),
 (17, 287, 'technikausschuss', 'test@einrad.hockey', NULL, NULL),
 (18, 380, 'technikausschuss', 'test@einrad.hockey', NULL, NULL),
@@ -121,7 +97,8 @@ INSERT INTO `ligaleitung` (`ligaleitung_id`, `spieler_id`, `funktion`, `email`, 
 (38, 1005, 'schiriausbilder', 'test@einrad.hockey', NULL, NULL),
 (39, 1093, 'schiriausbilder', 'test@einrad.hockey', NULL, NULL),
 (40, 1573, 'schiriausbilder', 'test@einrad.hockey', NULL, NULL),
-(41, 3, 'ligaausschuss', 'test@einrad.hockey', 'entwickler', '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e');
+(41, 321, 'technikausschuss', 'test@einrad.hockey', NULL, NULL),
+(42, 3, 'ligaausschuss', 'test@einrad.hockey', 'entwickler', '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e');
 
 -- --------------------------------------------------------
 
@@ -162,23 +139,7 @@ CREATE TABLE `neuigkeiten` (
 --
 
 INSERT INTO `neuigkeiten` (`neuigkeiten_id`, `titel`, `inhalt`, `link_pdf`, `link_jpg`, `bild_verlinken`, `eingetragen_von`, `zeit`) VALUES
-(1, 'Passwörter für die Logins', 'Alle Passwörter für das Teamcenter sind: <b>test</b>\r\n\r\nLoginname für Ligacenter: <b>entwickler</b> Passwort: <b>einrad</b>\r\n\r\nIm _localhost-Ordner befindet sich ein Tutorial, wie man eine Seite für die Website erstellt.\r\n\r\n\r\n', '', '', '', 'Ligaausschuss', '2021-03-08 00:28:55');
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `oeffi_challenge`
---
-
-CREATE TABLE `oeffi_challenge` (
-  `id` smallint(6) NOT NULL,
-  `spieler_id` int(8) NOT NULL,
-  `kilometer` float DEFAULT NULL,
-  `radgröße` float NOT NULL,
-  `datum` date NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `count` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+(1, 'Passwörter für die Logins', 'Alle Passwörter für das Teamcenter sind: <b>test</b>\r\n\r\nLoginname für Ligacenter: <b>entwickler</b> Passwort: <b>einrad</b>\r\n\r\nIm _localhost-Ordner befindet sich ein Tutorial, wie man eine Seite erstellt.', '', '', '', 'Ligaausschuss', '2021-06-07 00:38:04');
 
 -- --------------------------------------------------------
 
@@ -8681,7 +8642,7 @@ CREATE TABLE `spieler` (
 INSERT INTO `spieler` (`spieler_id`, `team_id`, `vorname`, `nachname`, `jahrgang`, `geschlecht`, `schiri`, `junior`, `letzte_saison`, `zeit`) VALUES
 (1, 20, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
 (2, 20, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
-(3, NULL, 'Vorname', 'Entwickler', 1234, 'd', '', 'Nein', 26, '2021-03-08 00:28:55'),
+(3, NULL, 'Vorname', 'Entwickler', 1234, 'd', '', 'Nein', 26, '2021-06-07 00:38:04'),
 (5, 87, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
 (9, 535, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
 (12, 535, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
@@ -9080,7 +9041,7 @@ INSERT INTO `spieler` (`spieler_id`, `team_id`, `vorname`, `nachname`, `jahrgang
 (1377, 533, 'Vorname', 'Nachname', 2020, 'd', '', '', 25, NULL),
 (1378, 832, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
 (1379, 243, 'Vorname', 'Nachname', 2020, 'd', '', '', 24, NULL),
-(1380, 2, 'Vorname', 'Nachname', 2020, 'd', '27', 'Nein', 25, NULL),
+(1380, 2, 'Vorname', 'Nachname', 2020, 'd', '27', 'Nein', 26, NULL),
 (1381, 2, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, '2020-11-29 14:22:54'),
 (1382, 423, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
 (1383, 423, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
@@ -9182,7 +9143,7 @@ INSERT INTO `spieler` (`spieler_id`, `team_id`, `vorname`, `nachname`, `jahrgang
 (1652, 535, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
 (1653, 535, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
 (1654, 2, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
-(1655, 2, 'Vorname', 'Nachname', 2020, 'd', '26', 'Nein', 25, NULL),
+(1655, 2, 'Vorname', 'Nachname', 2020, 'd', '26', 'Nein', 26, NULL),
 (1657, 2, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
 (1659, 2, 'Vorname', 'Nachname', 2020, 'd', '26', 'Nein', 26, NULL),
 (1664, 240, 'Vorname', 'Nachname', 2020, 'd', '', '', 24, NULL),
@@ -9472,7 +9433,7 @@ INSERT INTO `spieler` (`spieler_id`, `team_id`, `vorname`, `nachname`, `jahrgang
 (2271, 689, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
 (2272, 529, 'Vorname', 'Nachname', 2020, 'd', '', '', 24, NULL),
 (2275, 645, 'Vorname', 'Nachname', 2020, 'd', '', '', 25, NULL),
-(2276, 2, 'Vorname', 'Nachname', 2020, 'd', '', '', 25, NULL),
+(2276, 2, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
 (2277, 632, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
 (2278, 632, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
 (2279, 632, 'Vorname', 'Nachname', 2020, 'd', '', '', 26, NULL),
@@ -9858,36 +9819,36 @@ CREATE TABLE `teams_details` (
 --
 
 INSERT INTO `teams_details` (`team_id`, `plz`, `ort`, `verein`, `homepage`, `ligavertreter`, `teamfoto`, `trikot_farbe_1`, `trikot_farbe_2`) VALUES
-(2, '42897', 'Remscheid', 'Frisch Auf Lennep', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
+(2, '42897', 'Remscheid', 'Frisch Auf Lennep', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, '#873a9c', '#ffffff'),
 (8, '44623', 'Herne', 'Baukauer TC', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
-(11, '30449', 'Hannover', 'CatchArt e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
+(11, '30449', 'Hannover', 'CatchArt e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, '#ff0000', '#00ff00'),
 (12, '12207', 'Berlin', 'FSG SC Lilienthal e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (14, '40229', 'Düsseldorf', 'Vanny UCTD', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (16, '64546', 'Mörfelden', 'SKV Mörfelden', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, '#ffffff', '#4a55a5'),
 (18, '64546', 'Mörfelden', 'SKV Mörfelden', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (20, '42699', 'Solingen', 'TSV Solingen-Aufderhöhe 1877 e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (21, '27321', 'Thedinghausen', 'Hochschulsport Bremen', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
-(25, '61118', 'Bad Vilbel', 'Fun-Ball Dortelweil', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
+(25, '61118', 'Bad Vilbel', 'Fun-Ball Dortelweil', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, '#ffff00', '#8b17ff'),
 (26, '64839', 'Münster (bei Dieburg)', 'Verein Radsport 1921 Münster', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (27, '01129', 'Dresden', 'SV Motor Mickten-Dresden e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
-(30, '61348', 'Bad Homburg', 'Jugendkulturtreff e-werk', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
+(30, '61348', 'Bad Homburg', 'Jugendkulturtreff e-werk', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, '#ffa000', '#000000'),
 (32, '40229', 'Düsseldorf', 'Vanny-Düsseldorf', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
-(33, '22087', 'Hamburg', 'NTSV', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
+(33, '22087', 'Hamburg', 'NTSV', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, '#78ff00', '#000000'),
 (34, '51067', 'Köln', 'MTV Köln', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (36, '26180', 'Rastede', 'TuS Lehmden', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (37, '42897', 'Remscheid', 'Frisch Auf Lennep', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (38, '42369', 'Wuppertal', 'BTV Ronsdorf-Graben', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (40, '40668', 'Meerbusch', 'RV 1897 Meerbusch-Lank', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (42, '44623', 'Herne', 'Baukauer TC', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
-(44, '46236', 'Bottrop/Düsseldorf', '', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
+(44, '46236', 'Bottrop/Düsseldorf', 'Überregionale Spielergemeinschaft', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, '#ffff00', '#80ffff'),
 (51, '32832', 'Augustdorf', 'RSV Schwalbe Augustdorf', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (86, '54295', 'Trier', 'MJC Trier', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (87, '44623', 'Herne', 'Baukauer TC', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (154, '65558', 'Lohrheim', 'SV 1929 Lohrheim e. V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
-(155, '54290', 'Trier', 'MJC Trier', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
+(155, '54290', 'Trier', 'MJC Trier', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, '#b9313f', '#000000'),
 (161, '44623', 'Herne', 'Baukauer TC', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (162, '48703', 'Stadtlohn', 'DJK Eintracht Stadtlohn', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
-(178, '46325', 'Borken (NRW)', 'SV Westfalia Gemen', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
+(178, '46325', 'Borken (NRW)', 'SV Westfalia Gemen', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, '#0000ff', '#ffffff'),
 (240, '65558', 'Lohrheim', 'SV 1929 Lohrheim e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (243, '48145', 'Münster (Westf.)', '', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (244, '54295', 'Trier', 'MJC Trier', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
@@ -9915,12 +9876,12 @@ INSERT INTO `teams_details` (`team_id`, `plz`, `ort`, `verein`, `homepage`, `lig
 (430, '44789', 'Bochum', 'Flying Circus Bochum e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (431, '04315', 'Leipzig', 'KSC 1864 Leipzig e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (435, '41201', 'Litomerice (CZE)', 'Uners Litomerice', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
-(443, '79102', 'Freiburg', 'Breisgau Beasts', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
-(501, '28865', 'Lilienthal', 'TV Lilienthal e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
+(443, '79102', 'Freiburg', 'Breisgau Beasts', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, '#0000ff', NULL),
+(501, '28865', 'Lilienthal', 'TV Lilienthal', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, '#d40017', '#0d0d0d'),
 (529, '27321', 'Thedinghausen', 'LaFaretti Unicorns', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (530, '48703', 'Stadtlohn', 'Djk Eintracht Stadtlohn', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (533, '01099', 'Dresden', 'SV TuR, Sport & Jugend Dresden e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
-(534, '46240', 'Bottrop', '', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
+(534, '46240', 'Bottrop', '', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, '#ffffff', '#00ff00'),
 (535, '44623', 'Herne', 'Baukauer TC 1879 e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (610, '23564', 'Lübeck', 'Lübecker Einradfüchse', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (611, '48703', 'Stadtlohn', 'Djk Eintracht Stadtlohn', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
@@ -9934,7 +9895,7 @@ INSERT INTO `teams_details` (`team_id`, `plz`, `ort`, `verein`, `homepage`, `lig
 (637, '22869', 'Kreis Pinneberg', 'Schenefeld und Brande Hörnerkirchen', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (645, '40229', 'Düsseldorf', 'Vanny', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (652, '41363', 'Jüchen', 'SG RW Gierath', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
-(689, '28865', 'Lilienthal', 'TV Lilienthal e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
+(689, '28865', 'Lilienthal', 'TV Lilienthal', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, '#d40020', '#0e0101'),
 (690, '44623', 'Herne', 'Baukauer TC', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (691, '54290', 'Trier', 'MJC Trier', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (692, '48703', 'Stadtlohn', 'DJK Eintracht Stadtlohn', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
@@ -9945,7 +9906,7 @@ INSERT INTO `teams_details` (`team_id`, `plz`, `ort`, `verein`, `homepage`, `lig
 (717, '22087', 'Hamburg', 'Niendorfer TSV', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (831, '24111', 'Kiel', 'TSV Russee', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (832, '48149', 'Münster', 'HSP Universität  Münster', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
-(833, '28865', 'Lilienthal', 'TV Lilienthal e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
+(833, '28865', 'Lilienthal', 'TV Lilienthal', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, '#c9001b', NULL),
 (835, '36100', 'Petersberg', 'RMV Früh-Auf Horwieden', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (837, '49078', 'Osnabrück', 'Osnabrücker Turnerbund', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
 (840, '60437', 'Frankfurt am Main', 'TSV Bonames 1875 e.V.', 'https://test.einrad.hockey', 'Vorname Nachname', NULL, NULL, NULL),
@@ -10109,7 +10070,8 @@ INSERT INTO `teams_kontakt` (`teams_kontakt_id`, `team_id`, `email`, `public`, `
 (154, 34, 'test@einrad.hockey', 'Ja', 'Ja'),
 (156, 16, 'test@einrad.hockey', 'Ja', 'Ja'),
 (157, 393, 'test@einrad.hockey', 'Nein', 'Ja'),
-(158, 16, 'test@einrad.hockey', 'Nein', 'Nein');
+(158, 16, 'test@einrad.hockey', 'Nein', 'Nein'),
+(159, 33, 'test@einrad.hockey', 'Ja', 'Ja');
 
 -- --------------------------------------------------------
 
@@ -10351,19 +10313,19 @@ CREATE TABLE `turniere_berichte` (
 
 CREATE TABLE `turniere_details` (
   `turnier_id` int(11) NOT NULL,
-  `hallenname` varchar(255) NOT NULL,
-  `strasse` varchar(255) NOT NULL,
-  `plz` int(8) NOT NULL,
-  `ort` varchar(255) NOT NULL,
-  `haltestellen` varchar(255) NOT NULL,
-  `plaetze` int(11) NOT NULL,
-  `format` varchar(255) NOT NULL,
-  `startzeit` time NOT NULL,
-  `besprechung` enum('Ja','Nein') NOT NULL,
-  `hinweis` varchar(1700) NOT NULL,
-  `organisator` varchar(255) NOT NULL,
-  `handy` varchar(255) NOT NULL,
-  `startgebuehr` varchar(255) NOT NULL
+  `hallenname` varchar(255) DEFAULT NULL,
+  `strasse` varchar(255) DEFAULT NULL,
+  `plz` int(8) DEFAULT NULL,
+  `ort` varchar(255) DEFAULT NULL,
+  `haltestellen` varchar(255) DEFAULT NULL,
+  `plaetze` int(11) DEFAULT NULL,
+  `format` varchar(255) DEFAULT NULL,
+  `startzeit` time DEFAULT NULL,
+  `besprechung` enum('Ja','Nein') DEFAULT NULL,
+  `hinweis` varchar(1700) DEFAULT NULL,
+  `organisator` varchar(255) DEFAULT NULL,
+  `handy` varchar(255) DEFAULT NULL,
+  `startgebuehr` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -10471,12 +10433,7 @@ INSERT INTO `turniere_details` (`turnier_id`, `hallenname`, `strasse`, `plz`, `o
 (914, 'Wolfsberghalle', 'Montessoriweg 11', 54295, 'Trier', 'Waldorfschule', 5, 'jgj', '10:00:00', 'Ja', 'Beispieltext', 'Vorname Nachname', '1234 56789', '10 Euro'),
 (915, 'Wolfsberghalle', 'Montessoriweg 11', 54295, 'Trier', 'Waldorfschule', 4, 'jgj', '16:00:00', 'Ja', 'Beispieltext', 'Vorname Nachname', '1234 56789', '10 Euro'),
 (916, 'Gustav England Halle', 'Lehmstraße', 27321, 'Thedinghausen', '', 6, 'jgj', '10:00:00', 'Nein', 'Beispieltext', 'Vorname Nachname', '1234 56789', '5 Euro'),
-(920, 'Sporthalle Marie-Curie-Gymnasium', 'Zirkusstraße 7', 1069, 'Dresden', 'Pirnaischer Platz', 6, 'jgj', '09:00:00', 'Ja', 'Beispieltext', 'Vorname Nachname', '1234 56789', '10 Euro'),
-(934, 'Gustav-England-Halle', 'Lehmstrasse', 27321, 'Thedinghausen', '', 5, 'jgj', '10:00:00', 'Nein', 'Beispieltext', 'Vorname Nachname', '1234 56789', '5 Euro'),
-(935, 'Gustav-England-Halle', 'Lehmstrasse', 27321, 'Thedinghausen', '', 5, 'jgj', '10:00:00', 'Nein', 'Beispieltext', 'Vorname Nachname', '1234 56789', '5 Euro'),
-(941, 'Sporthalle am Heinrich-Heine-Gymnasium Bottrop', 'Gustav-Ohm-Straße 65', 46236, 'Bottrop', '', 5, 'jgj', '10:00:00', 'Ja', 'Beispieltext', 'Vorname Nachname', '1234 56789', '10 Euro'),
-(942, 'Sporthalle am Heinrich-Heine-Gymnasium Bottrop', 'Gustav-Ohm-Straße 65', 46236, 'Bottrop', '', 5, 'jgj', '10:00:00', 'Ja', 'Beispieltext', 'Vorname Nachname', '1234 56789', '10 Euro'),
-(943, 'Sporthalle am Heinrich-Heine-Gymnasium Bottrop', 'Gustav-Ohm-Straße 65', 46236, 'Bottrop', '', 5, 'jgj', '10:00:00', 'Ja', 'Beispieltext', 'Vorname Nachname', '1234 56789', '10 Euro');
+(920, 'Sporthalle Marie-Curie-Gymnasium', 'Zirkusstraße 7', 1069, 'Dresden', 'Pirnaischer Platz', 6, 'jgj', '09:00:00', 'Ja', 'Beispieltext', 'Vorname Nachname', '1234 56789', '10 Euro');
 
 -- --------------------------------------------------------
 
@@ -11145,17 +11102,17 @@ CREATE TABLE `turniere_geloescht` (
 
 CREATE TABLE `turniere_liga` (
   `turnier_id` int(11) NOT NULL,
-  `tname` varchar(255) NOT NULL,
-  `ausrichter` int(11) NOT NULL,
-  `art` enum('I','II','III','fixed','final','spass') NOT NULL,
-  `tblock` varchar(255) NOT NULL,
-  `tblock_fixed` enum('Ja','Nein') NOT NULL DEFAULT 'Nein',
-  `datum` date NOT NULL,
-  `spieltag` int(11) NOT NULL DEFAULT 0,
-  `phase` enum('offen','melde','spielplan','ergebnis') NOT NULL,
+  `tname` varchar(255) DEFAULT NULL,
+  `ausrichter` int(11) DEFAULT NULL,
+  `art` enum('I','II','III','fixed','final','spass') DEFAULT NULL,
+  `tblock` varchar(255) DEFAULT NULL,
+  `tblock_fixed` enum('Ja','Nein') DEFAULT 'Nein',
+  `datum` date DEFAULT NULL,
+  `spieltag` int(11) DEFAULT 0,
+  `phase` enum('offen','melde','spielplan','ergebnis') DEFAULT NULL,
   `spielplan_vorlage` varchar(30) DEFAULT NULL,
   `spielplan_datei` varchar(255) DEFAULT NULL,
-  `saison` int(11) NOT NULL
+  `saison` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -11263,12 +11220,7 @@ INSERT INTO `turniere_liga` (`turnier_id`, `tname`, `ausrichter`, `art`, `tblock
 (914, 'Römer-Cup', 86, 'I', 'BCD', 'Nein', '2020-08-23', 1, 'ergebnis', '5er_jgj_default', NULL, 26),
 (915, '', 244, 'I', 'EF', 'Nein', '2020-08-23', 1, 'ergebnis', '4er_jgj_2_12_6', NULL, 26),
 (916, '', 529, 'III', 'ABCDEF', 'Ja', '2020-10-03', 4, 'ergebnis', '6er_jgj_default', NULL, 26),
-(920, 'Tiger-Turnier', 423, 'III', 'ABCDEF', 'Ja', '2020-10-10', 5, 'ergebnis', '6er_jgj_default', NULL, 26),
-(934, '', 529, 'III', 'ABCDEF', 'Ja', '2021-04-17', 7, 'offen', NULL, NULL, 26),
-(935, '', 529, 'III', 'ABCDEF', 'Ja', '2021-06-05', 10, 'offen', NULL, NULL, 26),
-(941, '', 44, 'I', 'BC', 'Nein', '2021-04-17', 7, 'offen', NULL, NULL, 26),
-(942, '', 44, 'I', 'BC', 'Nein', '2021-05-08', 8, 'offen', NULL, NULL, 26),
-(943, '', 44, 'I', 'BC', 'Nein', '2021-05-29', 9, 'offen', NULL, NULL, 26);
+(920, 'Tiger-Turnier', 423, 'III', 'ABCDEF', 'Ja', '2020-10-10', 5, 'ergebnis', '6er_jgj_default', NULL, 26);
 
 -- --------------------------------------------------------
 
@@ -11395,17 +11347,7 @@ INSERT INTO `turniere_liste` (`liste_id`, `turnier_id`, `team_id`, `liste`, `pos
 (206, 905, 855, 'spiele', 0, 'Nein'),
 (209, 905, 856, 'spiele', 0, 'Nein'),
 (218, 895, 610, 'spiele', 0, 'Nein'),
-(232, 934, 529, 'spiele', 0, 'Nein'),
-(233, 935, 529, 'spiele', 0, 'Nein'),
-(241, 895, 857, 'spiele', 0, 'Nein'),
-(255, 941, 44, 'spiele', 0, 'Nein'),
-(256, 942, 44, 'spiele', 0, 'Nein'),
-(257, 943, 44, 'spiele', 0, 'Nein'),
-(261, 942, 87, 'melde', 0, 'Nein'),
-(262, 943, 87, 'melde', 0, 'Nein'),
-(263, 935, 837, 'melde', 0, 'Nein'),
-(264, 934, 837, 'melde', 0, 'Nein'),
-(265, 934, 689, 'melde', 0, 'Nein');
+(241, 895, 857, 'spiele', 0, 'Nein');
 
 -- --------------------------------------------------------
 
@@ -11424,18 +11366,6 @@ CREATE TABLE `turniere_log` (
 --
 -- Indizes der exportierten Tabellen
 --
-
---
--- Indizes für die Tabelle `abstimmung_ergebnisse`
---
-ALTER TABLE `abstimmung_ergebnisse`
-  ADD PRIMARY KEY (`crypt`);
-
---
--- Indizes für die Tabelle `abstimmung_teams`
---
-ALTER TABLE `abstimmung_teams`
-  ADD PRIMARY KEY (`team_id`);
 
 --
 -- Indizes für die Tabelle `ligakarte_gesuch`
@@ -11462,13 +11392,6 @@ ALTER TABLE `mailbot`
 --
 ALTER TABLE `neuigkeiten`
   ADD PRIMARY KEY (`neuigkeiten_id`);
-
---
--- Indizes für die Tabelle `oeffi_challenge`
---
-ALTER TABLE `oeffi_challenge`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `spieler_id` (`spieler_id`);
 
 --
 -- Indizes für die Tabelle `plz`
@@ -11609,7 +11532,7 @@ ALTER TABLE `ligakarte_gesuch`
 -- AUTO_INCREMENT für Tabelle `ligaleitung`
 --
 ALTER TABLE `ligaleitung`
-  MODIFY `ligaleitung_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `ligaleitung_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT für Tabelle `mailbot`
@@ -11622,12 +11545,6 @@ ALTER TABLE `mailbot`
 --
 ALTER TABLE `neuigkeiten`
   MODIFY `neuigkeiten_id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT für Tabelle `oeffi_challenge`
---
-ALTER TABLE `oeffi_challenge`
-  MODIFY `id` smallint(6) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT für Tabelle `spieler`
@@ -11651,7 +11568,7 @@ ALTER TABLE `spieler_zeitstrafen`
 -- AUTO_INCREMENT für Tabelle `teams_kontakt`
 --
 ALTER TABLE `teams_kontakt`
-  MODIFY `teams_kontakt_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=159;
+  MODIFY `teams_kontakt_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=160;
 
 --
 -- AUTO_INCREMENT für Tabelle `teams_liga`
@@ -11681,13 +11598,13 @@ ALTER TABLE `turniere_ergebnisse`
 -- AUTO_INCREMENT für Tabelle `turniere_liga`
 --
 ALTER TABLE `turniere_liga`
-  MODIFY `turnier_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=944;
+  MODIFY `turnier_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=921;
 
 --
 -- AUTO_INCREMENT für Tabelle `turniere_liste`
 --
 ALTER TABLE `turniere_liste`
-  MODIFY `liste_id` int(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=266;
+  MODIFY `liste_id` int(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=242;
 
 --
 -- AUTO_INCREMENT für Tabelle `turniere_log`
@@ -11700,22 +11617,10 @@ ALTER TABLE `turniere_log`
 --
 
 --
--- Constraints der Tabelle `abstimmung_teams`
---
-ALTER TABLE `abstimmung_teams`
-  ADD CONSTRAINT `abstimmung_teams_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams_liga` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Constraints der Tabelle `ligaleitung`
 --
 ALTER TABLE `ligaleitung`
   ADD CONSTRAINT `ligaleitung_ibfk_1` FOREIGN KEY (`spieler_id`) REFERENCES `spieler` (`spieler_id`);
-
---
--- Constraints der Tabelle `oeffi_challenge`
---
-ALTER TABLE `oeffi_challenge`
-  ADD CONSTRAINT `oeffi_challenge_ibfk_1` FOREIGN KEY (`spieler_id`) REFERENCES `spieler` (`spieler_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints der Tabelle `spiele`
