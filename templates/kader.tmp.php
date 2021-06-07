@@ -105,7 +105,7 @@
             <input type="checkbox" class="w3-check" value="zugestimmt" name="dsgvo" id="dsgvo">
             <label for="dsgvo" style="cursor: pointer;" class="w3-text-black">
                 Alle ausgewählten Spieler haben die aktuellen <?= Html::link(Nav::LINK_DSGVO, 'Datenschutz-Hinweise') ?>
-                gelesen und ihnen zugestimmt.
+                gelesen und ihnen zugestimmt. Bei unter 16-Jährigen wurde die Erlaubnis der Eltern eingeholt.
             </label>
         </p>
         <input type="submit" name="submit_takeover" value="Ausgewählte Spieler übernehmen" class="w3-button w3-primary">
