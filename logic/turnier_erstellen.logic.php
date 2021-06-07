@@ -13,6 +13,9 @@ while ($chosen >= 0) {
 }
 $block_higher_str = substr($block_higher_str, 0, -2);
 
+
+$startzeit = (string)($_POST['startzeit'] ?? '');
+
 // Formularauswertung
 if (isset($_POST['create_turnier'])) {
     $error = false;
@@ -53,7 +56,7 @@ if (isset($_POST['create_turnier'])) {
     }
 
     // Anzahl der Plätze bzw ob 8er DKO- oder Gruppen-Spielplan
-    $plaetze = (int)($_POST['plaetze'] ?? 0);
+    $plaetze = (string)($_POST['plaetze'] ?? 0);
     if ($plaetze === '8 dko') {
         $plaetze = 8;
         $format = 'dko';
@@ -101,7 +104,6 @@ if (isset($_POST['create_turnier'])) {
         }
 
         // Validierung Startzeit:
-        $startzeit = (string)($_POST['startzeit'] ?? '');
         if ((date("H", strtotime($startzeit)) < 9 || date("H", strtotime($startzeit)) > 15)) {
             $error = true;
             Html::error("Turniere dürfen frühestens um 9:00&nbsp;Uhr beginnen und müssen spätestens"
@@ -120,7 +122,7 @@ if (isset($_POST['create_turnier'])) {
     $hinweis = (string)$_POST['hinweis'];
     $startgebuehr = (string)$_POST['startgebuehr'];
     $organisator = (string)$_POST['organisator'];
-    $handy = (int)$_POST['handy'];
+    $handy = (string)$_POST['handy'];
 
     // Besprechung
     if (($_POST['besprechung'] ?? '') === 'Ja') {
