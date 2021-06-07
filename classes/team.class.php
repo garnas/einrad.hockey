@@ -63,7 +63,7 @@ class Team
     /**
      * Deaktiviert ein Ligateam, es kann im Ligacenter reaktiviert werden
      *
-     * @param $team_id
+     * @param int $team_id
      */
     public static function deactivate(int $team_id): void
     {
@@ -228,10 +228,10 @@ class Team
      * @param int $turnier_id
      * @param string $grund
      * @param int $prozentsatz
-     * @param string $saison
+     * @param int $saison
      */
     public static function set_strafe(int $team_id, string $verwarnung, int $turnier_id, string $grund,
-                                      int $prozentsatz, $saison = Config::SAISON): void
+                                      int $prozentsatz, int $saison = Config::SAISON): void
     {
         $sql = "
                 INSERT INTO teams_strafen (team_id, verwarnung, turnier_id, grund, prozentsatz, saison)
@@ -328,7 +328,7 @@ class Team
     /**
      * Setzt die Anzahl der Freilose eines Teams
      *
-     * @param $anzahl
+     * @param int $anzahl
      */
     public function set_freilose(int $anzahl): void
     {
