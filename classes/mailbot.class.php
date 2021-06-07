@@ -294,6 +294,9 @@ class MailBot
      */
     public static function mail_turnierdaten_geaendert(Turnier $turnier): void
     {
+        if ($turnier->details['art'] === 'spass') {
+            return;
+        }
         $betreff = "Turnierdaten geändert: " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
         ob_start();
             include(Env::BASE_PATH . "/templates/mails/mail_turnierdaten_geaendert.tmp.php");
