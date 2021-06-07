@@ -64,7 +64,7 @@ include '../../templates/header.tmp.php'; ?>
 <!-- Öffntlichkeits-Ausschuss -->
 <h2 class="w3-text-primary"><?= Html::icon("public", tag:"h2") ?> Öffentlichkeitsausschuss</h2>
 <p>
-    Der Öffentlichkeitsausschuss ist zuständig für die redaktionellen Inhalte der Internetseite. Darüber hinaus organisiert er Veranstaltungen und informiert über die Social Media-Kanaäle der Deutschen Einradhockeyliga.
+    Der Öffentlichkeitsausschuss ist zuständig für die redaktionellen Inhalte der Internetseite. Darüber hinaus organisiert er Veranstaltungen und informiert über die Social-Media-Kanäle der Deutschen Einradhockeyliga.
 </p>
 <p class="w3-text-grey"><?=Html::mailto(Env::OEFFIMAIL)?></p>
 <div class="w3-responsive">
