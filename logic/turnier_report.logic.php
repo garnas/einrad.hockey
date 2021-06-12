@@ -46,10 +46,9 @@ foreach ($kader_array as $team_id => $kader) { // Todo In Funktion
     }
 }
 
+$spieler_ausleihen = $tbericht->get_spieler_ausleihen();
 
 if ($change_tbericht) {
-
-    $spieler_ausleihen = $tbericht->get_spieler_ausleihen();
 
     // Spielerausleihe löschen
     foreach ($spieler_ausleihen as $ausleihe_id => $ausleihe) {
