@@ -45,15 +45,11 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
             <th class="w3-primary-3">Ligaausschusswahlen</th>
             <td>14. Februar 2022 - 27. Februar 2022</td>
         </tr>
-        <tr>
-            <th class="w3-primary-3">Amtsübernahme</th>
-            <td>20. Juni 2022</td>
-        </tr>
     </table>
 </div>
 
-<h1 class="w3-text-primary w3-margin-top">Weitere Saisontermine</h1>
-<p>Für die kommenden Saisons sind bereits diese Termine festgelegt</p>
+<h1 class="w3-text-primary w3-margin-top">Zukünftige Saisontermine</h1>
+<p>Für die kommenden Saisons sind bereits diese Termine festgelegt:</p>
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-bordered">
         <tr>
