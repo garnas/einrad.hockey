@@ -116,7 +116,7 @@ class Turnier
      */
     public function set(string $column, mixed $value): Turnier
     {
-        if ($this->details[$column] === $value) {
+        if ($this->details[$column] == $value) {
             return $this;
         }
         $column_esc = db::escape_column('turniere_details', $column);
@@ -421,7 +421,7 @@ class Turnier
      * @param $liste
      * @param int $pos
      */
-    public function nl_anmelden($teamname, $liste, $pos = 0): void
+    public function nl_anmelden($teamname, $liste, int $pos = 0): void
     {
         $teamname .= "*"; // Nichtligateams haben einen Stern hinter dem Namen
         if (Team::name_to_id($teamname) === NULL) { //TODO === NULL testen
@@ -522,7 +522,7 @@ class Turnier
      *
      * @param bool $send_mail
      */
-    public function spieleliste_auffuellen($send_mail = true): void //TODO Keine NLs nachrücken, wenn < 4 Ligateams, aber dann wieder NL mitrücken wenn ok
+    public function spieleliste_auffuellen(bool $send_mail = true): void //TODO Keine NLs nachrücken, wenn < 4 Ligateams, aber dann wieder NL mitrücken wenn ok
     {
         $freie_plaetze = $this->get_anzahl_freie_plaetze();
         $log = false;
@@ -575,7 +575,7 @@ class Turnier
      * @param string $liste
      * @param int $pos
      */
-    public function set_liste(int $team_id, string $liste, $pos = 0): void
+    public function set_liste(int $team_id, string $liste, int $pos = 0): void
     {
         $sql = "
                 UPDATE turniere_liste 
@@ -646,7 +646,7 @@ class Turnier
     /**
      * Gibt true aus, wenn der Teamblock in das Turnier passt.
      *
-     * @param $team_id
+     * @param int $team_id
      * @return bool
      */
     public function check_team_block(int $team_id): bool
@@ -799,7 +799,7 @@ class Turnier
      * Grund des Löschens
      * @param string $grund
      */
-    public function delete($grund = ''): void
+    public function delete(string $grund = ''): void
     {
         // Datenbank Backup
         db::sql_backup();
