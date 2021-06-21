@@ -18,6 +18,7 @@ class Nav
     public static function get_liga(): array
     {
         return [
+            [Env::BASE_URL . "/liga/saisontermine.php", "Saisontermine"],
             [Env::BASE_URL . "/liga/turniere.php", "Turniere"],
             [Env::BASE_URL . "/liga/ergebnisse.php", "Ergebnisse"],
             [Env::BASE_URL . "/liga/teams.php", "Teams"],
