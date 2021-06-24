@@ -162,6 +162,25 @@ class Turnier
     }
 
     /**
+     * Finalturniere erhalten
+     *
+     * Where-Klause für SQl-Query
+     * @param int $saison
+     * @return array
+     */
+    public static function get_finalturniere(int $saison = Config::SAISON): array
+    {
+        $sql = "
+            SELECT *
+            FROM turniere_liga
+            LEFT JOIN turniere_details ON turniere_liga.turnier_id = turniere_details.turnier_id
+            WHERE saison = ?
+            AND art LIKE '%final';
+            ";
+        return db::$db->query($sql, $saison)->esc()->fetch('turnier_id');
+    }
+
+    /**
      * Get Turniere, welche ein Team ausrichtet.
      *
      * @param int $team_id Ausrichter

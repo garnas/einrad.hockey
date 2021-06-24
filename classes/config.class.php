@@ -8,6 +8,15 @@ class Config
     public const SAISON = 27; // Saison 0 = Jahr 1995;
     public const SAISON_ANFANG = '14.08.2021';
     public const SAISON_ENDE = '29.05.2022';
+
+    /**
+     * Saisontermine
+     */
+    public const FINALE_EINS = '11.06.2022';
+    public const FINALE_ZWEI = '12.06.2022';
+    public const FINALE_DREI = '18.06.2022';
+    public const FINALE_VIER = '19.06.2022';
+
     /**
      * Log-Files
      */
