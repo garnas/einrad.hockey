@@ -2,50 +2,62 @@
 
 <h1 class="w3-text-primary">Finalturniere der Saison <?= Html::get_saison_string() ?></h1>
 
-    <div class="w3-container">
-        <ul class="w3-ul w3-leftbar w3-border-tertiary">
-            <?php if (isset($finale)) { ?>
-                <li>Das <a href='turnier_details.php?turnier_id=<?=$finale['turnier_id']?>'>Finale der Deutschen Einradhockeyliga</a> findet am <?=$finale['datum']?> in <?=$finale['ort']?> statt.</li>
-            <?php } else { ?>
-                <li>Für das Finale der Deutschen Einradhockeyliga am 
-                    <?=strftime("%d.%m", strtotime(Config::FINALE_EINS))?> / 
-                    <?=strftime("%d.%m", strtotime(Config::FINALE_ZWEI))?> / 
-                    <?=strftime("%d.%m", strtotime(Config::FINALE_DREI))?> / 
-                    <?=strftime("%d.%m.%y", strtotime(Config::FINALE_VIER))?>
-                    wird noch ein Ausrichter gesucht.</li>
-            <?php } ?>
-
-            <?php if (isset($bfinale)) { ?>
-                <li>Das <a href='turnier_details.php?turnier_id=<?=$bfinale['turnier_id']?>'>B-Finale der Deutschen Einradhockeyliga</a> findet am <?=$bfinale['datum']?> in <?=$bfinale['ort']?> statt.</li>
-            <?php } else { ?>
-                <li>Für das B-Finale der Deutschen Einradhockeyliga am 
-                    <?=strftime("%d.%m", strtotime(Config::FINALE_EINS))?> / 
-                    <?=strftime("%d.%m", strtotime(Config::FINALE_ZWEI))?> / 
-                    <?=strftime("%d.%m", strtotime(Config::FINALE_DREI))?> / 
-                    <?=strftime("%d.%m.%y", strtotime(Config::FINALE_VIER))?>
-                    wird noch ein Ausrichter gesucht.</li>
-            <?php } ?>
-
-            <?php if (isset($dfinale)) { ?>
-                <li>Das <a href='turnier_details.php?turnier_id=<?=$cfinale['turnier_id']?>'>C-Finale der Deutschen Einradhockeyliga</a> findet am <?=$dfinale['datum']?> in <?=$cfinale['ort']?> statt.</li>
-            <?php } else { ?>
-                <li>Für das C-Finale der Deutschen Einradhockeyliga am 
-                    <?=strftime("%d.%m", strtotime(Config::FINALE_EINS))?> / 
-                    <?=strftime("%d.%m", strtotime(Config::FINALE_ZWEI))?> / 
-                    <?=strftime("%d.%m", strtotime(Config::FINALE_DREI))?> / 
-                    <?=strftime("%d.%m.%y", strtotime(Config::FINALE_VIER))?>
-                    wird noch ein Ausrichter gesucht.</li>
-            <?php } ?>
-
-            <?php if (isset($dfinale)) { ?>
-                <li>Das <a href='turnier_details.php?turnier_id=<?=$dfinale['turnier_id']?>'>Saisonschlussturnier</a> findet am <?=$dfinale['datum']?> in <?=$dfinale['ort']?> statt.</li>
-            <?php } else { ?>
-                <li>Für das Saisonschlussturnier am 
-                    <?=strftime("%d.%m", strtotime(Config::FINALE_EINS))?> / 
-                    <?=strftime("%d.%m", strtotime(Config::FINALE_ZWEI))?> / 
-                    <?=strftime("%d.%m", strtotime(Config::FINALE_DREI))?> / 
-                    <?=strftime("%d.%m.%y", strtotime(Config::FINALE_VIER))?>
-                    wird noch ein Ausrichter gesucht.</li>
-            <?php } ?>
-        </ul>
+    <div class="w3-responsive w3-card">
+        <table class="w3-table w3-striped">
+            <thead>
+                <tr class="w3-primary">
+                    <td>Datum</td>
+                    <td>Finalturnier</td>
+                    <td>Ort</td>
+                </tr>            
+            </thead>
+            <!-- Finale der Deutschen Einradhockeyliga -->
+            <tr>
+                <?php if (isset($finale)) { ?>
+                    <td class="w3-right-align"><?=$finale['datum']?></td>
+                    <td><?= Html::link('turnier_details.php?turnier_id=' . $finale['turnier_id'], "Finale der Deutschen Einradhockeyliga", false) ?></td>
+                    <td class="w3-right-align"><?=$finale['ort']?></td>
+                <?php } else { ?>
+                    <td class="w3-right-align"><?=strftime("%d.", strtotime(Config::FINALE_EINS))?> / <?=strftime("%d.", strtotime(Config::FINALE_ZWEI))?> / <?=strftime("%d.", strtotime(Config::FINALE_DREI))?> / <?=strftime("%d.%m.%y", strtotime(Config::FINALE_VIER))?></td>
+                    <td>Finale der Deutschen Einradhockeyliga</td>
+                    <td class="w3-right-align">Ausrichter gesucht</td>
+                <?php } ?>
+            </tr>
+            <!-- B-Finale der Deutschen Einradhockeyliga -->
+            <tr>
+                <?php if (isset($bfinale)) { ?>
+                    <td class="w3-right-align"><?=$bfinale['datum']?></td>
+                    <td><?= Html::link('turnier_details.php?turnier_id=' . $bfinale['turnier_id'], "B-Finale der Deutschen Einradhockeyliga", false) ?></td>
+                    <td class="w3-right-align"><?=$bfinale['ort']?></td>
+                <?php } else { ?>
+                    <td class="w3-right-align"><?=strftime("%d.", strtotime(Config::FINALE_EINS))?> / <?=strftime("%d.", strtotime(Config::FINALE_ZWEI))?> / <?=strftime("%d.", strtotime(Config::FINALE_DREI))?> / <?=strftime("%d.%m.%y", strtotime(Config::FINALE_VIER))?></td>
+                    <td>B-Finale der Deutschen Einradhockeyliga</td>
+                    <td class="w3-right-align">Ausrichter gesucht</td>
+                <?php } ?>
+            </tr>
+            <!-- C-Finale der Deutschen Einradhockeyliga -->
+            <tr>
+                <?php if (isset($cfinale)) { ?>
+                    <td class="w3-right-align"><?=$cfinale['datum']?></td>
+                    <td><?= Html::link('turnier_details.php?turnier_id=' . $cfinale['turnier_id'], "C-Finale der Deutschen Einradhockeyliga", false) ?></td>
+                    <td class="w3-right-align"><?=$cfinale['ort']?></td>
+                <?php } else { ?>
+                    <td class="w3-right-align"><?=strftime("%d.", strtotime(Config::FINALE_EINS))?> / <?=strftime("%d.", strtotime(Config::FINALE_ZWEI))?> / <?=strftime("%d.", strtotime(Config::FINALE_DREI))?> / <?=strftime("%d.%m.%y", strtotime(Config::FINALE_VIER))?></td>
+                    <td>C-Finale der Deutschen Einradhockeyliga</td>
+                    <td class="w3-right-align">Ausrichter gesucht</td>
+                <?php } ?>
+            </tr>
+            <!-- Saisonschlussturnier -->
+            <tr>
+                <?php if (isset($cfinale)) { ?>
+                    <td class="w3-right-align"><?=$dfinale['datum']?></td>
+                    <td><?= Html::link('turnier_details.php?turnier_id=' . $dfinale['turnier_id'], "Saisonschlussturnier", false) ?></td>
+                    <td class="w3-right-align"><?=$dfinale['ort']?></td>
+                <?php } else { ?>
+                    <td class="w3-right-align"><?=strftime("%d.", strtotime(Config::FINALE_EINS))?> / <?=strftime("%d.", strtotime(Config::FINALE_ZWEI))?> / <?=strftime("%d.", strtotime(Config::FINALE_DREI))?> / <?=strftime("%d.%m.%y", strtotime(Config::FINALE_VIER))?></td>
+                    <td>Saisonschlussturnier</td>
+                    <td class="w3-right-align">Ausrichter gesucht</td>
+                <?php } ?>
+            </tr>
+        </table>
     </div>
