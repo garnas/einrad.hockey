@@ -30,6 +30,8 @@ if (isset($_POST['neuer_eintrag'])) {
         // Spieler Eintragen, wenn der Spieler schon existiert wird false zurückgegeben und eine Fehlermeldung
         if (Spieler::set_new_spieler($vorname, $nachname, $jahrgang, $geschlecht, $team_id)) {
             Html::info("Der Spieler wurde eingetragen");
+            (new Team ($team_id))->set_schiri_freilos(); // Check in der Funktion
+                // set_new_spieler kann auch Spieler mit Schiristatus aus anderen Kadern übernehmen
             header('Location: ' . db::escape($_SERVER['PHP_SELF']) . '?team_id=' . $team_id);
             die ();
         }
@@ -49,6 +51,7 @@ if (isset($_POST['submit_takeover'])) {
         }
         if ($changed ?? false) {
             Html::info("Spieler wurden in die neue Saison übernommen");
+            (new Team ($team_id))->set_schiri_freilos(); // Check in der Funktion
             header('Location: ' . db::escape($_SERVER['PHP_SELF']) . '?team_id=' . $team_id);
             die ();
         }

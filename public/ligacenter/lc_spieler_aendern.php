@@ -68,6 +68,7 @@ if (isset($_POST['spieler_aendern'])) {
         }
         if ($changed) {
             Html::info("Spielerdaten wurden geändert");
+            (new Team ($team_id))->set_schiri_freilos(); // Berechtigungscheck in der Funktion
             header('Location: lc_kader.php?team_id=' . $team_id);
             die();
         }

@@ -206,21 +206,6 @@ class Team
     }
 
     /**
-     * Fügt ein Freilos hinzu
-     *
-     * @param $team_id
-     */
-    public static function add_freilos($team_id): void
-    {
-        $sql = "
-                UPDATE teams_liga 
-                SET freilose = freilose + 1 
-                WHERE team_id = ?
-                ";
-        db::$db->query($sql, $team_id)->log();
-    }
-
-    /**
      * Teamstrafe eintragen
      *
      * @param int $team_id
@@ -258,9 +243,10 @@ class Team
     /**
      * Gibt die Teamstrafen aller Teams zurück
      *
+     * @param int $saison
      * @return array
      */
-    public static function get_strafen($saison = Config::SAISON): array
+    public static function get_strafen(int $saison = Config::SAISON): array
     {
         $sql = "
                 SELECT teams_strafen.*, teams_liga.teamname, turniere_details.ort, turniere_liga.datum 
@@ -311,7 +297,7 @@ class Team
     }
 
     /**
-     * Gibt Anzahl der Freilose des Teams zurück
+     * Gibt Anzahl der Freilose des Teams zurück.
      *
      * @return int
      */
@@ -326,7 +312,7 @@ class Team
     }
 
     /**
-     * Setzt die Anzahl der Freilose eines Teams
+     * Setzt die Anzahl der Freilose eines Teams.
      *
      * @param int $anzahl
      */
@@ -338,6 +324,97 @@ class Team
                 WHERE team_id = $this->id
                 ";
         db::$db->query($sql, $anzahl)->log();
+    }
+
+    /**
+     * Fügt ein Freilos hinzu.
+     *
+     * @param $team_id
+     */
+    public static function add_freilos($team_id): void
+    {
+        $sql = "
+                UPDATE teams_liga 
+                SET freilose = freilose + 1 
+                WHERE team_id = ?
+                ";
+        db::$db->query($sql, $team_id)->log();
+    }
+
+    /**
+     * Setzt das zweite Freilos mit Zeitstempel in der Datenbank.
+     */
+    public function set_zweites_freilos(): void
+    {
+        $sql = "
+                UPDATE teams_liga
+                SET freilose = freilose + 1, zweites_freilos = ?
+                WHERE team_id = $this->id
+                ";
+        db::$db->query($sql, date("Y-m-d"))->log();
+        Helper::log('schirifreilos.log', "$this->id hat für zwei Schiris ein Freilos erhalten.");
+        MailBot::mail_zweites_freilos($this);
+    }
+
+    /**
+     * Hat das Team in dieser Saison schon ein zweites Freilos für zwei Schiris erhalten?
+     *
+     * @return bool
+     */
+    public function check_schiri_freilos_erhalten(): bool
+    {
+        $erhalten_am = empty($this->details['zweites_freilos'])
+            ? 0
+            : strtotime($this->details['zweites_freilos']);
+        return $erhalten_am >= strtotime(Config::SAISON_ANFANG);
+    }
+
+    /**
+     * Ist das Team berechtigt ein zweites Freilos für zwei Schiris zu bekommen?
+     *
+     * @return bool
+     */
+    public function check_schiri_freilos_erhaltbar(): bool
+    {
+        // False, wenn die neue Saison noch nicht begonnen hat
+        if (time() < strtotime(Config::SAISON_ANFANG)){
+            return false;
+        }
+
+        // False, wenn schon ein Schiri-Freilos in der Saison erhalten wurde.
+        if ($this->check_schiri_freilos_erhalten()){
+            return false;
+        }
+
+        // Mehr als zwei Schiris im Kader?
+        $sql = "
+                SELECT count(schiri)
+                FROM spieler
+                WHERE schiri >= ?
+                AND team_id = $this->id
+                AND letzte_saison = ?
+                ";
+        return db::$db->query($sql, Config::SAISON, Config::SAISON)->fetch_one() >= 2;
+    }
+
+    /**
+     *  Überprüft alle Teams und setzt die Schiri-Freilose.
+     */
+    public static function set_schiri_freilose(): void {
+        $team_ids = self::get_liste_ids();
+        foreach ($team_ids as $id) {
+            (new Team($id))->set_schiri_freilos();
+        }
+    }
+
+    /**
+     *  Setzt das zweite Schiri-Freilos, falls das Team berechtigt ist.
+     */
+    public function set_schiri_freilos(): void {
+       if ($this->check_schiri_freilos_erhaltbar()){
+                Html::info($this->details['teamname'] . " hat ein zweites Freilos erhalten.");
+                $this->set_zweites_freilos();
+            }
     }
 
     /**

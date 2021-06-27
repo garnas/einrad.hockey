@@ -59,7 +59,12 @@
         </tr>
         <tr>
             <th class="w3-primary">Freilose</th>
-            <td><?=$team->details['freilose']?></td>
+            <td>
+                <?=$team->details['freilose']?>
+                <?php if($team->check_schiri_freilos_erhalten()){ ?>
+                    <span class="w3-text-green"><?= Html::icon("check") ?> (Schirifreilos erhalten)</span>
+                <?php } //end if ?>
+            </td>
         </tr>
         <tr>
             <th class="w3-primary">Ligavertreter</th>

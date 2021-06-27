@@ -303,4 +303,22 @@ class MailBot
         $inhalt = ob_get_clean();
         self::add_mail($betreff, $inhalt, Env::LAMAIL);
     }
+
+    /**
+     * Erstellt eine Mail in der Datenbank, dass ein Team ein zweites Freilos erhalten hat.
+     *
+     * @param Team $team
+     */
+    public static function mail_zweites_freilos(Team $team): void
+    {
+        $betreff = "Zweites Freilos erhalten";
+        ob_start();
+        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_zweites_freilos.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+        $inhalt = ob_get_clean();
+        $emails = (new Kontakt ($team->id))->get_emails('info');
+        self::add_mail($betreff, $inhalt, $emails);
+    }
+
 }

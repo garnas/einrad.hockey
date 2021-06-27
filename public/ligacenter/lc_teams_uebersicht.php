@@ -89,6 +89,7 @@ include '../../templates/header.tmp.php';
             <th>Team ID</th>
             <th>Teamname</th>
             <th>Freilose</th>
+            <th>Zweites Freilos</th>
             <th>Kader</th>
             <th>Schiris</th>
             <th>Kader (alt)</th>
@@ -99,6 +100,7 @@ include '../../templates/header.tmp.php';
                 <td><?=$team['team_id']?></td>
                 <td><?=Html::link('lc_kader.php?team_id='. $team_id, $team['teamname'])?></td>
                 <td><?=$team['freilose']?></td>
+                <td><?=$team['zweites_freilos']?></td>
                 <td><?=$team['kader']?></td>
                 <td><?=$team['schiris']?></td>
                 <td class="w3-text-grey"><?=$team['kader_alt']?></td>

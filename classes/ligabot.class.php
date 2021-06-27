@@ -113,6 +113,8 @@ class LigaBot
             }
             $kw = date('W', $datum); // Kalenderwoche übernehmen für die nächste Iteration
         }
+
+        Team::set_schiri_freilose();
     }
 
     /**
