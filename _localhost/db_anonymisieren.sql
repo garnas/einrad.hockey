@@ -5,9 +5,9 @@ TRUNCATE TABLE teams_strafen;
 TRUNCATE TABLE neuigkeiten;
 TRUNCATE TABLE ligakarte_gesuch;
 TRUNCATE TABLE mailbot;
-TRUNCATE TABLE abstimmung_ergebnisse;
-TRUNCATE TABLE abstimmung_teams;
-TRUNCATE TABLE oeffi_challenge;
+# TRUNCATE TABLE abstimmung_ergebnisse;
+# TRUNCATE TABLE abstimmung_teams;
+# TRUNCATE TABLE oeffi_challenge;
 TRUNCATE TABLE spieler_ausleihen;
 TRUNCATE TABLE turniere_berichte;
 TRUNCATE TABLE turniere_geloescht;
@@ -24,7 +24,7 @@ INSERT INTO ligaleitung(funktion, login, passwort, spieler_id, email) VALUES ('l
 UPDATE turniere_details SET organisator='Vorname Nachname', handy='1234 56789', hinweis='Beispieltext';
 
 -- Teams
-UPDATE teams_liga SET passwort='$2y$10$PCOkOZQw6wut4uRCQyLWgup7nFn6Gv0zbqJ8ZhEds7wZ753Ba7wd6', freilose='2';
+UPDATE teams_liga SET passwort='$2y$10$PCOkOZQw6wut4uRCQyLWgup7nFn6Gv0zbqJ8ZhEds7wZ753Ba7wd6', freilose='1', zweites_freilos = NULL;
 UPDATE teams_liga SET passwort_geaendert='Ja' WHERE aktiv = 'Ja';
 UPDATE teams_details SET ligavertreter='Vorname Nachname', homepage='https://test.einrad.hockey', teamfoto=NULL;
 UPDATE teams_kontakt SET email='test@einrad.hockey';
