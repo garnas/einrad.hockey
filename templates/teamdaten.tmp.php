@@ -5,7 +5,6 @@
         <?= Html::link(
                 (Helper::$ligacenter) ? 'lc_teamdaten_aendern.php?team_id=' . $team->id : 'tc_teamdaten_aendern.php',
                 Html::icon('create') . ' Team- und Kontaktdaten ändern') ?>
-        </>
     </p>
 <div class="w3-panel w3-card-4">
     <h2 class="w3-text-primary"><?= Html::icon("image", tag: "h2") ?> Teamfoto</h2>
@@ -88,6 +87,7 @@
         </tr>
     </table>
 </div>
+
 <h2 class="w3-text-primary"><?= Html::icon("mail", tag: "h2") ?> Kontaktdaten</h2>
 <div class="w3-responsive w3-card-4">
     <table class="w3-table w3-striped">

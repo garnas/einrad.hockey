@@ -111,7 +111,7 @@ class db
      * @param mixed $input Zu debuggende Variable
      * @param bool $types Sollen Typen angezeigt werden?
      */
-    public static function debug(mixed $input, $types = false): void
+    public static function debug(mixed $input, bool $types = false): void
     {
         $input = self::escape($input);
         // Show Types?

@@ -94,7 +94,7 @@ class Team
     /**
      * Reaktiviert ein deaktiviertes Team
      *
-     * @param $team_id
+     * @param int $team_id
      */
     public static function activate(int $team_id): void
     {
@@ -459,7 +459,6 @@ class Team
 
     /**
      * Teamfoto löschen
-     *
      */
     public function delete_foto(): void
     {

@@ -64,12 +64,12 @@ include '../../templates/header.tmp.php';
 <span class="w3-text-grey">Saison <?=Html::get_saison_string()?></span>
 
 <!-- Infobox -->
-<b>
+<div style="font-weight: bold;">
     <p>&sum; Spieler: <span class="w3-text-green"><?=$max_spieler?></span></p>
     <p>&sum; Schiris: <span class="w3-text-green"><?=$max_schiris?></span></p>
     <p>&sum; Teams: <span class="w3-text-green"><?=count($teams)?></span></p>
     <p>&sum; Teams mit zwei oder mehr Schiris: <span class="w3-text-green"><?=$teams_mit_zwei_schiris?></span></p>
-</b>
+</div>
 
 <!-- Button 2. Freilos 
 <form class="w3-section" method='post'>

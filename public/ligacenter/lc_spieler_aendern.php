@@ -66,6 +66,7 @@ if (isset($_POST['spieler_aendern'])) {
             $spieler->set_detail('team_id', $team_id);
             $changed = true;
         }
+
         if ($changed) {
             Html::info("Spielerdaten wurden geändert");
             (new Team ($team_id))->set_schiri_freilos(); // Berechtigungscheck in der Funktion
@@ -108,9 +109,7 @@ include '../../templates/header.tmp.php';
                        name="spieler_auswahl"
                 >
                 <datalist id="spielerliste">
-                    <?php foreach ($spieler_liste
-
-                    as $spieler_id => $name){ ?>
+                    <?php foreach ($spieler_liste as $spieler_id => $name){ ?>
                     <option value='<?= $name . ' ' . $spieler_id ?>'>
                         <?php } //end foreach ?>
                 </datalist>
@@ -227,8 +226,7 @@ include '../../templates/header.tmp.php';
     </form>
     <form onsubmit="return confirm(
                 'Der Spieler mit der ID <?= $spieler->details['spieler_id'] ?> <?= $spieler->details['vorname'] . ' '
-                . $spieler->details['nachname'] ?>) wird gelöscht werden.'
-            );"
+                . $spieler->details['nachname'] ?>) wird gelöscht werden.');"
           class="w3-container w3-card-4 w3-panel"
           method="POST">
         <p>

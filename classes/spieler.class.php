@@ -14,7 +14,7 @@ class Spieler
 
     /**
      * Spieler constructor.
-     * @param $spieler_id
+     * @param int $spieler_id
      */
     public function __construct(int $spieler_id)
     {
