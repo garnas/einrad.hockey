@@ -6,7 +6,7 @@ class Config
      * Saison
      */
     public const SAISON = 27; // Saison 0 = Jahr 1995;
-    public const SAISON_ANFANG = '14.08.2021';
+    public const SAISON_ANFANG = '16.08.2021';
     public const SAISON_ENDE = '29.05.2022';
     /**
      * Log-Files
