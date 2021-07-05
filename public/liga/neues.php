@@ -248,7 +248,7 @@ include '../../templates/header.tmp.php'; ?>
                 <p><?= Html::link(Nav::LINK_EV_SH, " Einradverband Schleswig-Holstein", true, "link") ?></p>
                 <p><?= Html::link(Nav::LINK_EV_BY, " Einradverband Bayern", true, "link") ?></p>
 
-                <p class="w3-text-grey w3-border-top w3-border-grey"><?= Html::icon("bookmark") ?> Förderation</p>
+                <p class="w3-text-grey w3-border-top w3-border-grey"><?= Html::icon("bookmark") ?> Föderation</p>
                 <p><?= Html::link(Nav::LINK_IUF, " International Unicycle Federation", true, "link") ?></p>
             </div>
         </div>
