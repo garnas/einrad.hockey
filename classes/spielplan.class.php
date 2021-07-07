@@ -210,7 +210,7 @@ class Spielplan
     public static function delete(Turnier $turnier): void
     {
         if (!empty($turnier->details['spielplan_vorlage'])) {
-            $turnier->set('spielplan_vorlage', null);
+            $turnier->set_liga('spielplan_vorlage', null);
         }
         // Es existiert kein dynamischer Spielplan
         if (!self::check_exist($turnier->id)) {
