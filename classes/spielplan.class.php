@@ -157,7 +157,7 @@ class Spielplan
         // Turnierlog
         $turnier->log("Automatischer Jgj-Spielplan erstellt.");
         $turnier->set_liga('phase', 'spielplan');
-        $turnier->set('spielplan_vorlage', $vorlage);
+        $turnier->set_liga('spielplan_vorlage', $vorlage);
 
         return true;
     }
