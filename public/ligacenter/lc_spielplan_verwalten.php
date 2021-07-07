@@ -62,7 +62,7 @@ if (isset($_POST['ergebnis_eintragen'])) {
 // Spielplan automatisch erstellen
 if (isset($_POST['auto_spielplan_erstellen'])) {
     $error = false;
-    if ($turnier->details['phase'] != "melde") {
+    if ($turnier->details['phase'] != "melde") { //TODO and is ligaturnier
         Html::error("Das Turnier muss in der Meldephase sein.");
         $error = true;
     }
