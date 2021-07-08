@@ -21,6 +21,12 @@ include '../../templates/header.tmp.php';
             Ligamodus
         </p>
     </a>
+    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_TURNIER ?>">
+        <p>
+            <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i>
+            Turniermodi
+        </p>
+    </a>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS_KURZ ?>">
         <p>
             <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file</i>
@@ -30,14 +36,8 @@ include '../../templates/header.tmp.php';
     <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">28.06.2021</p>
 </div>
 <div class="w3-panel w3-card">
-    <h2 class="w3-text-primary">Turniermodi</h2>
+    <h2 class="w3-text-primary">Finale der Deutschen Einradhockeyliga</h2>
     <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
-    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_TURNIER ?>">
-        <p>
-            <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i>
-            Turniermodi
-        </p>
-    </a>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_FINALE ?>">
         <p>
             <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
@@ -45,25 +45,11 @@ include '../../templates/header.tmp.php';
             Turniermodus des Finales der Deutschen Einradhockeyliga
         </p>
     </a>
-    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_FINALE_MODA ?>">
+    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_FINALE_MODI ?>">
         <p>
-            <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file
+            <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
             </i>
-            Turniermodus A Finale der Deutschen Einradhockeyliga
-        </p>
-    </a>
-    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_FINALE_MODB ?>">
-        <p>
-            <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file
-            </i>
-            Turniermodus B Finale der Deutschen Einradhockeyliga
-        </p>
-    </a>
-    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_FINALE_MODC ?>">
-        <p>
-            <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file
-            </i>
-            Turniermodus C Finale der Deutschen Einradhockeyliga
+            Spielpläne Finalmodi
         </p>
     </a>
     <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">08.07.2021</p>

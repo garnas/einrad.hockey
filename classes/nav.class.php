@@ -181,9 +181,7 @@ class Nav
      */
     public const LINK_MODUS = Env::BASE_URL . '/dokumente/ligamodus.pdf';
     public const LINK_FINALE = Env::BASE_URL . '/dokumente/finalturnier.pdf';
-    public const LINK_FINALE_MODA = Env::BASE_URL . '/dokumente/finalturnier_modus-a.pdf';
-    public const LINK_FINALE_MODB = Env::BASE_URL . '/dokumente/finalturnier_modus-b.pdf';
-    public const LINK_FINALE_MODC = Env::BASE_URL . '/dokumente/finalturnier_modus-c.pdf';
+    public const LINK_FINALE_MODI = Env::BASE_URL . '/dokumente/finalturnier_spielmodi.pdf';
     public const LINK_DSGVO = Env::BASE_URL . '/dokumente/datenschutz-hinweise.pdf';
     public const LINK_FRANCE = 'https://monocycle.info/ligue-de-monocycle-basket-remaniement-co/';
     public const LINK_SPIELPLAENE_ALT = Env::BASE_URL . '/dokumente/alte_spielplan_vorlagen.pdf';
