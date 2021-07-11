@@ -106,7 +106,7 @@ include '../../templates/header.tmp.php'; ?>
                             $turnier['ort'],
                             false,
                             "open_in_new") ?>
-                        <i>(<?= $turnier['tblock'] ?>)</i>
+                        <i>(<?= $turnier['art'] == 'spass' ? "Spaß" : $turnier['block'] ?>)</i>
                     </p>
                 <?php } //end foreach?>
             </div>
