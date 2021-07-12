@@ -9,6 +9,16 @@ if ($turnier->details['ausrichter'] == ($_SESSION['logins']['team']['id'] ?? '')
     $change_tbericht = false;
 }
 
+$anmeldungen = $turnier->get_anmeldungen();
+$spielen_liste = $anmeldungen['spiele'];
+
+$lese_berechtigung = false;
+foreach ($spielen_liste as $team) {
+    if (($team['team_id'] == ($_SESSION['logins']['team']['id'] ?? '')) || Helper::$ligacenter) {
+        $lese_berechtigung = true;
+    }
+}
+
 if (strtotime($turnier->details['datum']) - time() < -3 * 24 * 60 * 60 && !Helper::$ligacenter) {
     $change_tbericht = false; //Berechtigung zum Verändern des Reports widerrufen für Ausrichter, wenn das Turnier mehr als zwei Tage zurückliegt.
     if ($turnier->details['ausrichter'] == ($_SESSION['logins']['team']['id'] ?? '')) {
@@ -25,6 +35,14 @@ if (empty($turnier->details)) {
     die();
 }
 
+// Gibt es eine Leseberechtigung?
+if (!$lese_berechtigung) {
+    Html::notice("Der Turnierreport kann nur von teilnehmenden Teams eingesehen werden.");
+    header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->id);
+    die();
+}
+
+// Ist es ein Spass-Turnier?
 if ($turnier->details['art'] == 'spass') {
     Html::notice("Spaßturniere erfordern keinen Turnierreport.");
     header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->id);
