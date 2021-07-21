@@ -38,7 +38,7 @@ include '../../templates/header.tmp.php'; # Html-header und Navigation
 if (isset($DEBUGMODUS)) { # Start Debug Modus
     echo '<form method="post"> ' .
         '<div class="w3-card w3-panel w3-leftbar w3-border-red w3-pale-red"> ' .
-        'Frage Nr.: <input type="text" size="3" name="ausgewaehlte_nummer"> ' .
+        'Fragen-ID: <input type="text" size="3" name="ausgewaehlte_nummer"> ' .
         '<input type="submit" value="auswählen"> ' .
         '(leere Eingabe erhöht Fragennummer um 1) (Debug Modus)</div></form>';
 } # Ende Debug Modus
@@ -77,7 +77,7 @@ if (isset($DEBUGMODUS)) { # Start Debug Modus
     $debuginfo .= "<BR>Punkte:        " . $frage['punkte'];
     $debuginfo .= "<BR>bestätigt:     " . $frage['bestaetigt'];
     $debuginfo .= "<BR>interne Notiz: " . $frage['interne_notiz'];
-    Html::message('error', $debuginfo, "Infos zu Frage Nr. " . $frage_id .
+    Html::message('error', $debuginfo, "Infos zu Fragen-ID " . $frage_id .
         " (Debug Modus):", esc: false);
 } # Ende Debug Modus
 

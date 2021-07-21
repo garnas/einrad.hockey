@@ -19,7 +19,7 @@ class SchiriTest
             $sql = "
                 SELECT *
                 FROM schiri_test
-                WHERE INSTR(LJBF, ?) > 0
+                WHERE INSTR(LJBF, ?) > 0 AND bestaetigt = 'ja'
                 ORDER BY RAND()
                 LIMIT ?
                 ";
@@ -28,7 +28,7 @@ class SchiriTest
             $sql = "
                 SELECT *
                 FROM schiri_test
-                WHERE INSTR(LJBF, ?) > 0 AND kategorie = ?
+                WHERE INSTR(LJBF, ?) > 0 AND bestaetigt = 'ja' AND kategorie = ?
                 ORDER BY RAND()
                 LIMIT ?
                 ";
