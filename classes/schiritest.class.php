@@ -62,9 +62,16 @@ class SchiriTest
     #-------------------------------------------------------------------------
 
     # Frage anzeigen:
-    public static function frage_anzeigen(int $index, array $frage): void
+    public static function frage_anzeigen(int $frage_id, int $index, array $frage): void
     {
-        echo '<h3 class="w3-topbar">Frage Nr. ' . $index . '</h3>';
+        if ($index>0) {
+            $fragennummer = 'Frage Nr. ' . $index ;
+        } else {
+            $fragennummer = '';
+        }
+        echo '<h3 class="w3-topbar">' . $fragennummer .
+            '<span style="float:right"><font size="-2">(id: ' .
+            $frage_id . ')</font></span></h3>';
         echo '<h4>' . $frage['frage'] . '</h4>';
         if (!empty($frage['name_video'])) { # Video zur Frage:
             echo '<div style="max-width: 500px">';

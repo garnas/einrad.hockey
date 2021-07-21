@@ -42,8 +42,7 @@ include '../../templates/header.tmp.php'; # Html-header und Navigation
 echo '<H4><form method="post">' .
     '<input type="submit" class="w3-btn w3-block w3-pale-red"' .
     ' value="Neuen Test erzeugen"></form></H4>';
-# Ende Debug Modus
-if (isset($DEBUGMODUS)) { # Start Debug Modus
+if (isset($DEBUGMODUS)) {
     $index = 0;
     echo '<table class="w3-table w3-pale-red w3-bordered">';
     echo '<tr><td>Nr.</td><td>id</td><td>Kat.</td><td>Level</td><td>Frage</td></tr>';
@@ -58,10 +57,23 @@ if (isset($DEBUGMODUS)) { # Start Debug Modus
 } # Ende Debug Modus
 
 if (isset($_POST['beantworten'])) { # Test auswerten:
-    echo '<H2>Ergebnis: Du hast ' . $richtig . ' von ' . count($fragen) . ' Fragen ';
-    echo 'richtig beantwortet.</H2>';
     echo 'Danke für das Ausfüllen des Schiritests, deine Antworten sind an den ';
-    echo 'Ligaausschuss geschickt worden. Hier ist eine ausführliche Auswertung.';
+    echo 'Ligaausschuss geschickt worden.';
+    if ($richtig >= 25) { # bestanden:
+        echo '<H1 class="w3-center w3-text-green">' .
+            Html::icon("sentiment_satisfied_alt", class:"md-36") .
+            ' Herzlichen Glückwunsch, du hast bestanden! ' .
+            Html::icon("sentiment_satisfied_alt", class:"md-36") .
+            '</H1>';
+    } else {
+        echo '<H1 class="w3-center w3-text-red">' .
+            Html::icon("sentiment_very_dissatisfied", class: "md-36") .
+            ' Du hast leider nicht bestanden. ' .
+            Html::icon("sentiment_very_dissatisfied", class: "md-36") .
+            '</H1>';
+    }
+    echo '<H4>Es wurden ' . $richtig . ' von ' . count($fragen) . ' Fragen ';
+    echo 'richtig beantwortet, eine ausführliche Auswertung findest du hier:</H4>';
     echo '<UL><LI>Deine Antworten werden mit einem Häkchen im Kreis angezeigt.</LI>';
     echo '<LI>Der grüne bzw. rote Daumen zeigt, ob deine Antwort stimmt.</LI>';
     echo '<LI>Die richtigen Antworten sind jetzt fett gedruckt, die falschen ';
@@ -81,7 +93,7 @@ $frage_index = 0;
 foreach ($fragen as $frage_id => $frage) { # Schleife über alle Fragen:
     echo '<div class="w3-section w3-display-container">';
     $frage_index++;
-    SchiriTest::frage_anzeigen($frage_index, $frage);
+    SchiriTest::frage_anzeigen($frage_id, $frage_index, $frage);
     if (isset($_POST['beantworten'])) { # Test auswerten:
         SchiriTest::auswertung_anzeigen($frage_id, $frage);
     } else { # Test anzeigen:

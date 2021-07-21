@@ -45,7 +45,7 @@ if (isset($DEBUGMODUS)) { # Start Debug Modus
 echo '<form method="post">';
 foreach ($fragen as $frage_id => $frage) { # Schleife über alle Fragen:
     echo '<div class="w3-section w3-display-container">';
-    SchiriTest::frage_anzeigen($frage_id, $frage);
+    SchiriTest::frage_anzeigen($frage_id, 0, $frage); # dummy Fragennummer
     if (isset($_POST['beantworten'])) { # Test auswerten:
         SchiriTest::auswertung_anzeigen($frage_id, $frage);
     } else { # Test anzeigen:
