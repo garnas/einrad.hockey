@@ -19,7 +19,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '3e4bd534d58f72b426b580ff95ac736cc8fd7c4b',
+    'reference' => '83e79b709b818f3dc3225f40850d65b5b04ff4ba',
     'name' => '__root__',
   ),
   'versions' => 
@@ -31,7 +31,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '3e4bd534d58f72b426b580ff95ac736cc8fd7c4b',
+      'reference' => '83e79b709b818f3dc3225f40850d65b5b04ff4ba',
     ),
     'gregwar/captcha' => 
     array (
@@ -44,12 +44,12 @@ private static $installed = array (
     ),
     'mpdf/mpdf' => 
     array (
-      'pretty_version' => 'v8.0.10',
-      'version' => '8.0.10.0',
+      'pretty_version' => 'v8.0.11',
+      'version' => '8.0.11.0',
       'aliases' => 
       array (
       ),
-      'reference' => '1333a962cd2f7ae1a127b7534b7734b58179186f',
+      'reference' => 'af17afbbfa0b6ce76defc8da5d02a73d54f94c64',
     ),
     'myclabs/deep-copy' => 
     array (
@@ -75,12 +75,12 @@ private static $installed = array (
     ),
     'phpmailer/phpmailer' => 
     array (
-      'pretty_version' => 'v6.4.1',
-      'version' => '6.4.1.0',
+      'pretty_version' => 'v6.5.0',
+      'version' => '6.5.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '9256f12d8fb0cd0500f93b19e18c356906cbed3d',
+      'reference' => 'a5b5c43e50b7fba655f793ad27303cd74c57363c',
     ),
     'psr/log' => 
     array (
@@ -102,12 +102,12 @@ private static $installed = array (
     ),
     'symfony/finder' => 
     array (
-      'pretty_version' => 'v5.2.4',
-      'version' => '5.2.4.0',
+      'pretty_version' => 'v5.3.0',
+      'version' => '5.3.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '0d639a0943822626290d169965804f79400e6a04',
+      'reference' => '0ae3f047bed4edff6fd35b26a9a6bfdc92c953c6',
     ),
   ),
 );

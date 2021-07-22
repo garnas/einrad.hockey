@@ -63,7 +63,7 @@ class Team
     /**
      * Deaktiviert ein Ligateam, es kann im Ligacenter reaktiviert werden
      *
-     * @param $team_id
+     * @param int $team_id
      */
     public static function deactivate(int $team_id): void
     {
@@ -183,7 +183,7 @@ class Team
                 FROM teams_liga
                 WHERE ligateam = 'Ja' AND aktiv = 'Ja' 
                 ORDER BY team_id 
-                "; //TODO Früher nach RAND() für Abhandlung Ligabot, jetzt besser shuffle() einbauen
+                ";
         return db::$db->query($sql)->esc()->list('team_id');
     }
 
@@ -228,10 +228,10 @@ class Team
      * @param int $turnier_id
      * @param string $grund
      * @param int $prozentsatz
-     * @param string $saison
+     * @param int $saison
      */
     public static function set_strafe(int $team_id, string $verwarnung, int $turnier_id, string $grund,
-                                      int $prozentsatz, $saison = Config::SAISON): void
+                                      int $prozentsatz, int $saison = Config::SAISON): void
     {
         $sql = "
                 INSERT INTO teams_strafen (team_id, verwarnung, turnier_id, grund, prozentsatz, saison)
@@ -260,7 +260,7 @@ class Team
      *
      * @return array
      */
-    public static function get_strafen(): array
+    public static function get_strafen($saison = Config::SAISON): array
     {
         $sql = "
                 SELECT teams_strafen.*, teams_liga.teamname, turniere_details.ort, turniere_liga.datum 
@@ -271,11 +271,11 @@ class Team
                 ON turniere_liga.turnier_id = teams_strafen.turnier_id
                 LEFT JOIN turniere_details
                 ON turniere_details.turnier_id = teams_strafen.turnier_id
-                WHERE teams_strafen.saison = '" . Config::SAISON . "'
+                WHERE teams_strafen.saison = ?
                 AND teams_liga.aktiv = 'Ja'
                 ORDER BY turniere_liga.datum DESC
                 ";
-        return db::$db->query($sql)->esc()->fetch('strafe_id');
+        return db::$db->query($sql, $saison)->esc()->fetch('strafe_id');
     }
 
     /**
@@ -328,7 +328,7 @@ class Team
     /**
      * Setzt die Anzahl der Freilose eines Teams
      *
-     * @param $anzahl
+     * @param int $anzahl
      */
     public function set_freilose(int $anzahl): void
     {

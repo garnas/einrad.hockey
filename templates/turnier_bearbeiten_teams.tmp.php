@@ -8,7 +8,7 @@
             <i class="w3-text-grey">Turniere dürfen frühestens um 9:00&nbsp;Uhr beginnen und müssen um 20:00&nbsp;Uhr beendet sein</i>
         </p>
         <p>
-            <input class="w3-check" type="checkbox" id="besprechung" name="besprechung" <?php if ($turnier->details['besprechung'] == "Ja"){?> checked <?php } //endif?> value="Ja">
+            <input class="w3-check" type="checkbox" id="besprechung" name="besprechung" <?php if ($turnier->details['besprechung'] == "Ja"){?>checked <?php } //endif?>value="Ja">
             <label style="cursor: pointer;" class="w3-hover-text-secondary w3-text-primary" for="besprechung"> Gemeinsame Besprechung aller Teams 15 min vor Turnierbeginn</label>
         </p>
     </div>
@@ -34,8 +34,8 @@
                 <option <?php if($turnier->details['plaetze'] == '5'){?>selected<?php }?> value="5">5 Teams</option>
                 <option <?php if($turnier->details['plaetze'] == '6'){?>selected<?php }?> value="6">6 Teams</option>
                 <option <?php if($turnier->details['plaetze'] == '7'){?>selected<?php }?> value="7">7 Teams</option>
-                <option <?php if($turnier->details['plaetze'] == '8' && $turnier->details['format'] === 'gruppen'){?>selected<?php }?> value="8 gruppen">8 Teams (zwei Gruppen)</option>
-                <option <?php if($turnier->details['plaetze'] == '8' && $turnier->details['format'] === 'dko'){?>selected<?php }?> value="8 dko">8 Teams (Doppel-KO)</option>
+                <option <?php if($turnier->details['plaetze'] == '8' && $turnier->details['format'] === 'gruppen'){?>selected<?php }?>value="8 gruppen">8 Teams (zwei Gruppen)</option>
+                <option <?php if($turnier->details['plaetze'] == '8' && $turnier->details['format'] === 'dko'){?>selected<?php }?>value="8 dko">8 Teams (Doppel-KO)</option>
             </select>
         </p>
     </div>

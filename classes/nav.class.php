@@ -18,13 +18,12 @@ class Nav
     public static function get_liga(): array
     {
         return [
-            [Env::BASE_URL . "/liga/jubilaeum.php", "25 Jahre Liga"],
+            [Env::BASE_URL . "/liga/saisontermine.php", "Saisontermine"],
             [Env::BASE_URL . "/liga/turniere.php", "Turniere"],
             [Env::BASE_URL . "/liga/ergebnisse.php", "Ergebnisse"],
             [Env::BASE_URL . "/liga/teams.php", "Teams"],
             [Env::BASE_URL . "/liga/tabelle.php#meister", "Meisterschaftstabelle"],
             [Env::BASE_URL . "/liga/tabelle.php#rang", "Rangtabelle"]
-
         ];
     }
 
@@ -100,6 +99,7 @@ class Nav
     {
         return [
             [Env::BASE_URL . "/liga/ueber_uns.php", "Über uns"],
+            [Env::BASE_URL . "/liga/jubilaeum.php", "25 Jahre Liga"],
             [Env::BASE_URL . "/liga/archiv.php", "Archiv"],
             [Env::BASE_URL . "/ligacenter/lc_login.php", "Ligacenter"],
             [Env::BASE_URL . "/liga/kontakt.php", "Kontakt"],
@@ -180,6 +180,8 @@ class Nav
      * Dokumente
      */
     public const LINK_MODUS = Env::BASE_URL . '/dokumente/ligamodus.pdf';
+    public const LINK_FINALE = Env::BASE_URL . '/dokumente/finalturnier.pdf';
+    public const LINK_FINALE_MODI = Env::BASE_URL . '/dokumente/finalturnier_spielmodi.pdf';
     public const LINK_DSGVO = Env::BASE_URL . '/dokumente/datenschutz-hinweise.pdf';
     public const LINK_FRANCE = 'https://monocycle.info/ligue-de-monocycle-basket-remaniement-co/';
     public const LINK_SPIELPLAENE_ALT = Env::BASE_URL . '/dokumente/alte_spielplan_vorlagen.pdf';

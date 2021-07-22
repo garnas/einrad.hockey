@@ -156,8 +156,8 @@ class Spielplan
 
         // Turnierlog
         $turnier->log("Automatischer Jgj-Spielplan erstellt.");
-        $turnier->set_phase('spielplan');
-        $turnier->set('spielplan_vorlage', $vorlage);
+        $turnier->set_liga('phase', 'spielplan');
+        $turnier->set_liga('spielplan_vorlage', $vorlage);
 
         return true;
     }
@@ -210,7 +210,7 @@ class Spielplan
     public static function delete(Turnier $turnier): void
     {
         if (!empty($turnier->details['spielplan_vorlage'])) {
-            $turnier->set('spielplan_vorlage', null);
+            $turnier->set_liga('spielplan_vorlage', null);
         }
         // Es existiert kein dynamischer Spielplan
         if (!self::check_exist($turnier->id)) {
@@ -224,7 +224,7 @@ class Spielplan
                 ";
         db::$db->query($sql)->log();
         $turnier->log("Automatischer JgJ-Spielplan gelöscht.");
-        $turnier->set_phase('melde');
+        $turnier->set_liga('phase', 'melde');
     }
 
     /**
@@ -522,7 +522,6 @@ class Spielplan
 //        }
 
 
-
         // Gibt die Wertung des schlechtplatziertesten Ligateams aus
         $reverse_tabelle = array_reverse($this->platzierungstabelle, true);
         $last_ligateam = function () use ($reverse_tabelle) {
@@ -536,7 +535,7 @@ class Spielplan
 
         $ligapunkte = 0;
         foreach ($reverse_tabelle as $team_id => $eintrag) {
-            if (is_null($this->teamliste[$team_id]['wertigkeit'])){
+            if (is_null($this->teamliste[$team_id]['wertigkeit'])) {
                 // Es handelt sich um ein Nichtligateam // max($werte) + 1 wenn nicht Letzter.
                 $wert = max($werte ?? [round($last_ligateam() / 2 - 1), 14]) + 1;
             } else {
