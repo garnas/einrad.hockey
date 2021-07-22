@@ -1,6 +1,6 @@
 <?php
-// Dies hier muss in jeder geschützten Seite direkt nach von init.php eingefügt werden!
-if(!isset($_SESSION['logins']['team'])) {
+// Dies hier muss in jeder geschützten Seite direkt nach init.php eingefügt werden!
+if (!isset($_SESSION['logins']['team'])) {
   $_SESSION['tc_redirect'] = db::escape($_SERVER['REQUEST_URI']); //Damit man nach dem Login direkt auf die gewünschte Seite geführt wird
   Html::info("Du wirst nach deinem Login weitergeleitet.");
   header('Location: ../teamcenter/tc_login.php?redirect');
@@ -24,4 +24,4 @@ if (!Helper::$teamcenter_no_redirect && empty($team->details['ligavertreter'])){
 }
 
 Html::$titel = $_SESSION['logins']['team']['name'];
-Helper::$teamcenter = true; // Dies zeigt allen Dateien (insbeondere .tmp.php) , das man sich im Teamcenter befindet.
+Helper::$teamcenter = true; // Dies zeigt allen Dateien (insbeondere .tmp.php), dass man sich im Teamcenter befindet.

@@ -6,8 +6,6 @@ require_once '../../init.php';
 
 $turniere = Turnier::get_turniere('ergebnis', false);
 
-if (empty($turniere)) Html::info("Es wurden noch keine Turniere eingetragen.");
-
 $all_anmeldungen = Turnier::get_all_anmeldungen();
 
 //Turnierdarten parsen
@@ -24,7 +22,7 @@ foreach ($turniere as $turnier_id => $turnier) {
     } else {
         $turniere[$turnier_id]['besprechung'] = '';
     }
-    //Spielmodus
+    // Spielmodus
     if ($turniere[$turnier_id]['format'] == 'jgj') {
         $turniere[$turnier_id]['format'] = 'Jeder-gegen-Jeden';
     } elseif ($turniere[$turnier_id]['format'] == 'dko') {
@@ -57,7 +55,10 @@ foreach ($all_anmeldungen as $turnier_id => $liste) {
     if ($turniere[$turnier_id]['art'] == 'final') {
         $turniere[$turnier_id]['phase'] = 'Finale';
     }
-    if ($turniere[$turnier_id]['art'] == 'spass') {
+    if (
+            $turniere[$turnier_id]['art'] === 'spass'
+            && $turniere[$turnier_id]['phase'] !== 'spielplan'
+    ) {
         $turniere[$turnier_id]['phase'] = 'Nichtligaturnier';
     }
 
@@ -90,15 +91,20 @@ include '../../templates/header.tmp.php';
         });
     </script>
 
-    <h1 class="w3-text-primary">Ausstehende Turniere</h1>
+    <h1 class="w3-text-primary">Turniere der Saison <?= Html::get_saison_string() ?></h1>
 
     <!-- Turnier suchen -->
     <div class="w3-section w3-text-grey w3-border-bottom" style="width: 250px;">
         <?= Html::icon("search") ?><input id="myInput" class='w3-padding w3-border-0' style="width: 225px;" type="text" placeholder="Turnier suchen">
     </div>
 
-    <div id="myDIV"><!-- zu durchsuchendes div -->
-                    <!--Turnierpanels -->
+   <?php if (empty($turniere)) {
+        Html::message('info', "Keine Turniere gefunden.", NULL);
+    } // end if ?>
+
+    <!-- zu durchsuchendes div -->
+    <div id="myDIV">
+        <!--Turnierpanels -->
         <?php foreach ($turniere as $turnier) { ?>
             <section onclick="modal('modal<?= $turnier['turnier_id'] ?>')"
                      class='w3-display-container w3-panel <?php if ($turnier['art'] == 'final') { ?>w3-pale-red<?php } ?> w3-card'

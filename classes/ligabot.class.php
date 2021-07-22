@@ -44,7 +44,7 @@ class LigaBot
                 && $turnier_block != $ausrichter_block
                 && ($pos_ausrichter - 1) != $pos_turnier
             ) { // Um einen Block vom Ausrichterblock aus erweiterte Turniere sollen nicht wandern...
-                $turnier->set_block($ausrichter_block);
+                $turnier->set_liga('tblock', $ausrichter_block);
             }
             if (
                 $turnier->details['art'] === 'II'
@@ -52,7 +52,7 @@ class LigaBot
                 && $turnier->details['phase'] === 'offen'
                 && $pos_ausrichter < $pos_turnier
             ) {
-                $turnier->set_block($ausrichter_block);
+                $turnier->set_liga('tblock', $ausrichter_block);
             }
 
             /**
@@ -63,7 +63,7 @@ class LigaBot
                 $turnier->details['phase'] === 'offen'
                 && self::time_offen_melde($turnier->details['datum']) <= time()
             ) {
-                $turnier->set_phase("melde"); //Aktualisiert auch $turnier->get_details()
+                $turnier->set_liga('phase', 'melde'); //Aktualisiert auch $turnier->get_details()
                 // Losen setzt alle Teams in richtiger Reihenfolge auf die Warteliste.
                 self::losen($turnier);
                 // Füllt die Spielen-Liste auf.
@@ -109,7 +109,7 @@ class LigaBot
                 $set_spieltag = $spieltag - 1;
             }
             if ($turnier->details['spieltag'] != $set_spieltag) { // Die Datenbank wird nur beschrieben, wenn sich der Spieltag ändert.
-                $turnier->set_spieltag($set_spieltag);
+                $turnier->set_liga('spieltag', $set_spieltag);
             }
             $kw = date('W', $datum); // Kalenderwoche übernehmen für die nächste Iteration
         }

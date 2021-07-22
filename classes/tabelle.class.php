@@ -10,12 +10,12 @@ class Tabelle
 
     /**
      * Speichert die Erstellten Rangtabellen, damit diese nicht mehrfach erstellt werden müssen.
-     * @var array
      */
     public static array $rangtabellen = [];
 
     /**
      * Übergibt den Spieltag, bis zu welchem Ergebnisse eingetragen worden sind.
+     * Also den nächsten, nicht vollendeten, noch zu spielenden Spieltag.
      *
      * @param int $saison
      * @return int
@@ -23,13 +23,11 @@ class Tabelle
     public static function get_aktuellen_spieltag(int $saison = Config::SAISON): int
     {
         $sql = "
-                SELECT spieltag
+                SELECT max(spieltag) + 1 
                 FROM turniere_liga 
                 WHERE saison = ?
-                AND (art='I' OR art = 'II' OR art='III')
-                AND phase != 'ergebnis'
-                ORDER BY spieltag
-                LIMIT 1
+                AND (art = 'I' OR art = 'II' OR art = 'III')
+                AND phase = 'ergebnis'
                 ";
         return db::$db->query($sql, $saison)->fetch_one() ?? 1;
     }
@@ -41,7 +39,7 @@ class Tabelle
      * @param int $saison
      * @return bool
      */
-    public static function check_spieltag_live(int $spieltag, $saison = Config::SAISON): bool
+    public static function check_spieltag_live(int $spieltag, int $saison = Config::SAISON): bool
     {
         $sql = "
                 SELECT phase, count(phase)
@@ -176,7 +174,7 @@ class Tabelle
      * @param int $saison
      * @return array
      */
-    public static function get_all_ergebnisse($saison = Config::SAISON): array
+    public static function get_all_ergebnisse(int $saison = Config::SAISON): array
     {
         $sql = "
                 SELECT turniere_ergebnisse.*, teams_liga.teamname , teams_liga.ligateam
@@ -221,7 +219,6 @@ class Tabelle
                 ORDER BY ergebnis DESC, RAND()
                 ";
         $result = db::$db->query($sql, $saison, $spieltag)->esc()->fetch();
-
         $counter = $return = [];
         foreach($result as $eintrag){
             $team_id = $eintrag['team_id'];
@@ -237,7 +234,7 @@ class Tabelle
                 $return[$team_id]['team_id'] = $team_id;
                 $return[$team_id]['teamname'] = $eintrag['teamname'];
                 $return[$team_id]['string'] = Html::link("ergebnisse.php#" . $eintrag['turnier_id'], $eintrag['ergebnis']);
-                $return[$team_id]['summe'] = $eintrag['ergebnis'];
+                $return[$team_id]['summe'] = (int) $eintrag['ergebnis'];
                 $counter[$team_id] = 1;
             }
             $counter[$team_id]++;
@@ -260,7 +257,7 @@ class Tabelle
         }
 
         // Hinzufügen der Strafen:
-        $strafen = Team::get_strafen();
+        $strafen = Team::get_strafen($saison);
         foreach ($strafen as $strafe) {
             // Hinzufügen des Sterns
             if (isset($return[$strafe['team_id']]['strafe_stern'])) {
@@ -276,7 +273,7 @@ class Tabelle
         // Kumulierte Strafe mit der Summe der Turnierergebnisse des Teams verrechnen
         foreach ($return as $team_id => $team) {
             if (isset($team['strafe'])) {
-                $return[$team_id]['summe'] = round($return[$team_id]['summe'] * (1 - $team['strafe']));
+                $return[$team_id]['summe'] = round($team['summe'] * (1 - $team['strafe']));
             }
         }
 
@@ -290,7 +287,7 @@ class Tabelle
         $zeile_vorher['summe'] = 0;
         $zeile_vorher['max_einzel'] = 0;
         foreach ($return as $key => $zeile) {
-            $zeile['max_einzel'] = max($zeile['einzel_ergebnisse']);
+            $zeile['max_einzel'] = max($zeile['einzel_ergebnisse'] ?? [0]);
             if (
                 $zeile_vorher['summe'] === $zeile['summe']
                 && $zeile_vorher['max_einzel'] === $zeile['max_einzel']
@@ -317,7 +314,11 @@ class Tabelle
     public static function get_rang_tabelle(int $spieltag, int $saison = Config::SAISON): array
     {
 
-        $ausnahme = ($saison === 26) ? 'OR turniere_liga.saison = 24' : '';
+        $ausnahme = match($saison) {
+            26 => 'OR turniere_liga.saison = 24',
+            27 => 'OR turniere_liga.saison >= 24',
+            default => '',
+        };
 
         $sql = "
                 SELECT turniere_ergebnisse.ergebnis, turniere_ergebnisse.turnier_id, turniere_liga.datum, 

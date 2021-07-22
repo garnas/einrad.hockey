@@ -115,6 +115,7 @@ class LigaLeitung
         return false;
     }
 
+    #TODO löschen
     static function umzug2($table, $funktion)
     {
         $sql = "

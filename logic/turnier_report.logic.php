@@ -1,6 +1,6 @@
 <?php
 // Turnierobjekt erstellen
-$turnier_id = (int) @$_GET['turnier_id'];
+$turnier_id = (int)@$_GET['turnier_id'];
 $turnier = new Turnier ($turnier_id);
 
 if ($turnier->details['ausrichter'] == ($_SESSION['logins']['team']['id'] ?? '') || Helper::$ligacenter) {
@@ -46,14 +46,13 @@ foreach ($kader_array as $team_id => $kader) { // Todo In Funktion
     }
 }
 
+$spieler_ausleihen = $tbericht->get_spieler_ausleihen();
 
 if ($change_tbericht) {
 
-    $spieler_ausleihen = $tbericht->get_spieler_ausleihen();
-
     // Spielerausleihe löschen
     foreach ($spieler_ausleihen as $ausleihe_id => $ausleihe) {
-        if (isset($_POST['del_ausleihe_' . $ausleihe_id])) {
+        if (isset($_POST[('del_ausleihe_' . $ausleihe_id)])) { //TODO Array bauen
             $tbericht->delete_spieler_ausleihe($ausleihe_id);
             Html::info("Spielerausleihe wurde entfernt.");
             header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
@@ -83,7 +82,7 @@ if ($change_tbericht) {
 
     // Zeitstrafe löschen
     foreach ($zeitstrafen as $zeitstrafe_id => $zeitstrafe) {
-        if (isset($_POST['del_zeitstrafe_' . $zeitstrafe_id])) {
+        if (isset($_POST[('del_zeitstrafe_' . $zeitstrafe_id)])) {
             $tbericht->delete_zeitstrafe($zeitstrafe_id);
             Html::info("Zeitstrafe wurde entfernt.");
             header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);

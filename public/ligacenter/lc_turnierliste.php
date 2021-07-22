@@ -8,20 +8,22 @@ require_once '../../logic/session_la.logic.php'; //Auth
 //Füge Links zum Weiterverarbeiten der ausgewählten Turniere hinzu; diese werden dem Teamplate übergeben
 
 //Für Turniere die nicht in der Ergebnis-Phase sind:
-$turniere_no_erg = Turnier::get_turniere('ergebnis', false);
+$turniere_no_erg = Turnier::get_turniere('ergebnis', false)
+    + Turnier::get_turniere('ergebnis', false, saison:Config::SAISON + 1);
+
 foreach ($turniere_no_erg as $turnier_id => $turnier){
     //Links
     $turniere_no_erg[$turnier_id]['links'] = 
-        array(
+        [
             Html::link("../liga/turnier_details.php?turnier_id=".$turnier_id, '<i class="material-icons">info</i> Details'),
             Html::link("lc_turnier_log.php?turnier_id=".$turnier_id, '<i class="material-icons">info_outline</i> Log einsehen'),
             Html::link("lc_team_anmelden.php?turnier_id=".$turnier_id, '<i class="material-icons">how_to_reg</i> Teams an/abmelden'),
             Html::link("lc_turnier_bearbeiten.php?turnier_id=".$turnier_id, '<i class="material-icons">create</i> Turnier bearbeiten/löschen'),
             Html::link("lc_spielplan_verwalten.php?turnier_id=".$turnier_id, '<i class="material-icons">playlist_play</i> Spielplan/Ergebnis verwalten'),
             Html::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">article</i>Turnierreport bearbeiten')
-        );
+        ];
     if ($turnier['phase'] == 'spielplan'){
-        array_push($turniere_no_erg[$turnier_id]['links'], Html::link("lc_spielplan.php?turnier_id=".$turnier_id, '<i class="material-icons">reorder</i> Spielergebnis eintragen'));
+        $turniere_no_erg[$turnier_id]['links'][] = Html::link("lc_spielplan.php?turnier_id=" . $turnier_id, '<i class="material-icons">reorder</i> Spielergebnis eintragen');
     }
 }
 

@@ -4,8 +4,10 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
+$saison = (int) ($_GET['saison'] ?? Config::SAISON);
+
 //Aktuellen Spieltag bekommen. Der aktuelle Spieltag ist der Spieltag, an dem das nächste Turnier eingetragen wird.
-$akt_spieltag = Tabelle::get_aktuellen_spieltag();
+$akt_spieltag = Tabelle::get_aktuellen_spieltag($saison);
 
 if (Tabelle::check_spieltag_live($akt_spieltag)){
     $live_spieltag = $akt_spieltag;
@@ -20,10 +22,12 @@ if (isset($_GET['spieltag'])){
     $gew_spieltag = $akt_spieltag;
 }
 
+
+
 //Tabellen und Strafen, um sie an das Layout zu übergeben
-$meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag);
-$rang_tabelle = Tabelle::get_rang_tabelle($gew_spieltag);
-$strafen = Team::get_strafen();
+$meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag,$saison);
+$rang_tabelle = Tabelle::get_rang_tabelle($gew_spieltag,$saison);
+$strafen = Team::get_strafen($saison);
 
 //Testen ob Verwarnungen oder Strafen existieren.
 $verwarnung_not_empty = $strafe_not_empty = false;
@@ -41,20 +45,14 @@ foreach ($strafen as $key => $strafe){
 }
 
 // Den Plätzen der Meisterschaftstabelle eine Farbe zuordnen:
-for ($i = 1; $i < 5; $i++){
+for ($i = 1; $i <= 12 ; $i++){
     $platz_color[$i] = "w3-text-tertiary";
 }
-for ($i = 5; $i < 11; $i++){
+for ($i = 13; $i <= 18; $i++){
     $platz_color[$i] = "w3-text-grey";
 }
-for ($i = 11; $i < 17; $i++){
+for ($i = 19; $i < 24; $i++){
     $platz_color[$i] = "w3-text-brown";
-}
-for ($i = 17; $i < 23; $i++){
-    $platz_color[$i] = "w3-text-primary";
-}
-for ($i = 23; $i < 29; $i++){
-    $platz_color[$i] = "w3-text-green";
 }
 
 // Spieltag wählen:
@@ -117,7 +115,7 @@ include '../../templates/header.tmp.php';?>
             <ul class="w3-ul w3-leftbar w3-border-tertiary">
                 <li>In der Meisterschaftstabelle werden die besten fünf Turnierergebnisse deines Teams in der aktuellen Saison aufaddiert.</li>
                 <li>Der Platz in der Meisterschaftstabelle bestimmt, für welche Meisterschaft sich dein Team qualifizieren kann.</li>
-                <li><b>Meisterschaften</b> <i>(Plätze)</i><br>Deutsche Meisterschaft (<span class="w3-text-tertiary">1-4</span>)<br>Quali zur Deutschen (<span class="w3-text-grey">5-10</span>)<br>B-Meisterschaft (<span class="w3-text-brown">11-16</span>)<br>C-Meisterschaft (<span class="w3-text-primary">17-22</span>)<br>D-Meisterschaft (<span class="w3-text-green">23-28</span>)</li>
+                <li><b>Finalturniere</b> <i>(Plätze)</i><br>Finale der Deutschen Einradhockeyliga (<span class="w3-text-tertiary">1-12</span>)<br>B-Finale der Deutschen Einradhockeyliga (<span class="w3-text-brown">13-18</span>)<br>C-Finale der Deutschen Einradhockeyliga (<span class="w3-text-primary">19-24</span>)</li>
             </ul>
         </div>
     </div>

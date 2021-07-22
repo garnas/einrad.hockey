@@ -21,7 +21,7 @@ $turnier_ergebnis = $turnier->get_ergebnis();
 //Ergebnis löschen
 if (isset($_POST['ergebnis_loeschen'])) {
     $turnier->delete_ergebnis();
-    $turnier->set_phase('spielplan');
+    $turnier->set_liga('phase', 'spielplan');
     Html::info("Ergebnis wurde gelöscht. Das Turnier wurde in die Spielplanphase versetzt.");
     header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->details['turnier_id']);
     die();
@@ -53,7 +53,7 @@ if (isset($_POST['ergebnis_eintragen'])) {
     for ($platz = 1; $platz <= $anzahl_teams; $platz++) {
         $turnier->set_ergebnis($_POST['team_id'][$platz], $_POST['ergebnis'][$platz], $platz);
     }
-    $turnier->set_phase('ergebnis');
+    $turnier->set_liga('phase', 'ergebnis');
     Html::info("Ergebnisse wurden manuell eingetragen. Das Turnier wurde in die Ergebnisphase versetzt.");
     header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->details['turnier_id']);
     die();
@@ -62,7 +62,7 @@ if (isset($_POST['ergebnis_eintragen'])) {
 // Spielplan automatisch erstellen
 if (isset($_POST['auto_spielplan_erstellen'])) {
     $error = false;
-    if ($turnier->details['phase'] != "melde") {
+    if ($turnier->details['phase'] != "melde") { //TODO and is ligaturnier
         Html::error("Das Turnier muss in der Meldephase sein.");
         $error = true;
     }
