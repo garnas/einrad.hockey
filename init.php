@@ -7,7 +7,7 @@
  * PHP-Einstellungen vornehmen
  */
 // Session-Sicherheit
-ini_set('session.cookie_lifetime', '1200');
+ini_set('session.cookie_lifetime', '7200'); // Entspricht 2h
 ini_set('session.use_cookies', '1');
 ini_set('session.use_only_cookies', '1');
 ini_set('session.use_strict_mode', '1');
