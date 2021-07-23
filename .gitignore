@@ -8,9 +8,9 @@ public/xml/test.php
 # Backup Dateien ignorieren:
 *~
 
-# Bilder und Videos ignorieren:
-public/schiricenter/bilder/*
-public/schiricenter/videos/*
+# Bilder und Videos ignorieren?
+#public/schiricenter/bilder/*
+#public/schiricenter/videos/*
 
 # Enviroment
 env.php
