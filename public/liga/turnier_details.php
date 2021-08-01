@@ -46,7 +46,7 @@ if ($turnier->details['art'] == 'III'){
     $turnier->details['art'] = 'III: Blockfreies Turnier';
 }
 if ($turnier->details['art'] == 'final'){
-    $turnier->details['art'] = 'Abschlussturnier';
+    $turnier->details['art'] = 'Finalturnier';
 }
 if ($turnier->details['art'] == 'fixed'){
     $turnier->details['art'] = 'Manuell';
