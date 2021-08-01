@@ -20,8 +20,8 @@ include '../../templates/header.tmp.php'; ?>
 <h2 class="w3-text-primary"><?= Html::icon("perm_identity", tag:"h2") ?>Ligaausschuss</h2>
 <p>
     Der Ligaausschuss besteht aus sechs Mitgliedern und dient als Ansprechpartner der Deutschen Einradhockeyliga. Er ist
-    verantwortlich für die Weiterentwicklung der Liga und für den reibungslosen Saisonablauf. Wenn es mehr Bewerber als
-    Ligaausschussplätze gibt, wird er jeweils gegen Ende der Saison von allen Ligateams gewählt.
+    verantwortlich für die Weiterentwicklung der Liga und für den reibungslosen Saisonablauf. Er wird alle zwei Saisons von den Ligateams gewählt,
+    wenn es mehr Bewerber als Ligaausschussplätze gibt.
 </p>
 <p class="w3-margin" style="max-width: 666px">
     <a href="<?= Env::BASE_URL ?>/bilder/ligaausschuss.jpg">
@@ -41,9 +41,9 @@ include '../../templates/header.tmp.php'; ?>
         <?php } //end foreach?>
     </table>
 </div>
-<form action="mailto:<?=Env::LAMAIL?>">
-    <input class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top" type="submit" value="Ligaausschuss kontaktieren">
-</form>
+<a href="mailto:<?= Env::LAMAIL ?>" class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top">
+    <?= Html::icon("mail") ?> <?= Env::LAMAIL ?>
+</a>
 
 <!-- Technik -->
 <h2 class="w3-text-primary"><?= Html::icon("engineering", tag:"h2") ?> Technikausschuss</h2>
@@ -61,9 +61,9 @@ include '../../templates/header.tmp.php'; ?>
         <?php } //end foreach?>
     </table>
 </div>
-<form action="mailto:<?=Env::TECHNIKMAIL?>">
-    <input class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top" type="submit" value="Technikausschuss kontaktieren">
-</form>
+    <a href="mailto:<?= Env::TECHNIKMAIL ?>" class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top">
+        <?= Html::icon("mail") ?> <?= Env::TECHNIKMAIL ?>
+    </a>
 
 <!-- Öffntlichkeits-Ausschuss -->
 <h2 class="w3-text-primary"><?= Html::icon("public", tag:"h2") ?> Öffentlichkeitsausschuss</h2>
@@ -80,9 +80,9 @@ include '../../templates/header.tmp.php'; ?>
         <?php } //end foreach?>
     </table>
 </div>
-<form action="mailto:<?=Env::OEFFIMAIL?>">
-    <input class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top" type="submit" value="Öffentlichkeitsausschuss kontaktieren">
-</form>
+<a href="mailto:<?= Env::OEFFIMAIL ?>" class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top">
+    <?= Html::icon("mail") ?> <?= Env::OEFFIMAIL ?>
+</a>
 
 <!-- Schiri-Ausschuss -->
 <h2 class="w3-text-primary"><?= Html::icon("sports", tag:"h2") ?> Schiedsrichterausschuss</h2>
@@ -101,9 +101,9 @@ include '../../templates/header.tmp.php'; ?>
         <?php } //end foreach?>
     </table>
 </div>
-<form action="mailto:<?=Env::SCHIRIMAIL?>">
-    <input class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top" type="submit" value="Schiedsrichterausschuss kontaktieren">
-</form>
+    <a href="mailto:<?= Env::SCHIRIMAIL ?>" class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top">
+        <?= Html::icon("mail") ?> <?= Env::SCHIRIMAIL ?>
+    </a>
 <h3 class="w3-text-primary"><?= Html::icon("school", tag:"h3") ?> Schiedsrichterausbilder</h3>
 <p>
     Der Schiedsrichterausschuss ernennt in seiner Funktion Schiedsrichterprüfer. Diese dürfen Spielerinnen und Spielen 
