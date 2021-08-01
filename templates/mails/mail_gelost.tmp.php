@@ -2,12 +2,14 @@
 <p>
     das <?= $turnier->details['tblock'] ?>-Turnier in <?= $turnier->details['ort'] ?> am
     <?= date("d.m.Y", strtotime($turnier->details['datum'])) ?> ist in die Meldephase übergegangen und
-    die freien Spielen-Plätze wurden nach Modus 4.5.2 verteilt. Euer Team steht nun auf der <b><?= $liste ?></b>
+    die freien Spielen-Plätze wurden besetzt. Euer Team steht nun auf der <b><?= $liste ?></b>
 </p>
 <?php if ($liste == "Warteliste") {?>
-<p>
-    Eine Abmeldung von der Warteliste ist jederzeit mmöglich und sollte vorgenommen werden, wenn das Team nicht als Nachrücker zur Verfügung steht. (Modus 4.7)
-</p>
+    <p>
+        <b>Hinweis:</b> Auf der Warteliste rückt ihr automatisch nach, wenn noch ein Platz für euch frei wird.
+        Wenn der Spielplan schon erstellt wurde, dann geschieht dies manuell vom Ligaausschuss.
+        Bitte meldet euch von der Warteliste ab, wenn euer Team nicht als Nachrücker zur Verfügung steht.
+    </p>
 <?php } ?>
 <p>
     <a href="<?= Env::BASE_URL . "/liga/turnier_details.php?turnier_id=" . $turnier->id ?>">
