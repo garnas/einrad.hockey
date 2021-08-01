@@ -158,7 +158,7 @@ include '../../templates/header.tmp.php';
         <?php }//end foreach?>
     <?php }else{?><i>leer</i><?php } //endif?> 
 </i></p>
-<?php if($turnier->details['phase'] == 'Offene Phase' or $turnier->details['art'] == 'Abschlussturnier'){ ?>
+<?php if($turnier->details['phase'] == 'Offene Phase' or $turnier->details['art'] == 'Finalturnier'){ ?>
     <p class="w3-text-grey w3-border-bottom w3-border-grey">Meldeliste</p> 
     <p><i>
         <?php if (!empty($liste['melde'])){?>
