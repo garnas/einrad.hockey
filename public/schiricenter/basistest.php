@@ -32,6 +32,8 @@ if (isset($_POST['beantworten'])) {
     $_SESSION['sc_test_fragen'] = $fragen;
 }
 
+$timelimit = 45*60; // in Sekunden
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -86,6 +88,14 @@ if (isset($_POST['beantworten'])) { # Test auswerten:
     echo '<LI>Es können mehrere Antwortmöglichkeiten richtig sein.</LI>';
     echo '<LI>Mindestens 1 Antwort ist immer richtig.</LI>';
     echo '<LI>Du hast 45 Minuten Zeit.</LI></UL>';
+    ?>
+    <div class="w3-center w3-white w3-bottombar w3-border-primary"
+         style="position: sticky; top: 0; z-index: 1000;">
+        <?php
+        Html::countdown(time() + $timelimit);
+        ?>
+    </div>
+    <?php
 }
 
 echo '<form method="post">';
