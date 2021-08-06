@@ -14,3 +14,6 @@ public/xml/test.php
 
 # Enviroment
 env.php
+
+#npm
+node_modules/
