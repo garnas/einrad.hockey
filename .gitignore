@@ -5,3 +5,6 @@ system/logs/
 classes/xml.class.php_bak
 public/xml/test.php
 env.php
+
+#npm
+node_modules/
