@@ -260,4 +260,43 @@ class SchiriTest
 
     #-------------------------------------------------------------------------
 
+    # Testergebnis melden:
+    public static function testergebnis_melden($pruefling, $fragen, $richtig, $abgabe): void
+    {
+
+        # Text der Email zusammenstellen:
+        $text = "<p>Prüfling: " . $pruefling;
+        $text .= "<P>Es wurden " . $richtig . " Fragen richtig beantwortet.";
+        $index = 0;
+        foreach ($fragen as $frage) {
+            $text .= "<P>Frage Nr. " . ++$index . " (ID " . $frage['frage_id'] . "): ";
+            $text .= $frage['frage'] . "<br>";
+            $text .= "Richtige Antwort: " . implode(",",$frage['richtig']) . "<br>";
+            $text .= "Antwort des Prüflings: " . implode(",",$abgabe[$index-1]) . "<br>";
+        }
+
+        # zeige Emailtext zum Debuggen auf der Webseite an:
+        # echo $text;
+
+        # Email an Schiriausschuss senden:
+        $mailer = MailBot::start_mailer();
+        $mailer->setFrom('Absender@einrad.hockey', 'Name'); // TODO: richtiger Absender 
+        # Empfängeradressen zum Testen:
+        $mailer->addAddress('ansgar@einrad.hockey', 'Ansgar');
+        $mailer->addAddress('mail@rolf-sander.net', 'Rolf');
+        # später Env::SCHIRIMAIL verwenden:
+        # $mailer->addAddress(Env::SCHIRIMAIL); // Empfängeradresse
+        $mailer->Subject = 'Testergebnis von ' . $pruefling; // Betreff der Email
+        $mailer->Body = $text;
+        if (MailBot::send_mail($mailer)) {
+            Html::info("Die E-Mail wurde versandt.");
+        } else {
+            Html::error("FEHLER: E-Mail konnte nicht versendet werden.");
+        }
+        
+    }
+
+
+    #-------------------------------------------------------------------------
+
 }
