@@ -76,10 +76,7 @@ register_shutdown_function(static function () {
 
     if (
         // Kein Fehlerhandling für localhost (Debugging)
-        !(
-            file_exists(__DIR__ . '/_localhost/nur_localhost.php')
-            && in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])
-        )
+        !Env::IS_LOCALHOST
         // Es lag ein Fehler vor
         && ($error = error_get_last()) !== null
     ) {
