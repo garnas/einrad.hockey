@@ -1,7 +1,23 @@
-.idea/
-public/uploads/s/
+# Enviroment Einstellungen
+env.php
+
+# Webroot Dateien
+public/.htaccess
+
+public/uploads/s/*
+!public/uploads/s/spielplan/.gitkeep
+!public/uploads/s/.gitkeep
+
+# System Backups und Logs
 system/backups/
 system/logs/
+
+# IntelliJ IDE
+.idea/
+
+# npm
+node_modules/
+
+# xml
 classes/xml.class.php_bak
 public/xml/test.php
-env.php

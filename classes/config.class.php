@@ -6,7 +6,7 @@ class Config
      * Saison
      */
     public const SAISON = 27; // Saison 0 = Jahr 1995;
-    public const SAISON_ANFANG = '14.08.2021';
+    public const SAISON_ANFANG = '16.08.2021';
     public const SAISON_ENDE = '29.05.2022';
     /**
      * Log-Files
@@ -41,13 +41,13 @@ class Config
      * Rangtabellen-Zuordnung
      */
     public const RANG_TO_BLOCK = [
-        "A" => [1, 6],
-        "AB" => [7, 13],
-        "BC" => [14, 21],
-        "CD" => [22, 31],
-        "DE" => [32, 43],
-        "EF" => [44, 57],
-        "F" => [58, INF]
+        "A" => [1, 8],
+        "AB" => [9, 16],
+        "BC" => [17, 24],
+        "CD" => [25, 34],
+        "DE" => [35, 46],
+        "EF" => [47, 58],
+        "F" => [59, INF]
     ];
 
     /**

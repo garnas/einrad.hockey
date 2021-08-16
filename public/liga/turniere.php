@@ -55,7 +55,10 @@ foreach ($all_anmeldungen as $turnier_id => $liste) {
     if ($turniere[$turnier_id]['art'] == 'final') {
         $turniere[$turnier_id]['phase'] = 'Finale';
     }
-    if ($turniere[$turnier_id]['art'] == 'spass') {
+    if (
+            $turniere[$turnier_id]['art'] === 'spass'
+            && $turniere[$turnier_id]['phase'] !== 'spielplan'
+    ) {
         $turniere[$turnier_id]['phase'] = 'Nichtligaturnier';
     }
 

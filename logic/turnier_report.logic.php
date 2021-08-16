@@ -3,14 +3,18 @@
 $turnier_id = (int)@$_GET['turnier_id'];
 $turnier = new Turnier ($turnier_id);
 
-if ($turnier->details['ausrichter'] == ($_SESSION['logins']['team']['id'] ?? '') || Helper::$ligacenter) {
-    $change_tbericht = true; // Berechtigung zum Verändern des Reports
-} else {
-    $change_tbericht = false;
-}
+// Berechtigung zum Verändern des Reports
+$change_tbericht = (
+    $turnier->details['ausrichter'] === ($_SESSION['logins']['team']['id'] ?? '')
+    || Helper::$ligacenter
+);
 
-if (strtotime($turnier->details['datum']) - time() < -3 * 24 * 60 * 60 && !Helper::$ligacenter) {
-    $change_tbericht = false; //Berechtigung zum Verändern des Reports widerrufen für Ausrichter, wenn das Turnier mehr als zwei Tage zurückliegt.
+// Berechtigung zum Verändern des Reports widerrufen für Ausrichter, wenn das Turnier mehr als zwei Tage zurückliegt.
+if (
+    strtotime($turnier->details['datum']) - time() < -3 * 24 * 60 * 60
+    && !Helper::$ligacenter
+) {
+    $change_tbericht = false;
     if ($turnier->details['ausrichter'] == ($_SESSION['logins']['team']['id'] ?? '')) {
         Html::notice("Das Turnier liegt bereits in der Vergangenheit. Bearbeiten des Turnierreports nur noch via den Ligaausschuss möglich.");
     }
@@ -21,14 +25,21 @@ $tbericht = new TurnierReport ($turnier_id);
 // Existiert das Turnier?
 if (empty($turnier->details)) {
     Html::error("Turnier wurde nicht gefunden");
-    header('Location: ../liga/turniere.php');
-    die();
+    Helper::reload('/liga/turniere.php');
 }
 
-if ($turnier->details['art'] == 'spass') {
+// Gibt es eine Leseberechtigung?
+if (
+    !Helper::$ligacenter && $turnier->get_liste($_SESSION['logins']['team']['id']) !== 'spiele'
+) {
+    Html::error("Der Turnierreport kann nur von teilnehmenden Teams eingesehen werden.");
+    Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id);
+}
+
+// Ist es ein Spass-Turnier?
+if ($turnier->details['art'] === 'spass') {
     Html::notice("Spaßturniere erfordern keinen Turnierreport.");
-    header('Location: ../liga/turnier_details.php?turnier_id=' . $turnier->id);
-    die();
+    Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id);
 }
 
 // Liste der Teams
