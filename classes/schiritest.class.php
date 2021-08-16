@@ -61,6 +61,49 @@ class SchiriTest
 
     #-------------------------------------------------------------------------
 
+    # personifizierten Test aus md5sum erzeugen:
+    public static function personifizierter_test(string $md5sum): array
+    {
+        $pruefling = '';
+        #-----
+        # Hier werden jetzt einige mit test-erstellen.php erstellte
+        # Tests definiert. Letztendlich sollten diese
+        # Daten wohl aus der Datenbank kommen.        
+        #-----
+        if ($md5sum == '0dd3b944eb3f6ac6abdc1e1af23a4565') {
+            $pruefling = 'Erika Mustermann';
+            $level = 'F'; # Fortgeschritten
+            $fragen_IDs = [32,42,202,195,65,64,66,33,54,26,12,52,55,120,20,
+            23,113,8,67,77,131,74,178,10];
+        }
+        #-----
+        if ($md5sum == '8d8de0915e02108b1a0e647e0165f288') {
+            $pruefling = 'John Doe';
+            $level = 'B'; # Basis
+            $fragen_IDs = [56,3,144,188,89,108,196,65,179,66,27,26,199,180,15,
+            14,55,213,45,205,7,127,93,223,49,216,61,21,111,135];
+        }
+        #-----
+        if ($md5sum == '8632fd6fd39204f63c284fc2d2d3155b') {
+            $pruefling = 'Lieschen Müller';
+            $level = 'B'; # Basis
+            $fragen_IDs = [39,189,87,144,85,106,196,64,179,62,26,199,33,12,180,
+            1,147,210,127,114,8,123,49,216,73,149,218,10,140,11];
+        }
+        #-----
+        if ($pruefling==''){
+             exit('<H1>Ungültige URL (falsche md5sum)</H1>');
+        } else {
+            $fragen = [];
+            foreach ($fragen_IDs as $frage_ID) {
+                $fragen += self::get_fragen('DUMMY', 'DUMMY', 1, $frage_ID);
+            }
+        }
+        return [$pruefling, $level, $fragen];
+    }
+    
+    #-------------------------------------------------------------------------
+
     # Frage anzeigen:
     public static function frage_anzeigen(int $frage_id, int $index, array $frage): void
     {
