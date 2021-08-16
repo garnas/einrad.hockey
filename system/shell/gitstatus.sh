@@ -1,3 +1,3 @@
-git fetch origin git-deploy
+git fetch origin master
 git status
-git diff origin/git-deploy
+git diff origin/master
