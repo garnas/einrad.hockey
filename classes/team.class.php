@@ -41,7 +41,7 @@ class Team
         // TeamIDs werden über die Sql-Funktion auto increment vergeben
         $sql = "
                 INSERT INTO teams_liga (teamname, passwort, freilose) 
-                VALUES (?, ?, 2)
+                VALUES (?, ?, 1)
                 ";
         db::$db->query($sql, $teamname, $passwort)->log();
 
@@ -386,7 +386,7 @@ class Team
             return false;
         }
 
-        // Mehr als zwei Schiris im Kader?
+        // Zwei oder mehr Schiris im Kader?
         $sql = "
                 SELECT count(schiri)
                 FROM spieler
@@ -394,6 +394,7 @@ class Team
                 AND team_id = $this->id
                 AND letzte_saison = ?
                 ";
+
         return db::$db->query($sql, Config::SAISON, Config::SAISON)->fetch_one() >= 2;
     }
 
