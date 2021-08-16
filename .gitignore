@@ -1,19 +1,23 @@
-.idea/
-public/uploads/s/
-system/backups/
-system/logs/
-classes/xml.class.php_bak
-public/xml/test.php
-
-# Backup Dateien ignorieren:
-*~
-
-# Bilder und Videos ignorieren?
-#public/schiricenter/bilder/*
-#public/schiricenter/videos/*
-
-# Enviroment
+# Enviroment Einstellungen
 env.php
 
-#npm
+# Webroot Dateien
+public/.htaccess
+
+public/uploads/s/*
+!public/uploads/s/spielplan/.gitkeep
+!public/uploads/s/.gitkeep
+
+# System Backups und Logs
+system/backups/
+system/logs/
+
+# IntelliJ IDE
+.idea/
+
+# npm
 node_modules/
+
+# xml
+classes/xml.class.php_bak
+public/xml/test.php
