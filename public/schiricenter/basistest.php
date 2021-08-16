@@ -16,17 +16,18 @@ if (isset($_POST['beantworten'])) {
         }
     }
 } else {
-    $fragen01 = SchiriTest::get_fragen('B', '1', 2); # 16* Vor dem Spiel / Rund ums Spiel
-    $fragen02 = SchiriTest::get_fragen('B', '2', 3); # 27* Schiedsrichterverhalten
-    $fragen03 = SchiriTest::get_fragen('B', '3', 1); # 13* Handzeichen
-    $fragen04 = SchiriTest::get_fragen('B', '4', 1); # 13* Penaltyschießen
-    $fragen05 = SchiriTest::get_fragen('B', '5', 3); #  8* Vorfahrt
-    $fragen06 = SchiriTest::get_fragen('B', '6', 3); #  5* Übertriebene Härte
-    $fragen07 = SchiriTest::get_fragen('B', '7', 3); # 18* Eingriff ins Spiel
-    $fragen08 = SchiriTest::get_fragen('B', '8', 6); # 35* Sonstige Fouls
-    $fragen09 = SchiriTest::get_fragen('B', '9', 4); # 16* Torschüsse
-    $fragen10 = SchiriTest::get_fragen('B', '10', 1); # 16* Zeitstrafen / Unsportlichkeiten
-    $fragen11 = SchiriTest::get_fragen('B', '11', 3); # 22* Strafen
+    $level = 'B'; # Basis
+    $fragen01 = SchiriTest::get_fragen($level,  '1', 2); # Vor dem Spiel / Rund ums Spiel
+    $fragen02 = SchiriTest::get_fragen($level,  '2', 3); # Schiedsrichterverhalten
+    $fragen03 = SchiriTest::get_fragen($level,  '3', 1); # Handzeichen
+    $fragen04 = SchiriTest::get_fragen($level,  '4', 1); # Penaltyschießen
+    $fragen05 = SchiriTest::get_fragen($level,  '5', 3); # Vorfahrt
+    $fragen06 = SchiriTest::get_fragen($level,  '6', 3); # Übertriebene Härte
+    $fragen07 = SchiriTest::get_fragen($level,  '7', 3); # Eingriff ins Spiel
+    $fragen08 = SchiriTest::get_fragen($level,  '8', 6); # Sonstige Fouls
+    $fragen09 = SchiriTest::get_fragen($level,  '9', 4); # Torschüsse
+    $fragen10 = SchiriTest::get_fragen($level, '10', 1); # Zeitstrafen / Unsportlichkeiten
+    $fragen11 = SchiriTest::get_fragen($level, '11', 3); # Strafen
     $fragen = $fragen01 + $fragen02 + $fragen03 + $fragen04 + $fragen05 + $fragen06 +
         $fragen07 + $fragen08 + $fragen09 + $fragen10 + $fragen11;
     $_SESSION['sc_test_fragen'] = $fragen;
@@ -59,20 +60,18 @@ if (isset($DEBUGMODUS)) {
 } # Ende Debug Modus
 
 if (isset($_POST['beantworten'])) { # Test auswerten:
-    echo 'Danke für das Ausfüllen des Schiritests, deine Antworten sind an den ';
+    echo '<P>Danke für das Ausfüllen des Schiritests, deine Antworten sind an den ';
     echo 'Ligaausschuss geschickt worden.';
+    $text_bestanden = ' Herzlichen Glückwunsch, du hast bestanden! ';
+    $text_durchgefallen = ' Du hast leider nicht bestanden. ';
     if ($richtig >= 25) { # bestanden:
         echo '<H1 class="w3-center w3-text-green">' .
-            Html::icon("sentiment_satisfied_alt", class:"md-36") .
-            ' Herzlichen Glückwunsch, du hast bestanden! ' .
-            Html::icon("sentiment_satisfied_alt", class:"md-36") .
-            '</H1>';
+            Html::icon("sentiment_satisfied_alt", class:"md-36") . $text_bestanden .
+            Html::icon("sentiment_satisfied_alt", class:"md-36") . '</H1>';
     } else {
         echo '<H1 class="w3-center w3-text-red">' .
-            Html::icon("sentiment_very_dissatisfied", class: "md-36") .
-            ' Du hast leider nicht bestanden. ' .
-            Html::icon("sentiment_very_dissatisfied", class: "md-36") .
-            '</H1>';
+            Html::icon("sentiment_very_dissatisfied", class: "md-36") . $text_durchgefallen .
+            Html::icon("sentiment_very_dissatisfied", class: "md-36") . '</H1>';
     }
     echo '<H4>Es wurden ' . $richtig . ' von ' . count($fragen) . ' Fragen ';
     echo 'richtig beantwortet, eine ausführliche Auswertung findest du hier:</H4>';

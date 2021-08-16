@@ -46,11 +46,12 @@ echo 'Datum: ' . $datum . '<p>';
 
 echo 'Fragen-IDs: ' . $fragen_csv . '<p>';
 
-
-
-
-
 echo 'Die folgende URL kann an den Prüfling verschickt werden:<p>';
 
+# lokaler Webserver:
 echo 'http://localhost/einrad.hockey/public/schiricenter/basistest-personifiziert.php?md5sum='
+    . md5($fragen_csv) . '<p>';
+
+# Webserver der Liga:
+echo 'https://test.einrad.hockey/schiricenter/basistest-personifiziert.php?md5sum='
     . md5($fragen_csv) . '<p>';

@@ -11,6 +11,7 @@ public/uploads/s/*
 # System Backups und Logs
 system/backups/
 system/logs/
+*~
 
 # IntelliJ IDE
 .idea/
