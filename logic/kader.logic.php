@@ -10,30 +10,28 @@ if (isset($_POST['neuer_eintrag'])) {
 
     if (($_POST['dsgvo'] ?? '') !== 'zugestimmt') {
         $error = true;
-        Html::error("Den Datenschutz-Hiweisen muss zugestimmt werden, um in einem Ligateam spielen zu können");
+        Html::error("Den Datenschutz-Hiweisen muss zugestimmt werden, um in einem Ligateam spielen zu können.");
     }
     if (empty($vorname) || empty($nachname) || empty($jahrgang) || empty($geschlecht)) {
         $error = true;
         Html::error("Bitte Felder ausfüllen");
     }
-    if (1900 > $jahrgang || $jahrgang > date('Y')) {
-        $error = true;
-        Html::error("Ungültiger Jahrgang: Bitte als Jahreszahl ausschreiben.");
-    }
-    // Ist der Zeitraum richtig um Spieler hinzuzufügen?
-    if (!Helper::$ligacenter && !Spieler::check_timing()) {
-        Html::error("Spieler können nur bis zum Ende der Saison hinzugefügt werden.");
-        return false;
-    }
 
     if (!$error) {
-        // Spieler Eintragen, wenn der Spieler schon existiert wird false zurückgegeben und eine Fehlermeldung
-        if (Spieler::set_new_spieler($vorname, $nachname, $jahrgang, $geschlecht, $team_id)) {
-            Html::info("Der Spieler wurde eingetragen");
-            (new Team ($team_id))->set_schiri_freilos(); // Check in der Funktion
-                // set_new_spieler kann auch Spieler mit Schiristatus aus anderen Kadern übernehmen
-            header('Location: ' . db::escape($_SERVER['PHP_SELF']) . '?team_id=' . $team_id);
-            die ();
+        $spieler = new nSpieler();
+        if ($spieler
+            ->set_vorname($vorname)
+            ->set_nachname($nachname)
+            ->set_jahrgang($jahrgang)
+            ->set_geschlecht($geschlecht)
+            ->set_team_id($team_id)
+            ->set_letzte_saison(Config::SAISON)
+            ->speichern(true)
+        ) {
+            Html::info("Der Spieler wurde erfolgreich eingetragen.");
+            Helper::reload(get:'?team_id=' . $team_id);
+        } else {
+            Html::error("Der Spieler konnte nicht eingetragen werden.");
         }
     }
 }
@@ -41,16 +39,19 @@ if (isset($_POST['neuer_eintrag'])) {
 // Spieler aus der Vorsaison übernehmen
 if (isset($_POST['submit_takeover'])) {
     if (($_POST['dsgvo'] ?? '') !== 'zugestimmt') {
-        Html::error("Den Datenschutz-Hiweisen muss zugestimmt werden, um in einem Ligateam spielen zu können");
+        Html::error("Den Datenschutz-Hiweisen muss zugestimmt werden, um in einem Ligateam spielen zu können.");
     } else {
         foreach (($_POST['takeover'] ?? []) as $spieler_id) {
             if (!empty($kader_vorsaison[$spieler_id])) { // Validation + Schutz gegen Html-Manipulation
-                (new Spieler($spieler_id))->set_detail('letzte_saison', Config::SAISON);
+                $spieler = nSpieler::get($spieler_id);
+                $spieler
+                    ->set_letzte_saison(Config::SAISON)
+                    ->speichern();
                 $changed = true;
             }
         }
         if ($changed ?? false) {
-            Html::info("Spieler wurden in die neue Saison übernommen");
+            Html::info("Die Spieler wurden in die neue Saison übernommen.");
             (new Team ($team_id))->set_schiri_freilos(); // Check in der Funktion
             header('Location: ' . db::escape($_SERVER['PHP_SELF']) . '?team_id=' . $team_id);
             die ();

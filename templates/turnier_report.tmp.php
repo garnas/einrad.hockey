@@ -16,7 +16,7 @@
         <h2 class="w3-text-primary"><?= Html::icon('school', tag:'h2') ?> Schiedsrichter-Ausbilder</h2>
         <ul class='w3-ul w3-margin-left w3-leftbar w3-border-tertiary'>
             <?php foreach ($ausbilder_liste as $spieler){?>
-                <li><?=$spieler['vorname'] . ' ' . $spieler['nachname']?> (<i><?=Team::id_to_name($spieler['team_id'])?></i>)</li>
+                <li><?= $spieler->get_name() ?> (<i><?=$spieler->get_team()?></i>)</li>
             <?php }//end foreach?>
         </ul>
     <?php }//endif?>
@@ -41,16 +41,15 @@
                             <th><?= Html::icon("account_circle") ?> Spieler</th>
                             <th><?= Html::icon("sports") ?> Schiri</th>
                         </tr>
-                        <?php foreach ($kader as $spieler_id => $spieler){?>
-                            <tr class="<?php if(!empty($spieler['schiri'])){?>w3-pale-green<?php } //endif?>">
-                                <td><?=$spieler_id?></td>
+                        <?php foreach ($kader as $spieler){?>
+                            <tr class="<?php if($spieler->schiri){?>w3-pale-green<?php } //endif?>">
+                                <td><?=$spieler->id()?></td>
                                 <td>
-                                    <?=$spieler['vorname'] . ' '
-                                    .  mb_substr($spieler['nachname'],0,1, "utf-8") . '.'?>
+                                    <?= $spieler->get_name(true) ?>
                                 </td>
                                 <td>
-                                    <?php if (!empty($spieler['schiri'])){?>
-                                        <?= Html::icon('check_circle') ?> <?= Html::get_saison_string($spieler['schiri']) ?>
+                                    <?php if ($spieler->schiri){?>
+                                        <?= Html::icon('check_circle') ?> <?= $spieler->get_schiri() ?>
                                     <?php } //endif?>
                                 </td>
                             </tr>
@@ -213,8 +212,8 @@
                 <input type="text" placeholder="Name eingeben" class="w3-input w3-border w3-border-primary" list="spielerliste" id="zeitstrafe_spieler" name="zeitstrafe_spieler">
                     <datalist id="spielerliste">
                         <?php
-                        foreach ($spieler_liste as $spieler_id => $spieler){ ?>
-                            <option value='<?=$spieler['vorname'] . ' ' .  mb_substr($spieler['nachname'],0,1, "utf-8") . '.' . ' | ' . Team::id_to_name($spieler['team_id'])?>'>
+                        foreach ($spieler_liste as $spieler){ ?>
+                            <option value='<?= $spieler->get_name(true) ?> | <?= $spieler->get_team() ?>'>
                         <?php } //end foreach ?>
                     </datalist>
             </p>
@@ -267,10 +266,10 @@
                    id="kader_check"
                    onchange="this.form.submit()"
             >
-            <label for="kader_check" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer;"> Kader wurden kontrolliert</label>
+            <label for="kader_check" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer;"> Es wurde auf richtige Teamkader geachet.</label>
         </p>
         <p>
-            <label for="turnierbericht">Turnierbericht</label>
+            <label for="turnierbericht">Turnierbericht / besondere Vorkommnisse</label>
             <textarea class="w3-input w3-border w3-border-primary"
                       onkeyup="woerter_zaehlen(1500, 'turnierbericht', 'turnierbericht_counter');"
                       maxlength="1500"

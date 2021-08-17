@@ -363,9 +363,14 @@ class Team
      */
     public function check_schiri_freilos_erhalten(): bool
     {
-        $erhalten_am = empty($this->details['zweites_freilos'])
+        return (self::static_check_schiri_freilos_erhalten($this->details['zweites_freilos']));
+    }
+
+    public static function static_check_schiri_freilos_erhalten($zweites_freilos): bool
+    {
+        $erhalten_am = empty($zweites_freilos)
             ? 0
-            : strtotime($this->details['zweites_freilos']);
+            : strtotime($zweites_freilos);
         return $erhalten_am >= strtotime(Config::SAISON_ANFANG);
     }
 
@@ -413,7 +418,7 @@ class Team
      */
     public function set_schiri_freilos(): void {
        if ($this->check_schiri_freilos_erhaltbar()){
-                Html::info($this->details['teamname'] . " hat ein zweites Freilos erhalten.");
+                Html::info("Das Team '" . $this->details['teamname'] . "' hat ein zweites Freilos erhalten.");
                 $this->set_zweites_freilos();
             }
     }

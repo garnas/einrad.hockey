@@ -26,10 +26,11 @@ class Helper
      * Verwendung zB nach Formularverarbeitungen.
      *
      * @param string|null $path
+     * @param string|null $get
      */
-    public static function reload(?string $path = null): void
+    public static function reload(?string $path = null, ?string $get = null ): void
     {
-        $url = ($path === null) ? db::escape($_SERVER['PHP_SELF']) : Env::BASE_URL . $path;
+        $url = ($path === null) ? db::escape($_SERVER['PHP_SELF'] . $get) : Env::BASE_URL . $path . $get;
         header("Location: $url");
         die();
     }

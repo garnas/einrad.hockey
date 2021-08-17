@@ -48,12 +48,15 @@ $teams = $turnier->get_liste_spielplan();
 $kader_array = $turnier->get_kader_kontrolle();
 $ausbilder_liste = [];
 $spieler_liste = [];
-foreach ($kader_array as $team_id => $kader) { // Todo In Funktion
-    foreach ($kader as $spieler_id => $spieler) {
-        if ($spieler['schiri'] == 'Ausbilder/in') {
-            $ausbilder_liste[$spieler_id] = $spieler;
+
+// Todo In Funktion
+$alle_ausbilder = LigaLeitung::get_all('schiriausbilder');
+foreach ($kader_array as $team_id => $kader) {
+    foreach ($kader as $spieler) {
+        if (isset($alle_ausbilder[$spieler->id()])) {
+            $ausbilder_liste[$spieler->id()] = $spieler;
         }
-        $spieler_liste[$spieler_id] = $spieler;
+        $spieler_liste[$spieler->id()] = $spieler;
     }
 }
 
