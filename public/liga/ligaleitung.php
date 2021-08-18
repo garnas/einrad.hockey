@@ -119,6 +119,6 @@ include '../../templates/header.tmp.php'; ?>
         <?php } //end foreach?>
     </table>
 </div>
-<p>Dank unserer Ausbilder haben wir zurzeit <?=Spieler::get_schiris_anzahl()?> Schiedsrichter in der Deutschen Einradhockeyliga.</p>
+<p>Dank unserer Ausbilder haben wir zurzeit <?=Stats::get_schiris_anzahl()?> Schiedsrichter in der Deutschen Einradhockeyliga.</p>
 
 <?php include '../../templates/footer.tmp.php';

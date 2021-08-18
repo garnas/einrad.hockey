@@ -9,7 +9,7 @@ class LigaBot
     /**
      * Führt den Ligabot aus
      */
-    public static function liga_bot()
+    public static function liga_bot(): void
     {
 
         db::sql_backup(); // Datenbank wird gesichert
@@ -113,6 +113,8 @@ class LigaBot
             }
             $kw = date('W', $datum); // Kalenderwoche übernehmen für die nächste Iteration
         }
+
+        Team::set_schiri_freilose();
     }
 
     /**

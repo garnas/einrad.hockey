@@ -9,8 +9,10 @@ require_once '../../logic/la_team_waehlen.logic.php'; //Auswahlfeld für ein Tea
 if (isset($_GET['team_id'])) {
     $team_id = (int)$_GET['team_id'];
     if (Team::is_ligateam($team_id)) {
-        $kader = Spieler::get_teamkader($team_id); //wird an Kader-Template übergeben
-        $kader_vorsaison = Spieler::get_teamkader_vorsaison($team_id); //wird an kader.logic und an template übergeben
+        $kader = nSpieler::get_kader($team_id);
+        $kader_vorsaison =
+            nSpieler::get_kader($team_id, Config::SAISON - 1)
+            +  nSpieler::get_kader($team_id, Config::SAISON - 2);
     } else {
         Html::error("Team wurde nicht gefunden");
     }

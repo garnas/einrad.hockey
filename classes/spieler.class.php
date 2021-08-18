@@ -5,21 +5,53 @@
  */
 class Spieler
 {
-    /**
-     * Eindeutige ID eines Spielers
-     * @var int
-     */
     public int $id;
-    public array $details;
+    public int $spieler_id;
+    public int $team_id;
+    public ?string $vorname;
+    public ?string $nachname;
+    public ?string $jahrgang;
+    public ?string $geschlecht;
+    public ?string $schiri;
+    public ?string $junior;
+    public ?string $zeit;
+
 
     /**
      * Spieler constructor.
-     * @param $spieler_id
      */
-    public function __construct(int $spieler_id)
+    public function __construct()
     {
-        $this->id = $spieler_id;
-        $this->details = $this->get_details();
+        db::debug("Alte Spielerklasse");
+    }
+
+    public static function get(int $id): object|null
+    {
+        $sql = "
+                SELECT * 
+                FROM spieler 
+                WHERE spieler_id = ?
+                ";
+        return db::$db->query($sql, $id)->fetch_object('Spieler');
+    }
+
+    public static function exists(int $id): bool
+    {
+        $sql = "
+                SELECT * 
+                FROM spieler 
+                WHERE spieler_id = ?
+                ";
+        return db::$db->query($sql, $id)->affected_rows() > 0;
+    }
+
+    public static function get_all(): array
+    {
+        $sql = "
+                SELECT * 
+                FROM spieler 
+                ";
+        return db::$db->query($sql)->fetch_objects('Spieler', key: 'spieler_id');
     }
 
     /**
@@ -84,7 +116,7 @@ class Spieler
      */
     public static function check_timing(): bool
     {
-        $saison_ende = strtotime(Config::SAISON_ENDE) + 25 * 60 * 60 - 1; // 23:59:59 am Saisonende
+        $saison_ende = strtotime(Config::SAISON_ENDE) + 24 * 60 * 60 - 1; // 23:59:59 am Saisonende
         $heute = time();
         return $saison_ende > $heute;
     }
@@ -99,8 +131,9 @@ class Spieler
     public static function get_teamkader(int $team_id, int $saison = Config::SAISON): array
     {
         $sql = "
-                SELECT *  
-                FROM spieler 
+                SELECT spieler.*, l.funktion  
+                FROM spieler
+                LEFT JOIN ligaleitung l on spieler.spieler_id = l.spieler_id
                 WHERE team_id = ? 
                 AND letzte_saison = ?
                 ORDER BY letzte_saison DESC, vorname
@@ -184,11 +217,7 @@ class Spieler
      */
     public function set_detail(string $entry, mixed $value): void
     {
-        $spalten_namen = db::$db->query("SHOW FIELDS FROM spieler")->list('Field');
-        if (!in_array($entry, $spalten_namen, true)) {
-            trigger_error("Ungültiger Spaltenname", E_USER_ERROR);
-        }
-        $zeit = ($entry === 'team_id' || $entry === 'letzte_saison') ? '' : ', zeit = zeit';
+        $zeit = ($entry === 'team_id' || $entry === 'letzte_saison') ? 'zeit = CURRENT_TIMESTAMP' : ', zeit = zeit';
         $entry = "`" . $entry . "`";
         $sql = "
                 UPDATE spieler 
@@ -198,37 +227,8 @@ class Spieler
                 ";
         db::$db->query($sql, $value)->log();
     }
-
-
-    /**
-     * Der Spieler wird aus der Datenbank gelöscht
-     */
-    public function delete_spieler(): void
-    {
-        $sql = "
-                DELETE FROM spieler 
-                WHERE spieler_id = $this->id
-                ";
-        db::$db->query($sql)->log();
-    }
-
-    /**
-     * Anzahl der gültigen Schiedsrichter in aktiven Teams
-     *
-     * @return int
-     */
-    public static function get_schiris_anzahl(): int
-    {
-        $saison = Config::SAISON;
-        $sql = "
-                SELECT count(*) 
-                FROM `spieler` 
-                INNER JOIN teams_liga 
-                ON teams_liga.team_id = spieler.team_id 
-                WHERE teams_liga.aktiv = 'Ja' 
-                AND spieler.schiri >= $saison 
-                OR spieler.schiri = 'Ausbilder/in'
-                ";
-        return db::$db->query($sql)->esc()->fetch_one() ?? 0;
+    public function get_ausbilder(): array {
+        $sql = "SELECT funktion FROM ligaleitung WHERE spieler_id = $this->spieler_id";
+        return db::$db->query($sql)->fetch();
     }
 }

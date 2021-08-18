@@ -118,6 +118,19 @@ class dbWrapper
         return $this->result->fetch_array()[0] ?? null;
     }
 
+    public function fetch_object(String $class, array $args = []): object|null
+    {
+        return $this->result->fetch_object($class, $args);
+    }
+
+    public function fetch_objects(string $class, ?String $key = NULL, array $constructor_args = []): array
+    {
+        while ($object = $this->result->fetch_object($class, ...$constructor_args)) {
+            is_null($key) ? $objects[] = $object : $objects[$object->$key] = $object;
+        }
+        return $objects ?? [];
+    }
+
     /**
      * Gibt die erste Reihe als Array aus
      *

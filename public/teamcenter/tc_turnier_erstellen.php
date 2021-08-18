@@ -5,8 +5,8 @@
 require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth
 
-//Check ob das Team über fünf Spieler verfügt
-if (count(Spieler::get_teamkader($_SESSION['logins']['team']['id'])) < 5){
+// heck ob das Team über fünf Spieler verfügt
+if (count(nSpieler::get_kader($_SESSION['logins']['team']['id'])) < 5){
     Html::info('Bitte trag deinen Teamkader ein, um Turniere zu erstellen.');
     header('Location: ../teamcenter/tc_kader.php');
     die();
