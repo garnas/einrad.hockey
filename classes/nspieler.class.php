@@ -118,6 +118,9 @@ class nSpieler
      */
     public function set_team_id(?int $team_id): nSpieler
     {
+        if (!isset($this->team_id)) {
+            $this->team_id = 0;
+        }
         if (Team::is_ligateam($team_id)) {
             if ($this->team_id !== $team_id) {
                 $this->set_timestamp();
@@ -406,6 +409,11 @@ class nSpieler
             $this->error = true;
             return $this;
         }
+
+        if (!isset($this->letzte_saison)) {
+            $this->letzte_saison = 0;
+        }
+
         if (
             $this->letzte_saison !== $saison
             && $saison === Config::SAISON

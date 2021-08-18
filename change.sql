@@ -1,1 +1,0 @@
-ALTER TABLE `teams_liga` ADD `zweites_freilos` DATE NULL COMMENT '2 Schiris 2 Freilose' AFTER `freilose`;
