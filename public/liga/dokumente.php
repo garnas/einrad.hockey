@@ -97,6 +97,13 @@ include '../../templates/header.tmp.php';
 <div class="w3-panel w3-card">
     <h2 class="w3-text-primary">Sonstiges</h2>
     <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
+    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_HYGIENE ?>">
+        <p>
+            <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
+            </i>
+            Empfohlenes Hygienekonzept
+        </p>
+    </a>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_DSGVO ?>">
         <p>
             <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
