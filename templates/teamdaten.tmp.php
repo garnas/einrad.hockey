@@ -61,7 +61,10 @@
             <td>
                 <?=$team->details['freilose']?>
                 <?php if($team->check_schiri_freilos_erhalten()){ ?>
-                    <span class="w3-text-green"><?= Html::icon("check") ?> (Schirifreilos erhalten)</span>
+                    <span class="w3-text-green">
+                        <?= Html::icon("check") ?>
+                        (Schirifreilos erhalten am <?= $team->details['zweites_freilos'] ?>)
+                    </span>
                 <?php } //end if ?>
             </td>
         </tr>

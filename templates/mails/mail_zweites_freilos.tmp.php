@@ -1,5 +1,5 @@
 <p>Hallo <?= $team->details['teamname'] ?>, </p>
 <p>
-    ihr habt für eure zwei Schiedsrichter im Kader euer zweites Freilos erhalten.
+    da ihr zwei ausgebildete Schiedsrichter im Kader eingetragen habt, wurde euch euer zweites Freilos gutgeschrieben.
 </p>
 
