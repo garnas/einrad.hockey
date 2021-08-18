@@ -301,7 +301,7 @@ class Turnier
     {
         $spielen_liste = $this->get_liste_spielplan();
         foreach ($spielen_liste as $team) {
-            $return[$team['team_id']] = Spieler::get_teamkader($team['team_id']);
+            $return[$team['team_id']] = nSpieler::get_kader($team['team_id']);
         }
         return $return ?? [];
     }

@@ -5,7 +5,6 @@
         <?= Html::link(
                 (Helper::$ligacenter) ? 'lc_teamdaten_aendern.php?team_id=' . $team->id : 'tc_teamdaten_aendern.php',
                 Html::icon('create') . ' Team- und Kontaktdaten ändern') ?>
-        </>
     </p>
 <div class="w3-panel w3-card-4">
     <h2 class="w3-text-primary"><?= Html::icon("image", tag: "h2") ?> Teamfoto</h2>
@@ -59,7 +58,15 @@
         </tr>
         <tr>
             <th class="w3-primary">Freilose</th>
-            <td><?=$team->details['freilose']?></td>
+            <td>
+                <?=$team->details['freilose']?>
+                <?php if($team->check_schiri_freilos_erhalten()){ ?>
+                    <span class="w3-text-green">
+                        <?= Html::icon("check") ?>
+                        (Schirifreilos erhalten am <?= $team->details['zweites_freilos'] ?>)
+                    </span>
+                <?php } //end if ?>
+            </td>
         </tr>
         <tr>
             <th class="w3-primary">Ligavertreter</th>
@@ -83,6 +90,7 @@
         </tr>
     </table>
 </div>
+
 <h2 class="w3-text-primary"><?= Html::icon("mail", tag: "h2") ?> Kontaktdaten</h2>
 <div class="w3-responsive w3-card-4">
     <table class="w3-table w3-striped">
