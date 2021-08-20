@@ -319,8 +319,8 @@ class nSpieler
 
                 $this->spieler_id = $result['spieler_id'];
 
-                if ($result['letzte_saison'] === Config::SAISON) {  // Spieler ist für diese Saison bereits in einem anderen Team
-                    Html::error("Der Spieler ist bereits im Kader für folgendes Team gemeldet: " . $this->get_team()
+                if ($result['letzte_saison'] === Config::SAISON) {
+                    Html::error("Der Spieler ist bereits im Kader für folgendes Team gemeldet: " . Team::id_to_name($result['team_id'])
                         . "<br> Bitte wende dich an den Ligaausschuss (" . Html::mailto(Env::LAMAIL) . ")",
                         esc:false);
                     return false;
