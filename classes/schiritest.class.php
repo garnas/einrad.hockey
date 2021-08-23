@@ -342,4 +342,122 @@ class SchiriTest
 
     #-------------------------------------------------------------------------
 
+
+    ############## Beispiel-Vorschlag von Ansgar ######################
+    ############## Nur ein Vorschlag! ######################
+
+    private int $schiri_test_id;
+    public array $pruefungs_fragen;
+    public nSpieler $spieler;
+    public string $level;
+    public string $gestellte_fragen;
+    public bool $error = false;
+
+    public function __construct(){}
+
+    /**
+     * @return SchiriTest
+     */
+    public function set_pruefungs_fragen(): SchiriTest
+    {
+        $level = match ($this->level) {
+            'junior' => 'J',
+            'basis' => 'B',
+            'fortgeschritten' => 'F'
+        }; // todo einheitliche Bezeichnung und match entfernen und unten $level durch $this->level ersetzten
+
+        # identisch mit $fragen von Rolf
+        $this->pruefungs_fragen = // vorschlag self::get_Fragen zu $this->get_fragen. $level als Argument streichen und zu $this->level in der funktion
+            self::get_fragen($level,  '1', 2) # Vor dem Spiel / Rund ums Spiel
+            + self::get_fragen($level,  '2', 3) # Schiedsrichterverhalten
+            + self::get_fragen($level,  '3', 1) # Handzeichen
+            + self::get_fragen($level,  '4', 1) # Penaltyschießen
+            + self::get_fragen($level,  '5', 3) # Vorfahrt
+            + self::get_fragen($level,  '6', 3) # Übertriebene Härte
+            + self::get_fragen($level,  '7', 3) # Eingriff ins Spiel
+            + self::get_fragen($level,  '8', 6) # Sonstige Fouls
+            + self::get_fragen($level,  '9', 4) # Torschüsse
+            + self::get_fragen($level, '10', 1) # Zeitstrafen/Unsportlichkeiten
+            + self::get_fragen($level, '11', 3); # Strafen
+
+        $this->set_gestellte_fragen(); // Ids in CSV-Form speichern
+
+        return $this;
+
+    }
+
+    /**
+     * @param nSpieler $spieler
+     * @return SchiriTest
+     */
+    public function set_spieler(nSpieler $spieler): SchiriTest
+    {
+        $this->spieler = $spieler;
+
+        return $this;
+    }
+
+    /**
+     * @param string $level
+     */
+    public function set_level(string $level): SchiriTest
+    {
+
+        if (in_array($level, ['junior', 'basis', 'fortgeschritten'])) {
+            $this->level = $level;
+        } else {
+            Html::error("Level nicht gefunden.");
+            $this->error = true;
+        }
+
+        return $this;
+    }
+
+    public function set_gestellte_fragen (): SchiriTest
+    {
+        $this->gestellte_fragen = implode(',', array_keys($this->pruefungs_fragen));
+        return $this;
+    }
+
+    public function create(): bool|SchiriTest
+    {
+        if ($this->error) {
+            return false;
+        }
+
+        $sql = "
+            INSERT INTO schiri_ergebnis (spieler_id, gestellte_fragen, level, saison, schiri_test_version)
+            VALUES (?, ?, ?, ?, '1')
+            ";
+        $params = [$this->spieler->id(), $this->gestellte_fragen, $this->level, Config::SAISON];
+
+        db::$db->query($sql, $params)->log();
+
+        $this->schiri_test_id = db::$db->get_last_insert_id();
+
+        return $this;
+    }
+
+    public function mail_on_create() {
+        $text = <<<Mail
+Test (Test-ID: $this->schiri_test_id, $this->level) für {$this->spieler->get_name()} wurde erstellt mit diesen 
+$this->gestellte_fragen Fragen-IDs
+Mail;
+        db::debug($text);
+        // Todo Ansgar mail versenden
+
+    }
+
+    public function ergebnis_speichern() {
+        // todo Update schiritest ergebnis.......
+    }
+
+    // Beispiel getter
+    public function get(int $schiri_test_id): null|object
+    {
+        $sql = "SELECT * FROM schiri_ergebnis WHERE schiri_test_id = ?";
+        // Dies nimmt alle Spalten und füllt dann alle Attribute, die den gleichen Namen wie eine der Spalten hat.
+        // Erst nachdem alle Attribute gesetzt worden sind, wird __construct() ausgeführt
+        return db::$db->query($sql, $schiri_test_id)->fetch_object(__CLASS__);
+    }
 }
