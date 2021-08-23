@@ -116,6 +116,7 @@ class Nav
     public static function get_lc_start(): array
     {
         return [
+            [Env::BASE_URL . "/schiricenter/schiri_verwalten.php", "Schiritest", "w3-secondary"],
             [Env::BASE_URL . "/ligacenter/lc_turnierliste.php", "Turniere verwalten", "w3-primary"],
             [Env::BASE_URL . "/ligacenter/lc_turnier_erstellen.php", "Turnier erstellen", "w3-primary"],
             [Env::BASE_URL . "/ligacenter/lc_kontaktcenter.php", "Kontaktcenter", "w3-tertiary"],
