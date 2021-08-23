@@ -66,8 +66,11 @@ if (isset($_POST['gitpull'])){
         $password = $_POST['password'];
 
         if (password_verify($password, $hash)) {
-
-            $output = shell_exec("sh " . Env::BASE_PATH . "/system/shell/gitpull.sh");
+            if (isset($_POST['schiri'])) {
+                $output = shell_exec("sh " . Env::BASE_PATH . "/system/shell/schiripull.sh");
+            } else {
+                $output = shell_exec("sh " . Env::BASE_PATH . "/system/shell/gitpull.sh");
+            }
             Helper::log("git.log", $output);
             db::debug($output);
             Helper::reload();
@@ -200,7 +203,12 @@ include '../../templates/header.tmp.php';?>
         <input type='password' name='password' class="w3-input w3-light-grey">
     </p>
     <p>
+        <input type='checkbox' id="schiri" name='schiri' checked="checked" class="w3-check">
+        <label for="schiri"><b>Nicht Master, sondern schiri_php8!</b></label>
+    </p>
+    <p>
         <input type='submit' name='gitpull' value='Update Website von Master' class="w3-button w3-green w3-block">
+    </p>
     </p>
 </form>
 
