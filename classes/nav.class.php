@@ -185,7 +185,7 @@ class Nav
     public const LINK_HYGIENE = Env::BASE_URL . '/dokumente/empfohlenes_hygienekonzept.pdf';
     public const LINK_DSGVO = Env::BASE_URL . '/dokumente/datenschutz-hinweise.pdf';
     public const LINK_FRANCE = 'https://monocycle.info/ligue-de-monocycle-basket-remaniement-co/';
-    public const LINK_SPIELPLAENE_ALT = Env::BASE_URL . '/dokumente/alte_spielplan_vorlagen.pdf';
+    public const LINK_SPIELPLAENE_ALT = Env::BASE_URL . '/dokumente/alte_spielplan_vorlagen.zip';
     public const LINK_EV_SH = 'https://www.einradverband-sh.de/';
     public const LINK_IUF = 'https://unicycling.org/';
     public const LINK_MODUS_KURZ_ENG = Env::BASE_URL . '/dokumente/summary_modus.pdf';
