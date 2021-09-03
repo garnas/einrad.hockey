@@ -49,7 +49,7 @@
             </tr>
             <!-- Saisonschlussturnier -->
             <tr>
-                <?php if (isset($cfinale)) { ?>
+                <?php if (isset($dfinale)) { ?>
                     <td class="w3-right-align"><?=$dfinale['datum']?></td>
                     <td><?= Html::link('turnier_details.php?turnier_id=' . $dfinale['turnier_id'], "Saisonschlussturnier", false) ?></td>
                     <td class="w3-right-align"><?=$dfinale['ort']?></td>

@@ -175,7 +175,7 @@ class Turnier
             FROM turniere_liga
             LEFT JOIN turniere_details ON turniere_liga.turnier_id = turniere_details.turnier_id
             WHERE saison = ?
-            AND art LIKE '%final';
+            AND art LIKE 'final';
             ";
         return db::$db->query($sql, $saison)->esc()->fetch('turnier_id');
     }
