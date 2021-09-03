@@ -53,6 +53,8 @@ include '../../templates/header.tmp.php';?>
 
 <h1 class="w3-text-grey">Turniere verwalten</h1>
 <p> 
+    <?=Html::link('lc_logs.php', '<span class="material-icons">info_outline</span> Gesamtlog anzeigen')?>
+    <br>
     <?=Html::link('#anstehend', '<span class="material-icons">sports_hockey</span> Anstehende Turniere')?>
     <br>
     <?=Html::link('#ergebnis', '<span class="material-icons">emoji_events</span> Ergebnisphase-Turniere')?>
