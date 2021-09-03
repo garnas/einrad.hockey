@@ -6,7 +6,6 @@ require_once '../../init.php';
 
 $turniere = Turnier::get_turniere('ergebnis', false);
 $finalturniere = Turnier::get_finalturniere();
-
 $all_anmeldungen = Turnier::get_all_anmeldungen();
 
 //Liste der Finalturniere erstellen
@@ -66,7 +65,9 @@ foreach ($all_anmeldungen as $turnier_id => $liste) {
     $freie_plaetze = $turniere[$turnier_id]['plaetze'] - $anz_spieleliste[$turnier_id] - $anz_meldeliste[$turnier_id] - $anz_warteliste[$turnier_id];
 
     //Oben rechts Plätze frei
-    if ($freie_plaetze > 0) {
+    if ($turniere[$turnier_id]['phase'] == 'spielplan') {
+        $turniere[$turnier_id]['plaetze_frei'] = '<span class="w3-text-gray">geschlossen</span>';
+    } elseif ($freie_plaetze > 0) {
         $turniere[$turnier_id]['plaetze_frei'] = '<span class="w3-text-green">frei</span>';
     } elseif ($freie_plaetze < 0 && $turniere[$turnier_id]['phase'] == 'offen' && $turniere[$turnier_id]['plaetze'] - $anz_spieleliste[$turnier_id] > 0) {
         $turniere[$turnier_id]['plaetze_frei'] = '<span class="w3-text-yellow">losen</span>';
