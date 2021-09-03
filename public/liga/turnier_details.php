@@ -26,43 +26,59 @@ if(in_array($turnier->details['art'],['I','II','III'])){
 $turnier->details['datum'] = strftime("%d.%m.%Y&nbsp;(%A)", strtotime($turnier->details['datum']));
 $turnier->details['startzeit'] = substr($turnier->details['startzeit'], 0, -3);
 
+//Turnierbesprechung
 if($turnier->details['besprechung'] == 'Ja'){
     $turnier->details['besprechung'] = 'Alle Teams sollen sich um ' . date('H:i', strtotime($turnier->details['startzeit']) - 15*60) . '&nbsp;Uhr zu einer gemeinsamen Turnierbesprechung einfinden.';
 }else{
     $turnier->details['besprechung'] = '';
 }
 
-if ($turnier->details['art'] == 'spass'){
-    $turnier->details['tblock'] = '--';
-    $turnier->details['art'] = 'Spaßturnier';
+//Turnierart
+switch ($turnier->details['art'])
+{
+    case 'spass':
+        $turnier->details['tblock'] = '';
+        $turnier->details['art'] = 'Spaßturnier';
+        break;
+    case 'I':
+        $turnier->details['tblock'] = ' (' . $turnier->details['tblock'] . ')';
+        $turnier->details['art'] = 'I: Blockeigenes Turnier (Der Turnierblock wandert mit Ausrichterblock)';
+        break;
+    case 'II':
+        $turnier->details['tblock'] = ' (' . $turnier->details['tblock'] . ')';
+        $turnier->details['art'] = 'II: Blockhöheres Turnier (Der Turnierblock wandert nur höherwertig mit Ausrichterblock)';
+        break;
+    case 'III':
+        $turnier->details['tblock'] = ' (' . $turnier->details['tblock'] . ')';
+        $turnier->details['art'] = 'III: Blockfreies Turnier';
+        break;
+    case 'final':
+        $turnier->details['tblock'] = '';
+        $turnier->details['tname'] = '';
+        $turnier->details['art'] = 'Finalturnier';
+        break;
+    case 'fixed':
+        $turnier->details['art'] = 'Manuell';
+        break;
 }
-if ($turnier->details['art'] == 'I'){
-    $turnier->details['art'] = 'I: Blockeigenes Turnier (Der Turnierblock wandert mit Ausrichterblock)';
+
+//Turnierphase
+switch ($turnier->details['phase'])
+{
+    case 'offen':
+        $turnier->details['phase'] = 'Offene Phase';
+        break;
+    case 'melde':
+        $turnier->details['phase'] = 'Meldephase';
+        break;
+    case 'ergebnis':
+        $turnier->details['phase'] = 'Ergebnisphase';
+        break;
+    case 'spieplan':
+        $turnier->details['phase'] = 'Spielplanphase';
+        break;
 }
-if ($turnier->details['art'] == 'II'){
-    $turnier->details['art'] = 'II: Blockhöheres Turnier (Der Turnierblock wandert nur höherwertig mit Ausrichterblock)';
-}
-if ($turnier->details['art'] == 'III'){
-    $turnier->details['art'] = 'III: Blockfreies Turnier';
-}
-if ($turnier->details['art'] == 'final'){
-    $turnier->details['art'] = 'Finalturnier';
-}
-if ($turnier->details['art'] == 'fixed'){
-    $turnier->details['art'] = 'Manuell';
-}
-if ($turnier->details['phase'] == 'melde'){
-    $turnier->details['phase'] = 'Meldephase';
-}
-if ($turnier->details['phase'] == 'offen'){
-    $turnier->details['phase'] = 'Offene Phase';
-}
-if ($turnier->details['phase'] == 'ergebnis'){
-    $turnier->details['phase'] = 'Ergebnisphase';
-}
-if ($turnier->details['phase'] == 'spielplan'){
-    $turnier->details['phase'] = 'Spielplanphase';
-}
+
 //Spielmodus
 if ($turnier->details['format'] == 'jgj'){
     $turnier->details['format'] = 'Jeder-gegen-Jeden';
@@ -83,7 +99,7 @@ include '../../templates/header.tmp.php';
 <!-- Überschrift -->
 <h1 class="w3-text-primary">
     <span class="w3-text-grey"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">info</i> Turnierinfos:</span>
-    <br><?=$turnier->details['tname']?> <?=$turnier->details['ort']?> (<?=$turnier->details['tblock']?>), <?=$turnier->details['datum']?>
+    <br><?=$turnier->details['tname']?> <?=$turnier->details['ort']?><?=$turnier->details['tblock']?>, <?=$turnier->details['datum']?>
 </h1>
 
 <!-- Anzeigen der allgemeinen Infos -->
