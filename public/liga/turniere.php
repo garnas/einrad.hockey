@@ -10,22 +10,28 @@ $all_anmeldungen = Turnier::get_all_anmeldungen();
 
 //Liste der Finalturniere erstellen
 foreach ($finalturniere as $turnier_id => $turnier) {
-    if ($finalturniere[$turnier_id]['tblock'] == "DFINALE") {
-        $dfinale['turnier_id'] = $finalturniere[$turnier_id]['turnier_id'];
-        $dfinale['ort'] = $finalturniere[$turnier_id]['ort'];
-        $dfinale['datum'] = strftime("%d.%m.%Y", strtotime($finalturniere[$turnier_id]['datum']));
-    } elseif ($finalturniere[$turnier_id]['tblock'] == "CFINALE") {
-        $cfinale['turnier_id'] = $finalturniere[$turnier_id]['turnier_id'];
-        $cfinale['ort'] = $finalturniere[$turnier_id]['ort'];
-        $cfinale['datum'] = strftime("%d.%m.%Y", strtotime($finalturniere[$turnier_id]['datum']));
-    } elseif ($finalturniere[$turnier_id]['tblock'] == "BFINALE") {
-        $bfinale['turnier_id'] = $finalturniere[$turnier_id]['turnier_id'];
-        $bfinale['ort'] = $finalturniere[$turnier_id]['ort'];
-        $bfinale['datum'] = strftime("%d.%m.%Y", strtotime($finalturniere[$turnier_id]['datum']));
-    } elseif ($finalturniere[$turnier_id]['tblock'] == "AFINALE") {
-        $finale['turnier_id'] = $finalturniere[$turnier_id]['turnier_id'];
-        $finale['ort'] = $finalturniere[$turnier_id]['ort'];
-        $finale['datum'] = strftime("%d.%m.%Y", strtotime($finalturniere[$turnier_id]['datum']));
+    switch ($finalturniere[$turnier_id]['tblock'])
+    {
+        case "DFINALE":
+            $dfinale['turnier_id'] = $finalturniere[$turnier_id]['turnier_id'];
+            $dfinale['ort'] = $finalturniere[$turnier_id]['ort'];
+            $dfinale['datum'] = strftime("%d.%m.%Y", strtotime($finalturniere[$turnier_id]['datum']));
+            break;
+        case "CFINALE":
+            $cfinale['turnier_id'] = $finalturniere[$turnier_id]['turnier_id'];
+            $cfinale['ort'] = $finalturniere[$turnier_id]['ort'];
+            $cfinale['datum'] = strftime("%d.%m.%Y", strtotime($finalturniere[$turnier_id]['datum']));
+            break;
+        case "BFINALE":
+            $bfinale['turnier_id'] = $finalturniere[$turnier_id]['turnier_id'];
+            $bfinale['ort'] = $finalturniere[$turnier_id]['ort'];
+            $bfinale['datum'] = strftime("%d.%m.%Y", strtotime($finalturniere[$turnier_id]['datum']));
+            break;
+        case "AFINALE":
+            $finale['turnier_id'] = $finalturniere[$turnier_id]['turnier_id'];
+            $finale['ort'] = $finalturniere[$turnier_id]['ort'];
+            $finale['datum'] = strftime("%d.%m.%Y", strtotime($finalturniere[$turnier_id]['datum']));
+            break;
     }
 }
 
@@ -35,21 +41,53 @@ foreach ($turniere as $turnier_id => $turnier) {
     $turniere[$turnier_id]['datum'] = strftime("%d.%m.", strtotime($turniere[$turnier_id]['datum']));
     $turniere[$turnier_id]['startzeit'] = substr($turniere[$turnier_id]['startzeit'], 0, -3);
 
+    // Spassturnier
     if ($turniere[$turnier_id]['art'] == 'spass') {
         $turniere[$turnier_id]['tblock'] = 'Spaß';
     }
+
+    // Turnierbesprechung
     if ($turniere[$turnier_id]['besprechung'] == 'Ja') {
         $turniere[$turnier_id]['besprechung'] = 'Gemeinsame Teambesprechung um ' . date('H:i', strtotime($turniere[$turnier_id]['startzeit']) - 15 * 60) . '&nbsp;Uhr';
     } else {
         $turniere[$turnier_id]['besprechung'] = '';
     }
+
     // Spielmodus
-    if ($turniere[$turnier_id]['format'] == 'jgj') {
-        $turniere[$turnier_id]['format'] = 'Jeder-gegen-Jeden';
-    } elseif ($turniere[$turnier_id]['format'] == 'dko') {
-        $turniere[$turnier_id]['format'] = 'Doppel-KO';
-    } elseif ($turniere[$turnier_id]['format'] == 'gruppen') {
-        $turniere[$turnier_id]['format'] = 'zwei Gruppen';
+    switch ($turniere[$turnier_id]['format']) 
+    {
+        case 'jgj':
+            $turniere[$turnier_id]['format'] = 'Jeder-gegen-Jeden';
+            break;
+        case 'dko':
+            $turniere[$turnier_id]['format'] = 'Doppel-KO';
+            break;
+        case 'gruppen':
+            $turniere[$turnier_id]['format'] = 'zwei Gruppen';
+            break;
+    }
+
+    // Turnierblock
+    switch ($turniere[$turnier_id]['tblock']) 
+    {
+        case 'AFINALE':
+            $turniere[$turnier_id]['tblock'] = '';
+            $turniere[$turnier_id]['tname'] = 'Finale der Deutschen Einradhockeyliga';
+            break;
+        case 'BFINALE':
+            $turniere[$turnier_id]['tblock'] = '';
+            $turniere[$turnier_id]['tname'] = 'B-Finale der Deutschen Einradhockeyliga';
+            break;
+        case 'CFINALE':
+            $turniere[$turnier_id]['tblock'] = '';
+            $turniere[$turnier_id]['tname'] = 'C-Finale der Deutschen Einradhockeyliga';
+            break;
+        case 'DFINALE':
+            $turniere[$turnier_id]['tblock'] = '';
+            $turniere[$turnier_id]['tname'] = 'Saisonschlussturnier';
+            break;
+        default:
+            $turniere[$turnier_id]['tblock'] = '(' . $turniere[$turnier_id]['tblock'] . ')';
     }
 }
 
@@ -75,6 +113,7 @@ foreach ($all_anmeldungen as $turnier_id => $liste) {
         $turniere[$turnier_id]['plaetze_frei'] = '<span class="w3-text-red">voll</span>';
     }
 
+    //Unten links Phase
     if ($turniere[$turnier_id]['art'] == 'final') {
         $turniere[$turnier_id]['phase'] = 'Finale';
     }
@@ -129,15 +168,22 @@ include '../../templates/header.tmp.php';
         <!--Turnierpanels -->
         <?php foreach ($turniere as $turnier) { ?>
             <section onclick="modal('modal<?= $turnier['turnier_id'] ?>')"
-                     class='w3-display-container w3-panel <?php if ($turnier['art'] == 'final') { ?>w3-pale-red<?php } ?> w3-card'
-                     style='cursor: pointer'
+                     class='w3-display-container w3-panel w3-card'
+                     style='cursor: pointer; <?php if ($turnier['art'] == 'final') { ?>background-color:#edf0f7;<?php } ?>'
                      id='<?= $turnier['turnier_id'] ?>'>
                 <!-- Angezeigtes Turnierpanel -->
                 <div class='w3-panel'>
                     <div class="w3-center">
-                        <h4 class=''><?= $turnier['datum'] ?>
-                            <span class="w3-text-primary"><?= $turnier['ort'] ?></span> (<?= $turnier['tblock'] ?>)</h4>
-                        <p class='w3-text-grey'><?= $turnier['tname'] ?></p>
+                        <?php if ($turnier['art'] != 'final') { ?>
+                            <h4 class=''><?= $turnier['datum'] ?>
+                                <span class="w3-text-primary"><?= $turnier['ort'] ?></span> <?= $turnier['tblock'] ?></h4>
+                            <p class='w3-text-grey'><?= $turnier['tname'] ?></p>
+                        <?php } else {?>
+                            <h4 class='w3-text-primary'>
+                                <?= $turnier['tname'] ?> </h4>
+                            <h4 class=''> 
+                                <?= $turnier['datum'] ?> <span class="w3-text-primary"><?= $turnier['ort'] ?></span></h4>
+                        <?php } ?>
                     </div>
                     <div style="font-size: 13px;" class="w3-text-grey">
                         <i class='w3-display-topleft w3-padding'><?= $turnier['plaetze_frei'] ?? '<span class="w3-text-green">frei</span>' ?></i>
