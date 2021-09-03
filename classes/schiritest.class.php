@@ -3,6 +3,47 @@
 class SchiriTest
 {
 
+    # Anzahl der Fragen in den einzelnen Kategorien festlegen:
+    #  0 -> beliebige Kategorie
+    #  1 -> Vor dem Spiel/Rund ums Spiel
+    #  2 -> Schiedsrichterverhalten
+    #  3 -> Handzeichen
+    #  4 -> Penaltyschießen
+    #  5 -> Vorfahrt
+    #  6 -> Übertriebene Härte
+    #  7 -> Eingriff ins Spiel
+    #  8 -> Sonstige Fouls
+    #  9 -> Torschüsse
+    # 10 -> Zeitstrafen/Unsportlichkeiten
+    # 11 -> Strafen
+    #                             0  1  2  3  4  5  6  7  8  9 10 11
+    public const anzahl_L = array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    public const anzahl_J = array(0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1);
+    public const anzahl_B = array(0, 2, 3, 1, 1, 3, 3, 3, 6, 4, 1, 3);
+    public const anzahl_F = array(0, 2, 3, 1, 1, 3, 3, 3, 6, 4, 1, 3);
+    public const lev_infos = array(
+        'L'=>array(
+            'name'        => 'Lehrgang',
+            'anzahl'      => self::anzahl_L,
+            'timelimit'   => 10,  # in Minuten
+            'richtig_min' => 1),  # Minimum zum Bestehen
+        'J'=>array(
+            'name'        => 'Junior',
+            'anzahl'      => self::anzahl_J,
+            'timelimit'   => 45,  # in Minuten
+            'richtig_min' => 9),  # Minimum zum Bestehen
+        'B'=>array(
+            'name'        => 'Basis',
+            'anzahl'      => self::anzahl_B,
+            'timelimit'   => 45,  # in Minuten
+            'richtig_min' => 25), # Minimum zum Bestehen
+        'F'=>array(
+            'name'        => 'Fortgeschrittene',
+            'anzahl'      => self::anzahl_F,
+            'timelimit'   => 30,  # in Minuten
+            'richtig_min' => 25)  # Minimum zum Bestehen
+    );
+
     #-------------------------------------------------------------------------
 
     # Get eine bestimmte Anzahl an zufälligen Fragen einer Kategorie für den Schiritest
@@ -10,12 +51,12 @@ class SchiriTest
     # @param $LJBF      # Lehrgang, Junior, Basis oder Fortgeschrittene?
     # @param $kategorie # Kategorie aus welcher die Fragen geholt werden sollen
     # @param $anzahl    # Anzahl der Fragen die geholt werden sollen
-    # @param $fragenr   # Nummer einer bestimmten Frage, die geholt werden soll
+    # @param $frage_id  # ID einer bestimmten Frage, die geholt werden soll
     # @return array     # Fragen die zurückgegeben werden
-    public static function get_fragen(string $LJBF, string $kategorie,
-                                      int $anzahl, int $fragenr = 0): array
+    public static function get_fragen(string $LJBF, int $kategorie,
+                                      int $anzahl, int $frage_id = 0): array
     {
-        if ($kategorie === '*') {
+        if ($kategorie === 0) {
             $sql = "
                 SELECT *
                 FROM schiri_test
@@ -34,14 +75,14 @@ class SchiriTest
                 ";
             $result = db::$db->query($sql, $LJBF, $kategorie, $anzahl)->fetch();
         }
-        if ($fragenr > 0) {
+        if ($frage_id > 0) {
             $sql = "
                 SELECT *
                 FROM schiri_test
                 WHERE frage_id = ?
                 LIMIT ?
                 ";
-            $result = db::$db->query($sql, $fragenr, $anzahl)->fetch();
+            $result = db::$db->query($sql, $frage_id, $anzahl)->fetch();
         }
         foreach ($result as $row) {
             # String in ein Array parsen:
@@ -61,8 +102,8 @@ class SchiriTest
 
     #-------------------------------------------------------------------------
 
-    # personifizierten Test aus md5sum erzeugen:
-    public static function personifizierter_test(string $md5sum): array
+    # personalisierten Test aus md5sum erzeugen:
+    public static function personalisierter_test(string $md5sum): array
     {
         $pruefling = '';
         #-----
@@ -96,7 +137,7 @@ class SchiriTest
         } else {
             $fragen = [];
             foreach ($fragen_IDs as $frage_ID) {
-                $fragen += self::get_fragen('DUMMY', 'DUMMY', 1, $frage_ID);
+                $fragen += self::get_fragen('DUMMY', 0, 1, $frage_ID);
             }
         }
         return [$pruefling, $level, $fragen];
@@ -113,8 +154,8 @@ class SchiriTest
             $fragennummer = '';
         }
         echo '<h3 class="w3-topbar">' . $fragennummer .
-            '<span style="float:right"><font size="-2">(id: ' .
-            $frage_id . ')</font></span></h3>';
+            '<span style="float:right;color:gray;font-size:60%">(ID: ' .
+            $frage_id . ')</span></h3>';
         echo '<h4>' . $frage['frage'] . '</h4>';
         if (!empty($frage['name_video'])) { # Video zur Frage:
             echo '<div style="max-width: 500px">';
@@ -318,8 +359,7 @@ class SchiriTest
             $text .= "Antwort des Prüflings: " . implode(",",$abgabe[$index-1]) . "<br>";
         }
 
-        # zeige Emailtext zum Debuggen auf der Webseite an:
-        # echo $text;
+        echo '<pre>' . $text . '</pre>'; # qqq diese Zeile nur zum debugging aktivieren
 
         # Email an Schiriausschuss senden:
         $mailer = MailBot::start_mailer();
@@ -349,7 +389,7 @@ class SchiriTest
     private int $schiri_test_id;
     public array $pruefungs_fragen;
     public nSpieler $spieler;
-    public string $level;
+    public string $test_level;
     public string $gestellte_fragen;
     public bool $error = false;
 
@@ -360,27 +400,24 @@ class SchiriTest
      */
     public function set_pruefungs_fragen(): SchiriTest
     {
-        $level = match ($this->level) {
-            'junior' => 'J',
-            'basis' => 'B',
-            'fortgeschritten' => 'F'
-        }; // todo einheitliche Bezeichnung und match entfernen und unten $level durch $this->level ersetzten
 
         # identisch mit $fragen von Rolf
-        $this->pruefungs_fragen = // vorschlag self::get_Fragen zu $this->get_fragen. $level als Argument streichen und zu $this->level in der funktion
-            self::get_fragen($level,  '1', 2) # Vor dem Spiel / Rund ums Spiel
-            + self::get_fragen($level,  '2', 3) # Schiedsrichterverhalten
-            + self::get_fragen($level,  '3', 1) # Handzeichen
-            + self::get_fragen($level,  '4', 1) # Penaltyschießen
-            + self::get_fragen($level,  '5', 3) # Vorfahrt
-            + self::get_fragen($level,  '6', 3) # Übertriebene Härte
-            + self::get_fragen($level,  '7', 3) # Eingriff ins Spiel
-            + self::get_fragen($level,  '8', 6) # Sonstige Fouls
-            + self::get_fragen($level,  '9', 4) # Torschüsse
-            + self::get_fragen($level, '10', 1) # Zeitstrafen/Unsportlichkeiten
-            + self::get_fragen($level, '11', 3); # Strafen
+        $this->pruefungs_fragen = // vorschlag self::get_Fragen zu $this->get_fragen. $test_level als Argument streichen und zu $this->test_level in der funktion
+            self::get_fragen($this->test_level,  1, 2) # Vor dem Spiel / Rund ums Spiel
+            + self::get_fragen($this->test_level,  2, 3) # Schiedsrichterverhalten
+            + self::get_fragen($this->test_level,  3, 1) # Handzeichen
+            + self::get_fragen($this->test_level,  4, 1) # Penaltyschießen
+            + self::get_fragen($this->test_level,  5, 3) # Vorfahrt
+            + self::get_fragen($this->test_level,  6, 3) # Übertriebene Härte
+            + self::get_fragen($this->test_level,  7, 3) # Eingriff ins Spiel
+            + self::get_fragen($this->test_level,  8, 6) # Sonstige Fouls
+            + self::get_fragen($this->test_level,  9, 4) # Torschüsse
+            + self::get_fragen($this->test_level, 10, 1) # Zeitstrafen/Unsportlichkeiten
+            + self::get_fragen($this->test_level, 11, 3); # Strafen
 
         $this->set_gestellte_fragen(); // Ids in CSV-Form speichern
+        $this->md5 = md5($this->gestellte_fragen); // Checksum für die URL des Tests
+        $this->zeitstempel = date('Y-m-d H:i:s'); // heutiges Datum + Uhrzeit abspeichern
 
         return $this;
 
@@ -398,18 +435,25 @@ class SchiriTest
     }
 
     /**
-     * @param string $level
+     * @param string $test_level
      */
-    public function set_level(string $level): SchiriTest
+    public function set_level(string $test_level): SchiriTest
     {
-
-        if (in_array($level, ['junior', 'basis', 'fortgeschritten'])) {
-            $this->level = $level;
+        if (in_array($test_level, ['J', 'B', 'F'])) {
+            $this->test_level = $test_level;
         } else {
             Html::error("Level nicht gefunden.");
             $this->error = true;
         }
+        return $this;
+    }
 
+    /**
+     * @param string $email
+     */
+    public function set_email(string $email): SchiriTest
+    {
+        $this->email = $email;
         return $this;
     }
 
@@ -426,26 +470,54 @@ class SchiriTest
         }
 
         $sql = "
-            INSERT INTO schiri_ergebnis (spieler_id, gestellte_fragen, level, saison, schiri_test_version)
-            VALUES (?, ?, ?, ?, '1')
+            INSERT INTO schiri_ergebnis (schiri_test_md5, spieler_id, gestellte_fragen,
+            test_level, time_stamp, saison, schiri_test_version)
+            VALUES (?, ?, ?, ?, ?, ?, '1')
             ";
-        $params = [$this->spieler->id(), $this->gestellte_fragen, $this->level, Config::SAISON];
+        $params = [$this->md5, $this->spieler->id(), $this->gestellte_fragen,
+            $this->test_level, $this->zeitstempel, Config::SAISON];
 
         db::$db->query($sql, $params)->log();
 
+        $this->url = Env::BASE_URL . '/schiricenter/schiritest.php?md5sum=' . $this->md5;
         $this->schiri_test_id = db::$db->get_last_insert_id();
 
         return $this;
     }
 
     public function mail_on_create() {
+        $levelname = self::lev_infos[$this->test_level]['name'];
+        $anzahl = array_sum(self::lev_infos[$this->test_level]['anzahl']);
+        $richtig_min = self::lev_infos[$this->test_level]['richtig_min'];
+        $timelimit = self::lev_infos[$this->test_level]['timelimit'];
         $text = <<<Mail
-Test (Test-ID: $this->schiri_test_id, $this->level) für {$this->spieler->get_name()} wurde erstellt mit diesen 
-$this->gestellte_fragen Fragen-IDs
-Mail;
-        db::debug($text);
-        // Todo Ansgar mail versenden
+Hallo {$this->spieler->get_name()},
 
+dein Online Schiritest (Level: $levelname) ist jetzt erstellt
+worden. Du kannst ihn hier starten:
+
+$this->url
+
+Sobald du die Webseite aufrufst, hast du $timelimit Minuten Zeit.
+
+Es müssen $richtig_min von den $anzahl Fragen richtig beantwortet werden.
+
+Viele Grüße
+Der Schiriausschuss
+Mail;
+        Html::message('info', '<pre>' . $text . '</pre>',
+            'Text der automatischen E-Mail:', esc:false);
+        // Todo Ansgar mail versenden
+        # Email an Prüfling senden:
+        $mailer = MailBot::start_mailer();
+        $mailer->setFrom(Env::SCHIRIMAIL); # Absender ist Schiriausschuss
+        $mailer->addAddress($this->email, $this->spieler->get_name()); # Empfänger
+        $mailer->addCC(Env::SCHIRIMAIL); # cc: an Schiriausschuss
+        $mailer->Subject = 'Online Schiritest für ' . $this->spieler->get_name(); # Betreff
+        $mailer->Body = $text; # Text der E-Mail 
+        if (!MailBot::send_mail($mailer)) {
+            return false;
+        }
     }
 
     public function ergebnis_speichern() {

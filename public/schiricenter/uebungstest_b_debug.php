@@ -1,3 +1,3 @@
 <?php # -*- php -*-
 $DEBUGMODUS = TRUE;
-include 'basistest.php';
+include 'uebungstest_b.php';

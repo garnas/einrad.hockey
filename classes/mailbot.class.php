@@ -51,7 +51,7 @@ class MailBot
         }
 
         Helper::log(Config::LOG_EMAILS, 'E-Mail-Debug-Pseudo-Versand erfolgreich');
-        db::debug($mailer);
+        #qqq db::debug($mailer);
         return true;
     }
 

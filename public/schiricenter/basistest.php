@@ -5,6 +5,8 @@
 require_once '../../init.php'; # Autoloader und Session, muss immer geladen werden!
 # require_once '../../logic/session_team.logic.php'; # Nur im Teamcenter zugreifbar
 
+$test_level = 'B'; # Basis
+
 # Antwort auswerten oder neue Frage stellen?
 if (isset($_POST['beantworten'])) {
     $fragen = $_SESSION['sc_test_fragen'];
@@ -16,24 +18,27 @@ if (isset($_POST['beantworten'])) {
         }
     }
 } else {
-    $level = 'B'; # Basis
-    $fragen01 = SchiriTest::get_fragen($level,  '1', 2); # Vor dem Spiel / Rund ums Spiel
-    $fragen02 = SchiriTest::get_fragen($level,  '2', 3); # Schiedsrichterverhalten
-    $fragen03 = SchiriTest::get_fragen($level,  '3', 1); # Handzeichen
-    $fragen04 = SchiriTest::get_fragen($level,  '4', 1); # Penaltyschießen
-    $fragen05 = SchiriTest::get_fragen($level,  '5', 3); # Vorfahrt
-    $fragen06 = SchiriTest::get_fragen($level,  '6', 3); # Übertriebene Härte
-    $fragen07 = SchiriTest::get_fragen($level,  '7', 3); # Eingriff ins Spiel
-    $fragen08 = SchiriTest::get_fragen($level,  '8', 6); # Sonstige Fouls
-    $fragen09 = SchiriTest::get_fragen($level,  '9', 4); # Torschüsse
-    $fragen10 = SchiriTest::get_fragen($level, '10', 1); # Zeitstrafen / Unsportlichkeiten
-    $fragen11 = SchiriTest::get_fragen($level, '11', 3); # Strafen
+    # Fragen aus den einzelnen Kategorien auswählen:
+    $lev_info = SchiriTest::lev_infos[$test_level];
+    $levelname   = $lev_info['name'];
+    $anzahl      = $lev_info['anzahl'];
+    $timelimit   = $lev_info['timelimit'];
+    $richtig_min = $lev_info['richtig_min'];
+    $fragen01 = SchiriTest::get_fragen($test_level,  1, $anzahl[1]); # Vor dem Spiel / Rund ums Spiel
+    $fragen02 = SchiriTest::get_fragen($test_level,  2, $anzahl[2]); # Schiedsrichterverhalten
+    $fragen03 = SchiriTest::get_fragen($test_level,  3, $anzahl[3]); # Handzeichen
+    $fragen04 = SchiriTest::get_fragen($test_level,  4, $anzahl[4]); # Penaltyschießen
+    $fragen05 = SchiriTest::get_fragen($test_level,  5, $anzahl[5]); # Vorfahrt
+    $fragen06 = SchiriTest::get_fragen($test_level,  6, $anzahl[6]); # Übertriebene Härte
+    $fragen07 = SchiriTest::get_fragen($test_level,  7, $anzahl[7]); # Eingriff ins Spiel
+    $fragen08 = SchiriTest::get_fragen($test_level,  8, $anzahl[8]); # Sonstige Fouls
+    $fragen09 = SchiriTest::get_fragen($test_level,  9, $anzahl[9]); # Torschüsse
+    $fragen10 = SchiriTest::get_fragen($test_level, 10, $anzahl[10]); # Zeitstrafen / Unsportlichkeiten
+    $fragen11 = SchiriTest::get_fragen($test_level, 11, $anzahl[11]); # Strafen
     $fragen = $fragen01 + $fragen02 + $fragen03 + $fragen04 + $fragen05 + $fragen06 +
         $fragen07 + $fragen08 + $fragen09 + $fragen10 + $fragen11;
     $_SESSION['sc_test_fragen'] = $fragen;
 }
-
-$timelimit = 45*60; // in Sekunden
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -91,7 +96,7 @@ if (isset($_POST['beantworten'])) { # Test auswerten:
     <div class="w3-center w3-white w3-bottombar w3-border-primary"
          style="position: sticky; top: 0; z-index: 1000;">
         <?php
-        Html::countdown(time() + $timelimit);
+        Html::countdown(time() + 60*$timelimit);
         ?>
     </div>
     <?php
