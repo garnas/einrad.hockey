@@ -37,23 +37,20 @@ if($turnier->details['besprechung'] == 'Ja'){
 switch ($turnier->details['art'])
 {
     case 'spass':
-        $turnier->details['tblock'] = '';
+        $turnier->details['tblock'] = '--';
         $turnier->details['art'] = 'Spaßturnier';
         break;
     case 'I':
-        $turnier->details['tblock'] = ' (' . $turnier->details['tblock'] . ')';
         $turnier->details['art'] = 'I: Blockeigenes Turnier (Der Turnierblock wandert mit Ausrichterblock)';
         break;
     case 'II':
-        $turnier->details['tblock'] = ' (' . $turnier->details['tblock'] . ')';
         $turnier->details['art'] = 'II: Blockhöheres Turnier (Der Turnierblock wandert nur höherwertig mit Ausrichterblock)';
         break;
     case 'III':
-        $turnier->details['tblock'] = ' (' . $turnier->details['tblock'] . ')';
         $turnier->details['art'] = 'III: Blockfreies Turnier';
         break;
     case 'final':
-        $turnier->details['tblock'] = '';
+        $turnier->details['tblock'] = '--';
         $turnier->details['tname'] = '';
         $turnier->details['art'] = 'Finalturnier';
         break;
@@ -99,7 +96,7 @@ include '../../templates/header.tmp.php';
 <!-- Überschrift -->
 <h1 class="w3-text-primary">
     <span class="w3-text-grey"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">info</i> Turnierinfos:</span>
-    <br><?=$turnier->details['tname']?> <?=$turnier->details['ort']?><?=$turnier->details['tblock']?>, <?=$turnier->details['datum']?>
+    <br><?=$turnier->details['tname']?> <?=$turnier->details['ort']?> (<?=$turnier->details['tblock']?>), <?=$turnier->details['datum']?>
 </h1>
 
 <!-- Anzeigen der allgemeinen Infos -->
