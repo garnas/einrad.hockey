@@ -10,19 +10,19 @@ $all_anmeldungen = Turnier::get_all_anmeldungen();
 
 //Liste der Finalturniere erstellen
 foreach ($finalturniere as $turnier_id => $turnier) {
-    if ($finalturniere[$turnier_id]['tname'] == "Saisonschlussturnier") {
+    if ($finalturniere[$turnier_id]['tblock'] == "DFINALE") {
         $dfinale['turnier_id'] = $finalturniere[$turnier_id]['turnier_id'];
         $dfinale['ort'] = $finalturniere[$turnier_id]['ort'];
         $dfinale['datum'] = strftime("%d.%m.%Y", strtotime($finalturniere[$turnier_id]['datum']));
-    } elseif ($finalturniere[$turnier_id]['tname'] == "C-Finale der Deutschen Einradhockeyliga") {
+    } elseif ($finalturniere[$turnier_id]['tblock'] == "CFINALE") {
         $cfinale['turnier_id'] = $finalturniere[$turnier_id]['turnier_id'];
         $cfinale['ort'] = $finalturniere[$turnier_id]['ort'];
         $cfinale['datum'] = strftime("%d.%m.%Y", strtotime($finalturniere[$turnier_id]['datum']));
-    } elseif ($finalturniere[$turnier_id]['tname'] == "B-Finale der Deutschen Einradhockeyliga") {
+    } elseif ($finalturniere[$turnier_id]['tblock'] == "BFINALE") {
         $bfinale['turnier_id'] = $finalturniere[$turnier_id]['turnier_id'];
         $bfinale['ort'] = $finalturniere[$turnier_id]['ort'];
         $bfinale['datum'] = strftime("%d.%m.%Y", strtotime($finalturniere[$turnier_id]['datum']));
-    } elseif ($finalturniere[$turnier_id]['tname'] == "Finale der Deutschen Einradhockeyliga") {
+    } elseif ($finalturniere[$turnier_id]['tblock'] == "AFINALE") {
         $finale['turnier_id'] = $finalturniere[$turnier_id]['turnier_id'];
         $finale['ort'] = $finalturniere[$turnier_id]['ort'];
         $finale['datum'] = strftime("%d.%m.%Y", strtotime($finalturniere[$turnier_id]['datum']));
@@ -88,6 +88,8 @@ foreach ($all_anmeldungen as $turnier_id => $liste) {
     }
 
 }
+
+db::debug($finalturniere);
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
