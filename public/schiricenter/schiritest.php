@@ -6,7 +6,7 @@ require_once '../../init.php'; # Autoloader und Session, muss immer geladen werd
 # require_once '../../logic/session_team.logic.php'; # Nur im Teamcenter zugreifbar
 
 if (isset($_GET['md5sum'])) {
-    [$pruefling, $test_level, $fragen] = SchiriTest::personalisierter_test($_GET['md5sum']);
+    [$pruefling, $test_level, $fragen, $neu] = SchiriTest::offizieller_test($_GET['md5sum']);
 }
 
 if (isset($test_level)) {
@@ -35,10 +35,17 @@ if (isset($_POST['beantworten'])) {
         }
     }
     if (!$pruefling==''){
-        SchiriTest::testergebnis_melden($pruefling, $fragen, $richtig, $alle_antworten_user);
+        SchiriTest::testergebnis_melden($fragen, $richtig, $alle_antworten_user);
     }
 } else {
     if (isset($_GET['md5sum'])) {
+        if (!$neu) {
+            exit('<H1>Ungültiger Test (wurde schon gestartet)</H1>');
+        }
+        $zeitstempel = date('Y-m-d H:i:s'); # heutiges Datum + Uhrzeit
+        $sql = "UPDATE schiri_ergebnis SET t_gestartet = ? WHERE md5sum = ?;";
+        $params = [$zeitstempel, $_GET['md5sum']];
+        db::$db->query($sql, $params)->log();
         $titel = 'Schiritest (' . $levelname . ') für ' . $pruefling;
     } else {
         $pruefling = '';
@@ -129,7 +136,12 @@ if (isset($_POST['beantworten'])) { # Test auswerten:
         echo '<LI>Du hast ' . $timelimit . ' Minuten Zeit.</LI>';
     }
     echo '<LI>Es können mehrere Antwortmöglichkeiten richtig sein.</LI>';
-    echo '<LI>Mindestens 1 Antwort ist immer richtig.</LI></UL>';
+    echo '<LI>Mindestens 1 Antwort ist immer richtig.</LI>';
+    echo '<LI>In den Beispielen spielt Team "Rot" gegen Team "Blau".</LI>';
+    if ($pruefling != '') {
+        echo '<LI>Achtung: Seite nicht neu laden, während der Test ausgefüllt wird!</LI>';
+    }
+    echo '</UL>';
     if ($test_level!='L') { # Timer, außer für Lehrgang
         echo '<div class="w3-center w3-white w3-bottombar w3-border-primary"';
         echo 'style="position: sticky; top: 0; z-index: 1000;">';
@@ -171,13 +183,13 @@ $_SESSION['frage_id'] = $frage_id; # Fragennummer abspeichern
 if (!isset($_POST['beantworten'])) {
     if ($test_level!='L') {
         echo '<h3 class="w3-topbar">Fertig!</h3>';
-        echo '<P>Du kannst dir alle Fragen nochmals ansehen, und du kannst deine';
-        echo 'Antworten jetzt noch ändern. Dann bitte auf "Test abgeben" klicken,';
+        echo '<P>Du kannst dir alle Fragen nochmals ansehen, und du kannst deine ';
+        echo 'Antworten jetzt noch ändern. Dann bitte auf "Test abgeben" klicken, ';
         echo 'danach sind keine Änderungen mehr möglich.</P>';
     }
-    echo '<button type="submit" class="w3-button w3-hover-indigo w3-block w3-primary"';
-    echo 'name="beantworten"><i class="material-icons">check_circle_outline</i>';
-    echo ' Test abgeben</button>';
+    echo '<button type="submit" class="w3-button w3-hover-indigo w3-block w3-primary" ';
+    echo 'name="beantworten"><i class="material-icons">check_circle_outline</i> ';
+    echo 'Test abgeben</button>';
 }
 echo '</form>';
 include '../../templates/footer.tmp.php';

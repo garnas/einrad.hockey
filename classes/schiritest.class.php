@@ -102,45 +102,28 @@ class SchiriTest
 
     #-------------------------------------------------------------------------
 
-    # personalisierten Test aus md5sum erzeugen:
-    public static function personalisierter_test(string $md5sum): array
+    # offiziellen, personalisierten Test aus md5sum erzeugen:
+    public static function offizieller_test(string $md5sum): array
     {
-        $pruefling = '';
-        #-----
-        # Hier werden jetzt einige mit test-erstellen.php erstellte
-        # Tests definiert. Letztendlich sollten diese
-        # Daten wohl aus der Datenbank kommen.        
-        #-----
-        if ($md5sum == '0dd3b944eb3f6ac6abdc1e1af23a4565') {
-            $pruefling = 'Erika Mustermann';
-            $level = 'F'; # Fortgeschritten
-            $fragen_IDs = [32,42,202,195,65,64,66,33,54,26,12,52,55,120,20,
-            23,113,8,67,77,131,74,178,10];
-        }
-        #-----
-        if ($md5sum == '8d8de0915e02108b1a0e647e0165f288') {
-            $pruefling = 'John Doe';
-            $level = 'B'; # Basis
-            $fragen_IDs = [56,3,144,188,89,108,196,65,179,66,27,26,199,180,15,
-            14,55,213,45,205,7,127,93,223,49,216,61,21,111,135];
-        }
-        #-----
-        if ($md5sum == '8632fd6fd39204f63c284fc2d2d3155b') {
-            $pruefling = 'Lieschen Müller';
-            $level = 'B'; # Basis
-            $fragen_IDs = [39,189,87,144,85,106,196,64,179,62,26,199,33,12,180,
-            1,147,210,127,114,8,123,49,216,73,149,218,10,140,11];
-        }
-        #-----
-        if ($pruefling==''){
-             exit('<H1>Ungültige URL (falsche md5sum)</H1>');
-        } else {
+        $sql = "
+            SELECT *
+            FROM schiri_ergebnis
+            WHERE md5sum = ?
+            ";
+        $result = db::$db->query($sql, $md5sum)->fetch();
+        if (count($result)==1) {
+            $pruefling = $result[0]['spieler_name'];
+            $level = $result[0]['test_level'];
+            $fragen_IDs = str_getcsv($result[0]['gestellte_fragen']);
             $fragen = [];
             foreach ($fragen_IDs as $frage_ID) {
                 $fragen += self::get_fragen('DUMMY', 0, 1, $frage_ID);
             }
+            $neu = ($result[0]['t_gestartet']==NULL);
+        } else {
+            exit('<H1>Ungültige URL (falsche md5sum)</H1>');
         }
-        return [$pruefling, $level, $fragen];
+        return [$pruefling, $level, $fragen, $neu];
     }
     
     #-------------------------------------------------------------------------
@@ -345,9 +328,30 @@ class SchiriTest
     #-------------------------------------------------------------------------
 
     # Testergebnis melden:
-    public static function testergebnis_melden($pruefling, $fragen, $richtig, $abgabe): void
+    public static function testergebnis_melden($fragen, $richtig, $abgabe): void
     {
-
+        # Infos aus Datenbank holen:
+        $sql = "
+            SELECT spieler_name, spieler_email, test_level
+            FROM schiri_ergebnis
+            WHERE md5sum = ?
+            ";
+        $result = db::$db->query($sql, $_GET['md5sum'])->fetch();
+        $test_level = $result[0]['test_level'];
+        $pruefling  = $result[0]['spieler_name'];
+        $email      = $result[0]['spieler_email'];
+        # Ergebnis in MySQL entragen:
+        $zeitstempel = date('Y-m-d H:i:s'); # heutiges Datum + Uhrzeit
+        $antworten = json_encode($abgabe); #qqq Formattierung verbessern
+        if ($richtig < self::lev_infos[$test_level]['richtig_min']) {
+            $bestanden = 'Nein';
+        } else {
+            $bestanden = 'Ja';
+        }
+        $sql = "UPDATE schiri_ergebnis SET t_abgegeben = ?,
+            gesetzte_antworten = ?, bestanden = ? WHERE md5sum = ?;";
+        $params = [$zeitstempel, $antworten, $bestanden, $_GET['md5sum']];
+        db::$db->query($sql, $params)->log();
         # Text der Email zusammenstellen:
         $text = "<p>Prüfling: " . $pruefling;
         $text .= "<P>Es wurden " . $richtig . " Fragen richtig beantwortet.";
@@ -357,28 +361,21 @@ class SchiriTest
             $text .= $frage['frage'] . "<br>";
             $text .= "Richtige Antwort: " . implode(",",$frage['richtig']) . "<br>";
             $text .= "Antwort des Prüflings: " . implode(",",$abgabe[$index-1]) . "<br>";
+        #echo '<pre>' . $text . '</pre>'; # qqq diese Zeile nur zum debugging aktivieren
         }
-
-        echo '<pre>' . $text . '</pre>'; # qqq diese Zeile nur zum debugging aktivieren
-
-        # Email an Schiriausschuss senden:
+        # Email an Prüfling und Schiriausschuss senden:
         $mailer = MailBot::start_mailer();
-        $mailer->setFrom('Absender@einrad.hockey', 'Name'); // TODO: richtiger Absender 
-        # Empfängeradressen zum Testen:
-        $mailer->addAddress('ansgar@einrad.hockey', 'Ansgar');
-        $mailer->addAddress('mail@rolf-sander.net', 'Rolf');
-        # später Env::SCHIRIMAIL verwenden:
-        # $mailer->addAddress(Env::SCHIRIMAIL); // Empfängeradresse
-        $mailer->Subject = 'Testergebnis von ' . $pruefling; // Betreff der Email
+        $mailer->setFrom(Env::SCHIRIMAIL);
+        $mailer->addAddress($email, $pruefling);
+        $mailer->addCC(Env::SCHIRIMAIL);
+        $mailer->Subject = 'Testergebnis von ' . $pruefling; # Betreff 
         $mailer->Body = $text;
         if (MailBot::send_mail($mailer)) {
             Html::info("Die E-Mail wurde versandt.");
         } else {
             Html::error("FEHLER: E-Mail konnte nicht versendet werden.");
         }
-        
     }
-
 
     #-------------------------------------------------------------------------
 
@@ -400,27 +397,25 @@ class SchiriTest
      */
     public function set_pruefungs_fragen(): SchiriTest
     {
-
-        # identisch mit $fragen von Rolf
-        $this->pruefungs_fragen = // vorschlag self::get_Fragen zu $this->get_fragen. $test_level als Argument streichen und zu $this->test_level in der funktion
-            self::get_fragen($this->test_level,  1, 2) # Vor dem Spiel / Rund ums Spiel
-            + self::get_fragen($this->test_level,  2, 3) # Schiedsrichterverhalten
-            + self::get_fragen($this->test_level,  3, 1) # Handzeichen
-            + self::get_fragen($this->test_level,  4, 1) # Penaltyschießen
-            + self::get_fragen($this->test_level,  5, 3) # Vorfahrt
-            + self::get_fragen($this->test_level,  6, 3) # Übertriebene Härte
-            + self::get_fragen($this->test_level,  7, 3) # Eingriff ins Spiel
-            + self::get_fragen($this->test_level,  8, 6) # Sonstige Fouls
-            + self::get_fragen($this->test_level,  9, 4) # Torschüsse
-            + self::get_fragen($this->test_level, 10, 1) # Zeitstrafen/Unsportlichkeiten
-            + self::get_fragen($this->test_level, 11, 3); # Strafen
-
-        $this->set_gestellte_fragen(); // Ids in CSV-Form speichern
-        $this->md5 = md5($this->gestellte_fragen); // Checksum für die URL des Tests
-        $this->zeitstempel = date('Y-m-d H:i:s'); // heutiges Datum + Uhrzeit abspeichern
-
+        $anzahl = self::lev_infos[$this->test_level]['anzahl'];            
+        # vorschlag self::get_Fragen zu $this->get_fragen. $test_level
+        # als Argument streichen und zu $this->test_level in der funktion 
+        $this->pruefungs_fragen =
+            self::get_fragen($this->test_level,  1, $anzahl[1])  +
+            self::get_fragen($this->test_level,  2, $anzahl[2])  +
+            self::get_fragen($this->test_level,  3, $anzahl[3])  +
+            self::get_fragen($this->test_level,  4, $anzahl[4])  +
+            self::get_fragen($this->test_level,  5, $anzahl[5])  +
+            self::get_fragen($this->test_level,  6, $anzahl[6])  +
+            self::get_fragen($this->test_level,  7, $anzahl[7])  +
+            self::get_fragen($this->test_level,  8, $anzahl[8])  +
+            self::get_fragen($this->test_level,  9, $anzahl[9])  +
+            self::get_fragen($this->test_level, 10, $anzahl[10]) +
+            self::get_fragen($this->test_level, 11, $anzahl[11]); 
+        $this->set_gestellte_fragen(); # Ids in CSV-Form speichern
+        $this->zeitstempel = date('Y-m-d H:i:s'); # heutiges Datum + Uhrzeit abspeichern
+        $this->md5 = md5($this->gestellte_fragen . $this->zeitstempel); # für Test-URL
         return $this;
-
     }
 
     /**
@@ -470,12 +465,12 @@ class SchiriTest
         }
 
         $sql = "
-            INSERT INTO schiri_ergebnis (schiri_test_md5, spieler_id, gestellte_fragen,
-            test_level, time_stamp, saison, schiri_test_version)
-            VALUES (?, ?, ?, ?, ?, ?, '1')
+            INSERT INTO schiri_ergebnis (md5sum, spieler_id, spieler_name, spieler_email, 
+            gestellte_fragen, test_level, t_erstellt, saison, schiri_test_version)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, '1')
             ";
-        $params = [$this->md5, $this->spieler->id(), $this->gestellte_fragen,
-            $this->test_level, $this->zeitstempel, Config::SAISON];
+        $params = [$this->md5, $this->spieler->id(), $this->spieler->get_name(), $this->email,
+            $this->gestellte_fragen, $this->test_level, $this->zeitstempel, Config::SAISON];
 
         db::$db->query($sql, $params)->log();
 
@@ -500,14 +495,15 @@ $this->url
 
 Sobald du die Webseite aufrufst, hast du $timelimit Minuten Zeit.
 
-Es müssen $richtig_min von den $anzahl Fragen richtig beantwortet werden.
+Von den $anzahl Fragen müssen mindestens $richtig_min richtig
+beantwortet werden.
 
 Viele Grüße
 Der Schiriausschuss
 Mail;
         Html::message('info', '<pre>' . $text . '</pre>',
             'Text der automatischen E-Mail:', esc:false);
-        // Todo Ansgar mail versenden
+        # Todo Ansgar mail versenden
         # Email an Prüfling senden:
         $mailer = MailBot::start_mailer();
         $mailer->setFrom(Env::SCHIRIMAIL); # Absender ist Schiriausschuss

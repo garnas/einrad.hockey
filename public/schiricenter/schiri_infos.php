@@ -35,13 +35,15 @@ include '../../templates/header.tmp.php';
     <LI>Der schriftliche Test gilt bis ???.</LI>
     <LI>Die Schirilizenz gilt für ??? Jahre.</LI>
     <LI>Teams mit mindestens ??? Schiris haben folgende Vorteile: ???</LI>
-    <LI>(...mehr Infos hier...)</LI>
+    <LI>(...hier noch mehr Infos hinzufügen...)</LI>
+    <LI>(alle Infos gelten für die Saison 2021/2022)</LI>
 </UL>
 
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-bordered">
         <tr>
-            <td class="w3-primary" colspan="2"><b>Multiple-Choice Übungstests</b></td>
+            <td class="w3-primary" colspan="2"><b>Multiple-Choice Übungstests
+            (mit den Fragen aus den echten Tests)</b></td>
         </tr>
         <tr>
             <th class="w3-primary-3"><?=Html::link("uebungstest_l.php",
