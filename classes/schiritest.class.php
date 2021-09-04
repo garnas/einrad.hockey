@@ -495,6 +495,8 @@ $this->url
 
 Sobald du die Webseite aufrufst, hast du $timelimit Minuten Zeit.
 
+Achtung: Webseite nicht neu laden, während der Test ausgefüllt wird!
+
 Von den $anzahl Fragen müssen mindestens $richtig_min richtig
 beantwortet werden.
 

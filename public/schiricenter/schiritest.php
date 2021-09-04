@@ -81,7 +81,7 @@ if (isset($_POST['beantworten'])) {
 Html::$titel = $titel;
 include '../../templates/header.tmp.php'; # Html-header und Navigation
 
-if ($pruefling==''){
+if ($test_level=='L') {
     echo '<p><form method="post" class="w3-panel w3-center w3-indigo"><P> ' .
         '(Fragen-ID: <input type="text" size="3" name="ausgewaehlte_nummer">) ' .
         '<input type="submit" value="Neue Frage"> ' . '</P></form>';
