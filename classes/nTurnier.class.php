@@ -14,6 +14,7 @@ class nTurnier
     public ?string $block;
     public ?string $tblock_fixed;
     public ?string $datum;
+    public ?int $unix;
     public ?int $spieltag;
     public ?string $phase;
     public ?string $spielplan_vorlage;
@@ -153,9 +154,17 @@ class nTurnier
     /**
      * @return string
      */
-    public function get_turnier_datum(): string
+    public function get_datum(): string
     {
         return $this->datum;
+    }
+
+    /**
+     * @return int
+     */
+    public function get_unix(): int
+    {
+        return strtotime($this->datum);
     }
 
     /**
