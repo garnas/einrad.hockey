@@ -19,19 +19,6 @@ class nTurnier
     public ?string $spielplan_vorlage;
     public ?string $spielplan_datei;
     public ?int $saison;
-    public ?string $hallenname;
-    public ?string $strasse;
-    public ?int $plz;
-    public ?string $ort;
-    public ?string $haltestellen;
-    public ?int $plaetze;
-    public ?string $format;
-    public ?string $startzeit;
-    public ?string $besprechung;
-    public ?string $hinweis;
-    public ?string $organisator;
-    public ?string $handy;
-    public ?string $startgebuehr;
 
     public bool $error = false;
 
@@ -153,5 +140,53 @@ class nTurnier
                 WHERE turniere_liga.turnier_id = $this->id
                 ";
         return db::$db->query($sql)->fetch_object(__CLASS__) ?? new nTurnier();
+    }
+
+    /**
+     * @return int
+     */
+    public function get_turnier_id(): int
+    {
+        return $this->turnier_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_turnier_datum(): string
+    {
+        return $this->datum;
+    }
+
+    /**
+     * @return int
+     */
+    public function get_ausrichter(): int
+    {
+        return $this->ausrichter;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_art(): string
+    {
+        return $this->art;
+    }
+
+    /**
+     * @return int
+     */
+    public function get_spieltag()
+    {
+        return $this->spieltag;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_phase()
+    {
+        return $this->phase;
     }
 }
