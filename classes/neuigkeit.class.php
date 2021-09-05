@@ -319,8 +319,11 @@ class Neuigkeit
                 FROM spiele
                 INNER JOIN turniere_liga 
                 ON spiele.turnier_id = turniere_liga.turnier_id 
+                INNER JOIN teams_liga
+                ON spiele.team_id_a = teams_liga.team_id
                 WHERE (tore_a > tore_b OR penalty_a > penalty_b)
                 AND turniere_liga.saison = ?
+                AND teams_liga.ligateam = 'Ja'
                 GROUP BY team_id_a
                 ORDER BY gew, RAND()
                 ";
@@ -334,8 +337,11 @@ class Neuigkeit
                 FROM spiele
                 INNER JOIN turniere_liga
                 ON spiele.turnier_id = turniere_liga.turnier_id
+                INNER JOIN teams_liga
+                ON spiele.team_id_b = teams_liga.team_id
                 WHERE (tore_a < tore_b OR penalty_a < penalty_b)
                 AND turniere_liga.saison = ?
+                AND teams_liga.ligateam = 'Ja'
                 GROUP BY team_id_b
                 ORDER BY RAND()
                 ";
