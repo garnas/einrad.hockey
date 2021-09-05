@@ -8,6 +8,15 @@ class Config
     public const SAISON = 27; // Saison 0 = Jahr 1995;
     public const SAISON_ANFANG = '16.08.2021';
     public const SAISON_ENDE = '29.05.2022';
+
+    /**
+     * Saisontermine
+     */
+    public const FINALE_EINS = '11.06.2022';
+    public const FINALE_ZWEI = '12.06.2022';
+    public const FINALE_DREI = '18.06.2022';
+    public const FINALE_VIER = '19.06.2022';
+
     /**
      * Log-Files
      */
@@ -35,7 +44,13 @@ class Config
      * Mögliche Turnier-Blöcke
      * Reihenfolge ist wichtig!
      */
-    public const BLOCK_ALL = ["ABCDEF", 'A', 'AB', 'ABC', 'BC', 'BCD', 'CD', 'CDE', 'DE', 'DEF', 'EF', 'F'];
+    public const BLOCK_ALL = ['ABCDEF', 'A', 'AB', 'ABC', 'BC', 'BCD', 'CD', 'CDE', 'DE', 'DEF', 'EF', 'F'];
+
+    /**
+     * Mögliche Finalturnier-Blöcke
+     * Reihenfolge ist wichtig!
+     */
+    public const BLOCK_FINALE = ['AFINALE', 'BFINALE', 'CFINALE', 'DFINALE'];
 
     /**
      * Rangtabellen-Zuordnung
