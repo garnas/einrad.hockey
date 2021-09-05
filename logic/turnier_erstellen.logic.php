@@ -17,7 +17,7 @@ $block_higher_str = substr($block_higher_str, 0, -2);
 $startzeit = (string)($_POST['startzeit'] ?? '');
 
 // Formularauswertung
-if (isset($_POST['create_turnier'])) {
+if (isset($_POST['create_turnier'])) {    
     $error = false;
 
     // Art festlegen
@@ -48,7 +48,13 @@ if (isset($_POST['create_turnier'])) {
             $error = true;
             Html::error("Ungültiger Turnierblock.");
         }
-    } elseif ($art === 'spass' || $art === 'final') {
+    } elseif ($art === 'final') {
+        $tblock = $_POST['block_final'];
+        if (!in_array($tblock, Config::BLOCK_FINALE, true)) {
+            $error = true;
+            Html::error("Ungültiger Turnierblock.");
+        }
+    } elseif ($art === 'spass') {
         $tblock = '';
     } else {
         $error = true;
@@ -92,12 +98,13 @@ if (isset($_POST['create_turnier'])) {
             $error = true;
             Html::error("Das Datum liegt außerhalb der Saison.");
         }
+
         $feiertage = Feiertage::finden(date("Y", $datum));
         if (!in_array($datum, $feiertage) && date('N', $datum) < 6) {
             $error = true;
             Html::error("Das Datum liegt nicht am Wochende und ist kein bundesweiter Feiertag.");
         }
-
+    
         if (LigaBot::time_offen_melde(date("Y-m-d", $datum)) < time()) {
             $error = true;
             Html::error("Turniere können nur vier Wochen vor dem Spieltag eingetragen werden");
@@ -109,6 +116,19 @@ if (isset($_POST['create_turnier'])) {
             Html::error("Turniere dürfen frühestens um 9:00&nbsp;Uhr beginnen und müssen spätestens"
                 . " um 20:00&nbsp;Uhr beendet sein. Wende dich an den Ligaausschuss für spezielle"
                 . " Spielzeiten.");
+        }
+    } elseif (
+        Helper::$ligacenter
+        && in_array($tblock, Config::BLOCK_FINALE, true)
+    ) {
+        if (
+            $datum != strtotime(Config::FINALE_EINS)
+            && $datum != strtotime(Config::FINALE_ZWEI)
+            && $datum != strtotime(Config::FINALE_DREI)
+            && $datum != strtotime(Config::FINALE_VIER)
+        ) {
+            $error = true;
+            Html::error("Das Datum ist nicht für die Abschlussturniere vorgesehen.");
         }
     }
 

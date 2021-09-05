@@ -6,7 +6,7 @@
     <?= Html::icon('article', tag:'h2') ?> Turnier-Report
 </h2>
 <?php Html::message('notice',
-            "Der Turnierreport ist nur von teilnehemenden Ligateams und dem Ligaausschuss einsehbar.",
+            "Der Turnierreport ist nur von teilnehmenden Ligateams und dem Ligaausschuss einsehbar.",
             "") ?>
 <!-- Link Spielplan -->
 <p><?=Html::link('../liga/spielplan.php?turnier_id=' . $turnier_id, '<i class="material-icons">reorder</i> Zum Spielplan')?></p>

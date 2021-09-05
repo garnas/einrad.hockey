@@ -12,10 +12,10 @@ if(!Helper::$ligacenter){ // Ligacenter darf alles.
     $N = date("N", strtotime($spielplan->turnier->details['datum'])); // Numerischer Wochentag.
     $delta = (8-$N) * 24*60*60 + 18*60*60; // Die Zeit bis zum nächsten Montag 18:00 Uhr von 0:00 Uhr aus gesehen.
     $abgabe = strtotime($spielplan->turnier->details['datum']) + $delta;
-    if ($abgabe > time()){
+
+    if ($abgabe < time()){
         Html::error("Bitte wende dich an den Ligaausschuss um Ergebnisse nachträglich zu verändern.");
-        header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
-        die();
+        Helper::reload("/liga/spielplan.php", '?turnier_id=' . $turnier_id);
     }
 }
 

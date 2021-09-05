@@ -316,7 +316,7 @@ class Tabelle
 
         $ausnahme = match($saison) {
             26 => 'OR turniere_liga.saison = 24',
-            27 => 'OR turniere_liga.saison >= 24',
+            27 => 'OR turniere_liga.saison = 24 OR turniere_liga.saison = 25',
             default => '',
         };
 
@@ -332,10 +332,9 @@ class Tabelle
                 AND teams_liga.aktiv = 'Ja'
                 AND turniere_liga.art != 'final'
                 AND (
-                    (turniere_liga.spieltag <= ? 
-                    AND turniere_liga.saison = ? 
-                    OR (turniere_liga.saison = ? - 1)
-                    $ausnahme)
+                    (turniere_liga.spieltag <= ? AND turniere_liga.saison = ?)
+                    OR turniere_liga.saison = ? - 1
+                    $ausnahme
                     )
                 ORDER BY turniere_liga.saison DESC, turniere_liga.datum DESC";
         $result = db::$db->query($sql, $spieltag, $saison, $saison)->esc()->fetch();
