@@ -783,7 +783,7 @@ class Turnier
      *
      * @return array
      */
-    public function get_logs(): array
+    public function get_turnier_logs(): array
     {
         $sql = "
                 SELECT * 
