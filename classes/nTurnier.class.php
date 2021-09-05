@@ -33,6 +33,8 @@ class nTurnier
     public ?string $handy;
     public ?string $startgebuehr;
 
+    public bool $error = false;
+
     /**
      * Turnier constructor.
      */
