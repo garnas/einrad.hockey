@@ -301,6 +301,7 @@ class Neuigkeit
                 INNER JOIN teams_liga 
                 ON teams_liga.team_id = turniere_liste.team_id 
                 WHERE teams_liga.aktiv = 'Ja' 
+                AND teams_liga.ligateam = 'Ja'
                 AND turniere_liga.saison = ? 
                 AND turniere_liste.liste = 'spiele' 
                 AND turniere_liga.phase = 'ergebnis' 
