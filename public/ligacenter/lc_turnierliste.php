@@ -44,7 +44,7 @@ foreach ($turniere_erg as $turnier_id => $turnier){
 }
 
 //Gelöschte Turniere
-$turniere_deleted = Turnier::get_deleted_turniere();
+$turniere_deleted = nTurnierGeloescht::get_geloescht();
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -88,11 +88,11 @@ include '../../templates/turnierliste.tmp.php';
             </tr>
             <?php foreach ($turniere_deleted as $turnier){?>
                 <tr>
-                    <td style="white-space:nowrap;"><?=date("d.m.y", strtotime($turnier['datum']))?> in <?=$turnier['ort']?> (<?=$turnier['turnier_id']?>)</td>
-                    <td style="white-space:nowrap;" class="w3-text-secondary"><?=$turnier['grund']?></td>
+                    <td style="white-space:nowrap;"><?=date("d.m.y", strtotime($turnier->datum))?> in <?=$turnier->ort?> (<?=$turnier->turnier_id?>)</td>
+                    <td style="white-space:nowrap;" class="w3-text-secondary"><?=$turnier->get_grund()?></td>
                 </tr>
                 <tr>
-                    <td colspan='4'><?=Html::link('lc_turnier_log.php?turnier_id=' . $turnier['turnier_id'], 'Link zum Turnierlog')?></td>
+                    <td colspan='4'><?=Html::link('lc_turnier_log.php?turnier_id=' . $turnier->turnier_id, 'Link zum Turnierlog')?></td>
                 </tr>
             <?php }//end foreach?>
         </table>
