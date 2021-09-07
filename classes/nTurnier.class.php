@@ -64,7 +64,7 @@ class nTurnier
         if (!empty($this->log) && $this->error == false) {
             $sql = "
                 INSERT INTO turniere_log (turnier_id, log_text, autor) 
-                VALUES ($this->id, ?, ?);
+                VALUES ($this->turnier_id, ?, ?);
                 ";
             $autor = Helper::get_akteur(true);
             db::$db->query($sql, trim($this->log), $autor)->log();
@@ -445,9 +445,9 @@ class nTurnier
             // Blöcke und Wertungen hinzufügen
             foreach ($spielen_liste as $team_id => $anmeldung) {
                 $spielen_liste[$team_id]['tblock']
-                    = Tabelle::get_team_block($anmeldung['team_id'], $this->details['spieltag'] - 1);
+                    = Tabelle::get_team_block($anmeldung['team_id'], $this->spieltag - 1);
                 $spielen_liste[$team_id]['wertigkeit']
-                    = Tabelle::get_team_wertigkeit($anmeldung['team_id'], $this->details['spieltag'] - 1);
+                    = Tabelle::get_team_wertigkeit($anmeldung['team_id'], $this->spieltag - 1);
             }
 
             // Sortierung nach Wertigkeit
@@ -579,16 +579,16 @@ class nTurnier
     public function get_spielplan_link(string $scope = ''): false|string
     {
         // Es existiert ein manuell hochgeladener Spielplan
-        if (!empty($this->details['spielplan_datei'])) {
-            return $this->details['spielplan_datei'];
+        if (!empty($this->spielplan_datei)) {
+            return $this->spielplan_datei;
         }
 
         // Es existiert ein automatisch erstellter Spielplan
-        if (!empty($this->details['spielplan_vorlage'])) {
+        if (!empty($this->spielplan_vorlage)) {
             return match ($scope) {
-                'lc' => Env::BASE_URL . '/ligacenter/lc_spielplan.php?turnier_id=' . $this->id,
-                'tc' => Env::BASE_URL . '/teamcenter/tc_spielplan.php?turnier_id=' . $this->id,
-                default => Env::BASE_URL . '/liga/spielplan.php?turnier_id=' . $this->id
+                'lc' => Env::BASE_URL . '/ligacenter/lc_spielplan.php?turnier_id=' . $this->turnier_id,
+                'tc' => Env::BASE_URL . '/teamcenter/tc_spielplan.php?turnier_id=' . $this->turnier_id,
+                default => Env::BASE_URL . '/liga/spielplan.php?turnier_id=' . $this->turnier_id
             };
         }
 
@@ -740,7 +740,7 @@ class nTurnier
      */
     public function check_team_block_freilos(int $team_id): bool
     {
-        return self::check_team_block_freilos_static(Tabelle::get_team_block($team_id), $this->details['tblock']);
+        return self::check_team_block_freilos_static(Tabelle::get_team_block($team_id), $this->tblock);
     }
 
     /**
@@ -752,11 +752,11 @@ class nTurnier
     public function check_team_block(int $team_id): bool
     {
         // Falsche Turnierart für Blockcheck
-        if (!in_array($this->details['art'], ['I', 'II', 'III'])) {
+        if (!in_array($this->art, ['I', 'II', 'III'])) {
             return false;
         }
 
-        return self::check_team_block_static(Tabelle::get_team_block($team_id), $this->details['tblock']);
+        return self::check_team_block_static(Tabelle::get_team_block($team_id), $this->tblock);
     }
 
     /**
@@ -777,7 +777,7 @@ class nTurnier
                AND liste = 'spiele'
                AND (turniere_liga.art = 'I' OR turniere_liga.art = 'II' OR turniere_liga.art = 'III')
                ";
-        return db::$db->query($sql, $team_id, $this->details['datum'])->num_rows() > 0;
+        return db::$db->query($sql, $team_id, $this->datum)->num_rows() > 0;
     }
 
     /**
@@ -868,7 +868,7 @@ class nTurnier
         $this->log(
             "Anmeldung:\r\n" . Team::id_to_name($team_id) . " ($liste)"
                 . (($liste === 'warte') ? "\r\nWartepos: $pos" : '')
-                . "\r\nTeamb.: " . Tabelle::get_team_block($team_id) . " | Turnierb. " . $this->details['tblock']
+                . "\r\nTeamb.: " . Tabelle::get_team_block($team_id) . " | Turnierb. " . $this->tblock
         );
     }
 
@@ -921,7 +921,7 @@ class nTurnier
 
         $this->log(
             "Freilos:\r\n" . Team::id_to_name($team_id) . " (spiele)"
-                . "\r\nTeamb.: " . Tabelle::get_team_block($team_id) . " | Turnierb. " . $this->details['tblock']
+                . "\r\nTeamb.: " . Tabelle::get_team_block($team_id) . " | Turnierb. " . $this->tblock
         );
     }
 
@@ -1000,7 +1000,7 @@ class nTurnier
      */
     public function set_ergebnis(int $team_id, int|null $ergebnis, int $platz): void
     {
-        if (!in_array($this->details['art'], ['I', 'II', 'III'])) {
+        if (!in_array($this->art, ['I', 'II', 'III'])) {
             $ergebnis = NULL;
         }
         $sql = "
@@ -1064,7 +1064,7 @@ class nTurnier
                 WHERE turnier_id = ?;
                 ";
         db::$db->query($sql, $link, $this->turnier_id)->log();
-        $this->details['spielplan_datei'] = $link;
+        $this->spielplan_datei = $link;
         $this->set_liga('phase', $phase);
         $this->log("Manuelle Spielplan- oder Ergebnisdatei wurde hochgeladen.");
     }
@@ -1091,7 +1091,7 @@ class nTurnier
         // Turnier aus der Datenbank löschen
         $sql = "
                 DELETE FROM turniere_liga 
-                WHERE turnier_id = $this->id
+                WHERE turnier_id = $this->turnier_id
                 ";
         db::$db->query($sql)->log();
         $this->log("Turnier wurde gelöscht.");
