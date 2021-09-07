@@ -7,6 +7,8 @@ require_once '../../init.php';
 $turnier_id = (int) @$_GET['turnier_id'];
 $turnier = new Turnier ($turnier_id);
 
+$nturnier = nTurnier::get($turnier_id);
+
 if (empty($turnier->details)){
     Helper::not_found("Das Turnier konnte nicht gefunden werden.");
 }

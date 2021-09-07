@@ -61,7 +61,7 @@ class nTurnier
      */
     public function __destruct()
     {
-        if (!empty($this->log) && $this->error == false) {
+        if (!empty($this->log) && !$this->error) {
             $sql = "
                 INSERT INTO turniere_log (turnier_id, log_text, autor) 
                 VALUES ($this->turnier_id, ?, ?);
@@ -159,17 +159,17 @@ class nTurnier
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function get_spielplan_vorlage(): string
+    public function get_spielplan_vorlage(): null|string
     {
         return $this->spielplan_vorlage;
     }
 
-    /**
-     * @return string
+    /** 
+     * @return null|string
      */
-    public function get_spielplan_datei(): string
+    public function get_spielplan_datei(): null|string
     {
         return $this->spielplan_datei;
     }
@@ -493,42 +493,7 @@ class nTurnier
 
         return db::$db->query($sql, $this->turnier_id)->esc()->fetch('platz');
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     
-    /**
-     * Liste an gelöschten Turnieren
-     *
-     * @param int
-     * @return array
-     */
-    public static function get_deleted_turniere(int $saison = Config::SAISON): array
-    {
-        $sql = "
-                SELECT * 
-                FROM turniere_geloescht 
-                WHERE saison = ? 
-                ORDER BY datum DESC
-                ";
-        return db::$db->query($sql, $saison)->esc()->fetch('turnier_id');
-    }
-
     /**
      * Erhalte die Finalturniere
      * 
@@ -602,17 +567,40 @@ class nTurnier
      *
      * @param string $log_text
      */
-    public function log(string $log_text): void
+    public function set_log(string $log_text): void
     {
         $this->log .= "\r\n" . $log_text;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+
+    
+
+    
 
     /**
      * Erstellt ein neues Turnier.
      * 
      * @return nTurnier
      */
-    public static function new_turnier(int $ausrichter): nTurnier
+    public static function set_neues_turnier(int $ausrichter): nTurnier
     {
         $sql = "
                 INSERT INTO turniere_liga (ausrichter, phase) 
@@ -629,7 +617,7 @@ class nTurnier
         db::$db->query($sql, $turnier_id)->log();
 
         $turnier = new nTurnier();
-        $turnier->log("Turnier wurde erstellt. (Ausrichter $ausrichter)");
+        $turnier->set_log("Turnier wurde erstellt. (Ausrichter $ausrichter)");
         $turnier->anmelden($ausrichter, 'spiele');
         return $turnier;
     }
@@ -805,7 +793,7 @@ class nTurnier
 
         db::$db->query($sql, $value, $this->turnier_id)->log();
         $this->details[$column] = $value;
-        $this->log(ucfirst($column) . ": $value");
+        $this->set_log(ucfirst($column) . ": $value");
         return $this;
     }
 
@@ -830,7 +818,7 @@ class nTurnier
 
         db::$db->query($sql, $value, $this->turnier_id)->log();
         $this->details[$column] = $value;
-        $this->log(ucfirst($column) . ": $value");
+        $this->set_log(ucfirst($column) . ": $value");
 
         return $this;
     }
@@ -857,7 +845,7 @@ class nTurnier
                     AND position_warteliste >= ?";
             db::$db->query($sql, $this->turnier_id, $pos)->log();
             if (db::$db->affected_rows() > 0) {
-                $this->log("Warteliste aktualisiert");
+                $this->set_log("Warteliste aktualisiert");
             }
         }
         $sql = "
@@ -865,7 +853,7 @@ class nTurnier
                 VALUES (?, ?, ?, ?)
                 ";
         db::$db->query($sql, $this->turnier_id, $team_id, $liste, $pos)->log();
-        $this->log(
+        $this->set_log(
             "Anmeldung:\r\n" . Team::id_to_name($team_id) . " ($liste)"
                 . (($liste === 'warte') ? "\r\nWartepos: $pos" : '')
                 . "\r\nTeamb.: " . Tabelle::get_team_block($team_id) . " | Turnierb. " . $this->tblock
@@ -919,7 +907,7 @@ class nTurnier
                 ";
         db::$db->query($sql, $this->turnier_id, $team_id)->log();
 
-        $this->log(
+        $this->set_log(
             "Freilos:\r\n" . Team::id_to_name($team_id) . " (spiele)"
                 . "\r\nTeamb.: " . Tabelle::get_team_block($team_id) . " | Turnierb. " . $this->tblock
         );
@@ -937,7 +925,7 @@ class nTurnier
                 AND team_id = ?
                 ";
         db::$db->query($sql, $this->turnier_id, $team_id)->log();
-        if (db::$db->affected_rows() > 0) $this->log("Abmeldung:\r\n" . Team::id_to_name($team_id));
+        if (db::$db->affected_rows() > 0) $this->set_log("Abmeldung:\r\n" . Team::id_to_name($team_id));
     }
 
     /**
@@ -974,7 +962,7 @@ class nTurnier
             $logs[] = $pos . ". " . Team::id_to_name($team['team_id']);
         }
         if ($affected_rows > 0) {
-            $this->log("Warteliste aktualisiert:\r\n" . implode("\r\n", $logs ?? []));
+            $this->set_log("Warteliste aktualisiert:\r\n" . implode("\r\n", $logs ?? []));
         }
     }
 
@@ -988,7 +976,7 @@ class nTurnier
                 WHERE turnier_id = ?
                 ";
         db::$db->query($sql, $this->turnier_id)->log();
-        if (db::$db->affected_rows() > 0) $this->log("Turnierergebnisse wurden gelöscht.");
+        if (db::$db->affected_rows() > 0) $this->set_log("Turnierergebnisse wurden gelöscht.");
     }
 
     /**
@@ -1025,7 +1013,7 @@ class nTurnier
             $this->set_ergebnis($team_id, $ergebnis['ligapunkte'], $ergebnis['platz']);
         }
         $this->set_liga('phase', 'ergebnis');
-        $this->log("Turnierergebnis wurde in die Datenbank eingetragen");
+        $this->set_log("Turnierergebnis wurde in die Datenbank eingetragen");
     }
 
     /**
@@ -1044,7 +1032,7 @@ class nTurnier
                 AND team_id = ?
                 ";
         db::$db->query($sql, [$liste, $pos, $this->turnier_id, $team_id]);
-        $this->log("Listenwechsel:\r\n"
+        $this->set_log("Listenwechsel:\r\n"
             . Team::id_to_name($team_id) . " ($liste)"
             . (($liste === 'warte') ? "\r\nWartepos: $pos" : ''));
     }
@@ -1066,7 +1054,7 @@ class nTurnier
         db::$db->query($sql, $link, $this->turnier_id)->log();
         $this->spielplan_datei = $link;
         $this->set_liga('phase', $phase);
-        $this->log("Manuelle Spielplan- oder Ergebnisdatei wurde hochgeladen.");
+        $this->set_log("Manuelle Spielplan- oder Ergebnisdatei wurde hochgeladen.");
     }
 
     /**
@@ -1094,7 +1082,7 @@ class nTurnier
                 WHERE turnier_id = $this->turnier_id
                 ";
         db::$db->query($sql)->log();
-        $this->log("Turnier wurde gelöscht.");
+        $this->set_log("Turnier wurde gelöscht.");
         // Spieltage neu sortieren
         Ligabot::set_spieltage();
     }
