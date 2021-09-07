@@ -22,11 +22,11 @@ $last_turniere = array_slice($turniere, 0, 4);
 $colors = ["w3-text-tertiary", "w3-text-grey", "w3-text-brown"];
 $icons = ["looks_one", "looks_two", "looks_3"];
 
-$statistik['max_gew'] = Neuigkeit::get_statistik_gew_spiele();
-$statistik['max_turniere'] = Neuigkeit::get_statistik_turniere();
-$statistik['ges_tore'] = Neuigkeit::get_alle_tore();
-$statistik['ges_spiele'] = Neuigkeit::get_alle_spiele();
-$statistik['spielminuten'] = Neuigkeit::get_spielminuten();
+$statistik['max_gew'] = Stats::get_gew_spiele_team();
+$statistik['max_turniere'] = Stats::get_turniere_team();
+$statistik['ges_tore'] = Stats::get_tore_anzahl();
+$statistik['ges_spiele'] = Stats::get_spiele_anzahl();
+$statistik['spielminuten'] = Stats::get_spielminuten_anzahl();
 
 // Zeitanzeige der Neuigkeiteneinträge verschönern
 foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit) { //Todo in get_neuikgeiten rein
@@ -191,13 +191,13 @@ include '../../templates/header.tmp.php'; ?>
                                     <td><?= Html::icon("assistant_photo") ?></td>
                                 </tr>
                                 <?php $i = 0;
-                                foreach ($statistik['max_turniere'] as $team) { ?>
+                                foreach ($statistik['max_turniere'] as $team): ?>
                                     <tr class="<?= $colors[$i] ?>">
                                         <td><?= Html::icon($icons[$i++]) ?></td>
                                         <td style="white-space: nowrap;" class="w3-small"><?= $team['teamname'] ?></td>
                                         <td><?= $team['gespielt'] ?></td>
                                     </tr>
-                                <?php } //end foreach?>
+                                <?php endforeach;?>
                             </table>
                         </div>
                         <span class="w3-text-grey w3-small">
