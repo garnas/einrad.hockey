@@ -8,44 +8,40 @@
 class nTurnier
 {
 
-    /**
-     * ATTRIBUTE
-     */
-
+    // turniere_liga
     public int $turnier_id;
-    public ?string $tname;
-    public int $ausrichter;
-    public string $art;
-    public string $tblock_fixed;
-    public string $datum;
-    public int $spieltag;
-    public string $phase;
-    public ?string $spielplan_vorlage;
-    public ?string $spielplan_datei;
-    public int $saison;
-    public string $tblock;
-    public string $hallenname;
-    public string $strasse;
-    public int $plz;
-    public string $ort;
-    public ?string $haltestellen;
-    public int $plaetze;
-    public string $format;
-    public string $startzeit;
-    public string $besprechung;
-    public ?string $hinweis;
-    public string $organisator;
-    public int $handy;
-    public ?int $startgebuehr;
+    private ?string $tname;
+    private ?int $ausrichter;
+    private ?string $art;
+    private ?string $tblock;
+    private ?string $tblock_fixed;
+    private ?string $datum;
+    private ?int $spieltag;
+    private ?string $phase;
+    private ?string $spielplan_vorlage;
+    private ?string $spielplan_datei;
+    private ?int $saison;
 
-    public ?array $details;
-    public ?int $unix;
+    // turniere_details
+    private ?string $hallenname;
+    private ?string $strasse;
+    private ?int $plz;
+    private ?string $ort;
+    private ?string $haltestellen;
+    private ?int $plaetze;
+    private ?string $format;
+    private ?string $startzeit;
+    private ?string $besprechung;
+    private ?string $hinweis;
+    private ?string $organisator;
+    private ?string $handy;
+    private ?string $startgebuehr;
+
+    // weitere
+    private ?array $details;
+    private ?int $unix;
     private string $log = '';
-    public bool $error = false;
-
-    /**
-     * CONSTRUCTOR & DECONSTRUCTOR
-     */
+    private bool $error = false;
 
     /**
      * Turnier constructor.
@@ -57,9 +53,6 @@ class nTurnier
                 $this->$name = db::escape($value);
             }
         }
-
-        $this->unix = strtotime($this->datum);
-        $this->details = $this->get_details();
 
     }
 
@@ -77,10 +70,6 @@ class nTurnier
             db::$db->query($sql, trim($this->log), $autor)->log();
         }
     }
-
-    /**
-     * GETTER
-     */
 
     /**
      * @param int $id
@@ -132,7 +121,7 @@ class nTurnier
     /**
      * @return string
      */
-    public function get_block(): string
+    public function get_tblock(): string
     {
         return $this->tblock;
     }
@@ -194,6 +183,145 @@ class nTurnier
     }
 
     /**
+     * @return string
+     */
+    public function get_hallenname(): string
+    {
+        return $this->hallenname;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_strasse(): string
+    {
+        return $this->strasse;
+    }
+
+    /**
+     * @return int
+     */
+    public function get_plz(): int
+    {
+        return $this->plz;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_ort(): string
+    {
+        return $this->ort;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_haltestellen(): string
+    {
+        return $this->haltestellen;
+    }
+
+    /**
+     * @return int
+     */
+    public function get_plaetze(): int
+    {
+        return $this->plaetze;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_format(): string
+    {
+        return $this->format;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_startzeit(): string
+    {
+        return $this->startzeit;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_besprechung(): string
+    {
+        return $this->besprechung;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_hinweis(): string
+    {
+        return $this->hinweis;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_organisator(): string
+    {
+        return $this->organisator;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_handy(): string
+    {
+        return $this->handy;
+    }
+
+    /**
+     * @return string
+     */
+    public function get_startgebuehr(): string
+    {
+        return $this->startgebuehr;
+    }
+
+    /**
+     * Get Turnierlogs
+     *
+     * @return array
+     */
+    public function get_log(): array
+    {
+        $sql = "
+                SELECT * 
+                FROM turniere_log 
+                WHERE turnier_id = ?
+                ";
+        return db::$db->query($sql, $this->tunier_id)->esc()->fetch();
+    }
+
+    /**
+     * Turnierdetails von nur einem Turnier erhalten
+     *
+     * @return array
+     */
+    public function get_details(): array
+    {
+        $sql = "
+                SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname
+                FROM turniere_liga 
+                INNER JOIN turniere_details 
+                ON turniere_liga.turnier_id = turniere_details.turnier_id
+                INNER JOIN teams_liga
+                ON turniere_liga.ausrichter = teams_liga.team_id
+                WHERE turniere_liga.turnier_id = ?
+                ";
+        return db::$db->query($sql, $this->turnier_id)->esc()->fetch_row();
+
+    }
+
+    /**
      * Erhalte vollständige Turnierinformationen über alle Turniere
      * 
      * @return nTurnier[]
@@ -205,7 +333,7 @@ class nTurnier
             FROM turniere_liga
             LEFT JOIN turniere_details ON turniere_liga.turnier_id = turniere_details.turnier_id
         ";
-        return db::$db->query($sql)->fetch_objects(__CLASS__, key: 'turnier_id');
+        return db::$db->query($sql)->fetch_objects(__CLASS__, key:'turnier_id');
     }
 
     /**
@@ -234,11 +362,8 @@ class nTurnier
     }
 
     /**
-     * Anmeldungen der Warte-, Melde-, Spielen-Liste eines Turnieres
-     * 
-     * [liste][team_id]
-     * [liste][team_id][tblock]
-     * [liste][team_id][wertigkeit]
+     * Anmeldungen der Warte-, Melde-, Spielen-Liste des aktuellen Turniers
+     * TODO: Änderung zu einem Array aus nTeam-Objekten!
      * 
      * @return array
      */
@@ -249,10 +374,12 @@ class nTurnier
                 FROM turniere_liste
                 LEFT JOIN teams_liga
                 ON turniere_liste.team_id = teams_liga.team_id
-                WHERE turniere_liste.turnier_id = $this->id
+                WHERE turniere_liste.turnier_id = ?
                 ORDER BY turniere_liste.position_warteliste
                 ";
-        $anmeldungen = db::$db->query($sql)->esc()->fetch();
+        $anmeldungen = db::$db->query($sql, $this->turnier_id)->esc()->fetch();
+        
+        // Erstellung des Arrays mit den Teamnamen, Teamblöcken und Teamwertigkeiten
         $liste['team_ids'] = $liste['teamnamen'] = $liste['spiele'] = $liste['melde'] = $liste['warte'] = [];
         foreach ($anmeldungen as $a) {
             $liste[$a['liste']][$a['team_id']] = $a;
@@ -264,10 +391,6 @@ class nTurnier
     
     /**
      * Anmeldungen der Warte-, Melde-, Spielen-Liste aller Turniere der Saison
-     * 
-     * [turnier_id][liste][team_id]
-     * [turnier_id][liste][team_id][tblock]
-     * [turnier_id][liste][team_id][wertigkeit]
      *
      * @param int $saison
      * @return array
@@ -286,7 +409,11 @@ class nTurnier
                 ORDER BY turniere_liste.position_warteliste
                 ";
         $anmeldungen = db::$db->query($sql, $saison)->esc()->fetch();
+
+        // Erhalten den aktuellen Spieltag für die Ermittung des Teamblocks und der -wertigkeit
         $spieltag = Tabelle::get_aktuellen_spieltag();
+        
+        // Erstellung des Arrays mit der TurnierID, der -liste, Teamnamen, -blöcken und -wertigkeiten
         foreach ($anmeldungen as $a) {
             $turnier_listen[$a['turnier_id']][$a['liste']][$a['team_id']] = $a;
             $turnier_listen[$a['turnier_id']][$a['liste']][$a['team_id']]['tblock'] = Tabelle::get_team_block($a['team_id'], $spieltag);
@@ -300,7 +427,7 @@ class nTurnier
      *
      * @return array
      */
-    public function get_liste_spielplan(): array
+    public function get_spielen_liste(): array
     {
         // Teams der Spielen-Liste erhalten
         $sql = "
@@ -311,10 +438,10 @@ class nTurnier
                 ON turniere_liste.team_id = teams_liga.team_id
                 LEFT JOIN teams_details
                 ON turniere_liste.team_id = teams_details.team_id
-                WHERE turniere_liste.turnier_id = $this->id 
+                WHERE turniere_liste.turnier_id = ? 
                 AND turniere_liste.liste = 'spiele'
                 ";
-        $spielen_liste = db::$db->query($sql)->esc()->fetch('team_id');
+        $spielen_liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
         
         // Prüfen ob Spielen-Liste gegeben
         if (!empty($spielen_liste)) {
@@ -337,22 +464,25 @@ class nTurnier
     }
 
     /**
-     * Get Turnierlogs
+     * Kaderliste für die Kaderkontrolle des Turniers
      *
      * @return array
      */
-    public function get_turnier_logs(): array
+    public function get_kader(): array
     {
-        $sql = "
-                SELECT * 
-                FROM turniere_log 
-                WHERE turnier_id = $this->id
-                ";
-        return db::$db->query($sql)->esc()->fetch();
+        // Erhalte alle Teams der Spielenliste
+        $spielen_liste = $this->get_spielen_liste();
+        
+        foreach ($spielen_liste as $team) {
+            $return[$team['team_id']] = nSpieler::get_kader($team['team_id']);
+        }
+
+        return $return ?? [];
     }
 
     /**
      * Get Turnierergebnis des Turnieres
+     * TODO: Umstellung zu einem Array mit nTeam
      * 
      * @return array
      */
@@ -361,47 +491,31 @@ class nTurnier
         $sql = "
                 SELECT * 
                 FROM turniere_ergebnisse 
-                WHERE turnier_id = $this->id
+                WHERE turnier_id = ?
                 ORDER BY platz
                 ";
 
-        return db::$db->query($sql)->esc()->fetch('platz');
+        return db::$db->query($sql, $this->turnier_id)->esc()->fetch('platz');
     }
 
-    /**
-     * Kaderliste für die Kaderkontrolle des Turniers
-     *
-     * @return array
-     */
-    public function get_kader_kontrolle(): array
-    {
-        $spielen_liste = $this->get_liste_spielplan();
-        foreach ($spielen_liste as $team) {
-            $return[$team['team_id']] = nSpieler::get_kader($team['team_id']);
-        }
-        return $return ?? [];
-    }
 
-    /**
-     * Turnierdetails von nur einem Turnier erhalten
-     *
-     * @return array
-     */
-    public function get_details(): array
-    {
-        $sql = "
-                SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname
-                FROM turniere_liga 
-                INNER JOIN turniere_details 
-                ON turniere_liga.turnier_id = turniere_details.turnier_id
-                INNER JOIN teams_liga
-                ON turniere_liga.ausrichter = teams_liga.team_id
-                WHERE turniere_liga.turnier_id = $this->turnier_id
-                ";
-        return db::$db->query($sql)->esc()->fetch_row();
 
-    }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     /**
      * Liste an gelöschten Turnieren
      *
