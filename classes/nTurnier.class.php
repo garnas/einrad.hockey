@@ -287,8 +287,6 @@ class nTurnier
     }
 
     /**
-     * Get Turnierlogs
-     *
      * @return array
      */
     public function get_log(): array
@@ -302,8 +300,6 @@ class nTurnier
     }
 
     /**
-     * Turnierdetails von nur einem Turnier erhalten
-     *
      * @return array
      */
     public function get_details(): array
@@ -646,11 +642,11 @@ class nTurnier
     {
         $sql = "
                 SELECT 
-                (SELECT plaetze FROM turniere_details WHERE turnier_id = $this->id)
+                (SELECT plaetze FROM turniere_details WHERE turnier_id = ?)
                  - 
-                (SELECT COUNT(liste_id) FROM turniere_liste WHERE turnier_id = $this->id AND liste = 'spiele')
+                (SELECT COUNT(liste_id) FROM turniere_liste WHERE turnier_id = ? AND liste = 'spiele')
                 ";
-        return db::$db->query($sql)->esc()->fetch_one();
+        return db::$db->query($sql, $this->turnier_id, $this->turnier_id)->esc()->fetch_one();
     }
 
     /**
@@ -664,9 +660,9 @@ class nTurnier
         $sql = "
                 SELECT liste 
                 FROM turniere_liste 
-                WHERE team_id = ? AND turnier_id = $this->id
+                WHERE team_id = ? AND turnier_id = ?
                 ";
-        return (db::$db->query($sql, $team_id)->num_rows() > 0);
+        return (db::$db->query($sql, $team_id, $this->turnier_id)->num_rows() > 0);
     }
 
     /**
@@ -681,9 +677,9 @@ class nTurnier
                 SELECT liste 
                 FROM turniere_liste 
                 WHERE team_id = ? 
-                AND turnier_id = $this->id
+                AND turnier_id = ?
                 ";
-        return db::$db->query($sql, $team_id)->esc()->fetch_one() ?? '';
+        return db::$db->query($sql, $team_id, $this->turnier_id)->esc()->fetch_one() ?? '';
     }
 
     /**
@@ -804,10 +800,10 @@ class nTurnier
         $sql = "
                 UPDATE turniere_liga
                 SET $column_esc = ?
-                WHERE turnier_id = $this->id
+                WHERE turnier_id = ?
                 ";
 
-        db::$db->query($sql, $value)->log();
+        db::$db->query($sql, $value, $this->turnier_id)->log();
         $this->details[$column] = $value;
         $this->log(ucfirst($column) . ": $value");
         return $this;
@@ -829,10 +825,10 @@ class nTurnier
         $sql = "
                 UPDATE turniere_details
                 SET $column_esc = ?
-                WHERE turnier_id = $this->id
+                WHERE turnier_id = ?
                 ";
 
-        db::$db->query($sql, $value)->log();
+        db::$db->query($sql, $value, $this->turnier_id)->log();
         $this->details[$column] = $value;
         $this->log(ucfirst($column) . ": $value");
 
@@ -856,19 +852,19 @@ class nTurnier
             $sql = "
                     UPDATE turniere_liste 
                     SET position_warteliste = position_warteliste + 1 
-                    WHERE turnier_id = $this->id 
+                    WHERE turnier_id = ? 
                     AND liste = 'warte' 
                     AND position_warteliste >= ?";
-            db::$db->query($sql, $pos)->log();
+            db::$db->query($sql, $this->turnier_id, $pos)->log();
             if (db::$db->affected_rows() > 0) {
                 $this->log("Warteliste aktualisiert");
             }
         }
         $sql = "
                 INSERT INTO turniere_liste (turnier_id, team_id, liste, position_warteliste) 
-                VALUES ($this->id, ?, ?, ?)
+                VALUES (?, ?, ?, ?)
                 ";
-        db::$db->query($sql, $team_id, $liste, $pos)->log();
+        db::$db->query($sql, $this->turnier_id, $team_id, $liste, $pos)->log();
         $this->log(
             "Anmeldung:\r\n" . Team::id_to_name($team_id) . " ($liste)"
                 . (($liste === 'warte') ? "\r\nWartepos: $pos" : '')
@@ -919,9 +915,9 @@ class nTurnier
         // Auf die Spielenliste setzen
         $sql = "
                 INSERT INTO turniere_liste (turnier_id, team_id, liste, freilos_gesetzt) 
-                VALUES ($this->id, ?, 'spiele', 'Ja')
+                VALUES (?, ?, 'spiele', 'Ja')
                 ";
-        db::$db->query($sql, $team_id)->log();
+        db::$db->query($sql, $this->turnier_id, $team_id)->log();
 
         $this->log(
             "Freilos:\r\n" . Team::id_to_name($team_id) . " (spiele)"
@@ -937,10 +933,10 @@ class nTurnier
     {
         $sql = "
                 DELETE FROM turniere_liste 
-                WHERE turnier_id = $this->id
+                WHERE turnier_id = 
                 AND team_id = ?
                 ";
-        db::$db->query($sql, $team_id)->log();
+        db::$db->query($sql, $this->turnier_id, $team_id)->log();
         if (db::$db->affected_rows() > 0) $this->log("Abmeldung:\r\n" . Team::id_to_name($team_id));
     }
 
@@ -957,11 +953,11 @@ class nTurnier
         $sql = "
                 SELECT * 
                 FROM turniere_liste 
-                WHERE turnier_id = $this->id 
+                WHERE turnier_id = ? 
                 AND liste = 'warte' 
                 ORDER BY position_warteliste
                 ";
-        $liste = db::$db->query($sql)->fetch('team_id');
+        $liste = db::$db->query($sql, $this->turnier_id)->fetch('team_id');
 
         // Warteliste korrigieren
         $pos = $affected_rows = 0;
@@ -969,11 +965,11 @@ class nTurnier
             $sql = "
                     UPDATE turniere_liste 
                     SET position_warteliste = ?
-                    WHERE turnier_id = $this->id
+                    WHERE turnier_id = ?
                     AND liste = 'warte'
                     AND team_id = ?;
                     ";
-            db::$db->query($sql, ++$pos, $team['team_id'])->log();
+            db::$db->query($sql, $this->turnier_id, ++$pos, $team['team_id'])->log();
             $affected_rows += db::$db->affected_rows();
             $logs[] = $pos . ". " . Team::id_to_name($team['team_id']);
         }
@@ -989,9 +985,9 @@ class nTurnier
     {
         $sql = "
                 DELETE FROM turniere_ergebnisse 
-                WHERE turnier_id = $this->id
+                WHERE turnier_id = ?
                 ";
-        db::$db->query($sql)->log();
+        db::$db->query($sql, $this->turnier_id)->log();
         if (db::$db->affected_rows() > 0) $this->log("Turnierergebnisse wurden gelöscht.");
     }
 
@@ -1009,9 +1005,9 @@ class nTurnier
         }
         $sql = "
                 INSERT INTO turniere_ergebnisse (turnier_id, team_id, ergebnis, platz) 
-                VALUES ($this->id, ?, ?, ?);
+                VALUES (?, ?, ?, ?);
                 ";
-        db::$db->query($sql, $team_id, $ergebnis, $platz)->log();
+        db::$db->query($sql, $this->turnier_id, $team_id, $ergebnis, $platz)->log();
     }
     
     /**
@@ -1044,10 +1040,10 @@ class nTurnier
         $sql = "
                 UPDATE turniere_liste 
                 SET liste = ?, position_warteliste = ? 
-                WHERE turnier_id = $this->id 
+                WHERE turnier_id = ? 
                 AND team_id = ?
                 ";
-        db::$db->query($sql, [$liste, $pos, $team_id]);
+        db::$db->query($sql, [$liste, $pos, $this->turnier_id, $team_id]);
         $this->log("Listenwechsel:\r\n"
             . Team::id_to_name($team_id) . " ($liste)"
             . (($liste === 'warte') ? "\r\nWartepos: $pos" : ''));
@@ -1065,9 +1061,9 @@ class nTurnier
         $sql = "
                 UPDATE turniere_liga
                 SET spielplan_datei = ?
-                WHERE turnier_id = $this->id;
+                WHERE turnier_id = ?;
                 ";
-        db::$db->query($sql, $link)->log();
+        db::$db->query($sql, $link, $this->turnier_id)->log();
         $this->details['spielplan_datei'] = $link;
         $this->set_liga('phase', $phase);
         $this->log("Manuelle Spielplan- oder Ergebnisdatei wurde hochgeladen.");
@@ -1087,9 +1083,9 @@ class nTurnier
         // Turnier in der Datenbank vermerken
         $sql = "
                 INSERT INTO turniere_geloescht (turnier_id, datum, ort, grund, saison) 
-                VALUES ($this->id, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?)
                 ";
-        $params = [$this->details['datum'], $this->details['ort'], $grund, $this->details['saison']];
+        $params = [$this->turnier_id, $this->datum, $this->ort, $grund, $this->saison];
         db::$db->query($sql, $params)->log();
 
         // Turnier aus der Datenbank löschen
