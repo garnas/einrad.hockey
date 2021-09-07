@@ -244,16 +244,16 @@ class MailBot
     /**
      * Erstellt eine Mail in der Datenbank an alle spielberechtigten Teams, wenn ein neues Turnier eingetragen wird
      *
-     * @param Turnier $turnier
+     * @param nTurnier $turnier
      */
-    public static function mail_neues_turnier(Turnier $turnier): void
+    public static function mail_neues_turnier(nTurnier $turnier): void
     {
-        if (in_array($turnier->details['art'], ['I', 'II', 'III'])) {
+        if (in_array($turnier->art, ['I', 'II', 'III'])) {
             $team_ids = Team::get_liste_ids();
             foreach ($team_ids as $team_id) {
                 // Noch Plätze frei?
                 if ($turnier->check_team_block($team_id) && !$turnier->check_doppel_anmeldung($team_id)) {
-                    $betreff = "Neues " . $turnier->details['tblock'] . "-Turnier in " . $turnier->details['ort'];
+                    $betreff = "Neues " . $turnier->tblock . "-Turnier in " . $turnier->ort;
                     ob_start();
                         include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
                         include(Env::BASE_PATH . "/templates/mails/mail_neues_turnier.tmp.php");

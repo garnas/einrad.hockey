@@ -616,7 +616,7 @@ class nTurnier
                 ";
         db::$db->query($sql, $turnier_id)->log();
 
-        $turnier = new nTurnier();
+        $turnier = self::get($turnier_id);
         $turnier->set_log("Turnier wurde erstellt. (Ausrichter $ausrichter)");
         $turnier->anmelden($ausrichter, 'spiele');
         return $turnier;
@@ -779,7 +779,7 @@ class nTurnier
      * @param mixed $value
      * @return $this
      */
-    public function set_liga(string $column, mixed $value): nTurnier
+    public function set_turniere_liga(string $column, mixed $value): nTurnier
     {
         if ($this->details[$column] === $value) {
             return $this;
@@ -804,7 +804,7 @@ class nTurnier
      * @param mixed $value
      * @return $this
      */
-    public function set(string $column, mixed $value): nTurnier
+    public function set_turniere_details(string $column, mixed $value): nTurnier
     {
         if ($this->details[$column] == $value) {
             return $this;
@@ -1012,7 +1012,7 @@ class nTurnier
         foreach ($platzierungstabelle as $team_id => $ergebnis) {
             $this->set_ergebnis($team_id, $ergebnis['ligapunkte'], $ergebnis['platz']);
         }
-        $this->set_liga('phase', 'ergebnis');
+        $this->set_turniere_liga('phase', 'ergebnis');
         $this->set_log("Turnierergebnis wurde in die Datenbank eingetragen");
     }
 
@@ -1053,7 +1053,7 @@ class nTurnier
                 ";
         db::$db->query($sql, $link, $this->turnier_id)->log();
         $this->spielplan_datei = $link;
-        $this->set_liga('phase', $phase);
+        $this->set_turniere_liga('phase', $phase);
         $this->set_log("Manuelle Spielplan- oder Ergebnisdatei wurde hochgeladen.");
     }
 

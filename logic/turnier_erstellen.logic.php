@@ -162,33 +162,33 @@ if (isset($_POST['create_turnier'])) {
         Html::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht erstellt.");
     } else {
         // Turnier erstellen
-        $turnier = Turnier::new_turnier($ausrichter_team_id);
-        $turnier->set_liga('art', $art)
-            ->set_liga('tblock_fixed', $fixed)
-            ->set_liga('tname', $tname)
-            ->set_liga('tblock', $tblock)
-            ->set_liga('datum', $datum)
-            ->set_liga('saison', Config::SAISON)
-            ->set('startzeit', $startzeit)
-            ->set('besprechung', $besprechung)
-            ->set('hinweis', $hinweis)
-            ->set('plaetze', $plaetze)
-            ->set('format', $format)
-            ->set('plz', $plz)
-            ->set('ort', $ort)
-            ->set('strasse', $strasse)
-            ->set('hallenname', $hallenname)
-            ->set('haltestellen', $haltestellen)
-            ->set('format', $format)
-            ->set('handy', $handy)
-            ->set('organisator', $organisator)
-            ->set('startgebuehr', $startgebuehr);
+        $turnier = nTurnier::get($ausrichter_team_id);
+        $turnier->set_turniere_liga('art', $art)
+            ->set_turniere_liga('tblock_fixed', $fixed)
+            ->set_turniere_liga('tname', $tname)
+            ->set_turniere_liga('tblock', $tblock)
+            ->set_turniere_liga('datum', $datum)
+            ->set_turniere_liga('saison', Config::SAISON)
+            ->set_turniere_details('startzeit', $startzeit)
+            ->set_turniere_details('besprechung', $besprechung)
+            ->set_turniere_details('hinweis', $hinweis)
+            ->set_turniere_details('plaetze', $plaetze)
+            ->set_turniere_details('format', $format)
+            ->set_turniere_details('plz', $plz)
+            ->set_turniere_details('ort', $ort)
+            ->set_turniere_details('strasse', $strasse)
+            ->set_turniere_details('hallenname', $hallenname)
+            ->set_turniere_details('haltestellen', $haltestellen)
+            ->set_turniere_details('format', $format)
+            ->set_turniere_details('handy', $handy)
+            ->set_turniere_details('organisator', $organisator)
+            ->set_turniere_details('startgebuehr', $startgebuehr);
 
         // Mailbot
         if (Helper::$teamcenter) MailBot::mail_neues_turnier($turnier); // Nur wenn Teams Turniere erstellen.
 
         // Turnier wurde erfolgreich erstellt - Weiterleitung zu Turnierdetails
         Html::info("Euer Turnier wurde erfolgreich eingetragen.");
-        Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id);
+        Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->turnier_id);
     }
 }
