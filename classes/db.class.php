@@ -2,7 +2,7 @@
 
 class db
 {
-    public static null|dbWrapper $db;
+    public static null|ndbWrapper $db;
 
     /**
      * Stellt die Verbindung zur Datenbank her
@@ -20,7 +20,7 @@ class db
                                       string $password = Env::PASSWORD,
                                       string $database = Env::DATABASE): void
     {
-        self::$db = new dbWrapper($host, $user, $password, $database);
+        self::$db = new ndbWrapper($host, $user, $password, $database);
     }
 
     /**
