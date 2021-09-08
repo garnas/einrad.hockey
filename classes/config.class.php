@@ -66,6 +66,11 @@ class Config
     ];
 
     /**
+     * Turnierarten
+     */
+    public const TURNIER_ARTEN = ['I', 'II', 'III'];
+
+    /**
      * Ligagebühr
      */
     public const LIGAGEBUEHR = "30&nbsp;€";
