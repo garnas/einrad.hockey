@@ -86,13 +86,13 @@ class ndbwrapper
      */
     public function fetch_one(): mixed
     {
-        if ($this->escape_result) return db::escape($this->stmt->fetch(PDO::FETCH_NUM)[0] ?? null);
-        return $this->stmt->fetch(PDO::FETCH_NUM)[0] ?? null;
+        if ($this->escape_result) return db::escape($this->stmt->fetch(PDO::FETCH_NUM)[0] ?? NULL);
+        return $this->stmt->fetch(PDO::FETCH_NUM)[0] ?? NULL;
     }
 
     public function fetch_object(String $class, array $args = []): object|null
     {
-        return $this->stmt->fetchObject($class, $args);
+        return $this->stmt->fetchObject($class, $args) ?: NULL;
     }
 
     public function fetch_objects(string $class, ?String $key = NULL, array $constructor_args = []): array
@@ -110,8 +110,16 @@ class ndbwrapper
      */
     public function fetch_row(): array
     {
-        if ($this->escape_result) return db::escape($this->stmt->fetch(PDO::FETCH_ASSOC) ?? []);
-        return $this->stmt->fetch(PDO::FETCH_ASSOC) ?? [];
+        $return = $this->stmt->fetch(PDO::FETCH_ASSOC);
+        if ($return === false) {
+            return [];
+        }
+
+        if ($this->escape_result) {
+            return db::escape($return);
+        }
+
+        return $return;
     }
 
     /**
