@@ -29,12 +29,12 @@ ini_set('display_errors', 'Off');
 ini_set('error_log', __DIR__ . '/system/logs/errors.log');
 
 // Nur für Localhost-Einstellungen
-if (
-    file_exists(__DIR__ . '/_localhost/nur_localhost.php')
-    && in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])
-) {
-    require_once __DIR__ . '/_localhost/nur_localhost.php';
+if (Env::IS_LOCALHOST) {
+    ini_set('session.cookie_secure', '0'); // $_SESSION Funktioniert auch ohne https
+    ini_set('display_errors', 'On'); // Fehler werden angzeigt und nicht nur geloggt
 }
+
+
 
 /**
  * Enviroment-Variablen laden
