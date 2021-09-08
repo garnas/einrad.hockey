@@ -572,29 +572,6 @@ class nTurnier
         $this->log .= "\r\n" . $log_text;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-
-    
-
-    
-
     /**
      * Erstellt ein neues Turnier.
      * 
@@ -616,17 +593,21 @@ class nTurnier
                 ";
         db::$db->query($sql, $turnier_id)->log();
 
+        // Turnierlog beschreiben
         $turnier = self::get($turnier_id);
         $turnier->set_log("Turnier wurde erstellt. (Ausrichter $ausrichter)");
-        $turnier->anmelden($ausrichter, 'spiele');
+        
+        // Ausrichter auf dem Turnier melden
+        $turnier->set_team($ausrichter, 'spiele');
+        
         return $turnier;
     }
 
     /**
      * Get Anzahl der freien Plätze auf dem Turnier
-     * @return string
+     * @return int
      */
-    public function get_anzahl_freie_plaetze(): string
+    public function get_freie_plaetze(): int
     {
         $sql = "
                 SELECT 
@@ -638,12 +619,12 @@ class nTurnier
     }
 
     /**
-     * Gibt true aus, wenn das Team bereits zum Turnier angemeldet ist, sonst false
+     * Ermittelt, ob das Team bereits bei diesem Turnier angemeldet ist
      *
      * @param int $team_id
      * @return bool
      */
-    public function check_team_angemeldet(int $team_id): bool
+    public function is_angemeldet(int $team_id): bool
     {
         $sql = "
                 SELECT liste 
@@ -654,7 +635,7 @@ class nTurnier
     }
 
     /**
-     * Erhalte die Liste, auf der sich ein Team auf dem Turnier befindet
+     * Erhalte die Liste, auf der sich ein Team bei diesem Turnier befindet
      *
      * @param int $team_id
      * @return string
@@ -671,46 +652,27 @@ class nTurnier
     }
 
     /**
-     * Statischer Check des Teamblocks/Turnierblocks
-     *
-     * @param string $team_block
-     * @param string $turnier_block
+     * Ermittelt, ob ein Team bei diesem Turnier ein Freilos setzten darf
+     * @param int $team_id
      * @return bool
      */
-    public static function check_team_block_static(string $team_block, string $turnier_block): bool
+    public function is_spielberechtig_freilos(int $team_id): bool
     {
+        $team_block = Tabelle::get_team_block($team_id);
+        $turnier_block = $this->tblock;
+
         if ($team_block === NULL) {
             return true;
-        } // NL Teams können immer angemeldet werden
-
-        // Check ob es sich um ein Block-Turnier handelt (nicht spass oder finale)
-        if (in_array($turnier_block, Config::BLOCK_ALL)) {
-            // Block-String in Array auflösen
-            $turnier_buchstaben = str_split($turnier_block);
-            $team_buchstaben = str_split($team_block);
-            // Check ob ein Buchstabe des Team-Blocks im Turnier-Block vorkommt
-            foreach ($team_buchstaben as $buchstabe) {
-                if (in_array($buchstabe, $turnier_buchstaben)) {
-                    return true;
-                }
-            }
         }
-        return false;
-    }
 
-    /**
-     * Statischer Check Teamblock/Turnierblock bei Freilosen
-     *
-     * @param string $team_block
-     * @param string $turnier_block
-     * @return bool
-     */
-    public static function check_team_block_freilos_static(string $team_block, string $turnier_block): bool
-    {
-        // Check ob es sich um einen Block-Turnier handelt (nicht spass, finale, oder fix)
-        if (in_array($turnier_block, Config::BLOCK_ALL)) {
+        // Check ob es sich um ein Ligaturnier handelt
+        if (in_array($turnier_block, Config::TURNIER_ARTEN)) {
+            
+            // Finde Index des Blocks im Block-Array
             $pos_turnier = array_search($turnier_block, Config::BLOCK_ALL, true);
             $team_block = str_split($team_block);
+            
+            // Prüfe, ob sich der Teamblock im Array dahinter und somit unter dem Turnierblock befindet
             for ($i = $pos_turnier; $i <= (count(Config::BLOCK_ALL) - 1); $i++) {
                 foreach ($team_block as $buchstabe) {
                     $turnier_block = str_split(Config::BLOCK_ALL[$i]);
@@ -718,42 +680,52 @@ class nTurnier
                 }
             }
         }
+
         return false;
     }
 
     /**
-     * Gibt true aus, wenn das Team für das Turnier ein Ffreilos setzten darf
-     * @param int $team_id
-     * @return bool
-     */
-    public function check_team_block_freilos(int $team_id): bool
-    {
-        return self::check_team_block_freilos_static(Tabelle::get_team_block($team_id), $this->tblock);
-    }
-
-    /**
-     * Gibt true aus, wenn der Teamblock in das Turnier passt.
+     * Ermittelt, ob das Team auf diesem Turnier spielen darf
      *
      * @param int $team_id
      * @return bool
      */
-    public function check_team_block(int $team_id): bool
+    public function is_spielberechtigt(int $team_id): bool
     {
-        // Falsche Turnierart für Blockcheck
-        if (!in_array($this->art, ['I', 'II', 'III'])) {
-            return false;
+        $team_block = Tabelle::get_team_block($team_id);
+        $turnier_block = $this->tblock;
+        $turnier_art = $this->art;
+
+        // NL-Teams sind immer spielberechtigt
+        if ($team_block === NULL) {
+            return true;
         }
 
-        return self::check_team_block_static(Tabelle::get_team_block($team_id), $this->tblock);
+        // Check ob es sich um ein Block-Turnier handelt (nicht spass oder finale)
+        if (in_array($turnier_art, Config::TURNIER_ARTEN)) {
+            
+            // Block-String in Array auflösen
+            $turnier_buchstaben = str_split($turnier_block);
+            $team_buchstaben = str_split($team_block);
+            
+            // Check ob ein Buchstabe des Team-Blocks im Turnier-Block vorkommt
+            foreach ($team_buchstaben as $buchstabe) {
+                if (in_array($buchstabe, $turnier_buchstaben)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
-     * Gibt true aus, wenn das Team am Kalendertag des Turnieres bereits bei einem Turnier auf der Spielen-Liste steht
+     * Ermittelt, ob das Team an gleichen Kalendertag auf einem anderen Turnier angemeldet ist
      *
      * @param int $team_id
      * @return bool
      */
-    public function check_doppel_anmeldung(int $team_id): bool
+    public function is_doppelmeldung(int $team_id): bool
     {
         $sql = "
                SELECT liste_id
@@ -767,10 +739,6 @@ class nTurnier
                ";
         return db::$db->query($sql, $team_id, $this->datum)->num_rows() > 0;
     }
-
-    /**
-     * SETTER
-     */
 
     /**
      * Schreibt einen Eintrag in die turniere_liga Tabelle
@@ -827,13 +795,14 @@ class nTurnier
      * Ein Team zum Turnier anmelden
      *
      * Bei Anmeldung auf die Warteliste sollte $pos als die jeweilige Wartelistenposition übergeben werden
-     * Könnnte man das auch mit nl_anmelden für nichtligateams zusammenlegen?
+     * Könnnte man das auch mit nl_anmelden für nichtligateams zusammenlegen? 
+     * PeKA: Das NL-Team muss angelegt werden, bevor es in der Turnier gesetzt wird. Dann sollte das gehen.
      *
      * @param int $team_id
      * @param string $liste
      * @param int $pos
      */
-    public function anmelden(int $team_id, string $liste, int $pos = 0): void
+    public function set_team(int $team_id, string $liste, int $pos = 0): void
     {
         // Update der Wartelistepositionen
         if ($liste === 'warte') {
@@ -866,16 +835,17 @@ class nTurnier
      * Existiert bereits ein Nichtligateam mit gleichem Namen in der Datenbank, so wird dieses angemeldet es wird also
      * kein neues Nichtligateam erstellt
      *
-     * Nichtligateams bekommen automatisch einen Stern hinter ihrem Namen
      *
      * @param $teamname
      * @param $liste
      * @param int $pos
      */
-    public function nl_anmelden($teamname, $liste, int $pos = 0): void
+    public function set_nl_team($teamname, $liste, int $pos = 0): void
     {
-        $teamname .= "*"; // Nichtligateams haben einen Stern hinter dem Namen
-        if (Team::name_to_id($teamname) === NULL) { //TODO === NULL testen
+        // Nichtligateams haben einen Stern hinter dem Namen
+        $teamname .= "*";
+
+        if (Team::name_to_id($teamname) === NULL) {
             $sql = "
                     INSERT INTO teams_liga (teamname, ligateam) 
                     VALUES (?, 'Nein')
@@ -885,7 +855,8 @@ class nTurnier
         } else {
             $nl_team_id = Team::name_to_id($teamname);
         }
-        $this->anmelden($nl_team_id, $liste, $pos);
+
+        $this->set_team($nl_team_id, $liste, $pos);
     }
 
     /**
