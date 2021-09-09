@@ -200,7 +200,7 @@ if (isset($_POST['change_turnier'])) {
             $turnier->details['phase'] === 'melde'
             && $plaetze_vorher < $plaetze
         ) {
-            $turnier->warteliste_aktualisieren();
+            $turnier->spieleliste_auffuellen();
         }
 
         Html::info("Turnierdaten wurden geändert");
