@@ -105,7 +105,7 @@ register_shutdown_function(static function () {
     Helper::log(Config::LOG_USER,
         $_SERVER['REQUEST_URI']
         . " | " . round(microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"], 3) . " s (Load)"
-        . " | " . dbWrapper::$query_count . " (Querys)"
+        . " | " . ndbWrapper::$query_count . " (Querys)"
         . $referrer,
         true);
 
