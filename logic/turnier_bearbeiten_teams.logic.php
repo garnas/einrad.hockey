@@ -42,7 +42,7 @@ if (isset($_POST['change_turnier'])) {
     }
 
     // Anzahl der Plätze bzw ob 8er DKO- oder Gruppen-Spielplan
-    if ($plaetze == '8 dko') {
+    if ($plaetze == '8 dko') { //TODO besser machen - Unterscheidung zwsichen dko und gruppen nicht zwangsläufig notwendig
         $plaetze = 8;
         $format = 'dko';
     } elseif ($plaetze == '8 gruppen') {
@@ -52,7 +52,7 @@ if (isset($_POST['change_turnier'])) {
         $format = 'jgj';
     }
 
-    // Leere Felder können eigentlich nicht auftreten (nur durch html-Manipulation), aber sicherheitshalber dass hier...
+    // Leere Felder können eigentlich nicht auftreten (nur durch html-Manipulation), aber sicherheitshalber das hier...
     if (
         empty($plaetze) || empty($startzeit) || empty($hallenname) || empty($strasse) || empty($plz) || empty($ort)
         || empty($hinweis) || empty($organisator) || empty($handy)
@@ -179,6 +179,8 @@ if (isset($_POST['change_turnier'])) {
             MailBot::mail_turnierdaten_geaendert($turnier);
         }
 
+        $plaetze_vorher = $turnier->details['plaetze'];
+
         // Ändern der Turnierdetails
         $turnier->set('startzeit', $startzeit)
                 ->set('besprechung', $besprechung)
@@ -193,6 +195,13 @@ if (isset($_POST['change_turnier'])) {
                 ->set('organisator', $organisator)
                 ->set('handy', $handy)
                 ->set('hinweis', $hinweis);
+
+        if (
+            $turnier->details['phase'] === 'melde'
+            && $plaetze_vorher < $plaetze
+        ) {
+            $turnier->warteliste_aktualisieren();
+        }
 
         Html::info("Turnierdaten wurden geändert");
         Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id);
