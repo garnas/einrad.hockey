@@ -72,21 +72,6 @@ class nTurnier
     }
 
     /**
-     * @param int $id
-     * @return nTurnier
-     */
-    public static function get(int $turnier_id): nTurnier
-    {
-        $sql = "
-            SELECT turniere_liga.*, turniere_details.*
-            FROM turniere_liga
-            LEFT JOIN turniere_details ON turniere_liga.turnier_id = turniere_details.turnier_id
-            WHERE turniere_liga.turnier_id = $turnier_id
-        ";
-        return db::$db->query($sql)->fetch_object(__CLASS__);
-    }
-
-    /**
      * @return int
      */
     public function get_turnier_id(): int
@@ -315,6 +300,21 @@ class nTurnier
                 ";
         return db::$db->query($sql, $this->turnier_id)->esc()->fetch_row();
 
+    }
+
+    /**
+     * @param int $id
+     * @return nTurnier
+     */
+    public static function get(int $turnier_id): nTurnier
+    {
+        $sql = "
+            SELECT turniere_liga.*, turniere_details.*
+            FROM turniere_liga
+            LEFT JOIN turniere_details ON turniere_liga.turnier_id = turniere_details.turnier_id
+            WHERE turniere_liga.turnier_id = $turnier_id
+        ";
+        return db::$db->query($sql)->fetch_object(__CLASS__);
     }
 
     /**
@@ -561,6 +561,71 @@ class nTurnier
     }
 
     /**
+     * Erhalte die Liste, auf der sich ein Team bei diesem Turnier befindet
+     *
+     * @param int $team_id
+     * @return string
+     */
+    public function get_liste(int $team_id): string
+    {
+        $sql = "
+                SELECT liste 
+                FROM turniere_liste 
+                WHERE team_id = ? 
+                AND turnier_id = ?
+                ";
+        return db::$db->query($sql, $team_id, $this->turnier_id)->esc()->fetch_one() ?? '';
+    }
+
+    /**
+     * Get Anzahl der freien Plätze auf dem Turnier
+     * @return int
+     */
+    public function get_freie_plaetze(): int
+    {
+        $sql = "
+                SELECT 
+                (SELECT plaetze FROM turniere_details WHERE turnier_id = ?)
+                 - 
+                (SELECT COUNT(liste_id) FROM turniere_liste WHERE turnier_id = ? AND liste = 'spiele')
+                ";
+        return db::$db->query($sql, $this->turnier_id, $this->turnier_id)->esc()->fetch_one();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
      * Schreibt in den Turnierlog.
      *
      * Turnierlogs werden bei Zerstörung des Objektes in die DB geschrieben.
@@ -601,143 +666,6 @@ class nTurnier
         $turnier->set_team($ausrichter, 'spiele');
         
         return $turnier;
-    }
-
-    /**
-     * Get Anzahl der freien Plätze auf dem Turnier
-     * @return int
-     */
-    public function get_freie_plaetze(): int
-    {
-        $sql = "
-                SELECT 
-                (SELECT plaetze FROM turniere_details WHERE turnier_id = ?)
-                 - 
-                (SELECT COUNT(liste_id) FROM turniere_liste WHERE turnier_id = ? AND liste = 'spiele')
-                ";
-        return db::$db->query($sql, $this->turnier_id, $this->turnier_id)->esc()->fetch_one();
-    }
-
-    /**
-     * Ermittelt, ob das Team bereits bei diesem Turnier angemeldet ist
-     *
-     * @param int $team_id
-     * @return bool
-     */
-    public function is_angemeldet(int $team_id): bool
-    {
-        $sql = "
-                SELECT liste 
-                FROM turniere_liste 
-                WHERE team_id = ? AND turnier_id = ?
-                ";
-        return (db::$db->query($sql, $team_id, $this->turnier_id)->num_rows() > 0);
-    }
-
-    /**
-     * Erhalte die Liste, auf der sich ein Team bei diesem Turnier befindet
-     *
-     * @param int $team_id
-     * @return string
-     */
-    public function get_liste(int $team_id): string
-    {
-        $sql = "
-                SELECT liste 
-                FROM turniere_liste 
-                WHERE team_id = ? 
-                AND turnier_id = ?
-                ";
-        return db::$db->query($sql, $team_id, $this->turnier_id)->esc()->fetch_one() ?? '';
-    }
-
-    /**
-     * Ermittelt, ob ein Team bei diesem Turnier ein Freilos setzten darf
-     * @param int $team_id
-     * @return bool
-     */
-    public function is_spielberechtig_freilos(int $team_id): bool
-    {
-        $team_block = Tabelle::get_team_block($team_id);
-        $turnier_block = $this->tblock;
-
-        if ($team_block === NULL) {
-            return true;
-        }
-
-        // Check ob es sich um ein Ligaturnier handelt
-        if (in_array($turnier_block, Config::TURNIER_ARTEN)) {
-            
-            // Finde Index des Blocks im Block-Array
-            $pos_turnier = array_search($turnier_block, Config::BLOCK_ALL, true);
-            $team_block = str_split($team_block);
-            
-            // Prüfe, ob sich der Teamblock im Array dahinter und somit unter dem Turnierblock befindet
-            for ($i = $pos_turnier; $i <= (count(Config::BLOCK_ALL) - 1); $i++) {
-                foreach ($team_block as $buchstabe) {
-                    $turnier_block = str_split(Config::BLOCK_ALL[$i]);
-                    if (in_array($buchstabe, $turnier_block)) return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Ermittelt, ob das Team auf diesem Turnier spielen darf
-     *
-     * @param int $team_id
-     * @return bool
-     */
-    public function is_spielberechtigt(int $team_id): bool
-    {
-        $team_block = Tabelle::get_team_block($team_id);
-        $turnier_block = $this->tblock;
-        $turnier_art = $this->art;
-
-        // NL-Teams sind immer spielberechtigt
-        if ($team_block === NULL) {
-            return true;
-        }
-
-        // Check ob es sich um ein Block-Turnier handelt (nicht spass oder finale)
-        if (in_array($turnier_art, Config::TURNIER_ARTEN)) {
-            
-            // Block-String in Array auflösen
-            $turnier_buchstaben = str_split($turnier_block);
-            $team_buchstaben = str_split($team_block);
-            
-            // Check ob ein Buchstabe des Team-Blocks im Turnier-Block vorkommt
-            foreach ($team_buchstaben as $buchstabe) {
-                if (in_array($buchstabe, $turnier_buchstaben)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Ermittelt, ob das Team an gleichen Kalendertag auf einem anderen Turnier angemeldet ist
-     *
-     * @param int $team_id
-     * @return bool
-     */
-    public function is_doppelmeldung(int $team_id): bool
-    {
-        $sql = "
-               SELECT liste_id
-               FROM turniere_liste
-               INNER JOIN turniere_liga
-               ON turniere_liste.turnier_id = turniere_liga.turnier_id
-               WHERE team_id = ? 
-               AND datum = ? 
-               AND liste = 'spiele'
-               AND (turniere_liga.art = 'I' OR turniere_liga.art = 'II' OR turniere_liga.art = 'III')
-               ";
-        return db::$db->query($sql, $team_id, $this->datum)->num_rows() > 0;
     }
 
     /**
@@ -1058,5 +986,110 @@ class nTurnier
         $this->set_log("Turnier wurde gelöscht.");
         // Spieltage neu sortieren
         Ligabot::set_spieltage();
+    }
+
+    /**
+     * Ermittelt, ob ein Team bei diesem Turnier ein Freilos setzten darf
+     * @param int $team_id
+     * @return bool
+     */
+    public function is_spielberechtig_freilos(int $team_id): bool
+    {
+        $team_block = Tabelle::get_team_block($team_id);
+        $turnier_block = $this->tblock;
+
+        if ($team_block === NULL) {
+            return true;
+        }
+
+        // Check ob es sich um ein Ligaturnier handelt
+        if (in_array($turnier_block, Config::TURNIER_ARTEN)) {
+            
+            // Finde Index des Blocks im Block-Array
+            $pos_turnier = array_search($turnier_block, Config::BLOCK_ALL, true);
+            $team_block = str_split($team_block);
+            
+            // Prüfe, ob sich der Teamblock im Array dahinter und somit unter dem Turnierblock befindet
+            for ($i = $pos_turnier; $i <= (count(Config::BLOCK_ALL) - 1); $i++) {
+                foreach ($team_block as $buchstabe) {
+                    $turnier_block = str_split(Config::BLOCK_ALL[$i]);
+                    if (in_array($buchstabe, $turnier_block)) return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Ermittelt, ob das Team auf diesem Turnier spielen darf
+     *
+     * @param int $team_id
+     * @return bool
+     */
+    public function is_spielberechtigt(int $team_id): bool
+    {
+        $team_block = Tabelle::get_team_block($team_id);
+        $turnier_block = $this->tblock;
+        $turnier_art = $this->art;
+
+        // NL-Teams sind immer spielberechtigt
+        if ($team_block === NULL) {
+            return true;
+        }
+
+        // Check ob es sich um ein Block-Turnier handelt (nicht spass oder finale)
+        if (in_array($turnier_art, Config::TURNIER_ARTEN)) {
+            
+            // Block-String in Array auflösen
+            $turnier_buchstaben = str_split($turnier_block);
+            $team_buchstaben = str_split($team_block);
+            
+            // Check ob ein Buchstabe des Team-Blocks im Turnier-Block vorkommt
+            foreach ($team_buchstaben as $buchstabe) {
+                if (in_array($buchstabe, $turnier_buchstaben)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Ermittelt, ob das Team an gleichen Kalendertag auf einem anderen Turnier angemeldet ist
+     *
+     * @param int $team_id
+     * @return bool
+     */
+    public function is_doppelmeldung(int $team_id): bool
+    {
+        $sql = "
+               SELECT liste_id
+               FROM turniere_liste
+               INNER JOIN turniere_liga
+               ON turniere_liste.turnier_id = turniere_liga.turnier_id
+               WHERE team_id = ? 
+               AND datum = ? 
+               AND liste = 'spiele'
+               AND (turniere_liga.art = 'I' OR turniere_liga.art = 'II' OR turniere_liga.art = 'III')
+               ";
+        return db::$db->query($sql, $team_id, $this->datum)->num_rows() > 0;
+    }
+
+    /**
+     * Ermittelt, ob das Team bereits bei diesem Turnier angemeldet ist
+     *
+     * @param int $team_id
+     * @return bool
+     */
+    public function is_angemeldet(int $team_id): bool
+    {
+        $sql = "
+                SELECT liste 
+                FROM turniere_liste 
+                WHERE team_id = ? AND turnier_id = ?
+                ";
+        return (db::$db->query($sql, $team_id, $this->turnier_id)->num_rows() > 0);
     }
 }
