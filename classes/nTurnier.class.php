@@ -888,7 +888,7 @@ class nTurnier
      * Team wird von einem Turnier abgemeldet
      * @param int $team_id
      */
-    public function abmelden(int $team_id): void
+    public function set_abmeldung(int $team_id): void
     {
         $sql = "
                 DELETE FROM turniere_liste 
@@ -959,7 +959,7 @@ class nTurnier
      */
     public function set_ergebnis(int $team_id, int|null $ergebnis, int $platz): void
     {
-        if (!in_array($this->art, ['I', 'II', 'III'])) {
+        if (!in_array($this->art, Config::TURNIER_ARTEN)) {
             $ergebnis = NULL;
         }
         $sql = "
@@ -976,13 +976,15 @@ class nTurnier
      */
     public function set_ergebnisse(array $platzierungstabelle): void
     {
-        // Ergebns eintragen
+        // Löscht Ergebnisse, die bereits eingetragen sind
         if (!empty($this->get_ergebnis())) {
             $this->delete_ergebnis();
         }
+
         foreach ($platzierungstabelle as $team_id => $ergebnis) {
             $this->set_ergebnis($team_id, $ergebnis['ligapunkte'], $ergebnis['platz']);
         }
+
         $this->set_turniere_liga('phase', 'ergebnis');
         $this->set_log("Turnierergebnis wurde in die Datenbank eingetragen");
     }
