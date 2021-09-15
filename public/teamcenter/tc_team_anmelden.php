@@ -165,7 +165,8 @@ if (isset($_POST['abmelden']) && isset($_SESSION['logins']['team'])){
     }
     if (time() > $abmelden_moeglich_bis && $liste == 'spiele'){
         $error = true;
-        Html::error ("Abmeldungen von der Spielen-Liste sind nur bis Freitag 23:59 zwei Wochen vor dem Turnier möglich. Bitte nehmt via Email Kontakt mit dem Ligaausschuss auf: " .Html::mailto(Env::LAMAIL). "");
+        Html::error ("Abmeldungen von der Spielen-Liste sind nur bis Freitag 23:59 zwei Wochen vor dem Turnier möglich. Bitte nehmt via Email Kontakt mit dem Ligaausschuss auf: " .Html::mailto(Env::LAMAIL). "",
+            esc:false);
     }
     if (!$error){
 
@@ -220,11 +221,11 @@ include '../../templates/header.tmp.php';
 <?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->details['turnier_id'],
     "Turnierdetails",
     false,
-    "keyboard_arrow_left") ?>
-<?= Html::link('../liga/tc_turnierliste_anmelden.php?turnier_id=' . $turnier->details['turnier_id'],
-    "Turnieranmeldeliste",
+    "launch") ?>
+<?= Html::link('../teamcenter/tc_turnierliste_anmelden.php?turnier_id=' . $turnier->details['turnier_id'],
+    "Zurück zur Turnieranmeldeliste",
     false,
-    "keyboard_arrow_right") ?>
+    "launch") ?>
 
 <!-- Anzeigen der angemeldeten Teams und gleichzeitig Abmeldeformular -->
 <div class="w3-card w3-container">

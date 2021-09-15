@@ -109,7 +109,7 @@ class nSpieler
 
     public function get_team(): string
     {
-        return $this->teamname;
+        return $this->teamname ?? '';
     }
 
     /**

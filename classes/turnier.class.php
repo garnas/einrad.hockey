@@ -681,11 +681,11 @@ class Turnier
     /**
      * Statischer Check  des Teamblocks/Turnierblocks
      *
-     * @param string $team_block
+     * @param string|null $team_block
      * @param string $turnier_block
      * @return bool
      */
-    public static function check_team_block_static(string $team_block, string $turnier_block): bool
+    public static function check_team_block_static(?string $team_block, string $turnier_block): bool
     {
         if ($team_block === NULL) {
             return true;
