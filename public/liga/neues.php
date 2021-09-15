@@ -22,11 +22,11 @@ $last_turniere = array_slice($turniere, 0, 4);
 $colors = ["w3-text-tertiary", "w3-text-grey", "w3-text-brown"];
 $icons = ["looks_one", "looks_two", "looks_3"];
 
-$statistik['max_gew'] = Neuigkeit::get_statistik_gew_spiele();
-$statistik['max_turniere'] = Neuigkeit::get_statistik_turniere();
-$statistik['ges_tore'] = Neuigkeit::get_alle_tore();
-$statistik['ges_spiele'] = Neuigkeit::get_alle_spiele();
-$statistik['spielminuten'] = Neuigkeit::get_spielminuten();
+$statistik['max_gew'] = Stats::get_gew_spiele_team();
+$statistik['max_turniere'] = Stats::get_turniere_team();
+$statistik['ges_tore'] = Stats::get_tore_anzahl();
+$statistik['ges_spiele'] = Stats::get_spiele_anzahl();
+$statistik['spielminuten'] = Stats::get_spielminuten_anzahl();
 
 // Zeitanzeige der Neuigkeiteneinträge verschönern
 foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit) { //Todo in get_neuikgeiten rein
@@ -98,7 +98,7 @@ include '../../templates/header.tmp.php'; ?>
                 <?php if (empty($next_turniere)) { ?>
                     <p class="w3-text-grey">Es sind keine Turniere eingetragen.</p>
                 <?php } //end if?>
-                <?php foreach ($next_turniere as $turnier) { ?>
+                <?php foreach ($next_turniere as $turnier): ?>
                     <p class="w3-text-dark-gray">
                         <?= date("d.m", strtotime($turnier['datum'])) ?>
                         <?= Html::link(
@@ -108,7 +108,7 @@ include '../../templates/header.tmp.php'; ?>
                             "open_in_new") ?>
                         <i>(<?= $turnier['art'] == 'spass' ? "Spaß" : $turnier['tblock'] ?>)</i>
                     </p>
-                <?php } //end foreach?>
+                <?php endforeach;?>
             </div>
 
             <!-- Ergebnisse -->
@@ -119,12 +119,12 @@ include '../../templates/header.tmp.php'; ?>
                     </a>
                 </div>
 
-                <?php if (empty($last_turniere)) { ?>
+                <?php if (empty($last_turniere)): ?>
                     <p class="w3-text-grey">
                         Es liegen keine Ergebnisse vor.
                     </p>
-                <?php } //end if?>
-                <?php foreach ($last_turniere as $turnier) { ?>
+                <?php endif;?>
+                <?php foreach ($last_turniere as $turnier): ?>
                     <p class="w3-text-dark-gray">
                         <?= date("d.m", strtotime($turnier['datum'])) ?>
                         <?= Html::link(
@@ -134,7 +134,7 @@ include '../../templates/header.tmp.php'; ?>
                             'open_in_new') ?>
                         <i>(<?= $turnier['tblock'] ?>)</i>
                     </p>
-                <?php } //end foreach?>
+                <?php endforeach;?>
             </div>
 
             <!-- Statistik -->
@@ -181,7 +181,7 @@ include '../../templates/header.tmp.php'; ?>
                 </div>
 
                 <!-- Wer hat am meisten Turniere gespielt? -->
-                <?php if (!empty($statistik['max_turniere'])) { ?>
+                <?php if (!empty($statistik['max_turniere'])): ?>
                     <div class="w3-section">
                         <div class="w3-responsive">
                             <table class="w3-table w3-centered w3-bordered">
@@ -191,23 +191,23 @@ include '../../templates/header.tmp.php'; ?>
                                     <td><?= Html::icon("assistant_photo") ?></td>
                                 </tr>
                                 <?php $i = 0;
-                                foreach ($statistik['max_turniere'] as $team) { ?>
+                                foreach ($statistik['max_turniere'] as $team): ?>
                                     <tr class="<?= $colors[$i] ?>">
                                         <td><?= Html::icon($icons[$i++]) ?></td>
                                         <td style="white-space: nowrap;" class="w3-small"><?= $team['teamname'] ?></td>
                                         <td><?= $team['gespielt'] ?></td>
                                     </tr>
-                                <?php } //end foreach?>
+                                <?php endforeach;?>
                             </table>
                         </div>
                         <span class="w3-text-grey w3-small">
                         <?= Html::icon("assistant_photo") ?> Anzahl gespielter Turniere
                     </span>
                     </div>
-                <?php } //endif ?>
+                <?php endif; ?>
 
                 <!-- Wer hat am meisten Spiele gewonnen? -->
-                <?php if (!empty($statistik['max_gew'])) { ?>
+                <?php if (!empty($statistik['max_gew'])): ?>
                     <div class="w3-section">
                         <div class="w3-responsive">
                             <table class="w3-table w3-centered w3-bordered">
@@ -217,20 +217,20 @@ include '../../templates/header.tmp.php'; ?>
                                     <td><?= Html::icon("sports_hockey") ?></td>
                                 </tr>
                                 <?php $i = 0;
-                                foreach ($statistik['max_gew'] as $team_id => $gew_spiele) { ?>
+                                foreach ($statistik['max_gew'] as $team_id => $gew_spiele): ?>
                                     <tr class="<?= $colors[$i] ?>">
                                         <td><?= Html::icon($icons[$i++]) ?></td>
                                         <td style="white-space: nowrap;" class="w3-small"><?= Team::id_to_name($team_id) ?></td>
                                         <td><?= $gew_spiele ?></td>
                                     </tr>
-                                <?php } //end foreach?>
+                                <?php endforeach; ?>
                             </table>
                         </div>
                         <span class="w3-text-grey w3-small">
                         <?= Html::icon("sports_hockey") ?> Anzahl gewonnener Spiele
                         </span>
                     </div>
-                <?php }//endif?>
+                <?php endif; ?>
             </div>
 
             <!-- Links -->
@@ -255,7 +255,7 @@ include '../../templates/header.tmp.php'; ?>
 
         <!-- Neuigkeiten-Einträge -->
         <div class="w3-col l8 m7">
-            <?php foreach ($neuigkeiten as $neuigkeit) { //Schleife für jede Neuigkeit?>
+            <?php foreach ($neuigkeiten as $neuigkeit): //Schleife für jede Neuigkeit?>
                 <div class='w3-card-4 w3-panel w3-responsive w3-round w3-bottombar'>
 
                     <!-- Überschrift -->
@@ -264,13 +264,13 @@ include '../../templates/header.tmp.php'; ?>
                     </div>
 
                     <!-- Bild -->
-                    <?php if ($neuigkeit['link_jpg'] != '') { ?>
+                    <?php if ($neuigkeit['link_jpg'] != ''): ?>
                         <div class='w3-center w3-card w3-section'>
                             <a href='<?= $neuigkeit['bild_verlinken'] ?: $neuigkeit['link_jpg'] ?>'>
                                 <img class='w3-image w3-hover-opacity' alt="<?= $neuigkeit['titel'] ?>" src=<?= $neuigkeit['link_jpg'] ?>>
                             </a>
                         </div>
-                    <?php } //end if?>
+                    <?php endif; ?>
 
                     <!-- Text -->
                     <div class="w3-section">
@@ -278,9 +278,9 @@ include '../../templates/header.tmp.php'; ?>
                     </div>
 
                     <!-- PDF -->
-                    <?php if ($neuigkeit['link_pdf'] != '') { ?>
+                    <?php if ($neuigkeit['link_pdf'] != ''): ?>
                         <?= Html::link($neuigkeit['link_pdf'], "PDF-Anhang", true, "insert_drive_file") ?>
-                    <?php } //end if?>
+                    <?php endif; ?>
 
                     <!-- Autor + Zeitstempel -->
                     <div class='w3-text-grey'>
@@ -311,7 +311,7 @@ include '../../templates/header.tmp.php'; ?>
                         </p>
                     <?php } //end if?>
                 </div>
-            <?php } //end for?>
+            <?php endforeach; ?>
         </div>
     </div>
 
