@@ -59,9 +59,9 @@ class nTurnier
             }
         }
 
-        $this->meldeliste = $this->get_melde_liste();
-        $this->spielenliste = $this->get_spielen_liste();
-        $this->warteliste = $this->get_warte_liste();
+        $this->meldeliste = $this->set_melde_liste();
+        $this->spielenliste = $this->set_spielen_liste();
+        $this->warteliste = $this->set_warte_liste();
         $this->freie_plaetze = $this->set_freie_plaetze();
 
     }
@@ -571,7 +571,7 @@ class nTurnier
      *
      * @return array
      */
-    public function get_spielen_liste(): array
+    public function set_spielen_liste(): array
     {
         // Teams der Spielen-Liste erhalten
         $sql = "
@@ -613,7 +613,7 @@ class nTurnier
      *
      * @return array
      */
-    public function get_warte_liste(): array
+    public function set_warte_liste(): array
     {
         // Teams der Spielen-Liste erhalten
         $sql = "
@@ -655,7 +655,7 @@ class nTurnier
      *
      * @return array
      */
-    public function get_melde_liste(): array
+    public function set_melde_liste(): array
     {
         // Teams der Spielen-Liste erhalten
         $sql = "
@@ -698,10 +698,7 @@ class nTurnier
      */
     public function get_kader(): array
     {
-        // Erhalte alle Teams der Spielenliste
-        $spielen_liste = $this->get_spielen_liste();
-        
-        foreach ($spielen_liste as $team) {
+        foreach ($this->spielenliste as $team) {
             $return[$team['team_id']] = nSpieler::get_kader($team['team_id']);
         }
 
