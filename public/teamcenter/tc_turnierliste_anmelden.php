@@ -12,8 +12,7 @@ $anz_freilose = $team->get_freilose();
 
 // Relevante Turniere finden
 $heute = date("Y-m-d");
-$turniere = Turnier::get_turniere('ergebnis', false)
-                + Turnier::get_turniere('ergebnis', false, saison:Config::SAISON + 1);
+$db_turniere = nTurnier::get_turniere_kommend();
 
 // Hinweis Live-Spieltag
 $akt_spieltag = Tabelle::get_aktuellen_spieltag();
@@ -23,42 +22,13 @@ if (Tabelle::check_spieltag_live($akt_spieltag)){
         . Html::link("../liga/tabelle.php?spieltag=" . ($akt_spieltag - 1) . "#rang", "Spieltag " . ($akt_spieltag - 1)));
 }
 
-// Füge Links zum Weiterverarbeiten der ausgewählten Turniere hinzu
-// diese werden dem Teamplate übergeben
-foreach ($turniere as $turnier_id => $turnier){
-    //Links
-    $turniere[$turnier_id]['links'] = 
-        array(
-            Html::link("tc_team_anmelden.php?turnier_id=".$turnier_id,'Zur Ab- / Anmeldung', false , 'how_to_reg'),
-            Html::link("../liga/turnier_details.php?turnier_id=".$turnier_id, 'Zu den Turnierdetails', false, 'info')
-        );
-        
-    //Farbe des Turnierblocks festlegen
-    $freilos = true;
-    $turniere[$turnier_id]['block_color'] = 'w3-text-red';
-    if (Turnier::check_team_block_static($_SESSION['logins']['team']['block'],$turnier['tblock'])){
-        $turniere[$turnier_id]['block_color'] = 'w3-text-green';
-        $freilos = false;
-    }
-    if ($freilos && Turnier::check_team_block_freilos_static($_SESSION['logins']['team']['block'],$turnier['tblock']) && $anz_freilose>0){
-        $turniere[$turnier_id]['block_color'] = 'w3-text-yellow';
-    }
+// Links
+$turniere[$turnier_id]['links'] = 
+array(
+    Html::link("tc_team_anmelden.php?turnier_id=" . $turnier_id,'Zur Ab- / Anmeldung', false , 'how_to_reg'),
+    Html::link("../liga/turnier_details.php?turnier_id=" . $turnier_id, 'Zu den Turnierdetails', false, 'info')
+);
 
-    //Einfärben wenn schon angemeldet
-    $turniere[$turnier_id]['row_color'] = '';
-    if (isset($turnier_angemeldet[$turnier['turnier_id']])){
-        $liste = $turnier_angemeldet[$turnier['turnier_id']];
-        if ($liste == 'spiele'){
-            $turniere[$turnier_id]['row_color'] = 'w3-pale-green';
-        }
-        if ($liste == 'melde'){
-            $turniere[$turnier_id]['row_color'] = 'w3-pale-yellow';
-        }
-        if ($liste == 'warte'){
-            $turniere[$turnier_id]['row_color'] = 'w3-pale-blue';
-        }
-    }
-}
 include '../../logic/turnierliste.logic.php';
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////

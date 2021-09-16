@@ -759,7 +759,7 @@ class nTurnier
                 ON teams_liga.team_id = turniere_liga.ausrichter
                 AND ausrichter = ?
                 AND saison = ? 
-                ORDER BY turniere_liga.datum desc
+                ORDER BY turniere_liga.datum asc
                 ";
         return db::$db->query($sql, $team_id, $saison)->fetch_objects(__CLASS__, key: 'turnier_id');
     }
