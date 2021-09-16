@@ -42,6 +42,11 @@ class nTurnier
     private ?int $unix;
     private string $log = '';
     private bool $error = false;
+    
+    private int $freie_plaetze;
+    private array $meldeliste;
+    private array $spielenliste;
+    private array $warteliste;
 
     /**
      * Turnier constructor.
@@ -53,6 +58,11 @@ class nTurnier
                 $this->$name = db::escape($value);
             }
         }
+
+        $this->meldeliste = $this->get_melde_liste();
+        $this->spielenliste = $this->get_spielen_liste();
+        $this->warteliste = $this->get_warte_liste();
+        $this->freie_plaetze = $this->set_freie_plaetze();
 
     }
 
@@ -274,6 +284,38 @@ class nTurnier
     /**
      * @return array
      */
+    public function get_warteliste(): array
+    {
+        return $this->warteliste;
+    }
+
+    /**
+     * @return array
+     */
+    public function get_spielenliste()
+    {
+        return $this->spielenliste;
+    }
+
+    /**
+     * @return array
+     */
+    public function get_meldeliste()
+    {
+        return $this->meldeliste;
+    }
+
+    /**
+     * @return int
+     */
+    public function get_freie_plaetze()
+    {
+        return $this->freie_plaetze;
+    }
+
+    /**
+     * @return array
+     */
     public function get_log(): array
     {
         $sql = "
@@ -353,6 +395,7 @@ class nTurnier
                 ON teams_liga.team_id = turniere_liga.ausrichter
                 AND saison = ?
                 ORDER BY turniere_liga.datum " . ($asc ? "asc" : "desc");
+
         return db::$db->query($sql, $saison)->fetch_objects(__CLASS__, key: 'turnier_id');
     }
 
@@ -565,6 +608,90 @@ class nTurnier
     }
 
     /**
+     * Get alle Teams auf der Warteliste des Turniers nach Wertung sortiert.
+     * TODO: Return eines Arrays mit Team-Objekten
+     *
+     * @return array
+     */
+    public function get_warte_liste(): array
+    {
+        // Teams der Spielen-Liste erhalten
+        $sql = "
+                SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam,
+                    teams_details.ligavertreter, teams_details.trikot_farbe_1, teams_details.trikot_farbe_2
+                FROM turniere_liste
+                LEFT JOIN teams_liga
+                ON turniere_liste.team_id = teams_liga.team_id
+                LEFT JOIN teams_details
+                ON turniere_liste.team_id = teams_details.team_id
+                WHERE turniere_liste.turnier_id = ? 
+                AND turniere_liste.liste = 'warte'
+                ";
+        $warte_liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
+        
+        // Prüfen ob Spielen-Liste gegeben
+        if (!empty($warte_liste)) {
+
+            // Blöcke und Wertungen hinzufügen
+            foreach ($warte_liste as $team_id => $anmeldung) {
+                $warte_liste[$team_id]['tblock']
+                    = Tabelle::get_team_block($anmeldung['team_id'], $this->spieltag - 1);
+                $warte_liste[$team_id]['wertigkeit']
+                    = Tabelle::get_team_wertigkeit($anmeldung['team_id'], $this->spieltag - 1);
+            }
+
+            // Sortierung nach Wertigkeit
+            uasort($warte_liste, static function ($team_a, $team_b) {
+                return ((int)$team_b['wertigkeit'] <=> (int)$team_a['wertigkeit']);
+            });
+        }
+
+        return $warte_liste ?? [];
+    }
+
+    /**
+     * Get alle Teams auf der Warteliste des Turniers nach Wertung sortiert.
+     * TODO: Return eines Arrays mit Team-Objekten
+     *
+     * @return array
+     */
+    public function get_melde_liste(): array
+    {
+        // Teams der Spielen-Liste erhalten
+        $sql = "
+                SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam,
+                    teams_details.ligavertreter, teams_details.trikot_farbe_1, teams_details.trikot_farbe_2
+                FROM turniere_liste
+                LEFT JOIN teams_liga
+                ON turniere_liste.team_id = teams_liga.team_id
+                LEFT JOIN teams_details
+                ON turniere_liste.team_id = teams_details.team_id
+                WHERE turniere_liste.turnier_id = ? 
+                AND turniere_liste.liste = 'melde'
+                ";
+        $melde_liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
+        
+        // Prüfen ob Spielen-Liste gegeben
+        if (!empty($melde_liste)) {
+
+            // Blöcke und Wertungen hinzufügen
+            foreach ($melde_liste as $team_id => $anmeldung) {
+                $melde_liste[$team_id]['tblock']
+                    = Tabelle::get_team_block($anmeldung['team_id'], $this->spieltag - 1);
+                $melde_liste[$team_id]['wertigkeit']
+                    = Tabelle::get_team_wertigkeit($anmeldung['team_id'], $this->spieltag - 1);
+            }
+
+            // Sortierung nach Wertigkeit
+            uasort($melde_liste, static function ($team_a, $team_b) {
+                return ((int)$team_b['wertigkeit'] <=> (int)$team_a['wertigkeit']);
+            });
+        }
+
+        return $melde_liste ?? [];
+    }
+
+    /**
      * Kaderliste für die Kaderkontrolle des Turniers
      *
      * @return array
@@ -683,10 +810,10 @@ class nTurnier
     }
 
     /**
-     * Get Anzahl der freien Plätze auf dem Turnier
+     * Get Anzahl der freien Plätze auf der Spielen-Liste
      * @return int
      */
-    public function get_freie_plaetze(): int
+    public function set_freie_plaetze(): int
     {
         $sql = "
                 SELECT 

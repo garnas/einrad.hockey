@@ -4,57 +4,73 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
-$turniere = Turnier::get_turniere('ergebnis', false);
-$finalturniere = Turnier::get_finalturniere();
-$all_anmeldungen = Turnier::get_all_anmeldungen();
+$alle_turniere = nTurnier::get_turniere_kommend();
+$finalturniere = nTurnier::get_finalturniere();
 
 //Liste der Finalturniere erstellen
-foreach ($finalturniere as $turnier_id => $turnier) {
-    switch ($finalturniere[$turnier_id]['tblock'])
+foreach ($finalturniere as $turnier) {
+    switch ($turnier->get_tblock())
     {
         case "DFINALE":
-            $dfinale['turnier_id'] = $finalturniere[$turnier_id]['turnier_id'];
-            $dfinale['ort'] = $finalturniere[$turnier_id]['ort'];
-            $dfinale['datum'] = strftime("%d.%m.%Y", strtotime($finalturniere[$turnier_id]['datum']));
+            $dfinale['turnier_id'] = $turnier->get_turnier_id();
+            $dfinale['ort'] = $turnier->get_ort();
+            $dfinale['datum'] = strftime("%d.%m.%Y", strtotime($turnier->get_datum()));
             break;
         case "CFINALE":
-            $cfinale['turnier_id'] = $finalturniere[$turnier_id]['turnier_id'];
-            $cfinale['ort'] = $finalturniere[$turnier_id]['ort'];
-            $cfinale['datum'] = strftime("%d.%m.%Y", strtotime($finalturniere[$turnier_id]['datum']));
+            $cfinale['turnier_id'] = $turnier->get_turnier_id();
+            $cfinale['ort'] = $turnier->get_ort();
+            $cfinale['datum'] = strftime("%d.%m.%Y", strtotime($turnier->get_datum()));
             break;
         case "BFINALE":
-            $bfinale['turnier_id'] = $finalturniere[$turnier_id]['turnier_id'];
-            $bfinale['ort'] = $finalturniere[$turnier_id]['ort'];
-            $bfinale['datum'] = strftime("%d.%m.%Y", strtotime($finalturniere[$turnier_id]['datum']));
+            $bfinale['turnier_id'] = $turnier->get_turnier_id();
+            $bfinale['ort'] = $turnier->get_ort();
+            $bfinale['datum'] = strftime("%d.%m.%Y", strtotime($turnier->get_datum()));
             break;
         case "AFINALE":
-            $finale['turnier_id'] = $finalturniere[$turnier_id]['turnier_id'];
-            $finale['ort'] = $finalturniere[$turnier_id]['ort'];
-            $finale['datum'] = strftime("%d.%m.%Y", strtotime($finalturniere[$turnier_id]['datum']));
+            $finale['turnier_id'] = $turnier->get_turnier_id();
+            $finale['ort'] = $turnier->get_ort();
+            $finale['datum'] = strftime("%d.%m.%Y", strtotime($turnier->get_datum()));
             break;
     }
 }
 
 //Turnierdarten parsen
-foreach ($turniere as $turnier_id => $turnier) {
-    $turniere[$turnier_id]['wochentag'] = strftime("%A", strtotime($turniere[$turnier_id]['datum']));
-    $turniere[$turnier_id]['datum'] = strftime("%d.%m.", strtotime($turniere[$turnier_id]['datum']));
-    $turniere[$turnier_id]['startzeit'] = substr($turniere[$turnier_id]['startzeit'], 0, -3);
+foreach ($alle_turniere as $turnier) {
+    $turnier_id = $turnier->get_turnier_id();
+
+    $turniere[$turnier_id]['turnier_id'] = $turnier_id;
+    $turniere[$turnier_id]['art'] = $turnier->get_art();
+    $turniere[$turnier_id]['plaetze'] = $turnier->get_plaetze();
+    $turniere[$turnier_id]['ort'] = $turnier->get_ort();
+    $turniere[$turnier_id]['tblock'] = $turnier->get_tblock();
+    $turniere[$turnier_id]['tname'] = $turnier->get_tname();
+    $turniere[$turnier_id]['teamname'] = Team::id_to_name($turnier->get_ausrichter());
+    $turniere[$turnier_id]['phase'] = $turnier->get_phase();
+    $turniere[$turnier_id]['hinweis'] = $turnier->get_hinweis();
+    $turniere[$turnier_id]['ausrichter'] = $turnier->get_ausrichter();
+    $turniere[$turnier_id]['spielen_liste'] = $turnier->get_spielenliste();
+    $turniere[$turnier_id]['warte_liste'] = $turnier->get_warteliste();
+    $turniere[$turnier_id]['melde_liste'] = $turnier->get_meldeliste();
+
+    // Zeit und Datum
+    $turniere[$turnier_id]['wochentag'] = strftime("%A", strtotime($turnier->get_datum()));
+    $turniere[$turnier_id]['datum'] = strftime("%d.%m.", strtotime($turnier->get_datum()));
+    $turniere[$turnier_id]['startzeit'] = substr($turnier->get_startzeit(), 0, -3);
 
     // Spassturnier
-    if ($turniere[$turnier_id]['art'] == 'spass') {
+    if ($turnier->get_tblock() == 'spass') {
         $turniere[$turnier_id]['tblock'] = 'Spaß';
     }
 
     // Turnierbesprechung
-    if ($turniere[$turnier_id]['besprechung'] == 'Ja') {
+    if ($turnier->get_besprechung() == 'Ja') {
         $turniere[$turnier_id]['besprechung'] = 'Gemeinsame Teambesprechung um ' . date('H:i', strtotime($turniere[$turnier_id]['startzeit']) - 15 * 60) . '&nbsp;Uhr';
     } else {
         $turniere[$turnier_id]['besprechung'] = '';
     }
 
     // Spielmodus
-    switch ($turniere[$turnier_id]['format']) 
+    switch ($turnier->get_format()) 
     {
         case 'jgj':
             $turniere[$turnier_id]['format'] = 'Jeder-gegen-Jeden';
@@ -68,7 +84,7 @@ foreach ($turniere as $turnier_id => $turnier) {
     }
 
     // Turnierblock
-    switch ($turniere[$turnier_id]['tblock']) 
+    switch ($turnier->get_tblock()) 
     {
         case 'AFINALE':
             $turniere[$turnier_id]['tblock'] = '';
@@ -87,48 +103,54 @@ foreach ($turniere as $turnier_id => $turnier) {
             $turniere[$turnier_id]['tname'] = 'Saisonschlussturnier';
             break;
         default:
-            $turniere[$turnier_id]['tblock'] = '(' . $turniere[$turnier_id]['tblock'] . ')';
+            $turniere[$turnier_id]['tblock'] = '(' . $turnier->get_tblock() . ')';
     }
 }
 
 //Parsen der Warteliste und Spieleliste
 $warteliste = $spieleliste = $meldeliste = [];
-$anz_warteliste = $anz_spieleliste = $anz_meldeliste = [];
-foreach ($all_anmeldungen as $turnier_id => $liste) {
+foreach ($alle_turniere as $turnier) {
 
-    $anz_warteliste[$turnier_id] = count($liste['warte'] ?? []);
-    $anz_spieleliste[$turnier_id] = count($liste['spiele'] ?? []);
-    $anz_meldeliste[$turnier_id] = count($liste['melde'] ?? []);
+    $turnier_id = $turnier->get_turnier_id();
+    
+    //Feststellung der freien Plätze und Anzahl der Mannschaften auf den unterschiedlichen Listen
+    $freie_plaetze = $turnier->get_freie_plaetze();
 
-    $freie_plaetze = $turniere[$turnier_id]['plaetze'] - $anz_spieleliste[$turnier_id] - $anz_meldeliste[$turnier_id] - $anz_warteliste[$turnier_id];
+    $anz_spieleliste = count($turnier->get_spielenliste());
+    $turniere[$turnier_id]['anz_spieleliste'] = $anz_spieleliste;
+
+    $anz_meldeliste = count($turnier->get_meldeliste());
+    $turniere[$turnier_id]['anz_meldeliste'] = $anz_meldeliste;
+
+    $anz_warteliste = count($turnier->get_warteliste());
+    $turniere[$turnier_id]['anz_warteliste'] = $anz_warteliste;
 
     //Oben rechts Plätze frei
-    if ($turniere[$turnier_id]['phase'] == 'spielplan') {
+    if ($turnier->get_phase() == 'spielplan') {
         $turniere[$turnier_id]['plaetze_frei'] = '<span class="w3-text-gray">geschlossen</span>';
     } elseif ($freie_plaetze > 0) {
         $turniere[$turnier_id]['plaetze_frei'] = '<span class="w3-text-green">frei</span>';
-    } elseif ($freie_plaetze < 0 && $turniere[$turnier_id]['phase'] == 'offen' && $turniere[$turnier_id]['plaetze'] - $anz_spieleliste[$turnier_id] > 0) {
+    } elseif ($turnier->get_phase() == 'offen' && $anz_spieleliste + $anz_meldeliste > $turnier->get_plaetze()) {
         $turniere[$turnier_id]['plaetze_frei'] = '<span class="w3-text-yellow">losen</span>';
-    } elseif (($turniere[$turnier_id]['plaetze'] - $anz_spieleliste[$turnier_id]) <= 0) {
+    } elseif ($turnier->get_plaetze() - $anz_spieleliste <= 0) {
         $turniere[$turnier_id]['plaetze_frei'] = '<span class="w3-text-red">voll</span>';
     }
 
     //Unten links Phase
-    if ($turniere[$turnier_id]['art'] == 'final') {
+    if ($turnier->get_art() == 'final') {
         $turniere[$turnier_id]['phase'] = 'Finale';
     }
     if (
-            $turniere[$turnier_id]['art'] === 'spass'
-            && $turniere[$turnier_id]['phase'] !== 'spielplan'
+            $turnier->get_art() === 'spass'
+            && $turnier->get_phase() !== 'spielplan'
     ) {
         $turniere[$turnier_id]['phase'] = 'Nichtligaturnier';
     }
 
-    if ($turniere[$turnier_id]['phase'] == 'spielplan') {
-        $turniere[$turnier_id]['phase'] = Html::link($turniere[$turnier_id]['spielplan_datei'] ?: ('spielplan.php?turnier_id=' . $turnier_id), 'Spielplan', true);
+    if ($turnier->get_phase() == 'spielplan') {
+        $turniere[$turnier_id]['phase'] = Html::link($turnier->get_spielplan_datei() ?: ('spielplan.php?turnier_id=' . $turnier_id), 'Spielplan', true);
         $turniere[$turnier_id]['phase_spielplan'] = true;
     }
-
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -191,7 +213,7 @@ include '../../templates/header.tmp.php';
                     <div style="font-size: 13px;" class="w3-text-grey">
                         <i class='w3-display-topleft w3-padding'><?= $turnier['plaetze_frei'] ?? '<span class="w3-text-green">frei</span>' ?></i>
                         <i class='w3-display-bottomleft w3-padding'><?= $turnier['phase'] ?></i>
-                        <i class='w3-display-topright w3-padding'><?= ($anz_spieleliste[$turnier['turnier_id']] ?? 0) . "(" . (($anz_warteliste[$turnier['turnier_id']] ?? 0) + ($anz_meldeliste[$turnier['turnier_id']] ?? 0)) . ")" ?>
+                        <i class='w3-display-topright w3-padding'><?= ($turnier['anz_spieleliste'] ?? 0) . "(" . (($turnier['anz_meldeliste'] ?? 0) + ($turnier['anz_warteliste'] ?? 0)) . ")" ?>
                             von <?= $turnier['plaetze'] ?></i>
                         <i class='w3-display-bottomright w3-padding'><?= $turnier['teamname'] ?></i>
                     </div>
@@ -203,11 +225,11 @@ include '../../templates/header.tmp.php';
                         <div class='w3-row'>
                             <div class='w3-half'>
                                 <h4 class='w3-text-primary'><span>Spielen-Liste</span></h4>
-                                <?php if (!empty($all_anmeldungen[$turnier['turnier_id']]['spiele'])) { ?>
+                                <?php if (!empty($turnier['spielen_liste'])) { ?>
                                     <!-- Ausklappbarer Content -->
                                     <p>
                                         <i>
-                                            <?php foreach ($all_anmeldungen[$turnier['turnier_id']]['spiele'] as $team) { ?>
+                                            <?php foreach ($turnier['spielen_liste'] as $team) { ?>
                                                 <?= $team['teamname'] ?><span class="w3-text-primary">
                                                 (<?= $team['tblock'] ?? 'NL' ?>)</span><br>
                                             <?php }//end foreach?>
@@ -218,11 +240,11 @@ include '../../templates/header.tmp.php';
                             </div>
                             <div class='w3-half'>
                                 <?php if ($turnier['phase'] == 'offen' || $turnier['art'] == 'final') { ?>
-                                    <?php if (!empty($all_anmeldungen[$turnier['turnier_id']]['melde'])) { ?>
+                                    <?php if (!empty($turnier['melde_liste'])) { ?>
                                         <h4 class='w3-text-primary'><span>Meldeliste</span></h4>
                                         <p>
                                             <i>
-                                                <?php foreach (($all_anmeldungen[$turnier['turnier_id']]['melde']) as $team) { ?>
+                                                <?php foreach (($turnier['melde_liste']) as $team) { ?>
                                                     <?= $team['teamname'] ?>
                                                     <span class="w3-text-primary">(<?= $team['tblock'] ?? 'NL' ?>)</span>
                                                     <br>
@@ -231,11 +253,11 @@ include '../../templates/header.tmp.php';
                                         </p>
                                     <?php }//end if?>
                                 <?php } else { //else phase?>
-                                    <?php if (!empty($all_anmeldungen[$turnier['turnier_id']]['warte'])) { ?>
+                                    <?php if (!empty($turnier['warte_liste'])) { ?>
                                         <h4 class='w3-text-primary'><span>Warteliste</span></h4>
                                         <p>
                                             <i>
-                                                <?php foreach (($all_anmeldungen[$turnier['turnier_id']]['warte']) as $team) { ?>
+                                                <?php foreach (($turnier['warte_liste']) as $team) { ?>
                                                     <?= $team['position_warteliste'] . ". " . $team['teamname'] ?>
                                                     <span class="w3-text-primary">(<?= $team['tblock'] ?? 'NL' ?>)</span>
                                                     <br>
@@ -304,10 +326,3 @@ include '../../templates/header.tmp.php';
         <?php } //end foreach?>
     </div>
 <?php include '../../templates/footer.tmp.php';
-
-
-
-
-
-
-

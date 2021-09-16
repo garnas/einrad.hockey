@@ -3,7 +3,7 @@
 $grenze_bcc = 12; //TODO in Config oder Env
 
 // Für die Turnierauswahl
-$turniere = Turnier::get_turniere('alle', false, false);
+$turniere = nTurnier::get_turniere(false);
 
 // Für Sortierung der Teams nach Blöcken
 $akt_spieltag = Tabelle::get_aktuellen_spieltag();
@@ -27,14 +27,14 @@ if (isset($_POST['reset'])) {
 //Turnier wurde ausgewählt
 if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
     unset ($_SESSION[$list_id]);
-    $turnier = new Turnier((int) $_POST['turnier_id']);
-    if (empty($turnier->details)) {
+    $turnier = nTurnier::get((int) $_POST['turnier_id']);
+    if (empty($turnier->get_turnier_id())) {
         Html::error("Turnier wurde nicht gefunden");
         header('Location: ' . db::escape($_SERVER['PHP_SELF']));
         die();
     }
     $array = Kontakt::get_emails_turnier($_POST['turnier_id']);
-    $_SESSION[$list_id]['type'] = 'Turnier in ' . $turnier->details['ort'] . ' (' . date("d.m.Y", strtotime($turnier->details['datum'])) . ', ' . $turnier->details['tblock'] . ')';
+    $_SESSION[$list_id]['type'] = 'Turnier in ' . $turnier->get_ort() . ' (' . date("d.m.Y", strtotime($turnier->get_datum())) . ', ' . $turnier->get_tblock() . ')';
     $_SESSION[$list_id]['emails'] = $array['emails'];
     $_SESSION[$list_id]['empfaenger'] = $array['teamnamen'];
 

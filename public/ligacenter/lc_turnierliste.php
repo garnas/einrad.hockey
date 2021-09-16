@@ -8,10 +8,11 @@ require_once '../../logic/session_la.logic.php'; //Auth
 //Füge Links zum Weiterverarbeiten der ausgewählten Turniere hinzu; diese werden dem Teamplate übergeben
 
 //Für Turniere die nicht in der Ergebnis-Phase sind:
-$turniere_no_erg = Turnier::get_turniere('ergebnis', false)
-    + Turnier::get_turniere('ergebnis', false, saison:Config::SAISON + 1);
+$turniere_no_erg = nTurnier::get_turniere_kommend();
 
-foreach ($turniere_no_erg as $turnier_id => $turnier){
+foreach ($turniere_no_erg as $turnier){
+    $turnier_id = $turnier->get_turnier_id();
+    
     //Links
     $turniere_no_erg[$turnier_id]['links'] = 
         [
@@ -20,7 +21,7 @@ foreach ($turniere_no_erg as $turnier_id => $turnier){
             Html::link("lc_team_anmelden.php?turnier_id=".$turnier_id, '<i class="material-icons">how_to_reg</i> Teams an/abmelden'),
             Html::link("lc_turnier_bearbeiten.php?turnier_id=".$turnier_id, '<i class="material-icons">create</i> Turnier bearbeiten/löschen'),
             Html::link("lc_spielplan_verwalten.php?turnier_id=".$turnier_id, '<i class="material-icons">playlist_play</i> Spielplan/Ergebnis verwalten'),
-            Html::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">article</i>Turnierreport bearbeiten')
+            Html::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">article</i>Turnierreport bearbeiten')
         ];
     if ($turnier['phase'] == 'spielplan'){
         $turniere_no_erg[$turnier_id]['links'][] = Html::link("lc_spielplan.php?turnier_id=" . $turnier_id, '<i class="material-icons">reorder</i> Spielergebnis eintragen');
@@ -28,8 +29,10 @@ foreach ($turniere_no_erg as $turnier_id => $turnier){
 }
 
 //Für Turniere die in der Ergebnisphase sind:
-$turniere_erg = Turnier::get_turniere('ergebnis', true, false);
+$turniere_erg = nTurnier::get_turniere_ergebnis();
 foreach ($turniere_erg as $turnier_id => $turnier){
+  $turnier_id = $turnier->get_turnier_id();
+  
   //Links
   $turniere_erg[$turnier_id]['links'] = 
       array(
@@ -39,7 +42,7 @@ foreach ($turniere_erg as $turnier_id => $turnier){
             Html::link("lc_turnier_bearbeiten.php?turnier_id=".$turnier_id, '<i class="material-icons">create</i> Turnier bearbeiten'),
             Html::link("lc_spielplan_verwalten.php?turnier_id=".$turnier_id, '<i class="material-icons">playlist_play</i> Spielplan/Ergebnis verwalten'),
             Html::link("lc_spielplan.php?turnier_id=".$turnier_id, '<i class="material-icons">reorder</i> Spielergebnisse verändern'),
-            Html::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">article</i>Turnierreport bearbeiten')
+            Html::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">article</i>Turnierreport bearbeiten')
       );
 }
 
