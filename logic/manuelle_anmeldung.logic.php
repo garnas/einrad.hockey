@@ -1,27 +1,28 @@
 <?php
 //Turnierobjekt erstellen
 $turnier_id = (int) @$_GET['turnier_id'];
-$turnier = new Turnier ($turnier_id);
+$turnier = nTurnier::get($turnier_id);
 
 //Existiert das Turnier?
-if (empty($turnier->details)){
+if (empty($turnier->get_turnier_id())){
     Html::error("Turnier wurde nicht gefunden");
     header('Location: ../liga/turniere.php');
     die();
 }
+
 //im Teamcenter testen, ob es sich um den Ausrichter handelt
-if (Helper::$teamcenter && ($turnier->details['ausrichter'] != $_SESSION['logins']['team']['id'] || $turnier->details['art'] != 'spass')){
+if (Helper::$teamcenter && ($turnier->get_ausrichter() != $_SESSION['logins']['team']['id'] || $turnier->get_art() != 'spass')){
     Html::error("Fehlende Berechtigung Teams zu diesem Turnier anzumelden");
     header('Location: ../liga/turniere.php');
     die();
-} 
+}
 
 //Autor für Logs
-if(Helper::$teamcenter){
+if (Helper::$teamcenter) {
     $autor = $_SESSION['logins']['team']['name'];
-}elseif (Helper::$ligacenter){
+} elseif (Helper::$ligacenter) {
     $autor = "Ligaausschuss";
-}else{
+} else {
     Html::error("Weder im Teamcenter noch im Ligacenter angemeldet");
     header('Location: ../liga/turniere.php');
     die();
@@ -37,12 +38,12 @@ if (isset($_POST['abmelden'])){
     foreach ($anmeldungen as $liste) {
         foreach ($liste as $team) {
             if (isset($_POST['abmelden' . $team['team_id']])){
-                $turnier->abmelden($team['team_id']);
+                $turnier->set_abmeldung($team['team_id']);
                 if ($team['liste'] == 'warte'){
                     $turnier->warteliste_aktualisieren();
                 }
                 Html::info ($team['teamname'] . " wurde abgemeldet");
-                header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
+                header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->get_turnier_id()));
                 die();
             }
         }
@@ -58,9 +59,9 @@ if (isset($_POST['team_anmelden'])){
     $error = false;
 
     //Postion auf der Warteliste
-    if ($liste == 'warte'){
+    if ($liste == 'warte') {
         $pos = $_POST['pos'];
-    }else{
+    } else {
         $pos = 0;
     }
 
@@ -71,15 +72,15 @@ if (isset($_POST['team_anmelden'])){
     }
 
     //Ist das Team bereits angemeldet?
-    if ($turnier->check_team_angemeldet($team_id)){
+    if ($turnier->is_angemeldet($team_id)){
         $error = true;
         Html::error("Team ist bereits angemeldet");
     }
 
     if (!$error){
-        $turnier->anmelden($team_id, $liste, $pos);
+        $turnier->set_team($team_id, $liste, $pos);
         Html::info ("$teamname wurde angemeldet");
-        header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
+        header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->get_turnier_id()));
         die();
     }
 }
@@ -98,10 +99,10 @@ if (isset($_POST['nl_anmelden'])){
     //Check ob schon ein Nichtligateam mit diesem Namen in der Datenbank existiert
     //Nichtligateams bekommen immer einen Stern hinter ihrem Namen
     $team_id = Team::name_to_id($teamname . '*');
-    if (!$turnier->check_team_angemeldet($team_id ?? 0)){
-        $turnier->nl_anmelden($teamname, $liste, $pos);
+    if (!$turnier->is_angemeldet($team_id ?? 0)){
+        $turnier->set_nl_team($teamname, $liste, $pos);
         Html::info("$teamname wurde angemeldet auf Liste: $liste");
-        header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
+        header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->get_turnier_id()));
         die();
     }else{
         Html::error("Ein Nichtligateam mit diesem Namen ist bereits angemeldet");
@@ -115,7 +116,7 @@ if (isset($_POST['warteliste_aktualisieren'])){
     //Log wird automatisch in der Funktion geschrieben, Argument: Autor
 
     Html::info("Warteliste wurde aktualisiert");
-    header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
+    header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->get_turnier_id()));
     die();
 }
 
@@ -124,7 +125,7 @@ if (isset($_POST['spieleliste_auffuellen'])){
     $error = false;
 
     //Hat das Turnier noch freie Plätze?
-    if ($turnier->get_anzahl_freie_plaetze() <= 0){
+    if ($turnier->get_freie_plaetze() <= 0){
         $error = true;
         Html::error("Spielen-Liste ist bereits voll");
     }
@@ -138,7 +139,7 @@ if (isset($_POST['spieleliste_auffuellen'])){
     if (!$error){
         $turnier->spieleliste_auffuellen("Ligaausschuss");
         Html::info("Spielen-Liste wurde aufgefüllt");
-        header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->details['turnier_id']));
+        header('Location: ' . db::escape($_SERVER['PHP_SELF'] . '?turnier_id=' . $turnier->get_turnier_id()));
         die();
     }else{
         Html::error('Spielen-Liste wurde nicht aufgefüllt');

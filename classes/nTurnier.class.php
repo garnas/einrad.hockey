@@ -48,6 +48,8 @@ class nTurnier
     private array $spielenliste;
     private array $warteliste;
 
+    private int $letzter_abmeldezeitpunkt;
+
     /**
      * Turnier constructor.
      */
@@ -63,6 +65,8 @@ class nTurnier
         $this->spielenliste = $this->set_spielen_liste();
         $this->warteliste = $this->set_warte_liste();
         $this->freie_plaetze = $this->set_freie_plaetze();
+
+        $this->letzter_abmeldezeitpunkt = LigaBot::time_offen_melde($this->get_datum()) + 2*7*24*60*60;
 
     }
 
@@ -292,7 +296,7 @@ class nTurnier
     /**
      * @return array
      */
-    public function get_spielenliste()
+    public function get_spielenliste(): array
     {
         return $this->spielenliste;
     }
@@ -300,7 +304,7 @@ class nTurnier
     /**
      * @return array
      */
-    public function get_meldeliste()
+    public function get_meldeliste(): array
     {
         return $this->meldeliste;
     }
@@ -308,9 +312,17 @@ class nTurnier
     /**
      * @return int
      */
-    public function get_freie_plaetze()
+    public function get_freie_plaetze(): int
     {
         return $this->freie_plaetze;
+    }
+
+    /**
+     * @return int
+     */
+    public function get_letzte_abmeldezeitpunkt(): int
+    {
+        return $this->letzter_abmeldezeitpunkt;
     }
 
     /**
@@ -1287,5 +1299,64 @@ class nTurnier
                 WHERE team_id = ? AND turnier_id = ?
                 ";
         return (db::$db->query($sql, $team_id, $this->turnier_id)->num_rows() > 0);
+    }
+
+    /**
+     * Ermittelt, ob sich ein Team für das Turnier überhaupt anmelden kann
+     * 
+     * @return bool
+     */
+    public function is_anmeldung_moeglich()
+    {
+        if ($this->phase === 'spielplan'){
+            Html::error("Das Turnier ist in der Spielplanphase. Eine Anmeldung ist nicht mehr möglich.");
+            return false;
+        }
+
+        if ($this->phase == 'ergebnis'){
+            Html::error("Das Turnier ist in der Ergebnisphase. Eine Anmeldung ist nicht mehr möglich.");
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Füllt freie Plätze auf der Spielen-Liste von der Warteliste aus wieder auf,
+     * wenn der Teamblock des Wartelisteneintrags zum Turnier passt,
+     * wenn das Turnier nicht in der offenen Phase ist,
+     * wenn das Turnier noch freie Plätze hat.
+     *
+     * @param bool $send_mail
+     */
+    public function spieleliste_auffuellen(bool $send_mail = true): void //TODO Keine NLs nachrücken, wenn < 4 Ligateams, aber dann wieder NL mitrücken wenn ok
+    {
+        $freie_plaetze = $this->freie_plaetze;
+        $log = false;
+
+        if ($this->details['phase'] === 'melde' && $freie_plaetze > 0) {
+            $liste = $this->get_anmeldungen();// Order by Warteliste weshalb die Teams in der foreach schleife in der Richtigen reihenfolge behandelt werden
+
+            foreach ($liste['warte'] as $team) {
+                if ($this->is_spielberechtigt($team['team_id']) && $freie_plaetze > 0) {
+                    if ($this->is_doppelmeldung($team['team_id'])) {
+                        $this->set_abmeldung($team['team_id']);
+                    } else { // Das Team wird abgemeldet, wenn es schon am Turnierdatum auf einer Spielen-Liste steht
+                        $this->set_liste($team['team_id'], 'spiele');
+                        if ($send_mail) {
+                            MailBot::mail_warte_zu_spiele($this, $team['team_id']);
+                        }
+                        --$freie_plaetze;
+                        $log = true;
+                    }
+                }
+            }
+
+            if ($log) {
+                $this->set_log("Spielen-Liste aufgefüllt");
+            }
+
+            $this->warteliste_aktualisieren();
+        }
     }
 }
