@@ -1359,6 +1359,53 @@ class nTurnier
     }
 
     /**
+     * Ermittelt, ob ein Turnier nach oben erweiterbar ist
+     * 
+     * @return bool
+     */
+    public function is_erweiterbar_blockhoch()
+    {
+        if (
+            $this->phase === 'melde'
+            && strlen($this->tblock) < 3
+            && $this->tblock !== 'AB'
+            && $this->tblock !== 'A'
+            && ($this->art === 'I' || $this->art === 'II')
+        ) {
+            return true;
+        } else {
+            return false;
+        };
+    }
+
+    /**
+     * Ermittelt, ob ein Turnier auf ABCDEF zu öffnen ist
+     */
+    public function is_erweiterbar_blockfrei()
+    {
+        if (
+            $this->phase === 'melde'
+            && ($this->art === 'I' || $this->art === 'II')
+        ) {
+            return true;
+        } else {
+            return false;
+        };
+    }
+
+    /**
+     * Ermittelt, ob die Anzahl der Plätze eines Turniers geändert werden kann
+     */
+    public function is_erweiterbar_plaetze()
+    {
+        if ($this->phase == 'melde') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Ermittelt, ob das angegebene Team gemeldet ist
      */
 
