@@ -8,13 +8,15 @@ $turniere[$turnier_id]['phase'] = $turnier->get_phase();
 $turniere[$turnier_id]['teamname'] = Team::id_to_name($turnier->get_ausrichter());
 $turniere[$turnier_id]['freivoll'] = $turnier->get_freie_plaetze_status();
 
-// Farbe des Turnierblocks festlegen
-if ($turnier->is_spielberechtigt($team_id)) {
-    $turniere[$turnier_id]['block_color'] = 'w3-text-green';
-} elseif ($turnier->is_spielberechtigt_freilos($team_id) && $team_anz_freilose > 0) {
-    $turniere[$turnier_id]['block_color'] = 'w3-text-yellow';
-} else {
-    $turniere[$turnier_id]['block_color'] = 'w3-text-red';
+if (Helper::$teamcenter) {
+    // Farbe des Turnierblocks festlegen
+    if ($turnier->is_spielberechtigt($team_id)) {
+        $turniere[$turnier_id]['block_color'] = 'w3-text-green';
+    } elseif ($turnier->is_spielberechtigt_freilos($team_id) && $team_anz_freilose > 0) {
+        $turniere[$turnier_id]['block_color'] = 'w3-text-yellow';
+    } else {
+        $turniere[$turnier_id]['block_color'] = 'w3-text-red';
+}
 }
 
 // Einfärben wenn schon angemeldet
