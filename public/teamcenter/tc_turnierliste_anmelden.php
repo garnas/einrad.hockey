@@ -6,13 +6,10 @@ require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth
 
 // Teamspezifisches
-$team = new Team($_SESSION['logins']['team']['id']);
-$turnier_angemeldet = $team->get_turniere_angemeldet();
-$anz_freilose = $team->get_freilose();
-
-// Relevante Turniere finden
-$heute = date("Y-m-d");
-$db_turniere = nTurnier::get_turniere_kommend();
+$team_id = $_SESSION['logins']['team']['id'];
+$team = new Team($team_id);
+$team_turniere_angemeldet = $team->get_turniere_angemeldet();
+$team_anz_freilose = $team->get_freilose();
 
 // Hinweis Live-Spieltag
 $akt_spieltag = Tabelle::get_aktuellen_spieltag();
@@ -22,14 +19,31 @@ if (Tabelle::check_spieltag_live($akt_spieltag)){
         . Html::link("../liga/tabelle.php?spieltag=" . ($akt_spieltag - 1) . "#rang", "Spieltag " . ($akt_spieltag - 1)));
 }
 
-// Links
-$turniere[$turnier_id]['links'] = 
-array(
-    Html::link("tc_team_anmelden.php?turnier_id=" . $turnier_id,'Zur Ab- / Anmeldung', false , 'how_to_reg'),
-    Html::link("../liga/turnier_details.php?turnier_id=" . $turnier_id, 'Zu den Turnierdetails', false, 'info')
-);
+// Relevante Turniere finden
+$db_turniere = nTurnier::get_turniere_kommend();
 
-include '../../logic/turnierliste.logic.php';
+if (!empty($db_turniere)) {
+  // Gefundene Turniere werden aufbereitet
+  foreach ($db_turniere as $turnier) {
+    $turnier_id = $turnier->get_turnier_id();
+
+    include '../../logic/turnierliste.logic.php';
+
+    $turniere[$turnier_id]['links'] =
+      array(
+        Html::link("tc_team_anmelden.php?turnier_id=" . $turnier_id, 'An- / Abmeldung', false, 'how_to_reg'),
+        Html::link("../liga/turnier_details.php?turnier_id=" . $turnier_id, 'Turnierdetails', false, 'info')
+      );
+  }
+} else {
+  // Da keine Tunriere gefunden wurden, wird auf die TC-Startseite umgeleitet
+  Html::notice(
+    'Bisher sind keine Turniere ausgeschrieben.',
+    esc: false
+  );
+  Helper::reload('/teamcenter/tc_start.php');
+} // end if
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////

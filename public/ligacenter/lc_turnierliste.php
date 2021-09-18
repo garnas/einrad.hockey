@@ -5,16 +5,16 @@
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
-//Füge Links zum Weiterverarbeiten der ausgewählten Turniere hinzu; diese werden dem Teamplate übergeben
-
 //Für Turniere die nicht in der Ergebnis-Phase sind:
-$turniere_no_erg = nTurnier::get_turniere_kommend();
-
-foreach ($turniere_no_erg as $turnier){
+$turniere = array();
+$db_turniere = nTurnier::get_turniere_kommend();
+foreach ($db_turniere as $turnier){
     $turnier_id = $turnier->get_turnier_id();
+
+    include '../../logic/turnierliste.logic.php';
     
     //Links
-    $turniere_no_erg[$turnier_id]['links'] = 
+    $turniere[$turnier_id]['links'] = 
         [
             Html::link("../liga/turnier_details.php?turnier_id=".$turnier_id, '<i class="material-icons">info</i> Details'),
             Html::link("lc_turnier_log.php?turnier_id=".$turnier_id, '<i class="material-icons">info_outline</i> Log einsehen'),
@@ -23,30 +23,36 @@ foreach ($turniere_no_erg as $turnier){
             Html::link("lc_spielplan_verwalten.php?turnier_id=".$turnier_id, '<i class="material-icons">playlist_play</i> Spielplan/Ergebnis verwalten'),
             Html::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">article</i>Turnierreport bearbeiten')
         ];
-    if ($turnier['phase'] == 'spielplan'){
-        $turniere_no_erg[$turnier_id]['links'][] = Html::link("lc_spielplan.php?turnier_id=" . $turnier_id, '<i class="material-icons">reorder</i> Spielergebnis eintragen');
+    if ($turnier->get_phase() == 'spielplan'){
+        $turniere[$turnier_id]['links'][] = Html::link("lc_spielplan.php?turnier_id=" . $turnier_id, '<i class="material-icons">reorder</i> Spielergebnis eintragen');
     }
 }
+$turniere_no_erg = $turniere;
 
 //Für Turniere die in der Ergebnisphase sind:
-$turniere_erg = nTurnier::get_turniere_ergebnis();
-foreach ($turniere_erg as $turnier_id => $turnier){
-  $turnier_id = $turnier->get_turnier_id();
-  
-  //Links
-  $turniere_erg[$turnier_id]['links'] = 
-      array(
-            Html::link("../liga/turnier_details.php?turnier_id=".$turnier_id, '<i class="material-icons">info</i> Details'),
-            Html::link("lc_turnier_log.php?turnier_id=".$turnier_id, '<i class="material-icons">info_outline</i> Log einsehen'),
-            Html::link("lc_team_anmelden.php?turnier_id=".$turnier_id, '<i class="material-icons">how_to_reg</i> Teams an/abmelden'),
-            Html::link("lc_turnier_bearbeiten.php?turnier_id=".$turnier_id, '<i class="material-icons">create</i> Turnier bearbeiten'),
-            Html::link("lc_spielplan_verwalten.php?turnier_id=".$turnier_id, '<i class="material-icons">playlist_play</i> Spielplan/Ergebnis verwalten'),
-            Html::link("lc_spielplan.php?turnier_id=".$turnier_id, '<i class="material-icons">reorder</i> Spielergebnisse verändern'),
+$turniere = array();
+$db_turniere = nTurnier::get_turniere_ergebnis();
+foreach ($db_turniere as $turnier) {
+    $turnier_id = $turnier->get_turnier_id();
+
+    include '../../logic/turnierliste.logic.php';
+
+    //Links
+    $turniere[$turnier_id]['links'] =
+        array(
+            Html::link("../liga/turnier_details.php?turnier_id=" . $turnier_id, '<i class="material-icons">info</i> Details'),
+            Html::link("lc_turnier_log.php?turnier_id=" . $turnier_id, '<i class="material-icons">info_outline</i> Log einsehen'),
+            Html::link("lc_team_anmelden.php?turnier_id=" . $turnier_id, '<i class="material-icons">how_to_reg</i> Teams an/abmelden'),
+            Html::link("lc_turnier_bearbeiten.php?turnier_id=" . $turnier_id, '<i class="material-icons">create</i> Turnier bearbeiten'),
+            Html::link("lc_spielplan_verwalten.php?turnier_id=" . $turnier_id, '<i class="material-icons">playlist_play</i> Spielplan/Ergebnis verwalten'),
+            Html::link("lc_spielplan.php?turnier_id=" . $turnier_id, '<i class="material-icons">reorder</i> Spielergebnisse verändern'),
             Html::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $turnier_id, '<i class="material-icons">article</i>Turnierreport bearbeiten')
-      );
+        );
 }
+$turniere_erg = $turniere;
 
 //Gelöschte Turniere
+$turniere = array();
 $turniere_deleted = nTurnierGeloescht::get_geloescht();
 
 /////////////////////////////////////////////////////////////////////////////
@@ -69,7 +75,6 @@ include '../../templates/header.tmp.php';?>
 <?php
 //Turniere die nicht in der Ergebnis-Phase sind:
 $turniere = $turniere_no_erg;
-include '../../logic/turnierliste.logic.php'; //Als absolute Ausnahme zur Init
 include '../../templates/turnierliste.tmp.php';
 ?>
 
@@ -77,7 +82,6 @@ include '../../templates/turnierliste.tmp.php';
 <?php
 //Turniere die in der Ergebnisphase sind:
 $turniere = $turniere_erg;
-include '../../logic/turnierliste.logic.php'; //Als absolute Ausnahme zur Init
 include '../../templates/turnierliste.tmp.php';
 ?>
 

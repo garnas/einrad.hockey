@@ -42,8 +42,9 @@ class nTurnier
     private ?int $unix;
     private string $log = '';
     private bool $error = false;
-    
+
     private int $freie_plaetze;
+    private string $freie_plaetze_status;
     private array $meldeliste;
     private array $spielenliste;
     private array $warteliste;
@@ -65,9 +66,9 @@ class nTurnier
         $this->spielenliste = $this->set_spielen_liste();
         $this->warteliste = $this->set_warte_liste();
         $this->freie_plaetze = $this->set_freie_plaetze();
+        $this->freie_plaetze_status = $this->set_freie_plaetze_status();
 
-        $this->letzter_abmeldezeitpunkt = LigaBot::time_offen_melde($this->get_datum()) + 2*7*24*60*60;
-
+        $this->letzter_abmeldezeitpunkt = LigaBot::time_offen_melde($this->get_datum()) + 2 * 7 * 24 * 60 * 60;
     }
 
     /**
@@ -318,6 +319,14 @@ class nTurnier
     }
 
     /**
+     * @return string
+     */
+    public function get_freie_plaetze_status()
+    {
+        return $this->freie_plaetze_status;
+    }
+
+    /**
      * @return int
      */
     public function get_letzte_abmeldezeitpunkt(): int
@@ -353,7 +362,6 @@ class nTurnier
                 WHERE turniere_liga.turnier_id = ?
                 ";
         return db::$db->query($sql, $this->turnier_id)->esc()->fetch_row();
-
     }
 
     /**
@@ -383,7 +391,7 @@ class nTurnier
             FROM turniere_liga
             LEFT JOIN turniere_details ON turniere_liga.turnier_id = turniere_details.turnier_id
         ";
-        return db::$db->query($sql)->fetch_objects(__CLASS__, key:'turnier_id');
+        return db::$db->query($sql)->fetch_objects(__CLASS__, key: 'turnier_id');
     }
 
     /**
@@ -396,7 +404,7 @@ class nTurnier
      * @param int $saison
      * @return nTurnier[]
      */
-    public static function get_turniere(bool $asc = true, int $saison = Config::SAISON): array 
+    public static function get_turniere(bool $asc = true, int $saison = Config::SAISON): array
     {
         $sql = "
                 SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname 
@@ -533,7 +541,7 @@ class nTurnier
                 ORDER BY turniere_liste.position_warteliste
                 ";
         $anmeldungen = db::$db->query($sql, $this->turnier_id)->esc()->fetch();
-        
+
         // Erstellung des Arrays mit den Teamnamen, Teamblöcken und Teamwertigkeiten
         $liste['team_ids'] = $liste['teamnamen'] = $liste['spiele'] = $liste['melde'] = $liste['warte'] = [];
         foreach ($anmeldungen as $a) {
@@ -543,7 +551,7 @@ class nTurnier
         }
         return $liste;
     }
-    
+
     /**
      * Anmeldungen der Warte-, Melde-, Spielen-Liste aller Turniere der Saison
      *
@@ -567,7 +575,7 @@ class nTurnier
 
         // Erhalten den aktuellen Spieltag für die Ermittung des Teamblocks und der -wertigkeit
         $spieltag = Tabelle::get_aktuellen_spieltag();
-        
+
         // Erstellung des Arrays mit der TurnierID, der -liste, Teamnamen, -blöcken und -wertigkeiten
         foreach ($anmeldungen as $a) {
             $turnier_listen[$a['turnier_id']][$a['liste']][$a['team_id']] = $a;
@@ -598,7 +606,7 @@ class nTurnier
                 AND turniere_liste.liste = 'spiele'
                 ";
         $spielen_liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
-        
+
         // Prüfen ob Spielen-Liste gegeben
         if (!empty($spielen_liste)) {
 
@@ -640,7 +648,7 @@ class nTurnier
                 AND turniere_liste.liste = 'warte'
                 ";
         $warte_liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
-        
+
         // Prüfen ob Spielen-Liste gegeben
         if (!empty($warte_liste)) {
 
@@ -682,7 +690,7 @@ class nTurnier
                 AND turniere_liste.liste = 'melde'
                 ";
         $melde_liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
-        
+
         // Prüfen ob Spielen-Liste gegeben
         if (!empty($melde_liste)) {
 
@@ -734,7 +742,7 @@ class nTurnier
 
         return db::$db->query($sql, $this->turnier_id)->esc()->fetch('platz');
     }
-    
+
     /**
      * Erhalte die Finalturniere
      * 
@@ -834,6 +842,24 @@ class nTurnier
     }
 
     /**
+     * Erhalte den Status der freien Plätze als String im entsprechenden Color-Code
+     * 
+     * @return string
+     */
+    public function set_freie_plaetze_status()
+    {
+        if ($this->phase == 'spielplan') {
+            return '<span class="w3-text-gray">geschlossen</span>';
+        } elseif ($this->freie_plaetze > 0) {
+            return '<span class="w3-text-green">frei</span>';
+        } elseif ($this->phase == 'offen' && count($this->spielenliste) + count($this->meldeliste) > $this->freie_plaetze) {
+            return '<span class="w3-text-yellow">losen</span>';
+        } elseif ($this->freie_plaetze - count($this->spielenliste) <= 0) {
+            return '<span class="w3-text-red">voll</span>';
+        }
+    }
+
+    /**
      * Schreibt in den Turnierlog.
      *
      * Turnierlogs werden bei Zerstörung des Objektes in die DB geschrieben.
@@ -869,10 +895,10 @@ class nTurnier
         // Turnierlog beschreiben
         $turnier = self::get($turnier_id);
         $turnier->set_log("Turnier wurde erstellt. (Ausrichter $ausrichter)");
-        
+
         // Ausrichter auf dem Turnier melden
         $turnier->set_team($ausrichter, 'spiele');
-        
+
         return $turnier;
     }
 
@@ -926,7 +952,7 @@ class nTurnier
 
         return $this;
     }
-    
+
     /**
      * Ein Team zum Turnier anmelden
      *
@@ -1104,7 +1130,7 @@ class nTurnier
                 ";
         db::$db->query($sql, $this->turnier_id, $team_id, $ergebnis, $platz)->log();
     }
-    
+
     /**
      * Überträgt das Turnierergebnis der Platzierungstabelle in die Datenbank
      *
@@ -1212,11 +1238,11 @@ class nTurnier
 
         // Check ob es sich um ein Ligaturnier handelt
         if (in_array($turnier_block, Config::TURNIER_ARTEN)) {
-            
+
             // Finde Index des Blocks im Block-Array
             $pos_turnier = array_search($turnier_block, Config::BLOCK_ALL, true);
             $team_block = str_split($team_block);
-            
+
             // Prüfe, ob sich der Teamblock im Array dahinter und somit unter dem Turnierblock befindet
             for ($i = $pos_turnier; $i <= (count(Config::BLOCK_ALL) - 1); $i++) {
                 foreach ($team_block as $buchstabe) {
@@ -1248,11 +1274,11 @@ class nTurnier
 
         // Check ob es sich um ein Block-Turnier handelt (nicht spass oder finale)
         if (in_array($turnier_art, Config::TURNIER_ARTEN)) {
-            
+
             // Block-String in Array auflösen
             $turnier_buchstaben = str_split($turnier_block);
             $team_buchstaben = str_split($team_block);
-            
+
             // Check ob ein Buchstabe des Team-Blocks im Turnier-Block vorkommt
             foreach ($team_buchstaben as $buchstabe) {
                 if (in_array($buchstabe, $turnier_buchstaben)) {
@@ -1308,18 +1334,32 @@ class nTurnier
      */
     public function is_anmeldung_moeglich()
     {
-        if ($this->phase === 'spielplan'){
+        if ($this->phase === 'spielplan') {
             Html::error("Das Turnier ist in der Spielplanphase. Eine Anmeldung ist nicht mehr möglich.");
             return false;
         }
 
-        if ($this->phase == 'ergebnis'){
+        if ($this->phase == 'ergebnis') {
             Html::error("Das Turnier ist in der Ergebnisphase. Eine Anmeldung ist nicht mehr möglich.");
             return false;
         }
 
         return true;
     }
+
+    /**
+     * Ermittelt, ob das angegebene Team der Ausrichter ist
+     * 
+     * @return bool
+     */
+    public function is_ausrichter(int $team_id): bool
+    {
+        return $team_id == $this->ausrichter;
+    }
+
+    /**
+     * Ermittelt, ob das angegebene Team gemeldet ist
+     */
 
     /**
      * Füllt freie Plätze auf der Spielen-Liste von der Warteliste aus wieder auf,
@@ -1335,7 +1375,7 @@ class nTurnier
         $log = false;
 
         if ($this->details['phase'] === 'melde' && $freie_plaetze > 0) {
-            $liste = $this->get_anmeldungen();// Order by Warteliste weshalb die Teams in der foreach schleife in der Richtigen reihenfolge behandelt werden
+            $liste = $this->get_anmeldungen(); // Order by Warteliste weshalb die Teams in der foreach schleife in der Richtigen reihenfolge behandelt werden
 
             foreach ($liste['warte'] as $team) {
                 if ($this->is_spielberechtigt($team['team_id']) && $freie_plaetze > 0) {
