@@ -1227,17 +1227,18 @@ class nTurnier
      * @param int $team_id
      * @return bool
      */
-    public function is_spielberechtig_freilos(int $team_id): bool
+    public function is_spielberechtigt_freilos(int $team_id): bool
     {
         $team_block = Tabelle::get_team_block($team_id);
         $turnier_block = $this->tblock;
+        $turnier_art = $this->art;
 
         if ($team_block === NULL) {
             return true;
         }
 
         // Check ob es sich um ein Ligaturnier handelt
-        if (in_array($turnier_block, Config::TURNIER_ARTEN)) {
+        if (in_array($turnier_art, Config::TURNIER_ARTEN)) {
 
             // Finde Index des Blocks im Block-Array
             $pos_turnier = array_search($turnier_block, Config::BLOCK_ALL, true);

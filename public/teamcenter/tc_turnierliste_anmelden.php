@@ -76,6 +76,7 @@ include '../../templates/header.tmp.php';?>
         <br>
         <i><span class="w3-text-green">frei</span>: Plaetze auf der Spielen-Liste frei</i><br>
         <i><span class="w3-text-red">voll</span>: Spielen-Liste ist voll</i><br>
+        <i><span class="w3-text-gray">geschlossen</span>: Anmeldung nicht mehr möglich</i><br>
         </p>
     </div>
   </div>
