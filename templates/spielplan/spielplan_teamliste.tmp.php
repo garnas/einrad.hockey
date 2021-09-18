@@ -40,7 +40,7 @@
                     <th><?= Html::icon("group") ?><br>Team</th>
                     <th><?= Html::icon("reorder") ?><br>Block</th>
                     <th><?= Html::icon("arrow_circle_up") ?><br>Wertung</th>
-                    <?php if ($spielplan->turnier->details['phase'] !== 'ergebnis') { ?>
+                    <?php if ($spielplan->turnier->get_phase() !== 'ergebnis') { ?>
                         <th><span class="pdf-hide"><?= Html::icon("invert_colors") ?><br>Trikots</span></th>
                     <?php } //endif?>
                     <th><span class="pdf-hide"><?= Html::icon("account_circle") ?><br>Ligavertreter</span></th>
@@ -52,7 +52,7 @@
                         <td><?= $team["teamname"] ?></td>
                         <td><?= $team["tblock"] ?></td>
                         <td><?= $team["wertigkeit"] ?></td>
-                        <?php if ($spielplan->turnier->details['phase'] !== 'ergebnis') { ?>
+                        <?php if ($spielplan->turnier->get_phase !== 'ergebnis') { ?>
                             <td>
                                 <span class="pdf-hide">
                                     <?= Html::trikot_punkt($team['trikot_farbe_1'], $team['trikot_farbe_2']) ?>

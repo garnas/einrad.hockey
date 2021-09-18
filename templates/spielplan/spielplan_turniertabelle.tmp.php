@@ -15,7 +15,7 @@
                 <?= Html::icon("workspaces") ?>
                 <br>Punkte
             </th>
-            <?php if (in_array($spielplan->turnier->details['art'], ['I', 'II', 'III'])) { ?>
+            <?php if (in_array($spielplan->turnier->get_art(), Config::TURNIER_ARTEN)) { ?>
                 <th>
                     <?= Html::icon("emoji_events") ?>
                     <br>Ergebnis
@@ -39,7 +39,7 @@
                     <?= $x["teamname"] ?>
                 </td>
                 <td class="w3-hide-small"><?= $x['statistik']["punkte"] ?? '--' ?></td>
-                <?php if (in_array($spielplan->turnier->details['art'], ['I', 'II', 'III'])) { ?>
+                <?php if (in_array($spielplan->turnier->get_art(), Config::TURNIER_ARTEN)) { ?>
                     <td>
                         <?= ($spielplan->check_penalty_team($team_id) || !$spielplan->check_tabelle_einblenden())
                             ? '--'
@@ -88,7 +88,7 @@
                         <?= Html::icon("remove") ?>
                         <br>Gegentore
                     </th>
-                    <?php if (in_array($spielplan->turnier->details['art'], ['I', 'II', 'III'])) { ?>
+                    <?php if (in_array($spielplan->turnier->get_art(), Config::TURNIER_ARTEN)) { ?>
                         <th>
                             <?= Html::icon("emoji_events") ?>
                             <br>Ergebnis
@@ -114,7 +114,7 @@
                         <td><?= $x['statistik']["tordifferenz"] ?? '--' ?></td>
                         <td><?= $x['statistik']["tore"] ?? '--' ?></td>
                         <td><?= $x['statistik']["gegentore"] ?? '--' ?></td>
-                        <?php if (in_array($spielplan->turnier->details['art'], ['I', 'II', 'III'])) { ?>
+                        <?php if (in_array($spielplan->turnier->get_art(), Config::TURNIER_ARTEN)) { ?>
                             <td>
                                 <?= ($spielplan->check_penalty_team($team_id) || !$spielplan->check_tabelle_einblenden())
                                     ? '--'

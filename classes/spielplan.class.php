@@ -11,7 +11,7 @@ class Spielplan
      * Allgemeine Daten
      */
     public int $turnier_id;
-    public Turnier $turnier;
+    public nTurnier $turnier;
     public array $teamliste;
     public array $details;
     public int $anzahl_teams;
@@ -34,16 +34,16 @@ class Spielplan
     /**
      * Spielplan constructor.
      *
-     * @param Turnier $turnier
+     * @param nTurnier $turnier
      */
-    public function __construct(Turnier $turnier)
+    public function __construct(nTurnier $turnier)
     {
         // Turnier
-        $this->turnier_id = $turnier->id;
         $this->turnier = $turnier;
+        $this->turnier_id = $turnier->get_turnier_id();  
 
         // Spielplan
-        $this->teamliste = $this->turnier->get_liste_spielplan();
+        $this->teamliste = $this->turnier->get_spielenliste();
         $this->anzahl_teams = count($this->teamliste);
 
         $this->details = $this->get_details();
@@ -103,14 +103,14 @@ class Spielplan
      * @param Turnier $turnier
      * @return bool Erfolgreich / Nicht erfolgreich estellt
      */
-    public static function fill_vorlage(Turnier $turnier): bool
+    public static function fill_vorlage(nTurnier $turnier): bool
     {
-        if (self::check_exist($turnier->id)) {
+        if (self::check_exist($turnier->get_turnier_id())) {
             Html::error("Es existiert bereits ein Spielplan");
             return false;
         }
 
-        $teamliste = $turnier->get_liste_spielplan(); //TODO Array mit 1 beginnen lassen
+        $teamliste = $turnier->get_spielenliste(); //TODO Array mit 1 beginnen lassen
         // Teamlisten-Array mit 1 Beginnen lassen zum Ausfüllen der Spielplan-Vorlage //TODO Array mit 1 beginnen lassen
         $teamliste = array_values($teamliste);
         array_unshift($teamliste, '');
@@ -165,11 +165,11 @@ class Spielplan
     /**
      * Welche Spielplanvorlage soll für das Turnier verwendet werden?
      *
-     * @param Turnier $turnier
+     * @param nTurnier $turnier
      * @param int|null $anzahl_teams
      * @return false|string
      */
-    public static function get_vorlage(Turnier $turnier, ?int $anzahl_teams = NULL): false|string
+    public static function get_vorlage(nTurnier $turnier, ?int $anzahl_teams = NULL): false|string
     {
         // Existiert ein manuell hochgeladener Spielplan?
         if (!empty($turnier->details['spielplan_datei'])) {
@@ -183,11 +183,11 @@ class Spielplan
 
         // Wie viele Teams sind angemeldet?
         if (is_null($anzahl_teams)) {
-            $anzahl_teams = count($turnier->get_liste_spielplan());
+            $anzahl_teams = count($turnier->get_spielenliste());
         }
 
         // Nur JgJ-Spielpläne sind in der Datenbank hinterlegt.
-        if ($turnier->details['format'] !== 'jgj') {
+        if ($turnier->get_format() !== 'jgj') {
             return false;
         }
 
@@ -269,7 +269,7 @@ class Spielplan
                 + $this->details["puffer"]
             ) * 60; // In Sekunden für Unixzeit
 
-        $startzeit = strtotime($this->turnier->details["startzeit"]);
+        $startzeit = strtotime($this->turnier->get_startzeit());
 
         foreach ($spiele as $spiel_id => $spiel) {
             $spiele[$spiel_id]["zeit"] = date("H:i", $startzeit);
@@ -351,7 +351,7 @@ class Spielplan
      */
     public function get_trikot_colors(array $spiel): array
     {
-        if ($this->turnier->details['phase'] === 'ergebnis') {
+        if ($this->turnier->get_phase() === 'ergebnis') {
             return [];
         }
         $team_id_a = $spiel['team_id_a'];
@@ -514,14 +514,6 @@ class Spielplan
      */
     public function set_wertigkeiten(): void
     {
-        // Nur Turniere der I,II,II art vergeben Ligapunkte
-//        if (!in_array($this->turnier->details['art'], ['I', 'II', 'III'], true)){
-//            foreach ($this->platzierungstabelle as $team_id => $eintrag){
-//                $this->platzierungstabelle[$team_id]['ligapunkte'] = '--';
-//            }
-//        }
-
-
         // Gibt die Wertung des schlechtplatziertesten Ligateams aus
         $reverse_tabelle = array_reverse($this->platzierungstabelle, true);
         $last_ligateam = function () use ($reverse_tabelle) {
