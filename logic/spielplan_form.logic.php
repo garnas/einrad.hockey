@@ -53,7 +53,7 @@ if (isset($_POST["turnierergebnis_speichern"])) {
     }
 
     // Testen ob Turnier tabellentechnisch eingetragen werden darf.
-    if (!Tabelle::check_ergebnis_eintragbar($spielplan->turnier)) {
+    if (!$turnier->is_ergebnis_eintragbar()) {
         Html::error("Turnierergebnis kann nicht eingetragen werden. Kontaktiere bitte den Ligaausschuss.");
         $error = true;
     }

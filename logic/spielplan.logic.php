@@ -2,6 +2,7 @@
 
 // Turnier-ID
 $turnier_id = (int) @$_GET['turnier_id'];
+$turnier = nTurnier::get($turnier_id);
 
 // Gibt es einen Spielplan zu diesem Turnier?
 if (!Spielplan::check_exist($turnier_id)) {
@@ -9,4 +10,4 @@ if (!Spielplan::check_exist($turnier_id)) {
 }
 
 // Spielplan laden
-$spielplan = new Spielplan_JgJ((nTurnier::get($turnier_id)));
+$spielplan = new Spielplan_JgJ($turnier);

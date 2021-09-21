@@ -39,7 +39,6 @@ class nTurnier
 
     // weitere
     private ?array $details;
-    private ?int $unix;
     private string $log = '';
     private bool $error = false;
 
@@ -213,9 +212,9 @@ class nTurnier
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function get_haltestellen(): string
+    public function get_haltestellen(): null|string
     {
         return $this->haltestellen;
     }
@@ -636,7 +635,7 @@ class nTurnier
         // Teams der Spielen-Liste erhalten
         $sql = "
                 SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam,
-                    teams_details.ligavertreter, teams_details.trikot_farbe_1, teams_details.trikot_farbe_2
+                    teams_details.ligavertreter, teams_details.trikot_farbe_1, teams_details.trikot_farbe_2, turniere_liste.position_warteliste
                 FROM turniere_liste
                 LEFT JOIN teams_liga
                 ON turniere_liste.team_id = teams_liga.team_id
@@ -644,6 +643,7 @@ class nTurnier
                 ON turniere_liste.team_id = teams_details.team_id
                 WHERE turniere_liste.turnier_id = ? 
                 AND turniere_liste.liste = 'warte'
+                ORDER BY turniere_liste.position_warteliste
                 ";
         $warte_liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
 
@@ -1123,6 +1123,28 @@ class nTurnier
     }
 
     /**
+     * Setzt die Spielplanvorlage
+     */
+    public function set_spielplan_vorlage(null|string $vorlage): void
+    {
+        $sql = "
+            UPDATE turniere_liga
+            SET spielplan_vorlage = ?
+            WHERE turnier_id = ?
+        ";
+        db::$db->query($sql, $vorlage, $this->turnier_id)->log();
+    }
+
+    /**
+     * Setzt die Mail-Adresse
+     * Wird bei den Turnierdetails benötigt 
+     */
+    public function set_email(string $email): void
+    {
+        $this->email = $email;
+    }
+
+    /**
      * Setzt das Turnier in die Datenbank
      * 
      * @return nTurnier
@@ -1145,7 +1167,7 @@ class nTurnier
             WHERE turnier_id = ?;
         ";
         db::$db->query($sql, 
-            $this->tname, $this->ausrichter, $this->art, $this->tblock, $this->tblock_fixed, $this->datum, $this->spieltag, $this->phase, $this->spielplan_vorlage, $this->spielplan_datei,  $this->saison, $this->turnier_id, )->log();
+            $this->tname, $this->ausrichter, $this->art, $this->tblock, $this->tblock_fixed, $this->datum, $this->spieltag, $this->phase, $this->spielplan_vorlage, $this->spielplan_datei,  $this->saison, $this->turnier_id)->log();
 
         $sql = "
             UPDATE turniere_details SET
@@ -1620,6 +1642,30 @@ class nTurnier
         } else {
             return false;
         }
+    }
+
+    /**
+     * True, wenn das Turnierergebnis eingetragen werden darf. Also jedes vorherige Turnier in der Ergebnisphase ist.
+     *
+     * @return bool
+     */
+    public function is_ergebnis_eintragbar(): bool
+    {
+        if (!in_array($this->art, ['I', 'II', 'III', 'final'])) {
+            Html::error("Für diesen Turniertyp können keine Ergebnisse eingetragen werden.");
+            // TODO ist der Check hier an der besten Stelle?
+            return false;
+        }
+        $sql = "
+                SELECT * 
+                FROM turniere_liga 
+                WHERE spieltag < ? 
+                AND spieltag != 0 
+                AND (art='I' OR art = 'II' OR art='III' OR art='final') 
+                AND saison = ?
+                AND phase != 'ergebnis'
+                ";
+        return db::$db->query($sql, $this->spieltag, $this->saison)->num_rows() === 0;
     }
 
     /**

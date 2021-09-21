@@ -205,12 +205,12 @@ class Spielplan
     /**
      * Löscht einen bisher erstellten Spielplan
      *
-     * @param Turnier $turnier
+     * @param nTurnier $turnier
      */
-    public static function delete(Turnier $turnier): void
+    public static function delete(nTurnier $turnier): void
     {
-        if (!empty($turnier->details['spielplan_vorlage'])) {
-            $turnier->set_liga('spielplan_vorlage', null);
+        if (!empty($turnier->get_spielplan_vorlage())) {
+            $turnier->set_spielplan_vorlage(null);
         }
         // Es existiert kein dynamischer Spielplan
         if (!self::check_exist($turnier->id)) {
@@ -220,11 +220,11 @@ class Spielplan
         // Spielplan löschen
         $sql = "
                 DELETE FROM spiele 
-                WHERE turnier_id = $turnier->id
+                WHERE turnier_id = ?
                 ";
-        db::$db->query($sql)->log();
-        $turnier->log("Automatischer JgJ-Spielplan gelöscht.");
-        $turnier->set_liga('phase', 'melde');
+        db::$db->query($sql, $turnier->get_turnier_id())->log();
+        $turnier->set_log("Automatischer JgJ-Spielplan gelöscht.");
+        $turnier->set_phase('melde');
     }
 
     /**
@@ -255,12 +255,12 @@ class Spielplan
                 FROM spiele AS sp
                 INNER JOIN teams_liga as t1 on t1.team_id = sp.team_id_a
                 INNER JOIN teams_liga as t2 on t2.team_id = sp.team_id_b
-                WHERE turnier_id = $this->turnier_id
+                WHERE turnier_id = ?
                 AND team_id_a = t1.team_id
                 AND team_id_b = t2.team_id
                 ORDER BY spiel_id
                 ";
-        $spiele = db::$db->query($sql)->esc()->fetch('spiel_id');
+        $spiele = db::$db->query($sql, $this->turnier_id)->esc()->fetch('spiel_id');
 
         // Uhrzeiten berechnen
         $spielzeit = (
@@ -293,7 +293,7 @@ class Spielplan
         $sql = "
                 UPDATE spiele 
                 SET tore_a = ?, tore_b = ?, penalty_a = ?, penalty_b = ?
-                WHERE turnier_id = $this->turnier_id AND spiel_id = ?
+                WHERE turnier_id = ? AND spiel_id = ?
                 ";
 
         // Damit die nicht eingetragene Tore nicht als 0 : 0 gewertet werden, müssen '' --> NULL werden
@@ -302,6 +302,7 @@ class Spielplan
             !is_numeric($tore_b) ? NULL : (int)$tore_b,
             !is_numeric($penalty_a) ? NULL : (int)$penalty_a,
             !is_numeric($penalty_b) ? NULL : (int)$penalty_b,
+            $this->turnier_id,
             $spiel_id
         ];
         db::$db->query($sql, $params)->log();
