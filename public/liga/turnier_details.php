@@ -71,7 +71,7 @@ switch ($turnier->details['phase'])
     case 'ergebnis':
         $turnier->details['phase'] = 'Ergebnisphase';
         break;
-    case 'spieplan':
+    case 'spielplan':
         $turnier->details['phase'] = 'Spielplanphase';
         break;
 }
