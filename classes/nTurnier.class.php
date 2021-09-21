@@ -48,8 +48,6 @@ class nTurnier
     private array $spielenliste;
     private array $warteliste;
 
-    private int $letzter_abmeldezeitpunkt;
-
     /**
      * Turnier constructor.
      */
