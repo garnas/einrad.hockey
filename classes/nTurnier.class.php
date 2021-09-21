@@ -341,7 +341,7 @@ class nTurnier
                 FROM turniere_log 
                 WHERE turnier_id = ?
                 ";
-        return db::$db->query($sql, $this->tunier_id)->esc()->fetch();
+        return db::$db->query($sql, $this->turnier_id)->esc()->fetch();
     }
 
     /**
