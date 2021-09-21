@@ -1121,6 +1121,14 @@ class nTurnier
     }
 
     /**
+     * Setzt den Spieltag
+     */
+    public function set_spieltag(int $spieltag): void
+    {
+        $this->spieltag = $spieltag;
+    }
+
+    /**
      * Setzt die Spielplanvorlage
      */
     public function set_spielplan_vorlage(null|string $vorlage): void
