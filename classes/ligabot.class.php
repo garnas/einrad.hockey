@@ -178,8 +178,7 @@ class LigaBot
     /**
      * Regelt den Übergang von offen zu melden bezüglich der Teamlisten.
      * setzt die Teams in geloster Reihenfolge auf die Warteliste, also danach: Spielen-Liste auffuellen!
-     * @param Turnier $turnier
-     * Objekt des Typs Turnier
+     * @param nTurnier $turnier
      *
      * @return bool
      */
@@ -194,7 +193,7 @@ class LigaBot
         foreach (($spielenliste ?? []) as $team) {
             // Das Team hat ein Freilos gesetzt, aber den falschen Freilosblock
             if ($team['freilos_gesetzt'] === 'Ja' && !$turnier->is_spielberechtigt_freilos($team['team_id'])) {
-                $turnier->log("Falscher Freilos-Block: " . $team['teamname']
+                $turnier->set_log("Falscher Freilos-Block: " . $team['teamname']
                     . "\r\nTeamb. " . Tabelle::get_team_block($team['team_id']) . " | Turnierb. " . $turnier->get_tblock()
                     . "\r\nFreilos wird erstattet");
                 $turnier->set_liste($team['team_id'], 'warte');
@@ -205,15 +204,11 @@ class LigaBot
             }
         }
 
-        $anz_spiele = count($spielenliste);
-        $anz_warte = count($warteliste);
-        $anz_melde = count($meldeliste);
-
         // Anzahl der zu losenden Teams
         $anz_los = $turnier->get_freie_plaetze();
         if ($anz_los < 0) {
             $gelost = true;
-            $turnier->log("Turnierplätze werden verlost");
+            $turnier->set_log("Turnierplätze werden verlost");
         }
 
         $los_nl = $los_rblock = $los_fblock = [];   // 3 Lostöpfe für Nichtligateams, Teams mit richtigem Block und
@@ -240,7 +235,7 @@ class LigaBot
         foreach ($los_ges as $team_id) {
             $pos++;
             if ($turnier->is_doppelmeldung($team_id)) { //Check ob das Team am Kalendertag des Turnieres schon auf einer Spiele-Liste steht
-                $turnier->log("Doppelanmeldung " . Team::id_to_name($team_id));
+                $turnier->set_log("Doppelanmeldung " . Team::id_to_name($team_id));
                 $turnier->set_abmeldung($team_id);
                 Html::info("Abmeldung Doppelanmeldung im Turnier" . $turnier->get_turnier_id() . ": \r\n" . Team::id_to_name($team_id));
             } else {
