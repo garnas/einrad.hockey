@@ -44,9 +44,15 @@ class nTurnier
 
     private int $freie_plaetze;
     private string $freie_plaetze_status;
+
     private array $meldeliste;
-    private array $spielenliste;
+    private int $anz_meldeliste;
+
     private array $warteliste;
+    private int $anz_warteliste;
+
+    private array $spielenliste;
+    private int $anz_spielenliste;
 
     /**
      * Turnier constructor.
@@ -59,11 +65,17 @@ class nTurnier
             }
         }
 
-        $this->meldeliste = $this->set_melde_liste();
-        $this->spielenliste = $this->set_spielen_liste();
-        $this->warteliste = $this->set_warte_liste();
+        $this->meldeliste = $this->set_meldeliste();
+        $this->anz_meldeliste = $this->set_anz_meldeliste();
+
+        $this->warteliste = $this->set_warteliste();
+        $this->anz_warteliste = $this->set_anz_warteliste();
+
+        $this->spielenliste = $this->set_spielenliste();
+        $this->anz_spielenliste = $this->set_anz_spielenliste();
+
         $this->freie_plaetze = $this->set_freie_plaetze();
-        $this->freie_plaetze_status = $this->set_freie_plaetze_status();;
+        $this->freie_plaetze_status = $this->set_freie_plaetze_status();
     }
 
     /**
@@ -290,6 +302,14 @@ class nTurnier
     }
 
     /**
+     * @return int
+     */
+    public function get_anz_warteliste(): int
+    {
+        return $this->anz_warteliste;
+    }
+
+    /**
      * @return array
      */
     public function get_spielenliste(): array
@@ -298,11 +318,27 @@ class nTurnier
     }
 
     /**
+     * @return int
+     */
+    public function get_anz_spielenliste(): int
+    {
+        return $this->anz_spielenliste;
+    }
+
+    /**
      * @return array
      */
     public function get_meldeliste(): array
     {
         return $this->meldeliste;
+    }
+
+    /**
+     * @return int
+     */
+    public function get_anz_meldeliste(): int
+    {
+        return $this->anz_meldeliste;
     }
 
     /**
@@ -586,7 +622,7 @@ class nTurnier
      *
      * @return array
      */
-    public function set_spielen_liste(): array
+    public function set_spielenliste(): array
     {
         // Teams der Spielen-Liste erhalten
         $sql = "
@@ -628,7 +664,7 @@ class nTurnier
      *
      * @return array
      */
-    public function set_warte_liste(): array
+    public function set_warteliste(): array
     {
         // Teams der Spielen-Liste erhalten
         $sql = "
@@ -671,7 +707,7 @@ class nTurnier
      *
      * @return array
      */
-    public function set_melde_liste(): array
+    public function set_meldeliste(): array
     {
         // Teams der Spielen-Liste erhalten
         $sql = "
@@ -823,20 +859,13 @@ class nTurnier
     }
 
     /**
-     * Get Anzahl der freien Plätze auf der Spielen-Liste
+     * Set Anzahl der freien Plätze auf der Spielen-Liste
+     * 
      * @return int
      */
     public function set_freie_plaetze(): int
     {
         return $this->plaetze - count($this->spielenliste);
-        
-        // $sql = "
-        //         SELECT 
-        //         (SELECT plaetze FROM turniere_details WHERE turnier_id = ?)
-        //          - 
-        //         (SELECT COUNT(liste_id) FROM turniere_liste WHERE turnier_id = ? AND liste = 'spiele')
-        //         ";
-        // return db::$db->query($sql, $this->turnier_id, $this->turnier_id)->esc()->fetch_one();
     }
 
     /**
@@ -1151,6 +1180,36 @@ class nTurnier
     }
 
     /**
+     * Setzt die Anzahl der Teams auf der Melden-Liste
+     * 
+     * @return int
+     */
+    public function set_anz_meldeliste(): int
+    {
+        return count($this->meldeliste);
+    }
+
+    /**
+     * Setzt die Anzahl der Teams auf der Warte-Liste
+     * 
+     * @return int
+     */
+    public function set_anz_warteliste(): int
+    {
+        return count($this->warteliste);
+    }
+
+    /**
+     * Setzt die Anzahl der Tems auf der Spielen-Liste
+     * 
+     * @return int
+     */
+    public function set_anz_spielenliste(): int
+    {
+        return count($this->spielenliste);
+    }
+
+    /**
      * Setzt das Turnier in die Datenbank
      * 
      * @return nTurnier
@@ -1172,8 +1231,21 @@ class nTurnier
             saison = ?
             WHERE turnier_id = ?;
         ";
-        db::$db->query($sql, 
-            $this->tname, $this->ausrichter, $this->art, $this->tblock, $this->tblock_fixed, $this->datum, $this->spieltag, $this->phase, $this->spielplan_vorlage, $this->spielplan_datei,  $this->saison, $this->turnier_id)->log();
+        db::$db->query(
+            $sql,
+            $this->tname,
+            $this->ausrichter,
+            $this->art,
+            $this->tblock,
+            $this->tblock_fixed,
+            $this->datum,
+            $this->spieltag,
+            $this->phase,
+            $this->spielplan_vorlage,
+            $this->spielplan_datei,
+            $this->saison,
+            $this->turnier_id
+        )->log();
 
         $sql = "
             UPDATE turniere_details SET
@@ -1192,8 +1264,23 @@ class nTurnier
             startgebuehr = ?
             WHERE turnier_id = ?
         ";
-        db::$db->query($sql, 
-            $this->hallenname, $this->strasse, $this->plz, $this->ort, $this->haltestellen, $this->plaetze, $this->format, $this->startzeit, $this->besprechung, $this->hinweis, $this->organisator, $this->handy, $this->startgebuehr, $this->turnier_id)->log();
+        db::$db->query(
+            $sql,
+            $this->hallenname,
+            $this->strasse,
+            $this->plz,
+            $this->ort,
+            $this->haltestellen,
+            $this->plaetze,
+            $this->format,
+            $this->startzeit,
+            $this->besprechung,
+            $this->hinweis,
+            $this->organisator,
+            $this->handy,
+            $this->startgebuehr,
+            $this->turnier_id
+        )->log();
 
         return $this;
     }

@@ -183,7 +183,7 @@ class Spielplan
 
         // Wie viele Teams sind angemeldet?
         if (is_null($anzahl_teams)) {
-            $anzahl_teams = count($turnier->get_spielenliste());
+            $anzahl_teams = $turnier->get_anz_spielenliste();
         }
 
         // Nur JgJ-Spielpläne sind in der Datenbank hinterlegt.

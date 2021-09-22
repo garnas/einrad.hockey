@@ -116,13 +116,13 @@ foreach ($alle_turniere as $turnier) {
     //Feststellung der freien Plätze und Anzahl der Mannschaften auf den unterschiedlichen Listen
     $freie_plaetze = $turnier->get_freie_plaetze();
 
-    $anz_spieleliste = count($turnier->get_spielenliste());
+    $anz_spieleliste = $turnier->get_anz_spielenliste();
     $turniere[$turnier_id]['anz_spieleliste'] = $anz_spieleliste;
 
-    $anz_meldeliste = count($turnier->get_meldeliste());
+    $anz_meldeliste = $turnier->get_anz_meldeliste();
     $turniere[$turnier_id]['anz_meldeliste'] = $anz_meldeliste;
 
-    $anz_warteliste = count($turnier->get_warteliste());
+    $anz_warteliste = $turnier->get_anz_warteliste();
     $turniere[$turnier_id]['anz_warteliste'] = $anz_warteliste;
 
     //Oben rechts Plätze frei
