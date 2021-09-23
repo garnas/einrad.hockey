@@ -379,23 +379,6 @@ class nTurnier
     }
 
     /**
-     * @return array
-     */
-    public function get_details(): array
-    {
-        $sql = "
-                SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname
-                FROM turniere_liga 
-                INNER JOIN turniere_details 
-                ON turniere_liga.turnier_id = turniere_details.turnier_id
-                INNER JOIN teams_liga
-                ON turniere_liga.ausrichter = teams_liga.team_id
-                WHERE turniere_liga.turnier_id = ?
-                ";
-        return db::$db->query($sql, $this->turnier_id)->esc()->fetch_row();
-    }
-
-    /**
      * @param int $id
      * @return nTurnier
      */
@@ -408,21 +391,6 @@ class nTurnier
             WHERE turniere_liga.turnier_id = $turnier_id
         ";
         return db::$db->query($sql)->fetch_object(__CLASS__);
-    }
-
-    /**
-     * Erhalte vollständige Turnierinformationen über alle Turniere
-     * 
-     * @return nTurnier[]
-     */
-    public static function get_all(): array
-    {
-        $sql = "
-            SELECT turniere_liga.*, turniere_details.*
-            FROM turniere_liga
-            LEFT JOIN turniere_details ON turniere_liga.turnier_id = turniere_details.turnier_id
-        ";
-        return db::$db->query($sql)->fetch_objects(__CLASS__, key: 'turnier_id');
     }
 
     /**
@@ -1760,10 +1728,6 @@ class nTurnier
                 ";
         return db::$db->query($sql, $this->spieltag, $this->saison)->num_rows() === 0;
     }
-
-    /**
-     * Ermittelt, ob das angegebene Team gemeldet ist
-     */
 
     /**
      * Füllt freie Plätze auf der Spielen-Liste von der Warteliste aus wieder auf,

@@ -75,4 +75,9 @@ class Config
      */
     public const LIGAGEBUEHR = "30&nbsp;€";
 
+    /**
+     * Kontaktcenter
+     */
+    public const BCC_GRENZE = 12;
+
 }

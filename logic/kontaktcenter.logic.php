@@ -1,9 +1,6 @@
 <?php
-// Max Anzahl bevor alle im BCC angeschrieben werden
-$grenze_bcc = 12; //TODO in Config oder Env
-
 // Für die Turnierauswahl
-$turniere = nTurnier::get_turniere(false);
+$turniere = nTurnier::get_turniere();
 
 // Für Sortierung der Teams nach Blöcken
 $akt_spieltag = Tabelle::get_aktuellen_spieltag();
@@ -45,7 +42,6 @@ if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
 
     Html::notice("Achtung: Nichtligateams müssen seperat angeschrieben werden!");
 }
-
 
 // Rundmail wurde ausgewählt
 if (isset($_POST['rundmail'])) {
@@ -113,8 +109,9 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
             }
         }
 
-        //BCC oder Adressat?
-        if (count($emails) > $grenze_bcc) {
+        // BCC oder Adressat?
+        // Überprüfung, wann BCC angeschrieben werden muss
+        if (count($emails) > Config::BCC_GRENZE) {
             foreach ($emails as $email) {
                 $mailer->addBCC($email);
             }
