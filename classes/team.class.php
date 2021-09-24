@@ -17,10 +17,10 @@ class Team
      * Werden nur bei Bedarf gesetzt.
      * Dazu müssen dann die entsprechenden Setter aufgerufen werden.
      */
-    public int $wertigkeit;
-    public string $tblock;
-    public int $rang;
-    public int $position_warteliste;
+    public ?int $wertigkeit;
+    public ?string $tblock;
+    public ?int $rang;
+    public ?int $position_warteliste;
 
     /**
      * Team constructor.
