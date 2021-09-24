@@ -14,6 +14,15 @@ class Team
     public array $details;
 
     /**
+     * Werden nur bei Bedarf gesetzt.
+     * Dazu müssen dann die entsprechenden Setter aufgerufen werden.
+     */
+    public int $wertigkeit;
+    public string $tblock;
+    public int $rang;
+    public int $position_warteliste;
+
+    /**
      * Team constructor.
      * @param $team_id
      */
@@ -558,5 +567,79 @@ class Team
                 WHERE team_id = $this->id
                 ";
         db::$db->query($sql, $passwort_hash, $pw_geaendert)->log();
+    }
+
+    /**
+     * Setzt die Wertigkeit vor dem benannten Spieltag
+     * 
+     * @param int $spieltag
+     */
+    public function set_wertigkeit(int $spieltag): void
+    {
+        $this->wertigkeit = Tabelle::get_team_wertigkeit($this->id, $spieltag - 1);
+    }
+
+    /**
+     * Setzt den Teamblock vor dem benannten Spieltag
+     * 
+     * @param int $spieltag
+     */
+    public function set_tblock(int $spieltag): void
+    {
+        $this->tblock = Tabelle::get_team_block($this->id, $spieltag - 1);
+    }
+
+    /**
+     * Setzte den Teamrang vor dem benannten Spieltag
+     * 
+     * @param int $spieltag
+     */
+    public function set_rang(int $spieltag): void
+    {
+        $this->rang = Tabelle::get_team_rang($this->id, $spieltag - 1);
+    }
+
+    /**
+     * Setzte die Wartelisteposition des Teams auf einem Turnier
+     * 
+     * @param int $spieltag
+     */
+    public function set_position_warteliste(int $pos): void
+    {
+        $this->position_warteliste = $pos;
+    }
+
+    /**
+     * Gibt die Teamwertigkeit
+     * 
+     * @return int
+     */
+    public function get_wertigkeit(): int
+    {
+        return $this->wertigkeit;
+    }
+
+    /**
+     * Gibt den Teamblock
+     */
+    public function get_tblock(): string
+    {
+        return $this->tblock;
+    }
+
+    /**
+     * Gibt den Teamrang
+     */
+    public function get_rang(): int
+    {
+        return $this->rang;
+    }
+
+    /**
+     * Gibt die Wartelisteposition
+     */
+    public function get_warteliste_postition(): int
+    {
+        return $this->position_warteliste;
     }
 }

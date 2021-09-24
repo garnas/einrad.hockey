@@ -4,6 +4,10 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
+$test_team = new Team(30);
+$test_team->set_wertigkeit(5);
+db::debug($test_team);
+
 $turnier_id = (int) @$_GET['turnier_id'];
 $turnier = nTurnier::get($turnier_id);
 $details = array();
@@ -12,7 +16,9 @@ if (empty($turnier->get_turnier_id())){
     Helper::not_found("Das Turnier konnte nicht gefunden werden.");
 }
 
-$liste = $turnier->get_anmeldungen(); // Anmeldungen für dieses Turnier Form: $liste['warte'] = Array([0] => Array['teamname','team_id','tblock', etc])
+$spielenliste = $turnier->get_spielenliste();
+$warteliste = $turnier->get_warteliste(); 
+$meldeliste = $turnier->get_meldeliste();
 
 $details['turnier_id'] = $turnier->get_turnier_id();
 $details['ort'] = $turnier->get_ort();
@@ -192,36 +198,50 @@ include '../../templates/header.tmp.php';
 
 <!--Anmeldungen / Listen -->
 <p class="w3-text-grey w3-border-bottom w3-border-grey">Spielen-Liste</p> 
-<p><i>
-    <?php if (!empty($liste['spiele'])){?>
-        <?php foreach ($liste['spiele'] as $team){?>
-            <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span><br>
-        <?php }//end foreach?>
-    <?php }else{?><i>leer</i><?php } //endif?> 
-</i></p>
-<?php if($details['phase'] == 'Offene Phase' or $details['art'] == 'Finalturnier'){ ?>
+<p>
+    <?php if (!empty($spielenliste)): ?>
+        <i>
+            <?php foreach ($spielenliste as $team): ?>
+                <?=$team->details['teamname']?> <span class="w3-text-primary">(<?=$team->get_tblock() ?: 'NL'?>)</span><br>
+            <?php endforeach; ?>
+        </i>
+    <?php else: ?>
+        <i>leer</i>
+    <?php endif;?> 
+</p>
+
+<?php if($details['phase'] == 'Offene Phase' or $details['art'] == 'Finalturnier'): ?>
     <p class="w3-text-grey w3-border-bottom w3-border-grey">Meldeliste</p> 
-    <p><i>
-        <?php if (!empty($liste['melde'])){?>
-            <?php foreach ($liste['melde'] as $team){?>
-                <?=$team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?: 'NL'?>)</span><br>
-            <?php }//end foreach?>
-        <?php }else{?><i>leer</i><?php } //endif?>
-    </i></p>
-<?php }else{//else phase?>
+    <p>
+        <?php if (!empty($meldeliste)): ?>
+            <i>
+                <?php foreach ($meldeliste as $team): ?>
+                    <?=$team->details['teamname']?> <span class="w3-text-primary">(<?=$team->details['tblock'] ?: 'NL'?>)</span><br>
+                <?php endforeach; ?>
+            </i>
+        <?php else: ?>
+            <i>leer</i>
+        <?php endif; ?>
+    </p>
+<?php else: ?>
     <p class="w3-text-grey w3-border-bottom w3-border-grey">Warteliste</p> 
-    <p><i>
-        <?php if (!empty($liste['warte'])){?>
-            <?php foreach ($liste['warte'] as $team){?>
-                <?=$team['position_warteliste'] . ". " . $team['teamname']?> <span class="w3-text-primary">(<?=$team['tblock'] ?? 'NL'?>)</span><br>
-            <?php }//end foreach?>
-        <?php }else{?><i>leer</i><?php } //endif?> 
-    </i></p>
+    <p>
+        <?php if (!empty($warteliste)):?>
+            <i>
+                <?php foreach ($warteliste as $team): ?>
+                    <?=$team->get_warteliste_postition() . ". " . $team->details['teamname']?> <span class="w3-text-primary">(<?=$team->details['tblock'] ?? 'NL'?>)</span><br>
+                <?php endforeach; ?>
+            </i>
+        <?php else: ?>
+            <i>leer</i>
+        <?php endif; ?> 
+    </p>
     <p>Freie Plätze: <?=$details['plaetze'] - count(($liste['spiele'] ?? array()))?> von <?=$details['plaetze']?></p>
-<?php  } //end if phase?>
-<?php if ($details['art'] == 'Spaßturnier'){?>
+<?php endif; ?>
+
+<?php if ($details['art'] == 'Spaßturnier'):?>
     <p class="w3-text-green">Anmeldung erfolgt beim Ausrichter
-<?php }//end if spass?>
+<?php endif; ?>
 
 <!-- Anzeigen der Ligaspezifischen Infos -->
 <p class="w3-text-grey w3-margin-top w3-border-bottom w3-border-grey">Ligaspezifische Infos</p> 

@@ -498,7 +498,8 @@ class nTurnier
                 ON teams_liga.team_id = turniere_liga.ausrichter
                 WHERE phase != 'ergebnis'
                 AND saison = ?
-                ORDER BY turniere_liga.datum " . ($asc ? "asc" : "desc");
+                ORDER BY turniere_liga.datum " . ($asc ? "asc" : "desc")
+                ;
         return db::$db->query($sql, $saison)->fetch_objects(__CLASS__, key: 'turnier_id');
     }
 
@@ -525,7 +526,6 @@ class nTurnier
 
     /**
      * Anmeldungen der Warte-, Melde-, Spielen-Liste des aktuellen Turniers
-     * TODO: Änderung zu einem Array aus nTeam-Objekten!
      * 
      * @return array
      */
@@ -586,13 +586,11 @@ class nTurnier
 
     /**
      * Get alle Teams auf der Spielenliste des Turniers nach Wertung sortiert.
-     * TODO: Return eines Arrays mit Team-Objekten
      *
      * @return array
      */
     public function set_spielenliste(): array
     {
-        // Teams der Spielen-Liste erhalten
         $sql = "
                 SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam,
                     teams_details.ligavertreter, teams_details.trikot_farbe_1, teams_details.trikot_farbe_2
@@ -604,37 +602,39 @@ class nTurnier
                 WHERE turniere_liste.turnier_id = ? 
                 AND turniere_liste.liste = 'spiele'
                 ";
-        $spielen_liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
+        $liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
 
         // Prüfen ob Spielen-Liste gegeben
-        if (!empty($spielen_liste)) {
-
+        if (!empty($liste)) {
+            
             // Blöcke und Wertungen hinzufügen
-            foreach ($spielen_liste as $team_id => $anmeldung) {
-                $spielen_liste[$team_id]['tblock']
-                    = Tabelle::get_team_block($anmeldung['team_id'], $this->spieltag - 1);
-                $spielen_liste[$team_id]['wertigkeit']
-                    = Tabelle::get_team_wertigkeit($anmeldung['team_id'], $this->spieltag - 1);
+            $spielenliste = array();
+            foreach ($liste as $team) {
+                $team_id = $team['team_id'];
+                
+                $temp = new Team($team_id);
+                db::debug($temp);
+                $temp->set_wertigkeit($this->spieltag);
+                // $temp->set_tblock($this->spieltag);
+                $spielenliste[30] = $temp;
             }
 
             // Sortierung nach Wertigkeit
-            uasort($spielen_liste, static function ($team_a, $team_b) {
-                return ((int)$team_b['wertigkeit'] <=> (int)$team_a['wertigkeit']);
+            uasort($spielenliste, static function ($team_a, $team_b) {
+                return ((int)$team_b->get_wertigkeit() <=> (int)$team_a->get_wertigkeit());
             });
         }
 
-        return $spielen_liste ?? [];
+        return $spielenliste ?? [];
     }
 
     /**
      * Get alle Teams auf der Warteliste des Turniers nach Wertung sortiert.
-     * TODO: Return eines Arrays mit Team-Objekten
      *
      * @return array
      */
     public function set_warteliste(): array
     {
-        // Teams der Spielen-Liste erhalten
         $sql = "
                 SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam,
                     teams_details.ligavertreter, teams_details.trikot_farbe_1, teams_details.trikot_farbe_2, turniere_liste.position_warteliste
@@ -647,37 +647,39 @@ class nTurnier
                 AND turniere_liste.liste = 'warte'
                 ORDER BY turniere_liste.position_warteliste
                 ";
-        $warte_liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
+        $liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
 
         // Prüfen ob Spielen-Liste gegeben
-        if (!empty($warte_liste)) {
+        if (!empty($liste)) {
 
             // Blöcke und Wertungen hinzufügen
-            foreach ($warte_liste as $team_id => $anmeldung) {
-                $warte_liste[$team_id]['tblock']
-                    = Tabelle::get_team_block($anmeldung['team_id'], $this->spieltag - 1);
-                $warte_liste[$team_id]['wertigkeit']
-                    = Tabelle::get_team_wertigkeit($anmeldung['team_id'], $this->spieltag - 1);
+            $warteliste = array();
+            foreach ($liste as $team) {
+                $team_id = $team['team_id'];
+
+                $temp = new Team($team_id);
+                $temp->set_wertigkeit($this->spieltag);
+                $temp->set_tblock($this->spieltag);
+                $temp->set_position_warteliste($team['position_warteliste']);
+                $warteliste[$team_id] = $temp;
             }
 
             // Sortierung nach Wertigkeit
-            uasort($warte_liste, static function ($team_a, $team_b) {
-                return ((int)$team_b['wertigkeit'] <=> (int)$team_a['wertigkeit']);
+            uasort($warteliste, static function ($team_a, $team_b) {
+                return ((int)$team_b->get_wertigkeit() <=> (int)$team_a->get_wertigkeit());
             });
         }
 
-        return $warte_liste ?? [];
+        return $warteliste ?? [];
     }
 
     /**
      * Get alle Teams auf der Warteliste des Turniers nach Wertung sortiert.
-     * TODO: Return eines Arrays mit Team-Objekten
      *
      * @return array
      */
     public function set_meldeliste(): array
     {
-        // Teams der Spielen-Liste erhalten
         $sql = "
                 SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam,
                     teams_details.ligavertreter, teams_details.trikot_farbe_1, teams_details.trikot_farbe_2
@@ -689,26 +691,29 @@ class nTurnier
                 WHERE turniere_liste.turnier_id = ? 
                 AND turniere_liste.liste = 'melde'
                 ";
-        $melde_liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
+        $liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
 
         // Prüfen ob Spielen-Liste gegeben
-        if (!empty($melde_liste)) {
+        if (!empty($liste)) {
 
             // Blöcke und Wertungen hinzufügen
-            foreach ($melde_liste as $team_id => $anmeldung) {
-                $melde_liste[$team_id]['tblock']
-                    = Tabelle::get_team_block($anmeldung['team_id'], $this->spieltag - 1);
-                $melde_liste[$team_id]['wertigkeit']
-                    = Tabelle::get_team_wertigkeit($anmeldung['team_id'], $this->spieltag - 1);
+            $meldeliste = array();
+            foreach ($liste as $team) {
+                $team_id = $team['team_id'];
+
+                $temp = new Team($team_id);
+                $temp->set_wertigkeit($this->spieltag);
+                $temp->set_tblock($this->spieltag);
+                $meldeliste[$team_id] = $temp;
             }
 
             // Sortierung nach Wertigkeit
-            uasort($melde_liste, static function ($team_a, $team_b) {
-                return ((int)$team_b['wertigkeit'] <=> (int)$team_a['wertigkeit']);
+            uasort($meldeliste, static function ($team_a, $team_b) {
+                return ((int)$team_b->get_wertigkeit() <=> (int)$team_a->get_wertigkeit());
             });
         }
 
-        return $melde_liste ?? [];
+        return $meldeliste ?? [];
     }
 
     /**
