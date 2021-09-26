@@ -4,10 +4,6 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
-$test_team = new Team(30);
-$test_team->set_wertigkeit(5);
-db::debug($test_team);
-
 $turnier_id = (int) @$_GET['turnier_id'];
 $turnier = nTurnier::get($turnier_id);
 $details = array();
