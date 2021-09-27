@@ -613,10 +613,9 @@ class nTurnier
                 $team_id = $team['team_id'];
                 
                 $temp = new Team($team_id);
-                db::debug($temp);
                 $temp->set_wertigkeit($this->spieltag);
-                // $temp->set_tblock($this->spieltag);
-                $spielenliste[30] = $temp;
+                $temp->set_tblock($this->spieltag);
+                $spielenliste[$team_id] = $temp;
             }
 
             // Sortierung nach Wertigkeit
@@ -732,7 +731,7 @@ class nTurnier
 
     /**
      * Get Turnierergebnis des Turnieres
-     * TODO: Umstellung zu einem Array mit nTeam
+     * TODO: Umstellung zu einem Array mit nTeam?
      * 
      * @return array
      */
@@ -1747,20 +1746,23 @@ class nTurnier
         $freie_plaetze = $this->freie_plaetze;
         $log = false;
 
-        if ($this->details['phase'] === 'melde' && $freie_plaetze > 0) {
-            $liste = $this->get_anmeldungen(); // Order by Warteliste weshalb die Teams in der foreach schleife in der Richtigen reihenfolge behandelt werden
+        if ($this->phase === 'melde' && $freie_plaetze > 0) {
+            $liste = $this->get_warteliste(); // Order by Warteliste weshalb die Teams in der foreach schleife in der Richtigen reihenfolge behandelt werden
 
-            foreach ($liste['warte'] as $team) {
-                if ($this->is_spielberechtigt($team['team_id']) && $freie_plaetze > 0) {
-                    if ($this->is_doppelmeldung($team['team_id'])) {
-                        $this->set_abmeldung($team['team_id']);
-                    } else { // Das Team wird abgemeldet, wenn es schon am Turnierdatum auf einer Spielen-Liste steht
-                        $this->set_liste($team['team_id'], 'spiele');
-                        if ($send_mail) {
-                            MailBot::mail_warte_zu_spiele($this, $team['team_id']);
+            foreach ($liste as $team) {
+                if ($freie_plaetze > 0) {
+                    if ($this->is_spielberechtigt($team->id)) {
+                        // Prüfen, ob das Team schon bei einem anderen Turnier auf der Spielen-Liste stehen
+                        if ($this->is_doppelmeldung($team->id)) {
+                            $this->set_abmeldung($team->id);
+                        } else { 
+                            $this->set_liste($team->id, 'spiele');
+                            if ($send_mail) {
+                                MailBot::mail_warte_zu_spiele($this, $team->id);
+                            }
+                            --$freie_plaetze;
+                            $log = true;
                         }
-                        --$freie_plaetze;
-                        $log = true;
                     }
                 }
             }
