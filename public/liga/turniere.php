@@ -44,7 +44,7 @@ foreach ($alle_turniere as $turnier) {
     $turniere[$turnier_id]['ort'] = $turnier->get_ort();
     $turniere[$turnier_id]['tblock'] = $turnier->get_tblock();
     $turniere[$turnier_id]['tname'] = $turnier->get_tname();
-    $turniere[$turnier_id]['teamname'] = Team::id_to_name($turnier->get_ausrichter());
+    $turniere[$turnier_id]['ausrichter'] = Team::id_to_name($turnier->get_ausrichter());
     $turniere[$turnier_id]['phase'] = $turnier->get_phase();
     $turniere[$turnier_id]['hinweis'] = $turnier->get_hinweis();
     $turniere[$turnier_id]['ausrichter'] = $turnier->get_ausrichter();
@@ -184,14 +184,16 @@ include '../../templates/header.tmp.php';
         <?= Html::icon("search") ?><input id="myInput" class='w3-padding w3-border-0' style="width: 225px;" type="text" placeholder="Turnier suchen">
     </div>
 
-   <?php if (empty($turniere)) {
+    <?php 
+    if (empty($turniere)):
         Html::message('info', "Keine Turniere gefunden.", NULL);
-    } // end if ?>
+    endif; 
+    ?>
 
     <!-- zu durchsuchendes div -->
     <div id="myDIV">
         <!--Turnierpanels -->
-        <?php foreach ($turniere as $turnier) { ?>
+        <?php foreach ($turniere as $turnier): ?>
             <section onclick="modal('modal<?= $turnier['turnier_id'] ?>')"
                      class='w3-display-container w3-panel w3-card'
                      style='cursor: pointer; <?php if ($turnier['art'] == 'final') { ?>background-color:#edf0f7;<?php } ?>'
@@ -199,23 +201,23 @@ include '../../templates/header.tmp.php';
                 <!-- Angezeigtes Turnierpanel -->
                 <div class='w3-panel'>
                     <div class="w3-center">
-                        <?php if ($turnier['art'] != 'final') { ?>
+                        <?php if ($turnier['art'] != 'final'): ?>
                             <h4 class=''><?= $turnier['datum'] ?>
                                 <span class="w3-text-primary"><?= $turnier['ort'] ?></span> <?= $turnier['tblock'] ?></h4>
                             <p class='w3-text-grey'><?= $turnier['tname'] ?></p>
-                        <?php } else {?>
+                        <?php else: ?>
                             <h4 class='w3-text-primary'>
                                 <?= $turnier['tname'] ?> </h4>
                             <h4 class=''> 
                                 <?= $turnier['datum'] ?> <span class="w3-text-primary"><?= $turnier['ort'] ?></span></h4>
-                        <?php } ?>
+                        <?php endif; ?>
                     </div>
                     <div style="font-size: 13px;" class="w3-text-grey">
                         <i class='w3-display-topleft w3-padding'><?= $turnier['plaetze_frei'] ?? '<span class="w3-text-green">frei</span>' ?></i>
                         <i class='w3-display-bottomleft w3-padding'><?= $turnier['phase'] ?></i>
                         <i class='w3-display-topright w3-padding'><?= ($turnier['anz_spieleliste'] ?? 0) . "(" . (($turnier['anz_meldeliste'] ?? 0) + ($turnier['anz_warteliste'] ?? 0)) . ")" ?>
                             von <?= $turnier['plaetze'] ?></i>
-                        <i class='w3-display-bottomright w3-padding'><?= $turnier['teamname'] ?></i>
+                        <i class='w3-display-bottomright w3-padding'><?= $turnier['ausrichter'] ?></i>
                     </div>
 
                     <!-- Ausklappbarer Content -->
@@ -225,52 +227,53 @@ include '../../templates/header.tmp.php';
                         <div class='w3-row'>
                             <div class='w3-half'>
                                 <h4 class='w3-text-primary'><span>Spielen-Liste</span></h4>
-                                <?php if (!empty($turnier['spielen_liste'])) { ?>
+                                <?php if (!empty($turnier['spielen_liste'])): ?>
                                     <!-- Ausklappbarer Content -->
                                     <p>
                                         <i>
-                                            <?php foreach ($turnier['spielen_liste'] as $team) { ?>
-                                                <?= $team['teamname'] ?><span class="w3-text-primary">
-                                                (<?= $team['tblock'] ?? 'NL' ?>)</span><br>
-                                            <?php }//end foreach?>
+                                            <?php foreach ($turnier['spielen_liste'] as $team): ?>
+                                                <?= $team->get_teamname()?><span class="w3-text-primary">
+                                                (<?= $team->get_tblock() ?? 'NL' ?>)</span><br>
+                                            <?php endforeach; ?>
                                         </i>
                                     </p>
-                                <?php } else { ?>
-                                    <i>leer</i> <?php }//end if?>
+                                <?php else: ?>
+                                    <i>leer</i> 
+                                <?php endif; ?>
                             </div>
                             <div class='w3-half'>
-                                <?php if ($turnier['phase'] == 'offen' || $turnier['art'] == 'final') { ?>
-                                    <?php if (!empty($turnier['melde_liste'])) { ?>
+                                <?php if ($turnier['phase'] == 'offen' || $turnier['art'] == 'final'): ?>
+                                    <?php if (!empty($turnier['melde_liste'])): ?>
                                         <h4 class='w3-text-primary'><span>Meldeliste</span></h4>
                                         <p>
                                             <i>
-                                                <?php foreach (($turnier['melde_liste']) as $team) { ?>
-                                                    <?= $team['teamname'] ?>
-                                                    <span class="w3-text-primary">(<?= $team['tblock'] ?? 'NL' ?>)</span>
+                                                <?php foreach (($turnier['melde_liste']) as $team): ?>
+                                                    <?= $team->get_teamname() ?>
+                                                    <span class="w3-text-primary">(<?= $team->get_tblock() ?? 'NL' ?>)</span>
                                                     <br>
-                                                <?php }//end foreach?>
+                                                <?php endforeach; ?>
                                             </i>
                                         </p>
-                                    <?php }//end if?>
-                                <?php } else { //else phase?>
-                                    <?php if (!empty($turnier['warte_liste'])) { ?>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <?php if (!empty($turnier['warte_liste'])): ?>
                                         <h4 class='w3-text-primary'><span>Warteliste</span></h4>
                                         <p>
                                             <i>
-                                                <?php foreach (($turnier['warte_liste']) as $team) { ?>
-                                                    <?= $team['position_warteliste'] . ". " . $team['teamname'] ?>
-                                                    <span class="w3-text-primary">(<?= $team['tblock'] ?? 'NL' ?>)</span>
+                                                <?php foreach (($turnier['warte_liste']) as $team): ?>
+                                                    <?= $team->get_warteliste_postition() . ". " . $team->get_teamname() ?>
+                                                    <span class="w3-text-primary">(<?= $team->get_tblock() ?? 'NL' ?>)</span>
                                                     <br>
-                                                <?php }//end foreach?>
+                                                <?php endforeach; ?>
                                             </i>
                                         </p>
-                                    <?php }//end if?>
-                                <?php } //end if phase?>
+                                    <?php endif; ?>
+                                <?php endif; ?>
                             </div>
                         </div>
-                        <?php if ($turnier['art'] == 'spass') { ?>
+                        <?php if ($turnier['art'] == 'spass'): ?>
                             <p class="w3-text-green">Anmeldung erfolgt beim Ausrichter</p>
-                        <?php } //end if spass?>
+                        <?php endif; ?>
 
                         <!-- Turnierdetails -->
                         <p class="w3-text-grey w3-border-bottom w3-border-grey">Details</p>
@@ -283,8 +286,8 @@ include '../../templates/header.tmp.php';
                                 <tr style="white-space: nowrap;">
                                     <td class="w3-text-primary"><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">schedule</i> Beginn') ?></td>
                                     <td><?= $turnier['startzeit'] ?>
-                                        &nbsp;Uhr<?php if (!empty($turnier['besprechung'])) { ?>
-                                            <i>(<?= $turnier['besprechung'] ?>)</i><?php } //endif?></td>
+                                        &nbsp;Uhr<?php if (!empty($turnier['besprechung'])): ?>
+                                            <i>(<?= $turnier['besprechung'] ?>)</i><?php endif; ?></td>
                                 </tr>
                                 <tr style="white-space: nowrap;">
                                     <td class="w3-text-primary" style=""><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier['turnier_id'], '<i class="material-icons">event</i> Wochentag') ?></td>
@@ -323,6 +326,6 @@ include '../../templates/header.tmp.php';
                     </div>
                 </div>
             </section>
-        <?php } //end foreach?>
+        <?php endforeach; ?>
     </div>
 <?php include '../../templates/footer.tmp.php';
