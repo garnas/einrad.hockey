@@ -12,6 +12,7 @@ class Team
      */
     public int $id;
     public array $details;
+    public string $teamname;
 
     /**
      * Werden nur bei Bedarf gesetzt.
@@ -30,6 +31,7 @@ class Team
     {
         $this->id = $team_id;
         $this->details = $this->get_details();
+        $this->teamname = $this->set_teamname();
     }
 
     /**
@@ -610,36 +612,65 @@ class Team
     }
 
     /**
+     * Setzt den Teamnamen
+     */
+    public function set_teamname(): string
+    {
+        $sql = "
+        SELECT teamname 
+        FROM teams_liga
+        WHERE team_id = ?
+        ";
+        return db::$db->query($sql, $this->id)->fetch_one();
+    }
+
+    /**
      * Gibt die Teamwertigkeit
      * 
-     * @return int
+     * @return null|int
      */
-    public function get_wertigkeit(): int
+    public function get_wertigkeit(): null|int
     {
         return $this->wertigkeit;
     }
 
     /**
      * Gibt den Teamblock
+     * 
+     * @return null|string
      */
-    public function get_tblock(): string
+    public function get_tblock(): null|string
     {
         return $this->tblock;
     }
 
     /**
      * Gibt den Teamrang
+     * 
+     * @return null|int
      */
-    public function get_rang(): int
+    public function get_rang(): null|int
     {
         return $this->rang;
     }
 
     /**
      * Gibt die Wartelisteposition
+     * 
+     * @return null|int
      */
-    public function get_warteliste_postition(): int
+    public function get_warteliste_postition(): null|int
     {
         return $this->position_warteliste;
+    }
+
+    /**
+     * Gibt den Teamnamen
+     * 
+     * @return string
+     */
+    public function get_teamname(): string
+    {
+        return $this->teamname;
     }
 }
