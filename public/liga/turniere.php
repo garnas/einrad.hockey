@@ -44,7 +44,7 @@ foreach ($alle_turniere as $turnier) {
     $turniere[$turnier_id]['ort'] = $turnier->get_ort();
     $turniere[$turnier_id]['tblock'] = $turnier->get_tblock();
     $turniere[$turnier_id]['tname'] = $turnier->get_tname();
-    $turniere[$turnier_id]['ausrichter'] = Team::id_to_name($turnier->get_ausrichter());
+    $turniere[$turnier_id]['teamname'] = Team::id_to_name($turnier->get_ausrichter());
     $turniere[$turnier_id]['phase'] = $turnier->get_phase();
     $turniere[$turnier_id]['hinweis'] = $turnier->get_hinweis();
     $turniere[$turnier_id]['ausrichter'] = $turnier->get_ausrichter();
@@ -217,7 +217,7 @@ include '../../templates/header.tmp.php';
                         <i class='w3-display-bottomleft w3-padding'><?= $turnier['phase'] ?></i>
                         <i class='w3-display-topright w3-padding'><?= ($turnier['anz_spieleliste'] ?? 0) . "(" . (($turnier['anz_meldeliste'] ?? 0) + ($turnier['anz_warteliste'] ?? 0)) . ")" ?>
                             von <?= $turnier['plaetze'] ?></i>
-                        <i class='w3-display-bottomright w3-padding'><?= $turnier['ausrichter'] ?></i>
+                        <i class='w3-display-bottomright w3-padding'><?= $turnier['teamname'] ?></i>
                     </div>
 
                     <!-- Ausklappbarer Content -->
