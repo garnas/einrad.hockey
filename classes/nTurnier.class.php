@@ -723,7 +723,7 @@ class nTurnier
     public function get_kader(): array
     {
         foreach ($this->spielenliste as $team) {
-            $return[$team['team_id']] = nSpieler::get_kader($team['team_id']);
+            $return[$team->id] = nSpieler::get_kader($team->id);
         }
 
         return $return ?? [];
