@@ -45,12 +45,12 @@ if (isset($_POST['change_turnier'])) {
 
     // Validierung Startzeit:
     if ($startzeit != $turnier->get_startzeit() && Helper::$teamcenter) {
-        if ($turnier->details['art'] === 'final') {
+        if ($turnier->get_art() === 'final') {
             $error = true;
             Html::error("Die Startzeit bei Finalturnieren kann nur vom Ligaausschuss geändert werden.");
         }
         if (
-            $startzeit != $turnier->details['startzeit']
+            $startzeit != $turnier->get_startzeit()
             && (date("H", strtotime($startzeit)) < 9 || date("H", strtotime($startzeit)) > 14)
             && Helper::$teamcenter
         ) {
@@ -60,8 +60,8 @@ if (isset($_POST['change_turnier'])) {
     }
 
     // Validierung der Plätze
-    if ($plaetze != $turnier->details['plaetze'] && Helper::$teamcenter) {
-        if ($turnier->details['art'] === 'final') { //Anzahl der Plätze darf nur geändert werden, wenn es sich nicht um ein Finalturnier handelt
+    if ($plaetze != $turnier->get_plaetze() && Helper::$teamcenter) {
+        if ($turnier->get_art() === 'final') { //Anzahl der Plätze darf nur geändert werden, wenn es sich nicht um ein Finalturnier handelt
             Html::error("Das Ändern der Anzahl der Plätze ist bei Abschlussturnieren können nur vom Ligaausschuss geändert werden.");
             $error = true;
         }
@@ -73,8 +73,8 @@ if (isset($_POST['change_turnier'])) {
 
     // Keine Änderung der Plätze in der Spielplanphase
     if (
-        $turnier->details['phase'] === 'spielplan'
-        && $turnier->details['plaetze'] != $plaetze
+        $turnier->get_phase() === 'spielplan'
+        && $turnier->get_plaetze() != $plaetze
         && !Helper::$ligacenter
     ) {
         $error = true;
@@ -84,7 +84,7 @@ if (isset($_POST['change_turnier'])) {
 
     // Keine Änderungen in der Ergebnisphase
     if (
-        $turnier->details['phase'] === 'ergebnis'
+        $turnier->get_phase() === 'ergebnis'
         && !Helper::$ligacenter
     ) {
         $error = true;
@@ -100,9 +100,9 @@ if (isset($_POST['change_turnier'])) {
         Html::error("Bitte entweder um den nächsthöheren Block oder auf ABCDEF öffnen.");
     }
 
-    $tblock = $turnier->details['tblock'];
-    $fixed = $turnier->details['tblock_fixed'];
-    $art = $turnier->details['art'];
+    $tblock = $turnier->get_tblock();
+    $fixed = $turnier->get_tblock_fixed();
+    $art = $turnier->get_art();
     
     $erweitern = false; // Wird auf true gesetzt, wenn der Turnierblock erweitert werden soll
 
@@ -140,9 +140,10 @@ if (isset($_POST['change_turnier'])) {
     if (!$error) {
         // Turnierblock erweitern und mögliche Teams der Warteliste aufnehmen
         if ($erweitern) {
-            $turnier->set_liga('tblock', $tblock)
-                    ->set_liga('tblock_fixed', $fixed)
-                    ->set_liga('art', $art)
+            $turnier->set_tblock($tblock)
+                    ->set_fixed_tblock($fixed)
+                    ->set_art($art)
+                    ->set_database()
                     ->spieleliste_auffuellen();
             Html::info("Turnier wurde erweitert");
         }
@@ -161,19 +162,20 @@ if (isset($_POST['change_turnier'])) {
         }
 
         // Ändern der Turnierdetails
-        $turnier->set('startzeit', $startzeit)
-                ->set('besprechung', $besprechung)
-                ->set('plaetze', $plaetze)
-                ->set('format', $format)
-                ->set('hallenname', $hallenname)
-                ->set('strasse', $strasse)
-                ->set('plz', $plz)
-                ->set('ort', $ort)
-                ->set('haltestellen', $haltestellen)
-                ->set('startgebuehr', $startgebuehr)
-                ->set('organisator', $organisator)
-                ->set('handy', $handy)
-                ->set('hinweis', $hinweis);
+        $turnier->set_startzeit($startzeit)
+                ->set_besprechung($besprechung)
+                ->set_plaetze($plaetze)
+                ->set_format($format)
+                ->set_hallennamen($hallenname)
+                ->set_strasse($strasse)
+                ->set_plz($plz)
+                ->set_ort($ort)
+                ->set_haltestelle($haltestellen)
+                ->set_startgebuehr($startgebuehr)
+                ->set_organisator($organisator)
+                ->set_handy($handy)
+                ->set_hinweis($hinweis)
+                ->set_database();
 
         // Spielen-Liste aktualisieren, wenn die Anzahl der Plätze geändert wurde        
         if (

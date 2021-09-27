@@ -66,7 +66,7 @@ if (isset($_POST['team_anmelden'])){
     }
 
     //Existiert der ausgewählte Teamname?
-    if (empty($team_id)){
+    if (empty($team_id) || is_null($team_id)){
         $error = true;
         Html::error("Team wurde nicht gefunden");
     }
