@@ -232,7 +232,7 @@ include '../../templates/header.tmp.php';
             <i>leer</i>
         <?php endif; ?> 
     </p>
-    <p>Freie Plätze: <?=$details['plaetze'] - count(($liste['spiele'] ?? array()))?> von <?=$details['plaetze']?></p>
+    <p>Freie Plätze: <?=$turnier->get_freie_plaetze()?> von <?=$turnier->get_plaetze()?></p>
 <?php endif; ?>
 
 <?php if ($details['art'] == 'Spaßturnier'):?>
