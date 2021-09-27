@@ -198,7 +198,7 @@ include '../../templates/header.tmp.php';
     <?php if (!empty($spielenliste)): ?>
         <i>
             <?php foreach ($spielenliste as $team): ?>
-                <?=$team->details['teamname']?> <span class="w3-text-primary">(<?=$team->get_tblock() ?: 'NL'?>)</span><br>
+                <?=$team->get_teamname()?> <span class="w3-text-primary">(<?=$team->get_tblock() ?: 'NL'?>)</span><br>
             <?php endforeach; ?>
         </i>
     <?php else: ?>
@@ -212,7 +212,7 @@ include '../../templates/header.tmp.php';
         <?php if (!empty($meldeliste)): ?>
             <i>
                 <?php foreach ($meldeliste as $team): ?>
-                    <?=$team->details['teamname']?> <span class="w3-text-primary">(<?=$team->details['tblock'] ?: 'NL'?>)</span><br>
+                    <?=$team->get_teamname()?> <span class="w3-text-primary">(<?=$team->get_tblock() ?: 'NL'?>)</span><br>
                 <?php endforeach; ?>
             </i>
         <?php else: ?>
@@ -225,7 +225,7 @@ include '../../templates/header.tmp.php';
         <?php if (!empty($warteliste)):?>
             <i>
                 <?php foreach ($warteliste as $team): ?>
-                    <?=$team->get_warteliste_postition() . ". " . $team->details['teamname']?> <span class="w3-text-primary">(<?=$team->details['tblock'] ?? 'NL'?>)</span><br>
+                    <?=$team->get_warteliste_postition() . ". " . $team->get_teamname()?> <span class="w3-text-primary">(<?=$team->get_tblock() ?? 'NL'?>)</span><br>
                 <?php endforeach; ?>
             </i>
         <?php else: ?>
