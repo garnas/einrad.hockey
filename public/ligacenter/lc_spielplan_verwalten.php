@@ -166,10 +166,10 @@ include '../../templates/header.tmp.php';
             </thead>
             <?php foreach ($teamliste as $team) { ?>
                 <tr>
-                    <td><?= $team['team_id'] ?></td>
-                    <td><?= $team['teamname'] ?></td>
-                    <td class="w3-center"><?= $team['tblock'] ?: 'NL' ?></td>
-                    <td class="w3-center"><?= $team['wertigkeit'] ?: 'Siehe Modus' ?></td>
+                    <td><?= $team->id ?></td>
+                    <td><?= $team->get_teamname() ?></td>
+                    <td class="w3-center"><?= $team->get_tblock() ?: 'NL' ?></td>
+                    <td class="w3-center"><?= $team->get_wertigkeit() ?: 'Siehe Modus' ?></td>
                 </tr>
             <?php } //end foreach?>
         </table>
@@ -204,7 +204,7 @@ include '../../templates/header.tmp.php';
 
     <form method="post" enctype="multipart/form-data">
 
-        <?php if (Spielplan::check_exist($turnier->get_turnier_id)) { ?>
+        <?php if (Spielplan::check_exist($turnier->get_turnier_id())) { ?>
             <p>Bitte zuerst den dynamischen Spielplan löschen.</p>
         <?php } else { ?>
 
@@ -267,8 +267,8 @@ include '../../templates/header.tmp.php';
                             </option>
                             <?php foreach ($teamliste as $team_id => $team) { ?>
                                 <option
-                                    <?php if (($turnier_ergebnis[$platz]['team_id'] ?? 0) == $team['team_id']){ ?>selected<?php } //endif?>
-                                    value="<?= $team['team_id'] ?>"><?= $team['teamname'] ?></option>
+                                    <?php if (($turnier_ergebnis[$platz]['team_id'] ?? 0) == $team->id){ ?>selected<?php } //endif?>
+                                    value="<?= $team->id ?>"><?= $team->get_teamname() ?></option>
                             <?php } //end foreach?>
                         </select>
                     </td>
