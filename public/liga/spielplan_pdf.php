@@ -37,7 +37,7 @@ $mpdf = MPDF::load_mpdf(); // Erstellt ein MPDF-Objekt aus dem Framework
 $mpdf->shrink_tables_to_fit = 4; // Tabellen können um den Faktor 4 verkleinert werden, um noch auf eine Seite zu passen.
 
 // PDF beschreiben
-$mpdf->SetTitle('Spielplan ' . $spielplan->turnier->details['ort']);
+$mpdf->SetTitle('Spielplan ' . $spielplan->turnier->get_ort());
 $mpdf->SetHTMLHeader('<img src="../bilder/logo_lang_small.png" style="margin-top:18px; width: 70mm; float: right;">');
 $mpdf->SetHTMLFooter(
     '<table style="width: 100%">
@@ -51,4 +51,4 @@ $mpdf->WriteHTML($css_style,\Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
 
 // Output - Otpion 'D' für Download, 'I' für im Browser anzeigen
-$mpdf->Output('Spielplan '. $spielplan->turnier->details['ort'] . '.pdf', 'I');
+$mpdf->Output('Spielplan '. $spielplan->turnier->get_ort() . '.pdf', 'I');

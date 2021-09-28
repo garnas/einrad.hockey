@@ -31,7 +31,7 @@ include '../../templates/header.tmp.php';
 <?php if (!empty($turnier->get_turnier_id())){?>
     <h2>Turnierlog <?=$turnier->get_datum() . ' ' . $turnier->get_tname()?> <?=$turnier->get_ort()?> (<?=$turnier->get_tblock()?>)</h2>
 <?php }else{ ?>
-    <h2>Turnierlog Turnier-ID <?=$turnier->id?></h2>
+    <h2>Turnierlog Turnier-ID <?=$turnier->get_turnier_id()?></h2>
 <?php } //endif?>
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-striped">

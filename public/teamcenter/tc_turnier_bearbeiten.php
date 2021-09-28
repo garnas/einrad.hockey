@@ -20,13 +20,13 @@ include '../../templates/header.tmp.php';
     <h2 class="w3-text-primary">
         <span class="w3-text-grey">Turnierdaten ändern</span>
         <br>
-        <?= $turnier->details['ort']
-        . ' (' . $turnier->details['tblock'] . ') '
-        . date("d.m.Y", strtotime($turnier->details['datum'])) ?>
+        <?= $turnier->get_ort()
+        . ' (' . $turnier->get_datum() . ') '
+        . date("d.m.Y", strtotime($turnier->get_datum())) ?>
     </h2>
 
     <p>
-        <?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->details['turnier_id'],
+        <?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->get_turnier_id(),
             'Alle Turnierdetails',
             icon: 'info') ?>
     </p>

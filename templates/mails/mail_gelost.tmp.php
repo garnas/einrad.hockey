@@ -1,7 +1,7 @@
 <p>Hallo <?= Team::id_to_name($team_id) ?>,</p>
 <p>
-    das <?= $turnier->details['tblock'] ?>-Turnier in <?= $turnier->details['ort'] ?> am
-    <?= date("d.m.Y", strtotime($turnier->details['datum'])) ?> ist in die Meldephase übergegangen und
+    das <?= $turnier->get_tblock() ?>-Turnier in <?= $turnier->get_ort() ?> am
+    <?= date("d.m.Y", strtotime($turnier->get_datum())) ?> ist in die Meldephase übergegangen und
     die freien Spielen-Plätze wurden besetzt. Euer Team steht nun auf der <b><?= $liste ?></b>
 </p>
 <?php if ($liste == "Warteliste") {?>
@@ -12,7 +12,7 @@
     </p>
 <?php } ?>
 <p>
-    <a href="<?= Env::BASE_URL . "/liga/turnier_details.php?turnier_id=" . $turnier->id ?>">
+    <a href="<?= Env::BASE_URL . "/liga/turnier_details.php?turnier_id=" . $turnier->get_turnier_id() ?>">
         Link des Turnieres
     </a>
 </p>

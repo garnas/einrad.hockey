@@ -56,14 +56,14 @@ if (isset($_POST['ergebnis_eintragen'])) {
     }
     $turnier->set_phase('ergebnis');
     Html::info("Ergebnisse wurden manuell eingetragen. Das Turnier wurde in die Ergebnisphase versetzt.");
-    header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->details['turnier_id']);
+    header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->get_turnier_id());
     die();
 }
 
 // Spielplan automatisch erstellen
 if (isset($_POST['auto_spielplan_erstellen'])) {
     $error = false;
-    if ($turnier->details['phase'] != "melde") { //TODO and is ligaturnier
+    if ($turnier->get_phase() != "melde") { //TODO and is ligaturnier
         Html::error("Das Turnier muss in der Meldephase sein.");
         $error = true;
     }
@@ -71,14 +71,14 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
         Html::error("Falsche Anzahl an Teams. Nur 4er - 8er Jeder-gegen-Jeden Spielpläne können erstellt werden.");
         $error = true;
     }
-    if (!empty($turnier->details['spielplan_link'])) {
+    if (!empty($turnier->get_spielplan_link())) {
         Html::error("Spielplan konnte nicht erstellt werden. Es existiert ein manuell hochgeladener Spielplan.");
         $error = true;
     }
     if (!$error) {
         if (Spielplan::fill_vorlage($turnier)) {
             Html::info("Das Turnier wurde in die Spielplan-Phase versetzt. Der Spielplan wird jetzt angezeigt.");
-            header('Location: ../liga/spielplan.php?turnier_id=' . $turnier->id);
+            header('Location: ../liga/spielplan.php?turnier_id=' . $turnier->get_turnier_id());
             die();
         }
 
@@ -112,7 +112,7 @@ if (isset($_POST['spielplan_hochladen'])) {
                 $turnier->upload_spielplan($target_file_pdf, 'spielplan');
                 Html::info("Manueller Spielplan hochgeladen. Das Turnier wurde in die Spielplan-Phase versetzt.");
             }
-            header("Location: lc_spielplan_verwalten.php?turnier_id=$turnier->id");
+            header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->get_turnier_id());
             die();
         }
         Html::error("Fehler beim Upload");

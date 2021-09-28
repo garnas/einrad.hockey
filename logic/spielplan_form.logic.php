@@ -2,16 +2,16 @@
 
 // Besteht die Berechtigung das Turnier zu bearbeiten?
 if(!Helper::$ligacenter){ // Ligacenter darf alles.
-    if ((Helper::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $spielplan->turnier->details['ausrichter'])){
+    if ((Helper::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $spielplan->turnier->get_ausrichter())){
         Html::error("Nur der Ausrichter kann Spielergebnisse eintragen");
         header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
         die();
     }
 
     // Wird das Turnierergebnis rechtzeitig eingetragen?
-    $N = date("N", strtotime($spielplan->turnier->details['datum'])); // Numerischer Wochentag.
+    $N = date("N", strtotime($spielplan->turnier->get_datum())); // Numerischer Wochentag.
     $delta = (8-$N) * 24*60*60 + 18*60*60; // Die Zeit bis zum nächsten Montag 18:00 Uhr von 0:00 Uhr aus gesehen.
-    $abgabe = strtotime($spielplan->turnier->details['datum']) + $delta;
+    $abgabe = strtotime($spielplan->turnier->get_datum()) + $delta;
 
     if ($abgabe < time()){
         Html::error("Bitte wende dich an den Ligaausschuss um Ergebnisse nachträglich zu verändern.");

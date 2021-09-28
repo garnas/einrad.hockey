@@ -131,7 +131,7 @@ if (isset($_POST['spieleliste_auffuellen'])){
     }
 
     //Ist das Turnier in der Meldephase?
-    if ($turnier->details['phase'] != 'melde'){
+    if ($turnier->get_phase() != 'melde'){
         $error = true;
         Html::error("Turnier befindet sich nicht in der Meldephase");
     }

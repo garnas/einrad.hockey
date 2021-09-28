@@ -185,7 +185,7 @@ class LigaBot
     public static function losen(nTurnier $turnier): bool
     {
         // Falsche Freilosanmeldungen beim Übergang in die Meldephase abmelden
-        Html::info($turnier->id . " wurde gelost.");
+        Html::info($turnier->get_turnier_id() . " wurde gelost.");
         $spielenliste = $turnier->get_spielenliste();
         $warteliste = $turnier->get_warteliste();
         $meldeliste = $turnier->get_meldeliste();

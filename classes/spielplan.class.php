@@ -144,7 +144,7 @@ class Spielplan
                     VALUES (?,?,?,?,?,?)
                     ";
             $params = [
-                $turnier->id,
+                $turnier->get_turnier_id(),
                 $spiel["spiel_id"],
                 $teamliste[$spiel["team_a"]]["team_id"],
                 $teamliste[$spiel["team_b"]]["team_id"],
@@ -172,13 +172,13 @@ class Spielplan
     public static function get_vorlage(nTurnier $turnier, ?int $anzahl_teams = NULL): false|string
     {
         // Existiert ein manuell hochgeladener Spielplan?
-        if (!empty($turnier->details['spielplan_datei'])) {
+        if (!empty($turnier->get_spielplan_datei())) {
             return false;
         }
 
         // Wurde schon ein Spielplan gesetzt?
-        if (!empty($turnier->details['spielplan_vorlage'])) {
-            return $turnier->details['spielplan_vorlage'];
+        if (!empty($turnier->get_spielplan_vorlage())) {
+            return $turnier->get_spielplan_vorlage();
         }
 
         // Wie viele Teams sind angemeldet?
@@ -213,7 +213,7 @@ class Spielplan
             $turnier->set_spielplan_vorlage(null);
         }
         // Es existiert kein dynamischer Spielplan
-        if (!self::check_exist($turnier->id)) {
+        if (!self::check_exist($turnier->get_turnier_id())) {
             return;
         }
 
