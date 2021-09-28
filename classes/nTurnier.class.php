@@ -1527,6 +1527,20 @@ class nTurnier
     }
 
     /**
+     * Ermittelt, ob es sich um ein Ligaturnier handelt
+     * 
+     * @return bool
+     */
+    public function is_ligaturnier()
+    {
+        if ($this->art == 'spass') {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
      * Ermittelt, ob ein Team bei diesem Turnier ein Freilos setzten darf
      * @param int $team_id
      * @return bool
