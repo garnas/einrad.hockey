@@ -70,6 +70,7 @@ if (!isset($_POST['create'])) {
         <table>
         <tr><td>Zeitstempel: </td><td><?= $test->zeitstempel ?>         </td></tr>
         <tr><td>Prüfling:    </td><td><?= $test->spieler->get_name() ?> </td></tr>
+        <tr><td>E-Mail:      </td><td><?= $test->email ?>               </td></tr>
         <tr><td>Team:        </td><td><?= $test->spieler->get_team() ?> </td></tr>
         <tr><td>Level:       </td><td><?= $test->test_level ?>          </td></tr>
         <tr><td>URL:         </td><td><?= $test->url ?>                 </td></tr>
@@ -80,8 +81,8 @@ if (!isset($_POST['create'])) {
             Html::message('error', 'E-Mail an ' . $test->spieler->get_name() .
                 ' konnte nicht versendet werden.', 'Fehler:');
         } else { 
-            echo '<H3>' . $test->spieler->get_name() . '&lt;' . $test->email . '&gt';
-            echo 'hat eine E-Mail mit dem Link zur Prüfung bekommen.</H3>';
+            echo '<H4>' . $test->spieler->get_name() . ' &lt;' . $test->email . '&gt';
+            echo ' hat eine E-Mail mit dem Link zur Prüfung bekommen.</H4>';
         }
     }
 }

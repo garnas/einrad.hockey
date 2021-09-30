@@ -512,9 +512,11 @@ Mail;
         $mailer->addAddress($this->email, $this->spieler->get_name()); # Empfänger
         $mailer->addCC(Env::SCHIRIMAIL); # cc: an Schiriausschuss
         $mailer->Subject = 'Online Schiritest für ' . $this->spieler->get_name(); # Betreff
-        $mailer->Body = $text; # Text der E-Mail 
-        if (!MailBot::send_mail($mailer)) {
-            return false;
+        $mailer->Body = $text; # Text der E-Mail
+        if (MailBot::send_mail($mailer)) {
+            return true; # E-mail erfolgreich versendet
+        } else {
+            return false; # Fehler beim Versenden der E-Mail
         }
     }
 
