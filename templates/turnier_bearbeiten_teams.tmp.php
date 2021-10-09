@@ -34,8 +34,8 @@
                 <option <?php if($turnier->details['plaetze'] == '5'){?>selected<?php }?> value="5">5 Teams</option>
                 <option <?php if($turnier->details['plaetze'] == '6'){?>selected<?php }?> value="6">6 Teams</option>
                 <option <?php if($turnier->details['plaetze'] == '7'){?>selected<?php }?> value="7">7 Teams</option>
-                <option <?php if($turnier->details['plaetze'] == '8' && $turnier->details['format'] === 'gruppen'){?>selected<?php }?>value="8 gruppen">8 Teams (zwei Gruppen)</option>
-                <option <?php if($turnier->details['plaetze'] == '8' && $turnier->details['format'] === 'dko'){?>selected<?php }?>value="8 dko">8 Teams (Doppel-KO)</option>
+                <option <?php if($turnier->details['plaetze'] == '8' && $turnier->details['format'] === 'gruppen'){?>selected<?php }?> value="8 gruppen">8 Teams (zwei Gruppen)</option>
+                <option <?php if($turnier->details['plaetze'] == '8' && $turnier->details['format'] === 'dko'){?>selected<?php }?> value="8 dko">8 Teams (Doppel-KO)</option>
             </select>
         </p>
     </div>
