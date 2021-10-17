@@ -190,15 +190,15 @@ class LigaBot
         $warteliste = $turnier->get_warteliste();
         $meldeliste = $turnier->get_meldeliste();
         
-        foreach (($spielenliste ?? []) as $team) {
+        foreach ($spielenliste as $team) {
             // Das Team hat ein Freilos gesetzt, aber den falschen Freilosblock
-            if ($team['freilos_gesetzt'] === 'Ja' && !$turnier->is_spielberechtigt_freilos($team['team_id'])) {
-                $turnier->set_log("Falscher Freilos-Block: " . $team['teamname']
-                    . "\r\nTeamb. " . Tabelle::get_team_block($team['team_id']) . " | Turnierb. " . $turnier->get_tblock()
+            if ($team->freilos_gesetzt === 'Ja' && !$turnier->is_spielberechtigt_freilos($team->id)) {
+                $turnier->set_log("Falscher Freilos-Block: " . $team->details['teamname']
+                    . "\r\nTeamb. " . Tabelle::get_team_block($team->id) . " | Turnierb. " . $turnier->get_tblock()
                     . "\r\nFreilos wird erstattet");
-                $turnier->set_liste($team['team_id'], 'warte');
-                Team::add_freilos($team['team_id']);
-                MailBot::mail_freilos_abmeldung($turnier, $team['team_id']);
+                $turnier->set_liste($team->id, 'warte');
+                Team::add_freilos($team->id);
+                MailBot::mail_freilos_abmeldung($turnier, $team->id);
                 // Anmeldeliste aktualisieren
                 $liste = $turnier->get_anmeldungen();
             }
@@ -215,12 +215,12 @@ class LigaBot
                                                     // Teams mit falschem Block
         // Aufteilung der Teams in die Lostöpf, Teams mit falschem Freilos wurden schon abgemeldet
         foreach ($meldeliste as $team) {
-            if ($team['ligateam'] === 'Nein') {
-                $los_nl[] = $team['team_id'];
-            } elseif ($turnier->is_spielberechtigt($team['team_id'])) {
-                $los_rblock[] = $team['team_id'];
+            if ($team->details['ligateam'] === 'Nein') {
+                $los_nl[] = $team->id;
+            } elseif ($turnier->is_spielberechtigt($team->id)) {
+                $los_rblock[] = $team->id;
             } else {
-                $los_fblock[] = $team['team_id'];
+                $los_fblock[] = $team->id;
             }
         }
 

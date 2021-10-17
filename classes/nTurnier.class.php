@@ -593,7 +593,7 @@ class nTurnier
     {
         $sql = "
                 SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam,
-                    teams_details.ligavertreter, teams_details.trikot_farbe_1, teams_details.trikot_farbe_2
+                    teams_details.ligavertreter, teams_details.trikot_farbe_1, teams_details.trikot_farbe_2, turniere_liste.freilos_gesetzt
                 FROM turniere_liste
                 LEFT JOIN teams_liga
                 ON turniere_liste.team_id = teams_liga.team_id
@@ -615,6 +615,7 @@ class nTurnier
                 $temp = new Team($team_id);
                 $temp->set_wertigkeit($this->spieltag);
                 $temp->set_tblock($this->spieltag);
+                $temp->set_freilos_gesetzt($team['freilos_gesetzt']);    
                 $spielenliste[$team_id] = $temp;
             }
 
@@ -1358,7 +1359,7 @@ class nTurnier
     {
         $sql = "
                 DELETE FROM turniere_liste 
-                WHERE turnier_id = 
+                WHERE turnier_id = ?
                 AND team_id = ?
                 ";
         db::$db->query($sql, $this->turnier_id, $team_id)->log();

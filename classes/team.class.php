@@ -22,6 +22,7 @@ class Team
     public ?string $tblock;
     public ?int $rang;
     public ?int $position_warteliste;
+    public ?string $freilos_gesetzt;
 
     /**
      * Team constructor.
@@ -589,6 +590,16 @@ class Team
     public function set_tblock(int $spieltag): void
     {
         $this->tblock = Tabelle::get_team_block($this->id, $spieltag - 1);
+    }
+
+    /**
+     * Setzt die Information, ob ein Freilos gesetzt wurde
+     * 
+     * @param string $freilos_gesetzt
+     */
+    public function set_freilos_gesetzt(string $freilos_gesetzt): void
+    {
+        $this->freilos_gesetzt = $freilos_gesetzt;
     }
 
     /**
