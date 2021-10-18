@@ -60,6 +60,8 @@ include '../../templates/header.tmp.php';?>
     <?=Html::link('#ergebnis', '<span class="material-icons">emoji_events</span> Ergebnisphase-Turniere')?>
     <br>
     <?=Html::link('#deleted', '<span class="material-icons">not_interested</span> Gelöschte Turniere')?>
+    <br>
+    <?=Html::link('lc_spielerausleihe.php', '<span class="material-icons">person_add</span> Spielerausleihe')?>
 </p>
 
 <h2 id="anstehend" class="w3-text-primary"><i style="font-size: 31px; vertical-align: -19%;" class="material-icons">sports_hockey</i> Anstehende Turniere</h2>
