@@ -134,7 +134,7 @@
                 >
                     <option selected disabled>--</option>
                     <?php foreach($teams as $team){?>
-                        <option><?=$team['teamname']?></option>
+                        <option><?=$team->teamname?></option>
                     <?php } //end foreach?>
                 </select>
             </p>
@@ -230,14 +230,14 @@
                 <select id="zeitstrafe_team_a" name="zeitstrafe_team_a" class="w3-select w3-input w3-border w3-border-primary">
                     <option disabled selected>--</option>
                     <?php foreach($teams as $team){?>
-                        <option><?=$team['teamname']?></option>
+                        <option><?=$team->teamname?></option>
                     <?php } //end foreach?>
                 </select>
                 <label for="zeitstrafe_team_b" class="w3-text-grey">versus</label>
                 <select id="zeitstrafe_team_b" name="zeitstrafe_team_b" class="w3-select w3-input w3-border w3-border-primary">
                     <option disabled selected>--</option>
                     <?php foreach($teams as $team){?>
-                        <option><?=$team['teamname']?></option>
+                        <option><?=$team->teamname?></option>
                     <?php } //end foreach?>
                 </select>
             </p>
