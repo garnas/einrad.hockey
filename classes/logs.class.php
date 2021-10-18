@@ -7,7 +7,7 @@ class Logs
      *
      * @return array
      */
-    public static function get_logs(): array
+    public static function get_turnier_logs(): array
     {
         $sql = "
             SELECT turniere_liga.datum, turniere_details.ort, turniere_liga.tblock, turniere_log.turnier_id, log_text, autor, zeit

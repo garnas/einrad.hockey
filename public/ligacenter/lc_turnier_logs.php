@@ -6,13 +6,13 @@ require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
 // Logs des Turnieres bekommen
-$logs = Logs::get_logs();
+$logs = Logs::get_turnier_logs();
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-Html::$titel = "Gesamtlogs | Ligacenter";
+Html::$titel = "Gesamtlogs Turniere | Ligacenter";
 Html::$content = "Hier wird der gesamte Log aller Turniere angezeigt.";
 include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 
