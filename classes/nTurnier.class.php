@@ -1452,7 +1452,7 @@ class nTurnier
             $this->set_ergebnis($team_id, $ergebnis['ligapunkte'], $ergebnis['platz']);
         }
 
-        $this->set_phase('ergebnis');
+        $this->update_phase('ergebnis');
         $this->set_log("Turnierergebnis wurde in die Datenbank eingetragen");
     }
 
@@ -1525,6 +1525,22 @@ class nTurnier
         $this->set_log("Turnier wurde gelöscht.");
         // Spieltage neu sortieren
         Ligabot::set_spieltage();
+    }
+
+    /**
+     * Ändert die Phase des Turniers, ohne dass das gesamte Turnier durch ein Update muss
+     * 
+     * @param string $phase
+     */
+    public function update_phase(string $phase): void
+    {
+        $sql = "
+            UPDATE turniere_liga
+            SET phase = ?
+            WHERE turnier_id = ?;
+        ";
+        db::$db->query($sql, $phase, $this->turnier_id)->log();
+        $this->set_log("Turnierphase angepasst");
     }
 
     /**

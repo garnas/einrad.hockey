@@ -63,7 +63,7 @@ class LigaBot
                 $turnier->get_phase() === 'offen'
                 && self::time_offen_melde($turnier->get_datum()) <= time()
             ) {
-                $turnier->set_phase('melde');
+                $turnier->update_phase('melde');
                 // Losen setzt alle Teams in richtiger Reihenfolge auf die Warteliste.
                 self::losen($turnier);
                 // Füllt die Spielen-Liste auf.

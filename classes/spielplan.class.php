@@ -44,7 +44,7 @@ class Spielplan
 
         // Spielplan
         $this->teamliste = $this->turnier->get_spielenliste();
-        $this->anzahl_teams = count($this->teamliste);
+        $this->anzahl_teams = $this->turnier->get_anz_spielenliste();
 
         $this->details = $this->get_details();
         if (empty($this->details)) {
@@ -100,7 +100,7 @@ class Spielplan
     /**
      * Erstellt einen Spielplan in der Datenbank
      *
-     * @param Turnier $turnier
+     * @param nTurnier $turnier
      * @return bool Erfolgreich / Nicht erfolgreich estellt
      */
     public static function fill_vorlage(nTurnier $turnier): bool
@@ -146,18 +146,18 @@ class Spielplan
             $params = [
                 $turnier->get_turnier_id(),
                 $spiel["spiel_id"],
-                $teamliste[$spiel["team_a"]]["team_id"],
-                $teamliste[$spiel["team_b"]]["team_id"],
-                $teamliste[$spiel["schiri_a"]]["team_id"],
-                $teamliste[$spiel["schiri_b"]]["team_id"]
+                $teamliste[$spiel["team_a"]]->id,
+                $teamliste[$spiel["team_b"]]->id,
+                $teamliste[$spiel["schiri_a"]]->id,
+                $teamliste[$spiel["schiri_b"]]->id
             ];
             db::$db->query($sql, $params)->log();
         }
 
         // Turnierlog
-        $turnier->log("Automatischer Jgj-Spielplan erstellt.");
-        $turnier->set_liga('phase', 'spielplan');
-        $turnier->set_liga('spielplan_vorlage', $vorlage);
+        $turnier->set_log("Automatischer Jgj-Spielplan erstellt.");
+        $turnier->update_phase('spielplan');
+        $turnier->set_spielplan_vorlage($vorlage);
 
         return true;
     }
@@ -187,7 +187,7 @@ class Spielplan
         }
 
         // Nur JgJ-Spielpläne sind in der Datenbank hinterlegt.
-        if ($turnier->get_format() !== 'jgj') {
+        if ($turnier->get_format() !== 'jgj' && $anzahl_teams == 8) {
             return false;
         }
 
@@ -212,6 +212,7 @@ class Spielplan
         if (!empty($turnier->get_spielplan_vorlage())) {
             $turnier->set_spielplan_vorlage(null);
         }
+        
         // Es existiert kein dynamischer Spielplan
         if (!self::check_exist($turnier->get_turnier_id())) {
             return;
@@ -224,7 +225,7 @@ class Spielplan
                 ";
         db::$db->query($sql, $turnier->get_turnier_id())->log();
         $turnier->set_log("Automatischer JgJ-Spielplan gelöscht.");
-        $turnier->set_phase('melde');
+        $turnier->update_phase('melde');
     }
 
     /**
@@ -359,12 +360,12 @@ class Spielplan
         $team_id_b = $spiel['team_id_b'];
         $farben = [
             $team_id_a => [
-                1 => $this->teamliste[$spiel['team_id_a']]['trikot_farbe_1'],
-                2 => $this->teamliste[$spiel['team_id_a']]['trikot_farbe_2']
+                1 => $this->teamliste[$spiel['team_id_a']]->details['trikot_farbe_1'],
+                2 => $this->teamliste[$spiel['team_id_a']]->details['trikot_farbe_2']
             ],
             $team_id_b => [
-                1 => $this->teamliste[$spiel['team_id_b']]['trikot_farbe_1'],
-                2 => $this->teamliste[$spiel['team_id_b']]['trikot_farbe_2']
+                1 => $this->teamliste[$spiel['team_id_b']]->details['trikot_farbe_1'],
+                2 => $this->teamliste[$spiel['team_id_b']]->details['trikot_farbe_2']
             ]
         ];
 
@@ -504,7 +505,7 @@ class Spielplan
         $this->platzierungstabelle[$team_id] =
             [
                 'platz' => count($this->platzierungstabelle) + 1,
-                'teamname' => $this->teamliste[$team_id]['teamname'],
+                'teamname' => $this->teamliste[$team_id]->teamname,
                 'ligapunkte' => 0,
                 'statistik' => $this->turnier_tabelle[$team_id],
             ];
@@ -519,8 +520,8 @@ class Spielplan
         $reverse_tabelle = array_reverse($this->platzierungstabelle, true);
         $last_ligateam = function () use ($reverse_tabelle) {
             foreach ($reverse_tabelle as $team_id => $eintrag) {
-                if ($this->teamliste[$team_id]['wertigkeit'] !== NULL) {
-                    return $this->teamliste[$team_id]['wertigkeit'];
+                if ($this->teamliste[$team_id]->wertigkeit !== NULL) {
+                    return $this->teamliste[$team_id]->wertigkeit;
                 }
             }
             return NULL;
@@ -528,12 +529,12 @@ class Spielplan
 
         $ligapunkte = 0;
         foreach ($reverse_tabelle as $team_id => $eintrag) {
-            if (is_null($this->teamliste[$team_id]['wertigkeit'])) {
+            if (is_null($this->teamliste[$team_id]->wertigkeit)) {
                 // Es handelt sich um ein Nichtligateam // max($werte) + 1 wenn nicht Letzter.
                 $wert = max($werte ?? [round($last_ligateam() / 2 - 1), 14]) + 1;
             } else {
                 // Normales Ligateam
-                $wert = $this->teamliste[$team_id]['wertigkeit'];
+                $wert = $this->teamliste[$team_id]->wertigkeit;
             }
             $werte[] = $wert;
             $ligapunkte += $wert;
