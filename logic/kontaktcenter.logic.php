@@ -1,4 +1,7 @@
 <?php
+// BCC Grenze
+$grenze_bcc = Config::BCC_GRENZE;
+
 // Für die Turnierauswahl
 $turniere = nTurnier::get_turniere();
 
