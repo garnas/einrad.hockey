@@ -11,4 +11,4 @@ $turniere = nTurnier::get_turniere();
 
 $xml = new SimpleXMLElement('<turniere/>');
 
-xml::array_to_xml($turniere,$xml,"turnier");
+xml::turnier_array_to_xml($turniere, $xml);
