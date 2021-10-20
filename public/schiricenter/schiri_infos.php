@@ -16,7 +16,7 @@ include '../../templates/header.tmp.php';
 <?php if (isset($DEBUGMODUS)) { # Start Debug Modus ?>
     <P><div class="w3-ul w3-pale-red w3-bordered">
         DEBUGGING:
-        <?=Html::link("uebungstest_l_debug.php", "Übungstest (Lehrgang)",
+        <?=Html::link("uebungstest_l_debug.php", "Einzelne Fragen",
                       false, false)?> /
         <?=Html::link("uebungstest_j_debug.php", "Übungstest (Junior)",
                       false, false)?> /
@@ -31,12 +31,15 @@ include '../../templates/header.tmp.php';
     werden wollen</h1>
 
 <UL>
-    <LI>Es gibt immer einen schriftlichen Test, und dann eine praktische Prüfung.</LI>
-    <LI>Der schriftliche Test gilt bis ???.</LI>
-    <LI>Die Schirilizenz gilt für ??? Jahre.</LI>
-    <LI>Teams mit mindestens ??? Schiris haben folgende Vorteile: ???</LI>
-    <LI>(...hier noch mehr Infos hinzufügen...)</LI>
-    <LI>(alle Infos gelten für die Saison 2021/2022)</LI>
+    <LI><div class="w3-pale-red w3-text-red">DEBUGGING: Folgenden Text
+        überprüfen und noch mehr Infos hinzufügen:</div></LI>
+    <LI>Zuerst gibt es einen schriftlichen (online Multiple-Choice) Test.</LI>
+    <LI>Der bestandene schriftliche Test gilt 6 Monate. Innerhalb dieser
+    Zeit kann eine praktische Prüfung erfolgen.</LI>
+    <LI>Nach dem Bestehen der praktischen Prüfung gilt die Schirilizenz
+    für die aktuelle und nächste Saison.</LI>
+    <LI>Teams mit mindestens 2 Schiris bekommen ein zusätzliches Freilos.</LI>
+    <LI>Alle Infos gelten für die Saison 2021/2022.</LI>
 </UL>
 
 <div class="w3-responsive w3-card">
@@ -47,30 +50,29 @@ include '../../templates/header.tmp.php';
         </tr>
         <tr>
             <th class="w3-primary-3"><?=Html::link("uebungstest_l.php",
-                "Übungstest (Lehrgang)", false, false)?></th>
-            <td>Dieser Test eignet sich für einen Schirilehrgang. Es
-            wird immer 1 Frage gestellt, und auf der nächsten Seite
-            kommt die Auflösung. Es ist auch möglich, per ID eine
-            gezielte Frage auszuwählen.</tr>
+                "Einzelne Fragen", false, false)?></th>
+            <td>Hier wird eine einzelne, zufällig ausgewählte Frage
+                gestellt, und auf der nächsten Seite kommt die Auflösung
+                mit Erklärung.</td>
         </tr>
         <tr>
             <th class="w3-primary-3"><?=Html::link("uebungstest_j.php",
                 "Übungstest (Junior)", false, false)?></th>
             <td>Dies ist ein kompletter Test (<?=array_sum(SchiriTest::anzahl_J)?> Fragen)
-            als Vorbereitung auf die Junior-Schiriprüfung.</tr>
+            als Vorbereitung auf die Junior-Schiriprüfung.</td>
         </tr>
         <tr>
             <th class="w3-primary-3"><?=Html::link("uebungstest_b.php",
                 "Übungstest (Basis)", false, false)?></th>
             <td>Dies ist ein kompletter Test (<?=array_sum(SchiriTest::anzahl_B)?> Fragen)
-            als Vorbereitung auf die Basis-Schiriprüfung.</tr>
+            als Vorbereitung auf die Basis-Schiriprüfung.</td>
         </tr>
         <tr>
             <th class="w3-primary-3"><?=Html::link("uebungstest_f.php",
                 "Übungstest (Fortgeschrittene)", false, false)?></th>
             <td>Dies ist ein kompletter Test
             (<?=array_sum(SchiriTest::anzahl_F)?> Fragen) als
-            Vorbereitung auf die Schiriprüfung für Fortgeschrittene.</tr>
+            Vorbereitung auf die Schiriprüfung für Fortgeschrittene.</td>
         </tr>
     </table>
 </div>
@@ -86,7 +88,7 @@ include '../../templates/header.tmp.php';
             <th class="w3-primary-3"><?=Html::link(Nav::LINK_REGELN,
                                                    'Regelwerk', false, false)?></th>
             <td>Hier gibt es die kompletten Regeln der deutschen
-                Einradhockeyliga als pdf.</tr>
+                Einradhockeyliga als pdf.</td>
         </tr>
     </table>
 </div>

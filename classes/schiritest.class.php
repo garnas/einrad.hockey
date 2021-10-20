@@ -19,11 +19,11 @@ class SchiriTest
     #                             0  1  2  3  4  5  6  7  8  9 10 11
     public const anzahl_L = array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     public const anzahl_J = array(0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1);
-    public const anzahl_B = array(0, 2, 3, 1, 1, 3, 3, 3, 6, 4, 1, 3);
+    public const anzahl_B = array(0, 1, 2, 1, 0, 2, 2, 2, 4, 3, 1, 2);
     public const anzahl_F = array(0, 2, 3, 1, 1, 3, 3, 3, 6, 4, 1, 3);
     public const lev_infos = array(
         'L'=>array(
-            'name'        => 'Lehrgang',
+            'name'        => 'einzelne Fragen',
             'anzahl'      => self::anzahl_L,
             'timelimit'   => 10,  # in Minuten
             'richtig_min' => 1),  # Minimum zum Bestehen
@@ -35,8 +35,8 @@ class SchiriTest
         'B'=>array(
             'name'        => 'Basis',
             'anzahl'      => self::anzahl_B,
-            'timelimit'   => 45,  # in Minuten
-            'richtig_min' => 25), # Minimum zum Bestehen
+            'timelimit'   => 30,  # in Minuten
+            'richtig_min' => 17), # Minimum zum Bestehen
         'F'=>array(
             'name'        => 'Fortgeschrittene',
             'anzahl'      => self::anzahl_F,
