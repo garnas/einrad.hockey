@@ -3,7 +3,6 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
-$DEBUGMODUS = true;
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -30,12 +29,14 @@ include '../../templates/header.tmp.php';
 <h1 class="w3-text-primary">Infos für Schiedsrichter und alle, die es
     werden wollen</h1>
 
-<UL>
-    <LI><div class="w3-pale-red w3-text-red">DEBUGGING: Folgenden Text
-        überprüfen und noch mehr Infos hinzufügen:</div></LI>
+<UL>    
+    <LI>Wer die Schiedsrichterprüfung ablegen möchte, kann das dem
+        Schiedsrichterausschuss einfach per Email mitteilen.</LI>    
+    <LI>Wenn ein bestimmter Prüfungstermin gewünscht wird, muss die
+        Anmeldung spätestens eine Woche vorher erfolgen.</LI>
     <LI>Zuerst gibt es einen schriftlichen (online Multiple-Choice) Test.</LI>
-    <LI>Der bestandene schriftliche Test gilt 6 Monate. Innerhalb dieser
-    Zeit kann eine praktische Prüfung erfolgen.</LI>
+    <LI>Die bestandene theoretische Prüfung berechtigt innerhalb der
+        nachfolgenden 6 Monate, die praktische Prüfung anzutreten.</LI>
     <LI>Nach dem Bestehen der praktischen Prüfung gilt die Schirilizenz
     für die aktuelle und nächste Saison.</LI>
     <LI>Teams mit mindestens 2 Schiris bekommen ein zusätzliches Freilos.</LI>
@@ -52,28 +53,29 @@ include '../../templates/header.tmp.php';
             <th class="w3-primary-3"><?=Html::link("uebungstest_l.php",
                 "Einzelne Fragen", false, false)?></th>
             <td>Hier wird eine einzelne, zufällig ausgewählte Frage
-                gestellt, und auf der nächsten Seite kommt die Auflösung
+                gestellt, und nach der Beantwortung kommt die Auflösung
                 mit Erklärung.</td>
         </tr>
-        <tr>
-            <th class="w3-primary-3"><?=Html::link("uebungstest_j.php",
-                "Übungstest (Junior)", false, false)?></th>
-            <td>Dies ist ein kompletter Test (<?=array_sum(SchiriTest::anzahl_J)?> Fragen)
-            als Vorbereitung auf die Junior-Schiriprüfung.</td>
-        </tr>
+        <!-- TODO: Junior und Fortgeschrittenentest demnächst wieder aktivieren!!! -->
+        <!-- <tr>
+             <th class="w3-primary-3"><?=Html::link("uebungstest_j.php",
+                                      "Übungstest (Junior)", false, false)?></th>
+             <td>Dies ist ein kompletter Test (<?=array_sum(SchiriTest::anzahl_J)?> Fragen)
+             als Vorbereitung auf die Junior-Schiriprüfung.</td>
+             </tr> -->
         <tr>
             <th class="w3-primary-3"><?=Html::link("uebungstest_b.php",
                 "Übungstest (Basis)", false, false)?></th>
             <td>Dies ist ein kompletter Test (<?=array_sum(SchiriTest::anzahl_B)?> Fragen)
             als Vorbereitung auf die Basis-Schiriprüfung.</td>
         </tr>
-        <tr>
-            <th class="w3-primary-3"><?=Html::link("uebungstest_f.php",
-                "Übungstest (Fortgeschrittene)", false, false)?></th>
-            <td>Dies ist ein kompletter Test
-            (<?=array_sum(SchiriTest::anzahl_F)?> Fragen) als
-            Vorbereitung auf die Schiriprüfung für Fortgeschrittene.</td>
-        </tr>
+        <!-- <tr>
+             <th class="w3-primary-3"><?=Html::link("uebungstest_f.php",
+                                      "Übungstest (Fortgeschrittene)", false, false)?></th>
+             <td>Dies ist ein kompletter Test
+             (<?=array_sum(SchiriTest::anzahl_F)?> Fragen) als
+             Vorbereitung auf die Schiriprüfung für Fortgeschrittene.</td>
+             </tr> -->
     </table>
 </div>
 
