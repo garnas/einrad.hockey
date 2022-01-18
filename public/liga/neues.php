@@ -14,7 +14,7 @@ $turniere = nTurnier::get_turniere_kommend();
 $anz_next_turniere = count($turniere);
 $next_turniere = array_slice($turniere, 0, 4);
 
-$turniere = nTurnier::get_turniere_ergebnis();
+$turniere = nTurnier::get_turniere_ergebnis($asc = false);
 $anz_last_turniere = count($turniere);
 $last_turniere = array_slice($turniere, 0, 4);
 
