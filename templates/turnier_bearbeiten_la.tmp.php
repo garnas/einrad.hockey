@@ -1,5 +1,5 @@
 <!-- Formular Turnier löschen -->
-<form method="post" onsubmit="return confirm('Das Turnier in <?=$turnier->details['ort']?> am <?=$turnier->details['datum']?> (<?=$turnier->details['tblock']?>) mit der ID <?=$turnier->details['turnier_id']?> wird gelöscht werden.');">
+<form method="post" onsubmit="return confirm('Das Turnier in <?=$turnier->get_ort()?> am <?=$turnier->get_datum()?> (<?=$turnier->get_tblock()?>) mit der ID <?=$turnier->get_turnier_id()?> wird gelöscht werden.');">
     <div class="w3-panel w3-card-4">
         <h3>Turnier löschen <span class="w3-text-gray">- nur Ligaausschuss</span></h3>
         <p>
@@ -30,43 +30,43 @@
         <h3>Turnierdaten <span class="w3-text-gray">- nur Ligaausschuss</span></h3>
         <p>
             <label for="ausrichter" class='w3-text-primary'>Ausrichter ändern</label><br>
-            <input type="text" class="w3-input w3-border w3-border-primary" value="<?=$turnier->details['teamname']?>" list="teams" id="ausrichter" name="ausrichter">
+            <input type="text" class="w3-input w3-border w3-border-primary" value="<?=Team::id_to_name($turnier->get_ausrichter())?>" list="teams" id="ausrichter" name="ausrichter">
                 <?=Html::datalist_teams()?>
         </p>
         <p>
             <label class="w3-text-primary" for="tname">Turniername <i class="w3-small">(optional)</i></label>
-            <input type="text" maxlength="25" value="<?=$turnier->details['tname'];?>" class="w3-input w3-border w3-border-primary" id="tname" name="tname">
+            <input type="text" maxlength="25" value="<?=$turnier->get_tname();?>" class="w3-input w3-border w3-border-primary" id="tname" name="tname">
         </p>
         <p>
             <label class="w3-text-primary" for="datum">Datum</label>
-            <input required type="date" value="<?=$turnier->details['datum'];?>" class="w3-input w3-border w3-border-primary" style="max-width: 320px" id="datum" name="datum">
+            <input required type="date" value="<?=$turnier->get_datum();?>" class="w3-input w3-border w3-border-primary" style="max-width: 320px" id="datum" name="datum">
         </p>
         <h3>Ligalogik <span class="w3-text-gray">- nur Ligaausschuss</span></h3>
         <p>
             <label class="w3-text-primary" for="phase">Phase</label>
-            <select required type="date" value="<?=$turnier->details['phase'];?>" class="w3-input w3-border w3-border-primary" id="phase" name="phase">
-                <option <?php if($turnier->details['phase'] == 'offen'){?> selected <?php }?> value="offen">Offene Phase</option>
-                <option <?php if($turnier->details['phase'] == 'melde'){?> selected <?php }?> value="melde">Meldephase</option>
-                <option <?php if($turnier->details['phase'] == 'spielplan'){?> selected <?php }?> value="spielplan">Spielplan</option>
-                <option <?php if($turnier->details['phase'] == 'ergebnis'){?> selected <?php }?> value="ergebnis">Ergebnis</option>
+            <select required type="date" value="<?=$turnier->get_phase();?>" class="w3-input w3-border w3-border-primary" id="phase" name="phase">
+                <option <?php if($turnier->get_phase() == 'offen'){?> selected <?php }?> value="offen">Offene Phase</option>
+                <option <?php if($turnier->get_phase() == 'melde'){?> selected <?php }?> value="melde">Meldephase</option>
+                <option <?php if($turnier->get_phase() == 'spielplan'){?> selected <?php }?> value="spielplan">Spielplan</option>
+                <option <?php if($turnier->get_phase() == 'ergebnis'){?> selected <?php }?> value="ergebnis">Ergebnis</option>
             </select>
         </p>
         <p>
             <label class="w3-text-primary" for="art">Turnierart</label>
             <select required class="w3-select w3-border w3-border-primary" id="art" name="art">
-                <option <?php if($turnier->details['art'] == 'I'){?> selected <?php }?> value="I">I: Blockeigenes Turnier</option>
-                <option <?php if($turnier->details['art'] == 'II'){?> selected <?php }?> value="II">II: Blockhöheres Turnier</option>
-                <option <?php if($turnier->details['art'] == 'III'){?> selected <?php }?> value="III">III: Blockfreies Turnier (ABCDEF)</option>
-                <option <?php if($turnier->details['art'] == 'spass'){?> selected <?php }?> value="spass">Spaßturnier</option>
-                <option <?php if($turnier->details['art'] == 'final'){?> selected <?php }?> value='final'>Abschlussturnier</option>
-                <option <?php if($turnier->details['art'] == 'fixed'){?> selected <?php }?> value='fixed'>Manuelles (fixed) Turnier</option>
+                <option <?php if($turnier->get_art() == 'I'){?> selected <?php }?> value="I">I: Blockeigenes Turnier</option>
+                <option <?php if($turnier->get_art() == 'II'){?> selected <?php }?> value="II">II: Blockhöheres Turnier</option>
+                <option <?php if($turnier->get_art() == 'III'){?> selected <?php }?> value="III">III: Blockfreies Turnier (ABCDEF)</option>
+                <option <?php if($turnier->get_art() == 'spass'){?> selected <?php }?> value="spass">Spaßturnier</option>
+                <option <?php if($turnier->get_art() == 'final'){?> selected <?php }?> value='final'>Abschlussturnier</option>
+                <option <?php if($turnier->get_art() == 'fixed'){?> selected <?php }?> value='fixed'>Manuelles (fixed) Turnier</option>
             </select>
         </p>
         <p>
         <label class="w3-text-primary" for="block">Turnierblock</label>
         <select required class="w3-select w3-border w3-border-primary" id="block" name="block">';
         <?php foreach (Config::BLOCK_ALL as $block){?>
-            <option <?php if ($turnier->details['tblock'] == $block){?> selected <?php }?> value='<?=$block?>'><?=$block?></option>
+            <option <?php if ($turnier->get_tblock() == $block){?> selected <?php }?> value='<?=$block?>'><?=$block?></option>
         <?php } //end foreach?>
         </select>
         <i class="w3-text-primary">Nach ändern des Blockes sollten die Anmeldelisten kontrolliert werden.</i>

@@ -6,18 +6,18 @@ require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
 // Turnierobjekt erstellen
-$turnier = new Turnier ((int) @$_GET['turnier_id']);
+$turnier = nTurnier::get((int) @$_GET['turnier_id']);
 
 // Logs des Turnieres bekommen
-$logs = $turnier->get_turnier_logs();
+$logs = $turnier->get_log();
 
 // Gelöschtes Turnier
-if (empty($turnier->details) & !empty($logs)){
+if (empty($turnier->get_turnier_id()) & !empty($logs)){
     Html::notice("Turnier wurde gelöscht.");
 }
 
 // Turnier nicht gefunden
-if (empty($turnier->details) & empty($logs)){
+if (empty($turnier->get_turnier_id()) & empty($logs)){
     Html::notice("Es wurden keine Turnierlogs gefunden");
     header('Location: lc_turnierliste.php');
     die();
@@ -28,10 +28,10 @@ if (empty($turnier->details) & empty($logs)){
 /////////////////////////////////////////////////////////////////////////////
 include '../../templates/header.tmp.php';
 ?>
-<?php if (!empty($turnier->details)){?>
-    <h2>Turnierlog <?=$turnier->details['datum'] . ' ' . $turnier->details['tname']?> <?=$turnier->details['ort']?> (<?=$turnier->details['tblock']?>)</h2>
+<?php if (!empty($turnier->get_turnier_id())){?>
+    <h2>Turnierlog <?=$turnier->get_datum() . ' ' . $turnier->get_tname()?> <?=$turnier->get_ort()?> (<?=$turnier->get_tblock()?>)</h2>
 <?php }else{ ?>
-    <h2>Turnierlog Turnier-ID <?=$turnier->id?></h2>
+    <h2>Turnierlog Turnier-ID <?=$turnier->get_turnier_id()?></h2>
 <?php } //endif?>
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-striped">

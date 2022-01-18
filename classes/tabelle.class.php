@@ -57,31 +57,6 @@ class Tabelle
     }
 
     /**
-     * True, wenn das Turnierergebnis eingetragen werden darf. Also jedes vorherige Turnier in der Ergebnisphase ist.
-     *
-     * @param Turnier $turnier
-     * @return bool
-     */
-    public static function check_ergebnis_eintragbar(Turnier $turnier): bool
-    {
-        if (!in_array($turnier->details['art'], ['I', 'II', 'III', 'final'])) {
-            Html::error("Für diesen Turniertyp können keine Ergebnisse eingetragen werden.");
-            // TODO ist der Check hier an der besten Stelle?
-            return false;
-        }
-        $sql = "
-                SELECT * 
-                FROM turniere_liga 
-                WHERE spieltag < ? 
-                AND spieltag != 0 
-                AND (art='I' OR art = 'II' OR art='III') 
-                AND saison = ?
-                AND phase != 'ergebnis'
-                ";
-        return db::$db->query($sql, $turnier->details['spieltag'], $turnier->details['saison'])->num_rows() === 0;
-    }
-
-    /**
      * Gibt die Platzierung eines Teams in der Rangtabelle zurück
      *
      * @param int $team_id

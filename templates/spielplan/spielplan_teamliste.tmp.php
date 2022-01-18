@@ -12,9 +12,9 @@
             <?php foreach ($spielplan->teamliste as $team_id => $team) { ?>
                 <tr>
                     <td><?= $team_id ?></td>
-                    <td><?= $team["teamname"] ?></td>
-                    <td><?= $team["tblock"] ?></td>
-                    <td class="w3-hide-small"><?= $team["wertigkeit"] ?></td>
+                    <td><?= $team->teamname ?></td>
+                    <td><?= $team->tblock ?></td>
+                    <td class="w3-hide-small"><?= $team->wertigkeit ?></td>
                 </tr>
             <?php }//end foreach?>
         </table>
@@ -40,7 +40,7 @@
                     <th><?= Html::icon("group") ?><br>Team</th>
                     <th><?= Html::icon("reorder") ?><br>Block</th>
                     <th><?= Html::icon("arrow_circle_up") ?><br>Wertung</th>
-                    <?php if ($spielplan->turnier->details['phase'] !== 'ergebnis') { ?>
+                    <?php if ($spielplan->turnier->get_phase() !== 'ergebnis') { ?>
                         <th><span class="pdf-hide"><?= Html::icon("invert_colors") ?><br>Trikots</span></th>
                     <?php } //endif?>
                     <th><span class="pdf-hide"><?= Html::icon("account_circle") ?><br>Ligavertreter</span></th>
@@ -49,18 +49,18 @@
                 <?php foreach ($spielplan->teamliste as $team_id => $team) { ?>
                     <tr>
                         <td><?= $team_id ?></td>
-                        <td><?= $team["teamname"] ?></td>
-                        <td><?= $team["tblock"] ?></td>
-                        <td><?= $team["wertigkeit"] ?></td>
-                        <?php if ($spielplan->turnier->details['phase'] !== 'ergebnis') { ?>
+                        <td><?= $team->teamname ?></td>
+                        <td><?= $team->tblock ?></td>
+                        <td><?= $team->wertigkeit ?></td>
+                        <?php if ($spielplan->turnier->get_phase() !== 'ergebnis') { ?>
                             <td>
                                 <span class="pdf-hide">
-                                    <?= Html::trikot_punkt($team['trikot_farbe_1'], $team['trikot_farbe_2']) ?>
+                                    <?= Html::trikot_punkt($team->details['trikot_farbe_1'], $team->details['trikot_farbe_2']) ?>
                                 </span>
                             </td>
                         <?php } // end if ?>
                         <td>
-                            <span class="pdf-hide"><?= $team["ligavertreter"] ?></span>
+                            <span class="pdf-hide"><?= $team->details["ligavertreter"] ?></span>
                         </td>
                         <td>
                             <span class="pdf-hide">

@@ -12,6 +12,17 @@ class Team
      */
     public int $id;
     public array $details;
+    public string $teamname;
+
+    /**
+     * Werden nur bei Bedarf gesetzt.
+     * Dazu müssen dann die entsprechenden Setter aufgerufen werden.
+     */
+    public ?int $wertigkeit;
+    public ?string $tblock;
+    public ?int $rang;
+    public ?int $position_warteliste;
+    public ?string $freilos_gesetzt;
 
     /**
      * Team constructor.
@@ -21,6 +32,7 @@ class Team
     {
         $this->id = $team_id;
         $this->details = $this->get_details();
+        $this->teamname = $this->set_teamname();
     }
 
     /**
@@ -558,5 +570,118 @@ class Team
                 WHERE team_id = $this->id
                 ";
         db::$db->query($sql, $passwort_hash, $pw_geaendert)->log();
+    }
+
+    /**
+     * Setzt die Wertigkeit vor dem benannten Spieltag
+     * 
+     * @param int $spieltag
+     */
+    public function set_wertigkeit(int $spieltag): void
+    {
+        $this->wertigkeit = Tabelle::get_team_wertigkeit($this->id, $spieltag - 1);
+    }
+
+    /**
+     * Setzt den Teamblock vor dem benannten Spieltag
+     * 
+     * @param int $spieltag
+     */
+    public function set_tblock(int $spieltag): void
+    {
+        $this->tblock = Tabelle::get_team_block($this->id, $spieltag - 1);
+    }
+
+    /**
+     * Setzt die Information, ob ein Freilos gesetzt wurde
+     * 
+     * @param string $freilos_gesetzt
+     */
+    public function set_freilos_gesetzt(string $freilos_gesetzt): void
+    {
+        $this->freilos_gesetzt = $freilos_gesetzt;
+    }
+
+    /**
+     * Setzte den Teamrang vor dem benannten Spieltag
+     * 
+     * @param int $spieltag
+     */
+    public function set_rang(int $spieltag): void
+    {
+        $this->rang = Tabelle::get_team_rang($this->id, $spieltag - 1);
+    }
+
+    /**
+     * Setzte die Wartelisteposition des Teams auf einem Turnier
+     * 
+     * @param int $spieltag
+     */
+    public function set_position_warteliste(int $pos): void
+    {
+        $this->position_warteliste = $pos;
+    }
+
+    /**
+     * Setzt den Teamnamen
+     */
+    public function set_teamname(): string
+    {
+        $sql = "
+        SELECT teamname 
+        FROM teams_liga
+        WHERE team_id = ?
+        ";
+        return db::$db->query($sql, $this->id)->fetch_one();
+    }
+
+    /**
+     * Gibt die Teamwertigkeit
+     * 
+     * @return null|int
+     */
+    public function get_wertigkeit(): null|int
+    {
+        return $this->wertigkeit;
+    }
+
+    /**
+     * Gibt den Teamblock
+     * 
+     * @return null|string
+     */
+    public function get_tblock(): null|string
+    {
+        return $this->tblock;
+    }
+
+    /**
+     * Gibt den Teamrang
+     * 
+     * @return null|int
+     */
+    public function get_rang(): null|int
+    {
+        return $this->rang;
+    }
+
+    /**
+     * Gibt die Wartelisteposition
+     * 
+     * @return null|int
+     */
+    public function get_warteliste_postition(): null|int
+    {
+        return $this->position_warteliste;
+    }
+
+    /**
+     * Gibt den Teamnamen
+     * 
+     * @return string
+     */
+    public function get_teamname(): string
+    {
+        return $this->teamname;
     }
 }

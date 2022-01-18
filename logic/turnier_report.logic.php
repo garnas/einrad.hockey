@@ -1,21 +1,19 @@
 <?php
 // Turnierobjekt erstellen
 $turnier_id = (int)@$_GET['turnier_id'];
-$turnier = new Turnier ($turnier_id);
+$turnier = nTurnier::get($turnier_id);
 
 // Berechtigung zum Verändern des Reports
-$change_tbericht = (
-    $turnier->details['ausrichter'] === ($_SESSION['logins']['team']['id'] ?? '')
-    || Helper::$ligacenter
-);
+$team_id = $_SESSION['logins']['team']['id'] ?? 0;
+$change_tbericht = ($turnier->is_ausrichter($team_id) || Helper::$ligacenter);
 
 // Berechtigung zum Verändern des Reports widerrufen für Ausrichter, wenn das Turnier mehr als zwei Tage zurückliegt.
 if (
-    strtotime($turnier->details['datum']) - time() < -3 * 24 * 60 * 60
+    strtotime($turnier->get_datum()) - time() < -3 * 24 * 60 * 60
     && !Helper::$ligacenter
 ) {
     $change_tbericht = false;
-    if ($turnier->details['ausrichter'] == ($_SESSION['logins']['team']['id'] ?? '')) {
+    if ($turnier->is_ausrichter($team_id)) {
         Html::notice("Das Turnier liegt bereits in der Vergangenheit. Bearbeiten des Turnierreports nur noch via den Ligaausschuss möglich.");
     }
 }
@@ -23,29 +21,29 @@ if (
 $tbericht = new TurnierReport ($turnier_id);
 
 // Existiert das Turnier?
-if (empty($turnier->details)) {
+if (empty($turnier->get_turnier_id())) {
     Html::error("Turnier wurde nicht gefunden");
     Helper::reload('/liga/turniere.php');
 }
 
 // Gibt es eine Leseberechtigung?
 if (
-    !Helper::$ligacenter && $turnier->get_liste($_SESSION['logins']['team']['id']) !== 'spiele'
+    !Helper::$ligacenter && !array_key_exists($team_id, $turnier->get_spielenliste())
 ) {
     Html::error("Der Turnierreport kann nur von teilnehmenden Teams eingesehen werden.");
-    Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id);
+    Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->get_turnier_id());
 }
 
 // Ist es ein Spass-Turnier?
-if ($turnier->details['art'] === 'spass') {
+if ($turnier->get_art() === 'spass') {
     Html::notice("Spaßturniere erfordern keinen Turnierreport.");
-    Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id);
+    Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->get_turnier_id());
 }
 
 // Liste der Teams
-$teams = $turnier->get_liste_spielplan();
+$teams = $turnier->get_spielenliste();
 // Kader und Ausbilder
-$kader_array = $turnier->get_kader_kontrolle();
+$kader_array = $turnier->get_kader();
 $ausbilder_liste = [];
 $spieler_liste = [];
 
@@ -69,7 +67,7 @@ if ($change_tbericht) {
         if (isset($_POST[('del_ausleihe_' . $ausleihe_id)])) { //TODO Array bauen
             $tbericht->delete_spieler_ausleihe($ausleihe_id);
             Html::info("Spielerausleihe wurde entfernt.");
-            header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
+            header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier->get_turnier_id());
             die();
         }
     }
@@ -83,12 +81,12 @@ if ($change_tbericht) {
         $team_id_auf = Team::name_to_id($team_auf);
         if (!(Team::is_ligateam($team_id_ab) && Team::is_ligateam($team_id_auf))) {
             Html::error("Ligateams der Spielerausleihe wurden nicht gefunden");
-            header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
+            header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier->get_turnier_id());
             die();
         }
         $tbericht->set_spieler_ausleihe($name, $team_auf, $team_ab);
         Html::info("Spielerausleihe wurde hinzugefügt.");
-        header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
+        header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier->get_turnier_id());
         die();
     }
 
@@ -99,7 +97,7 @@ if ($change_tbericht) {
         if (isset($_POST[('del_zeitstrafe_' . $zeitstrafe_id)])) {
             $tbericht->delete_zeitstrafe($zeitstrafe_id);
             Html::info("Zeitstrafe wurde entfernt.");
-            header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
+            header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier->get_turnier_id());
             die();
         }
     }
@@ -113,7 +111,7 @@ if ($change_tbericht) {
         $bericht = $_POST['zeitstrafe_bericht'];
         $tbericht->new_zeitstrafe($name, $dauer, $team_a, $team_b, $bericht);
         Html::info("Zeitstrafe wurde hinzugefügt.");
-        header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier_id);
+        header('Location:' . db::escape($_SERVER['PHP_SELF']) . '?turnier_id=' . $turnier->get_turnier_id());
         die();
     }
 
@@ -127,7 +125,7 @@ if ($change_tbericht) {
         $kader_check = $_POST['kader_check'] == "kader_checked";
         $tbericht->set_turnier_bericht($bericht, $kader_check);
         Html::info("Turnierbericht wurde aktualisiert");
-        header("Location:" . db::escape($_SERVER['PHP_SELF']) . "?turnier_id=$turnier_id");
+        header("Location:" . db::escape($_SERVER['PHP_SELF']) . "?turnier_id=" . $turnier->get_turnier_id());
         die();
     }
 }
