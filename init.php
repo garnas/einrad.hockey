@@ -59,7 +59,6 @@ header('Referrer-Policy: no-referrer-when-downgrade');
  */
 spl_autoload_register(
     static function ($class) {
-        $class = strtolower($class);
         include Env::BASE_PATH . '/classes/' . $class . '.class.php';
     }
 );
