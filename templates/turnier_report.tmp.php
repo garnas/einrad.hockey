@@ -1,6 +1,6 @@
 <h1 class="w3-text-primary">
-    <?=date("d.m.Y", strtotime($turnier->details['datum']))?>
-    <?=$turnier->details['ort']?> <i>(<?=$turnier->details['tblock']?>)</i>
+    <?=date("d.m.Y", strtotime($turnier->get_datum()))?>
+    <?=$turnier->get_ort()?> <i>(<?=$turnier->get_tblock()?>)</i>
 </h1>
 <h2 class="w3-text-grey">
     <?= Html::icon('article', tag:'h2') ?> Turnier-Report
@@ -10,7 +10,7 @@
             "") ?>
 <!-- Link Spielplan -->
 <p><?=Html::link('../liga/spielplan.php?turnier_id=' . $turnier_id, '<i class="material-icons">reorder</i> Zum Spielplan')?></p>
-<?php if ((time() - strtotime($turnier->details['datum'])) < (8 * 24 * 60 * 60)) { ?>
+<?php if ((time() - strtotime($turnier->get_datum())) < (8 * 24 * 60 * 60)) { ?>
     <!-- Ausbilder -->
     <?php if (!empty($ausbilder_liste)){?>
         <h2 class="w3-text-primary"><?= Html::icon('school', tag:'h2') ?> Schiedsrichter-Ausbilder</h2>
@@ -134,7 +134,7 @@
                 >
                     <option selected disabled>--</option>
                     <?php foreach($teams as $team){?>
-                        <option><?=$team['teamname']?></option>
+                        <option><?=$team->teamname?></option>
                     <?php } //end foreach?>
                 </select>
             </p>
@@ -230,14 +230,14 @@
                 <select id="zeitstrafe_team_a" name="zeitstrafe_team_a" class="w3-select w3-input w3-border w3-border-primary">
                     <option disabled selected>--</option>
                     <?php foreach($teams as $team){?>
-                        <option><?=$team['teamname']?></option>
+                        <option><?=$team->teamname?></option>
                     <?php } //end foreach?>
                 </select>
                 <label for="zeitstrafe_team_b" class="w3-text-grey">versus</label>
                 <select id="zeitstrafe_team_b" name="zeitstrafe_team_b" class="w3-select w3-input w3-border w3-border-primary">
                     <option disabled selected>--</option>
                     <?php foreach($teams as $team){?>
-                        <option><?=$team['teamname']?></option>
+                        <option><?=$team->teamname?></option>
                     <?php } //end foreach?>
                 </select>
             </p>

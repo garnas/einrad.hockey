@@ -6,14 +6,10 @@ require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth
 
 // Teamspezifisches
-$team = new Team($_SESSION['logins']['team']['id']);
-$turnier_angemeldet = $team->get_turniere_angemeldet();
-$anz_freilose = $team->get_freilose();
-
-// Relevante Turniere finden
-$heute = date("Y-m-d");
-$turniere = Turnier::get_turniere('ergebnis', false)
-                + Turnier::get_turniere('ergebnis', false, saison:Config::SAISON + 1);
+$team_id = $_SESSION['logins']['team']['id'];
+$team = new Team($team_id);
+$team_turniere_angemeldet = $team->get_turniere_angemeldet();
+$team_anz_freilose = $team->get_freilose();
 
 // Hinweis Live-Spieltag
 $akt_spieltag = Tabelle::get_aktuellen_spieltag();
@@ -23,43 +19,31 @@ if (Tabelle::check_spieltag_live($akt_spieltag)){
         . Html::link("../liga/tabelle.php?spieltag=" . ($akt_spieltag - 1) . "#rang", "Spieltag " . ($akt_spieltag - 1)));
 }
 
-// Füge Links zum Weiterverarbeiten der ausgewählten Turniere hinzu
-// diese werden dem Teamplate übergeben
-foreach ($turniere as $turnier_id => $turnier){
-    //Links
-    $turniere[$turnier_id]['links'] = 
-        array(
-            Html::link("tc_team_anmelden.php?turnier_id=".$turnier_id,'Zur Ab- / Anmeldung', false , 'how_to_reg'),
-            Html::link("../liga/turnier_details.php?turnier_id=".$turnier_id, 'Zu den Turnierdetails', false, 'info')
-        );
-        
-    //Farbe des Turnierblocks festlegen
-    $freilos = true;
-    $turniere[$turnier_id]['block_color'] = 'w3-text-red';
-    if (Turnier::check_team_block_static($_SESSION['logins']['team']['block'],$turnier['tblock'])){
-        $turniere[$turnier_id]['block_color'] = 'w3-text-green';
-        $freilos = false;
-    }
-    if ($freilos && Turnier::check_team_block_freilos_static($_SESSION['logins']['team']['block'],$turnier['tblock']) && $anz_freilose>0){
-        $turniere[$turnier_id]['block_color'] = 'w3-text-yellow';
-    }
+// Relevante Turniere finden
+$db_turniere = nTurnier::get_turniere_kommend();
 
-    //Einfärben wenn schon angemeldet
-    $turniere[$turnier_id]['row_color'] = '';
-    if (isset($turnier_angemeldet[$turnier['turnier_id']])){
-        $liste = $turnier_angemeldet[$turnier['turnier_id']];
-        if ($liste == 'spiele'){
-            $turniere[$turnier_id]['row_color'] = 'w3-pale-green';
-        }
-        if ($liste == 'melde'){
-            $turniere[$turnier_id]['row_color'] = 'w3-pale-yellow';
-        }
-        if ($liste == 'warte'){
-            $turniere[$turnier_id]['row_color'] = 'w3-pale-blue';
-        }
-    }
-}
-include '../../logic/turnierliste.logic.php';
+if (!empty($db_turniere)) {
+  // Gefundene Turniere werden aufbereitet
+  foreach ($db_turniere as $turnier) {
+    $turnier_id = $turnier->get_turnier_id();
+
+    include '../../logic/turnierliste.logic.php';
+
+    $turniere[$turnier_id]['links'] =
+      array(
+        Html::link("tc_team_anmelden.php?turnier_id=" . $turnier_id, 'An- / Abmeldung', false, 'how_to_reg'),
+        Html::link("../liga/turnier_details.php?turnier_id=" . $turnier_id, 'Turnierdetails', false, 'info')
+      );
+  }
+} else {
+  // Da keine Tunriere gefunden wurden, wird auf die TC-Startseite umgeleitet
+  Html::notice(
+    'Bisher sind keine Turniere ausgeschrieben.',
+    esc: false
+  );
+  Helper::reload('/teamcenter/tc_start.php');
+} // end if
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -92,6 +76,7 @@ include '../../templates/header.tmp.php';?>
         <br>
         <i><span class="w3-text-green">frei</span>: Plaetze auf der Spielen-Liste frei</i><br>
         <i><span class="w3-text-red">voll</span>: Spielen-Liste ist voll</i><br>
+        <i><span class="w3-text-gray">geschlossen</span>: Anmeldung nicht mehr möglich</i><br>
         </p>
     </div>
   </div>
