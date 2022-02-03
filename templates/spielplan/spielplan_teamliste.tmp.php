@@ -55,7 +55,7 @@
                         <?php if ($spielplan->turnier->get_phase() !== 'ergebnis') { ?>
                             <td>
                                 <span class="pdf-hide">
-                                    <?= Html::trikot_punkt($team->details['trikot_farbe_1'], $team->details['trikot_farbe_2']) ?>
+                                    <?= Html::trikot_punkt($team->details['trikot_farbe_1'] ?? null, $team->details['trikot_farbe_2'] ?? null) ?>
                                 </span>
                             </td>
                         <?php } // end if ?>

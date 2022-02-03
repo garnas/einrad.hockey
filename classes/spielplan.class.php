@@ -356,29 +356,24 @@ class Spielplan
         if ($this->turnier->get_phase() === 'ergebnis') {
             return [];
         }
+
         $team_id_a = $spiel['team_id_a'];
         $team_id_b = $spiel['team_id_b'];
+
         $farben = [
             $team_id_a => [
-                1 => $this->teamliste[$spiel['team_id_a']]->details['trikot_farbe_1'],
-                2 => $this->teamliste[$spiel['team_id_a']]->details['trikot_farbe_2']
+                1 => $this->teamliste[$team_id_a]->details['trikot_farbe_1'] ?? null,
+                2 => $this->teamliste[$team_id_a]->details['trikot_farbe_2'] ?? null
             ],
             $team_id_b => [
-                1 => $this->teamliste[$spiel['team_id_b']]->details['trikot_farbe_1'],
-                2 => $this->teamliste[$spiel['team_id_b']]->details['trikot_farbe_2']
+                1 => $this->teamliste[$team_id_b]->details['trikot_farbe_1'] ?? null,
+                2 => $this->teamliste[$team_id_b]->details['trikot_farbe_2'] ?? null
             ]
         ];
 
         // Nicht hinterlegte Farben entfernen
         $farben[$team_id_a] = array_filter($farben[$team_id_a]);
         $farben[$team_id_b] = array_filter($farben[$team_id_b]);
-
-        if (
-            empty($farben[$team_id_a])
-            || empty($farben[$team_id_b])
-        ) {
-            return [];
-        }
 
         // Hexfarbe in RGB umwandeln und Farbunterschied berechnen und ausgeben
         $get_delta_e = static function ($hex_color_1, $hex_color_2) {

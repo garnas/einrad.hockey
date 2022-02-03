@@ -122,7 +122,7 @@ if ($change_tbericht) {
         || isset($_POST['turnierbericht'])
     ) {
         $bericht = $_POST['turnierbericht'];
-        $kader_check = $_POST['kader_check'] == "kader_checked";
+        $kader_check = $_POST['kader_check'];
         $tbericht->set_turnier_bericht($bericht, $kader_check);
         Html::info("Turnierbericht wurde aktualisiert");
         header("Location:" . db::escape($_SERVER['PHP_SELF']) . "?turnier_id=" . $turnier->get_turnier_id());

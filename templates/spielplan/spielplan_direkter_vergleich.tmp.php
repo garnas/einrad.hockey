@@ -65,7 +65,7 @@
                 <?php foreach ($direkter_vergleich as $team_id => $ergebnis) { ?>
                     <tr>
                         <td><?= $spielplan->platzierungstabelle[$team_id]['platz'] ?></td>
-                        <td style="white-space: nowrap"><?= $spielplan->teamliste[$team_id]['teamname'] ?></td>
+                        <td style="white-space: nowrap"><?= $spielplan->teamliste[$team_id]->details['teamname']?></td>
                         <td><?= $ergebnis['spiele'] ?></td>
                         <td><?= $ergebnis['punkte'] ?></td>
                         <td><?= $ergebnis['tordifferenz'] ?></td>
