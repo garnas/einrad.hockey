@@ -60,7 +60,7 @@
                             </td>
                         <?php } // end if ?>
                         <td>
-                            <span class="pdf-hide"><?= $team->details["ligavertreter"] ?></span>
+                            <span class="pdf-hide"><?= $team->details["ligavertreter"] ?? null?></span>
                         </td>
                         <td>
                             <span class="pdf-hide">
