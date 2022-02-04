@@ -64,10 +64,20 @@ class LigaBot
                 && self::time_offen_melde($turnier->get_datum()) <= time()
             ) {
                 $turnier->update_phase('melde');
+
                 // Losen setzt alle Teams in richtiger Reihenfolge auf die Warteliste.
                 self::losen($turnier);
+
+                // TODO: es wäre schön wenn sich die Listen nur im Turnierobjekt ändern und erst mit __destruct
+                // vom Turnierobjekt in der DB gespeichert werden
+                // Das gleiche gilt für die Turnierphase und alle anderen Setter
+                // updatephase speichert die phase nur in die db, aber das turnierobjekt hat noch die alte phase
+                // Turnier aktualisieren
+                $turnier = nTurnier::get($turnier->turnier_id);
+
                 // Füllt die Spielen-Liste auf.
                 $turnier->spieleliste_auffuellen(false);
+
                 // Info-Mails versenden.
                 MailBot::mail_gelost($turnier);
                 // Freie-Plätze-Mails versenden.
@@ -199,8 +209,6 @@ class LigaBot
                 $turnier->set_liste($team->id, 'warte');
                 Team::add_freilos($team->id);
                 MailBot::mail_freilos_abmeldung($turnier, $team->id);
-                // Anmeldeliste aktualisieren
-                $liste = $turnier->get_anmeldungen();
             }
         }
 
@@ -215,7 +223,7 @@ class LigaBot
                                                     // Teams mit falschem Block
         // Aufteilung der Teams in die Lostöpf, Teams mit falschem Freilos wurden schon abgemeldet
         foreach ($meldeliste as $team) {
-            if ($team->details['ligateam'] === 'Nein') {
+            if (!Team::is_ligateam($team->id)) {
                 $los_nl[] = $team->id;
             } elseif ($turnier->is_spielberechtigt($team->id)) {
                 $los_rblock[] = $team->id;
