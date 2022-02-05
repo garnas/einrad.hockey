@@ -49,13 +49,13 @@ if (isset($_POST['turnier_bearbeiten_la'])) {
 
     // Ändern der Turnierdaten
     if (!$error) {
-        $turnier->set_liga('tname', $tname)
-                ->set_liga('ausrichter', $ausrichter)
-                ->set_liga('art', $art)
-                ->set_liga('tblock', $tblock)
-                ->set_liga('tblock_fixed', $fixed)
-                ->set_liga('datum', $datum)
-                ->set_liga('phase', $phase);
+        $turnier->set_tname($tname)
+                ->set_team($ausrichter)
+                ->set_art($art)
+                ->set_tblock($tblock)
+                ->set_fixed_tblock($fixed)
+                ->set_datum($datum)
+                ->set_phase($phase);
 
         Html::info("Turnierdaten wurden geändert");
         Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->get_turnier_id());
