@@ -6,42 +6,44 @@ require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
 //Turnierdaten für Select
-$turniere = Turnier::get_turniere('alle', false, false);
+$turniere = nTurnier::get_turniere();
 $strafen = Team::get_strafen();
 
 //Formularauswertung
-foreach ($strafen as $strafe){
-    if(isset($_POST['delete' . $strafe['strafe_id']])){
+foreach ($strafen as $strafe) {
+    if (isset($_POST['delete' . $strafe['strafe_id']])) {
         Team::unset_strafe((int) $strafe['strafe_id']);
         Html::info("Strafe wurde gelöscht.");
-        header ("Location: lc_teamstrafe.php");
+        header("Location: lc_teamstrafe.php");
         die();
     }
 }
 
-if (isset($_POST['strafe_eintragen'])){
+if (isset($_POST['strafe_eintragen'])) {
     $error = false;
-    if (empty($_POST['teamname']) or empty($_POST['grund'])){
+    if (empty($_POST['teamname']) or empty($_POST['grund'])) {
         $error = true;
         Html::error("Bitte Team auswählen und Begründung eintragen.");
     }
-    if ($_POST['verwarnung'] == 'Ja' && !empty($_POST['prozent'])){
+    if ($_POST['verwarnung'] == 'Ja' && !empty($_POST['prozent'])) {
         $error = true;
         Html::error("Prozentstrafen sind bei Vewarnungen nicht möglich.");
     }
     $team_id = Team::name_to_id($_POST['teamname']);
-    if (!Team::is_ligateam($team_id)){
+    if (!Team::is_ligateam($team_id)) {
         $error = true;
         Html::error("Teamname gehört zu keinem Ligateam");
     }
-    if (!$error){
-        Team::set_strafe($team_id,
+    if (!$error) {
+        Team::set_strafe(
+            $team_id,
             $_POST['verwarnung'] ?? 'Nein',
             (int) $_POST['turnier'],
             $_POST['grund'],
-            (int) $_POST['prozent']);
+            (int) $_POST['prozent']
+        );
         Html::info("Strafe wurde eingetragen.");
-        header ("Location: ../liga/tabelle.php#pranger");
+        header("Location: ../liga/tabelle.php#pranger");
         die();
     }
 }
@@ -53,7 +55,7 @@ include '../../templates/header.tmp.php';
 ?>
 
 <!-- Vergangene Strafen -->
-<h2 class="w3-bottombar w3-border-primary">Vergebene Strafen/Verwarnungen der Saison <?=Html::get_saison_string()?></h2>
+<h2 class="w3-bottombar w3-border-primary">Vergebene Strafen/Verwarnungen der Saison <?= Html::get_saison_string() ?></h2>
 <div class="w3-responsive">
     <table class="w3-table w3-striped">
         <thead>
@@ -66,24 +68,26 @@ include '../../templates/header.tmp.php';
                 <th></th>
             </tr>
         </thead>
-            <?php foreach ($strafen as $strafe){?>
-                <tr>
-                    <td style="vertical-align: middle"><?=$strafe['strafe_id']?></td>
-                    <td style="vertical-align: middle"><?=$strafe['verwarnung']?></td>
-                    <td style="white-space: nowrap; vertical-align: middle;"><?=$strafe['teamname']?></td>
-                    <td style="vertical-align: middle">
-                        <?=$strafe['grund']?>
-                        <?php if (!empty($strafe['prozentsatz'])){?>(<?=$strafe['prozentsatz']?>&nbsp;%)<?php } //endif?>
-                    </td>
-                    <td style="vertical-align: middle"><?=($strafe['datum'] ?? '') . ' ' . ($strafe['ort'] ?? '')?></td>
-                    <td  style="vertical-align: middle">
-                        <form method="POST" onsubmit="return confirm('Soll die Strafe/Verwarnung für das Team <?=$strafe['teamname']?> wirklich gelöscht werden?')">
-                            <input type="hidden" name="delete<?=$strafe['strafe_id']?>" value='delete'>
-                            <input class="w3-button w3-text-primary" type="submit" name="delete<?=$strafe['strafe_id']?>" value="Löschen">
-                        </form>
-                    </td>
-                </tr>
-            <?php } //end foreach?>
+        <?php foreach ($strafen as $strafe) { ?>
+            <tr>
+                <td style="vertical-align: middle"><?= $strafe['strafe_id'] ?></td>
+                <td style="vertical-align: middle"><?= $strafe['verwarnung'] ?></td>
+                <td style="white-space: nowrap; vertical-align: middle;"><?= $strafe['teamname'] ?></td>
+                <td style="vertical-align: middle">
+                    <?= $strafe['grund'] ?>
+                    <?php if (!empty($strafe['prozentsatz'])) { ?>(<?= $strafe['prozentsatz'] ?>&nbsp;%)<?php } //endif
+                                                                                                    ?>
+                </td>
+                <td style="vertical-align: middle"><?= ($strafe['datum'] ?? '') . ' ' . ($strafe['ort'] ?? '') ?></td>
+                <td style="vertical-align: middle">
+                    <form method="POST" onsubmit="return confirm('Soll die Strafe/Verwarnung für das Team <?= $strafe['teamname'] ?> wirklich gelöscht werden?')">
+                        <input type="hidden" name="delete<?= $strafe['strafe_id'] ?>" value='delete'>
+                        <input class="w3-button w3-text-primary" type="submit" name="delete<?= $strafe['strafe_id'] ?>" value="Löschen">
+                    </form>
+                </td>
+            </tr>
+        <?php } //end foreach
+        ?>
     </table>
 </div>
 
@@ -97,15 +101,16 @@ include '../../templates/header.tmp.php';
     <p>
         <label class="w3-text-primary" for="teamname">Team</label>
         <input required type="text" class="w3-input w3-border w3-border-primary" placeholder="Team eingeben" list="teams" id="teamname" name="teamname">
-            <?=Html::datalist_teams();?>
+        <?= Html::datalist_teams(); ?>
     </p>
     <p>
         <label class="w3-text-primary" for="turnier">Turnier (optional)</label>
         <select placeholder="Optional" class="w3-select w3-border w3-border-primary" name="turnier" id="turnier">
             <option value="" selected></option>
-            <?php foreach ($turniere as $turnier_id => $turnier){?>
-                <option value="<?=$turnier_id?>"><?=$turnier['datum'] .' '.$turnier['ort']. ' (' . $turnier['tblock'] . ')'?></option>
-            <?php } //end foreach?>
+            <?php foreach ($turniere as $turnier) { ?>
+                <option value="<?= $turnier->get_turnier_id() ?>"><?= $turnier->get_datum() . ' ' . $turnier->get_ort() . ' (' . $turnier->get_tblock() . ')' ?></option>
+            <?php } //end foreach
+            ?>
         </select>
     <p>
     <p>

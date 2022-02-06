@@ -6,11 +6,11 @@
 <body>
 <p>Hallo Ligaausschuss,</p>
 <p>
-    <?= $turnier->details["teamname"] ?> hat als Ausrichter seine Turnierdaten vom
-    <?= $turnier->details['tblock'] ?>-Turnier in <?= $turnier->details['ort'] ?> verändert.
+    <?= Team::id_to_name($turnier->get_ausrichter()) ?> hat als Ausrichter seine Turnierdaten vom
+    <?= $turnier->get_tblock() ?>-Turnier in <?= $turnier->get_ort() ?> verändert.
 </p>
 <p>
-    <a href='<?= Env::BASE_URL . "/ligacenter/lc_turnier_log?turnier_id=" . $turnier->id ?> '>
+    <a href='<?= Env::BASE_URL . "/ligacenter/lc_turnier_log?turnier_id=" . $turnier->get_turnier_id() ?> '>
         Link zum Turnier
     </a>
 </p>

@@ -14,11 +14,16 @@ if (isset($_POST['delete_turnier'])) {
 // Forumlarauswertung Turnierdaten ändern
 if (isset($_POST['turnier_bearbeiten_la'])) {
     $error = false;
+    
     // Ausrichter setzen
     $ausrichter = Team::name_to_id($_POST['ausrichter']);
-    if (!Team::is_ligateam($ausrichter)) {
+
+    if (is_null($ausrichter)) {
         $error = true;
-        Html::error("Ausrichter wurde nicht gefunden");
+        Html::error('Der Ausrichter wurde nicht gefunden.');
+    } elseif (!Team::is_ligateam($ausrichter)) {
+        $error = true;
+        Html::error("Der Ausrichter ist ein NL-Team");
     }
 
     // Turnierblock ändern:
@@ -43,18 +48,18 @@ if (isset($_POST['turnier_bearbeiten_la'])) {
     }
 
     // Ändern der Turnierdaten
-    if ($error) {
-        Html::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht geändert - alle Änderungen bitte neu eingeben.");
-    } else {
-        $turnier->set_liga('tname', $tname)
-                ->set_liga('ausrichter', $ausrichter)
-                ->set_liga('art', $art)
-                ->set_liga('tblock', $tblock)
-                ->set_liga('tblock_fixed', $fixed)
-                ->set_liga('datum', $datum)
-                ->set_liga('phase', $phase);
+    if (!$error) {
+        $turnier->set_tname($tname)
+                ->set_team($ausrichter)
+                ->set_art($art)
+                ->set_tblock($tblock)
+                ->set_fixed_tblock($fixed)
+                ->set_datum($datum)
+                ->set_phase($phase);
 
         Html::info("Turnierdaten wurden geändert");
-        Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id);
+        Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->get_turnier_id());
+    } else {
+        Html::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht geändert - alle Änderungen bitte neu eingeben.");
     }
 }

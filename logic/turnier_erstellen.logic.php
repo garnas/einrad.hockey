@@ -30,47 +30,68 @@ if (isset($_POST['create_turnier'])) {
         Html::error("Unbekannte Turnierart.");
     }
 
-    // Turnierblock festlegen
-    if ($art === 'I') {
-        $tblock = $ausrichter_block;
-    } elseif ($art === 'II') {
-        if (is_numeric(strpos($block_higher_str, $_POST['block']))) {
-            $tblock = $_POST['block'];
-        } else {
+    switch ($art) {
+        case 'I':
+            $tblock = $ausrichter_block;
+            break;
+
+        case 'II':
+            if (in_array($_POST['block'], $block_higher)) {
+                $tblock = $_POST['block'];
+            } else {
+                $error = true;
+                Html::error("Block und Turnierart passen nicht zueinander.");
+            }
+            break;
+
+        case 'III':
+            $tblock = 'ABCDEF';
+            break;
+
+        case 'fixed':
+            if (in_array($_POST['block'], Config::BLOCK_ALL, true)) {
+                $tblock = $_POST['block'];
+            } else {
+                $error = true;
+                Html::error("Ungültiger Turnierblock.");
+            }
+            break;
+
+        case 'final':
+            if (in_array($_POST['block'], Config::BLOCK_FINALE, true)) {
+                $tblock = $_POST['block'];
+            } else {
+                $error = true;
+                Html::error("Ungültiger Turnierblock.");
+            }
+            break;
+
+        case 'spass':
+            $tblock = '';
+            break;
+
+        default:
             $error = true;
-            Html::error("Block und Turnierart passen nicht zueinander.");
-        }
-    } elseif ($art === 'III') {
-        $tblock = 'ABCDEF';
-    } elseif ($art === 'fixed') {
-        $tblock = $_POST['tblock'];
-        if (!in_array($tblock, Config::BLOCK_ALL, true)) {
-            $error = true;
-            Html::error("Ungültiger Turnierblock.");
-        }
-    } elseif ($art === 'final') {
-        $tblock = $_POST['block_final'];
-        if (!in_array($tblock, Config::BLOCK_FINALE, true)) {
-            $error = true;
-            Html::error("Ungültiger Turnierblock.");
-        }
-    } elseif ($art === 'spass') {
-        $tblock = '';
-    } else {
-        $error = true;
-        Html::error("Es konnte kein Turnierblock bestimmt werden.");
+            Html::error("Es konnte kein Turnierblock bestimmt werden.");
+            break;
     }
 
     // Anzahl der Plätze bzw ob 8er DKO- oder Gruppen-Spielplan
     $plaetze = (string)($_POST['plaetze'] ?? 0);
-    if ($plaetze === '8 dko') {
-        $plaetze = 8;
-        $format = 'dko';
-    } elseif ($plaetze === '8 gruppen') {
-        $plaetze = 8;
-        $format = 'gruppen';
-    } else {
-        $format = 'jgj';
+    switch ($plaetze) {
+        case '8 dko':
+            $plaetze = 8;
+            $format = 'dko';
+            break;
+        
+        case '8 gruppen':
+            $plaetze = 8;
+            $format = 'gruppen';
+            break;
+
+        default:
+            $format = 'jgj';
+            break;
     }
 
     // Validierung der Plätze
@@ -78,6 +99,7 @@ if (isset($_POST['create_turnier'])) {
         $error = true;
         Html::error("Ungültige Anzahl an Turnierplätzen.");
     }
+
     // 4er Turniere nur über den LA
     if ($plaetze === 4 && Helper::$teamcenter) {
         $error = true;
@@ -87,8 +109,7 @@ if (isset($_POST['create_turnier'])) {
     $datum = strtotime((string)($_POST['datum'] ?? ''));
     // Validierung von Datum und Startzeit nur für Ligaturniere und Ligateams
     if (
-        !Helper::$ligacenter
-        && in_array($art, ['I', 'II', 'III'], true)
+        in_array($art, Config::TURNIER_ARTEN, true)
     ) {
         // Validierung Datum
         if (
@@ -158,37 +179,40 @@ if (isset($_POST['create_turnier'])) {
     };
 
     // Eintragen des Turnieres
-    if ($error) {
-        Html::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht erstellt.");
-    } else {
+    if (!$error) {
         // Turnier erstellen
-        $turnier = Turnier::new_turnier($ausrichter_team_id);
-        $turnier->set_liga('art', $art)
-            ->set_liga('tblock_fixed', $fixed)
-            ->set_liga('tname', $tname)
-            ->set_liga('tblock', $tblock)
-            ->set_liga('datum', $datum)
-            ->set_liga('saison', Config::SAISON)
-            ->set('startzeit', $startzeit)
-            ->set('besprechung', $besprechung)
-            ->set('hinweis', $hinweis)
-            ->set('plaetze', $plaetze)
-            ->set('format', $format)
-            ->set('plz', $plz)
-            ->set('ort', $ort)
-            ->set('strasse', $strasse)
-            ->set('hallenname', $hallenname)
-            ->set('haltestellen', $haltestellen)
-            ->set('format', $format)
-            ->set('handy', $handy)
-            ->set('organisator', $organisator)
-            ->set('startgebuehr', $startgebuehr);
+        $turnier = nTurnier::set_turnier($ausrichter_team_id);
 
-        // Mailbot
-        if (Helper::$teamcenter) MailBot::mail_neues_turnier($turnier); // Nur wenn Teams Turniere erstellen.
+        $turnier->set_datum($datum)
+            ->set_art($art)
+            ->set_fixed_tblock($fixed)
+            ->set_tname($tname)
+            ->set_tblock($tblock)
+            ->set_saison(Config::SAISON)
+            ->set_startzeit($startzeit)
+            ->set_besprechung($besprechung)
+            ->set_hinweis($hinweis)
+            ->set_plaetze($plaetze)
+            ->set_format($format)
+            ->set_plz($plz)
+            ->set_ort($ort)
+            ->set_strasse($strasse)
+            ->set_hallennamen($hallenname)
+            ->set_haltestelle($haltestellen)
+            ->set_handy($handy)
+            ->set_organisator($organisator)
+            ->set_startgebuehr($startgebuehr)
+            ->set_database();
+        
+        // Mailbot, wenn Teams neue Turniere erstellen
+        if (Helper::$teamcenter) {
+            MailBot::mail_neues_turnier($turnier);
+        }
 
         // Turnier wurde erfolgreich erstellt - Weiterleitung zu Turnierdetails
         Html::info("Euer Turnier wurde erfolgreich eingetragen.");
-        Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id);
+        Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->get_turnier_id());
+    } else {
+        Html::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht erstellt.");
     }
 }

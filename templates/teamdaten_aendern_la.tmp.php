@@ -41,7 +41,7 @@
                     class='w3-button w3-secondary w3-block'
                     name="change_la"
             >
-                <?= Html::icon('create') ?> Teamdaten aendern (nur LA)
+                <?= Html::icon('create') ?> Teamdaten ändern (nur LA)
             </button>
         </p>
     </form>
