@@ -94,11 +94,16 @@ if (isset($_POST['beantworten'])) {
 Html::$titel = $titel;
 include '../../templates/header.tmp.php'; # Html-header und Navigation
 
-if ($test_level=='L') {
-    echo '<p><form method="post" class="w3-panel w3-center w3-indigo"><P> ' .
-        '(Fragen-ID: <input type="text" size="3" name="ausgewaehlte_nummer">) ' .
-        '<input type="submit" value="Neue Frage"> ' . '</P></form>';
-}
+if ($test_level == 'L') { ?>
+    <form method="post" class="w3-panel w3-center w3-section w3-indigo">
+        <p>
+            (Fragen-ID: <input type="text" size="3" name="ausgewaehlte_nummer"> - leer lassen für zufällige Frage)
+        </p>
+        <p>
+            <input type="submit" value="Neue Frage">
+        </p>
+    </form>
+<?php } //endif
 
 # Start Debug Modus
 if (Env::DEBUGMODUS) {
