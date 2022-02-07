@@ -29,6 +29,11 @@ include '../../templates/header.tmp.php';
 <h1 class="w3-text-primary">Infos für Schiedsrichter und alle, die es
     werden wollen</h1>
 
+    <p class="w3-text-gray w3-center"> <!-- TODO entfernen -->
+        <i>-- Vorläufiger Entwurf --</i>
+        <br>(07.02.22)
+    </p>
+
 <UL>    
     <LI>Wer die Schiedsrichterprüfung ablegen möchte, kann das dem
         Schiedsrichterausschuss einfach per Email mitteilen.</LI>    
