@@ -548,23 +548,6 @@ Mail;
         $mailer->addCC(Env::SCHIRIMAIL); # cc: an Schiriausschuss
         $mailer->Subject = 'Online Schiritest für ' . $this->spieler->get_name(); # Betreff
         $mailer->Body = $text; # Text der E-Mail
-        if (MailBot::send_mail($mailer)) {
-            return true; # E-mail erfolgreich versendet
-        } else {
-            return false; # Fehler beim Versenden der E-Mail
-        }
-    }
-
-    public function ergebnis_speichern() {
-        // todo Update schiritest ergebnis.......
-    }
-
-    // Beispiel getter
-    public function get(int $schiri_test_id): null|object
-    {
-        $sql = "SELECT * FROM schiri_ergebnis WHERE schiri_test_id = ?";
-        // Dies nimmt alle Spalten und füllt dann alle Attribute, die den gleichen Namen wie eine der Spalten hat.
-        // Erst nachdem alle Attribute gesetzt worden sind, wird __construct() ausgeführt
-        return db::$db->query($sql, $schiri_test_id)->fetch_object(__CLASS__);
+        return (MailBot::send_mail($mailer)); // Booleanwert, ob Mail erfolgreich versendet wurde
     }
 }
