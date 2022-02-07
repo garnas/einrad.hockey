@@ -414,6 +414,13 @@ class SchiriTest
 
     public function __construct(){}
 
+    public static function test_gestartet(string $zeitstempel, string $md5sum): void
+    {
+        $sql = "UPDATE schiri_ergebnis SET t_gestartet = ? WHERE md5sum = ?;";
+        $params = [$zeitstempel, $md5sum];
+        db::$db->query($sql, $params)->log();
+    }
+
     /**
      * @return SchiriTest
      */
