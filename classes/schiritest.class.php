@@ -126,11 +126,15 @@ class SchiriTest
             foreach ($fragen_IDs as $frage_ID) {
                 $fragen += self::get_fragen('DUMMY', 0, 1, $frage_ID);
             }
-            $neu = ($result[0]['t_gestartet']==NULL);
-        } else {
-            exit('<H1>Ungültige URL (falsche md5sum)</H1>');
+            $neu = ($result['t_gestartet'] === NULL);
+
+            return [$pruefling_id, $pruefling, $level, $fragen, $neu];
         }
-        return [$pruefling, $level, $fragen, $neu];
+
+        Helper::log(Config::LOG_SCHIRI_PRUEFUNG, "$md5sum: md5sum nicht in der Datenbank gefunden");
+        Html::error("Ungültige URL für den Schiritst (falsche md5sum)");
+        Helper::not_found("");
+        return [];
     }
     
     #-------------------------------------------------------------------------

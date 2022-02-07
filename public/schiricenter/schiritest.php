@@ -6,7 +6,7 @@ require_once '../../init.php'; # Autoloader und Session, muss immer geladen werd
 # require_once '../../logic/session_team.logic.php'; # Nur im Teamcenter zugreifbar
 
 if (isset($_GET['md5sum'])) {
-    [$pruefling, $test_level, $fragen, $neu] = SchiriTest::offizieller_test($_GET['md5sum']);
+    [$pruefling_id, $pruefling, $test_level, $fragen, $neu] = SchiriTest::offizieller_test($_GET['md5sum']);
 }
 
 if (isset($test_level)) {
