@@ -111,15 +111,17 @@ class SchiriTest
     public static function offizieller_test(string $md5sum): array
     {
         $sql = "
-            SELECT *
+            SELECT schiri_ergebnis.*, spieler.vorname, spieler.nachname
             FROM schiri_ergebnis
+            INNER JOIN spieler on schiri_ergebnis.spieler_id = spieler.spieler_id
             WHERE md5sum = ?
             ";
-        $result = db::$db->query($sql, $md5sum)->fetch();
-        if (count($result)==1) {
-            $pruefling = $result[0]['spieler_name'];
-            $level = $result[0]['test_level'];
-            $fragen_IDs = str_getcsv($result[0]['gestellte_fragen']);
+        $result = db::$db->query($sql, $md5sum)->fetch_row();
+        if (!empty($result)) {
+            $pruefling = $result['vorname'] . " " . $result['nachname'];
+            $pruefling_id = $result['spieler_id'];
+            $level = $result['test_level'];
+            $fragen_IDs = str_getcsv($result['gestellte_fragen']);
             $fragen = [];
             foreach ($fragen_IDs as $frage_ID) {
                 $fragen += self::get_fragen('DUMMY', 0, 1, $frage_ID);
@@ -337,14 +339,19 @@ class SchiriTest
     {
         # Infos aus Datenbank holen:
         $sql = "
-            SELECT spieler_name, spieler_email, test_level
+            SELECT schiri_ergebnis.spieler_id, spieler.vorname, spieler.nachname,
+                   schiri_ergebnis.spieler_email, schiri_ergebnis.test_level
             FROM schiri_ergebnis
+            INNER JOIN spieler ON schiri_ergebnis.spieler_id = spieler.spieler_id
             WHERE md5sum = ?
             ";
-        $result = db::$db->query($sql, $_GET['md5sum'])->fetch();
-        $test_level = $result[0]['test_level'];
-        $pruefling  = $result[0]['spieler_name'];
-        $email      = $result[0]['spieler_email'];
+        $result = db::$db->query($sql, $_GET['md5sum'])->fetch_row();
+
+        $test_level = $result['test_level'];
+        $pruefling  = $result['vorname'] .  ' '. $result['nachname'] ;
+        $pruefling_id = $result['spieler_id'];
+        $email      = $result['spieler_email'];
+
         # Ergebnis in MySQL entragen:
         $zeitstempel = date('Y-m-d H:i:s'); # heutiges Datum + Uhrzeit
         $antworten = json_encode($abgabe); #qqq Formattierung verbessern
@@ -470,11 +477,11 @@ class SchiriTest
         }
 
         $sql = "
-            INSERT INTO schiri_ergebnis (md5sum, spieler_id, spieler_name, spieler_email, 
+            INSERT INTO schiri_ergebnis (md5sum, spieler_id, spieler_email, 
             gestellte_fragen, test_level, t_erstellt, saison, schiri_test_version)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, '1')
+            VALUES (?, ?, ?, ?, ?, ?, ?, '1')
             ";
-        $params = [$this->md5, $this->spieler->id(), $this->spieler->get_name(), $this->email,
+        $params = [$this->md5, $this->spieler->id(), $this->email,
             $this->gestellte_fragen, $this->test_level, $this->zeitstempel, Config::SAISON];
 
         db::$db->query($sql, $params)->log();
