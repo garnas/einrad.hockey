@@ -391,17 +391,20 @@ class SchiriTest
         }
         # Email an Prüfling und Schiriausschuss senden:
         $mailer = MailBot::start_mailer();
+        $mailer->isHTML(true);
         $mailer->setFrom(Env::SCHIRIMAIL);
         $mailer->addAddress($email, $pruefling);
         $mailer->addCC(Env::SCHIRIMAIL);
         $mailer->Subject = 'Testergebnis von ' . $pruefling; # Betreff 
         $mailer->Body = $text;
+
         if (MailBot::send_mail($mailer)) {
             Html::info("Eine E-Mail mit deinem Testergebis wurde versandt.");
         } else {
             Html::error("E-Mail konnte nicht versendet werden.");
             Helper::log(Config::LOG_SCHIRI_PRUEFUNG, "Fehler: Email wurde nicht versendet!");
         }
+
     }
 
     #-------------------------------------------------------------------------
