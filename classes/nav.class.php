@@ -52,6 +52,7 @@ class Nav
     public static function get_modus(): array
     {
         return [
+            [Env::BASE_URL . "/schiricenter/schiri_infos.php", "Schiritest"],
             [Env::BASE_URL . "/liga/dokumente.php", "Dokumente"],
             [Env::BASE_URL . "/liga/ligaleitung.php", "Ligaleitung"],
         ];
