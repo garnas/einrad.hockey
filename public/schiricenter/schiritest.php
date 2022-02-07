@@ -34,7 +34,7 @@ if (isset($_POST['beantworten'])) {
             $richtig++;
         }
     }
-    if (!$pruefling==''){
+    if (!empty($pruefling)){
         SchiriTest::testergebnis_melden($fragen, $richtig, $alle_antworten_user);
     }
 } else {
