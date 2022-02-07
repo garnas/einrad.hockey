@@ -50,7 +50,7 @@ include '../../templates/header.tmp.php'; # Html-header und Navigation
 echo '<H4><form method="post">' .
     '<input type="submit" class="w3-btn w3-block w3-pale-red"' .
     ' value="Neuen Test erzeugen"></form></H4>';
-if (isset($DEBUGMODUS)) {
+if (Env::DEBUGMODUS) {
     $index = 0;
     echo '<table class="w3-table w3-pale-red w3-bordered">';
     echo '<tr><td>Nr.</td><td>id</td><td>Kat.</td><td>Level</td><td>Frage</td></tr>';
@@ -114,7 +114,7 @@ foreach ($fragen as $frage_id => $frage) { # Schleife über alle Fragen:
         SchiriTest::antworten_anzeigen($frage_id, $frage);
     }
     echo '</div>';
-    if (isset($DEBUGMODUS)) { # Start Debug Modus
+    if (Env::DEBUGMODUS) { # Start Debug Modus
         $debuginfo = "frage_id:      " . $frage_id;
         $debuginfo .= "<BR>Kategorie: " . $frage['kategorie'];
         $debuginfo .= "<BR>LJBF:      " . $frage['LJBF'];
