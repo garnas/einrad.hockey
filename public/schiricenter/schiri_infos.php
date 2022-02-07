@@ -40,7 +40,7 @@ include '../../templates/header.tmp.php';
     <LI>Nach dem Bestehen der praktischen Prüfung gilt die Schirilizenz
     für die aktuelle und nächste Saison.</LI>
     <LI>Teams mit mindestens 2 Schiris bekommen ein zusätzliches Freilos.</LI>
-    <LI>Alle Infos gelten für die Saison 2021/2022.</LI>
+    <LI>Alle Infos gelten für die Saison <?= Html::get_saison_string() ?></LI>
 </UL>
 
 <div class="w3-responsive w3-card">
