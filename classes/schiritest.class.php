@@ -53,6 +53,11 @@ class SchiriTest
     # @param $anzahl    # Anzahl der Fragen die geholt werden sollen
     # @param $frage_id  # ID einer bestimmten Frage, die geholt werden soll
     # @return array     # Fragen die zurückgegeben werden
+    public string $zeitstempel;
+    public string $email;
+    public string $url;
+    public string $md5;
+
     public static function get_fragen(string $LJBF, int $kategorie,
                                       int $anzahl, int $frage_id = 0): array
     {
