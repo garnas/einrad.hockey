@@ -366,6 +366,7 @@ class SchiriTest
         }
         $sql = "UPDATE schiri_ergebnis SET t_abgegeben = ?,
             gesetzte_antworten = ?, bestanden = ? WHERE md5sum = ?;";
+        Helper::log(Config::LOG_SCHIRI_PRUEFUNG, $pruefling_id . ": Bestanden -> " . $bestanden);
         $params = [$zeitstempel, $antworten, $bestanden, $_GET['md5sum']];
         db::$db->query($sql, $params)->log();
         # Text der Email zusammenstellen:
@@ -387,9 +388,10 @@ class SchiriTest
         $mailer->Subject = 'Testergebnis von ' . $pruefling; # Betreff 
         $mailer->Body = $text;
         if (MailBot::send_mail($mailer)) {
-            Html::info("Die E-Mail wurde versandt.");
+            Html::info("Eine E-Mail mit deinem Testergebis wurde versandt.");
         } else {
-            Html::error("FEHLER: E-Mail konnte nicht versendet werden.");
+            Html::error("E-Mail konnte nicht versendet werden.");
+            Helper::log(Config::LOG_SCHIRI_PRUEFUNG, "Fehler: Email wurde nicht versendet!");
         }
     }
 
@@ -492,6 +494,7 @@ class SchiriTest
 
         $this->url = Env::BASE_URL . '/schiricenter/schiritest.php?md5sum=' . $this->md5;
         $this->schiri_test_id = db::$db->get_last_insert_id();
+        Helper::log(Config::LOG_SCHIRI_PRUEFUNG, $this->spieler->id() . ": Test wurde erstellt ($this->md5)");
 
         return $this;
     }

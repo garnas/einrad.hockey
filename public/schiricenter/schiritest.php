@@ -17,7 +17,8 @@ if (isset($test_level)) {
     $timelimit   = $lev_info['timelimit'];
     $richtig_min = $lev_info['richtig_min'];
 } else {
-    die('Ungültige URL');
+    Html::error("Testlevel konnte nicht ermittelt werden.");
+    Helper::reload("/schiricenter/schiri_infos.php");
 }
 
 # Antwort auswerten oder neue Frage stellen?
@@ -40,12 +41,15 @@ if (isset($_POST['beantworten'])) {
 } else {
     if (isset($_GET['md5sum'])) {
         if (!$neu) {
-            exit('<H1>Ungültiger Test (wurde schon gestartet)</H1>');
+            Html::error("Der Link zur Schiriprüfung ist nicht mehr gültig.");
+            Helper::log(Config::LOG_SCHIRI_PRUEFUNG, $pruefling_id . ": mehrfacher Aufruf des Tests " . $_GET['md5sum']);
+            Helper::reload("/schiricenter/schiri_infos.php");
         }
         $zeitstempel = date('Y-m-d H:i:s'); # heutiges Datum + Uhrzeit
-        $sql = "UPDATE schiri_ergebnis SET t_gestartet = ? WHERE md5sum = ?;";
-        $params = [$zeitstempel, $_GET['md5sum']];
-        db::$db->query($sql, $params)->log();
+
+        SchiriTest::test_gestartet($zeitstempel, $_GET['md5sum']);
+        Helper::log(Config::LOG_SCHIRI_PRUEFUNG, $pruefling_id. ": Pruefung gestartet");
+
         $titel = 'Schiritest (' . $levelname . ') für ' . $pruefling;
     } else {
         $pruefling = '';
