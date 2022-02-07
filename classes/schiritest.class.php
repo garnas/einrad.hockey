@@ -443,7 +443,7 @@ class SchiriTest
         $this->set_gestellte_fragen(); # Ids in CSV-Form speichern
 
         $this->zeitstempel = date('Y-m-d H:i:s'); # heutiges Datum + Uhrzeit abspeichern
-        $this->md5 = md5($this->gestellte_fragen . $this->zeitstempel); # für Test-URL
+        $this->md5 = md5(uniqid($this->gestellte_fragen . $this->zeitstempel, true)); # für Test-URL
         return $this;
     }
 
