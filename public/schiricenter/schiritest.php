@@ -162,7 +162,7 @@ if (isset($_POST['beantworten'])) { # Test auswerten:
     echo '</UL>';
     if ($test_level!='L') { # Timer, außer für Lehrgang
         echo '<div class="w3-center w3-white w3-bottombar w3-border-primary"';
-        echo 'style="position: sticky; top: 0; z-index: 1000;">';
+        echo ' style="position: sticky; top: 0; z-index: 1000;">';
         Html::countdown(time() + 60*$timelimit);
         echo '</div>';
     }
