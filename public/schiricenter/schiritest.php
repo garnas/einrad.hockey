@@ -27,11 +27,13 @@ if (isset($test_level)) {
 
 # Antwort auswerten oder neue Frage stellen?
 if (isset($_POST['beantworten'])) {
+
     $alle_antworten_user = array();
     $pruefling = $_SESSION['pruefling'];
     $titel = 'Auswertung des Schiritests';
     $fragen = $_SESSION['sc_test_fragen'];
     $richtig = 0; # Zähler für richtige Antworten
+
     foreach ($fragen as $frage_id => $frage) {
         $antworten_user = $_POST['abgabe'][$frage_id] ?? [];
         $alle_antworten_user[] = $antworten_user;
@@ -39,9 +41,11 @@ if (isset($_POST['beantworten'])) {
             $richtig++;
         }
     }
+
     if (!empty($pruefling)){
         SchiriTest::testergebnis_melden($fragen, $richtig, $alle_antworten_user);
     }
+
 } else {
     if (isset($_GET['md5sum'])) {
         if (!$neu) {

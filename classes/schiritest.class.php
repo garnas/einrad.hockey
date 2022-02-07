@@ -289,14 +289,14 @@ class SchiriTest
             FROM schiri_test
             WHERE frage_id = ?
         ";
-        # $result = db::readdb($sql);
-        # $richtig = mysqli_fetch_assoc($result)['richtig']; # String, # als Trennzeichen
+
         $richtig = db::$db->query($sql, $frage_id)->fetch_one();
         # Array mit den Nummern der richtigen Antwort:
         $richtig = preg_split('/[\s#\s]+/', $richtig);
         # Vergleich der Arrays $richtig und $antworten
         sort($richtig); # Sortieren, damit beide Arrays die gleiche Reihenfolge haben
         sort($user_antworten);
+
         return $richtig == $user_antworten;
     }
 
@@ -359,16 +359,25 @@ class SchiriTest
         # Ergebnis in MySQL entragen:
         $zeitstempel = date('Y-m-d H:i:s'); # heutiges Datum + Uhrzeit
         $antworten = json_encode($abgabe); #qqq Formattierung verbessern
+
         if ($richtig < self::lev_infos[$test_level]['richtig_min']) {
             $bestanden = 'Nein';
         } else {
             $bestanden = 'Ja';
         }
-        $sql = "UPDATE schiri_ergebnis SET t_abgegeben = ?,
-            gesetzte_antworten = ?, bestanden = ? WHERE md5sum = ?;";
         Helper::log(Config::LOG_SCHIRI_PRUEFUNG, $pruefling_id . ": Bestanden -> " . $bestanden);
+
+        $sql = "
+            UPDATE schiri_ergebnis 
+            SET t_abgegeben = ?,
+                gesetzte_antworten = ?,
+                bestanden = ?
+            WHERE md5sum = ?
+            ";
         $params = [$zeitstempel, $antworten, $bestanden, $_GET['md5sum']];
+
         db::$db->query($sql, $params)->log();
+
         # Text der Email zusammenstellen:
         $text = "<p>Prüfling: " . $pruefling;
         $text .= "<P>Es wurden " . $richtig . " Fragen richtig beantwortet.";
@@ -397,11 +406,6 @@ class SchiriTest
 
     #-------------------------------------------------------------------------
 
-
-    ############## Beispiel-Vorschlag von Ansgar ######################
-    ############## Nur ein Vorschlag! ######################
-
-    private int $schiri_test_id;
     public array $pruefungs_fragen;
     public nSpieler $spieler;
     public string $test_level;
@@ -416,8 +420,7 @@ class SchiriTest
     public function set_pruefungs_fragen(): SchiriTest
     {
         $anzahl = self::lev_infos[$this->test_level]['anzahl'];            
-        # vorschlag self::get_Fragen zu $this->get_fragen. $test_level
-        # als Argument streichen und zu $this->test_level in der funktion 
+
         $this->pruefungs_fragen =
             self::get_fragen($this->test_level,  1, $anzahl[1])  +
             self::get_fragen($this->test_level,  2, $anzahl[2])  +
@@ -431,6 +434,7 @@ class SchiriTest
             self::get_fragen($this->test_level, 10, $anzahl[10]) +
             self::get_fragen($this->test_level, 11, $anzahl[11]); 
         $this->set_gestellte_fragen(); # Ids in CSV-Form speichern
+
         $this->zeitstempel = date('Y-m-d H:i:s'); # heutiges Datum + Uhrzeit abspeichern
         $this->md5 = md5($this->gestellte_fragen . $this->zeitstempel); # für Test-URL
         return $this;
@@ -449,6 +453,7 @@ class SchiriTest
 
     /**
      * @param string $test_level
+     * @return SchiriTest
      */
     public function set_level(string $test_level): SchiriTest
     {
@@ -463,6 +468,7 @@ class SchiriTest
 
     /**
      * @param string $email
+     * @return SchiriTest
      */
     public function set_email(string $email): SchiriTest
     {
@@ -493,7 +499,7 @@ class SchiriTest
         db::$db->query($sql, $params)->log();
 
         $this->url = Env::BASE_URL . '/schiricenter/schiritest.php?md5sum=' . $this->md5;
-        $this->schiri_test_id = db::$db->get_last_insert_id();
+
         Helper::log(Config::LOG_SCHIRI_PRUEFUNG, $this->spieler->id() . ": Test wurde erstellt ($this->md5)");
 
         return $this;
