@@ -6,7 +6,7 @@ require_once '../../init.php'; # Autoloader und Session, muss immer geladen werd
 
 if (isset($_GET['md5sum'])) {
     [$pruefling_id, $pruefling, $test_level, $fragen, $neu] = SchiriTest::offizieller_test($_GET['md5sum']);
-    Helper::log(Config::LOG_SCHIRI_PRUEFUNG, "$pruefling_id: hat Test aufgerufen.");
+    Helper::log(Config::LOG_SCHIRI_PRUEFUNG, "$pruefling_id: hat die Seite geladen oder lässt das Ergebnis anzeigen.");
     Helper::log(Config::LOG_SCHIRI_PRUEFUNG,
         "$pruefling_id: " . print_r([$_SERVER['REQUEST_URI'], $_SERVER['HTTP_REFERER'], $_SERVER['REMOTE_ADDR']], true)
     );
