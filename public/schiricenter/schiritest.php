@@ -43,6 +43,8 @@ if (isset($_POST['beantworten'])) {
 
     if (!empty($pruefling)){
         SchiriTest::testergebnis_melden($fragen, $richtig, $alle_antworten_user);
+    } else {
+        Helper::log(Config::LOG_SCHIRI_UEBUNGSTEST, "Richtig: $richtig");
     }
 
 } else {
