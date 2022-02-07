@@ -12,7 +12,7 @@ Html::$content = "Infos für Schiedsrichter und alle, die es werden wollen.";
 include '../../templates/header.tmp.php';
 ?>
 
-<?php if (isset($DEBUGMODUS)) { # Start Debug Modus ?>
+<?php if (Env::DEBUGMODUS) { # Start Debug Modus ?>
     <P><div class="w3-ul w3-pale-red w3-bordered">
         DEBUGGING:
         <?=Html::link("uebungstest_l_debug.php", "Einzelne Fragen",
