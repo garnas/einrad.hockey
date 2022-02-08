@@ -860,6 +860,25 @@ class nTurnier
     }
 
     /**
+     * Ändert den Ausrichter
+     * @param int|null $ausrichter
+     * @return nTurnier
+     */
+    public function set_ausrichter(?int $ausrichter): nTurnier
+    {
+        if (!Team::is_ligateam($ausrichter)){
+            $this->error = true;
+            Html::error("Ausrichter nicht gefunden");
+        }
+
+        if ($this->ausrichter != $ausrichter) {
+            $this->auto_log("Ausrichter", Team::id_to_name($this->ausrichter), Team::id_to_name($ausrichter));
+            $this->ausrichter = $ausrichter;
+        }
+        return $this;
+    }
+
+    /**
      * Schreibt in den Turnierlog.
      *
      * Turnierlogs werden bei Zerstörung des Objektes in die DB geschrieben.
@@ -1189,6 +1208,11 @@ class nTurnier
      */
     public function set_database(): nTurnier
     {
+        if ($this->error){
+            Html::error("Turnier konnte nicht in die Datenbank geschrieben werden, da Fehler vorliegen");
+            return $this;
+        }
+
         $sql = "
             UPDATE turniere_liga SET 
             tname = ?,
