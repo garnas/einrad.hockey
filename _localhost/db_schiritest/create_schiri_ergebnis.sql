@@ -4,7 +4,6 @@ CREATE TABLE schiri_ergebnis (
     `schiri_test_id`      INT NOT NULL AUTO_INCREMENT,
     `md5sum`              VARCHAR(32) NULL,
     `spieler_id`          INT NOT NULL,
-    `spieler_name`        VARCHAR(500) NULL,
     `spieler_email`       VARCHAR(500) NULL,
     `gestellte_fragen`    VARCHAR(500) NULL,
     `gesetzte_antworten`  VARCHAR(500) NULL,
