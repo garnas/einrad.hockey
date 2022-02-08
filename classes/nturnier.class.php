@@ -706,8 +706,6 @@ class nTurnier
                 $temp = new Team($team_id);
                 $temp->set_wertigkeit($this->spieltag);
                 $temp->set_tblock($this->spieltag);
-                db::debug([$temp->get_teamname(), $temp->tblock, $this->spieltag]);
-                db::debug(Tabelle::get_aktuellen_spieltag());
                 $meldeliste[$team_id] = $temp;
             }
 
@@ -1035,7 +1033,9 @@ class nTurnier
      */
     public function set_hinweis(string $hinweis): nTurnier
     {
-        $this->auto_log("Hinweis", $this->hinweis , $hinweis);
+        if ($this->hinweis !== $hinweis){
+            $this->set_log("Hinweise geändert:\r\n" . $hinweis);
+        }
         $this->hinweis = $hinweis;
         return $this;
     }
