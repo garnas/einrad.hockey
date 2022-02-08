@@ -45,6 +45,7 @@ class LigaBot
                 && ($pos_ausrichter - 1) != $pos_turnier
             ) { // Um einen Block vom Ausrichterblock aus erweiterte Turniere sollen nicht wandern...
                 $turnier->set_tblock($ausrichter_block);
+                $turnier->set_database();
             }
             if (
                 $turnier->get_art() === 'II'
@@ -53,6 +54,7 @@ class LigaBot
                 && $pos_ausrichter < $pos_turnier
             ) {
                 $turnier->set_tblock($ausrichter_block);
+                $turnier->set_database();
             }
 
             /**
@@ -120,6 +122,7 @@ class LigaBot
             }
             if ($turnier->get_spieltag() != $set_spieltag) { // Die Datenbank wird nur beschrieben, wenn sich der Spieltag ändert.
                 $turnier->set_spieltag($set_spieltag);
+                $turnier->set_database();
             }
             $kw = date('W', $datum); // Kalenderwoche übernehmen für die nächste Iteration
         }

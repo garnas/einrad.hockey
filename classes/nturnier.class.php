@@ -352,7 +352,7 @@ class nTurnier
     /**
      * @return string
      */
-    public function get_freie_plaetze_status()
+    public function get_freie_plaetze_status(): string
     {
         return $this->freie_plaetze_status;
     }
@@ -420,7 +420,8 @@ class nTurnier
 
     /**
      * Erhalte Turniere, die in der offen-Phase sind
-     * @param $saison
+     * @param bool $asc
+     * @param int $saison
      * @return nTurnier[]
      */
 
@@ -441,7 +442,8 @@ class nTurnier
 
     /**
      * Erhalte Turniere, die in der melden-Phase sind
-     * @param $saison
+     * @param bool $asc
+     * @param int $saison
      * @return nTurnier[]
      */
 
@@ -693,7 +695,7 @@ class nTurnier
                 ";
         $liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
 
-        // Prüfen ob Spielen-Liste gegeben
+        // Prüfen ob Melde-Liste gegeben
         if (!empty($liste)) {
 
             // Blöcke und Wertungen hinzufügen
@@ -860,6 +862,25 @@ class nTurnier
     }
 
     /**
+     * Ändert den Ausrichter
+     * @param int|null $ausrichter
+     * @return nTurnier
+     */
+    public function set_ausrichter(?int $ausrichter): nTurnier
+    {
+        if (!Team::is_ligateam($ausrichter)){
+            $this->error = true;
+            Html::error("Ausrichter nicht gefunden");
+        }
+
+        if ($this->ausrichter != $ausrichter) {
+            $this->auto_log("Ausrichter", Team::id_to_name($this->ausrichter), Team::id_to_name($ausrichter));
+            $this->ausrichter = $ausrichter;
+        }
+        return $this;
+    }
+
+    /**
      * Schreibt in den Turnierlog.
      *
      * Turnierlogs werden bei Zerstörung des Objektes in die DB geschrieben.
@@ -869,6 +890,13 @@ class nTurnier
     public function set_log(string $log_text): void
     {
         $this->log .= "\r\n" . $log_text;
+    }
+
+    public function auto_log(string $name, mixed $alt, mixed $neu): void
+    {
+        if ($alt !== $neu){
+            $this->set_log($name . ": " . $alt . " -> " . $neu );
+        }
     }
 
     /**
@@ -894,7 +922,7 @@ class nTurnier
 
         // Turnierlog beschreiben
         $turnier = self::get($turnier_id);
-        $turnier->set_log("Turnier wurde erstellt. (Ausrichter $ausrichter)");
+        $turnier->set_log("Turnier mit ID $turnier_id wurde erstellt. (Ausrichter-ID $ausrichter)");
 
         // Ausrichter auf dem Turnier melden
         $turnier->set_team($ausrichter, 'spiele');
@@ -909,6 +937,7 @@ class nTurnier
      */
     public function set_art(string $art): nTurnier
     {
+        $this->auto_log("Turnierart", $this->art, $art);
         $this->art = $art;
         return $this;
     }
@@ -920,6 +949,7 @@ class nTurnier
      */
     public function set_fixed_tblock(string $tblock_fixed): nTurnier
     {
+        $this->auto_log("Fixer Block", $this->tblock_fixed, $tblock_fixed);
         $this->tblock_fixed = $tblock_fixed;
         return $this;
     }
@@ -931,6 +961,7 @@ class nTurnier
      */
     public function set_tname(string|null $tname): nTurnier
     {
+        $this->auto_log("Turniername", $this->tname , $tname);
         $this->tname = $tname;
         return $this;
     }
@@ -942,6 +973,7 @@ class nTurnier
      */
     public function set_tblock(string $tblock): nTurnier
     {
+        $this->auto_log("Turnierblock", $this->tblock , $tblock);
         $this->tblock = $tblock;
         return $this;
     }
@@ -953,6 +985,7 @@ class nTurnier
      */
     public function set_datum(string $datum): nTurnier
     {
+        $this->auto_log("Datum", $this->datum , $datum);
         $this->datum = $datum;
         return $this;
     }
@@ -964,6 +997,7 @@ class nTurnier
      */
     public function set_saison(int $saison): nTurnier
     {
+        $this->auto_log("Saison", $this->saison , $saison);
         $this->saison = $saison;
         return $this;
     }
@@ -975,6 +1009,7 @@ class nTurnier
      */
     public function set_startzeit(string $startzeit): nTurnier
     {
+        $this->auto_log("Startzeit", $this->startzeit , $startzeit);
         $this->startzeit = $startzeit;
         return $this;
     }
@@ -986,6 +1021,7 @@ class nTurnier
      */
     public function set_besprechung(string $besprechung): nTurnier
     {
+        $this->auto_log("Turnierbesprechung", $this->besprechung , $besprechung);
         $this->besprechung = $besprechung;
         return $this;
     }
@@ -997,6 +1033,9 @@ class nTurnier
      */
     public function set_hinweis(string $hinweis): nTurnier
     {
+        if ($this->hinweis !== $hinweis){
+            $this->set_log("Hinweise geändert:\r\n" . $hinweis);
+        }
         $this->hinweis = $hinweis;
         return $this;
     }
@@ -1008,6 +1047,7 @@ class nTurnier
      */
     public function set_plaetze(int $plaetze): nTurnier
     {
+        $this->auto_log("Plätze", $this->plaetze , $plaetze);
         $this->plaetze = $plaetze;
         return $this;
     }
@@ -1019,6 +1059,7 @@ class nTurnier
      */
     public function set_format(string $format): nTurnier
     {
+        $this->auto_log("Format", $this->format , $format);
         $this->format = $format;
         return $this;
     }
@@ -1030,6 +1071,7 @@ class nTurnier
      */
     public function set_plz(int $plz): nTurnier
     {
+        $this->auto_log("Plz", $this->plz , $plz);
         $this->plz = $plz;
         return $this;
     }
@@ -1041,6 +1083,7 @@ class nTurnier
      */
     public function set_ort(string $ort): nTurnier
     {
+        $this->auto_log("Ort", $this->ort , $ort);
         $this->ort = $ort;
         return $this;
     }
@@ -1052,6 +1095,7 @@ class nTurnier
      */
     public function set_strasse(string $strasse): nTurnier
     {
+        $this->auto_log("Strasse", $this->strasse , $strasse);
         $this->strasse = $strasse;
         return $this;
     }
@@ -1063,6 +1107,7 @@ class nTurnier
      */
     public function set_hallennamen(string $hallenname): nTurnier
     {
+        $this->auto_log("Hallenname", $this->hallenname , $hallenname);
         $this->hallenname = $hallenname;
         return $this;
     }
@@ -1074,6 +1119,7 @@ class nTurnier
      */
     public function set_haltestelle(string $haltestelle): nTurnier
     {
+        $this->auto_log("Haltestelle", $this->haltestellen , $haltestelle);
         $this->haltestellen = $haltestelle;
         return $this;
     }
@@ -1085,6 +1131,7 @@ class nTurnier
      */
     public function set_handy(string $handy): nTurnier
     {
+        $this->auto_log("Handy", $this->handy , $handy);
         $this->handy = $handy;
         return $this;
     }
@@ -1096,6 +1143,7 @@ class nTurnier
      */
     public function set_organisator(string $organisator): nTurnier
     {
+        $this->auto_log("Organisator", $this->organisator , $organisator);
         $this->organisator = $organisator;
         return $this;
     }
@@ -1107,6 +1155,7 @@ class nTurnier
      */
     public function set_startgebuehr(string $startgebuehr): nTurnier
     {
+        $this->auto_log("Startgebühr", $this->startgebuehr , $startgebuehr);
         $this->startgebuehr = $startgebuehr;
         return $this;
     }
@@ -1116,8 +1165,9 @@ class nTurnier
      * 
      * @return nTurnier
      */
-    public function set_phase(string $phase)
+    public function set_phase(string $phase): nTurnier
     {
+        $this->auto_log("Phase", $this->phase , $phase);
         $this->phase = $phase;
         return $this;
     }
@@ -1127,6 +1177,7 @@ class nTurnier
      */
     public function set_spieltag(int $spieltag): void
     {
+        $this->auto_log("Spieltag", $this->spieltag , $spieltag);
         $this->spieltag = $spieltag;
     }
 
@@ -1189,6 +1240,11 @@ class nTurnier
      */
     public function set_database(): nTurnier
     {
+        if ($this->error){
+            Html::error("Turnier konnte nicht in die Datenbank geschrieben werden, da Fehler vorliegen");
+            return $this;
+        }
+
         $sql = "
             UPDATE turniere_liga SET 
             tname = ?,
@@ -1363,7 +1419,9 @@ class nTurnier
                 AND team_id = ?
                 ";
         db::$db->query($sql, $this->turnier_id, $team_id)->log();
-        if (db::$db->affected_rows() > 0) $this->set_log("Abmeldung:\r\n" . Team::id_to_name($team_id));
+        if (db::$db->affected_rows() > 0) {
+            $this->set_log("Abmeldung:\r\n" . Team::id_to_name($team_id));
+        }
     }
 
     /**
@@ -1395,7 +1453,7 @@ class nTurnier
                     AND liste = 'warte'
                     AND team_id = ?;
                     ";
-            db::$db->query($sql, $this->turnier_id, ++$pos, $team['team_id'])->log();
+            db::$db->query($sql,  ++$pos, $this->turnier_id,$team['team_id'])->log();
             $affected_rows += db::$db->affected_rows();
             $logs[] = $pos . ". " . Team::id_to_name($team['team_id']);
         }
@@ -1540,7 +1598,7 @@ class nTurnier
             WHERE turnier_id = ?;
         ";
         db::$db->query($sql, $phase, $this->turnier_id)->log();
-        $this->set_log("Turnierphase angepasst");
+        $this->auto_log("Phase (direkt in die DB)", $this->phase, $phase);
     }
 
     /**
@@ -1733,11 +1791,7 @@ class nTurnier
      */
     public function is_erweiterbar_plaetze()
     {
-        if ($this->phase == 'melde') {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->phase == 'melde';
     }
 
     /**
@@ -1801,7 +1855,6 @@ class nTurnier
             if ($log) {
                 $this->set_log("Spielen-Liste aufgefüllt");
             }
-
             $this->warteliste_aktualisieren();
         }
     }
