@@ -1453,7 +1453,7 @@ class nTurnier
                     AND liste = 'warte'
                     AND team_id = ?;
                     ";
-            db::$db->query($sql, $this->turnier_id, ++$pos, $team['team_id'])->log();
+            db::$db->query($sql,  ++$pos, $this->turnier_id,$team['team_id'])->log();
             $affected_rows += db::$db->affected_rows();
             $logs[] = $pos . ". " . Team::id_to_name($team['team_id']);
         }
