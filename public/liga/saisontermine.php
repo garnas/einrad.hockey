@@ -39,11 +39,11 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
     <table class="w3-table w3-bordered">
         <tr>
             <th class="w3-primary-3">Bewerbungsfrist</th>
-            <td>30. Januar 2022</tr>
+            <td>28. Januar 2024</tr>
         </tr>
         <tr>
             <th class="w3-primary-3">Ligaausschusswahlen</th>
-            <td>14. Februar 2022 - 27. Februar 2022</td>
+            <td>12. Februar 2024 - 25. Februar 2024</td>
         </tr>
     </table>
 </div>
