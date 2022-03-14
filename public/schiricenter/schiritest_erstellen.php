@@ -1,7 +1,7 @@
 <?php # -*- php -*-
 
 require_once '../../init.php'; # Autoloader und Session, muss immer geladen werden!
-#qqq require_once '../../logic/session_la.logic.php'; # Auth
+require_once '../../logic/session_la.logic.php'; # Auth
 require_once '../../logic/la_spieler_waehlen.logic.php';
 
 $titel = 'Schiritest erstellen';
