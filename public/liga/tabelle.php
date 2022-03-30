@@ -51,7 +51,7 @@ for ($i = 1; $i <= 12 ; $i++){
 for ($i = 13; $i <= 18; $i++){
     $platz_color[$i] = "w3-text-grey";
 }
-for ($i = 19; $i < 24; $i++){
+for ($i = 19; $i <= 24; $i++){
     $platz_color[$i] = "w3-text-brown";
 }
 
