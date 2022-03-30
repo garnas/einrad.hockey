@@ -1,7 +1,3 @@
-<?php 
-db::debug($spielplan->direkter_vergleich_tabellen);
-?>
-
 <?php if (!empty($spielplan->direkter_vergleich_tabellen)){ ?>
     <!-- Buttons zum Ein/Ausblenden der Vergleiche -->
     <div class="w3-section w3-margin-top">
