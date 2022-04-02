@@ -70,6 +70,7 @@ if (isset($_POST['change_turnier'])) {
             Html::error("Ungültige Anzahl an Turnierplätzen.");
         }
     }
+    $turnier_plaetze_erweitert = $plaetze > $turnier->get_plaetze();
 
     // Keine Änderung der Plätze in der Spielplanphase
     if (
@@ -103,7 +104,7 @@ if (isset($_POST['change_turnier'])) {
     $tblock = $turnier->get_tblock();
     $fixed = $turnier->get_tblock_fixed();
     $art = $turnier->get_art();
-    
+
     $erweitern = false; // Wird auf true gesetzt, wenn der Turnierblock erweitert werden soll
 
     // Um den nächst höheren Buchstaben erweitern
@@ -141,18 +142,17 @@ if (isset($_POST['change_turnier'])) {
         // Turnierblock erweitern und mögliche Teams der Warteliste aufnehmen
         if ($erweitern) {
             $turnier->set_tblock($tblock)
-                    ->set_fixed_tblock($fixed)
-                    ->set_art($art)
-                    ->set_database()
-                    ->spieleliste_auffuellen();
+                ->set_fixed_tblock($fixed)
+                ->set_art($art)
+                ->set_database()
+                ->spieleliste_auffuellen();
             Html::info("Turnier wurde erweitert");
         }
 
         // Mail an den Ligaausschuss, wenn Plätze, Startzeit, Ort oder Format im Teamcenter geändert wurden
         if (
             Helper::$teamcenter
-            && (
-                $turnier->get_startzeit() !== $startzeit
+            && ($turnier->get_startzeit() !== $startzeit
                 || $turnier->get_plaetze() !== $plaetze
                 || $turnier->get_ort() !== $ort
                 || $turnier->get_format() !== $format
@@ -163,24 +163,23 @@ if (isset($_POST['change_turnier'])) {
 
         // Ändern der Turnierdetails
         $turnier->set_startzeit($startzeit)
-                ->set_besprechung($besprechung)
-                ->set_plaetze($plaetze)
-                ->set_format($format)
-                ->set_hallennamen($hallenname)
-                ->set_strasse($strasse)
-                ->set_plz($plz)
-                ->set_ort($ort)
-                ->set_haltestelle($haltestellen)
-                ->set_startgebuehr($startgebuehr)
-                ->set_organisator($organisator)
-                ->set_handy($handy)
-                ->set_hinweis($hinweis)
-                ->set_database();
+            ->set_besprechung($besprechung)
+            ->set_plaetze($plaetze)
+            ->set_format($format)
+            ->set_hallennamen($hallenname)
+            ->set_strasse($strasse)
+            ->set_plz($plz)
+            ->set_ort($ort)
+            ->set_haltestelle($haltestellen)
+            ->set_startgebuehr($startgebuehr)
+            ->set_organisator($organisator)
+            ->set_handy($handy)
+            ->set_hinweis($hinweis)
+            ->set_database();
 
-        // Spielen-Liste aktualisieren, wenn die Anzahl der Plätze geändert wurde        
+        // Spielen-Liste aktualisieren, wenn die Anzahl der Plätze mehr wurde        
         if (
-            $turnier->is_erweiterbar_plaetze()
-            && $turnier->get_plaetze() < $plaetze
+            $turnier_plaetze_erweitert
         ) {
             $turnier->spieleliste_auffuellen();
         }
