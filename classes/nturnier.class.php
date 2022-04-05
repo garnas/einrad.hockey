@@ -1311,6 +1311,18 @@ class nTurnier
             $this->turnier_id
         )->log();
 
+        $this->meldeliste = $this->set_meldeliste();
+        $this->anz_meldeliste = $this->set_anz_meldeliste();
+
+        $this->warteliste = $this->set_warteliste();
+        $this->anz_warteliste = $this->set_anz_warteliste();
+
+        $this->spielenliste = $this->set_spielenliste();
+        $this->anz_spielenliste = $this->set_anz_spielenliste();
+
+        $this->freie_plaetze = $this->set_freie_plaetze();
+        $this->freie_plaetze_status = $this->set_freie_plaetze_status();
+
         return $this;
     }
 

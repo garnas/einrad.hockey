@@ -6,6 +6,7 @@ $turnier = nTurnier::get($turnier_id);
 // Berechtigung zum Verändern des Reports
 $team_id = $_SESSION['logins']['team']['id'] ?? 0;
 $change_tbericht = ($turnier->is_ausrichter($team_id) || Helper::$ligacenter);
+$read_tbericht = Helper::$ligacenter || array_key_exists($team_id, $turnier->get_spielenliste()) || $turnier->is_ausrichter($team_id);
 
 // Berechtigung zum Verändern des Reports widerrufen für Ausrichter, wenn das Turnier mehr als zwei Tage zurückliegt.
 if (
@@ -27,9 +28,8 @@ if (empty($turnier->get_turnier_id())) {
 }
 
 // Gibt es eine Leseberechtigung?
-if (
-    !Helper::$ligacenter && !array_key_exists($team_id, $turnier->get_spielenliste())
-) {
+if (!$read_tbericht) 
+{
     Html::error("Der Turnierreport kann nur von teilnehmenden Teams eingesehen werden.");
     Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->get_turnier_id());
 }

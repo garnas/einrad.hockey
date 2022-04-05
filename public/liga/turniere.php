@@ -57,11 +57,6 @@ foreach ($alle_turniere as $turnier) {
     $turniere[$turnier_id]['datum'] = strftime("%d.%m.", strtotime($turnier->get_datum()));
     $turniere[$turnier_id]['startzeit'] = substr($turnier->get_startzeit(), 0, -3);
 
-    // Spassturnier
-    if ($turnier->get_tblock() == 'spass') {
-        $turniere[$turnier_id]['tblock'] = 'Spaß';
-    }
-
     // Turnierbesprechung
     if ($turnier->get_besprechung() == 'Ja') {
         $turniere[$turnier_id]['besprechung'] = 'Gemeinsame Teambesprechung um ' . date('H:i', strtotime($turniere[$turnier_id]['startzeit']) - 15 * 60) . '&nbsp;Uhr';
@@ -104,6 +99,11 @@ foreach ($alle_turniere as $turnier) {
             break;
         default:
             $turniere[$turnier_id]['tblock'] = '(' . $turnier->get_tblock() . ')';
+    }
+
+    // Spassturnier
+    if ($turnier->get_art() == 'spass') {
+        $turniere[$turnier_id]['tblock'] = '';
     }
 }
 
