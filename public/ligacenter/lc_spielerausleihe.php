@@ -6,19 +6,19 @@ require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
 // Logs des Turnieres bekommen
-$logs = Logs::get_logs();
+$ausleihen = Logs::get_spielerausleihe();
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-Html::$titel = "Gesamtlogs | Ligacenter";
-Html::$content = "Hier wird der gesamte Log aller Turniere angezeigt.";
+Html::$titel = "Spielerausleihe | Ligacenter";
+Html::$content = "Hier werden alle Spielerausleihen der gesamten Saison angezeigt.";
 include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 
 <br>
 <?= Html::link('lc_turnierliste.php', '<span class="material-icons">sports_hockey</span> Zurück zur Turnierliste') ?>
-<h2 class="w3-text-grey">Gesamtübersicht über alle Vorgänge</h2>
+<h2 class="w3-text-grey">Alle Spielerausleihen der Saison <?=Html::get_saison_string()?></h2>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
@@ -40,20 +40,23 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped">
             <tr class="w3-primary">
-                <th>Zeit</th>
-                <th>Turnier ID</th>
-                <th>Aktion</th>
-                <th>Akteur</th>
+                <th>Turnier</th>
+                <th>Datum</th>
+                <th>Ort</th>
+                <th>Spieler</th>
+                <th>Aufnehmendes Team</th>
+                <th>Abgebendes Team</th>
             </tr>
-            <?php foreach ($logs as $log) { ?>
+            <?php foreach ($ausleihen as $spieler): ?>
                 <tr class="row">
-                    <td style="white-space: pre;"><?= $log['zeit'] ?></td>
-                    <td><?= $log['turnier_id'] ?></td>
-                    <td style="white-space: pre;"><?= $log['log_text'] ?></td>
-                    <td><?= $log['autor'] ?></td>
+                    <td><?= Html::link('lc_turnier_report.php?turnier_id=' . $spieler['turnier_id'], $spieler['turnier_id']) ?></td>
+                    <td><?= strftime("%d.%m.%Y", strtotime($spieler['datum'])) ?></td>
+                    <td><?= $spieler['ort'] ?></td>
+                    <td><?= $spieler['spieler'] ?></td>
+                    <td><?= $spieler['team_auf'] ?></td>
+                    <td><?= $spieler['team_ab'] ?></td>
                 </tr>
-            <?php } //end forach
-            ?>
+            <?php endforeach; ?>
         </table>
     </div>
 </div>
