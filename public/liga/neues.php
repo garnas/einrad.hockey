@@ -139,8 +139,10 @@ include '../../templates/header.tmp.php'; ?>
 
             <!-- Statistik -->
             <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
-                <div class="w3-stretch w3-container w3-primary">
-                    <h3><?= Html::icon("insert_chart_outlined", tag: "h2") ?> Statistik</h3>
+                <div class="w3-stretch w3-container w3-primary w3-hover-tertiary">
+                    <a href='statistik.php' class="no">
+                        <h3><?= Html::icon("insert_chart_outlined", tag: "h2") ?> Statistik</h3>
+                    </a>
                 </div>
                 <span class="w3-text-grey w3-small">Saison <?= Html::get_saison_string() ?></span>
 
@@ -217,11 +219,11 @@ include '../../templates/header.tmp.php'; ?>
                                     <td><?= Html::icon("sports_hockey") ?></td>
                                 </tr>
                                 <?php $i = 0;
-                                foreach ($statistik['max_gew'] as $team_id => $gew_spiele): ?>
+                                foreach ($statistik['max_gew'] as $team): ?>
                                     <tr class="<?= $colors[$i] ?>">
                                         <td><?= Html::icon($icons[$i++]) ?></td>
-                                        <td style="white-space: nowrap;" class="w3-small"><?= Team::id_to_name($team_id) ?></td>
-                                        <td><?= $gew_spiele ?></td>
+                                        <td style="white-space: nowrap;" class="w3-small"><?= $team['teamname'] ?></td>
+                                        <td><?= $team['siege'] ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </table>
