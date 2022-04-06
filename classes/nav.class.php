@@ -23,7 +23,8 @@ class Nav
             [Env::BASE_URL . "/liga/ergebnisse.php", "Ergebnisse"],
             [Env::BASE_URL . "/liga/teams.php", "Teams"],
             [Env::BASE_URL . "/liga/tabelle.php#meister", "Meisterschaftstabelle"],
-            [Env::BASE_URL . "/liga/tabelle.php#rang", "Rangtabelle"]
+            [Env::BASE_URL . "/liga/tabelle.php#rang", "Rangtabelle"],
+            [Env::BASE_URL . "/liga/statistik.php", "Statistik"]
         ];
     }
 
