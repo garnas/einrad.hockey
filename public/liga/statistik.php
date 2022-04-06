@@ -9,6 +9,19 @@ $max_gew = Stats::get_gew_spiele_team(limit: 999);
 $max_ausrichter = Stats::get_max_ausrichter(limit: 999);
 $max_turnierorte = Stats::get_max_turnierorte(limit: 999);
 
+$gespielte_turniere = count(nTurnier::get_turniere_ergebnis($asc = false));
+$anstehende_turniere = count(nTurnier::get_turniere_kommend());
+$spiele = Stats::get_spiele_anzahl();
+$tore = Stats::get_tore_anzahl();
+
+// Erstellen des Strings für die Spielzeit
+$zeit = Stats::get_spielminuten_anzahl();
+$tage = floor($zeit / 60 / 24);
+$stunden = floor(($zeit / 60) % 24);
+$minuten = $zeit % 60;
+
+$string_zeit = ($tage > 0 ? $tage . "d " : "") . ($stunden > 0 ? $stunden . "h " : "") . ($minuten > 0 ? $minuten . "min" : "");
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -18,6 +31,31 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 
 <h1 class="w3-text-primary">Statistik der Saison <?=Html::get_saison_string()?></h1>
 
+<!-- Kacheln für allgemeine Auswertungen -->
+<div class="w3-row-padding w3-stretch">
+    <!-- gespielte Spiele -->
+    <div class="w3-quarter">
+        <div class="w3-panel w3-primary w3-card-4">
+            <p class="w3-center w3-xxlarge"><?=number_format($spiele, 0, ",", ".")?></p>
+            <p class="w3-center">Spiele</p>
+        </div>
+    </div>
+    <!-- geschossene Tore -->
+    <div class="w3-quarter">
+        <div class="w3-panel w3-primary w3-card-4">
+            <p class="w3-center w3-xxlarge"><?=number_format($tore, 0, ",", ".")?></p>
+            <p class="w3-center">Tore</p>
+        </div>
+    </div>
+    <!-- Spielminuten -->
+    <div class="w3-half">
+        <div class="w3-panel w3-primary w3-card-4">
+            <p class="w3-center w3-xxlarge"><?=$string_zeit?></p>
+            <p class="w3-center">Spielzeit</p>
+        </div>
+    </div>
+</div>
+
 <h3 class="w3-text-secondary">Turnierspieler</h3>
 <p class="w3-border-top w3-border-grey w3-text-grey">
     <span>Anzahl der gespielten Turniere pro Team</span>
@@ -26,16 +64,16 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
     <table class="w3-table w3-striped">
         <thead class="w3-primary">
             <tr>
-                <th><b>Platz</b></th>
+                <th class="w3-center"><b>#</b></th>
                 <th><b>Team</b></th>
-                <th><b>Anzahl</b></th>
+                <th class="w3-center"><b>&sum;</b></th>
             </tr>
         </thead>
         <?php foreach ($max_turniere as $team):?>
             <tr>
-                <td><?=$team['platz']?></td>
+                <td class="w3-center"><?=$team['platz']?></td>
                 <td><?=$team['teamname']?></td>
-                <td><?=$team['gespielt']?></td>
+                <td class="w3-center"><?=$team['gespielt']?></td>
             </tr>
         <?php endforeach; ?>
     </table>
@@ -49,16 +87,16 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
     <table class="w3-table w3-striped">
         <thead class="w3-primary">
             <tr>
-                <th><b>Platz</b></th>
+                <th class="w3-center"><b>#</b></th>
                 <th><b>Team</b></th>
-                <th><b>Anzahl</b></th>
+                <th class="w3-center"><b>&sum;</b></th>
             </tr>
         </thead>
         <?php foreach ($max_gew as $team):?>
             <tr>
-                <td><?=$team['platz']?></td>
+                <td class="w3-center"><?=$team['platz']?></td>
                 <td><?=$team['teamname']?></td>
-                <td><?=$team['siege']?></td>
+                <td class="w3-center"><?=$team['siege']?></td>
             </tr>
         <?php endforeach; ?>
     </table>    
@@ -72,16 +110,16 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
     <table class="w3-table w3-striped">
         <thead class="w3-primary">
             <tr>
-                <th><b>Platz</b></th>
+                <th class="w3-center"><b>#</b></th>
                 <th><b>Team</b></th>
-                <th><b>Anzahl</b></th>
+                <th class="w3-center"><b>&sum;</b></th>
             </tr>
         </thead>
         <?php foreach ($max_ausrichter as $team):?>
             <tr>
-                <td><?=$team['platz']?></td>
+                <td class="w3-center"><?=$team['platz']?></td>
                 <td><?=$team['teamname']?></td>
-                <td><?=$team['anzahl']?></td>
+                <td class="w3-center"><?=$team['anzahl']?></td>
             </tr>
         <?php endforeach; ?>
     </table>    
@@ -95,16 +133,16 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
     <table class="w3-table w3-striped">
         <thead class="w3-primary">
             <tr>
-                <th><b>Platz</b></th>
+                <th class="w3-center"><b>#</b></th>
                 <th><b>Team</b></th>
-                <th><b>Anzahl</b></th>
+                <th class="w3-center"><b>&sum;</b></th>
             </tr>
         </thead>
         <?php foreach ($max_turnierorte as $ort):?>
             <tr>
-                <td><?=$ort['platz']?></td>
+                <td class="w3-center"><?=$ort['platz']?></td>
                 <td><?=$ort['ort']?></td>
-                <td><?=$ort['anzahl']?></td>
+                <td class="w3-center"><?=$ort['anzahl']?></td>
             </tr>
         <?php endforeach; ?>
     </table>    
