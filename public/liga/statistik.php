@@ -56,96 +56,108 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
     </div>
 </div>
 
-<h3 class="w3-text-secondary">Turnierspieler</h3>
-<p class="w3-border-top w3-border-grey w3-text-grey">
-    <span>Anzahl der gespielten Turniere pro Team</span>
-</p>
-<div class="w3-responsive w3-card">
-    <table class="w3-table w3-striped">
-        <thead class="w3-primary">
-            <tr>
-                <th class="w3-center"><b>#</b></th>
-                <th><b>Team</b></th>
-                <th class="w3-center"><b>&sum;</b></th>
-            </tr>
-        </thead>
-        <?php foreach ($max_turniere as $team):?>
-            <tr>
-                <td class="w3-center"><?=$team['platz']?></td>
-                <td><?=$team['teamname']?></td>
-                <td class="w3-center"><?=$team['gespielt']?></td>
-            </tr>
-        <?php endforeach; ?>
-    </table>
+<div class="w3-row-padding">
+    <div class="w3-col l6">
+        <h3 class="w3-text-secondary">Turnierspieler</h3>
+        <p class="w3-border-top w3-border-grey w3-text-grey">
+            <span>Anzahl der gespielten Turniere pro Team</span>
+        </p>
+        <div class="w3-responsive w3-card">
+            <table class="w3-table w3-striped">
+                <thead class="w3-primary">
+                    <tr>
+                        <th class="w3-center"><b>#</b></th>
+                        <th><b>Team</b></th>
+                        <th class="w3-center"><b>&sum;</b></th>
+                    </tr>
+                </thead>
+                <?php foreach ($max_turniere as $team):?>
+                    <tr>
+                        <td class="w3-center"><?=$team['platz']?></td>
+                        <td><?=$team['teamname']?></td>
+                        <td class="w3-center"><?=$team['gespielt']?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </div>
+    </div>
+
+    <div class="w3-col l6">
+        <h3 class="w3-text-secondary">Spielsieger</h3>
+        <p class="w3-border-top w3-border-grey w3-text-grey">
+            <span>Anzahl der Siege pro Team</span>
+        </p>
+        <div class="w3-responsive w3-card">
+            <table class="w3-table w3-striped">
+                <thead class="w3-primary">
+                    <tr>
+                        <th class="w3-center"><b>#</b></th>
+                        <th><b>Team</b></th>
+                        <th class="w3-center"><b>&sum;</b></th>
+                    </tr>
+                </thead>
+                <?php foreach ($max_gew as $team):?>
+                    <tr>
+                        <td class="w3-center"><?=$team['platz']?></td>
+                        <td><?=$team['teamname']?></td>
+                        <td class="w3-center"><?=$team['siege']?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>    
+        </div>
+    </div>
 </div>
 
-<h3 class="w3-text-secondary">Spielsieger</h3>
-<p class="w3-border-top w3-border-grey w3-text-grey">
-    <span>Anzahl der Siege pro Team</span>
-</p>
-<div class="w3-responsive w3-card">
-    <table class="w3-table w3-striped">
-        <thead class="w3-primary">
-            <tr>
-                <th class="w3-center"><b>#</b></th>
-                <th><b>Team</b></th>
-                <th class="w3-center"><b>&sum;</b></th>
-            </tr>
-        </thead>
-        <?php foreach ($max_gew as $team):?>
-            <tr>
-                <td class="w3-center"><?=$team['platz']?></td>
-                <td><?=$team['teamname']?></td>
-                <td class="w3-center"><?=$team['siege']?></td>
-            </tr>
-        <?php endforeach; ?>
-    </table>    
-</div>
+<div class="w3-row-padding">
+    <div class="w3-col l6">
+        <h3 class="w3-text-secondary">Ausrichter</h3>
+        <p class="w3-border-top w3-border-grey w3-text-grey">
+            <span>Anzahl der ausgerichteten Turniere nach Team</span>
+        </p>
+        <div class="w3-responsive w3-card">
+            <table class="w3-table w3-striped">
+                <thead class="w3-primary">
+                    <tr>
+                        <th class="w3-center"><b>#</b></th>
+                        <th><b>Team</b></th>
+                        <th class="w3-center"><b>&sum;</b></th>
+                    </tr>
+                </thead>
+                <?php foreach ($max_ausrichter as $team):?>
+                    <tr>
+                        <td class="w3-center"><?=$team['platz']?></td>
+                        <td><?=$team['teamname']?></td>
+                        <td class="w3-center"><?=$team['anzahl']?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>    
+        </div>
+    </div>
 
-<h3 class="w3-text-secondary">Ausrichter</h3>
-<p class="w3-border-top w3-border-grey w3-text-grey">
-    <span>Anzahl der ausgerichteten Turniere nach Team</span>
-</p>
-<div class="w3-responsive w3-card">
-    <table class="w3-table w3-striped">
-        <thead class="w3-primary">
-            <tr>
-                <th class="w3-center"><b>#</b></th>
-                <th><b>Team</b></th>
-                <th class="w3-center"><b>&sum;</b></th>
-            </tr>
-        </thead>
-        <?php foreach ($max_ausrichter as $team):?>
-            <tr>
-                <td class="w3-center"><?=$team['platz']?></td>
-                <td><?=$team['teamname']?></td>
-                <td class="w3-center"><?=$team['anzahl']?></td>
-            </tr>
-        <?php endforeach; ?>
-    </table>    
-</div>
-
-<h3 class="w3-text-secondary">Turnierorte</h3>
-<p class="w3-border-top w3-border-grey w3-text-grey">
-    <span>Anzahl der ausgerichteten Turniere nach Ort</span>
-</p>
-<div class="w3-responsive w3-card">
-    <table class="w3-table w3-striped">
-        <thead class="w3-primary">
-            <tr>
-                <th class="w3-center"><b>#</b></th>
-                <th><b>Team</b></th>
-                <th class="w3-center"><b>&sum;</b></th>
-            </tr>
-        </thead>
-        <?php foreach ($max_turnierorte as $ort):?>
-            <tr>
-                <td class="w3-center"><?=$ort['platz']?></td>
-                <td><?=$ort['ort']?></td>
-                <td class="w3-center"><?=$ort['anzahl']?></td>
-            </tr>
-        <?php endforeach; ?>
-    </table>    
+    <div class="w3-col l6">
+        <h3 class="w3-text-secondary">Turnierorte</h3>
+        <p class="w3-border-top w3-border-grey w3-text-grey">
+            <span>Anzahl der ausgerichteten Turniere nach Ort</span>
+        </p>
+        <div class="w3-responsive w3-card">
+            <table class="w3-table w3-striped">
+                <thead class="w3-primary">
+                    <tr>
+                        <th class="w3-center"><b>#</b></th>
+                        <th><b>Team</b></th>
+                        <th class="w3-center"><b>&sum;</b></th>
+                    </tr>
+                </thead>
+                <?php foreach ($max_turnierorte as $ort):?>
+                    <tr>
+                        <td class="w3-center"><?=$ort['platz']?></td>
+                        <td><?=$ort['ort']?></td>
+                        <td class="w3-center"><?=$ort['anzahl']?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>    
+        </div>
+    </div>
 </div>
 
 <?php
