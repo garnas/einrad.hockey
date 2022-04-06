@@ -66,16 +66,16 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
             <table class="w3-table w3-striped">
                 <thead class="w3-primary">
                     <tr>
-                        <th class="w3-center"><b>#</b></th>
+                        <th class="w3-right-align"><b>#</b></th>
                         <th><b>Team</b></th>
-                        <th class="w3-center"><b>&sum;</b></th>
+                        <th class="w3-right-align"><b>&sum;</b></th>
                     </tr>
                 </thead>
                 <?php foreach ($max_turniere as $team):?>
                     <tr>
-                        <td class="w3-center"><?=$team['platz']?></td>
+                        <td class="w3-right-align"><?=$team['platz']?></td>
                         <td><?=$team['teamname']?></td>
-                        <td class="w3-center"><?=$team['gespielt']?></td>
+                        <td class="w3-right-align"><?=$team['gespielt']?></td>
                     </tr>
                 <?php endforeach; ?>
             </table>
@@ -91,16 +91,16 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
             <table class="w3-table w3-striped">
                 <thead class="w3-primary">
                     <tr>
-                        <th class="w3-center"><b>#</b></th>
+                        <th class="w3-right-align"><b>#</b></th>
                         <th><b>Team</b></th>
-                        <th class="w3-center"><b>&sum;</b></th>
+                        <th class="w3-right-align"><b>&sum;</b></th>
                     </tr>
                 </thead>
                 <?php foreach ($max_gew as $team):?>
                     <tr>
-                        <td class="w3-center"><?=$team['platz']?></td>
+                        <td class="w3-right-align"><?=$team['platz']?></td>
                         <td><?=$team['teamname']?></td>
-                        <td class="w3-center"><?=$team['siege']?></td>
+                        <td class="w3-right-align"><?=$team['siege']?></td>
                     </tr>
                 <?php endforeach; ?>
             </table>    
@@ -118,16 +118,16 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
             <table class="w3-table w3-striped">
                 <thead class="w3-primary">
                     <tr>
-                        <th class="w3-center"><b>#</b></th>
+                        <th class="w3-right-align"><b>#</b></th>
                         <th><b>Team</b></th>
-                        <th class="w3-center"><b>&sum;</b></th>
+                        <th class="w3-right-align"><b>&sum;</b></th>
                     </tr>
                 </thead>
                 <?php foreach ($max_ausrichter as $team):?>
                     <tr>
-                        <td class="w3-center"><?=$team['platz']?></td>
+                        <td class="w3-right-align"><?=$team['platz']?></td>
                         <td><?=$team['teamname']?></td>
-                        <td class="w3-center"><?=$team['anzahl']?></td>
+                        <td class="w3-right-align"><?=$team['anzahl']?></td>
                     </tr>
                 <?php endforeach; ?>
             </table>    
@@ -143,16 +143,16 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
             <table class="w3-table w3-striped">
                 <thead class="w3-primary">
                     <tr>
-                        <th class="w3-center"><b>#</b></th>
+                        <th class="w3-right-align"><b>#</b></th>
                         <th><b>Team</b></th>
-                        <th class="w3-center"><b>&sum;</b></th>
+                        <th class="w3-right-align"><b>&sum;</b></th>
                     </tr>
                 </thead>
                 <?php foreach ($max_turnierorte as $ort):?>
                     <tr>
-                        <td class="w3-center"><?=$ort['platz']?></td>
+                        <td class="w3-right-align"><?=$ort['platz']?></td>
                         <td><?=$ort['ort']?></td>
-                        <td class="w3-center"><?=$ort['anzahl']?></td>
+                        <td class="w3-right-align"><?=$ort['anzahl']?></td>
                     </tr>
                 <?php endforeach; ?>
             </table>    
