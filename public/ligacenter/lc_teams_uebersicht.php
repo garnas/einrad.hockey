@@ -52,7 +52,7 @@ foreach ($teams as $team_id => $team){
 //            $text =
 //                "<html>Hallo " . $team['teamname'] . ","
 //                ."<br><br>da ihr zwei ausgebildete Schiedsrichter im Kader eingetragen habt, wurde euch euer zweites Freilos gutgeschrieben."
-//                ."<br><br>Wir wünschen euch eine schöne Saison " . Form::get_saison_string() . "!"
+//                ."<br><br>Wir wünschen euch eine schöne Saison " . Html::get_saison_string() . "!"
 //                ."<br><br>Eure Einradhockeyliga</html>";
 //            $akt_kontakt = new Kontakt ($team_id);
 //            $adressaten = $akt_kontakt->get_emails();
@@ -60,7 +60,7 @@ foreach ($teams as $team_id => $team){
 //            $team_liste .= "<br>" . $team['teamname'];
 //        }
 //    }
-//    Form::info("Freilose vergeben an:<br>" . $team_liste);
+//    Html::info("Freilose vergeben an:<br>" . $team_liste);
 //    header('Location: lc_teams_uebersicht.php');
 //    die();
 //}

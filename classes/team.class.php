@@ -253,6 +253,34 @@ class Team
     }
 
     /**
+     * Hinterlegt, dass das Team den Terminplaner nutzt.
+     */
+    public function set_terminplaner(): void
+    {
+        $sql = "
+                UPDATE teams_liga 
+                SET terminplaner = 'Ja'
+                WHERE team_id = $this->id
+                ";
+        db::$db->query($sql)->log();
+    }
+
+    /**
+     * True, wenn das Team bereits einen Terminplaner-Account hat.
+     *
+     * @return bool
+     */
+    public function check_terminplaner(): bool
+    {
+        $sql = "
+                SELECT terminplaner 
+                FROM teams_liga 
+                WHERE team_id = $this->id
+                ";
+        return db::$db->query($sql)->fetch_one() === 'Ja';
+    }
+    
+    /**
      * Gibt die Teamstrafen aller Teams zurück
      *
      * @param int $saison

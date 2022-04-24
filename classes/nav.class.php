@@ -70,6 +70,7 @@ class Nav
         $class_text_color = (isset($_SESSION['logins']['team'])) ? "" : "w3-text-grey";
         $links = [
             [Env::BASE_URL . "/teamcenter/tc_start.php", "Start", $class_text_color],
+            [Env::BASE_URL . "/teamcenter/tc_terminseite_erstellen.php", Html::icon("fiber_new") . " Teamtermine", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_anmelden.php", "Turnieranmeldung", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_turnier_erstellen.php", "Turnier erstellen", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_verwalten.php", "Eigene Turniere", $class_text_color],
@@ -144,6 +145,7 @@ class Nav
     public static function get_tc_start(): array
     {
         return [
+            [Env::BASE_URL . "/teamcenter/tc_terminseite_erstellen.php", "Teamtermine", "w3-green"],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_anmelden.php", "Turnier- anmeldung", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_turnier_erstellen.php", "Turnier erstellen", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_verwalten.php", "Eigene Turniere", "w3-primary"],
@@ -160,6 +162,7 @@ class Nav
     /**
      *  Ligalinks
      */
+    public const LINK_TERMINPLANER = 'https://team.einrad.hockey';
     public const LINK_FORUM = 'https://forum.einrad.hockey/';
     public const LINK_FACE = 'https://www.facebook.com/DeutscheEinradhockeyliga';
     public const LINK_GIT = 'https://github.com/garnas/einrad.hockey';
