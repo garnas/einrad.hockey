@@ -7,17 +7,23 @@
         <p>Hier kannst Du eine neue Terminseite für Deinen Verein anlegen.
             Unter <?= Html::link(Nav::LINK_TERMINPLANER, extern: true) ?>
             können sich die Mitspieler dann anmelden und für Termine eintragen.
-            So könnt Ihr leicht den Überblick behalten wer zu welchem Termin kommt oder bereits abgesagt hat.<br><br>
+            So könnt Ihr leicht den Überblick behalten wer zu welchem Termin kommt oder bereits abgesagt hat.
+        </p>
+        <p>
             Trainingszeiten werden nur einmalig angelegt und wiederholen sich wöchentlich.<br>
             Daten der Ligaturniere können einfach übernommen werden und es ist den Spielern ersichtlich, ob Ihr zum
             Turnier gemeldet seid und ob Ihr spielt oder auf der Warteliste steht.<br>
             Auch ist es möglich Eure Termine über CalDAV in verschiedene Clients (z.B. Thunderbird, Outlook) oder
-            Android und iOS einzubinden.<br><br>
+            Android und iOS einzubinden.
+        </p>
+        <p>
             Es ist möglich und sinnvoll mehrere Teams für einen Verein anzulegen (Nur 1 Account hier anlegen). So könnt
             Ihr auch Spielern ermöglichen bei Turnieren auszuhelfen oder ein gemeinsames Training für mehrere Teams
-            organsiseren.<br><br>
-            Die Erstellung der Spieleraccounts, Teams etc. ist unabhängig von der Teamkaderverwaltung auf der Ligaseite.<br><br>
-            Bei Fragen kontaktiere <?= Html::mailto('team@einrad.hockey') ?>.
+            organsiseren.
+        </p>
+        <p>
+            Die Erstellung der Spieleraccounts, Teams etc. ist unabhängig von der Teamkaderverwaltung auf der Ligaseite.
+            Bei Fragen kontaktiere <?= Html::mailto('technik@einrad.hockey') ?>.
         </p>
     </div>
 
@@ -25,7 +31,7 @@
         <div class="w3-card-4 w3-panel">
             Für Dein Team wurde mit der Emailadresse bereits eine Gruppe angelegt.
             <br>
-            Klicke <?= Html::link('https://team.einrad.hockey') ?>, um auf deine Seite zu gelangen.
+            Klicke <?= Html::link(Nav::LINK_TERMINPLANER) ?>, um auf deine Seite zu gelangen.
             <br><br>
             Bei Fragen kannst du dich bei <?= Html::mailto(Env::TECHNIKMAIL) ?> melden.
         </div>
@@ -91,7 +97,7 @@
 
         <!-- Submit -->
         <div class="w3-panel w3-card-4">
-            <input type=hidden name='passphrase' value='NurdamitnichtjederHansundFranzeineGruppeanlegenkann'>
+            <input type=hidden name='passphrase' value='<?= Env::TERMINPLANER_KEY ?>'>
             <input type="hidden" name='ligaUID' value=" <?=$_SESSION['logins']['team']['id'] ?>">
             <p>
                 <button type="submit" name="create_team" class="w3-secondary w3-button w3-block">
