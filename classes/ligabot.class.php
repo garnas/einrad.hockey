@@ -200,7 +200,6 @@ class LigaBot
         // Falsche Freilosanmeldungen beim Übergang in die Meldephase abmelden
         Html::info($turnier->get_turnier_id() . " wurde gelost.");
         $spielenliste = $turnier->get_spielenliste();
-        $warteliste = $turnier->get_warteliste();
         $meldeliste = $turnier->get_meldeliste();
         
         foreach ($spielenliste as $team) {

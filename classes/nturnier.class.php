@@ -651,7 +651,7 @@ class nTurnier
                 ";
         $liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
 
-        // Prüfen ob Spielen-Liste gegeben
+        // Prüfen ob Warte-Liste gegeben
         if (!empty($liste)) {
 
             // Blöcke und Wertungen hinzufügen
@@ -665,11 +665,6 @@ class nTurnier
                 $temp->set_position_warteliste($team['position_warteliste']);
                 $warteliste[$team_id] = $temp;
             }
-
-            // Sortierung nach Wertigkeit
-            uasort($warteliste, static function ($team_a, $team_b) {
-                return ((int)$team_b->get_wertigkeit() <=> (int)$team_a->get_wertigkeit());
-            });
         }
 
         return $warteliste ?? [];
