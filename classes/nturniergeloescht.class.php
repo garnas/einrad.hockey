@@ -1,6 +1,6 @@
 <?php
 
-class nTurnierGeloescht extends nTurnier {
+class nTurnierGeloescht {
     
     private $grund;
 
