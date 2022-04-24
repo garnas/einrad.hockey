@@ -8,16 +8,18 @@ require_once '../../logic/la_team_waehlen.logic.php';
 
 $show_form = false;
 if (isset($_GET['team_id'])){
-    $ausrichter_team_id = $_GET['team_id'];
+    $ausrichter_team_id = (int) $_GET['team_id'];
     if (Team::is_ligateam($ausrichter_team_id)) {
-        Html::error("Ungültige TeamID");
-        header('Location: lc_turnier_erstellen.php');
-        die();
+        $show_form = true;
+        $ausrichter_name = Team::id_to_name($ausrichter_team_id);
+        $ausrichter_block = Tabelle::get_team_block($ausrichter_team_id);
+
+        require_once '../../logic/turnier_erstellen.logic.php';
+
+    } else {
+        Html::error("Ungültige Team-ID");
+        Helper::reload(); // Beendet dieses Skript
     }
-    $show_form = true;
-    $ausrichter_name = Team::id_to_name($ausrichter_team_id);
-    $ausrichter_block = Tabelle::get_team_block($ausrichter_team_id);
-    require_once '../../logic/turnier_erstellen.logic.php';
 }
 
 /////////////////////////////////////////////////////////////////////////////

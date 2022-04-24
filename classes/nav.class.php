@@ -18,13 +18,13 @@ class Nav
     public static function get_liga(): array
     {
         return [
-            [Env::BASE_URL . "/liga/jubilaeum.php", "25 Jahre Liga"],
+            [Env::BASE_URL . "/liga/saisontermine.php", "Saisontermine"],
             [Env::BASE_URL . "/liga/turniere.php", "Turniere"],
             [Env::BASE_URL . "/liga/ergebnisse.php", "Ergebnisse"],
             [Env::BASE_URL . "/liga/teams.php", "Teams"],
             [Env::BASE_URL . "/liga/tabelle.php#meister", "Meisterschaftstabelle"],
-            [Env::BASE_URL . "/liga/tabelle.php#rang", "Rangtabelle"]
-
+            [Env::BASE_URL . "/liga/tabelle.php#rang", "Rangtabelle"],
+            [Env::BASE_URL . "/liga/statistik.php", "Statistik"]
         ];
     }
 
@@ -53,6 +53,7 @@ class Nav
     public static function get_modus(): array
     {
         return [
+            [Env::BASE_URL . "/schiricenter/schiri_infos.php", "Schiritest"],
             [Env::BASE_URL . "/liga/dokumente.php", "Dokumente"],
             [Env::BASE_URL . "/liga/ligaleitung.php", "Ligaleitung"],
         ];
@@ -101,6 +102,7 @@ class Nav
     {
         return [
             [Env::BASE_URL . "/liga/ueber_uns.php", "Über uns"],
+            [Env::BASE_URL . "/liga/jubilaeum.php", "25 Jahre Liga"],
             [Env::BASE_URL . "/liga/archiv.php", "Archiv"],
             [Env::BASE_URL . "/ligacenter/lc_login.php", "Ligacenter"],
             [Env::BASE_URL . "/liga/kontakt.php", "Kontakt"],
@@ -117,6 +119,7 @@ class Nav
     public static function get_lc_start(): array
     {
         return [
+            [Env::BASE_URL . "/schiricenter/schiritest_erstellen.php", "Schiritest", "w3-secondary"],
             [Env::BASE_URL . "/ligacenter/lc_turnierliste.php", "Turniere verwalten", "w3-primary"],
             [Env::BASE_URL . "/ligacenter/lc_turnier_erstellen.php", "Turnier erstellen", "w3-primary"],
             [Env::BASE_URL . "/ligacenter/lc_kontaktcenter.php", "Kontaktcenter", "w3-tertiary"],
@@ -183,9 +186,14 @@ class Nav
      * Dokumente
      */
     public const LINK_MODUS = Env::BASE_URL . '/dokumente/ligamodus.pdf';
+    public const LINK_FINALE = Env::BASE_URL . '/dokumente/finalturnier.pdf';
+    public const LINK_FINALE_MODI = Env::BASE_URL . '/dokumente/finalturnier_spielmodi.pdf';
+    public const LINK_CHECK_XLSX = Env::BASE_URL . '/dokumente/checkliste_einradhockeyturnier_fuer_ausrichter.xlsx';
+    public const LINK_CHECK_PDF = Env::BASE_URL . '/dokumente/checkliste_einradhockeyturnier_fuer_ausrichter.pdf';
+    public const LINK_HYGIENE = Env::BASE_URL . '/dokumente/empfohlenes_hygienekonzept.pdf';
     public const LINK_DSGVO = Env::BASE_URL . '/dokumente/datenschutz-hinweise.pdf';
     public const LINK_FRANCE = 'https://monocycle.info/ligue-de-monocycle-basket-remaniement-co/';
-    public const LINK_SPIELPLAENE_ALT = Env::BASE_URL . '/dokumente/alte_spielplan_vorlagen.pdf';
+    public const LINK_SPIELPLAENE_ALT = Env::BASE_URL . '/dokumente/alte_spielplan_vorlagen.zip';
     public const LINK_EV_SH = 'https://www.einradverband-sh.de/';
     public const LINK_IUF = 'https://unicycling.org/';
     public const LINK_MODUS_KURZ_ENG = Env::BASE_URL . '/dokumente/summary_modus.pdf';

@@ -4,6 +4,6 @@
     deaktivieren.
 </p>
 <p>Bis zum nächsten Mal</p>
-<p>Euer Mailbot der Einradhockeyliga</p>
+<p>euer Einradhockey-Bot</p>
 </body>
 </html>

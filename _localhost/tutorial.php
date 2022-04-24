@@ -15,9 +15,9 @@ require_once '../init.php';
 # require_once Env::BASE_PATH . '/logic/session_team.logic.php'; // Zugriff nur mit Team-Login
 
 // (4) Beispiel-Meldungen, diese werden nach dem Laden der Navigation ausgegeben und vorher in der Session gespeichert.
-# Form::info("Alles gut");
-# Form::error("Ein Fehler");
-# Form::notice("Ein Hinweis");
+# Html::info("Alles gut");
+# Html::error("Ein Fehler");
+# Html::notice("Ein Hinweis");
 
 
 // (5) Datenbankabfragen sollen in einer *.class.php im classes Ordner getätigt werden. Die Klasse wird
@@ -34,9 +34,9 @@ if (isset($_POST['mein_formular'])) {
 }
 
 // (8) Debuggen von Arrays:
-# dbi::debug($teams);
-# dbi::debug(Html::$teamcenter, true);
-# dbi::debug([1.2234, 1, 'hallo', [false, true]], true);
+# db::debug($teams);
+# db::debug(Helper::$teamcenter, true);
+# db::debug([1.2234, 1, 'hallo', [false, true]], true);
 
 
 // (9) Beispiel Fehler, welche das Skript beenden und eine Fehlerseite aufrufen.

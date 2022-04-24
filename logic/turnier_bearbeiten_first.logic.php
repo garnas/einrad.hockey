@@ -1,21 +1,22 @@
 <?php
 // Turnier und $daten-Array erstellen
-$turnier = new Turnier((int) @$_GET['turnier_id']);
+$team_id = $_SESSION['logins']['team']['id'] ?? 0;
+$turnier = nTurnier::get((int) @$_GET['turnier_id']);
 
 //Existiert das Turnier?
-if (empty($turnier->details)){
+if (empty($turnier->get_turnier_id())){
     Helper::not_found("Das Turnier konnte nicht gefunden werden.");
 }
 
 //Besteht die Berechtigung das Turnier zu bearbeiten?
-if (Helper::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $turnier->details['ausrichter']){
+if (Helper::$teamcenter && !$turnier->is_ausrichter($team_id)){
     Html::error("Keine Berechtigung das Turnier zu bearbeiten");
     header('Location: ../liga/turniere.php');
     die();
 }
 
 //Turniere in der Vergangenheit können von Teams nicht mehr verändert werden
-if (Helper::$teamcenter && strtotime($turnier->details['datum']) < time()){
+if (Helper::$teamcenter && strtotime($turnier->get_datum()) < time()){
     Html::error("Das Turnier liegt bereits in der Vergangenheit und kann nicht bearbeitet werden");
     header('Location: ../liga/turniere.php');
     die();

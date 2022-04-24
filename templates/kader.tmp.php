@@ -1,4 +1,4 @@
-<h3 class="w3-text-primary">Teamkader der <?= Team::id_to_name($team_id); ?></h3>
+<h3 class="w3-text-primary">Teamkader der <?= Team::id_to_name($team_id) ?></h3>
 <!-- Aktuelle Saison -->
 <div class="w3-responsive w3-section w3-card">
     <table class="w3-table w3-striped">
@@ -8,49 +8,48 @@
             <th class="w3-primary">Name</th>
             <th class="w3-primary w3-center">J/G</th>
             <th class="w3-primary w3-center">Schiri</th>
-            <?php if (Helper::$ligacenter) { ?>
-                <th class="w3-primary w3-center">Hinzugefügt am:</th><?php }//endif?>
+            <?php if (Helper::$ligacenter): ?>
+                <th class="w3-primary w3-center">Hinzugefügt am:</th>
+            <?php endif; // endif?>
         </tr>
         </thead>
-        <?php foreach ($kader as $eintrag) { ?>
+        <?php foreach ($kader as $spieler): ?>
             <tr>
-                <td><?= $eintrag['spieler_id'] ?></td>
-                <?php if (Helper::$ligacenter) { //Direktverlinkung zum Bearbeiten eines Spielers Config::$ligacenter wird definiert in session_la.logic.php?>
+                <td><?= $spieler->id() ?></td>
+                <?php if (Helper::$ligacenter): // Link zum Bearbeiten als LA ?>
                     <td>
-                        <?= Html::link('lc_spieler_aendern.php?spieler_id=' . $eintrag['spieler_id'],
-                            $eintrag['vorname'] . " " . $eintrag['nachname']) ?>
+                        <?= Html::link('lc_spieler_aendern.php?spieler_id=' . $spieler->id(), $spieler->get_name()) ?>
                     </td>
-                <?php } else { ?>
+                <?php else: ?>
                     <td>
-                        <?= $eintrag['vorname'] . " " . $eintrag['nachname'] ?>
+                        <?= $spieler->get_name() ?>
                     </td>
-                <?php } //ende if?>
+                <?php endif; ?>
                 <td class='w3-center'>
-                    <?= $eintrag['jahrgang'] . " " . $eintrag['geschlecht'] ?>
+                    <?= $spieler->get_jahrgang() . " " . $spieler->get_geschlecht() ?>
                 </td>
-                <?php if (!empty($eintrag['schiri'])) { //Häkchen Setzten wenn gültiger Schirieintrag?>
-                    <td class='w3-center'>
-                        <?= Html::icon("check_circle_outline") . ' ' . Html::get_saison_string($eintrag['schiri']) ?>
-                        <?php if ($eintrag['junior'] === 'Ja') { ?>
-                            <i class="w3-text-grey">junior</i><?php }//endif?>
-                    </td>
-                <?php } else { ?>
-                    <td class='w3-center'></td>
-                <?php } //ende if?>
-                <?php if (Helper::$ligacenter) { ?>
+                <td class='w3-center'>
+                    <?php if ($spieler->schiri): ?>
+                        <?= Html::icon("check_circle_outline") ?>
+                        <?= $spieler->get_schiri() ?>
+                        <?= ($spieler->junior === 'Ja') ? "<i class='w3-text-grey'>junior</i>" : "" ?>
+                        <?= ($spieler->check_ausbilder()) ? "<i class='w3-text-grey'>Ausbilder/in</i>" : "" ?>
+                    <?php endif; ?>
+                </td>
+                <?php if (Helper::$ligacenter): ?>
                     <td class="w3-center">
-                        <?= $eintrag['zeit'] ?>
+                        <?= $spieler->get_timestamp() ?>
                     </td>
-                <?php }//endif?>
+                <?php endif; ?>
             </tr>
-        <?php } //Ende foreach?>
+        <?php endforeach; ?>
     </table>
 </div>
 
 <!-- Aus Vorsaison übernehmen -->
-<?php if (!empty($kader_vorsaison)) { ?>
+<?php if (!empty($kader_vorsaison)): ?>
     <form method="post" class="w3-section w3-text-grey">
-        <h3 class="">Spieler aus der Vorsaison übernehmen</h3>
+        <h3>Spieler aus der Vorsaison übernehmen</h3>
         <div class="w3-responsive w3-section w3-card">
             <table class="w3-table w3-striped">
                 <tr>
@@ -60,72 +59,75 @@
                     <th class="w3-primary w3-center">Schiri</th>
                     <th class="w3-primary ">Übernehmen</th>
                 </tr>
-                <?php foreach ($kader_vorsaison as $eintrag) { ?>
+                <?php foreach ($kader_vorsaison as $spieler): ?>
                     <tr>
-                        <td><?= $eintrag['spieler_id'] ?></td>
-                        <?php if (Helper::$ligacenter) { ?>
+                        <td><?= $spieler->id() ?></td>
+
+                        <?php if (Helper::$ligacenter): // Link zum Bearbeiten als LA ?>
                             <td>
-                                <?= Html::link('lc_spieler_aendern.php?spieler_id=' . $eintrag['spieler_id'],
-                                    $eintrag['vorname'] . " " . $eintrag['nachname']) ?>
+                                <?= Html::link('lc_spieler_aendern.php?spieler_id=' . $spieler->id(), $spieler->get_name()) ?>
                             </td>
-                        <?php } else { ?>
+                        <?php else: ?>
                             <td>
-                                <?= $eintrag['vorname'] . " " . $eintrag['nachname'] ?>
+                                <?= $spieler->get_name() ?>
                             </td>
-                        <?php } //ende if?>
+                        <?php endif; ?>
+
                         <td class='w3-center'>
-                            <?= $eintrag['jahrgang'] . " " . $eintrag['geschlecht'] ?>
+                            <?= $spieler->get_jahrgang() . " " . $spieler->get_geschlecht() ?>
                         </td>
-                        <?php if (!empty($eintrag['schiri'])) { //Häkchen Setzten wenn gültiger Schirieintrag?>
-                            <td class='w3-center'>
-                                <?= Html::icon("check_circle_outline") . Html::get_saison_string($eintrag['schiri']) ?>
-                                <?php if ($eintrag['junior'] === 'Ja') { ?>
-                                    <i class="w3-text-primary">junior</i>
-                                <?php }//endif?></td>
-                        <?php } else { ?>
-                            <td class='w3-center'></td>
-                        <?php } //ende if?>
+                        <td class='w3-center'>
+                            <?php if ($spieler->schiri): ?>
+                                <?= Html::icon("check_circle_outline") ?>
+                                <?= $spieler->get_schiri() ?>
+                                <?= ($spieler->junior === 'Ja') ? "<i class='w3-text-grey'>junior</i>" : "" ?>
+                                <?= ($spieler->check_ausbilder()) ? "<i class='w3-text-grey'>Ausbilder/in</i>" : "" ?>
+                            <?php endif; ?>
+                        </td>
                         <td>
                             <input type="checkbox"
                                    class="w3-check"
-                                   id="<?= $eintrag['spieler_id'] ?>"
+                                   id="<?= $spieler->id() ?>"
                                    name="takeover[]"
-                                   value="<?= $eintrag['spieler_id'] ?>">
+                                   value="<?= $spieler->id() ?>">
                             <label style="cursor: pointer"
                                    class="w3-hover-text-secondary w3-text-primary"
-                                   for="<?= $eintrag['spieler_id'] ?>">
+                                   for="<?= $spieler->id() ?>">
                                 Spieler übernehmen
                             </label>
                         </td>
                     </tr>
-                <?php } //Ende foreach?>
+                <?php endforeach; ?>
             </table>
         </div>
         <p>
             <input type="checkbox" class="w3-check" value="zugestimmt" name="dsgvo" id="dsgvo">
             <label for="dsgvo" style="cursor: pointer;" class="w3-text-black">
-                Alle ausgewählten Spieler haben dien aktuellen <?= Html::link(Nav::LINK_DSGVO, 'Datenschutz-Hinweise') ?>
-                gelesen und ihnen zugestimmt.
+                Alle ausgewählten Spieler haben die aktuellen <?= Html::link(Nav::LINK_DSGVO, 'Datenschutz-Hinweise') ?>
+                gelesen und ihnen zugestimmt. Bei unter 16-Jährigen wurde die Erlaubnis der Eltern eingeholt.
             </label>
         </p>
         <input type="submit" name="submit_takeover" value="Ausgewählte Spieler übernehmen" class="w3-button w3-primary">
     </form>
-<?php } //end if?>
+<?php endif; ?>
 
 <!-- Form zum Eintragen eines neuen Spielers -->
 <div class="w3-section">
     <!--<p class="w3-text-grey">Neue Spieler können bis zum <?= Config::SAISON_ENDE ?> 23:59:59&nbsp;Uhr hinzugefügt werden.</p>-->
     <p class="w3-text-grey">
         Um einen neuen Spieler aus einem anderen Team zu übernehmen, bitte den Spieler neu eintragen. Die Übernahme
-        geschieht dann automatisch, wenn die Daten identisch sind und dieser Spieler nicht in einem aktuellen Kader
-        steht. Der Schiedsrichterstatus wird dann ebenfalls übernommen.
+        geschieht dann automatisch, wenn die Daten identisch sind und dieser Spieler noch nicht in einen aktuellen Kader
+        übernommen wurde. Der Schiedsrichterstatus wird dann ebenfalls übernommen.
     </p>
     <button class="w3-button w3-tertiary" onclick="document.getElementById('spieler_eintragen').style.display='block'">
         Neuen Spieler eintragen
     </button>
     <div class="w3-modal" id="spieler_eintragen" style="display: none;">
         <form class="w3-card-4 w3-modal-content w3-panel" style="max-width: 400px;" method='POST'>
-            <span onclick="document.getElementById('spieler_eintragen').style.display='none'" class="w3-button w3-large w3-text-secondary w3-display-topright">&times;</span>
+            <span onclick="document.getElementById('spieler_eintragen').style.display='none'"
+                  class="w3-button w3-large w3-text-secondary w3-display-topright">
+                &times;
+            </span>
             <h3 class="w3-text-primary">Neuen Spieler eintragen</h3>
             <p>
                 <label class="w3-text-primary" for="vorname">Vorname</labeL>

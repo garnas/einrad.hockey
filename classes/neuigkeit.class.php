@@ -97,7 +97,7 @@ class Neuigkeit
             $neuigkeiten = db::$db->query($sql, $neuigkeiten_id)->esc()->fetch('neuigkeiten_id');
         }
         foreach ($neuigkeiten as $key => $neuigkeit) {
-            if ($neuigkeit['eingetragen_von'] == 'Ligaausschuss') {
+            if ($neuigkeit['eingetragen_von'] === 'Ligaausschuss' || $neuigkeit['eingetragen_von'] === "einradhockeykader@gmx.de") { //Temp Hotfix Todo: Vermerk escaping oder nicht in der DB!
                 $neuigkeiten[$key]['inhalt'] = htmlspecialchars_decode($neuigkeit['inhalt'], ENT_QUOTES);
                 $neuigkeiten[$key]['titel'] = htmlspecialchars_decode($neuigkeit['titel'], ENT_QUOTES);
             }
@@ -210,6 +210,7 @@ class Neuigkeit
                 3 => imagerotate($image, 180, 0),
                 6 => imagerotate($image, -90, 0),
                 8 => imagerotate($image, 90, 0),
+                default => $image,
             };
         }
 
@@ -284,72 +285,6 @@ class Neuigkeit
     }
 
     /**
-     * Max-Turniere Statistik für das Infoboard
-     *
-     * @param int $saison
-     * @return mixed
-     */
-    public static function get_statistik_turniere(int $saison = Config::SAISON): array
-    {
-        // Findet die drei Teams, welche die meisten Turniere bisher gespielt haben
-        // Sortiert nach Zufall bei gleichstand
-        $sql = "
-                SELECT teams_liga.teamname, count(*) as gespielt 
-                FROM turniere_liste 
-                INNER JOIN turniere_liga 
-                ON turniere_liste.turnier_id = turniere_liga.turnier_id 
-                INNER JOIN teams_liga 
-                ON teams_liga.team_id = turniere_liste.team_id 
-                WHERE teams_liga.aktiv = 'Ja' 
-                AND turniere_liga.saison = ? 
-                AND turniere_liste.liste = 'spiele' 
-                AND turniere_liga.phase = 'ergebnis' 
-                GROUP BY teams_liga.teamname 
-                ORDER BY gespielt desc, rand()
-                LIMIT 3
-                ";
-        return db::$db->query($sql, $saison)->esc()->fetch();
-    }
-
-    public static function get_statistik_gew_spiele(int $saison = Config::SAISON): array
-    {
-        // Gewonnen Team A
-        $sqla = "
-                SELECT COUNT(*) AS gew, team_id_a
-                FROM spiele
-                INNER JOIN turniere_liga 
-                ON spiele.turnier_id = turniere_liga.turnier_id 
-                WHERE (tore_a > tore_b OR penalty_a > penalty_b)
-                AND turniere_liga.saison = ?
-                GROUP BY team_id_a
-                ORDER BY gew, RAND()
-                ";
-        $gew = [];
-        foreach (db::$db->query($sqla, $saison)->esc()->fetch() as $x) {
-            $gew[$x['team_id_a']] = $x['gew'];
-        }
-        // Addition der Tore Team B
-        $sqlb = "
-                SELECT COUNT(*) AS gew, team_id_b
-                FROM spiele
-                INNER JOIN turniere_liga
-                ON spiele.turnier_id = turniere_liga.turnier_id
-                WHERE (tore_a < tore_b OR penalty_a < penalty_b)
-                AND turniere_liga.saison = ?
-                GROUP BY team_id_b
-                ORDER BY RAND()
-                ";
-        foreach (db::$db->query($sqlb, $saison)->esc()->fetch() as $x) {
-            if (isset($gew[$x['team_id_b']])) {
-                $gew[$x['team_id_b']] += $x['gew'];
-            } else {
-                $gew[$x['team_id_b']] = $x['gew'];
-            }
-        }
-        arsort($gew);
-        return array_slice($gew, 0, 3, true);
-    }
-    /**
      * Max Tore Statistik für das Inforboard
      *
      * @param int $saison
@@ -391,62 +326,5 @@ class Neuigkeit
         }
         arsort($tore);
         return array_slice($tore, 0, 3, true) ?? [];
-    }
-
-    /**
-     * Gibt alle gefallenen Tore inklusive Penaltys einer Saison aus.
-     *
-     * @param int $saison
-     * @return int
-     */
-    public static function get_alle_tore(int $saison = Config::SAISON): int
-    {
-        $sql = "
-                SELECT sum(tore_a) + sum(tore_b) + sum(penalty_a) + sum(penalty_b) AS tore
-                FROM spiele
-                INNER JOIN turniere_liga tl on spiele.turnier_id = tl.turnier_id
-                WHERE tl.saison = ?
-                ";
-        return db::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
-    }
-
-    /**
-     * Wie viele Spiele wurden gespielt?
-     *
-     * @param int $saison
-     * @return int
-     */
-    public static function get_alle_spiele(int $saison = Config::SAISON): int
-    {
-        $sql = "
-                SELECT count(*) AS spiele
-                FROM spiele
-                INNER JOIN turniere_liga tl on spiele.turnier_id = tl.turnier_id
-                WHERE tl.saison = ?
-                AND tore_b IS NOT NULL
-                AND tore_a IS NOT NULL
-                ";
-        return db::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
-    }
-
-    /**
-     * Wie viele Spielminuten wurden in der Saison gespielt?
-     *
-     * @param int $saison
-     * @return int
-     */
-    public static function get_spielminuten(int $saison = Config::SAISON): int
-    {
-        $sql = "
-                SELECT sum(sd.anzahl_halbzeiten * sd.halbzeit_laenge)
-                FROM spiele
-                INNER JOIN turniere_liga tl on spiele.turnier_id = tl.turnier_id
-                INNER JOIN turniere_details td on spiele.turnier_id = td.turnier_id
-                INNER JOIN spielplan_details sd on tl.spielplan_vorlage = sd.spielplan
-                WHERE tl.saison = ?
-                AND tore_b IS NOT NULL
-                AND tore_a IS NOT NULL
-                ";
-        return db::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
     }
 }

@@ -54,6 +54,47 @@ if (isset($_POST['reaktivieren'])){
     Html::error("Teamname wurde nicht gefunden. Team wurde nicht deaktiviert.");
 }
 
+if (isset($_POST['gitpull'])){
+
+    if (Env::IS_LOCALHOST ?? true) {
+
+        Html::error("Update im Localhost nicht sinnvoll, da eventuelle Änderungen gelöscht werden würden.");
+
+    } else {
+
+        $hash = LigaLeitung::get_details($_SESSION['logins']['la']['login'])['passwort'];
+        $password = $_POST['password'];
+
+        if (password_verify($password, $hash)) {
+            $output = shell_exec("sh " . Env::BASE_PATH . "/system/shell/gitpull.sh");
+
+            Helper::log("git.log", $output ?? 'EMPTY OUTPUT');
+            db::debug($output);
+            Helper::reload();
+
+        } else {
+
+            Html::error("Falsches Passwort.");
+
+        }
+
+    }
+}
+
+if (isset($_POST['gitlogs'])){
+
+    $output = shell_exec("sh " . Env::BASE_PATH . "/system/shell/gitlog.sh");
+    db::debug($output);
+
+}
+
+if (isset($_POST['gitstatus'])){
+
+    $output = shell_exec("sh " . Env::BASE_PATH . "/system/shell/gitstatus.sh");
+    db::debug($output);
+
+}
+
 //Ligabot ausführen
 if (isset($_POST['ligabot'])){
     LigaBot::liga_bot();
@@ -139,4 +180,28 @@ include '../../templates/header.tmp.php';?>
         <input type='submit' name='ligabot' value='Ligabot ausführen' class="w3-button w3-secondary">
     </p>
 </form>
+
+<form method='post'>
+    <h4 class="w3-bottombar w3-text-primary">Git Logs</h4>
+    <p>
+        <input type='submit' name='gitlogs' value='Git Logs' class="w3-button w3-secondary">
+    </p>
+</form>
+<form method='post'>
+    <h4 class="w3-bottombar w3-text-primary">Git Status</h4>
+    <p>
+        <input type='submit' name='gitstatus' value='Git Status' class="w3-button w3-secondary">
+    </p>
+</form>
+<form method='post'>
+    <h4 class="w3-bottombar w3-text-primary">Git Update Website</h4>
+    <p>
+        <label>LA-Passwort eingeben:</label>
+        <input type='password' name='password' class="w3-input w3-light-grey">
+    </p>
+    <p>
+        <input type='submit' name='gitpull' value='Update Website von Master' class="w3-button w3-green w3-block">
+    </p>
+</form>
+
 <?php include '../../templates/footer.tmp.php';

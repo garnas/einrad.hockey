@@ -13,6 +13,14 @@
 class env
 {
     /**
+     * Auf der Live-Seite sollte dies auf false gesetzt werden.
+     * Sie überschreibt PHP-Einstellungen in init.php für Localhost. z. B. wird für Sessions kein SSL mehr verlangt.
+     * Außerdem werden bei true Fehler im Browser fürs Debugging angezeigt.
+     * Siehe _localhost/nur_localhost.php und /init.php.
+     */
+     public const IS_LOCALHOST = true;
+
+    /**
      * Webadresse für Verlinkungen, unabhängig der Ordnerstruktur.
      * Auf dem Server ist der public-Ordner mit der Domain verknüpft.
      */

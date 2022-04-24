@@ -5,131 +5,77 @@
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
-$spieler_liste = Spieler::get_spielerliste(); //Liste aller Spielernamen und IDs [0] => vorname nachname [1] => spieler_id
-
-//Formularauswertung Spielerauswahl
-if (isset($_POST['spieler_auswahl'])) {
-    $pos = count(explode(" ", $_POST['spieler_auswahl'])) - 1; //Postion der SpielerID finden
-    $spieler_id = explode(" ", $_POST['spieler_auswahl'])[$pos]; //SpielerID extrahieren
-    header('Location: ' . db::escape($_SERVER['PHP_SELF']) . '?spieler_id=' . $spieler_id);
-    die();
-}
-
-//Formular unten nur Anzeigen wenn eine existierende SpielerID übergeben wurde wurde
+require_once '../../logic/la_spieler_waehlen.logic.php';
 
 if (isset($_GET['spieler_id'])) {
-    $spieler_id = (int) $_GET['spieler_id'];
-    if (array_key_exists($spieler_id, $spieler_liste)) {
-        $spieler = new Spieler($spieler_id);
-        $spieler->details = $spieler->get_details();
-        $show_form = true;
-    } else {
+
+    $spieler = nSpieler::get((int)$_GET['spieler_id']);
+    if  (!isset($spieler->spieler_id)) {
         Html::error("Spieler wurde nicht gefunden");
     }
+
 }
 
-//Formularauswertung Spielerdaten verändern
+// Formularauswertung Spielerdaten verändern
 if (isset($_POST['spieler_aendern'])) {
+
     $vorname = $_POST['vorname'];
     $nachname = $_POST['nachname'];
-    $jahrgang = $_POST['jahrgang'];
+    $jahrgang = (int)$_POST['jahrgang'];
     $geschlecht = $_POST['geschlecht'];
     $teamname = $_POST['teamname'];
-    $letzter_saison = (int)$_POST['letzte_saison'];
-    $error = false;
-    if (empty($vorname) || empty($nachname) || empty($jahrgang) || empty($geschlecht) || empty($teamname)) {
-        Html::error("Bitte Formular ausfüllen");
-        $error = true;
-    }
-    $team_id = Team::name_to_id($teamname);
-    if (!Team::is_ligateam($team_id)) {
-        Html::error("Das Team $teamname wurde nicht gefunden");
-        $error = true;
-    }
-    if (1900 > $jahrgang || $jahrgang > date('Y')) {
-        Html::error("Ungültiger Jahrgang (Jahreszahl vierstellig ausschreiben)");
-        $error = true;
+    $letzte_saison = (int)$_POST['letzte_saison'];
+    $schiri = (int)$_POST['schiri'];
+    $junior = (string)$_POST['junior'];
+
+    if ($spieler
+        ->set_vorname($vorname)
+        ->set_nachname($nachname)
+        ->set_jahrgang($jahrgang)
+        ->set_geschlecht($geschlecht)
+        ->set_teamname($teamname)
+        ->set_letzte_saison($letzte_saison)
+        ->set_schiri($schiri)
+        ->set_junior($junior)
+        ->speichern()) {
+
+        Html::info("Spielerdaten wurden gespeichert.");
+        Helper::reload('/ligacenter/lc_kader.php','?team_id=' . $spieler->team_id);
+
+    } else {
+
+        Html::error("Spieler konnte nicht gespeichert werden. Alle Änderungen bitte erneut eingeben");
+        Helper::reload(get: "?spieler_id=" . $spieler->id());
+
     }
 
-    //Alle Datenbankeinträge außer team_id
-    $changed = false;
-    if (!$error) {
-        $liste = ["vorname", "nachname", "jahrgang", "geschlecht", "schiri", "junior", "letzte_saison"];
-        foreach ($liste as $entry) {
-            if ($spieler->details[$entry] != $_POST[$entry]) {
-                $spieler->set_detail($entry, $_POST[$entry]);
-                $changed = true;
-            }
-        }
-
-        if ($spieler->details['team_id'] != $team_id) {
-            $spieler->set_detail('team_id', $team_id);
-            $changed = true;
-        }
-        if ($changed) {
-            Html::info("Spielerdaten wurden geändert");
-            header('Location: lc_kader.php?team_id=' . $team_id);
-            die();
-        }
-        Html::error("Es wurden keine Daten geändert");
-    }
 }
 
 //Formularauswertung Spieler löschen
 if (isset($_POST['delete_spieler'])) {
-    $spieler->delete_spieler();
-    Html::info("Der Spieler " . $spieler->details['vorname'] . " " . $spieler->details['nachname']
-        . " mit der ID " . $spieler->details['spieler_id'] . " wurde gelöscht.");
-    header("Location: " . $_SERVER['PHP_SELF']);
-    die();
+    $spieler->delete();
+    Html::info("Der Spieler " . $spieler->get_name() . " mit der ID " . $spieler->id() . " wurde gelöscht.");
+    Helper::reload();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-include '../../templates/header.tmp.php';
-?>
+include '../../templates/header.tmp.php'; ?>
 
-    <!-- Spielerauswahlfeld -->
-    <div class="w3-panel w3-card-4">
-        <form method="post">
-            <h3 class="w3-text-primary">
-                <label for="spieler">Spieler wählen</label>
-            </h3>
-            <p>
-                <input onchange="this.form.submit();"
-                       type="text"
-                       placeholder="Spieler eingeben"
-                       style="max-width:400px"
-                       class="w3-input w3-border w3-border-primary"
-                       list="spielerliste"
-                       id="spieler"
-                       name="spieler_auswahl"
-                >
-                <datalist id="spielerliste">
-                    <?php foreach ($spieler_liste
+<?php include '../../templates/la_spieler_waehlen.tmp.php'; ?>
 
-                    as $spieler_id => $name){ ?>
-                    <option value='<?= $name . ' ' . $spieler_id ?>'>
-                        <?php } //end foreach ?>
-                </datalist>
-            </p>
-            <p>
-                <input type="submit" class="w3-button w3-tertiary" value="Spieler wählen">
-            </p>
-        </form>
-    </div>
-<?php if ($show_form ?? false) { ?>
+<?php if (isset($spieler->spieler_id)) { ?>
     <form class="w3-card-4 w3-panel" method='post'>
         <!-- Spieler-Details -->
-        <h3>Spieler mit der ID <?= $spieler->id ?> ändern</h3>
+        <h3>Spieler mit der ID <?= $spieler->id() ?> ändern</h3>
         <p>
             <label class="w3-text-primary" for="vorname">Vorname</labeL>
             <input class="w3-input w3-border w3-border-primary"
                    type="text"
                    name="vorname"
                    id="vorname"
-                   value="<?= $spieler->details['vorname'] ?>"
+                   value="<?= $spieler->get_vorname() ?>"
                    autocomplete="off"
                    required
             >
@@ -140,7 +86,7 @@ include '../../templates/header.tmp.php';
                    type="text"
                    name="nachname"
                    id="nachname"
-                   value="<?= $spieler->details['nachname'] ?>"
+                   value="<?= $spieler->get_nachname() ?>"
                    autocomplete="off"
                    required>
         </p>
@@ -150,32 +96,37 @@ include '../../templates/header.tmp.php';
                    type="number"
                    name="jahrgang"
                    id="jahrgang"
-                   value="<?= $spieler->details['jahrgang'] ?>"
+                   value="<?= $spieler->get_jahrgang() ?>"
                    autocomplete="off"
                    required>
         </p>
         <p>
             <label class="w3-text-primary" for="geschlecht">Geschlecht</labeL>
-            <select style="height:40px" class='w3-input w3-border w3-border-primary' name='geschlecht'>
-                <option <?php if ($spieler->details['geschlecht'] === 'm'){ ?>selected<?php } ?> value='m'>m</option>
-                <option <?php if ($spieler->details['geschlecht'] === 'w'){ ?>selected<?php } ?> value='w'>w</option>
-                <option <?php if ($spieler->details['geschlecht'] === 'd') { ?>selected<?php } ?>value='d'>d</option>
+            <select style="height:40px" class='w3-input w3-border w3-border-primary' id='geschlecht' name='geschlecht'>
+                <option <?= ($spieler->geschlecht === 'm') ? 'selected' : '' ?> value='m'>männlich</option>
+                <option <?= ($spieler->geschlecht === 'w') ? 'selected' : '' ?> value='w'>weiblich</option>
+                <option <?= ($spieler->geschlecht === 'd') ? 'selected' : '' ?> value='d'>divers</option>
             </select>
         </p>
         <p>
-            <label class="w3-text-primary" for="schiri">Schiri</labeL>
-            <select style="height:40px" class='w3-input w3-border w3-border-primary' name='schiri'>
-                <option <?php if ($spieler->details['schiri'] == Config::SAISON + 2){ ?>selected<?php } ?>
-                        value='<?= Config::SAISON + 2 ?>'><?= Html::get_saison_string(Config::SAISON + 2) ?></option>
-                <option <?php if ($spieler->details['schiri'] == Config::SAISON + 1){ ?>selected<?php } ?>
-                        value='<?= Config::SAISON + 1 ?>'><?= Html::get_saison_string(Config::SAISON + 1) ?></option>
-                <option <?php if ($spieler->details['schiri'] == Config::SAISON){ ?>selected<?php } ?>
-                        value='<?= Config::SAISON ?>'><?= Html::get_saison_string() ?></option>
-                <option <?php if (empty($spieler->details['schiri'])){ ?>selected<?php } ?>
-                        value=''>kein Schiri
+            <label class="w3-text-primary" for="schiri">
+                Schiri
+            </labeL>
+            <select class='w3-input w3-border w3-border-primary' id='schiri' name='schiri'>
+                <option <?= ($spieler->schiri === Config::SAISON + 2) ?  'selected' : '' ?>
+                        value='<?= Config::SAISON + 2 ?>'>
+                   bis inkl. Saison <?= Html::get_saison_string(Config::SAISON + 2) ?>
                 </option>
-                <option <?php if (($spieler->details['schiri']) === 'Ausbilder/in'){ ?>selected<?php } ?>
-                        value='Ausbilder/in'>Ausbilder/in
+                <option <?=  ($spieler->schiri == Config::SAISON + 1) ?  'selected' : '' ?>
+                        value='<?= Config::SAISON + 1 ?>'>
+                    bis inkl. Saison  <?= Html::get_saison_string(Config::SAISON + 1) ?>
+                </option>
+                <option <?=  ($spieler->schiri == Config::SAISON) ?  'selected' : '' ?>
+                        value='<?= Config::SAISON ?>'>
+                    bis inkl. Saison  <?= Html::get_saison_string() ?>
+                </option>
+                <option <?=  (is_null($spieler->schiri)) ?  'selected' : '' ?>
+                        value=''>kein Schiri
                 </option>
             </select>
         </p>
@@ -183,7 +134,7 @@ include '../../templates/header.tmp.php';
             <input class="w3-check"
                    type="checkbox"
                    id="junior"
-                   name="junior" <?php if ($spieler->details['junior'] === "Ja") { ?> checked <?php } //endif?>
+                   name="junior" <?php if ($spieler->junior === "Ja") { ?> checked <?php } //endif?>
                    value="Ja"
             >
             <label for="junior">
@@ -196,13 +147,13 @@ include '../../templates/header.tmp.php';
             <label class="w3-text-primary" for="teamname">Team ändern</label>
             <input type="text"
                    class="w3-input w3-border w3-border-primary"
-                   value="<?= $spieler->details['teamname'] ?>"
+                   value="<?= $spieler->get_team() ?>"
                    list="teams"
                    id="teamname"
                    name="teamname">
             <?= Html::datalist_teams() ?>
-            <?= Html::link("lc_kader.php?team_id=" . $spieler->details['team_id'],
-                'Zum Teamkader der ' . $spieler->details['teamname'],
+            <?= Html::link("lc_kader.php?team_id=" . $spieler->team_id,
+                'Zum Teamkader der ' . $spieler->get_team(),
                 true,
                 'group') ?>
         </p>
@@ -212,12 +163,12 @@ include '../../templates/header.tmp.php';
                    type="number"
                    id="letzte_saison"
                    name="letzte_saison"
-                   value="<?= $spieler->details['letzte_saison'] ?>"
+                   value="<?= $spieler->letzte_saison ?>"
                    autocomplete="off"
                    required>
             <span class="w3-text-grey">
-                (Saison Nr. <?= $spieler->details['letzte_saison'] ?> entspricht Saison
-                <?= Html::get_saison_string($spieler->details['letzte_saison']) ?>)
+                (Saison Nr. <?= $spieler->letzte_saison ?> entspricht Saison
+                <?= $spieler->get_letzte_saison() ?>)
             </span>
         </p>
         <p>
@@ -225,9 +176,7 @@ include '../../templates/header.tmp.php';
         </p>
     </form>
     <form onsubmit="return confirm(
-                'Der Spieler mit der ID <?= $spieler->details['spieler_id'] ?> <?= $spieler->details['vorname'] . ' '
-                . $spieler->details['nachname'] ?>) wird gelöscht werden.'
-            );"
+                'Der Spieler mit der ID <?= $spieler->id() ?> <?= $spieler->get_name() ?>) wird gelöscht werden.');"
           class="w3-container w3-card-4 w3-panel"
           method="POST">
         <p>

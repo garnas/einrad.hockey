@@ -7,7 +7,7 @@
  * PHP-Einstellungen vornehmen
  */
 // Session-Sicherheit
-ini_set('session.cookie_lifetime', '1200');
+ini_set('session.cookie_lifetime', '7200'); // Entspricht 2h
 ini_set('session.use_cookies', '1');
 ini_set('session.use_only_cookies', '1');
 ini_set('session.use_strict_mode', '1');
@@ -28,18 +28,18 @@ ini_set('log_errors', 'On');
 ini_set('display_errors', 'Off');
 ini_set('error_log', __DIR__ . '/system/logs/errors.log');
 
-// Nur für Localhost-Einstellungen
-if (
-    file_exists(__DIR__ . '/_localhost/nur_localhost.php')
-    && in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])
-) {
-    require_once __DIR__ . '/_localhost/nur_localhost.php';
-}
 
 /**
  * Enviroment-Variablen laden
  */
 require_once __DIR__ . '/env.php';
+
+
+// Nur für Localhost-Einstellungen
+if (Env::IS_LOCALHOST) {
+    ini_set('session.cookie_secure', '0'); // $_SESSION Funktioniert auch ohne https
+    ini_set('display_errors', 'On'); // Fehler werden angzeigt und nicht nur geloggt
+}
 
 
 /**
@@ -76,10 +76,7 @@ register_shutdown_function(static function () {
 
     if (
         // Kein Fehlerhandling für localhost (Debugging)
-        !(
-            file_exists(__DIR__ . '/_localhost/nur_localhost.php')
-            && in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1'])
-        )
+        !Env::IS_LOCALHOST
         // Es lag ein Fehler vor
         && ($error = error_get_last()) !== null
     ) {
@@ -108,7 +105,7 @@ register_shutdown_function(static function () {
     Helper::log(Config::LOG_USER,
         $_SERVER['REQUEST_URI']
         . " | " . round(microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"], 3) . " s (Load)"
-        . " | " . dbWrapper::$query_count . " (Querys)"
+        . " | " . ndbWrapper::$query_count . " (Querys)"
         . $referrer,
         true);
 
@@ -121,6 +118,7 @@ register_shutdown_function(static function () {
  * https://www.php.net/session_regenerate_id
  *
  * Bei mangelnder Performance session_regenerate_id nur bei Login und Logout einrichten.
+ * Bei häufigen ungültigen Sessions wegen einer schlechten Inet-Verbindung von 15 Sekunden hoch gehen.
  */
 session_start();
 if (

@@ -53,10 +53,23 @@
             <p>
             <label class="w3-text-primary" for="block_fixed">Fixierter Turnierblock</label>
             <select class="w3-input w3-border w3-border-primary" id="block_fixed" name="block_fixed">
-            <?php foreach (Config::BLOCK as $block_fixed) {?>
-            <option <?php if (($_POST['block_fixed'] ?? '') == $block_fixed){?> selected <?php } //endif?> value='<?=$block_fixed?>'><?=$block_fixed?></option>
-            <?php } //end foreach?>
+                <?php foreach (Config::BLOCK as $block_fixed) {?>
+                <option <?php if (($_POST['block_fixed'] ?? '') == $block_fixed){?> selected <?php } //endif?> value='<?=$block_fixed?>'><?=$block_fixed?></option>
+                <?php } //end foreach?>
             </select><i class="w3-small w3-text-grey">Fixierte Turnierblöcke verändern sich nicht mehr</i>
+            </p>
+        </div>
+        <?php } //endif?>
+        
+        <?php if (Helper::$ligacenter){?>
+        <div id="block_final_div" style="display: none">
+            <p>
+            <label class="w3-text-primary" for="block_final">Block des Abschlussturniers</label>
+            <select class="w3-select w3-border w3-border-primary" id="block_final" name="block_final">
+                <?php foreach (Config::BLOCK_FINALE as $block_finale) {?>
+                <option <?php if (($_POST['block_final'] ?? '') == $block_finale){?> selected <?php } //endif?> value='<?=$block_finale?>'><?=$block_finale?></option>
+                <?php } //end foreach?>
+            </select>
             </p>
         </div>
         <?php } //endif?>
@@ -69,7 +82,7 @@
                 <option <?php if (($_POST['plaetze'] ?? '') == '6'){?> selected <?php } //endif?> value="6">6 Teams</option>
                 <option <?php if (($_POST['plaetze'] ?? '') == '7'){?> selected <?php } //endif?> value="7">7 Teams</option>
                 <option <?php if (($_POST['plaetze'] ?? '') == '8 gruppen'){?> selected <?php } //endif?> value="8 gruppen">8 Teams (zwei Gruppen)</option>
-                <option <?php if (($_POST['plaetze'] ?? '')  == '8 dko'){?> selected <?php } //endif?> value="8 dko">8 Teams (Doppel-KO)</option>
+                <option <?php if (($_POST['plaetze'] ?? '') == '8 dko'){?> selected <?php } //endif?> value="8 dko">8 Teams (Doppel-KO)</option>
             </select>
         </p>
     </div>
@@ -145,7 +158,7 @@
         </p>
         <p>
             <label class="w3-text-primary" for="handy">Handynummer</label>
-            <input required value="<?=$_POST['handy'] ?? ''?>" type="number" class="w3-input w3-border w3-border-primary" id="handy" name="handy">
+            <input required value="<?=$_POST['handy'] ?? ''?>" type="text" class="w3-input w3-border w3-border-primary" id="handy" name="handy">
             <i class="w3-text-grey">Das Handy muss während des Turniertages erreichbar sein</i>
         </p>
     </div>
@@ -153,7 +166,7 @@
     <!-- Submit -->
     <div class="w3-panel w3-card-4">
         <p>
-            <input type="submit" value="Turnier eintragen!" name="create_turnier" class="w3-secondary w3-button w3-block">
+            <input type="submit" value="Turnier eintragen" name="create_turnier" class="w3-secondary w3-button w3-block">
         </p>
     </div>
 </form>
@@ -163,13 +176,21 @@
 Bei übermittlung des fixierten Blockes ist eine zusätzliche Überprüfung notwendig, ob man als Ligaausschuss eingeloggt ist*/
 
 function onstart_show_block(){
-    /* Einblenden der Auswahl fixierten Turnierblocks */
+    
     var e = document.getElementById("art");
     var result = e.options[e.selectedIndex].value;
 
+    /* Einblenden der Auswahl fixierten Turnierblocks */
     <?php if(Helper::$ligacenter){?>
     if (result === "fixed"){
         document.getElementById("block_fixed_div").style.display = "block";
+    }
+    <?php } //endif?>
+    
+    /* Einblenden der Auswahl Abschlussturniere */
+    <?php if(Helper::$ligacenter){?>
+    if (result === "final"){
+        document.getElementById("block_final_div").style.display = "block";
     }
     <?php } //endif?>
 
@@ -182,13 +203,20 @@ function onstart_show_block(){
 onstart_show_block();
 
 function onchange_show_block(selectObject) {
+    
     /* Einblenden der Auswahl des fixierten Turnierblocks */
-
     <?php if(Helper::$ligacenter){?>
     if (selectObject.value ===  "fixed") {
         document.getElementById("block_fixed_div").style.display = "block";
     }else{
         document.getElementById("block_fixed_div").style.display = "none";
+    }
+
+    /* Einblenden der Auswahl für das Abschlussturnier */
+    if (selectObject.value ===  "final") {
+        document.getElementById("block_final_div").style.display = "block";
+    }else{
+        document.getElementById("block_final_div").style.display = "none";
     }
     <?php } //endif?>
 

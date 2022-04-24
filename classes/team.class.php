@@ -12,6 +12,17 @@ class Team
      */
     public int $id;
     public array $details;
+    public string $teamname;
+
+    /**
+     * Werden nur bei Bedarf gesetzt.
+     * Dazu müssen dann die entsprechenden Setter aufgerufen werden.
+     */
+    public ?int $wertigkeit;
+    public ?string $tblock;
+    public ?int $rang;
+    public ?int $position_warteliste;
+    public ?string $freilos_gesetzt;
 
     /**
      * Team constructor.
@@ -21,6 +32,7 @@ class Team
     {
         $this->id = $team_id;
         $this->details = $this->get_details();
+        $this->teamname = $this->set_teamname();
     }
 
     /**
@@ -41,7 +53,7 @@ class Team
         // TeamIDs werden über die Sql-Funktion auto increment vergeben
         $sql = "
                 INSERT INTO teams_liga (teamname, passwort, freilose) 
-                VALUES (?, ?, 2)
+                VALUES (?, ?, 1)
                 ";
         db::$db->query($sql, $teamname, $passwort)->log();
 
@@ -63,7 +75,7 @@ class Team
     /**
      * Deaktiviert ein Ligateam, es kann im Ligacenter reaktiviert werden
      *
-     * @param $team_id
+     * @param int $team_id
      */
     public static function deactivate(int $team_id): void
     {
@@ -94,7 +106,7 @@ class Team
     /**
      * Reaktiviert ein deaktiviertes Team
      *
-     * @param $team_id
+     * @param int $team_id
      */
     public static function activate(int $team_id): void
     {
@@ -183,7 +195,7 @@ class Team
                 FROM teams_liga
                 WHERE ligateam = 'Ja' AND aktiv = 'Ja' 
                 ORDER BY team_id 
-                "; //TODO Früher nach RAND() für Abhandlung Ligabot, jetzt besser shuffle() einbauen
+                ";
         return db::$db->query($sql)->esc()->list('team_id');
     }
 
@@ -206,21 +218,6 @@ class Team
     }
 
     /**
-     * Fügt ein Freilos hinzu
-     *
-     * @param $team_id
-     */
-    public static function add_freilos($team_id): void
-    {
-        $sql = "
-                UPDATE teams_liga 
-                SET freilose = freilose + 1 
-                WHERE team_id = ?
-                ";
-        db::$db->query($sql, $team_id)->log();
-    }
-
-    /**
      * Teamstrafe eintragen
      *
      * @param int $team_id
@@ -228,10 +225,10 @@ class Team
      * @param int $turnier_id
      * @param string $grund
      * @param int $prozentsatz
-     * @param string $saison
+     * @param int $saison
      */
     public static function set_strafe(int $team_id, string $verwarnung, int $turnier_id, string $grund,
-                                      int $prozentsatz, $saison = Config::SAISON): void
+                                      int $prozentsatz, int $saison = Config::SAISON): void
     {
         $sql = "
                 INSERT INTO teams_strafen (team_id, verwarnung, turnier_id, grund, prozentsatz, saison)
@@ -286,9 +283,10 @@ class Team
     /**
      * Gibt die Teamstrafen aller Teams zurück
      *
+     * @param int $saison
      * @return array
      */
-    public static function get_strafen(): array
+    public static function get_strafen(int $saison = Config::SAISON): array
     {
         $sql = "
                 SELECT teams_strafen.*, teams_liga.teamname, turniere_details.ort, turniere_liga.datum 
@@ -299,11 +297,11 @@ class Team
                 ON turniere_liga.turnier_id = teams_strafen.turnier_id
                 LEFT JOIN turniere_details
                 ON turniere_details.turnier_id = teams_strafen.turnier_id
-                WHERE teams_strafen.saison = '" . Config::SAISON . "'
+                WHERE teams_strafen.saison = ?
                 AND teams_liga.aktiv = 'Ja'
                 ORDER BY turniere_liga.datum DESC
                 ";
-        return db::$db->query($sql)->esc()->fetch('strafe_id');
+        return db::$db->query($sql, $saison)->esc()->fetch('strafe_id');
     }
 
     /**
@@ -339,7 +337,7 @@ class Team
     }
 
     /**
-     * Gibt Anzahl der Freilose des Teams zurück
+     * Gibt Anzahl der Freilose des Teams zurück.
      *
      * @return int
      */
@@ -350,13 +348,13 @@ class Team
                 FROM teams_liga
                 WHERE team_id = $this->id
                 ";
-        return db::$db->query($sql)->log()->fetch_one();
+        return db::$db->query($sql)->esc()->fetch_one();
     }
 
     /**
-     * Setzt die Anzahl der Freilose eines Teams
+     * Setzt die Anzahl der Freilose eines Teams.
      *
-     * @param $anzahl
+     * @param int $anzahl
      */
     public function set_freilose(int $anzahl): void
     {
@@ -366,6 +364,103 @@ class Team
                 WHERE team_id = $this->id
                 ";
         db::$db->query($sql, $anzahl)->log();
+    }
+
+    /**
+     * Fügt ein Freilos hinzu.
+     *
+     * @param $team_id
+     */
+    public static function add_freilos($team_id): void
+    {
+        $sql = "
+                UPDATE teams_liga 
+                SET freilose = freilose + 1 
+                WHERE team_id = ?
+                ";
+        db::$db->query($sql, $team_id)->log();
+    }
+
+    /**
+     * Setzt das zweite Freilos mit Zeitstempel in der Datenbank.
+     */
+    public function set_zweites_freilos(): void
+    {
+        $sql = "
+                UPDATE teams_liga
+                SET freilose = freilose + 1, zweites_freilos = ?
+                WHERE team_id = $this->id
+                ";
+        db::$db->query($sql, date("Y-m-d"))->log();
+        Helper::log('schirifreilos.log', "$this->id hat für zwei Schiris ein Freilos erhalten.");
+        MailBot::mail_zweites_freilos($this);
+    }
+
+    /**
+     * Hat das Team in dieser Saison schon ein zweites Freilos für zwei Schiris erhalten?
+     *
+     * @return bool
+     */
+    public function check_schiri_freilos_erhalten(): bool
+    {
+        return (self::static_check_schiri_freilos_erhalten($this->details['zweites_freilos']));
+    }
+
+    public static function static_check_schiri_freilos_erhalten($zweites_freilos): bool
+    {
+        $erhalten_am = empty($zweites_freilos)
+            ? 0
+            : strtotime($zweites_freilos);
+        return $erhalten_am >= strtotime(Config::SAISON_ANFANG);
+    }
+
+    /**
+     * Ist das Team berechtigt ein zweites Freilos für zwei Schiris zu bekommen?
+     *
+     * @return bool
+     */
+    public function check_schiri_freilos_erhaltbar(): bool
+    {
+        // False, wenn die neue Saison noch nicht begonnen hat
+        if (time() < strtotime(Config::SAISON_ANFANG)){
+            return false;
+        }
+
+        // False, wenn schon ein Schiri-Freilos in der Saison erhalten wurde.
+        if ($this->check_schiri_freilos_erhalten()){
+            return false;
+        }
+
+        // Zwei oder mehr Schiris im Kader?
+        $sql = "
+                SELECT count(schiri)
+                FROM spieler
+                WHERE schiri >= ?
+                AND team_id = $this->id
+                AND letzte_saison = ?
+                ";
+
+        return db::$db->query($sql, Config::SAISON, Config::SAISON)->fetch_one() >= 2;
+    }
+
+    /**
+     *  Überprüft alle Teams und setzt die Schiri-Freilose.
+     */
+    public static function set_schiri_freilose(): void {
+        $team_ids = self::get_liste_ids();
+        foreach ($team_ids as $id) {
+            (new Team($id))->set_schiri_freilos();
+        }
+    }
+
+    /**
+     *  Setzt das zweite Schiri-Freilos, falls das Team berechtigt ist.
+     */
+    public function set_schiri_freilos(): void {
+       if ($this->check_schiri_freilos_erhaltbar()){
+                Html::info("Das Team '" . $this->details['teamname'] . "' hat ein zweites Freilos erhalten.");
+                $this->set_zweites_freilos();
+            }
     }
 
     /**
@@ -410,7 +505,6 @@ class Team
 
     /**
      * Teamfoto löschen
-     *
      */
     public function delete_foto(): void
     {
@@ -504,5 +598,118 @@ class Team
                 WHERE team_id = $this->id
                 ";
         db::$db->query($sql, $passwort_hash, $pw_geaendert)->log();
+    }
+
+    /**
+     * Setzt die Wertigkeit vor dem benannten Spieltag
+     * 
+     * @param int $spieltag
+     */
+    public function set_wertigkeit(int $spieltag): void
+    {
+        $this->wertigkeit = Tabelle::get_team_wertigkeit($this->id, $spieltag - 1);
+    }
+
+    /**
+     * Setzt den Teamblock vor dem benannten Spieltag
+     * 
+     * @param int $spieltag
+     */
+    public function set_tblock(int $spieltag): void
+    {
+        $this->tblock = Tabelle::get_team_block($this->id, $spieltag - 1);
+    }
+
+    /**
+     * Setzt die Information, ob ein Freilos gesetzt wurde
+     * 
+     * @param string $freilos_gesetzt
+     */
+    public function set_freilos_gesetzt(string $freilos_gesetzt): void
+    {
+        $this->freilos_gesetzt = $freilos_gesetzt;
+    }
+
+    /**
+     * Setzte den Teamrang vor dem benannten Spieltag
+     * 
+     * @param int $spieltag
+     */
+    public function set_rang(int $spieltag): void
+    {
+        $this->rang = Tabelle::get_team_rang($this->id, $spieltag - 1);
+    }
+
+    /**
+     * Setzte die Wartelisteposition des Teams auf einem Turnier
+     * 
+     * @param int $spieltag
+     */
+    public function set_position_warteliste(int $pos): void
+    {
+        $this->position_warteliste = $pos;
+    }
+
+    /**
+     * Setzt den Teamnamen
+     */
+    public function set_teamname(): string
+    {
+        $sql = "
+        SELECT teamname 
+        FROM teams_liga
+        WHERE team_id = ?
+        ";
+        return db::$db->query($sql, $this->id)->fetch_one();
+    }
+
+    /**
+     * Gibt die Teamwertigkeit
+     * 
+     * @return null|int
+     */
+    public function get_wertigkeit(): null|int
+    {
+        return $this->wertigkeit;
+    }
+
+    /**
+     * Gibt den Teamblock
+     * 
+     * @return null|string
+     */
+    public function get_tblock(): null|string
+    {
+        return $this->tblock;
+    }
+
+    /**
+     * Gibt den Teamrang
+     * 
+     * @return null|int
+     */
+    public function get_rang(): null|int
+    {
+        return $this->rang;
+    }
+
+    /**
+     * Gibt die Wartelisteposition
+     * 
+     * @return null|int
+     */
+    public function get_warteliste_postition(): null|int
+    {
+        return $this->position_warteliste;
+    }
+
+    /**
+     * Gibt den Teamnamen
+     * 
+     * @return string
+     */
+    public function get_teamname(): string
+    {
+        return $this->teamname;
     }
 }

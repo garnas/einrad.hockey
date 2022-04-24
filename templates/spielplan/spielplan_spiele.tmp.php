@@ -57,9 +57,9 @@
                 </th>
             <?php }//endif?>
         </tr>
-        <?php if ($spielplan->turnier->details['besprechung'] === 'Ja') { ?>
+        <?php if ($spielplan->turnier->get_besprechung() === 'Ja') { ?>
             <tr class="w3-primary-3">
-                <td><?= date('H:i', strtotime($spielplan->turnier->details['startzeit']) - 15 * 60) ?></td>
+                <td><?= date('H:i', strtotime($spielplan->turnier->get_startzeit()) - 15 * 60) ?></td>
                 <td></td>
                 <td></td>
                 <td colspan="3">
@@ -159,7 +159,7 @@
                     </span>
                 </td>
                 <?php if ($spielplan->check_penalty_anzeigen()) { ?>
-                    <!-- Pen Dekstop -->
+                    <!-- Pen Desktop -->
                     <td>
                         <table class="w3-table w3-centered w3-hide-small w3-text-secondary" style="width: auto; margin: auto;">
                             <tr>
@@ -183,7 +183,7 @@
                             </span>
                         </span>
                     </td>
-                <?php }//endif?>
+                <?php } //endif?>
             </tr>
             <?php if ($spielplan->get_pause($spiel_id) > 0) { ?>
                 <tr>

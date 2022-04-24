@@ -132,13 +132,13 @@ class Html
     /**
      * Erstellt einen HTML-Link.
      *
-     * @param string $link
-     * @param string $bezeichnung
+     * @param string|null $link
+     * @param string|null $bezeichnung
      * @param bool $extern
      * @param string $icon Material-Icon
      * @return string
      */
-    public static function link(string $link, string $bezeichnung = '', bool $extern = false, string $icon = ''): string
+    public static function link(?string $link, ?string $bezeichnung = '', bool $extern = false, string $icon = ''): string
     {
         if (empty($link)) {
             return '';
