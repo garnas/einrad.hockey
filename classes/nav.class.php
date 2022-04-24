@@ -145,7 +145,7 @@ class Nav
     public static function get_tc_start(): array
     {
         return [
-            [Env::BASE_URL . "/teamcenter/tc_terminseite_erstellen.php", "Teamtermine", "w3-primary"],
+            [Env::BASE_URL . "/teamcenter/tc_terminseite_erstellen.php", "Teamtermine", "w3-green"],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_anmelden.php", "Turnier- anmeldung", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_turnier_erstellen.php", "Turnier erstellen", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_verwalten.php", "Eigene Turniere", "w3-primary"],
