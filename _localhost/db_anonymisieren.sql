@@ -11,9 +11,11 @@ TRUNCATE TABLE mailbot;
 TRUNCATE TABLE spieler_ausleihen;
 TRUNCATE TABLE turniere_berichte;
 TRUNCATE TABLE turniere_geloescht;
+TRUNCATE `schiri_ergebnis`;
+TRUNCATE `schiri_test`;
 
 -- Spieler
-UPDATE spieler SET vorname= 'Vorname',nachname='Nachname',jahrgang= 2020, geschlecht = 'd';
+UPDATE spieler SET vorname= 'Vorname',nachname='Nachname',jahrgang= 2020, geschlecht = 'd', letzte_saison = '27', timestamp = NULL;
 
 -- Ligaleitung
 UPDATE ligaleitung SET passwort = NULL, email = 'test@einrad.hockey';
