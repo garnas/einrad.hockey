@@ -143,19 +143,19 @@ if (isset($_POST['create_turnier'])) {
                 . " um 20:00&nbsp;Uhr beendet sein. Wende dich an den Ligaausschuss für spezielle"
                 . " Spielzeiten.");
         }
-    } elseif (
-        Helper::$ligacenter
-        && in_array($tblock, Config::BLOCK_FINALE, true)
-    ) {
-        if (
-            $datum != strtotime(Config::FINALE_EINS)
-            && $datum != strtotime(Config::FINALE_ZWEI)
-            && $datum != strtotime(Config::FINALE_DREI)
-            && $datum != strtotime(Config::FINALE_VIER)
-        ) {
-            $error = true;
-            Html::error("Das Datum ist nicht für die Abschlussturniere vorgesehen.");
-        }
+//    } elseif (
+//        Helper::$ligacenter
+//        && in_array($tblock, Config::BLOCK_FINALE, true)
+//    ) {
+//        if (
+//            $datum != strtotime(Config::FINALE_EINS)
+//            && $datum != strtotime(Config::FINALE_ZWEI)
+//            && $datum != strtotime(Config::FINALE_DREI)
+//            && $datum != strtotime(Config::FINALE_VIER)
+//        ) {
+//            $error = true;
+//            Html::error("Das Datum ist nicht für die Abschlussturniere vorgesehen.");
+//        }
     }
 
     $datum = date("Y-m-d", $datum);
