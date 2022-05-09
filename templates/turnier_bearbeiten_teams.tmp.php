@@ -30,13 +30,13 @@
         <p>
             <label class="w3-text-primary" for="plaetze">Plätze</label>
             <select required class="w3-select w3-border w3-border-primary" id="plaetze" name="plaetze">
-            <option <?php if($turnier->get_plaetze() == '4'){?>selected<?php }elseif(Helper::$teamcenter){?>disabled<?php }?>value="4">4 Teams (nur in Absprache mit dem Ligaausschuss)</option>
+            <option <?php if($turnier->get_plaetze() == '4'){?>selected<?php }elseif(Helper::$teamcenter){?> disabled<?php }?> value="4">4 Teams (nur in Absprache mit dem Ligaausschuss)</option>
                 <option <?php if($turnier->get_plaetze() == '5'){?>selected<?php }?> value="5">5 Teams</option>
                 <option <?php if($turnier->get_plaetze() == '6'){?>selected<?php }?> value="6">6 Teams</option>
                 <option <?php if($turnier->get_plaetze() == '7'){?>selected<?php }?> value="7">7 Teams</option>
                 <option <?php if($turnier->get_plaetze() == '8' && $turnier->get_format() === 'gruppen'){?>selected<?php }?> value="8 gruppen">8 Teams (zwei Gruppen)</option>
                 <option <?php if($turnier->get_plaetze() == '8' && $turnier->get_format() === 'dko'){?>selected<?php }?> value="8 dko">8 Teams (Doppel-KO)</option>
-                <option <?php if($turnier->get_plaetze() == '12'){?>selected<?php }elseif(Helper::$teamcenter){?>disabled<?php }?>value="12">12 Teams (nur Finalturniere)</option>
+                <option <?php if($turnier->get_plaetze() == '12'){?>selected<?php }elseif(Helper::$teamcenter){?> disabled<?php }?> value="12">12 Teams (nur Finalturniere)</option>
             </select>
         </p>
     </div>

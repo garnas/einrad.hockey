@@ -163,7 +163,7 @@ include '../../templates/header.tmp.php';
         });
     </script>
 
-    <?php include '../../templates/finalturniere22.tmp.php'; ?>
+    <?php //include '../../templates/finalturniere22.tmp.php'; ?>
     
     <h1 class="w3-text-primary">Turniere der Saison <?= Html::get_saison_string() ?></h1>
 
