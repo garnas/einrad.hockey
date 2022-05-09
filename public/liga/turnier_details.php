@@ -44,7 +44,15 @@ if(in_array($turnier->get_art(), Config::TURNIER_ARTEN)){
 }
 
 // Datum
-$details['datum'] = strftime("%d.%m.%Y&nbsp;(%A)", strtotime($turnier->get_datum()));
+$details['datum'] = strftime("", strtotime($turnier->get_datum()));
+if ($details['plaetze']  == '12') {
+    $details['datum']  =
+        strftime("%d.%m.", strtotime($turnier->get_datum()))
+        ." & "
+        . strftime("%d.%m.", strtotime($turnier->get_datum()) + 24*60*60);
+} else {
+    $details['datum']  = strftime("%d.%m.%Y&nbsp;(%A)", strtotime($turnier->get_datum()));
+}
 
 // Startzeit
 $details['startzeit'] = substr($turnier->get_startzeit(), 0, -3);
