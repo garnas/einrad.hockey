@@ -65,7 +65,7 @@ if (isset($_POST['change_turnier'])) {
             Html::error("Das Ändern der Anzahl der Plätze ist bei Abschlussturnieren können nur vom Ligaausschuss geändert werden.");
             $error = true;
         }
-        if ($plaetze < 5 || $plaetze > 8) {
+        if (Helper::$teamcenter && ($plaetze < 5 || $plaetze > 8)) {
             $error = true; // 4er nur via Ligaausschuss
             Html::error("Ungültige Anzahl an Turnierplätzen.");
         }

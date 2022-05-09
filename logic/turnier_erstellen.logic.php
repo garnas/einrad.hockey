@@ -95,7 +95,7 @@ if (isset($_POST['create_turnier'])) {
     }
 
     // Validierung der Plätze
-    if ($plaetze < 4 || $plaetze > 8) {
+    if (Helper::$teamcenter && ($plaetze < 4 || $plaetze > 8)) {
         $error = true;
         Html::error("Ungültige Anzahl an Turnierplätzen.");
     }
@@ -113,20 +113,24 @@ if (isset($_POST['create_turnier'])) {
     ) {
         // Validierung Datum
         if (
-            $datum < strtotime(Config::SAISON_ANFANG)
-            || $datum > strtotime(Config::SAISON_ENDE)
+                Helper::$teamcenter &&
+                (
+                    $datum < strtotime(Config::SAISON_ANFANG)
+                    || ($datum > strtotime(Config::SAISON_ENDE)
+                )
+            )
         ) {
             $error = true;
             Html::error("Das Datum liegt außerhalb der Saison.");
         }
 
         $feiertage = Feiertage::finden(date("Y", $datum));
-        if (!in_array($datum, $feiertage) && date('N', $datum) < 6) {
+        if (Helper::$teamcenter && !in_array($datum, $feiertage) && date('N', $datum) < 6) {
             $error = true;
             Html::error("Das Datum liegt nicht am Wochende und ist kein bundesweiter Feiertag.");
         }
     
-        if (LigaBot::time_offen_melde(date("Y-m-d", $datum)) < time()) {
+        if (LigaBot::time_offen_melde(date("Y-m-d", $datum)) < time() && Helper::$teamcenter) {
             $error = true;
             Html::error("Turniere können nur vier Wochen vor dem Spieltag eingetragen werden");
         }
@@ -203,7 +207,7 @@ if (isset($_POST['create_turnier'])) {
             ->set_organisator($organisator)
             ->set_startgebuehr($startgebuehr)
             ->set_database();
-        
+
         // Mailbot, wenn Teams neue Turniere erstellen
         if (Helper::$teamcenter) {
             MailBot::mail_neues_turnier($turnier);

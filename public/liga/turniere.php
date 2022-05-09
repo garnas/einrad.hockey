@@ -11,22 +11,22 @@ $finalturniere = nTurnier::get_finalturniere();
 foreach ($finalturniere as $turnier) {
     switch ($turnier->get_tblock())
     {
-        case "DFINALE":
+        case "A-Finale":
             $dfinale['turnier_id'] = $turnier->get_turnier_id();
             $dfinale['ort'] = $turnier->get_ort();
             $dfinale['datum'] = strftime("%d.%m.%Y", strtotime($turnier->get_datum()));
             break;
-        case "CFINALE":
+        case "B-Finale":
             $cfinale['turnier_id'] = $turnier->get_turnier_id();
             $cfinale['ort'] = $turnier->get_ort();
             $cfinale['datum'] = strftime("%d.%m.%Y", strtotime($turnier->get_datum()));
             break;
-        case "BFINALE":
+        case "C-Finale":
             $bfinale['turnier_id'] = $turnier->get_turnier_id();
             $bfinale['ort'] = $turnier->get_ort();
             $bfinale['datum'] = strftime("%d.%m.%Y", strtotime($turnier->get_datum()));
             break;
-        case "AFINALE":
+        case "Saisonschlussturnier":
             $finale['turnier_id'] = $turnier->get_turnier_id();
             $finale['ort'] = $turnier->get_ort();
             $finale['datum'] = strftime("%d.%m.%Y", strtotime($turnier->get_datum()));
@@ -34,7 +34,7 @@ foreach ($finalturniere as $turnier) {
     }
 }
 
-//Turnierdarten parsen
+//Turnierdaten parsen
 foreach ($alle_turniere as $turnier) {
     $turnier_id = $turnier->get_turnier_id();
 
@@ -78,28 +78,7 @@ foreach ($alle_turniere as $turnier) {
             break;
     }
 
-    // Turnierblock
-    switch ($turnier->get_tblock()) 
-    {
-        case 'AFINALE':
-            $turniere[$turnier_id]['tblock'] = '';
-            $turniere[$turnier_id]['tname'] = 'Finale der Deutschen Einradhockeyliga';
-            break;
-        case 'BFINALE':
-            $turniere[$turnier_id]['tblock'] = '';
-            $turniere[$turnier_id]['tname'] = 'B-Finale der Deutschen Einradhockeyliga';
-            break;
-        case 'CFINALE':
-            $turniere[$turnier_id]['tblock'] = '';
-            $turniere[$turnier_id]['tname'] = 'C-Finale der Deutschen Einradhockeyliga';
-            break;
-        case 'DFINALE':
-            $turniere[$turnier_id]['tblock'] = '';
-            $turniere[$turnier_id]['tname'] = 'Saisonschlussturnier';
-            break;
-        default:
-            $turniere[$turnier_id]['tblock'] = '(' . $turnier->get_tblock() . ')';
-    }
+    $turniere[$turnier_id]['tblock'] = '(' . $turnier->get_tblock() . ')';
 
     // Spassturnier
     if ($turnier->get_art() == 'spass') {
@@ -196,7 +175,7 @@ include '../../templates/header.tmp.php';
         <?php foreach ($turniere as $turnier): ?>
             <section onclick="modal('modal<?= $turnier['turnier_id'] ?>')"
                      class='w3-display-container w3-panel w3-card'
-                     style='cursor: pointer; <?php if ($turnier['art'] == 'final') { ?>background-color:#edf0f7;<?php } ?>'
+                     style='cursor: pointer;'
                      id='<?= $turnier['turnier_id'] ?>'>
                 <!-- Angezeigtes Turnierpanel -->
                 <div class='w3-panel'>
@@ -204,12 +183,14 @@ include '../../templates/header.tmp.php';
                         <?php if ($turnier['art'] != 'final'): ?>
                             <h4 class=''><?= $turnier['datum'] ?>
                                 <span class="w3-text-primary"><?= $turnier['ort'] ?></span> <?= $turnier['tblock'] ?></h4>
-                            <p class='w3-text-grey'><?= $turnier['tname'] ?></p>
+                            <p class="w3-text-grey"><?= $turnier['tname'] ?></p>
                         <?php else: ?>
-                            <h4 class='w3-text-primary'>
-                                <?= $turnier['tname'] ?> </h4>
+                            <h3 class='w3-text-secondary'>
+                                <?= $turnier['tname'] ?>
+                            </h3>
                             <h4 class=''> 
-                                <?= $turnier['datum'] ?> <span class="w3-text-primary"><?= $turnier['ort'] ?></span></h4>
+                                <?= $turnier['datum'] ?> <span class="w3-text-primary"><?= $turnier['ort'] ?></span>
+                            </h4>
                         <?php endif; ?>
                     </div>
                     <div style="font-size: 13px;" class="w3-text-grey">

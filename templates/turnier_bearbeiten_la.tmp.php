@@ -35,7 +35,7 @@
         </p>
         <p>
             <label class="w3-text-primary" for="tname">Turniername <i class="w3-small">(optional)</i></label>
-            <input type="text" maxlength="25" value="<?=$turnier->get_tname();?>" class="w3-input w3-border w3-border-primary" id="tname" name="tname">
+            <input type="text" maxlength="60" value="<?=$turnier->get_tname();?>" class="w3-input w3-border w3-border-primary" id="tname" name="tname">
         </p>
         <p>
             <label class="w3-text-primary" for="datum">Datum</label>
@@ -62,15 +62,18 @@
                 <option <?php if($turnier->get_art() == 'fixed'){?> selected <?php }?> value='fixed'>Manuelles (fixed) Turnier</option>
             </select>
         </p>
-        <p>
-        <label class="w3-text-primary" for="block">Turnierblock</label>
-        <select required class="w3-select w3-border w3-border-primary" id="block" name="block">';
-        <?php foreach (Config::BLOCK_ALL as $block){?>
-            <option <?php if ($turnier->get_tblock() == $block){?> selected <?php }?> value='<?=$block?>'><?=$block?></option>
-        <?php } //end foreach?>
-        </select>
-        <i class="w3-text-primary">Nach ändern des Blockes sollten die Anmeldelisten kontrolliert werden.</i>
-        </p>
+        <?php if ($turnier->get_art() !== "final"): ?>
+            <p>
+                <label class="w3-text-primary" for="block">Turnierblock</label>
+                <select required class="w3-select w3-border w3-border-primary" id="block" name="block">
+                    <?php foreach (Config::BLOCK_ALL as $block): ?>
+                        <option <?php if ($turnier->get_tblock() == $block){?> selected <?php }?> value='<?=$block?>'><?=$block?></option>
+                    <?php endforeach; ?>
+                </select>
+                <i class="w3-text-primary">Nach ändern des Blockes sollten die Anmeldelisten kontrolliert werden.</i>
+            </p>
+        <?php endif; ?>
+
         <p>
             <input type="submit" value="Turnierdaten ändern" name="turnier_bearbeiten_la" class="w3-tertiary w3-button w3-block">
         </p>
