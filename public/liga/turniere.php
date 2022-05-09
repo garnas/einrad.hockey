@@ -54,7 +54,16 @@ foreach ($alle_turniere as $turnier) {
 
     // Zeit und Datum
     $turniere[$turnier_id]['wochentag'] = strftime("%A", strtotime($turnier->get_datum()));
-    $turniere[$turnier_id]['datum'] = strftime("%d.%m.", strtotime($turnier->get_datum()));
+
+    if ($turniere[$turnier_id]['plaetze'] == 12) {
+        $turniere[$turnier_id]['datum'] =
+            strftime("%d.%m.", strtotime($turnier->get_datum()))
+            . " & "
+            . strftime("%d.%m.", strtotime($turnier->get_datum()) + 24*60*60) ;
+
+    } else {
+        $turniere[$turnier_id]['datum'] = strftime("%d.%m.", strtotime($turnier->get_datum()));
+    }
     $turniere[$turnier_id]['startzeit'] = substr($turnier->get_startzeit(), 0, -3);
 
     // Turnierbesprechung
@@ -85,6 +94,7 @@ foreach ($alle_turniere as $turnier) {
         $turniere[$turnier_id]['tblock'] = '';
     }
 }
+db::debug($turniere[1005], true);
 
 //Parsen der Warteliste und Spieleliste
 $warteliste = $spieleliste = $meldeliste = [];
