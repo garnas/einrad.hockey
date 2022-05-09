@@ -189,7 +189,7 @@ if (isset($_POST['abmelden']) && Helper::$teamcenter){
 
 // Für Abschlussturnier bewerben
 if (isset($_POST['bewerben'])){
-    if ($turnier->get_art() != 'final'){
+    if (!$turnier->is_finalturnier()){
         Html::error ("Anmeldung fehlgeschlagen.");
         $error = true;
     }

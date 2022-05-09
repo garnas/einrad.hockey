@@ -920,7 +920,9 @@ class nTurnier
         $turnier->set_log("Turnier mit ID $turnier_id wurde erstellt. (Ausrichter-ID $ausrichter)");
 
         // Ausrichter auf dem Turnier melden
-        $turnier->set_team($ausrichter, 'spiele');
+        if (!$turnier->is_finalturnier()) {
+            $turnier->set_team($ausrichter, 'spiele');
+        }
 
         return $turnier;
     }
@@ -1613,14 +1615,21 @@ class nTurnier
      * 
      * @return bool
      */
-    public function is_ligaturnier()
+    public function is_ligaturnier(): bool
     {
-        if ($this->art == 'spass') {
-            return false;
-        } else {
-            return true;
-        }
+        return $this->art != 'spass';
     }
+
+    /**
+     * Ermittelt, ob es sich um ein Finalturnier handelt
+     *
+     * @return bool
+     */
+    public function is_finalturnier(): bool
+    {
+        return $this->art == 'final';
+    }
+
 
     /**
      * Ermittelt, ob ein Team bei diesem Turnier ein Freilos setzten darf

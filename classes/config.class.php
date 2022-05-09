@@ -52,7 +52,7 @@ class Config
      * Mögliche Finalturnier-Blöcke
      * Reihenfolge ist wichtig!
      */
-    public const BLOCK_FINALE = ['AFINALE', 'BFINALE', 'CFINALE', 'DFINALE'];
+    public const BLOCK_FINALE = ['Finale', 'B-Finale', 'C-Finale', 'Saisonschlussturnier'];
 
     /**
      * Rangtabellen-Zuordnung
