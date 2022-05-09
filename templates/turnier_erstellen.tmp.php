@@ -100,7 +100,7 @@
         </div>
         <div class="w3-section">
             <label class="w3-text-primary" for="plz">PLZ</label>
-            <input required type="number" class="w3-input w3-border w3-border-primary" value="<?=$_POST['plz'] ?? ''?>" id="plz" name="plz">
+            <input required type="text" maxlength="5" class="w3-input w3-border w3-border-primary" value="<?=$_POST['plz'] ?? ''?>" id="plz" name="plz">
         </div>
         <div class="w3-section">
             <label class="w3-text-primary" for="ort">Ort</label>
