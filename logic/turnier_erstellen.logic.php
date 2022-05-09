@@ -77,7 +77,7 @@ if (isset($_POST['create_turnier'])) {
     }
 
     // Anzahl der Plätze bzw ob 8er DKO- oder Gruppen-Spielplan
-    $plaetze = (string)($_POST['plaetze'] ?? 0);
+    $plaetze = $_POST['plaetze'];
     switch ($plaetze) {
         case '8 dko':
             $plaetze = 8;
@@ -93,6 +93,7 @@ if (isset($_POST['create_turnier'])) {
             $format = 'jgj';
             break;
     }
+    $plaetze = (int)$plaetze;
 
     // Validierung der Plätze
     if (Helper::$teamcenter && ($plaetze < 4 || $plaetze > 8)) {

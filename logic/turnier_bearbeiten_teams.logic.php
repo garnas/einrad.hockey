@@ -34,6 +34,8 @@ if (isset($_POST['change_turnier'])) {
         $format = 'jgj';
     }
 
+    $plaetze = (int) $plaetze;
+
     // Leere Felder können eigentlich nicht auftreten (nur durch html-Manipulation), aber sicherheitshalber das hier...
     if (
         empty($plaetze) || empty($startzeit) || empty($hallenname) || empty($strasse) || empty($plz) || empty($ort)
