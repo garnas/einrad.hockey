@@ -94,7 +94,6 @@ foreach ($alle_turniere as $turnier) {
         $turniere[$turnier_id]['tblock'] = '';
     }
 }
-db::debug($turniere[1005], true);
 
 //Parsen der Warteliste und Spieleliste
 $warteliste = $spieleliste = $meldeliste = [];
