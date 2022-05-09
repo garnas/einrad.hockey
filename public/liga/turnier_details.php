@@ -74,8 +74,6 @@ switch ($turnier->get_art())
         break;
     case 'final':
         $details['art'] = 'Finalturnier';
-        $details['tblock'] = '--';
-        $details['tname'] = '';
         break;
     case 'fixed':
         $details['art'] = 'Manuell';
