@@ -25,7 +25,7 @@ class nTurnier
     // turniere_details
     private ?string $hallenname;
     private ?string $strasse;
-    private ?int $plz;
+    private ?string $plz;
     private ?string $ort;
     private ?string $haltestellen;
     private ?int $plaetze;
@@ -206,9 +206,9 @@ class nTurnier
     }
 
     /**
-     * @return int
+     * @return string
      */
-    public function get_plz(): int
+    public function get_plz(): string
     {
         return $this->plz;
     }
@@ -1064,7 +1064,7 @@ class nTurnier
      * 
      * @return nTurnier
      */
-    public function set_plz(int $plz): nTurnier
+    public function set_plz(string $plz): nTurnier
     {
         $this->auto_log("Plz", $this->plz , $plz);
         $this->plz = $plz;

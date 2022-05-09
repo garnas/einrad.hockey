@@ -157,7 +157,7 @@ if (isset($_POST['create_turnier'])) {
     $tname = (string)$_POST['tname'];
     $hallenname = (string)$_POST['hallenname'];
     $strasse = (string)$_POST['strasse'];
-    $plz = (int)$_POST['plz'];
+    $plz = (string)$_POST['plz'];
     $ort = (string)$_POST['ort'];
     $haltestellen = (string)$_POST['haltestellen'];
     $hinweis = (string)$_POST['hinweis'];
