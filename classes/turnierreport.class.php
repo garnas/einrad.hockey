@@ -150,9 +150,10 @@ class TurnierReport
      * @param string $bericht
      * @param bool $kader_check
      */
-    function set_turnier_bericht(string $bericht, bool $kader_check)
+    function set_turnier_bericht(string $bericht, ?string $kader_check)
     {
         $kader_check = ($kader_check) ? 'Ja' : 'Nein';
+
         // Existiert bereits ein Turnierbericht?
         $sql = "
                 SELECT * FROM turniere_berichte 

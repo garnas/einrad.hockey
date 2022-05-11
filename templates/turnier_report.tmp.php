@@ -258,7 +258,7 @@
 <?php if($change_tbericht): ?>
     <form method="post">
         <p>
-            <input <?php $tbericht->kader_check() ? 'checked' : '' ?>
+            <input <?= $tbericht->kader_check() ? 'checked' : '' ?>
                    class="w3-check"
                    value="kader_checked"
                    type="checkbox"
