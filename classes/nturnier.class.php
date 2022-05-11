@@ -366,23 +366,24 @@ class nTurnier
     }
 
     /**
+     * @param int $turnier_id
      * @return array
      */
-    public function get_log(): array
+    public static function get_log(int $turnier_id): array
     {
         $sql = "
                 SELECT * 
                 FROM turniere_log 
                 WHERE turnier_id = ?
                 ";
-        return db::$db->query($sql, $this->turnier_id)->esc()->fetch();
+        return db::$db->query($sql, $turnier_id)->esc()->fetch();
     }
 
     /**
      * @param int $id
      * @return nTurnier
      */
-    public static function get(int $turnier_id): nTurnier
+    public static function get(int $turnier_id): ?nTurnier
     {
         $sql = "
             SELECT turniere_liga.*, turniere_details.*
