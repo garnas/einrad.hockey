@@ -89,7 +89,11 @@ class nTurnier
                 VALUES ($this->turnier_id, ?, ?);
                 ";
             $autor = Helper::get_akteur(true);
-            db::$db->query($sql, trim($this->log), $autor)->log();
+
+            $this->log = trim($this->log);
+            db::$db->query($sql, $this->log, $autor)->log();
+
+            Discord::send_with_turnier($this->log, $this);
         }
     }
 
@@ -468,7 +472,6 @@ class nTurnier
      * @param $saison
      * @return nTurnier[]
      */
-
     public static function get_turniere_spielplan(bool $asc = true, int $saison = CONFIG::SAISON): array
     {
         $sql = "
