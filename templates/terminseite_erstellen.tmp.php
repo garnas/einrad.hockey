@@ -9,6 +9,15 @@
             können sich die Mitspieler dann anmelden und für Termine eintragen.
             So könnt Ihr leicht den Überblick behalten wer zu welchem Termin kommt oder bereits abgesagt hat.
         </p>
+        <div class="w3-center w3-margin" >
+            <a href="<?=Env::BASE_URL?>/bilder/teamplaner/ligatermine.png">
+                <img src="<?=Env::BASE_URL?>/bilder/teamplaner/ligatermine.png"
+                     style="max-width: 666px"
+                     alt="Screenshot Terminplaner"
+                     class="w3-imagew3-card-4">
+            </a>
+            <p class="w3-text-grey"><i>Screenshot der Spielerseite</i></p>
+        </div>
         <p>
             Trainingszeiten werden nur einmalig angelegt und wiederholen sich wöchentlich.<br>
             Daten der Ligaturniere können einfach übernommen werden und es ist den Spielern ersichtlich, ob Ihr zum
@@ -16,6 +25,15 @@
             Auch ist es möglich Eure Termine über CalDAV in verschiedene Clients (z.B. Thunderbird, Outlook) oder
             Android und iOS einzubinden.
         </p>
+        <div class="w3-center w3-margin" >
+            <a href="<?=Env::BASE_URL?>/bilder/teamplaner/turnier_termine.png">
+                <img src="<?=Env::BASE_URL?>/bilder/teamplaner/turnier_termine.png"
+                     style="max-width: 666px"
+                     alt="Screenshot Terminplaner"
+                     class="w3-imagew3-card-4">
+            </a>
+            <p class="w3-text-grey"><i>Screenshot der Spielerseite</i></p>
+        </div>
         <p>
             Es ist möglich und sinnvoll mehrere Teams für einen Verein anzulegen (Nur 1 Account hier anlegen). So könnt
             Ihr auch Spielern ermöglichen bei Turnieren auszuhelfen oder ein gemeinsames Training für mehrere Teams
@@ -23,8 +41,14 @@
         </p>
         <p>
             Die Erstellung der Spieleraccounts, Teams etc. ist unabhängig von der Teamkaderverwaltung auf der Ligaseite.
-            Bei Fragen kontaktiere <?= Html::mailto('technik@einrad.hockey') ?>.
+            Unten seht ihre eine Anleitung hierzu. Bei Fragen kontaktiere <?= Html::mailto('technik@einrad.hockey') ?>.
         </p>
+        <a class="no w3-hover-text-secondary w3-text-primary" href="<?= Env::BASE_URL ?>/dokumente/howto_team.einrad.hockey.pdf">
+            <p>
+                <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i>
+                Anleitung team.einrad.hockey (pdf)
+            </p>
+        </a>
     </div>
 
     <?php if ($team->check_terminplaner()) { ?>
