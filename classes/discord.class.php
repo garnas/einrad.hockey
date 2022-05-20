@@ -19,6 +19,17 @@ class Discord
         }
     }
 
+    public static function tickerUpdate($spiel): void
+    {
+        if (!empty($spiel['penalty_a']) ||  !empty($spiel['penalty_b'])) {
+            $message =  "Penalty!\r\n"
+                . $spiel['teamname_a'] . " : " . $spiel['teamname_b'] . " " . $spiel['penalty_a'] . " : " . $spiel['penalty_b'];
+        } else {
+            $message = $spiel['teamname_a'] . " : " . $spiel['teamname_b'] . " " . $spiel['tore_a'] . " : " . $spiel['tore_b'] ;
+        }
+        self::send($message);
+    }
+
     public static function send($message): void
     {
 
