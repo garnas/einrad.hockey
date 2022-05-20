@@ -37,7 +37,13 @@ if (isset($_POST["tore_speichern"])) {
             $_POST["penalty_a"][$spiel_id] ?? '',
             $_POST["penalty_b"][$spiel_id] ?? ''
         );
+        $spiel['tore_a'] = $_POST["tore_a"][$spiel_id]  ?? '';
+        $spiel['tore_b'] = $_POST["tore_b"][$spiel_id]  ?? '';
+        $spiel['penalty_a'] = $_POST["penalty_a"][$spiel_id]  ?? '';
+        $spiel['penalty_b'] = $_POST["penalty_b"][$spiel_id]  ?? '';
+        Discord::tickerUpdate($spiel);
     }
+
     Html::info('Spielergebnisse wurden gespeichert');
     header('Location: ' . db::escape($_SERVER['REQUEST_URI']));
     die();
