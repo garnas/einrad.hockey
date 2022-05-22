@@ -159,7 +159,7 @@ window.onclick = function(event) {
             <tr>
                 <td class="<?=$platz_color[$spalte['platz']] ?? ''?>"><?=$spalte['platz'] ?? ''?></td>
                 <td style="white-space: nowrap"><?=$spalte['teamname']?></td>
-                <td><?=htmlspecialchars_decode($spalte['string'])?></td>
+                <td style='white-space: nowrap;'><?=$spalte['string']?></td>
                 <td><?=$spalte['summe'] ?: 0?><a class="no w3-text-primary w3-hover-text-secondary" href="#pranger"><?=$spalte['strafe_stern'] ?? ''?></a></td>
             </tr>
         <?php } //end foreach?>
@@ -197,7 +197,7 @@ window.onclick = function(event) {
                 <td class="w3-center"><?=Tabelle::rang_to_block($spalte['rang'])?></td>
                 <td class="w3-center"><?=Tabelle::rang_to_wertigkeit($spalte['rang'])?></td>
                 <td style="white-space: nowrap"><?=$spalte['teamname']?></td>
-                <td><?=htmlspecialchars_decode($spalte['string'])?></td>
+                <td style='white-space: nowrap;'><?=$spalte['string']?></td>
                 <td class="w3-center"><?=$spalte['avg'] ?: 0?></td>
             </tr>
         <?php } //end foreach?>
