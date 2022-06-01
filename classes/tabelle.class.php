@@ -77,6 +77,23 @@ class Tabelle
     }
 
     /**
+     * Gibt die Platzierung eines Teams in der Meisterschaftstabelle zurück
+     *
+     * @param int $team_id
+     * @param int|null $spieltag
+     * @return int|null
+     */
+    public static function get_team_meister_platz(int $team_id, NULL|int $spieltag = NULL): ?int
+    {
+        // Default: Aktueller Spieltag - 1 = Spieltag mit allen eingetragenen Ergebnissen
+        $spieltag = $spieltag ?? (self::get_aktuellen_spieltag() - 1);
+        $meisterschaftstabelle = self::get_meisterschafts_tabelle($spieltag);
+
+        // Nichtligateam haben den Platz NULL
+        return $meisterschaftstabelle[$spieltag][$team_id]['rang'] ?? NULL;
+    }
+
+    /**
      * Gibt den Block eines Teams auf Grundlage der Platzierung in der Rangtabelle zurück
      *
      * @param int $team_id

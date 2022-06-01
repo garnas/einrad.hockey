@@ -621,14 +621,21 @@ class nTurnier
                 $temp = new Team($team_id);
                 $temp->set_wertigkeit($this->spieltag);
                 $temp->set_tblock($this->spieltag);
-                $temp->set_freilos_gesetzt($team['freilos_gesetzt']);    
+                $temp->set_freilos_gesetzt($team['freilos_gesetzt']);
                 $spielenliste[$team_id] = $temp;
             }
 
             // Sortierung nach Wertigkeit
-            uasort($spielenliste, static function ($team_a, $team_b) {
-                return ((int)$team_b->get_wertigkeit() <=> (int)$team_a->get_wertigkeit());
-            });
+            if ($this->get_art() === "final") {
+                uasort($spielenliste, static function ($team_a, $team_b) {
+                    return ((int)Tabelle::get_team_meister_platz($team_b->id) <=> (int)Tabelle::get_team_meister_platz($team_a->id));
+                });
+            } else {
+                uasort($spielenliste, static function ($team_a, $team_b) {
+                    return ((int)$team_b->get_wertigkeit() <=> (int)$team_a->get_wertigkeit());
+                });
+            }
+
         }
 
         return $spielenliste ?? [];
@@ -1877,5 +1884,15 @@ class nTurnier
             }
             $this->warteliste_aktualisieren();
         }
+    }
+        }
+
+        foreach($this->get_spielenliste() as $team) {
+            if ($team->is_mixteam()){
+                return false;
+            }
+        }
+
+        return true; // Das Turnier ist in der Offenen Phase und hat kein Mixteam auf der Spielenliste
     }
 }
