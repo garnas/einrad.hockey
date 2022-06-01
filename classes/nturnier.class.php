@@ -628,7 +628,7 @@ class nTurnier
             // Sortierung nach Wertigkeit
             if ($this->get_art() === "final") {
                 uasort($spielenliste, static function ($team_a, $team_b) {
-                    return ((int)Tabelle::get_team_meister_platz($team_b->id) <=> (int)Tabelle::get_team_meister_platz($team_a->id));
+                    return ((int)Tabelle::get_team_meister_platz($team_a->id) <=> (int)Tabelle::get_team_meister_platz($team_b->id));
                 });
             } else {
                 uasort($spielenliste, static function ($team_a, $team_b) {
