@@ -88,9 +88,8 @@ class Tabelle
         // Default: Aktueller Spieltag - 1 = Spieltag mit allen eingetragenen Ergebnissen
         $spieltag = $spieltag ?? (self::get_aktuellen_spieltag() - 1);
         $meisterschaftstabelle = self::get_meisterschafts_tabelle($spieltag);
-
         // Nichtligateam haben den Platz NULL
-        return $meisterschaftstabelle[$spieltag][$team_id]['rang'] ?? NULL;
+        return $meisterschaftstabelle[$team_id]['platz'] ?? NULL;
     }
 
     /**
@@ -136,6 +135,7 @@ class Tabelle
                 return $block;
             }
         }
+        trigger_error("Aus der Rangtabelle konnte kein Block abgeleitet werden.", E_USER_ERROR);
     }
 
     /**
