@@ -1885,14 +1885,4 @@ class nTurnier
             $this->warteliste_aktualisieren();
         }
     }
-        }
-
-        foreach($this->get_spielenliste() as $team) {
-            if ($team->is_mixteam()){
-                return false;
-            }
-        }
-
-        return true; // Das Turnier ist in der Offenen Phase und hat kein Mixteam auf der Spielenliste
-    }
 }
