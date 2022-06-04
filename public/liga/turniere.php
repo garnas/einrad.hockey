@@ -55,7 +55,7 @@ foreach ($alle_turniere as $turnier) {
     // Zeit und Datum
     $turniere[$turnier_id]['wochentag'] = strftime("%A", strtotime($turnier->get_datum()));
 
-    if ($turniere[$turnier_id]['plaetze'] == 12) {
+    if ($turnier_id == 1005) { //TODO rausnehmen
         $turniere[$turnier_id]['datum'] =
             strftime("%d.%m.", strtotime($turnier->get_datum()))
             . " & "

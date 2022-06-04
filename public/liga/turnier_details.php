@@ -45,7 +45,7 @@ if(in_array($turnier->get_art(), Config::TURNIER_ARTEN)){
 
 // Datum
 $details['datum'] = strftime("", strtotime($turnier->get_datum()));
-if ($details['plaetze']  == '12') {
+if ($turnier_id == 1005) { //TODO rausnehmen
     $details['datum']  =
         strftime("%d.%m.", strtotime($turnier->get_datum()))
         ." & "
