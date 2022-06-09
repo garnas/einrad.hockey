@@ -257,7 +257,7 @@ class Html
      * @param int $min Anzahl der Konfettis liegt zufällig zwischen $min und $max
      * @param int $max
      */
-    public static function set_confetti(int $min = 40, int $max = 90, $timeout = 0): void
+    public static function set_confetti(int $min = 40, int $max = 120, $timeout = 3000): void
     {
         echo "
             <script src = '../javascript/confetti/confetti.js'></script>

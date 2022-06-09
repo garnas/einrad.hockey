@@ -59,6 +59,23 @@ if (isset($_POST['ergebnis_eintragen'])) {
     header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->get_turnier_id());
     die();
 }
+if (isset($_POST['spielplan_final_top'])) {
+    $spielplan = new Spielplan_Final($turnier, 'top');
+    $spielplan->delete();
+    $spielplan->createAndPersist();
+    $turnier->set_phase('spielplan');
+    $turnier->set_database();
+    Helper::reload('/liga/spielplan_finale.php', '?turnier_id=' . $turnier->get_turnier_id());
+}
+
+if (isset($_POST['spielplan_final_bottom'])) {
+    $spielplan = new Spielplan_Final($turnier, 'bottom');
+    $spielplan->delete();
+    $spielplan->createAndPersist();
+    $turnier->set_phase('spielplan');
+    $turnier->set_database();
+    Helper::reload('/liga/spielplan_finale.php', '?turnier_id=' . $turnier->get_turnier_id());
+}
 
 // Spielplan automatisch erstellen
 if (isset($_POST['auto_spielplan_erstellen'])) {
@@ -175,6 +192,18 @@ include '../../templates/header.tmp.php';
         </table>
     </div>
 
+    <h2 class="w3-text-primary w3-bottombar">Final-Spielplan erstellen</h2>
+    <p>Spielenliste wird automatisch gesetzt</p>
+    <form method="post">
+        <input type="submit"
+               name="spielplan_final_bottom"
+               value="spielplan_final_bottom"
+               class="w3-button w3-tertiary">
+        <input type="submit"
+               name="spielplan_final_top"
+               value="spielplan_final_top"
+               class="w3-button w3-tertiary">
+    </form>
     <!-- Dynamischer Spielplan erstellen -->
     <h2 class="w3-text-primary w3-bottombar">JgJ-Spielplan erstellen</h2>
 <?php if (empty($turnier->get_spielplan_datei())) { ?>

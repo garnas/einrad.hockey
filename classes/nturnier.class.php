@@ -818,6 +818,13 @@ class nTurnier
                 default => Env::BASE_URL . '/liga/spielplan.php?turnier_id=' . $this->turnier_id
             };
         }
+        if($this->get_art() == 'final') {
+            return match ($scope) {
+                'lc' => Env::BASE_URL . '/ligacenter/lc_spielplan.php?turnier_id=' . $this->turnier_id,
+                'tc' => Env::BASE_URL . '/teamcenter/tc_spielplan.php?turnier_id=' . $this->turnier_id,
+                default => Env::BASE_URL . '/liga/spielplan_finale.php?turnier_id=' . $this->turnier_id
+            };
+        }
 
         return false;
     }
