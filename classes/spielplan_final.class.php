@@ -17,7 +17,7 @@ class spielplan_final
 
     public static function topOrBottom(int $turnier_id): string
     {
-        if ($turnier_id === 1011) {
+        if ($turnier_id === 1010) {
             return 'bottom';
         }
         return 'top';
