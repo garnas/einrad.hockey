@@ -72,6 +72,6 @@ class env
 
     public const TERMINPLANER_KEY = 'NotValid';
 
-    public const WEBHOOK_DISCORD = "https://discord.com/api/webhooks/975394332637020170/3qLpdM8-mW5Whzp6tKPHEMZrXcDVq11hgMGkYeLKDLTaxyzS7YI7dIaf6DZjRUbHquWf";
+    public const WEBHOOK_DISCORD = "example";
 
 }
