@@ -70,7 +70,7 @@ class env
     public const WARTUNGSMODUS = false;
     public const DEBUGMODUS = false;
 
-    public const TERMINPLANER_KEY = 'NurdamitnichtjederHansundFranzeineGruppeanlegenkann';
+    public const TERMINPLANER_KEY = 'NotValid';
 
     public const WEBHOOK_DISCORD = "https://discord.com/api/webhooks/975394332637020170/3qLpdM8-mW5Whzp6tKPHEMZrXcDVq11hgMGkYeLKDLTaxyzS7YI7dIaf6DZjRUbHquWf";
 
