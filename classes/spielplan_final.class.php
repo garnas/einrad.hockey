@@ -37,6 +37,7 @@ class spielplan_final
             if (Helper::$ligacenter) {
                 Helper::reload('/ligacenter/lc_spielplan_finale.php', '?turnier_id=' . $turnier_id);
             }
+            Helper::reload('/liga/spielplan_finale.php', '?turnier_id=' . $turnier_id);
         }
     }
 
