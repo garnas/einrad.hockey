@@ -257,6 +257,37 @@ include '../../templates/header.tmp.php'; ?>
 
         <!-- Neuigkeiten-Einträge -->
         <div class="w3-col l8 m7">
+            <div class='w3-card-4 w3-panel w3-responsive w3-round w3-bottombar'>
+
+                <div class='w3-stretch w3-container w3-primary w3-center'>
+                    <h3>Liveticker</h3>
+                    <p>
+                        <?php Html::include_widget_bot(); ?>
+                    </p>
+                </div>
+                <div class="">
+                    <h3>Spielpläne für Samstag</h3>
+                    <p>
+                        <?= Html::link(Env::BASE_URL . '/liga/spielplan.php?turnier_id=1007', "Thedinghausen (Gruppe A)", false, 'launch') ?>
+                        <br>
+                        <?= Html::link(Env::BASE_URL . '/liga/spielplan.php?turnier_id=1008', "Lilienthal (Gruppe B)", false, 'launch') ?>
+                    </p>
+                    <h3>Spielpläne für Sonntag</h3>
+                    <p>
+                        <?= Html::link(Env::BASE_URL . '/liga/spielplan_finale.php?turnier_id='. Env::FINAL_BOTTOM_ID, "Thedinghausen (Platz 7, ab 9:00 Uhr)", false, 'launch') ?>
+                        <br>
+                        <?= Html::link(Env::BASE_URL . '/liga/spielplan_finale.php?turnier_id=' . Env::FINAL_TOP_ID, "Thedinghausen (Deutscher Meister, ab 14:00 Uhr)", false, 'launch') ?>
+                    </p>
+                    <p>
+                        Hier könnt ihr den Liveticker direkt in der Discord-App auf euer Handy bekommen:
+                    </p>
+                    <p>
+                        <?= Html::link(Env::LINK_DISCORD, Env::LINK_DISCORD, true, 'bookmark') ?>
+                    </p>
+                </div>
+
+            </div>
+
             <?php foreach ($neuigkeiten as $neuigkeit): //Schleife für jede Neuigkeit?>
                 <div class='w3-card-4 w3-panel w3-responsive w3-round w3-bottombar'>
 

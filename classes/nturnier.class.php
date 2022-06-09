@@ -93,7 +93,7 @@ class nTurnier
             $this->log = trim($this->log);
             db::$db->query($sql, $this->log, $autor)->log();
 
-            Discord::send_with_turnier($this->log, $this);
+//            Discord::send_with_turnier($this->log, $this);
         }
     }
 

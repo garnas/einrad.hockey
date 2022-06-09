@@ -99,7 +99,7 @@ if (!empty($vgl_data)) {
         || count($vgl_data) != $spielplan->anzahl_teams
     ) {
         $error = true;
-    } else {
+    } elseif ($turnier->get_art() != 'final') {
         foreach ($spielplan->platzierungstabelle as $ergebnis) {
             if ($vgl_data[$ergebnis['platz']]['ergebnis'] != $ergebnis['ligapunkte']) {
                 $error = true;
