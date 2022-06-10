@@ -274,9 +274,11 @@ include '../../templates/header.tmp.php'; ?>
                     </p>
                     <h3>Spielpläne für Sonntag</h3>
                     <p>
-                        <?= Html::link(Env::BASE_URL . '/liga/spielplan_finale.php?turnier_id='. Env::FINAL_BOTTOM_ID, "Thedinghausen (Platz 7, ab 9:00 Uhr)", false, 'launch') ?>
+                        <?= Html::link(nTurnier::get(Env::FINAL_BOTTOM_ID)->get_spielplan_link(), "Thedinghausen (Platz 7, ab 9:00 Uhr)", false, 'launch') ?>
                         <br>
-                        <?= Html::link(Env::BASE_URL . '/liga/spielplan_finale.php?turnier_id=' . Env::FINAL_TOP_ID, "Thedinghausen (Deutscher Meister, ab 14:00 Uhr)", false, 'launch') ?>
+                        <?= Html::link(nTurnier::get(Env::FINAL_TOP_ID)->get_spielplan_link(), "Thedinghausen (Deutscher Meister, ab 14:00 Uhr)", false, 'launch') ?>
+                        <br>
+                        <span class="w3-text-grey"><i>Die genauen Spielpläne werden Samstagabend erstellt</i></span>
                     </p>
                     <p>
                         Hier könnt ihr den Liveticker direkt in der Discord-App auf euer Handy bekommen:
