@@ -326,7 +326,7 @@ class Html
                 server='$server'
                 channel='$channel'
                 width='100%'
-                height='300'
+                height='350'
         >
         </widgetbot>
         <script src='https://cdn.jsdelivr.net/npm/@widgetbot/html-embed'></script>
