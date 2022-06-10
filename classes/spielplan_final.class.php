@@ -1,5 +1,6 @@
 <?php
 
+
 class spielplan_final
 {
     private Spielplan_JgJ $lilienthal;
@@ -17,10 +18,27 @@ class spielplan_final
 
     public static function topOrBottom(int $turnier_id): string
     {
-        if ($turnier_id === 1010) {
+        if ($turnier_id === Env::FINAL_BOTTOM_ID) {
             return 'bottom';
         }
-        return 'top';
+        if ($turnier_id === Env::FINAL_TOP_ID) {
+            return 'top';
+        }
+        trigger_error("TopOrBottom Fehler Final", E_USER_ERROR);
+    }
+
+    public static function routeToFinalSpielplan(int $turnier_id): void
+    {
+        if ($turnier_id === Env::FINAL_TOP_ID || $turnier_id === Env::FINAL_BOTTOM_ID){
+            if (Helper::$teamcenter){
+                Helper::reload('/teamcenter/tc_spielplan_finale.php', '?turnier_id=' . $turnier_id);
+
+            }
+            if (Helper::$ligacenter) {
+                Helper::reload('/ligacenter/lc_spielplan_finale.php', '?turnier_id=' . $turnier_id);
+            }
+            Helper::reload('/liga/spielplan_finale.php', '?turnier_id=' . $turnier_id);
+        }
     }
 
     public function delete() {
