@@ -266,19 +266,17 @@ include '../../templates/header.tmp.php'; ?>
                     </p>
                 </div>
                 <div class="">
-                    <h3>Spielpläne für Samstag</h3>
-                    <p>
-                        <?= Html::link(Env::BASE_URL . '/liga/spielplan.php?turnier_id=1007', "Thedinghausen (Gruppe A)", false, 'launch') ?>
-                        <br>
-                        <?= Html::link(Env::BASE_URL . '/liga/spielplan.php?turnier_id=1008', "Lilienthal (Gruppe B)", false, 'launch') ?>
-                    </p>
-                    <h3>Spielpläne für Sonntag</h3>
+                    <h3>Spielpläne für heute</h3>
                     <p>
                         <?= Html::link(nTurnier::get(Env::FINAL_BOTTOM_ID)->get_spielplan_link(), "Thedinghausen (Platz 7, ab 9:00 Uhr)", false, 'launch') ?>
                         <br>
                         <?= Html::link(nTurnier::get(Env::FINAL_TOP_ID)->get_spielplan_link(), "Thedinghausen (Deutscher Meister, ab 14:00 Uhr)", false, 'launch') ?>
+                    </p>
+                    <h3>Ergebnisse von gestern</h3>
+                    <p>
+                        <?= Html::link(Env::BASE_URL . '/liga/spielplan.php?turnier_id=1007', "Thedinghausen (Gruppe A)", false, 'launch') ?>
                         <br>
-                        <span class="w3-text-grey"><i>Die genauen Spielpläne werden Samstagabend erstellt</i></span>
+                        <?= Html::link(Env::BASE_URL . '/liga/spielplan.php?turnier_id=1008', "Lilienthal (Gruppe B)", false, 'launch') ?>
                     </p>
                     <p>
                         Hier könnt ihr den Liveticker direkt in der Discord-App auf euer Handy bekommen:
