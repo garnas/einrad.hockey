@@ -27,7 +27,7 @@ if (isset($_GET['team_id'])){
 /////////////////////////////////////////////////////////////////////////////
 include '../../templates/header.tmp.php';?>
 
-<h2> Turnier erstellen (Ligaausschuss) </h2>
+<h2>Turnier erstellen (Ligaausschuss)</h2>
 
 <?php
 include '../../templates/la_team_waehlen.tmp.php';

@@ -318,9 +318,6 @@ class Html
     }
     
     public static function include_widget_bot($server = '494602271447842856', $channel = '984536643107180594') {
-        if (!Env::ACTIVE_FINAL_DISCORD) {
-            return;
-        }
         echo "
         <widgetbot
                 server='$server'
