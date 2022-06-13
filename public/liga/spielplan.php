@@ -15,9 +15,6 @@ Html::$content = "Der Spielplan für das Einradhockey-Turnier in " . $spielplan-
 include '../../templates/header.tmp.php';
 include '../../templates/spielplan/spielplan_titel.tmp.php';
 include '../../templates/spielplan/spielplan_teamliste.tmp.php'; // Teamliste
-if (Env::ACTIVE_FINAL_DISCORD && $turnier->is_finalturnier()) {
-    include '../../templates/spielplan/spielplan_discord_read.tmp.php'; // Spiele
-}
 include '../../templates/spielplan/spielplan_spiele.tmp.php'; // Spiele
 include '../../templates/spielplan/spielplan_turniertabelle.tmp.php'; // Abschlusstabelle
 include '../../templates/spielplan/spielplan_direkter_vergleich.tmp.php'; // Direkter Vergleich Tabellen

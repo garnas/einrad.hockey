@@ -29,9 +29,7 @@ include '../../templates/spielplan/spielplan_titel.tmp.php'; // Titel
     </p>
 
 <?php
-if (Env::ACTIVE_FINAL_DISCORD) {
-    include include '../../templates/spielplan/spielplan_discord_write.tmp.php';
-}
+
 include '../../templates/spielplan/spielplan_tore_eintragen.tmp.php'; // Spielplan -> Formular übertragen
 include '../../templates/spielplan/spielplan_turniertabelle.tmp.php'; // Turniertabelle
 include '../../templates/spielplan/spielplan_ergebnis_senden.tmp.php'; // Ergebnis senden

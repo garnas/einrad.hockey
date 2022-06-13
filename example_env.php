@@ -75,10 +75,6 @@ class env
     /**
      * Discord
      */
-    public const ACTIVE_FINAL_DISCORD = true;
     public const WEBHOOK_DISCORD = "asdfsdfasfd";
-    public const LINK_DISCORD = "asdfsdfa";
 
-    public const FINAL_TOP_ID = 1012;
-    public const FINAL_BOTTOM_ID = 1013;
 }
