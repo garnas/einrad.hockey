@@ -7,7 +7,7 @@ require_once '../../logic/session_la.logic.php';//Auth
 
 $turnier_id = (int) @$_GET['turnier_id'];
 $turnier = nTurnier::get($turnier_id);
-$spielplan = (new Spielplan_Final($turnier))->get_spielplan();
+$spielplan = (new Spielplan_Final($turnier))->get_spielplan_b();
 
 require_once '../../logic/spielplan_form.logic.php'; //Wertet Formular aus
 

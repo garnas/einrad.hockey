@@ -9,6 +9,7 @@ class spielplan_final
 
     public const FINAL_TOP_ID = 1011;
     public const FINAL_BOTTOM_ID = 1010;
+    public const FINAL_B_ID = 1005;
 
 
     public function __construct(nTurnier $turnier)
@@ -25,14 +26,52 @@ class spielplan_final
         if ($turnier_id === self::FINAL_TOP_ID) {
             return 'top';
         }
-        trigger_error("TopOrBottom Fehler Final", E_USER_ERROR);
+        return '';
     }
 
     public static function routeToFinalSpielplan(int $turnier_id): void
     {
+        if ($turnier_id == self::FINAL_B_ID) {
+
+            if (Helper::$teamcenter) {
+                Helper::reload('/teamcenter/tc_spielplan_finale.php', '?turnier_id=' . $turnier_id);
+            }
+
+            if (Helper::$ligacenter) {
+                Helper::reload('/ligacenter/lc_spielplan_finale.php', '?turnier_id=' . $turnier_id);
+            }
+
+            Helper::reload('/liga/spielplan_b_finale.php', '?turnier_id=' . $turnier_id);
+
+        }
         if ($turnier_id === self::FINAL_TOP_ID || $turnier_id === self::FINAL_BOTTOM_ID){
             Helper::reload('/liga/spielplan_finale.php', '?turnier_id=' . $turnier_id);
         }
+    }
+
+    public function get_spielplan_b(): Spielplan_JgJ
+    {
+        $spielplan = new Spielplan_JgJ($this->turnier);
+
+        $spielzeit = (
+                $spielplan->details["anzahl_halbzeiten"]
+                * $spielplan->details["halbzeit_laenge"]
+                + $spielplan->details["puffer"]
+            ) * 60; // In Sekunden für Unixzeit
+
+        $startzeit = strtotime($this->turnier->get_startzeit());
+        $spiele = $spielplan->spiele;
+        foreach ($spiele as $spiel_id => $spiel) {
+            if ($spiel_id == 15) {
+                $startzeit = strtotime($this->turnier->get_startzeit());
+            }
+            $spiele[$spiel_id]["zeit"] = date("H:i", $startzeit);
+            $startzeit += $spielzeit + $spielplan->get_pause($spiel_id) * 60;
+        }
+
+        $spielplan->spiele = $spiele;
+
+        return $spielplan;
     }
 
     public function get_spielplan(): Spielplan_JgJ
