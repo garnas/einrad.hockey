@@ -24,6 +24,9 @@ class Team
     public ?int $position_warteliste;
     public ?string $freilos_gesetzt;
 
+    private static array $cache_id_to_name;
+    private static array $cache_details;
+
     /**
      * Team constructor.
      * @param $team_id
@@ -32,7 +35,7 @@ class Team
     {
         $this->id = $team_id;
         $this->details = $this->get_details();
-        $this->teamname = $this->set_teamname();
+        $this->teamname = self::id_to_name($team_id);
     }
 
     /**
@@ -142,13 +145,19 @@ class Team
      */
     public static function id_to_name($team_id): null|string
     {
+
+        if (isset(self::$cache_id_to_name[$team_id])) {
+            return self::$cache_id_to_name[$team_id];
+        }
+
         $sql = "
                 SELECT teamname 
                 FROM teams_liga 
                 WHERE team_id = ?
                 ";
-        return db::$db->query($sql, $team_id)->esc()->fetch_one();
-
+        $teamname = db::$db->query($sql, $team_id)->esc()->fetch_one();
+        self::$cache_id_to_name[$team_id] = $teamname;
+        return $teamname;
     }
 
     /**
@@ -311,6 +320,10 @@ class Team
      */
     public function get_details(): array
     {
+        if (isset(self::$cache_details[$this->id])) {
+            return self::$cache_details[$this->id];
+        }
+
         $sql = "
                 SELECT *  
                 FROM teams_liga 
@@ -318,7 +331,8 @@ class Team
                 ON teams_details.team_id = teams_liga.team_id
                 WHERE teams_liga.team_id = $this->id
                 ";
-        return db::$db->query($sql)->esc()->fetch_row();
+        self::$cache_details[$this->id] = db::$db->query($sql)->esc()->fetch_row();
+        return self::$cache_details[$this->id];
     }
 
     /**
@@ -648,19 +662,6 @@ class Team
     public function set_position_warteliste(int $pos): void
     {
         $this->position_warteliste = $pos;
-    }
-
-    /**
-     * Setzt den Teamnamen
-     */
-    public function set_teamname(): string
-    {
-        $sql = "
-        SELECT teamname 
-        FROM teams_liga
-        WHERE team_id = ?
-        ";
-        return db::$db->query($sql, $this->id)->fetch_one();
     }
 
     /**

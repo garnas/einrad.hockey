@@ -11,7 +11,8 @@ class Tabelle
     /**
      * Speichert die Erstellten Rangtabellen, damit diese nicht mehrfach erstellt werden müssen.
      */
-    public static array $rangtabellen = [];
+    public static array $cache_rangtabellen = [];
+    public static array $cache_meisterschaftstabelle;
 
     /**
      * Übergibt den Spieltag, bis zu welchem Ergebnisse eingetragen worden sind.
@@ -69,11 +70,11 @@ class Tabelle
         $spieltag = $spieltag ?? (self::get_aktuellen_spieltag() - 1);
 
         // Rangtabelle soll nicht jedes mal neu berechnet werden müssen
-        if (!isset(self::$rangtabellen[$spieltag])){
-            self::$rangtabellen[$spieltag] = self::get_rang_tabelle($spieltag);
+        if (!isset(self::$cache_rangtabellen[$spieltag])){
+            self::$cache_rangtabellen[$spieltag] = self::get_rang_tabelle($spieltag);
         }
         // Nichtligateam haben den Rang NULL
-        return self::$rangtabellen[$spieltag][$team_id]['rang'] ?? NULL;
+        return self::$cache_rangtabellen[$spieltag][$team_id]['rang'] ?? NULL;
     }
 
     /**
@@ -87,9 +88,11 @@ class Tabelle
     {
         // Default: Aktueller Spieltag - 1 = Spieltag mit allen eingetragenen Ergebnissen
         $spieltag = $spieltag ?? (self::get_aktuellen_spieltag() - 1);
-        $meisterschaftstabelle = self::get_meisterschafts_tabelle($spieltag);
+        if (!isset(self::$cache_meisterschaftstabelle)){
+            self::$cache_meisterschaftstabelle = self::get_meisterschafts_tabelle($spieltag);
+        }
         // Nichtligateam haben den Platz NULL
-        return $meisterschaftstabelle[$team_id]['platz'] ?? NULL;
+        return self::$cache_meisterschaftstabelle[$team_id]['platz'] ?? NULL;
     }
 
     /**

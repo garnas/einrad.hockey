@@ -33,7 +33,7 @@ include '../../templates/spielplan/spielplan_titel.tmp.php';
 ?>
 <p>
     <b>
-        <?= Html::link('https://einrad.hockey/uploads/s/spielplan/2022_06_10_00_57_06.pdf', 'Excel-Spielplan', true, 'download')?>
+        <?= Html::link('https://einrad.hockey/uploads/s/spielplan/2022_06_10_00_57_06.pdf', 'PDF-Spielplan', true, 'download')?>
     </b>
 </p>
 <?php
