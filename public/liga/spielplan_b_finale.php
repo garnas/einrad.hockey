@@ -324,10 +324,12 @@ include '../../templates/spielplan/spielplan_direkter_vergleich.tmp.php'; // Dir
 <h1 class="w3-text-secondary">
     Finalspiele
 </h1>
-<div>
+<div class="w3-center">
     <iframe
         width="100%"
-        height="700px"
+        height="600px"
+        style="max-width: 840px;"
+        class="w3-leftbar w3-topbar w3-rightbar w3-bottombar w3-border-primary w3-card-4"
         src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTJWR4esrOrIY9gAZwLBilxGLLPqiWNtMJ3BAb0Np3pdrtH563MnHJaoLtTXTDXJNjJgaBxOQp1CzZ6/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=true"></iframe>
 </div>
 <?php

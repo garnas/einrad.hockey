@@ -29,7 +29,7 @@ INSERT INTO spielplan_paarungen VALUES
                         ('8er_jgj_bfinal',28,4,3,4,3);
 
 INSERT INTO spielplan_details VALUES
-    ('8er_jgj_bfinal','8er_jgj_bfinal',8,2,10,5,'6,30#10,930#20,30#24,930',8);
+    ('8er_jgj_bfinal','8er_jgj_bfinal',8,2,5,5,'6,30#10,930#20,30#24,930',8);
 
 UPDATE `turniere_liga` SET `spielplan_vorlage` = '8er_jgj_bfinal' WHERE `turniere_liga`.`turnier_id` = 1005;
 

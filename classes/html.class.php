@@ -318,8 +318,6 @@ class Html
     }
     
     public static function include_widget_bot($server = '494602271447842856', $channel = '984536643107180594') {
-        $server = "975394220468756540";
-        $channel = "975394221450227745";
         echo "
         <widgetbot
                 server='$server'

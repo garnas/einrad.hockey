@@ -77,7 +77,7 @@ class Discord
                 . " - *" . Helper::get_akteur() . "*"
                 . "\r\n"
                 . $message;
-            self::send($message);
+           // self::send($message);
     }
 
 }

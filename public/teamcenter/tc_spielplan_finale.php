@@ -36,5 +36,5 @@ if (Env::ACTIVE_FINAL_DISCORD) {
 }
 include '../../templates/spielplan/spielplan_tore_eintragen.tmp.php'; // Spielplan -> Formular übertragen
 include '../../templates/spielplan/spielplan_turniertabelle.tmp.php'; // Turniertabelle
-include '../../templates/spielplan/spielplan_ergebnis_senden.tmp.php'; // Ergebnis senden
+//include '../../templates/spielplan/spielplan_ergebnis_senden.tmp.php'; // Ergebnis senden
 include '../../templates/footer.tmp.php';

@@ -65,6 +65,9 @@ class spielplan_final
             if ($spiel_id == 15) {
                 $startzeit = strtotime($this->turnier->get_startzeit());
             }
+            if ($spiel_id % 2 != 0 && $spiel_id != 1 && $spiel_id != 15) {
+                $startzeit += 10 * 60;
+            }
             $spiele[$spiel_id]["zeit"] = date("H:i", $startzeit);
             $startzeit += $spielzeit + $spielplan->get_pause($spiel_id) * 60;
         }
@@ -115,4 +118,23 @@ class spielplan_final
         }
         return $spielplan;
     }
+
+    public static function disclaimer_tore_eintragen(): string
+    {
+        $html = "
+<p>
+<b>Achtung<br>Vor dem Eintragen der Tore die Seite aktualisieren, damit die aktuellen Ergebnisse vom anderen Spielfeld habt. Sonst überschreibt ihr diese!</b>
+</p>
+";
+        return $html;
+    }
+    public static function disclaimer_final_spiele(): string
+    {
+        $html = "<b><p>Die Finalspiele können in GoogleDocs eingetragen werden und werden dann automatisch in den Spielplänen nach einer gewissen Zeit angezeigt.</p>";
+        $html .= "<p>";
+        $html .= Html::link("https://docs.google.com/spreadsheets/d/1iDWF9gdEg0DrKW6FVev2h4tKmrpAETVW_GcBJahAtNM/edit#gid=0", "Google Docs Spreadsheet zum Eintragen der Finalspiele.", true, "launch");
+        $html .= "</p></b>";
+        return $html;
+    }
+
 }

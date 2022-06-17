@@ -11,7 +11,7 @@
     <p>
         Zurzeit kann bei Guestmode erstmal jeder in den Liveticker Nachrichten senden und zum Beispiel Fragen
         stellen. Sollte wir das irgendwann abstellen müssen, dann könnt ihr
-        weiterhin mit den Zugangsdaten technik@einrad.hockey/einrad+live Nachrichten versenden.
+        weiterhin mit den Discord-Zugangsdaten technik@einrad.hockey (pw: einrad+live) Nachrichten versenden.
     </p>
     <p>
         Wenn ihr einen eigenen Discord-Account habt, dann könnt ihr über den Link unten auch direkt via Handy in den Liveticker schreiben,
