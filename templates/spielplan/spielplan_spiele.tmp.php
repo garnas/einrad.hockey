@@ -1,5 +1,5 @@
-<h2 class="w3-text-secondary w3-margin-top">Spiele</h2>
 <!-- Spielzeiten -->
+<h1 class="w3-text-secondary">Vorrunde - Spielfeld 1</h1>
 <span class="w3-text-grey w3-margin-top">
     Spielzeit: <?= $spielplan->details['anzahl_halbzeiten'] ?> x <?= $spielplan->details['halbzeit_laenge'] ?>&nbsp;min
     | Puffer: <?= $spielplan->details['puffer'] ?>&nbsp;min
@@ -73,6 +73,18 @@
             </tr>
         <?php }//endif?>
         <?php foreach ($spielplan->spiele as $spiel_id => $spiel) { ?>
+                <?php if($spiel_id == 14): ?>
+                    </table>
+</div>
+<h1 class="w3-text-secondary">Vorrunde - Spielfeld 2</h1>
+<span class="w3-text-grey w3-margin-top">
+    Spielzeit: <?= $spielplan->details['anzahl_halbzeiten'] ?> x <?= $spielplan->details['halbzeit_laenge'] ?>&nbsp;min
+    | Puffer: <?= $spielplan->details['puffer'] ?>&nbsp;min
+</span>
+    <div class="w3-responsive w3-card">
+
+                    <table class="w3-table w3-centered w3-striped">
+                <?php endif; ?>
             <tr>
                 <!-- Uhrzeit -->
                 <td><?= $spiel["zeit"] ?></td>

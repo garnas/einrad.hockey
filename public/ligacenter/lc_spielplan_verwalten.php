@@ -71,7 +71,7 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
         Html::error("Falsche Anzahl an Teams. Nur 4er - 8er Jeder-gegen-Jeden Spielpläne können erstellt werden.");
         $error = true;
     }
-    if (!empty($turnier->get_spielplan_link())) {
+    if (!empty($turnier->get_spielplan_datei())) {
         Html::error("Spielplan konnte nicht erstellt werden. Es existiert ein manuell hochgeladener Spielplan.");
         $error = true;
     }

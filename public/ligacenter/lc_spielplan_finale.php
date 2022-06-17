@@ -7,7 +7,7 @@ require_once '../../logic/session_la.logic.php';//Auth
 
 $turnier_id = (int) @$_GET['turnier_id'];
 $turnier = nTurnier::get($turnier_id);
-$spielplan = (new Spielplan_Final($turnier))->get_spielplan();
+$spielplan = (new Spielplan_Final($turnier))->get_spielplan_b();
 
 require_once '../../logic/spielplan_form.logic.php'; //Wertet Formular aus
 
@@ -32,6 +32,6 @@ include '../../templates/spielplan/spielplan_titel.tmp.php'; // Titel
 
 include '../../templates/spielplan/spielplan_tore_eintragen.tmp.php'; // Spielplan -> Formular übertragen
 include '../../templates/spielplan/spielplan_turniertabelle.tmp.php'; // Turniertabelle
-include '../../templates/spielplan/spielplan_ergebnis_senden.tmp.php'; // Ergebnis senden
+//include '../../templates/spielplan/spielplan_ergebnis_senden.tmp.php'; // Ergebnis senden
 include '../../templates/spielplan/spielplan_direkter_vergleich.tmp.php'; // Turniertabelle
 include '../../templates/footer.tmp.php';
