@@ -13,8 +13,6 @@ class Captcha
      */
     public static function load(): Gregwar\Captcha\CaptchaBuilder
     {
-        require_once __DIR__ . "/../lib/composer/vendor/autoload.php";
-
         // Zufällige Phrases mit Themenbezug, welche erlesen werden müssen
         $phrases = ['einrad', 'hockey', 'ball', 'liga', 'meister', 'sib', 'sub', 'tor', 'ecke', 'schiri', 'turnier'];
         // Captchas werden in der Session gespeichert, ansonsten wenn kein Captcha in der Session, dann ein Zufälliges
