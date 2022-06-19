@@ -19,6 +19,9 @@ system/logs/
 # npm
 node_modules/
 
+# composer
+vendor/
+
 # xml
 classes/xml.class.php_bak
 public/xml/test.php
