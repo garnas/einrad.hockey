@@ -60,8 +60,14 @@ header('Referrer-Policy: no-referrer-when-downgrade');
 spl_autoload_register(
     static function ($class) {
         $class = strtolower($class);
-        include Env::BASE_PATH . '/classes/' . $class . '.class.php';
+        $array = explode('\\', $class);
+        $className = $array[array_key_last($array)];
+        $path = Env::BASE_PATH . '/classes/' . $className . '.class.php';
+        if (file_exists($path)) {
+            include $path;
+        }
     }
+
 );
 
 /**
@@ -156,3 +162,7 @@ if (
     require(__DIR__ . '/public/errors/wartungsmodus.php');
     die();
 }
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+App\Repository\DoctrineWrapper::setup();
