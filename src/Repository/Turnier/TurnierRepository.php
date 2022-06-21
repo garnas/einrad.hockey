@@ -9,14 +9,15 @@ use App\Repository\TraitSingletonRepository;
 
 use Doctrine\ORM\EntityRepository;
 use App\Repository\DoctrineWrapper;
+use Doctrine\ORM\Exception\ORMException;
 
 class TurnierRepository
 {
     use TraitSingletonRepository;
 
-    private EntityRepository $liste;
-    private EntityRepository $turnier;
-    private EntityRepository $bericht;
+    public EntityRepository $liste;
+    public EntityRepository $turnier;
+    public EntityRepository $bericht;
 
     private function __construct()
     {
@@ -29,14 +30,23 @@ class TurnierRepository
      * @param int $turnier_id
      * @return TurniereListe[]
      */
-    public function getSpielenliste(int $turnier_id = 1005): array
+    public function getSetzListe(Turnier $turnier): array
     {
-        return $this->liste->findBy(['turnierId' => $turnier_id, 'liste' => 'spiele']);
+        return $this->liste->findBy(['turnier' => $turnier, 'liste' => 'setz']);
     }
 
     public function turnier(int $turnier_id = 1005): Turnier
     {
         return $this->turnier->find($turnier_id);
+    }
+
+    /**
+     * @throws ORMException
+     */
+    public function speichern(Turnier $turnier): void
+    {
+        DoctrineWrapper::manager()->persist($turnier);
+        DoctrineWrapper::manager()->flush();
     }
 
     public function getBericht(int $turnier_id): ?TurnierBericht

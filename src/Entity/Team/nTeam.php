@@ -2,8 +2,10 @@
 
 namespace App\Entity\Team;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Tabelle;
 
 /**
  * TeamsLiga
@@ -53,7 +55,7 @@ class nTeam
     }
 
     public function __construct() {
-        $this->turniere_liste = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->turniere_liste = new ArrayCollection();
     }
 
 
@@ -229,6 +231,21 @@ class nTeam
         $this->aktiv = $aktiv;
 
         return $this;
+    }
+
+    public function getBlock(int $spieltag = null): ?string
+    {
+        return Tabelle::get_team_block($this->id(), $spieltag); // TODO Symfony
+    }
+
+    public function isLigaTeam(): bool
+    {
+        return $this->ligateam === 'Ja';
+    }
+
+    public function isAktiv(): bool
+    {
+        return $this->aktiv === 'Ja';
     }
 
 }

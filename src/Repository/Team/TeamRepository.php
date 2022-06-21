@@ -24,4 +24,12 @@ class TeamRepository
         return $this->team->find($id);
     }
 
+    /**
+     * @return nTeam[]
+     */
+    public function activeLigaTeams(): array
+    {
+        return $this->team->findBy(['aktiv' => 'Ja', 'ligateam' => 'Ja']);
+    }
+
 }

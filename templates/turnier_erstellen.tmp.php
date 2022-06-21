@@ -34,8 +34,8 @@
                 <option <?php if (($_POST['art'] ?? '') == 'spass'){?> selected <?php } ?> value="spass">Spaßturnier (außerhalb der Liga, Anmeldung beim Ausrichter, Datum und Uhrzeit beliebig)</option>
 
                 <?php if (Helper::$ligacenter){?>
-                <option <?php if (($_POST['art'] ?? '') == 'final'){?> selected <?php } ?> value='final'>Abschlussturnier</option>
-                <option <?php if (($_POST['art'] ?? '') == 'fixed'){?> selected <?php } ?> value='fixed'>Fixierter Turnierblock (<?=implode(", ", Config::BLOCK)?>)</option>
+                    <option <?php if (($_POST['art'] ?? '') == 'final'){?> selected <?php } ?> value='final'>Abschlussturnier</option>
+                    <option <?php if (($_POST['art'] ?? '') == 'fixed'){?> selected <?php } ?> value='fixed'>Fixierter Turnierblock (<?=implode(", ", Config::BLOCK)?>)</option>
                 <?php } //endif?>
             </select>
         </p>
@@ -43,35 +43,40 @@
             <p><label class="w3-text-primary" for="block">Höheren Turnierblock wählen</label>
             <select required class="w3-select w3-border w3-border-primary" id="block" name="block">
                 <?php foreach ($block_higher as $block){?>
-                <option <?php if (($_POST['block'] ?? '') == $block){?> selected <?php } //endif?> value='<?=$block?>'> <?=$block?> </option>
+                    <option
+                        <?php if (($_POST['block'] ?? '') == $block): ?>
+                            selected
+                        <?php endif; ?>
+                            value='<?=$block?>'> <?=$block?>
+                    </option>
                 <?php } //end foreach?>
             </select>
         </div>
 
         <?php if (Helper::$ligacenter){?>
-        <div id="block_fixed_div" style="display: none">
-            <p>
-            <label class="w3-text-primary" for="block_fixed">Fixierter Turnierblock</label>
-            <select class="w3-input w3-border w3-border-primary" id="block_fixed" name="block">
-                <?php foreach (Config::BLOCK as $block_fixed) {?>
-                <option <?php if (($_POST['block'] ?? '') == $block_fixed){?> selected <?php } //endif?> value='<?=$block_fixed?>'><?=$block_fixed?></option>
-                <?php } //end foreach?>
-            </select><i class="w3-small w3-text-grey">Fixierte Turnierblöcke verändern sich nicht mehr</i>
-            </p>
-        </div>
+            <div id="block_fixed_div" style="display: none">
+                <p>
+                <label class="w3-text-primary" for="block_fixed">Fixierter Turnierblock</label>
+                <select class="w3-input w3-border w3-border-primary" id="block_fixed" name="block">
+                    <?php foreach (Config::BLOCK as $block_fixed) {?>
+                    <option <?php if (($_POST['block'] ?? '') == $block_fixed){?> selected <?php } //endif?> value='<?=$block_fixed?>'><?=$block_fixed?></option>
+                    <?php } //end foreach?>
+                </select><i class="w3-small w3-text-grey">Fixierte Turnierblöcke verändern sich nicht mehr</i>
+                </p>
+            </div>
         <?php } //endif?>
         
         <?php if (Helper::$ligacenter){?>
-        <div id="block_final_div" style="display: none">
-            <p>
-            <label class="w3-text-primary" for="block_final">Block des Abschlussturniers</label>
-            <select class="w3-select w3-border w3-border-primary" id="block_final" name="block">
-                <?php foreach (Config::BLOCK_FINALE as $block_finale) {?>
-                <option <?php if (($_POST['block'] ?? '') == $block_finale){?> selected <?php } //endif?> value='<?=$block_finale?>'><?=$block_finale?></option>
-                <?php } //end foreach?>
-            </select>
-            </p>
-        </div>
+            <div id="block_final_div" style="display: none">
+                <p>
+                <label class="w3-text-primary" for="block_final">Block des Abschlussturniers</label>
+                <select class="w3-select w3-border w3-border-primary" id="block_final" name="block">
+                    <?php foreach (Config::BLOCK_FINALE as $block_finale) {?>
+                    <option <?php if (($_POST['block'] ?? '') == $block_finale){?> selected <?php } //endif?> value='<?=$block_finale?>'><?=$block_finale?></option>
+                    <?php } //end foreach?>
+                </select>
+                </p>
+            </div>
         <?php } //endif?>
 
         <p>
@@ -81,9 +86,13 @@
                 <option <?php if (($_POST['plaetze'] ?? '') == '5'){?> selected <?php } //endif?> value="5">5 Teams</option>
                 <option <?php if (($_POST['plaetze'] ?? '') == '6'){?> selected <?php } //endif?> value="6">6 Teams</option>
                 <option <?php if (($_POST['plaetze'] ?? '') == '7'){?> selected <?php } //endif?> value="7">7 Teams</option>
-                <option <?php if (($_POST['plaetze'] ?? '') == '8 gruppen'){?> selected <?php } //endif?> value="8 gruppen">8 Teams (zwei Gruppen)</option>
-                <option <?php if (($_POST['plaetze'] ?? '') == '8 dko'){?> selected <?php } //endif?> value="8 dko">8 Teams (Doppel-KO)</option>
-                <option <?php if (($_POST['plaetze'] ?? '') == '12'){?> selected <?php } //endif?> value="12">12 Teams (Finalturniere)</option>
+                <option <?php if (($_POST['plaetze'] ?? '') == '8'){?> selected <?php } //endif?> value="8 gruppen">8 Teams</option>
+                <?php if(Helper::$ligacenter): ?>
+                    <option <?php if (($_POST['plaetze'] ?? '') == '9'){?> selected <?php } //endif?> value="9">9 Teams</option>
+                    <option <?php if (($_POST['plaetze'] ?? '') == '10'){?> selected <?php } //endif?> value="10">10 Teams</option>
+                    <option <?php if (($_POST['plaetze'] ?? '') == '11'){?> selected <?php } //endif?> value="11">11 Teams</option>
+                    <option <?php if (($_POST['plaetze'] ?? '') == '12'){?> selected <?php } //endif?> value="12">12 Teams</option>
+                <?php endif; ?>
             </select>
         </p>
     </div>

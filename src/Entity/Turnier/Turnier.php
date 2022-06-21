@@ -3,6 +3,7 @@
 namespace App\Entity\Turnier;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Team\nTeam;
@@ -16,6 +17,9 @@ use App\Entity\Spielplan\SpielplanDetails;
  */
 class Turnier
 {
+
+
+
     /**
      * @var int
      *
@@ -47,18 +51,11 @@ class Turnier
     private ?string $block;
 
     /**
-     * @var string|null
+     * @var DateTime
      *
-     * @ORM\Column(name="tblock_fixed", type="string", length=0, nullable=true, options={"default"="Nein"})
+     * @ORM\Column(name="datum", type="date")
      */
-    private ?string $blockFixed = 'Nein';
-
-    /**
-     * @var DateTime|null
-     *
-     * @ORM\Column(name="datum", type="date", nullable=true)
-     */
-    private ?DateTime $datum;
+    private DateTime $datum;
 
     /**
      * @var int|null
@@ -109,7 +106,7 @@ class Turnier
     /**
      * @var TurnierDetails
      *
-     * @ORM\OneToOne(targetEntity="App\Entity\Turnier\TurnierDetails")
+     * @ORM\OneToOne(targetEntity="App\Entity\Turnier\TurnierDetails", mappedBy="turnier", cascade={"persist"})
      * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
      */
     private TurnierDetails $details;
@@ -117,10 +114,42 @@ class Turnier
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurnierErgebnis", mappedBy="turnier")
+     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurnierErgebnis", mappedBy="turnier", cascade={"persist"})
      * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
      */
     private Collection $ergebnis;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereListe", mappedBy="turnier", cascade={"persist"})
+     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
+     */
+    private Collection $liste;
+
+    public function __construct()
+    {
+        $this->ergebnis = new ArrayCollection();
+        $this->liste = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getListe(): Collection
+    {
+        return $this->liste;
+    }
+
+    /**
+     * @param Collection $liste
+     * @return Turnier
+     */
+    public function setListe(Collection $liste): Turnier
+    {
+        $this->liste = $liste;
+        return $this;
+    }
 
     /**
      * @return Collection|TurnierErgebnis[]
@@ -143,7 +172,7 @@ class Turnier
     /**
      * @return int
      */
-    public function getId(): int
+    public function id(): int
     {
         return $this->id;
     }
@@ -213,36 +242,18 @@ class Turnier
     }
 
     /**
-     * @return string|null
+     * @return DateTime
      */
-    public function getBlockFixed(): ?string
-    {
-        return $this->blockFixed;
-    }
-
-    /**
-     * @param string|null $blockFixed
-     * @return Turnier
-     */
-    public function setBlockFixed(?string $blockFixed): Turnier
-    {
-        $this->blockFixed = $blockFixed;
-        return $this;
-    }
-
-    /**
-     * @return DateTime|null
-     */
-    public function getDatum(): ?DateTime
+    public function getDatum(): DateTime
     {
         return $this->datum;
     }
 
     /**
-     * @param DateTime|null $datum
+     * @param DateTime $datum
      * @return Turnier
      */
-    public function setDatum(?DateTime $datum): Turnier
+    public function setDatum(DateTime $datum): Turnier
     {
         $this->datum = $datum;
         return $this;

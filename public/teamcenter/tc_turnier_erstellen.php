@@ -2,6 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Repository\Team\TeamRepository;
+
 require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth
 
@@ -15,6 +17,8 @@ if (count(nSpieler::get_kader($_SESSION['logins']['team']['id'])) < 5){
 $ausrichter_team_id = $_SESSION['logins']['team']['id'];
 $ausrichter_name = $_SESSION['logins']['team']['name'];
 $ausrichter_block = $_SESSION['logins']['team']['block'];
+
+$ausrichter = TeamRepository::get()->team($ausrichter_team_id);
 
 // Formularauswertung
 require_once '../../logic/turnier_erstellen.logic.php';

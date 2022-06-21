@@ -70,7 +70,7 @@ class Config
     /**
      * Turnierarten
      */
-    public const TURNIER_ARTEN = ['I', 'II', 'III'];
+    public const TURNIER_ARTEN = ['I', 'II'];
 
     /**
      * Ligagebühr

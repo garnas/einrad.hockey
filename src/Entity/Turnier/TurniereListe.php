@@ -37,22 +37,23 @@ class TurniereListe
      * @ORM\ManyToOne(targetEntity="App\Entity\Team\nTeam", inversedBy="turniere_liste")
      * @ORM\JoinColumn(name="team_id", referencedColumnName="team_id")
      */
-    private nTeam $teamsLiga;
+    private nTeam $team;
 
     /**
      * @return nTeam
      */
-    public function get_team(): nTeam
+    public function getTeam(): nTeam
     {
-        return $this->teamsLiga;
+        return $this->team;
     }
 
     /**
      * @param nTeam $teamsLiga
      */
-    public function set_team(nTeam $teamsLiga): void
+    public function setTeam (nTeam $teamsLiga): TurniereListe
     {
-        $this->teamsLiga = $teamsLiga;
+        $this->team = $teamsLiga;
+        return $this;
     }
 
     /**
@@ -70,26 +71,28 @@ class TurniereListe
     private $freilosGesetzt = 'Nein';
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="turnier_id", type="integer")
+     * @var Turnier
+     * @ORM\ManyToOne(targetEntity="App\Entity\Turnier\Turnier", inversedBy="turnier")
+     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
      */
-    private int $turnierId;
+    private $turnier;
 
     /**
-     * @return int
+     * @return Turnier
      */
-    public function get_turnier_id(): int
+    public function getTurnier(): Turnier
     {
-        return $this->turnierId;
+        return $this->turnier;
     }
 
     /**
-     * @param int $turnierId
+     * @param Turnier $turnier
+     * @return TurniereListe
      */
-    public function set_turnier_id(int $turnierId): void
+    public function setTurnier(Turnier $turnier): TurniereListe
     {
-        $this->turnierId = $turnierId;
+        $this->turnier = $turnier;
+        return $this;
     }
 
     public function getListeId(): ?int

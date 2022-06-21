@@ -2,6 +2,7 @@
 
 namespace App\Entity\Turnier;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,11 +15,30 @@ class TurnierDetails
 {
 
     /**
-     * @var int
+     * @var Turnier
      * @ORM\Id
-     * @ORM\Column(name="turnier_id", type="integer")
+     * @ORM\OneToOne(targetEntity="App\Entity\Turnier\Turnier", mappedBy="details")
+     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
      */
-    private $turnierId;
+    private $turnier;
+
+    /**
+     * @return Turnier
+     */
+    public function getTurnier(): Turnier
+    {
+        return $this->turnier;
+    }
+
+    /**
+     * @param Turnier $turnier
+     * @return TurnierDetails
+     */
+    public function setTurnier(Turnier $turnier): TurnierDetails
+    {
+        $this->turnier = $turnier;
+        return $this;
+    }
 
     /**
      * @var string|null
@@ -70,9 +90,9 @@ class TurnierDetails
     private $format;
 
     /**
-     * @var \DateTime|null
+     * @var DateTime
      *
-     * @ORM\Column(name="startzeit", type="time", nullable=true)
+     * @ORM\Column(name="startzeit", type="time")
      */
     private $startzeit;
 
@@ -256,18 +276,18 @@ class TurnierDetails
     }
 
     /**
-     * @return \DateTime|null
+     * @return DateTime
      */
-    public function getStartzeit(): ?\DateTime
+    public function getStartzeit(): DateTime
     {
         return $this->startzeit;
     }
 
     /**
-     * @param \DateTime|null $startzeit
+     * @param DateTime $startzeit
      * @return TurnierDetails
      */
-    public function setStartzeit(?\DateTime $startzeit): TurnierDetails
+    public function setStartzeit(DateTime $startzeit): TurnierDetails
     {
         $this->startzeit = $startzeit;
         return $this;
