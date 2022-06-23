@@ -34,7 +34,7 @@ class TurniereListe
     /**
      * @var nTeam
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Team\nTeam", inversedBy="turniere_liste")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Team\nTeam", inversedBy="turniereListe")
      * @ORM\JoinColumn(name="team_id", referencedColumnName="team_id")
      */
     private nTeam $team;

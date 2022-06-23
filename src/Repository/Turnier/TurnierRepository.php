@@ -4,9 +4,11 @@ namespace App\Repository\Turnier;
 
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurnierBericht;
+use App\Entity\Turnier\TurnierDetails;
 use App\Entity\Turnier\TurniereListe;
 use App\Repository\DoctrineWrapper;
 use App\Repository\TraitSingletonRepository;
+use Config;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Exception\ORMException;
 
@@ -58,6 +60,30 @@ class TurnierRepository
     public function getBericht(int $turnier_id): ?TurnierBericht
     {
         return $this->bericht->findOneBy(['turnierId' => $turnier_id]);
+    }
+
+    /**
+     * Ermittelt, ob das Team an gleichen Kalendertag auf einem anderen Turnier angemeldet ist
+     * @return Turnier[]
+     */
+    public static function getKommendeTurniere(): array
+    {
+        $query = DoctrineWrapper::manager()
+            ->createQueryBuilder()
+            ->select('t', 'details', 'l', 'ausrichter', 'team')
+            ->from(Turnier::class, 't')
+            ->join('t.details', 'details')
+            ->join('t.ausrichter', 'ausrichter')
+            ->join('t.liste', 'l')
+            ->join('l.team', 'team')
+            ->where('t.phase != :phase')
+            ->andWhere('t.canceled = 0')
+            ->andWhere('t.saison = :saison')
+            ->setParameter('phase', 'ergebnis')
+            ->setParameter('saison', Config::SAISON)
+        ;
+
+        return $query->getQuery()->getResult();
     }
 
 }

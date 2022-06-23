@@ -2,11 +2,55 @@
 
 namespace App\Service\Turnier;
 
-use App\Entity\Turnier\Turnier;use App\Repository\Turnier\TurnierRepository;
+use App\Entity\Turnier\Turnier;
 use Html;
 use Jenssegers\Date\Date;
 
 class TurnierSnippets {
+
+    public static function status(Turnier $turnier): string
+    {
+        if ($turnier->isSpielplanPhase()) {
+            return '<span class="w3-text-gray">geschlossen</span>';
+        }
+        if ($turnier->isSpassTurnier()) {
+            return '<span class="w3-text-grey">Nichtligaturnier</span>';
+        }
+        if (TurnierService::isLosen($turnier)) {
+            return '<span class="w3-text-yellow">losen</span>';
+        }
+        if (!TurnierService::hasFreieSetzPlaetze($turnier)) {
+            return '<span class="w3-text-red">voll</span>';
+        }
+        return '<span class="w3-text-green">frei</span>';
+
+    }
+
+    public static function phase(Turnier $turnier): string
+    {
+        if ($turnier->isSpielplanPhase()) {
+            $link = TurnierLinks::spielplan($turnier);
+            $phase = self::translate($turnier->getPhase());
+            Html::link($link, $phase, true);
+        }
+
+        if ($turnier->isSpassTurnier()) {
+            return 'Nichtligaturnier';
+        }
+
+        if ($turnier->isFinalTurnier()) {
+            return 'Finalturnier';
+        }
+
+        return (self::translate($turnier->getPhase()));
+    }
+
+    public static function plaetze(Turnier $turnier): string
+    {
+        return TurnierService::getAnzahlGesetzteTeams($turnier)
+            . "(" . TurnierService::getAnzahlWartelisteTeams($turnier) . ")"
+            . " von " . $turnier->getDetails()->getPlaetze();
+    }
 
     public static function ortDatumBlock(Turnier $turnier): string
     {
@@ -40,6 +84,13 @@ class TurnierSnippets {
         return $turnier->getDatum()->format("d.m.Y");
     }
 
+    public static function wochentag(Turnier $turnier): string
+    {
+        Date::setLocale('de');
+        return Date::createFromTimestamp($turnier->getDatum()->getTimestamp())->format("l");
+    }
+
+
     public static function translate(string $begriff): string
     {
         return match($begriff) {
@@ -72,15 +123,14 @@ class TurnierSnippets {
         $warteliste = TurnierService::getWarteliste($turnier);
         $setzliste = TurnierService::getSetzListe($turnier);
 
-        $html = '<p class="w3-text-grey w3-border-bottom w3-border-grey">Warteliste</p>';
+        $html = '<p class="w3-text-grey w3-border-bottom w3-border-grey">Setzliste</p>';
         $html .= '<p>';
-        if (TurnierService::getAnzahlWartelisteTeams($turnier) > 0) {
+        if (TurnierService::getAnzahlGesetzteTeams($turnier) > 0) {
             $html .= '<i>';
-            foreach ($warteliste as $anmeldung) {
-                $warteplatz = ($turnier->isSetzPhase()) ? $anmeldung->getPositionWarteliste() . ". " : "";
+            foreach ($setzliste as $anmeldung) {
                 $teamname = e($anmeldung->getTeam()->getName());
                 $block = BlockService::toString($anmeldung->getTeam()->getBlock());
-                $html .= $warteplatz . " " . $teamname;
+                $html .= $teamname;
                 $html .= '<span class="w3-text-primary">' . $block . '</span>';
                 $html .= '<br>';
             }
@@ -90,14 +140,15 @@ class TurnierSnippets {
         }
         $html .= '</p>';
 
-        $html = '<p class="w3-text-grey w3-border-bottom w3-border-grey">Setzliste</p>';
+        $html .= '<p class="w3-text-grey w3-border-bottom w3-border-grey">Warteliste</p>';
         $html .= '<p>';
-        if (TurnierService::getAnzahlGesetzteTeams($turnier) > 0) {
+        if (TurnierService::getAnzahlWartelisteTeams($turnier) > 0) {
             $html .= '<i>';
-            foreach ($setzliste as $anmeldung) {
+            foreach ($warteliste as $anmeldung) {
+                $warteplatz = ($turnier->isSetzPhase()) ? $anmeldung->getPositionWarteliste() . ". " : "";
                 $teamname = e($anmeldung->getTeam()->getName());
                 $block = BlockService::toString($anmeldung->getTeam()->getBlock());
-                $html .= $teamname;
+                $html .= $warteplatz . " " . $teamname;
                 $html .= '<span class="w3-text-primary">' . $block . '</span>';
                 $html .= '<br>';
             }

@@ -11,7 +11,6 @@ use App\Repository\Turnier\TurnierRepository;
 use App\Service\Team\TeamService;
 use Config;
 use Doctrine\Common\Collections\Collection;
-use DateTime;
 use Jenssegers\Date\Date;
 
 class TurnierService
@@ -22,15 +21,28 @@ class TurnierService
         return $turnier->getAusrichter()->id() === $teamId;
     }
 
-    public static function isLigaTurnier(Turnier $turnier): bool
+    public static function hasFreieSetzPlaetze(Turnier $turnier): bool
     {
-        return in_array($turnier->getArt(), Config::TURNIER_ARTEN, true);
+        return self::getFreieSetzPlaetze($turnier) > 0;
+    }
+
+    public static function isLosen(Turnier $turnier): bool
+    {
+        if (!$turnier->isWartePhase()){
+            return false;
+        }
+        return $turnier->getDetails()->getPlaetze() < self::getAnzahlAngemeldeteTeams($turnier);
+    }
+
+    public static function getAnzahlAngemeldeteTeams(Turnier $turnier): int
+    {
+        return $turnier->getListe()->count();
     }
 
     public static function getSetzListe(Turnier $turnier): Collection
     {
         $filter = static function(TurniereListe $anmeldung) {
-            return $anmeldung->getListe() === 'setz';
+            return $anmeldung->getListe() === 'setzliste';
         };
 
         return $turnier->getListe()->filter($filter);
@@ -39,17 +51,27 @@ class TurnierService
     public static function getWarteliste(Turnier $turnier): Collection
     {
         $filter = static function(TurniereListe $anmeldung) {
-            return $anmeldung->getListe() === 'warte';
+            return $anmeldung->getListe() === 'warteliste';
         };
 
         return $turnier->getListe()->filter($filter);
     }
 
-
-
     public static function getTurnierEintrageFristUnix(Turnier $turnier): int
     {
         return self::getLosDatumUnix($turnier);
+    }
+
+    public static function getAbmeldeFristUnix(Turnier $turnier): int
+    {
+        return self::getLosDatumUnix($turnier) + 2 * 7 * 24 * 60 * 60;
+    }
+
+    public static function getAbmeldeFrist(Turnier $turnier): string
+    {
+        $unixTime = self::getAbmeldeFristUnix($turnier) - 1;
+        Date::setLocale('de');
+        return Date::createFromTimestamp($unixTime)->format("l, d.m.Y - H:i") . " Uhr";
     }
 
     public static function getLosDatumUnix(Turnier $turnier): int

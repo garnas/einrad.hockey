@@ -21,7 +21,7 @@ class TurnierEventMailBot
      */
     public static function mailNeuesTurnier(Turnier $turnier): void
     {
-        if (TurnierService::isLigaTurnier($turnier)) {
+        if ($turnier->isLigaturnier()) {
 
             $teams = TeamRepository::get()->activeLigaTeams();
 

@@ -66,7 +66,7 @@ include '../../templates/header.tmp.php';
                 <?=$turnier->getDetails()->getStartzeit()->format("H:i")?>&nbsp;Uhr
                 <?php if ($turnier->hasBesprechung()): ?>
                     <p>
-                        <i>Alle Teams sollen sich um <?=$turnier->getDetails()->getBesprechungUhrzeit() ?> Uhr zu einer gemeinsamen Turnierbesprechung einfinden.'</i>
+                        <i>Alle Teams sollen sich um <?= $turnier->getDetails()->getBesprechungUhrzeit() ?> Uhr zu einer gemeinsamen Turnierbesprechung einfinden.'</i>
                     </p>
                 <?php endif; ?>
             </td>
@@ -112,7 +112,7 @@ include '../../templates/header.tmp.php';
         <tr>
             <td class="w3-primary" style="vertical-align: middle">Losung</td>
             <td>
-                <?= (TurnierService::isLigaTurnier($turnier))
+                <?= ($turnier->isLigaturnier())
                     ? TurnierService::getLosDatum($turnier)
                     : '--' ?>
                 (Übergang von Wartephase zur Setzphase)

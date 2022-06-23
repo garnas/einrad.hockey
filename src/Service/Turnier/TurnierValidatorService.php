@@ -158,7 +158,7 @@ class TurnierValidatorService
         }
 
         $unixTime = $this->turnier->getDatum()->getTimestamp();
-        if (TurnierService::isLigaTurnier($this->turnier)) {
+        if ($this->turnier->isLigaturnier()) {
             if (
                 $unixTime < strtotime(Config::SAISON_ANFANG)
                 || ($unixTime > strtotime(Config::SAISON_ENDE)
@@ -240,7 +240,7 @@ class TurnierValidatorService
             && strlen($turnier->getBlock()) < 3
             && $turnier->getBlock() !== 'AB'
             && $turnier->getBlock() !== 'A'
-            && (TurnierService::isLigaTurnier($turnier));
+            && $turnier->isLigaTurnier();
     }
 
     /**
@@ -252,7 +252,7 @@ class TurnierValidatorService
     public static function isErweiterbarBlockfrei(Turnier $turnier): bool
     {
        return $turnier->getPhase() === 'setz'
-             && TurnierService::isLigaTurnier($turnier)
+             && $turnier->isLigaturnier()
              && $turnier->getBlock() != Config::BLOCK_ALL[0];
     }
 

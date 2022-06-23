@@ -15,10 +15,11 @@ class TurnierLinks {
     /**
      * Gibt den Link zum Liga-Spielplan aus, je nach dem ob er manuell hochgeladen oder automatisch erstellt wurde
      *
+     * @param Turnier $turnier
      * @param string $scope default: allgemein, lc => ligacenter tc => teamcenter
      * @return false|string
      */
-    public function spielplan(Turnier $turnier, string $scope = ''): false|string
+    public static function spielplan(Turnier $turnier, string $scope = ''): false|string
     {
         // Es existiert ein manuell hochgeladener Spielplan
         if (!empty($turnier->getSpielplanDatei())) {

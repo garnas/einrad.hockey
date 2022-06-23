@@ -524,4 +524,9 @@ class Turnier
         $this->logs = $logs;
     }
 
+    public function isLigaturnier(): bool
+    {
+        return $this->art == 'I' || $this->art == 'II';
+    }
+
 }

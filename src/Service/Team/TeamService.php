@@ -21,7 +21,7 @@ class TeamService
      * @param nTeam $team
      * @return bool
      */
-    public static function isAmKalenderTagAufSetzliste(DateTime $date_time, nTeam $team): bool
+    public static function isAmKalenderTagAufSetzliste(DateTime $date_time, nTeam $team): bool //TODO ins repo
     {
         $query = DoctrineWrapper::manager()
             ->createQueryBuilder()
