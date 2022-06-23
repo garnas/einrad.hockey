@@ -115,6 +115,10 @@ register_shutdown_function(static function () {
         . $referrer,
         true);
 
+    echo "<pre>";
+    print_r(App\Repository\DoctrineWrapper::$logger);
+    echo "</pre>";
+
 });
 
 /**
@@ -148,7 +152,7 @@ db::initialize(); // Neue DB-Verbindung mit Prepared-Statements
 /**
  * Sprache für Zeitformate in Deutsch --> strftime()
  */
-setlocale(LC_TIME, 'de_DE@euro', 'de_DE', 'de', 'ge');
+setlocale(LC_ALL, 'de_DE@euro', 'de_DE', 'de', 'ge');
 
 
 /**
@@ -164,5 +168,9 @@ if (
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
+
+function e(mixed $value) {
+    return db::escape($value);
+}
 
 App\Repository\DoctrineWrapper::setup();

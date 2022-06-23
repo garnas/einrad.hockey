@@ -919,7 +919,8 @@ class nTurnier
 
     /**
      * Erstellt ein neues Turnier.
-     * 
+     *
+     * @param int $ausrichter
      * @return nTurnier
      */
     public static function set_turnier(int $ausrichter): nTurnier
@@ -1347,7 +1348,7 @@ class nTurnier
     }
 
     /**
-     * Ein Team zum Turnier anmelden
+     * Ein Team zum Turnier aufSetzListe
      *
      * Bei Anmeldung auf die Warteliste sollte $pos als die jeweilige Wartelistenposition übergeben werden
      * Könnnte man das auch mit nl_anmelden für nichtligateams zusammenlegen? 
@@ -1415,7 +1416,7 @@ class nTurnier
     }
 
     /**
-     * Team via Freilos anmelden
+     * Team via Freilos aufSetzListe
      *
      * @param int $team_id
      */
@@ -1761,7 +1762,7 @@ class nTurnier
     }
 
     /**
-     * Ermittelt, ob sich ein Team für das Turnier überhaupt anmelden kann
+     * Ermittelt, ob sich ein Team für das Turnier überhaupt aufSetzListe kann
      * 
      * @return bool
      */

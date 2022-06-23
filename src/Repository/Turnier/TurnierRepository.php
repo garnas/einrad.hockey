@@ -5,10 +5,9 @@ namespace App\Repository\Turnier;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurnierBericht;
 use App\Entity\Turnier\TurniereListe;
-use App\Repository\TraitSingletonRepository;
-
-use Doctrine\ORM\EntityRepository;
 use App\Repository\DoctrineWrapper;
+use App\Repository\TraitSingletonRepository;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Exception\ORMException;
 
 class TurnierRepository
@@ -27,15 +26,15 @@ class TurnierRepository
     }
 
     /**
-     * @param int $turnier_id
+     * @param Turnier $turnier
      * @return TurniereListe[]
      */
-    public function getSetzListe(Turnier $turnier): array
+    public function getWarteListe(Turnier $turnier): array
     {
-        return $this->liste->findBy(['turnier' => $turnier, 'liste' => 'setz']);
+        return $this->liste->findBy(['turnier' => $turnier, 'liste' => 'warteliste'], ['positionWarteliste' => 'ASC']);
     }
 
-    public function turnier(int $turnier_id = 1005): Turnier
+    public function turnier(int $turnier_id = 1005): ?Turnier
     {
         return $this->turnier->find($turnier_id);
     }
@@ -45,7 +44,14 @@ class TurnierRepository
      */
     public function speichern(Turnier $turnier): void
     {
+        $turnier->getLogService()->addAllLogs();
         DoctrineWrapper::manager()->persist($turnier);
+        DoctrineWrapper::manager()->flush();
+    }
+
+    public function delete(Turnier $turnier): void
+    {
+        DoctrineWrapper::manager()->remove($turnier);
         DoctrineWrapper::manager()->flush();
     }
 

@@ -2,23 +2,83 @@
 
 namespace App\Entity\Turnier;
 
+use App\Entity\Spielplan\SpielplanDetails;
+use App\Entity\Team\nTeam;
+use App\Service\Turnier\TurnierLogService;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Team\nTeam;
-use App\Entity\Spielplan\SpielplanDetails;
 
 /**
  * Turnier
  *
  * @ORM\Table(name="turniere_liga", indexes={@ORM\Index(name="ausrichter_team_id", columns={"ausrichter"}), @ORM\Index(name="spielplan_vorlage", columns={"spielplan_vorlage"})})
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity
  */
 class Turnier
 {
 
 
+    public function __construct()
+    {
+        $this->ergebnis = new ArrayCollection();
+        $this->liste = new ArrayCollection();
+        $this->logService = new TurnierLogService($this);
+    }
+
+    private TurnierLogService $logService;
+
+
+    /** @ORM\PostLoad() */
+    public function setLogService(): void
+    {
+        $this->logService = new TurnierLogService($this);
+    }
+
+    /**
+     * @return TurnierLogService
+     */
+    public function getLogService(): TurnierLogService
+    {
+        return $this->logService;
+    }
+
+    public function isSetzPhase(): bool
+    {
+        return $this->phase === "setz";
+    }
+
+
+    public function isSpielplanPhase()
+    {
+        return $this->phase === 'spielplan';
+    }
+
+    public function isErgebnisPhase()
+    {
+        return $this->phase === 'ergebnis';
+    }
+
+    public function isSpassTurnier(): bool
+    {
+        return $this->art === "spass";
+    }
+
+    public function isWartePhase(): bool
+    {
+        return $this->phase === "warte";
+    }
+
+    public function hasBesprechung(): bool
+    {
+        return $this->getDetails()->getBesprechung() === "Ja";
+    }
+
+    public function isFinalTurnier(): bool{
+        return $this->getArt() === 'final';
+    }
 
     /**
      * @var int
@@ -67,9 +127,36 @@ class Turnier
     /**
      * @var string|null
      *
-     * @ORM\Column(name="phase", type="string", length=0, nullable=true)
+     * @ORM\Column(name="phase", type="string", nullable=true)
      */
     private ?string $phase;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="canceled_grund", type="string", nullable=true)
+     */
+    private ?string $canceledGrund;
+
+    /**
+     * @return string|null
+     */
+    public function getCanceledGrund(): ?string
+    {
+        return $this->canceledGrund;
+    }
+
+    /**
+     * @param string|null $canceledGrund
+     * @return Turnier
+     */
+    public function setCanceledGrund(?string $canceledGrund): Turnier
+    {
+        $this->canceledGrund = $canceledGrund;
+        return $this;
+    }
+
+
 
     /**
      * @var string|null
@@ -113,6 +200,14 @@ class Turnier
 
     /**
      * @var Collection
+     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereLog", mappedBy="turnier", cascade={"persist"})
+     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
+     */
+    private Collection $logs;
+
+
+    /**
+     * @var Collection
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurnierErgebnis", mappedBy="turnier", cascade={"persist"})
      * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
@@ -127,10 +222,28 @@ class Turnier
      */
     private Collection $liste;
 
-    public function __construct()
+    /**
+     * @var bool
+     * @ORM\Column(name="canceled", type="boolean")
+     */
+    private bool $canceled;
+
+    /**
+     * @return bool
+     */
+    public function isCanceled(): bool
     {
-        $this->ergebnis = new ArrayCollection();
-        $this->liste = new ArrayCollection();
+        return $this->canceled;
+    }
+
+    /**
+     * @param bool $canceled
+     * @return Turnier
+     */
+    public function setCanceled(bool $canceled): Turnier
+    {
+        $this->canceled = $canceled;
+        return $this;
     }
 
     /**
@@ -201,6 +314,7 @@ class Turnier
      */
     public function setName(?string $name): Turnier
     {
+        $this->logService->autoLog("Turniername", $this->name, $name);
         $this->name = $name;
         return $this;
     }
@@ -219,6 +333,7 @@ class Turnier
      */
     public function setArt(?string $art): Turnier
     {
+        $this->logService->autoLog("Art", $this->art, $art);
         $this->art = $art;
         return $this;
     }
@@ -237,6 +352,7 @@ class Turnier
      */
     public function setBlock(?string $block): Turnier
     {
+        $this->logService->autoLog("Block", $this->block, $block);
         $this->block = $block;
         return $this;
     }
@@ -255,6 +371,7 @@ class Turnier
      */
     public function setDatum(DateTime $datum): Turnier
     {
+        $this->logService->autoLog("Datum", $this->datum, $datum);
         $this->datum = $datum;
         return $this;
     }
@@ -273,6 +390,7 @@ class Turnier
      */
     public function setSpieltag(?int $spieltag): Turnier
     {
+        $this->logService->autoLog("Spieltag", $this->spieltag, $spieltag);
         $this->spieltag = $spieltag;
         return $this;
     }
@@ -291,6 +409,7 @@ class Turnier
      */
     public function setPhase(?string $phase): Turnier
     {
+        $this->logService->autoLog("Phase", $this->phase, $phase);
         $this->phase = $phase;
         return $this;
     }
@@ -309,6 +428,7 @@ class Turnier
      */
     public function setSpielplanDatei(?string $spielplanDatei): Turnier
     {
+        $this->logService->autoLog("Spielplandatei", $this->spielplanDatei, $spielplanDatei);
         $this->spielplanDatei = $spielplanDatei;
         return $this;
     }
@@ -327,6 +447,7 @@ class Turnier
      */
     public function setSaison(?int $saison): Turnier
     {
+        $this->logService->autoLog("Saison", $this->saison, $saison);
         $this->saison = $saison;
         return $this;
     }
@@ -345,6 +466,7 @@ class Turnier
      */
     public function setSpielplanVorlage(SpielplanDetails $spielplanVorlage): Turnier
     {
+        $this->logService->autoLog("Spielplanvorlage", $this->spielplanVorlage, $spielplanVorlage);
         $this->spielplanVorlage = $spielplanVorlage;
         return $this;
     }
@@ -363,6 +485,7 @@ class Turnier
      */
     public function setAusrichter(nTeam $ausrichter): Turnier
     {
+        $this->logService->autoLog("Ausrichter", $this->ausrichter->getName(), $ausrichter->getName());
         $this->ausrichter = $ausrichter;
         return $this;
     }
@@ -383,6 +506,22 @@ class Turnier
     {
         $this->details = $details;
         return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getLogs(): Collection
+    {
+        return $this->logs;
+    }
+
+    /**
+     * @param Collection $logs
+     */
+    public function setLogs(Collection $logs): void
+    {
+        $this->logs = $logs;
     }
 
 }

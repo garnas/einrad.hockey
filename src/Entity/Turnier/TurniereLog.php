@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Turnier;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,7 +21,7 @@ class TurniereLog
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $turnierLogId;
+    private int $id;
 
     /**
      * @var int
@@ -43,15 +45,42 @@ class TurniereLog
     private $autor;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="zeit", type="datetime", nullable=false, options={"default"="current_timestamp(1)"})
      */
-    private $zeit = 'current_timestamp(1)';
+    private DateTime $zeit;
 
-    public function getTurnierLogId(): ?int
+    /**
+     * @var Turnier
+     * @ORM\ManyToOne(targetEntity="App\Entity\Turnier\Turnier", inversedBy="turnier")
+     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
+     */
+    private Turnier $turnier;
+
+    /**
+     * @return Turnier
+     */
+    public function getTurnier(): Turnier
     {
-        return $this->turnierLogId;
+        return $this->turnier;
+    }
+
+    /**
+     * @param Turnier $turnier
+     * @return TurniereLog
+     */
+    public function setTurnier(Turnier $turnier): TurniereLog
+    {
+        $this->turnier = $turnier;
+        return $this;
+    }
+
+
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function getTurnierId(): ?int
@@ -90,17 +119,9 @@ class TurniereLog
         return $this;
     }
 
-    public function getZeit(): ?\DateTimeInterface
+    public function getZeit(): ?DateTimeInterface
     {
         return $this->zeit;
     }
-
-    public function setZeit(\DateTimeInterface $zeit): self
-    {
-        $this->zeit = $zeit;
-
-        return $this;
-    }
-
 
 }

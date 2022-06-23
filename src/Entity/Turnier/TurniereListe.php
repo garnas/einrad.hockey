@@ -29,7 +29,7 @@ class TurniereListe
      *
      * @ORM\Column(name="liste", type="string", length=0, nullable=false, options={"default"="melde"})
      */
-    private $liste = 'melde';
+    private string $liste = 'melde';
 
     /**
      * @var nTeam
@@ -48,11 +48,12 @@ class TurniereListe
     }
 
     /**
-     * @param nTeam $teamsLiga
+     * @param nTeam $team
+     * @return TurniereListe
      */
-    public function setTeam (nTeam $teamsLiga): TurniereListe
+    public function setTeam (nTeam $team): TurniereListe
     {
-        $this->team = $teamsLiga;
+        $this->team = $team;
         return $this;
     }
 
@@ -119,6 +120,9 @@ class TurniereListe
 
     public function setPositionWarteliste(?int $positionWarteliste): self
     {
+        $name = $this->team->getName();
+
+        $this->turnier->getLogService()->autoLog("Position Warteliste $name", $this->positionWarteliste, $positionWarteliste);
         $this->positionWarteliste = $positionWarteliste;
 
         return $this;

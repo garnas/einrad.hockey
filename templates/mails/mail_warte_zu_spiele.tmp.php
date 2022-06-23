@@ -1,9 +1,13 @@
-<p>Hallo <?= Team::id_to_name($team_id) ?>, </p>
+<?php
+
+use App\Service\Turnier\TurnierSnippets;
+
+?>
+<p>Hallo <?= $team->getName() ?>, </p>
 <p>
-    dein Team ist auf dem <?= $turnier->get_tblock() ?>-Turnier in <?= $turnier->get_ort() ?>
-    am <?= date("d.m.Y", strtotime($turnier->get_datum())) ?> von der Warteliste auf die
-    <b>Spielen-Liste</b> aufgerückt.
+    dein Team ist auf dem Turnier in <?= TurnierSnippets::ortDatumBlock($turnier) ?>
+    von der Warteliste auf die <b>Setzliste</b> aufgerückt. Somit spielt ihr auf diesem Turnier!
 </p>
 <p>
-    <a href='<?= Env::BASE_URL . "/liga/turnier_details?turnier_id=" . $turnier->get_turnier_id() ?>'>Link zum Turnier</a>
+    <a href='<?= TurnierLinks::details($turnier) ?>'>Link zum Turnier</a>
 </p>

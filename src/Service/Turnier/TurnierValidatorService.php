@@ -3,6 +3,7 @@
 namespace App\Service\Turnier;
 
 use App\Entity\Turnier\Turnier;
+use App\Repository\Turnier\TurnierRepository;
 use App\Service\Team\TeamService;
 use Html;
 use Config;
@@ -19,15 +20,52 @@ class TurnierValidatorService
         $this->turnier = $turnier;
     }
 
-    public function isValid(): bool
+    public static function onCreate(Turnier $turnier): bool
     {
-       return $this->hasValidArt()
-            && $this->hasValidAusrichter()
-            && $this->hasValidBlock()
-            && $this->hasValidDatum()
-            && $this->hasValidPlaetze()
-            && $this->hasValidUhrzeit();
+        $validator = new TurnierValidatorService($turnier);
+        return $validator->mayChange()
+            && $validator->hasValidArt()
+            && $validator->hasValidAusrichter()
+            && $validator->hasValidBlock()
+            && $validator->hasValidDatum()
+            && $validator->hasValidPlaetze()
+            && $validator->hasValidUhrzeit();
     }
+
+    public static function onChange(Turnier $turnier): bool
+    {
+        // Keine Änderungen in der Ergebnisphase
+        if (
+            $turnier->getPhase() === 'ergebnis'
+            && !Helper::$ligacenter
+        ) {
+            Html::error("Turniere können in der Ergebnisphase nicht mehr geändert werden. Bitte wende dich unter "
+                . Env::LAMAIL . " an den Ligaaussschuss.");
+            return false;
+        }
+
+        $validator = new TurnierValidatorService($turnier);
+
+        return $validator->hasValidArt()
+            && $validator->hasValidAusrichter()
+            && $validator->hasValidPhase()
+            && $validator->hasValidUhrzeit();
+    }
+
+    public function mayChange(): bool
+    {
+        return $this->turnier->getPhase() === 'ergebnis' && !Helper::$ligacenter ;
+    }
+
+    public function hasValidPhase(): bool
+    {
+        if (!in_array($this->turnier->getPhase(), ['warte', 'setz', 'spielplan', 'ergebnis'], true)) {
+            Html::error("Ungültige Phase");
+            return false;
+        }
+        return true;
+    }
+
 
     public function hasValidArt(): bool
     {
@@ -87,6 +125,11 @@ class TurnierValidatorService
 
         $plaetze = $this->turnier->getDetails()->getPlaetze();
 
+        if (TurnierService::getAnzahlGesetzteTeams($this->turnier) > $plaetze) {
+            Html::error("Es sind mehr Teams angemeldet als Plätze vorhanden.");
+            return false;
+        }
+
         if (
             Helper::$teamcenter
             && $plaetze >= 5
@@ -131,7 +174,7 @@ class TurnierValidatorService
                 return false;
             }
 
-            if (time() > TurnierService::getTurnierEintrageFrist($this->turnier)) {
+            if (time() > TurnierService::getTurnierEintrageFristUnix($this->turnier)) {
                 Html::error("Turniere können nur vier Wochen vor dem Spieltag eingetragen werden");
                 return false;
             }
@@ -165,11 +208,52 @@ class TurnierValidatorService
     {
         $ausrichter = $this->turnier->getAusrichter();
         $datum = $this->turnier->getDatum();
-        if (TeamService::isAmKalenderTagAufSetzliste($datum, $ausrichter)) {
-            Html::error("Der Ausrichter befindet sich am Turniertag bereits auf einer Setzliste");
+
+        if (
+            Helper::$teamcenter
+            && TeamService::isAmKalenderTagAufSetzliste($datum, $ausrichter)
+        ) {
+            Html::error("Ihr befindet euch am Turniertag bereits auf einer Setzliste");
             return false;
         }
-        return ($ausrichter->isLigaTeam() && $ausrichter->isAktiv());
+
+        if (
+            !$ausrichter->isLigaTeam()
+            || !$ausrichter->isAktiv()
+        ) {
+            Html::error("Ungültiger Ausrichter");
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Ermittelt, ob ein Turnier nach oben erweiterbar ist
+     *
+     * @param Turnier $turnier
+     * @return bool
+     */
+    public static function isErweiterbarBlockhoch(Turnier $turnier): bool
+    {
+        return $turnier->getPhase() === 'setz'
+            && strlen($turnier->getBlock()) < 3
+            && $turnier->getBlock() !== 'AB'
+            && $turnier->getBlock() !== 'A'
+            && (TurnierService::isLigaTurnier($turnier));
+    }
+
+    /**
+     * Ermittelt, ob ein Turnier nach oben erweiterbar ist
+     *
+     * @param Turnier $turnier
+     * @return bool
+     */
+    public static function isErweiterbarBlockfrei(Turnier $turnier): bool
+    {
+       return $turnier->getPhase() === 'setz'
+             && TurnierService::isLigaTurnier($turnier)
+             && $turnier->getBlock() != Config::BLOCK_ALL[0];
     }
 
 }

@@ -34,28 +34,53 @@ class nTeam
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereListe", mappedBy="teamsLiga")
+     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereListe", mappedBy="team")
      */
-    private Collection $turniere_liste;
+    private Collection $turniereListe;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Team\Kontakt", mappedBy="team")
+     */
+    private Collection $emails;
 
     /**
      * @return Collection
      */
-    public function get_turniere_liste(): Collection
+    public function getEmails(): Collection
     {
-        return $this->turniere_liste;
+        return $this->emails;
     }
 
     /**
-     * @param Collection $turniere_liste
+     * @param Collection $emails
+     * @return nTeam
      */
-    public function set_turniere_liste(Collection $turniere_liste): void
+    public function setEmails(Collection $emails): nTeam
     {
-        $this->turniere_liste = $turniere_liste;
+        $this->emails = $emails;
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getTurniereListe(): Collection
+    {
+        return $this->turniereListe;
+    }
+
+    /**
+     * @param Collection $turniereListe
+     */
+    public function setTurniere(Collection $turniereListe): void
+    {
+        $this->turniere = $turniereListe;
     }
 
     public function __construct() {
-        $this->turniere_liste = new ArrayCollection();
+        $this->turniereListe = new ArrayCollection();
     }
 
 
@@ -65,22 +90,22 @@ class nTeam
      * @ORM\OneToOne(targetEntity="TeamDetails")
      * @ORM\JoinColumn(name="team_id", referencedColumnName="team_id")
      */
-    private TeamDetails $teams_details;
+    private TeamDetails $details;
 
     /**
      * @return TeamDetails
      */
-    public function get_teams_details(): TeamDetails
+    public function getDetails(): TeamDetails
     {
-        return $this->teams_details;
+        return $this->details;
     }
 
     /**
-     * @param TeamDetails $teams_details
+     * @param TeamDetails $details
      */
-    public function set_teams_details(TeamDetails $teams_details): void
+    public function setDetails(TeamDetails $details): void
     {
-        $this->teams_details = $teams_details;
+        $this->details = $details;
     }
 
     /**
@@ -235,7 +260,7 @@ class nTeam
 
     public function getBlock(int $spieltag = null): ?string
     {
-        return Tabelle::get_team_block($this->id(), $spieltag); // TODO Symfony
+        return Tabelle::get_team_block($this->id(), $spieltag); // TODO Symfonyfy
     }
 
     public function isLigaTeam(): bool

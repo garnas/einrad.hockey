@@ -189,6 +189,8 @@ class Html
 
         $email = is_array($email) ? implode(',', $email) : $email;
 
+        $email = e($email);
+        $name = e($name);
         return "<a href='mailto:$email' class='no w3-text-primary w3-hover-text-secondary' style='white-space: nowrap;'>"
             . self::icon("mail") . ' ' . ($name ?? $email)
             . "</a>";

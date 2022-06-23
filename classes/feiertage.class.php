@@ -18,26 +18,26 @@ class Feiertage {
     {
         if($year > 2038 || $year < 1970) {
             return false;
-        } else {
-            $a = $year % 19;
-            $b = $year % 4;
-            $c = $year % 7;
-            $m = ((8 * ($year / 100) + 13) / 25) - 2;
-            $s = ($year / 100) - ($year / 400) - 2;
-            $M = (15 + $s - $m) % 30;
-            $N = (6 + $s) % 7;
-            $d = ($M + 19 * $a) % 30;
-            if ($d == 29) {
-                $D = 28;
-            } elseif ($d == 28 && $a >= 11) {
-                $D = 27;
-            } else {
-                $D = $d;
-            }
-            $e = (2 * $b + 4 * $c + 6 * $D + $N) % 7;
-            $delta = $D + $e + 1;
-            return mktime(0, 0, 0, 3, 21, $year) + $delta * (24 * 3600);
         }
+
+        $a = $year % 19;
+        $b = $year % 4;
+        $c = $year % 7;
+        $m = ((8 * ($year / 100) + 13) / 25) - 2;
+        $s = ($year / 100) - ($year / 400) - 2;
+        $M = (int) (15 + $s - $m) % 30;
+        $N = (int) (6 + $s) % 7;
+        $d = ($M + 19 * $a) % 30;
+        if ($d == 29) {
+            $D = 28;
+        } elseif ($d == 28 && $a >= 11) {
+            $D = 27;
+        } else {
+            $D = $d;
+        }
+        $e = (2 * $b + 4 * $c + 6 * $D + $N) % 7;
+        $delta = $D + $e + 1;
+        return mktime(0, 0, 0, 3, 21, $year) + $delta * (24 * 3600);
     }
 
     /**

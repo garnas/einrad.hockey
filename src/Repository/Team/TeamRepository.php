@@ -32,4 +32,21 @@ class TeamRepository
         return $this->team->findBy(['aktiv' => 'Ja', 'ligateam' => 'Ja']);
     }
 
+    /**
+     * @return nTeam[]
+     */
+    public function fromTurnier(Turnier $turnier): array
+    {
+        return $this->team->findBy(['aktiv' => 'Ja', 'ligateam' => 'Ja']);
+    }
+
+    /**
+     * @param string $name
+     * @return nTeam|null
+     */
+    public function findByName(string $name): ?nTeam
+    {
+        return $this->team->findOneBy(['name' => $name]);
+    }
+
 }

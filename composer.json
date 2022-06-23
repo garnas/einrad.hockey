@@ -5,7 +5,8 @@
         "gregwar/captcha": "1.*",
         "doctrine/orm": "*",
         "symfony/cache": "*",
-        "doctrine/annotations": "^1.13"
+        "doctrine/annotations": "^1.13",
+        "jenssegers/date": "^4.0"
     },
 
     "autoload": {

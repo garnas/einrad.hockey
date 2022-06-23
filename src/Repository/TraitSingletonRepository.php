@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use Doctrine\ORM\EntityManager;
+
 trait TraitSingletonRepository {
 
     private static self $instance;

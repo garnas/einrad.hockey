@@ -8,6 +8,7 @@ use Doctrine\Common\Util\Debug;
 use Doctrine\ORM\ORMSetup;
 
 use Env;
+use Db;
 
 class DoctrineWrapper
 {

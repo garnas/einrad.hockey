@@ -73,9 +73,7 @@ if (isset($_POST['create_turnier'])) {
 
         TurnierService::aufSetzListe($turnier, $ausrichter);
 
-        $turnierValidator = new TurnierValidatorService($turnier);
-
-        if ($turnierValidator->isValid()) {
+        if (TurnierValidatorService::onCreate($turnier)) {
 
                 TurnierRepository::get()->speichern($turnier);
                 if (Helper::$teamcenter) {
