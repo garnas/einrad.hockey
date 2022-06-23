@@ -130,8 +130,12 @@ class TurnierSnippets {
             foreach ($setzliste as $anmeldung) {
                 $teamname = e($anmeldung->getTeam()->getName());
                 $block = BlockService::toString($anmeldung->getTeam()->getBlock());
-                $html .= $teamname;
-                $html .= '<span class="w3-text-primary">' . $block . '</span>';
+                if ($anmeldung->getTeam()->id() === ($_SESSION['logins']['team']['id'] ?? 0)) {
+                    $html .= "<span class='w3-text-green'><b>$teamname</b></span>";
+                } else {
+                    $html .= $teamname;
+                }
+                $html .= ' <span class="w3-text-primary">' . $block . '</span>';
                 $html .= '<br>';
             }
             $html .= '</i>';
@@ -148,8 +152,12 @@ class TurnierSnippets {
                 $warteplatz = ($turnier->isSetzPhase()) ? $anmeldung->getPositionWarteliste() . ". " : "";
                 $teamname = e($anmeldung->getTeam()->getName());
                 $block = BlockService::toString($anmeldung->getTeam()->getBlock());
-                $html .= $warteplatz . " " . $teamname;
-                $html .= '<span class="w3-text-primary">' . $block . '</span>';
+                if ($anmeldung->getTeam()->id() === ($_SESSION['logins']['team']['id'] ?? 0)) {
+                    $html .= "<span class='w3-text-yellow'><b>" . $warteplatz . " " . $teamname . "</b></span>";
+                } else {
+                    $html .= $warteplatz . " " . $teamname;
+                }
+                $html .= ' <span class="w3-text-primary">' . $block . '</span>';
                 $html .= '<br>';
             }
             $html .= '</i>';

@@ -1,5 +1,7 @@
 <?php
 // Dies hier muss in jeder geschützten Seite direkt nach init.php eingefügt werden!
+use App\Repository\Team\TeamRepository;
+
 if (!isset($_SESSION['logins']['team'])) {
   $_SESSION['tc_redirect'] = db::escape($_SERVER['REQUEST_URI']); //Damit man nach dem Login direkt auf die gewünschte Seite geführt wird
   Html::info("Du wirst nach deinem Login weitergeleitet.");
@@ -8,6 +10,7 @@ if (!isset($_SESSION['logins']['team'])) {
 }
 
 $team = new Team ($_SESSION['logins']['team']['id']);
+$teamEntity = TeamRepository::get()->team($_SESSION['logins']['team']['id']);
 
 if (!Helper::$teamcenter_no_redirect && $team->details['passwort_geaendert'] === 'Nein'){
   Html::info("Bitte ändere zuerst das von uns vergebene Passwort.");

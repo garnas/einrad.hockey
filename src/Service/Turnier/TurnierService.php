@@ -7,11 +7,11 @@ use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Event\Turnier\TurnierEventMailBot;
-use App\Repository\Turnier\TurnierRepository;
 use App\Service\Team\TeamService;
 use Config;
 use Doctrine\Common\Collections\Collection;
 use Jenssegers\Date\Date;
+use Html;
 
 class TurnierService
 {
@@ -39,6 +39,10 @@ class TurnierService
         return $turnier->getListe()->count();
     }
 
+    /**
+     * @param Turnier $turnier
+     * @return TurniereListe[]
+     */
     public static function getSetzListe(Turnier $turnier): Collection
     {
         $filter = static function(TurniereListe $anmeldung) {
@@ -48,6 +52,10 @@ class TurnierService
         return $turnier->getListe()->filter($filter);
     }
 
+    /**
+     * @param Turnier $turnier
+     * @return TurniereListe[]
+     */
     public static function getWarteliste(Turnier $turnier): Collection
     {
         $filter = static function(TurniereListe $anmeldung) {
@@ -99,13 +107,25 @@ class TurnierService
             return true;
         }
 
-        $datum = $turnier->getDatum();
-
-        return BlockService::isBlockPassend($turnier, $team)
-            && !TeamService::isAmKalenderTagAufSetzliste($datum, $team);
+        return BlockService::isBlockPassend($turnier, $team);
     }
 
-    public static function aufSetzListe(Turnier $turnier, nTeam $team): void
+    /**
+     * Ermittelt, ob ein Team bei diesem Turnier ein Freilos setzten könnte
+     * @param Turnier $turnier
+     * @param nTeam $team
+     * @return bool
+     */
+    public static function isSpielBerechtigtFreilos(Turnier $turnier, nTeam $team): bool
+    {
+        if (self::isSpielBerechtigt($turnier, $team)) {
+            return true;
+        }
+
+        return BlockService::isTurnierBlockHigher($turnier, $team);
+    }
+
+    public static function addToSetzListe(Turnier $turnier, nTeam $team): void
     {
         $anmeldung = new TurniereListe();
         $anmeldung->setTeam($team)
@@ -116,28 +136,24 @@ class TurnierService
          $turnier->getLogService()->addLog("Auf Setzliste: " . $team->getName() . " (" . $team->getBlock() . ")");
     }
 
-    public static function aufWarteListe(Turnier $turnier, nTeam $team): void
+    public static function addToWarteListe(Turnier $turnier, nTeam $team): void
     {
-        $positionWarteliste = self::getAnzahlWartelisteTeams($turnier) + 1;
+        $positionWarteliste = $turnier->isWartePhase() ? null : self::getAnzahlWartelisteTeams($turnier) + 1;
+
         $anmeldung = new TurniereListe();
         $anmeldung->setTeam($team)
             ->setListe('warteliste')
             ->setTurnier($turnier)
             ->setFreilosGesetzt('Nein')
             ->setPositionWarteliste($positionWarteliste);
+
         $turnier->getListe()->add($anmeldung);
         $turnier->getLogService()->addLog(
-            "Auf Warteliste:" . " $positionWarteliste ". $team->getName() . " (" . $team->getBlock() . ")"
+            "Auf Warteliste: "
+            .  ($positionWarteliste ? $positionWarteliste . ". " : "")
+            . $team->getName()
+            . " (" . $team->getBlock() . ")"
         );
-    }
-
-    public static function teamAbmelden(Turnier $turnier, nTeam $team): void
-    {
-        $anmeldung = TurnierRepository::get()->liste->findOneBy(['team' => $team]);
-        $turnier->getListe()->removeElement($anmeldung);
-        $liste = TurnierSnippets::translate($anmeldung->getListe());
-        $name = $team->getName();
-        $turnier->getLogService()->addLog("Abmeldung: $name von der $liste");
     }
 
     public static function neueWartelistePositionen(Turnier $turnier): void
@@ -235,18 +251,17 @@ class TurnierService
                 if ($freie_plaetze > 0) {
                     $team = $anmeldung->getTeam();
                     if (self::isSpielBerechtigt($turnier, $team)) {
-                            self::aufSetzListe($turnier, $team);
-                            if ($send_mail) {
-                                TurnierEventMailBot::mailWarteZuSetzliste($turnier, $team); // TODO
-                            }
-                            --$freie_plaetze;
+                        TeamService::abmelden($team, $turnier);
+                        self::addToSetzListe($turnier, $team);
+                        if ($send_mail) {
+                            TurnierEventMailBot::mailWarteZuSetzliste($turnier, $team); // TODO
                         }
+                        --$freie_plaetze;
                     }
                 }
             }
-
-        self::neueWartelistePositionen($turnier);
-
+            self::neueWartelistePositionen($turnier);
+        }
     }
 
 }

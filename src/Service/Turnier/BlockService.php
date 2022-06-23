@@ -2,9 +2,10 @@
 
 namespace App\Service\Turnier;
 
-use App\Entity\Turnier\Turnier;
 use App\Entity\Team\nTeam;
+use App\Entity\Turnier\Turnier;
 use Config;
+use db;
 
 class BlockService
 {
@@ -24,6 +25,14 @@ class BlockService
         return $block_higher;
     }
 
+    public static function isTurnierBlockHigher(Turnier $turnier, nteam $team): bool
+    {
+        $rangTurnierBock = array_search($turnier->getBlock(), Config::BLOCK_ALL, true);
+        $rangTeamBlock = array_search($team->getBlock(), Config::BLOCK_ALL, true);
+
+        return $rangTurnierBock < $rangTeamBlock;
+    }
+
     public static function toString(mixed $block): string
     {
         if (is_string($block)) {
@@ -38,7 +47,8 @@ class BlockService
         return "";
     }
 
-    public static function nextTurnierBlock(Turnier $turnier) {
+    public static function nextTurnierBlock(Turnier $turnier): string
+    {
         return Config::BLOCK_ALL[array_search($turnier->getBlock(), Config::BLOCK_ALL)-1];
     }
 
@@ -59,6 +69,6 @@ class BlockService
         }
 
         return false;
-
     }
+
 }

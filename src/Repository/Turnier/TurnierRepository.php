@@ -4,13 +4,11 @@ namespace App\Repository\Turnier;
 
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurnierBericht;
-use App\Entity\Turnier\TurnierDetails;
 use App\Entity\Turnier\TurniereListe;
 use App\Repository\DoctrineWrapper;
 use App\Repository\TraitSingletonRepository;
 use Config;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Exception\ORMException;
 
 class TurnierRepository
 {
@@ -41,9 +39,6 @@ class TurnierRepository
         return $this->turnier->find($turnier_id);
     }
 
-    /**
-     * @throws ORMException
-     */
     public function speichern(Turnier $turnier): void
     {
         $turnier->getLogService()->addAllLogs();

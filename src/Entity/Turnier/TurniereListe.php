@@ -73,7 +73,7 @@ class TurniereListe
 
     /**
      * @var Turnier
-     * @ORM\ManyToOne(targetEntity="App\Entity\Turnier\Turnier", inversedBy="turnier")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Turnier\Turnier", inversedBy="liste")
      * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
      */
     private $turnier;

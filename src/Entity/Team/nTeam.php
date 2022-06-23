@@ -2,6 +2,7 @@
 
 namespace App\Entity\Team;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -144,7 +145,7 @@ class nTeam
     private $freilose;
 
     /**
-     * @var \DateTime|null
+     * @var DateTime|null
      *
      * @ORM\Column(name="zweites_freilos", type="date", nullable=true, options={"comment"="2 Schiris 2 Freilose"})
      */
@@ -156,6 +157,34 @@ class nTeam
      * @ORM\Column(name="aktiv", type="string", length=0, nullable=false, options={"default"="Ja"})
      */
     private $aktiv = 'Ja';
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Team\Spieler", mappedBy="team", cascade={"all"})
+     * @ORM\JoinColumn(name="team_id", referencedColumnName="team_id")
+     */
+    private Collection $kader;
+
+    /**
+     * @return Collection
+     */
+    public function getKader(): Collection
+    {
+        return $this->kader;
+    }
+
+    /**
+     * @param Collection $kader
+     * @return nTeam
+     */
+    public function setKader(Collection $kader): nTeam
+    {
+        $this->kader = $kader;
+        return $this;
+    }
+
+
 
     public function id(): ?int
     {

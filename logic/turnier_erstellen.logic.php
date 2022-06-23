@@ -71,9 +71,9 @@ if (isset($_POST['create_turnier'])) {
         $details->setTurnier($turnier);
         $turnier->setDetails($details);
 
-        TurnierService::aufSetzListe($turnier, $ausrichter);
-
         if (TurnierValidatorService::onCreate($turnier)) {
+
+                TurnierService::addToSetzListe($turnier, $ausrichter);
 
                 TurnierRepository::get()->speichern($turnier);
                 if (Helper::$teamcenter) {

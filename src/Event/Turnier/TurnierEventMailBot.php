@@ -6,6 +6,7 @@ use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
 use App\Repository\Team\TeamRepository;
 use App\Service\Team\TeamService;
+use App\Service\Team\TeamValidator;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierSnippets;
 use Env;
@@ -28,7 +29,7 @@ class TurnierEventMailBot
             foreach ($teams as $team) {
                 if (
                     TurnierService::isSpielBerechtigt($turnier, $team)
-                    && !TeamService::isAmKalenderTagAufSetzliste($turnier->getDatum(),$team)
+                    && !TeamValidator::isAmKalenderTagAufSetzliste($turnier->getDatum(),$team)
                 ) {
                     $betreff = "Neues " . $turnier->getBlock() . "-Turnier in " . $turnier->getDetails()->getOrt();
                     ob_start();

@@ -193,14 +193,14 @@ class Turnier
     /**
      * @var TurnierDetails
      *
-     * @ORM\OneToOne(targetEntity="App\Entity\Turnier\TurnierDetails", mappedBy="turnier", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Turnier\TurnierDetails", mappedBy="turnier", cascade={"all"})
      * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
      */
     private TurnierDetails $details;
 
     /**
      * @var Collection
-     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereLog", mappedBy="turnier", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereLog", mappedBy="turnier", cascade={"all"})
      * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
      */
     private Collection $logs;
@@ -209,7 +209,7 @@ class Turnier
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurnierErgebnis", mappedBy="turnier", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurnierErgebnis", mappedBy="turnier", cascade={"all"})
      * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
      */
     private Collection $ergebnis;
@@ -217,7 +217,8 @@ class Turnier
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereListe", mappedBy="turnier", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereListe", mappedBy="turnier", cascade={"persist", "remove"},
+     *      orphanRemoval=true)
      * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
      */
     private Collection $liste;
@@ -247,7 +248,7 @@ class Turnier
     }
 
     /**
-     * @return Collection
+     * @return TurniereListe[]
      */
     public function getListe(): Collection
     {

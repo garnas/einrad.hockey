@@ -3,12 +3,11 @@
 namespace App\Service\Turnier;
 
 use App\Entity\Turnier\Turnier;
-use App\Repository\Turnier\TurnierRepository;
-use App\Service\Team\TeamService;
-use Html;
+use App\Service\Team\TeamValidator;
 use Config;
-use Helper;
 use Feiertage;
+use Helper;
+use Html;
 
 class TurnierValidatorService
 {
@@ -211,7 +210,7 @@ class TurnierValidatorService
 
         if (
             Helper::$teamcenter
-            && TeamService::isAmKalenderTagAufSetzliste($datum, $ausrichter)
+            && TeamValidator::isAmKalenderTagAufSetzliste($datum, $ausrichter)
         ) {
             Html::error("Ihr befindet euch am Turniertag bereits auf einer Setzliste");
             return false;

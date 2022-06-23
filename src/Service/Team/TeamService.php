@@ -4,40 +4,16 @@ namespace App\Service\Team;
 
 use App\Entity\Team\Kontakt;
 use App\Entity\Team\nTeam;
-use App\Entity\Turnier\TurniereListe;
+use App\Entity\Team\Spieler;
 use App\Entity\Turnier\Turnier;
-use App\Repository\DoctrineWrapper;
-use DateTime;
-use db;
+use App\Entity\Turnier\TurniereListe;
+use App\Service\Turnier\TurnierService;
+use App\Service\Turnier\TurnierSnippets;
+use Config;
 use Doctrine\Common\Collections\Collection;
 
 class TeamService
 {
-
-    /**
-     * Ermittelt, ob das Team an gleichen Kalendertag auf einem anderen Turnier angemeldet ist
-     *
-     * @param DateTime $date_time
-     * @param nTeam $team
-     * @return bool
-     */
-    public static function isAmKalenderTagAufSetzliste(DateTime $date_time, nTeam $team): bool //TODO ins repo
-    {
-        $query = DoctrineWrapper::manager()
-            ->createQueryBuilder()
-            ->select('l.listeId')
-            ->from(TurniereListe::class, 'l')
-            ->innerJoin('l.turnier', 't')
-            ->where('l.team = :team')
-            ->andWhere('t.datum = :datum')
-            ->andWhere("t.art = 'I' OR t.art = 'II'")
-            ->andWhere("t.canceled == false")
-            ->setParameter('team', $team)
-            ->setParameter('datum', $date_time)
-        ;
-
-        return count($query->getQuery()->getResult()) > 0;
-    }
 
     /**
      * @param nTeam[] $teams
@@ -48,7 +24,7 @@ class TeamService
         foreach ($teams as $team) {
             $emails[] = $team->getEmails();
         }
-        return $emails;
+        return $emails ?? [];
     }
 
     public static function getPublicEmailsAsString(nTeam $team): string
@@ -66,5 +42,87 @@ class TeamService
         }
         return "";
     }
+
+    /**
+     * @param nTeam $team
+     * @return Spieler[]
+     */
+    public static function getAktiveSpieler(nTeam $team): Collection
+    {
+        $filter = static function (Spieler $spieler) {
+            return $spieler->getLetzteSaison() === Config::SAISON;
+        };
+        return $team->getKader()->filter($filter);
+    }
+
+    public static function getAnzahlAktiveSpieler(nTeam $team): int
+    {
+        return self::getAktiveSpieler($team)->count();
+    }
+
+    public static function anmelden(nTeam $team, Turnier $turnier)
+    {
+        if (
+            !TurnierService::hasFreieSetzPlaetze($turnier)
+            || $turnier->isWartePhase()
+        ) {
+            TurnierService::addToWarteListe($turnier, $team);
+        }
+        if ($turnier->isSetzPhase()) {
+            TurnierService::addToSetzListe($turnier, $team);
+        }
+    }
+
+    public static function freilos(nTeam $team, Turnier $turnier): void
+    {
+        if (self::isAufWarteliste($team, $turnier)) {
+            self::abmelden($team, $turnier);
+        }
+        TurnierService::addToSetzListe($turnier, $team);
+        $freilose = $team->getFreilose();
+        $team->setFreilose($freilose - 1);
+    }
+
+    public static function abmelden(nTeam $team, Turnier $turnier): void
+    {
+        foreach ($turnier->getListe() as $anmeldung) {
+            if ($anmeldung->getTeam()->id() === $team->id()) {
+                $turnier->getListe()->removeElement($anmeldung);
+                $liste = TurnierSnippets::translate($anmeldung->getListe());
+                $name = $team->getName();
+                $turnier->getLogService()->addLog("Abmeldung: $name von der $liste");
+            }
+        }
+
+        if ($turnier->isSetzPhase()) {
+            TurnierService::setzListeAuffuellen($turnier);
+        }
+
+    }
+
+    public static function isAufWarteliste(nTeam $team, Turnier $turnier): bool
+    {
+        $predicate = static function (int $key, TurniereListe $anmeldung) use ($team) {
+            return $anmeldung->getTeam() === $team;
+        };
+        return TurnierService::getWarteliste($turnier)->exists($predicate);
+    }
+
+    public static function isAufSetzliste(nTeam $team, Turnier $turnier): bool
+    {
+        $predicate = static function (int $key, TurniereListe $anmeldung) use ($team) {
+            return $anmeldung->getTeam() === $team;
+        };
+        return TurnierService::getSetzListe($turnier)->exists($predicate);
+    }
+
+    public static function isAngemeldet(nTeam $team, Turnier $turnier): bool
+    {
+        $predicate = static function (int $key, TurniereListe $anmeldung) use ($turnier) {
+            return $anmeldung->getTurnier() === $turnier;
+        };
+        return $team->getTurniereListe()->exists($predicate);
+    }
+
 
 }

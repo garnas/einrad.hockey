@@ -32,12 +32,16 @@ class TeamRepository
         return $this->team->findBy(['aktiv' => 'Ja', 'ligateam' => 'Ja']);
     }
 
-    /**
-     * @return nTeam[]
-     */
-    public function fromTurnier(Turnier $turnier): array
+    public function speichern(nTeam $team): void
     {
-        return $this->team->findBy(['aktiv' => 'Ja', 'ligateam' => 'Ja']);
+        DoctrineWrapper::manager()->persist($team);
+        DoctrineWrapper::manager()->flush();
+    }
+
+    public function delete(nTeam $team): void
+    {
+        DoctrineWrapper::manager()->remove($team);
+        DoctrineWrapper::manager()->flush();
     }
 
     /**
