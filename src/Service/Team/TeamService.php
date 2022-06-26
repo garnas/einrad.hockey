@@ -7,6 +7,7 @@ use App\Entity\Team\nTeam;
 use App\Entity\Team\Spieler;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
+use App\Repository\DoctrineWrapper;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierSnippets;
 use Config;

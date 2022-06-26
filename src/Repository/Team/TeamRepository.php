@@ -27,7 +27,7 @@ class TeamRepository
     /**
      * @return nTeam[]
      */
-    public function activeLigaTeams(): array
+    public function activeLigaTeams(): array //TODO 1+n query
     {
         return $this->team->findBy(['aktiv' => 'Ja', 'ligateam' => 'Ja']);
     }

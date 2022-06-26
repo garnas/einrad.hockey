@@ -77,7 +77,7 @@ include '../../templates/header.tmp.php';
                 <p>
                     <i>Ausrichter:</i>
                     <br>
-                    <?= TeamSnippets::getEmailLink($turnier->getAusrichter()) ?? e($turnier->getAusrichter()->getName())?>
+                    <?= TeamSnippets::getEmailLink($turnier->getAusrichter()) ?: e($turnier->getAusrichter()->getName())?>
                 </p> 
                 <p><i>Organisator:</i><br><?= $turnier->getDetails()->getOrganisator() ?></p>
                 <p><i>Handy:</i><br><?= TurnierSnippets::getHandy($turnier) ?></p>

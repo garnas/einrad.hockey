@@ -25,7 +25,7 @@ class DoctrineWrapper
 
     public static function dump(mixed $var): void
     {
-        db::debug(Debug::dump($var, echo:false));
+        db::debug(Debug::dump($var,3,true, false));
     }
 
     public static function setup(): void

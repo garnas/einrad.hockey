@@ -41,7 +41,6 @@ class TurnierRepository
 
     public function speichern(Turnier $turnier): void
     {
-        $turnier->getLogService()->addAllLogs();
         DoctrineWrapper::manager()->persist($turnier);
         DoctrineWrapper::manager()->flush();
     }
@@ -67,13 +66,14 @@ class TurnierRepository
             ->createQueryBuilder()
             ->select('t', 'details', 'l', 'ausrichter', 'team')
             ->from(Turnier::class, 't')
-            ->join('t.details', 'details')
-            ->join('t.ausrichter', 'ausrichter')
-            ->join('t.liste', 'l')
-            ->join('l.team', 'team')
+            ->innerJoin('t.details', 'details')
+            ->leftJoin('t.ausrichter', 'ausrichter')
+            ->leftJoin('t.liste', 'l')
+            ->leftJoin('l.team', 'team')
             ->where('t.phase != :phase')
             ->andWhere('t.canceled = 0')
             ->andWhere('t.saison = :saison')
+            ->orderBy('t.datum', 'asc')
             ->setParameter('phase', 'ergebnis')
             ->setParameter('saison', Config::SAISON)
         ;

@@ -10,8 +10,8 @@ use App\Event\Turnier\TurnierEventMailBot;
 use App\Service\Team\TeamService;
 use Config;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Jenssegers\Date\Date;
-use Html;
 
 class TurnierService
 {
@@ -41,38 +41,37 @@ class TurnierService
 
     /**
      * @param Turnier $turnier
-     * @return TurniereListe[]
+     * @return Collection|TurniereListe[]
      */
-    public static function getSetzListe(Turnier $turnier): Collection
+    public static function getSetzListe(Turnier $turnier): Collection|array
     {
-        $filter = static function(TurniereListe $anmeldung) {
-            return $anmeldung->getListe() === 'setzliste';
-        };
+        $criteria = Criteria::create()
+            ->andWhere((Criteria::expr())->eq('liste', 'setzliste'));
 
-        return $turnier->getListe()->filter($filter);
+        return $turnier->getListe()->matching($criteria);
     }
 
     /**
      * @param Turnier $turnier
-     * @return TurniereListe[]
+     * @return Collection|TurniereListe[]
      */
-    public static function getWarteliste(Turnier $turnier): Collection
+    public static function getWarteliste(Turnier $turnier): Collection|array
     {
-        $filter = static function(TurniereListe $anmeldung) {
-            return $anmeldung->getListe() === 'warteliste';
-        };
+        $criteria = Criteria::create()
+            ->orderBy(["positionWarteliste" => Criteria::ASC])
+            ->andWhere((Criteria::expr())->eq('liste', 'warteliste'));
 
-        return $turnier->getListe()->filter($filter);
+        return $turnier->getListe()->matching($criteria);
     }
 
     public static function getTurnierEintrageFristUnix(Turnier $turnier): int
     {
-        return self::getLosDatumUnix($turnier);
+        return self::warteToSetzUnix($turnier);
     }
 
     public static function getAbmeldeFristUnix(Turnier $turnier): int
     {
-        return self::getLosDatumUnix($turnier) + 2 * 7 * 24 * 60 * 60;
+        return self::warteToSetzUnix($turnier) + 2 * 7 * 24 * 60 * 60;
     }
 
     public static function getAbmeldeFrist(Turnier $turnier): string
@@ -82,10 +81,10 @@ class TurnierService
         return Date::createFromTimestamp($unixTime)->format("l, d.m.Y - H:i") . " Uhr";
     }
 
-    public static function getLosDatumUnix(Turnier $turnier): int
+    public static function warteToSetzUnix(Turnier $turnier): int
     {
         $unix = $turnier->getDatum()->getTimestamp();
-        $tag = date("N", $unix); // Numerische Zahl des Wochentages 1-7
+        $tag = $turnier->getDatum()->format('N'); // Numerische Zahl des Wochentages 1-7
         // Faktor 3.93 und strtotime(date("d-M-Y"..)) -> Reset von 12 Uhr Mittags auf Null Uhr, um Winter <-> Sommerzeit korrekt handzuhaben
         if ($tag >= 3) {
             return strtotime(date("d-M-Y", $unix - 3.93 * 7 * 24 * 60 * 60 + (6 - $tag) * 24 * 60 * 60));
@@ -95,7 +94,7 @@ class TurnierService
 
     public static function getLosDatum(Turnier $turnier): string
     {
-        $unixTime = self::getLosDatumUnix($turnier) - 1;
+        $unixTime = self::warteToSetzUnix($turnier) - 1;
         Date::setLocale('de');
         return Date::createFromTimestamp($unixTime)->format("l, d.m.Y - H:i") . " Uhr";
     }
@@ -134,6 +133,7 @@ class TurnierService
             ->setFreilosGesetzt('Nein');
          $turnier->getListe()->add($anmeldung);
          $turnier->getLogService()->addLog("Auf Setzliste: " . $team->getName() . " (" . $team->getBlock() . ")");
+
     }
 
     public static function addToWarteListe(Turnier $turnier, nTeam $team): void
@@ -159,9 +159,12 @@ class TurnierService
     public static function neueWartelistePositionen(Turnier $turnier): void
     {
         $warteliste = self::getWarteListe($turnier);
-        $i = 1;
+        $pos = 1;
         foreach ($warteliste as $anmeldung) {
-            $anmeldung->setPositionWarteliste($i++);
+            $anmeldung->setPositionWarteliste($pos++);
+            $name = $anmeldung->getTeam()->getName();
+            $turnier->getLogService()->addLog("Warteliste: $pos. $name");
+
         }
     }
 
@@ -209,7 +212,7 @@ class TurnierService
 
     public static function getAnzahlWartelisteTeams(Turnier $turnier): int
     {
-        return self::getWarteliste($turnier)->count();
+        return count(self::getWarteliste($turnier));
     }
 
     public static function blockhochErweitern(Turnier $turnier): void

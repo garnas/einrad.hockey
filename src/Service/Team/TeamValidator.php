@@ -26,7 +26,7 @@ class TeamValidator
      * @param nTeam $team
      * @return bool
      */
-    public static function isAmKalenderTagAufSetzliste(DateTime $date_time, nTeam $team): bool //TODO ins repo
+    public static function isAmKalenderTagAufSetzliste(Turnier $turnier, nTeam $team): bool //TODO ins repo
     {
         $query = DoctrineWrapper::manager()
             ->createQueryBuilder()
@@ -36,9 +36,12 @@ class TeamValidator
             ->where('l.team = :team')
             ->andWhere('t.datum = :datum')
             ->andWhere("t.art = 'I' OR t.art = 'II'")
-            ->andWhere("t.canceled = 1")
+            ->andWhere("t.canceled = 0")
+            ->andWhere("l.liste = 'setzliste'")
+            ->andWhere('t.id != :turnierId')
             ->setParameter('team', $team)
-            ->setParameter('datum', $date_time);
+            ->setParameter('turnierId', $turnier->id())
+            ->setParameter('datum', $turnier->getDatum());
         return count($query->getQuery()->getResult()) > 0;
     }
 
@@ -49,7 +52,7 @@ class TeamValidator
         if (TeamService::isAufSetzliste($team, $turnier)) {
             Html::error("Das Team $name ist bereits auf der Setzliste.");
             $valid = false;
-        } elseif (self::isAmKalenderTagAufSetzliste($turnier->getDatum(), $team)) {
+        } elseif (self::isAmKalenderTagAufSetzliste($turnier, $team)) {
             Html::error("Das Team $name ist bereits auf einem anderen Turnier auf der Setzliste.");
             $valid = false;
         }

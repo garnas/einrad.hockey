@@ -4,7 +4,6 @@ namespace App\Entity\Turnier;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Team\nTeam;
-
 use DoctrineWrapper;
 
 /**
@@ -76,7 +75,7 @@ class TurniereListe
      * @ORM\ManyToOne(targetEntity="App\Entity\Turnier\Turnier", inversedBy="liste")
      * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
      */
-    private $turnier;
+    private Turnier $turnier;
 
     /**
      * @return Turnier
@@ -101,6 +100,16 @@ class TurniereListe
         return $this->listeId;
     }
 
+    public function isWarteliste(): bool
+    {
+        return $this->getListe() === "warteliste";
+    }
+
+    public function isSetzliste(): bool
+    {
+        return $this->getListe() === "setzliste";
+    }
+
     public function getListe(): ?string
     {
         return $this->liste;
@@ -120,11 +129,7 @@ class TurniereListe
 
     public function setPositionWarteliste(?int $positionWarteliste): self
     {
-        $name = $this->team->getName();
-
-        $this->turnier->getLogService()->autoLog("Position Warteliste $name", $this->positionWarteliste, $positionWarteliste);
         $this->positionWarteliste = $positionWarteliste;
-
         return $this;
     }
 
@@ -133,10 +138,14 @@ class TurniereListe
         return $this->freilosGesetzt;
     }
 
+    public function hasFreilosGesetzt(): bool
+    {
+        return $this->freilosGesetzt === 'Ja';
+    }
+
     public function setFreilosGesetzt(string $freilosGesetzt): self
     {
         $this->freilosGesetzt = $freilosGesetzt;
-
         return $this;
     }
 

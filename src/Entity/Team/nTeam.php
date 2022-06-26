@@ -35,7 +35,7 @@ class nTeam
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereListe", mappedBy="team")
+     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereListe", mappedBy="team", cascade={"all"})
      */
     private Collection $turniereListe;
 
@@ -88,7 +88,7 @@ class nTeam
     /**
      * @var TeamDetails
      *
-     * @ORM\OneToOne(targetEntity="TeamDetails")
+     * @ORM\OneToOne(targetEntity="TeamDetails", cascade={"all"}, orphanRemoval=true)
      * @ORM\JoinColumn(name="team_id", referencedColumnName="team_id")
      */
     private TeamDetails $details;

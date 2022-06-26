@@ -8,12 +8,12 @@ use Helper;
 
 class TurnierLogService {
 
-    private string $logTexts;
+    private array $logTexts;
     private Turnier $turnier;
 
     public function __construct(Turnier $turnier)
     {
-        $this->logTexts = "";
+        $this->logTexts = [];
         $this->turnier = $turnier;
     }
 
@@ -26,7 +26,7 @@ class TurnierLogService {
      */
     public function addLog(string $log_text): void
     {
-        $this->logTexts .= "\r\n" . $log_text;
+        $this->logTexts[] = $log_text;
     }
 
     public function autoLog(string $name, mixed $alt, mixed $neu): void
@@ -58,7 +58,8 @@ class TurnierLogService {
             $log = new TurniereLog();
             $log->setAutor(Helper::get_akteur());
             $log->setTurnier($this->turnier);
-            $log->setLogText($this->logTexts);
+            $logText = implode("\r\n", $this->logTexts);
+            $log->setLogText($logText);
             $this->turnier->getLogs()->add($log);
         }
     }

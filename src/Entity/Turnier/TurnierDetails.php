@@ -55,9 +55,9 @@ class TurnierDetails
     private $strasse;
 
     /**
-     * @var string|null
+     * @var string
      *
-     * @ORM\Column(name="plz", type="string", length=6, nullable=true)
+     * @ORM\Column(name="plz", type="string", length=6)
      */
     private $plz;
 
@@ -245,18 +245,18 @@ class TurnierDetails
     }
 
     /**
-     * @return int|null
+     * @return int
      */
-    public function getPlaetze(): ?int
+    public function getPlaetze(): int
     {
         return $this->plaetze;
     }
 
     /**
-     * @param int|null $plaetze
+     * @param int $plaetze
      * @return TurnierDetails
      */
-    public function setPlaetze(?int $plaetze): TurnierDetails
+    public function setPlaetze(int $plaetze): TurnierDetails
     {
         $this->turnier->getLogService()->autoLog("Ort", $this->plaetze, $plaetze);
         $this->plaetze = $plaetze;

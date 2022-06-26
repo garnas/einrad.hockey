@@ -20,7 +20,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Turnier
 {
 
-
     public function __construct()
     {
         $this->ergebnis = new ArrayCollection();
@@ -31,10 +30,20 @@ class Turnier
     private TurnierLogService $logService;
 
 
-    /** @ORM\PostLoad() */
+    /**
+     * @ORM\PostLoad()
+     */
     public function setLogService(): void
     {
         $this->logService = new TurnierLogService($this);
+    }
+
+    /**
+     * @ORM\PreFlush()
+     */
+    public function saveLogs(): void
+    {
+        $this->logService->addAllLogs();
     }
 
     /**
@@ -156,8 +165,6 @@ class Turnier
         return $this;
     }
 
-
-
     /**
      * @var string|null
      *
@@ -193,7 +200,7 @@ class Turnier
     /**
      * @var TurnierDetails
      *
-     * @ORM\OneToOne(targetEntity="App\Entity\Turnier\TurnierDetails", mappedBy="turnier", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Turnier\TurnierDetails", inversedBy="turnier", cascade={"all"})
      * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
      */
     private TurnierDetails $details;
@@ -217,7 +224,7 @@ class Turnier
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereListe", mappedBy="turnier", cascade={"persist", "remove"},
+     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereListe", mappedBy="turnier", cascade={"all"},
      *      orphanRemoval=true)
      * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
      */
@@ -248,9 +255,9 @@ class Turnier
     }
 
     /**
-     * @return TurniereListe[]
+     * @return TurniereListe[]|Collection
      */
-    public function getListe(): Collection
+    public function getListe(): array|Collection
     {
         return $this->liste;
     }

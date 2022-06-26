@@ -12,6 +12,7 @@ use App\Service\Turnier\TurnierSnippets;
 use Env;
 use Kontakt;
 use MailBot;
+use Config;
 
 class TurnierEventMailBot
 {
@@ -29,7 +30,7 @@ class TurnierEventMailBot
             foreach ($teams as $team) {
                 if (
                     TurnierService::isSpielBerechtigt($turnier, $team)
-                    && !TeamValidator::isAmKalenderTagAufSetzliste($turnier->getDatum(),$team)
+                    && !TeamValidator::isAmKalenderTagAufSetzliste($turnier, $team)
                 ) {
                     $betreff = "Neues " . $turnier->getBlock() . "-Turnier in " . $turnier->getDetails()->getOrt();
                     ob_start();
@@ -78,5 +79,76 @@ class TurnierEventMailBot
         $akt_kontakt = new Kontakt ($team->id());
         $emails = $akt_kontakt->get_emails('info');
         MailBot::add_mail($betreff, $inhalt, $emails);
+    }
+
+    public static function mailDoppelAnmeldung(Turnier $turnier, nTeam $team): void
+    {
+        $betreff = "Abgemeldet: " . TurnierSnippets::ortDatumBlock($turnier);
+        ob_start();
+        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_doppelt_anmeldung.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+        $inhalt = ob_get_clean();
+        $akt_kontakt = new Kontakt ($team->id());
+        $emails = $akt_kontakt->get_emails('info');
+        MailBot::add_mail($betreff, $inhalt, $emails);
+    }
+
+    /**
+     * Erstellt eine Mail in der Datenbank an alle vom Losen betroffenen Teams
+     *
+     * @param Turnier $turnier
+     */
+    public static function mailGelost(Turnier $turnier): void
+    {
+        if ($turnier->isLigaturnier()) {
+            $anmeldungen = $turnier->getListe();
+            foreach ($anmeldungen as $anmeldung) {
+                if (!$anmeldung->getTeam()->isLigaTeam()) {
+                    continue;
+                }
+
+                $betreff =  TurnierSnippets::translate($anmeldung->getListe())
+                    . ": "
+                    . TurnierSnippets::ortDatumBlock($turnier);
+                ob_start();
+                    include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+                    include(Env::BASE_PATH . "/templates/mails/mail_gelost.tmp.php");
+                    include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+                    $inhalt = ob_get_clean();
+                    $emails = (new Kontakt ($anmeldung->getTeam()->id()))->get_emails('info');
+                MailBot::add_mail($betreff, $inhalt, $emails);
+            }
+        }
+    }
+
+    /**
+     * Schreibt eine Mail in die Datenbank an alle spielberechtigten Teams, wenn es (zum Übergang zur Meldephase) noch
+     * freie Plätze gibt.
+     *
+     * @param Turnier $turnier
+     */
+    public static function mailPlaetzeFrei(Turnier $turnier): void
+    {
+        if ($turnier->isLigaturnier() && TurnierService::hasFreieSetzPlaetze($turnier)) {
+            $teams = TeamRepository::get()->activeLigaTeams();
+            foreach ($teams as $team) {
+                // Noch Plätze frei
+                if (
+                    !TeamService::isAngemeldet($team, $turnier)
+                    && TurnierService::isSpielBerechtigt($turnier, $team)
+                    && TeamValidator::isAmKalenderTagAufSetzliste($turnier, $team)
+                ) {
+                    $betreff = "Freie Plätze: " . TurnierSnippets::ortDatumBlock($turnier);
+                    ob_start();
+                        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+                        include(Env::BASE_PATH . "/templates/mails/mail_plaetze_frei.tmp.php");
+                        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+                        $inhalt = ob_get_clean();
+                    $emails = (new Kontakt ($team->id()))->get_emails('info');
+                    MailBot::add_mail($betreff, $inhalt, $emails);
+                }
+            }
+        }
     }
 }

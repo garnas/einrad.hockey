@@ -210,7 +210,7 @@ class TurnierValidatorService
 
         if (
             Helper::$teamcenter
-            && TeamValidator::isAmKalenderTagAufSetzliste($datum, $ausrichter)
+            && TeamValidator::isAmKalenderTagAufSetzliste($this->turnier, $ausrichter)
         ) {
             Html::error("Ihr befindet euch am Turniertag bereits auf einer Setzliste");
             return false;
