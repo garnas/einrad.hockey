@@ -1,6 +1,8 @@
 <?php
 
+use App\Service\Team\TeamService;
 use App\Service\Team\TeamValidator;
+use App\Service\Turnier\TurnierSnippets;
 
 ?>
 <!-- Link Teamdaten ändern -->
@@ -75,18 +77,40 @@ use App\Service\Team\TeamValidator;
                 <?php endif; ?>
             </td>
         </tr>
-<!--        <tr>-->
-<!--            <th class="w3-primary">Gesetzte Freilose</th>-->
-<!--            <td>-->
-<!--                Fehlt noch-->
-<!--            </td>-->
-<!--        </tr>-->
-<!--        <tr>-->
-<!--            <th class="w3-primary">Erstellte und Stattgefundene Turniere</th>-->
-<!--            <td>-->
-<!--                Fehlt noch-->
-<!--            </td>-->
-<!--        </tr>-->
+        <tr>
+            <th class="w3-primary">Gesetzte Freilose</th>
+            <td>
+                <?php if (TeamService::getGesetzteFreilose($teamEntity)->isEmpty()): ?>
+                    --
+                <?php endif; ?>
+                <?php foreach (TeamService::getGesetzteFreilose($teamEntity) as $anmeldung): ?>
+                    <p>
+                        Freilos gesetzt am <?= $anmeldung->getFreilosGesetztAm()->format("d.m.Y") ?> für das Turnier
+                        <?= TurnierSnippets::ortDatumBlock($anmeldung->getTurnier()) ?>
+                        <?php if(TeamService::isFreilosRecyclebar($anmeldung)): ?>
+                            <br>
+                            <span class="w3-text-green">Für dieses Turnier könnt ihr nach dem Turnier ein Freilos erhalten</span>
+                        <?php endif; ?>
+                    </p>
+                <?php endforeach; ?>
+            </td>
+        </tr>
+        <tr>
+            <th class="w3-primary">Erstellte Turniere</th>
+            <td>
+                <?php if (TeamService::getEingetrageneTurniere($teamEntity)->isEmpty()): ?>
+                    --
+                <?php endif; ?>
+                <?php foreach (TeamService::getEingetrageneTurniere($teamEntity) as $turnier): ?>
+                     Turnier in <?= TurnierSnippets::ortDatumBlock($turnier) ?> eingetragen am
+                     <?= $turnier->getErstelltAm()->format("d.m.Y") ?>
+                    <?php if(TeamService::isAusrichterFreilosBerechtigt($turnier)): ?>
+                        <br>
+                        <span class="w3-text-green">Für dieses Turnier könnt ihr nach dem Turnier ein Freilos erhalten</span>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </td>
+        </tr>
         <tr>
             <th class="w3-primary">Ligavertreter</th>
             <td><?= e($teamEntity->getDetails()->getLigavertreter()) ?></td>

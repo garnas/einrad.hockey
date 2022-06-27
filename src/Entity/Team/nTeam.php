@@ -2,6 +2,7 @@
 
 namespace App\Entity\Team;
 
+use App\Entity\Turnier\Turnier;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -42,6 +43,31 @@ class nTeam
     /**
      * @var Collection
      *
+     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\Turnier", mappedBy="ausrichter", cascade={"all"}, indexBy="turnier_id")
+     */
+    private Collection $ausgerichteteTurniere;
+
+    /**
+     * @return Collection|Turnier[]
+     */
+    public function getAusgerichteteTurniere(): Collection|array
+    {
+        return $this->ausgerichteteTurniere;
+    }
+
+    /**
+     * @param Collection $ausgerichteteTurniere
+     * @return nTeam
+     */
+    public function setAusgerichteteTurniere(Collection $ausgerichteteTurniere): nTeam
+    {
+        $this->ausgerichteteTurniere = $ausgerichteteTurniere;
+        return $this;
+    }
+
+    /**
+     * @var Collection
+     *
      * @ORM\OneToMany(targetEntity="App\Entity\Team\Kontakt", mappedBy="team")
      */
     private Collection $emails;
@@ -77,11 +103,12 @@ class nTeam
      */
     public function setTurniere(Collection $turniereListe): void
     {
-        $this->turniere = $turniereListe;
+        $this->turniereListe = $turniereListe;
     }
 
     public function __construct() {
         $this->turniereListe = new ArrayCollection();
+        $this->ausgerichteteTurniere = new ArrayCollection();
     }
 
 

@@ -137,5 +137,51 @@ class TeamService
         return $team->getTurniereListe()->exists($predicate);
     }
 
+    /**
+     * @param nTeam $team
+     * @return Collection|TurniereListe[]
+     */
+    public static function getGesetzteFreilose(nTeam $team): Collection|array
+    {
+        $filter = static function(TurniereListe $anmeldung) {
+            return ($anmeldung->getTurnier()->getSaison() == Config::SAISON
+            && $anmeldung->getFreilosGesetzt() === "Ja");
+        };
+        return $team->getTurniereListe()->filter($filter);
+    }
+
+    /**
+     * @param nTeam $team
+     * @return Collection|TurniereListe[]
+     */
+    public static function getEingetrageneTurniere(nTeam $team): Collection|array
+    {
+        $filter = static function(Turnier $turnier) {
+            return ($turnier->getSaison() === Config::SAISON);
+        };
+        return $team->getAusgerichteteTurniere()->filter($filter);
+    }
+
+    /**
+     * @param Turnier $turnier
+     * @return bool
+     */
+    public static function isAusrichterFreilosBerechtigt(Turnier $turnier): bool
+    {
+        $erstelltAmUnix = $turnier->getErstelltAm()->getTimestamp();
+        $datumAmUnix = $turnier->getDatum()->getTimestamp();
+        return $datumAmUnix - $erstelltAmUnix >= 8 * 7 * 24 * 60 * 60;
+    }
+
+    /**
+     * @param TurniereListe $anmeldung
+     * @return bool
+     */
+    public static function isFreilosRecyclebar(TurniereListe $anmeldung): bool
+    {
+        $freilosGesetztUnix = $anmeldung->getFreilosGesetztAm()->getTimestamp();
+        $turnierDatumUnix = $anmeldung->getTurnier()->getDatum()->getTimestamp();
+        return $turnierDatumUnix - $freilosGesetztUnix >= 8 * 7 * 24 * 60 * 60;
+    }
 
 }
