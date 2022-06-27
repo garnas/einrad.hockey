@@ -1,11 +1,16 @@
-<p>Hallo <?= Team::id_to_name($team_id) ?>,</p>
+<?php
+
+use App\Service\Turnier\TurnierLinks;
+use App\Service\Turnier\TurnierSnippets;
+
+?>
+<p>Hallo <?= $team->getName() ?>,</p>
 <p>
     es wurde ein neues Turnier eingetragen, für welches ihr euch anmelden könnt:
-    <?= $turnier->get_tblock() ?>-Turnier in <?= $turnier->get_ort() ?>
-    am <?= date("d.m.Y", strtotime($turnier->get_datum())) ?>
+    <?= TurnierSnippets::ortDatumBlock($turnier) ?>
 </p>
 <p>
-    <a href='<?= Env::BASE_URL ?>/liga/turnier_details.php?turnier_id=<?= $turnier->get_turnier_id() ?>'>
+    <a href='<?= TurnierLinks::details($turnier) ?>'>
         Link zum Turnier
     </a>
 </p>

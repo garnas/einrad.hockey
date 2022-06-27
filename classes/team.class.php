@@ -435,8 +435,8 @@ class Team
      */
     public function check_schiri_freilos_erhaltbar(): bool
     {
-        // False, wenn die neue Saison noch nicht begonnen hat
-        if (time() < strtotime(Config::SAISON_ANFANG)){
+        // False, wenn die neue Saison noch nicht umgeschaltet wurde
+        if (time() < strtotime(Config::SAISON_WECHSEL)){
             return false;
         }
 

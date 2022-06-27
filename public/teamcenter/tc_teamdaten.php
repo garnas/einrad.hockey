@@ -5,7 +5,6 @@
 require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth
 
-$team = new Team ($_SESSION['logins']['team']['id']);
 $emails = (new Kontakt ($_SESSION['logins']['team']['id']))->get_emails_with_details();
 
 /////////////////////////////////////////////////////////////////////////////

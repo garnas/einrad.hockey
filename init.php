@@ -60,8 +60,14 @@ header('Referrer-Policy: no-referrer-when-downgrade');
 spl_autoload_register(
     static function ($class) {
         $class = strtolower($class);
-        include Env::BASE_PATH . '/classes/' . $class . '.class.php';
+        $array = explode('\\', $class);
+        $className = $array[array_key_last($array)];
+        $path = Env::BASE_PATH . '/classes/' . $className . '.class.php';
+        if (file_exists($path)) {
+            include $path;
+        }
     }
+
 );
 
 /**
@@ -109,6 +115,8 @@ register_shutdown_function(static function () {
         . $referrer,
         true);
 
+    Helper::log(Config::LOG_DB, print_r(App\Repository\DoctrineWrapper::$logger, true));
+
 });
 
 /**
@@ -142,7 +150,7 @@ db::initialize(); // Neue DB-Verbindung mit Prepared-Statements
 /**
  * Sprache für Zeitformate in Deutsch --> strftime()
  */
-setlocale(LC_TIME, 'de_DE@euro', 'de_DE', 'de', 'ge');
+setlocale(LC_ALL, 'de_DE@euro', 'de_DE', 'de', 'ge');
 
 
 /**
@@ -156,3 +164,11 @@ if (
     require(__DIR__ . '/public/errors/wartungsmodus.php');
     die();
 }
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+function e(mixed $value) {
+    return db::escape($value);
+}
+
+App\Repository\DoctrineWrapper::setup();

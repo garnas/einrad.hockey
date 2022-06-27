@@ -1,10 +1,14 @@
-<p>Hallo <?= Team::id_to_name($team_id) ?>,</p>
+<?php
+
+use App\Service\Turnier\TurnierSnippets;
+
+?>
+<p>Hallo <?= $anmeldung->getTeam()->getName() ?>,</p>
 <p>
-    das <?= $turnier->get_tblock() ?>-Turnier in <?= $turnier->get_ort() ?> am
-    <?= date("d.m.Y", strtotime($turnier->get_datum())) ?> ist in die Meldephase übergegangen und
-    die freien Spielen-Plätze wurden besetzt. Euer Team steht nun auf der <b><?= $liste ?></b>
+    das <?= TurnierSnippets::ortDatumBlock($turnier) ?> ist in die Setzphase übergegangen und
+    die freien Plätze wurden vergeben. Euer Team steht nun auf der <?= TurnierSnippets::translate($anmeldung->getListe()) ?>
 </p>
-<?php if ($liste == "Warteliste") {?>
+<?php if ($anmeldung->isWarteliste()) {?>
     <p>
         <b>Hinweis:</b> Auf der Warteliste rückt ihr automatisch nach, wenn noch ein Platz für euch frei wird.
         Wenn der Spielplan schon erstellt wurde, dann geschieht dies manuell vom Ligaausschuss.
@@ -12,7 +16,7 @@
     </p>
 <?php } ?>
 <p>
-    <a href="<?= Env::BASE_URL . "/liga/turnier_details.php?turnier_id=" . $turnier->get_turnier_id() ?>">
+    <a href="<?= Env::BASE_URL . "/liga/turnier_details.php?turnier_id=" . $turnier->id() ?>">
         Link des Turnieres
     </a>
 </p>

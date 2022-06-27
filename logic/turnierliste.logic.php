@@ -20,17 +20,8 @@ if (Helper::$teamcenter) {
 }
 
 // Einfärben wenn schon angemeldet
-switch ($team_turniere_angemeldet[$turnier_id] ?? 'kein') {
-    case 'spiele':
-        $turniere[$turnier_id]['row_color'] = 'w3-pale-green';
-        break;
-    case 'melde':
-        $turniere[$turnier_id]['row_color'] = 'w3-pale-yellow';
-        break;
-    case 'warte':
-        $turniere[$turnier_id]['row_color'] = 'w3-pale-blue';
-        break;
-    case 'kein':
-        $turniere[$turnier_id]['row_color'] = '';
-        break;
-}
+$turniere[$turnier_id]['row_color'] = match ($team_turniere_angemeldet[$turnier_id] ?? 'kein') {
+    'setzliste' => 'w3-pale-green',
+    'warteliste' => 'w3-pale-blue',
+    'kein' => '',
+};
