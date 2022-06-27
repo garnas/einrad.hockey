@@ -105,10 +105,6 @@ include '../../templates/header.tmp.php';
                         <div class="w3-responsive w3-stretch">
                             <table class="w3-table">
                                 <tr style="white-space: nowrap;">
-                                    <td class="w3-text-primary" style="width: 150px"><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), '<i class="material-icons">pending</i> Plätze') ?></td>
-                                    <td><?= $turnier->getDetails()->getPlaetze() ?></td>
-                                </tr>
-                                <tr style="white-space: nowrap;">
                                     <td class="w3-text-primary"><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), '<i class="material-icons">schedule</i> Beginn') ?></td>
                                     <td><?= $turnier->getDetails()->getStartzeit()->format("H:i") ?> Uhr
                                         <?php if ($turnier->hasBesprechung()): ?>
