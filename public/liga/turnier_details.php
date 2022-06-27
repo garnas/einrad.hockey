@@ -134,6 +134,10 @@ include '../../templates/header.tmp.php';
             <td class="w3-primary" style="vertical-align: middle">Plätze</td>
             <td><?= $turnier->getDetails()->getPlaetze() ?></td>
         </tr>
+        <tr>
+            <td class="w3-primary" style="vertical-align: middle">Erstellt am</td>
+            <td><?= $turnier->getErstelltAm()->format("d.m.Y") ?></td>
+        </tr>
     </table>
 </div>
 

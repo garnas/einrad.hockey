@@ -8,6 +8,7 @@ use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Event\Turnier\TurnierEventMailBot;
 use App\Service\Team\TeamService;
+use App\Service\Team\TeamSnippets;
 use Config;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -58,7 +59,6 @@ class TurnierService
     public static function getWarteliste(Turnier $turnier): Collection|array
     {
         $criteria = Criteria::create()
-            ->orderBy(["positionWarteliste" => Criteria::ASC])
             ->andWhere((Criteria::expr())->eq('liste', 'warteliste'));
 
         return $turnier->getListe()->matching($criteria);
@@ -132,8 +132,20 @@ class TurnierService
             ->setTurnier($turnier)
             ->setFreilosGesetzt('Nein');
          $turnier->getListe()->add($anmeldung);
-         $turnier->getLogService()->addLog("Auf Setzliste: " . $team->getName() . " (" . $team->getBlock() . ")");
+         $turnier->getLogService()->addLog("Auf Setzliste: " . $team->getName() . " " . BlockService::toString($team->getBlock()));
+    }
 
+    public static function nlAnmelden(Turnier $turnier, nTeam $nlTeam, string $liste) {
+            if($nlTeam->isLigaTeam()) {
+                trigger_error("Ligateam soll als NL-Team angemeldet werden", E_USER_ERROR);
+            }
+            if ($liste === "warteliste") {
+                self::addToWarteListe($turnier, $nlTeam);
+            } elseif ($liste === "setzliste") {
+                self::addToSetzListe($turnier, $nlTeam);
+            } else {
+                trigger_error("Falsche Liste", E_USER_ERROR);
+            }
     }
 
     public static function addToWarteListe(Turnier $turnier, nTeam $team): void

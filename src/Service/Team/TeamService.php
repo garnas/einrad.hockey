@@ -8,10 +8,13 @@ use App\Entity\Team\Spieler;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Repository\DoctrineWrapper;
+use App\Service\Turnier\BlockService;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierSnippets;
 use Config;
+use DateTime;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Query\AST\Functions\DateAddFunction;
 
 class TeamService
 {
@@ -46,9 +49,9 @@ class TeamService
 
     /**
      * @param nTeam $team
-     * @return Spieler[]
+     * @return Spieler[]|Collection
      */
-    public static function getAktiveSpieler(nTeam $team): Collection
+    public static function getAktiveSpieler(nTeam $team): Collection|array
     {
         $filter = static function (Spieler $spieler) {
             return $spieler->getLetzteSaison() === Config::SAISON;
@@ -61,7 +64,7 @@ class TeamService
         return self::getAktiveSpieler($team)->count();
     }
 
-    public static function anmelden(nTeam $team, Turnier $turnier)
+    public static function anmelden(nTeam $team, Turnier $turnier): void
     {
         if (
             !TurnierService::hasFreieSetzPlaetze($turnier)
@@ -77,11 +80,20 @@ class TeamService
     public static function freilos(nTeam $team, Turnier $turnier): void
     {
         if (self::isAufWarteliste($team, $turnier)) {
-            self::abmelden($team, $turnier);
+            $anmeldung = $team->getTurniereListe()->get($turnier->id());
+        } else {
+            $anmeldung = new TurniereListe();
+            $anmeldung->setTeam($team)->setTurnier($turnier);
         }
-        TurnierService::addToSetzListe($turnier, $team);
+
+        $anmeldung
+            ->setListe('setzliste')
+            ->setFreilosGesetzt('Ja')
+            ->setFreilosGesetztAm(new DateTime());
         $freilose = $team->getFreilose();
-        $team->setFreilose($freilose - 1);
+        $team->setFreilose($freilose -1);
+        $turnier->getListe()->add($anmeldung);
+        $turnier->getLogService()->addLog("Freilos: " . $team->getName() . " " . BlockService::toString($team->getBlock()));
     }
 
     public static function abmelden(nTeam $team, Turnier $turnier): void

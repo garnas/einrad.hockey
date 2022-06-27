@@ -7,9 +7,9 @@ use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Repository\DoctrineWrapper;
 use App\Service\Turnier\TurnierService;
-use DateTime;
 use Env;
 use Html;
+use Config;
 
 class TeamValidator
 {
@@ -19,10 +19,16 @@ class TeamValidator
         return TeamService::getAnzahlAktiveSpieler($team) >= 5;
     }
 
+    public static function hasSchiriFreilosErhalten(nTeam $team): bool
+    {
+            return $team->getZweitesFreilos() != null
+                && $team->getZweitesFreilos()->getTimestamp() >= strtotime(Config::SAISON_WECHSEL);
+    }
+
     /**
      * Ermittelt, ob das Team an gleichen Kalendertag auf einem anderen Turnier angemeldet ist
      *
-     * @param DateTime $date_time
+     * @param Turnier $turnier
      * @param nTeam $team
      * @return bool
      */
@@ -138,7 +144,7 @@ class TeamValidator
         return $valid;
     }
 
-    public static function isValidFinalMeldung(nTeam $teamEntity, Turnier $turnier)
+    public static function isValidFinalMeldung(nTeam $teamEntity, Turnier $turnier): bool
     {
         if (!$turnier->isFinalTurnier()){
             Html::error ("Anmeldung fehlgeschlagen.");

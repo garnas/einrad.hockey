@@ -2,12 +2,10 @@
 
 use App\Entity\Turnier\TurnierDetails;
 use App\Event\Turnier\TurnierEventMailBot;
-use App\Repository\DoctrineWrapper;
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Turnier\BlockService;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierValidatorService;
-use Doctrine\ORM\Exception\ORMException;
 
 $block_higher = BlockService::getHigherBlocks($ausrichter_block);
 $block_higher_str = BlockService::toString($block_higher);
@@ -41,35 +39,38 @@ if (isset($_POST['create_turnier'])) {
     }
 
     // Eintragen des Turnieres
-        // Turnier erstellen
-        $turnier = new App\Entity\Turnier\Turnier();
-        $turnier
-            ->setDatum($datum)
-            ->setName($name)
-            ->setArt($art)
-            ->setAusrichter($ausrichter)
-            ->setBlock($block)
-            ->setSaison(Config::SAISON)
-            ->setPhase('offen');
+    // Turnier erstellen
+    $turnier = new App\Entity\Turnier\Turnier();
+    $turnier
+        ->setDatum($datum)
+        ->setName($name)
+        ->setArt($art)
+        ->setAusrichter($ausrichter)
+        ->setBlock($block)
+        ->setSaison(Config::SAISON)
+        ->setPhase('warte')
+        ->setCanceled(false)
+        ->setErstelltAm(new DateTime())
+    ;
 
-        $details = new TurnierDetails();
-        $details
-            ->setBesprechung($besprechung)
-            ->setHallenname($hallenname)
-            ->setHaltestellen($haltestellen)
-            ->setHandy($handy)
-            ->setOrganisator($organisator)
-            ->setHinweis($hinweis)
-            ->setPlz($plz)
-            ->setOrt($ort)
-            ->setStrasse($strasse)
-            ->setStartgebuehr($startgebuehr)
-            ->setStartzeit($startzeit)
-            ->setFormat("jgj")
-            ->setPlaetze($plaetze);
+    $details = new TurnierDetails();
+    $details
+        ->setTurnier($turnier)
+        ->setBesprechung($besprechung)
+        ->setHallenname($hallenname)
+        ->setHaltestellen($haltestellen)
+        ->setHandy($handy)
+        ->setOrganisator($organisator)
+        ->setHinweis($hinweis)
+        ->setPlz($plz)
+        ->setOrt($ort)
+        ->setStrasse($strasse)
+        ->setStartgebuehr($startgebuehr)
+        ->setStartzeit($startzeit)
+        ->setPlaetze($plaetze);
+    $turnier->setDetails($details);
 
-        $details->setTurnier($turnier);
-        $turnier->setDetails($details);
+
 
         if (TurnierValidatorService::onCreate($turnier)) {
 

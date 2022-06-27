@@ -42,7 +42,7 @@ class BlockService
             return "(" . implode(",", $block) . ")";
         }
         if (is_null($block)) {
-            return "(NL)";
+            return ""; // Darstellung NL-Team...
         }
         return "";
     }

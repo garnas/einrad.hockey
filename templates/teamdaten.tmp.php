@@ -1,16 +1,22 @@
-<?php if (isset($team->details)){ //Wird nur angezeigt, wenn daten zum ausfüllen übertragen worden sind?>
+<?php
+
+use App\Service\Team\TeamValidator;
+
+?>
 <!-- Link Teamdaten ändern -->
-<h1 class="w3-text-primary"><?= Html::icon("group", tag: "h1") ?> <?=$team->details['teamname']?></h1>
+<h1 class="w3-text-primary"><?= Html::icon("group", tag: "h1") ?> <?= e($teamEntity->getName()) ?></h1>
     <p>
         <?= Html::link(
                 (Helper::$ligacenter) ? 'lc_teamdaten_aendern.php?team_id=' . $team->id : 'tc_teamdaten_aendern.php',
-                Html::icon('create') . ' Team- und Kontaktdaten ändern') ?>
+                Html::icon('create') . ' Team- und Kontaktdaten ändern'
+        ) ?>
     </p>
 <div class="w3-panel w3-card-4">
     <h2 class="w3-text-primary"><?= Html::icon("image", tag: "h2") ?> Teamfoto</h2>
-    <?php if (!empty($team->details['teamfoto'])){?>
+    <?php if ($teamEntity->getDetails()->getTeamfoto()){?>
         <p>
-            <img src="<?=$team->details['teamfoto']?>" class="w3-card w3-image" alt="<?=$team->details['teamname']?>" style="max-height: 360px;">
+            <img src="<?= e($teamEntity->getDetails()->getTeamfoto()) ?>" class="w3-card w3-image"
+                 alt="<?= e($teamEntity->getName())?>" style="max-height: 360px;">
         </p>
     <?php }else{?>
         <p class="w3-text-grey">Es wurde noch kein Teamfoto hochgeladen.</p>
@@ -28,7 +34,7 @@
                     1. Trikotfarbe
                 </p>
                     <span class="w3-card-4" style="height:70px;width:70px;background-color:<?= empty($team->details['trikot_farbe_1']) ? '#bbb' : $team->details['trikot_farbe_1']?>;border-radius:50%;display:inline-block;">
-                        <br><?= (empty($team->details['trikot_farbe_1'])) ? Html::icon('not_interested') : '' ?>
+                        <br><?= $teamEntity->getDetails()->getTrikotFarbe1() ? '' :  Html::icon('not_interested')?>
                     </span>
         </div>
 
@@ -37,12 +43,13 @@
                     2. Trikotfarbe
                 </p>
                     <span class="w3-card-4" style="height:70px;width:70px; background-color:<?= empty($team->details['trikot_farbe_2']) ? '#bbb' : $team->details['trikot_farbe_2'] ?>;border-radius:50%;display:inline-block;">
-                        <br><?= (empty($team->details['trikot_farbe_2'])) ? Html::icon('not_interested') : '' ?>
+                        <br><?= $teamEntity->getDetails()->getTrikotFarbe2() ? '' :  Html::icon('not_interested')?>
                     </span>
         </div>
     </div>
     <p class="w3-text-grey">
         Eure Trikotfarben werden im Spielplan angezeigt. Sie helfen anderen Teams bei der Wahl ihrer Trikots und Zuschauern dein Team zu identifizieren.
+        Die 1. Trikotfarbe wird in den Spielplänen bevorzugt.
     </p>
 </div>
 <h2 class="w3-text-primary"><?= Html::icon("info", tag: "h2") ?> Teamdaten</h2>
@@ -50,43 +57,55 @@
     <table class="w3-table w3-striped">
         <tr>
             <th class="w3-primary" style="width: 140px">Teamname</th>
-            <td><b><?=$team->details['teamname']?></b></td>
+            <td><b><?= e($teamEntity->getName()) ?></b></td>
         </tr>
         <tr>
             <th class="w3-primary">Team ID</th>
-            <td><?=$team->details['team_id']?></td>
+            <td><?= e($teamEntity->id()) ?></td>
         </tr>
         <tr>
             <th class="w3-primary">Freilose</th>
             <td>
-                <?=$team->details['freilose']?>
-                <?php if($team->check_schiri_freilos_erhalten()){ ?>
+                <?=$teamEntity->getFreilose()?>
+                <?php if(TeamValidator::hasSchiriFreilosErhalten($teamEntity)): ?>
                     <span class="w3-text-green">
                         <?= Html::icon("check") ?>
-                        (Schirifreilos erhalten am <?= $team->details['zweites_freilos'] ?>)
+                        (Schirifreilos erhalten am <?= $teamEntity->getZweitesFreilos()->format("d.m.Y") ?>)
                     </span>
-                <?php } //end if ?>
+                <?php endif; ?>
             </td>
         </tr>
+<!--        <tr>-->
+<!--            <th class="w3-primary">Gesetzte Freilose</th>-->
+<!--            <td>-->
+<!--                Fehlt noch-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <th class="w3-primary">Erstellte und Stattgefundene Turniere</th>-->
+<!--            <td>-->
+<!--                Fehlt noch-->
+<!--            </td>-->
+<!--        </tr>-->
         <tr>
             <th class="w3-primary">Ligavertreter</th>
-            <td><?=$team->details['ligavertreter']?></td>
+            <td><?= e($teamEntity->getDetails()->getLigavertreter()) ?></td>
         </tr>
         <tr>
             <th class="w3-primary" style="width: 140px">PLZ</th>
-            <td><?=$team->details['plz']?></td>
+            <td><?= e($teamEntity->getDetails()->getPlz()) ?></td>
         </tr>
         <tr>
             <th class="w3-primary">Ort</th>
-            <td><?=$team->details['ort']?></td>
+            <td><?= e($teamEntity->getDetails()->getOrt()) ?></td>
         </tr>
         <tr>
             <th class="w3-primary">Verein</th>
-            <td><?=$team->details['verein']?></td>
+            <td><?= e($teamEntity->getDetails()->getVerein()) ?></td>
         </tr>
         <tr>
             <th class="w3-primary">Homepage</th>
-            <td><?=Html::link($team->details['homepage'], $team->details['homepage'], true)?></td>
+            <td><?= Html::link(e($teamEntity->getDetails()->getHomepage())) ?></td>
         </tr>
     </table>
 </div>
@@ -101,9 +120,9 @@
         </tr>
         <?php foreach($emails as $email){?>
             <tr>
-                <td><?=$email['email']?></td>
-                <td class='w3-center'><?=$email['public']?></td>
-                <td class='w3-center'><?=$email['get_info_mail']?></td>
+                <td><?=e($email['email'])?></td>
+                <td class='w3-center'><?=e($email['public'])?></td>
+                <td class='w3-center'><?=e($email['get_info_mail'])?></td>
             </tr>
         <?php }?>
     </table>
@@ -116,4 +135,3 @@
         <?= Html::icon("create") ?> Team- und Kontaktdaten ändern
     </a>
 </p>
-<?php } //ende if?>

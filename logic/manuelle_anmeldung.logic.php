@@ -2,8 +2,10 @@
 
 use App\Repository\Team\TeamRepository;
 use App\Repository\Turnier\TurnierRepository;
+use App\Service\Form\FormLogicTeam;
 use App\Service\Team\NLTeamService;
 use App\Service\Team\TeamService;
+use App\Service\Team\TeamValidator;
 use App\Service\Turnier\TurnierService;
 
 $turnierId = (int) @$_GET['turnier_id'];
@@ -60,7 +62,6 @@ if (isset($_POST['team_anmelden'])){
         Html::error("Setzliste ist voll.");
     }
 
-
     if (!$error) {
         if ($liste === 'warte') {
             TurnierService::addToWarteListe($turnier, $team);
@@ -75,26 +76,7 @@ if (isset($_POST['team_anmelden'])){
 
 // Nichtligateam anmelden
 if (isset($_POST['nl_anmelden'])){
-    $liste = $_POST['nl_liste'];
-    $teamname = $_POST['nl_teamname'];
-
-    // Nichtligateams bekommen immer einen Stern hinter ihrem Namen
-    $teamname .= '*';
-    $nlTeam = TeamRepository::get()->findByName($teamname) ?? NLTeamService::create($teamname);
-
-    if (!TeamService::isAngemeldet($nlTeam, $turnier) || !TurnierService::hasFreieSetzPlaetze($turnier)) {
-        if ($liste === "warte") {
-            TurnierService::addToWarteListe($turnier, $nlTeam);
-            TurnierService::neueWartelistePositionen($turnier);
-        } elseif ($liste === "setz") {
-            TurnierService::addToSetzListe($turnier, $nlTeam);
-        }
-        TurnierRepository::get()->speichern($turnier);
-        Html::info("$teamname wurde angemeldet auf Liste: $liste");
-        Helper::reload(get: '?turnier_id='. $turnier->id());
-    }
-
-    Html::error("Ein Nichtligateam mit diesem Namen ist bereits angemeldet oder das Turnier ist voll.");
+   FormLogicTeam::nlTeamAnmelden($turnier);
 }
 
 // Warteliste neu Durchnummerieren

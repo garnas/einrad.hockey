@@ -8,6 +8,7 @@ use Config;
 use Feiertage;
 use Helper;
 use Html;
+use db;
 
 class TurnierValidatorService
 {
@@ -22,8 +23,7 @@ class TurnierValidatorService
     public static function onCreate(Turnier $turnier): bool
     {
         $validator = new TurnierValidatorService($turnier);
-        return $validator->mayChange()
-            && $validator->hasValidArt()
+        return $validator->hasValidArt()
             && $validator->hasValidAusrichter()
             && $validator->hasValidBlock()
             && $validator->hasValidDatum()
@@ -53,11 +53,12 @@ class TurnierValidatorService
 
     public function mayChange(): bool
     {
-        return $this->turnier->getPhase() === 'ergebnis' && !Helper::$ligacenter ;
+        return $this->turnier->getPhase() === 'ergebnis' && !Helper::$ligacenter;
     }
 
     public function hasValidPhase(): bool
     {
+        db::debug($this->turnier->getPhase());
         if (!in_array($this->turnier->getPhase(), ['warte', 'setz', 'spielplan', 'ergebnis'], true)) {
             Html::error("Ungültige Phase");
             return false;
@@ -206,7 +207,6 @@ class TurnierValidatorService
     public function hasValidAusrichter(): bool
     {
         $ausrichter = $this->turnier->getAusrichter();
-        $datum = $this->turnier->getDatum();
 
         if (
             Helper::$teamcenter

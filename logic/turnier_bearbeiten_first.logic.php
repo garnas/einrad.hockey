@@ -8,7 +8,7 @@ $turnierId = (int) @$_GET['turnier_id'];
 $turnier = TurnierRepository::get()->turnier($turnierId);
 
 //Existiert das Turnier?
-if (empty($turnier->id())){ // TODO CHECKEN
+if ($turnier === null){ // TODO CHECKEN
     Helper::not_found("Das Turnier konnte nicht gefunden werden.");
 }
 

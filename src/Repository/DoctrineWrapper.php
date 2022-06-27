@@ -31,8 +31,9 @@ class DoctrineWrapper
     public static function setup(): void
     {
         // Create a simple "default" Doctrine ORM configuration for Annotations
-        $isDevMode = Env::IS_LOCALHOST;
-        $proxyDir = null;
+//        $isDevMode = Env::IS_LOCALHOST;
+        $isDevMode = false;
+        $proxyDir = Env::BASE_PATH . "/tmp";
         $cache = null;
         $config = ORMSetup::createAnnotationMetadataConfiguration(
             array(__DIR__),
@@ -43,6 +44,7 @@ class DoctrineWrapper
 
         self::$logger = new DebugStack();
 
+        $config->setAutoGenerateProxyClasses(true);
         $config->setSQLLogger(self::$logger);
 
         // database configuration parameters

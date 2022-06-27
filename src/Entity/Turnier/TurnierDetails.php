@@ -163,7 +163,7 @@ class TurnierDetails
      */
     public function setHallenname(?string $hallenname): TurnierDetails
     {
-        $this->turnier->getLogService()->autoLog("Hallenname", $this->hallenname, $hallenname);
+        $this->turnier->getLogService()->autoLog("Hallenname", $this->hallenname ?? null, $hallenname);
         $this->hallenname = $hallenname;
         return $this;
     }
@@ -182,7 +182,7 @@ class TurnierDetails
      */
     public function setStrasse(?string $strasse): TurnierDetails
     {
-        $this->turnier->getLogService()->autoLog("Straße", $this->strasse, $strasse);
+        $this->turnier->getLogService()->autoLog("Straße", $this->strasse ?? null, $strasse);
         $this->strasse = $strasse;
         return $this;
     }
@@ -201,7 +201,7 @@ class TurnierDetails
      */
     public function setPlz(?string $plz): TurnierDetails
     {
-        $this->turnier->getLogService()->autoLog("Plz", $this->plz, $plz);
+        $this->turnier->getLogService()->autoLog("Plz", $this->plz ?? null, $plz);
         $this->plz = $plz;
         return $this;
     }
@@ -220,7 +220,7 @@ class TurnierDetails
      */
     public function setOrt(?string $ort): TurnierDetails
     {
-        $this->turnier->getLogService()->autoLog("Ort", $this->ort, $ort);
+        $this->turnier->getLogService()->autoLog("Ort", $this->ort ?? null, $ort);
         $this->ort = $ort;
         return $this;
     }
@@ -239,7 +239,7 @@ class TurnierDetails
      */
     public function setHaltestellen(?string $haltestellen): TurnierDetails
     {
-        $this->turnier->getLogService()->autoLog("Ort", $this->haltestellen, $haltestellen);
+        $this->turnier->getLogService()->autoLog("Ort", $this->haltestellen ?? null, $haltestellen);
         $this->haltestellen = $haltestellen;
         return $this;
     }
@@ -258,7 +258,7 @@ class TurnierDetails
      */
     public function setPlaetze(int $plaetze): TurnierDetails
     {
-        $this->turnier->getLogService()->autoLog("Ort", $this->plaetze, $plaetze);
+        $this->turnier->getLogService()->autoLog("Ort", $this->plaetze ?? null, $plaetze);
         $this->plaetze = $plaetze;
         return $this;
     }
@@ -295,10 +295,8 @@ class TurnierDetails
      */
     public function setStartzeit(DateTime $startzeit): TurnierDetails
     {
-        $this->turnier->getLogService()->autoLog("Startzeit",
-            $this->startzeit->format("h:i"),
-            $startzeit->format("h:i")
-        );
+        $startzeitText = (isset($this->startzeit)) ? $this->startzeit->format("h:i") : null;
+        $this->turnier->getLogService()->autoLog("Startzeit", $startzeitText, $startzeit->format("h:i"));
         $this->startzeit = $startzeit;
         return $this;
     }
@@ -317,7 +315,7 @@ class TurnierDetails
      */
     public function setBesprechung(?string $besprechung): TurnierDetails
     {
-        $this->turnier->getLogService()->autoLog("Besprechung", $this->besprechung, $besprechung);
+        $this->turnier->getLogService()->autoLog("Besprechung", $this->besprechung ?? null, $besprechung);
         $this->besprechung = $besprechung;
         return $this;
     }
@@ -336,7 +334,8 @@ class TurnierDetails
      */
     public function setHinweis(?string $hinweis): TurnierDetails
     {
-        $this->turnier->getLogService()->autoLog("Hinweis", "\r\n" . $this->hinweis, "\r\n" . $hinweis);
+        $hinweisText = isset($this->hinweis) ? "\r\n" . $this->hinweis : null;
+        $this->turnier->getLogService()->autoLog("Hinweis", $hinweisText, "\r\n" . $hinweis);
         $this->hinweis = $hinweis;
         return $this;
     }
@@ -355,7 +354,7 @@ class TurnierDetails
      */
     public function setOrganisator(?string $organisator): TurnierDetails
     {
-        $this->turnier->getLogService()->autoLog("Organisator", "\r\n" . $this->organisator, "\r\n" . $organisator);
+        $this->turnier->getLogService()->autoLog("Organisator", $this->organisator ?? null, $organisator);
         $this->organisator = $organisator;
         return $this;
     }
@@ -374,7 +373,7 @@ class TurnierDetails
      */
     public function setHandy(?string $handy): TurnierDetails
     {
-        $this->turnier->getLogService()->autoLog("Handy", "\r\n" . $this->handy, "\r\n" . $handy);
+        $this->turnier->getLogService()->autoLog("Handy", $this->handy ?? null, $handy);
         $this->handy = $handy;
         return $this;
     }
@@ -398,10 +397,7 @@ class TurnierDetails
      */
     public function setStartgebuehr(?string $startgebuehr): TurnierDetails
     {
-        $this->turnier->getLogService()->autoLog("Startgebühr",
-            "\r\n" . $this->startgebuehr,
-            "\r\n" . $startgebuehr
-        );
+        $this->turnier->getLogService()->autoLog("Startgebühr", $this->startgebuehr ?? null, $startgebuehr);
         $this->startgebuehr = $startgebuehr;
         return $this;
     }

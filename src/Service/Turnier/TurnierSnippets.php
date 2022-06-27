@@ -3,6 +3,7 @@
 namespace App\Service\Turnier;
 
 use App\Entity\Turnier\Turnier;
+use App\Service\Team\NLTeamService;
 use Html;
 use Jenssegers\Date\Date;
 
@@ -168,6 +169,9 @@ class TurnierSnippets {
 
         $freiePlaetze = TurnierService::getFreieSetzPlaetze($turnier);
         $pleatze = $turnier->getDetails()->getPlaetze();
+        if (NLTeamService::countNLTeams($turnier) > 0) {
+            $html .= "<span class='w3-text-grey'>* Nichtligateam</span>";
+        }
         $html .= "<p>Freie Plätze: $freiePlaetze von $pleatze</p>";
 
         if ($turnier->isSpassTurnier()) {

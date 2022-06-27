@@ -115,9 +115,7 @@ register_shutdown_function(static function () {
         . $referrer,
         true);
 
-    echo "<pre>";
-    print_r(App\Repository\DoctrineWrapper::$logger);
-    echo "</pre>";
+    Helper::log(Config::LOG_DB, print_r(App\Repository\DoctrineWrapper::$logger, true));
 
 });
 

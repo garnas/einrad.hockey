@@ -35,7 +35,7 @@ class nTeam
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereListe", mappedBy="team", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereListe", mappedBy="team", cascade={"all"}, indexBy="turnier_id")
      */
     private Collection $turniereListe;
 
@@ -149,7 +149,7 @@ class nTeam
      *
      * @ORM\Column(name="zweites_freilos", type="date", nullable=true, options={"comment"="2 Schiris 2 Freilose"})
      */
-    private $zweitesFreilos;
+    private ?DateTime $zweitesFreilos;
 
     /**
      * @var string
@@ -263,12 +263,12 @@ class nTeam
         return $this;
     }
 
-    public function getZweitesFreilos(): ?\DateTimeInterface
+    public function getZweitesFreilos(): DateTime
     {
         return $this->zweitesFreilos;
     }
 
-    public function setZweitesFreilos(?\DateTimeInterface $zweitesFreilos): self
+    public function setZweitesFreilos(DateTime $zweitesFreilos): self
     {
         $this->zweitesFreilos = $zweitesFreilos;
 
@@ -289,6 +289,9 @@ class nTeam
 
     public function getBlock(int $spieltag = null): ?string
     {
+        if (!$this->isLigaTeam()) {
+            return null;
+        }
         return Tabelle::get_team_block($this->id(), $spieltag); // TODO Symfonyfy
     }
 

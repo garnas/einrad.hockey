@@ -246,7 +246,7 @@ class nLigaBot
         foreach ($reihenfolgeAnmeldungen as $anmeldung) {
             $team = $anmeldung->getTeam();
             $name = $team->getName();
-            $block = $team->getBlock();
+            $blockString = BlockService::toString($team->getBlock());
             // Check ob das Team am Kalendertag des Turnieres schon auf einer Spiele-Liste steht
             if (TeamValidator::isAmKalenderTagAufSetzliste($turnier, $team)) {
                 $turnier->getLogService()->addLog(
@@ -259,11 +259,11 @@ class nLigaBot
                 && TurnierService::isSpielBerechtigt($turnier, $team)
             ) {
                 $anmeldung->setListe('setzliste');
-                $turnier->getLogService()->addLog("Gesetzt: $name ($block)");
+                $turnier->getLogService()->addLog("Gesetzt: $name $blockString");
             } else {
                 $anmeldung->setListe('warteliste');
                 $anmeldung->setPositionWarteliste($pos);
-                $turnier->getLogService()->addLog("Wartend: $pos. $name ($block)");
+                $turnier->getLogService()->addLog("Wartend: $pos. $name $blockString");
                 $pos++;
             }
         }

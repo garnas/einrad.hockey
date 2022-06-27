@@ -5,6 +5,7 @@ namespace App\Entity\Turnier;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Team\nTeam;
 use DoctrineWrapper;
+use DateTime;
 
 /**
  * TurniereListe
@@ -22,6 +23,31 @@ class TurniereListe
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $listeId;
+
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(name="freilos_gesetzt_am", type="datetime", nullable=false, options={"default"="current_timestamp(1)"})
+     */
+    private DateTime $freilosGesetztAm;
+
+    /**
+     * @return DateTime
+     */
+    public function getFreilosGesetztAm(): DateTime
+    {
+        return $this->freilosGesetztAm;
+    }
+
+    /**
+     * @param DateTime $freilosGesetztAm
+     * @return TurniereListe
+     */
+    public function setFreilosGesetztAm(DateTime $freilosGesetztAm): TurniereListe
+    {
+        $this->freilosGesetztAm = $freilosGesetztAm;
+        return $this;
+    }
 
     /**
      * @var string
@@ -61,14 +87,14 @@ class TurniereListe
      *
      * @ORM\Column(name="position_warteliste", type="integer", nullable=true)
      */
-    private $positionWarteliste;
+    private ?int $positionWarteliste;
 
     /**
      * @var string
      *
      * @ORM\Column(name="freilos_gesetzt", type="string", length=0, nullable=false, options={"default"="Nein"})
      */
-    private $freilosGesetzt = 'Nein';
+    private string $freilosGesetzt = 'Nein';
 
     /**
      * @var Turnier

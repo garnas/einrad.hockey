@@ -24,6 +24,7 @@ class Turnier
     {
         $this->ergebnis = new ArrayCollection();
         $this->liste = new ArrayCollection();
+        $this->logs = new ArrayCollection();
         $this->logService = new TurnierLogService($this);
     }
 
@@ -120,11 +121,11 @@ class Turnier
     private ?string $block;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      *
      * @ORM\Column(name="datum", type="date")
      */
-    private DateTime $datum;
+    private ?DateTime $datum;
 
     /**
      * @var int|null
@@ -212,11 +213,36 @@ class Turnier
      */
     private Collection $logs;
 
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(name="erstellt_am", type="datetime")
+     */
+    private DateTime $erstelltAm;
+
+    /**
+     * @return DateTime
+     */
+    public function getErstelltAm(): DateTime
+    {
+        return $this->erstelltAm;
+    }
+
+    /**
+     * @param DateTime $erstelltAm
+     * @return Turnier
+     */
+    public function setErstelltAm(DateTime $erstelltAm): Turnier
+    {
+        $this->erstelltAm = $erstelltAm;
+        return $this;
+    }
 
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurnierErgebnis", mappedBy="turnier", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurnierErgebnis", mappedBy="turnier", cascade={"all"},
+     *     orphanRemoval=true)
      * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
      */
     private Collection $ergebnis;
@@ -225,7 +251,7 @@ class Turnier
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereListe", mappedBy="turnier", cascade={"all"},
-     *      orphanRemoval=true)
+     *      orphanRemoval=true, indexBy="team_id")
      * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
      */
     private Collection $liste;
@@ -257,7 +283,7 @@ class Turnier
     /**
      * @return TurniereListe[]|Collection
      */
-    public function getListe(): array|Collection
+    public function getListe(): Collection|array
     {
         return $this->liste;
     }
@@ -291,11 +317,11 @@ class Turnier
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function id(): int
+    public function id(): ?int
     {
-        return $this->id;
+        return $this->id ?? null;
     }
 
     /**
@@ -322,7 +348,7 @@ class Turnier
      */
     public function setName(?string $name): Turnier
     {
-        $this->logService->autoLog("Turniername", $this->name, $name);
+        $this->logService->autoLog("Turniername", $this->name ?? '', $name);
         $this->name = $name;
         return $this;
     }
@@ -341,7 +367,7 @@ class Turnier
      */
     public function setArt(?string $art): Turnier
     {
-        $this->logService->autoLog("Art", $this->art, $art);
+        $this->logService->autoLog("Art", $this->art ?? '', $art);
         $this->art = $art;
         return $this;
     }
@@ -360,7 +386,7 @@ class Turnier
      */
     public function setBlock(?string $block): Turnier
     {
-        $this->logService->autoLog("Block", $this->block, $block);
+        $this->logService->autoLog("Block", $this->block ?? null, $block);
         $this->block = $block;
         return $this;
     }
@@ -379,7 +405,7 @@ class Turnier
      */
     public function setDatum(DateTime $datum): Turnier
     {
-        $this->logService->autoLog("Datum", $this->datum, $datum);
+        $this->logService->autoLog("Datum", $this->datum ?? null, $datum->format("d.m.Y"));
         $this->datum = $datum;
         return $this;
     }
@@ -398,7 +424,7 @@ class Turnier
      */
     public function setSpieltag(?int $spieltag): Turnier
     {
-        $this->logService->autoLog("Spieltag", $this->spieltag, $spieltag);
+        $this->logService->autoLog("Spieltag", $this->spieltag ?? null, $spieltag);
         $this->spieltag = $spieltag;
         return $this;
     }
@@ -417,7 +443,7 @@ class Turnier
      */
     public function setPhase(?string $phase): Turnier
     {
-        $this->logService->autoLog("Phase", $this->phase, $phase);
+        $this->logService->autoLog("Phase", $this->phase ?? null, $phase);
         $this->phase = $phase;
         return $this;
     }
@@ -436,7 +462,7 @@ class Turnier
      */
     public function setSpielplanDatei(?string $spielplanDatei): Turnier
     {
-        $this->logService->autoLog("Spielplandatei", $this->spielplanDatei, $spielplanDatei);
+        $this->logService->autoLog("Spielplandatei", $this->spielplanDatei ?? null, $spielplanDatei);
         $this->spielplanDatei = $spielplanDatei;
         return $this;
     }
@@ -455,7 +481,7 @@ class Turnier
      */
     public function setSaison(?int $saison): Turnier
     {
-        $this->logService->autoLog("Saison", $this->saison, $saison);
+        $this->logService->autoLog("Saison", $this->saison ?? null, $saison);
         $this->saison = $saison;
         return $this;
     }
@@ -474,7 +500,7 @@ class Turnier
      */
     public function setSpielplanVorlage(SpielplanDetails $spielplanVorlage): Turnier
     {
-        $this->logService->autoLog("Spielplanvorlage", $this->spielplanVorlage, $spielplanVorlage);
+        $this->logService->autoLog("Spielplanvorlage", $this->spielplanVorlage ?? null, $spielplanVorlage);
         $this->spielplanVorlage = $spielplanVorlage;
         return $this;
     }
@@ -493,7 +519,8 @@ class Turnier
      */
     public function setAusrichter(nTeam $ausrichter): Turnier
     {
-        $this->logService->autoLog("Ausrichter", $this->ausrichter->getName(), $ausrichter->getName());
+        $ausrichterText = isset ($this->ausrichter) ? $this->ausrichter->getName() : null;
+        $this->logService->autoLog("Ausrichter", $ausrichterText, $ausrichter->getName());
         $this->ausrichter = $ausrichter;
         return $this;
     }

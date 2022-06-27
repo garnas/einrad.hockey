@@ -35,6 +35,8 @@ use App\Service\Turnier\TurnierValidatorService;
             <?php endif; ?>
         <?php endif; ?>
     </div>
+</form>
+<form method="post">
     <div class="w3-panel w3-card-4">
         <h3>Startzeit</h3>
         <p>
