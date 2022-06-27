@@ -5,17 +5,18 @@ class Config
     /**
      * Saison
      */
-    public const SAISON = 27; // Saison 0 = Jahr 1995;
-    public const SAISON_ANFANG = '16.08.2021';
-    public const SAISON_ENDE = '29.05.2024';
+    public const SAISON = 28; // Saison 0 = Jahr 1995;
+    public const SAISON_WECHSEL = "28.06.2021"; // Wichtig für zweites Freilos
+    public const SAISON_ANFANG = '15.08.2022';
+    public const SAISON_ENDE = '28.05.2023';
 
     /**
      * Saisontermine
      */
-    public const FINALE_EINS = '11.06.2022';
-    public const FINALE_ZWEI = '12.06.2022';
-    public const FINALE_DREI = '18.06.2022';
-    public const FINALE_VIER = '19.06.2022';
+    public const FINALE_EINS = '10.06.2023';
+    public const FINALE_ZWEI = '11.06.2023';
+    public const FINALE_DREI = '17.06.2023';
+    public const FINALE_VIER = '18.06.2023';
 
     /**
      * Log-Files

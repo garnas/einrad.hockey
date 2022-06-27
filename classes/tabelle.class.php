@@ -239,6 +239,7 @@ class Tabelle
         // In vergangenen Saisons werden nur Teams mit Ergebnissen gelistet
         if ($saison == Config::SAISON) {
             $list_of_teamids = Team::get_liste_ids();
+            shuffle($list_of_teamids);
             foreach ($list_of_teamids as $team_id) {
                 if (!array_key_exists($team_id, $return)) {
                     $return[$team_id] = [];

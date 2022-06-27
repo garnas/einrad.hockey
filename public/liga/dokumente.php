@@ -15,16 +15,10 @@ include '../../templates/header.tmp.php';
 <div class="w3-panel w3-card">
     <h2 class="w3-text-primary">Modus</h2>
     <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
-    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS_ENTWURF ?>">
-        <p>
-            <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i>
-            Entwurf Ligamodus Saison 2022/2023
-        </p>
-    </a>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS ?>">
         <p>
             <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i>
-            Ligamodus
+            Ligamodus (Änderungen noch bis Saisonstart wahrscheinlich, insbesondere bei den Finalturnieren)
         </p>
     </a>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_TURNIER ?>">
@@ -36,10 +30,10 @@ include '../../templates/header.tmp.php';
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS_KURZ ?>">
         <p>
             <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file</i>
-            Zusammenfassung Ligamodus
+            Zusammenfassung Ligamodus - nicht aktuell
         </p>
     </a>
-    <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">28.06.2021</p>
+    <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">28.06.2022</p>
 </div>
 <div class="w3-panel w3-card">
     <h2 class="w3-text-primary">Finale der Deutschen Einradhockeyliga</h2>
@@ -48,14 +42,14 @@ include '../../templates/header.tmp.php';
         <p>
             <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
             </i>
-            Turniermodus des Finales der Deutschen Einradhockeyliga
+            Turniermodus des Finales der Deutschen Einradhockeyliga - nicht aktuell
         </p>
     </a>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_FINALE_MODI ?>">
         <p>
             <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
             </i>
-            Spielpläne Finalmodi
+            Spielpläne Finalmodi - nicht aktuell
         </p>
     </a>
     <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">08.07.2021</p>
@@ -74,8 +68,7 @@ include '../../templates/header.tmp.php';
         <p>
             <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file
             </i>
-            Zusammenfassung
-            Regelwerk
+            Zusammenfassung Regelwerk
         </p>
     </a>
     <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">14.08.2020</p>
