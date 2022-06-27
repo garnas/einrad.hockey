@@ -16,7 +16,7 @@ include '../../templates/header.tmp.php';
     <h1 class="w3-text-primary">Archiv</h1>
     <p>---</p>
     <p><?= Html::link('ergebnisse.php?saison=27', 'Turniere der Saison 2021/22') ?></p>
-    <p><?= Html::link('ergebnisse.php?saison=27', 'Turniere der Saison 2021/22') ?></p>
+    <p><?= HTML::link('tabelle.php?saison=27', 'Tabelle der Saison 2021/22') ?></p>
     <p>---</p>
     <p><?= HTML::link('tabelle.php?saison=26', 'Tabelle der Saison 2020/21') ?></p>
     <p><?= Html::link('ergebnisse.php?saison=26', 'Turniere der Saison 2020/21') ?></p>
