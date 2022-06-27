@@ -144,7 +144,7 @@ include '../../templates/header.tmp.php';
                             <p class="w3-text-grey w3-border-bottom w3-border-grey">Links</p>
                             <p><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), 'Alle Turnierdetails', icon:'info') ?></p>
                             <?php if ($turnier->isSpielplanPhase()) { ?>
-                                <p><?= Html::link($turnier['spielplan_datei'] ?? ('../liga/spielplan.php?turnier_id=' . $turnier->id()), 'Zum Spielplan', icon:'reorder') ?></p>
+                                <p><?= Html::link($turnier->getSpielplanDatei() ?? ('../liga/spielplan.php?turnier_id=' . $turnier->id()), 'Zum Spielplan', icon:'reorder') ?></p>
                             <?php } //endif?>
                             <?php if (isset($_SESSION['logins']['team'])) { ?>
                                 <p><?= Html::link('../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier->id(), 'Zur Anmeldeseite', icon:'how_to_reg') ?></p>
