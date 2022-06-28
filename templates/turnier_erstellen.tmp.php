@@ -41,6 +41,7 @@ use App\Service\Turnier\BlockService;
                     <option <?php if (($_POST['art'] ?? '') == 'fixed'){?> selected <?php } ?> value='fixed'>Fixierter Turnierblock (<?=implode(", ", Config::BLOCK)?>)</option>
                 <?php } //endif?>
             </select>
+            <span class="w3-text-grey">Bitte vermerkt in den Hinweisen, wenn ihr das Turnier direkt beim Übergang in die Setzphase auf ABCDEF öffnen wollt.</span>
         </p>
         <div id="block_higher_div" style="display: none">
             <p><label class="w3-text-primary" for="block">Höheren Turnierblock wählen</label>
