@@ -290,12 +290,12 @@ class nTeam
         return $this;
     }
 
-    public function getZweitesFreilos(): DateTime
+    public function getZweitesFreilos(): ?DateTime
     {
         return $this->zweitesFreilos;
     }
 
-    public function setZweitesFreilos(DateTime $zweitesFreilos): self
+    public function setZweitesFreilos(?DateTime $zweitesFreilos): self
     {
         $this->zweitesFreilos = $zweitesFreilos;
 

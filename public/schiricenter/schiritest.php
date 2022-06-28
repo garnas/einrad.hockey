@@ -57,7 +57,7 @@ if (isset($_POST['beantworten'])) {
         $zeitstempel = date('Y-m-d H:i:s'); # heutiges Datum + Uhrzeit
 
         SchiriTest::test_gestartet($zeitstempel, $_GET['md5sum']);
-        Helper::log(Config::LOG_SCHIRI_PRUEFUNG, $pruefling_id. ": Pruefung gestartet");
+        Helper::log(Config::LOG_SCHIRI_PRUEFUNG, $pruefling_id . ": Pruefung gestartet");
 
         $titel = 'Schiritest (' . $levelname . ') für ' . $pruefling;
     } else {

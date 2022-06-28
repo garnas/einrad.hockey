@@ -114,9 +114,6 @@ register_shutdown_function(static function () {
         . " | " . ndbWrapper::$query_count . " (Querys)"
         . $referrer,
         true);
-
-    Helper::log(Config::LOG_DB, print_r(App\Repository\DoctrineWrapper::$logger, true));
-
 });
 
 /**
