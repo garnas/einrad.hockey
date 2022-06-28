@@ -239,7 +239,7 @@ class TurnierDetails
      */
     public function setHaltestellen(?string $haltestellen): TurnierDetails
     {
-        $this->turnier->getLogService()->autoLog("Ort", $this->haltestellen ?? null, $haltestellen);
+        $this->turnier->getLogService()->autoLog("Haltestelle", $this->haltestellen ?? null, $haltestellen);
         $this->haltestellen = $haltestellen;
         return $this;
     }
@@ -258,7 +258,7 @@ class TurnierDetails
      */
     public function setPlaetze(int $plaetze): TurnierDetails
     {
-        $this->turnier->getLogService()->autoLog("Ort", $this->plaetze ?? null, $plaetze);
+        $this->turnier->getLogService()->autoLog("Plätze", $this->plaetze ?? null, $plaetze);
         $this->plaetze = $plaetze;
         return $this;
     }

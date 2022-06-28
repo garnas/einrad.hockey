@@ -17,12 +17,13 @@ class BlockService
         // Position des eigenen Blockes im Array der Blöcke
         $chosen = array_search($block, Config::BLOCK);
 
-        while ($chosen >= 0) {
-            $block_higher[] = Config::BLOCK[$chosen];
-            --$chosen;
+        foreach (Config::BLOCK as $blockVgl) {
+            if (array_search($blockVgl, Config::BLOCK) <= $chosen) {
+                $block_higher[] = $blockVgl;
+            }
         }
 
-        return $block_higher;
+        return $block_higher ?? [];
     }
 
     public static function isTurnierBlockHigher(Turnier $turnier, nteam $team): bool

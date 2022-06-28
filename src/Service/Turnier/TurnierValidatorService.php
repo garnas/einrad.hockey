@@ -45,7 +45,8 @@ class TurnierValidatorService
 
         $validator = new TurnierValidatorService($turnier);
 
-        return $validator->hasValidArt()
+        return $validator->mayChange()
+            && $validator->hasValidArt()
             && $validator->hasValidAusrichter()
             && $validator->hasValidPhase()
             && $validator->hasValidUhrzeit();
@@ -53,12 +54,11 @@ class TurnierValidatorService
 
     public function mayChange(): bool
     {
-        return $this->turnier->getPhase() === 'ergebnis' && !Helper::$ligacenter;
+        return $this->turnier->getPhase() != 'ergebnis' || Helper::$ligacenter;
     }
 
     public function hasValidPhase(): bool
     {
-        db::debug($this->turnier->getPhase());
         if (!in_array($this->turnier->getPhase(), ['warte', 'setz', 'spielplan', 'ergebnis'], true)) {
             Html::error("Ungültige Phase");
             return false;

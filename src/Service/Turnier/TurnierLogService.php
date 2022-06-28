@@ -29,6 +29,11 @@ class TurnierLogService {
         $this->logTexts[] = $log_text;
     }
 
+    public function getLogAsString(): string
+    {
+        return implode("\r\n", $this->logTexts);
+    }
+
     public function autoLog(string $name, mixed $alt, mixed $neu): void
     {
         if ($alt === false) {
@@ -58,7 +63,7 @@ class TurnierLogService {
             $log = new TurniereLog();
             $log->setAutor(Helper::get_akteur());
             $log->setTurnier($this->turnier);
-            $logText = implode("\r\n", $this->logTexts);
+            $logText = $this->getLogAsString();
             $log->setLogText($logText);
             $this->turnier->getLogs()->add($log);
         }

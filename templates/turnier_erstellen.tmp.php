@@ -1,3 +1,8 @@
+<?php
+
+use App\Service\Turnier\BlockService;
+
+?>
 <form method="post">
     <div class="w3-panel w3-tertiary w3-card-4">
         <h3 class="w3-center">Ausrichter: <?= $ausrichter_name ?></h3>
@@ -28,11 +33,9 @@
         <p>
             <label class="w3-text-primary" for="art">Turnierart</label>
             <select required class="w3-select w3-border w3-border-primary" id="art" name="art" onchange="onchange_show_block(this)">
-                <option <?php if (($_POST['art'] ?? '') == 'I'){?> selected <?php } ?> value="I">I: Blockeigenes Turnier (<?=$ausrichter_block?>)</option>
-                <option <?php if (($_POST['art'] ?? '') == 'II'){?> selected <?php } ?> value="II">II: Blockhöheres Turnier (<?=$block_higher_str?>)</option>
-                <option <?php if (($_POST['art'] ?? '') == 'III'){?> selected <?php } ?> value="III">III: Blockfreies Turnier (ABCDEF)</option>
+                <option <?php if (($_POST['art'] ?? '') == 'I'){?> selected <?php } ?> value="I">I: Blockeigenes Turnier <?= BlockService::toString($ausrichter_block)?></option>
+                <option <?php if (($_POST['art'] ?? '') == 'II'){?> selected <?php } ?> value="II">II: Blockhöheres Turnier <?=$block_higher_str?></option>
                 <option <?php if (($_POST['art'] ?? '') == 'spass'){?> selected <?php } ?> value="spass">Spaßturnier (außerhalb der Liga, Anmeldung beim Ausrichter, Datum und Uhrzeit beliebig)</option>
-
                 <?php if (Helper::$ligacenter){?>
                     <option <?php if (($_POST['art'] ?? '') == 'final'){?> selected <?php } ?> value='final'>Abschlussturnier</option>
                     <option <?php if (($_POST['art'] ?? '') == 'fixed'){?> selected <?php } ?> value='fixed'>Fixierter Turnierblock (<?=implode(", ", Config::BLOCK)?>)</option>

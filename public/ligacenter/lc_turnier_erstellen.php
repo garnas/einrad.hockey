@@ -3,19 +3,20 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
+
 require_once '../../logic/session_la.logic.php'; //Auth
 require_once '../../logic/la_team_waehlen.logic.php';
 
 use App\Repository\Team\TeamRepository;
-
 $show_form = false;
 if (isset($_GET['team_id'])){
+
     $ausrichter_team_id = (int) $_GET['team_id'];
     if (Team::is_ligateam($ausrichter_team_id)) {
         $ausrichter = TeamRepository::get()->team($ausrichter_team_id);
         $show_form = true;
         $ausrichter_name = $ausrichter->getName();
-
+        $ausrichter_block = $ausrichter->getBlock();
         require_once '../../logic/turnier_erstellen.logic.php';
 
     } else {
