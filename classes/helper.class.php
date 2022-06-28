@@ -57,7 +57,7 @@ class Helper
      * @param string $line Einzutragender Text in die Logdatei
      * @param bool $hide_akteur Soll ein Name hinterlegt werden?
      */
-    public static function log(string $file_name, string $line, bool $hide_akteur): void
+    public static function log(string $file_name, string $line, bool $hide_akteur = false): void
     {
         if (!self::$log_user) return;
 
