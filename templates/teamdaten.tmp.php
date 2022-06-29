@@ -102,12 +102,14 @@ use App\Service\Turnier\TurnierSnippets;
                     --
                 <?php endif; ?>
                 <?php foreach (TeamService::getEingetrageneTurniere($teamEntity) as $turnier): ?>
-                     Turnier in <?= TurnierSnippets::ortDatumBlock($turnier) ?> eingetragen am
-                     <?= $turnier->getErstelltAm()->format("d.m.Y") ?>
-                    <?php if(TeamService::isAusrichterFreilosBerechtigt($turnier)): ?>
-                        <br>
-                        <span class="w3-text-green">Für dieses Turnier könnt ihr nach dem Turnier ein Freilos erhalten</span>
-                    <?php endif; ?>
+                    <p>
+                         Turnier in <?= TurnierSnippets::ortDatumBlock($turnier) ?> eingetragen am
+                         <?= $turnier->getErstelltAm()->format("d.m.Y") ?>
+                        <?php if(TeamService::isAusrichterFreilosBerechtigt($turnier)): ?>
+                            <br>
+                            <span class="w3-text-green">Für dieses Turnier könnt ihr nach dem Turnier ein Freilos erhalten</span>
+                        <?php endif; ?>
+                    </p>
                 <?php endforeach; ?>
             </td>
         </tr>

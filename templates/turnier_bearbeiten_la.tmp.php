@@ -55,10 +55,6 @@ else: ?>
                 <?=Html::datalist_teams()?>
         </p>
         <p>
-            <label class="w3-text-primary" for="tname">Turniername <i class="w3-small">(optional)</i></label>
-            <input type="text" maxlength="60" value="<?= e($turnier->getName()) ?>" class="w3-input w3-border w3-border-primary" id="tname" name="tname">
-        </p>
-        <p>
             <label class="w3-text-primary" for="datum">Datum</label>
             <input required type="date" value="<?= e($turnier->getDatum()->format('Y-m-d')) ?>" class="w3-input w3-border w3-border-primary" style="max-width: 320px" id="datum" name="datum">
         </p>

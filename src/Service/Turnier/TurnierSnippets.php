@@ -4,6 +4,8 @@ namespace App\Service\Turnier;
 
 use App\Entity\Turnier\Turnier;
 use App\Service\Team\NLTeamService;
+use App\Service\Team\TeamValidator;
+use App\Entity\Team\nTeam;
 use Html;
 use Jenssegers\Date\Date;
 
@@ -11,6 +13,9 @@ class TurnierSnippets {
 
     public static function status(Turnier $turnier): string
     {
+        if ($turnier->isCanceled()) {
+            return '<span class="w3-text-red">abgesagt</span>';
+        }
         if ($turnier->isSpielplanPhase()) {
             return '<span class="w3-text-gray">geschlossen</span>';
         }
@@ -24,7 +29,38 @@ class TurnierSnippets {
             return '<span class="w3-text-red">voll</span>';
         }
         return '<span class="w3-text-green">frei</span>';
+    }
 
+    public static function rowColor(Turnier $turnier): string
+    {
+        if ($turnier->isCanceled()) {
+            return 'w3-grey';
+        }
+        if ($turnier->isWartePhase()) {
+            return 'w3-pale-yellow';
+        }
+        if ($turnier->isSetzPhase()) {
+            return 'w3-pale-yellow';
+        }
+        if ($turnier->isSpielplanPhase()) {
+            return 'w3-pale-blue';
+        }
+        if ($turnier->isErgebnisPhase()) {
+            return 'w3-green';
+        }
+        return '';
+    }
+
+
+    public static function blockColor(Turnier $turnier, nTeam $team): string
+    {
+        if(TeamValidator::isValidRegularAnmeldung($team, $turnier, false)) {
+            return "<span class='w3-text-green'>" . $turnier->getBlock() . "</span>";
+        }
+        if (TeamValidator::isValidFreilos($team, $turnier, false)) {
+            return "<span class='w3-text-yellow'>" . $turnier->getBlock() . "</span>";
+        }
+        return "<span class='w3-text-blue'>" . $turnier->getBlock() . "</span>";
     }
 
     public static function phase(Turnier $turnier): string
@@ -75,7 +111,7 @@ class TurnierSnippets {
     public static function nameBrTitel(Turnier $turnier): string
     {
         if (!empty($turnier->getName())) {
-            return e($turnier->getName() . " " . self::ortWochentagDatumBlock($turnier));
+            return e($turnier->getName()) . "<br>" . self::ortWochentagDatumBlock($turnier);
         }
         return self::ortWochentagDatumBlock($turnier);
     }
@@ -109,7 +145,7 @@ class TurnierSnippets {
         };
     }
 
-    public static function getHandy(Turnier $turnier)
+    public static function getHandy(Turnier $turnier): string
     {
         $handy = e($turnier->getDetails()->getHandy());
         $handyNumbers = preg_replace('/[^0-9.]+/', '', $handy);
@@ -119,7 +155,7 @@ class TurnierSnippets {
         );
     }
 
-    public static function getListen(Turnier $turnier)
+    public static function getListen(Turnier $turnier): string
     {
         $warteliste = TurnierService::getWarteliste($turnier);
         $setzliste = TurnierService::getSetzListe($turnier);

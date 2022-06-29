@@ -135,7 +135,8 @@ class TurnierService
          $turnier->getLogService()->addLog("Auf Setzliste: " . $team->getName() . " " . BlockService::toString($team->getBlock()));
     }
 
-    public static function nlAnmelden(Turnier $turnier, nTeam $nlTeam, string $liste) {
+    public static function nlAnmelden(Turnier $turnier, nTeam $nlTeam, string $liste): void
+    {
             if($nlTeam->isLigaTeam()) {
                 trigger_error("Ligateam soll als NL-Team angemeldet werden", E_USER_ERROR);
             }

@@ -47,7 +47,7 @@ if (isset($_POST['change_turnier'])) {
     $handy = $_POST['handy'];
     $startzeit = DateTime::createFromFormat("H:i", $_POST['startzeit']);
     $plaetze = (int) $_POST['plaetze'];
-
+    $tname = $_POST['tname'];
 
     // Leere Felder können eigentlich nicht auftreten (nur durch html-Manipulation), aber sicherheitshalber das hier...
     if (
@@ -63,8 +63,7 @@ if (isset($_POST['change_turnier'])) {
     } else {
         $besprechung = 'Nein';
     }
-
-    // Ändern der Turnierdetails
+    $turnier->setName($tname);
     $turnier->getDetails()->setStartzeit($startzeit)
         ->setBesprechung($besprechung)
         ->setPlaetze($plaetze)
@@ -76,7 +75,8 @@ if (isset($_POST['change_turnier'])) {
         ->setStartgebuehr($startgebuehr)
         ->setOrganisator($organisator)
         ->setHandy($handy)
-        ->setHinweis($hinweis);
+        ->setHinweis($hinweis)
+        ;
 
     if (TurnierValidatorService::onChange($turnier)) {
         TurnierRepository::get()->speichern($turnier);

@@ -51,44 +51,49 @@ class TeamValidator
         return count($query->getQuery()->getResult()) > 0;
     }
 
-    public static function isValidTurnierForAnmeldung(nTeam $team, Turnier $turnier): bool
+    public static function isValidTurnierForAnmeldung(nTeam $team, Turnier $turnier, $showError = true): bool
     {
         $valid = true;
         $name = $team->getName();
         if (TeamService::isAufSetzliste($team, $turnier)) {
-            Html::error("Das Team $name ist bereits auf der Setzliste.");
+            $error[] = "Das Team $name ist bereits auf der Setzliste.";
             $valid = false;
         } elseif (self::isAmKalenderTagAufSetzliste($turnier, $team)) {
-            Html::error("Das Team $name ist bereits auf einem anderen Turnier auf der Setzliste.");
+            $error[] = "Das Team $name ist bereits auf einem anderen Turnier auf der Setzliste.";
             $valid = false;
         }
 
         if ($turnier->isSpielplanPhase() || $turnier->isErgebnisPhase()) {
-            Html::error("Eine Anmeldung ist nicht mehr möglich, da der Spielplan schon erstellt wurde.");
+            $error[] = "Eine Anmeldung ist nicht mehr möglich, da der Spielplan schon erstellt wurde.";
             $valid = false;
         }
 
         if (!$turnier->isLigaturnier()) {
-            Html::error("Anmeldungen zu Turnieren dieser Art sind im Teamcenter nicht möglich.");
+            $error[] = "Anmeldungen zu Turnieren dieser Art sind im Teamcenter nicht möglich.";
             $valid = false;
+        }
+
+        if ($showError && isset($error)) {
+            Html::error(implode("<br>", $error));
         }
 
         return $valid;
     }
 
-    public static function isValidRegularAnmeldung(nTeam $team, Turnier $turnier): bool
+    public static function isValidRegularAnmeldung(nTeam $team, Turnier $turnier, $showError = true): bool
     {
-        $valid = self::isValidTurnierForAnmeldung($team, $turnier);
+        $valid = self::isValidTurnierForAnmeldung($team, $turnier, $showError);
 
         if (TeamService::isAufWarteliste($team, $turnier)) {
-            Html::error("Das Team " . $team->getName() . " ist bereits auf der Warteliste angemeldet.");
+            $error[] = "Das Team " . $team->getName() . " ist bereits auf der Warteliste angemeldet.";
             $valid = false;
         }
         if (!TurnierService::isSpielBerechtigt($turnier, $team)) {
-            Html::error("Der Teamblock " . $team->getBlock() . " passt nicht zum Turnierblock "
-                . $turnier->getBlock() . "."
-            );
+            $error[] = "Der Teamblock " . $team->getBlock() . " passt nicht zum Turnierblock." . $turnier->getBlock();
             $valid = false;
+        }
+        if ($showError && isset($error)) {
+            Html::error(implode("<br>", $error));
         }
         return $valid;
     }
@@ -117,28 +122,32 @@ class TeamValidator
         return $valid;
     }
 
-    public static function isValidFreilos(nTeam $team, Turnier $turnier): bool
+    public static function isValidFreilos(nTeam $team, Turnier $turnier, $showError = true): bool
     {
-        $valid = self::isValidTurnierForAnmeldung($team, $turnier);
+        $valid = self::isValidTurnierForAnmeldung($team, $turnier, $showError);
 
         if (!TurnierService::hasFreieSetzPlaetze($turnier)) {
-            Html::error("Es gibt keine freien Plätze mehr auf der Setzliste.");
+            $error[] = "Es gibt keine freien Plätze mehr auf der Setzliste.";
             $valid = false;
         }
 
         if ($team->getFreilose() <= 0) {
-            Html::error("Dein Team hat keine Freilose zur Verfügung.");
+            $error[] = "Dein Team hat keine Freilose zur Verfügung.";
             $valid = false;
         }
 
         if ($turnier->isSetzPhase() && TurnierService::isSpielBerechtigt($turnier, $team)){
-            Html::error ("Dein Team würde auch ohne Freilos auf die Setzliste kommen.");
+            $error[] = "Dein Team würde auch ohne Freilos auf die Setzliste kommen.";
             $valid = false;
         }
 
         if (!TurnierService::isSpielBerechtigtFreilos($turnier, $team)) {
-            Html::error ("Turnierblock stimmt nicht. Freilose können nur für Turniere mit höheren oder passenden Block gesetzt werden.");
+            $error[] = "Turnierblock stimmt nicht. Freilose können nur für Turniere mit höheren oder passenden Block gesetzt werden.";
             $valid = false;
+        }
+
+        if ($showError && isset($error)) {
+            Html::error(implode("<br>", $error));
         }
 
         return $valid;

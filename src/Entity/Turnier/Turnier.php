@@ -491,11 +491,11 @@ class Turnier
     }
 
     /**
-     * @return SpielplanDetails
+     * @return null|SpielplanDetails
      */
-    public function getSpielplanVorlage(): SpielplanDetails
+    public function getSpielplanVorlage(): ?SpielplanDetails
     {
-        return $this->spielplanVorlage;
+        return $this->spielplanVorlage ?? null;
     }
 
     /**
@@ -548,9 +548,9 @@ class Turnier
     }
 
     /**
-     * @return Collection
+     * @return Collection|TurniereLog[]
      */
-    public function getLogs(): Collection
+    public function getLogs(): Collection|array
     {
         return $this->logs;
     }

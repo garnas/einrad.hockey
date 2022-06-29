@@ -2,10 +2,8 @@
 
 namespace App\Entity\Turnier;
 
-use App\Service\Turnier\TurnierSnippets;
 use DateTime;
 use DateTimeInterface;
-use Discord;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

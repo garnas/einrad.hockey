@@ -45,9 +45,8 @@ if (isset($_POST['turnier_bearbeiten_la'])) {
     $unixTime = strtotime($_POST['datum']);
     $datum = (new DateTime)->setTimestamp($unixTime);
     $phase = $_POST['phase'];
-    $tname = $_POST['tname'];
 
-    $turnier->setName($tname)
+    $turnier
         ->setAusrichter($ausrichter)
         ->setArt($art)
         ->setDatum($datum)

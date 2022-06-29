@@ -8,6 +8,8 @@ use App\Entity\Turnier\TurniereListe;
 use App\Repository\DoctrineWrapper;
 use App\Repository\TraitSingletonRepository;
 use Config;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
 
 class TurnierRepository
@@ -57,10 +59,9 @@ class TurnierRepository
     }
 
     /**
-     * Ermittelt, ob das Team an gleichen Kalendertag auf einem anderen Turnier angemeldet ist
-     * @return Turnier[]
+     * @return Turnier[]|Collection
      */
-    public static function getKommendeTurniere(): array
+    public static function getKommendeTurniere(): array|Collection
     {
         $query = DoctrineWrapper::manager()
             ->createQueryBuilder()
@@ -78,7 +79,28 @@ class TurnierRepository
             ->setParameter('saison', Config::SAISON)
         ;
 
-        return $query->getQuery()->getResult();
+        return new ArrayCollection($query->getQuery()->execute());
+    }
+
+    /**
+     * @return Turnier[]|Collection
+     */
+    public static function getAlleTurniere(): array|Collection
+    {
+        $query = DoctrineWrapper::manager()
+            ->createQueryBuilder()
+            ->select('t', 'details', 'l', 'ausrichter', 'team')
+            ->from(Turnier::class, 't')
+            ->innerJoin('t.details', 'details')
+            ->leftJoin('t.ausrichter', 'ausrichter')
+            ->leftJoin('t.liste', 'l')
+            ->leftJoin('l.team', 'team')
+            ->where('t.saison = :saison')
+            ->orderBy('t.datum', 'asc')
+            ->setParameter('saison', Config::SAISON)
+        ;
+
+        return new ArrayCollection($query->getQuery()->execute());
     }
 
 }

@@ -11,22 +11,15 @@ require_once '../../logic/session_la.logic.php'; //Auth
 
 // Turnierobjekt erstellen
 $turnier_id = (int) @$_GET['turnier_id'];
-// Logs des Turnieres bekommen
-$logs = nTurnier::get_log($turnier_id);
 
 $turnierEntity = TurnierRepository::get()->turnier($turnier_id);
-// Gelöschtes Turnier
-$turnier = nTurnier::get($turnier_id);
-if ($turnier === null & !empty($logs)){
-    Html::notice("Turnier wurde gelöscht.");
+
+if ($turnierEntity === null){
+    Html::notice("Turnier wurde nicht gefunden.");
 }
 
-// Turnier nicht gefunden
-if ($turnier === null & empty($logs)){
-    Html::notice("Es wurden keine Turnierlogs gefunden");
-    header('Location: lc_turnierliste.php');
-    die();
-}
+;
+
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -35,7 +28,7 @@ include '../../templates/header.tmp.php'; ?>
 
     <h2>Turnierlog</h2>
     <h2><?= TurnierSnippets::nameBrTitel($turnierEntity) ?></h2>
-    <?= Html::link(TurnierLinks::details($turnierEntity)) ?>
+    <?= Html::link(TurnierLinks::details($turnierEntity), "Turnierdetails", icon:'info') ?>
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped">
             <tr class="w3-primary">
@@ -43,11 +36,11 @@ include '../../templates/header.tmp.php'; ?>
                 <th>Akteur</th>
                 <th>Aktion</th>
             </tr>
-            <?php foreach ($logs as $log){?>
+            <?php foreach ($turnierEntity->getLogs() as $log){?>
                 <tr>
-                    <td style="white-space: pre;"><?=$log['zeit']?></td>
-                    <td><?=$log['autor']?></td>
-                    <td style="white-space: pre;"><?=$log['log_text']?></td>
+                    <td style="white-space: pre;"><?= $log->getZeit()->format("d.m.y h:i:s") ?></td>
+                    <td><?= $log->getAutor() ?></td>
+                    <td style="white-space: pre;"><?=$log->getLogText()?></td>
                 </tr>
             <?php } //end forach?>
         </table>

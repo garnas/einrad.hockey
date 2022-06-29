@@ -48,7 +48,7 @@ use App\Service\Turnier\BlockService;
             <select required class="w3-select w3-border w3-border-primary" id="block" name="block">
                 <?php foreach ($block_higher as $block){?>
                     <option
-                        <?php if (($_POST['block'] ?? '') == $block): ?>
+                        <?php if (($_POST['block'] ?? '') === $block): ?>
                             selected
                         <?php endif; ?>
                             value='<?=$block?>'> <?=$block?>
@@ -69,19 +69,6 @@ use App\Service\Turnier\BlockService;
                 </p>
             </div>
         <?php } //endif?>
-        
-        <?php if (Helper::$ligacenter){?>
-            <div id="block_final_div" style="display: none">
-                <p>
-                <label class="w3-text-primary" for="block_final">Block des Abschlussturniers</label>
-                <select class="w3-select w3-border w3-border-primary" id="block_final" name="block">
-                    <?php foreach (Config::BLOCK_FINALE as $block_finale) {?>
-                    <option <?php if (($_POST['block'] ?? '') == $block_finale){?> selected <?php } //endif?> value='<?=$block_finale?>'><?=$block_finale?></option>
-                    <?php } //end foreach?>
-                </select>
-                </p>
-            </div>
-        <?php } //endif?>
 
         <p>
             <label class="w3-text-primary" for="plaetze">Plätze</label>
@@ -90,7 +77,7 @@ use App\Service\Turnier\BlockService;
                 <option <?php if (($_POST['plaetze'] ?? '') == '5'){?> selected <?php } //endif?> value="5">5 Teams</option>
                 <option <?php if (($_POST['plaetze'] ?? '') == '6'){?> selected <?php } //endif?> value="6">6 Teams</option>
                 <option <?php if (($_POST['plaetze'] ?? '') == '7'){?> selected <?php } //endif?> value="7">7 Teams</option>
-                <option <?php if (($_POST['plaetze'] ?? '') == '8'){?> selected <?php } //endif?> value="8 gruppen">8 Teams</option>
+                <option <?php if (($_POST['plaetze'] ?? '') == '8'){?> selected <?php } //endif?> value="8">8 Teams</option>
                 <?php if(Helper::$ligacenter): ?>
                     <option <?php if (($_POST['plaetze'] ?? '') == '9'){?> selected <?php } //endif?> value="9">9 Teams</option>
                     <option <?php if (($_POST['plaetze'] ?? '') == '10'){?> selected <?php } //endif?> value="10">10 Teams</option>

@@ -99,6 +99,10 @@ use App\Service\Turnier\TurnierValidatorService;
     <div class="w3-panel w3-card-4">
         <h3>Turnierdetails</h3>
         <p>
+            <label class="w3-text-primary" for="tname">Turniername <i class="w3-small">(optional)</i></label>
+            <input type="text" maxlength="60" value="<?= e($turnier->getName()) ?>" class="w3-input w3-border w3-border-primary" id="tname" name="tname">
+        </p>
+        <p>
             <label class="w3-text-primary" for="text">Hinweistext</label>
             <i class="w3-text-grey">(optional)</i>
             <textarea class="w3-input w3-border w3-border-primary" onkeyup="woerter_zaehlen(1500);" maxlength="1500" rows="4" id="text" name="hinweis"><?=$turnier->getDetails()->getHinweis()?></textarea>

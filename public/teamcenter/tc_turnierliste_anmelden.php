@@ -2,51 +2,44 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Entity\Turnier\Turnier;
+use App\Repository\Turnier\TurnierRepository;
+use App\Service\Team\TeamService;
+use App\Service\Turnier\TurnierSnippets;
+use App\Service\Turnier\TurnierLinks;
+
 require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth
 
 // Teamspezifisches
 $team_id = $_SESSION['logins']['team']['id'];
-$team = new Team($team_id);
-$team_turniere_angemeldet = $team->get_turniere_angemeldet();
-$team_anz_freilose = $team->get_freilose();
 
-// Hinweis Live-Spieltag
-$akt_spieltag = Tabelle::get_aktuellen_spieltag();
-if (Tabelle::check_spieltag_live($akt_spieltag)){
-    Html::notice(
-        "Für den aktuelle Spieltag (ein Spieltag ist immer ein ganzes Wochenende) wurden noch nicht alle Ergebnisse eingetragen. Für die Turnieranmeldung gilt immer der Teamblock des letzten vollständigen Spieltages: "
-        . Html::link("../liga/tabelle.php?spieltag=" . ($akt_spieltag - 1) . "#rang", "Spieltag " . ($akt_spieltag - 1)));
-}
+$turniere = TurnierRepository::getKommendeTurniere();
 
-// Relevante Turniere finden
-$db_turniere = nTurnier::get_turniere_kommend();
-
-if (!empty($db_turniere)) {
-  // Gefundene Turniere werden aufbereitet
-  foreach ($db_turniere as $turnier) {
-    $turnier_id = $turnier->get_turnier_id();
-
-    include '../../logic/turnierliste.logic.php';
-
-    $turniere[$turnier_id]['links'] =
-      array(
-        Html::link("tc_team_anmelden.php?turnier_id=" . $turnier_id, 'An- / Abmeldung', false, 'how_to_reg'),
-        Html::link("../liga/turnier_details.php?turnier_id=" . $turnier_id, 'Turnierdetails', false, 'info')
-      );
-  }
-} else {
+if ($turniere->isEmpty()) {
   // Da keine Tunriere gefunden wurden, wird auf die TC-Startseite umgeleitet
   Html::notice(
     'Bisher sind keine Turniere ausgeschrieben.',
     esc: false
   );
   Helper::reload('/teamcenter/tc_start.php');
-} // end if
+}
 
-/////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////LAYOUT///////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+// Einfärben wenn schon angemeldet
+$rowColor = static function (Turnier $turnier) use ($teamEntity) {
+    if (TeamService::isAufSetzliste($teamEntity, $turnier)) {
+        return 'w3-pale-green';
+    }
+    if (TeamService::isAufWarteliste($teamEntity, $turnier) && $turnier->isWartePhase()) {
+        return 'w3-pale-yellow';
+    }
+    if (TeamService::isAufWarteliste($teamEntity, $turnier) && $turnier->isSetzPhase()) {
+        return 'w3-pale-blue';
+    }
+    return '';
+};
+
+// LAYOUT
 include '../../templates/header.tmp.php';?>
 
 <h2 class="w3-text-primary" style='display: inline;'>Turnieranmeldung und -abmeldung</h2>
@@ -66,34 +59,61 @@ include '../../templates/header.tmp.php';?>
         <h3>Legende:</h3>
         <p>
         Reihen:<br>
-        <span class="w3-pale-green">Auf Spielen-Liste<br></span>
-        <span class="w3-pale-blue">Auf Warteliste<br></span>
-        <span class="w3-pale-yellow">Auf Meldeliste<br></span>
+        <span class="w3-pale-green">Auf Setzliste<br></span>
+        <span class="w3-pale-blue">Auf Warteliste in der Meldephase<br></span>
+        <span class="w3-pale-yellow">Auf Warteliste in der Wartephase<br></span>
         <br>
         <i><span class="w3-text-green">(Block)</span>: Anmeldung möglich</i><br>
         <i><span class="w3-text-yellow">(Block)</span>: Freilos möglich</i><br>
         <i><span class="w3-text-red">(Block)</span>: Falscher Block</i><br>
         <br>
-        <i><span class="w3-text-green">frei</span>: Plaetze auf der Spielen-Liste frei</i><br>
-        <i><span class="w3-text-red">voll</span>: Spielen-Liste ist voll</i><br>
+        <i><span class="w3-text-green">frei</span>: Plaetze auf der Setzliste frei</i><br>
+        <i><span class="w3-text-red">voll</span>: Setzliste ist voll</i><br>
         <i><span class="w3-text-gray">geschlossen</span>: Anmeldung nicht mehr möglich</i><br>
         </p>
     </div>
   </div>
 </div>
 
-
 <script>
-// Get the modal
-var modal = document.getElementById('id01');
+    // Get the modal
+    let modal = document.getElementById('id01');
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    }
 </script>
-<?php include '../../templates/turnierliste.tmp.php';?>
+
+<div class="w3-responsive w3-card-4">
+    <table class="w3-table w3-bordered w3-striped w3-centered" style="white-space: nowrap">
+        <tr class='w3-primary'>
+            <th>Status</th>
+            <th>Datum</th>
+            <th>Ort</th>
+            <th>Block</th>
+            <th><i>Phase<i></th>
+            <th><i>Ausrichter<i></th>
+
+        </tr>
+        <?php foreach ($turniere as $turnier): ?>
+            <tr class="<?= isset($rowColor) ? $rowColor($turnier) : '' ?>">
+                <td><?= TurnierSnippets::status($turnier) ?></td>
+                <td><?= $turnier->getDatum()->format("d.m.y") ?></td>
+                <td><?= $turnier->getDetails()->getOrt() ?></td>
+                <td><?= TurnierSnippets::blockColor($turnier, $teamEntity) ?></td>
+                <td><?= TurnierSnippets::phase($turnier) ?></td>
+                <td><?= $turnier->getAusrichter()->getName() ?></i></td>
+            </tr>
+            <tr>
+                <td colspan="4" style="white-space:normal;" class="w3-left-align">
+                    <?= implode("<br>", TurnierLinks::getLinksAnmeldeListe($turnier)) ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</div>
 
 <?php include '../../templates/footer.tmp.php';

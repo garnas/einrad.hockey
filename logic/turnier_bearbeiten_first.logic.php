@@ -18,8 +18,14 @@ if (Helper::$teamcenter && !TurnierService::isAusrichter($turnier, $teamId)){
     Helper::reload('/liga/turniere.php');
 }
 
+// Besteht die Berechtigung das Turnier zu bearbeiten?
+if (Helper::$teamcenter && $turnier->isCanceled()){
+    Html::error("Turnier wurde abgesagt.");
+    Helper::reload('/teamcenter/tc_turnierliste_verwalten.php');
+}
+
 // Turniere in der Vergangenheit können von Teams nicht mehr verändert werden
-if (Helper::$teamcenter && $turnier->getDatum()->getTimestamp() < time()){
+if (Helper::$teamcenter && $turnier->getDatum()->getTimestamp() < (time() - 2 * 24 * 60 * 60)){
     Html::error("Das Turnier liegt bereits in der Vergangenheit und kann nicht bearbeitet werden");
-    Helper::reload('/liga/turniere.php');
+    Helper::reload('/teamcenter/tc_turnierliste_verwalten.php');
 }

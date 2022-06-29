@@ -4,6 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Team\TeamSnippets;
+use App\Service\Turnier\TurnierLinks;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierSnippets;
 require_once '../../init.php';
@@ -145,7 +146,7 @@ include '../../templates/header.tmp.php';
 <p class="w3-text-grey w3-border-bottom w3-border-grey">Links</p>
 <p><?=Html::link('../liga/turniere.php#' . $turnier_id, '<i class="material-icons">event</i> Anstehende Turniere')?></p>
 <?php if($turnier->isSpielplanPhase()){?>
-    <p><?=Html::link($details['spielplan_link'], 'Zum Spielplan', true, "reorder")?></p>
+    <p><?=Html::link(TurnierLinks::spielplan($turnier), 'Zum Spielplan', true, "reorder")?></p>
 <?php }//end if?>
 
 <?php if (isset($_SESSION['logins']['team'])){?>
