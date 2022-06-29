@@ -11,11 +11,14 @@ require_once '../../init.php';
 
 $turniere = TurnierRepository::getKommendeTurniere();
 
+if ($turniere->isEmpty()) {
+    Html::info("Es stehen zurzeit keine Turniere aus.");
+}
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 Html::$titel = "Turnierliste | Deutsche Einradhockeyliga";
-//Html::$page_width = "800px";
 Html::$content = "Eine Liste aller ausstehenden Spaß-, Final- und Ligaturniere der Deutschen Einradhockeyliga.";
 include '../../templates/header.tmp.php';
 ?>
@@ -42,12 +45,6 @@ include '../../templates/header.tmp.php';
         <label for="myInput"><?= Html::icon("search") ?></label>
         <input id="myInput" class='w3-padding w3-border-0' style="width: 225px;" type="text" placeholder="Turnier suchen">
     </div>
-
-    <?php 
-    if (empty($turniere)):
-        Html::message('info', "Keine Turniere gefunden.", NULL);
-    endif; 
-    ?>
 
     <!-- zu durchsuchendes div -->
     <div id="myDIV">
