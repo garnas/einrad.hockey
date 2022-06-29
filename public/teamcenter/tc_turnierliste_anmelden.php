@@ -11,18 +11,15 @@ use App\Service\Turnier\TurnierLinks;
 require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth
 
-// Teamspezifisches
 $team_id = $_SESSION['logins']['team']['id'];
 
 $turniere = TurnierRepository::getKommendeTurniere();
 
 if ($turniere->isEmpty()) {
-  // Da keine Tunriere gefunden wurden, wird auf die TC-Startseite umgeleitet
   Html::notice(
-    'Bisher sind keine Turniere ausgeschrieben.',
+    'Zurzeit sind keine Turniere ausgeschrieben.',
     esc: false
   );
-  Helper::reload('/teamcenter/tc_start.php');
 }
 
 // Einfärben wenn schon angemeldet
