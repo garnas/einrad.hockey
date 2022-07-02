@@ -36,12 +36,14 @@ class TurnierLogService {
 
     public function autoLog(string $name, mixed $alt, mixed $neu): void
     {
-        if ($alt === false) {
-            $alt = "false";
+        if ($neu === false && $alt != $neu) {
+            $this->addLog($name . ": Nein");
+            return;
         }
 
-        if ($alt === true) {
-            $alt = "true";
+        if ($neu === true && $alt != $neu) {
+            $this->addLog($name . ": Ja");
+            return;
         }
 
         if ($alt instanceof DateTime) {

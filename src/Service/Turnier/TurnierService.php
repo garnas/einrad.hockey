@@ -132,7 +132,7 @@ class TurnierService
             ->setTurnier($turnier)
             ->setFreilosGesetzt('Nein');
          $turnier->getListe()->add($anmeldung);
-         $turnier->getLogService()->addLog("Auf Setzliste: " . $team->getName() . " " . BlockService::toString($team->getBlock()));
+         $turnier->getLogService()->addLog("Auf Setzliste: " . $team->getName() . " " . BlockService::toString($team));
     }
 
     public static function nlAnmelden(Turnier $turnier, nTeam $nlTeam, string $liste): void
@@ -165,7 +165,7 @@ class TurnierService
             "Auf Warteliste: "
             .  ($positionWarteliste ? $positionWarteliste . ". " : "")
             . $team->getName()
-            . " (" . $team->getBlock() . ")"
+            . " " . BlockService::toString($team)
         );
     }
 

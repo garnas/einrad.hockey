@@ -117,6 +117,10 @@ include '../../templates/header.tmp.php';
                     ? TurnierService::getLosDatum($turnier)
                     : '--' ?>
                 (Übergang von Wartephase zur Setzphase)
+                <?php if ($turnier->isSofortOeffnen() && $turnier->isWartePhase()): ?>
+                    <br>
+                    <span class="w3-text-grey">Das Turnier wird direkt nach dem Phasenwechsel auf ABCDEF geöffnet</span>
+                <?php endif; ?>
             </td>
         </tr>
         <tr>

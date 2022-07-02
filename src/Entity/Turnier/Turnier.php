@@ -7,10 +7,10 @@ use App\Entity\Team\nTeam;
 use App\Service\Turnier\TurnierLogService;
 use App\Service\Turnier\TurnierSnippets;
 use DateTime;
+use Discord;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Discord;
 
 /**
  * Turnier
@@ -22,22 +22,158 @@ use Discord;
 class Turnier
 {
 
+    private TurnierLogService $logService;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="turnier_id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private int $id;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="tname", type="string", length=255, nullable=true)
+     */
+    private ?string $name;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="art", type="string", length=0, nullable=true)
+     */
+    private ?string $art;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="tblock", type="string", length=255, nullable=true)
+     */
+    private ?string $block;
+    /**
+     * @var DateTime|null
+     *
+     * @ORM\Column(name="datum", type="date")
+     */
+    private ?DateTime $datum;
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="spieltag", type="integer", nullable=true)
+     */
+    private int|null $spieltag = 0;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="phase", type="string", nullable=true)
+     */
+    private ?string $phase;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="canceled_grund", type="string", nullable=true)
+     */
+    private ?string $canceledGrund;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="spielplan_datei", type="string", length=255, nullable=true)
+     */
+    private ?string $spielplanDatei;
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="saison", type="integer", nullable=true)
+     */
+    private ?int $saison;
+    /**
+     * @var SpielplanDetails
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Spielplan\SpielplanDetails")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="spielplan_vorlage", referencedColumnName="spielplan")
+     * })
+     */
+    private SpielplanDetails $spielplanVorlage;
+    /**
+     * @var nTeam
+     *
+     * @ORM\OneToOne(targetEntity="App\Entity\Team\nTeam")
+     * @ORM\JoinColumn(name="ausrichter", referencedColumnName="team_id")
+     */
+    private nTeam $ausrichter;
+    /**
+     * @var TurnierDetails
+     *
+     * @ORM\OneToOne(targetEntity="App\Entity\Turnier\TurnierDetails", inversedBy="turnier", cascade={"all"})
+     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
+     */
+    private TurnierDetails $details;
+    /**
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereLog", mappedBy="turnier", cascade={"all"})
+     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
+     */
+    private Collection $logs;
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(name="erstellt_am", type="datetime")
+     */
+    private DateTime $erstelltAm;
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurnierErgebnis", mappedBy="turnier", cascade={"all"},
+     *     orphanRemoval=true)
+     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
+     */
+    private Collection $ergebnis;
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereListe", mappedBy="turnier", cascade={"all"},
+     *      orphanRemoval=true, indexBy="team_id")
+     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
+     */
+    private Collection $liste;
+    /**
+     * @var bool
+     * @ORM\Column(name="canceled", type="boolean")
+     */
+    private bool $canceled;
+    /**
+     * @var bool
+     * @ORM\Column(name="sofort_oeffnen", type="boolean")
+     */
+    private bool $sofortOeffnen;
+
+    /**
+     * @return bool
+     */
+    public function isSofortOeffnen(): bool
+    {
+        return $this->sofortOeffnen;
+    }
+
+    /**
+     * @param bool $sofortOeffnen
+     * @return Turnier
+     */
+    public function setSofortOeffnen(bool $sofortOeffnen): Turnier
+    {
+        $this->logService->autoLog("Sofort öffnen nach dem Phasenwechsel",
+            $this->sofortOeffnen ?? false,
+            $sofortOeffnen);
+        $this->sofortOeffnen = $sofortOeffnen;
+        return $this;
+    }
+
+
     public function __construct()
     {
         $this->ergebnis = new ArrayCollection();
         $this->liste = new ArrayCollection();
         $this->logs = new ArrayCollection();
-        $this->logService = new TurnierLogService($this);
-    }
-
-    private TurnierLogService $logService;
-
-
-    /**
-     * @ORM\PostLoad()
-     */
-    public function setLogService(): void
-    {
         $this->logService = new TurnierLogService($this);
     }
 
@@ -47,9 +183,8 @@ class Turnier
     public function saveLogs(): void
     {
         $this->logService->addAllLogs();
-        Discord::send(TurnierSnippets::ortDatumBlock($this) . "\r\n" . $this->logService->getLogAsString());
+        Discord::send(TurnierSnippets::ortDatumBlock($this, false) . "\r\n" . $this->logService->getLogAsString());
     }
-
 
     /**
      * @return TurnierLogService
@@ -59,18 +194,25 @@ class Turnier
         return $this->logService;
     }
 
+    /**
+     * @ORM\PostLoad()
+     */
+    public function setLogService(): void
+    {
+        $this->logService = new TurnierLogService($this);
+    }
+
     public function isSetzPhase(): bool
     {
         return $this->phase === "setz";
     }
 
-
-    public function isSpielplanPhase()
+    public function isSpielplanPhase(): bool
     {
         return $this->phase === 'spielplan';
     }
 
-    public function isErgebnisPhase()
+    public function isErgebnisPhase(): bool
     {
         return $this->phase === 'ergebnis';
     }
@@ -90,67 +232,47 @@ class Turnier
         return $this->getDetails()->getBesprechung() === "Ja";
     }
 
-    public function isFinalTurnier(): bool{
+    /**
+     * @return TurnierDetails
+     */
+    public function getDetails(): TurnierDetails
+    {
+        return $this->details;
+    }
+
+    /**
+     * @param TurnierDetails $details
+     * @return Turnier
+     */
+    public function setDetails(TurnierDetails $details): Turnier
+    {
+        $this->details = $details;
+        return $this;
+    }
+
+    public function isFinalTurnier(): bool
+    {
         return $this->getArt() === 'final';
     }
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="turnier_id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @return string|null
      */
-    private int $id;
+    public function getArt(): ?string
+    {
+        return $this->art;
+    }
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="tname", type="string", length=255, nullable=true)
+     * @param string|null $art
+     * @return Turnier
      */
-    private ?string $name;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="art", type="string", length=0, nullable=true)
-     */
-    private ?string $art;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="tblock", type="string", length=255, nullable=true)
-     */
-    private ?string $block;
-
-    /**
-     * @var DateTime|null
-     *
-     * @ORM\Column(name="datum", type="date")
-     */
-    private ?DateTime $datum;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="spieltag", type="integer", nullable=true)
-     */
-    private int|null $spieltag = 0;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="phase", type="string", nullable=true)
-     */
-    private ?string $phase;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="canceled_grund", type="string", nullable=true)
-     */
-    private ?string $canceledGrund;
+    public function setArt(?string $art): Turnier
+    {
+        $this->logService->autoLog("Art", $this->art ?? '', $art);
+        $this->art = $art;
+        return $this;
+    }
 
     /**
      * @return string|null
@@ -171,60 +293,6 @@ class Turnier
     }
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="spielplan_datei", type="string", length=255, nullable=true)
-     */
-    private ?string $spielplanDatei;
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="saison", type="integer", nullable=true)
-     */
-    private ?int $saison;
-
-    /**
-     * @var SpielplanDetails
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Spielplan\SpielplanDetails")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="spielplan_vorlage", referencedColumnName="spielplan")
-     * })
-     */
-    private SpielplanDetails $spielplanVorlage;
-
-    /**
-     * @var nTeam
-     *
-     * @ORM\OneToOne(targetEntity="App\Entity\Team\nTeam")
-     * @ORM\JoinColumn(name="ausrichter", referencedColumnName="team_id")
-     */
-    private nTeam $ausrichter;
-
-    /**
-     * @var TurnierDetails
-     *
-     * @ORM\OneToOne(targetEntity="App\Entity\Turnier\TurnierDetails", inversedBy="turnier", cascade={"all"})
-     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
-     */
-    private TurnierDetails $details;
-
-    /**
-     * @var Collection
-     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereLog", mappedBy="turnier", cascade={"all"})
-     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
-     */
-    private Collection $logs;
-
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="erstellt_am", type="datetime")
-     */
-    private DateTime $erstelltAm;
-
-    /**
      * @return DateTime
      */
     public function getErstelltAm(): DateTime
@@ -241,30 +309,6 @@ class Turnier
         $this->erstelltAm = $erstelltAm;
         return $this;
     }
-
-    /**
-     * @var Collection
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurnierErgebnis", mappedBy="turnier", cascade={"all"},
-     *     orphanRemoval=true)
-     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
-     */
-    private Collection $ergebnis;
-
-    /**
-     * @var Collection
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereListe", mappedBy="turnier", cascade={"all"},
-     *      orphanRemoval=true, indexBy="team_id")
-     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
-     */
-    private Collection $liste;
-
-    /**
-     * @var bool
-     * @ORM\Column(name="canceled", type="boolean")
-     */
-    private bool $canceled;
 
     /**
      * @return bool
@@ -354,25 +398,6 @@ class Turnier
     {
         $this->logService->autoLog("Turniername", $this->name ?? '', $name);
         $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getArt(): ?string
-    {
-        return $this->art;
-    }
-
-    /**
-     * @param string|null $art
-     * @return Turnier
-     */
-    public function setArt(?string $art): Turnier
-    {
-        $this->logService->autoLog("Art", $this->art ?? '', $art);
-        $this->art = $art;
         return $this;
     }
 
@@ -526,24 +551,6 @@ class Turnier
         $ausrichterText = isset ($this->ausrichter) ? $this->ausrichter->getName() : null;
         $this->logService->autoLog("Ausrichter", $ausrichterText, $ausrichter->getName());
         $this->ausrichter = $ausrichter;
-        return $this;
-    }
-
-    /**
-     * @return TurnierDetails
-     */
-    public function getDetails(): TurnierDetails
-    {
-        return $this->details;
-    }
-
-    /**
-     * @param TurnierDetails $details
-     * @return Turnier
-     */
-    public function setDetails(TurnierDetails $details): Turnier
-    {
-        $this->details = $details;
         return $this;
     }
 

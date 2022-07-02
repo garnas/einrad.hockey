@@ -43,11 +43,18 @@ class TeamValidator
             ->andWhere('t.datum = :datum')
             ->andWhere("t.art = 'I' OR t.art = 'II'")
             ->andWhere("t.canceled = 0")
-            ->andWhere("l.liste = 'setzliste'")
-            ->andWhere('t.id != :turnierId')
+            ->andWhere("l.liste = 'setzliste'");
+
+        // Beim Erstellen ist TurnierId null bis es in die DB geschrieben wird.
+        if ($turnier->id() != null) {
+            $query->andWhere("t.id != :turnierId")
+                ->setParameter('turnierId', $turnier->id());
+        }
+
+        $query
             ->setParameter('team', $team)
-            ->setParameter('turnierId', $turnier->id())
             ->setParameter('datum', $turnier->getDatum());
+
         return count($query->getQuery()->getResult()) > 0;
     }
 
