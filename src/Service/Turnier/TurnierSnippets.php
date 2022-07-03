@@ -54,7 +54,9 @@ class TurnierSnippets {
 
     public static function blockColor(Turnier $turnier, nTeam $team): string
     {
-        if(TeamValidator::isValidRegularAnmeldung($team, $turnier, false)) {
+        if(
+            TeamValidator::isValidRegularAnmeldung($team, $turnier, false)
+        ) {
             return "<span class='w3-text-green'>" . $turnier->getBlock() . "</span>";
         }
         if (TeamValidator::isValidFreilos($team, $turnier, false)) {
@@ -89,12 +91,12 @@ class TurnierSnippets {
             . " von " . $turnier->getDetails()->getPlaetze();
     }
 
-    public static function ortDatumBlock(Turnier $turnier): string
+    public static function ortDatumBlock(Turnier $turnier, $html = true): string
     {
-        $block = BlockService::toString($turnier->getBlock());
+        $block = BlockService::toString(($html) ? $turnier : $turnier->getBlock());
         $datum = self::datum($turnier);
         $ort = $turnier->getDetails()->getOrt();
-        return e($ort . " am " . $datum . " " . $block);
+        return e($ort) . " am " . $datum . " " . $block;
     }
 
     public static function ortWochentagDatumBlock(Turnier $turnier): string
@@ -103,9 +105,9 @@ class TurnierSnippets {
         $date = Date::createFromTimestamp($turnier->getDatum()->getTimestamp());
         $datum = $date->format("D d.m.Y");
 
-        $block = BlockService::toString($turnier->getBlock());
-        $ort = $turnier->getDetails()->getOrt();
-        return e($ort . " am " . $datum . " " . $block);
+        $block = BlockService::toString($turnier);
+        $ort = e($turnier->getDetails()->getOrt());
+        return $ort . " am " . $datum . " " . $block;
     }
 
     public static function nameBrTitel(Turnier $turnier): string
@@ -166,7 +168,7 @@ class TurnierSnippets {
             $html .= '<i>';
             foreach ($setzliste as $anmeldung) {
                 $teamname = e($anmeldung->getTeam()->getName());
-                $block = BlockService::toString($anmeldung->getTeam()->getBlock());
+                $block = BlockService::toString($anmeldung->getTeam());
                 if ($anmeldung->getTeam()->id() === ($_SESSION['logins']['team']['id'] ?? 0)) {
                     $html .= "<span class='w3-text-green'><b>$teamname</b></span>";
                 } else {
@@ -188,7 +190,7 @@ class TurnierSnippets {
             foreach ($warteliste as $anmeldung) {
                 $warteplatz = ($turnier->isSetzPhase()) ? $anmeldung->getPositionWarteliste() . ". " : "";
                 $teamname = e($anmeldung->getTeam()->getName());
-                $block = BlockService::toString($anmeldung->getTeam()->getBlock());
+                $block = BlockService::toString($anmeldung->getTeam());
                 if ($anmeldung->getTeam()->id() === ($_SESSION['logins']['team']['id'] ?? 0)) {
                     $html .= "<span class='w3-text-yellow'><b>" . $warteplatz . " " . $teamname . "</b></span>";
                 } else {

@@ -73,7 +73,7 @@ include '../../templates/header.tmp.php';
                                 <span class="w3-text-primary">
                                     <?= e($turnier->getDetails()->getOrt()) ?>
                                 </span>
-                                <?= BlockService::toString($turnier->getBlock()) ?>
+                                <?= BlockService::toString($turnier) ?>
                             </h4>
                         <?php endif; ?>
                     </div>
@@ -114,7 +114,13 @@ include '../../templates/header.tmp.php';
                                 <?php if($turnier->isWartePhase() && $turnier->isLigaturnier()): ?>
                                     <tr style="white-space: nowrap;">
                                         <td class="w3-text-primary" style=""><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), '<i class="material-icons">event</i> Phasenwechsel') ?></td>
-                                        <td><?= TurnierService::getLosDatum($turnier)?> (Loszeitpunkt)</td>
+                                        <td>
+                                            <?= TurnierService::getLosDatum($turnier)?> (Loszeitpunkt)
+                                            <?php if ($turnier->isSofortOeffnen() && $turnier->isWartePhase()): ?>
+                                                <br>
+                                                <span class="w3-text-grey">Das Turnier wird direkt nach dem Phasenwechsel auf ABCDEF geöffnet</span>
+                                            <?php endif; ?>
+                                        </td>
                                     </tr>
                                 <?php endif; ?>
                                 <?php if($turnier->isLigaturnier()): ?>

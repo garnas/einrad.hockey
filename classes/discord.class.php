@@ -14,7 +14,7 @@ class Discord
                 "avatar_url" => "https://einrad.hockey/bilder/logo_kurz_small.png",
             ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         } catch (JsonException $exception) {
-            Helper::log("discord.log", $exception->getMessage() ."/r/n" . $exception->getTraceAsString());
+            Helper::log("discord.log", $exception->getMessage() . "/r/n" . $exception->getTraceAsString());
             return false;
         }
     }

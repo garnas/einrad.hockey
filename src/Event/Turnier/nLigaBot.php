@@ -25,6 +25,7 @@ class nLigaBot
     /**
      * @throws OptimisticLockException
      * @throws ORMException
+     * @throws MappingException
      */
     public static function ligaBot(): void
     {
@@ -174,11 +175,17 @@ class nLigaBot
                 // Losen setzt alle Teams in richtiger Reihenfolge auf die Warteliste.
                 self::losen($turnier);
 
+                if($turnier->isSofortOeffnen()) {
+                    TurnierService::blockOeffnen($turnier);
+                    TurnierService::setzListeAuffuellen($turnier, false);
+                }
+
                 // Info-Mails versenden.
                 TurnierEventMailBot::mailGelost($turnier);
                 if (TurnierService::hasFreieSetzPlaetze($turnier)) {
                     TurnierEventMailBot::mailPlaetzeFrei($turnier);
                 }
+
             }
             DoctrineWrapper::manager()->persist($turnier);
         }

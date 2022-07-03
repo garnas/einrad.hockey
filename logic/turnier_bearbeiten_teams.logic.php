@@ -48,6 +48,7 @@ if (isset($_POST['change_turnier'])) {
     $startzeit = DateTime::createFromFormat("H:i", $_POST['startzeit']);
     $plaetze = (int) $_POST['plaetze'];
     $tname = $_POST['tname'];
+    $sofortOeffnen = @($_POST['sofort_oeffnen'] === "Ja");
 
     // Leere Felder können eigentlich nicht auftreten (nur durch html-Manipulation), aber sicherheitshalber das hier...
     if (
@@ -63,7 +64,7 @@ if (isset($_POST['change_turnier'])) {
     } else {
         $besprechung = 'Nein';
     }
-    $turnier->setName($tname);
+    $turnier->setName($tname)->setSofortOeffnen($sofortOeffnen);
     $turnier->getDetails()->setStartzeit($startzeit)
         ->setBesprechung($besprechung)
         ->setPlaetze($plaetze)

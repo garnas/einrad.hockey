@@ -4,7 +4,7 @@ use App\Service\Turnier\TurnierSnippets;
 
 ?>
 <!-- Formular Turnier löschen -->
-<form method="post" onsubmit="return confirm('Das Turnier in <?= e(TurnierSnippets::ortDatumBlock($turnier)) ?> mit der ID <?= $turnier->id() ?> wird gelöscht werden.');">
+<form method="post" onsubmit="return confirm('Das Turnier in <?= TurnierSnippets::ortDatumBlock($turnier) ?> mit der ID <?= $turnier->id() ?> wird gelöscht werden.');">
     <div class="w3-panel w3-card-4">
         <h3>Turnier löschen <span class="w3-text-gray">- nur Ligaausschuss</span></h3>
         <p>

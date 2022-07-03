@@ -129,7 +129,13 @@ include '../../templates/header.tmp.php';
         </tr>
         <tr>
             <td class="w3-primary" style="vertical-align: middle">Turnierblock</td>
-            <td><?= $turnier->getBlock() ?></td>
+            <td>
+                <?= $turnier->getBlock() ?>
+                <?php if ($turnier->isSofortOeffnen() && $turnier->isWartePhase()): ?>
+                    <br>
+                    <span class="w3-text-grey">Das Turnier wird direkt nach dem Phasenwechsel auf ABCDEF geöffnet</span>
+                <?php endif; ?>
+            </td>
         </tr>
         <tr>
             <td class="w3-primary" style="vertical-align: middle">Plätze</td>

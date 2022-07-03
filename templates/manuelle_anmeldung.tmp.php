@@ -5,7 +5,7 @@ use App\Service\Turnier\TurnierSnippets;
 
 ?>
 <h1 class="w3-text-primary">Manuelle Teamanmeldung</h1>
-<h3 class="w3-text-grey">
+<h3>
     <?= TurnierSnippets::nameBrTitel($turnier) ?>
     <br>
     <span class="w3-text-secondary"><?= TurnierSnippets::translate($turnier->getPhase()) ?></span>
@@ -30,38 +30,6 @@ use App\Service\Turnier\TurnierSnippets;
 <!-- Anzeigen der angemeldeten Teams und gleichzeitig Abmeldeformular -->
 <div class="w3-panel w3-card-4">
     <?= TurnierSnippets::getListen($turnier) ?>
-</div>
-<div class="w3-panel w3-card-4">
-    <form method='post'>
-        <h3>Teams abmelden</h3>
-        <?php foreach ($turnier->getListe() as $anmeldung): ?>
-            <p>
-                <input type='checkbox'
-                       class='w3-check'
-                       id="<?= $anmeldung->getTeam()->id() ?>"
-                       name='team_abmelden[<?= $anmeldung->getTeam()->id() ?>]'
-                       value='<?= $anmeldung->getTeam()->id() ?>'
-                >
-                <label class="w3-hover-text-secondary w3-text-primary"
-                       for="<?= $anmeldung->getTeam()->id() ?>">
-                    <?= $anmeldung->getTeam()->getName() ?>
-                </label>
-            </p>
-        <?php endforeach; ?>
-        <button class="w3-button w3-secondary w3-block" type='submit' name='abmelden'>Ausgewählte Teams abmelden</button>
-    </form>
-
-    <!-- Spielen-Liste auffuellen und Warteliste aktualisieren -->
-    <?php if (Helper::$ligacenter): ?>
-        <form method='post'>
-            <p>
-                <input type='submit' class='w3-button w3-block w3-tertiary' name='warteliste_aktualisieren' value='Warteliste neu durchnummerieren'>
-            </p>
-            <p>
-                <input type='submit' class='w3-button w3-block w3-tertiary' name='setzliste_auffuellen' value='Warteliste -> Setzliste'>
-            </p>
-        </form>
-    <?php endif; ?>
 </div>
 
 <!-- An- und Abmeldung -->
@@ -98,12 +66,45 @@ use App\Service\Turnier\TurnierSnippets;
             <label for="nl_liste" class='w3-text-primary'>Liste wählen:</label>
             <select required class='w3-select w3-border w3-border-primary' name='nl_liste' id='nl_liste'>
                 <option selected disabled value=''>--</option>
-                <option value='setz'>Setzliste</option>
-                <option value='warte'><?= $turnier->isSetzPhase() ? "Ende der" : "" ?> Warteliste</option>
+                <option value='setzliste'>Setzliste</option>
+                <option value='warteliste'><?= $turnier->isSetzPhase() ? "Ende der" : "" ?> Warteliste</option>
             </select>
         </p>
         <p>
             <input type='submit' class='w3-button w3-margin-bottom w3-tertiary' name='nl_anmelden' value='Anmelden'>
         </p>
     </form>
+</div>
+
+<div class="w3-panel w3-card-4">
+    <form method='post'>
+        <h3>Teams abmelden</h3>
+        <?php foreach ($turnier->getListe() as $anmeldung): ?>
+            <p>
+                <input type='checkbox'
+                       class='w3-check'
+                       id="<?= $anmeldung->getTeam()->id() ?>"
+                       name='team_abmelden[<?= $anmeldung->getTeam()->id() ?>]'
+                       value='<?= $anmeldung->getTeam()->id() ?>'
+                >
+                <label class="w3-hover-text-secondary w3-text-primary"
+                       for="<?= $anmeldung->getTeam()->id() ?>">
+                    <?= $anmeldung->getTeam()->getName() ?>
+                </label>
+            </p>
+        <?php endforeach; ?>
+        <button class="w3-button w3-secondary w3-block" type='submit' name='abmelden'>Ausgewählte Teams abmelden</button>
+    </form>
+
+    <!-- Spielen-Liste auffuellen und Warteliste aktualisieren -->
+    <?php if (Helper::$ligacenter): ?>
+        <form method='post'>
+            <p>
+                <input type='submit' class='w3-button w3-block w3-tertiary' name='warteliste_aktualisieren' value='Warteliste neu durchnummerieren'>
+            </p>
+            <p>
+                <input type='submit' class='w3-button w3-block w3-tertiary' name='setzliste_auffuellen' value='Warteliste -> Setzliste'>
+            </p>
+        </form>
+    <?php endif; ?>
 </div>

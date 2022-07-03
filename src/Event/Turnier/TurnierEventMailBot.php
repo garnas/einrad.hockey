@@ -70,7 +70,7 @@ class TurnierEventMailBot
      */
     public static function mailWarteZuSetzliste(Turnier $turnier, nTeam $team): void
     {
-        $betreff = "Setzliste: " . TurnierSnippets::ortDatumBlock($turnier);
+        $betreff = "Setzliste: " . TurnierSnippets::ortDatumBlock($turnier, false);
         ob_start();
             include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
             include(Env::BASE_PATH . "/templates/mails/mail_warte_zu_spiele.tmp.php");
@@ -83,7 +83,7 @@ class TurnierEventMailBot
 
     public static function mailDoppelAnmeldung(Turnier $turnier, nTeam $team): void
     {
-        $betreff = "Abgemeldet: " . TurnierSnippets::ortDatumBlock($turnier);
+        $betreff = "Abgemeldet: " . TurnierSnippets::ortDatumBlock($turnier, false);
         ob_start();
         include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
         include(Env::BASE_PATH . "/templates/mails/mail_doppelt_anmeldung.tmp.php");
@@ -110,7 +110,7 @@ class TurnierEventMailBot
 
                 $betreff =  TurnierSnippets::translate($anmeldung->getListe())
                     . ": "
-                    . TurnierSnippets::ortDatumBlock($turnier);
+                    . TurnierSnippets::ortDatumBlock($turnier, false);
                 ob_start();
                     include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
                     include(Env::BASE_PATH . "/templates/mails/mail_gelost.tmp.php");
@@ -139,7 +139,7 @@ class TurnierEventMailBot
                     && TurnierService::isSpielBerechtigt($turnier, $team)
                     && TeamValidator::isAmKalenderTagAufSetzliste($turnier, $team)
                 ) {
-                    $betreff = "Freie Plätze: " . TurnierSnippets::ortDatumBlock($turnier);
+                    $betreff = "Freie Plätze: " . TurnierSnippets::ortDatumBlock($turnier, false);
                     ob_start();
                         include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
                         include(Env::BASE_PATH . "/templates/mails/mail_plaetze_frei.tmp.php");

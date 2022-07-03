@@ -22,8 +22,8 @@ use App\Service\Turnier\BlockService;
             <i class="w3-text-grey">Ligaturniere müssen zwischen 9:00&nbsp;Uhr und 20:00&nbsp;Uhr stattfinden</i>
         </p>
         <p>
-        <input class="w3-check" type="checkbox" id="besprechung" name="besprechung" <?php if(($_POST['besprechung'] ?? '') == "Ja"){?> checked <?php }//endif?> value="Ja">
-        <label for="besprechung" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer"> Gemeinsame Besprechung aller Teams 15 min vor Turnierbeginn</label>
+            <input class="w3-check" type="checkbox" id="besprechung" name="besprechung" <?php if(($_POST['besprechung'] ?? '') == "Ja"){?> checked <?php }//endif?> value="Ja">
+            <label for="besprechung" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer"> Gemeinsame Besprechung aller Teams 15 min vor Turnierbeginn</label>
         </p>
     </div>
 
@@ -41,7 +41,12 @@ use App\Service\Turnier\BlockService;
                     <option <?php if (($_POST['art'] ?? '') == 'fixed'){?> selected <?php } ?> value='fixed'>Fixierter Turnierblock (<?=implode(", ", Config::BLOCK)?>)</option>
                 <?php } //endif?>
             </select>
-            <span class="w3-text-grey">Bitte vermerkt in den Hinweisen, wenn ihr das Turnier direkt beim Übergang in die Setzphase auf ABCDEF öffnen wollt.</span>
+        </p>
+        <p>
+            <input class="w3-check" type="checkbox" id="sofort_oeffnen" name="sofort_oeffnen" <?php if(($_POST['sofort_oeffnen'] ?? '') == "Ja"){?> checked <?php }//endif?> value="Ja">
+            <label for="sofort_oeffnen" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer"> Das Turnier soll beim Übergang von Wartephase auf Setzphase sofort auf ABCDEF geöffnet werden.</label>
+            <br>
+            <span class="w3-text-grey">Entspricht dem früheren blockfreien Turnier und wird auf der Webseite auch so angezeigt.</span>
         </p>
         <div id="block_higher_div" style="display: none">
             <p><label class="w3-text-primary" for="block">Höheren Turnierblock wählen</label>

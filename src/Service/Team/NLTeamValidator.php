@@ -26,7 +26,7 @@ class NLTeamValidator
             Html::notice("Falsche Liste fürs NL-Team");
             return false;
         }
-        if (Helper::$teamcenter && NLTeamService::countNLTeams($turnier) > 2) {
+        if (Helper::$teamcenter && NLTeamService::countNLTeams($turnier) >= 2) {
             Html::notice("Bitte wende dich an den Ligaausschuss, um ein drittes Nichtligateam anzumelden.");
             return false;
         }

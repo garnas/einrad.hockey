@@ -34,17 +34,32 @@ class BlockService
         return $rangTurnierBock < $rangTeamBlock;
     }
 
-    public static function toString(mixed $block): string
+    public static function toString(mixed $blockContext): string
     {
-        if (is_string($block)) {
-            return "(" . $block . ")";
+        if (is_a($blockContext, Turnier::class)) {
+            if ($blockContext->isSofortOeffnen() && $blockContext->isWartePhase()) {
+                $blockToHighlight = $blockContext->getBlock();
+                $string = str_replace(
+                    $blockToHighlight,
+                    "<span class='w3-text-black'>$blockToHighlight</span>",
+                    Config::BLOCK_ALL[0]);
+                return "(<span class='w3-text-grey'>" . $string . "</span>)";
+            }
+            return "(" . $blockContext->getBlock() . ")";
         }
-        if (is_array($block)) {
-            return "(" . implode(",", $block) . ")";
+
+        if (is_a($blockContext, nTeam::class)){
+            return $blockContext->isLigaTeam() ? "(" . $blockContext->getBlock() . ")" : "";
         }
-        if (is_null($block)) {
-            return ""; // Darstellung NL-Team...
+
+        if (is_string($blockContext)) {
+            return "(" . $blockContext . ")";
         }
+
+        if (is_array($blockContext)) {
+            return "(" . implode(",", $blockContext) . ")";
+        }
+
         return "";
     }
 
