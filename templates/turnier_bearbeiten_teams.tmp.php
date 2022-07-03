@@ -44,7 +44,7 @@ use App\Service\Turnier\TurnierValidatorService;
             <h3>Block</h3>
             <p>
                 <input class="w3-check" type="checkbox" id="sofort_oeffnen" name="sofort_oeffnen" <?= $turnier->isSofortOeffnen() ? "checked" : "" ?> value="Ja">
-                <label for="sofort_oeffnen" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer"> Das Turnier soll beim Übergang von Wartephase auf Setzphase sofort auf ABCDEF geöffnet werden.</label>
+                <label for="sofort_oeffnen" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer">Das Turnier soll beim Übergang von Wartephase auf Setzphase sofort auf ABCDEF geöffnet werden.</label>
                 <br>
                 <span class="w3-text-grey">Entspricht dem früheren blockfreien Turnier und wird auf der Webseite auch so angezeigt.</span>
             </p>
