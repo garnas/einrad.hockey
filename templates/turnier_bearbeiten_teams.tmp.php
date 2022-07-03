@@ -40,6 +40,15 @@ use App\Service\Turnier\TurnierValidatorService;
 </form>
 <form method="post">
     <div class="w3-panel w3-card-4">
+        <?php if($turnier->isWartePhase()): ?>
+            <h3>Block</h3>
+            <p>
+                <input class="w3-check" type="checkbox" id="sofort_oeffnen" name="sofort_oeffnen" <?= $turnier->isSofortOeffnen() ? "checked" : "" ?> value="Ja">
+                <label for="sofort_oeffnen" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer"> Das Turnier soll beim Übergang von Wartephase auf Setzphase sofort auf ABCDEF geöffnet werden.</label>
+                <br>
+                <span class="w3-text-grey">Entspricht dem früheren blockfreien Turnier und wird auf der Webseite auch so angezeigt.</span>
+            </p>
+        <?php endif; ?>
         <h3>Startzeit</h3>
         <p>
             <label class="w3-text-primary" for="startzeit">Startzeit</label>
@@ -73,15 +82,6 @@ use App\Service\Turnier\TurnierValidatorService;
                 <?php endif; ?>
             </select>
         </p>
-        <?php if($turnier->isWartePhase()): ?>
-            <h3>Block</h3>
-            <p>
-                <input class="w3-check" type="checkbox" id="sofort_oeffnen" name="sofort_oeffnen" <?= $turnier->isSofortOeffnen() ? "checked" : "" ?> value="Ja">
-                <label for="sofort_oeffnen" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer"> Das Turnier soll beim Übergang von Wartephase auf Setzphase sofort auf ABCDEF geöffnet werden.</label>
-                <br>
-                <span class="w3-text-grey">Entspricht dem früheren blockfreien Turnier und wird auf der Webseite auch so angezeigt.</span>
-            </p>
-        <?php endif; ?>
     </div>
     <div class="w3-panel w3-card-4">
             <h3>Adresse</h3>
