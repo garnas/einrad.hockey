@@ -246,7 +246,7 @@ class nTurnier
      */
     public function get_format(): string
     {
-        return $this->format;
+        return $this->format ?? "jgj";
     }
 
     /**
