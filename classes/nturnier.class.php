@@ -599,7 +599,7 @@ class nTurnier
     {
         $sql = "
                 SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam,
-                    teams_details.ligavertreter, teams_details.trikot_farbe_1, teams_details.trikot_farbe_2, turniere_liste.angemeldet_am
+                    teams_details.ligavertreter, teams_details.trikot_farbe_1, teams_details.trikot_farbe_2, turniere_liste.freilos_gesetzt
                 FROM turniere_liste
                 LEFT JOIN teams_liga
                 ON turniere_liste.team_id = teams_liga.team_id
@@ -1429,7 +1429,7 @@ class nTurnier
 
         // Auf die Spielenliste setzen
         $sql = "
-                INSERT INTO turniere_liste (turnier_id, team_id, liste, angemeldet_am) 
+                INSERT INTO turniere_liste (turnier_id, team_id, liste, freilos_gesetzt) 
                 VALUES (?, ?, 'spiele', 'Ja')
                 ";
         db::$db->query($sql, $this->turnier_id, $team_id)->log();
