@@ -71,7 +71,7 @@ include '../../templates/header.tmp.php'; ?>
                 <input type='submit' class='w3-button w3-margin-bottom w3-tertiary' name='nl_anmelden' value='Anmelden'>
             </p>
             <p class="w3-text-grey">
-                Hinweis: Eine Abmeldung von Ligateams ist nur über den Ligaausschuss mit Einverständnis des Nichtligateams möglich.
+                Hinweis: Eine Abmeldung von Nichtligateams ist nur über den Ligaausschuss mit Einverständnis des Nichtligateams möglich.
             </p>
         </form>
     </div>
