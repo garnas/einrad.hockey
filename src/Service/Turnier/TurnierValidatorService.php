@@ -132,8 +132,8 @@ class TurnierValidatorService
 
         if (
             Helper::$teamcenter
+            && $plaetze <= 8
             && $plaetze >= 5
-            && $plaetze <= 5
         ) {
             return true;
         }
