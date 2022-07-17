@@ -29,7 +29,7 @@ class TurnierEventMailBot
 
             foreach ($teams as $team) {
                 if (
-                    TurnierService::isSpielBerechtigt($turnier, $team)
+                    TurnierService::isSetzBerechtigt($turnier, $team)
                     && !TeamValidator::isAmKalenderTagAufSetzliste($turnier, $team)
                 ) {
                     $betreff = "Neues " . $turnier->getBlock() . "-Turnier in " . $turnier->getDetails()->getOrt();
@@ -136,7 +136,7 @@ class TurnierEventMailBot
                 // Noch Plätze frei
                 if (
                     !TeamService::isAngemeldet($team, $turnier)
-                    && TurnierService::isSpielBerechtigt($turnier, $team)
+                    && TurnierService::isSetzBerechtigt($turnier, $team)
                     && TeamValidator::isAmKalenderTagAufSetzliste($turnier, $team)
                 ) {
                     $betreff = "Freie Plätze: " . TurnierSnippets::ortDatumBlock($turnier, false);

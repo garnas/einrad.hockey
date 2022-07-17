@@ -95,10 +95,6 @@ class TeamValidator
             $error[] = "Das Team " . $team->getName() . " ist bereits auf der Warteliste angemeldet.";
             $valid = false;
         }
-        if (!TurnierService::isSpielBerechtigt($turnier, $team)) {
-            $error[] = "Der Teamblock " . $team->getBlock() . " passt nicht zum Turnierblock." . $turnier->getBlock();
-            $valid = false;
-        }
         if ($showError && isset($error)) {
             Html::error(implode("<br>", $error));
         }
@@ -143,7 +139,7 @@ class TeamValidator
             $valid = false;
         }
 
-        if ($turnier->isSetzPhase() && TurnierService::isSpielBerechtigt($turnier, $team)){
+        if ($turnier->isSetzPhase() && TurnierService::isSetzBerechtigt($turnier, $team)){
             $error[] = "Dein Team würde auch ohne Freilos auf die Setzliste kommen.";
             $valid = false;
         }

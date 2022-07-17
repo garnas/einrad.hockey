@@ -57,7 +57,6 @@ if (isset($_POST['anmelden'])){
 if (isset($_POST['freilos'])){
     if (TeamValidator::isValidFreilos($teamEntity, $turnier)) {
         TeamService::freilos($teamEntity, $turnier);
-        TurnierRepository::get()->speichern($turnier);
         TeamRepository::get()->speichern($teamEntity);
         Html::info ("Dein Team wurde zum Turnier via Freilos angemeldet.");
         Helper::reload("/teamcenter/tc_team_anmelden.php", "?turnier_id=" . $turnier->id());

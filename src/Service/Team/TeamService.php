@@ -7,14 +7,12 @@ use App\Entity\Team\nTeam;
 use App\Entity\Team\Spieler;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
-use App\Repository\DoctrineWrapper;
 use App\Service\Turnier\BlockService;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierSnippets;
 use Config;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Query\AST\Functions\DateAddFunction;
 
 class TeamService
 {
@@ -67,13 +65,13 @@ class TeamService
     public static function anmelden(nTeam $team, Turnier $turnier): void
     {
         if (
-            !TurnierService::hasFreieSetzPlaetze($turnier)
-            || $turnier->isWartePhase()
+            $turnier->isSetzPhase()
+            && TurnierService::isSetzBerechtigt($turnier, $team)
+            && TurnierService::hasFreieSetzPlaetze($turnier)
         ) {
-            TurnierService::addToWarteListe($turnier, $team);
-        }
-        if ($turnier->isSetzPhase()) {
             TurnierService::addToSetzListe($turnier, $team);
+        } else {
+            TurnierService::addToWarteListe($turnier, $team);
         }
     }
 

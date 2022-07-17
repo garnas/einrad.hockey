@@ -263,7 +263,7 @@ class nLigaBot
                 TurnierEventMailBot::mailDoppelAnmeldung($turnier, $team);
             } else if (
                 TurnierService::hasFreieSetzPlaetze($turnier)
-                && TurnierService::isSpielBerechtigt($turnier, $team)
+                && TurnierService::isSetzBerechtigt($turnier, $team)
             ) {
                 $anmeldung->setListe('setzliste');
                 $turnier->getLogService()->addLog("Gesetzt: $name $blockString");

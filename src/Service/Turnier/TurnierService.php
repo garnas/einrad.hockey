@@ -99,7 +99,7 @@ class TurnierService
         return Date::createFromTimestamp($unixTime)->format("l, d.m.Y - H:i") . " Uhr";
     }
 
-    public static function isSpielBerechtigt(Turnier $turnier, nTeam $team): bool
+    public static function isSetzBerechtigt(Turnier $turnier, nTeam $team): bool
     {
         // NL Team geht immer
         if (!$team->isLigaTeam()) {
@@ -117,7 +117,7 @@ class TurnierService
      */
     public static function isSpielBerechtigtFreilos(Turnier $turnier, nTeam $team): bool
     {
-        if (self::isSpielBerechtigt($turnier, $team)) {
+        if (self::isSetzBerechtigt($turnier, $team)) {
             return true;
         }
 
@@ -266,7 +266,7 @@ class TurnierService
             foreach ($liste as $anmeldung) {
                 if ($freie_plaetze > 0) {
                     $team = $anmeldung->getTeam();
-                    if (self::isSpielBerechtigt($turnier, $team)) {
+                    if (self::isSetzBerechtigt($turnier, $team)) {
                         TeamService::abmelden($team, $turnier);
                         self::addToSetzListe($turnier, $team);
                         if ($send_mail) {
