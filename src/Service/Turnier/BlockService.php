@@ -41,9 +41,9 @@ class BlockService
                 $blockToHighlight = $blockContext->getBlock();
                 $string = str_replace(
                     $blockToHighlight,
-                    "<span class='w3-text-black'>$blockToHighlight</span>",
+                    "<span class='w3-text-black' style='font-style: normal'>$blockToHighlight</span>",
                     Config::BLOCK_ALL[0]);
-                return "(<span class='w3-text-grey'>" . $string . "</span>)";
+                return "(<span class='w3-text-gray' style='font-style: italic'>" . $string . "</span>)";
             }
             return "(" . $blockContext->getBlock() . ")";
         }
