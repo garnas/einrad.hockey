@@ -1,6 +1,7 @@
 <?php
 
 use App\Entity\Turnier\TurnierDetails;
+use App\Event\Turnier\nLigaBot;
 use App\Event\Turnier\TurnierEventMailBot;
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Turnier\BlockService;
@@ -27,7 +28,7 @@ if (isset($_POST['create_turnier'])) {
     $organisator = (string)$_POST['organisator'];
     $handy = (string)$_POST['handy'];
     $art = (string)$_POST['art'];
-    $block = (string) ($_POST['block'] ?? $ausrichter_block);
+    $block = ($art === 'I') ? $ausrichter_block : $_POST['block'];
     $startzeit = DateTime::createFromFormat("H:i", ((string)($_POST['startzeit'] ?? '')));
     $plaetze = (string)($_POST['plaetze'] ?? '');
     $sofotOeffnen = @($_POST['sofort_oeffnen'] === "Ja");
@@ -78,6 +79,8 @@ if (isset($_POST['create_turnier'])) {
                 TurnierService::addToSetzListe($turnier, $ausrichter);
 
                 TurnierRepository::get()->speichern($turnier);
+                nLigaBot::setSpieltage();
+
                 if (Helper::$teamcenter) {
                     TurnierEventMailBot::mailNeuesTurnier($turnier);
                 }
