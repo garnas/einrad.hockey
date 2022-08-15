@@ -15,10 +15,16 @@ include '../../templates/header.tmp.php';
 <div class="w3-panel w3-card">
     <h2 class="w3-text-primary">Modus</h2>
     <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
+    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS_KURZ ?>">
+        <p>
+            <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file</i>
+            Zusammenfassung Ligamodus
+        </p>
+    </a>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS ?>">
         <p>
             <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i>
-            Ligamodus (Änderungen noch bis Saisonstart wahrscheinlich, insbesondere bei den Finalturnieren)
+            Ligamodus
         </p>
     </a>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_TURNIER ?>">
@@ -27,68 +33,37 @@ include '../../templates/header.tmp.php';
             Turniermodi
         </p>
     </a>
-    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS_KURZ ?>">
+    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_SCHIRIWESEN ?>">
         <p>
-            <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file</i>
-            Zusammenfassung Ligamodus - nicht aktuell
+            <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i>
+            Schiedsrichterwesen
         </p>
     </a>
+    <p>Hinweis: Die Finalturniermodi werden überarbeitet und zu einem unbekannten späteren Zeitpunkt veröffentlicht.</p>
     <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">28.06.2022</p>
 </div>
 <div class="w3-panel w3-card">
-    <h2 class="w3-text-primary">Finale der Deutschen Einradhockeyliga</h2>
+    <h2 class="w3-text-primary">Spielregeln</h2>
     <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
-    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_FINALE ?>">
-        <p>
-            <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
-            </i>
-            Turniermodus des Finales der Deutschen Einradhockeyliga - nicht aktuell
-        </p>
-    </a>
-    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_FINALE_MODI ?>">
-        <p>
-            <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
-            </i>
-            Spielpläne Finalmodi - nicht aktuell
-        </p>
-    </a>
-    <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">08.07.2021</p>
-</div>
-<div class="w3-panel w3-card">
-    <h2 class="w3-text-primary">Regeln</h2>
-    <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
-    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_REGELN ?>">
-        <p>
-            <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
-            </i>
-            Regelwerk
-        </p>
-    </a>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_REGELN_KURZ ?>">
         <p>
             <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file
             </i>
-            Zusammenfassung Regelwerk
+            Die zehn wichtigsten Regeln
         </p>
     </a>
-    <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">14.08.2020</p>
-</div>
-<div class="w3-panel w3-card">
-    <h2 class="w3-text-primary">Englisch</h2>
-    <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
+    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_REGELN ?>">
+        <p>
+            <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
+            </i>
+            Offizielles Regelwerk der Deutschen Einradhockeyliga
+        </p>
+    </a>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_REGELN_IUF ?>">
         <p>
             <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
             </i>
-            IUF-Rules (only
-            international competitions)
-        </p>
-    </a>
-    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS_KURZ_ENG ?>">
-        <p>
-            <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file
-            </i>
-            Summary League Mode
+            IUF-Rules (only international competitions)
         </p>
     </a>
     <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">14.08.2020</p>
@@ -108,13 +83,6 @@ include '../../templates/header.tmp.php';
             <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
             </i>
             Checkliste für Ausrichter (xlsx)
-        </p>
-    </a>
-    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_HYGIENE ?>">
-        <p>
-            <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
-            </i>
-            Empfohlenes Hygienekonzept
         </p>
     </a>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_DSGVO ?>">
