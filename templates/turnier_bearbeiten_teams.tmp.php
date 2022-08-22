@@ -82,6 +82,11 @@ use App\Service\Turnier\TurnierValidatorService;
                 <?php endif; ?>
             </select>
         </p>
+        <p class="w3-text-grey">
+            <b>Hinweis:</b> Die mit der Anzahl der Plätze verknüpften Turniermodi können in der Setzphase
+            nur noch mit Zustimmung des Ligaausschusses geändert werden. In der Setzphase ein 7er- auf ein 8er-Turnier oder
+            5er- auf ein 6er-Turnier zu erweitern, ist also in der Setzphase nicht mehr ohne weiteres möglich.
+        </p>
     </div>
     <div class="w3-panel w3-card-4">
             <h3>Adresse</h3>

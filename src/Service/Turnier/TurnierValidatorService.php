@@ -8,7 +8,6 @@ use Config;
 use Feiertage;
 use Helper;
 use Html;
-use db;
 
 class TurnierValidatorService
 {
@@ -49,7 +48,24 @@ class TurnierValidatorService
             && $validator->hasValidArt()
             && $validator->hasValidAusrichter()
             && $validator->hasValidPhase()
-            && $validator->hasValidUhrzeit();
+            && $validator->hasValidUhrzeit()
+            && $validator->hasValidPlaetze();
+    }
+
+
+    public static function mayChangePlaetze(Turnier $turnier, int $plaetze_before): bool
+    {
+        if (Helper::$ligacenter) {
+            return true;
+        }
+        if ($turnier->getDetails()->getPlaetze() === $plaetze_before) {
+            return true;
+        }
+        if ($turnier->isWartePhase()) {
+            return true;
+        }
+        Html::error("Die mit der Anzahl der Plätze verknüpften Turniermodi können in der Setzphase nur noch mit Zustimmung des Ligaausschusses geändert werden");
+        return false;
     }
 
     public function mayChange(): bool

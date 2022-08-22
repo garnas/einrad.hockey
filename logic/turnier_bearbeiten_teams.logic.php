@@ -64,6 +64,7 @@ if (isset($_POST['change_turnier'])) {
     } else {
         $besprechung = 'Nein';
     }
+    $plaetze_before = $turnier->getDetails()->getPlaetze();
     $turnier->setName($tname)->setSofortOeffnen($sofortOeffnen);
     $turnier->getDetails()->setStartzeit($startzeit)
         ->setBesprechung($besprechung)
@@ -79,7 +80,10 @@ if (isset($_POST['change_turnier'])) {
         ->setHinweis($hinweis)
         ;
 
-    if (TurnierValidatorService::onChange($turnier)) {
+    if (
+        TurnierValidatorService::onChange($turnier)
+        && TurnierValidatorService::mayChangePlaetze($turnier, $plaetze_before)
+    ) {
         TurnierRepository::get()->speichern($turnier);
         Html::info("Turnierdaten wurden geändert");
         Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
