@@ -138,7 +138,7 @@ include '../../templates/header.tmp.php';
                        value='Anmelden <?php if (!BlockService::isBlockPassend($turnier, $teamEntity) && $turnier->isSetzPhase()): ?> (Warteliste)<?php endif; ?>'>
             </p>
         </form>
-        <form method="post" onsubmit="return confirm('Freilose setzen dein Team direkt auf die Spielen-Liste. Beim Übergang in die Meldephase wirst du auf die Warteliste gesetzt, wenn dein Teamblock höher ist als der Turnierblock. Das Freilos wird euch dann erstattet.');">
+        <form method="post"">
             <p>
                 <input type='submit'
                     class='w3-button w3-margin-bottom w3-block w3-tertiary
@@ -148,12 +148,13 @@ include '../../templates/header.tmp.php';
                              ): ?> w3-opacity<?php endif; ?>'
                     name='freilos' value='Freilos setzen (<?=$teamEntity->getFreilose()?> vorhanden)'>
             </p>
+            <span class="w3-text-grey">Freilose setzen dein Team in der Wartephase direkt auf die Setzliste. Ein Team kann auch für blockhöhere Turnieren ein Freilos einsetzen, nicht jedoch für blockniedrigere Turniere.</span>
         </form>
     <?php } //endif?>
         <form method="post" onsubmit="return confirm('Dein Team wird vom Turnier abgemeldet werden.');">
             <p><input type='submit' class='<?php if (!TeamService::isAngemeldet($teamEntity, $turnier)): ?>w3-opacity<?php endif;?> w3-button w3-margin-bottom w3-block w3-tertiary w3-right' name='abmelden' value='Abmelden'></p>
             <?php if($turnier->isLigaturnier()): ?>
-                <p class="w3-text-grey">Abmeldung von der Spielen-Liste ist möglich bis <?= TurnierService::getAbmeldeFrist($turnier) ?></p>
+                <p class="w3-text-grey">Abmeldung von der Setzliste ist möglich bis <?= TurnierService::getAbmeldeFrist($turnier) ?></p>
             <?php endif; ?>
         </form>
     </div>
