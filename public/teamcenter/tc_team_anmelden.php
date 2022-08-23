@@ -47,7 +47,7 @@ if (isset($_POST['anmelden'])){
         TeamService::anmelden($teamEntity, $turnier);
         TurnierRepository::get()->speichern($turnier);
         Html::info("Dein Team wurde zum Turnier angemeldet.");
-        Helper::reload('./teamcenter/tc_team_anmelden.php', '?turnier_id=' . $turnier->id());
+        Helper::reload('/teamcenter/tc_team_anmelden.php', '?turnier_id=' . $turnier->id());
     } else {
         Html::error("Dein Team wurde nicht angemeldet.");
     }
