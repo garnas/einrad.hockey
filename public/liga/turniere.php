@@ -79,7 +79,13 @@ include '../../templates/header.tmp.php';
                     </div>
                     <div style="font-size: 13px;" class="w3-text-grey">
                         <i class='w3-display-topleft w3-padding'><?= TurnierSnippets::status($turnier) ?></i>
-                        <i class='w3-display-bottomleft w3-padding'><?= TurnierSnippets::phase($turnier) ?></i>
+                        <?php if ($turnier->isSpielplanPhase()): ?>
+                            <i class='w3-display-bottomleft w3-padding'>
+                                <?= Html::link("spielplan.php?turnier_id=" . $turnier->id(), "Spielplan") ?>
+                            </i>
+                        <?php else: ?>
+                            <i class='w3-display-bottomleft w3-padding'><?= TurnierSnippets::phase($turnier) ?></i>
+                        <?php endif; ?>
                         <i class='w3-display-topright w3-padding'>
                             <?= TurnierSnippets::plaetze($turnier) ?>
                         </i>
