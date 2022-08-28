@@ -1,7 +1,5 @@
 <h3 class="w3-text-secondary w3-margin-top">Tore eintragen</h3>
-<?= Spielplan_Final::disclaimer_tore_eintragen() ?>
-
-<form method="post" <?php if($turnier_id == Spielplan_Final::FINAL_B_ID): ?> onsubmit="return confirm('Die Seite wurde aktualisiert, so dass die Ergebnisses vom anderen Spielfeld nicht überschrieben wurden.') <?php endif; ?>">
+<form method="post">
     <!-- Tore zwischenspeichern -->
     <p>
         <button type="submit"
@@ -159,8 +157,6 @@
         </button>
     </p>
 </form>
-
-<?= Spielplan_Final::disclaimer_final_spiele() ?>
 
 <script>
     document.addEventListener("wheel", function (event) {
