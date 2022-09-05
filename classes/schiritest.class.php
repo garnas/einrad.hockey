@@ -36,7 +36,7 @@ class SchiriTest
             'name'        => 'Basis',
             'anzahl'      => self::anzahl_B,
             'timelimit'   => 30,  # in Minuten
-            'richtig_min' => 17), # Minimum zum Bestehen
+            'richtig_min' => 15), # Minimum zum Bestehen
         'F'=>array(
             'name'        => 'Fortgeschrittene',
             'anzahl'      => self::anzahl_F,
