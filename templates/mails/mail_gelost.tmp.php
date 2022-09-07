@@ -5,7 +5,7 @@ use App\Service\Turnier\TurnierSnippets;
 ?>
 <p>Hallo <?= $anmeldung->getTeam()->getName() ?>,</p>
 <p>
-    das <?= TurnierSnippets::ortDatumBlock($turnier) ?> ist in die Setzphase übergegangen und
+    das Turnier in <?= TurnierSnippets::ortDatumBlock($turnier) ?> ist in die Setzphase übergegangen und
     die freien Plätze wurden vergeben. Euer Team steht nun auf der <?= TurnierSnippets::translate($anmeldung->getListe()) ?>
 </p>
 <?php if ($anmeldung->isWarteliste()) {?>
