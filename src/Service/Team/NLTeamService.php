@@ -8,6 +8,7 @@ use App\Entity\Turnier\TurniereListe;
 use App\Repository\DoctrineWrapper;
 use App\Repository\Team\TeamRepository;
 use App\Service\Turnier\TurnierService;
+use App\Service\Turnier\TurnierValidatorService;
 
 class NLTeamService
 {
@@ -37,7 +38,10 @@ class NLTeamService
             }
             return ['warteliste', 'setzliste'];
         }
-        return ['setzliste'];
+        if (TurnierService::hasFreieSetzPlaetze($turnier)) {
+            return ['setzliste'];
+        }
+        return ['warteliste'];
     }
 
     public static function countNLTeams(Turnier $turnier): int

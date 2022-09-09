@@ -48,10 +48,7 @@ if (isset($_POST['team_anmelden'])){
     if (!$team) {
         Html::error("Team wurde nicht gefunden");
         $error = true;
-    }
-
-    // Ist das Team bereits angemeldet?
-    if (TeamService::isAngemeldet($team, $turnier)){
+    } elseif (TeamService::isAngemeldet($team, $turnier)){
         $error = true;
         Html::error("Team ist bereits angemeldet");
     }
