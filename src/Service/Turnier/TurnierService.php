@@ -60,8 +60,13 @@ class TurnierService
     {
         $criteria = Criteria::create()
             ->andWhere((Criteria::expr())->eq('liste', 'warteliste'));
-
-        return $turnier->getListe()->matching($criteria);
+        $sort = static function(TurniereListe $eintrag, TurniereListe $vergleich) {
+            return $eintrag->getPositionWarteliste() <=> $vergleich->getPositionWarteliste();
+        };
+        $liste = $turnier->getListe()->matching($criteria);
+        $listeAsArray = $liste->toArray();
+        uasort($listeAsArray, $sort);
+        return $listeAsArray;
     }
 
     public static function getTurnierEintrageFristUnix(Turnier $turnier): int
