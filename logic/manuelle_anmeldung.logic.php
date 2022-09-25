@@ -28,15 +28,11 @@ if (isset($_POST['abmelden'])){
         $team = $anmeldung->getTeam();
         if (isset($_POST['team_abmelden'][$team->id()])) {
             TeamService::abmelden($team, $turnier);
-            if ($turnier->isSetzPhase()) {
-                TurnierService::setzListeAuffuellen($turnier);
-            }
-            TurnierRepository::get()->speichern($turnier);
             Html::info ($team->getName(). " wurde abgemeldet");
-            Helper::reload(get: '?turnier_id='. $turnier->id());
         }
     }
-    Html::error("Es wurde kein Team abgemeldet.");
+    TurnierRepository::get()->speichern($turnier);
+    Helper::reload(get: '?turnier_id='. $turnier->id());
 }
 
 // Ligateam als Ligaausschuss anmelden

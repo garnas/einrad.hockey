@@ -33,7 +33,7 @@ class NLTeamService
     public static function getPossibleAnmeldungListe(Turnier $turnier): array
     {
         if($turnier->isWartePhase()) {
-            if (self::hasNLTeamAufSetzliste($turnier)) {
+            if (self::hasNLTeamAufSetzliste($turnier) || !TurnierService::hasFreieSetzPlaetze($turnier)) {
                 return ['warteliste'];
             }
             return ['warteliste', 'setzliste'];

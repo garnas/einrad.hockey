@@ -104,9 +104,9 @@ class TeamService
                 $turnier->getLogService()->addLog("Abmeldung: $name von der $liste");
             }
         }
-
         if ($turnier->isSetzPhase()) {
             TurnierService::setzListeAuffuellen($turnier);
+            TurnierService::neueWartelistePositionen($turnier);
         }
 
     }
