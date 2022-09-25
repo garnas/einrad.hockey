@@ -83,9 +83,8 @@ use App\Service\Turnier\TurnierValidatorService;
             </select>
         </p>
         <p class="w3-text-grey">
-            <b>Hinweis:</b> Die mit der Anzahl der Plätze verknüpften Turniermodi können in der Setzphase
-            nur noch mit Zustimmung des Ligaausschusses geändert werden. In der Setzphase ein 7er- auf ein 8er-Turnier oder
-            5er- auf ein 6er-Turnier zu erweitern, ist also nicht mehr ohne weiteres möglich.
+            <b>Hinweis:</b> Der Turniermodus von JgJ (5er, 6er, und 7er-Turnier) auf Gruppe (8er-Turnier) kann in der
+            Setzphase nur mit Abstimmung mit dem Ligaausschuss geändert werden.
         </p>
     </div>
     <div class="w3-panel w3-card-4">
