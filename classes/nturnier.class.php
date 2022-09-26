@@ -1854,6 +1854,7 @@ class nTurnier
                 AND spieltag != 0 
                 AND (art='I' OR art = 'II' OR art='III' OR art='final') 
                 AND saison = ?
+                AND canceled = 0
                 AND phase != 'ergebnis'
                 ";
         return db::$db->query($sql, $this->spieltag, $this->saison)->num_rows() === 0;
