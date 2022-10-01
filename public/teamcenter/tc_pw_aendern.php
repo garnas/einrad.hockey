@@ -36,7 +36,7 @@ if(isset($_POST['change'])) {
     }
 }
 
-Html::notice("Euer Passwort wird verschlüsselt gespeichert. Es muss mindestens sechs Zeichen lang sein.");
+Html::notice("Dein Passwort muss mindestens sechs Zeichen lang sein.");
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
