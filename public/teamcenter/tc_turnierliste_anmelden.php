@@ -57,7 +57,7 @@ include '../../templates/header.tmp.php';?>
         <p>
         Reihen:<br>
         <span class="w3-pale-green">Auf Setzliste<br></span>
-        <span class="w3-pale-blue">Auf Warteliste in der Meldephase<br></span>
+        <span class="w3-pale-blue">Auf Warteliste in der Setzphase<br></span>
         <span class="w3-pale-yellow">Auf Warteliste in der Wartephase<br></span>
         <br>
         <i><span class="w3-text-green">(Block)</span>: Anmeldung möglich</i><br>

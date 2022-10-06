@@ -89,7 +89,7 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
 //Spielplan löschen
 if (isset($_POST['auto_spielplan_loeschen'])) {
     Spielplan::delete($turnier);
-    Html::info("Der dynamisch erstellte Spielplan wurde gelöscht. Das Turnier wurde in die Meldephase versetzt!");
+    Html::info("Der dynamisch erstellte Spielplan wurde gelöscht. Das Turnier wurde in die Setzphase versetzt!");
     header('Location:' . db::escape($_SERVER['REQUEST_URI']));
     die();
 }
@@ -126,7 +126,7 @@ if (isset($_POST['spielplan_hochladen'])) {
 if (isset($_POST['spielplan_delete'])) {
     unlink($turnier->get_spielplan_datei());
     $turnier->upload_spielplan('', 'melde');
-    Html::info("Spielplan- / Ergebnisdatei wurde gelöscht. Turnier wurde in die Meldephase versetzt.");
+    Html::info("Spielplan- / Ergebnisdatei wurde gelöscht. Turnier wurde in die Setzphase versetzt.");
     header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->get_turnier_id());
     die();
 }
