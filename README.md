@@ -36,3 +36,4 @@ Du hast Lust mitzuwirken? Oder Fragen darüber, wie die Webseite funktioniert? M
 * [https://www.einrad.hockey/xml/turnierliste.php](https://www.einrad.hockey/xml/turnierliste.php)
 * [https://www.einrad.hockey/xml/turnieranmeldungen.php](https://www.einrad.hockey/xml/turnieranmeldungen.php)
 * [https://www.einrad.hockey/xml/rangtabelle.php](https://www.einrad.hockey/xml/rangtabelle.php)
+* [https://www.einrad.hockey/xml/spielplan.php?turnier_id=?](https://www.einrad.hockey/xml/spielplan.php?turnier_id=1021)
