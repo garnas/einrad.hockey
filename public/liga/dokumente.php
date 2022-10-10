@@ -40,7 +40,7 @@ include '../../templates/header.tmp.php';
         </p>
     </a>
     <p>Hinweis: Die Finalturniermodi werden überarbeitet und zu einem unbekannten späteren Zeitpunkt veröffentlicht.</p>
-    <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">15.08.2022</p>
+    <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">10.10.2022</p>
 </div>
 <div class="w3-panel w3-card">
     <h2 class="w3-text-primary">Spielregeln</h2>
