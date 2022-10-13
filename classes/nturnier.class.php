@@ -607,7 +607,8 @@ class nTurnier
                 LEFT JOIN teams_details
                 ON turniere_liste.team_id = teams_details.team_id
                 WHERE turniere_liste.turnier_id = ? 
-                AND turniere_liste.liste = 'setzliste'
+                AND (turniere_liste.liste = 'setzliste' 
+                OR turniere_liste.liste = 'spiele') 
                 ";
         $liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
 
