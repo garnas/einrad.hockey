@@ -6,7 +6,6 @@ require_once '../../init.php';
 
 $_SESSION['logins']['cronjob'] = 'Cronjob';
 
-//LigaBot::liga_bot(); //TODO Helper::log verwenden
-
+nLigaBot::ligaBot();
 
 session_destroy();
