@@ -183,7 +183,9 @@ class Turnier
     public function saveLogs(): void
     {
         $this->logService->addAllLogs();
-        Discord::send(TurnierSnippets::ortDatumBlock($this, false) . "\r\n" . $this->logService->getLogAsString());
+        if (!empty($this->logService->getLogAsString())) {
+            Discord::send(TurnierSnippets::ortDatumBlock($this, false) . "\r\n" . $this->logService->getLogAsString());
+        }
     }
 
     /**
