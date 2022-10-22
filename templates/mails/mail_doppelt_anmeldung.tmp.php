@@ -6,5 +6,5 @@
 <p>Hallo <?= $team->getName() ?></p>
 <p>
     Ihr standet für das <?= \App\Service\Turnier\TurnierSnippets::ortWochentagDatumBlock($turnier) ?>
-    auf der Warteliste. Da ihr jedoch am gleichen Turniertag schon auf einer Setzliste standet, wurdet ihr wieder abgemeldet. 
+    auf der Warteliste. Da ihr jedoch am gleichen Turniertag schon auf die Setzliste eines Turnieres gelost wurdet, seid ihr vom obigen Turnier abgemeldet worden.
 </p>

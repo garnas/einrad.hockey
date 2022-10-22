@@ -2,10 +2,11 @@
 
 namespace App\Event\Turnier;
 
+use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Repository\DoctrineWrapper;
-use App\Service\Team\TeamValidator;
+use App\Service\Team\TeamService;
 use App\Service\Turnier\BlockService;
 use App\Service\Turnier\TurnierService;
 use Config;
@@ -21,6 +22,9 @@ use Html;
  */
 class nLigaBot
 {
+
+    /** @var Turnier[] $gelosteTurniere */
+    private static array $gelosteTurniere = [];
 
     /**
      * @throws OptimisticLockException
@@ -174,6 +178,7 @@ class nLigaBot
 
                 // Losen setzt alle Teams in richtiger Reihenfolge auf die Warteliste.
                 self::losen($turnier);
+                self::$gelosteTurniere[] = $turnier;
 
                 if($turnier->isSofortOeffnen()) {
                     TurnierService::blockOeffnen($turnier);
@@ -255,7 +260,7 @@ class nLigaBot
             $name = $team->getName();
             $blockString = BlockService::toString($team->getBlock());
             // Check ob das Team am Kalendertag des Turnieres schon auf einer Spiele-Liste steht
-            if (TeamValidator::isAmKalenderTagAufSetzliste($turnier, $team)) {
+            if (self::isBereitsAufSetzlisteGelostAmGleichenKalendertag($turnier, $team)) {
                 $turnier->getLogService()->addLog(
                     "$name war schon auf einer Setzliste eines anderen Turnieres und wurde daher abgemeldet."
                 );
@@ -274,6 +279,18 @@ class nLigaBot
                 $pos++;
             }
         }
+    }
+
+    public static function isBereitsAufSetzlisteGelostAmGleichenKalendertag(Turnier $turnier, nTeam $team): bool {
+        foreach (self::$gelosteTurniere as $vglTurnier) {
+            if (
+                $turnier->getDatum() == $vglTurnier->getDatum()
+                && TeamService::isAufSetzliste($team, $vglTurnier)
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

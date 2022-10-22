@@ -12,7 +12,6 @@ use App\Service\Turnier\TurnierSnippets;
 use Env;
 use Kontakt;
 use MailBot;
-use Config;
 
 class TurnierEventMailBot
 {
