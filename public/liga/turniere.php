@@ -82,7 +82,7 @@ include '../../templates/header.tmp.php';
                         <i class='w3-display-topleft w3-padding'><?= TurnierSnippets::status($turnier) ?></i>
                         <?php if ($turnier->isSpielplanPhase()): ?>
                             <i class='w3-display-bottomleft w3-padding'>
-                                <?= Html::link("spielplan.php?turnier_id=" . $turnier->id(), "Spielplan") ?>
+                                <?= Html::link(TurnierLinks::spielplan($turnier), "Spielplan") ?>
                             </i>
                         <?php else: ?>
                             <i class='w3-display-bottomleft w3-padding'><?= TurnierSnippets::phase($turnier) ?></i>
