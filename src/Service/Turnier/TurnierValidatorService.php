@@ -58,14 +58,17 @@ class TurnierValidatorService
         if (Helper::$ligacenter) {
             return true;
         }
-        if ($turnier->getDetails()->getPlaetze() === $plaetze_before) {
-            return true;
-        }
         if ($turnier->isWartePhase()) {
             return true;
         }
-        Html::error("Die mit der Anzahl der Plätze verknüpften Turniermodi können in der Setzphase nur noch mit Zustimmung des Ligaausschusses geändert werden");
-        return false;
+        if (
+            ($turnier->getDetails()->getPlaetze() === 8 && $plaetze_before < 8)
+            || ($turnier->getDetails()->getPlaetze() < 8 && $plaetze_before === 8)
+        ) {
+            Html::error("Der Turniermodus zwischen JgJ und Gruppe benötigt in der Setzphase die Abstimmung mit dem Ligaausschuss.");
+            return false;
+        }
+        return true;
     }
 
     public function mayChange(): bool

@@ -351,7 +351,7 @@ class Spielplan
      * @return array
      *
      */
-    public function get_trikot_colors(array $spiel): array
+    public function get_trikot_colors(array $spiel, $is_html = true): array
     {
         if ($this->turnier->get_phase() === 'ergebnis') {
             return [];
@@ -395,8 +395,8 @@ class Spielplan
                         continue;
                     }
                     $max_delta_e = $delta_e;
-                    $return[$team_id_a] = Html::trikot_punkt($farbe_a);
-                    $return[$team_id_b] = Html::trikot_punkt($farbe_b);
+                    $return[$team_id_a] = $is_html ? Html::trikot_punkt($farbe_a) : $farbe_a;
+                    $return[$team_id_b] = $is_html ? Html::trikot_punkt($farbe_b) : $farbe_b;
                 }
             }
         }

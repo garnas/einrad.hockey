@@ -132,6 +132,9 @@ class TeamValidator
         if (!TurnierService::hasFreieSetzPlaetze($turnier)) {
             $error[] = "Es gibt keine freien Plätze mehr auf der Setzliste.";
             $valid = false;
+        } else if ($turnier->isSetzPhase() && TurnierService::isSetzBerechtigt($turnier, $team)){
+            $error[] = "Dein Team würde auch ohne Freilos auf die Setzliste kommen.";
+            $valid = false;
         }
 
         if ($team->getFreilose() <= 0) {
@@ -139,10 +142,7 @@ class TeamValidator
             $valid = false;
         }
 
-        if ($turnier->isSetzPhase() && TurnierService::isSetzBerechtigt($turnier, $team)){
-            $error[] = "Dein Team würde auch ohne Freilos auf die Setzliste kommen.";
-            $valid = false;
-        }
+
 
         if (!TurnierService::isSpielBerechtigtFreilos($turnier, $team)) {
             $error[] = "Turnierblock stimmt nicht. Freilose können nur für Turniere mit höheren oder passenden Block gesetzt werden.";
@@ -150,7 +150,7 @@ class TeamValidator
         }
 
         if ($showError && isset($error)) {
-            Html::error(implode("<br>", $error));
+            Html::error(implode("<br>", $error), esc:false);
         }
 
         return $valid;

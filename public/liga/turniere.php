@@ -6,6 +6,7 @@ use App\Repository\Turnier\TurnierRepository;
 use App\Service\Turnier\BlockService;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierSnippets;
+use App\Service\Turnier\TurnierLinks;
 
 require_once '../../init.php';
 
@@ -81,7 +82,7 @@ include '../../templates/header.tmp.php';
                         <i class='w3-display-topleft w3-padding'><?= TurnierSnippets::status($turnier) ?></i>
                         <?php if ($turnier->isSpielplanPhase()): ?>
                             <i class='w3-display-bottomleft w3-padding'>
-                                <?= Html::link("spielplan.php?turnier_id=" . $turnier->id(), "Spielplan") ?>
+                                <?= Html::link(TurnierLinks::spielplan($turnier), "Spielplan") ?>
                             </i>
                         <?php else: ?>
                             <i class='w3-display-bottomleft w3-padding'><?= TurnierSnippets::phase($turnier) ?></i>
@@ -143,7 +144,7 @@ include '../../templates/header.tmp.php';
                             <p class="w3-text-grey w3-border-bottom w3-border-grey">Links</p>
                             <p><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), 'Alle Turnierdetails', icon:'info') ?></p>
                             <?php if ($turnier->isSpielplanPhase()) { ?>
-                                <p><?= Html::link($turnier->getSpielplanDatei() ?? ('../liga/spielplan.php?turnier_id=' . $turnier->id()), 'Zum Spielplan', icon:'reorder') ?></p>
+                                <p><?= Html::link(TurnierLinks::spielplan($turnier), 'Zum Spielplan', icon:'reorder') ?></p>
                             <?php } //endif?>
                             <?php if (isset($_SESSION['logins']['team'])) { ?>
                                 <p><?= Html::link('../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier->id(), 'Zur Anmeldeseite', icon:'how_to_reg') ?></p>

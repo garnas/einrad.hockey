@@ -7,13 +7,12 @@ use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Event\Turnier\TurnierEventMailBot;
-use App\Service\Team\TeamService;
-use App\Service\Team\TeamSnippets;
 use Config;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Jenssegers\Date\Date;
-
+use DB;
 class TurnierService
 {
 
@@ -60,8 +59,13 @@ class TurnierService
     {
         $criteria = Criteria::create()
             ->andWhere((Criteria::expr())->eq('liste', 'warteliste'));
-
-        return $turnier->getListe()->matching($criteria);
+        $sort = static function(TurniereListe $eintrag, TurniereListe $vergleich) {
+            return $eintrag->getPositionWarteliste() <=> $vergleich->getPositionWarteliste();
+        };
+        $liste = $turnier->getListe()->matching($criteria);
+        $listeAsArray = $liste->toArray();
+        uasort($listeAsArray, $sort);
+        return new ArrayCollection($listeAsArray);
     }
 
     public static function getTurnierEintrageFristUnix(Turnier $turnier): int
@@ -172,12 +176,11 @@ class TurnierService
     public static function neueWartelistePositionen(Turnier $turnier): void
     {
         $warteliste = self::getWarteListe($turnier);
-        $pos = 1;
+        $pos = 0;
         foreach ($warteliste as $anmeldung) {
-            $anmeldung->setPositionWarteliste($pos++);
+            $anmeldung->setPositionWarteliste(++$pos);
             $name = $anmeldung->getTeam()->getName();
             $turnier->getLogService()->addLog("Warteliste: $pos. $name");
-
         }
     }
 
@@ -257,26 +260,22 @@ class TurnierService
      */
     public static function setzListeAuffuellen(Turnier $turnier, bool $send_mail = true): void
     {
-        $freie_plaetze = self::getFreieSetzPlaetze($turnier);
-
         if ($turnier->isSetzPhase() && self::getFreieSetzPlaetze($turnier) > 0) {
 
             $liste = self::getWarteListe($turnier);
 
             foreach ($liste as $anmeldung) {
-                if ($freie_plaetze > 0) {
+                if (self::getFreieSetzPlaetze($turnier) > 0) {
                     $team = $anmeldung->getTeam();
                     if (self::isSetzBerechtigt($turnier, $team)) {
-                        TeamService::abmelden($team, $turnier);
-                        self::addToSetzListe($turnier, $team);
+                        $anmeldung->setListe('setzliste');
+                        $turnier->getLogService()->addLog("Von Warteliste auf Setzliste: " . $team->getName());
                         if ($send_mail) {
-                            TurnierEventMailBot::mailWarteZuSetzliste($turnier, $team); // TODO
+                            TurnierEventMailBot::mailWarteZuSetzliste($turnier, $team);
                         }
-                        --$freie_plaetze;
                     }
                 }
             }
-            self::neueWartelistePositionen($turnier);
         }
     }
 

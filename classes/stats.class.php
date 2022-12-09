@@ -118,7 +118,7 @@ class Stats
                 WHERE teams_liga.aktiv = 'Ja' 
                 AND teams_liga.ligateam = 'Ja'
                 AND turniere_liga.saison = ? 
-                AND turniere_liste.liste = 'spiele' 
+                AND turniere_liste.liste = 'setzliste' 
                 AND turniere_liga.phase = 'ergebnis' 
                 GROUP BY teams_liga.teamname 
                 ORDER BY gespielt desc, rand()

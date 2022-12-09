@@ -504,6 +504,7 @@ class nTurnier
                 ON teams_liga.team_id = turniere_liga.ausrichter
                 WHERE phase != 'ergebnis'
                 AND saison = ?
+                AND canceled = 0
                 ORDER BY turniere_liga.datum " . ($asc ? "asc" : "desc")
                 ;
         return db::$db->query($sql, $saison)->fetch_objects(__CLASS__, key: 'turnier_id');
@@ -606,7 +607,8 @@ class nTurnier
                 LEFT JOIN teams_details
                 ON turniere_liste.team_id = teams_details.team_id
                 WHERE turniere_liste.turnier_id = ? 
-                AND turniere_liste.liste = 'setzliste'
+                AND (turniere_liste.liste = 'setzliste' 
+                OR turniere_liste.liste = 'spiele') 
                 ";
         $liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
 
@@ -1853,6 +1855,7 @@ class nTurnier
                 AND spieltag != 0 
                 AND (art='I' OR art = 'II' OR art='III' OR art='final') 
                 AND saison = ?
+                AND canceled = 0
                 AND phase != 'ergebnis'
                 ";
         return db::$db->query($sql, $this->spieltag, $this->saison)->num_rows() === 0;

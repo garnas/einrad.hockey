@@ -31,7 +31,6 @@ include '../../templates/header.tmp.php'; ?>
 
 <form method="post" class="w3-panel w3-card-4">
     <h3> Ligacenter-Passwort ändern </h3>
-        <?php Html::message('notice', 'Dein Passwort wird verschlüsselt gespeichert', null); ?>
         <label class="w3-text-primary" for="passwort_alt">Altes Passwort:</label>
         <input required
                class="w3-input w3-border w3-border-primary"
