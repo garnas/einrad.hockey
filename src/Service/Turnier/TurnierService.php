@@ -105,6 +105,7 @@ class TurnierService
 
     public static function isSetzBerechtigt(Turnier $turnier, nTeam $team): bool
     {
+        //TODO check am Kalendertag schon auf Setzliste
         // NL Team geht immer
         if (!$team->isLigaTeam()) {
             return true;
