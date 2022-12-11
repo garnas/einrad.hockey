@@ -1,16 +1,17 @@
 <?php
 
+use App\Repository\Mailbot\MailbotRepository;
+
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
-
 include '../../templates/header.tmp.php'; ?>
+
 
     <h1>Alle Mailbot-Mails der letzten 30 Tage</h1>
     <h3 class="w3-bottombar"></h3>
 <?php
-$mails = \App\Repository\DoctrineWrapper::manager()
-    ->getRepository(\App\Entity\Sonstiges\Mailbot::class)->findAll();
+$mails = MailbotRepository::get()->findAll();
 
 foreach ($mails as $mail) {
     if ($mail->getZeit()->getTimestamp() > time() - 30 * 24 * 60 * 60) { ?>
