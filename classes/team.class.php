@@ -56,7 +56,7 @@ class Team
         // TeamIDs werden über die Sql-Funktion auto increment vergeben
         $sql = "
                 INSERT INTO teams_liga (teamname, passwort, freilose) 
-                VALUES (?, ?, 1)
+                VALUES (?, ?, 0)
                 ";
         db::$db->query($sql, $teamname, $passwort)->log();
 
