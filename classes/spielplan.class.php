@@ -225,7 +225,7 @@ class Spielplan
                 ";
         db::$db->query($sql, $turnier->get_turnier_id())->log();
         $turnier->set_log("Automatischer JgJ-Spielplan gelöscht.");
-        $turnier->update_phase('melde');
+        $turnier->update_phase('setz');
     }
 
     /**

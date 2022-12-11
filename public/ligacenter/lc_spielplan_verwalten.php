@@ -125,7 +125,7 @@ if (isset($_POST['spielplan_hochladen'])) {
 // Spielplan löschen
 if (isset($_POST['spielplan_delete'])) {
     unlink($turnier->get_spielplan_datei());
-    $turnier->upload_spielplan('', 'melde');
+    $turnier->upload_spielplan('', 'setz');
     Html::info("Spielplan- / Ergebnisdatei wurde gelöscht. Turnier wurde in die Setzphase versetzt.");
     header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->get_turnier_id());
     die();
@@ -157,12 +157,12 @@ include '../../templates/header.tmp.php';
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped">
             <thead class="w3-primary">
-            <tr>
-                <th>Team ID</th>
-                <th>Teamname</th>
-                <th class="w3-center">Teamblock</th>
-                <th class="w3-center">Wertung</th>
-            </tr>
+                <tr>
+                    <th>Team-ID</th>
+                    <th>Teamname</th>
+                    <th class="w3-center">Teamblock</th>
+                    <th class="w3-center">Wertung</th>
+                </tr>
             </thead>
             <?php foreach ($teamliste as $team) { ?>
                 <tr>
@@ -267,8 +267,11 @@ include '../../templates/header.tmp.php';
                             </option>
                             <?php foreach ($teamliste as $team_id => $team) { ?>
                                 <option
-                                    <?php if (($turnier_ergebnis[$platz]['team_id'] ?? 0) == $team->id){ ?>selected<?php } //endif?>
-                                    value="<?= $team->id ?>"><?= $team->get_teamname() ?></option>
+                                    <?php if (($turnier_ergebnis[$platz]['team_id'] ?? 0) == $team->id) { ?>
+                                        selected
+                                    <?php } //endif?>
+                                    value="<?= $team->id ?>"><?= $team->get_teamname() ?>
+                                </option>
                             <?php } //end foreach?>
                         </select>
                     </td>

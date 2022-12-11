@@ -52,9 +52,9 @@ class TurniereListe
     /**
      * @var string
      *
-     * @ORM\Column(name="liste", type="string", length=0, nullable=false, options={"default"="melde"})
+     * @ORM\Column(name="liste", type="string", length=0, nullable=false, options={"default"="setz"})
      */
-    private string $liste = 'melde';
+    private string $liste = 'setz';
 
     /**
      * @var nTeam
