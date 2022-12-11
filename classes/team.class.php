@@ -400,14 +400,7 @@ class Team
      */
     public function set_zweites_freilos(): void
     {
-        $sql = "
-                UPDATE teams_liga
-                SET freilose = freilose + 1, zweites_freilos = ?
-                WHERE team_id = $this->id
-                ";
-        db::$db->query($sql, date("Y-m-d"))->log();
-        Helper::log('schirifreilos.log', "$this->id hat für zwei Schiris ein Freilos erhalten.");
-        MailBot::mail_zweites_freilos($this);
+
     }
 
     /**
@@ -470,10 +463,18 @@ class Team
     /**
      *  Setzt das zweite Schiri-Freilos, falls das Team berechtigt ist.
      */
-    public function set_schiri_freilos(): void {
-       if ($this->check_schiri_freilos_erhaltbar()){
+    public function set_schiri_freilos(): void
+    {
+       if ($this->check_schiri_freilos_erhaltbar()) {
                 Html::info("Das Team '" . $this->details['teamname'] . "' hat ein zweites Freilos erhalten.");
-                $this->set_zweites_freilos();
+               $sql = "
+                    UPDATE teams_liga
+                    SET freilose = freilose + 1, zweites_freilos = ?
+                    WHERE team_id = $this->id
+                    ";
+               db::$db->query($sql, date("Y-m-d"))->log();
+               Helper::log('schirifreilos.log', "$this->id hat für zwei Schiris ein Freilos erhalten.");
+               MailBot::mail_schiri_freilos($this);
             }
     }
 

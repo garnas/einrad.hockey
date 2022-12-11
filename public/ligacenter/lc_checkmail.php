@@ -13,14 +13,17 @@ $mails = \App\Repository\DoctrineWrapper::manager()
     ->getRepository(\App\Entity\Sonstiges\Mailbot::class)->findAll();
 
 foreach ($mails as $mail) {
-    if($mail->getZeit()->getTimestamp() > time() - 30 * 24 * 60 * 60){ ?>
-        <p class="w3-center"><b>An</b></p>
+    if ($mail->getZeit()->getTimestamp() > time() - 30 * 24 * 60 * 60) { ?>
+        <p class="w3-center"><em>Status</em></p>
+        <p class="w3-center"><?=$mail->getMailStatus()?></p>
+        <p class="w3-center"><strong>An</strong></p>
         <p class="w3-center"><?=$mail->getAdressat()?></p>
-        <p class="w3-center"><b>Betreff</b></p>
+        <p class="w3-center"><strong>Betreff</strong></p>
         <p class="w3-center"><?=$mail->getBetreff()?></p>
-        <p><b>Inhalt</b></p>
+        <p><strong>Inhalt</strong></p>
         <p><?=$mail->getInhalt()?></p>
         <h3 class="w3-bottombar"></h3>
     <?php }
 }
+
 include '../../templates/footer.tmp.php';
