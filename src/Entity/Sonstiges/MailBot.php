@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="mailbot")
  * @ORM\Entity
  */
-class Mailbot
+class nMailbot
 {
     /**
      * @var int

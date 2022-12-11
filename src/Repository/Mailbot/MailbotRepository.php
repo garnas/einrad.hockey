@@ -3,7 +3,7 @@
 
 namespace App\Repository\Mailbot;
 
-use App\Entity\Sonstiges\Mailbot;
+use App\Entity\Sonstiges\nMailbot;
 use App\Repository\DoctrineWrapper;
 use App\Repository\TraitSingletonRepository;
 use Doctrine\ORM\EntityRepository;
@@ -17,7 +17,7 @@ class MailbotRepository
 
     private function __construct()
     {
-        $this->mailBot = DoctrineWrapper::manager()->getRepository(Mailbot::class);
+        $this->mailBot = DoctrineWrapper::manager()->getRepository(nMailbot::class);
     }
 
     public function findAll(): array
