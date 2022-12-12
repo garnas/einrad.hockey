@@ -13,7 +13,7 @@
 <?php if ((time() - strtotime($turnier->get_datum())) < (8 * 24 * 60 * 60)): ?>
     <!-- Ausbilder -->
     <?php if (!empty($ausbilder_liste)): ?>
-        <h2 class="w3-text-primary"><?= Html::icon('school', tag:'h2') ?> Schiedsrichter-Ausbilder</h2>
+        <h2 class="w3-text-primary"><?= Html::icon('school', tag:'h2') ?> Schiedsrichter-Prüfende</h2>
         <ul class='w3-ul w3-margin-left w3-leftbar w3-border-tertiary'>
             <?php foreach ($ausbilder_liste as $spieler): ?>
                 <li><?= $spieler->get_name() ?> (<i><?=$spieler->get_team()?></i>)</li>

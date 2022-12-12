@@ -104,9 +104,9 @@ include '../../templates/header.tmp.php'; ?>
     <a href="mailto:<?= Env::SCHIRIMAIL ?>" class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top">
         <?= Html::icon("mail") ?> <?= Env::SCHIRIMAIL ?>
     </a>
-<h3 class="w3-text-primary"><?= Html::icon("school", tag:"h3") ?> Schiedsrichterausbilder</h3>
+<h3 class="w3-text-primary"><?= Html::icon("school", tag:"h3") ?> Schiedsrichterprüfende</h3>
 <p>
-    Der Schiedsrichterausschuss ernennt in seiner Funktion Schiedsrichterprüfer. Diese dürfen Spielerinnen und Spielen 
+    Der Schiedsrichterausschuss ernennt in seiner Funktion Schiedsrichterprüfende. Diese dürfen Spielerinnen und Spieler
     die theoretische und auch praktische Prüfung abnehmen. Folgende Personen sind momentan als Prüferinnen und Prüfer ernannt.
 </p>
 <div class="w3-responsive">
@@ -119,6 +119,6 @@ include '../../templates/header.tmp.php'; ?>
         <?php } //end foreach?>
     </table>
 </div>
-<p>Dank unserer Ausbilder haben wir zurzeit <?=Stats::get_schiris_anzahl()?> Schiedsrichter in der Deutschen Einradhockeyliga.</p>
+<p>Dank unserer Prüfer haben wir zurzeit <?=Stats::get_schiris_anzahl()?> Schiedsrichter in der Deutschen Einradhockeyliga.</p>
 
 <?php include '../../templates/footer.tmp.php';

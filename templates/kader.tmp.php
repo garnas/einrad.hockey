@@ -81,7 +81,7 @@
                                 <?= Html::icon("check_circle_outline") ?>
                                 <?= $spieler->get_schiri() ?>
                                 <?= ($spieler->junior === 'Ja') ? "<i class='w3-text-grey'>junior</i>" : "" ?>
-                                <?= ($spieler->check_ausbilder()) ? "<i class='w3-text-grey'>Ausbilder/in</i>" : "" ?>
+                                <?= ($spieler->check_ausbilder()) ? "<i class='w3-text-grey'>Prüfender</i>" : "" ?>
                             <?php endif; ?>
                         </td>
                         <td>
