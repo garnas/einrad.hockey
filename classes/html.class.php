@@ -247,7 +247,7 @@ class Html
                     <span class="w3-small w3-text-grey" style="display: block">Sekunden</span>
                 </span>
         </div>
-        <script>countdown('<?= date("Y-m-d\TH:i:s", $date) ?>', '<?= $id ?>')</script>
+        <script>countdown('<?= $date ?>', '<?= $id ?>')</script>
         <?php
     }
 

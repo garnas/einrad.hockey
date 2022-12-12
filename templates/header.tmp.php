@@ -17,7 +17,7 @@
     <link type="text/css" rel="stylesheet" href="<?= Env::BASE_URL ?>/css/w3.css">
     <link type="text/css" rel="stylesheet" href="<?= Env::BASE_URL ?>/css/style.css?v=20210308">
     <link type="text/css" rel="stylesheet" href="<?= Env::BASE_URL ?>/css/icons/icons.css">
-    <script src="<?= Env::BASE_URL ?>/javascript/script.js?v=20210308"></script>
+    <script src="<?= Env::BASE_URL ?>/javascript/script.js?v=20221212"></script>
     <script src="<?= Env::BASE_URL ?>/javascript/360search/360search.js?v=20210308" async></script>
 
     <title><?= Html::$titel ?></title>
