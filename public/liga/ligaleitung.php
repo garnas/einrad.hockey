@@ -106,8 +106,7 @@ include '../../templates/header.tmp.php'; ?>
     </a>
 <h3 class="w3-text-primary"><?= Html::icon("school", tag:"h3") ?> Schiedsrichterprüfende</h3>
 <p>
-    Der Schiedsrichterausschuss ernennt in seiner Funktion Schiedsrichterprüfende. Diese dürfen Spielerinnen und Spieler
-    die theoretische und auch praktische Prüfung abnehmen. Folgende Personen sind momentan als Prüferinnen und Prüfer ernannt.
+    Der Schiedsrichterausschuss ernennt in seiner Funktion Schiedsrichterprüfende. Folgende Personen sind momentan als Prüferinnen und Prüfer ernannt:
 </p>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
