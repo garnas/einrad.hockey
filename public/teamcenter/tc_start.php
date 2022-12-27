@@ -7,8 +7,7 @@ require_once '../../logic/session_team.logic.php'; //auth
 
 $centerpanels = Nav::get_tc_start();
 Html::info("In euren " . Html::link(Env::BASE_URL . "/teamcenter/tc_teamdaten.php", "Teamdaten")
-    . " könnt ihr mögliche Bonus-Freilose für frühzeitig gesetzte Freilose und angemeldete Turniere sehen. Eventuell 
-    wird das Erstatten der Freilose noch bis Saisonbeginn automatisiert werden.", esc:false);
+    . " könnt ihr mögliche Bonus-Freilose für frühzeitig gesetzte Freilose und angemeldete Turniere sehen.", esc:false);
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////

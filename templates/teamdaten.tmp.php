@@ -89,7 +89,7 @@ use App\Service\Turnier\TurnierSnippets;
                         <?= TurnierSnippets::ortDatumBlock($anmeldung->getTurnier()) ?>
                         <?php if(TeamService::isFreilosRecyclebar($anmeldung)): ?>
                             <br>
-                            <span class="w3-text-green">Für dieses Turnier könnt ihr nach dem Turnier ein Freilos erhalten</span>
+                            <span class="w3-text-green">Dieses Freilos könnt ihr auf Antrag beim Ligaausschuss zurückerhalten</span>
                         <?php endif; ?>
                     </p>
                 <?php endforeach; ?>
@@ -107,7 +107,7 @@ use App\Service\Turnier\TurnierSnippets;
                          <?= $turnier->getErstelltAm()->format("d.m.Y") ?>
                         <?php if(TeamService::isAusrichterFreilosBerechtigt($turnier)): ?>
                             <br>
-                            <span class="w3-text-green">Für dieses Turnier könnt ihr nach dem Turnier ein Freilos erhalten</span>
+                            <span class="w3-text-green">Für dieses Turnier könnt ihr nach dem Turnier ein Freilos erhalten (insgesamt 2x möglich)</span>
                         <?php endif; ?>
                     </p>
                 <?php endforeach; ?>
