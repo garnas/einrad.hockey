@@ -13524,6 +13524,38 @@ ALTER TABLE `turniere_liga`
 ALTER TABLE `turniere_liste`
   ADD CONSTRAINT `turniere_liste_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams_liga` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `turniere_liste_ibfk_2` FOREIGN KEY (`turnier_id`) REFERENCES `turniere_liga` (`turnier_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `abstimmung_ergebnisse`
+--
+
+CREATE TABLE `abstimmung_ergebnisse` (
+                                         `crypt` varchar(255) NOT NULL,
+                                         `stimme` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `abstimmung_teams`
+--
+
+CREATE TABLE `abstimmung_teams` (
+                                    `team_id` int(11) NOT NULL,
+                                    `aenderungen` int(8) NOT NULL DEFAULT 0,
+                                    `passwort` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+ALTER TABLE `abstimmung_teams`
+    ADD PRIMARY KEY(
+                    `team_id`
+        );
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
