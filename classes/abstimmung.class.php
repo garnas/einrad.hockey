@@ -163,9 +163,9 @@ class Abstimmung
             db::$db->query($sql, $this->passwort_hash)->log(true);
             $sql = "
                 INSERT INTO abstimmung_ergebnisse (stimme, crypt) 
-                VALUES ('$stimme', '$crypt')
+                VALUES (?, ?)
                 ";
-            db::$db->query($sql)->log(true);
+            db::$db->query($sql, $stimme, $crypt)->log(true);
             Helper::log("abstimmung.log", "$this->team_id hat seine Stimme abgegeben");
             Html::info("Dein Team hat erfolgreich abgestimmt. Vielen Dank!");
         } else { // Team korrigiert seine Stimme
