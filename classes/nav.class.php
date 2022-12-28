@@ -82,7 +82,7 @@ class Nav
             [Env::BASE_URL . "/teamcenter/tc_pw_aendern.php", "Passwort ändern", $class_text_color],
         ];
         // Abstimmung Finalart
-        if (Abstimmung::darf_abstimmen($_SESSION['logins']['team']['id'])) {
+        if (Helper::$teamcenter && Abstimmung::darf_abstimmen($_SESSION['logins']['team']['id'])) {
             array_unshift($links, [Env::BASE_URL . "/teamcenter/tc_abstimmung.php", "Abstimmung Finalturnier", $class_text_color]);
         }
         if (isset($_SESSION['logins']['team'])) {
