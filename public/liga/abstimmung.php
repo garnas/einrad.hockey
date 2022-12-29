@@ -23,11 +23,13 @@ include '../../templates/header.tmp.php';
         <p><strong>Informationen</strong></p>
 
         <p>
-            <?= Html::link(Env::BASE_URL, "Rundmail", true, "insert_drive_file") ?>
+            <?= Html::link(Env::BASE_URL . "/dokumente/abstimmung_finalmodi/rundschreiben.pdf",
+                "Rundmail", true, "insert_drive_file") ?>
         </p>
 
         <p>
-            <?= Html::link(Env::BASE_URL, "Anhang Beispiel-Spielpläne", true, "insert_drive_file") ?>
+            <?= Html::link(Env::BASE_URL . "/dokumente/abstimmung_finalmodi/finalmodi_beispielhaft.pdf",
+                "Anhang Beispiel-Spielpläne", true, "insert_drive_file") ?>
         </p>
     <?php
     if (time() > strtotime(Abstimmung::ENDE)){
