@@ -21,7 +21,7 @@ include '../../templates/header.tmp.php';
 
         <h1 class="w3-text-primary">Abstimmung Finalturniermodus</h1>
         <?php Html::message('notice',
-            "Die Abstimmung startet am " . date("d.m.Y", $beginn) . " und endet am "
+            "Die Abstimmung startet hier am " . date("d.m.Y", $beginn) . " und endet am "
             . date("d.m.Y \u\m H:i", $abschluss) . " Uhr. "
             . "Es haben bisher " . $ergebnisse["gesamt"] . " von " . Abstimmung::ANZAHL_TEAMS . " Teams abgestimmt.",
             Null); ?>
@@ -33,11 +33,13 @@ include '../../templates/header.tmp.php';
         <p><strong>Informationen</strong></p>
 
         <p>
-            <?= Html::link(Env::BASE_URL, "Rundmail", true, "insert_drive_file") ?>
+            <?= Html::link(Env::BASE_URL . "/dokumente/abstimmung_finalmodi/rundschreiben.pdf",
+                "Rundmail", true, "insert_drive_file") ?>
         </p>
 
         <p>
-            <?= Html::link(Env::BASE_URL, "Anhang Beispiel-Spielpläne", true, "insert_drive_file") ?>
+            <?= Html::link(Env::BASE_URL . "/dokumente/abstimmung_finalmodi/finalmodi_beispielhaft.pdf",
+                "Anhang Beispiel-Spielpläne", true, "insert_drive_file") ?>
         </p>
 
         <p><strong>Verbleibende Zeit</strong></p>

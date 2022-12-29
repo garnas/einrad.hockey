@@ -30,11 +30,11 @@ class Abstimmung
     /**
      * Frühstmöglicher Zeitpunkt der Stimmabgabe
      */
-    public const BEGINN = "28.12.2021 00:35";
+    public const BEGINN = "02.01.2023 00:00";
     /**
      * Letztmöglicher Zeitpunkt der Stimmabgabe
      */
-    public const ENDE = "28.12.2025 00:35";
+    public const ENDE = "06.01.2023 23:59";
     /**
      * Verschlüsselungsverfahren für die TeamIDs
      */
