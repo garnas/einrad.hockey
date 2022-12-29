@@ -7,6 +7,7 @@ use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Event\Turnier\TurnierEventMailBot;
+use App\Service\Team\TeamService;
 use Config;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -261,15 +262,17 @@ class TurnierService
      */
     public static function setzListeAuffuellen(Turnier $turnier, bool $send_mail = true): void
     {
-        if ($turnier->isSetzPhase() && self::getFreieSetzPlaetze($turnier) > 0) {
+        $freie_plaetze = self::getFreieSetzPlaetze($turnier);
+        if ($turnier->isSetzPhase() && $freie_plaetze > 0) {
 
             $liste = self::getWarteListe($turnier);
 
             foreach ($liste as $anmeldung) {
-                if (self::getFreieSetzPlaetze($turnier) > 0) {
+                if ($freie_plaetze > 0) {
                     $team = $anmeldung->getTeam();
                     if (self::isSetzBerechtigt($turnier, $team)) {
                         $anmeldung->setListe('setzliste');
+                        $freie_plaetze--;
                         $turnier->getLogService()->addLog("Von Warteliste auf Setzliste: " . $team->getName());
                         if ($send_mail) {
                             TurnierEventMailBot::mailWarteZuSetzliste($turnier, $team);
