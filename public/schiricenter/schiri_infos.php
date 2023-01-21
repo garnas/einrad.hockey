@@ -29,16 +29,12 @@ include '../../templates/header.tmp.php';
 <h1 class="w3-text-primary">Infos für Schiedsrichter und alle, die es
     werden wollen</h1>
 
-    <p class="w3-text-gray w3-center"> <!-- TODO entfernen -->
-        <i>-- Vorläufiger Entwurf --</i>
-        <br>(07.02.22)
-    </p>
-
 <UL>    
     <LI>Wer die Schiedsrichterprüfung ablegen möchte, kann das dem
-        Schiedsrichterausschuss einfach per Email mitteilen.</LI>    
-    <LI>Wenn ein bestimmter Prüfungstermin gewünscht wird, muss die
-        Anmeldung spätestens eine Woche vorher erfolgen.</LI>
+        Schiedsrichterausschuss einfach per Email mitteilen.</LI>
+    <LI>Die Anmeldung zur Prüfung erfolgt per Mail an <?=Html::mailto(Env::SCHIRIMAIL) ?> und zwar in zwei Schritten: zuerst zur
+        theoretischen Prüfung und, nachdem diese bestanden wurde, zur praktischen Prüfung unter Nennung mindestens eines
+        Wunsch-Turniertermins (für die praktische Prüfung).</LI>
     <LI>Zuerst gibt es einen schriftlichen (online Multiple-Choice) Test.</LI>
     <LI>Die bestandene theoretische Prüfung berechtigt innerhalb der
         nachfolgenden 6 Monate, die praktische Prüfung anzutreten.</LI>
@@ -94,8 +90,13 @@ include '../../templates/header.tmp.php';
         <tr>
             <th class="w3-primary-3"><?=Html::link(Nav::LINK_REGELN,
                                                    'Regelwerk', false, false)?></th>
-            <td>Hier gibt es die kompletten Regeln der deutschen
+            <td>Hier gibt es die kompletten Regeln der Deutschen
                 Einradhockeyliga als pdf.</td>
+        </tr>
+        <tr>
+            <th class="w3-primary-3"><?=Html::link(Nav::LINK_SCHIRIWESEN,
+                                                   'Schiriwesen', false, false)?></th>
+            <td>Schiedsrichtermodus der Deutschen Einradhockeyliga</td>
         </tr>
     </table>
 </div>
