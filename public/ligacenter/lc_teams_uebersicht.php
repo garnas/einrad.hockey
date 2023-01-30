@@ -100,7 +100,7 @@ include '../../templates/header.tmp.php';
             <th>Team ID</th>
             <th>Teamname</th>
             <th>Freilose</th>
-            <th>Zweites Freilos</th>
+            <th>2-Schiri-Freilos</th>
             <th>Kader</th>
             <th>Schiris</th>
             <th>Kader (alt)</th>

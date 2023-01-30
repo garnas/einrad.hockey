@@ -303,7 +303,7 @@ include '../../templates/header.tmp.php'; ?>
                                 </button>
                             </a>
                         </p>
-                    <?php } elseif (!empty($_SESSION['logins']['team']['name']) && $_SESSION['logins']['team']['name'] == $neuigkeit['eingetragen_von']) { ?>
+                    <?php } elseif (Neuigkeit::darf_bearbeiten($neuigkeit['eingetragen_von'])){ ?>
                         <p>
                             <a href='../teamcenter/tc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>' class='no'>
                                 <button class="w3-button w3-block w3-tertiary">

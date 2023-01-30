@@ -327,4 +327,49 @@ class Neuigkeit
         arsort($tore);
         return array_slice($tore, 0, 3, true) ?? [];
     }
+
+    public static function darf_verlinken(): bool
+    {
+        if (Helper::$ligacenter) {
+            return true;
+        }
+
+        if (
+            Helper::$teamcenter
+            && \App\Service\Team\TeamValidator::isOeffentlichkeitsausschuss($_SESSION["logins"]["team"]["id"])
+        ) {
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public static function darf_bearbeiten(string $eingetragen_von): bool
+    {
+        // LA?
+        if (Helper::$ligacenter) {
+            return true;
+        }
+
+        // Vom Team eingetragen?
+        if (
+            isset($_SESSION['logins']['team']['name'])
+            && $_SESSION['logins']['team']['name'] == $eingetragen_von
+        ) {
+            return true;
+        }
+
+        // Team Teil des Öffis?
+        if (
+            $eingetragen_von== "Öffentlichkeitsausschuss"
+            && \App\Service\Team\TeamValidator::isOeffentlichkeitsausschuss($_SESSION['logins']['team']['id'])
+        ) {
+            return true;
+        }
+
+        return false;
+
+    }
+
 }
