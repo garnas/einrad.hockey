@@ -116,6 +116,16 @@ class Spielplan
         array_unshift($teamliste, '');
         unset($teamliste[0]);
 
+        if ($turnier->get_turnier_id() == 1078) {
+            $temp = $teamliste[3];
+            $teamliste[3] = $teamliste[5];
+            $teamliste[5] = $temp;
+
+            $temp = $teamliste[2];
+            $teamliste[2] = $teamliste[3];
+            $teamliste[3] = $temp;
+        }
+
         $vorlage = self::get_vorlage($turnier);
 
         if ($vorlage === false) {
