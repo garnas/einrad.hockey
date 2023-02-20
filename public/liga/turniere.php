@@ -18,7 +18,7 @@ if ($turniere->isEmpty()) {
 }
 
 Html::info("Für das Wochende 10/11.06 suchen wir noch einen Ausrichter für die B-Meisterschaft.
- Da die Frist für die Bewerbung am 15.02 verstrich, wird der erste Ausrichter genommen, welcher sich bei dem 
+ Da die Frist für die Bewerbung am 15.02 verstrich, gilt der erste Ausrichter, welcher sich bei dem
  Ligaausschuss meldet.", "B-Meisterschaft");
 
 /////////////////////////////////////////////////////////////////////////////
