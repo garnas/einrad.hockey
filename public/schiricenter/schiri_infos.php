@@ -98,6 +98,11 @@ include '../../templates/header.tmp.php';
                                                    'Schiriwesen', false, false)?></th>
             <td>Schiedsrichtermodus der Deutschen Einradhockeyliga</td>
         </tr>
+        <tr>
+            <th class="w3-primary-3"><?=Html::link(Nav::LINK_SCHIRI_CHECKLIST,
+                                                   'Checkliste', false, false)?></th>
+            <td>Checkliste für die praktische Prüfung</td>
+        </tr>
     </table>
 </div>
 

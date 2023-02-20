@@ -17,7 +17,7 @@ include '../../templates/header.tmp.php';
     <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS_KURZ ?>">
         <p>
-            <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file</i>
+            <i class="w3-xxlarge w3-text-gray material-icons">insert_drive_file</i>
             Zusammenfassung Ligamodus
         </p>
     </a>
@@ -39,6 +39,12 @@ include '../../templates/header.tmp.php';
             Schiedsrichterwesen
         </p>
     </a>
+    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_SCHIRI_CHECKLIST ?>">
+        <p>
+            <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file</i>
+            Schiedsrichter Checkliste für praktische Prüfung
+        </p>
+    </a>
     <p>Hinweis: Die Finalturniermodi werden überarbeitet und zu einem unbekannten späteren Zeitpunkt veröffentlicht.</p>
     <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">10.10.2022</p>
 </div>
@@ -47,7 +53,7 @@ include '../../templates/header.tmp.php';
     <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_REGELN_KURZ ?>">
         <p>
-            <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file
+            <i class="w3-xxlarge w3-text-grey material-icons">insert_drive_file
             </i>
             Die zehn wichtigsten Regeln
         </p>
@@ -61,7 +67,7 @@ include '../../templates/header.tmp.php';
     </a>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_REGELN_IUF ?>">
         <p>
-            <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
+            <i class="w3-xxlarge w3-text-grey material-icons">insert_drive_file
             </i>
             IUF-Rules (only international competitions)
         </p>
@@ -73,28 +79,28 @@ include '../../templates/header.tmp.php';
     <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_CHECK_PDF ?>">
         <p>
-            <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
+            <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file
             </i>
             Checkliste für Ausrichter (pdf)
         </p>
     </a>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_CHECK_XLSX ?>">
         <p>
-            <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
+            <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file
             </i>
             Checkliste für Ausrichter (xlsx)
         </p>
     </a>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_DSGVO ?>">
         <p>
-            <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
+            <i class="w3-xxlarge w3-text-grey material-icons">insert_drive_file
             </i>
             Datenschutzhinweise
         </p>
     </a>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_SPIELPLAENE_ALT ?>">
         <p>
-            <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file
+            <i class="w3-xxlarge w3-text-grey material-icons">insert_drive_file
             </i>
             alte Spielplanvorlagen
         </p>
