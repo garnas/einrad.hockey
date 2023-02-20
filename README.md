@@ -36,7 +36,12 @@ Du hast Lust mitzuwirken? Oder Fragen darüber, wie die Webseite funktioniert? M
 
 ### 1. Voraussetzungen:
 * XAMPP installieren (PHP >=8.0), Composer installieren
-* Repository in den htdocs-Ordner herunterladen. Ordnersturktur sollte so aussehen: ...htdocs\einrad.hockey\example_env.php
+* Repository in den htdocs-Ordner herunterladen. Ordnersturktur sollte so aussehen: 
+```
+htdocs
+└── einrad.hockey
+    └── example_env.php
+```
 * Im Verzeichnis der example_env.php eine Datei env.php erstellen und den Inhalt von example_env.php hereinkopieren
 
 ### 2. Datenbank einrichten:
