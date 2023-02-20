@@ -36,7 +36,7 @@ Du hast Lust mitzuwirken? Oder Fragen darüber, wie die Webseite funktioniert? M
 
 ### 1. Voraussetzungen:
 * XAMPP installieren (PHP >=8.0), Composer installieren
-* Repository in den htdocs-Ordner herunterladen. Ordnersturktur sollte so aussehen: 
+* Repository in den htdocs-Ordner herunterladen. Ordnerstruktur sollte so aussehen: 
 ```
 htdocs
 └── einrad.hockey
