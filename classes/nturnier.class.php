@@ -130,9 +130,9 @@ class nTurnier
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function get_tblock(): string
+    public function get_tblock(): ?string
     {
         return $this->tblock;
     }
