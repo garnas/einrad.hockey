@@ -45,13 +45,13 @@ foreach ($strafen as $key => $strafe){
 }
 
 // Den Plätzen der Meisterschaftstabelle eine Farbe zuordnen:
-for ($i = 1; $i <= 12 ; $i++){
+for ($i = 1; $i <= 10 ; $i++){
     $platz_color[$i] = "w3-text-tertiary";
 }
-for ($i = 13; $i <= 18; $i++){
+for ($i = 11; $i <= 16; $i++){
     $platz_color[$i] = "w3-text-grey";
 }
-for ($i = 19; $i <= 24; $i++){
+for ($i = 17; $i <= 22; $i++){
     $platz_color[$i] = "w3-text-brown";
 }
 
@@ -115,7 +115,10 @@ include '../../templates/header.tmp.php';?>
             <ul class="w3-ul w3-leftbar w3-border-tertiary">
                 <li>In der Meisterschaftstabelle werden die besten fünf Turnierergebnisse deines Teams in der aktuellen Saison aufaddiert.</li>
                 <li>Der Platz in der Meisterschaftstabelle bestimmt, für welche Meisterschaft sich dein Team qualifizieren kann.</li>
-                <li><b>Finalturniere</b> <i>(Plätze)</i><br>Finale der Deutschen Einradhockeyliga (<span class="w3-text-tertiary">1-12</span>)<br>B-Finale der Deutschen Einradhockeyliga (<span class="w3-text-brown">13-18</span>)<br>C-Finale der Deutschen Einradhockeyliga (<span class="w3-text-primary">19-24</span>)</li>
+                <li><b>Finalturniere</b> <i>(Plätze)</i><br>Finale der Deutschen Einradhockeyliga (<span class="w3-text-tertiary">1-10</span>)
+                    <br>B-Finale der Deutschen Einradhockeyliga (<span class="w3-text-brown">11-16</span>)
+                    <br>C-Finale der Deutschen Einradhockeyliga (<span class="w3-text-primary">17-22</span>)
+                </li>
             </ul>
         </div>
     </div>
