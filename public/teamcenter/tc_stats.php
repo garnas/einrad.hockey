@@ -1,32 +1,22 @@
 <?php
-use App\Service\Team\TeamstatsAndersEingebunden; // Lädt die Klasse TeamstatsAndersEingebunden
-// In der Klasse TeamstatsAndersEingebunden ist der namespace deklariert,
-// um die Klasse via Composer laden zu können!
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth
+require_once '../../logic/teamstats.logic.php';
 
-// Via Composer Autoloader eingebunden (best practice)
-// Siehe Zeile 2 oben für use statement
-// und composer.json autoload in Zeile 13
-echo TeamstatsAndersEingebunden::exampleMethod();
-
-$team_id = $_SESSION['logins']['team']['id'];
-
-// Via selbstgeschriebenen Classloader eingebunden (antipattern, aber einfach)
-// Daher ist auch das .class notwendig im Dateinamen der Klasse...
-// Siehe init.php Zeile spl_autoload_register Zeile 60
-$spiele = Teamstats::get_anzahl_spiele($team_id);
-db::debug($spiele);
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 include Env::BASE_PATH . '/templates/header.tmp.php';
+?>
 
+<p>Siegquote gegen schwache Teams: <?=$quote_stark?> %</p>
+<p>Siegquote gegen starke Teams: <?=$quote_schwach?> %</p>
+<p>Siegquote insgesamt: <?=$quote_gesamt?> %</p>
 
-var_dump($spiele);
+<?php
 include '../../templates/footer.tmp.php';
