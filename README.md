@@ -56,3 +56,15 @@ htdocs
 ### 4. Seite öffnen
 * http://localhost/einrad.hockey/public/liga/neues.php
 * Hier sollte nun die Neuigkeitenseite angezeigt werden
+
+
+### Ionos Webspace:
+* composer.phar herunterladen
+<pre>
+curl -sS https://getcomposer.org/installer | /usr/bin/php8.0-cli
+</pre>
+
+* composer.phar ausführen
+<pre>
+/usr/bin/php8.0-cli composer.phar about
+</pre>
