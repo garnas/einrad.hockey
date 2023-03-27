@@ -358,8 +358,9 @@ class SchiriTest
 
         # Ergebnis in MySQL entragen:
         $zeitstempel = date('Y-m-d H:i:s'); # heutiges Datum + Uhrzeit
+        db::debug($abgabe);
         $antworten = json_encode($abgabe); #qqq Formattierung verbessern
-
+        db::debug($antworten);
         if ($richtig < self::lev_infos[$test_level]['richtig_min']) {
             $bestanden = 'Nein';
         } else {
