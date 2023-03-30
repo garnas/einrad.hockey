@@ -8,7 +8,8 @@ class Teamstats
 {
     private int $team_id;
     private int $saison;
-    private array|null $data;
+    private array|null $game_data;
+    private array|null $tournament_data;
 
     public const ALLE = 0;
     public const STARK = 1;
@@ -19,7 +20,8 @@ class Teamstats
     {
         $this->team_id = $team_id;
         $this->saison = $saison;
-        $this->data = $this->get_spiele();
+        $this->game_data = $this->get_spiele();
+        $this->tournament_data = $this->get_turniere();
     }
 
     private function get_spiele(): array|null {
@@ -86,9 +88,21 @@ class Teamstats
         return $result;
     }
 
+    private function get_turniere(): array|null {
+        $sql = "
+            SELECT te.turnier_id, ergebnis, platz
+            FROM turniere_ergebnisse te
+                INNER JOIN turniere_liga tl on te.turnier_id = tl.turnier_id
+            WHERE team_id = ?
+              AND saison = ?
+        ";
+
+        return db::$db->query($sql, $this->team_id, $this->saison)->esc()->fetch();
+    }
+
     public function get_anzahl_spiele(): int
     {
-        return count($this->data);
+        return count($this->game_data);
     }
 
     private function is_win(int $h, int $g): bool
@@ -130,7 +144,7 @@ class Teamstats
         $ploss = 0;
         $games = 0;
 
-        foreach ($this->data as $spiel) {
+        foreach ($this->game_data as $spiel) {
             if (!(($mode == self::STARK && $spiel['stark']) || ($mode == self::SCHWACH && $spiel['schwach']) || $mode == self::ALLE)) continue;
 
             $h = $spiel['tore_a'];
@@ -149,5 +163,90 @@ class Teamstats
         }
 
         return array("win" => $win, "draw" => $draw, "loss"=>$loss, "pwin"=>$pwin, "ploss"=>$ploss, "games"=>$games);
+    }
+
+    public function get_verteilung_tore(int $mode): array
+    {
+        $tore = 0;
+        $gegentore = 0;
+
+        foreach ($this->game_data as $spiel) {
+            if (!(($mode == self::STARK && $spiel['stark']) || ($mode == self::SCHWACH && $spiel['schwach']) || $mode == self::ALLE)) continue;
+            $tore += $spiel['tore_a'];
+            $gegentore += $spiel['tore_b'];
+        }
+
+        return array('goals' => $tore, 'goals_against' => $gegentore, 'diff' => $tore - $gegentore);
+    }
+
+    public function get_hoechster_sieg(): array|null
+    {
+        // 1. Differenz zwischen Tore und Gegentore
+        // 2. Anzahl Tore
+        $rs = NULL;
+        $cmp = 0;
+        $goals = 0;
+        foreach ($this->game_data as $id=> $spiel) {
+            $diff = $spiel['tore_a'] - $spiel['tore_b'];
+            if ($diff <= 0) continue;
+
+            if (($diff > $cmp) || ($diff == $cmp && $spiel['tore_a'] > $goals)) {
+                $goals = $spiel['tore_a'];
+                $cmp = $diff;
+                $rs = $id;
+            }
+        }
+
+        return is_null($rs) ? $rs : $this->game_data[$rs];
+    }
+
+    public function get_hoechste_niederlage(): array|null
+    {
+        // 1. Differenz zwischen Tore und Gegentore
+        // 2. Anzahl Gegentore
+        $rs = NULL;
+        $cmp = 0;
+        $goals = 0;
+
+        foreach ($this->game_data as $id=> $spiel) {
+            $diff = $spiel['tore_a'] - $spiel['tore_b'];
+            if ($diff >= 0) continue;
+
+            if (($diff < $cmp) || ($diff == $cmp && $spiel['tore_b'] > $goals)) {
+                $goals = $spiel['tore_a'];
+                $cmp = $diff;
+                $rs = $id;
+            }
+        }
+
+        return is_null($rs) ? $rs : $this->game_data[$rs];
+    }
+
+    public function get_bestes_turnier(): array|null
+    {
+        $rs = NULL;
+        $max = PHP_INT_MIN;
+        foreach ($this->tournament_data as $id => $turnier) {
+            if ($turnier['ergebnis'] > $max) {
+                $max = $turnier['ergebnis'];
+                $rs = $id;
+            }
+        }
+
+        return is_null($rs) ? $rs : $this->tournament_data[$rs];
+    }
+
+    public function get_schlechtestes_turnier(): array|null
+    {
+        $rs = NULL;
+        $min = PHP_INT_MAX;
+        foreach ($this->tournament_data as $id => $turnier) {
+            if ($turnier['ergebnis'] < $min) {
+                $max = $turnier['ergebnis'];
+                $rs = $id;
+            }
+        }
+
+        return is_null($rs) ? $rs : $this->tournament_data[$rs];
     }
 }

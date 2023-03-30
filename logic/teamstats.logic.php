@@ -9,13 +9,25 @@ $eval = true;
 $spiele = $stats->get_anzahl_spiele();
 if ($spiele == 0) $eval = false;
 
-if ($eval) {
-    $alle = $stats->get_verteilung_spiele(Teamstats::ALLE);
-    $schwach = $stats->get_verteilung_spiele(Teamstats::SCHWACH);
-    $stark = $stats->get_verteilung_spiele(Teamstats::STARK);
+// Spiele gegen alle Teams
+$alle = $stats->get_verteilung_spiele(Teamstats::ALLE);
+// Spiele, bei denen man das schwaechere Team gewesen ist
+$schwach = $stats->get_verteilung_spiele(Teamstats::SCHWACH);
+// Spiele, bei denen man das staerkere Team gewesen ist
+$stark = $stats->get_verteilung_spiele(Teamstats::STARK);
 
-    $quote_stark = number_format($stark['win'] / $alle['win'] * 100, 2, ',', '.');
-    $quote_schwach = number_format($schwach['win'] / $alle['win'] * 100, 2, ',', '.');
-    $quote_gesamt = number_format($alle['win'] / $spiele * 100, 2, ',', '.');
+$alle_tore = $stats->get_verteilung_tore(Teamstats::ALLE);
+$schwach_tore = $stats->get_verteilung_tore(Teamstats::SCHWACH);
+$stark_tore = $stats->get_verteilung_tore(Teamstats::STARK);
 
-}
+$hoechster_sieg = $stats->get_hoechster_sieg();
+$hoechster_sieg_string = is_null($hoechster_sieg) ? "-" :  $hoechster_sieg['tore_a'] . ":" . $hoechster_sieg['tore_b'];
+
+$hoechste_niederlage = $stats->get_hoechste_niederlage();
+$hoechste_niederlage_string = is_null($hoechste_niederlage) ? "-" :  $hoechste_niederlage['tore_a'] . ":" . $hoechste_niederlage['tore_b'];
+
+$bestes_turnier = $stats->get_bestes_turnier();
+$bestes_turnier_string = is_null($bestes_turnier) ? "-" : $bestes_turnier['ergebnis'];
+
+$schlechtestes_turnier = $stats->get_schlechtestes_turnier();
+$schlechtestes_turnier_string = is_null($schlechtestes_turnier) ? "-" : $schlechtestes_turnier['ergebnis'];
