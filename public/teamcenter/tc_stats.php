@@ -14,9 +14,12 @@ require_once '../../logic/teamstats.logic.php';
 include Env::BASE_PATH . '/templates/header.tmp.php';
 ?>
 
-<p>Siegquote gegen schwache Teams: <?=$quote_stark?> %</p>
-<p>Siegquote gegen starke Teams: <?=$quote_schwach?> %</p>
-<p>Siegquote insgesamt: <?=$quote_gesamt?> %</p>
+<?php if ($eval):
+    include '../../templates/teamstats.tmp.php'; ?>
+<?php else: ?>
+    <p>Es gibt keine Datengrundlage!</p>
+<?php endif; ?>
+
 
 <?php
 include '../../templates/footer.tmp.php';
