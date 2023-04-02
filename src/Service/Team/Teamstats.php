@@ -249,4 +249,97 @@ class Teamstats
 
         return is_null($rs) ? $rs : $this->tournament_data[$rs];
     }
+
+    public function get_gegner(): array|null
+    {
+        $rs = [];
+        foreach ($this->game_data as $game) {
+            $id = $game['team_id_b'];
+
+            if (!key_exists($id, $rs)) {
+                $rs[$id] = array('games'=>0, 'win'=>0, 'draw'=>0, 'loss'=>0, 'goals'=>0, 'goals_against'=>0);
+            }
+
+            $h = $game['tore_a'];
+            $g = $game['tore_b'];
+
+            if ($this->is_win($h, $g)) {
+                $rs[$id]['win'] += 1;
+                $rs[$id]['goals'] += $h;
+                $rs[$id]['goals_against'] += $g;
+            }
+
+            if ($this->is_draw($h, $g)) {
+                $rs[$id]['draw'] += 1;
+                $rs[$id]['goals'] += $h;
+                $rs[$id]['goals_against'] += $g;
+            }
+
+            if ($this->is_loss($h, $g)) {
+                $rs[$id]['loss'] += 1;
+                $rs[$id]['goals'] += $h;
+                $rs[$id]['goals_against'] += $g;
+            }
+
+            $rs[$id]['games'] += 1;
+        }
+
+        return $rs;
+    }
+
+    /**
+     * Erhalte die Teams, gegen die am haeufigsten verloren wurde
+     * @return array|null
+     */
+    public function get_angstgegner(): array|null
+    {
+        $teams = $this->get_gegner();
+
+        // Finde das beste Wertepaar
+        // Anzahl der Niederlagen in Kombination mit Anzahl der Spiele
+        $niederlagen = PHP_INT_MIN;
+        $aufeinandertreffen = PHP_INT_MIN;
+        foreach ($teams as $team) {
+            if ($team['loss'] >= $niederlagen && $team['games'] >= $aufeinandertreffen) {
+                $niederlagen = ($team['loss'] + $team['draw']);
+                $aufeinandertreffen = $team['games'];
+            }
+        }
+
+        // Durchsuche alle Spiele, die dieses Wertepaar erfuellen
+        $rs = [];
+        foreach ($teams as $team_id => $team) {
+            if ($team['loss'] == $niederlagen && $team['games'] == $aufeinandertreffen) $rs[$team_id] = $team;
+        }
+
+        // Wurde ueberhaupt ein Spiel verloren?
+        return empty($rs) ? NULL : $rs;
+    }
+
+    public function get_lieblingsgegner(): array|null
+    {
+        $teams = $this->get_gegner();
+
+        // Finde das beste Wertepaar
+        // Anzahl der Niederlagen in Kombination mit Anzahl der Spiele
+        $siege = PHP_INT_MIN;
+        $aufeinandertreffen = PHP_INT_MIN;
+        foreach ($teams as $team) {
+            $val = 3 * $team['win'] + $team['draw'];
+            if ($val >= $siege && $team['games'] >= $aufeinandertreffen) {
+                $siege = $val;
+                $aufeinandertreffen = $team['games'];
+            }
+        }
+
+        // Durchsuche alle Spiele, die dieses Wertepaar erfuellen
+        $rs = [];
+        foreach ($teams as $team_id => $team) {
+            $val = 3 * $team['win'] + $team['draw'];
+            if ($val == $siege && $team['games'] == $aufeinandertreffen) $rs[$team_id] = $team;
+        }
+
+        // Wurde ueberhaupt ein Spiel verloren?
+        return empty($rs) ? NULL : $rs;
+    }
 }

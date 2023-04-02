@@ -3,6 +3,41 @@
     .ehl-yellow {background-color: hsl(38deg, 38%, 58%)}
     .ehl-red {background-color: hsl(7deg, 38%, 58%)}
 </style>
+<h2>Gegner</h2>
+<!-- Ergebnisse gegen anderer Teams -->
+<table>
+    <?php foreach ($gegner as $team_id => $data):?>
+        <tr>
+            <td><?=$team_id?></td>
+            <td><?=$data['win']?> / <?=$data['draw']?> / <?=$data['loss']?></td>
+            <td><?=$data['goals']?>:<?=$data['goals_against']?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+<h2>Lieblingsgegner</h2>
+<table>
+    <?php if (!is_null($liebling)): ?>
+    <?php foreach ($liebling as $team_id => $team): ?>
+        <tr>
+            <td><?=$team_id?></td>
+            <td><?=$team['win']?> / <?=$team['draw']?> / <?=$team['loss']?></td>
+            <td><?=$team['goals']?>:<?=$team['goals_against']?></td>
+        </tr>
+    <?php endforeach; ?>
+    <?php endif; ?>
+</table>
+<h2>Angstgegner</h2>
+<table>
+    <?php if (!is_null($angst)): ?>
+        <?php foreach ($angst as $team_id => $team): ?>
+            <tr>
+                <td><?=$team_id?></td>
+                <td><?=$team['win']?> / <?=$team['draw']?> / <?=$team['loss']?></td>
+                <td><?=$team['goals']?>:<?=$team['goals_against']?></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</table>
 <h2>Turniere</h2>
 <div class="w3-row-padding w3-stretch">
     <!-- Bestes Turnier -->
