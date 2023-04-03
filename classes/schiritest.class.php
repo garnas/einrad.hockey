@@ -541,7 +541,6 @@ Der Schiriausschuss
 Mail;
         Html::message('info', '<pre>' . $text . '</pre>',
             'Text der automatischen E-Mail:', esc:false);
-        # Todo Ansgar mail versenden
         # Email an Prüfling senden:
         $mailer = MailBot::start_mailer();
         $mailer->setFrom(Env::SCHIRIMAIL); # Absender ist Schiriausschuss

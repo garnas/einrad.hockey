@@ -9,6 +9,7 @@ $sql = "
                    spieler.spieler_id,
                    spieler.vorname,
                    spieler.nachname,
+                   spieler_email,
                    spieler.schiri,
                    spieler.junior,
                    teams_liga.teamname,
@@ -41,11 +42,31 @@ $getRowColor = static function ($result) {
         return "w3-green";
     }
     if ($result["bestanden"] === "Ja") {
-        return "w3-light-green";
+        return "w3-yellow";
     }
     return "";
 };
 
+//$checkStatus = static function ($spieler, $results) {
+//    if ($spieler["schiri"] <= Config::SAISON) {
+//        return true;
+//    }
+//    foreach ($results as $result) {
+//        if (
+//            $result["spieler_id"] == $spieler["spieler_id"]
+//            && $result["bestanden"] == "Ja"
+//        ){
+//            return true;
+//        }
+//    }
+//    return false;
+//};
+//
+//foreach ($check as $spieler) {
+//    if (!$checkStatus($spieler, $results)){
+//        db::debug($spieler);
+//    }
+//}
 
 //DoctrineWrapper::dump(TurnierRepository::get());
 /////////////////////////////////////////////////////////////////////////////
@@ -83,17 +104,20 @@ include '../../templates/header.tmp.php'; ?>
                 <th>Team</th>
                 <th>Spieler</th>
                 <th>Theo. Bestanden</th>
-                <th>Fertig</th>
+                <th>Prakt. Bestanden</th>
                 <th>Abgegeben <br> Gestartet <br> Erstellt <br></th>
                 <th>Level</th>
             </tr>
             <?php foreach ($results as $result): ?>
 
-                <tr class="<?= ($result["bestanden"] === "Ja") ? "w3-green" : "" ?>">
-                    <td><?= $result["teamname"] ?></td>
-                    <td><?= $result["vorname"] . " " . mb_substr($result["nachname"], 0, 3, "UTF-8") . "." ?></td>
+                <tr class="<?= $getRowColor($result) ?>">
+                    <td><span class="w3-small"><?= $result["teamname"] ?></span></td>
+                    <td>
+                        <?= $result["vorname"] . " " . mb_substr($result["nachname"], 0, 3, "UTF-8") . "." ?> <br>
+                        <span class="w3-small"><?= $result["spieler_email"] ?></span>
+                    </td>
                     <td><?= ($result["bestanden"] == "Ja") ? Html::icon("check_circle_outline") : $result["bestanden"] ?></td>
-                    <td><?= ($result["schiri"] >= (Config::SAISON + 1)) ? "Ja" : "Nein" ?></td>
+                    <td><?= ($result["schiri"] >= (Config::SAISON + 1)) ? Html::icon("check_circle_outline") : "" ?></td>
                     <td>
                         <?= $result["t_abgegeben"] ?><br>
                         <?= $result["t_gestartet"] ?><br>
