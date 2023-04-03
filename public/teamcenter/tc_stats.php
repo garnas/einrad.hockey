@@ -15,7 +15,7 @@ include Env::BASE_PATH . '/templates/header.tmp.php';
 ?>
 
 <?php if ($eval):
-    include '../../templates/teamstats.tmp.php'; ?>
+    include '../../templates/teamstats/overview.tmp.php'; ?>
 <?php else: ?>
     <p>Es gibt keine Datengrundlage!</p>
 <?php endif; ?>

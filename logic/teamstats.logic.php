@@ -32,6 +32,6 @@ $bestes_turnier_string = is_null($bestes_turnier) ? "-" : $bestes_turnier['ergeb
 $schlechtestes_turnier = $stats->get_schlechtestes_turnier();
 $schlechtestes_turnier_string = is_null($schlechtestes_turnier) ? "-" : $schlechtestes_turnier['ergebnis'];
 
-$gegner = $stats->get_gegner();
+$teams = $stats->get_gegner();
 $angst = $stats->get_angstgegner();
 $liebling = $stats->get_lieblingsgegner();

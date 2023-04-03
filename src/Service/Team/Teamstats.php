@@ -92,9 +92,11 @@ class Teamstats
         $sql = "
             SELECT te.turnier_id, ergebnis, platz
             FROM turniere_ergebnisse te
-                INNER JOIN turniere_liga tl on te.turnier_id = tl.turnier_id
+            INNER JOIN turniere_liga tl on te.turnier_id = tl.turnier_id
             WHERE team_id = ?
-              AND saison = ?
+            AND saison = ?
+            AND art NOT LIKE 'final'
+            ORDER BY ergebnis DESC
         ";
 
         return db::$db->query($sql, $this->team_id, $this->saison)->esc()->fetch();
@@ -224,30 +226,12 @@ class Teamstats
 
     public function get_bestes_turnier(): array|null
     {
-        $rs = NULL;
-        $max = PHP_INT_MIN;
-        foreach ($this->tournament_data as $id => $turnier) {
-            if ($turnier['ergebnis'] > $max) {
-                $max = $turnier['ergebnis'];
-                $rs = $id;
-            }
-        }
-
-        return is_null($rs) ? $rs : $this->tournament_data[$rs];
+        return is_null($this->tournament_data) ? NULL : $this->tournament_data[0];
     }
 
     public function get_schlechtestes_turnier(): array|null
     {
-        $rs = NULL;
-        $min = PHP_INT_MAX;
-        foreach ($this->tournament_data as $id => $turnier) {
-            if ($turnier['ergebnis'] < $min) {
-                $max = $turnier['ergebnis'];
-                $rs = $id;
-            }
-        }
-
-        return is_null($rs) ? $rs : $this->tournament_data[$rs];
+        return is_null($this->tournament_data) ? NULL : $this->tournament_data[max(array_keys($this->tournament_data))];
     }
 
     public function get_gegner(): array|null
