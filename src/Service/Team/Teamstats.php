@@ -181,20 +181,23 @@ class Teamstats
         return array('goals' => $tore, 'goals_against' => $gegentore, 'diff' => $tore - $gegentore);
     }
 
+    /**
+     * Feststellung des hoechsten Siegs eines Teams.
+     * Dabei gilt zuerst die Anzahl der selbst geschossenen Tore; bei Gleichheit ist die Anzahl der Gegentore (Differenz zwischen Toren und Gegentore) ausschlaggebend.
+     *
+     * @return array|null
+     */
     public function get_hoechster_sieg(): array|null
     {
-        // 1. Differenz zwischen Tore und Gegentore
-        // 2. Anzahl Tore
         $rs = NULL;
-        $cmp = 0;
+        $diff = 0;
         $goals = 0;
-        foreach ($this->game_data as $id=> $spiel) {
-            $diff = $spiel['tore_a'] - $spiel['tore_b'];
-            if ($diff <= 0) continue;
+        foreach ($this->game_data as $id => $game) {
+            if ($game['tore_a'] <= $game['tore_b']) continue; // Niederlage oder Unentschieden werden nicht betrachtet
 
-            if (($diff > $cmp) || ($diff == $cmp && $spiel['tore_a'] > $goals)) {
-                $goals = $spiel['tore_a'];
-                $cmp = $diff;
+            if (($game['tore_a'] > $goals) || ($game['tore_a'] == $goals && $diff > ($game['tore_a'] - $game['tore_b']))) {
+                $diff = $game['tore_a'] - $game['tore_b'];
+                $goals = $game['tore_a'];
                 $rs = $id;
             }
         }
@@ -202,21 +205,24 @@ class Teamstats
         return is_null($rs) ? $rs : $this->game_data[$rs];
     }
 
+    /**
+     * Feststellung der hoechsten Niederlage eines Teams.
+     * Dabei gilt zuerst die Anzahl der Gegentore; bei Gleichheit ist die Anzahl der Tore (Differenz zwischen Gegentoren und Toren) ausschlaggebend.
+     *
+     * @return array|null
+     */
     public function get_hoechste_niederlage(): array|null
     {
-        // 1. Differenz zwischen Tore und Gegentore
-        // 2. Anzahl Gegentore
         $rs = NULL;
-        $cmp = 0;
+        $diff = 0;
         $goals = 0;
 
-        foreach ($this->game_data as $id=> $spiel) {
-            $diff = $spiel['tore_a'] - $spiel['tore_b'];
-            if ($diff >= 0) continue;
+        foreach ($this->game_data as $id => $game) {
+            if ($game['tore_a'] >= $game['tore_b']) continue; // Siege oder Unentschieden werden nicht beachtet
 
-            if (($diff < $cmp) || ($diff == $cmp && $spiel['tore_b'] > $goals)) {
-                $goals = $spiel['tore_a'];
-                $cmp = $diff;
+            if (($goals < $game['tore_b']) || ($goals == $game['tore_b'] && $diff > ($game['tore_b'] - $game['tore_a']))) {
+                $diff = $game['tore_b'] - $game['tore_a'];
+                $goals = $game['tore_b'];
                 $rs = $id;
             }
         }
@@ -272,33 +278,38 @@ class Teamstats
     }
 
     /**
-     * Erhalte die Teams, gegen die am haeufigsten verloren wurde
+     * Feststellung der Teams, gegen die Teams, gegen die am haeufigsten verloren wurde.
+     * Dabei gilt zuerst die Anzahl der Niederlagen; bei Gleichheit ist die Anzahl der Siege und Unentschieden (Differenz) ausschlaggebend.
+     *
      * @return array|null
      */
     public function get_angstgegner(): array|null
     {
+        // Erhalte die Zusammenfassung gegen alle Gegner
         $teams = $this->get_gegner();
 
-        $punkte = PHP_INT_MIN;
+        // Erhalte das beste Wertepaar
+        $losses = 0;
+        $diff = 0;
         foreach ($teams as $team) {
-            $val = 3 * $team['loss'] + $team['draw'];
-            if ($val >= $punkte) {
-                $punkte = $val;
+            if ($team['win'] + $team['draw'] >= $team['loss']) continue; // Mehr (Siege und Untentschieden) als Niederlagen
+
+            if ($team['loss'] > $losses || $team['loss'] == $losses && ($team['loss'] - $team['draw'] - $team['win']) > $diff) {
+                $losses = $team['loss'];
+                $diff = $team['loss'] - $team['draw'] - $team['win'];
             }
         }
 
-        if ($punkte == 0) return null;
+        if ($losses == 0 && $diff == 0) return null; // Es wurde kein Angstgegner gefunden
 
+        // Finde alle Gegner, die auf das gefundene Wertepaar zutreffen
         $rs = [];
         foreach ($teams as $team_id => $team) {
-            $val = 3 * $team['loss'] + $team['draw'];
-            if ($val == $punkte) {
+            if ($team['loss'] == $losses && ($team['loss'] - $team['draw'] - $team['win']) == $diff) {
                 $rs[$team_id] = $team;
                 $rs[$team_id]['team_id'] = $team_id;
             }
         }
-
-        if (empty($rs)) return NULL;
 
         uasort($rs, function($a, $b) {
             $a_diff = $a['goals'] - $a['goals_against'];
@@ -309,24 +320,35 @@ class Teamstats
         return $rs;
     }
 
+    /**
+     * Feststellung der Teams, gegen die am haeufigsten gewonnen wurde.
+     * Dabei gilt zuerst die Anzahl der Siege; bei Gleichheit ist die Anzahl der Niederlagen und Unentschieden (Differenz) ausschlaggebend.
+     *
+     * @return array|null
+     */
     public function get_lieblingsgegner(): array|null
     {
+        // Erhalte die Zusammenfassung gegen alle Gegner
         $teams = $this->get_gegner();
 
-        $punkte = PHP_INT_MIN;
+        // Erhalte das beste Wertepaar
+        $wins = 0;
+        $diff = 0;
         foreach ($teams as $team) {
-            $val = 3 * $team['win'] + $team['draw'];
-            if ($val >= $punkte) {
-                $punkte = $val;
+            if ($team['loss'] + $team['draw'] >= $team['win']) continue; // Mehr (Niederlagen und Untentschieden) als Siege
+
+            if ($team['win'] > $wins || $team['win'] == $wins && ($team['win'] - $team['draw'] - $team['loss']) > $diff) {
+                $wins = $team['win'];
+                $diff = $team['win'] - $team['draw'] - $team['loss'];
             }
         }
 
-        if ($punkte == 0) return null;
+        if ($wins == 0 && $diff == 0) return null; // Es wurde kein Lieblingsgegner gefunden
 
+        // Finde alle Gegner, die auf das gefundene Wertepaar zutreffen
         $rs = [];
         foreach ($teams as $team_id => $team) {
-            $val = 3 * $team['win'] + $team['draw'];
-            if ($val == $punkte) {
+            if ($team['win'] == $wins && ($team['win'] - $team['draw'] - $team['loss']) == $diff) {
                 $rs[$team_id] = $team;
                 $rs[$team_id]['team_id'] = $team_id;
             }
