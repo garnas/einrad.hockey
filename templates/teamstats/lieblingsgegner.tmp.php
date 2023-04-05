@@ -1,28 +1,29 @@
 <?php use App\Repository\Team\TeamRepository; ?>
 
+<h3 class="w3-text-secondary">Lieblingsgegner</h3>
 <div class="w3-row-padding">
-    <h3 class="w3-text-secondary">Lieblingsgegner</h3>
-    <p class="w3-border-top w3-border-grey w3-text-grey">
-        <span> </span>
-    </p>
-    <div class="w3-responsive w3-card">
-        <table class="w3-table w3-striped">
-            <thead class="w3-primary">
-            <tr>
-                <th>Team</th>
-                <th class="w3-center">Sieg / Unentschieden / Niederlage</th>
-                <th class="w3-center">Tore:Gegentore</th>
-                <th class="w3-center">Differenz</th>
-            </tr>
-            </thead>
-            <?php foreach ($liebling as $team_id => $team): ?>
-                <tr>
-                    <td><?=TeamRepository::get()->team($team_id)->getName();?></td>
-                    <td class="w3-center"><?=$team['win']?> / <?=$team['draw']?> / <?=$team['loss']?></td>
-                    <td class="w3-center"><?=$team['goals']?>:<?=$team['goals_against']?></td>
-                    <td class="w3-right"><?=$team['goals']-$team['goals_against']?></td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
+    <div class="w3-twothird">
+        <div class="w3-panel w3-primary w3-card-4">
+            <p class="w3-center w3-xxlarge"><?= TeamRepository::get()->team($first_liebling['team_id'])->getName(); ?></p>
+            <p class="w3-center">Gegner</p>
+        </div>
+    </div>
+    <div class="w3-third">
+        <div class="w3-panel w3-primary w3-card-4">
+            <p class="w3-center w3-xxlarge"><?=$first_liebling['win']?> / <?=$first_liebling['draw']?> / <?=$first_liebling['loss']?></p>
+            <p class="w3-center">Sieg / Unentschieden / Niederlage</p>
+        </div>
+    </div>
+    <div class="w3-twothird">
+        <div class="w3-panel w3-primary w3-card-4">
+            <p class="w3-center w3-xxlarge"><?=$first_liebling['goals']?>:<?=$first_liebling['goals_against']?></p>
+            <p class="w3-center">Tore:Gegentore</p>
+        </div>
+    </div>
+    <div class="w3-third">
+        <div class="w3-panel w3-primary w3-card-4">
+            <p class="w3-center w3-xxlarge"><?=$first_liebling['goals']-$first_liebling['goals_against']?></p>
+            <p class="w3-center">Differenz</p>
+        </div>
     </div>
 </div>

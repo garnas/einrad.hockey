@@ -35,3 +35,6 @@ $schlechtestes_turnier_string = is_null($schlechtestes_turnier) ? "-" : $schlech
 $teams = $stats->get_gegner();
 $angst = $stats->get_angstgegner();
 $liebling = $stats->get_lieblingsgegner();
+
+$first_liebling = array_shift($liebling);
+$first_angst = array_shift($angst);

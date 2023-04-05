@@ -294,10 +294,21 @@ class Teamstats
         $rs = [];
         foreach ($teams as $team_id => $team) {
             $val = 3 * $team['loss'] + $team['draw'];
-            if ($val == $punkte && $team['games'] == $aufeinandertreffen) $rs[$team_id] = $team;
+            if ($val == $punkte && $team['games'] == $aufeinandertreffen) {
+                $rs[$team_id] = $team;
+                $rs[$team_id]['team_id'] = $team_id;
+            }
         }
 
-        return empty($rs) ? NULL : $rs;
+        if (empty($rs)) return NULL;
+
+        uasort($rs, function($a, $b) {
+            $a_diff = $a['goals'] - $a['goals_against'];
+            $b_diff = $b['goals'] - $b['goals_against'];
+            return $a_diff - $b_diff;
+        });
+
+        return $rs;
     }
 
     public function get_lieblingsgegner(): array|null
@@ -316,9 +327,20 @@ class Teamstats
         $rs = [];
         foreach ($teams as $team_id => $team) {
             $val = 3 * $team['win'] + $team['draw'];
-            if ($val == $punkte) $rs[$team_id] = $team;
+            if ($val == $punkte) {
+                $rs[$team_id] = $team;
+                $rs[$team_id]['team_id'] = $team_id;
+            }
         }
 
-        return empty($rs) ? NULL : $rs;
+        if (empty($rs)) return NULL;
+
+        uasort($rs, function($a, $b) {
+            $a_diff = $a['goals'] - $a['goals_against'];
+            $b_diff = $b['goals'] - $b['goals_against'];
+            return $b_diff - $a_diff;
+        });
+
+        return $rs;
     }
 }
