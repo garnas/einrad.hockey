@@ -6,9 +6,9 @@
 
 <?php
     include "gegner.tmp.php";
-    if (!is_null($first_liebling)) include "lieblingsgegner.tmp.php";
+    if (isset($first_liebling)) include "lieblingsgegner.tmp.php";
     if (!empty($liebling)) include "lieblingsgegner_table.tmp.php";
-    if (!is_null($first_angst)) include "angstgegner.tmp.php";
+    if (isset($first_angst)) include "angstgegner.tmp.php";
     if (!empty($angst)) include "angstgegner_table.tmp.php";
     include "turnierergebnisse.tmp.php";
     include "spielergebnisse.tmp.php";

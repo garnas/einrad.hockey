@@ -280,21 +280,19 @@ class Teamstats
         $teams = $this->get_gegner();
 
         $punkte = PHP_INT_MIN;
-        $aufeinandertreffen = PHP_INT_MAX;
         foreach ($teams as $team) {
             $val = 3 * $team['loss'] + $team['draw'];
             if ($val >= $punkte) {
-                if ($team['games'] < $aufeinandertreffen) {
-                    $punkte = $val;
-                    $aufeinandertreffen = $team['games'];
-                }
+                $punkte = $val;
             }
         }
+
+        if ($punkte == 0) return null;
 
         $rs = [];
         foreach ($teams as $team_id => $team) {
             $val = 3 * $team['loss'] + $team['draw'];
-            if ($val == $punkte && $team['games'] == $aufeinandertreffen) {
+            if ($val == $punkte) {
                 $rs[$team_id] = $team;
                 $rs[$team_id]['team_id'] = $team_id;
             }
@@ -316,13 +314,14 @@ class Teamstats
         $teams = $this->get_gegner();
 
         $punkte = PHP_INT_MIN;
-        $aufeinandertreffen = PHP_INT_MIN;
         foreach ($teams as $team) {
             $val = 3 * $team['win'] + $team['draw'];
             if ($val >= $punkte) {
                 $punkte = $val;
             }
         }
+
+        if ($punkte == 0) return null;
 
         $rs = [];
         foreach ($teams as $team_id => $team) {
@@ -332,8 +331,6 @@ class Teamstats
                 $rs[$team_id]['team_id'] = $team_id;
             }
         }
-
-        if (empty($rs)) return NULL;
 
         uasort($rs, function($a, $b) {
             $a_diff = $a['goals'] - $a['goals_against'];
