@@ -1,3 +1,5 @@
+<?php use App\Repository\Team\TeamRepository; ?>
+
 <div class="w3-row-padding">
     <h3 class="w3-text-secondary">Gesamtübersicht über alle Teams</h3>
     <p class="w3-border-top w3-border-grey w3-text-grey">
@@ -14,7 +16,7 @@
             </thead>
             <?php foreach ($teams as $team_id => $team):?>
                 <tr>
-                    <td><?=$team_id?></td>
+                    <td><?=TeamRepository::get()->team($team_id)->getName()?></td>
                     <td class="w3-center"><?=$team['win']?> / <?=$team['draw']?> / <?=$team['loss']?></td>
                     <td class="w3-center"><?=$team['goals']?>:<?=$team['goals_against']?></td>
                 </tr>

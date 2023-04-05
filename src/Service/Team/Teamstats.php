@@ -279,24 +279,24 @@ class Teamstats
     {
         $teams = $this->get_gegner();
 
-        // Finde das beste Wertepaar
-        // Anzahl der Niederlagen in Kombination mit Anzahl der Spiele
-        $niederlagen = PHP_INT_MIN;
-        $aufeinandertreffen = PHP_INT_MIN;
+        $punkte = PHP_INT_MIN;
+        $aufeinandertreffen = PHP_INT_MAX;
         foreach ($teams as $team) {
-            if ($team['loss'] >= $niederlagen && $team['games'] >= $aufeinandertreffen) {
-                $niederlagen = ($team['loss'] + $team['draw']);
-                $aufeinandertreffen = $team['games'];
+            $val = 3 * $team['loss'] + $team['draw'];
+            if ($val >= $punkte) {
+                if ($team['games'] < $aufeinandertreffen) {
+                    $punkte = $val;
+                    $aufeinandertreffen = $team['games'];
+                }
             }
         }
 
-        // Durchsuche alle Spiele, die dieses Wertepaar erfuellen
         $rs = [];
         foreach ($teams as $team_id => $team) {
-            if ($team['loss'] == $niederlagen && $team['games'] == $aufeinandertreffen) $rs[$team_id] = $team;
+            $val = 3 * $team['loss'] + $team['draw'];
+            if ($val == $punkte && $team['games'] == $aufeinandertreffen) $rs[$team_id] = $team;
         }
 
-        // Wurde ueberhaupt ein Spiel verloren?
         return empty($rs) ? NULL : $rs;
     }
 
@@ -304,26 +304,21 @@ class Teamstats
     {
         $teams = $this->get_gegner();
 
-        // Finde das beste Wertepaar
-        // Anzahl der Niederlagen in Kombination mit Anzahl der Spiele
-        $siege = PHP_INT_MIN;
+        $punkte = PHP_INT_MIN;
         $aufeinandertreffen = PHP_INT_MIN;
         foreach ($teams as $team) {
             $val = 3 * $team['win'] + $team['draw'];
-            if ($val >= $siege && $team['games'] >= $aufeinandertreffen) {
-                $siege = $val;
-                $aufeinandertreffen = $team['games'];
+            if ($val >= $punkte) {
+                $punkte = $val;
             }
         }
 
-        // Durchsuche alle Spiele, die dieses Wertepaar erfuellen
         $rs = [];
         foreach ($teams as $team_id => $team) {
             $val = 3 * $team['win'] + $team['draw'];
-            if ($val == $siege && $team['games'] == $aufeinandertreffen) $rs[$team_id] = $team;
+            if ($val == $punkte) $rs[$team_id] = $team;
         }
 
-        // Wurde ueberhaupt ein Spiel verloren?
         return empty($rs) ? NULL : $rs;
     }
 }
