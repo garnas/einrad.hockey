@@ -90,9 +90,10 @@ class Teamstats
 
     private function get_turniere(): array|null {
         $sql = "
-            SELECT te.turnier_id, ergebnis, platz
+            SELECT te.turnier_id, ergebnis, platz, td.ort, tl.datum
             FROM turniere_ergebnisse te
             INNER JOIN turniere_liga tl on te.turnier_id = tl.turnier_id
+            INNER JOIN turniere_details td on te.turnier_id = td.turnier_id
             WHERE team_id = ?
             AND saison = ?
             AND art NOT LIKE 'final'
@@ -248,7 +249,7 @@ class Teamstats
 
             if (!key_exists($id, $rs)) {
                 $ligateam = $game['tb_ligateam'] == 'Ja';
-                
+
                 if ($ligateams_only && !$ligateam) continue;
                 $rs[$id] = array('games'=>0, 'win'=>0, 'draw'=>0, 'loss'=>0, 'goals'=>0, 'goals_against'=>0);
             }
