@@ -70,7 +70,7 @@ class Nav
         $class_text_color = (isset($_SESSION['logins']['team'])) ? "" : "w3-text-grey";
         $links = [
             [Env::BASE_URL . "/teamcenter/tc_start.php", "Start", $class_text_color],
-            [Env::BASE_URL . "/teamcenter/tc_terminseite_erstellen.php", Html::icon("fiber_new") . " Teamtermine", $class_text_color],
+            [Env::BASE_URL . "/teamcenter/tc_terminseite_erstellen.php", "Teamtermine", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_anmelden.php", "Turnieranmeldung", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_turnier_erstellen.php", "Turnier erstellen", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_verwalten.php", "Eigene Turniere", $class_text_color],
@@ -79,6 +79,7 @@ class Nav
             [Env::BASE_URL . "/teamcenter/tc_kontaktcenter.php", "Kontaktcenter", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_teamdaten.php", "Teamdaten", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_kader.php", "Kader", $class_text_color],
+            [Env::BASE_URL . "/teamcenter/tc_stats.php", Html::icon("fiber_new") . " Teamstatistik", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_pw_aendern.php", "Passwort ändern", $class_text_color],
         ];
         // Abstimmung Finalart
@@ -160,6 +161,7 @@ class Nav
             [Env::BASE_URL . "/teamcenter/tc_kontaktcenter.php", "Kontaktcenter", "w3-tertiary"],
             [Env::BASE_URL . "/teamcenter/tc_teamdaten.php", "Teamdaten", "w3-green"],
             [Env::BASE_URL . "/teamcenter/tc_kader.php", "Kader", "w3-green"],
+            [Env::BASE_URL . "/teamcenter/tc_stats.php", "Teamstatistik", "w3-green"],
             [Env::BASE_URL . "/teamcenter/tc_pw_aendern.php", "Passwort ändern", "w3-grey"],
             [Env::BASE_URL . "/teamcenter/tc_logout.php", "Logout", "w3-grey"],
         ];
