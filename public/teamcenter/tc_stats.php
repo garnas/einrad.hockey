@@ -14,10 +14,12 @@ require_once '../../logic/teamstats.logic.php';
 include Env::BASE_PATH . '/templates/header.tmp.php';
 ?>
 
+<h1 class="w3-text-primary">Team-Statistik der Saison <?= Html::get_saison_string() ?></h1>
+
 <?php if ($eval):
     include '../../templates/teamstats/overview.tmp.php'; ?>
 <?php else: ?>
-    <p>Es gibt keine Datengrundlage!</p>
+    <p class="w3-text-grey">Leider gibt es keine Turnier- und Spieldaten, die für die eine Auswertung verwendet werden kann.</p>
 <?php endif; ?>
 
 
