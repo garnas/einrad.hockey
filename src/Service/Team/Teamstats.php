@@ -40,7 +40,6 @@ class Teamstats
         $data = db::$db->query($sql, $this->saison, $this->team_id, $this->team_id)->esc()->fetch();
 
         $result = [];
-
         // erweitere die Daten und stelle sie so um, dass am Ende das gesuchte Team immer als team_a gelistet ist
         foreach ($data as $game) {
             if ($game['team_id_a'] == $this->team_id) {
@@ -106,6 +105,11 @@ class Teamstats
     public function get_anzahl_spiele(): int
     {
         return count($this->game_data);
+    }
+
+    public function get_anzahl_turniere(): int
+    {
+        return count($this->tournament_data);
     }
 
     private function is_win(int $h, int $g): bool
@@ -233,12 +237,12 @@ class Teamstats
 
     public function get_bestes_turnier(): array|null
     {
-        return is_null($this->tournament_data) ? NULL : $this->tournament_data[0];
+        return empty($this->tournament_data) ? NULL : $this->tournament_data[0];
     }
 
     public function get_schlechtestes_turnier(): array|null
     {
-        return is_null($this->tournament_data) ? NULL : $this->tournament_data[max(array_keys($this->tournament_data))];
+        return empty($this->tournament_data) ? NULL : $this->tournament_data[max(array_keys($this->tournament_data))];
     }
 
     public function get_gegner(bool $ligateams_only = false): array|null
