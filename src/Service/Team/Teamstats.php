@@ -240,13 +240,16 @@ class Teamstats
         return is_null($this->tournament_data) ? NULL : $this->tournament_data[max(array_keys($this->tournament_data))];
     }
 
-    public function get_gegner(): array|null
+    public function get_gegner(bool $ligateams_only = false): array|null
     {
         $rs = [];
         foreach ($this->game_data as $game) {
             $id = $game['team_id_b'];
 
             if (!key_exists($id, $rs)) {
+                $ligateam = $game['tb_ligateam'] == 'Ja';
+                
+                if ($ligateams_only && !$ligateam) continue;
                 $rs[$id] = array('games'=>0, 'win'=>0, 'draw'=>0, 'loss'=>0, 'goals'=>0, 'goals_against'=>0);
             }
 
@@ -273,6 +276,22 @@ class Teamstats
 
             $rs[$id]['games'] += 1;
         }
+
+        uasort($rs, function($a, $b) {
+            $diff = ($b['win'] - $b['loss']) - ($a['win'] - $a['loss']);
+            if ($diff != 0) return $diff;
+            $diff = $b['win'] - $a['win'];
+            if ($diff != 0) return $diff;
+            $diff = $a['loss'] - $b['loss'];
+            if ($diff != 0) return $diff;
+            $diff = $b['draw'] - $a['draw'];
+            if ($diff != 0) return $diff;
+            $diff = ($b['goals'] - $b['goals_against']) - ($a['goals'] - $a['goals_against']);
+            if ($diff != 0) return $diff;
+            $diff = $a['goals'] - $b['goals'];
+            if ($diff != 0) return $diff;
+            return $b['goals_against'] - $a['goals_against'];
+        });
 
         return $rs;
     }
