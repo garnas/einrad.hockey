@@ -4,6 +4,86 @@
     .ehl-red {background-color: hsl(7deg, 38%, 58%)}
 </style>
 
+<!-- Panels mit Verteilung -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Script zum Schalten der Buttons -->
+<script>
+    function show_all() {
+        $('#gesamt').show();
+        $('#btn_gesamt').addClass('w3-primary').removeClass('w3-light-gray w3-text-gray');
+
+        $('#schwach').hide();
+        $('#btn_schwach').addClass('w3-light-gray w3-text-gray').removeClass('w3-primary');
+
+        $('#stark').hide();
+        $('#btn_stark').addClass('w3-light-gray w3-text-gray').removeClass('w3-primary');
+
+        $('#infotext').text('Zusammenfassung der Spiele der aktuellen Saison.');
+    }
+
+    function show_schwach() {
+        $('#gesamt').hide();
+        $('#btn_gesamt').addClass('w3-light-gray w3-text-gray').removeClass('w3-primary');
+
+        $('#schwach').show();
+        $('#btn_schwach').addClass('w3-primary').removeClass('w3-light-gray w3-text-gray');
+
+        $('#stark').hide();
+        $('#btn_stark').addClass('w3-light-gray w3-text-gray').removeClass('w3-primary');
+
+        $('#infotext').text('Zusammenfassung der Spiele der aktuellen Saison. Dabei werden nur jene bedachtet, bei ' +
+            'denen das gegnerische Team zu diesem Zeitpunkt in der Rangtabelle besser platziert war.');
+    }
+
+    function show_stark() {
+        $('#gesamt').hide();
+        $('#btn_gesamt').addClass('w3-light-gray w3-text-gray').removeClass('w3-primary');
+
+        $('#schwach').hide();
+        $('#btn_schwach').addClass('w3-light-gray w3-text-gray').removeClass('w3-primary');
+
+        $('#stark').show();
+        $('#btn_stark').addClass('w3-primary').removeClass('w3-light-gray w3-text-gray');
+
+        $('#infotext').text('Zusammenfassung der Spiele der aktuellen Saison. Dabei werden nur jene bedachtet, bei ' +
+            'denen das gegnerische Team zu diesem Zeitpunkt in der Rangtabelle schlechter platziert war. Dazu ' +
+            'gehören auch Nichtligateams.');
+    }
+</script>
+<div class="w3-row-padding">
+    <h3 class="w3-text-secondary">Zusammenfassung</h3>
+    <p class="w3-border-top w3-border-grey w3-text-grey">
+        <span id="infotext"></span>
+    </p>
+
+    <!-- Buttons -->
+    <div class="w3-bar w3-border">
+        <button id="btn_gesamt" style="width: 33.3%" class="w3-button w3-bar-item w3-hover-primary" onclick="show_all()">
+            Gegen <b>alle</b> Teams
+        </button>
+        <button id="btn_schwach" style="width: 33.3%" class="w3-button w3-bar-item w3-hover-primary" onclick="show_schwach()">
+            Gegen <b>starke</b> Teams
+        </button>
+        <button id="btn_stark" style="width: 33.3%" class="w3-button w3-bar-item w3-hover-primary" onclick="show_stark()">
+            Gegen <b>schwache</b> Teams
+        </button>
+    </div>
+
+    <div id="gesamt">
+        <?php include "gesamt_verteilung.tmp.php"; ?>
+    </div>
+    <div id="schwach">
+        <?php include "schwach_verteilung.tmp.php"; ?>
+    </div>
+    <div id="stark">
+        <?php include "stark_verteilung.tmp.php"; ?>
+    </div>
+
+    <script>
+        $(document).ready(show_all());
+    </script>
+</div>
+
 <!-- Tabelle mit Ergebnissen gegen alle anderen Teams -->
 <div>
     <div class="w3-row-padding">
@@ -59,29 +139,4 @@
         </p>
     </div>
     <?php include "spielergebnisse.tmp.php"; ?>
-</div>
-
-
-<div class="w3-row-padding">
-    <h3 class="w3-text-secondary">Verteilung gegen alle Teams</h3>
-    <p class="w3-border-top w3-border-grey w3-text-grey">
-        <span> </span>
-    </p>
-    <?php include "gesamt_verteilung.tmp.php"; ?>
-</div>
-
-<div class="w3-row-padding">
-    <h3 class="w3-text-secondary">Verteilung gegen stärkere Teams</h3>
-    <p class="w3-border-top w3-border-grey w3-text-grey">
-        <span> </span>
-    </p>
-    <?php include "schwach_verteilung.tmp.php"; ?>
-</div>
-
-<div class="w3-row-padding">
-    <h3 class="w3-text-secondary">Verteilung gegen schwächere Teams</h3>
-    <p class="w3-border-top w3-border-grey w3-text-grey">
-        <span> </span>
-    </p>
-    <?php include "stark_verteilung.tmp.php"; ?>
 </div>
