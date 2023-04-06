@@ -2,7 +2,7 @@
 
 <div class="w3-row-padding">
     <div class="w3-half">
-        <div class="w3-panel w3-primary w3-card-4">
+        <div class="w3-panel ehl-red w3-card-4">
             <p class="w3-center w3-xlarge"><?= TeamRepository::get()->team($first_angst['team_id'])->getName(); ?></p>
         </div>
     </div>

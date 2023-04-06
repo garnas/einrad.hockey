@@ -18,7 +18,8 @@
         $('#stark').hide();
         $('#btn_stark').addClass('w3-light-gray w3-text-gray').removeClass('w3-primary');
 
-        $('#infotext').text('Zusammenfassung der Spiele der aktuellen Saison.');
+        $('#infotext').text('Zusammenfassung der Spiele der aktuellen Saison. Dabei werden auch jene beachtet bei ' +
+            'denen gegen ein Nichtligateam gespielt wurde.');
     }
 
     function show_schwach() {
@@ -100,7 +101,11 @@
     <div class="w3-row-padding">
         <h3 class="w3-text-secondary">Lieblingsgegner</h3>
         <p class="w3-border-top w3-border-grey w3-text-grey">
-            <span>Ausschlaggebend ist die Anzahl der Siege gegen ein anderes Team. Bei Gleichheit entscheidet die Summe der Anzahl aus Unentschieden und Niederlagen.</span>
+            <span>
+                Ausschlaggebend ist die Anzahl der Siege gegen ein anderes Team. Bei Gleichheit entscheidet
+                die Summe der Anzahl aus Unentschieden und Niederlagen. Besteht weiterhin Gleichheit, wird die
+                Tordifferenz herangezogen, wobei alle Gegner gelistet werden.
+            </span>
         </p>
     </div>
     <?php if (isset($first_liebling)) include "lieblingsgegner.tmp.php"; ?>
@@ -112,7 +117,11 @@
     <div class="w3-row-padding">
         <h3 class="w3-text-secondary">Angstgegner</h3>
         <p class="w3-border-top w3-border-grey w3-text-grey">
-            <span> </span>
+            <span>
+                Ausschlaggebend ist die Anzahl der Niederlagen gegen ein anderes Team. Bei Gleichheit entscheidet
+                die Summe der Anzahl aus Unentschieden und Siege. Besteht weiterhin Gleichheit, wird die
+                Tordifferenz herangezogen, wobei alle Gegner gelistet werden.
+            </span>
         </p>
     </div>
     <?php if (isset($first_angst)) include "angstgegner.tmp.php"; ?>
@@ -124,7 +133,10 @@
     <div class="w3-row-padding">
         <h3 class="w3-text-secondary">Turnierergebnisse</h3>
         <p class="w3-border-top w3-border-grey w3-text-grey">
-            <span> </span>
+            <span>
+                Aufzeigt werden das beste und das schlechteste Turnier in der laufenden Saison bemessen
+                an den erhaltenen Punkten.
+            </span>
         </p>
     </div>
     <?php include "turnierergebnisse.tmp.php"; ?>
@@ -135,7 +147,10 @@
     <div class="w3-row-padding">
         <h3 class="w3-text-secondary">Spielergebnisse</h3>
         <p class="w3-border-top w3-border-grey w3-text-grey">
-            <span> </span>
+            <span>
+                Darstellung des höchsten Siegs und der höchsten Niederlage über alle Spiele. Es werden zuerst die
+                Tore/Gegentore beachtet. Bei Gleichheit ist die Differenz ausschlaggebend.
+            </span>
         </p>
     </div>
     <?php include "spielergebnisse.tmp.php"; ?>
