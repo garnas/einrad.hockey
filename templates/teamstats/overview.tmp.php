@@ -63,10 +63,10 @@
             Gegen <b>alle</b> Teams
         </button>
         <button id="btn_schwach" style="width: 33.3%" class="w3-button w3-bar-item w3-hover-primary" onclick="show_schwach()">
-            Gegen <b>starke</b> Teams
+            <b>Starke</b> Teams
         </button>
         <button id="btn_stark" style="width: 33.3%" class="w3-button w3-bar-item w3-hover-primary" onclick="show_stark()">
-            Gegen <b>schwache</b> Teams
+            <b>Schwache</b> Teams
         </button>
     </div>
 
