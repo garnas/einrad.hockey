@@ -202,7 +202,7 @@ include '../../templates/header.tmp.php';?>
         <input type='password' name='password' class="w3-input w3-light-grey">
     </p>
     <p>
-        <input type='submit' name='gitpull' value='Update Website von Master' class="w3-button w3-green w3-block">
+        <input type='submit' name='gitpull' value='Update Website von Stats-Extension' class="w3-button w3-green w3-block">
     </p>
 </form>
 

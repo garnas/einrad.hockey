@@ -1,3 +1,3 @@
-git fetch origin master
+git fetch origin stats-extension
 git status
-git diff origin/master
+git diff origin/stats-extension
