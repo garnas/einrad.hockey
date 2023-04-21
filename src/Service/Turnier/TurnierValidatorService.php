@@ -11,6 +11,12 @@ use Html;
 
 class TurnierValidatorService
 {
+    public static function hasLaRights(Turnier $turnier): bool
+    {
+        return Helper::$ligacenter ||
+            ($turnier->isFinalTurnier() &&
+                TurnierService::isAusrichter($turnier, $_SESSION['logins']['team']['id']));
+    }
 
     private Turnier $turnier;
 
@@ -35,7 +41,7 @@ class TurnierValidatorService
         // Keine Änderungen in der Ergebnisphase
         if (
             $turnier->getPhase() === 'ergebnis'
-            && !Helper::$ligacenter
+            && !self::hasLaRights($turnier)
         ) {
             Html::error("Turniere können in der Ergebnisphase nicht mehr geändert werden. Bitte wende dich unter "
                 . Env::LAMAIL . " an den Ligaaussschuss.");
@@ -55,7 +61,7 @@ class TurnierValidatorService
 
     public static function mayChangePlaetze(Turnier $turnier, int $plaetze_before): bool
     {
-        if (Helper::$ligacenter) {
+        if (self::hasLaRights($turnier)) {
             return true;
         }
         if ($turnier->isWartePhase()) {
@@ -73,7 +79,7 @@ class TurnierValidatorService
 
     public function mayChange(): bool
     {
-        return $this->turnier->getPhase() != 'ergebnis' || Helper::$ligacenter;
+        return $this->turnier->getPhase() != 'ergebnis' || self::hasLaRights($this->turnier);
     }
 
     public function hasValidPhase(): bool
@@ -90,7 +96,7 @@ class TurnierValidatorService
     {
 
         if (
-            Helper::$teamcenter
+            (Helper::$teamcenter && !self::hasLaRights($this->turnier))
             &&
             in_array($this->turnier->getArt(), ['I', 'II', 'spass'], true)
         ) {
@@ -98,7 +104,7 @@ class TurnierValidatorService
         }
 
         if (
-            Helper::$ligacenter
+            self::hasLaRights($this->turnier)
             &&
             in_array($this->turnier->getArt(), ['I', 'II', 'spass', 'final', 'fixed'], true)
         ) {
@@ -150,7 +156,7 @@ class TurnierValidatorService
         }
 
         if (
-            Helper::$teamcenter
+            (Helper::$teamcenter && !self::hasLaRights($this->turnier))
             && $plaetze <= 8
             && $plaetze >= 5
         ) {
@@ -158,7 +164,7 @@ class TurnierValidatorService
         }
 
         if (
-            Helper::$ligacenter
+            self::hasLaRights($this->turnier)
             && $plaetze >= 0
             && $plaetze <= 12
         ) {
@@ -172,7 +178,8 @@ class TurnierValidatorService
 
     public function hasValidDatum(): bool
     {
-        if (Helper::$ligacenter) {
+        if (self::hasLaRights($this->turnier)
+        ) {
             return true;
         }
 
@@ -188,7 +195,8 @@ class TurnierValidatorService
             }
 
             $feiertage = Feiertage::finden(date("Y", $unixTime));
-            if (Helper::$teamcenter && !in_array($unixTime, $feiertage) && date('N', $unixTime) < 6) {
+            if ((Helper::$teamcenter && !self::hasLaRights($this->turnier))
+                && !in_array($unixTime, $feiertage) && date('N', $unixTime) < 6) {
                 Html::error("Das Datum liegt nicht am Wochende und ist kein bundesweiter Feiertag.");
                 return false;
             }
@@ -205,11 +213,11 @@ class TurnierValidatorService
     public function hasValidUhrzeit(): bool
     {
 
-        if(Helper::$ligacenter) {
+        if (self::hasLaRights($this->turnier)) {
             return true;
         }
 
-        $stunde = (int) $this->turnier->getDetails()->getStartzeit()->format('G');
+        $stunde = (int)$this->turnier->getDetails()->getStartzeit()->format('G');
 
         // Validierung Startzeit:
         if ($stunde < 9 || $stunde > 15) {
@@ -228,7 +236,8 @@ class TurnierValidatorService
         $ausrichter = $this->turnier->getAusrichter();
 
         if (
-            Helper::$teamcenter
+            ((Helper::$teamcenter && !self::hasLaRights($this->turnier))
+                && !self::hasLaRights($this->turnier))
             && TeamValidator::isAmKalenderTagAufSetzliste($this->turnier, $ausrichter)
         ) {
             Html::error("Ihr befindet euch am Turniertag bereits auf einer Setzliste");
@@ -269,9 +278,9 @@ class TurnierValidatorService
      */
     public static function isErweiterbarBlockfrei(Turnier $turnier): bool
     {
-       return $turnier->getPhase() === 'setz'
-             && $turnier->isLigaturnier()
-             && $turnier->getBlock() != Config::BLOCK_ALL[0];
+        return $turnier->getPhase() === 'setz'
+            && $turnier->isLigaturnier()
+            && $turnier->getBlock() != Config::BLOCK_ALL[0];
     }
 
 }

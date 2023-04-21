@@ -74,7 +74,7 @@ use App\Service\Turnier\TurnierValidatorService;
                 <option <?php if($turnier->getDetails()->getPlaetze() == '6'){?>selected<?php }?> value="6">6 Teams</option>
                 <option <?php if($turnier->getDetails()->getPlaetze() == '7'){?>selected<?php }?> value="7">7 Teams</option>
                 <option <?php if($turnier->getDetails()->getPlaetze() == '8'){?>selected<?php }?> value="8">8 Teams</option>
-                <?php if (Helper::$ligacenter): ?>
+                <?php if (TurnierValidatorService::hasLaRights($turnier)): ?>
                     <option <?php if($turnier->getDetails()->getPlaetze() == '9'){?>selected<?php }?> value="9">9 Teams</option>
                     <option <?php if($turnier->getDetails()->getPlaetze() == '10'){?>selected<?php }?> value="10">10 Teams</option>
                     <option <?php if($turnier->getDetails()->getPlaetze() == '11'){?>selected<?php }?> value="11">11 Teams</option>
@@ -125,7 +125,7 @@ use App\Service\Turnier\TurnierValidatorService;
         </p>
         <p>
             <label class="w3-text-primary" for="startgebuehr">Startgebühr</label>
-            <?php if(Helper::$ligacenter) { ?>
+            <?php if(TurnierValidatorService::hasLaRights($turnier)) { ?>
                 <input type="text" class="w3-input w3-border w3-border-primary" placeholder="z. B. 5 Euro" value="<?=$turnier->getDetails()->getStartgebuehr()?>" id="startgebuehr" name="startgebuehr">
             <?php } else { ?>
                 <select class="w3-input w3-border w3-border-primary" id="startgebuehr" name="startgebuehr">
