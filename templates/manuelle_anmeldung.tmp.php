@@ -89,7 +89,7 @@ use App\Service\Turnier\TurnierSnippets;
                 >
                 <label class="w3-hover-text-secondary w3-text-primary"
                        for="<?= $anmeldung->getTeam()->id() ?>">
-                    <?= $anmeldung->getTeam()->getName() ?>
+                    <?= e($anmeldung->getTeam()->getName()) ?>
                 </label>
             </p>
         <?php endforeach; ?>

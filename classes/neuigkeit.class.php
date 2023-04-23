@@ -1,5 +1,7 @@
 <?php
 
+use App\Service\Team\TeamValidator;
+
 /**
  * Class Neuigkeit
  */
@@ -336,7 +338,7 @@ class Neuigkeit
 
         if (
             Helper::$teamcenter
-            && \App\Service\Team\TeamValidator::isOeffentlichkeitsausschuss($_SESSION["logins"]["team"]["id"])
+            && TeamValidator::isOeffentlichkeitsausschuss($_SESSION["logins"]["team"]["id"] ?? null)
         ) {
             return true;
         }
@@ -363,7 +365,7 @@ class Neuigkeit
         // Team Teil des Öffis?
         if (
             $eingetragen_von== "Öffentlichkeitsausschuss"
-            && \App\Service\Team\TeamValidator::isOeffentlichkeitsausschuss($_SESSION['logins']['team']['id'])
+            && TeamValidator::isOeffentlichkeitsausschuss($_SESSION['logins']['team']['id'] ?? null)
         ) {
             return true;
         }
