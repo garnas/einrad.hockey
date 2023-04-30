@@ -1,5 +1,6 @@
 <?php
 require_once '../../init.php';
+require_once '../../logic/session_la.logic.php'; //Auth
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
