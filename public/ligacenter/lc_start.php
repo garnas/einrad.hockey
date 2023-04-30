@@ -19,6 +19,8 @@ include '../../templates/header.tmp.php'; ?>
 <br>
 <?= Html::link(Env::BASE_URL . "/ligacenter/lc_spielerstats.php","spieler.xlsx", extern: true) ?>
 <br>
+<?= Html::link(Env::BASE_URL . "/ligacenter/lc_teamstats.php", "teams.xlsx", extern: true) ?>
+<br>
 <?= Html::link(Env::BASE_URL . "/schiricenter/schiritest_stats.php", "schiritest.xlsx", extern: true) ?>
 <br>
 
