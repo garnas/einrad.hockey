@@ -358,8 +358,9 @@ class SchiriTest
 
         # Ergebnis in MySQL entragen:
         $zeitstempel = date('Y-m-d H:i:s'); # heutiges Datum + Uhrzeit
+        db::debug($abgabe);
         $antworten = json_encode($abgabe); #qqq Formattierung verbessern
-
+        db::debug($antworten);
         if ($richtig < self::lev_infos[$test_level]['richtig_min']) {
             $bestanden = 'Nein';
         } else {
@@ -540,7 +541,6 @@ Der Schiriausschuss
 Mail;
         Html::message('info', '<pre>' . $text . '</pre>',
             'Text der automatischen E-Mail:', esc:false);
-        # Todo Ansgar mail versenden
         # Email an Prüfling senden:
         $mailer = MailBot::start_mailer();
         $mailer->setFrom(Env::SCHIRIMAIL); # Absender ist Schiriausschuss
