@@ -12,7 +12,6 @@ Html::$content = "Die wichtigsten Termine der Deutschen Einradhockeyliga.";
 include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 
 <h1 class="w3-text-primary" id='saisontermine'>Saisontermine</h1>
-<p>Die Termine der aktuellen <span class="w3-text-primary"><b>Saison 2021/2022</b></span> sind:</p>
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-bordered">
         <tr>
