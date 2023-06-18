@@ -14,6 +14,10 @@ include '../../templates/header.tmp.php';
 
     <!-- Archiv -->
     <h1 class="w3-text-primary">Spielplan Deutsche Meisterschaft</h1>
+<h2>Livestream</h2>
+<p>
+    <iframe src="https://player.twitch.tv/?channel=holzmichel41&parent=www.example.com" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>
+</p>
 <p>
     <?= HTML::link("https://docs.google.com/spreadsheets/d/e/2PACX-1vQWCCtPxRlVZ6EAh6TSxoAGa0Lc0alfo2iqjWBz0rmGoM1deUl5hYPMORPAnn9gCq67eysaWUjGlqSK/pubhtml",
     bezeichnung: "Direkter Link zum Spielplan",
