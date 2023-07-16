@@ -5,18 +5,10 @@ class Config
     /**
      * Saison
      */
-    public const SAISON = 28; // Saison 0 = Jahr 1995;
-    public const SAISON_WECHSEL = "28.06.2022"; // Wichtig für zweites Freilos
-    public const SAISON_ANFANG = '15.08.2022';
-    public const SAISON_ENDE = '28.05.2023';
-
-    /**
-     * Saisontermine
-     */
-    public const FINALE_EINS = '10.06.2023';
-    public const FINALE_ZWEI = '11.06.2023';
-    public const FINALE_DREI = '17.06.2023';
-    public const FINALE_VIER = '18.06.2023';
+    public const SAISON = 29; // Saison 0 = Jahr 1995;
+    public const SAISON_WECHSEL = "16.07.2023"; // Wichtig für zweites Freilos
+    public const SAISON_ANFANG = '14.08.2023';
+    public const SAISON_ENDE = '26.05.2024';
 
     /**
      * Log-Files
@@ -48,12 +40,6 @@ class Config
      * Reihenfolge ist wichtig!
      */
     public const BLOCK_ALL = ['ABCDEF', 'A', 'AB', 'ABC', 'BC', 'BCD', 'CD', 'CDE', 'DE', 'DEF', 'EF', 'F'];
-
-    /**
-     * Mögliche Finalturnier-Blöcke
-     * Reihenfolge ist wichtig!
-     */
-    public const BLOCK_FINALE = ['Finale', 'B-Finale', 'C-Finale', 'Saisonschlussturnier'];
 
     /**
      * Rangtabellen-Zuordnung
