@@ -372,7 +372,6 @@ class nSpieler
             ];
 
         db::$db->query($update, $params)->log();
-        (new Team ($this->team_id))->set_schiri_freilos();
 
         return true;
     }

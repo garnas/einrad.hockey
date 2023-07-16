@@ -40,6 +40,7 @@ if (isset($_POST['spieler_aendern'])) {
         ->speichern()) {
 
         Html::info("Spielerdaten wurden gespeichert.");
+        (new Team ($spieler->team_id))->set_schiri_freilos();
         Helper::reload('/ligacenter/lc_kader.php','?team_id=' . $spieler->team_id);
 
     } else {

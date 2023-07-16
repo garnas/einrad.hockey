@@ -418,7 +418,7 @@ class Team
         $erhalten_am = empty($zweites_freilos)
             ? 0
             : strtotime($zweites_freilos);
-        return $erhalten_am >= strtotime(Config::SAISON_ANFANG);
+        return $erhalten_am >= strtotime(Config::SAISON_WECHSEL);
     }
 
     /**

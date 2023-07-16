@@ -38,6 +38,7 @@ if (isset($_POST['neuer_eintrag'])) {
 
 // Spieler aus der Vorsaison übernehmen
 if (isset($_POST['submit_takeover'])) {
+    $changed = false;
     if (($_POST['dsgvo'] ?? '') !== 'zugestimmt') {
         Html::error("Den Datenschutz-Hiweisen muss zugestimmt werden, um in einem Ligateam spielen zu können.");
     } else {
@@ -50,9 +51,9 @@ if (isset($_POST['submit_takeover'])) {
                 $changed = true;
             }
         }
-        if ($changed ?? false) {
+        if ($changed) {
             Html::info("Die Spieler wurden in die neue Saison übernommen.");
-            (new Team ($team_id))->set_schiri_freilos(); // Check in der Funktion
+            (new Team ($team_id))->set_schiri_freilos();
             header('Location: ' . db::escape($_SERVER['PHP_SELF']) . '?team_id=' . $team_id);
             die ();
         }
