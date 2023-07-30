@@ -1,5 +1,5 @@
 <!-- ABSCHLUSSTABELLE -->
-<div class="w3-responsive w3-card">
+<div class="w3-responsive">
     <table class="w3-table w3-centered w3-striped">
         <tr class="w3-primary">
             <th>

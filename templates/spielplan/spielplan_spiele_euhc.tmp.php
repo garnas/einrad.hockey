@@ -3,7 +3,7 @@
     Spielzeit: <?= $spielplan->details['anzahl_halbzeiten'] ?> x <?= $spielplan->details['halbzeit_laenge'] ?>&nbsp;min
     | Puffer: <?= $spielplan->details['puffer'] ?>&nbsp;min
 </span>
-<div class="w3-responsive w3-card">
+<div class="w3-responsive">
     <table class="w3-table w3-centered w3-striped">
         <tr class="w3-primary">
             <!-- DM Uhr -->
