@@ -23,11 +23,11 @@ final class Spielplan_JgJ extends Spielplan {
 
     /**
      * DirekterVergleich constructor.
-     * @param Turnier $turnier
+     * @param nTurnier $turnier
      * @param bool $penaltys Penaltys werden ignoriert. Dies ist für eine zweite Instanz der Klasse, aus welcher die
      * gesamt zu spielenden Penaltys in Erfahrung gebracht werden.
      */
-    public function __construct(nTurnier $turnier, bool $penaltys = true)
+    public function __construct(nTurnier $turnier, bool $penaltys = true, $skip_init = false)
     {
         parent:: __construct($turnier);
 
@@ -40,7 +40,11 @@ final class Spielplan_JgJ extends Spielplan {
         $this->tore_tabelle = $this->get_toretabelle($penaltys);
         $this->turnier_tabelle = self::get_sorted_turniertabelle($this->tore_tabelle);
         $this->set_platzierungen($this->tore_tabelle);
-        $this->set_wertigkeiten();
+
+        if (!$skip_init) {
+            $this->set_wertigkeiten();
+        }
+
         if (!empty($this->penaltys['kontrolle']) && $this->check_turnier_beendet()) {
             $this->out_of_scope = true;
         }

@@ -13,8 +13,8 @@
                 <tr>
                     <td><?= $team_id ?></td>
                     <td><?= $team->teamname ?></td>
-                    <td><?= $team->tblock ?></td>
-                    <td class="w3-hide-small"><?= $team->wertigkeit ?></td>
+                    <td><?= $team->tblock ?? "" ?></td>
+                    <td class="w3-hide-small"><?= $team->wertigkeit ?? "" ?></td>
                 </tr>
             <?php }//end foreach?>
         </table>

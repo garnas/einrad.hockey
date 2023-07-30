@@ -57,25 +57,30 @@ class nTurnier
     /**
      * Turnier constructor.
      */
-    public function __construct(bool $esc = true)
+    public function __construct(bool $esc = true, $skip_init = false)
     {
-        if ($esc) {
-            foreach (get_object_vars($this) as $name => $value) {
-                $this->$name = db::escape($value);
+        if (!$skip_init) {
+            if ($esc) {
+                foreach (get_object_vars($this) as $name => $value) {
+                    $this->$name = db::escape($value);
+                }
             }
+            $this->meldeliste = $this->set_meldeliste();
+            $this->anz_meldeliste = $this->set_anz_meldeliste();
+
+            $this->warteliste = $this->set_warteliste();
+            $this->anz_warteliste = $this->set_anz_warteliste();
+
+            $this->spielenliste = $this->set_spielenliste();
+            $this->anz_spielenliste = $this->set_anz_spielenliste();
+
+            $this->freie_plaetze = $this->set_freie_plaetze();
+            $this->freie_plaetze_status = $this->set_freie_plaetze_status();
+        } else {
+            $this->turnier_id = 0;
+            $this->spielplan_datei = "";
         }
 
-        $this->meldeliste = $this->set_meldeliste();
-        $this->anz_meldeliste = $this->set_anz_meldeliste();
-
-        $this->warteliste = $this->set_warteliste();
-        $this->anz_warteliste = $this->set_anz_warteliste();
-
-        $this->spielenliste = $this->set_spielenliste();
-        $this->anz_spielenliste = $this->set_anz_spielenliste();
-
-        $this->freie_plaetze = $this->set_freie_plaetze();
-        $this->freie_plaetze_status = $this->set_freie_plaetze_status();
     }
 
     /**
@@ -591,6 +596,25 @@ class nTurnier
         return $turnier_listen ?? [];
     }
 
+    public function set_spielenliste_euhc($teamliste)
+    {
+        // Prüfen ob Spielen-Liste gegeben
+
+            // Blöcke und Wertungen hinzufügen
+            $spielenliste = array();
+            foreach ($teamliste as $id => $teamname) {
+                $temp = new Team($id, skip_init: true);
+                $temp->set_name_object_only($teamname);
+                $spielenliste[$id] = $temp;
+            }
+
+            uasort($spielenliste, static function ($team_a, $team_b) {
+                return ($team_a->id <=> $team_b->id);
+            });
+        $this->spielenliste = $spielenliste;
+        $this->anz_spielenliste = count($teamliste);
+    }
+
     /**
      * Get alle Teams auf der Spielenliste des Turniers nach Wertung sortiert.
      *
@@ -911,6 +935,10 @@ class nTurnier
     {
         $this->log .= "\r\n" . $log_text;
     }
+    public function reset_log(): void
+    {
+        $this->log = "";
+    }
 
     public function auto_log(string $name, mixed $alt, mixed $neu): void
     {
@@ -960,7 +988,7 @@ class nTurnier
      */
     public function set_art(string $art): nTurnier
     {
-        $this->auto_log("Turnierart", $this->art, $art);
+        $this->auto_log("Turnierart", $this->art ?? "", $art);
         $this->art = $art;
         return $this;
     }
@@ -1032,7 +1060,7 @@ class nTurnier
      */
     public function set_startzeit(string $startzeit): nTurnier
     {
-        $this->auto_log("Startzeit", $this->startzeit , $startzeit);
+        $this->auto_log("Startzeit", $this->startzeit ?? "" , $startzeit);
         $this->startzeit = $startzeit;
         return $this;
     }
@@ -1044,7 +1072,7 @@ class nTurnier
      */
     public function set_besprechung(string $besprechung): nTurnier
     {
-        $this->auto_log("Turnierbesprechung", $this->besprechung , $besprechung);
+        $this->auto_log("Turnierbesprechung", $this->besprechung ?? "" , $besprechung);
         $this->besprechung = $besprechung;
         return $this;
     }
@@ -1190,7 +1218,7 @@ class nTurnier
      */
     public function set_phase(string $phase): nTurnier
     {
-        $this->auto_log("Phase", $this->phase , $phase);
+        $this->auto_log("Phase", $this->phase ?? "" , $phase);
         $this->phase = $phase;
         return $this;
     }
@@ -1215,6 +1243,10 @@ class nTurnier
             WHERE turnier_id = ?
         ";
         db::$db->query($sql, $vorlage, $this->turnier_id)->log();
+    }
+    public function set_spielplan_vorlage_object(null|string $vorlage): void
+    {
+        $this->spielplan_vorlage = $vorlage;
     }
 
     /**

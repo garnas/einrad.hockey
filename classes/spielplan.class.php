@@ -45,7 +45,6 @@ class Spielplan
         // Spielplan
         $this->teamliste = $this->turnier->get_spielenliste();
         $this->anzahl_teams = $this->turnier->get_anz_spielenliste();
-
         $this->details = $this->get_details();
         if (empty($this->details)) {
             trigger_error("Spielplan konnte nicht ermittelt werden. (Turnier-ID $this->turnier_id)",
@@ -54,6 +53,7 @@ class Spielplan
 
         $this->pausen = $this->get_pausen();
         $this->spiele = $this->get_spiele();
+        
         $this->anzahl_spiele = $this->anzahl_teams - 1;
 
         // Passen die angemeldeten Teams zu den im Spielplan hinterlegten Teams?
@@ -254,11 +254,9 @@ class Spielplan
                 SELECT spiel_id, team_id_a, t1.teamname AS teamname_a, team_id_b, t2.teamname AS teamname_b,
                 schiri_team_id_a, schiri_team_id_b, tore_a, tore_b, penalty_a, penalty_b
                 FROM spiele AS sp
-                INNER JOIN teams_liga as t1 on t1.team_id = sp.team_id_a
-                INNER JOIN teams_liga as t2 on t2.team_id = sp.team_id_b
+                LEFT JOIN teams_liga as t1 on t1.team_id = sp.team_id_a
+                LEFT JOIN teams_liga as t2 on t2.team_id = sp.team_id_b
                 WHERE turnier_id = ?
-                AND team_id_a = t1.team_id
-                AND team_id_b = t2.team_id
                 ORDER BY spiel_id
                 ";
         $spiele = db::$db->query($sql, $this->turnier_id)->esc()->fetch('spiel_id');

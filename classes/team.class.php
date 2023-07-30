@@ -31,11 +31,13 @@ class Team
      * Team constructor.
      * @param $team_id
      */
-    public function __construct($team_id)
+    public function __construct($team_id, $skip_init = false)
     {
         $this->id = $team_id;
-        $this->details = $this->get_details();
-        $this->teamname = self::id_to_name($team_id);
+        if (!$skip_init) {
+            $this->details = $this->get_details();
+            $this->teamname = self::id_to_name($team_id);
+        }
     }
 
     /**
@@ -350,6 +352,10 @@ class Team
         db::$db->query($sql, $name)->log();
     }
 
+    public function set_name_object_only(string $name): void
+    {
+        $this->teamname = $name;
+    }
     /**
      * Gibt Anzahl der Freilose des Teams zurück.
      *
