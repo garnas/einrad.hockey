@@ -62,5 +62,5 @@ $spielplan->spiele = $spiele_backup;
 
 ?>
 <div class="w3-margin-top">
-    <p><?= Html::link("https://einrad.hockey/euhc_b", "Direkter Link zum Spielplan", icon: "launch") ?></p>
+    <p><?= Html::link("https://einrad.hockey/euhc_b", "Direkter Link zum Spielplan", extern: true, icon: "launch") ?></p>
 </div>

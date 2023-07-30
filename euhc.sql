@@ -4,7 +4,7 @@ UPDATE `spielplan_details` SET `pausen` = '16,842' WHERE `spielplan_details`.`sp
 
 INSERT INTO `spielplan_details` (`spielplan`, `spielplan_paarung`, `plaetze`, `anzahl_halbzeiten`, `halbzeit_laenge`, `puffer`, `pausen`, `faktor`)
 VALUES ('euhc_a', '4er_jgj_default', '8', '2', '12', '6', NULL, '1');
-# UPDATE `spielplan_details` SET `pausen` = '16,784' WHERE `spielplan_details`.`spielplan` = 'euhc_b';
+UPDATE `spielplan_details` SET `pausen` = '56,810' WHERE `spielplan_details`.`spielplan` = 'euhc_a';
 
 DELETE FROM spiele WHERE turnier_id = 0;
 INSERT INTO spiele (turnier_id, spiel_id, team_id_a, team_id_b, schiri_team_id_a, schiri_team_id_b, tore_a, tore_b, penalty_a, penalty_b) VALUES ('0', '1', '1', '2', '5', '7', NULL, NULL, NULL, NULL);
@@ -44,7 +44,7 @@ INSERT INTO spiele (turnier_id, spiel_id, team_id_a, team_id_b, schiri_team_id_a
 INSERT INTO spiele (turnier_id, spiel_id, team_id_a, team_id_b, schiri_team_id_a, schiri_team_id_b, tore_a, tore_b, penalty_a, penalty_b) VALUES ('0', '35', '3', '8', '1', '6', NULL, NULL, NULL, NULL);
 INSERT INTO spiele (turnier_id, spiel_id, team_id_a, team_id_b, schiri_team_id_a, schiri_team_id_b, tore_a, tore_b, penalty_a, penalty_b) VALUES ('0', '36', '5', '7', '3', '8', NULL, NULL, NULL, NULL);
 
-
+DELETE FROM spiele WHERE turnier_id = 1;
 INSERT INTO `spiele` (`turnier_id`, `spiel_id`, `team_id_a`, `team_id_b`, `schiri_team_id_a`, `schiri_team_id_b`, `tore_a`, `tore_b`, `penalty_a`, `penalty_b`) VALUES ('1', '37', '2', '8', '5', '6', NULL, NULL, NULL, NULL);
 INSERT INTO `spiele` (`turnier_id`, `spiel_id`, `team_id_a`, `team_id_b`, `schiri_team_id_a`, `schiri_team_id_b`, `tore_a`, `tore_b`, `penalty_a`, `penalty_b`) VALUES ('1', '38', '3', '6', '2', '8', NULL, NULL, NULL, NULL);
 INSERT INTO `spiele` (`turnier_id`, `spiel_id`, `team_id_a`, `team_id_b`, `schiri_team_id_a`, `schiri_team_id_b`, `tore_a`, `tore_b`, `penalty_a`, `penalty_b`) VALUES ('1', '39', '1', '5', '3', '6', NULL, NULL, NULL, NULL);
