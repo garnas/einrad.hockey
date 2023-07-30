@@ -4,38 +4,25 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../init.php';
 // Turnier-ID
-
-$teamliste = [
-    1 => "Deutschland schwarz",
-    2 => "TV Lilienthal Moorlichter",
-    3 => "Deutschland rot",
-    4 => "Dresdner Einradlöwen",
-    5 => "Deutschland gold",
-    6 => "TV Lilienthal Moorteufel",
-    7 => "MJC Trier",
-    8 => "Lucky Shots",
-    9 => "Team Steyr Unicycling",
-];
-
-$turnier = new nTurnier(skip_init: true);
-$turnier->set_spielplan_vorlage_object("euhc_b");
-$turnier->set_startzeit("12:30:00");
-$turnier->set_besprechung("Ja");
-$turnier->set_phase("spielplan");
-$turnier->set_art("final");
-$turnier->set_spielenliste_euhc($teamliste);
-
-
-// Spielplan laden
-$spielplan = new Spielplan_JgJ($turnier, skip_init: true);
-foreach ($spielplan->spiele as $id => $spiel) {
-    $spielplan->spiele[$id]["teamname_a"] = $teamliste[$spiel["team_id_a"]];
-    $spielplan->spiele[$id]["teamname_b"] = $teamliste[$spiel["team_id_b"]];
+if ($_GET["euhc_key"] != Env::EUHC_KEY) {
+    die("Falscher link");
 }
 
-$turnier->reset_log();
+$teamliste = [
+    1 => "Swiss Team",
+    2 => "Deutschland 1",
+    3 => "Deutschland 2",
+    4 => "Swiss Team 2",
+    5 => "Deutschland 3",
+    6 => "Aussie Deutsch United",
+    7 => "Deutschland 4",
+    8 => "B&B"
+];
+$vorlage = "euhc_a";
+$turnier_id = 1;
+require_once Env::BASE_PATH . '/logic/spielplan_euhc.logic.php';
 
-require_once '../logic/spielplan_form.logic.php'; //Wertet Formular aus
+//require_once '../logic/spielplan_form.logic.php'; //Wertet Formular aus
 
 if (isset($_POST["tore_speichern"])) {
     // Neu eingetragene Tore speichern

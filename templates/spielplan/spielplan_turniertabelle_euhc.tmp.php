@@ -1,5 +1,4 @@
 <!-- ABSCHLUSSTABELLE -->
-<h2 class="w3-text-secondary w3-margin-top">Teams</h2>
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-centered w3-striped">
         <tr class="w3-primary">
