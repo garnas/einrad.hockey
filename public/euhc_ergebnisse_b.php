@@ -21,6 +21,7 @@ $teamliste = [
 ];
 $vorlage = "euhc_b";
 $turnier_id = 0;
+$startzeit = "12:30:00";
 require_once Env::BASE_PATH . '/logic/spielplan_euhc.logic.php';
 
 //require_once '../logic/spielplan_form.logic.php'; //Wertet Formular aus
