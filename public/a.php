@@ -39,7 +39,7 @@ include Env::BASE_PATH . '/templates/header_euhc.tmp.php'; ?>
 
 
 <div class="w3-auto" style="margin-top: 10%">
-    <h1 class="w3-text-grey w3-xxxlarge">EUHC B-Turnier</h1>
+    <h1 class="w3-text-grey w3-xxxlarge">EUHC A-Turnier</h1>
     <div id="tabelle_details_mobile" class="">
         <div class="w3-responsive w3-card">
             <table class="w3-table w3-centered w3-striped w3-xlarge">
