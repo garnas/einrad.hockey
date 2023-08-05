@@ -14,7 +14,7 @@
                 <?= Html::icon("sports") ?>
                 <br>Schiri
             </th>
-            <th class="w3-hide-small">
+            <th class="">
                 <?= Html::icon("workspaces") ?>
                 <br>Punkte
             </th>
@@ -44,7 +44,7 @@
                 <td style="white-space: nowrap;">
                     <?= $schiri[$schiri_ids[$x["teamname"]]] ?>
                 </td>
-                <td class="w3-hide-small"><?= $x['statistik']["punkte"] ?? '--' ?></td>
+                <td class=""><?= $x['statistik']["punkte"] ?? '--' ?></td>
                 <?php if (in_array($spielplan->turnier->get_art(), Config::TURNIER_ARTEN)) { ?>
                     <td>
                         <?= ($spielplan->check_penalty_team($team_id) || !$spielplan->check_tabelle_einblenden())
@@ -59,7 +59,7 @@
 
 <!-- Modal -->
 <span class="w3-button w3-text-primary" onclick="document.getElementById('tabelle_details_mobile').style.display='block'">
-    <i class='material-icons'>info</i> Details anzeigen
+    <i class='material-icons'>info</i> Details, Torverhältnisse, etc anzeigen
 </span>
 <div id="tabelle_details_mobile" class="w3-modal">
     <div class="w3-modal-content w3-card-4">

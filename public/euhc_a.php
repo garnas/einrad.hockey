@@ -47,18 +47,20 @@ include Env::BASE_PATH . '/templates/spielplan/spielplan_turniertabelle_euhc.tmp
 include Env::BASE_PATH . '/templates/spielplan/spielplan_direkter_vergleich.tmp.php'; // Direkter Vergleich Tabellen
 ?>
 
+<h1 class="w3-text-secondary w3-bottombar	w3-border-tertiary"><?=Html::icon("event", tag:"h1") ?> Samstag, 05.08.23</h1>
 <?php
-$spielplan->spiele = $spiele_freitag;
-?><h1 class="w3-text-secondary w3-bottombar	w3-border-tertiary"><?=Html::icon("event", tag:"h1") ?> Freitag, 04.08.23</h1><?php
-include Env::BASE_PATH . '/templates/spielplan/spielplan_spiele_euhc.tmp.php'; // Spiele
-?>
-<div class="w3-margin-top"></div>
-<h1 class="w3-text-secondary w3-bottombar	w3-border-tertiary"><?=Html::icon("event", tag:"h1") ?> Samstag, 05.08.23</h1><?php
 $spielplan->spiele = $spiele_samstag;
 include Env::BASE_PATH . '/templates/spielplan/spielplan_spiele_euhc.tmp.php'; // Spiele
 $spielplan->spiele = $spiele_backup;
-
 ?>
+<div class="w3-margin-top"></div>
+<?php
+$spielplan->spiele = $spiele_freitag;
+?><h1 class="w3-text-secondary w3-bottombar	w3-border-tertiary"><?=Html::icon("event", tag:"h1") ?> Freitag, 04.08.23</h1>
+<?php
+include Env::BASE_PATH . '/templates/spielplan/spielplan_spiele_euhc.tmp.php'; // Spiele
+?>
+
 <div class="w3-margin-top">
     <p><?= Html::link("https://einrad.hockey/euhc_a", "Direkter Link zum Spielplan", extern: true, icon: "launch") ?></p>
 </div>
