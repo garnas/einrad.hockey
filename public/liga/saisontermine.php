@@ -15,19 +15,19 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-bordered">
         <tr>
-            <td class="w3-primary" colspan="2"><b>Saison 2022/2023</b></td>
+            <td class="w3-primary" colspan="2"><b>Saison 2023/2024</b></td>
         </tr>
         <tr>
             <th class="w3-primary-3">Reguläre Spielzeit</th>
-            <td>15. August 2022 – 28. Mai 2023</td>
+            <td>19. August 2023 – 26. Mai 2024</td>
         </tr>
         <tr>
             <th class="w3-primary-3">B-Finalwochenende</th>
-            <td>08. Juni 2023 + 09. Juni 2023</td>
+            <td>08. Juni 2024 + 09. Juni 2024</td>
         </tr>
         <tr>
             <th class="w3-primary-3">Deutsche Meisterschaft</th>
-            <td>15. Juni 2023 + 16. Juni 2023</td>
+            <td>15. Juni 2024 + 16. Juni 2024</td>
         </tr>
     </table>
 </div>
