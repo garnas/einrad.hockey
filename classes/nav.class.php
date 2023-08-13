@@ -164,11 +164,11 @@ class Nav
             [Env::BASE_URL . "/teamcenter/tc_logout.php", "Logout", "w3-grey"],
         ];
         // Abstimmung Finalart
-        if (Abstimmung::darf_abstimmen($_SESSION['logins']['team']['id'])) {
-            array_unshift(
-                $links,
-                [Env::BASE_URL . "/teamcenter/tc_abstimmung.php", "Abstimmung Finalturnier", "w3-secondary"]);
-        }
+//        if (Abstimmung::darf_abstimmen($_SESSION['logins']['team']['id'])) {
+//            array_unshift(
+//                $links,
+//                [Env::BASE_URL . "/teamcenter/tc_abstimmung.php", "Abstimmung Finalturnier", "w3-secondary"]);
+//        }
         return $links;
     }
 
