@@ -67,9 +67,9 @@ include '../../templates/header.tmp.php';
                                 <?= TurnierSnippets::datum($turnier) ?> <span class="w3-text-primary"><?= e($turnier->getDetails()->getOrt()) ?></span>
                             </h4>
                         <?php else: ?>
-                            <h3 class='w3-text-grey'>
+                            <p class='w3-text-grey'>
                                 <?= $turnier->getName()?>
-                            </h3>
+                            </p>
                             <h4>
                                 <?= TurnierSnippets::datum($turnier) ?>
                                 <span class="w3-text-primary">
