@@ -10,13 +10,13 @@ require_once '../../init.php';
 Html::$titel = "Impressum | Deutsche Einradhockeyliga";
 Html::$content = "Das Impressum der Deutschen Einradhockeyliga findet sich hier.";
 include '../../templates/header.tmp.php'; ?>
-
+    <h1>Hallo</h1>
     <div class="w3-panel w3-center">
         <h1 class="w3-text-grey">Impressum</h1>
         <h2 class="w3-text-primary">Deutsche Einradhockeyliga</h2>
 
         <p class="w3-text-grey">Postanschrift</p>
-        <p>Ansgar Pölking<br>Karlstraße 1<br>64283 Darmstadt</p>
+        <p>Ansgar Pölking<br>Mühlstraße 17<br>67487 Maikammer</p>
 
         <p class="w3-text-grey">Kontakt</p>
         <p><?= Html::mailto(Env::LAMAIL) ?></p>
