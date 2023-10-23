@@ -1,0 +1,52 @@
+doctrine/annotations             1.13.3    Docblock Annotations Parser
+doctrine/cache                   2.2.0     PHP Doctrine Cache library is a popular cache implementation that supports many different drivers such as redis, memcache, apc, mongodb and others.
+doctrine/collections             1.8.0     PHP Doctrine Collections library that adds additional functionality on top of PHP arrays.
+doctrine/common                  3.4.2     PHP Doctrine Common project is a library that provides additional functionality that other Doctrine projects depend on such as better reflection support, proxies and much more.
+doctrine/dbal                    3.4.5     Powerful PHP database abstraction layer (DBAL) with many features for database schema introspection and management.
+doctrine/deprecations            v1.0.0    A small layer on top of trigger_error(E_USER_DEPRECATED) or PSR-3 logging with options to disable all deprecations or selectively for packages.
+doctrine/event-manager           1.1.2     The Doctrine Event Manager is a simple PHP event system that was built to be used with the various Doctrine projects.
+doctrine/inflector               2.0.5     PHP Doctrine Inflector is a small library that can perform string manipulations with regard to upper/lowercase and singular/plural forms of words.
+doctrine/instantiator            1.4.1     A small, lightweight utility to instantiate objects in PHP without invoking their constructors
+doctrine/lexer                   1.2.3     PHP Doctrine Lexer parser library that can be used in Top-Down, Recursive Descent Parsers.
+doctrine/orm                     2.13.2    Object-Relational-Mapper for PHP
+doctrine/persistence             3.0.3     The Doctrine Persistence project is a set of shared interfaces and functionality that the different Doctrine object mappers share.
+ezyang/htmlpurifier              v4.16.0   Standards compliant HTML filter written in PHP
+gregwar/captcha                  v1.1.9    Captcha generator
+jenssegers/date                  v4.0.0    A date library to help you work with dates in different languages
+maennchen/zipstream-php          v2.4.0    ZipStream is a library for dynamically streaming dynamic zip files from PHP without writing to the disk at all on the server.
+markbaker/complex                3.0.2     PHP Class for working with complex numbers
+markbaker/matrix                 3.0.1     PHP Class for working with matrices
+mpdf/mpdf                        v8.1.2    PHP library generating PDF files from UTF-8 encoded HTML
+myclabs/deep-copy                1.11.0    Create deep copies (clones) of your objects
+myclabs/php-enum                 1.8.4     PHP Enum implementation
+nesbot/carbon                    2.62.1    An API extension for DateTime that supports 281 different languages.
+paragonie/random_compat          v9.99.100 PHP 5.x polyfill for random_bytes() and random_int() from PHP 7
+php-http/message-factory         v1.0.2    Factory interfaces for PSR-7 HTTP Message
+phpmailer/phpmailer              v6.6.4    PHPMailer is a full-featured email creation and transfer class for PHP
+phpoffice/phpspreadsheet         1.28.0    PHPSpreadsheet - Read, Create and Write Spreadsheet documents in PHP - Spreadsheet engine
+psr/cache                        2.0.0     Common interface for caching libraries
+psr/container                    1.1.2     Common Container Interface (PHP FIG PSR-11)
+psr/http-client                  1.0.1     Common interface for HTTP clients
+psr/http-factory                 1.0.1     Common interfaces for PSR-7 HTTP message factories
+psr/http-message                 1.0.1     Common interface for HTTP messages
+psr/log                          2.0.0     Common interface for logging libraries
+psr/simple-cache                 3.0.0     Common interfaces for simple caching
+setasign/fpdi                    v2.3.6    FPDI is a collection of PHP classes facilitating developers to read pages from existing PDF documents and use them as templates in FPDF. Because it is also possible to use FPDI with TC...
+spatie/array-to-xml              3.1.3     Convert an array to xml
+symfony/cache                    v5.4.13   Provides extended PSR-6, PSR-16 (and tags) implementations
+symfony/cache-contracts          v2.5.2    Generic abstractions related to caching
+symfony/console                  v5.4.13   Eases the creation of beautiful and testable command line interfaces
+symfony/deprecation-contracts    v2.5.2    A generic function and convention to trigger deprecation notices
+symfony/finder                   v5.4.11   Finds files and directories via an intuitive fluent interface
+symfony/polyfill-ctype           v1.26.0   Symfony polyfill for ctype functions
+symfony/polyfill-intl-grapheme   v1.26.0   Symfony polyfill for intl's grapheme_* functions
+symfony/polyfill-intl-normalizer v1.26.0   Symfony polyfill for intl's Normalizer class and related functions
+symfony/polyfill-mbstring        v1.26.0   Symfony polyfill for the Mbstring extension
+symfony/polyfill-php72           v1.26.0   Symfony polyfill backporting some PHP 7.2+ features to lower PHP versions
+symfony/polyfill-php73           v1.26.0   Symfony polyfill backporting some PHP 7.3+ features to lower PHP versions
+symfony/polyfill-php80           v1.26.0   Symfony polyfill backporting some PHP 8.0+ features to lower PHP versions
+symfony/service-contracts        v2.5.2    Generic abstractions related to writing services
+symfony/string                   v5.4.13   Provides an object-oriented API to strings and deals with bytes, UTF-8 code points and grapheme clusters in a unified way
+symfony/translation              v5.4.12   Provides tools to internationalize your application
+symfony/translation-contracts    v2.5.2    Generic abstractions related to translation
+symfony/var-exporter             v5.4.10   Allows exporting any serializable PHP data structure to plain PHP code
