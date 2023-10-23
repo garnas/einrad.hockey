@@ -21,7 +21,7 @@ include '../../templates/header.tmp.php';
             Zusammenfassung Ligamodus
         </p>
     </a>
-    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS ?>">
+    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS ?>?version=2023-10-23">
         <p>
             <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i>
             Ligamodus
