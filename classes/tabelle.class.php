@@ -172,17 +172,19 @@ class Tabelle
     public static function get_all_ergebnisse(int $saison = Config::SAISON): array
     {
         $sql = "
-                SELECT turniere_ergebnisse.*, teams_liga.teamname , teams_liga.ligateam
+                SELECT turniere_ergebnisse.*, teams_name.teamname , teams_liga.ligateam
                 FROM turniere_ergebnisse
                 LEFT JOIN teams_liga
                 ON teams_liga.team_id = turniere_ergebnisse.team_id
+                LEFT JOIN teams_name
+                ON teams_liga.team_id = teams_name.team_id AND teams_name.saison = ?
                 LEFT JOIN turniere_liga
                 ON turniere_liga.turnier_id = turniere_ergebnisse.turnier_id
-                WHERE turniere_liga.saison = $saison
+                WHERE turniere_liga.saison = ?
                 AND phase = 'ergebnis'
                 ORDER BY turniere_liga.datum DESC, platz
                 ";
-        $result = db::$db->query($sql)->esc()->fetch();
+        $result = db::$db->query($sql, $saison, $saison)->esc()->fetch();
         foreach ($result as $ergebnis){
             $return[$ergebnis['turnier_id']][] = $ergebnis;
         }
@@ -201,10 +203,12 @@ class Tabelle
 
         $sql = "
                 SELECT turniere_ergebnisse.ergebnis, turniere_ergebnisse.turnier_id, turniere_liga.datum, 
-                turniere_liga.saison, teams_liga.aktiv, teams_liga.teamname, teams_liga.team_id 
+                turniere_liga.saison, teams_liga.aktiv, teams_name.teamname, teams_liga.team_id 
                 FROM turniere_ergebnisse
                 INNER JOIN teams_liga
                 ON teams_liga.team_id = turniere_ergebnisse.team_id
+                LEFT JOIN teams_name
+                ON teams_liga.team_id = teams_name.team_id AND teams_name.saison = ?
                 INNER JOIN turniere_liga
                 ON turniere_liga.turnier_id = turniere_ergebnisse.turnier_id
                 WHERE teams_liga.ligateam = 'Ja'
@@ -213,7 +217,7 @@ class Tabelle
                 AND (turniere_liga.spieltag <= ?)
                 ORDER BY ergebnis DESC, RAND()
                 ";
-        $result = db::$db->query($sql, $saison, $spieltag)->esc()->fetch();
+        $result = db::$db->query($sql, $saison, $saison, $spieltag)->esc()->fetch();
         $counter = $return = [];
         foreach($result as $eintrag){
             $team_id = $eintrag['team_id'];
@@ -318,10 +322,12 @@ class Tabelle
 
         $sql = "
                 SELECT turniere_ergebnisse.ergebnis, turniere_ergebnisse.turnier_id, turniere_liga.datum, 
-                turniere_liga.saison, teams_liga.teamname, teams_liga.team_id, turniere_liga.spieltag 
+                turniere_liga.saison, teams_name.teamname, teams_liga.team_id, turniere_liga.spieltag 
                 FROM turniere_ergebnisse
                 INNER JOIN teams_liga
                 ON teams_liga.team_id = turniere_ergebnisse.team_id
+                LEFT JOIN teams_name
+                ON teams_name.team_id = teams_liga.team_id AND teams_name.saison = ?
                 INNER JOIN turniere_liga
                 ON turniere_liga.turnier_id = turniere_ergebnisse.turnier_id
                 WHERE teams_liga.ligateam = 'Ja'
@@ -333,7 +339,7 @@ class Tabelle
                     $ausnahme
                     )
                 ORDER BY turniere_liga.saison DESC, turniere_liga.datum DESC";
-        $result = db::$db->query($sql, $spieltag, $saison, $saison)->esc()->fetch();
+        $result = db::$db->query($sql, $saison, $spieltag, $saison, $saison)->esc()->fetch();
         $return = [];
         $counter = [];
 

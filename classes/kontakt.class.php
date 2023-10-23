@@ -49,11 +49,16 @@ class Kontakt
      */
     public static function get_emails_turnier(int $turnier_id): array
     {
+        $turnier = nTurnier::get($turnier_id);
+        $saison = $turnier->get_saison();
+
         $sql = "
-                SELECT teams_kontakt.email, teams_liga.teamname 
+                SELECT teams_kontakt.email, teams_name.teamname
                 FROM teams_kontakt
                 INNER JOIN teams_liga
                 ON teams_liga.team_id = teams_kontakt.team_id
+                INNER JOIN teams_name
+                ON teams_name.team_id = teams_kontakt.team_id AND teams_name.saison = ?
                 INNER JOIN turniere_liste
                 ON turniere_liste.team_id = teams_kontakt.team_id
                 WHERE teams_liga.aktiv = 'Ja' 
@@ -62,7 +67,7 @@ class Kontakt
 
         $return['emails'] = $return['teamnamen'] = [];
         // Doppelte Teamnamen und Email-Adressen filtern
-        foreach (db::$db->query($sql, $turnier_id)->esc()->fetch() as $x){
+        foreach (db::$db->query($sql, $saison, $turnier_id)->esc()->fetch() as $x){
             if (!in_array($x['teamname'], $return['teamnamen'])) {
                 $return['teamnamen'][] = $x['teamname'];
             }

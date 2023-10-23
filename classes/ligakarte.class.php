@@ -62,19 +62,21 @@ class LigaKarte
      *
      * @return array
      */
-    public static function get_all_team_koordinaten(): array
+    public static function get_all_team_koordinaten(int $saison = Config::SAISON): array
     {
         $sql = "
-                SELECT teams_details.*, plz.*, teams_liga.teamname 
+                SELECT teams_details.*, plz.*, teams_name.teamname 
                 FROM teams_details 
                 INNER JOIN plz 
                 ON plz.PLZ = teams_details.plz
                 INNER JOIN teams_liga 
                 ON teams_details.team_id  = teams_liga.team_id
+                INNER JOIN teams_name
+                ON teams_name.team_id = teams_liga.team_id AND teams_name.saison = ?
                 WHERE teams_liga.aktiv = 'Ja'
-                ORDER BY teams_liga.teamname
+                ORDER BY teams_name.teamname
                 ";
-        return db::$db->query($sql)->esc()->fetch();
+        return db::$db->query($sql, $saison)->esc()->fetch();
     }
 
     /**

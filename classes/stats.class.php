@@ -109,23 +109,25 @@ class Stats
         // Findet die Teams entsprechend des Limits, welche die meisten Turniere bisher gespielt haben
         // Sortiert nach Zufall bei gleichstand
         $sql = "
-                SELECT teams_liga.teamname, count(*) as gespielt 
+                SELECT teams_name.teamname, count(*) as gespielt 
                 FROM turniere_liste 
                 INNER JOIN turniere_liga 
                 ON turniere_liste.turnier_id = turniere_liga.turnier_id 
                 INNER JOIN teams_liga 
                 ON teams_liga.team_id = turniere_liste.team_id 
-                WHERE teams_liga.aktiv = 'Ja' 
+                INNER JOIN teams_name
+                ON teams_liga.team_id = teams_name.team_id AND teams_name.saison = ? 
+                WHERE teams_liga.aktiv = 'Ja'
                 AND teams_liga.ligateam = 'Ja'
                 AND turniere_liga.saison = ? 
                 AND turniere_liste.liste = 'setzliste' 
                 AND turniere_liga.phase = 'ergebnis' 
-                GROUP BY teams_liga.teamname 
+                GROUP BY teams_name.teamname
                 ORDER BY gespielt desc, rand()
                 LIMIT ?
                 ";
         
-        $teams = db::$db->query($sql, $saison, $limit)->esc()->fetch();
+        $teams = db::$db->query($sql, $saison, $saison, $limit)->esc()->fetch();
         
         $rang = 1;
         $vorher_rang = 1;

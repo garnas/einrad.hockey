@@ -37,24 +37,30 @@ class nSpieler
      * @param int $id
      * @return nSpieler
      */
-    public static function get(int $id): nSpieler
+    public static function get(int $id, int $saison = Config::SAISON): nSpieler
     {
         $sql = "
-                SELECT spieler.* , teams_liga.teamname
+                SELECT spieler.* , teams_name.teamname
                 FROM spieler 
-                LEFT JOIN teams_liga on spieler.team_id = teams_liga.team_id
+                LEFT JOIN teams_liga
+                ON spieler.team_id = teams_liga.team_id
+                INNER JOIN teams_name
+                ON teams_name.team_id = teams_liga.team_id AND teams_name.saison = ?
                 WHERE spieler.spieler_id = ?
                 ";
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return db::$db->query($sql, $id)->fetch_object(__CLASS__) ?? new nSpieler();
+        return db::$db->query($sql, $saison, $id)->fetch_object(__CLASS__) ?? new nSpieler();
     }
 
     public static function get_all(): array
     {
         $sql = "
-                SELECT spieler.* , teams_liga.teamname
+                SELECT spieler.* , teams_name.teamname
                 FROM spieler 
-                LEFT JOIN teams_liga on spieler.team_id = teams_liga.team_id
+                LEFT JOIN teams_liga
+                ON spieler.team_id = teams_liga.team_id
+                LEFT JOIN teams_name
+                ON teams_liga.team_id = teams_name.team_id AND teams_name.saison = spieler.letzte_saison
                 ";
         return db::$db->query($sql)->fetch_objects(__CLASS__, key:'spieler_id');
     }
@@ -67,13 +73,16 @@ class nSpieler
     public static function get_kader(int $team_id, int $saison = Config::SAISON): array
     {
         $sql = "
-                SELECT spieler.* , teams_liga.teamname
+                SELECT spieler.* , teams_name.teamname
                 FROM spieler 
-                LEFT JOIN teams_liga on spieler.team_id = teams_liga.team_id
+                LEFT JOIN teams_liga
+                ON spieler.team_id = teams_liga.team_id
+                LEFT JOIN teams_name
+                ON teams_liga.team_id = teams_name.team_id AND teams_name.saison = ?
                 WHERE spieler.team_id = ?
                 AND spieler.letzte_saison = ?
                 ";
-        return db::$db->query($sql, $team_id, $saison)->fetch_objects(__CLASS__, key:'spieler_id');
+        return db::$db->query($sql, $saison, $team_id, $saison)->fetch_objects(__CLASS__, key:'spieler_id');
     }
 
     public function get_vorname(): String

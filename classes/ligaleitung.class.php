@@ -11,17 +11,21 @@ class LigaLeitung
      * @param string $funktion
      * @return array
      */
-    public static function get_all(string $funktion): array
+    public static function get_all(string $funktion, int $saison = Config::SAISON): array
     {
         $sql = "
-                SELECT ligaleitung.*, spieler.vorname, spieler.nachname, teams_liga.teamname
+                SELECT ligaleitung.*, spieler.vorname, spieler.nachname, teams_name.teamname
                 FROM ligaleitung
-                INNER JOIN spieler on ligaleitung.spieler_id = spieler.spieler_id 
-                LEFT JOIN teams_liga on spieler.team_id = teams_liga.team_id
+                INNER JOIN spieler
+                ON ligaleitung.spieler_id = spieler.spieler_id 
+                LEFT JOIN teams_liga
+                ON spieler.team_id = teams_liga.team_id
+                INNER JOIN teams_name
+                ON teams_name.team_id = teams_liga.team_id AND teams_name.saion = ?
                 WHERE funktion = ?
                 ORDER BY spieler.vorname
                 ";
-        return db::$db->query($sql, $funktion)->esc()->fetch('spieler_id');
+        return db::$db->query($sql, $saison, $funktion)->esc()->fetch('spieler_id');
     }
 
     /**
@@ -30,16 +34,20 @@ class LigaLeitung
      * @param string $login
      * @return array
      */
-    public static function get_details(string $login): array
+    public static function get_details(string $login, int $saison = Config::SAISON): array
     {
         $sql = "
-                SELECT ligaleitung.*, spieler.vorname, spieler.nachname, teams_liga.teamname
+                SELECT ligaleitung.*, spieler.vorname, spieler.nachname, teams_name.teamname
                 FROM ligaleitung
-                INNER JOIN spieler on ligaleitung.spieler_id = spieler.spieler_id 
-                LEFT JOIN teams_liga on spieler.team_id = teams_liga.team_id
+                INNER JOIN spieler
+                ON ligaleitung.spieler_id = spieler.spieler_id 
+                LEFT JOIN teams_liga
+                ON spieler.team_id = teams_liga.team_id
+                INNER JOIN teams_name
+                ON teams_name.team_id = teams_liga.team_id AND teams_name.saison = ?
                 WHERE login = ?
                 ";
-        return db::$db->query($sql, $login)->esc()->fetch_row();
+        return db::$db->query($sql, $saison, $login)->esc()->fetch_row();
     }
 
     /**

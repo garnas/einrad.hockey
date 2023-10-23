@@ -215,17 +215,19 @@ class Team
      *
      * @return array key: team_id
      */
-    public static function get_teams(): array
+    public static function get_teams(int $saison = Config::SAISON): array
     {
         $sql = "
                 SELECT * 
                 FROM teams_liga
                 INNER JOIN teams_details
                 ON teams_liga.team_id = teams_details.team_id
+                LEFT JOIN teams_name
+                ON teams_liga.team_id = teams_name.team_id AND teams_name.saison = ?
                 WHERE teams_liga.ligateam = 'Ja' AND teams_liga.aktiv = 'Ja'
-                ORDER BY teams_liga.teamname
+                ORDER BY teams_name.teamname
                 ";
-        return db::$db->query($sql)->esc()->fetch('team_id');
+        return db::$db->query($sql, $saison)->esc()->fetch('team_id');
     }
 
     /**
@@ -300,10 +302,12 @@ class Team
     public static function get_strafen(int $saison = Config::SAISON): array
     {
         $sql = "
-                SELECT teams_strafen.*, teams_liga.teamname, turniere_details.ort, turniere_liga.datum 
+                SELECT teams_strafen.*, teams_name.teamname, turniere_details.ort, turniere_liga.datum 
                 FROM teams_strafen
                 INNER JOIN teams_liga
                 ON teams_liga.team_id = teams_strafen.team_id
+                LEFT JOIN teams_name
+                ON teams_name.team_id = teams_strafen.team_id AND teams_name.saison = ?
                 LEFT JOIN turniere_liga
                 ON turniere_liga.turnier_id = teams_strafen.turnier_id
                 LEFT JOIN turniere_details
@@ -312,7 +316,7 @@ class Team
                 AND teams_liga.aktiv = 'Ja'
                 ORDER BY turniere_liga.datum DESC
                 ";
-        return db::$db->query($sql, $saison)->esc()->fetch('strafe_id');
+        return db::$db->query($sql, $saison, $saison)->esc()->fetch('strafe_id');
     }
 
     /**

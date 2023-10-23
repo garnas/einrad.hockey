@@ -416,16 +416,18 @@ class nTurnier
     public static function get_turniere(bool $asc = true, int $saison = Config::SAISON): array
     {
         $sql = "
-                SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname 
+                SELECT turniere_liga.*, turniere_details.*, teams_name.teamname 
                 FROM turniere_liga 
                 INNER JOIN turniere_details 
                 ON turniere_liga.turnier_id = turniere_details.turnier_id
                 INNER JOIN teams_liga
                 ON teams_liga.team_id = turniere_liga.ausrichter
+                INNER JOIN teams_name
+                ON teams_name.team_id = teams_liga.team_id AND teams_name.saison = ?
                 AND saison = ?
                 ORDER BY turniere_liga.datum " . ($asc ? "asc" : "desc");
 
-        return db::$db->query($sql, $saison)->fetch_objects(__CLASS__, key: 'turnier_id');
+        return db::$db->query($sql, $saison, $saison)->fetch_objects(__CLASS__, key: 'turnier_id');
     }
 
     /**
@@ -438,16 +440,18 @@ class nTurnier
     public static function get_turniere_offen(bool $asc = true, int $saison = CONFIG::SAISON): array
     {
         $sql = "
-                SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname 
+                SELECT turniere_liga.*, turniere_details.*, teams_names.teamname 
                 FROM turniere_liga 
                 INNER JOIN turniere_details 
                 ON turniere_liga.turnier_id = turniere_details.turnier_id
                 INNER JOIN teams_liga
                 ON teams_liga.team_id = turniere_liga.ausrichter
+                INNER JOIN teams_name
+                ON teams_name.team_id = teams_liga.team_id AND teams_name.saison = ?
                 WHERE phase = 'offen'
                 AND saison = ?
                 ORDER BY turniere_liga.datum " . ($asc ? "asc" : "desc");
-        return db::$db->query($sql, $saison)->fetch_objects(__CLASS__, key: 'turnier_id');
+        return db::$db->query($sql, $saison, $saison)->fetch_objects(__CLASS__, key: 'turnier_id');
     }
 
     /**
@@ -460,16 +464,18 @@ class nTurnier
     public static function get_turniere_melde(bool $asc = true, int $saison = CONFIG::SAISON): array
     {
         $sql = "
-                SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname 
+                SELECT turniere_liga.*, turniere_details.*, teams_name.teamname 
                 FROM turniere_liga 
                 INNER JOIN turniere_details 
                 ON turniere_liga.turnier_id = turniere_details.turnier_id
                 INNER JOIN teams_liga
                 ON teams_liga.team_id = turniere_liga.ausrichter
+                INNER JOIN teams_name
+                ON teams_name.team_id = teams_liga.team_id AND teams_name.saison = ?
                 WHERE phase = 'melde'
                 AND saison = ?
                 ORDER BY turniere_liga.datum " . ($asc ? "asc" : "desc");
-        return db::$db->query($sql, $saison)->fetch_objects(__CLASS__, key: 'turnier_id');
+        return db::$db->query($sql, $saison, $saison)->fetch_objects(__CLASS__, key: 'turnier_id');
     }
 
     /**
@@ -480,33 +486,35 @@ class nTurnier
     public static function get_turniere_spielplan(bool $asc = true, int $saison = CONFIG::SAISON): array
     {
         $sql = "
-                SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname 
+                SELECT turniere_liga.*, turniere_details.*, teams_name.teamname 
                 FROM turniere_liga 
                 INNER JOIN turniere_details 
                 ON turniere_liga.turnier_id = turniere_details.turnier_id
                 INNER JOIN teams_liga
                 ON teams_liga.team_id = turniere_liga.ausrichter
+                INNER JOIN teams_name
+                ON teams_name.team_id = teams_liga.team_id AND teams_name.saison = ?
                 WHERE phase = 'spielplan'
                 AND saison = ?
                 ORDER BY turniere_liga.datum " . ($asc ? "asc" : "desc");
-        return db::$db->query($sql, $saison)->fetch_objects(__CLASS__, key: 'turnier_id');
+        return db::$db->query($sql, $saison, $saison)->fetch_objects(__CLASS__, key: 'turnier_id');
     }
 
     /**
-     * Erhalte kommende Turniere
+     * Erhalte kommende Turniere der Saison
      * @param $saison
      * @return nTurnier[]
      */
 
     public static function get_turniere_kommend(bool $asc = true, int $saison = CONFIG::SAISON): array
-    {
+    {   
         $sql = "
-                SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname 
+                SELECT turniere_liga.*, turniere_details.*, teams_name.teamname
                 FROM turniere_liga 
                 INNER JOIN turniere_details 
                 ON turniere_liga.turnier_id = turniere_details.turnier_id
-                INNER JOIN teams_liga
-                ON teams_liga.team_id = turniere_liga.ausrichter
+                INNER JOIN teams_name
+                ON turniere_liga.ausrichter = teams_name.team_id AND turniere_liga.saison = teams_name.saison
                 WHERE phase != 'ergebnis'
                 AND saison = ?
                 AND canceled = 0
@@ -516,7 +524,7 @@ class nTurnier
     }
 
     /**
-     * Erhalte Turniere, die in der ergebnis-Phase sind
+     * Erhalte Turniere, die in der ergebnis-Phase sind der saison
      * @param $saison
      * @return nTurnier[]
      */
@@ -524,12 +532,12 @@ class nTurnier
     public static function get_turniere_ergebnis(bool $asc = true, int $saison = CONFIG::SAISON): array
     {
         $sql = "
-                SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname 
+                SELECT turniere_liga.*, turniere_details.*, teams_name.teamname
                 FROM turniere_liga 
                 INNER JOIN turniere_details 
                 ON turniere_liga.turnier_id = turniere_details.turnier_id
-                INNER JOIN teams_liga
-                ON teams_liga.team_id = turniere_liga.ausrichter
+                INNER JOIN teams_name
+                ON turniere_liga.ausrichter = teams_name.team_id AND turniere_liga.saison = teams_name.saison
                 WHERE phase = 'ergebnis'
                 AND saison = ?
                 ORDER BY turniere_liga.datum " . ($asc ? "asc" : "desc");
@@ -541,17 +549,19 @@ class nTurnier
      * 
      * @return array
      */
-    public function get_anmeldungen(): array
+    public function get_anmeldungen(int $saison = Config::SAISON): array
     {
         $sql = "
-                SELECT turniere_liste.*, teams_liga.teamname, teams_liga.ligateam
+                SELECT turniere_liste.*, teams_name.teamname, teams_liga.ligateam
                 FROM turniere_liste
                 LEFT JOIN teams_liga
                 ON turniere_liste.team_id = teams_liga.team_id
+                LEFT JOIN teams_name
+                ON teams_name.team_id = teams_liga.team_id AND teams_name.saison = ?
                 WHERE turniere_liste.turnier_id = ?
                 ORDER BY turniere_liste.position_warteliste
                 ";
-        $anmeldungen = db::$db->query($sql, $this->turnier_id)->esc()->fetch();
+        $anmeldungen = db::$db->query($sql, $saison, $this->turnier_id)->esc()->fetch();
 
         // Erstellung des Arrays mit den Teamnamen, Teamblöcken und Teamwertigkeiten
         $liste['team_ids'] = $liste['teamnamen'] = $liste['spiele'] = $liste['melde'] = $liste['warte'] = [];
@@ -572,17 +582,19 @@ class nTurnier
     public static function get_all_anmeldungen(int $saison = Config::SAISON): array
     {
         $sql = "
-                SELECT turniere_liste.*, teams_liga.teamname, teams_liga.ligateam
+                SELECT turniere_liste.*, teams_name.teamname, teams_liga.ligateam
                 FROM turniere_liste
                 LEFT JOIN teams_liga
                 ON turniere_liste.team_id = teams_liga.team_id
+                LEFT JOIN teams_name
+                ON teams_liga.turnier_id = teams_name.turnier_id AND teams_name.saison = ?
                 INNER JOIN turniere_liga
                 ON turniere_liga.turnier_id = turniere_liste.turnier_id
                 WHERE turniere_liga.saison = ?
                 AND turniere_liga.phase != 'ergebnis'
                 ORDER BY turniere_liste.position_warteliste
                 ";
-        $anmeldungen = db::$db->query($sql, $saison)->esc()->fetch();
+        $anmeldungen = db::$db->query($sql, $saison, $saison)->esc()->fetch();
 
         // Erhalten den aktuellen Spieltag für die Ermittung des Teamblocks und der -wertigkeit
         $spieltag = Tabelle::get_aktuellen_spieltag();
@@ -623,18 +635,20 @@ class nTurnier
     public function set_spielenliste(): array
     {
         $sql = "
-                SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam,
+                SELECT turniere_liste.team_id, teams_name.teamname, teams_liga.ligateam,
                     teams_details.ligavertreter, teams_details.trikot_farbe_1, teams_details.trikot_farbe_2, turniere_liste.freilos_gesetzt
                 FROM turniere_liste
                 LEFT JOIN teams_liga
                 ON turniere_liste.team_id = teams_liga.team_id
+                LEFT JOIN teams_name
+                ON teams_name.team_id = teams_liga.team_id AND teams_name.saison = ?
                 LEFT JOIN teams_details
                 ON turniere_liste.team_id = teams_details.team_id
                 WHERE turniere_liste.turnier_id = ? 
                 AND (turniere_liste.liste = 'setzliste' 
                 OR turniere_liste.liste = 'spiele') 
                 ";
-        $liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
+        $liste = db::$db->query($sql, $this->saison, $this->turnier_id)->esc()->fetch('team_id');
 
         // Prüfen ob Spielen-Liste gegeben
         if (!empty($liste)) {
@@ -680,18 +694,20 @@ class nTurnier
     public function set_warteliste(): array
     {
         $sql = "
-                SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam,
+                SELECT turniere_liste.team_id, teams_name.teamname, teams_liga.ligateam,
                     teams_details.ligavertreter, teams_details.trikot_farbe_1, teams_details.trikot_farbe_2, turniere_liste.position_warteliste
                 FROM turniere_liste
                 LEFT JOIN teams_liga
                 ON turniere_liste.team_id = teams_liga.team_id
+                LEFT JOIN teams_name
+                ON teams_name.team_id = teams_liga.team_id AND teams_name.saison = ?
                 LEFT JOIN teams_details
                 ON turniere_liste.team_id = teams_details.team_id
                 WHERE turniere_liste.turnier_id = ? 
                 AND turniere_liste.liste = 'warte'
                 ORDER BY turniere_liste.position_warteliste
                 ";
-        $liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
+        $liste = db::$db->query($sql, $this->saison, $this->turnier_id)->esc()->fetch('team_id');
 
         // Prüfen ob Warte-Liste gegeben
         if (!empty($liste)) {
@@ -720,17 +736,19 @@ class nTurnier
     public function set_meldeliste(): array
     {
         $sql = "
-                SELECT turniere_liste.team_id, teams_liga.teamname, teams_liga.ligateam,
+                SELECT turniere_liste.team_id, teams_name.teamname, teams_liga.ligateam,
                     teams_details.ligavertreter, teams_details.trikot_farbe_1, teams_details.trikot_farbe_2
                 FROM turniere_liste
                 LEFT JOIN teams_liga
                 ON turniere_liste.team_id = teams_liga.team_id
+                LEFT JOIN teams_name
+                ON teams_name.team_id = teams_liga.team_id AND teams_name.saison = ?
                 LEFT JOIN teams_details
                 ON turniere_liste.team_id = teams_details.team_id
                 WHERE turniere_liste.turnier_id = ? 
                 AND turniere_liste.liste = 'melde'
                 ";
-        $liste = db::$db->query($sql, $this->turnier_id)->esc()->fetch('team_id');
+        $liste = db::$db->query($sql, $this->saison, $this->turnier_id)->esc()->fetch('team_id');
 
         // Prüfen ob Melde-Liste gegeben
         if (!empty($liste)) {
@@ -815,17 +833,19 @@ class nTurnier
     public static function get_eigene_turniere(int $team_id, int $saison = Config::SAISON): array
     {
         $sql = "
-                SELECT turniere_liga.*, turniere_details.*, teams_liga.teamname 
+                SELECT turniere_liga.*, turniere_details.*, teams_name.teamname 
                 FROM turniere_liga 
                 INNER JOIN turniere_details 
                 ON turniere_liga.turnier_id = turniere_details.turnier_id
                 INNER JOIN teams_liga
                 ON teams_liga.team_id = turniere_liga.ausrichter
+                LEFT JOIN teams_name
+                ON teams_liga.team_id = teams_name.team_id AND teams_name.saison = ?
                 AND ausrichter = ?
                 AND saison = ? 
                 ORDER BY turniere_liga.datum asc
                 ";
-        return db::$db->query($sql, $team_id, $saison)->fetch_objects(__CLASS__, key: 'turnier_id');
+        return db::$db->query($sql, $saison, $team_id, $saison)->fetch_objects(__CLASS__, key: 'turnier_id');
     }
 
     /**
