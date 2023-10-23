@@ -22,7 +22,7 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
             <td>19. August 2023 – 26. Mai 2024</td>
         </tr>
         <tr>
-            <th class="w3-primary-3">B-Finalwochenende</th>
+            <th class="w3-primary-3">B/C-Finalwochenende</th>
             <td>08. Juni 2024 + 09. Juni 2024</td>
         </tr>
         <tr>
@@ -34,10 +34,10 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
         </tr>
         <tr>
             <th class="w3-primary-3">Reguläre Spielzeit</th>
-            <td>19.08.2024 – 01.06.2025</td>
+            <td>19. August 2024 – 01. Juni 2025</td>
         </tr>
         <tr>
-            <th class="w3-primary-3">B-Finalwochenende</th>
+            <th class="w3-primary-3">B/C-Finalwochenende</th>
             <td>14. + 15. Juni 2025</td>
         </tr>
         <tr>
