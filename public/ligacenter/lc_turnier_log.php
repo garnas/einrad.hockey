@@ -38,7 +38,7 @@ include '../../templates/header.tmp.php'; ?>
             </tr>
             <?php foreach ($turnierEntity->getLogs() as $log){?>
                 <tr>
-                    <td style="white-space: pre;"><?= $log->getZeit()->format("d.m.y h:i:s") ?></td>
+                    <td style="white-space: pre;"><?= $log->getZeit()->format("d.m.y (D) H:i:s") ?></td>
                     <td><?= $log->getAutor() ?></td>
                     <td style="white-space: pre;"><?=$log->getLogText()?></td>
                 </tr>
