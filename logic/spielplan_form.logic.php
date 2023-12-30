@@ -1,4 +1,5 @@
 <?php
+use App\Event\Turnier\nLigaBot;
 
 // Besteht die Berechtigung das Turnier zu bearbeiten?
 if(!Helper::$ligacenter){ // Ligacenter darf alles.
@@ -73,6 +74,10 @@ if (isset($_POST["turnierergebnis_speichern"])) {
     if (!($error ?? false)) {
         $spielplan->turnier->set_ergebnisse($spielplan->platzierungstabelle);
         Html::info("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
+        $spieltag = $spielplan->turnier->get_spieltag();
+        if (Tabelle::is_spieltag_beendet($spieltag)) {
+            nLigaBot::blockWechsel();
+        }
         header('Location: ' . db::escape($_SERVER['REQUEST_URI']));
         die();
     }

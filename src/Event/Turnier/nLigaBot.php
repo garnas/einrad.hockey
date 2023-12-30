@@ -16,7 +16,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\Mapping\MappingException;
 use Html;
-
+use Tabelle;
 /**
  *
  */
@@ -37,7 +37,7 @@ class nLigaBot
         db::sql_backup();
 
         self::setSpieltage();
-        self::blockWechsel();
+//        self::blockWechsel(); # Der Blockwechsel wird Moduskonform 23/24 nur noch mit Ende eines Spieltages vollzogen
         self::phasenWechsel();
 
         DoctrineWrapper::manager()->flush();

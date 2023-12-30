@@ -32,6 +32,20 @@ class Tabelle
                 ";
         return db::$db->query($sql, $saison)->fetch_one() ?? 1;
     }
+    public static function is_spieltag_beendet(int $spieltag): bool
+    {
+        $sql = "
+                SELECT phase
+                FROM turniere_liga 
+                WHERE spieltag = ?
+                AND (art = 'I' OR art = 'II') 
+                AND saison = ?
+                AND canceled != 1
+                GROUP BY phase
+                ";
+        $result = db::$db->query($sql, $spieltag, Config::SAISON)->list("phase");
+        return $result == ["ergebnis"];
+    }
 
     /**
      * Schaut ob der aktuelle Spieltag live ist, also ein unvollständiger Spieltag, welcher teilweise ausgespielt wurde.
@@ -52,7 +66,7 @@ class Tabelle
                 ";
         $result = db::$db->query($sql, $spieltag, $saison)->list('count(phase)','phase');
         return (
-                isset($result['spielplan']) or isset($result['melde']) or isset($result ['offen'])
+                isset($result['spielplan']) or isset($result['melde']) or isset($result['offen'])
                 )
                 && isset($result['ergebnis']);
     }
