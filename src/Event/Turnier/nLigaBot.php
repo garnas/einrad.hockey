@@ -16,7 +16,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\Mapping\MappingException;
 use Html;
-use Tabelle;
+
 /**
  *
  */
