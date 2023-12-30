@@ -103,4 +103,10 @@ class TurnierRepository
         return new ArrayCollection($query->getQuery()->execute());
     }
 
+
+    public function last_turnier(int $ausrichter_id): ?Turnier
+    {
+        return $this->turnier->findOneBy(['ausrichter' => $ausrichter_id], ['id' => 'DESC']);
+    }
+
 }

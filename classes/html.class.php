@@ -173,6 +173,92 @@ class Html
         return $return;
     }
 
+    public static function datalist_turnier_ausrichter(string $field, int $team_id): string
+    {
+        $whitelist = ["organisator", "handy"];
+        if (!in_array($field, $whitelist)) {
+            trigger_error("Whitelist-Error Datalist Turnier Ausrichter $field", E_USER_ERROR);
+        }
+        $sql = "
+            SELECT $field
+            FROM turniere_details
+            INNER JOIN turniere_liga on turniere_details.turnier_id = turniere_liga.turnier_id
+            WHERE ausrichter = ? AND saison >= ? AND $field != ''
+            GROUP BY $field
+            ORDER BY COUNT($field) DESC;
+        ";
+        $liste = Db::$db->query($sql, $team_id, Config::SAISON - 3)->list($field);
+
+        $return = "<datalist id='list_$field'>";
+        foreach ($liste as $value) {
+            $return .= "<option value='$value'>";
+        }
+        $return .= "</datalist>";
+        return $return;
+    }
+
+    public static function datalist_turnier(string $field): string
+    {
+        $whitelist = ["hallenname", "strasse", "plz", "ort", "haltestellen"];
+        if (!in_array($field, $whitelist)) {
+            trigger_error("Whitelist-Error Datalist Turnier Allgemein $field", E_USER_ERROR);
+        }
+
+        $sql = "
+            SELECT TRIM($field) AS $field
+            FROM turniere_liga 
+            INNER JOIN turniere_details on turniere_liga.turnier_id = turniere_details.turnier_id
+            WHERE TRIM($field) != '' AND TRIM($field) != '00000'
+            GROUP BY TRIM($field)
+            ORDER BY COUNT($field) DESC;
+        ";
+        $liste = Db::$db->query($sql)->list($field);
+        $return = "<datalist id='list_$field'>";
+        foreach ($liste as $value) {
+            $return .= "<option value='$value'>";
+        }
+        $return .= "</datalist>";
+        return $return;
+    }
+
+    public static function turnier_organisator_javascript_array($team_id): false|string
+    {
+        $sql = "
+            SELECT TRIM(organisator) AS organisator,
+                   TRIM(handy) AS handy, d1.turnier_id
+            FROM turniere_details as d1
+            INNER JOIN turniere_liga as tl on d1.turnier_id = tl.turnier_id
+            WHERE organisator != ''
+              AND tl.ausrichter = ?
+              AND tl.saison >= ?
+              AND d1.turnier_id =   (select max(d2.turnier_id)
+                                  from turniere_details as d2
+                                  inner join turniere_liga as tl2 on d2.turnier_id = tl2.turnier_id
+                                  where TRIM(d1.organisator) = TRIM(d2.organisator) and tl2.ausrichter = ?)
+            GROUP BY TRIM(organisator)
+        ";
+        $result = Db::$db->query($sql, $team_id, Config::SAISON - 3, $team_id)->fetch("organisator");
+        return json_encode($result);
+    }
+
+    public static function turnier_adressen_javascript_array(): false|string
+    {
+        $sql = "
+            SELECT TRIM(hallenname) AS hallenname,
+                   TRIM(strasse) AS strasse, 
+                   TRIM(plz) as plz, 
+                   TRIM(ort) as ort, 
+                   TRIM(haltestellen) as haltestellen
+            FROM turniere_details as d1
+            WHERE hallenname != '' AND turnier_id =   (select max(d2.turnier_id)
+                                                       from turniere_details as d2
+                                                       where TRIM(d1.hallenname) = TRIM(d2.hallenname))
+            GROUP BY TRIM(hallenname)
+        ";
+        $result = Db::$db->query($sql)->fetch("hallenname");
+        return json_encode($result);
+    }
+
     /**
      * Erststellt anklickbare Email-Adressen
      *

@@ -31,7 +31,7 @@ if (isset($_POST['create_turnier'])) {
     $block = ($art === 'I') ? $ausrichter_block : $_POST['block'];
     $startzeit = DateTime::createFromFormat("H:i", ((string)($_POST['startzeit'] ?? '')));
     $plaetze = (string)($_POST['plaetze'] ?? '');
-    $sofotOeffnen = @($_POST['sofort_oeffnen'] === "Ja");
+    $sofotOeffnen = @(($_POST['sofort_oeffnen'] ?? '') === "Ja");
 
     // Besprechung
     if (($_POST['besprechung'] ?? '') === 'Ja') {
