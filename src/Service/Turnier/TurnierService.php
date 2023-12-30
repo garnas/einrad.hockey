@@ -59,14 +59,9 @@ class TurnierService
     public static function getWarteliste(Turnier $turnier): Collection|array
     {
         $criteria = Criteria::create()
-            ->andWhere((Criteria::expr())->eq('liste', 'warteliste'));
-        $sort = static function(TurniereListe $eintrag, TurniereListe $vergleich) {
-            return $eintrag->getPositionWarteliste() <=> $vergleich->getPositionWarteliste();
-        };
-        $liste = $turnier->getListe()->matching($criteria);
-        $listeAsArray = $liste->toArray();
-        uasort($listeAsArray, $sort);
-        return new ArrayCollection($listeAsArray);
+            ->andWhere((Criteria::expr())->eq('liste', 'warteliste'))
+            ->orderBy(["positionWarteliste" => Criteria::ASC]);
+        return $turnier->getListe()->matching($criteria);
     }
 
     public static function getTurnierEintrageFristUnix(Turnier $turnier): int
@@ -271,7 +266,8 @@ class TurnierService
                 if ($freie_plaetze > 0) {
                     $team = $anmeldung->getTeam();
                     if (self::isSetzBerechtigt($turnier, $team)) {
-                        $anmeldung->setListe('setzliste');
+                        # Immer vom Parent aus verändern, sonst kann es hier zu Problemem kommen.
+                        $turnier->getListe()->get($anmeldung->getTeam()->id())->setListe('setzliste');
                         $freie_plaetze--;
                         $turnier->getLogService()->addLog("Von Warteliste auf Setzliste: " . $team->getName());
                         if ($send_mail) {
