@@ -1,6 +1,7 @@
 <?php
 
 // Formularauswertung
+use App\Repository\DoctrineWrapper;
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierValidatorService;
@@ -56,6 +57,7 @@ if (isset($_POST['change_turnier'])) {
         || empty($organisator) || empty($handy)
     ) {
         Html::error("Bitte alle nicht optionalen Felder ausfüllen.");
+        Helper::reload();
     }
 
     // Besprechung
@@ -84,6 +86,10 @@ if (isset($_POST['change_turnier'])) {
         TurnierValidatorService::onChange($turnier)
         && TurnierValidatorService::mayChangePlaetze($turnier, $plaetze_before)
     ) {
+        if ($turnier->isSetzPhase()) {
+            TurnierService::setzListeAuffuellen($turnier);
+            TurnierService::neueWartelistePositionen($turnier);
+        }
         TurnierRepository::get()->speichern($turnier);
         Html::info("Turnierdaten wurden geändert");
         Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
