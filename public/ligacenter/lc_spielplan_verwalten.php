@@ -2,6 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Event\Turnier\nLigaBot;
+
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
@@ -56,6 +58,10 @@ if (isset($_POST['ergebnis_eintragen'])) {
     }
     $turnier->update_phase('ergebnis');
     Html::info("Ergebnisse wurden manuell eingetragen. Das Turnier wurde in die Ergebnisphase versetzt.");
+    $spieltag = $turnier->get_spieltag();
+    if (Tabelle::is_spieltag_beendet($spieltag)) {
+        nLigaBot::blockWechsel();
+    }
     header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->get_turnier_id());
     die();
 }
