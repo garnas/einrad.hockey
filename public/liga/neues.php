@@ -58,7 +58,7 @@ include '../../templates/header.tmp.php'; ?>
             <?= Html::icon("visibility") ?> Infobar
         </span>
         <span id="ausblenden"
-                class="w3-left w3-left-align  w3-hide w3-hide-large w3-hide-medium w3-hover-text-secondary w3-text-primary"
+                class="w3-left w3-left-align w3-hide w3-hide-large w3-hide-medium w3-hover-text-secondary w3-text-primary"
                 onclick="ausblenden()"
                 style="width:50%;"
         >

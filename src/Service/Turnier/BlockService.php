@@ -5,7 +5,6 @@ namespace App\Service\Turnier;
 use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
 use Config;
-use db;
 
 class BlockService
 {

@@ -189,7 +189,7 @@ class LigaBot
     }
 
     /**
-     * Regelt den Übergang von offen zu melden bezüglich der Teamlisten.
+     * Regelt den Übergang von warte zu setz bezüglich der Teamlisten.
      * setzt die Teams in geloster Reihenfolge auf die Warteliste, also danach: Spielen-Liste auffuellen!
      * @param nTurnier $turnier
      *

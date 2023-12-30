@@ -39,6 +39,7 @@ require_once __DIR__ . '/env.php';
 if (Env::IS_LOCALHOST) {
     ini_set('session.cookie_secure', '0'); // $_SESSION Funktioniert auch ohne https
     ini_set('display_errors', 'On'); // Fehler werden angzeigt und nicht nur geloggt
+    ini_set('max_execution_time', '0'); // Für Debugging
 }
 
 
