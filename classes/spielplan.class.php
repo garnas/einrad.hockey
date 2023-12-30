@@ -126,8 +126,9 @@ class Spielplan
         // Spielplanvorlage aus der Datenbank
         $sql = "
                 SELECT * 
-                FROM spielplan_paarungen 
-                WHERE spielplan_paarung = ?
+                FROM spielplan_paarungen AS p
+                INNER JOIN spielplan_details AS d ON p.spielplan_paarung = d.spielplan_paarung
+                WHERE d.spielplan = ?
                 ";
         $paarungen = db::$db->query($sql, $vorlage)->fetch();
 
