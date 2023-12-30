@@ -54,6 +54,13 @@ class nTurnier
     private array $spielenliste;
     private int $anz_spielenliste;
 
+    # Update für fetchObject der "alten" DB-Klasse, ansonsten werden diese dynamisch gesetzt mit Deprecated-Warning
+    public ?string $erstellt_am;
+    public ?string $canceled_grund;
+    public ?string $sofort_oeffnen;
+    public ?string $canceled;
+    public ?string $teamname;
+
     /**
      * Turnier constructor.
      */
