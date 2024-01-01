@@ -81,7 +81,7 @@ include '../../templates/header.tmp.php';
                     <?= TeamSnippets::getEmailLink($turnier->getAusrichter()) ?: e($turnier->getAusrichter()->getName())?>
                 </p> 
                 <p><i>Organisator:</i><br><?= e($turnier->getDetails()->getOrganisator()) ?></p>
-                <p><i>Handy:</i><br><?= e(TurnierSnippets::getHandy($turnier)) ?></p>
+                <p><i>Handy:</i><br><?= TurnierSnippets::getHandy($turnier) ?></p>
             </td>
         </tr>
         <tr>
