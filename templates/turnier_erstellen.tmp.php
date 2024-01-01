@@ -90,7 +90,7 @@ if ($last_turnier) {
         <p>
             <label class="w3-text-primary" for="plaetze">Plätze</label>
             <select required class="w3-select w3-border w3-border-primary" id="plaetze" name="plaetze">
-                <option <?php if (($_POST['plaetze'] ?? '') == '4'){?> selected <?php } //endif?> <?php if(Helper::$teamcenter){?> disabled <?php } //end if?> value="4">4 Teams (nur in Absprache mit dem Ligaausschuss)</option>
+                <option <?php if (($_POST['plaetze'] ?? '') == '4'){?> selected <?php } //endif?> id="plaetze_4" value="4">4 Teams (nur blockeigene Turniere oder Spaßturnier)</option>
                 <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '5'){?> selected <?php } //endif?> value="5">5 Teams</option>
                 <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '6'){?> selected <?php } //endif?> value="6">6 Teams</option>
                 <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '7'){?> selected <?php } //endif?> value="7">7 Teams</option>
@@ -249,7 +249,6 @@ function onstart_show_block(){
 onstart_show_block();
 
 function onchange_show_block(selectObject) {
-    
     /* Einblenden der Auswahl des fixierten Turnierblocks */
     <?php if(Helper::$ligacenter){?>
         if (selectObject.value ===  "fixed") {
@@ -257,21 +256,17 @@ function onchange_show_block(selectObject) {
         }else{
             document.getElementById("block_fixed_div").style.display = "none";
         }
-
-        /* Einblenden der Auswahl für das Abschlussturnier */
-        if (selectObject.value ===  "final") {
-            document.getElementById("block_final_div").style.display = "block";
-        }else{
-            document.getElementById("block_final_div").style.display = "none";
-        }
     <?php } //endif?>
 
     /* Einblenden der Auswahl des höheren Turnierblocks */
     if (selectObject.value ===  "II") {
         document.getElementById("block_higher_div").style.display = "block";
-        }else{
+        document.getElementById("plaetze_4").disabled = true;
+    }else{
+        document.getElementById("plaetze_4").disabled = false;
         document.getElementById("block_higher_div").style.display = "none";
-        }
+    }
+
 }
 const turnier_array = <?= Html::turnier_adressen_javascript_array() ?>;
 
