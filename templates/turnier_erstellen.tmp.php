@@ -274,9 +274,9 @@ function onchange_show_block(selectObject) {
         }
 }
 const turnier_array = <?= Html::turnier_adressen_javascript_array() ?>;
-function onchange_fill_address(selectObject) {
 
-    /* Einblenden der Auswahl des fixierten Turnierblocks */
+// Automatisches Ausfüllen der Adresse bei Auswahl der Halle
+function onchange_fill_address(selectObject) {
     if (selectObject.value && turnier_array[selectObject.value] !== undefined) {
         document.getElementById("strasse").value = turnier_array[selectObject.value]["strasse"];
         document.getElementById("plz").value = turnier_array[selectObject.value]["plz"];
@@ -284,10 +284,10 @@ function onchange_fill_address(selectObject) {
         document.getElementById("haltestellen").value = turnier_array[selectObject.value]["haltestellen"];
     }
 }
+
+// Automatisches Ausfüllen der Handynummer bei Auswahl des Organisators
 const organisator_array = <?= Html::turnier_organisator_javascript_array($ausrichter_team_id) ?>;
 function onchange_fill_handy(selectObject) {
-
-    /* Einblenden der Auswahl des fixierten Turnierblocks */
     if (selectObject.value && organisator_array[selectObject.value] !== undefined) {
         document.getElementById("handy").value = organisator_array[selectObject.value]["handy"];
     }
