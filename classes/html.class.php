@@ -191,7 +191,7 @@ class Html
 
         $return = "<datalist id='list_$field'>";
         foreach ($liste as $value) {
-            $return .= "<option value='$value'>";
+            $return .= "<option value='" . e($value) . "'>";
         }
         $return .= "</datalist>";
         return $return;
@@ -215,7 +215,7 @@ class Html
         $liste = Db::$db->query($sql)->list($field);
         $return = "<datalist id='list_$field'>";
         foreach ($liste as $value) {
-            $return .= "<option value='$value'>";
+            $return .= "<option value='" . e($value) . "'>";
         }
         $return .= "</datalist>";
         return $return;
