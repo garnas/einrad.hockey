@@ -68,26 +68,10 @@ if (isset($_POST['ergebnis_eintragen'])) {
 
 // Spielplan automatisch erstellen
 if (isset($_POST['auto_spielplan_erstellen'])) {
-    $error = false;
-    if ($turnier->get_phase() != "setz") { //TODO and is ligaturnier
-        Html::error("Das Turnier muss in der Setzphase sein.");
-        $error = true;
-    }
-    if ($anzahl_teams < 4 || $anzahl_teams > 8) {
-        Html::error("Falsche Anzahl an Teams. Nur 4er - 8er Jeder-gegen-Jeden Spielpläne können erstellt werden.");
-        $error = true;
-    }
-    if (!empty($turnier->get_spielplan_datei())) {
-        Html::error("Spielplan konnte nicht erstellt werden. Es existiert ein manuell hochgeladener Spielplan.");
-        $error = true;
-    }
-    if (!$error) {
-        if (Spielplan::fill_vorlage($turnier)) {
-            Html::info("Das Turnier wurde in die Spielplan-Phase versetzt. Der Spielplan wird jetzt angezeigt.");
-            header('Location: ../liga/spielplan.php?turnier_id=' . $turnier->get_turnier_id());
-            die();
-        }
-
+    if (Spielplan::spielplan_erstellen($turnier)) {
+        Html::info("Das Turnier wurde in die Spielplan-Phase versetzt. Der Spielplan wird jetzt angezeigt.");
+        Helper::reload('/liga/spielplan.php?turnier_id=' . $turnier->get_turnier_id());
+    } else {
         Html::error("Spielplan konnte nicht erstellt werden.");
     }
 }

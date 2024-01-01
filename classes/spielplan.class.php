@@ -7,6 +7,29 @@
  */
 class Spielplan
 {
+    public static function spielplan_erstellen(nTurnier $turnier): bool
+    {
+        $anzahl_teams = count($turnier->get_spielenliste());
+        $error = false;
+
+        if ($turnier->get_phase() != "setz") { //TODO and is ligaturnier
+            Html::error("Das Turnier muss in der Setzphase sein.");
+            $error = true;
+        }
+        if ($anzahl_teams < 4 || $anzahl_teams > 8) {
+            Html::error("Falsche Anzahl an Teams. Nur 4er - 8er Jeder-gegen-Jeden Spielpläne können erstellt werden.");
+            $error = true;
+        }
+        if (!empty($turnier->get_spielplan_datei())) {
+            Html::error("Spielplan konnte nicht erstellt werden. Es existiert ein manuell hochgeladener Spielplan.");
+            $error = true;
+        }
+        if (!$error) {
+            return self::fill_vorlage($turnier);
+        }
+        return false;
+    }
+
     /**
      * Allgemeine Daten
      */
