@@ -68,7 +68,7 @@ include '../../templates/header.tmp.php';
                             </h4>
                         <?php else: ?>
                             <p class='w3-text-grey'>
-                                <?= $turnier->getName()?>
+                                <?= e($turnier->getName())?>
                             </p>
                             <h4>
                                 <?= TurnierSnippets::datum($turnier) ?>
