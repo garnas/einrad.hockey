@@ -155,6 +155,15 @@ class TurnierValidatorService
             return false;
         }
 
+        if ($this->turnier->getArt() != "I" && $this->turnier->getArt() != "spaß" && $plaetze == 4) {
+            Html::error("4er-Turniere dürfen nur blockeigene Turniere sein.");
+            return false;
+        }
+        if ($this->turnier->isSofortOeffnen() && $plaetze == 4) {
+            Html::error("4er-Turniere dürfen nicht als blockfreie Turniere ausgerichtet werden.");
+            return false;
+        }
+
         if (
             (Helper::$teamcenter && !self::hasLaRights($this->turnier))
             && $plaetze <= 8
