@@ -211,11 +211,12 @@ class TurnierService
      */
     public static function getEmails(Turnier $turnier): array
     {
+        $emails = [];
         $teams = self::getTeams($turnier);
         foreach ($teams as $team) {
-            $emails[] = $team->getEmails();
+            $emails += $team->getEmails()->toArray();
         }
-        return $emails ?? [];
+        return $emails;
     }
 
     public static function getAnzahlGesetzteTeams(Turnier $turnier): int

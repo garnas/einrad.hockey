@@ -51,14 +51,15 @@ class TurnierEventMailBot
         $betreff = "Abgesagt: " . $turnier->getBlock() . "-Turnier in " . $turnier->getDetails()->getOrt();
         foreach ($emails as $email) {
             $emailAdressen[] = $email->getEmail();
-            ob_start();
-                include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
-                include(Env::BASE_PATH . "/templates/mails/mail_turnier_canceled.tmp.php");
-                include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
-            $inhalt = ob_get_clean();
-
-            MailBot::add_mail($betreff, $inhalt, $emailAdressen);
         }
+        $emailAdressen[] = Env::LAMAIL;
+        ob_start();
+            include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+            include(Env::BASE_PATH . "/templates/mails/mail_turnier_canceled.tmp.php");
+        $inhalt = ob_get_clean();
+
+        MailBot::add_mail($betreff, $inhalt, $emailAdressen);
+        MailBot::mail_bot($betreff);
     }
 
     /**

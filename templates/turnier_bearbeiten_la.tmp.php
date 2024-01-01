@@ -25,7 +25,13 @@ else: ?>
             <p>
                 <b>Hinweis:</b> Zur bevorzugen, das Turnier bleibt in der Datenbank
                 <br>
-                <b>Allen Teams auf der Warte- und Setzliste wird eine automatische E-Mail geschickt (mit dem Grund)</b>
+            </p>
+            <p>
+                <input class="w3-check" type="checkbox" id="send_mail" name="send_mail" checked value="send_mail">
+                <label for="send_mail">
+                    <b>Allen Teams auf der Warte- und Setzliste wird eine automatische E-Mail geschickt
+                        (mit dem Grund)</b>
+                </label>
             </p>
             <p>
                 <label for='grund' class="w3-text-primary">Grund der Turnierabsage</label>

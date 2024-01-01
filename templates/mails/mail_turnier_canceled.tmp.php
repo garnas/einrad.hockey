@@ -1,4 +1,4 @@
-<p>Hallo <?= $team->getName() ?>,</p>
+<p>Hallo liebe Teams,</p>
 <p>
     das <?= $turnier->getBlock() ?>-Turnier in <?= $turnier->getDetails()->getOrt() ?>
     am <?= $turnier->getDatum()->format('d.m.Y') ?> wurde von Seiten des Ligaausschusses abgesagt.
@@ -10,3 +10,9 @@
         Link zum Turnier
     </a>
 </p>
+<p>
+    Viele Grüße<br>
+    euer Ligaausschuss
+</p>
+</body>
+</html>
