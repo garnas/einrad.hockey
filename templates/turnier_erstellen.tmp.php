@@ -5,9 +5,9 @@ use App\Repository\Turnier\TurnierRepository;
 
 $last_turnier = TurnierRepository::get()->last_turnier($ausrichter_team_id);
 if ($last_turnier) {
-    $last_startgebuehr = $last_turnier->getDetails()->getStartgebuehr();
-    $last_plaetze = $last_turnier->getDetails()->getPlaetze();
-    $last_hinweis = $last_turnier->getDetails()->getHinweis();
+    $last_startgebuehr = e($last_turnier->getDetails()->getStartgebuehr());
+    $last_plaetze = e($last_turnier->getDetails()->getPlaetze());
+    $last_hinweis = e($last_turnier->getDetails()->getHinweis());
 } else {
     $last_startgebuehr = '';
     $last_plaetze = '';
