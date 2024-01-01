@@ -94,6 +94,7 @@ class TurnierSnippets {
     public static function ortDatumBlock(Turnier $turnier, $html = true): string
     {
         $block = BlockService::toString(($html) ? $turnier : $turnier->getBlock());
+        $block = $turnier->isCanceled() ? "(Abgesagt)" : $block;
         $datum = self::datum($turnier);
         $ort = $turnier->getDetails()->getOrt();
         return e($ort) . " am " . $datum . " " . $block;
