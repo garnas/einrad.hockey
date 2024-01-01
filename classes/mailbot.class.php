@@ -59,16 +59,28 @@ class MailBot
      * Der Mailbot nimmt Emails aus der Datenbank und versendet diese
      *
      */
-    public static function mail_bot(): void
+    public static function mail_bot(string $betreff = ""): void
     {
-        $sql = "
+        if ($betreff === "") {
+            $sql = "
                 SELECT * 
                 FROM mailbot 
                 WHERE mail_status = 'warte'
                 ORDER BY zeit 
                 LIMIT 50
                 ";
-        $mails = db::$db->query($sql)->fetch();
+            $mails = db::$db->query($sql)->fetch();
+        } else {
+            $sql = "
+                SELECT * 
+                FROM mailbot 
+                WHERE mail_status = 'warte' AND betreff = ?
+                ORDER BY zeit 
+                LIMIT 50
+                ";
+            $mails = db::$db->query($sql, $betreff)->fetch();
+        }
+
         foreach($mails as $mail){
             $mailer = self::start_mailer();
             $mailer->isHTML(true); // Für die Links
