@@ -74,6 +74,10 @@ use App\Service\Turnier\TurnierSnippets;
                         <?= Html::icon("check") ?>
                         (Schirifreilos erhalten am <?= $teamEntity->getZweitesFreilos()->format("d.m.Y") ?>)
                     </span>
+                <?php else: ?>
+                    <span class="w3-text-grey">
+                         - dein Team hat noch kein Freislos für zwei Schiedsrichter erhalten.
+                    </span>
                 <?php endif; ?>
             </td>
         </tr>
@@ -105,9 +109,11 @@ use App\Service\Turnier\TurnierSnippets;
                     <p>
                          Turnier in <?= TurnierSnippets::ortDatumBlock($turnier) ?> eingetragen am
                          <?= $turnier->getErstelltAm()->format("d.m.Y") ?>
-                        <?php if(TeamService::isAusrichterFreilosBerechtigt($turnier)): ?>
+                        <?php if(TeamService::isAusrichterFreilosBerechtigt($turnier)
+                            && !$turnier->isCanceled()): ?>
                             <br>
-                            <span class="w3-text-green">Für dieses Turnier könnt ihr nach dem Turnier ein Freilos erhalten (insgesamt 2x möglich)</span>
+                            <span class="w3-text-green">Für dieses Turnier könnt ihr nach dem Turnier ein Freilos
+                                erhalten (insgesamt 2x möglich)</span>
                         <?php endif; ?>
                     </p>
                 <?php endforeach; ?>
