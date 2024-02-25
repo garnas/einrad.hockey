@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
-require_once '../../logic/session_Oa.logic.php'; //Auth
+require_once '../../logic/session_oa.logic.php'; //Auth
 
 //Formularauswertung
 require_once '../../logic/neuigkeit_bearbeiten.logic.php';
