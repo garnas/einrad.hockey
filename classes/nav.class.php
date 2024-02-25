@@ -108,7 +108,7 @@ class Nav
             [Env::BASE_URL . "/liga/ueber_uns.php", "Über uns"],
             [Env::BASE_URL . "/liga/jubilaeum.php", "25 Jahre Liga"],
             [Env::BASE_URL . "/liga/archiv.php", "Archiv"],
-            [Env::BASE_URL . "/login.php", "Ligacenter"],
+            [Env::BASE_URL . "/login.php", "Ausschusslogin"],
             [Env::BASE_URL . "/liga/kontakt.php", "Kontakt"],
             [Env::BASE_URL . "/liga/datenschutz.php", "Datenschutz"],
             [Env::BASE_URL . "/liga/impressum.php", "Impressum"],
