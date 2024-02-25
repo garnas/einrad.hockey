@@ -45,13 +45,13 @@ class MailBot
         }
 
         // Debugging
-        if (!Helper::$ligacenter) {
+        if (!(Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss)) {
             $mailer->Password = '***********'; // Passwort verstecken
             $mailer->ClearAllRecipients();
         }
 
         Helper::log(Config::LOG_EMAILS, 'E-Mail-Debug-Pseudo-Versand erfolgreich');
-        #qqq db::debug($mailer);
+        db::debug($mailer);
         return true;
     }
 

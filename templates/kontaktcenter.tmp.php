@@ -81,7 +81,10 @@ if (empty($_SESSION[$list_id ?? '']['emails'])): ?>
         <form method="post" onsubmit="return confirm('Soll die Email wirklich abgeschickt werden?')">
             <p class=""><b><i class=material-icons>mail</i> Absender</b></p>
             <p><?= $from ?? [] ?></p>
-            <p class=""><b><i class=material-icons>mail</i> Empfänger <?php if(Helper::$ligacenter){?>(<?=$anzahl_emails ?? []?>)<?php }//end if?></b></p>
+            <p class=""><b><i class=material-icons>mail</i> Empfänger
+                    <?php if(Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss){?>
+                        (<?=$anzahl_emails ?? ""?>)
+                    <?php }//end if?></b></p>
             <div class="w3-row w3-section">
                 <i>
                     <?php foreach($tos ?? [] as $to):?>

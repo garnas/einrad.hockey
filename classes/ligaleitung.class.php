@@ -55,7 +55,6 @@ class LigaLeitung
         $details = self::get_details($login);
         // Überprüfung des PWs
         if (!password_verify($passwort_alt, $details['passwort'])) {
-            Html::error("Falsches Passwort");
             return false;
         }
 
@@ -91,21 +90,24 @@ class LigaLeitung
         // Existenz prüfen
         if (empty($details)) {
             Html::error("Unbekannter Loginname");
-            Helper::log(Config::LOG_LOGIN, "Falscher LC-Login | Loginname: " . $login);
+            Helper::log(Config::LOG_LOGIN, "Falscher Login    | Loginname: " . $login);
             return false;
         }
 
         // Funktion prüfen
         if ($funktion !== $details['funktion']) {
-            Html::error("Fehlende Berichtigung");
             return false;
         }
 
+        $context = self::get_context($funktion);
+
         // Passwort prüfen
         if (password_verify($passwort, $details['passwort'])) {
-            $_SESSION['logins']['la']['id'] = $details['ligaleitung_id'];
-            $_SESSION['logins']['la']['login'] = $details['login'];
-            Helper::log(Config::LOG_LOGIN, "Erfolgreich       | Loginname: " . $login);
+            $_SESSION['logins'][$context]['id'] = $details['ligaleitung_id'];
+            $_SESSION['logins'][$context]['login'] = $details['login'];
+            Helper::log(
+                Config::LOG_LOGIN, "Erfolgreich       | Loginname: " . $login . " | Kontext: " . $context
+            );
             return true;
         }
 
@@ -114,4 +116,19 @@ class LigaLeitung
         Html::error("Falsches Passwort");
         return false;
     }
+
+    public static function is_logged_in(string $funktion = ""): bool
+    {
+        $context = self::get_context($funktion);
+        return isset($_SESSION['logins'][$context]);
+    }
+
+    private static function get_context(string $funktion): string
+    {
+        return match($funktion) {
+            "ligaausschuss" => "la",
+            "oeffentlichkeitsausschuss" => "oa",
+        };
+    }
+
 }

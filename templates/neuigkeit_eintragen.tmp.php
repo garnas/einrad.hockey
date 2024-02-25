@@ -2,13 +2,9 @@
 <h3>Neuigkeit eintragen</h3>
 <p id="counter"><i>Es dürfen 750 Zeichen verwendet werden. Für mehr Infos kannst du ein Bild und/oder ein PDF hochladen.</i><p>
 <form action="" method="post" enctype="multipart/form-data">
-    <?php if (\App\Service\Team\TeamValidator::isOeffentlichkeitsausschuss($_SESSION["logins"]["team"]["id"] ?? 0)): ?>
-        <input type="checkbox" class="w3-check" name="als_oeffi" id="als_oeffi">
-        <label for="als_oeffi">Als Öffentlichkeitsausschuss veröffentlichen</label>
-    <?php endif; ?>
     <p>
-        <label class="" for="titel">Titel</label>
-        <input required class="w3-input w3-border w3-border-primary" type="text" id="titel" name="titel" value="<?=$_POST['titel'] ?? ''?>" >
+        <label class="" for="titel">Titel (Optional)</label>
+        <input class="w3-input w3-border w3-border-primary" type="text" id="titel" name="titel" value="<?=$_POST['titel'] ?? ''?>" >
     </p><p>
         <label class="" for="text">Text</label>
         <textarea required class="w3-input w3-border w3-border-primary" rows="10" id="text" name="text" onkeyup="woerter_zaehlen(750)" maxlength="750"><?=stripcslashes($_POST['text'] ?? '')?></textarea>

@@ -169,7 +169,4 @@ class TeamValidator
         return true;
     }
 
-    public static function isOeffentlichkeitsausschuss(?int $teamId) {
-        return $teamId === 155;
-    }
 }

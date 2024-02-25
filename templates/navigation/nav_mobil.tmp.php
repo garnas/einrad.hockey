@@ -69,7 +69,7 @@
 <div class="w3-overlay" id="myOverlay" onclick="close_sidebar()" style="cursor:pointer;"></div>
 
 <!--Navigation für Smartphones -->
-<div class="w3-display-container w3-hide-large w3-hide-medium">
+<div class="w3-display-container">
     <!-- Hintergrundbild -->
     <img src="<?= Html::get_hintergrund_bild() ?>" class="<?php if (!isset($_SESSION['logins']['la']) && !isset($_SESSION['logins']['team'])){?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.4;">
     <div class="w3-display-left w3-margin-left">
@@ -80,7 +80,7 @@
     <div class="w3-display-right">
         <button onclick="open_sidebar()" class="w3-btn w3-round w3-ripple w3-text-primary">
             <!-- vertical-align 0% stehen lassen, da material-icons vertical-align in style.css verändern -->
-            <i class="w3-xxlarge material-icons" style="vertical-align: 0%;">menu</i>
+            <i class="w3-xxlarge material-icons" style="vertical-align: 0;">menu</i>
         </button>
     </div>
 

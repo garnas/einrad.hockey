@@ -99,12 +99,15 @@ class Neuigkeit
             $neuigkeiten = db::$db->query($sql, $neuigkeiten_id)->esc()->fetch('neuigkeiten_id');
         }
         foreach ($neuigkeiten as $key => $neuigkeit) {
-            if ($neuigkeit['eingetragen_von'] === 'Ligaausschuss' || $neuigkeit['eingetragen_von'] === "einradhockeykader@gmx.de") { //Temp Hotfix Todo: Vermerk escaping oder nicht in der DB!
+            if (
+                $neuigkeit['eingetragen_von'] === 'Ligaausschuss'
+                || $neuigkeit['eingetragen_von'] === "Öffiausschuss"
+            ) {
                 $neuigkeiten[$key]['inhalt'] = htmlspecialchars_decode($neuigkeit['inhalt'], ENT_QUOTES);
                 $neuigkeiten[$key]['titel'] = htmlspecialchars_decode($neuigkeit['titel'], ENT_QUOTES);
             }
         }
-        return $neuigkeiten; // Escaping in Funktion, nicht bei Ligaausschuss als Autor
+        return $neuigkeiten;
     }
 
     /**
@@ -332,19 +335,7 @@ class Neuigkeit
 
     public static function darf_verlinken(): bool
     {
-        if (Helper::$ligacenter) {
-            return true;
-        }
-
-        if (
-            Helper::$teamcenter
-            && TeamValidator::isOeffentlichkeitsausschuss($_SESSION["logins"]["team"]["id"] ?? null)
-        ) {
-            return true;
-        }
-
-        return false;
-
+        return Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss;
     }
 
     public static function darf_bearbeiten(string $eingetragen_von): bool
@@ -364,8 +355,8 @@ class Neuigkeit
 
         // Team Teil des Öffis?
         if (
-            $eingetragen_von== "Öffentlichkeitsausschuss"
-            && TeamValidator::isOeffentlichkeitsausschuss($_SESSION['logins']['team']['id'] ?? null)
+            $eingetragen_von === "Öffentlichkeitsausschuss"
+            && Helper::$oeffentlichkeitsausschuss
         ) {
             return true;
         }

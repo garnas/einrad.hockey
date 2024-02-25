@@ -4,8 +4,8 @@
 <p id="counter"><i>Es dürfen 750 Zeichen verwendet werden. Für mehr Infos kannst du ein Bild und/oder ein PDF hochladen.</i><p>
 <form action="" method="post" enctype="multipart/form-data">
     <p>
-        <label class="" for="titel">Titel</label>
-        <input class="w3-input w3-border w3-border-primary" type="text" id="titel" name="titel" value="<?=$neuigkeit['titel']?>" required>
+        <label class="" for="titel">Titel (Optional)</label>
+        <input class="w3-input w3-border w3-border-primary" type="text" id="titel" name="titel" value="<?=$neuigkeit['titel']?>">
     </p>
     <p>
         <label class="" for="text">Text</label>

@@ -4,24 +4,21 @@
 // Dies ermöglicht den gleichzeitgen Login von Ligaausschuss und Ligateams in einem Browser
 
 // Autor
-use App\Service\Team\TeamValidator;
+if (Helper::$ligacenter) {
+    $name = "Ligaausschuss";
+}elseif (Helper::$oeffentlichkeitsausschuss) {
+    $name = "Öffentlichkeitsausschuss";
+} else {
+    $name = $_SESSION['logins']['team']['name'];
+}
 
-$name = (Helper::$ligacenter) ? "Ligaausschuss" : $_SESSION['logins']['team']['name'];
 $error = false;
 
 // Formularauswertung
 if (isset($_POST['create_neuigkeit'])) {
 
-    // Öffentlichkeitsausschuss
-    if (
-        TeamValidator::isOeffentlichkeitsausschuss($_SESSION['logins']['team']['id'])
-        && isset($_POST['als_oeffi'])
-    ) {
-        $name = "Öffentlichkeitsausschuss";
-    }
-
-    if (empty($_POST['titel']) || empty($_POST['text'])) {
-        Html::error("Bitte Titel und Text eingeben.");
+    if (empty($_POST['text'])) {
+        Html::error("Bitte Text eingeben.");
     } else {
 
         // Fileupload

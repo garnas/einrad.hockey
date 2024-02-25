@@ -14,6 +14,8 @@ if (Helper::$ligacenter) {
     $list_id = 'lc_emails' . $_SESSION['logins']['la']['id'];
 } elseif (Helper::$teamcenter) {
     $list_id = 'tc_emails' . $_SESSION['logins']['team']['id'];
+} elseif (Helper::$oeffentlichkeitsausschuss) {
+    $list_id = 'oc_emails' . $_SESSION['logins']['oa']['id'];
 }
 
 
@@ -100,6 +102,9 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
         if (Helper::$ligacenter) {
             $mailer->setFrom(Env::LAMAIL, 'Ligaausschuss');
             $mailer->addBCC(Env::LAMAIL_ANTWORT);
+        } elseif (Helper::$oeffentlichkeitsausschuss) {
+            $mailer->setFrom(Env::LAMAIL, 'Öffentlichkeitsausschuss');
+            $mailer->addBCC(Env::OEFFIMAIL);
         } elseif (Helper::$teamcenter) {
             $akt_kontakt = new Kontakt($_SESSION['logins']['team']['id']); //Absender Mails bekommen
             $absender = $akt_kontakt->get_emails();
@@ -126,7 +131,7 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
 
         // Text und Betreff hinzufügen
         $mailer->Subject = $betreff;
-        $mailer->Body = $text . "\r\nVersendet aus dem Kontaktcenter von einrad.hockey";
+        $mailer->Body = $text . "\r\n\r\nVersendet aus dem Kontaktcenter von einrad.hockey";
 
 
         Helper::log(Config::LOG_EMAILS, "Betreff: $betreff" . " an " . implode(',', $emails));
@@ -149,6 +154,9 @@ if (isset($_SESSION[$list_id])) {
     if (Helper::$ligacenter) {
         $from = Env::LAMAIL;
         $tos = $_SESSION[$list_id]['emails'];
+    } elseif (Helper::$oeffentlichkeitsausschuss) {
+        $from = Env::OEFFIMAIL;
+        $tos = $_SESSION[$list_id]['emails'];
     } elseif (Helper::$teamcenter) {
         $from = $_SESSION['logins']['team']['name'];
         $tos = $_SESSION[$list_id]['empfaenger'];
@@ -158,11 +166,15 @@ if (isset($_SESSION[$list_id])) {
     }
 }
 
-if (Helper::$ligacenter){
+if (Helper::$ligacenter) {
     $las = Ligaleitung::get_all('ligaausschuss');
     $signatur = "\r\n\r\n\r\nDein Ligaausschuss\r\n--\r\n";
     foreach ($las as $la){
         $signatur .= $la['vorname'] . ' ' . $la['nachname']
             . (!empty($la['teamname']) ? ' (' . $la['teamname'] . ')' : '') . "\r\n";
     }
+}
+
+if (Helper::$oeffentlichkeitsausschuss) {
+    $signatur = "\r\n\r\n\r\nDein Öffentlichkeitsausschuss";
 }

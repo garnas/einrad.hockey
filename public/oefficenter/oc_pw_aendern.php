@@ -3,16 +3,16 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
-require_once '../../logic/session_la.logic.php'; //Auth
+require_once '../../logic/session_oa.logic.php'; //auth
 
 //Formularauswertung
 if(isset($_POST['change'])) {
     $passwort_alt = $_POST['passwort_alt'];
     $passwort_neu = $_POST['passwort_neu'];
     if (strlen($passwort_neu) >= 8){
-        if(LigaLeitung::set_passwort($_SESSION['logins']['la']['login'], $passwort_neu, $passwort_alt)) {
+        if(LigaLeitung::set_passwort($_SESSION['logins']['oa']['login'], $passwort_neu, $passwort_alt)) {
             Html::info("Dein Passwort wurde geändert");
-            Helper::reload("/ligacenter/lc_start.php");
+            Helper::reload("oefficenter/oc_start.php");
         }
         Html::error("Falsches Passwort");
     }else{
@@ -29,7 +29,7 @@ Html::$page_width = "500px";
 include '../../templates/header.tmp.php'; ?>
 
 <form method="post" class="w3-panel w3-card-4">
-    <h3> Ligacenter-Passwort ändern </h3>
+    <h3> Passwort ändern </h3>
         <label class="w3-text-primary" for="passwort_alt">Altes Passwort:</label>
         <input required
                class="w3-input w3-border w3-border-primary"

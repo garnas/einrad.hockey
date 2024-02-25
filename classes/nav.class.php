@@ -108,7 +108,7 @@ class Nav
             [Env::BASE_URL . "/liga/ueber_uns.php", "Über uns"],
             [Env::BASE_URL . "/liga/jubilaeum.php", "25 Jahre Liga"],
             [Env::BASE_URL . "/liga/archiv.php", "Archiv"],
-            [Env::BASE_URL . "/ligacenter/lc_login.php", "Ligacenter"],
+            [Env::BASE_URL . "/login.php", "Ligacenter"],
             [Env::BASE_URL . "/liga/kontakt.php", "Kontakt"],
             [Env::BASE_URL . "/liga/datenschutz.php", "Datenschutz"],
             [Env::BASE_URL . "/liga/impressum.php", "Impressum"],
@@ -215,4 +215,15 @@ class Nav
     public const LINK_IUF = 'https://unicycling.org/';
     public const LINK_MODUS_KURZ_ENG = Env::BASE_URL . '/dokumente/summary_modus.pdf';
     public const LINK_SWISS = 'https://www.swiss-iuc.ch/Wettkaempfe/Einradhockey';
+
+    public static function get_oc_start(): array
+    {
+        return [
+            [Env::BASE_URL . "/oefficenter/oc_kontaktcenter.php", "Kontaktcenter", "w3-tertiary"],
+            [Env::BASE_URL . "/oefficenter/oc_neuigkeit_eintragen.php", "Neuigkeit eintragen", "w3-tertiary"],
+            [Env::BASE_URL . "/liga/neues.php", "Neuigkeit bearbeiten", "w3-tertiary"],
+            [Env::BASE_URL . "/oefficenter/oc_pw_aendern.php", "Passwort ändern", "w3-grey"],
+            [Env::BASE_URL . "/oefficenter/oc_logout.php", "Logout", "w3-grey"]
+        ];
+    }
 }
