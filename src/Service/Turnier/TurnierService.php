@@ -7,6 +7,8 @@ use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Event\Turnier\TurnierEventMailBot;
+use App\Service\Team\NLTeamService;
+use App\Service\Team\NLTeamValidator;
 use App\Service\Team\TeamService;
 use Config;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -101,12 +103,9 @@ class TurnierService
 
     public static function isSetzBerechtigt(Turnier $turnier, nTeam $team): bool
     {
-        //TODO check am Kalendertag schon auf Setzliste
-        // NL Team geht immer
-        if (!$team->isLigaTeam()) {
+        if (!$team->isLigaTeam() && NLTeamValidator::isValidNLAnmeldungListe($turnier, "setzliste")) {
             return true;
         }
-
         return BlockService::isBlockPassend($turnier, $team);
     }
 

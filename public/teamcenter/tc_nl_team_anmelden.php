@@ -29,10 +29,20 @@ include '../../templates/header.tmp.php'; ?>
     </div>
     <div class="w3-panel w3-card-4">
         <h3 class="w3-text-primary">Nichtligateam anmelden</h3>
-        <p>
-            Hinweis: Hier können bis zu zwei Nichtligateams angemeldet werden.
-            Um ein drittes Nichtligateams anzumelden, wende dich bitte an den Ligaausschuss.
-        </p>
+        <div class="w3-container">
+            <ul class="w3-ul w3-leftbar w3-border-tertiary">
+                <li>
+                    Achtung: Abmeldung des Nichtligateams nur über den Ligaausschuss mit Einverständnis des
+                    Nichtligateams möglich.
+                </li>
+                <li>In der Wartephase kann einmal ein Nichtligateam direkt auf die Setzliste angemeldet werden.</li>
+                <li>
+                    Es können beliebig viele Nichtligateams angemeldet werden. Allerdings können maximal drei
+                    Nichtligateams auf der Setzliste stehen und es müssen immer mindestens vier Plätze auf der Setzliste
+                    frei sein für Ligateams. Der Rest wird auf der Warteliste angemeldet.
+                </li>
+            </ul>
+        </div>
         <form method="post">
             <p>
                 <label for="nl_teamname" class='w3-text-primary'>Teamname</label><br>
@@ -69,9 +79,6 @@ include '../../templates/header.tmp.php'; ?>
             <?php endif; ?>
             <p>
                 <input type='submit' class='w3-button w3-margin-bottom w3-tertiary' name='nl_anmelden' value='Anmelden'>
-            </p>
-            <p class="w3-text-grey">
-                Hinweis: Eine Abmeldung von Nichtligateams ist nur über den Ligaausschuss mit Einverständnis des Nichtligateams möglich.
             </p>
         </form>
     </div>

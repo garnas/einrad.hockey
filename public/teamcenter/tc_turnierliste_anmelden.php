@@ -99,10 +99,10 @@ include '../../templates/header.tmp.php';?>
             <tr class="<?= isset($rowColor) ? $rowColor($turnier) : '' ?>">
                 <td><?= TurnierSnippets::status($turnier) ?></td>
                 <td><?= $turnier->getDatum()->format("d.m.y") ?></td>
-                <td><?= $turnier->getDetails()->getOrt() ?></td>
+                <td><?= e($turnier->getDetails()->getOrt()) ?></td>
                 <td><?= TurnierSnippets::blockColor($turnier, $teamEntity) ?></td>
                 <td><?= TurnierSnippets::phase($turnier) ?></td>
-                <td><?= $turnier->getAusrichter()->getName() ?></i></td>
+                <td><?= e($turnier->getAusrichter()->getName()) ?></i></td>
             </tr>
             <tr>
                 <td colspan="4" style="white-space:normal;" class="w3-left-align">

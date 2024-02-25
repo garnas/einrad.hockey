@@ -38,7 +38,11 @@ class NLTeamService
             }
             return ['warteliste', 'setzliste'];
         }
-        if (TurnierService::hasFreieSetzPlaetze($turnier)) {
+        if (
+            TurnierService::hasFreieSetzPlaetze($turnier)
+            && (($turnier->getDetails()->getPlaetze() - self::getAnzahlNlTeamsAufSetzliste($turnier) - 1) >= 4)
+            && (self::getAnzahlNlTeamsAufSetzliste($turnier) < 3)
+        ) {
             return ['setzliste'];
         }
         return ['warteliste'];
@@ -61,6 +65,18 @@ class NLTeamService
             }
         }
         return false;
+    }
+
+    public static function getAnzahlNlTeamsAufSetzliste(Turnier $turnier): int
+    {
+        $liste = TurnierService::getSetzListe($turnier);
+        $anzahl = 0;
+        foreach ($liste as $anmeldung) {
+            if (!$anmeldung->getTeam()->isLigaTeam()) {
+                ++$anzahl;
+            }
+        }
+        return $anzahl;
     }
 
 }
