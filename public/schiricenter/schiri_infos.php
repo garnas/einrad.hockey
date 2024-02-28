@@ -57,13 +57,13 @@ include '../../templates/header.tmp.php';
                 gestellt, und nach der Beantwortung kommt die Auflösung
                 mit Erklärung.</td>
         </tr>
-        <!-- TODO: Junior und Fortgeschrittenentest demnächst wieder aktivieren!!! -->
-        <!-- <tr>
+        <!-- TODO: Fortgeschrittenentest demnächst wieder aktivieren!!! -->
+        <tr>
              <th class="w3-primary-3"><?=Html::link("uebungstest_j.php",
                                       "Übungstest (Junior)", false, false)?></th>
              <td>Dies ist ein kompletter Test (<?=array_sum(SchiriTest::anzahl_J)?> Fragen)
              als Vorbereitung auf die Junior-Schiriprüfung.</td>
-             </tr> -->
+             </tr>
         <tr>
             <th class="w3-primary-3"><?=Html::link("uebungstest_b.php",
                 "Übungstest (Basis)", false, false)?></th>
