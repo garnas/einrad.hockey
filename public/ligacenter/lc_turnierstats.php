@@ -26,7 +26,8 @@ $header = [
         "phase",
         "anzahl_teams",
         "team_id",
-        "teamname"
+        "teamname",
+        "plaetze"
     ]
 ];
 
@@ -45,7 +46,8 @@ foreach ($result as $row) {
         $row["phase"],
         \App\Service\Turnier\TurnierService::getAnzahlAngemeldeteTeams(\App\Repository\Turnier\TurnierRepository::get()->turnier($row["turnier_id"])),
         $row["team_id"],
-        $row["teamname"]
+        $row["teamname"],
+        $row["plaetze"]
     ];
 }
 
