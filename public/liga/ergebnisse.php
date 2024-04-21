@@ -87,7 +87,7 @@ include '../../templates/header.tmp.php'; ?>
                             </th>
                             <th class="w3-center">
                                 <?= Html::icon("emoji_events") ?>
-                                <br>Punkte
+                                <br>Ergebnis
                             </th>
                         </tr>
                         <?php foreach ($ergebnisse as $key => $ergebnis) { ?>
