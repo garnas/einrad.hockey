@@ -422,6 +422,14 @@ class Spielplan
                 }
             }
         }
+        if (!$farben[$team_id_a] && $farben[$team_id_b]) {
+            $farbe = array_values($farben[$team_id_b])[0];
+            $return[$team_id_b] = $is_html ? Html::trikot_punkt($farbe) : $farbe;
+        }
+        if ($farben[$team_id_a] && !$farben[$team_id_b]) {
+            $farbe = array_values($farben[$team_id_a])[0];
+            $return[$team_id_a] = $is_html ? Html::trikot_punkt($farbe) : $farbe;
+        }
         return $return ?? [];
     }
 
