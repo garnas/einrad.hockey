@@ -61,10 +61,10 @@ htdocs
 ### Ionos Webspace:
 * composer.phar herunterladen
 <pre>
-curl -sS https://getcomposer.org/installer | /usr/bin/php8.0-cli
+curl -sS https://getcomposer.org/installer | /usr/bin/php8.2-cli
 </pre>
 
 * composer.phar ausführen
 <pre>
-/usr/bin/php8.0-cli composer.phar about
+/usr/bin/php8.2-cli composer.phar about
 </pre>
