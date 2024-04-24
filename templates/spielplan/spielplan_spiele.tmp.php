@@ -126,8 +126,8 @@
                 </td>
                 <!-- Teams Mobil -->
                 <td class="w3-center w3-hide-large w3-hide-medium">
-                    <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_a']]  ?? '' ?>
-                    <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_b']]  ?? '' ?>
+                    <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_a']]  ?? "<span style='height:14px;width:14px;border-radius:50%;display:inline-block;'></span>" ?>
+                    <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_b']]  ?? "<span style='height:14px;width:14px;border-radius:50%;display:inline-block;'></span>"?>
                 </td>
                 <td colspan="3" class="w3-hide-large w3-hide-medium" style="white-space: nowrap;">
                     <span class="pdf-hide"><?= $spiel["teamname_a"] ?></span>
