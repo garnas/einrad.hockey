@@ -1,8 +1,9 @@
 <?php
-use App\Event\Turnier\nLigaBot;
-use App\Service\Turnier\TurnierService;
-use App\Repository\Turnier\TurnierRepository;
+
 use App\Event\Turnier\TurnierEventMailBot;
+use App\Repository\Turnier\TurnierRepository;
+use App\Service\Turnier\TurnierService;
+
 require_once '../../init.php';
 
 $_SESSION['logins']['cronjob'] = 'Cronjob';
@@ -26,7 +27,7 @@ foreach ($turniere as $turnier) {
     while ($aktuelles_datum < $datum_turnier) {
         # Dienstag = 2. Wochentag
         if (date("N", $aktuelles_datum) == 2) {
-            $erstellung_starten = False;
+            $erstellen = False;
             break;
         }
         $aktuelles_datum = strtotime("+1 day", $aktuelles_datum);
@@ -34,7 +35,7 @@ foreach ($turniere as $turnier) {
     if ($erstellen) {
         Html::info("Handling Turnier " . $turnier->get_turnier_id());
         $teams = $turnier->get_spielenliste();
-        $ligateams = array_filter($teams, function ($team) {
+        $ligateams = array_filter($teams, static function ($team) {
             return ($team->details["ligateam"] ?? "Nein") == "Ja";
         });
         if (count($ligateams) < 4) {
@@ -58,10 +59,10 @@ foreach ($turniere as $turnier) {
             TurnierRepository::get()->speichern($turnier_new);
             TurnierEventMailBot::mailCanceled($turnier_new);
             Html::info("Abgesagt: " . $turnier->get_turnier_id());
-        }elseif (Spielplan::spielplan_erstellen($turnier)) { # Weitere Checks für den LA in dieser Funktion
+        } elseif (Spielplan::spielplan_erstellen($turnier)) { # Weitere Checks für den LA in dieser Funktion
             Html::info("Spielplan für " . $turnier->get_turnier_id() . " erstellt");
         } else {
-            Html::error("Kein Spielplan für " . $turnier->get_turnier_id() . " erstellt");
+            Html::error("Keinen Spielplan für " . $turnier->get_turnier_id() . " erstellt");
         }
         Html::print_messages();
     }
