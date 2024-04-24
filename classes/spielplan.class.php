@@ -221,7 +221,7 @@ class Spielplan
             5 => '5er_jgj_default',
             6 => '6er_jgj_default',
             7 => '7er_jgj_default',
-            8 => '8er_jgj_versetzt',
+            8 => '8er_jgj_default',
             default => false,
         };
     }
