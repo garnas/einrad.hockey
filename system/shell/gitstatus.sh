@@ -1,3 +1,3 @@
-git fetch origin master
+git fetch origin/new-ranking
 git status
-git diff origin/master
+git diff origin/new-ranking
