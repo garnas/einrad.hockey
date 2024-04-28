@@ -16,9 +16,8 @@ $rankings_by_team = Ranking::get_spiele_by_team(30);
 //Ranking::reset_ratings();
 $rankings_glicko = Ranking::get_all_spiele(false);
 foreach ($rankings_glicko as $rank1) {
-    Ranking::calculate_glicko_2($rank1);
+//    Ranking::calculate_glicko_2($rank1);
 }
-
 $rankings_elo = Ranking::get_all_spiele(false);
 foreach ($rankings_elo as $rank2) {
 //    Ranking::calculate_elo($rank2);
@@ -95,7 +94,37 @@ $get_background_color = static function ($ranking, $type) use ($team_to_color) {
 include Env::BASE_PATH . '/templates/header.tmp.php';
 
 ?>
+<form method="get">
+    <p>Saisons
+        <input type="number" name="threshold_saison" value="<?= $_GET["threshold_saison"] ?? Ranking::TOTAL_SEASONS_FOR_CALC ?>">
+    </p>
 
+    <p>Glicko/Elo K
+        <input type="number" name="default_rating" value="<?= $_GET["default_rating"] ?? Ranking::RATING_DEFAULT ?>">
+    </p>
+
+    <p>Glicko-Volatility
+        <input type="number" name="volatility" min="0.01" max="0.3" step="" value="<?= $_GET["volatility"] ?? Ranking::VOLATILITY_DEFAULT ?>">
+    </p>
+
+    <p>Glicko-Deviaton
+        <input type="number" name="deviation" min="0" max="400" value="<?= $_GET["deviation"] ?? Ranking::DEVIATION_DEFAULT ?>">
+    </p>
+    <p class="w3-text-grey">Glicko-Tau
+        <input class="w3-text-grey" type="number" min="0" max="1" step="any" name="tau" value="<?= $_GET["tau"] ?? Ranking::TAU ?>">
+    </p>
+    <p class="w3-text-grey">Glicko-Tol
+        <input class="w3-text-grey" type="number" min="0" max="1" step="any" name="tol" value="<?= $_GET["tol"] ?? Ranking::TOL ?>">
+    </p>
+    <p>
+        <input type="submit" value="Ändern">
+    </p>
+</form>
+<form method="get">
+    <p>
+        <input type="submit" value="Reset">
+    </p>
+</form>
 <div class="w3-responsive w3-card table-wrap">
     <table class="w3-table w3-striped w3-centered sortable">
         <thead class="w3-primary">
@@ -111,7 +140,8 @@ include Env::BASE_PATH . '/templates/header.tmp.php';
                         Teamname
                         <span aria-hidden="true"></span>
                     </button>
-                </b></th>            <th class="num"><b>
+                </b></th>
+            <th class="num"><b>
 
                     <button class="w3-center">
                         Elo
@@ -135,17 +165,21 @@ include Env::BASE_PATH . '/templates/header.tmp.php';
                         Teamname
                         <span aria-hidden="true"></span>
                     </button>
-                </b></th>        </tr>
+                </b></th>
+        </tr>
         </thead>
         <tbody>
         <?php foreach ($multi_rankings as $mulit_ranking) { ?>
             <tr>
-                <td style="<?=$get_background_color($mulit_ranking, "glicko")?>" class="num w3-center"><?= round($mulit_ranking["glicko"]["score"], 1) ?></td>
-                <td style="white-space: nowrap;<?=$get_background_color($mulit_ranking, "glicko")?>"><?= $mulit_ranking["glicko"]["teamname"] ?></td>
-                <td style="<?=$get_background_color($mulit_ranking, "elo")?>" class="num w3-center"><?= round($mulit_ranking["elo"]["score"], 1) ?></td>
-                <td style="white-space: nowrap;<?=$get_background_color($mulit_ranking, "elo")?>"><?= $mulit_ranking["elo"]["teamname"] ?></td>
-                <td style="<?=$get_background_color($mulit_ranking, "rang")?>" class="num w3-center"><?= round($mulit_ranking["rang"]["score"], 1) ?></td>
-                <td style="white-space: nowrap;<?=$get_background_color($mulit_ranking, "rang")?>"><?= $mulit_ranking["rang"]["teamname"] ?></td>
+                <td style="<?= $get_background_color($mulit_ranking, "glicko") ?>"
+                    class="num w3-center"><?= round($mulit_ranking["glicko"]["score"], 1) ?></td>
+                <td style="white-space: nowrap;<?= $get_background_color($mulit_ranking, "glicko") ?>"><?= $mulit_ranking["glicko"]["teamname"] ?></td>
+                <td style="<?= $get_background_color($mulit_ranking, "elo") ?>"
+                    class="num w3-center"><?= round($mulit_ranking["elo"]["score"], 1) ?></td>
+                <td style="white-space: nowrap;<?= $get_background_color($mulit_ranking, "elo") ?>"><?= $mulit_ranking["elo"]["teamname"] ?></td>
+                <td style="<?= $get_background_color($mulit_ranking, "rang") ?>"
+                    class="num w3-center"><?= round($mulit_ranking["rang"]["score"], 1) ?></td>
+                <td style="white-space: nowrap;<?= $get_background_color($mulit_ranking, "rang") ?>"><?= $mulit_ranking["rang"]["teamname"] ?></td>
             </tr>
         <?php } //end foreach
         ?>

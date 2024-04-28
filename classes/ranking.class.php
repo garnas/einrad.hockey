@@ -38,6 +38,8 @@ class Ranking
     const VOLATILITY_DEFAULT = 0.06;
 
     const TOTAL_SEASONS_FOR_CALC = 2;
+    const TAU = 0.5;
+    const TOL = 0.000001;
 
     /**
      * Spieler constructor.
@@ -270,9 +272,6 @@ class Ranking
     {
         $delta = 0;
         foreach ($rankings as $ranking){
-            if (is_array($ranking)) {
-                echo "warum";
-            }
             if ($ranking->team_id_a == $team_id) {
                 $delta += $for_elo ? $ranking->delta_a_elo : $ranking->delta_a;
             }
