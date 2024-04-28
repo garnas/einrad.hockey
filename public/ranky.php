@@ -4,54 +4,50 @@ namespace App\Event\Turnier;
 
 use App\Repository\Team\TeamRepository;
 use Env;
-use db;
 use Ranking;
 use Tabelle;
-use Config;
+use Team;
+use Html;
 
 require_once '../init.php';
 
-$rankings_by_team = Ranking::get_spiele_by_team(30);
-
+//$rankings = Ranking::get_all_spiele();
+//
 //Ranking::reset_ratings();
-$rankings_glicko = Ranking::get_all_spiele(false);
-foreach ($rankings_glicko as $rank1) {
-//    Ranking::calculate_glicko_2($rank1);
-}
-$rankings_elo = Ranking::get_all_spiele(false);
-foreach ($rankings_elo as $rank2) {
-//    Ranking::calculate_elo($rank2);
+//foreach ($rankings as $rank) {
+//    Ranking::calculate_glicko_2($rank);
+//    Ranking::calculate_elo($rank);
+//    Ranking::persist_ranking($rank);
+//    Ranking::persist_ranking_elo($rank);
+//}
+
+$rankings = Ranking::get_all_spiele();
+
+foreach ($rankings as $rank) {
+    Ranking::calculate_glicko_2($rank, $rankings);
+    Ranking::calculate_elo($rank, $rankings);
 }
 
 $akt_spieltag = Tabelle::get_aktuellen_spieltag();
 $rangtabelle = Tabelle::get_rang_tabelle($akt_spieltag);
 
 $teams = TeamRepository::get()->activeLigaTeams();
+
 foreach ($teams as $team) {
     $id = $team->id();
-//    $rankings[] = [
-//        "glicko" => Ranking::get_rank($id),
-//        "elo" => Ranking::get_rank_elo($id),
-//        "teamname" => $team->getName(),
-//        "team_id" => $id,
-//        "rang" => $rangtabelle[$id]["rang"]
-//    ];
     $glicko[] = [
-        "score" => Ranking::get_rank_from_rankings($id, $rankings_glicko),
+        "score" => Ranking::get_rating_from_rankings($id, $rankings)->getRating(),
         "teamname" => $team->getName(),
-        "color" => $team->getDetails()->getTrikotFarbe1(),
         "id" => $id
     ];
     $elo[] = [
-        "score" => Ranking::get_rank_from_rankings($id, $rankings_elo, for_elo: true),
+        "score" => Ranking::get_rating_elo_from_rankings($id, $rankings)->getRating(),
         "teamname" => $team->getName(),
-        "color" => $team->getDetails()->getTrikotFarbe1(),
         "id" => $id
     ];
     $rang[] = [
         "score" => $rangtabelle[$id]["avg"],
         "teamname" => $team->getName(),
-        "color" => $team->getDetails()->getTrikotFarbe1(),
         "id" => $id
     ];
 }
@@ -90,41 +86,49 @@ $get_background_color = static function ($ranking, $type) use ($team_to_color) {
 //}
 ////arsort($rankings);
 
-
+Html::$page_width = "100%";
 include Env::BASE_PATH . '/templates/header.tmp.php';
 
 ?>
 <form method="get">
     <p>Saisons
-        <input type="number" name="threshold_saison" value="<?= $_GET["threshold_saison"] ?? Ranking::TOTAL_SEASONS_FOR_CALC ?>">
-    </p>
-
-    <p>Glicko/Elo K
-        <input type="number" name="default_rating" value="<?= $_GET["default_rating"] ?? Ranking::RATING_DEFAULT ?>">
-    </p>
-
-    <p>Glicko-Volatility
-        <input type="number" name="volatility" min="0.01" max="0.3" step="" value="<?= $_GET["volatility"] ?? Ranking::VOLATILITY_DEFAULT ?>">
-    </p>
-
-    <p>Glicko-Deviaton
-        <input type="number" name="deviation" min="0" max="400" value="<?= $_GET["deviation"] ?? Ranking::DEVIATION_DEFAULT ?>">
-    </p>
-    <p class="w3-text-grey">Glicko-Tau
-        <input class="w3-text-grey" type="number" min="0" max="1" step="any" name="tau" value="<?= $_GET["tau"] ?? Ranking::TAU ?>">
-    </p>
-    <p class="w3-text-grey">Glicko-Tol
-        <input class="w3-text-grey" type="number" min="0" max="1" step="any" name="tol" value="<?= $_GET["tol"] ?? Ranking::TOL ?>">
+        <input type="number" name="threshold_saison" min="0" max="5"
+               value="<?= Ranking::get_total_seasons_for_calc() ?>">
     </p>
     <p>
-        <input type="submit" value="Ändern">
+        <input class="w3-check" type="checkbox" min="0" max="1" step="any"
+               name="with_nl" <?= Ranking::get_with_nl_teams() ? "checked" : "" ?>>
+        NL-Teams einbeziehen
+    </p>
+    <p>Glicko/Elo K
+        <input type="number" name="default_rating" value="<?= Ranking::get_first_rating() ?>">
+    </p>
+    <p>Glicko-Volatility
+        <input type="number" name="volatility" min="0.01" max="0.3" step="0.01"
+               value="<?= Ranking::get_first_volatility() ?>">
+    </p>
+    <p>Glicko-Deviaton
+        <input type="number" name="deviation" min="0" max="400" value="<?= Ranking::get_first_deviation() ?>">
+    </p>
+    <p class="w3-tiny"><i>Glicko-Tau</i>
+        <input type="number" min="0" max="1" step="0.01" name="tau"
+               value="<?= Ranking::get_tau() ?>">
+    </p>
+    <p class="w3-tiny"><i>Glicko-Tol</i>
+        <input type="number" min="0" max="1" step="any" name="tol"
+               value="<?= Ranking::get_tol() ?>">
+    </p>
+    <p>
+        <input type="submit" class="w3-button w3-primary" value="CALCULATE!" name="change">
     </p>
 </form>
 <form method="get">
     <p>
-        <input type="submit" value="Reset">
+        <input type="submit" value="Reset" class="w3-button w3-secondary">
     </p>
 </form>
+
+<p>Anzahl Spiele: <?= count($rankings) ?></p>
 <div class="w3-responsive w3-card table-wrap">
     <table class="w3-table w3-striped w3-centered sortable">
         <thead class="w3-primary">
@@ -144,7 +148,7 @@ include Env::BASE_PATH . '/templates/header.tmp.php';
             <th class="num"><b>
 
                     <button class="w3-center">
-                        Elo
+                        Rang
                         <span aria-hidden="true"></span>
                     </button>
                 </b></th>
@@ -156,7 +160,7 @@ include Env::BASE_PATH . '/templates/header.tmp.php';
                 </b></th>
             <th class="num"><b>
                     <button class="w3-center">
-                        Rang
+                        Elo
                         <span aria-hidden="true"></span>
                     </button>
                 </b></th>
@@ -169,20 +173,55 @@ include Env::BASE_PATH . '/templates/header.tmp.php';
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($multi_rankings as $mulit_ranking) { ?>
+        <?php foreach ($multi_rankings as $multi_ranking) { ?>
             <tr>
-                <td style="<?= $get_background_color($mulit_ranking, "glicko") ?>"
-                    class="num w3-center"><?= round($mulit_ranking["glicko"]["score"], 1) ?></td>
-                <td style="white-space: nowrap;<?= $get_background_color($mulit_ranking, "glicko") ?>"><?= $mulit_ranking["glicko"]["teamname"] ?></td>
-                <td style="<?= $get_background_color($mulit_ranking, "elo") ?>"
-                    class="num w3-center"><?= round($mulit_ranking["elo"]["score"], 1) ?></td>
-                <td style="white-space: nowrap;<?= $get_background_color($mulit_ranking, "elo") ?>"><?= $mulit_ranking["elo"]["teamname"] ?></td>
-                <td style="<?= $get_background_color($mulit_ranking, "rang") ?>"
-                    class="num w3-center"><?= round($mulit_ranking["rang"]["score"], 1) ?></td>
-                <td style="white-space: nowrap;<?= $get_background_color($mulit_ranking, "rang") ?>"><?= $mulit_ranking["rang"]["teamname"] ?></td>
+                <td style="<?= $get_background_color($multi_ranking, "glicko") ?>"
+                    class="num w3-center"><?= round($multi_ranking["glicko"]["score"], 1) ?></td>
+                <td style="white-space: nowrap;<?= $get_background_color($multi_ranking, "glicko") ?>"><?= $multi_ranking["glicko"]["teamname"] ?></td>
+                <td style="<?= $get_background_color($multi_ranking, "rang") ?>"
+                    class="num w3-center"><?= round($multi_ranking["rang"]["score"], 1) ?></td>
+                <td style="white-space: nowrap;<?= $get_background_color($multi_ranking, "rang") ?>"><?= $multi_ranking["rang"]["teamname"] ?></td>
+                <td style="<?= $get_background_color($multi_ranking, "elo") ?>"
+                    class="num w3-center"><?= round($multi_ranking["elo"]["score"], 1) ?></td>
+                <td style="white-space: nowrap;<?= $get_background_color($multi_ranking, "elo") ?>"><?= $multi_ranking["elo"]["teamname"] ?></td>
             </tr>
         <?php } //end foreach
         ?>
+        </tbody>
+    </table>
+</div>
+<br>
+<div class="w3-responsive w3-card table-wrap">
+    <table class="w3-table w3-striped w3-centered">
+        <thead class="w3-primary">
+        </tr>
+        <th>Datum</th>
+        <th>&#9650; Elo<br>&#9650; Glicko (Dev/Vol)</th>
+        <th>Team A<br>Tore</th>
+        <th>Team B<br>Tore</th>
+        <th>&#9650; Elo<br>&#9650; Glicko (Dev/Vol)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($rankings as $ranking): ?>
+            <tr>
+                <td style="white-space: nowrap;"><?= $ranking->datum ?></td>
+                <td style="white-space: nowrap;"><?=round($ranking->rating_a_elo)?> <?= $ranking->delta_a >= 0 ? "+" : "" ?><?= round($ranking->delta_a_elo) ?>
+                    <br>
+                    <?=round($ranking->rating_a)?> <?= $ranking->delta_a >= 0 ? "+" : "" ?><?= round($ranking->delta_a) ?>
+                    (<?= round($ranking->rating_a_deviation) ?>/<?= round($ranking->rating_a_volatility, 5) ?>)
+                </td>
+                <td style="white-space: nowrap;"><?= Team::id_to_name($ranking->team_id_a) ?><br><?= $ranking->tore_a ?>
+                </td>
+                <td style="white-space: nowrap;"><?= Team::id_to_name($ranking->team_id_b) ?><br><?= $ranking->tore_b ?>
+                </td>
+                <td style="white-space: nowrap;"><?=round($ranking->rating_b_elo)?> <?= $ranking->delta_b >= 0 ? "+" : "" ?><?= round($ranking->delta_b_elo) ?>
+                    <br>
+                    <?=round($ranking->rating_b)?> <?= $ranking->delta_b >= 0 ? "+" : "" ?><?= round($ranking->delta_b,) ?>
+                    (<?= round($ranking->rating_b_deviation) ?>/<?= round($ranking->rating_b_volatility, 5) ?>)
+                </td>
+            </tr>
+        <?php endforeach; ?>
         </tbody>
     </table>
 </div>

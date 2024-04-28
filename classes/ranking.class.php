@@ -18,9 +18,11 @@ class Ranking
     public ?int $penalty_b;
 
     public ?float $rating_a;
+    public ?float $rating_a_elo;
     public ?float $rating_a_deviation;
     public ?float $rating_a_volatility;
     public ?float $rating_b;
+    public ?float $rating_b_elo;
     public ?float $rating_b_deviation;
     public ?float $rating_b_volatility;
     public ?float $delta_a;
@@ -37,13 +39,67 @@ class Ranking
     const DEVIATION_DEFAULT = 200;
     const VOLATILITY_DEFAULT = 0.06;
 
-    const TOTAL_SEASONS_FOR_CALC = 2;
+    const TOTAL_SAISONS_FOR_CALC = 2;
     const TAU = 0.5;
     const TOL = 0.000001;
 
-    /**
-     * Spieler constructor.
-     */
+    const WITH_NL_TEAMS = false;
+
+    public static function get_total_seasons_for_calc(): int
+    {
+        if (isset($_GET["threshold_saison"])) {
+            return (int) $_GET["threshold_saison"];
+        }
+        return self::TOTAL_SAISONS_FOR_CALC;
+    }
+
+    public static function get_first_rating(): int
+    {
+        if (isset($_GET["default_rating"])) {
+            return (int) $_GET["default_rating"];
+        }
+        return self::RATING_DEFAULT;
+    }
+    public static function get_first_deviation(): int
+    {
+        if (isset($_GET["deviation"])) {
+            return (int) $_GET["deviation"];
+        }
+        return self::DEVIATION_DEFAULT;
+    }
+
+    public static function get_first_volatility(): float
+    {
+        if (isset($_GET["volatility"])) {
+            return (float) $_GET["volatility"];
+        }
+        return self::VOLATILITY_DEFAULT;
+    }
+
+    public static function get_tau(): float
+    {
+        if (isset($_GET["tau"])) {
+            return (float) $_GET["tau"];
+        }
+        return self::TAU;
+    }
+
+    public static function get_tol(): float
+    {
+        if (isset($_GET["tol"])) {
+            return (float) $_GET["tol"];
+        }
+        return self::TOL;
+    }
+
+    public static function get_with_nl_teams(): bool
+    {
+        if (isset($_GET["with_nl"])) {
+            return (bool) $_GET["with_nl"];
+        }
+        return self::WITH_NL_TEAMS;
+    }
+
     public function __construct($esc = true)
     {
         if ($esc) {
@@ -68,10 +124,16 @@ class Ranking
         db::$db->query($sql)->log();
     }
 
-    public static function calculate_elo(Ranking $ranking): void
+    public static function calculate_elo(Ranking $ranking, ?array $all_rankings = null): void
     {
-        $rating_a = self::get_rating_elo($ranking->team_id_a, $ranking)->getRating();
-        $rating_b = self::get_rating_elo($ranking->team_id_b, $ranking)->getRating();
+        if ($all_rankings) {
+            $rating_a = self::get_rating_elo_from_rankings($ranking->team_id_a, $all_rankings, $ranking->datum)->getRating();
+            $rating_b = self::get_rating_elo_from_rankings($ranking->team_id_b, $all_rankings, $ranking->datum)->getRating();
+        } else {
+            $rating_a = self::get_rating_elo($ranking->team_id_a, $ranking)->getRating();
+            $rating_b = self::get_rating_elo($ranking->team_id_b, $ranking)->getRating();
+        }
+
 
         if ($ranking->tore_a == $ranking->tore_b) {
             $rating = new \Chovanec\Rating\Rating($rating_a, $rating_b, \Chovanec\Rating\Rating::DRAW, Chovanec\Rating\Rating::DRAW);
@@ -82,19 +144,26 @@ class Ranking
         }
 
         $results = $rating->getNewRatings();
-        $ranking->delta_a = $results["a"] - $rating_a;
-        $ranking->delta_b = $results["b"] - $rating_b;
+        $ranking->rating_a_elo = $rating_a;
+        $ranking->delta_a_elo = $results["a"] - $rating_a;
+        $ranking->rating_b_elo = $rating_b;
+        $ranking->delta_b_elo = $results["b"] - $rating_b;
 
     }
 
-    public static function calculate_glicko_2(Ranking $ranking): void
+    public static function calculate_glicko_2(Ranking $ranking, ?array $all_rankings = null): void
     {
-        $rating_a = self::get_rating($ranking->team_id_a, $ranking);
+        if ($all_rankings) {
+            $rating_a = self::get_rating_from_rankings($ranking->team_id_a, $all_rankings, $ranking->datum);
+            $rating_b = self::get_rating_from_rankings($ranking->team_id_b, $all_rankings, $ranking->datum);
+        } else {
+            $rating_a = self::get_rating($ranking->team_id_a, $ranking);
+            $rating_b = self::get_rating($ranking->team_id_b, $ranking);
+        }
         $ranking->rating_a = $rating_a->getRating();
         $ranking->rating_a_deviation = $rating_a->getRatingDeviation();
         $ranking->rating_a_volatility = $rating_a->getVolatility();
 
-        $rating_b = self::get_rating($ranking->team_id_b, $ranking);
         $ranking->rating_b = $rating_b->getRating();
         $ranking->rating_b_deviation = $rating_b->getRatingDeviation();
         $ranking->rating_b_volatility = $rating_a->getVolatility();
@@ -110,7 +179,7 @@ class Ranking
             $result_b = new Result($rating_a, 1);
         }
 
-        $glicko2 = new Glicko2;
+        $glicko2 = new Glicko2(tau: self::get_tau(), tol: self::get_tol());
 
         $rating_a_new = $glicko2->calculateRating($rating_a, [$result_a]);
         $ranking->delta_a = $rating_a_new->getRating() - $rating_a->getRating();
@@ -145,16 +214,16 @@ class Ranking
                   AND (s.team_id_a = $team_id OR s.team_id_b = $team_id)
                 ORDER BY t.datum, s.turnier_id, s.spiel_id 
                 ";
-        $threshold_saison = Config::SAISON - self::TOTAL_SEASONS_FOR_CALC;
+        $threshold_saison = Config::SAISON - self::get_total_seasons_for_calc();
         return db::$db->query($sql, $threshold_saison)->fetch_objects(__CLASS__);
     }
 
     /**
      * @return Ranking[]
      */
-    public static function get_all_spiele(bool $without_nls = true): array
+    public static function get_all_spiele(): array
     {
-        $without_nls_snippet = $without_nls ? "AND ta.ligateam = 'Ja' AND tb.ligateam = 'Ja'" : "";
+        $without_nls_snippet = self::get_with_nl_teams() ? "" : "AND ta.ligateam = 'Ja' AND tb.ligateam = 'Ja'";
         $sql = "
                 SELECT s.*, t.datum
                 FROM spiele s
@@ -169,7 +238,7 @@ class Ranking
                   $without_nls_snippet
                 ORDER BY t.datum, s.turnier_id, s.spiel_id 
                 ";
-        $threshold_saison = Config::SAISON - self::TOTAL_SEASONS_FOR_CALC;
+        $threshold_saison = Config::SAISON - self::get_total_seasons_for_calc();
         return db::$db->query($sql, $threshold_saison)->fetch_objects(__CLASS__);
     }
 
@@ -211,7 +280,7 @@ class Ranking
               AND t.phase = 'ergebnis'
               AND t.saison > ?
         ";
-        $sum_a = db::$db->query($sql, Config::SAISON - self::TOTAL_SEASONS_FOR_CALC)->fetch_row();
+        $sum_a = db::$db->query($sql, Config::SAISON - self::get_total_seasons_for_calc())->fetch_row();
         $sql = "
             SELECT SUM(delta_b_elo) as rating
             FROM spiele s
@@ -223,8 +292,8 @@ class Ranking
               AND t.phase = 'ergebnis'
               AND t.saison > ?
         ";
-        $sum_b = db::$db->query($sql, Config::SAISON - self::TOTAL_SEASONS_FOR_CALC)->fetch_row();
-        $rating = self::RATING_DEFAULT + $sum_a["rating"] + $sum_b["rating"];
+        $sum_b = db::$db->query($sql, Config::SAISON - self::get_total_seasons_for_calc())->fetch_row();
+        $rating = self::get_first_rating() + $sum_a["rating"] + $sum_b["rating"];
 
         return new Rating(rating: $rating);
     }
@@ -242,7 +311,7 @@ class Ranking
               AND t.phase = 'ergebnis'
               AND t.saison > ?
         ";
-        $sum_a = db::$db->query($sql, Config::SAISON - self::TOTAL_SEASONS_FOR_CALC)->fetch_row();
+        $sum_a = db::$db->query($sql, Config::SAISON - self::get_total_seasons_for_calc())->fetch_row();
         $sql = "
             SELECT SUM(delta_b) as rating, SUM(delta_b_deviation) as deviaton, SUM(delta_b_volatility) as volatility
             FROM spiele s
@@ -254,10 +323,10 @@ class Ranking
               AND t.phase = 'ergebnis'
               AND t.saison > ?
         ";
-        $sum_b = db::$db->query($sql, Config::SAISON - self::TOTAL_SEASONS_FOR_CALC)->fetch_row();
-        $rating = self::RATING_DEFAULT + $sum_a["rating"] + $sum_b["rating"];
-        $deviation = self::DEVIATION_DEFAULT + $sum_a["deviaton"] + $sum_b["deviaton"];
-        $volatility = self::VOLATILITY_DEFAULT + $sum_a["volatility"] + $sum_b["volatility"];
+        $sum_b = db::$db->query($sql, Config::SAISON - self::get_total_seasons_for_calc())->fetch_row();
+        $rating = self::get_first_rating() + $sum_a["rating"] + $sum_b["rating"];
+        $deviation = self::get_first_deviation() + $sum_a["deviaton"] + $sum_b["deviaton"];
+        $volatility = self::get_first_volatility() + $sum_a["volatility"] + $sum_b["volatility"];
 
         return new Rating(rating: $rating, ratingDeviation: $deviation, volatility: $volatility);
     }
@@ -265,21 +334,53 @@ class Ranking
     /**
      * @param int $team_id
      * @param Ranking[] $rankings
-     * @param bool $for_elo
-     * @return float
+     * @param string $datum
+     * @return Rating
      */
-    public static function get_rank_from_rankings(int $team_id, array $rankings, bool $for_elo = false): float
+    public static function get_rating_from_rankings(int $team_id, array $rankings, string $datum = "9999-12-31"): Rating
     {
-        $delta = 0;
+        $delta_rank = $delta_volatility = $delta_deviation = 0;
         foreach ($rankings as $ranking){
-            if ($ranking->team_id_a == $team_id) {
-                $delta += $for_elo ? $ranking->delta_a_elo : $ranking->delta_a;
-            }
-            if ($ranking->team_id_b == $team_id) {
-                $delta += $for_elo ? $ranking->delta_b_elo : $ranking->delta_b;
+            if ($ranking->datum < $datum) {
+                if ($ranking->team_id_a == $team_id) {
+                    $delta_rank += $ranking->delta_a;
+                    $delta_volatility += $ranking->delta_a_volatility;
+                    $delta_deviation += $ranking->delta_a_deviation;
+                }
+                if ($ranking->team_id_b == $team_id) {
+                    $delta_rank += $ranking->delta_b;
+                    $delta_volatility += $ranking->delta_b_volatility;
+                    $delta_deviation += $ranking->delta_b_deviation;
+                }
             }
         }
-        return self::RATING_DEFAULT + $delta;
+        return new Rating(
+            rating: self::get_first_rating() + $delta_rank,
+            ratingDeviation: self::get_first_deviation() + $delta_deviation,
+            volatility: self::get_first_volatility() + $delta_volatility
+        );
+    }
+
+    /**
+     * @param int $team_id
+     * @param Ranking[] $rankings
+     * @param string $datum
+     * @return Rating
+     */
+    public static function get_rating_elo_from_rankings(int $team_id, array $rankings, string $datum = "9999-12-31"): Rating
+    {
+        $delta_rank = 0;
+        foreach ($rankings as $ranking) {
+            if ($ranking->datum < $datum) {
+                if ($ranking->team_id_a == $team_id) {
+                    $delta_rank +=$ranking->delta_a_elo;
+                }
+                if ($ranking->team_id_b == $team_id) {
+                    $delta_rank += $ranking->delta_b_elo;
+                }
+            }
+        }
+        return new Rating(rating: self::get_first_rating() + $delta_rank);
     }
 
     public static function get_rank(int $team_id)
@@ -294,7 +395,7 @@ class Ranking
               AND t.phase = 'ergebnis'
               AND t.saison > ?
         ";
-        $sum_a = db::$db->query($sql, Config::SAISON - self::TOTAL_SEASONS_FOR_CALC)->fetch_one();
+        $sum_a = db::$db->query($sql, Config::SAISON - self::get_total_seasons_for_calc())->fetch_one();
         $sql = "
             SELECT SUM(delta_b)
             FROM spiele s
@@ -305,8 +406,8 @@ class Ranking
               AND t.phase = 'ergebnis'
               AND t.saison > ?
         ";
-        $sum_b = db::$db->query($sql, Config::SAISON - self::TOTAL_SEASONS_FOR_CALC)->fetch_one();
-        return self::RATING_DEFAULT + $sum_a + $sum_b;
+        $sum_b = db::$db->query($sql, Config::SAISON - self::get_total_seasons_for_calc())->fetch_one();
+        return self::get_first_rating() + $sum_a + $sum_b;
     }
 
     public static function get_rank_elo(int $team_id)
@@ -321,7 +422,7 @@ class Ranking
               AND t.phase = 'ergebnis'
               AND t.saison > ?
         ";
-        $sum_a = db::$db->query($sql, Config::SAISON - self::TOTAL_SEASONS_FOR_CALC)->fetch_one();
+        $sum_a = db::$db->query($sql, Config::SAISON - self::get_total_seasons_for_calc())->fetch_one();
         $sql = "
             SELECT SUM(delta_b_elo)
             FROM spiele s
@@ -332,8 +433,8 @@ class Ranking
               AND t.phase = 'ergebnis'
               AND t.saison > ?
         ";
-        $sum_b = db::$db->query($sql, Config::SAISON - self::TOTAL_SEASONS_FOR_CALC)->fetch_one();
-        return self::RATING_DEFAULT + $sum_a + $sum_b;
+        $sum_b = db::$db->query($sql, Config::SAISON - self::get_total_seasons_for_calc())->fetch_one();
+        return self::get_first_rating() + $sum_a + $sum_b;
     }
 
     public static function get_rank_turnier(int $team_id, int $turnier_id)
