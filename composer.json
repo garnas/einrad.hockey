@@ -8,7 +8,9 @@
         "doctrine/annotations": "^1.13",
         "jenssegers/date": "^4.0",
         "spatie/array-to-xml": "^3.1",
-        "phpoffice/phpspreadsheet": "^1.28"
+        "phpoffice/phpspreadsheet": "^1.28",
+        "diegobanos/php-glicko2": "^1.4",
+        "chovanec/elo-rating": "dev-master"
     },
 
     "autoload": {

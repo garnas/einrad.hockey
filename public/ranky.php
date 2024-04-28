@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Event\Turnier;
 
 
@@ -86,142 +87,174 @@ $get_background_color = static function ($ranking, $type) use ($team_to_color) {
 //}
 ////arsort($rankings);
 
+$check_team = static function ($team_id, Ranking $ranking) {
+    return $ranking->team_id_b == $team_id || $ranking->team_id_a == $team_id;
+};
 Html::$page_width = "100%";
 include Env::BASE_PATH . '/templates/header.tmp.php';
+$rankings = array_reverse($rankings, preserve_keys: true);
+$teams_to_rankings = [];
+foreach ($rankings as $ranking) {
+    $teams_to_rankings[$ranking->team_id_a][] = $ranking;
+    $teams_to_rankings[$ranking->team_id_b][] = $ranking;
+}
 
 ?>
-<form method="get">
-    <p>Saisons
-        <input type="number" name="threshold_saison" min="0" max="5"
-               value="<?= Ranking::get_total_seasons_for_calc() ?>">
-    </p>
-    <p>
-        <input class="w3-check" type="checkbox" min="0" max="1" step="any"
-               name="with_nl" <?= Ranking::get_with_nl_teams() ? "checked" : "" ?>>
-        NL-Teams einbeziehen
-    </p>
-    <p>Glicko/Elo K
-        <input type="number" name="default_rating" value="<?= Ranking::get_first_rating() ?>">
-    </p>
-    <p>Glicko-Volatility
-        <input type="number" name="volatility" min="0.01" max="0.3" step="0.01"
-               value="<?= Ranking::get_first_volatility() ?>">
-    </p>
-    <p>Glicko-Deviaton
-        <input type="number" name="deviation" min="0" max="400" value="<?= Ranking::get_first_deviation() ?>">
-    </p>
-    <p class="w3-tiny"><i>Glicko-Tau</i>
-        <input type="number" min="0" max="1" step="0.01" name="tau"
-               value="<?= Ranking::get_tau() ?>">
-    </p>
-    <p class="w3-tiny"><i>Glicko-Tol</i>
-        <input type="number" min="0" max="1" step="any" name="tol"
-               value="<?= Ranking::get_tol() ?>">
-    </p>
-    <p>
-        <input type="submit" class="w3-button w3-primary" value="CALCULATE!" name="change">
-    </p>
-</form>
-<form method="get">
-    <p>
-        <input type="submit" value="Reset" class="w3-button w3-secondary">
-    </p>
-</form>
+    <form method="get">
+        <p>Saisons
+            <input type="number" name="threshold_saison" min="0" max="5"
+                   value="<?= Ranking::get_total_seasons_for_calc() ?>">
+            <span class="w3-text-grey w3-tiny">(=1 nur diese Saison, =2 diese und die letzte, etc)</span>
+        </p>
+        <p>
+            <input class="w3-check" type="checkbox" min="0" max="1" step="any"
+                   name="with_nl" <?= Ranking::get_with_nl_teams() ? "checked" : "" ?>>
+            NL-Teams einbeziehen
+        </p>
+        <p>Glicko/Elo K
+            <input type="number" name="default_rating" value="<?= Ranking::get_first_rating() ?>">
+        </p>
+        <p>Glicko-Volatility
+            <input type="number" name="volatility" min="0.01" max="0.3" step="0.01"
+                   value="<?= Ranking::get_first_volatility() ?>">
+        </p>
+        <p>Glicko-Deviaton
+            <input type="number" name="deviation" min="0" max="400" value="<?= Ranking::get_first_deviation() ?>">
+        </p>
+        <p class="w3-tiny"><i>Glicko-Tau</i>
+            <input type="number" min="0" max="1" step="0.01" name="tau"
+                   value="<?= Ranking::get_tau() ?>">
+        </p>
+        <p class="w3-tiny"><i>Glicko-Tol</i>
+            <input type="number" min="0" max="1" step="any" name="tol"
+                   value="<?= Ranking::get_tol() ?>">
+        </p>
+        <p>
+            <input type="submit" class="w3-button w3-primary" value="CALCULATE!" name="change">
+        </p>
+    </form>
+    <form method="get">
+        <p>
+            <input type="submit" value="Reset" class="w3-button w3-secondary">
+        </p>
+    </form>
 
-<p>Anzahl Spiele: <?= count($rankings) ?></p>
-<div class="w3-responsive w3-card table-wrap">
-    <table class="w3-table w3-striped w3-centered sortable">
-        <thead class="w3-primary">
-        <tr>
-            <th class="num"><b>
-                    <button class="w3-center">
-                        Glicko
-                        <span aria-hidden="true"></span>
-                    </button>
-                </b></th>
-            <th><b>
-                    <button class="w3-center">
-                        Teamname
-                        <span aria-hidden="true"></span>
-                    </button>
-                </b></th>
-            <th class="num"><b>
+    <p>Anzahl Spiele: <?= count($rankings) ?></p>
+    <div class="w3-responsive w3-card table-wrap">
+        <table class="w3-table w3-striped w3-centered sortable">
+            <thead class="w3-primary">
+            <tr>
+                <th class="num"><b>
+                        <button class="w3-center">
+                            Glicko
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </b></th>
+                <th><b>
+                        <button class="w3-center">
+                            Teamname
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </b></th>
+                <th class="num"><b>
 
-                    <button class="w3-center">
-                        Rang
-                        <span aria-hidden="true"></span>
-                    </button>
-                </b></th>
-            <th><b>
-                    <button class="w3-center">
-                        Teamname
-                        <span aria-hidden="true"></span>
-                    </button>
-                </b></th>
-            <th class="num"><b>
-                    <button class="w3-center">
-                        Elo
-                        <span aria-hidden="true"></span>
-                    </button>
-                </b></th>
-            <th><b>
-                    <button class="w3-center">
-                        Teamname
-                        <span aria-hidden="true"></span>
-                    </button>
-                </b></th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($multi_rankings as $multi_ranking) { ?>
-            <tr>
-                <td style="<?= $get_background_color($multi_ranking, "glicko") ?>"
-                    class="num w3-center"><?= round($multi_ranking["glicko"]["score"], 1) ?></td>
-                <td style="white-space: nowrap;<?= $get_background_color($multi_ranking, "glicko") ?>"><?= $multi_ranking["glicko"]["teamname"] ?></td>
-                <td style="<?= $get_background_color($multi_ranking, "rang") ?>"
-                    class="num w3-center"><?= round($multi_ranking["rang"]["score"], 1) ?></td>
-                <td style="white-space: nowrap;<?= $get_background_color($multi_ranking, "rang") ?>"><?= $multi_ranking["rang"]["teamname"] ?></td>
-                <td style="<?= $get_background_color($multi_ranking, "elo") ?>"
-                    class="num w3-center"><?= round($multi_ranking["elo"]["score"], 1) ?></td>
-                <td style="white-space: nowrap;<?= $get_background_color($multi_ranking, "elo") ?>"><?= $multi_ranking["elo"]["teamname"] ?></td>
+                        <button class="w3-center">
+                            Rang
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </b></th>
+                <th><b>
+                        <button class="w3-center">
+                            Teamname
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </b></th>
+                <th class="num"><b>
+                        <button class="w3-center">
+                            Elo
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </b></th>
+                <th><b>
+                        <button class="w3-center">
+                            Teamname
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </b></th>
             </tr>
-        <?php } //end foreach
-        ?>
-        </tbody>
-    </table>
-</div>
-<br>
-<div class="w3-responsive w3-card table-wrap">
-    <table class="w3-table w3-striped w3-centered">
-        <thead class="w3-primary">
-        </tr>
-        <th>Datum</th>
-        <th>&#9650; Elo<br>&#9650; Glicko (Dev/Vol)</th>
-        <th>Team A<br>Tore</th>
-        <th>Team B<br>Tore</th>
-        <th>&#9650; Elo<br>&#9650; Glicko (Dev/Vol)</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($rankings as $ranking): ?>
-            <tr>
-                <td style="white-space: nowrap;"><?= $ranking->datum ?></td>
-                <td style="white-space: nowrap;"><?=round($ranking->rating_a_elo)?> <?= $ranking->delta_a >= 0 ? "+" : "" ?><?= round($ranking->delta_a_elo) ?>
-                    <br>
-                    <?=round($ranking->rating_a)?> <?= $ranking->delta_a >= 0 ? "+" : "" ?><?= round($ranking->delta_a) ?>
-                    (<?= round($ranking->rating_a_deviation) ?>/<?= round($ranking->rating_a_volatility, 5) ?>)
-                </td>
-                <td style="white-space: nowrap;"><?= Team::id_to_name($ranking->team_id_a) ?><br><?= $ranking->tore_a ?>
-                </td>
-                <td style="white-space: nowrap;"><?= Team::id_to_name($ranking->team_id_b) ?><br><?= $ranking->tore_b ?>
-                </td>
-                <td style="white-space: nowrap;"><?=round($ranking->rating_b_elo)?> <?= $ranking->delta_b >= 0 ? "+" : "" ?><?= round($ranking->delta_b_elo) ?>
-                    <br>
-                    <?=round($ranking->rating_b)?> <?= $ranking->delta_b >= 0 ? "+" : "" ?><?= round($ranking->delta_b,) ?>
-                    (<?= round($ranking->rating_b_deviation) ?>/<?= round($ranking->rating_b_volatility, 5) ?>)
-                </td>
+            </thead>
+            <tbody>
+            <?php foreach ($multi_rankings as $multi_ranking) { ?>
+                <tr>
+                    <td style="<?= $get_background_color($multi_ranking, "glicko") ?>"
+                        class="w3-hover-text-blue num w3-center"><a style="text-decoration: none"
+                                                                   href="#<?= $multi_ranking["glicko"]["id"] ?>"><?= round($multi_ranking["glicko"]["score"], 1) ?></a>
+                    </td>
+                    <td class="w3-hover-text-blue"
+                        style="white-space: nowrap;<?= $get_background_color($multi_ranking, "glicko") ?>"><a style="text-decoration: none"
+                                href="#<?= $multi_ranking["glicko"]["id"] ?>"><?= $multi_ranking["glicko"]["teamname"] ?></a>
+                    </td>
+                    <td class="w3-hover-text-blue" style="<?= $get_background_color($multi_ranking, "rang") ?>"
+                        class="w3-hover-text-blue num w3-center"><a style="text-decoration: none"
+                                                                   href="#<?= $multi_ranking["rang"]["id"] ?>"><?= round($multi_ranking["rang"]["score"], 1) ?></a>
+                    </td>
+                    <td class="w3-hover-text-blue"
+                        style="white-space: nowrap;<?= $get_background_color($multi_ranking, "rang") ?>"><a
+                                style="text-decoration: none"
+                                href="#<?= $multi_ranking["rang"]["id"] ?>"><?= $multi_ranking["rang"]["teamname"] ?></a>
+                    </td>
+                    <td style="<?= $get_background_color($multi_ranking, "elo") ?>"
+                        class="w3-hover-text-blue num w3-center"><a style="text-decoration: none"
+                                                                   href="#<?= $multi_ranking["rang"]["id"] ?>"><?= round($multi_ranking["elo"]["score"], 1) ?>
+                    </td>
+                    <td class="w3-hover-text-blue"
+                        style="white-space: nowrap;<?= $get_background_color($multi_ranking, "elo") ?>"><a
+                                style="text-decoration: none"
+                                href="#<?= $multi_ranking["elo"]["id"] ?>"><?= $multi_ranking["elo"]["teamname"] ?></a>
+                    </td>
+                </tr>
+            <?php } //end foreach
+            ?>
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <?php foreach ($teams_to_rankings as $team_id => $team_to_rankings): ?>
+    <h1 id="<?= $team_id ?>"><?= Team::id_to_name($team_id) ?></h1>
+    <div class="w3-responsive w3-card table-wrap">
+        <table class="w3-table w3-striped w3-centered">
+            <thead class="w3-primary">
             </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
-</div>
+            <th>Datum</th>
+            <th>&#9650; Elo<br>&#9650; Glicko (Dev/Vol)</th>
+            <th>Team A<br>Tore</th>
+            <th>Team B<br>Tore</th>
+            <th>&#9650; Elo<br>&#9650; Glicko (Dev/Vol)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($team_to_rankings as $ranking): ?>
+                <tr>
+                    <td style="white-space: nowrap;"><?= $ranking->datum ?></td>
+                    <td style="white-space: nowrap;"><?= round($ranking->rating_a_elo) ?> <?= $ranking->delta_a >= 0 ? "+" : "" ?><?= round($ranking->delta_a_elo) ?>
+                        <br>
+                        <?= round($ranking->rating_a) ?> <?= $ranking->delta_a >= 0 ? "+" : "" ?><?= round($ranking->delta_a) ?>
+                        (<?= round($ranking->rating_a_deviation) ?>/<?= round($ranking->rating_a_volatility, 5) ?>)
+                    </td>
+                    <td style="white-space: nowrap;"><?= Team::id_to_name($ranking->team_id_a) ?>
+                        <br><?= $ranking->tore_a ?>
+                    </td>
+                    <td style="white-space: nowrap;"><?= Team::id_to_name($ranking->team_id_b) ?>
+                        <br><?= $ranking->tore_b ?>
+                    </td>
+                    <td style="white-space: nowrap;"><?= round($ranking->rating_b_elo) ?> <?= $ranking->delta_b >= 0 ? "+" : "" ?><?= round($ranking->delta_b_elo) ?>
+                        <br>
+                        <?= round($ranking->rating_b) ?> <?= $ranking->delta_b >= 0 ? "+" : "" ?><?= round($ranking->delta_b,) ?>
+                        (<?= round($ranking->rating_b_deviation) ?>/<?= round($ranking->rating_b_volatility, 5) ?>)
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php endforeach; ?>
