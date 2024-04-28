@@ -1,4 +1,5 @@
 <?php
+
 use Diegobanos\Glicko2\Rating\Rating;
 use Diegobanos\Glicko2\Result\Result;
 use Diegobanos\Glicko2\Glicko2;
@@ -23,16 +24,18 @@ class Ranking
     public ?float $rating_b_deviation;
     public ?float $rating_b_volatility;
     public ?float $delta_a;
+    public ?float $delta_a_elo;
     public ?float $delta_a_deviation;
     public ?float $delta_a_volatility;
     public ?float $delta_b;
+    public ?float $delta_b_elo;
     public ?float $delta_b_deviation;
     public ?float $delta_b_volatility;
     public string $datum;
 
     const RATING_DEFAULT = 1500;
-    const DEVIATION_DEFAULT = 300;
-    const VOLATILITY_DEFAULT = 0.1;
+    const DEVIATION_DEFAULT = 200;
+    const VOLATILITY_DEFAULT = 0.06;
 
     const TOTAL_SEASONS_FOR_CALC = 2;
 
@@ -48,14 +51,48 @@ class Ranking
         }
     }
 
-    public static function calculate_score(Ranking $ranking): void
+    public static function reset_ratings()
     {
-        $rating_a = self::get_old_ranking($ranking->team_id_a, $ranking);
+        $sql = "
+            UPDATE spiele
+            SET 
+                delta_a = NULL, 
+                delta_b = NULL, 
+                delta_a_deviation = NULL, 
+                delta_b_deviation = NULL, 
+                delta_a_volatility = NULL, 
+                delta_b_volatility = NULL
+        ";
+        db::$db->query($sql)->log();
+    }
+
+    public static function calculate_elo(Ranking $ranking): void
+    {
+        $rating_a = self::get_rating_elo($ranking->team_id_a, $ranking)->getRating();
+        $rating_b = self::get_rating_elo($ranking->team_id_b, $ranking)->getRating();
+
+        if ($ranking->tore_a == $ranking->tore_b) {
+            $rating = new \Chovanec\Rating\Rating($rating_a, $rating_b, \Chovanec\Rating\Rating::DRAW, Chovanec\Rating\Rating::DRAW);
+        } elseif ($ranking->tore_a > $ranking->tore_b) {
+            $rating = new \Chovanec\Rating\Rating($rating_a, $rating_b, \Chovanec\Rating\Rating::WIN, Chovanec\Rating\Rating::LOST);
+        } else {
+            $rating = new \Chovanec\Rating\Rating($rating_a, $rating_b, \Chovanec\Rating\Rating::LOST, Chovanec\Rating\Rating::WIN);
+        }
+
+        $results = $rating->getNewRatings();
+        $ranking->delta_a = $results["a"] - $rating_a;
+        $ranking->delta_b = $results["b"] - $rating_b;
+
+    }
+
+    public static function calculate_glicko_2(Ranking $ranking): void
+    {
+        $rating_a = self::get_rating($ranking->team_id_a, $ranking);
         $ranking->rating_a = $rating_a->getRating();
         $ranking->rating_a_deviation = $rating_a->getRatingDeviation();
         $ranking->rating_a_volatility = $rating_a->getVolatility();
 
-        $rating_b = self::get_old_ranking($ranking->team_id_b, $ranking);
+        $rating_b = self::get_rating($ranking->team_id_b, $ranking);
         $ranking->rating_b = $rating_b->getRating();
         $ranking->rating_b_deviation = $rating_b->getRatingDeviation();
         $ranking->rating_b_volatility = $rating_a->getVolatility();
@@ -88,20 +125,64 @@ class Ranking
     /**
      * @return Ranking[]
      */
-    public static function get_all_spiele(): array
+    public static function get_spiele_by_team(int $team_id): array
     {
         $sql = "
                 SELECT s.*, t.datum
                 FROM spiele s
                 INNER JOIN turniere_liga t ON s.turnier_id = t.turnier_id
-                WHERE s.tore_a IS NOT NULL AND s.tore_b IS NOT NULL
+                INNER JOIN teams_liga ta ON s.team_id_a = ta.team_id
+                INNER JOIN teams_liga tb ON s.team_id_b = tb.team_id
+                WHERE s.tore_a IS NOT NULL AND s.tore_b IS NOT NULL 
+                  AND t.canceled = 0
+                  AND t.art != 'spass'
+                  AND t.phase = 'ergebnis'
+                  AND t.saison > ?
+                  AND s.delta_a is not NULL
+                  AND s.delta_b is not NULL
+                  AND (s.team_id_a = $team_id OR s.team_id_b = $team_id)
                 ORDER BY t.datum, s.turnier_id, s.spiel_id 
-                "
-        ;
-        return db::$db->query($sql)->fetch_objects(__CLASS__);
+                ";
+        $threshold_saison = Config::SAISON - self::TOTAL_SEASONS_FOR_CALC;
+        return db::$db->query($sql, $threshold_saison)->fetch_objects(__CLASS__);
     }
 
-    public static function persist_delta(Ranking $ranking): void
+    /**
+     * @return Ranking[]
+     */
+    public static function get_all_spiele(bool $without_nls = true): array
+    {
+        $without_nls_snippet = $without_nls ? "AND ta.ligateam = 'Ja' AND tb.ligateam = 'Ja'" : "";
+        $sql = "
+                SELECT s.*, t.datum
+                FROM spiele s
+                INNER JOIN turniere_liga t ON s.turnier_id = t.turnier_id
+                INNER JOIN teams_liga ta ON s.team_id_a = ta.team_id
+                INNER JOIN teams_liga tb ON s.team_id_b = tb.team_id
+                WHERE s.tore_a IS NOT NULL AND s.tore_b IS NOT NULL 
+                  AND t.canceled = 0
+                  AND t.art != 'spass'
+                  AND t.phase = 'ergebnis'
+                  AND t.saison > ?
+                  $without_nls_snippet
+                ORDER BY t.datum, s.turnier_id, s.spiel_id 
+                ";
+        $threshold_saison = Config::SAISON - self::TOTAL_SEASONS_FOR_CALC;
+        return db::$db->query($sql, $threshold_saison)->fetch_objects(__CLASS__);
+    }
+
+    public static function persist_ranking_elo(Ranking $ranking): void
+    {
+        $sql = "
+            UPDATE spiele
+            SET delta_a_elo = $ranking->delta_a,
+                delta_b_elo = $ranking->delta_b
+            WHERE turnier_id = $ranking->turnier_id AND spiel_id = $ranking->spiel_id
+        ";
+        db::$db->query($sql)->log();
+    }
+
+    public static function persist_ranking(Ranking $ranking): void
     {
         $sql = "
             UPDATE spiele
@@ -115,8 +196,38 @@ class Ranking
         ";
         db::$db->query($sql)->log();
     }
+    public static function get_rating_elo($team_id, Ranking $ranking): Rating
+    {
+        $sql = "
+            SELECT SUM(delta_a_elo) as rating
+            FROM spiele s
+            INNER JOIN turniere_liga t ON s.turnier_id = t.turnier_id
+            WHERE s.team_id_a = $team_id 
+              AND t.datum < (SELECT datum FROM turniere_liga st WHERE st.turnier_id = $ranking->turnier_id)
+              AND t.canceled = 0
+              AND t.art != 'spass'
+              AND t.phase = 'ergebnis'
+              AND t.saison > ?
+        ";
+        $sum_a = db::$db->query($sql, Config::SAISON - self::TOTAL_SEASONS_FOR_CALC)->fetch_row();
+        $sql = "
+            SELECT SUM(delta_b_elo) as rating
+            FROM spiele s
+            INNER JOIN turniere_liga t ON s.turnier_id = t.turnier_id
+            WHERE s.team_id_b = $team_id 
+              AND t.datum < (SELECT datum FROM turniere_liga st WHERE st.turnier_id = $ranking->turnier_id)
+              AND t.canceled = 0
+              AND t.art != 'spass'
+              AND t.phase = 'ergebnis'
+              AND t.saison > ?
+        ";
+        $sum_b = db::$db->query($sql, Config::SAISON - self::TOTAL_SEASONS_FOR_CALC)->fetch_row();
+        $rating = self::RATING_DEFAULT + $sum_a["rating"] + $sum_b["rating"];
 
-    public static function get_old_ranking($team_id, Ranking $ranking): Rating
+        return new Rating(rating: $rating);
+    }
+
+    public static function get_rating($team_id, Ranking $ranking): Rating
     {
         $sql = "
             SELECT SUM(delta_a) as rating, SUM(delta_a_deviation) as deviaton, SUM(delta_a_volatility) as volatility
@@ -149,7 +260,8 @@ class Ranking
         return new Rating(rating: $rating, ratingDeviation: $deviation, volatility: $volatility);
     }
 
-    public static function get_rank(int $team_id) {
+    public static function get_rank(int $team_id)
+    {
         $sql = "
             SELECT SUM(delta_a)
             FROM spiele s
@@ -163,6 +275,33 @@ class Ranking
         $sum_a = db::$db->query($sql, Config::SAISON - self::TOTAL_SEASONS_FOR_CALC)->fetch_one();
         $sql = "
             SELECT SUM(delta_b)
+            FROM spiele s
+            INNER JOIN turniere_liga t ON s.turnier_id = t.turnier_id
+            WHERE s.team_id_b = $team_id 
+              AND t.canceled = 0
+              AND t.art != 'spass'
+              AND t.phase = 'ergebnis'
+              AND t.saison > ?
+        ";
+        $sum_b = db::$db->query($sql, Config::SAISON - self::TOTAL_SEASONS_FOR_CALC)->fetch_one();
+        return self::RATING_DEFAULT + $sum_a + $sum_b;
+    }
+
+    public static function get_rank_elo(int $team_id)
+    {
+        $sql = "
+            SELECT SUM(delta_a_elo)
+            FROM spiele s
+            INNER JOIN turniere_liga t ON s.turnier_id = t.turnier_id
+            WHERE s.team_id_a = $team_id 
+              AND t.canceled = 0
+              AND t.art != 'spass'
+              AND t.phase = 'ergebnis'
+              AND t.saison > ?
+        ";
+        $sum_a = db::$db->query($sql, Config::SAISON - self::TOTAL_SEASONS_FOR_CALC)->fetch_one();
+        $sql = "
+            SELECT SUM(delta_b_elo)
             FROM spiele s
             INNER JOIN turniere_liga t ON s.turnier_id = t.turnier_id
             WHERE s.team_id_b = $team_id 
