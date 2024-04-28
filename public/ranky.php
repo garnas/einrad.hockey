@@ -11,46 +11,49 @@ use Config;
 
 require_once '../init.php';
 
-
-$rankings = Ranking::get_all_spiele(false);
 $rankings_by_team = Ranking::get_spiele_by_team(30);
 
 //Ranking::reset_ratings();
-//foreach ($rankings as $rank) {
-//
-//    Ranking::calculate_glicko_2($rank);
-//    Ranking::persist_ranking($rank);
-//
-//    Ranking::calculate_elo($rank);
-//    Ranking::persist_ranking_elo($rank);
-//}
+$rankings_glicko = Ranking::get_all_spiele(false);
+foreach ($rankings_glicko as $rank1) {
+    Ranking::calculate_glicko_2($rank1);
+}
+
+$rankings_elo = Ranking::get_all_spiele(false);
+foreach ($rankings_elo as $rank2) {
+//    Ranking::calculate_elo($rank2);
+}
+
+$akt_spieltag = Tabelle::get_aktuellen_spieltag();
+$rangtabelle = Tabelle::get_rang_tabelle($akt_spieltag);
 
 $teams = TeamRepository::get()->activeLigaTeams();
-$rankings = [];
-
-$akt_spieltag = Tabelle::get_aktuellen_spieltag(Config::SAISON);
-$rangtabelle = Tabelle::get_rang_tabelle($akt_spieltag);
-//db::debug($rangtabelle);
 foreach ($teams as $team) {
     $id = $team->id();
-    $rankings[] = [
-        "glicko" => Ranking::get_rank($id),
-        "elo" => Ranking::get_rank_elo($id),
+//    $rankings[] = [
+//        "glicko" => Ranking::get_rank($id),
+//        "elo" => Ranking::get_rank_elo($id),
+//        "teamname" => $team->getName(),
+//        "team_id" => $id,
+//        "rang" => $rangtabelle[$id]["rang"]
+//    ];
+    $glicko[] = [
+        "score" => Ranking::get_rank_from_rankings($id, $rankings_glicko),
         "teamname" => $team->getName(),
-        "team_id" => $id,
-        "rang" => $rangtabelle[$id]["rang"]
+        "color" => $team->getDetails()->getTrikotFarbe1(),
+        "id" => $id
     ];
-    $rankings_glicko[] = [
-        "score" => Ranking::get_rank($id),
+    $elo[] = [
+        "score" => Ranking::get_rank_from_rankings($id, $rankings_elo, for_elo: true),
         "teamname" => $team->getName(),
+        "color" => $team->getDetails()->getTrikotFarbe1(),
+        "id" => $id
     ];
-    $rankings_elo[] = [
-        "score" => Ranking::get_rank_elo($id),
-        "teamname" => $team->getName(),
-    ];
-    $ranking_rang[] = [
+    $rang[] = [
         "score" => $rangtabelle[$id]["avg"],
         "teamname" => $team->getName(),
+        "color" => $team->getDetails()->getTrikotFarbe1(),
+        "id" => $id
     ];
 }
 $sort = static function (&$arg) {
@@ -58,17 +61,26 @@ $sort = static function (&$arg) {
     array_multisort($score, SORT_DESC, $arg);
 };
 
-$sort($rankings_glicko);
-$sort($rankings_elo);
-$sort($ranking_rang);
+$sort($glicko);
+$sort($elo);
+$sort($rang);
 
-foreach ($rankings_glicko as $key => $_) {
+foreach ($glicko as $key => $_) {
     $multi_rankings[] = [
-        "glicko" => $rankings_glicko[$key],
-        "elo" => $rankings_elo[$key],
-        "rang" => $ranking_rang[$key],
+        "glicko" => $glicko[$key],
+        "elo" => $elo[$key],
+        "rang" => $rang[$key],
     ];
 }
+
+$colors = ['#e6194B', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#42d4f4', '#f032e6', '#bfef45', '#fabed4', '#469990', '#dcbeff', '#9A6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#6d6d9e', '#a9a9a9'];
+$colors = array_merge($colors, $colors, $colors, $colors, $colors);
+foreach ($rangtabelle as $id => $r) {
+    $team_to_color[$id] = $colors[$r["rang"] - 1];
+}
+$get_background_color = static function ($ranking, $type) use ($team_to_color) {
+    return "background-color: " . $team_to_color[$ranking[$type]["id"]] . ";";
+};
 //foreach ($rankings as $key => $ranking) {
 //    $rankings[$key]["delta"] = $ranking["rang"] - $key - 1;
 //}
@@ -128,12 +140,12 @@ include Env::BASE_PATH . '/templates/header.tmp.php';
         <tbody>
         <?php foreach ($multi_rankings as $mulit_ranking) { ?>
             <tr>
-                <td class="num w3-center"><?= round($mulit_ranking["glicko"]["score"], 1) ?></td>
-                <td style="white-space: nowrap;"><?= $mulit_ranking["glicko"]["teamname"] ?></td>
-                <td class="num w3-center"><?= round($mulit_ranking["elo"]["score"], 1) ?></td>
-                <td style="white-space: nowrap;"><?= $mulit_ranking["elo"]["teamname"] ?></td>
-                <td class="num w3-center"><?= round($mulit_ranking["rang"]["score"], 1) ?></td>
-                <td style="white-space: nowrap;"><?= $mulit_ranking["rang"]["teamname"] ?></td>
+                <td style="<?=$get_background_color($mulit_ranking, "glicko")?>" class="num w3-center"><?= round($mulit_ranking["glicko"]["score"], 1) ?></td>
+                <td style="white-space: nowrap;<?=$get_background_color($mulit_ranking, "glicko")?>"><?= $mulit_ranking["glicko"]["teamname"] ?></td>
+                <td style="<?=$get_background_color($mulit_ranking, "elo")?>" class="num w3-center"><?= round($mulit_ranking["elo"]["score"], 1) ?></td>
+                <td style="white-space: nowrap;<?=$get_background_color($mulit_ranking, "elo")?>"><?= $mulit_ranking["elo"]["teamname"] ?></td>
+                <td style="<?=$get_background_color($mulit_ranking, "rang")?>" class="num w3-center"><?= round($mulit_ranking["rang"]["score"], 1) ?></td>
+                <td style="white-space: nowrap;<?=$get_background_color($mulit_ranking, "rang")?>"><?= $mulit_ranking["rang"]["teamname"] ?></td>
             </tr>
         <?php } //end foreach
         ?>

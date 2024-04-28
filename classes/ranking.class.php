@@ -260,6 +260,29 @@ class Ranking
         return new Rating(rating: $rating, ratingDeviation: $deviation, volatility: $volatility);
     }
 
+    /**
+     * @param int $team_id
+     * @param Ranking[] $rankings
+     * @param bool $for_elo
+     * @return float
+     */
+    public static function get_rank_from_rankings(int $team_id, array $rankings, bool $for_elo = false): float
+    {
+        $delta = 0;
+        foreach ($rankings as $ranking){
+            if (is_array($ranking)) {
+                echo "warum";
+            }
+            if ($ranking->team_id_a == $team_id) {
+                $delta += $for_elo ? $ranking->delta_a_elo : $ranking->delta_a;
+            }
+            if ($ranking->team_id_b == $team_id) {
+                $delta += $for_elo ? $ranking->delta_b_elo : $ranking->delta_b;
+            }
+        }
+        return self::RATING_DEFAULT + $delta;
+    }
+
     public static function get_rank(int $team_id)
     {
         $sql = "
