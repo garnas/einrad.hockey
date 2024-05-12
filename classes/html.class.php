@@ -418,5 +418,20 @@ class Html
         ";
     }
 
+    public static function selected_from_post(string $key, ?string $condition_value = Null): string
+    {
+        $value = $_POST[$key] ?? Null;
+
+        if ($value === $condition_value) {
+            return "selected";
+        }
+        return "";
+    }
+
+    public static function value_from_post(string $betrag): string
+    {   $value = $_POST[$betrag] ?? null;
+        return $value ? "value='$value'" : "";
+    }
+
 
 }
