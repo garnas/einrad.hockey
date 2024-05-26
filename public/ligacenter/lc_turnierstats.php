@@ -12,6 +12,11 @@ $sql = "
             ";
 $result = db::$db->query($sql)->fetch();
 
+$anzahl_teams = static function ($id) {
+    $query = "SELECT COUNT(*) FROM turniere_liste WHERE turnier_id = $id AND (liste = 'setzliste' OR liste = 'spiele')";
+    return db::$db->query($query)->fetch_one();
+};
+
 $header = [
     [
         "turnier_id",
@@ -24,8 +29,8 @@ $header = [
         "canceled",
         "canceled_grund",
         "phase",
-        "anzahl_teams",
-        "team_id",
+        "anzahl_spielend",
+        "ausrichter_id",
         "teamname",
         "plaetze"
     ]
@@ -44,7 +49,7 @@ foreach ($result as $row) {
         $row["canceled"],
         $row["canceled_grund"],
         $row["phase"],
-        \App\Service\Turnier\TurnierService::getAnzahlAngemeldeteTeams(\App\Repository\Turnier\TurnierRepository::get()->turnier($row["turnier_id"])),
+        $anzahl_teams($row["turnier_id"]),
         $row["team_id"],
         $row["teamname"],
         $row["plaetze"]

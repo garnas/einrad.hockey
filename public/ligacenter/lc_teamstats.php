@@ -13,6 +13,22 @@ $sql = "
             ";
 $result = db::$db->query($sql)->fetch();
 
+$anzahl_spieler = static function ($team_id) {
+    $saison = Config::SAISON;
+    $query = "SELECT COUNT(*) FROM spieler WHERE team_id = $team_id AND letzte_saison = $saison";
+    return db::$db->query($query)->fetch_one();
+};
+
+$anzahl_turniere = static function ($team_id) {
+    $saison = Config::SAISON;
+    $query = "SELECT COUNT(*) FROM turniere_liste liste
+                INNER JOIN turniere_liga liga ON liste.turnier_id = liga.turnier_id
+                WHERE liga.saison = $saison
+                AND liste.liste = 'setzliste'
+                AND liste.team_id = $team_id"
+    ;
+    return db::$db->query($query)->fetch_one();
+};
 $header = [
     [
         "team_id",
@@ -21,7 +37,7 @@ $header = [
         "zweites_freilos",
         "anzahl spieler",
         "block",
-        "anzahl turniere",
+        "anzahl_gespielter_turniere_aktuelle_saison",
     ]
 ];
 
@@ -33,14 +49,15 @@ $filter2 = static function(\App\Entity\Turnier\TurniereListe $liste) {
 };
 $auswertung = $header;
 foreach ($result as $row) {
+    $team_id = $row["team_id"];
     $auswertung[] = [
-        $row["team_id"],
+        $team_id,
         $row["teamname"],
         $row["freilose"],
         $row["zweites_freilos"],
-        \App\Repository\Team\TeamRepository::get()->team($row['team_id'])->getKader()->filter($filter)->count(),
+        $anzahl_spieler($team_id),
         Tabelle::get_team_block($row["team_id"]),
-        \App\Repository\Team\TeamRepository::get()->team($row['team_id'])->getTurniereListe()->filter($filter2)->count(),
+        $anzahl_turniere($team_id)
     ];
 }
 

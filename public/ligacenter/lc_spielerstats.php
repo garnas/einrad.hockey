@@ -24,7 +24,6 @@ $header = [
         "platz",
         "rang",
         "block",
-        "timestamp",
         "team_id",
         "teamname",
         "plz",
