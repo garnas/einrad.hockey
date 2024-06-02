@@ -2,19 +2,15 @@
 
 namespace App\Repository;
 
+use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
-use Doctrine\DBAL\Logging\DebugStack;
-use Doctrine\Common\Util\Debug;
 use Doctrine\ORM\ORMSetup;
 
 use Env;
-use Db;
 
 class DoctrineWrapper
 {
     private static EntityManager $entity_manager;
-
-    public static DebugStack $logger;
 
     private function __construct(){}
 
@@ -25,36 +21,48 @@ class DoctrineWrapper
 
     public static function dump(mixed $var): void
     {
-        db::debug(Debug::dump($var,3,true, false));
+        echo "CHeckME";
+//        db::debug(Debug::dump($var,3,true, false));
     }
 
     public static function setup(): void
     {
         // Create a simple "default" Doctrine ORM configuration for Annotations
 //        $isDevMode = Env::IS_LOCALHOST;
-        $isDevMode = false;
-        $proxyDir = Env::BASE_PATH . "/tmp";
-        $cache = null;
-        $config = ORMSetup::createAnnotationMetadataConfiguration(
-            array(__DIR__),
-            $isDevMode,
-            $proxyDir,
-            $cache,
-        );
-
-        self::$logger = new DebugStack();
-
-        $config->setAutoGenerateProxyClasses(true);
-        $config->setSQLLogger(self::$logger);
+//        $isDevMode = false;
+//        $proxyDir = Env::BASE_PATH . "/tmp";
+//        $cache = null;
+//        $config = ORMSetup::createAttributeMetadataConfiguration(
+//            array(__DIR__),
+//            $isDevMode,
+//            $proxyDir,
+//            $cache,
+//        );
+//
+//        self::$logger = new DebugStack();
+//
+//        $config->setAutoGenerateProxyClasses(true);
+//        $config->setSQLLogger(self::$logger);
 
         // database configuration parameters
-        $connectionParams = [
-            'dbname' => Env::DATABASE,
-            'user' => Env::USER_NAME,
+//        $connectionParams = [
+//            'dbname' => ,
+//            'user' => Env::USER_NAME,
+//            'password' => ,
+//            'host' => Env::HOST_NAME,
+//            'driver' => 'pdo_mysql',
+//        ];
+        $dbParams = [
+            'driver'   => 'pdo_mysql',
+            'host'     => Env::HOST_NAME,
+            'user'     => Env::USER_NAME,
             'password' => Env::PASSWORD,
-            'host' => Env::HOST_NAME,
-            'driver' => 'pdo_mysql',
+            'dbname'   => Env::DATABASE,
         ];
-        self::$entity_manager = EntityManager::create($connectionParams, $config);
+        $paths = ["src/Entity"];
+        $isDevMode = Env::IS_LOCALHOST;
+        $config = ORMSetup::createAttributeMetadataConfiguration($paths, $isDevMode);
+        $connection = DriverManager::getConnection($dbParams, $config);
+        self::$entity_manager = new EntityManager($connection, $config);
     }
 }

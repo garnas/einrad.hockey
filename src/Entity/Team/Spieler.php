@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Spieler
  *
- * @ORM\Table(name="spieler", indexes={@ORM\Index(name="team_id", columns={"team_id"})})
- * @ORM\Entity
  */
+#[ORM\Entity]
+#[ORM\Table(name: "spieler", indexes: [new ORM\Index(name: "team_id", columns: ["team_id"])])]
 class Spieler
 {
     /**

@@ -7,55 +7,55 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SpielplanPaarungen
  *
- * @ORM\Table(name="spielplan_paarungen")
- * @ORM\Entity
  */
+#[ORM\Entity]
+#[ORM\Table(name: "spielplan_paarungen")]
 class SpielplanPaarungen
 {
     /**
      * @var string
      *
-     * @ORM\Column(name="spielplan_paarung", type="string", length=30, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
+    #[ORM\GeneratedValue(strategy: "NONE")]
+    #[ORM\Id]
+    #[ORM\Column(name: "spielplan_paarung", type: "string", length: 30, nullable: false)]
     private $spielplanPaarung;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="spiel_id", type="boolean", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
+    #[ORM\GeneratedValue(strategy: "NONE")]
+    #[ORM\Id]
+    #[ORM\Column(name: "spiel_id", type: "boolean", nullable: false)]
     private $spielId;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="team_a", type="boolean", nullable=false)
      */
+    #[ORM\Column(name: "team_a", type: "boolean", nullable: false)]
     private $teamA;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="team_b", type="boolean", nullable=false)
      */
+    #[ORM\Column(name: "team_b", type: "boolean", nullable: false)]
     private $teamB;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="schiri_a", type="boolean", nullable=false)
      */
+    #[ORM\Column(name: "schiri_a", type: "boolean", nullable: false)]
     private $schiriA;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="schiri_b", type="boolean", nullable=false)
      */
+    #[ORM\Column(name: "schiri_b", type: "boolean", nullable: false)]
     private $schiriB;
 
     public function getSpielplanPaarung(): ?string

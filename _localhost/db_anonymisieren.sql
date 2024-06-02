@@ -16,7 +16,7 @@ TRUNCATE `schiri_test`;
 TRUNCATE TABLE abstimmung_teams;
 TRUNCATE TABLE abstimmung_ergebnisse;
 -- Spieler
-UPDATE spieler SET vorname= 'Vorname',nachname='Nachname',jahrgang= 2020, geschlecht = 'd', letzte_saison = '27', timestamp = NULL;
+UPDATE spieler SET vorname= 'Vorname',nachname='Nachname', timestamp = NULL;
 
 -- Ligaleitung
 UPDATE ligaleitung SET passwort = NULL, email = 'test@einrad.hockey';

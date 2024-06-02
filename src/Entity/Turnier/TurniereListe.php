@@ -6,29 +6,28 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Team\nTeam;
 use DoctrineWrapper;
 use DateTime;
+use App\Entity\Turnier\Turnier;
 
 /**
  * TurniereListe
  *
- * @ORM\Table(name="turniere_liste", indexes={@ORM\Index(name="turniere_liste_ibfk_2", columns={"turnier_id"}), @ORM\Index(name="turniere_liste_ibfk_1", columns={"team_id"})})
- * @ORM\Entity
  */
+#[ORM\Entity]
+#[ORM\Table(name: "turniere_liste", indexes: [new ORM\Index(name: "turniere_liste_ibfk_2", columns: ["turnier_id"]), new ORM\Index(name: "turniere_liste_ibfk_1", columns: ["team_id"])])]
 class TurniereListe
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="liste_id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\GeneratedValue(strategy: "IDENTITY")]
+    #[ORM\Id] #[ORM\Column(name: "liste_id", type: "integer", nullable: false)]
     private $listeId;
 
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="freilos_gesetzt_am", type="datetime", nullable=false, options={"default"="current_timestamp(1)"})
      */
+    #[ORM\Column(name: "freilos_gesetzt_am", type: "datetime", nullable: false, options: ["default" => "current_timestamp(1)"])]
     private DateTime $freilosGesetztAm;
 
     /**
@@ -52,16 +51,16 @@ class TurniereListe
     /**
      * @var string
      *
-     * @ORM\Column(name="liste", type="string", length=0, nullable=false, options={"default"="setz"})
      */
+    #[ORM\Column(name: "liste", type: "string", length: 0, nullable: false, options: ["default" => "setz"])]
     private string $liste = 'setz';
 
     /**
      * @var nTeam
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Team\nTeam", inversedBy="turniereListe")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="team_id")
      */
+    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
+    #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "turniereListe")]
     private nTeam $team;
 
     /**
@@ -85,22 +84,22 @@ class TurniereListe
     /**
      * @var int|null
      *
-     * @ORM\Column(name="position_warteliste", type="integer", nullable=true)
      */
+    #[ORM\Column(name: "position_warteliste", type: "integer", nullable: true)]
     private ?int $positionWarteliste;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="freilos_gesetzt", type="string", length=0, nullable=false, options={"default"="Nein"})
      */
+    #[ORM\Column(name: "freilos_gesetzt", type: "string", length: 0, nullable: false, options: ["default" => "Nein"])]
     private string $freilosGesetzt = 'Nein';
 
     /**
      * @var Turnier
-     * @ORM\ManyToOne(targetEntity="App\Entity\Turnier\Turnier", inversedBy="liste")
-     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
      */
+    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
+    #[ORM\ManyToOne(targetEntity: Turnier::class, inversedBy: "liste")]
     private Turnier $turnier;
 
     /**

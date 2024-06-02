@@ -20,7 +20,7 @@ class TurnierRepository
     public EntityRepository $turnier;
     public EntityRepository $bericht;
 
-    private function __construct()
+    public function __construct()
     {
         $this->liste = DoctrineWrapper::manager()->getRepository(TurniereListe::class);
         $this->turnier = DoctrineWrapper::manager()->getRepository(Turnier::class);

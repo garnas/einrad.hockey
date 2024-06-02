@@ -44,6 +44,7 @@ if (isset($_POST['create_turnier'])) {
     // Turnier erstellen
     $turnier = new App\Entity\Turnier\Turnier();
     $turnier
+        ->setId(9999)
         ->setDatum($datum)
         ->setName($name)
         ->setArt($art)
@@ -70,7 +71,7 @@ if (isset($_POST['create_turnier'])) {
         ->setStartgebuehr($startgebuehr)
         ->setStartzeit($startzeit)
         ->setPlaetze($plaetze);
-    $turnier->setDetails($details);
+//    $turnier->setDetails($details);
 
 
 

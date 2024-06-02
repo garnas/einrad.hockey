@@ -2,52 +2,49 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TurniereGeloescht
  *
- * @ORM\Table(name="turniere_geloescht")
- * @ORM\Entity
  */
-class TurniereGeloescht
+#[ORM\Entity] #[ORM\Table(name: "turniere_geloescht")] class TurniereGeloescht
 {
     /**
      * @var int
      *
-     * @ORM\Column(name="turnier_id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\GeneratedValue(strategy: "IDENTITY")]
+    #[ORM\Id]
+    #[ORM\Column(name: "turnier_id", type: "integer", nullable: false)]
     private $turnierId;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
-     * @ORM\Column(name="datum", type="date", nullable=false)
      */
+    #[ORM\Column(name: "datum", type: "date", nullable: false)]
     private $datum;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ort", type="string", length=255, nullable=false)
      */
+    #[ORM\Column(name: "ort", type: "string", length: 255, nullable: false)]
     private $ort;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="grund", type="string", length=255, nullable=false)
      */
-    private $grund;
+    #[ORM\Column(name: "grund", type: "string", length: 255, nullable: false)] private $grund;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="saison", type="integer", nullable=false)
      */
-    private $saison;
+    #[ORM\Column(name: "saison", type: "integer", nullable: false)] private $saison;
 
     public function getTurnierId(): ?int
     {

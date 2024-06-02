@@ -8,127 +8,113 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TurniereDetails
  *
- * @ORM\Table(name="turniere_details")
- * @ORM\Entity
  */
+#[ORM\Entity]
+#[ORM\Table(name: "turniere_details")]
 class TurnierDetails
 {
 
     /**
-     * @var Turnier
-     * @ORM\Id
-     * @ORM\OneToOne(targetEntity="App\Entity\Turnier\Turnier", mappedBy="details")
-     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
-     */
-    private $turnier;
-
-    /**
      * @return Turnier
      */
-    public function getTurnier(): Turnier
-    {
-        return $this->turnier;
-    }
+    #[ORM\Id]
+    #[ORM\OneToOne(targetEntity: Turnier::class)]
+    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
+    private Turnier $turnier;
 
-    /**
-     * @param Turnier $turnier
-     * @return TurnierDetails
-     */
-    public function setTurnier(Turnier $turnier): TurnierDetails
-    {
-        $this->turnier = $turnier;
-        return $this;
-    }
+//    #[ORM\Id]
+//    #[ORM\Column(name: "turnier_id", type: "integer", nullable: false)]
+//    private int $turnier_id;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="hallenname", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: "hallenname", type: "string", length: 255, nullable: true)]
     private $hallenname;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="strasse", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: "strasse", type: "string", length: 255, nullable: true)]
     private $strasse;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="plz", type="string", length=6)
      */
+    #[ORM\Column(name: "plz", type: "string", length: 6)]
     private $plz;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="ort", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: "ort", type: "string", length: 255, nullable: true)]
     private $ort;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="haltestellen", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: "haltestellen", type: "string", length: 255, nullable: true)]
     private $haltestellen;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="plaetze", type="integer", nullable=true)
      */
+    #[ORM\Column(name: "plaetze", type: "integer", nullable: true)]
     private $plaetze;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="format", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: "format", type: "string", length: 255, nullable: true)]
     private $format;
 
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="startzeit", type="time")
      */
+    #[ORM\Column(name: "startzeit", type: "time")]
     private $startzeit;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="besprechung", type="string", length=0, nullable=true)
      */
+    #[ORM\Column(name: "besprechung", type: "string", length: 0, nullable: true)]
     private $besprechung;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="hinweis", type="string", length=1700, nullable=true)
      */
+    #[ORM\Column(name: "hinweis", type: "string", length: 1700, nullable: true)]
     private $hinweis;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="organisator", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: "organisator", type: "string", length: 255, nullable: true)]
     private $organisator;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="handy", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: "handy", type: "string", length: 255, nullable: true)]
     private $handy;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="startgebuehr", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: "startgebuehr", type: "string", length: 255, nullable: true)]
     private $startgebuehr;
 
     /**
@@ -258,7 +244,7 @@ class TurnierDetails
      */
     public function setPlaetze(int $plaetze): TurnierDetails
     {
-        $this->turnier->getLogService()->autoLog("Plätze", $this->plaetze ?? null, $plaetze);
+//        $this->turnier->getLogService()->autoLog("Plätze", $this->plaetze ?? null, $plaetze);
         $this->plaetze = $plaetze;
         return $this;
     }
@@ -399,6 +385,17 @@ class TurnierDetails
     {
         $this->turnier->getLogService()->autoLog("Startgebühr", $this->startgebuehr ?? null, $startgebuehr);
         $this->startgebuehr = $startgebuehr;
+        return $this;
+    }
+
+    public function getTurnier(): Turnier
+    {
+        return $this->turnier;
+    }
+
+    public function setTurnier(Turnier $turnier): TurnierDetails
+    {
+        $this->turnier = $turnier;
         return $this;
     }
 

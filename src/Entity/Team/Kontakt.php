@@ -8,47 +8,47 @@ use TeamsLiga;
 /**
  * TeamsKontakt
  *
- * @ORM\Table(name="teams_kontakt", indexes={@ORM\Index(name="team_id", columns={"team_id"})})
- * @ORM\Entity
  */
+#[ORM\Entity]
+#[ORM\Table(name: "teams_kontakt", indexes: [new ORM\Index(name: "team_id", columns: ["team_id"])])]
 class Kontakt
 {
     /**
      * @var int
      *
-     * @ORM\Column(name="teams_kontakt_id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\GeneratedValue(strategy: "IDENTITY")]
+    #[ORM\Id]
+    #[ORM\Column(name: "teams_kontakt_id", type: "integer", nullable: false)]
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255, nullable=false)
      */
+    #[ORM\Column(name: "email", type: "string", length: 255, nullable: false)]
     private string $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="public", type="string", length=0, nullable=false, options={"default"="Ja"})
      */
+    #[ORM\Column(name: "public", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])]
     private string $public = 'Ja';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="get_info_mail", type="string", length=0, nullable=false, options={"default"="Ja"})
      */
+    #[ORM\Column(name: "get_info_mail", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])]
     private string $getInfoMail = 'Ja';
 
     /**
      * @var nTeam
      *
-     * @ORM\ManyToOne(targetEntity="nTeam")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="team_id")
      */
+    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
+    #[ORM\ManyToOne(targetEntity: "nTeam")]
     private nTeam $team;
 
     public function getId(): ?int

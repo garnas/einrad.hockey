@@ -3,9 +3,9 @@
         "phpmailer/phpmailer": "^6.2",
         "mpdf/mpdf": "8.2.2",
         "gregwar/captcha": "1.*",
-        "doctrine/orm": "2.13.2",
+        "doctrine/orm": "*",
         "symfony/cache": "*",
-        "doctrine/annotations": "^1.13",
+        "doctrine/annotations": "*",
         "jenssegers/date": "^4.0",
         "spatie/array-to-xml": "^3.1",
         "phpoffice/phpspreadsheet": "^1.28"

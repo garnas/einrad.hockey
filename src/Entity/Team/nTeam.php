@@ -8,43 +8,44 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Tabelle;
+use App\Entity\Turnier\TurniereListe;
 
 /**
  * TeamsLiga
  *
- * @ORM\Table(name="teams_liga", uniqueConstraints={@ORM\UniqueConstraint(name="teamname", columns={"teamname"})})
- * @ORM\Entity
  */
+#[ORM\Entity]
+#[ORM\Table(name: "teams_liga", uniqueConstraints: [new ORM\UniqueConstraint(name: "teamname", columns: ["teamname"])])]
 class nTeam
 {
     /**
      * @var int
      *
-     * @ORM\Column(name="team_id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    #[ORM\Column(name: "team_id", type: "integer", nullable: false)]
+    #[ORM\GeneratedValue(strategy: "IDENTITY")]
+    #[ORM\Id]
+    private int $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="teamname", type="string", length=255, nullable=false)
      */
-    private $name;
+    #[ORM\Column(name: "teamname", type: "string", length: 255, nullable: false)]
+    private string $name;
 
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereListe", mappedBy="team", cascade={"all"}, indexBy="turnier_id")
      */
+    #[ORM\OneToMany(targetEntity: TurniereListe::class, mappedBy: "team", cascade: ["all"], indexBy: "turnier_id")]
     private Collection $turniereListe;
 
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\Turnier", mappedBy="ausrichter", cascade={"all"}, indexBy="turnier_id")
      */
+    #[ORM\OneToMany(targetEntity: Turnier::class, mappedBy: "ausrichter", cascade: ["all"], indexBy: "turnier_id")]
     private Collection $ausgerichteteTurniere;
 
     /**
@@ -106,7 +107,8 @@ class nTeam
         $this->turniereListe = $turniereListe;
     }
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->turniereListe = new ArrayCollection();
         $this->ausgerichteteTurniere = new ArrayCollection();
     }
@@ -210,7 +212,6 @@ class nTeam
         $this->kader = $kader;
         return $this;
     }
-
 
 
     public function id(): ?int

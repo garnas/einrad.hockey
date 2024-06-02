@@ -18,7 +18,7 @@ class TeamRepository
 
     private EntityRepository $team;
 
-    private function __construct()
+    public function __construct()
     {
         $this->team = DoctrineWrapper::manager()->getRepository(nTeam::class);
     }

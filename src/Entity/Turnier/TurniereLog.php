@@ -9,54 +9,43 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TurniereLog
  *
- * @ORM\Table(name="turniere_log", indexes={@ORM\Index(name="turnier_id", columns={"turnier_id"})})
- * @ORM\Entity
  */
-class TurniereLog
+#[ORM\Entity] #[ORM\Table(name: "turniere_log", indexes: [new ORM\Index(name: "turnier_id", columns: ["turnier_id"])])] class TurniereLog
 {
     /**
      * @var int
      *
-     * @ORM\Column(name="turnier_log_id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private int $id;
+    #[ORM\GeneratedValue(strategy: "IDENTITY")] #[ORM\Id] #[ORM\Column(name: "turnier_log_id", type: "integer", nullable: false)] private int $id;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="turnier_id", type="integer", nullable=false)
      */
-    private $turnierId;
+    #[ORM\Column(name: "turnier_id", type: "integer", nullable: false)] private $turnierId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="log_text", type="string", length=9000, nullable=false)
      */
-    private $logText;
+    #[ORM\Column(name: "log_text", type: "string", length: 9000, nullable: false)] private $logText;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="autor", type="string", length=255, nullable=false)
      */
-    private $autor;
+    #[ORM\Column(name: "autor", type: "string", length: 255, nullable: false)] private $autor;
 
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="zeit", type="datetime", nullable=false, options={"default"="current_timestamp(1)"})
      */
-    private DateTime $zeit;
+    #[ORM\Column(name: "zeit", type: "datetime", nullable: false, options: ["default" => "current_timestamp(1)"])] private DateTime $zeit;
 
     /**
      * @var Turnier
-     * @ORM\ManyToOne(targetEntity="App\Entity\Turnier\Turnier", inversedBy="turnier")
-     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
      */
-    private Turnier $turnier;
+    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")] #[ORM\ManyToOne(targetEntity: "App\Entity\Turnier\Turnier", inversedBy: "turnier")] private Turnier $turnier;
 
     /**
      * @return Turnier
