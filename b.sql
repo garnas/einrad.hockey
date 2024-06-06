@@ -76,6 +76,6 @@ VALUES                  (1191,1,1056,86,244,868),
 
 insert into spielplan_details (spielplan, spielplan_paarung, plaetze, anzahl_halbzeiten, halbzeit_laenge, puffer,
                                pausen, faktor)
-values ('12er_jgj', null, 12, 1, 15, 5, '56,900', 0);
+values ('12er_jgj', null, 12, 1, 15, 5, '56,900', 12);
 
 UPDATE turniere_liga SET spielplan_vorlage='12er_jgj', phase='spielplan', turniere_liga.spielplan_datei = 'https://einrad.hockey/liga/b' WHERE turnier_id = 1191;

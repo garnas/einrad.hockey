@@ -516,7 +516,7 @@ class nTurnier
                 ON teams_liga.team_id = turniere_liga.ausrichter
                 WHERE phase = 'ergebnis'
                 AND saison = ?
-                AND (art = 'I' OR art = 'II' OR art = 'III')
+                AND (art = 'I' OR art = 'II' OR art = 'III' OR art = 'final')
                 ORDER BY turniere_liga.datum " . ($asc ? "asc" : "desc");
         return db::$db->query($sql, $saison)->fetch_objects(__CLASS__, key: 'turnier_id');
     }

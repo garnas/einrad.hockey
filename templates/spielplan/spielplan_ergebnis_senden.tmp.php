@@ -1,6 +1,7 @@
 <form method="post">
     <p>
         <button type="submit"
+               <?= $spielplan->turnier->is_finalturnier() ? "disabled" : "" ?>
                name="turnierergebnis_speichern"
                class="w3-block w3-button w3-tertiary <?= $spielplan->check_turnier_beendet() ?: 'w3-opacity' ?>"
         >
