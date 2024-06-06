@@ -48,6 +48,29 @@ class spielplan_final
             Helper::reload('/liga/spielplan_finale.php', '?turnier_id=' . $turnier_id);
         }
     }
+    public function get_spielplan_b_2024(): Spielplan_JgJ
+    {
+        $spielplan = new Spielplan_JgJ($this->turnier);
+
+        $spielzeit = (
+                $spielplan->details["anzahl_halbzeiten"]
+                * $spielplan->details["halbzeit_laenge"]
+                + $spielplan->details["puffer"]
+            ) * 60; // In Sekunden für Unixzeit
+
+        $startzeit = strtotime($this->turnier->get_startzeit());
+        $spiele = $spielplan->spiele;
+        foreach ($spiele as $spiel_id => $spiel) {
+            $spiele[$spiel_id]["zeit"] = date("H:i", $startzeit);
+            if ($spiel_id % 2 == 0) {
+                $startzeit += $spielzeit + $spielplan->get_pause($spiel_id) * 60;
+            }
+        }
+
+        $spielplan->spiele = $spiele;
+
+        return $spielplan;
+    }
 
     public function get_spielplan_b(): Spielplan_JgJ
     {

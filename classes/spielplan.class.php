@@ -195,6 +195,9 @@ class Spielplan
      */
     public static function get_vorlage(nTurnier $turnier, ?int $anzahl_teams = NULL): false|string
     {
+        if ($turnier->turnier_id == 1191) {
+            return "12er_jgj";
+        }
         // Existiert ein manuell hochgeladener Spielplan?
         if (!empty($turnier->get_spielplan_datei())) {
             return false;
