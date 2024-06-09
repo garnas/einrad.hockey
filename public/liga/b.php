@@ -28,9 +28,7 @@ Html::$content = "Der Spielplan für das Einradhockey-Turnier in " . $spielplan-
     . " am " . $datum;
 
 include '../../templates/header.tmp.php';
-if ($turnier->get_phase() == "ergebnis") {
     Html::set_confetti();
-}
 
 ?>
     <!-- Überschrift -->
