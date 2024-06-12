@@ -59,7 +59,7 @@ if (Env::ACTIVE_FINAL_DISCORD) {
     <div class="w3-center">
         <iframe
                 width="100%"
-                height="100%"
+                height="960px"
                 class="w3-border-primary w3-card-4"
                 style="border:5px solid;"
                 src="https://docs.google.com/spreadsheets/d/e/2PACX-1vS8ie9atLJjIc9yhgsZRB8jRXSKoeioikMSW0kvfsTT7_qCvXEx51eaG-D_hRFo7eiam5R9pBs8usBA/pubhtml?gid=381383901&amp;single=true&amp;widget=true&amp;headers=true"></iframe>
