@@ -48,7 +48,7 @@ if ($turnier->get_phase() == "ergebnis") {
     </div>
     <p>
         <b>
-            <?= Html::link('https://einrad.hockey/spielplan_augustdorf.pdf', 'PDF-Spielplan', true, 'download')?>
+            <?= Html::link('https://einrad.hockey/spielplan_moerfelden.pdf', 'PDF-Spielplan', true, 'download')?>
         </b>
     </p>
 <?php
