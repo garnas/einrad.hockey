@@ -5,6 +5,7 @@
 require_once '../../init.php';
 
 $saison = (isset($_GET['saison'])) ? (int)$_GET['saison'] : Config::SAISON;
+$saison = 29; // Workaround für die Anzeige der bisherigen Ergebnisse bis zum Start der Saison
 $turnier_ergebnisse = Tabelle::get_all_ergebnisse($saison);
 
 if (empty($turnier_ergebnisse)) {
