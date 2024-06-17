@@ -101,7 +101,8 @@ class Neuigkeit
         foreach ($neuigkeiten as $key => $neuigkeit) {
             if (
                 $neuigkeit['eingetragen_von'] === 'Ligaausschuss'
-                || $neuigkeit['eingetragen_von'] === "Öffiausschuss"
+                || $neuigkeit['eingetragen_von'] === "Öffentlichkeitsausschuss"
+                || $neuigkeit['eingetragen_von'] === "Nationalkader"
             ) {
                 $neuigkeiten[$key]['inhalt'] = htmlspecialchars_decode($neuigkeit['inhalt'], ENT_QUOTES);
                 $neuigkeiten[$key]['titel'] = htmlspecialchars_decode($neuigkeit['titel'], ENT_QUOTES);
