@@ -7,7 +7,7 @@ class Config
      */
     public const SAISON = 30; // Saison 0 = Jahr 1995;
     public const SAISON_WECHSEL = "17.06.2024"; // Wichtig für zweites Freilos
-    public const SAISON_ANFANG = '19.08.2024';
+    public const SAISON_ANFANG = '17.08.2024';
     public const SAISON_ENDE = '01.06.2025';
 
     /**
