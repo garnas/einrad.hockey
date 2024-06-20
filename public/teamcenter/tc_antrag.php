@@ -14,7 +14,6 @@ if (isset($_POST['absenden'])) {
     $name = $_POST['name'];
     $bereich = $_POST['bereich'];
     $betrag = $_POST['betrag'];
-    $iban = $_POST['iban'];
     $text = $_POST['text'];
     if (empty($absender) || empty($bereich) || empty($text)) {
         Html::error("Bitte Formular ausfüllen");
@@ -28,7 +27,7 @@ if (isset($_POST['absenden'])) {
         $mailer->addReplyTo($absender, $name); // Absenderemail und -name setzen
         $mailer->addAddress(Env::LAMAIL); // Empfängeradresse
         $mailer->Subject = 'Antrag ' . $bereich; // Betreff der Email
-        $mailer->Body = "Bereich: $bereich\nBetrag: $betrag\nIBAN: $iban\n\n\n"
+        $mailer->Body = "Bereich: $bereich\nBetrag: $betrag\n\n\n"
             . $text
             . "\n\n\nAntwort an: " . $absender;
 
@@ -76,6 +75,9 @@ include '../../templates/header.tmp.php';
             <br>
             <?= Html::mailto(Env::LAMAIL) ?>
         </p>
+        <p><span class="">
+                - Anträge bitte bis zum 31.07 stellen -
+            </span></p>
         <form method="post">
             <p>
                 <label class="w3-text-grey" for="name">
@@ -129,23 +131,10 @@ include '../../templates/header.tmp.php';
             <p>
                 <label class="w3-text-grey" for="betrag">
                     <?= Html::icon('euro') ?>
-                    Förderbetrag
+                    Gewünschter Förderbetrag
                 </label>
                 <input class="w3-input w3-border w3-border-primary" <?= Html::value_from_post("betrag") ?> type="number"
                        step="1" min="1" name="betrag" id="betrag">
-            </p>
-            <p>
-                <label class="w3-text-grey" for="iban">
-                    <?= Html::icon("account_balance") ?>
-                    IBAN
-                </label>
-                <input class="w3-input w3-border w3-border-primary"
-                       type="text"
-                       id="iban"
-                       name="iban"
-                       value="<?= $_POST['iban'] ?? '' ?>"
-                >
-                <span class="w3-text-grey w3-small">optional</span>
             </p>
             <p>
                 <label class="w3-text-grey" for="text">
