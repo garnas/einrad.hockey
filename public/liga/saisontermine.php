@@ -15,21 +15,6 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-bordered">
         <tr>
-            <td class="w3-primary" colspan="2"><b>Saison 2023/2024</b></td>
-        </tr>
-        <tr>
-            <th class="w3-primary-3">Reguläre Spielzeit</th>
-            <td>19. August 2023 – 26. Mai 2024</td>
-        </tr>
-        <tr>
-            <th class="w3-primary-3">B/C-Finalwochenende</th>
-            <td>08. Juni 2024 + 09. Juni 2024</td>
-        </tr>
-        <tr>
-            <th class="w3-primary-3">Deutsche Meisterschaft</th>
-            <td>15. Juni 2024 + 16. Juni 2024</td>
-        </tr>
-        <tr>
             <td class="w3-primary" colspan="2"><b>Saison 2024/2025</b></td>
         </tr>
         <tr>
@@ -43,6 +28,21 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
         <tr>
             <th class="w3-primary-3">Deutsche Meisterschaft</th>
             <td>21. + 22. Juni 2025</td>
+        </tr>
+        <tr>
+            <td class="w3-primary" colspan="2"><b>Saison 2024/2025</b></td>
+        </tr>
+        <tr>
+            <th class="w3-primary-3">Reguläre Spielzeit</th>
+            <td>16. August 2025 – 31. Mai 2026</td>
+        </tr>
+        <tr>
+            <th class="w3-primary-3">B/C-Finalwochenende</th>
+            <td>13. Juni 2026 + 14. Juni 2026</td>
+        </tr>
+        <tr>
+            <th class="w3-primary-3">Deutsche Meisterschaft</th>
+            <td>20. Juni 2026 + 21. Juni 2026</td>
         </tr>
     </table>
 </div>
