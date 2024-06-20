@@ -30,7 +30,7 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
             <td>21. + 22. Juni 2025</td>
         </tr>
         <tr>
-            <td class="w3-primary" colspan="2"><b>Saison 2024/2025</b></td>
+            <td class="w3-primary" colspan="2"><b>Saison 2025/2026</b></td>
         </tr>
         <tr>
             <th class="w3-primary-3">Reguläre Spielzeit</th>
