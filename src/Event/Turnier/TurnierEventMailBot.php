@@ -30,6 +30,7 @@ class TurnierEventMailBot
                 if (
                     TurnierService::isSetzBerechtigt($turnier, $team)
                     && !TeamValidator::isAmKalenderTagAufSetzliste($turnier, $team)
+                    && $turnier->getAusrichter()->id() != $team->id()
                 ) {
                     $betreff = "Neues " . $turnier->getBlock() . "-Turnier in " . $turnier->getDetails()->getOrt();
                     ob_start();
