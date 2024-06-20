@@ -472,7 +472,7 @@ class Team
     public function set_schiri_freilos(): void
     {
        if ($this->check_schiri_freilos_erhaltbar()) {
-                Html::info("Das Team '" . $this->details['teamname'] . "' hat ein zweites Freilos erhalten.");
+                Html::info("Das Team '" . $this->details['teamname'] . "' hat ein Freilos für zwei Schiris erhalten.");
                $sql = "
                     UPDATE teams_liga
                     SET freilose = freilose + 1, zweites_freilos = ?

@@ -317,13 +317,13 @@ class MailBot
     }
 
     /**
-     * Erstellt eine Mail in der Datenbank, dass ein Team ein zweites Freilos erhalten hat.
+     * Erstellt eine Mail in der Datenbank, dass ein Team ein Freilos für zwei Schiris erhalten hat.
      *
      * @param Team $team
      */
     public static function mail_schiri_freilos(Team $team): void
     {
-        $betreff = "Zweites Freilos erhalten";
+        $betreff = "Freilos für zwei Schiris erhalten";
         ob_start();
             include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
             include(Env::BASE_PATH . "/templates/mails/mail_schiri_freilos.tmp.php");

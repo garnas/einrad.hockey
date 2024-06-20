@@ -79,7 +79,7 @@ include '../../templates/header.tmp.php';
     <p>&sum; Schiris: <span class="w3-text-green"><?=$max_schiris?></span></p>
     <p>&sum; Teams: <span class="w3-text-green"><?=count($teams)?></span></p>
     <p>&sum; Teams mit zwei oder mehr Schiris: <span class="w3-text-green"><?=$teams_mit_zwei_schiris?></span></p>
-    <p>&sum; Teams, die ihr zweites Freilos erhalten haben: <span class="w3-text-green"><?=$teams_zweites_freilos_erhalten?></span></p>
+    <p>&sum; Teams, die ihr Freilos für zwei Schiris erhalten haben: <span class="w3-text-green"><?=$teams_zweites_freilos_erhalten?></span></p>
 </div>
 
 <!-- Button 2. Freilos 
@@ -88,7 +88,7 @@ include '../../templates/header.tmp.php';
     <span class="w3-text-grey">Es werden Mails an die betroffenen Teams versendet<br></span>
 </form>-->
 <p><i>Legende:<br>
-    <span class="w3-pale-green">zweites Freilos erhalten</span>
+    <span class="w3-pale-green">Freilos für zwei Schiris erhalten</span>
     <br>
     <span class="w3-pale-red">keine fünf Spieler im Kader</span>
 </i></p>
