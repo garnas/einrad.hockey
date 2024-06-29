@@ -147,9 +147,14 @@ class SchiriTest
         } else {
             $fragennummer = '';
         }
+        if ((isset($_GET['md5sum'])) && (!isset($_POST['beantworten']))) {
+            $id_infotext = '';
+        } else {
+            $id_infotext = '(ID: ' . $frage_id . ')' ;
+        }
         echo '<h3 class="w3-topbar">' . $fragennummer .
-            '<span style="float:right;color:gray;font-size:60%">(ID: ' .
-            $frage_id . ')</span></h3>';
+            '<span style="float:right;color:gray;font-size:60%">' .
+            $id_infotext . '</span></h3>';
         echo '<h4>' . $frage['frage'] . '</h4>';
         if (!empty($frage['name_video'])) { # Video zur Frage:
             echo '<div style="max-width: 500px">';
