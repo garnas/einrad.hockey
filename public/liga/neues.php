@@ -44,7 +44,7 @@ foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit) { //Todo in get_neuikgei
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Html::info("Das Eintragen von neuen Ligaturnieren für die Saions 24/25 ist ab sofort möglich.");
+Html::info("Das Eintragen von neuen Ligaturnieren für die Saison 24/25 ist ab sofort möglich.");
 Html::$titel = "Neuigkeiten | Deutsche Einradhockeyliga";
 Html::$content = "Hier findet man die Neuigkeiteneinträge des Ligaausschusses und der Teams der Deutschen Einradhockeyliga.";
 include '../../templates/header.tmp.php'; ?>
