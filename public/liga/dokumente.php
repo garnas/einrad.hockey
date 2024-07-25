@@ -45,7 +45,6 @@ include '../../templates/header.tmp.php';
             Schiedsrichter Checkliste für praktische Prüfung
         </p>
     </a>
-    <p>Hinweis: Die Finalturniermodi werden überarbeitet und zu einem unbekannten späteren Zeitpunkt veröffentlicht.</p>
     <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">23.10.2023</p>
 </div>
 <div class="w3-panel w3-card">
