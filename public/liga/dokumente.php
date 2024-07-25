@@ -14,20 +14,19 @@ include '../../templates/header.tmp.php';
 <h1 class="w3-text-grey">Dokumente</h1>
 <div class="w3-panel w3-card">
     <h2 class="w3-text-primary">Modus</h2>
-    <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS_KURZ ?>">
         <p>
             <i class="w3-xxlarge w3-text-gray material-icons">insert_drive_file</i>
             Zusammenfassung Ligamodus
         </p>
     </a>
-    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS ?>?version=2023-10-23">
+    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS ?>?version=2024-07-25">
         <p>
             <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i>
             Ligamodus
         </p>
     </a>
-    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_TURNIER ?>">
+    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_TURNIER ?>?version=2024-07-25">
         <p>
             <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i>
             Turniermodi
@@ -45,11 +44,9 @@ include '../../templates/header.tmp.php';
             Schiedsrichter Checkliste für praktische Prüfung
         </p>
     </a>
-    <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">23.10.2023</p>
 </div>
 <div class="w3-panel w3-card">
     <h2 class="w3-text-primary">Spielregeln</h2>
-    <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_REGELN_KURZ ?>">
         <p>
             <i class="w3-xxlarge w3-text-grey material-icons">insert_drive_file
@@ -71,11 +68,9 @@ include '../../templates/header.tmp.php';
             IUF-Rules (only international competitions)
         </p>
     </a>
-    <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">15.08.2022</p>
 </div>
 <div class="w3-panel w3-card">
     <h2 class="w3-text-primary">Sonstiges</h2>
-    <p class="w3-text-grey w3-border-grey w3-border-top">Saison <?= Html::get_saison_string() ?></p>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_CHECK_PDF ?>">
         <p>
             <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file
@@ -104,7 +99,6 @@ include '../../templates/header.tmp.php';
             alte Spielplanvorlagen
         </p>
     </a>
-    <p class="w3-text-grey w3-border-grey w3-border-bottom w3-right-align">15.08.2022</p>
 </div>
 
 <?php include '../../templates/footer.tmp.php';
