@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Tabelle;
+use Helper;
 
 /**
  * TeamsLiga
@@ -268,7 +269,15 @@ class nTeam
 
     public function setPasswort(?string $passwort): self
     {
-        $this->passwort = $passwort;
+        $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
+        if (!is_string($passwort)) {
+            trigger_error("set_passwort fehlgeschlagen.", E_USER_ERROR);
+        }
+
+        // Befindet sich das Team im Teamcenter ihr Passwort geändert?
+        $pw_geaendert = (Helper::$teamcenter) ? 'Ja' : 'Nein';
+        $this->setPasswortGeaendert($pw_geaendert);
+        $this->passwort = $passwort_hash;
 
         return $this;
     }

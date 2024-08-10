@@ -1,47 +1,37 @@
 <?php
 
+use App\Repository\Team\TeamRepository;
+
 if (isset($_POST['change_la']) && Helper::$ligacenter) {
     $error = false;
     $neuer_teamname = $_POST['teamname'];
-    $freilose = (int) $_POST['freilose'];
+    $freilose = (int)$_POST['freilose'];
     $passwort = $_POST['passwort'];
 
-    if ($neuer_teamname === $team->details['teamname']
-        && empty ($passwort)
-        && $freilose === $team->details['freilose']
-    ) {
-        Html::error("Es wurden keine Daten verändert");
-        $error = true;
-    }
     if (
         !empty(Team::name_to_id($neuer_teamname))
-        && $neuer_teamname != htmlspecialchars_decode($team->details['teamname'])
+        && $neuer_teamname != htmlspecialchars_decode($team->getName())
     ) {
         Html::error("Der Teamname existiert bereits.");
         $error = true;
     }
-    if (
-        empty($neuer_teamname)
-        || $freilose < 0
-    ) {
-        Html::error("Felder dürfen nicht leer sein");
-        $error = true;
-    }
+
 
     if (!$error) {
-        if ($neuer_teamname != $team->details['teamname']) {
-            $team->set_name($neuer_teamname);
-            Html::info("Der Teamname wurde geändert");
+        if ($neuer_teamname != $team->getName()) {
+            $team->setName($neuer_teamname);
+            Html::info("Der Teamname wird geändert");
         }
-        if ($freilose != $team->details['freilose']) {
-            $team->set_freilose($freilose);
-            Html::info("Anzahl der Freilose wurde geändert");
+        if (!empty($_POST["freilos_grund"])) {
+            $team->addFreilos($_POST["freilos_grund"]);
+            Html::info("Freilos wird hinzugefügt");
         }
         if (!empty($passwort)) {
-            $team->set_passwort($passwort, 'Nein');
-            Html::info("Passwort wurde geändert");
+            $team->setPasswort($passwort);
+            Html::info("Passwort wird geändert");
         }
+        TeamRepository::get()->speichern($team);
     }
-    header('Location: lc_teamdaten_aendern.php?team_id=' . $team->id);
-    die();
+    Helper::reload("ligacenter/lc_teamdaten_aendern.php?team_id=" . $team->id());
+
 }

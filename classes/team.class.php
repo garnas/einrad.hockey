@@ -606,7 +606,7 @@ class Team
         // Passwort hashen
         $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
         if (!is_string($passwort)) {
-            trigger_error("set_passwort fehlgeschlagen.", E_USER_ERROR);
+            trigger_error("Passwort setzen fehlgeschlagen.", E_USER_ERROR);
         }
 
         // Befindet sich das Team im Teamcenter ihr Passwort geändert?

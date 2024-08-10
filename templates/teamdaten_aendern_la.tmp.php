@@ -10,7 +10,7 @@
                            type='text'
                            id='teamname'
                            name='teamname'
-                           value='<?= $team->details['teamname'] ?>'
+                           value='<?= $team->getName() ?>'
                     >
                 </p>
             </div>
@@ -26,12 +26,12 @@
             </div>
             <div class="w3-half">
                 <p>
-                    <label for="freilose" class="w3-text-primary">Freilose</label>
+                    <label for="freilos_grund" class="w3-text-primary">Neues Freilos hinzufügen</label>
                     <input class='w3-input w3-border w3-border-primary'
-                           type='number'
-                           id='freilose'
-                           name='freilose'
-                           value='<?= $team->details['freilose'] ?>'
+                           type='text'
+                           id='freilos_grund'
+                           name='freilos_grund'
+                           placeholder='Grund für Erhalt'
                     >
                 </p>
             </div>

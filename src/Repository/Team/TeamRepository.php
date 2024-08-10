@@ -94,4 +94,16 @@ class TeamRepository
         return $this->team->findOneBy(['name' => $name]);
     }
 
+    public function deleteFoto(nTeam $team): void
+    {
+        $teamfoto = $team->getDetails()->getTeamfoto();
+        $team->getDetails()->setTeamfoto(null);
+        $this->speichern($team);
+
+        # Datei löschen
+        if (file_exists($teamfoto)) {
+            unlink($teamfoto);
+        }
+    }
+
 }
