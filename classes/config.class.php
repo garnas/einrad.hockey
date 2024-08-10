@@ -62,7 +62,7 @@ class Config
     /**
      * Ligagebühr
      */
-    public const LIGAGEBUEHR = "30&nbsp;€";
+    public const LIGAGEBUEHR = "50&nbsp;€";
 
     /**
      * Kontaktcenter
