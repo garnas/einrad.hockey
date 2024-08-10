@@ -34,7 +34,7 @@ if ($last_turnier) {
             <i class="w3-text-grey">Ligaturniere müssen zwischen 9:00&nbsp;Uhr und 20:00&nbsp;Uhr stattfinden</i>
         </p>
         <p>
-            <input class="w3-check" type="checkbox" id="besprechung" name="besprechung" <?php if(($_POST['besprechung'] ?? '') == "Ja"){?> checked <?php }//endif?> value="Ja">
+            <input class="w3-check" type="checkbox" id="besprechung" name="besprechung" <?php if(($_POST['besprechung'] ?? '') == "Ja"){?>checked<?php }//endif?> value="Ja">
             <label for="besprechung" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer"> Gemeinsame Besprechung aller Teams 15 min vor Turnierbeginn</label>
         </p>
     </div>
@@ -90,7 +90,7 @@ if ($last_turnier) {
         <p>
             <label class="w3-text-primary" for="plaetze">Plätze</label>
             <select required class="w3-select w3-border w3-border-primary" id="plaetze" name="plaetze">
-                <option <?php if (($_POST['plaetze'] ?? '') == '4'){?> selected <?php } //endif?> id="plaetze_4" value="4">4 Teams (nur blockeigene Turniere oder Spaßturnier)</option>
+                <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '4'){?> selected <?php } //endif?> value="4">4 Teams</option>
                 <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '5'){?> selected <?php } //endif?> value="5">5 Teams</option>
                 <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '6'){?> selected <?php } //endif?> value="6">6 Teams</option>
                 <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '7'){?> selected <?php } //endif?> value="7">7 Teams</option>
@@ -102,6 +102,7 @@ if ($last_turnier) {
                     <option <?php if (($_POST['plaetze'] ?? '') == '12'){?> selected <?php } //endif?> value="12">12 Teams</option>
                 <?php endif; ?>
             </select>
+            <span class="w3-text-grey">Achtung: Ab der Setzphase ist eine Erweiterung des Turniers auf mehr Plätze nicht mehr möglich.</span>
         </p>
     </div>
 
@@ -154,10 +155,10 @@ if ($last_turnier) {
     <div class="w3-panel w3-card-4">
         <h3>Turnierdetails</h3>
         <p>
-            <label class="w3-text-primary" for="text">Hinweistext</label>
+            <label class="w3-text-primary" for="text">Hinweistext (optional)</label>
             <textarea class="w3-input w3-border w3-border-primary" onkeyup="woerter_zaehlen(1500);" maxlength="1500"
                       rows="4" id="text" name="hinweis"
-                      required><?=stripcslashes($_POST['hinweis'] ?? $last_hinweis)?></textarea>
+                      ><?=stripcslashes($_POST['hinweis'] ?? $last_hinweis)?></textarea>
             <?= $last_hinweis ? '<i class="w3-text-grey">Der Hinweis des letzten Turniers wurde übernommen.</i>' : '' ?>
         <p id="counter"><p>
         </p>

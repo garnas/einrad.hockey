@@ -67,7 +67,7 @@ include '../../templates/header.tmp.php';
                 <?=$turnier->getDetails()->getStartzeit()->format("H:i")?>&nbsp;Uhr
                 <?php if ($turnier->hasBesprechung()): ?>
                     <p>
-                        <i>Alle Teams sollen sich um <?= $turnier->getDetails()->getBesprechungUhrzeit() ?> Uhr zu einer gemeinsamen Turnierbesprechung einfinden.'</i>
+                        <i>Alle Teams sollen sich um <?= $turnier->getDetails()->getBesprechungUhrzeit() ?> Uhr zu einer gemeinsamen Turnierbesprechung einfinden.</i>
                     </p>
                 <?php endif; ?>
             </td>

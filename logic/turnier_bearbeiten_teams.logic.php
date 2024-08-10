@@ -1,7 +1,6 @@
 <?php
 
 // Formularauswertung
-use App\Repository\DoctrineWrapper;
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierValidatorService;

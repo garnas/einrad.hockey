@@ -62,6 +62,7 @@ use App\Service\Turnier\TurnierValidatorService;
                     id="besprechung"
                     name="besprechung"
                     <?= ($turnier->getDetails()->getBesprechung() === "Ja") ? "checked" : "" ?>
+                    value="Ja"
             >
             <label style="cursor: pointer;" class="w3-hover-text-secondary w3-text-primary" for="besprechung"> Gemeinsame Besprechung aller Teams 15 min vor Turnierbeginn</label>
         </p>
@@ -69,11 +70,7 @@ use App\Service\Turnier\TurnierValidatorService;
         <p>
             <label class="w3-text-primary" for="plaetze">Plätze</label>
             <select required class="w3-select w3-border w3-border-primary" id="plaetze" name="plaetze">
-                <option <?php if($turnier->getDetails()->getPlaetze() == '4'){?>selected<?php }?>
-                    <?= (($turnier->getArt() != "I" || $turnier->getBlock() == "ABCDEF")
-                            && $turnier->getArt() != "spass")
-                            ? "disabled" : "" ?>
-                        value="4">4 Teams (nur blockeigene Turniere der Art I)</option>
+                <option <?php if($turnier->getDetails()->getPlaetze() == '4'){?>selected<?php }?> value="4">4 Teams</option>
                 <option <?php if($turnier->getDetails()->getPlaetze() == '5'){?>selected<?php }?> value="5">5 Teams</option>
                 <option <?php if($turnier->getDetails()->getPlaetze() == '6'){?>selected<?php }?> value="6">6 Teams</option>
                 <option <?php if($turnier->getDetails()->getPlaetze() == '7'){?>selected<?php }?> value="7">7 Teams</option>
@@ -85,10 +82,7 @@ use App\Service\Turnier\TurnierValidatorService;
                     <option <?php if($turnier->getDetails()->getPlaetze() == '12'){?>selected<?php }?> value="12">12 Teams</option>
                 <?php endif; ?>
             </select>
-        </p>
-        <p class="w3-text-grey">
-            <b>Hinweis:</b> Der Turniermodus von JgJ (5er, 6er, und 7er-Turnier) auf Gruppe (8er-Turnier) kann in der
-            Setzphase nur mit Abstimmung mit dem Ligaausschuss geändert werden.
+            <span class="w3-text-grey">Achtung: Ab der Setzphase ist eine Erweiterung des Turniers auf mehr Plätze nicht mehr möglich.</span>
         </p>
     </div>
     <div class="w3-panel w3-card-4">
@@ -124,7 +118,8 @@ use App\Service\Turnier\TurnierValidatorService;
         <p>
             <label class="w3-text-primary" for="text">Hinweistext</label>
             <i class="w3-text-grey">(optional)</i>
-            <textarea class="w3-input w3-border w3-border-primary" onkeyup="woerter_zaehlen(1500);" maxlength="1500" rows="4" id="text" name="hinweis"><?=$turnier->getDetails()->getHinweis()?></textarea>
+            <textarea class="w3-input w3-border w3-border-primary" onkeyup="woerter_zaehlen(1500);" maxlength="1500"
+                      rows="4" id="text" name="hinweis"><?=$turnier->getDetails()->getHinweis()?></textarea>
             <p id="counter"><p>
         </p>
         <p>

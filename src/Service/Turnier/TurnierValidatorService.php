@@ -13,9 +13,15 @@ class TurnierValidatorService
 {
     public static function hasLaRights(Turnier $turnier): bool
     {
-        return Helper::$ligacenter ||
-            ($turnier->isFinalTurnier() &&
-                TurnierService::isAusrichter($turnier, $_SESSION['logins']['team']['id']));
+        return
+            Helper::$ligacenter
+            ||
+            (
+                $turnier->isFinalTurnier() &&
+                TurnierService::isAusrichter($turnier, $_SESSION['logins']['team']['id'])
+            )
+            ||
+            $turnier->isSpassTurnier();
     }
 
     private Turnier $turnier;
@@ -67,11 +73,8 @@ class TurnierValidatorService
         if ($turnier->isWartePhase()) {
             return true;
         }
-        if (
-            ($turnier->getDetails()->getPlaetze() === 8 && $plaetze_before < 8)
-            || ($turnier->getDetails()->getPlaetze() < 8 && $plaetze_before === 8)
-        ) {
-            Html::error("Der Turniermodus zwischen JgJ und Gruppe benötigt in der Setzphase die Abstimmung mit dem Ligaausschuss.");
+        if ($turnier->isSetzPhase() && $plaetze_before < $turnier->getDetails()->getPlaetze()) {
+            Html::error("Turnierplätze können ab der Setzphase nicht mehr erweitert werden.");
             return false;
         }
         return true;
@@ -155,19 +158,10 @@ class TurnierValidatorService
             return false;
         }
 
-        if ($this->turnier->getArt() != "I" && $this->turnier->getArt() != "spaß" && $plaetze == 4) {
-            Html::error("4er-Turniere dürfen nur blockeigene Turniere sein.");
-            return false;
-        }
-        if ($this->turnier->isSofortOeffnen() && $plaetze == 4) {
-            Html::error("4er-Turniere dürfen nicht als blockfreie Turniere ausgerichtet werden.");
-            return false;
-        }
-
         if (
             (Helper::$teamcenter && !self::hasLaRights($this->turnier))
             && $plaetze <= 8
-            && $plaetze >= 5
+            && $plaetze >= 4
         ) {
             return true;
         }
@@ -175,7 +169,7 @@ class TurnierValidatorService
         if (
             self::hasLaRights($this->turnier)
             && $plaetze >= 0
-            && $plaetze <= 12
+            && $plaetze <= 14
         ) {
             return true;
         }
