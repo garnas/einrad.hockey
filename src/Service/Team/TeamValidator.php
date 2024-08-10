@@ -137,7 +137,7 @@ class TeamValidator
             $valid = false;
         }
 
-        if ($team->getFreilose() <= 0) {
+        if ($team->getFreiloseOld() <= 0) {
             $error[] = "Dein Team hat keine Freilose zur Verfügung.";
             $valid = false;
         }

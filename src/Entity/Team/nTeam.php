@@ -68,6 +68,13 @@ class nTeam
     /**
      * @var Collection
      *
+     * @ORM\OneToMany(targetEntity="App\Entity\Team\Freilos", mappedBy="team", cascade={"all"}, indexBy="team_id")
+     */
+    private Collection $freilose;
+
+    /**
+     * @var Collection
+     *
      * @ORM\OneToMany(targetEntity="App\Entity\Team\Kontakt", mappedBy="team")
      */
     private Collection $emails;
@@ -169,7 +176,7 @@ class nTeam
      *
      * @ORM\Column(name="freilose", type="integer", nullable=true)
      */
-    private $freilose;
+    private $freilose_old;
 
     /**
      * @var DateTime|null
@@ -278,14 +285,14 @@ class nTeam
         return $this;
     }
 
-    public function getFreilose(): ?int
+    public function getFreiloseOld(): ?int
     {
-        return $this->freilose;
+        return $this->freilose_old;
     }
 
-    public function setFreilose(?int $freilose): self
+    public function setFreiloseOld(?int $freilose_old): self
     {
-        $this->freilose = $freilose;
+        $this->freilose_old = $freilose_old;
 
         return $this;
     }
@@ -330,6 +337,21 @@ class nTeam
     public function isAktiv(): bool
     {
         return $this->aktiv === 'Ja';
+    }
+
+    public function addFreilos(string $grund): nTeam
+    {
+        $freilos = new Freilos();
+        $freilos->setTeam($this);
+        $freilos->setErstelltAm();
+        $freilos->setGrund($grund);
+        $this->freilose[] = $freilos;
+        return $this;
+    }
+
+    public function getFreilose(): Collection
+    {
+        return $this->freilose;
     }
 
 }

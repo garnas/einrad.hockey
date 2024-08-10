@@ -68,7 +68,7 @@ use App\Service\Turnier\TurnierSnippets;
         <tr>
             <th class="w3-primary">Freilose</th>
             <td>
-                <?=$teamEntity->getFreilose()?>
+                <?=$teamEntity->getFreiloseOld()?>
                 <?php if(TeamValidator::hasSchiriFreilosErhalten($teamEntity)): ?>
                     <span class="w3-text-green">
                         <?= Html::icon("check") ?>

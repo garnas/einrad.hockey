@@ -88,8 +88,8 @@ class TeamService
             ->setListe('setzliste')
             ->setFreilosGesetzt('Ja')
             ->setFreilosGesetztAm(new DateTime());
-        $freilose = $team->getFreilose();
-        $team->setFreilose($freilose -1);
+        $freilose = $team->getFreiloseOld();
+        $team->setFreiloseOld($freilose -1);
         $turnier->getListe()->add($anmeldung);
         $turnier->getLogService()->addLog("Freilos: " . $team->getName() . " " . BlockService::toString($team->getBlock()));
     }
