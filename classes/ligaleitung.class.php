@@ -95,7 +95,7 @@ class LigaLeitung
         }
 
         // Funktion prüfen
-        if ($funktion !== $details['funktion']) {
+        if (self::get_context($funktion) !== self::get_context($details['funktion'])) {
             return false;
         }
 
@@ -126,7 +126,7 @@ class LigaLeitung
     private static function get_context(string $funktion): string
     {
         return match($funktion) {
-            "ligaausschuss" => "la",
+            "admin", "ligaausschuss" => "la",
             "oeffentlichkeitsausschuss" => "oa",
         };
     }

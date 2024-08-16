@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../init.php';
 
-if (LigaLeitung::is_logged_in("ligaausschuss")) {
+if (LigaLeitung::is_logged_in("ligaausschuss") || LigaLeitung::is_logged_in("admin")) {
     Helper::reload("/ligacenter/lc_start.php");
 }
 if (LigaLeitung::is_logged_in("oeffentlichkeitsausschuss")) {
