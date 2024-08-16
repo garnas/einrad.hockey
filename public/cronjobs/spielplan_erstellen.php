@@ -33,6 +33,7 @@ foreach ($turniere as $turnier) {
         $aktuelles_datum = strtotime("+1 day", $aktuelles_datum);
     }
     if ($erstellen) {
+        $turnier_new = TurnierRepository::get()->turnier($turnier->get_turnier_id());
         Html::info("Handling Turnier " . $turnier->get_turnier_id());
         $teams = $turnier->get_spielenliste();
         $ligateams = array_filter($teams, static function ($team) {
@@ -40,21 +41,11 @@ foreach ($turniere as $turnier) {
         });
         if (count($ligateams) < 4) {
             $absage_grund = "Zu wenige Ligateams";
-        } elseif (
-            count($teams) == 4
-            && $turnier->get_art() != "I"
-        ) {
-            $absage_grund = "Vierer-Turniere dürfen nur als blockeigene Turniere (Art I) stattfinden.";
-        } elseif (
-            count($teams) == 4
-            && $turnier->get_art() == "I"
-            && $turnier->get_tblock() == "ABCDEF"
-        ) {
-            $absage_grund = "Vierer-Turniere dürfen nur als blockeigene Turniere (Art I) stattfinden, dass Turnier
-             wurde jedoch auf ein blockfreies Turnier erweitert.";
+        }
+        if ($turnier_new->getDetails()->getMinTeams() && count($teams) < $turnier_new->getDetails()->getMinTeams()) {
+            $absage_grund = "Minimale Anzahl an Teams nicht erreicht";
         }
         if ($absage_grund != "") {
-            $turnier_new = TurnierRepository::get()->turnier($turnier->get_turnier_id());
             TurnierService::cancel($turnier_new, $absage_grund);
             TurnierRepository::get()->speichern($turnier_new);
             TurnierEventMailBot::mailCanceled($turnier_new);

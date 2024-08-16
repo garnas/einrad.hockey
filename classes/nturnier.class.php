@@ -29,6 +29,8 @@ class nTurnier
     private ?string $ort;
     private ?string $haltestellen;
     private ?int $plaetze;
+
+    private ?int $min_teams;
     private ?string $format;
     private ?string $startzeit;
     private ?string $besprechung;

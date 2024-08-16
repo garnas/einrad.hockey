@@ -39,6 +39,7 @@ class TurnierValidatorService
             && $validator->hasValidBlock()
             && $validator->hasValidDatum()
             && $validator->hasValidPlaetze()
+            && $validator->hasValidMinTeams()
             && $validator->hasValidUhrzeit();
     }
 
@@ -61,7 +62,8 @@ class TurnierValidatorService
             && $validator->hasValidAusrichter()
             && $validator->hasValidPhase()
             && $validator->hasValidUhrzeit()
-            && $validator->hasValidPlaetze();
+            && $validator->hasValidPlaetze()
+            && $validator->hasValidMinTeams();
     }
 
 
@@ -284,6 +286,19 @@ class TurnierValidatorService
         return $turnier->getPhase() === 'setz'
             && $turnier->isLigaturnier()
             && $turnier->getBlock() != Config::BLOCK_ALL[0];
+    }
+
+    public function hasValidMinTeams(): bool
+    {
+        if ($this->turnier->getDetails()->getPlaetze() < $this->turnier->getDetails()->getMinTeams()) {
+            Html::error("Anzahl der Plätze ist kleiner als die minimal Anzahl der Teams.");
+            return False;
+        }
+        if (!in_array($this->turnier->getDetails()->getMinTeams(), [4,5])) {
+            Html::error("Ungültige MinTeams Anzahl");
+            return False;
+        }
+        return True;
     }
 
 }

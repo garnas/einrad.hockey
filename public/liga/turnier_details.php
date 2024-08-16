@@ -142,6 +142,15 @@ include '../../templates/header.tmp.php';
             <td><?= $turnier->getDetails()->getPlaetze() ?></td>
         </tr>
         <tr>
+            <td class="w3-primary" style="vertical-align: middle">Min. Teams</td>
+            <td>
+                <?php if ($turnier->getDetails()->getMinTeams()): ?>
+                <?= e($turnier->getDetails()->getMinTeams()) ?>
+                <span class="w3-text-grey">(Das Turnier findet ab dieser Anzahl an Teams auf der Setzliste statt.)</span>
+                <?php endif; ?>
+            </td>
+        </tr>
+        <tr>
             <td class="w3-primary" style="vertical-align: middle">Erstellt am</td>
             <td><?= $turnier->getErstelltAm()->format("d.m.Y") ?></td>
         </tr>

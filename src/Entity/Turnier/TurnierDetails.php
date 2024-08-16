@@ -83,6 +83,13 @@ class TurnierDetails
     private $plaetze;
 
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="min_teams", type="integer", nullable=true)
+     */
+    private ?int $minTeams;
+
+    /**
      * @var string|null
      *
      * @ORM\Column(name="format", type="string", length=255, nullable=true)
@@ -400,6 +407,18 @@ class TurnierDetails
         $this->turnier->getLogService()->autoLog("Startgebühr", $this->startgebuehr ?? null, $startgebuehr);
         $this->startgebuehr = $startgebuehr;
         return $this;
+    }
+
+    public function setMinTeams(?int $minTeams): TurnierDetails
+    {
+        $this->turnier->getLogService()->autoLog("Minmale Anzahl an Teams", $this->minTeams ?? null, $minTeams);
+        $this->minTeams = $minTeams;
+        return $this;
+    }
+
+    public function getMinTeams(): ?int
+    {
+        return $this->minTeams;
     }
 
 }

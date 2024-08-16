@@ -7,6 +7,7 @@ $last_turnier = TurnierRepository::get()->last_turnier($ausrichter_team_id);
 if ($last_turnier) {
     $last_startgebuehr = e($last_turnier->getDetails()->getStartgebuehr());
     $last_plaetze = e($last_turnier->getDetails()->getPlaetze());
+    $last_min_teams = e($last_turnier->getDetails()->getMinTeams());
     $last_hinweis = e($last_turnier->getDetails()->getHinweis());
 } else {
     $last_startgebuehr = '';
@@ -103,6 +104,13 @@ if ($last_turnier) {
                 <?php endif; ?>
             </select>
             <span class="w3-text-grey">Achtung: Ab der Setzphase ist eine Erweiterung des Turniers auf mehr Plätze nicht mehr möglich.</span>
+        </p>
+        <p>
+            <label class="w3-text-primary" for="min_teams">Mindestanzahl an Teams damit das Turnier stattfindet</label>
+            <select required class="w3-select w3-border w3-border-primary" id="min_teams" name="min_teams">
+                <option <?php if (($_POST['min_teams'] ?? $last_min_teams) == '5'){?> selected <?php } //endif?> value="5">5 Teams</option>
+                <option <?php if (($_POST['min_teams'] ?? $last_min_teams) == '4'){?> selected <?php } //endif?> value="4">4 Teams</option>
+            </select>
         </p>
     </div>
 
@@ -262,9 +270,7 @@ function onchange_show_block(selectObject) {
     /* Einblenden der Auswahl des höheren Turnierblocks */
     if (selectObject.value ===  "II") {
         document.getElementById("block_higher_div").style.display = "block";
-        document.getElementById("plaetze_4").disabled = true;
     }else{
-        document.getElementById("plaetze_4").disabled = false;
         document.getElementById("block_higher_div").style.display = "none";
     }
 

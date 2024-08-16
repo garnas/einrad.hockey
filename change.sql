@@ -21,3 +21,5 @@ DELETE FROM ligaleitung WHERE `ligaleitung`.`ligaleitung_id` = 7
 
 ALTER TABLE `ligaleitung` CHANGE `funktion` `funktion` ENUM('ligaausschuss','schiriausschuss','oeffentlichkeitsausschuss','technikausschuss','schiriausbilder','admin') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 UPDATE `ligaleitung` SET `funktion` = 'admin' WHERE `ligaleitung`.`ligaleitung_id` = 9;
+
+ALTER TABLE `turniere_details` ADD `min_teams` INT NULL AFTER `startgebuehr`;

@@ -31,6 +31,7 @@ if (isset($_POST['create_turnier'])) {
     $block = ($art === 'I') ? $ausrichter_block : $_POST['block'];
     $startzeit = DateTime::createFromFormat("H:i", ((string)($_POST['startzeit'] ?? '')));
     $plaetze = (string)($_POST['plaetze'] ?? '');
+    $min_teams = (int)($_POST['min_teams'] ?? '');
     $sofotOeffnen = @(($_POST['sofort_oeffnen'] ?? '') === "Ja");
 
     // Besprechung
@@ -69,7 +70,8 @@ if (isset($_POST['create_turnier'])) {
         ->setStrasse($strasse)
         ->setStartgebuehr($startgebuehr)
         ->setStartzeit($startzeit)
-        ->setPlaetze($plaetze);
+        ->setPlaetze($plaetze)
+        ->setMinTeams($min_teams);
     $turnier->setDetails($details);
 
 

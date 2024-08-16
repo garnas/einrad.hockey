@@ -47,13 +47,14 @@ if (isset($_POST['change_turnier'])) {
     $handy = $_POST['handy'];
     $startzeit = DateTime::createFromFormat("H:i", $_POST['startzeit']);
     $plaetze = (int) $_POST['plaetze'];
+    $min_teams = (int) $_POST['min_teams'];
     $tname = $_POST['tname'];
     $sofortOeffnen = @($_POST['sofort_oeffnen'] === "Ja");
 
     // Leere Felder können eigentlich nicht auftreten (nur durch html-Manipulation), aber sicherheitshalber das hier...
     if (
         empty($plaetze) || empty($startzeit) || empty($hallenname) || empty($strasse) || empty($plz) || empty($ort)
-        || empty($organisator) || empty($handy)
+        || empty($organisator) || empty($handy) || empty($min_teams)
     ) {
         Html::error("Bitte alle nicht optionalen Felder ausfüllen.");
         Helper::reload();
@@ -66,10 +67,15 @@ if (isset($_POST['change_turnier'])) {
         $besprechung = 'Nein';
     }
     $plaetze_before = $turnier->getDetails()->getPlaetze();
-    $turnier->setName($tname)->setSofortOeffnen($sofortOeffnen);
+    $turnier
+        ->setName($tname);
+    if ($turnier->isWartePhase()) {
+        $turnier->setSofortOeffnen($sofortOeffnen);
+    }
     $turnier->getDetails()->setStartzeit($startzeit)
         ->setBesprechung($besprechung)
         ->setPlaetze($plaetze)
+        ->setMinTeams($min_teams)
         ->setHallenname($hallenname)
         ->setStrasse($strasse)
         ->setPlz($plz)

@@ -84,6 +84,14 @@ use App\Service\Turnier\TurnierValidatorService;
             </select>
             <span class="w3-text-grey">Achtung: Ab der Setzphase ist eine Erweiterung des Turniers auf mehr Plätze nicht mehr möglich.</span>
         </p>
+        <p>
+            <label class="w3-text-primary" for="min_teams">Min. Teams</label>
+            <select required class="w3-select w3-border w3-border-primary" id="min_teams" name="min_teams">
+                <option <?php if ($turnier->getDetails()->getMinTeams() == '5'):?> selected <?php endif; ?> value="5">5 Teams</option>
+                <option <?php if ($turnier->getDetails()->getMinTeams() == '4'):?> selected <?php endif; ?> value="4">4 Teams</option>
+            </select>
+            <span class="w3-text-grey">(Das Turnier findet ab dieser Anzahl an Teams auf der Setzliste statt.)</span>
+        </p>
     </div>
     <div class="w3-panel w3-card-4">
             <h3>Adresse</h3>
