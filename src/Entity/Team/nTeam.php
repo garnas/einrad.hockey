@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Tabelle;
 use Helper;
+use Config;
 
 /**
  * TeamsLiga
@@ -69,7 +70,7 @@ class nTeam
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Team\Freilos", mappedBy="team", cascade={"all"}, indexBy="team_id")
+     * @ORM\OneToMany(targetEntity="App\Entity\Team\Freilos", mappedBy="team", cascade={"all"})
      */
     private Collection $freilose;
 
@@ -86,6 +87,14 @@ class nTeam
     public function getEmails(): Collection
     {
         return $this->emails;
+    }
+
+    public function getEmailsByAutoInfo(): Collection
+    {
+        $filter = static function (Kontakt $f) {
+            return $f->getGetInfoMail() == "Ja";
+        };
+        return $this->emails->filter($filter);
     }
 
     /**
@@ -348,19 +357,63 @@ class nTeam
         return $this->aktiv === 'Ja';
     }
 
-    public function addFreilos(string $grund): nTeam
+    public function addFreilos(FreilosGrund $grund, int $saison = Config::SAISON): nTeam
     {
         $freilos = new Freilos();
         $freilos->setTeam($this);
         $freilos->setErstelltAm();
         $freilos->setGrund($grund);
+        $freilos->setSaison($saison);
         $this->freilose[] = $freilos;
         return $this;
     }
 
-    public function getFreilose(): Collection
+    /**
+     * @return Freilos[]|Collection
+     */
+    public function getGueltigeFreilose(): Collection|array
     {
-        return $this->freilose;
+        $filter = static function (Freilos $f) {
+            return $f->isGueltig();
+        };
+        return $this->freilose->filter($filter);
+    }
+
+    /**
+     * @return Freilos[]|Collection
+     */
+    public function getFreiloseBySaison(int $saison = Config::SAISON): Collection|array
+    {
+        $filter = static function (Freilos $f) use ($saison) {
+            return $f->getSaison() == $saison;
+        };
+        return $this->freilose->filter($filter);
+    }
+
+    /**
+     * @return Collection|Freilos[]
+     */
+    public function getOffeneFreilose(): Collection|array
+    {
+        $filter = static function (Freilos $f) {
+            return !$f->isGesetzt() && $f->isGueltig();
+        };
+        return $this->freilose->filter($filter);
+    }
+
+    public function getAnzahlOffenerFreilose(): int
+    {
+
+        return $this->getOffeneFreilose()->count();
+    }
+
+    public function getOldestFreilos(): Freilos
+    {
+        $freilose = $this->getGueltigeFreilose()->toArray();
+        usort($freilose, static function(Freilos $a, Freilos $b) {
+            return $a->getErstelltAm() <=> $b->getErstelltAm();
+        });
+        return $freilose[0];
     }
 
 }

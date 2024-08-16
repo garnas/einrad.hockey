@@ -144,9 +144,9 @@ include '../../templates/header.tmp.php';
                     class='w3-button w3-margin-bottom w3-block w3-tertiary
                     <?php if (TeamService::isAufSetzliste($teamEntity, $turnier)
                                 || !TurnierService::isSpielBerechtigtFreilos($turnier, $teamEntity)
-                                || $teamEntity->getFreiloseOld() <= 0
+                                || $teamEntity->getAnzahlOffenerFreilose() == 0
                              ): ?> w3-opacity<?php endif; ?>'
-                    name='freilos' value='Freilos setzen (<?=$teamEntity->getFreiloseOld()?> vorhanden)'>
+                    name='freilos' value='Freilos setzen (<?=$teamEntity->getAnzahlOffenerFreilose()?> vorhanden)'>
             </p>
             <span class="w3-text-grey">Freilose setzen dein Team in der Wartephase direkt auf die Setzliste. Ein Team kann auch für blockhöhere Turnieren ein Freilos einsetzen, nicht jedoch für blockniedrigere Turniere.</span>
         </form>

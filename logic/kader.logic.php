@@ -1,6 +1,10 @@
 <?php
 
 // Neuer Spieler eintragen
+use App\Entity\Team\FreilosGrund;
+use App\Repository\Team\TeamRepository;
+use App\Service\Team\TeamService;
+
 if (isset($_POST['neuer_eintrag'])) {
     $error = false;
     $vorname = $_POST['vorname'];
@@ -53,9 +57,12 @@ if (isset($_POST['submit_takeover'])) {
         }
         if ($changed) {
             Html::info("Die Spieler wurden in die neue Saison übernommen.");
-            (new Team ($team_id))->set_schiri_freilos();
-            header('Location: ' . db::escape($_SERVER['PHP_SELF']) . '?team_id=' . $team_id);
-            die ();
+            $team = TeamRepository::get()->team($team_id);
+            if (TeamService::handleSchiriFreilos($team)) {
+                TeamRepository::get()->speichern($team);
+                Html::info("Schirifreilos erhalten!");
+            }
         }
+        Helper::reload();
     }
 }

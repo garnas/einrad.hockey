@@ -13,3 +13,6 @@ ALTER TABLE `freilose`
     ADD FOREIGN KEY (`team_id`) REFERENCES `teams_liga` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE `freilose`
     ADD FOREIGN KEY (`turnier_id`) REFERENCES `turniere_liga` (`turnier_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `freilose` CHANGE `grund` `grund` ENUM('SCHIRI','TURNIER_AUSGERICHTET','FREILOS_GESETZT','SONSTIGES') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+ALTER TABLE `freilose` ADD `saison` INT NOT NULL AFTER `grund`;

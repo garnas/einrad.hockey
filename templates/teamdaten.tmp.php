@@ -2,6 +2,7 @@
 
 use App\Service\Team\TeamService;
 use App\Service\Team\TeamValidator;
+use App\Service\Team\TeamSnippets;
 use App\Service\Turnier\TurnierSnippets;
 
 ?>
@@ -68,15 +69,11 @@ use App\Service\Turnier\TurnierSnippets;
         <tr>
             <th class="w3-primary">Freilose</th>
             <td>
-                <?=$teamEntity->getFreiloseOld()?>
-                <?php if(TeamValidator::hasSchiriFreilosErhalten($teamEntity)): ?>
-                    <span class="w3-text-green">
-                        <?= Html::icon("check") ?>
-                        (Schirifreilos erhalten am <?= $teamEntity->getZweitesFreilos()->format("d.m.Y") ?>)
-                    </span>
-                <?php else: ?>
+                <p>Anzahl: <?= $teamEntity->getAnzahlOffenerFreilose() ?></p>
+                <?= TeamSnippets::freilose($teamEntity) ?>
+                <?php if(!TeamValidator::hasSchiriFreilosErhalten($teamEntity)): ?>
                     <span class="w3-text-grey">
-                         - dein Team hat noch kein Freislos für zwei Schiedsrichter erhalten.
+                         Dein Team hat noch kein Freislos für zwei Schiedsrichter erhalten.
                     </span>
                 <?php endif; ?>
             </td>
@@ -162,7 +159,7 @@ use App\Service\Turnier\TurnierSnippets;
 
 <!-- Link Teamdaten ändern -->
 <p>
-    <a href="<?=(Helper::$ligacenter) ? 'lc_teamdaten_aendern.php?team_id=' . $team->id : 'tc_teamdaten_aendern.php'?>"
+    <a href="<?=(Helper::$ligacenter) ? 'lc_teamdaten_aendern.php?team_id=' . $teamEntity->id() : 'tc_teamdaten_aendern.php'?>"
        class="w3-button w3-block w3-secondary">
         <?= Html::icon("create") ?> Team- und Kontaktdaten ändern
     </a>

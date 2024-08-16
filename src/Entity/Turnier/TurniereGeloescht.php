@@ -47,7 +47,7 @@ class TurniereGeloescht
      *
      * @ORM\Column(name="saison", type="integer", nullable=false)
      */
-    private $saison;
+    private int $saison;
 
     public function getTurnierId(): ?int
     {

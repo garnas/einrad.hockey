@@ -2,6 +2,7 @@
 
 namespace App\Service\Team;
 
+use App\Entity\Team\FreilosGrund;
 use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
@@ -21,8 +22,13 @@ class TeamValidator
 
     public static function hasSchiriFreilosErhalten(nTeam $team): bool
     {
-            return $team->getZweitesFreilos() != null
-                && $team->getZweitesFreilos()->getTimestamp() >= strtotime(Config::SAISON_WECHSEL);
+        $freilose = $team->getFreiloseBySaison();
+        foreach ($freilose as $freilos) {
+            if ($freilos->getGrund() == FreilosGrund::SCHIRI) {
+                return True;
+            }
+        }
+        return False;
     }
 
     /**
@@ -137,12 +143,10 @@ class TeamValidator
             $valid = false;
         }
 
-        if ($team->getFreiloseOld() <= 0) {
+        if ($team->getAnzahlOffenerFreilose() == 0) {
             $error[] = "Dein Team hat keine Freilose zur Verfügung.";
             $valid = false;
         }
-
-
 
         if (!TurnierService::isSpielBerechtigtFreilos($turnier, $team)) {
             $error[] = "Turnierblock stimmt nicht. Freilose können nur für Turniere mit höheren oder passenden Block gesetzt werden.";

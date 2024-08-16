@@ -2,6 +2,8 @@
 
 namespace App\Entity\Team;
 
+use App\Entity\Turnier\Turnier;
+use Config;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use DoctrineWrapper;
@@ -24,16 +26,16 @@ class Freilos
     private int $freilosId;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      *
-     * @ORM\Column(name="gesetzt_am", type="datetime", nullable=false, options={"default"="current_timestamp(1)"})
+     * @ORM\Column(name="gesetzt_am", type="datetime", nullable=true, options={"default"="current_timestamp(1)"})
      */
-    private DateTime $gesetztAm;
+    private ?DateTime $gesetztAm;
 
     /**
-     * @return DateTime
+     * @return DateTime|null
      */
-    public function getGesetztAm(): DateTime
+    public function getGesetztAm(): ?DateTime
     {
         return $this->gesetztAm;
     }
@@ -74,11 +76,18 @@ class Freilos
     }
 
     /**
-     * @var String
+     * @var string
      *
      * @ORM\Column(name="grund", type="string", nullable=false)
      */
     private string $grund;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="saison", type="integer", nullable=false)
+     */
+    private int $saison = Config::SAISON;
 
     /**
      * @var nTeam
@@ -107,16 +116,16 @@ class Freilos
     }
 
     /**
-     * @var Turnier
-     * @ORM\ManyToOne(targetEntity="App\Entity\Turnier\Turnier", inversedBy="liste")
+     * @var Turnier|null
+     * @ORM\OneToOne(targetEntity="App\Entity\Turnier\Turnier")
      * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
      */
-    private Turnier $turnier;
+    private ?Turnier $turnier;
 
     /**
-     * @return Turnier
+     * @return Turnier|null
      */
-    public function getTurnier(): Turnier
+    public function getTurnier(): ?Turnier
     {
         return $this->turnier;
     }
@@ -133,7 +142,7 @@ class Freilos
 
     public function isGesetzt(): bool
     {
-        return (bool) $this->turnier;
+        return $this->turnier && $this->getGesetztAm();
     }
 
     public function setzen(Turnier $turnier): void
@@ -142,15 +151,36 @@ class Freilos
         $this->setGesetztAm();
     }
 
-    public function setGrund(string $grund): Freilos
+    public function setGrund(FreilosGrund $grund): Freilos
     {
-        $this->grund = $grund;
+        $this->grund = $grund->name;
         return $this;
     }
 
-    public function getGrund(): string
+    public function getGrund(): FreilosGrund
     {
-        return $this->grund;
+        return FreilosGrund::fromName($this->grund);
+    }
+
+    public function setSaison(int $saison): Freilos
+    {
+        $this->saison = $saison;
+        return $this;
+    }
+
+    public function isGueltig(): bool
+    {
+        return $this->saison >= Config::SAISON -1;
+    }
+
+    public function getSaison(): int
+    {
+        return $this->saison;
+    }
+
+    public function id(): int
+    {
+        return $this->freilosId;
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Repository\Team;
 
+use App\Entity\Team\Freilos;
 use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
 use App\Repository\TraitSingletonRepository;
@@ -17,10 +18,12 @@ class TeamRepository
     use TraitSingletonRepository;
 
     private EntityRepository $team;
+    private EntityRepository $freilos;
 
     private function __construct()
     {
         $this->team = DoctrineWrapper::manager()->getRepository(nTeam::class);
+        $this->freilos = DoctrineWrapper::manager()->getRepository(Freilos::class);
     }
 
     public function team(int $id): nTeam
@@ -82,6 +85,16 @@ class TeamRepository
     public function delete(nTeam $team): void
     {
         DoctrineWrapper::manager()->remove($team);
+        DoctrineWrapper::manager()->flush();
+    }
+
+    public function deleteFreilos(int $id, nTeam $team): void
+    {
+        $freilos = $this->freilos->find($id);
+        if ($freilos->getTeam()->id() != $team->id()) {
+            trigger_error("Freilos löschen fehlgeschlagen", E_USER_ERROR);
+        }
+        DoctrineWrapper::manager()->remove($freilos);
         DoctrineWrapper::manager()->flush();
     }
 

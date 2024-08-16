@@ -1,5 +1,7 @@
 <?php
 
+use App\Entity\Team\nTeam;
+
 /**
  * Class MailBot
  */
@@ -319,9 +321,9 @@ class MailBot
     /**
      * Erstellt eine Mail in der Datenbank, dass ein Team ein Freilos für zwei Schiris erhalten hat.
      *
-     * @param Team $team
+     * @param nTeam $team
      */
-    public static function mail_schiri_freilos(Team $team): void
+    public static function mail_schiri_freilos(nTeam $team): void
     {
         $betreff = "Freilos für zwei Schiris erhalten";
         ob_start();
@@ -329,7 +331,7 @@ class MailBot
             include(Env::BASE_PATH . "/templates/mails/mail_schiri_freilos.tmp.php");
             include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
         $inhalt = ob_get_clean();
-        $emails = (new Kontakt ($team->id))->get_emails('info');
+        $emails = (new Kontakt ($team->id()))->get_emails('info');
         self::add_mail($betreff, $inhalt, $emails);
     }
 

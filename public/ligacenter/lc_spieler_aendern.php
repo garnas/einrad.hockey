@@ -2,6 +2,9 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Repository\Team\TeamRepository;
+use App\Service\Team\TeamService;
+
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
@@ -10,7 +13,7 @@ require_once '../../logic/la_spieler_waehlen.logic.php';
 if (isset($_GET['spieler_id'])) {
 
     $spieler = nSpieler::get((int)$_GET['spieler_id']);
-    if  (!isset($spieler->spieler_id)) {
+    if (!isset($spieler->spieler_id)) {
         Html::error("Spieler wurde nicht gefunden");
     }
 
@@ -26,7 +29,7 @@ if (isset($_POST['spieler_aendern'])) {
     $teamname = $_POST['teamname'];
     $letzte_saison = (int)$_POST['letzte_saison'];
     $schiri = (int)$_POST['schiri'];
-    $junior = (string)$_POST['junior'];
+    $junior = (string)($_POST['junior'] ?? null);
 
     if ($spieler
         ->set_vorname($vorname)
@@ -40,8 +43,12 @@ if (isset($_POST['spieler_aendern'])) {
         ->speichern()) {
 
         Html::info("Spielerdaten wurden gespeichert.");
-        (new Team ($spieler->team_id))->set_schiri_freilos();
-        Helper::reload('/ligacenter/lc_kader.php','?team_id=' . $spieler->team_id);
+        $team = TeamRepository::get()->team($spieler->team_id);
+        if (TeamService::handleSchiriFreilos($team)) {
+            TeamRepository::get()->speichern($team);
+            Html::info("Schirifreilos erhalten!");
+        }
+        Helper::reload('/ligacenter/lc_kader.php', '?team_id=' . $spieler->team_id);
 
     } else {
 
@@ -114,19 +121,19 @@ include '../../templates/header.tmp.php'; ?>
                 Schiri
             </labeL>
             <select class='w3-input w3-border w3-border-primary' id='schiri' name='schiri'>
-                <option <?= ($spieler->schiri === Config::SAISON + 2) ?  'selected' : '' ?>
+                <option <?= ($spieler->schiri === Config::SAISON + 2) ? 'selected' : '' ?>
                         value='<?= Config::SAISON + 2 ?>'>
-                   bis inkl. Saison <?= Html::get_saison_string(Config::SAISON + 2) ?>
+                    bis inkl. Saison <?= Html::get_saison_string(Config::SAISON + 2) ?>
                 </option>
-                <option <?=  ($spieler->schiri == Config::SAISON + 1) ?  'selected' : '' ?>
+                <option <?= ($spieler->schiri == Config::SAISON + 1) ? 'selected' : '' ?>
                         value='<?= Config::SAISON + 1 ?>'>
-                    bis inkl. Saison  <?= Html::get_saison_string(Config::SAISON + 1) ?>
+                    bis inkl. Saison <?= Html::get_saison_string(Config::SAISON + 1) ?>
                 </option>
-                <option <?=  ($spieler->schiri == Config::SAISON) ?  'selected' : '' ?>
+                <option <?= ($spieler->schiri == Config::SAISON) ? 'selected' : '' ?>
                         value='<?= Config::SAISON ?>'>
-                    bis inkl. Saison  <?= Html::get_saison_string() ?>
+                    bis inkl. Saison <?= Html::get_saison_string() ?>
                 </option>
-                <option <?=  (is_null($spieler->schiri)) ?  'selected' : '' ?>
+                <option <?= (is_null($spieler->schiri)) ? 'selected' : '' ?>
                         value=''>kein Schiri
                 </option>
             </select>
@@ -177,7 +184,7 @@ include '../../templates/header.tmp.php'; ?>
         </p>
     </form>
     <form onsubmit="return confirm(
-                'Der Spieler mit der ID <?= $spieler->id() ?> <?= $spieler->get_name() ?>) wird gelöscht werden.');"
+            'Der Spieler mit der ID <?= $spieler->id() ?> <?= $spieler->get_name() ?>) wird gelöscht werden.');"
           class="w3-container w3-card-4 w3-panel"
           method="POST">
         <p>

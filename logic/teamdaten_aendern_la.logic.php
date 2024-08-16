@@ -1,11 +1,11 @@
 <?php
 
+use App\Entity\Team\FreilosGrund;
 use App\Repository\Team\TeamRepository;
 
 if (isset($_POST['change_la']) && Helper::$ligacenter) {
     $error = false;
     $neuer_teamname = $_POST['teamname'];
-    $freilose = (int)$_POST['freilose'];
     $passwort = $_POST['passwort'];
 
     if (
@@ -22,9 +22,16 @@ if (isset($_POST['change_la']) && Helper::$ligacenter) {
             $team->setName($neuer_teamname);
             Html::info("Der Teamname wird geändert");
         }
-        if (!empty($_POST["freilos_grund"])) {
-            $team->addFreilos($_POST["freilos_grund"]);
+        if (!empty($_POST["freilos_grund"]) && $_POST["freilos_grund"] != "NO_CHANGE") {
+            $grund = FreilosGrund::fromName($_POST["freilos_grund"]);
+            $saison = (int) $_POST["freilos_saison"];
+            $team->addFreilos($grund, $saison);
             Html::info("Freilos wird hinzugefügt");
+        }
+        if (!empty($_POST["freilos_delete"]) && $_POST["freilos_delete"] != "NO_CHANGE") {
+            $id = (int) $_POST["freilos_delete"];
+            TeamRepository::get()->deleteFreilos($_POST["freilos_delete"], $team);
+            Html::info("Freilos wurde gelöscht.");
         }
         if (!empty($passwort)) {
             $team->setPasswort($passwort);
