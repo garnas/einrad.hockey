@@ -148,6 +148,7 @@ include '../../templates/header.tmp.php';
                              ): ?> w3-opacity<?php endif; ?>'
                     name='freilos' value='Freilos setzen (<?=$teamEntity->getAnzahlOffenerFreilose()?> vorhanden)'>
             </p>
+            <span><?= Html::link("teamcenter/tc_teamdaten.php#freilose", "Übersicht der Freilose", extern: True)?></span>
             <span class="w3-text-grey">Freilose setzen dein Team in der Wartephase direkt auf die Setzliste. Ein Team kann auch für blockhöhere Turnieren ein Freilos einsetzen, nicht jedoch für blockniedrigere Turniere.</span>
         </form>
     <?php } //endif?>

@@ -78,7 +78,7 @@ class TeamService
             ->setListe('setzliste')
             ->setFreilosGesetzt('Ja')
             ->setFreilosGesetztAm(new DateTime());
-        $team->getOldestFreilos()->setzen($turnier);
+        $team->getNextFreilos()->setzen($turnier);
         $turnier->getListe()->add($anmeldung);
         $turnier->getLogService()->addLog("Freilos: " . $team->getName() . " " . BlockService::toString($team->getBlock()));
     }

@@ -17,7 +17,7 @@ ALTER TABLE `freilose`
 ALTER TABLE `freilose` CHANGE `grund` `grund` ENUM('SCHIRI','TURNIER_AUSGERICHTET','FREILOS_GESETZT','SONSTIGES') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 ALTER TABLE `freilose` ADD `saison` INT NOT NULL AFTER `grund`;
 
-DELETE FROM ligaleitung WHERE `ligaleitung`.`ligaleitung_id` = 7
+DELETE FROM ligaleitung WHERE `ligaleitung`.`ligaleitung_id` = 7;
 
 ALTER TABLE `ligaleitung` CHANGE `funktion` `funktion` ENUM('ligaausschuss','schiriausschuss','oeffentlichkeitsausschuss','technikausschuss','schiriausbilder','admin') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
 UPDATE `ligaleitung` SET `funktion` = 'admin' WHERE `ligaleitung`.`ligaleitung_id` = 9;

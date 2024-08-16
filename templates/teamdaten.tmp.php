@@ -55,90 +55,91 @@ use App\Service\Turnier\TurnierSnippets;
         Die 1. Trikotfarbe wird in den Spielplänen bevorzugt.
     </p>
 </div>
-<h2 class="w3-text-primary"><?= Html::icon("info", tag: "h2") ?> Teamdaten</h2>
-<div class="w3-responsive w3-card-4">
-    <table class="w3-table w3-striped">
-        <tr>
-            <th class="w3-primary" style="width: 140px">Teamname</th>
-            <td><b><?= e($teamEntity->getName()) ?></b></td>
-        </tr>
-        <tr>
-            <th class="w3-primary">Team ID</th>
-            <td><?= e($teamEntity->id()) ?></td>
-        </tr>
-        <tr>
-            <th class="w3-primary">Freilose</th>
-            <td>
-                <p>Anzahl: <?= $teamEntity->getAnzahlOffenerFreilose() ?></p>
-                <?= TeamSnippets::freilose($teamEntity) ?>
-                <?php if(!TeamValidator::hasSchiriFreilosErhalten($teamEntity)): ?>
-                    <span class="w3-text-grey">
-                         Dein Team hat noch kein Freislos für zwei Schiedsrichter erhalten.
-                    </span>
-                <?php endif; ?>
-            </td>
-        </tr>
-        <tr>
-            <th class="w3-primary">Gesetzte Freilose</th>
-            <td>
-                <?php if (TeamService::getGesetzteFreilose($teamEntity)->isEmpty()): ?>
-                    --
-                <?php endif; ?>
-                <?php foreach (TeamService::getGesetzteFreilose($teamEntity) as $anmeldung): ?>
-                    <p>
-                        Freilos gesetzt am <?= $anmeldung->getFreilosGesetztAm()->format("d.m.Y") ?> für das Turnier
-                        <?= TurnierSnippets::ortDatumBlock($anmeldung->getTurnier()) ?>
-                        <?php if(TeamService::isFreilosRecyclebar($anmeldung)): ?>
-                            <br>
-                            <span class="w3-text-green">Dieses Freilos könnt ihr auf Antrag beim Ligaausschuss zurückerhalten</span>
-                        <?php endif; ?>
-                    </p>
-                <?php endforeach; ?>
-            </td>
-        </tr>
-        <tr>
-            <th class="w3-primary">Erstellte Turniere</th>
-            <td>
-                <?php if (TeamService::getEingetrageneTurniere($teamEntity)->isEmpty()): ?>
-                    --
-                <?php endif; ?>
-                <?php foreach (TeamService::getEingetrageneTurniere($teamEntity) as $turnier): ?>
-                    <p>
-                         Turnier in <?= TurnierSnippets::ortDatumBlock($turnier) ?> eingetragen am
-                         <?= $turnier->getErstelltAm()->format("d.m.Y") ?>
-                        <?php if(TeamService::isAusrichterFreilosBerechtigt($turnier)
-                            && !$turnier->isCanceled()): ?>
-                            <br>
-                            <span class="w3-text-green">Für dieses Turnier könnt ihr nach dem Turnier ein Freilos
-                                erhalten (insgesamt 2x möglich)</span>
-                        <?php endif; ?>
-                    </p>
-                <?php endforeach; ?>
-            </td>
-        </tr>
-        <tr>
-            <th class="w3-primary">Ligavertreter</th>
-            <td><?= e($teamEntity->getDetails()->getLigavertreter()) ?></td>
-        </tr>
-        <tr>
-            <th class="w3-primary" style="width: 140px">PLZ</th>
-            <td><?= e($teamEntity->getDetails()->getPlz()) ?></td>
-        </tr>
-        <tr>
-            <th class="w3-primary">Ort</th>
-            <td><?= e($teamEntity->getDetails()->getOrt()) ?></td>
-        </tr>
-        <tr>
-            <th class="w3-primary">Verein</th>
-            <td><?= e($teamEntity->getDetails()->getVerein()) ?></td>
-        </tr>
-        <tr>
-            <th class="w3-primary">Homepage</th>
-            <td><?= Html::link(e($teamEntity->getDetails()->getHomepage())) ?></td>
-        </tr>
-    </table>
-</div>
-
+<section id="teamdaten">
+    <h2 class="w3-text-primary"><?= Html::icon("info", tag: "h2") ?> Teamdaten</h2>
+    <div class="w3-responsive w3-card-4">
+        <table class="w3-table w3-striped">
+            <tr>
+                <th class="w3-primary" style="width: 140px">Teamname</th>
+                <td><b><?= e($teamEntity->getName()) ?></b></td>
+            </tr>
+            <tr>
+                <th class="w3-primary">Team ID</th>
+                <td><?= e($teamEntity->id()) ?></td>
+            </tr>
+            <tr>
+                <th class="w3-primary">Freilose</th>
+                <td>
+                    <p>Verfügbare Freilose: <?= $teamEntity->getAnzahlOffenerFreilose() ?></p>
+                    <?= TeamSnippets::freilose($teamEntity) ?>
+                    <?php if(!TeamValidator::hasSchiriFreilosErhalten($teamEntity)): ?>
+                        <span class="w3-text-grey">
+                             Dein Team hat noch kein Freislos für zwei Schiedsrichter erhalten.
+                        </span>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <th class="w3-primary">Gesetzte Freilose</th>
+                <td>
+                    <?php if (TeamService::getGesetzteFreilose($teamEntity)->isEmpty()): ?>
+                        --
+                    <?php endif; ?>
+                    <?php foreach (TeamService::getGesetzteFreilose($teamEntity) as $anmeldung): ?>
+                        <p>
+                            Freilos gesetzt am <?= $anmeldung->getFreilosGesetztAm()->format("d.m.Y") ?> für das Turnier
+                            <?= TurnierSnippets::ortDatumBlock($anmeldung->getTurnier()) ?>
+                            <?php if(TeamService::isFreilosRecyclebar($anmeldung)): ?>
+                                <br>
+                                <span class="w3-text-green">Dieses Freilos könnt ihr auf Antrag beim Ligaausschuss zurückerhalten</span>
+                            <?php endif; ?>
+                        </p>
+                    <?php endforeach; ?>
+                </td>
+            </tr>
+            <tr>
+                <th class="w3-primary">Erstellte Turniere</th>
+                <td>
+                    <?php if (TeamService::getEingetrageneTurniere($teamEntity)->isEmpty()): ?>
+                        --
+                    <?php endif; ?>
+                    <?php foreach (TeamService::getEingetrageneTurniere($teamEntity) as $turnier): ?>
+                        <p>
+                             Turnier in <?= TurnierSnippets::ortDatumBlock($turnier) ?> eingetragen am
+                             <?= $turnier->getErstelltAm()->format("d.m.Y") ?>
+                            <?php if(TeamService::isAusrichterFreilosBerechtigt($turnier)
+                                && !$turnier->isCanceled()): ?>
+                                <br>
+                                <span class="w3-text-green">Für dieses Turnier könnt ihr nach dem Turnier ein Freilos
+                                    erhalten (insgesamt 2x möglich)</span>
+                            <?php endif; ?>
+                        </p>
+                    <?php endforeach; ?>
+                </td>
+            </tr>
+            <tr>
+                <th class="w3-primary">Ligavertreter</th>
+                <td><?= e($teamEntity->getDetails()->getLigavertreter()) ?></td>
+            </tr>
+            <tr>
+                <th class="w3-primary" style="width: 140px">PLZ</th>
+                <td><?= e($teamEntity->getDetails()->getPlz()) ?></td>
+            </tr>
+            <tr>
+                <th class="w3-primary">Ort</th>
+                <td><?= e($teamEntity->getDetails()->getOrt()) ?></td>
+            </tr>
+            <tr>
+                <th class="w3-primary">Verein</th>
+                <td><?= e($teamEntity->getDetails()->getVerein()) ?></td>
+            </tr>
+            <tr>
+                <th class="w3-primary">Homepage</th>
+                <td><?= Html::link(e($teamEntity->getDetails()->getHomepage())) ?></td>
+            </tr>
+        </table>
+    </div>
+</section>
 <h2 class="w3-text-primary"><?= Html::icon("mail", tag: "h2") ?> Kontaktdaten</h2>
 <div class="w3-responsive w3-card-4">
     <table class="w3-table w3-striped">

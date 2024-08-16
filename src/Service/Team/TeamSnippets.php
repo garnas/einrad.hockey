@@ -26,9 +26,9 @@ class TeamSnippets
             $html .= "<li> ";
             $html .= $freilos->getGrund()->value . " (Saison " . Html::get_saison_string($freilos->getSaison()) . ")";
             if ($freilos->isGesetzt()) {
-                $html .= "<br>Gesetzt am: " . $freilos->getGesetztAm()->format("d.m.Y");
+                $html .= "<br>Gesetzt am " . $freilos->getGesetztAm()->format("d.m.Y");
                 $turnier = $freilos->getTurnier();
-                $html .= TurnierSnippets::ortDatumBlock(turnier: $turnier, html: false);
+                $html .= " für " .TurnierSnippets::ortDatumBlock(turnier: $turnier, html: false);
             }
             $html .= "</li>";
         }

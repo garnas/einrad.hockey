@@ -142,7 +142,7 @@ class Freilos
 
     public function isGesetzt(): bool
     {
-        return $this->turnier && $this->getGesetztAm();
+        return isset($this->turnier) && $this->getGesetztAm() !== null;
     }
 
     public function setzen(Turnier $turnier): void

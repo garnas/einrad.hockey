@@ -407,11 +407,18 @@ class nTeam
         return $this->getOffeneFreilose()->count();
     }
 
-    public function getOldestFreilos(): Freilos
+    /**
+     * Gibt das älteste Freilos zurück, welches als nächstes gesetzt werden soll.
+     * @return Freilos
+     */
+    public function getNextFreilos(): Freilos
     {
-        $freilose = $this->getGueltigeFreilose()->toArray();
+        $freilose = $this->getOffeneFreilose()->toArray();
         usort($freilose, static function(Freilos $a, Freilos $b) {
-            return $a->getErstelltAm() <=> $b->getErstelltAm();
+            if ($a->getSaison() == $b->getSaison()) {
+                return $a->getErstelltAm() <=> $b->getErstelltAm();
+            }
+            return $a->getSaison() <=> $b->getSaison();
         });
         return $freilose[0];
     }

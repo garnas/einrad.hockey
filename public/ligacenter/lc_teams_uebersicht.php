@@ -2,6 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Repository\Team\TeamRepository;
+
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
@@ -99,8 +101,8 @@ include '../../templates/header.tmp.php';
         <tr class=w3-primary>
             <th>Team ID</th>
             <th>Teamname</th>
+            <th>Freilose Old</th>
             <th>Freilose</th>
-            <th>2-Schiri-Freilos</th>
             <th>Kader</th>
             <th>Schiris</th>
             <th>Kader (alt)</th>
@@ -116,6 +118,7 @@ include '../../templates/header.tmp.php';
                 <td><?=$team['team_id']?></td>
                 <td><?=Html::link('lc_kader.php?team_id='. $team_id, $team['teamname'])?></td>
                 <td><?=$team['freilose']?></td>
+                <td><?= TeamRepository::get()->team($team_id)->getOffeneFreilose()->count()?></td>
                 <td><?=$team['zweites_freilos']?></td>
                 <td><?=$team['kader']?></td>
                 <td><?=$team['schiris']?></td>
