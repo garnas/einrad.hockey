@@ -138,12 +138,12 @@ window.onclick = function(event) {
 
 <!-- Meisterschaftstabelle -->
 <h1 class="w3-text-primary w3-border-primary" id='meister'>Meisterschaftstabelle</h1>
-<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#rang" class="no w3-hover-text-secondary">Zur Rangtabelle</a><span class="w3-right">Saison <?=Html::get_saison_string()?></span></p>
+<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#rang" class="no w3-hover-text-secondary">Zur Rangtabelle</a><span class="w3-right">Saison <?=Html::get_saison_string($saison)?></span></p>
 
 <!-- Spieltag wählen -->
 <div class="w3-bar">
     <?php foreach ($spieltage_array as $spieltag_dict){?>
-        <a class='no w3-hover-text-secondary' href='tabelle.php?spieltag=<?=$spieltag_dict[0]?>#meister'><span class= 'w3-bar-item w3-button <?=$spieltag_dict['spieltag_button']?> w3-hover-primary'><?=$spieltag_dict["spieltag_string"]?></span></a>
+        <a class='no w3-hover-text-secondary' href='tabelle.php?saison=<?=$saison?>&spieltag=<?=$spieltag_dict[0]?>#meister'><span class= 'w3-bar-item w3-button <?=$spieltag_dict['spieltag_button']?> w3-hover-primary'><?=$spieltag_dict["spieltag_string"]?></span></a>
     <?php } //endforeach?>
 </div>
 
@@ -171,12 +171,12 @@ window.onclick = function(event) {
 
 <!--Rangtabelle-->
 <h1 id="rang" class="w3-text-primary w3-border-primary">Rangtabelle</h1>
-<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#meister" class="no w3-hover-text-secondary">Zur Meisterschaftstabelle</a><span class="w3-right">Saison <?=Html::get_saison_string()?></span></p>
+<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#meister" class="no w3-hover-text-secondary">Zur Meisterschaftstabelle</a><span class="w3-right">Saison <?=Html::get_saison_string($saison)?></span></p>
 
 <!-- Spieltag wählen -->
 <div class="w3-bar">
     <?php foreach ($spieltage_array as $spieltag_dict){?>
-        <a class='no w3-hover-text-secondary' href='tabelle.php?spieltag=<?=$spieltag_dict[0]?>#rang'><span class='w3-bar-item w3-button <?=$spieltag_dict['spieltag_button']?> w3-hover-primary'><?=$spieltag_dict["spieltag_string"]?></span></a>
+        <a class='no w3-hover-text-secondary' href='tabelle.php?saison=<?=$saison?>&spieltag=<?=$spieltag_dict[0]?>#rang'><span class='w3-bar-item w3-button <?=$spieltag_dict['spieltag_button']?> w3-hover-primary'><?=$spieltag_dict["spieltag_string"]?></span></a>
     <?php } //endforeach?>
 </div>
 

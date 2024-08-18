@@ -76,16 +76,17 @@ class Tabelle
      *
      * @param int $team_id
      * @param int|null $spieltag
+     * @param int $saison
      * @return int|null
      */
-    public static function get_team_rang(int $team_id, NULL|int $spieltag = NULL): ?int
+    public static function get_team_rang(int $team_id, NULL|int $spieltag = NULL, int $saison = Config::SAISON): ?int
     {
         // Default: Aktueller Spieltag - 1 = Spieltag mit allen eingetragenen Ergebnissen
-        $spieltag = $spieltag ?? (self::get_aktuellen_spieltag() - 1);
+        $spieltag = $spieltag ?? (self::get_aktuellen_spieltag($saison) - 1);
 
         // Rangtabelle soll nicht jedes mal neu berechnet werden müssen
         if (!isset(self::$cache_rangtabellen[$spieltag])){
-            self::$cache_rangtabellen[$spieltag] = self::get_rang_tabelle($spieltag);
+            self::$cache_rangtabellen[$spieltag] = self::get_rang_tabelle($spieltag, $saison);
         }
         // Nichtligateam haben den Rang NULL
         return self::$cache_rangtabellen[$spieltag][$team_id]['rang'] ?? NULL;
@@ -129,9 +130,9 @@ class Tabelle
      * @param int|null $spieltag
      * @return int|null
      */
-    public static function get_team_wertigkeit(int $team_id, null|int $spieltag = null): ?int
+    public static function get_team_wertigkeit(int $team_id, null|int $spieltag = null, int $saison = Config::SAISON): ?int
     {
-        $rang = self::get_team_rang($team_id, $spieltag);
+        $rang = self::get_team_rang($team_id, $spieltag, $saison);
         return self::rang_to_wertigkeit($rang);
     }
 
@@ -269,6 +270,10 @@ class Tabelle
         // Hinzufügen der Strafen:
         $strafen = Team::get_strafen($saison);
         foreach ($strafen as $strafe) {
+            # Ist die Strafe überhaupt in den Ergebnissen enthalten?
+            if (!isset($return[$strafe['team_id']])) {
+                continue;
+            }
             // Hinzufügen des Sterns
             if (isset($return[$strafe['team_id']]['strafe_stern'])) {
                 $return[$strafe['team_id']]['strafe_stern'] .= '*';
