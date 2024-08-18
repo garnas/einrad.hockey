@@ -632,7 +632,7 @@ class nTurnier
                 $team_id = $team['team_id'];
                 
                 $temp = new Team($team_id);
-                $temp->set_wertigkeit($this->spieltag);
+                $temp->set_wertigkeit($this->spieltag, $this->saison);
                 $temp->set_tblock($this->spieltag);
                 $temp->set_freilos_gesetzt($team['freilos_gesetzt']);
                 $spielenliste[$team_id] = $temp;

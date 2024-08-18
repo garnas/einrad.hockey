@@ -626,9 +626,9 @@ class Team
      * 
      * @param int $spieltag
      */
-    public function set_wertigkeit(int $spieltag): void
+    public function set_wertigkeit(int $spieltag, int $saison = Config::SAISON): void
     {
-        $this->wertigkeit = Tabelle::get_team_wertigkeit($this->id, $spieltag - 1);
+        $this->wertigkeit = Tabelle::get_team_wertigkeit($this->id, $spieltag - 1, $saison);
     }
 
     /**
