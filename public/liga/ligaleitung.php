@@ -24,8 +24,8 @@ include '../../templates/header.tmp.php'; ?>
     wenn es mehr Bewerber als Ligaausschussplätze gibt.
 </p>
 <p class="w3-margin" style="max-width: 666px">
-    <a href="<?= Env::BASE_URL ?>/bilder/ligaausschuss.png">
-        <img src="<?= Env::BASE_URL ?>/bilder/ligaausschuss.png" alt="Ligaausschuss" class="w3-image w3-card-4">
+    <a href="<?= Env::BASE_URL ?>/bilder/ligaausschuss.jpg">
+        <img src="<?= Env::BASE_URL ?>/bilder/ligaausschuss.jpg" alt="Ligaausschuss" class="w3-image w3-card-4">
     </a>
     Das Bild des Ligaausschusses der Saison <?= Html::get_saison_string() ?>.
 </p>
