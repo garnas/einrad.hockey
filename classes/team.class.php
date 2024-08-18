@@ -142,35 +142,53 @@ class Team
     /**
      * Wandelt die TeamID in den Teamnamen um. Gibt leer zurück, wenn es den Teamnamen nicht gibt.
      *
-     * @param $team_id
+     * @param int $team_id
+     * @param int $saison
      * @return string|null
      */
-    public static function id_to_name($team_id, $saison = Config::SAISON): null|string
+    public static function id_to_name(int $team_id, int $saison = Config::SAISON): null|string
     {
 
         if (isset(self::$cache_id_to_name[$team_id])) {
             return self::$cache_id_to_name[$team_id];
         }
-        if ($saison == Config::SAISON) {
             $sql = "
                 SELECT teamname 
                 FROM teams_liga 
                 WHERE team_id = ?
-                ";
-            $params = [$team_id];
-        } else {
-            $sql = "
-                SELECT name
-                FROM teams_name_historic
-                WHERE team_id = ?
-                AND saison = ?
             ";
-            $params = [$team_id, $saison];
+            $params = [$team_id];
+
+        if ($saison != Config::SAISON) {
+            $teamname = self::id_to_historic_name($team_id, $saison);
+            if (empty($teamname)) {
+                $teamname = db::$db->query($sql, $params)->esc()->fetch_one();
+            }
+        } else {
+            $teamname = db::$db->query($sql, $params)->esc()->fetch_one();
         }
 
-        $teamname = db::$db->query($sql, $params)->esc()->fetch_one();
         self::$cache_id_to_name[$team_id] = $teamname;
         return $teamname;
+    }
+
+    /**
+     * Wandelt die TeamID in den Teamnamen aus der teams_historic Tabelle um. Gibt leer zurück, wenn es den Teamnamen nicht gibt.
+     *
+     * @param int $team_id
+     * @param int $saison
+     * @return string|null
+     */
+    public static function id_to_historic_name(int $team_id, int $saison = Config::SAISON): null|string
+    {
+        $sql = "
+            SELECT name
+            FROM teams_name_historic
+            WHERE team_id = ?
+            AND saison = ?
+        ";
+        $params = [$team_id, $saison];
+        return db::$db->query($sql, $params)->esc()->fetch_one();
     }
 
     /**
