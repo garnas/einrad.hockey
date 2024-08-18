@@ -246,9 +246,9 @@ if (Env::ACTIVE_FINAL_DISCORD) {
                             <span class="w3-hide-large w3-hide-medium">
                                <?= Html::icon("keyboard_arrow_left") ?>
                             </span>
-                            <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_a"]]['teamname'] ?? Team::id_to_name($spiel["schiri_team_id_a"]) ?>
+                            <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_a"]]['teamname'] ?? Team::id_to_name($spiel["schiri_team_id_a"], 27) ?>
                             |
-                            <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_b"]]['teamname'] ?? Team::id_to_name($spiel["schiri_team_id_a"]) ?>
+                            <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_b"]]['teamname'] ?? Team::id_to_name($spiel["schiri_team_id_a"], 27) ?>
                         </span>
                 <!-- Mobil -->
                 <span class="pdf-hide w3-hide-medium w3-hide-large w3-text-primary w3-hover-text-secondary">

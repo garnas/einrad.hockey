@@ -187,7 +187,7 @@ class Tabelle
     public static function get_all_ergebnisse(int $saison = Config::SAISON): array
     {
         $sql = "
-                SELECT turniere_ergebnisse.*, teams_liga.teamname , teams_liga.ligateam
+                SELECT turniere_ergebnisse.*, teams_liga.teamname , teams_liga.ligateam, teams_liga.team_id
                 FROM turniere_ergebnisse
                 LEFT JOIN teams_liga
                 ON teams_liga.team_id = turniere_ergebnisse.team_id
@@ -198,6 +198,11 @@ class Tabelle
                 ORDER BY turniere_liga.datum DESC, platz
                 ";
         $result = db::$db->query($sql)->esc()->fetch();
+        if ($saison !== Config::SAISON) {
+            foreach ($result as $key => $ergebnis) {
+                $result[$key]['teamname'] = Team::id_to_name($ergebnis['team_id'], $saison);
+            }
+        }
         foreach ($result as $ergebnis){
             $return[$ergebnis['turnier_id']][] = $ergebnis;
         }
@@ -316,6 +321,13 @@ class Tabelle
             $zeile_vorher['platz'] = $return[$key]['platz'];
             $platz++;
         }
+
+        if ($saison !== Config::SAISON) {
+            foreach ($return as $team_id => $team) {
+                $return[$team_id]['teamname'] = Team::id_to_name($team_id, $saison);
+            }
+        }
+
         return $return;
     }
 
@@ -403,6 +415,11 @@ class Tabelle
                     $return[$team_id]['avg'] = 0;
                     $return[$team_id]['einzel_ergebnisse'] = [0];
                 }
+            }
+        }
+        if ($saison !== Config::SAISON) {
+            foreach ($return as $team_id => $team) {
+                $return[$team_id]['teamname'] = Team::id_to_name($team_id, $saison);
             }
         }
 

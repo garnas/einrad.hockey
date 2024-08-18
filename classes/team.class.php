@@ -145,19 +145,30 @@ class Team
      * @param $team_id
      * @return string|null
      */
-    public static function id_to_name($team_id): null|string
+    public static function id_to_name($team_id, $saison = Config::SAISON): null|string
     {
 
         if (isset(self::$cache_id_to_name[$team_id])) {
             return self::$cache_id_to_name[$team_id];
         }
-
-        $sql = "
+        if ($saison == Config::SAISON) {
+            $sql = "
                 SELECT teamname 
                 FROM teams_liga 
                 WHERE team_id = ?
                 ";
-        $teamname = db::$db->query($sql, $team_id)->esc()->fetch_one();
+            $params = [$team_id];
+        } else {
+            $sql = "
+                SELECT name
+                FROM teams_name_historic
+                WHERE team_id = ?
+                AND saison = ?
+            ";
+            $params = [$team_id, $saison];
+        }
+
+        $teamname = db::$db->query($sql, $params)->esc()->fetch_one();
         self::$cache_id_to_name[$team_id] = $teamname;
         return $teamname;
     }

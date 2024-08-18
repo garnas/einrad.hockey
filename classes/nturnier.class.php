@@ -656,6 +656,12 @@ class nTurnier
 
         }
 
+        if ($this->saison !== Config::SAISON) {
+            foreach ($spielenliste as $team_id => $team) {
+                $spielenliste[$team_id]->teamname = Team::id_to_name($team_id, $this->saison);
+            }
+        }
+
         return $spielenliste ?? [];
     }
 
