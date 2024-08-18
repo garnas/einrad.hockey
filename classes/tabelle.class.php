@@ -243,7 +243,7 @@ class Tabelle
                 $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
                 $return[$team_id]['team_id'] = $team_id;
                 $return[$team_id]['teamname'] = $eintrag['teamname'];
-                $return[$team_id]['string'] = Html::link("ergebnisse.php#" . $eintrag['turnier_id'], $eintrag['ergebnis']);
+                $return[$team_id]['string'] = Html::link("ergebnisse.php?saison=$saison#" . $eintrag['turnier_id'], $eintrag['ergebnis']);
                 $return[$team_id]['summe'] = (int) $eintrag['ergebnis'];
                 $counter[$team_id] = 1;
             }
