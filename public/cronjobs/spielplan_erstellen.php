@@ -32,6 +32,11 @@ foreach ($turniere as $turnier) {
         }
         $aktuelles_datum = strtotime("+1 day", $aktuelles_datum);
     }
+
+    if ($turnier->get_phase() != "setz") {
+        $erstellen = False;
+    }
+
     if ($erstellen) {
         $turnier_new = TurnierRepository::get()->turnier($turnier->get_turnier_id());
         Html::info("Handling Turnier " . $turnier->get_turnier_id());
