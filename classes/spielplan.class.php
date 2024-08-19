@@ -16,7 +16,7 @@ class Spielplan
             Html::error("Das Turnier muss in der Setzphase sein.");
             $error = true;
         }
-        if ($anzahl_teams < 4 || $anzahl_teams > 8) {
+        if ($anzahl_teams < 3 || $anzahl_teams > 8) {
             Html::error("Falsche Anzahl an Teams. Nur 4er - 8er Jeder-gegen-Jeden Spielpläne können erstellt werden.");
             $error = true;
         }
