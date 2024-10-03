@@ -149,9 +149,7 @@ class Spieler
      */
     public static function get_teamkader_vorsaison(int $team_id): array
     {
-        $kader_vorsaison = self::get_teamkader($team_id, Config::SAISON - 1);
-        $kader_vorvorsaison = self::get_teamkader($team_id, Config::SAISON - 2);
-        return $kader_vorsaison + $kader_vorvorsaison;
+        return self::get_teamkader($team_id, Config::SAISON - 1);
     }
 
     /**

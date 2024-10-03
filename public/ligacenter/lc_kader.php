@@ -10,9 +10,7 @@ if (isset($_GET['team_id'])) {
     $team_id = (int)$_GET['team_id'];
     if (Team::is_ligateam($team_id)) {
         $kader = nSpieler::get_kader($team_id);
-        $kader_vorsaison =
-            nSpieler::get_kader($team_id, Config::SAISON - 1)
-            +  nSpieler::get_kader($team_id, Config::SAISON - 2);
+        $kader_vorsaison = nSpieler::get_kader($team_id, Config::SAISON - 1);
     } else {
         Html::error("Team wurde nicht gefunden");
     }

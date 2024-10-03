@@ -39,7 +39,7 @@
                         <tr class="w3-primary">
                             <th><?= Html::icon("tag") ?> ID</th>
                             <th><?= Html::icon("account_circle") ?> Spieler</th>
-                            <th><?= Html::icon("sports") ?> Schiri</th>
+                            <th><?= Html::icon("sports") ?> Schiri<sup>*</sup></th>
                         </tr>
                         <?php foreach ($kader as $spieler): ?>
                             <tr class="<?php $spieler->schiri ? "w3-pale-green" : ""; ?>">
@@ -48,14 +48,15 @@
                                     <?= $spieler->get_name(true) ?>
                                 </td>
                                 <td>
-                                    <?php if ($spieler->schiri): ?>
-                                        <?= Html::icon('check_circle') ?> <?= $spieler->get_schiri() ?>
-                                    <?php endif; ?>
+                                    <?= $spieler->get_schiri_as_html() ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                     </table>
                 </div>
+                <span class="w3-text-grey w3-small">
+                    <sup>*</sup>Schirilizenz ist gültig bis inkl. der angezeigten Saison
+                </span>
             <?php endif; ?>
             <?php if(!Team::is_ligateam($team_id)): ?>
                 <p class="w3-text-grey">
