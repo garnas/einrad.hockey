@@ -37,9 +37,9 @@ include '../../templates/header.tmp.php';
             <li>26. + 27. Oktober 2024 (Sichtungstraining) in Mörfelden</li>
             <li>09. + 10. November 2024 in Mörfelden</li>
             <li>18. + 19. Januar 2025</li>
-            <li>08. + 09. Februar 2025</li>
+            <li>08. + 09. Februar 2025 in Augustdorf</li>
             <li>29. + 30. März 2025 in Mörfelden</li>
-            <li>26. + 27. April 2025</li>
+            <li>03. + 04. Mai 2025 in Remscheid</li>
         </ul>
     </div>
     <h3 class="w3-text-primary">Termine für die Trainingslager der Saison 2024/25, A-Kader</h3>
