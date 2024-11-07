@@ -20,6 +20,7 @@ Ist vergleichbar mit einem gitignore und beschreibt die Files, die von Docker ig
 ## Code-Änderungen
 - In der `env.php` muss die `BASE_URL` auf `'http://localhost'` gesetzt werden.
 - Zudem muss (zur Zeit) sichergestellt werden, dass in der `env.php` `DATABASE` auf `db_localhost` gesetzt ist!
+- Der Host der Datenbank in `env.php` muss mit dem Namen des mysql-Containers übereinstimmen! Dies ist (im Normalfall) `ligaseite-mysql`
 - Es war notwendig Änderungen am Dummy vorzunehmen, da dieser sonst nicht richtig übernommen werden kann.
 
 ## Docker
