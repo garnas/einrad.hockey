@@ -29,5 +29,8 @@ COPY . .
 # Set the DocumentRoot to public/
 RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 
+# Allow Doctrine access to tmp
+RUN chmod 777 tmp
+
 # Expose port 80 for web traffic
 EXPOSE 80
