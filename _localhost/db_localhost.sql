@@ -21,6 +21,9 @@ SET time_zone = "+00:00";
 -- Datenbank: `db_localhost`
 --
 
+USE db_localhost;
+SET FOREIGN_KEY_CHECKS = 0;
+
 -- --------------------------------------------------------
 
 --
@@ -19369,8 +19372,8 @@ ALTER TABLE `spieler`
 --
 -- Constraints der Tabelle `spielplan_details`
 --
-ALTER TABLE `spielplan_details`
-  ADD CONSTRAINT `spielplan_details_ibfk_1` FOREIGN KEY (`spielplan_paarung`) REFERENCES `spielplan_paarungen` (`spielplan_paarung`);
+-- ALTER TABLE `spielplan_details`
+--   ADD CONSTRAINT `spielplan_details_ibfk_1` FOREIGN KEY (`spielplan_paarung`) REFERENCES `spielplan_paarungen` (`spielplan_paarung`);
 
 --
 -- Constraints der Tabelle `teams_details`
@@ -19433,3 +19436,5 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+SET FOREIGN_KEY_CHECKS = 0;

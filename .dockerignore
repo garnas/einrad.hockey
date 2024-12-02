@@ -1,0 +1,19 @@
+# Git und Versionskontrolle
+.git
+.gitignore
+.gitattributes
+
+# PHP Composer Abhängigkeiten und Konfigurationen
+vendor/
+# composer.lock
+
+# Umgebungsdateien
+.env
+.env.local
+.env.*.backup# Editor-spezifische Dateien
+
+# IDE spezifische Dateien
+*.swp
+*.swo
+*.idea/
+.vscode/
