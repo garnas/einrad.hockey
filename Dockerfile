@@ -31,6 +31,8 @@ RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available
 
 # Allow Doctrine access to tmp
 RUN chmod 777 tmp
+RUN touch system/logs/user.log
+RUN chmod 777 system/logs/user.log
 
 # Expose port 80 for web traffic
 EXPOSE 80
