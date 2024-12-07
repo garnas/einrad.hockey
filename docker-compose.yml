@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  web:
+    container_name: ligaseite-webserver
+    image: einradhockeyliga-apache
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+      - /var/www/html/vendor
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+
+  db:
+    container_name: ligaseite-mysql
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_localhost
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./_localhost/db_localhost.sql:/docker-entrypoint-initdb.d/db_localhost.sql
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    container_name: ligaseite-phpmyadmin
+    image: phpmyadmin
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+networks:
+  ligaseite-network:
+    external: true
+
+volumes:
+  db_data:
