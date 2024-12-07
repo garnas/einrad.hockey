@@ -16,6 +16,10 @@ include '../../templates/header.tmp.php';
         und den perspektivischen Aufstieg in den deutschen Nationalkader. Seit Sommer 2023 ist auch der B-Nationalkader
         bei internationalen Wettbewerben vertreten.
     </p>
+    <div class="w3-center">
+        <iframe  style="width:100%; height: 340px" src="https://www.youtube-nocookie.com/embed/eaUT9tUrjS4?si=Xkto73gokPx_a5UB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <span class="w3-text-grey">Video der Europameisterschaft 2023</span>
+    </div>
 
     <h3 class="w3-text-primary">Erfolge (Nationalkader)</h3>
     <div class="w3-container">
