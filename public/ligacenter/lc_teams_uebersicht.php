@@ -39,9 +39,6 @@ foreach ($teams as $team_id => $team){
     if ($genug_schiris){
         ++$teams_mit_zwei_schiris;
     }
-    if (Team::static_check_schiri_freilos_erhalten($team['zweites_freilos'])){
-        ++$teams_zweites_freilos_erhalten;
-    }
 }
 
 //Hinzufügen des zweiten Freiloses für zwei Schiris zu Saisonbeginn
@@ -81,7 +78,6 @@ include '../../templates/header.tmp.php';
     <p>&sum; Schiris: <span class="w3-text-green"><?=$max_schiris?></span></p>
     <p>&sum; Teams: <span class="w3-text-green"><?=count($teams)?></span></p>
     <p>&sum; Teams mit zwei oder mehr Schiris: <span class="w3-text-green"><?=$teams_mit_zwei_schiris?></span></p>
-    <p>&sum; Teams, die ihr Freilos für zwei Schiris erhalten haben: <span class="w3-text-green"><?=$teams_zweites_freilos_erhalten?></span></p>
 </div>
 
 <!-- Button 2. Freilos 
@@ -110,7 +106,7 @@ include '../../templates/header.tmp.php';
         </tr>
         <?php foreach ($teams as $team_id => $team){?>
             <tr class="w3-center
-                        <?php if(Team::static_check_schiri_freilos_erhalten($team['zweites_freilos'])){ ?>
+                        <?php if($team["schiris"] >= 2){ ?>
                             w3-pale-green
                         <?php }elseif($team['kader'] < 5){?>
                             w3-pale-red
@@ -119,7 +115,6 @@ include '../../templates/header.tmp.php';
                 <td><?=Html::link('lc_kader.php?team_id='. $team_id, $team['teamname'])?></td>
                 <td><?=$team['freilose']?></td>
                 <td><?= TeamRepository::get()->team($team_id)->getOffeneFreilose()->count()?></td>
-                <td><?=$team['zweites_freilos']?></td>
                 <td><?=$team['kader']?></td>
                 <td><?=$team['schiris']?></td>
                 <td class="w3-text-grey"><?=$team['kader_alt']?></td>
