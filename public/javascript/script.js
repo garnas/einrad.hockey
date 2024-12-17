@@ -138,3 +138,48 @@ function countdown(countDownDate, countdown_id){
     }, 1000);
 
 }
+
+// Ergebnisse der Tabelle ausklappen
+function show_results(table, id) {
+  
+  head = document.getElementById(table + '-head-' + id);
+  head.classList.toggle('active');
+  
+  icon_on = document.getElementById(table + '-icon-on-' + id);
+  icon_off = document.getElementById(table + '-icon-off-' + id);
+
+  results = document.querySelectorAll('.' + table + '-result-' + id);
+
+  if (head.classList.contains('active')) {
+    head.classList.add('w3-border-top');
+    head.classList.add('w3-border-bottom');
+    head.classList.add('w3-border-primary');
+
+    icon_on.style.display = "none";
+    icon_off.style.display = "block";
+
+    results.forEach(function(element, index, array) {
+      element.style.display = "block";
+      element.classList.add('w3-border-bottom');
+      
+      if (index === array.length - 1) {
+        element.classList.add('w3-border-primary');
+      }
+    });
+
+  } else {
+    head.classList.remove('w3-border-top');
+    head.classList.remove('w3-border-bottom');
+    head.classList.remove('w3-border-primary');
+
+    icon_on.style.display = "block";
+    icon_off.style.display = "none";
+
+    results.forEach(elem => {
+      elem.style.display = "none";
+      elem.classList.remove('w3-border-primary');
+      elem.classList.remove('w3-border-bottom');
+    });
+
+  }
+}
