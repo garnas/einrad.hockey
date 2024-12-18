@@ -89,7 +89,6 @@ if (isset($_POST['change_turnier'])) {
 
     if (
         TurnierValidatorService::onChange($turnier)
-        && TurnierValidatorService::mayChangePlaetze($turnier, $plaetze_before)
     ) {
         if ($turnier->isSetzPhase()) {
             TurnierService::setzListeAuffuellen($turnier);

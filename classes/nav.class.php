@@ -123,7 +123,7 @@ class Nav
      */
     public static function get_lc_start(): array
     {
-        return [
+        return array(
             [Env::BASE_URL . "/ligacenter/lc_abstimmung.php", "Abstimmung", "w3-secondary"],
             [Env::BASE_URL . "/schiricenter/schiritest_erstellen.php", "Schiritest", "w3-secondary"],
             [Env::BASE_URL . "/ligacenter/lc_turnierliste.php", "Turniere verwalten", "w3-primary"],
@@ -140,8 +140,23 @@ class Nav
             [Env::BASE_URL . "/ligacenter/lc_pw_aendern.php", "Passwort ändern", "w3-grey"],
             [Env::BASE_URL . "/ligacenter/lc_admin.php", "Admin", "w3-grey"],
             [Env::BASE_URL . "/ligacenter/lc_checkmail.php", "Mail-Bot", "w3-blue"],
-            [Env::BASE_URL . "/ligacenter/lc_logout.php", "Logout", "w3-grey"]
-        ];
+            [Env::BASE_URL . "/ligacenter/lc_logout.php", "Logout", "w3-grey"],
+        );
+    }
+
+    /**
+     * Downloadlinks für die Startseite des Ligacenters
+     * 
+     * @return string[][]
+     */
+    public static function get_lc_downloads(): array
+    {
+        return array(
+            [Env::BASE_URL . "/ligacenter/lc_turnierstats.php", "turniere.xlsx", "w3-light-grey"],
+            [Env::BASE_URL . "/ligacenter/lc_spielerstats.php", "spieler.xlsx", "w3-light-grey"],
+            [Env::BASE_URL . "/ligacenter/lc_teamstats.php", "teams.xlsx", "w3-light-grey"],
+            [Env::BASE_URL . "/schiricenter/schiritest_stats.php", "schiritest.xlsx", "w3-light-grey"],
+        );
     }
 
     /**
@@ -151,9 +166,9 @@ class Nav
      */
     public static function get_tc_start(): array
     {
-        $links = [
+        $links = array(
             [Env::BASE_URL . "/teamcenter/tc_terminseite_erstellen.php", "Teamtermine", "w3-green"],
-            [Env::BASE_URL . "/teamcenter/tc_turnierliste_anmelden.php", "Turnier- anmeldung", "w3-primary"],
+            [Env::BASE_URL . "/teamcenter/tc_turnierliste_anmelden.php", "Turnieranmeldung", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_turnier_erstellen.php", "Turnier erstellen", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_verwalten.php", "Eigene Turniere", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_neuigkeit_eintragen.php", "Neuigkeiten eintragen", "w3-tertiary"],
@@ -164,7 +179,7 @@ class Nav
             [Env::BASE_URL . "/teamcenter/tc_antrag.php", "Fördermittel", "w3-purple"],
             [Env::BASE_URL . "/teamcenter/tc_pw_aendern.php", "Passwort ändern", "w3-grey"],
             [Env::BASE_URL . "/teamcenter/tc_logout.php", "Logout", "w3-grey"],
-        ];
+        );
         // Abstimmung Finalart
 //        if (Abstimmung::darf_abstimmen($_SESSION['logins']['team']['id'])) {
 //            array_unshift(
@@ -220,12 +235,12 @@ class Nav
 
     public static function get_oc_start(): array
     {
-        return [
+        return array(
             [Env::BASE_URL . "/oefficenter/oc_kontaktcenter.php", "Kontaktcenter", "w3-tertiary"],
             [Env::BASE_URL . "/oefficenter/oc_neuigkeit_eintragen.php", "Neuigkeit eintragen", "w3-tertiary"],
             [Env::BASE_URL . "/liga/neues.php", "Neuigkeit bearbeiten", "w3-tertiary"],
             [Env::BASE_URL . "/oefficenter/oc_pw_aendern.php", "Passwort ändern", "w3-grey"],
-            [Env::BASE_URL . "/oefficenter/oc_logout.php", "Logout", "w3-grey"]
-        ];
+            [Env::BASE_URL . "/oefficenter/oc_logout.php", "Logout", "w3-grey"],
+        );
     }
 }
