@@ -105,7 +105,7 @@ include '../../templates/header.tmp.php';?>
 </script>
 
 <!-- ------------------------- MEISTERSCHAFTSTABELLE ------------------------- -->
-<h1 id='meister' class="w3-text-primary w3-border-primary">Meisterschaftstabelle</h1>
+<h1 id='meister' class="w3-text-primary">Meisterschaftstabelle</h1>
 <p class="w3-border-top w3-border-grey w3-text-grey"><a href="#rang" class="no w3-hover-text-secondary">Zur Rangtabelle</a><span class="w3-right">Saison <?=Html::get_saison_string($saison)?></span></p>
 
 <!-- Auswahl des Spieltages ueber der Meisterschaftstabelle -->
@@ -142,9 +142,9 @@ include '../../templates/header.tmp.php';?>
     <div>
         <?php $counter = 0; ?>
         <?php foreach ($meisterschafts_tabelle as $key => $zeile): ?>
-            <?php $row_style = $counter % 2 == 1 ? "background-color:#f1f1f1;" : ""; ?>
-            <?php $counter++; ?>
-            <div id="m-head-<?=$key?>" class="w3-row" style="<?=$row_style?>">
+            <?php $row_class = $counter % 2 == 1 ? "w3-light-grey" : ""; ?>
+            <!-- Kopfzeile fuer das Team -->
+            <div id="m-head-<?=$key?>" class="w3-row <?=$row_class?>">
                 <div class="w3-col w3-left w3-padding-8 w3-right-align <?=$platz_color[$zeile['platz']] ?? ''?>" style="width: 50px;"><?=$zeile['platz']?></div>
                 <div class="w3-col w3-right w3-padding-8" style="width: 42px;">
                     <?php if (!empty($zeile['details'])): ?>
@@ -152,16 +152,17 @@ include '../../templates/header.tmp.php';?>
                             <span id="m-icon-on-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:block">arrow_drop_down</span>
                             <span id="m-icon-off-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:none">arrow_drop_up</span>
                         </span>
-                        <?php endif; ?>
-                    </div>
+                    <?php endif; ?>
+                </div>
                 <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width: 80px;">
                     <?=number_format($zeile['summe'] ?: 0, 0, ",", ".") . (!empty($zeile['hat_strafe']) ? '<a class="no w3-text-primary w3-hover-text-secondary" href="#strafen">*</a>' : '')?>
                 </div>
                 <div class="w3-rest w3-padding-8 w3-left-align"><?=$zeile['teamname']?></div>
             </div>
+            <!-- Details zu den Turnieren des Teams -->
             <?php if (!empty($zeile['details'])): ?>
                 <?php foreach ($zeile['details'] as $ergebnis): ?>
-                    <div class="m-result-<?=$key?> w3-row" style="display: none; <?=$row_style?>">
+                    <div class="m-result-<?=$key?> w3-row <?=$row_class?>" style="display: none;">
                         <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width:100px;"><?=date_format(date_create($ergebnis['datum']), "d.m.y")?></div>
                         <div class="w3-col w3-hide-small w3-left w3-padding-8 w3-left-align" style="width:85px;"><?=$ergebnis['tblock']?></div>
                         <div class="w3-col w3-hide-small w3-right w3-padding-8" style="width: 42px;"></div>
@@ -171,6 +172,7 @@ include '../../templates/header.tmp.php';?>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
+            <?php $counter++; ?>
         <?php endforeach; ?>
     </div>
 </div>
@@ -228,9 +230,9 @@ include '../../templates/header.tmp.php';?>
     <div>
         <?php $counter = 0; ?>
         <?php foreach ($rang_tabelle as $key => $zeile): ?>
-            <?php $row_style = $counter % 2 == 1 ? "background-color:#f1f1f1;" : ""; ?>
-            <?php $counter++; ?>
-            <div id="r-head-<?=$key?>" class="w3-row" style="<?=$row_style?>">
+            <?php $row_class = $counter % 2 == 1 ? "w3-light-grey" : ""; ?>
+            <!-- Kopfzeile fuer das Team -->
+            <div id="r-head-<?=$key?>" class="w3-row <?=$row_class?>" >
                 <div class="w3-col w3-left w3-padding-8 w3-right-align w3-text-gray" style="width: 50px;"><?=$zeile['rang']?></div>
                 <div class="w3-col w3-left w3-padding-8 w3-left-align" style="width: 50px;"><?=Tabelle::rang_to_block($zeile['rang'])?></div>
                 <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width: 60px;"><?=Tabelle::rang_to_wertigkeit($zeile['rang'])?></div>
@@ -245,9 +247,10 @@ include '../../templates/header.tmp.php';?>
                 <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width:100px"><?=number_format($zeile['avg'] ?: 0, 1, ",", ".")?></div>
                 <div class="w3-rest w3-padding-8 w3-left-align"><?=$zeile['teamname']?></div>
             </div>
+            <!-- Details zu den Turnieren des Teams -->
             <?php if (!empty($zeile['details'])): ?>
                 <?php foreach ($zeile['details'] as $dey => $ergebnis): ?>
-                    <div class="r-result-<?=$key?> w3-row" style="display: none; <?=$row_style?>">
+                    <div class="r-result-<?=$key?> w3-row <?=$row_class?>" style="display: none;">
                         <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width: 100px;"><?=date_format(date_create($ergebnis['datum']), "d.m.y")?></div>
                         <div class="w3-col w3-hide-small w3-left w3-padding-8 w3-left-align" style="width: 85px;"><?=$ergebnis['tblock']?></div>
                         <div class="w3-col w3-hide-small w3-right w3-padding-8" style="width: 42px;"></div>
@@ -261,6 +264,7 @@ include '../../templates/header.tmp.php';?>
                     </div>
                 <?php endforeach; ?>    
             <?php endif; ?>
+            <?php $counter++; ?>
         <?php endforeach; ?>
     </div>
 </div>
@@ -286,16 +290,16 @@ include '../../templates/header.tmp.php';?>
 <!-- - Verwarnungen und Strafen - -->
 <!-- ---------------------------- -->
 
-<?php if (!$verwarnung_not_empty && $strafe_not_empty) : ?>
+<?php if (!$verwarnung_not_empty && $strafe_not_empty): ?>
     <h1 id="strafen" class="w3-text-primary">Strafen</h1>
-<?php elseif ($verwarnung_not_empty && !$strafe_not_empty) : ?>
+<?php elseif ($verwarnung_not_empty && !$strafe_not_empty): ?>
     <h1 id="strafen" class="w3-text-primary">Verwarnungen</h1>
-<?php elseif ($verwarnung_not_empty && $strafe_not_empty) : ?>
+<?php elseif ($verwarnung_not_empty && $strafe_not_empty): ?>
     <h1 id="strafen" class="w3-text-primary">Verwarnungen & Strafen</h1>
 <?php endif; ?>
 
-<?php if ($verwarnung_not_empty) : ?>
-    <h3 class="w3-text-secondary">Verwarnungen</h3>
+<?php if ($verwarnung_not_empty): ?>
+    <h2 class="w3-text-secondary">Verwarnungen</h2>
     <div class="w3-responsive w3-card">
         <!-- Header der Verwarnungen -->
         <div class="w3-row w3-primary"> 
@@ -307,9 +311,8 @@ include '../../templates/header.tmp.php';?>
         <?php $counter = 0; ?>
         <?php foreach ($strafen as $strafe) : ?>
             <?php if ($strafe['verwarnung'] == 'Ja') : ?>
-                <?php $row_style = $counter % 2 == 1 ? "background-color:#f1f1f1" : ""; ?>
-                <?php $counter++; ?>
-                <div class="w3-row" style="<?=$row_style?>">
+                <?php $row_class = $counter % 2 == 1 ? "w3-light-grey" : ""; ?>
+                <div class="w3-row <?=$row_class?>">
                     <div class="w3-col w3-padding-8 l3 m3 s3 w3-left-align"><?=$strafe['teamname']?></div>
                     <div class="w3-col w3-padding-8 l7 m7 s7 w3-left-align"><?=$strafe['grund']?></div>
                     <?php if (!empty($strafe['datum'])) : ?>
@@ -318,13 +321,14 @@ include '../../templates/header.tmp.php';?>
                         <div class="w3-col w3-padding-8 l2 m2 s2 w3-left-align">-</div>
                     <?php endif; ?>
                 </div>
+                <?php $counter++; ?>
             <?php endif; ?>
         <?php endforeach; ?>
     </div>
 <?php endif; ?>
 
 <?php if ($strafe_not_empty) : ?>
-    <h3 class="w3-text-secondary">Strafen</h3>
+    <h2 class="w3-text-secondary">Strafen</h2>
     <div class="w3-responsive w3-card">
         <!-- Header der Strafen -->
         <div class="w3-row w3-primary"> 
@@ -337,18 +341,18 @@ include '../../templates/header.tmp.php';?>
         <?php $counter = 0; ?>
         <?php foreach ($strafen as $strafe) : ?>
             <?php if ($strafe['verwarnung'] == 'Nein') : ?>
-                <?php $row_style = $counter % 2 == 1 ? "background-color:#f1f1f1" : ""; ?>
-                <?php $counter++; ?>
-                <div class="w3-row" style="<?=$row_style?>">
+                <?php $row_class = $counter % 2 == 1 ? "w3-light-grey" : ""; ?>
+                <div class="w3-row <?=$row_class?>">
                     <div class="w3-col w3-padding-8 l3 m3 s3 w3-left-align"><?=$strafe['teamname']?></div>
                     <div class="w3-col w3-padding-8 l6 m6 s6 w3-left-align"><?=$strafe['grund']?></div>
-                    <div class="w3-col w3-padding-8 l1 m1 s1 w3-right-align"><?=$strafe['prozentsatz']?>&nbsp;%</div>
+                    <div class="w3-col w3-padding-8 l1 m1 s1 w3-right-align"><?=$strafe['prozentsatz']?>%</div>
                     <?php if (!empty($strafe['datum'])) : ?>
                         <div class="w3-col w3-padding-8 l2 m2 s2 w3-left-align"><?=date("d.m.Y", strtotime($strafe['datum']))?> (<?=($strafe['ort'])?>)</div>
                     <?php else : ?>
                         <div class="w3-col w3-padding-8 l2 m2 s2 w3-left-align">-</div>
                     <?php endif; ?>
                 </div>
+                <?php $counter++; ?>
             <?php endif; ?>
         <?php endforeach; ?>
     </div>
