@@ -9,11 +9,10 @@ require_once '../../logic/session_la.logic.php'; //Auth
 if(isset($_POST['change'])) {
     $passwort_alt = $_POST['passwort_alt'];
     $passwort_neu = $_POST['passwort_neu'];
-    if (strlen($passwort_neu) > 8){
+    if (strlen($passwort_neu) >= 8){
         if(LigaLeitung::set_passwort($_SESSION['logins']['la']['login'], $passwort_neu, $passwort_alt)) {
             Html::info("Dein Passwort wurde geändert");
-            header('Location: lc_start.php');
-            die();
+            Helper::reload("/ligacenter/lc_start.php");
         }
         Html::error("Falsches Passwort");
     }else{
@@ -31,7 +30,6 @@ include '../../templates/header.tmp.php'; ?>
 
 <form method="post" class="w3-panel w3-card-4">
     <h3> Ligacenter-Passwort ändern </h3>
-        <?php Html::message('notice', 'Dein Passwort wird verschlüsselt gespeichert', null); ?>
         <label class="w3-text-primary" for="passwort_alt">Altes Passwort:</label>
         <input required
                class="w3-input w3-border w3-border-primary"

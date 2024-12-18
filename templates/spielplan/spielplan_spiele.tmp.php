@@ -1,5 +1,5 @@
-<h2 class="w3-text-secondary w3-margin-top">Spiele</h2>
 <!-- Spielzeiten -->
+<h1 class="w3-text-secondary">Spiele</h1>
 <span class="w3-text-grey w3-margin-top">
     Spielzeit: <?= $spielplan->details['anzahl_halbzeiten'] ?> x <?= $spielplan->details['halbzeit_laenge'] ?>&nbsp;min
     | Puffer: <?= $spielplan->details['puffer'] ?>&nbsp;min
@@ -57,9 +57,9 @@
                 </th>
             <?php }//endif?>
         </tr>
-        <?php if ($spielplan->turnier->details['besprechung'] === 'Ja') { ?>
+        <?php if ($spielplan->turnier->get_besprechung() === 'Ja') { ?>
             <tr class="w3-primary-3">
-                <td><?= date('H:i', strtotime($spielplan->turnier->details['startzeit']) - 15 * 60) ?></td>
+                <td><?= date('H:i', strtotime($spielplan->turnier->get_startzeit()) - 15 * 60) ?></td>
                 <td></td>
                 <td></td>
                 <td colspan="3">
@@ -98,9 +98,9 @@
                             <span class="w3-hide-large w3-hide-medium">
                                <?= Html::icon("keyboard_arrow_left") ?>
                             </span>
-                            <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_a"]]['teamname'] ?>
+                            <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_a"]]['teamname'] ?? Team::id_to_name($spiel["schiri_team_id_a"]) ?>
                             |
-                            <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_b"]]['teamname'] ?>
+                            <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_b"]]['teamname'] ?? Team::id_to_name($spiel["schiri_team_id_a"]) ?>
                         </span>
                         <!-- Mobil -->
                         <span class="pdf-hide w3-hide-medium w3-hide-large w3-text-primary w3-hover-text-secondary">
@@ -126,8 +126,8 @@
                 </td>
                 <!-- Teams Mobil -->
                 <td class="w3-center w3-hide-large w3-hide-medium">
-                    <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_a']]  ?? '' ?>
-                    <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_b']]  ?? '' ?>
+                    <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_a']]  ?? "<span style='height:14px;width:14px;border-radius:50%;display:inline-block;'></span>" ?>
+                    <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_b']]  ?? "<span style='height:14px;width:14px;border-radius:50%;display:inline-block;'></span>"?>
                 </td>
                 <td colspan="3" class="w3-hide-large w3-hide-medium" style="white-space: nowrap;">
                     <span class="pdf-hide"><?= $spiel["teamname_a"] ?></span>

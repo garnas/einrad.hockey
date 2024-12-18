@@ -1,22 +1,31 @@
 <?php
 // Turnier und $daten-Array erstellen
-$turnier = new Turnier((int) @$_GET['turnier_id']);
+use App\Repository\Turnier\TurnierRepository;
+use App\Service\Turnier\TurnierService;
+
+$teamId = $_SESSION['logins']['team']['id'] ?? 0;
+$turnierId = (int) @$_GET['turnier_id'];
+$turnier = TurnierRepository::get()->turnier($turnierId);
 
 //Existiert das Turnier?
-if (empty($turnier->details)){
+if ($turnier === null){ // TODO CHECKEN
     Helper::not_found("Das Turnier konnte nicht gefunden werden.");
 }
 
-//Besteht die Berechtigung das Turnier zu bearbeiten?
-if (Helper::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $turnier->details['ausrichter']){
+// Besteht die Berechtigung das Turnier zu bearbeiten?
+if (Helper::$teamcenter && !TurnierService::isAusrichter($turnier, $teamId)){
     Html::error("Keine Berechtigung das Turnier zu bearbeiten");
-    header('Location: ../liga/turniere.php');
-    die();
+    Helper::reload('/liga/turniere.php');
 }
 
-//Turniere in der Vergangenheit können von Teams nicht mehr verändert werden
-if (Helper::$teamcenter && strtotime($turnier->details['datum']) < time()){
+// Besteht die Berechtigung das Turnier zu bearbeiten?
+if (Helper::$teamcenter && $turnier->isCanceled()){
+    Html::error("Turnier wurde abgesagt.");
+    Helper::reload('/teamcenter/tc_turnierliste_verwalten.php');
+}
+
+// Turniere in der Vergangenheit können von Teams nicht mehr verändert werden
+if (Helper::$teamcenter && $turnier->getDatum()->getTimestamp() < (time() - 2 * 24 * 60 * 60)){
     Html::error("Das Turnier liegt bereits in der Vergangenheit und kann nicht bearbeitet werden");
-    header('Location: ../liga/turniere.php');
-    die();
+    Helper::reload('/teamcenter/tc_turnierliste_verwalten.php');
 }

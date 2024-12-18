@@ -222,15 +222,31 @@ class nSpieler
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function get_schiri(): string
     {
         if (empty($this->schiri)) {
             return '';
         }
         return Html::get_saison_string($this->schiri);
+    }
+
+    public function get_schiri_as_html(): string
+    {
+        if (empty($this->schiri)) {
+            return '';
+        }
+        $saison_text = Html::get_saison_string($this->schiri);
+        $junior = ($this->junior === 'Ja') ? "<i class='w3-text-grey'>junior</i>" : "";
+        $ausbilder = ($this->check_ausbilder()) ? "<i class='w3-text-grey'>Ausbilder/in</i>" : "";
+        if ($this->schiri >= Config::SAISON) {
+            $icon = Html::icon("check_circle_outline");
+            $color = "w3-text-green";
+        } else {
+            $icon = Html::icon("block");
+            $color = "w3-text-grey";
+        }
+        return "<span class='$color'>$icon $saison_text $junior $ausbilder</span>";
+
     }
 
     /**
@@ -372,7 +388,6 @@ class nSpieler
             ];
 
         db::$db->query($update, $params)->log();
-        (new Team ($this->team_id))->set_schiri_freilos();
 
         return true;
     }

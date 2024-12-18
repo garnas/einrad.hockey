@@ -46,10 +46,11 @@ if (isset($_POST['absenden'])) {
     if (!$error) {
         //Mail an die Liga
         $mailer = MailBot::start_mailer();
-        $mailer->setFrom($absender, $name); // Absenderemail und -name setzen
+        $mailer->setFrom("noreply@einrad.hockey", $name);
+        $mailer->addReplyTo($absender, $name); // Absenderemail und -name setzen
         $mailer->addAddress(Env::LAMAIL); // Empfängeradresse
         $mailer->Subject = 'Kontaktformular: ' . $betreff; // Betreff der Email
-        $mailer->Body = $text;
+        $mailer->Body = $text . "\n\n\nAntwort an: " . $absender;
 
         // Email an den Ligaausschuss versenden
         if (MailBot::send_mail($mailer)) {

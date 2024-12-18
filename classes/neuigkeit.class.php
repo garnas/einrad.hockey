@@ -1,5 +1,7 @@
 <?php
 
+use App\Service\Team\TeamValidator;
+
 /**
  * Class Neuigkeit
  */
@@ -97,12 +99,16 @@ class Neuigkeit
             $neuigkeiten = db::$db->query($sql, $neuigkeiten_id)->esc()->fetch('neuigkeiten_id');
         }
         foreach ($neuigkeiten as $key => $neuigkeit) {
-            if ($neuigkeit['eingetragen_von'] == 'Ligaausschuss') {
+            if (
+                $neuigkeit['eingetragen_von'] === 'Ligaausschuss'
+                || $neuigkeit['eingetragen_von'] === "Öffentlichkeitsausschuss"
+                || $neuigkeit['eingetragen_von'] === "Nationalkader"
+            ) {
                 $neuigkeiten[$key]['inhalt'] = htmlspecialchars_decode($neuigkeit['inhalt'], ENT_QUOTES);
                 $neuigkeiten[$key]['titel'] = htmlspecialchars_decode($neuigkeit['titel'], ENT_QUOTES);
             }
         }
-        return $neuigkeiten; // Escaping in Funktion, nicht bei Ligaausschuss als Autor
+        return $neuigkeiten;
     }
 
     /**
@@ -327,4 +333,37 @@ class Neuigkeit
         arsort($tore);
         return array_slice($tore, 0, 3, true) ?? [];
     }
+
+    public static function darf_verlinken(): bool
+    {
+        return Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss;
+    }
+
+    public static function darf_bearbeiten(string $eingetragen_von): bool
+    {
+        // LA?
+        if (Helper::$ligacenter) {
+            return true;
+        }
+
+        // Vom Team eingetragen?
+        if (
+            isset($_SESSION['logins']['team']['name'])
+            && $_SESSION['logins']['team']['name'] == $eingetragen_von
+        ) {
+            return true;
+        }
+
+        // Team Teil des Öffis?
+        if (
+            $eingetragen_von === "Öffentlichkeitsausschuss"
+            && Helper::$oeffentlichkeitsausschuss
+        ) {
+            return true;
+        }
+
+        return false;
+
+    }
+
 }

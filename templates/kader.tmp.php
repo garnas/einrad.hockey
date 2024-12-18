@@ -7,7 +7,7 @@
             <th class="w3-primary">ID</th>
             <th class="w3-primary">Name</th>
             <th class="w3-primary w3-center">J/G</th>
-            <th class="w3-primary w3-center">Schiri</th>
+            <th class="w3-primary w3-center">Schiri<sup>*</sup></th>
             <?php if (Helper::$ligacenter): ?>
                 <th class="w3-primary w3-center">Hinzugefügt am:</th>
             <?php endif; // endif?>
@@ -29,12 +29,7 @@
                     <?= $spieler->get_jahrgang() . " " . $spieler->get_geschlecht() ?>
                 </td>
                 <td class='w3-center'>
-                    <?php if ($spieler->schiri): ?>
-                        <?= Html::icon("check_circle_outline") ?>
-                        <?= $spieler->get_schiri() ?>
-                        <?= ($spieler->junior === 'Ja') ? "<i class='w3-text-grey'>junior</i>" : "" ?>
-                        <?= ($spieler->check_ausbilder()) ? "<i class='w3-text-grey'>Ausbilder/in</i>" : "" ?>
-                    <?php endif; ?>
+                    <?= $spieler->get_schiri_as_html() ?>
                 </td>
                 <?php if (Helper::$ligacenter): ?>
                     <td class="w3-center">
@@ -45,7 +40,9 @@
         <?php endforeach; ?>
     </table>
 </div>
-
+<span class="w3-text-grey w3-small">
+    <sup>*</sup>Schirilizenz ist gültig bis zum Ende der angezeigten Saison
+</span>
 <!-- Aus Vorsaison übernehmen -->
 <?php if (!empty($kader_vorsaison)): ?>
     <form method="post" class="w3-section w3-text-grey">
@@ -77,12 +74,7 @@
                             <?= $spieler->get_jahrgang() . " " . $spieler->get_geschlecht() ?>
                         </td>
                         <td class='w3-center'>
-                            <?php if ($spieler->schiri): ?>
-                                <?= Html::icon("check_circle_outline") ?>
-                                <?= $spieler->get_schiri() ?>
-                                <?= ($spieler->junior === 'Ja') ? "<i class='w3-text-grey'>junior</i>" : "" ?>
-                                <?= ($spieler->check_ausbilder()) ? "<i class='w3-text-grey'>Ausbilder/in</i>" : "" ?>
-                            <?php endif; ?>
+                            <?= $spieler->get_schiri_as_html() ?>
                         </td>
                         <td>
                             <input type="checkbox"
@@ -163,7 +155,7 @@
             <p>
                 <label class="w3-text-primary" for="geschlecht">Geschlecht</labeL>
                 <select style="height:40px" class='w3-input w3-border w3-border-primary' name='geschlecht' id='geschlecht'>
-                    <option <?= $_POST['geschlecht'] ?? 'selected' ?> disabled></option>
+                    <option <?= $_POST['geschlecht'] ?? 'selected' ?> disabled>Bitte wählen</option>
                     <option <?php if (($_POST['geschlecht'] ?? '') === 'm'){ ?>selected<?php } ?> value='m'>m</option>
                     <option <?php if (($_POST['geschlecht'] ?? '') === 'w'){ ?>selected<?php } ?> value='w'>w</option>
                     <option <?php if (($_POST['geschlecht'] ?? '') === 'd'){ ?>selected<?php } ?> value='d'>d</option>

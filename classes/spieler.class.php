@@ -149,10 +149,7 @@ class Spieler
      */
     public static function get_teamkader_vorsaison(int $team_id): array
     {
-        $kader_vorsaison = self::get_teamkader($team_id, Config::SAISON - 1);
-        $kader_vorvorsaison = self::get_teamkader($team_id, Config::SAISON - 2);
-            // Ausnahme für die Saison 20/21, da Teams ihre Spieler wegen Corona nicht zurückgemeldet wurden
-        return $kader_vorsaison + $kader_vorvorsaison;
+        return self::get_teamkader($team_id, Config::SAISON - 1);
     }
 
     /**

@@ -4,14 +4,21 @@
 // Dies ermöglicht den gleichzeitgen Login von Ligaausschuss und Ligateams in einem Browser
 
 // Autor
-$name = (Helper::$ligacenter) ? "Ligaausschuss" : $_SESSION['logins']['team']['name'];
+if (Helper::$ligacenter) {
+    $name = "Ligaausschuss";
+}elseif (Helper::$oeffentlichkeitsausschuss) {
+    $name = "Öffentlichkeitsausschuss";
+} else {
+    $name = $_SESSION['logins']['team']['name'];
+}
+
 $error = false;
 
 // Formularauswertung
 if (isset($_POST['create_neuigkeit'])) {
 
-    if (empty($_POST['titel']) || empty($_POST['text'])) {
-        Html::error("Bitte Titel und Text eingeben.");
+    if (empty($_POST['text'])) {
+        Html::error("Bitte Text eingeben.");
     } else {
 
         // Fileupload
@@ -45,7 +52,7 @@ if (isset($_POST['create_neuigkeit'])) {
         // Titel, Text und Verlinkungen werden in die Datenbank eingetragen//////
         $titel = $_POST['titel'];
         $text = $_POST['text'];
-        $bild_verlinken = $_POST['bild_verlinken'] ?? '';
+        $bild_verlinken = Neuigkeit::darf_verlinken() ? $_POST['bild_verlinken'] : '';
 
         if ($error) {
             // evtl hochgeladene Dateien löschen.

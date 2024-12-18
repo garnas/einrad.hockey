@@ -16,7 +16,7 @@ include '../../templates/header.tmp.php'; ?>
         <h2 class="w3-text-primary">Deutsche Einradhockeyliga</h2>
 
         <p class="w3-text-grey">Postanschrift</p>
-        <p>Ansgar Pölking<br>Karlstraße 1<br>64283 Darmstadt</p>
+        <p>Ansgar Pölking<br>Kattreinstr. 3c<br>64295 Darmstadt</p>
 
         <p class="w3-text-grey">Kontakt</p>
         <p><?= Html::mailto(Env::LAMAIL) ?></p>

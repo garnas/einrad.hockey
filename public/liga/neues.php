@@ -10,11 +10,11 @@ $tage = round((strtotime(Config::SAISON_ANFANG) - time()) / (24 * 60 * 60));
 
 $neuigkeiten = Neuigkeit::get_neuigkeiten();
 
-$turniere = Turnier::get_turniere('ergebnis', false, true);
+$turniere = nTurnier::get_turniere_kommend();
 $anz_next_turniere = count($turniere);
 $next_turniere = array_slice($turniere, 0, 4);
 
-$turniere = Turnier::get_turniere('ergebnis', true, false);
+$turniere = nTurnier::get_turniere_ergebnis($asc = false);
 $anz_last_turniere = count($turniere);
 $last_turniere = array_slice($turniere, 0, 4);
 
@@ -30,13 +30,13 @@ $statistik['spielminuten'] = Stats::get_spielminuten_anzahl();
 
 // Zeitanzeige der Neuigkeiteneinträge verschönern
 foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit) { //Todo in get_neuikgeiten rein
-    $delta_zeit = (time() - strtotime($neuigkeiten[$neuigkeiten_id]['zeit'])) / (60 * 60); //in Stunden
+    $delta_zeit = (time() - strtotime($neuigkeit['zeit'])) / (60 * 60); //in Stunden
     if ($delta_zeit < 24) {
         $zeit = ($delta_zeit <= 1.5) ? "gerade eben" : "vor " . round($delta_zeit) . " Stunden";
     } elseif ($delta_zeit < 7 * 24) {
         $zeit = ($delta_zeit <= 1.5 * 24) ? "vor einem Tag" : "vor " . round($delta_zeit / 24) . " Tagen";
     } else {
-        $zeit = date("d.m.Y", strtotime($neuigkeiten[$neuigkeiten_id]['zeit']));
+        $zeit = date("d.m.Y", strtotime($neuigkeit['zeit']));
     }
     $neuigkeiten[$neuigkeiten_id]['zeit'] = $zeit;
 }
@@ -44,6 +44,7 @@ foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit) { //Todo in get_neuikgei
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+
 Html::$titel = "Neuigkeiten | Deutsche Einradhockeyliga";
 Html::$content = "Hier findet man die Neuigkeiteneinträge des Ligaausschusses und der Teams der Deutschen Einradhockeyliga.";
 include '../../templates/header.tmp.php'; ?>
@@ -58,7 +59,7 @@ include '../../templates/header.tmp.php'; ?>
             <?= Html::icon("visibility") ?> Infobar
         </span>
         <span id="ausblenden"
-                class="w3-left w3-left-align  w3-hide w3-hide-large w3-hide-medium w3-hover-text-secondary w3-text-primary"
+                class="w3-left w3-left-align w3-hide w3-hide-large w3-hide-medium w3-hover-text-secondary w3-text-primary"
                 onclick="ausblenden()"
                 style="width:50%;"
         >
@@ -84,6 +85,7 @@ include '../../templates/header.tmp.php'; ?>
                     </a>
                 </div>
                 <p>Die Einradhockeyliga steht jedem Einradhockeybegeisterten offen!</p>
+                <iframe width="100%" height="100%" src="https://www.youtube-nocookie.com/embed/eaUT9tUrjS4?si=Xkto73gokPx_a5UB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 <p><?= Html::link("ueber_uns.php", " Mehr Infos", false, "info") ?></p>
             </div>
 
@@ -100,13 +102,13 @@ include '../../templates/header.tmp.php'; ?>
                 <?php } //end if?>
                 <?php foreach ($next_turniere as $turnier): ?>
                     <p class="w3-text-dark-gray">
-                        <?= date("d.m", strtotime($turnier['datum'])) ?>
+                        <?= date("d.m", strtotime($turnier->get_datum())) ?>
                         <?= Html::link(
-                            'turnier_details.php?turnier_id=' . $turnier['turnier_id'],
-                            $turnier['ort'],
+                            'turnier_details.php?turnier_id=' . $turnier->get_turnier_id(),
+                            $turnier->get_ort(),
                             false,
                             "open_in_new") ?>
-                        <i>(<?= $turnier['art'] == 'spass' ? "Spaß" : $turnier['tblock'] ?>)</i>
+                        <i>(<?= $turnier->get_art() == 'spass' ? "Spaß" : $turnier->get_tblock() ?>)</i>
                     </p>
                 <?php endforeach;?>
             </div>
@@ -126,21 +128,23 @@ include '../../templates/header.tmp.php'; ?>
                 <?php endif;?>
                 <?php foreach ($last_turniere as $turnier): ?>
                     <p class="w3-text-dark-gray">
-                        <?= date("d.m", strtotime($turnier['datum'])) ?>
+                        <?= date("d.m", strtotime($turnier->get_datum())) ?>
                         <?= Html::link(
-                            'ergebnisse.php#' . $turnier['turnier_id'],
-                            $turnier['ort'],
+                            'ergebnisse.php#' . $turnier->get_turnier_id(),
+                            $turnier->get_ort(),
                             false,
                             'open_in_new') ?>
-                        <i>(<?= $turnier['tblock'] ?>)</i>
+                        <i>(<?= $turnier->get_tblock() ?>)</i>
                     </p>
                 <?php endforeach;?>
             </div>
 
             <!-- Statistik -->
             <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
-                <div class="w3-stretch w3-container w3-primary">
-                    <h3><?= Html::icon("insert_chart_outlined", tag: "h2") ?> Statistik</h3>
+                <div class="w3-stretch w3-container w3-primary w3-hover-tertiary">
+                    <a href='statistik.php' class="no">
+                        <h3><?= Html::icon("insert_chart_outlined", tag: "h2") ?> Statistik</h3>
+                    </a>
                 </div>
                 <span class="w3-text-grey w3-small">Saison <?= Html::get_saison_string() ?></span>
 
@@ -217,11 +221,11 @@ include '../../templates/header.tmp.php'; ?>
                                     <td><?= Html::icon("sports_hockey") ?></td>
                                 </tr>
                                 <?php $i = 0;
-                                foreach ($statistik['max_gew'] as $team_id => $gew_spiele): ?>
+                                foreach ($statistik['max_gew'] as $team): ?>
                                     <tr class="<?= $colors[$i] ?>">
                                         <td><?= Html::icon($icons[$i++]) ?></td>
-                                        <td style="white-space: nowrap;" class="w3-small"><?= Team::id_to_name($team_id) ?></td>
-                                        <td><?= $gew_spiele ?></td>
+                                        <td style="white-space: nowrap;" class="w3-small"><?= $team['teamname'] ?></td>
+                                        <td><?= $team['siege'] ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </table>
@@ -259,15 +263,17 @@ include '../../templates/header.tmp.php'; ?>
                 <div class='w3-card-4 w3-panel w3-responsive w3-round w3-bottombar'>
 
                     <!-- Überschrift -->
-                    <div class="w3-stretch w3-container w3-primary w3-center">
-                        <h3><?= $neuigkeit['titel'] ?></h3>
-                    </div>
+                    <?php if ($neuigkeit['titel']): ?>
+                        <div class="w3-stretch w3-container w3-primary w3-center">
+                            <h3><?= $neuigkeit['titel'] ?></h3>
+                        </div>
+                    <?php endif; ?>
 
                     <!-- Bild -->
                     <?php if ($neuigkeit['link_jpg'] != ''): ?>
                         <div class='w3-center w3-card w3-section'>
                             <a href='<?= $neuigkeit['bild_verlinken'] ?: $neuigkeit['link_jpg'] ?>'>
-                                <img class='w3-image w3-hover-opacity' alt="<?= $neuigkeit['titel'] ?>" src=<?= $neuigkeit['link_jpg'] ?>>
+                                <img class='w3-image w3-hover-opacity' alt="<?= $neuigkeit['titel'] ?? "Foto"?>" src=<?= $neuigkeit['link_jpg'] ?>>
                             </a>
                         </div>
                     <?php endif; ?>
@@ -283,7 +289,7 @@ include '../../templates/header.tmp.php'; ?>
                     <?php endif; ?>
 
                     <!-- Autor + Zeitstempel -->
-                    <div class='w3-text-grey'>
+                    <div class='w3-text-grey w3-hide-small w3-hide-medium'>
                         <p class="w3-left">
                             <?= Html::icon("create") ?> <?= ($neuigkeit['eingetragen_von']) ?>
                         </p>
@@ -291,9 +297,15 @@ include '../../templates/header.tmp.php'; ?>
                             <?= Html::icon("schedule") ?> <?= $neuigkeit['zeit'] ?>
                         </p>
                     </div>
-
+                    <div class='w3-text-grey w3-hide-large'>
+                        <p class="w3-right">
+                            <?= Html::icon("create") ?> <?= ($neuigkeit['eingetragen_von']) ?>
+                            <br>
+                            <?= Html::icon("schedule") ?> <?= $neuigkeit['zeit'] ?>
+                        </p>
+                    </div>
                     <!-- Link zum Bearbeiten falls man im Ligacenter oder Teamcenter eingeloggt ist -->
-                    <?php if (isset($_SESSION['logins']['la'])) { ?>
+                    <?php if (LigaLeitung::is_logged_in("ligaausschuss")){ ?>
                         <p>
                             <a href='../ligacenter/lc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>' class='no'>
                                 <button class="w3-button w3-block w3-tertiary">
@@ -301,7 +313,18 @@ include '../../templates/header.tmp.php'; ?>
                                 </button>
                             </a>
                         </p>
-                    <?php } elseif (!empty($_SESSION['logins']['team']['name']) && $_SESSION['logins']['team']['name'] == $neuigkeit['eingetragen_von']) { ?>
+                    <?php } elseif (
+                            LigaLeitung::is_logged_in("oeffentlichkeitsausschuss")
+                            && $neuigkeit["eingetragen_von"] == "Öffentlichkeitsausschuss"
+                          ){ ?>
+                    <p>
+                        <a href='../oefficenter/oc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>' class='no'>
+                            <button class="w3-button w3-block w3-tertiary">
+                                <?= Html::icon("create") ?> Bearbeiten
+                            </button>
+                        </a>
+                    </p>
+                    <?php } elseif (Neuigkeit::darf_bearbeiten($neuigkeit['eingetragen_von'])){ ?>
                         <p>
                             <a href='../teamcenter/tc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>' class='no'>
                                 <button class="w3-button w3-block w3-tertiary">

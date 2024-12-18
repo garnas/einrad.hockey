@@ -1,23 +1,24 @@
-<h1 class="w3-text-primary">Abstimmungsergebnis</h1>
-
-<p class="w3-text-grey">
-    Start: <?=Abstimmung::BEGINN?>&nbsp;Uhr
-    <br>
-    Ende: <?=Abstimmung::ENDE?>&nbsp;Uhr
-</p>
-<?php foreach($display_ergebnisse as $ergebnis) { ?>
-    <div class="w3-section">
-        <span><?=$ergebnis['formulierung']?></span>
-        <div class="w3-light-grey w3-round w3-center">
-            <div class="<?=$ergebnis['farbe']?> w3-round" style="width:<?=$ergebnis['prozent']?>; height:24px;"></div>
-        </div>
-        <span><i><?=$ergebnis['stimmen']?> Stimmen (<?=$ergebnis['prozent']?>)</i></span>
-    </div>
-<?php } ?>
 <div class="w3-section">
-    <span><b>Wahlbeteiligung</b></span>
-    <div class="w3-light-grey w3-round">
-        <div class="w3-black w3-round" style="width:<?=$wahlbeteiligung?>; height:24px;"></div>
+
+    <h1 class="w3-text-primary">Abstimmungsergebnis</h1>
+
+</div>
+<?php foreach(Abstimmung::OPTIONS as $option => $text): ?>
+    <div class="w3-section">
+        <span><strong><?=$text?></strong></span>
+        <div class="w3-light-grey w3-round w3-center">
+            <div class="<?=Abstimmung::OPTIONS_COLOR[$option]?> w3-round"
+                 style="width:<?=$ergebnisse[$option]['%']?>%; height:24px;"></div>
+        </div>
+        <span><i><?=$ergebnisse[$option]['anzahl']?> Stimmen (<?=$ergebnisse[$option]['%']?> %)</i></span>
     </div>
-    <span class=""><i><?=$abgegebene_stimmen?> von <?=$anzahl_teams?> Teams (<?=$wahlbeteiligung?>)</i></span>
+<?php endforeach; ?>
+<div class="w3-section">
+        <br>
+        <span><b>Wahlbeteiligung</b></span>
+        <div class="w3-light-grey w3-round">
+            <div class="w3-black w3-round"
+                 style="width:<?=$ergebnisse["%"]?>%; height:24px;"></div>
+        </div>
+        <span class=""><i><?=$ergebnisse["gesamt"]?> von <?=Abstimmung::ANZAHL_TEAMS?> Teams (<?=$ergebnisse["%"]?> %)</i></span>
 </div>

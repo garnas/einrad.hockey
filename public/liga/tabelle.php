@@ -45,13 +45,13 @@ foreach ($strafen as $key => $strafe){
 }
 
 // Den Plätzen der Meisterschaftstabelle eine Farbe zuordnen:
-for ($i = 1; $i <= 12 ; $i++){
+for ($i = 1; $i <= 10 ; $i++){
     $platz_color[$i] = "w3-text-tertiary";
 }
-for ($i = 13; $i <= 18; $i++){
+for ($i = 11; $i <= 16; $i++){
     $platz_color[$i] = "w3-text-grey";
 }
-for ($i = 19; $i < 24; $i++){
+for ($i = 17; $i <= 22; $i++){
     $platz_color[$i] = "w3-text-brown";
 }
 
@@ -115,7 +115,10 @@ include '../../templates/header.tmp.php';?>
             <ul class="w3-ul w3-leftbar w3-border-tertiary">
                 <li>In der Meisterschaftstabelle werden die besten fünf Turnierergebnisse deines Teams in der aktuellen Saison aufaddiert.</li>
                 <li>Der Platz in der Meisterschaftstabelle bestimmt, für welche Meisterschaft sich dein Team qualifizieren kann.</li>
-                <li><b>Finalturniere</b> <i>(Plätze)</i><br>Finale der Deutschen Einradhockeyliga (<span class="w3-text-tertiary">1-12</span>)<br>B-Finale der Deutschen Einradhockeyliga (<span class="w3-text-brown">13-18</span>)<br>C-Finale der Deutschen Einradhockeyliga (<span class="w3-text-primary">19-24</span>)</li>
+                <li><b>Finalturniere</b> <i>(Plätze)</i><br>Finale der Deutschen Einradhockeyliga (<span class="w3-text-tertiary">1-10</span>)
+                    <br>B-Finale der Deutschen Einradhockeyliga (<span class="w3-text-brown">11-16</span>)
+                    <br>C-Finale der Deutschen Einradhockeyliga (<span class="w3-text-primary">17-22</span>)
+                </li>
             </ul>
         </div>
     </div>
@@ -135,12 +138,12 @@ window.onclick = function(event) {
 
 <!-- Meisterschaftstabelle -->
 <h1 class="w3-text-primary w3-border-primary" id='meister'>Meisterschaftstabelle</h1>
-<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#rang" class="no w3-hover-text-secondary">Zur Rangtabelle</a><span class="w3-right">Saison <?=Html::get_saison_string()?></span></p>
+<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#rang" class="no w3-hover-text-secondary">Zur Rangtabelle</a><span class="w3-right">Saison <?=Html::get_saison_string($saison)?></span></p>
 
 <!-- Spieltag wählen -->
 <div class="w3-bar">
     <?php foreach ($spieltage_array as $spieltag_dict){?>
-        <a class='no w3-hover-text-secondary' href='tabelle.php?spieltag=<?=$spieltag_dict[0]?>#meister'><span class= 'w3-bar-item w3-button <?=$spieltag_dict['spieltag_button']?> w3-hover-primary'><?=$spieltag_dict["spieltag_string"]?></span></a>
+        <a class='no w3-hover-text-secondary' href='tabelle.php?saison=<?=$saison?>&spieltag=<?=$spieltag_dict[0]?>#meister'><span class= 'w3-bar-item w3-button <?=$spieltag_dict['spieltag_button']?> w3-hover-primary'><?=$spieltag_dict["spieltag_string"]?></span></a>
     <?php } //endforeach?>
 </div>
 
@@ -149,31 +152,33 @@ window.onclick = function(event) {
     <table class="w3-table w3-striped">
         <thead class="w3-primary">
             <tr>
-                <th><b>Platz</b></th>
-                <th><b>Team</b></th>
-                <th><b>Turnierergebnisse</b></th>
-                <th><b>&sum;</b></th>
+                <th class="w3-right-align"><b>Platz</b></th>
+                <th class="w3-left-align"><b>Team</b></th>
+                <th class="w3-left-align"><b>Turnierergebnisse</b></th>
+                <th class="w3-right-align"><b>&sum;</b></th>
             </tr>
         </thead>
-        <?php foreach ($meisterschafts_tabelle as $spalte){?>
-            <tr>
-                <td class="<?=$platz_color[$spalte['platz']] ?? ''?>"><?=$spalte['platz'] ?? ''?></td>
-                <td style="white-space: nowrap"><?=$spalte['teamname']?></td>
-                <td><?=htmlspecialchars_decode($spalte['string'])?></td>
-                <td><?=$spalte['summe'] ?: 0?><a class="no w3-text-primary w3-hover-text-secondary" href="#pranger"><?=$spalte['strafe_stern'] ?? ''?></a></td>
-            </tr>
-        <?php } //end foreach?>
+        <tbody>
+            <?php foreach ($meisterschafts_tabelle as $spalte){?>
+                <tr>
+                    <td class="w3-right-align <?=$platz_color[$spalte['platz']] ?? ''?>"><?=$spalte['platz'] ?? ''?></td>
+                    <td class="w3-left-align"><?=$spalte['teamname']?></td>
+                    <td class="w3-left-align"><?=$spalte['string']?></td>
+                    <td class="w3-right-align"><?=number_format($spalte['summe'] ?: 0, 0, ",", ".")?><a class="no w3-text-primary w3-hover-text-secondary" href="#pranger"><?=$spalte['strafe_stern'] ?? ''?></a></td>
+                </tr>
+            <?php } //end foreach?>
+        </tbody>
     </table>    
 </div>
 
 <!--Rangtabelle-->
 <h1 id="rang" class="w3-text-primary w3-border-primary">Rangtabelle</h1>
-<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#meister" class="no w3-hover-text-secondary">Zur Meisterschaftstabelle</a><span class="w3-right">Saison <?=Html::get_saison_string()?></span></p>
+<p class="w3-border-top w3-border-grey w3-text-grey"><a href="#meister" class="no w3-hover-text-secondary">Zur Meisterschaftstabelle</a><span class="w3-right">Saison <?=Html::get_saison_string($saison)?></span></p>
 
 <!-- Spieltag wählen -->
 <div class="w3-bar">
     <?php foreach ($spieltage_array as $spieltag_dict){?>
-        <a class='no w3-hover-text-secondary' href='tabelle.php?spieltag=<?=$spieltag_dict[0]?>#rang'><span class='w3-bar-item w3-button <?=$spieltag_dict['spieltag_button']?> w3-hover-primary'><?=$spieltag_dict["spieltag_string"]?></span></a>
+        <a class='no w3-hover-text-secondary' href='tabelle.php?saison=<?=$saison?>&spieltag=<?=$spieltag_dict[0]?>#rang'><span class='w3-bar-item w3-button <?=$spieltag_dict['spieltag_button']?> w3-hover-primary'><?=$spieltag_dict["spieltag_string"]?></span></a>
     <?php } //endforeach?>
 </div>
 
@@ -181,26 +186,28 @@ window.onclick = function(event) {
 <!--Tabelle -->
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-striped">
-        <thead class="w3-primary">
-            <tr>
-                <th><b>#</b></th>
-                <th class="w3-center"><b>Block</b></th>
-                <th class="w3-center"><b>Wertung</b></th>
-                <th><b>Team</b></th>
-                <th><b>Turnierergebnisse</b></th>
-                <th class="w3-center"><b>&empty;</b></th>
+        <thead>
+            <tr class="w3-primary">
+                <th class="w3-right-align"><b>#</b></th>
+                <th class="w3-left-align"><b>Block</b></th>
+                <th class="w3-right-align"><b>Wertung</b></th>
+                <th class="w3-left-align"><b>Team</b></th>
+                <th class="w3-left-align"><b>Turnierergebnisse</b></th>
+                <th class="w3-right-align"><b>&empty;</b></th>
             </tr>
         </thead>
-        <?php foreach ($rang_tabelle as $spalte){?>
-            <tr>
-                <td><span class="w3-text-grey"><?=$spalte['rang']?></span></td>
-                <td class="w3-center"><?=Tabelle::rang_to_block($spalte['rang'])?></td>
-                <td class="w3-center"><?=Tabelle::rang_to_wertigkeit($spalte['rang'])?></td>
-                <td style="white-space: nowrap"><?=$spalte['teamname']?></td>
-                <td><?=htmlspecialchars_decode($spalte['string'])?></td>
-                <td class="w3-center"><?=$spalte['avg'] ?: 0?></td>
-            </tr>
-        <?php } //end foreach?>
+        <tbody>
+            <?php foreach ($rang_tabelle as $spalte){?>
+                <tr>
+                    <td class="w3-right-align w3-text-grey"><?=$spalte['rang']?></td>
+                    <td class="w3-left-align"><?=Tabelle::rang_to_block($spalte['rang'])?></td>
+                    <td class="w3-right-align"><?=Tabelle::rang_to_wertigkeit($spalte['rang'])?></td>
+                    <td class="w3-left-align"><?=$spalte['teamname']?></td>
+                    <td class="w3-left-align"><?=$spalte['string']?></td>
+                    <td class="w3-right-align"><?=number_format($spalte['avg'] ?: 0, 1, ",", ".")?></td>
+                </tr>
+            <?php } //end foreach?>
+        </tbody>
     </table>
 </div>
 

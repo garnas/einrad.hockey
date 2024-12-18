@@ -13,7 +13,7 @@ if (isset($_POST['team_erstellen'])) {
     $email = $_POST['email'];
 
     //Felder dürfen nicht leer sein
-    if (empty($teamname) or empty($email) or empty($passwort)) {
+    if (empty($teamname) || empty($email) || empty($passwort)) {
         Html::error("Bitte alle Felder ausfüllen");
         $error = true;
     }

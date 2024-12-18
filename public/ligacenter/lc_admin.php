@@ -2,6 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Event\Turnier\nLigaBot;
+
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
@@ -66,9 +68,9 @@ if (isset($_POST['gitpull'])){
         $password = $_POST['password'];
 
         if (password_verify($password, $hash)) {
-
             $output = shell_exec("sh " . Env::BASE_PATH . "/system/shell/gitpull.sh");
-            Helper::log("git.log", $output);
+
+            Helper::log("git.log", $output ?? 'EMPTY OUTPUT');
             db::debug($output);
             Helper::reload();
 
@@ -97,7 +99,7 @@ if (isset($_POST['gitstatus'])){
 
 //Ligabot ausführen
 if (isset($_POST['ligabot'])){
-    LigaBot::liga_bot();
+    nLigaBot::ligaBot();
 }
 
 //Datenbank sichern

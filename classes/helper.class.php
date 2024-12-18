@@ -8,8 +8,8 @@ class Helper
      */
     public static bool $ligacenter = false; // Befindet sich der Ligaausschuss auf einer Seite im Ligacenter?
     public static bool $teamcenter = false; // Befindet sich das Team auf einer Seite im Teamcenter?
-
-    public static $log_user = true; // Soll der User geloggt werden? // false für XML
+    public static bool $oeffentlichkeitsausschuss = false;
+    public static bool $log_user = true; // Soll der User geloggt werden? // false für XML
 
 
     /**
@@ -30,7 +30,12 @@ class Helper
      */
     public static function reload(?string $path = null, ?string $get = null ): void
     {
-        $url = ($path === null) ? db::escape($_SERVER['PHP_SELF'] . $get) : Env::BASE_URL . $path . $get;
+        if ($path === null) {
+            $url = db::escape($_SERVER['PHP_SELF'] . $get);
+        } else {
+            if ($path[0] != "/") $path = "/" . $path;
+            $url = Env::BASE_URL . $path . $get;
+        }
         header("Location: $url");
         die();
     }
@@ -57,7 +62,7 @@ class Helper
      * @param string $line Einzutragender Text in die Logdatei
      * @param bool $hide_akteur Soll ein Name hinterlegt werden?
      */
-    public static function log(string $file_name, string $line, $hide_akteur = false): void
+    public static function log(string $file_name, string $line, bool $hide_akteur = false): void
     {
         if (!self::$log_user) return;
 

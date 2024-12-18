@@ -7,7 +7,7 @@
  * ANLEITUNG
  * (1) Erstelle eine Datei env.php im selben Verzeichnis wie diese Datei (dies ist unser Root-Verzeichnis)
  * (2) Kopiere den Code dieser Datei hier in deine neue env.php
- * (3) Passe die Einstellungen in env.php entsprechend deiner Entwicklungsumgebung an (Mailsachen erstmal unwichtig).
+ * (3) Passe die Einstellungen in env.php entsprechend deiner Entwicklungsumgebung an (Mailsachen und Discord erstmal unwichtig).
  * (4) Deine Einstellungen in env.php liegen im Gitignore und werden nicht auf Github hochgeladen.
  */
 class env
@@ -68,4 +68,15 @@ class env
      * Webseite über die Session für dich freigeschaltet.
      */
     public const WARTUNGSMODUS = false;
+    public const DEBUGMODUS = false;
+
+    public const TERMINPLANER_KEY = 'NotValid';
+
+    /**
+     * Discord
+     */
+    public const WEBHOOK_DISCORD = "asdfsdfasfd";
+    public const LINK_DISCORD = "https://discord.gg/jQrFefqz";
+
+    public const ACTIVE_FINAL_DISCORD = true;
 }

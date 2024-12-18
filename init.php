@@ -7,7 +7,7 @@
  * PHP-Einstellungen vornehmen
  */
 // Session-Sicherheit
-ini_set('session.cookie_lifetime', '7200');
+ini_set('session.cookie_lifetime', '7200'); // Entspricht 2h
 ini_set('session.use_cookies', '1');
 ini_set('session.use_only_cookies', '1');
 ini_set('session.use_strict_mode', '1');
@@ -39,13 +39,14 @@ require_once __DIR__ . '/env.php';
 if (Env::IS_LOCALHOST) {
     ini_set('session.cookie_secure', '0'); // $_SESSION Funktioniert auch ohne https
     ini_set('display_errors', 'On'); // Fehler werden angzeigt und nicht nur geloggt
+    ini_set('max_execution_time', '0'); // Für Debugging
 }
 
 
 /**
  * Security-Header
  */
-header('X-Frame-Options: DENY');
+//header('X-Frame-Options: DENY');
 header('X-XSS-Protection: 1; mode=block');
 header('X-Content-Type-Options: nosniff');
 header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
@@ -60,8 +61,14 @@ header('Referrer-Policy: no-referrer-when-downgrade');
 spl_autoload_register(
     static function ($class) {
         $class = strtolower($class);
-        include Env::BASE_PATH . '/classes/' . $class . '.class.php';
+        $array = explode('\\', $class);
+        $className = $array[array_key_last($array)];
+        $path = Env::BASE_PATH . '/classes/' . $className . '.class.php';
+        if (file_exists($path)) {
+            include $path;
+        }
     }
+
 );
 
 /**
@@ -108,7 +115,6 @@ register_shutdown_function(static function () {
         . " | " . ndbWrapper::$query_count . " (Querys)"
         . $referrer,
         true);
-
 });
 
 /**
@@ -142,7 +148,7 @@ db::initialize(); // Neue DB-Verbindung mit Prepared-Statements
 /**
  * Sprache für Zeitformate in Deutsch --> strftime()
  */
-setlocale(LC_TIME, 'de_DE@euro', 'de_DE', 'de', 'ge');
+setlocale(LC_ALL, 'de_DE@euro', 'de_DE', 'de', 'ge');
 
 
 /**
@@ -156,3 +162,11 @@ if (
     require(__DIR__ . '/public/errors/wartungsmodus.php');
     die();
 }
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+function e(mixed $value) {
+    return db::escape($value);
+}
+
+App\Repository\DoctrineWrapper::setup();

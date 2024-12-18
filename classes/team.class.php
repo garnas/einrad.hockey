@@ -12,15 +12,32 @@ class Team
      */
     public int $id;
     public array $details;
+    public string $teamname;
+
+    /**
+     * Werden nur bei Bedarf gesetzt.
+     * Dazu müssen dann die entsprechenden Setter aufgerufen werden.
+     */
+    public ?int $wertigkeit;
+    public ?string $tblock;
+    public ?int $rang;
+    public ?int $position_warteliste;
+    public ?string $freilos_gesetzt;
+
+    private static array $cache_id_to_name;
+    private static array $cache_details;
 
     /**
      * Team constructor.
      * @param $team_id
      */
-    public function __construct($team_id)
+    public function __construct($team_id, $skip_init = false)
     {
         $this->id = $team_id;
-        $this->details = $this->get_details();
+        if (!$skip_init) {
+            $this->details = $this->get_details();
+            $this->teamname = self::id_to_name($team_id);
+        }
     }
 
     /**
@@ -41,7 +58,7 @@ class Team
         // TeamIDs werden über die Sql-Funktion auto increment vergeben
         $sql = "
                 INSERT INTO teams_liga (teamname, passwort, freilose) 
-                VALUES (?, ?, 1)
+                VALUES (?, ?, 0)
                 ";
         db::$db->query($sql, $teamname, $passwort)->log();
 
@@ -125,18 +142,53 @@ class Team
     /**
      * Wandelt die TeamID in den Teamnamen um. Gibt leer zurück, wenn es den Teamnamen nicht gibt.
      *
-     * @param $team_id
+     * @param int $team_id
+     * @param int $saison
      * @return string|null
      */
-    public static function id_to_name($team_id): null|string
+    public static function id_to_name(int $team_id, int $saison = Config::SAISON): null|string
     {
-        $sql = "
+
+        if (isset(self::$cache_id_to_name[$team_id])) {
+            return self::$cache_id_to_name[$team_id];
+        }
+            $sql = "
                 SELECT teamname 
                 FROM teams_liga 
                 WHERE team_id = ?
-                ";
-        return db::$db->query($sql, $team_id)->esc()->fetch_one();
+            ";
+            $params = [$team_id];
 
+        if ($saison != Config::SAISON) {
+            $teamname = self::id_to_historic_name($team_id, $saison);
+            if (empty($teamname)) {
+                $teamname = db::$db->query($sql, $params)->esc()->fetch_one();
+            }
+        } else {
+            $teamname = db::$db->query($sql, $params)->esc()->fetch_one();
+        }
+
+        self::$cache_id_to_name[$team_id] = $teamname;
+        return $teamname;
+    }
+
+    /**
+     * Wandelt die TeamID in den Teamnamen aus der teams_historic Tabelle um. Gibt leer zurück, wenn es den Teamnamen nicht gibt.
+     *
+     * @param int $team_id
+     * @param int $saison
+     * @return string|null
+     */
+    public static function id_to_historic_name(int $team_id, int $saison = Config::SAISON): null|string
+    {
+        $sql = "
+            SELECT name
+            FROM teams_name_historic
+            WHERE team_id = ?
+            AND saison = ?
+        ";
+        $params = [$team_id, $saison];
+        return db::$db->query($sql, $params)->esc()->fetch_one();
     }
 
     /**
@@ -241,6 +293,34 @@ class Team
     }
 
     /**
+     * Hinterlegt, dass das Team den Terminplaner nutzt.
+     */
+    public function set_terminplaner(): void
+    {
+        $sql = "
+                UPDATE teams_liga 
+                SET terminplaner = 'Ja'
+                WHERE team_id = $this->id
+                ";
+        db::$db->query($sql)->log();
+    }
+
+    /**
+     * True, wenn das Team bereits einen Terminplaner-Account hat.
+     *
+     * @return bool
+     */
+    public function check_terminplaner(): bool
+    {
+        $sql = "
+                SELECT terminplaner 
+                FROM teams_liga 
+                WHERE team_id = $this->id
+                ";
+        return db::$db->query($sql)->fetch_one() === 'Ja';
+    }
+    
+    /**
      * Gibt die Teamstrafen aller Teams zurück
      *
      * @param int $saison
@@ -271,6 +351,10 @@ class Team
      */
     public function get_details(): array
     {
+        if (isset(self::$cache_details[$this->id])) {
+            return self::$cache_details[$this->id];
+        }
+
         $sql = "
                 SELECT *  
                 FROM teams_liga 
@@ -278,7 +362,8 @@ class Team
                 ON teams_details.team_id = teams_liga.team_id
                 WHERE teams_liga.team_id = $this->id
                 ";
-        return db::$db->query($sql)->esc()->fetch_row();
+        self::$cache_details[$this->id] = db::$db->query($sql)->esc()->fetch_row();
+        return self::$cache_details[$this->id];
     }
 
     /**
@@ -296,6 +381,10 @@ class Team
         db::$db->query($sql, $name)->log();
     }
 
+    public function set_name_object_only(string $name): void
+    {
+        $this->teamname = $name;
+    }
     /**
      * Gibt Anzahl der Freilose des Teams zurück.
      *
@@ -346,14 +435,7 @@ class Team
      */
     public function set_zweites_freilos(): void
     {
-        $sql = "
-                UPDATE teams_liga
-                SET freilose = freilose + 1, zweites_freilos = ?
-                WHERE team_id = $this->id
-                ";
-        db::$db->query($sql, date("Y-m-d"))->log();
-        Helper::log('schirifreilos.log', "$this->id hat für zwei Schiris ein Freilos erhalten.");
-        MailBot::mail_zweites_freilos($this);
+
     }
 
     /**
@@ -371,7 +453,7 @@ class Team
         $erhalten_am = empty($zweites_freilos)
             ? 0
             : strtotime($zweites_freilos);
-        return $erhalten_am >= strtotime(Config::SAISON_ANFANG);
+        return $erhalten_am >= strtotime(Config::SAISON_WECHSEL);
     }
 
     /**
@@ -381,8 +463,8 @@ class Team
      */
     public function check_schiri_freilos_erhaltbar(): bool
     {
-        // False, wenn die neue Saison noch nicht begonnen hat
-        if (time() < strtotime(Config::SAISON_ANFANG)){
+        // False, wenn die neue Saison noch nicht umgeschaltet wurde
+        if (time() < strtotime(Config::SAISON_WECHSEL)){
             return false;
         }
 
@@ -416,10 +498,18 @@ class Team
     /**
      *  Setzt das zweite Schiri-Freilos, falls das Team berechtigt ist.
      */
-    public function set_schiri_freilos(): void {
-       if ($this->check_schiri_freilos_erhaltbar()){
-                Html::info("Das Team '" . $this->details['teamname'] . "' hat ein zweites Freilos erhalten.");
-                $this->set_zweites_freilos();
+    public function set_schiri_freilos(): void
+    {
+       if ($this->check_schiri_freilos_erhaltbar()) {
+                Html::info("Das Team '" . $this->details['teamname'] . "' hat ein Freilos für zwei Schiris erhalten.");
+               $sql = "
+                    UPDATE teams_liga
+                    SET freilose = freilose + 1, zweites_freilos = ?
+                    WHERE team_id = $this->id
+                    ";
+               db::$db->query($sql, date("Y-m-d"))->log();
+               Helper::log('schirifreilos.log', "$this->id hat für zwei Schiris ein Freilos erhalten.");
+               MailBot::mail_schiri_freilos($this);
             }
     }
 
@@ -545,7 +635,7 @@ class Team
         // Passwort hashen
         $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
         if (!is_string($passwort)) {
-            trigger_error("set_passwort fehlgeschlagen.", E_USER_ERROR);
+            trigger_error("Passwort setzen fehlgeschlagen.", E_USER_ERROR);
         }
 
         // Befindet sich das Team im Teamcenter ihr Passwort geändert?
@@ -558,5 +648,105 @@ class Team
                 WHERE team_id = $this->id
                 ";
         db::$db->query($sql, $passwort_hash, $pw_geaendert)->log();
+    }
+
+    /**
+     * Setzt die Wertigkeit vor dem benannten Spieltag
+     * 
+     * @param int $spieltag
+     */
+    public function set_wertigkeit(int $spieltag, int $saison = Config::SAISON): void
+    {
+        $this->wertigkeit = Tabelle::get_team_wertigkeit($this->id, $spieltag - 1, $saison);
+    }
+
+    /**
+     * Setzt den Teamblock vor dem benannten Spieltag
+     * 
+     * @param int $spieltag
+     */
+    public function set_tblock(int $spieltag): void
+    {
+        $this->tblock = Tabelle::get_team_block($this->id, $spieltag - 1);
+    }
+
+    /**
+     * Setzt die Information, ob ein Freilos gesetzt wurde
+     * 
+     * @param string $freilos_gesetzt
+     */
+    public function set_freilos_gesetzt(string $freilos_gesetzt): void
+    {
+        $this->freilos_gesetzt = $freilos_gesetzt;
+    }
+
+    /**
+     * Setzte den Teamrang vor dem benannten Spieltag
+     * 
+     * @param int $spieltag
+     */
+    public function set_rang(int $spieltag): void
+    {
+        $this->rang = Tabelle::get_team_rang($this->id, $spieltag - 1);
+    }
+
+    /**
+     * Setzte die Wartelisteposition des Teams auf einem Turnier
+     * 
+     * @param int $spieltag
+     */
+    public function set_position_warteliste(int $pos): void
+    {
+        $this->position_warteliste = $pos;
+    }
+
+    /**
+     * Gibt die Teamwertigkeit
+     * 
+     * @return null|int
+     */
+    public function get_wertigkeit(): null|int
+    {
+        return $this->wertigkeit;
+    }
+
+    /**
+     * Gibt den Teamblock
+     * 
+     * @return null|string
+     */
+    public function get_tblock(): null|string
+    {
+        return $this->tblock;
+    }
+
+    /**
+     * Gibt den Teamrang
+     * 
+     * @return null|int
+     */
+    public function get_rang(): null|int
+    {
+        return $this->rang;
+    }
+
+    /**
+     * Gibt die Wartelisteposition
+     * 
+     * @return null|int
+     */
+    public function get_warteliste_postition(): null|int
+    {
+        return $this->position_warteliste;
+    }
+
+    /**
+     * Gibt den Teamnamen
+     * 
+     * @return string
+     */
+    public function get_teamname(): string
+    {
+        return $this->teamname;
     }
 }

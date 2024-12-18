@@ -1,17 +1,18 @@
 <?php
+use App\Event\Turnier\nLigaBot;
 
 // Besteht die Berechtigung das Turnier zu bearbeiten?
 if(!Helper::$ligacenter){ // Ligacenter darf alles.
-    if ((Helper::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $spielplan->turnier->details['ausrichter'])){
+    if ((Helper::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $spielplan->turnier->get_ausrichter())){
         Html::error("Nur der Ausrichter kann Spielergebnisse eintragen");
         header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
         die();
     }
 
     // Wird das Turnierergebnis rechtzeitig eingetragen?
-    $N = date("N", strtotime($spielplan->turnier->details['datum'])); // Numerischer Wochentag.
+    $N = date("N", strtotime($spielplan->turnier->get_datum())); // Numerischer Wochentag.
     $delta = (8-$N) * 24*60*60 + 18*60*60; // Die Zeit bis zum nächsten Montag 18:00 Uhr von 0:00 Uhr aus gesehen.
-    $abgabe = strtotime($spielplan->turnier->details['datum']) + $delta;
+    $abgabe = strtotime($spielplan->turnier->get_datum()) + $delta;
 
     if ($abgabe < time()){
         Html::error("Bitte wende dich an den Ligaausschuss um Ergebnisse nachträglich zu verändern.");
@@ -37,7 +38,13 @@ if (isset($_POST["tore_speichern"])) {
             $_POST["penalty_a"][$spiel_id] ?? '',
             $_POST["penalty_b"][$spiel_id] ?? ''
         );
+        $spiel['tore_a'] = $_POST["tore_a"][$spiel_id]  ?? '';
+        $spiel['tore_b'] = $_POST["tore_b"][$spiel_id]  ?? '';
+        $spiel['penalty_a'] = $_POST["penalty_a"][$spiel_id]  ?? '';
+        $spiel['penalty_b'] = $_POST["penalty_b"][$spiel_id]  ?? '';
+        Discord::tickerUpdate($spiel);
     }
+
     Html::info('Spielergebnisse wurden gespeichert');
     header('Location: ' . db::escape($_SERVER['REQUEST_URI']));
     die();
@@ -53,7 +60,7 @@ if (isset($_POST["turnierergebnis_speichern"])) {
     }
 
     // Testen ob Turnier tabellentechnisch eingetragen werden darf.
-    if (!Tabelle::check_ergebnis_eintragbar($spielplan->turnier)) {
+    if (!$turnier->is_ergebnis_eintragbar()) {
         Html::error("Turnierergebnis kann nicht eingetragen werden. Kontaktiere bitte den Ligaausschuss.");
         $error = true;
     }
@@ -67,6 +74,10 @@ if (isset($_POST["turnierergebnis_speichern"])) {
     if (!($error ?? false)) {
         $spielplan->turnier->set_ergebnisse($spielplan->platzierungstabelle);
         Html::info("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
+        $spieltag = $spielplan->turnier->get_spieltag();
+        if (Tabelle::is_spieltag_beendet($spieltag)) {
+            nLigaBot::blockWechsel();
+        }
         header('Location: ' . db::escape($_SERVER['REQUEST_URI']));
         die();
     }
@@ -93,7 +104,7 @@ if (!empty($vgl_data)) {
         || count($vgl_data) != $spielplan->anzahl_teams
     ) {
         $error = true;
-    } else {
+    } elseif ($turnier->get_art() != 'final') {
         foreach ($spielplan->platzierungstabelle as $ergebnis) {
             if ($vgl_data[$ergebnis['platz']]['ergebnis'] != $ergebnis['ligapunkte']) {
                 $error = true;

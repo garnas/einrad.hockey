@@ -15,6 +15,14 @@ include '../../templates/header.tmp.php'; ?>
 
 
 <h1 class='w3-center w3-text-primary'>Hallo <?= LigaLeitung::get_details($_SESSION['logins']['la']['login'])['vorname'] ?>!</h1>
+<?= Html::link(Env::BASE_URL . "/ligacenter/lc_turnierstats.php", "turniere.xlsx", extern: true) ?>
+<br>
+<?= Html::link(Env::BASE_URL . "/ligacenter/lc_spielerstats.php","spieler.xlsx", extern: true) ?>
+<br>
+<?= Html::link(Env::BASE_URL . "/ligacenter/lc_teamstats.php", "teams.xlsx", extern: true) ?>
+<br>
+<?= Html::link(Env::BASE_URL . "/schiricenter/schiritest_stats.php", "schiritest.xlsx", extern: true) ?>
+<br>
 
 <div id="messen" class="">
     <!-- Misst die Fensterbreite des Browsers, um die Centerpanels gleichmäßig verteilen zu können -->

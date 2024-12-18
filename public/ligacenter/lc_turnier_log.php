@@ -2,51 +2,47 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Repository\Turnier\TurnierRepository;
+use App\Service\Turnier\TurnierLinks;
+use App\Service\Turnier\TurnierSnippets;
+
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
 // Turnierobjekt erstellen
-$turnier = new Turnier ((int) @$_GET['turnier_id']);
+$turnier_id = (int) @$_GET['turnier_id'];
 
-// Logs des Turnieres bekommen
-$logs = $turnier->get_turnier_logs();
+$turnierEntity = TurnierRepository::get()->turnier($turnier_id);
 
-// Gelöschtes Turnier
-if (empty($turnier->details) & !empty($logs)){
-    Html::notice("Turnier wurde gelöscht.");
+if ($turnierEntity === null){
+    Html::notice("Turnier wurde nicht gefunden.");
 }
 
-// Turnier nicht gefunden
-if (empty($turnier->details) & empty($logs)){
-    Html::notice("Es wurden keine Turnierlogs gefunden");
-    header('Location: lc_turnierliste.php');
-    die();
-}
+;
+
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-include '../../templates/header.tmp.php';
-?>
-<?php if (!empty($turnier->details)){?>
-    <h2>Turnierlog <?=$turnier->details['datum'] . ' ' . $turnier->details['tname']?> <?=$turnier->details['ort']?> (<?=$turnier->details['tblock']?>)</h2>
-<?php }else{ ?>
-    <h2>Turnierlog Turnier-ID <?=$turnier->id?></h2>
-<?php } //endif?>
-<div class="w3-responsive w3-card">
-    <table class="w3-table w3-striped">
-        <tr class="w3-primary">
-            <th>Zeit</th>
-            <th>Akteur</th>
-            <th>Aktion</th>
-        </tr>
-        <?php foreach ($logs as $log){?>   
-            <tr>
-                <td style="white-space: pre;"><?=$log['zeit']?></td>
-                <td><?=$log['autor']?></td>
-                <td style="white-space: pre;"><?=$log['log_text']?></td>
+include '../../templates/header.tmp.php'; ?>
+
+    <h2>Turnierlog</h2>
+    <h2><?= TurnierSnippets::nameBrTitel($turnierEntity) ?></h2>
+    <?= Html::link(TurnierLinks::details($turnierEntity), "Turnierdetails", icon:'info') ?>
+    <div class="w3-responsive w3-card">
+        <table class="w3-table w3-striped">
+            <tr class="w3-primary">
+                <th>Zeit</th>
+                <th>Akteur</th>
+                <th>Aktion</th>
             </tr>
-        <?php } //end forach?>
-    </table>
-</div>
+            <?php foreach ($turnierEntity->getLogs() as $log){?>
+                <tr>
+                    <td style="white-space: pre;"><?= $log->getZeit()->format("d.m.y (D) H:i:s") ?></td>
+                    <td><?= $log->getAutor() ?></td>
+                    <td style="white-space: pre;"><?=$log->getLogText()?></td>
+                </tr>
+            <?php } //end forach?>
+        </table>
+    </div>
 <?php include '../../templates/footer.tmp.php';

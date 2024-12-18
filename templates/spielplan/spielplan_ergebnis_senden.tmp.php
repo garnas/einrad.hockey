@@ -1,13 +1,14 @@
 <form method="post">
     <p>
         <button type="submit"
+               <?= $spielplan->turnier->is_finalturnier() ? "disabled" : "" ?>
                name="turnierergebnis_speichern"
                class="w3-block w3-button w3-tertiary <?= $spielplan->check_turnier_beendet() ?: 'w3-opacity' ?>"
         >
             <?= Html::icon('send') ?> In die Ligatabellen eintragen
         </button>
     </p>
-    <?php if ($spielplan->turnier->details['phase'] == 'ergebnis') { ?>
+    <?php if ($spielplan->turnier->get_phase() == 'ergebnis') { ?>
         <p class="w3-text-green">
             <?= Html::icon('check_circle') ?>
             Dem Ligaausschuss liegt ein Turnierergebnis vor.
@@ -18,7 +19,7 @@
         </p>
     <?php } //end if?>
 
-    <?php if ($spielplan->turnier->details['phase'] != 'ergebnis') { ?>
+    <?php if ($spielplan->turnier->get_phase() != 'ergebnis') { ?>
         <p class="w3-text-grey">
             <?= Html::icon('info') ?>
             Dem Ligaausschuss liegt noch kein Turnierergebnis vor.

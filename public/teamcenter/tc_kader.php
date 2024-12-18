@@ -8,9 +8,7 @@ require_once '../../logic/session_team.logic.php'; //Auth
 $team_id = $_SESSION['logins']['team']['id'];
 
 $kader = nSpieler::get_kader($team_id);
-$kader_vorsaison =
-    nSpieler::get_kader($team_id, Config::SAISON - 1)
-    +  nSpieler::get_kader($team_id, Config::SAISON - 2);
+$kader_vorsaison = nSpieler::get_kader($team_id, Config::SAISON - 1);
 
 //Formularauswertung neuer Spieler
 require_once '../../logic/kader.logic.php';

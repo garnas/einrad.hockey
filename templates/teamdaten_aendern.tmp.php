@@ -1,9 +1,9 @@
-<h3 class="w3-text-grey"><?= $team->details['teamname'] ?></h3>
+<h3 class="w3-text-grey"><?= $team->getName() ?></h3>
 
 
 <form class="w3-card w3-panel" method="post" enctype="multipart/form-data">
     <h2 class="w3-text-primary"><?= Html::icon("group", 16,28 ) ?> Teamfoto</h2>
-    <?php if (empty($team->details['teamfoto'])) { ?>
+    <?php if (empty($team->getDetails()->getTeamfoto())) { ?>
         <p>
             <i>Es können Bilder im <b>.jpg, .jpeg, .gif, .png</b> Format mit bis zu 11,9 Megabyte hochgeladen werden.</i>
         </p>
@@ -17,7 +17,7 @@
         </p>
     <?php } else { ?>
         <p>
-            <img src="<?= $team->details['teamfoto'] ?>" alt="<?= $team->details['teamname'] ?>" class="w3-card w3-image"
+            <img src="<?= $team->getDetails()->getTeamfoto() ?>" alt="<?= $team->getName() ?>" class="w3-card w3-image"
                  style="max-height: 360px">
         </p>
         <p>
@@ -26,7 +26,7 @@
         </p>
     <?php }  //end if?>
     <p class="w3-text-grey">
-        Das Teamfoto kann öffentlich <?= Html::link('../liga/teams.php#' . $team->id, 'auf der Teams-Seite') ?>
+        Das Teamfoto kann öffentlich <?= Html::link('../liga/teams.php#' . $team->id(), 'auf der Teams-Seite') ?>
         eingesehen werden.
     </p>
 </form>
@@ -50,8 +50,8 @@
             </form>
             <form method="post">
                 <label for="color_1" style="cursor:pointer;">
-                    <span class="w3-card-4" style="height:70px;width:70px;background-color:<?= empty($team->details['trikot_farbe_1']) ? '#bbb' : $team->details['trikot_farbe_1']?>;border-radius:50%;display:inline-block;">
-                        <br><?= (empty($team->details['trikot_farbe_1'])) ? Html::icon('not_interested') : '' ?>
+                    <span class="w3-card-4" style="height:70px;width:70px;background-color:<?= empty($team->getDetails()->getTrikotFarbe1()) ? '#bbb' : $team->getDetails()->getTrikotFarbe1()?>;border-radius:50%;display:inline-block;">
+                        <br><?= (empty($team->getDetails()->getTrikotFarbe1())) ? Html::icon('not_interested') : '' ?>
                     </span>
 
                 </label>
@@ -60,7 +60,7 @@
                            name='color_1'
                            id='color_1'
                            class="w3-white"
-                           value="<?= empty($team->details['trikot_farbe_1']) ? '#bbbbbb' : $team->details['trikot_farbe_1'] ?>"
+                           value="<?= empty($team->getDetails()->getTrikotFarbe1()) ? '#bbbbbb' : $team->getDetails()->getTrikotFarbe1() ?>"
                            style="cursor: pointer;"
                            onchange="this.form.submit()"
                     >
@@ -85,8 +85,8 @@
             </form>
             <form method="post">
                 <label for="color_2" style="cursor:pointer;">
-                    <span class="w3-card-4" style="height:70px;width:70px; background-color:<?= empty($team->details['trikot_farbe_2']) ? '#bbb' : $team->details['trikot_farbe_2'] ?>;border-radius:50%;display:inline-block;">
-                        <br><?= (empty($team->details['trikot_farbe_2'])) ? Html::icon('not_interested') : '' ?>
+                    <span class="w3-card-4" style="height:70px;width:70px; background-color:<?= empty($team->getDetails()->getTrikotFarbe2()) ? '#bbb' : $team->getDetails()->getTrikotFarbe2() ?>;border-radius:50%;display:inline-block;">
+                        <br><?= (empty($team->getDetails()->getTrikotFarbe2())) ? Html::icon('not_interested') : '' ?>
                     </span>
                 </label>
                 <p>
@@ -94,7 +94,7 @@
                            name='color_2'
                            id='color_2'
                            class="w3-white"
-                           value="<?= empty($team->details['trikot_farbe_2']) ? '#bbbbbb' : $team->details['trikot_farbe_2'] ?>"
+                           value="<?= empty($team->getDetails()->getTrikotFarbe2()) ? '#bbbbbb' : $team->getDetails()->getTrikotFarbe2() ?>"
                            style="cursor: pointer;"
                            onchange="this.form.submit()"
                     >
@@ -119,7 +119,7 @@
                id='ligavertreter'
                name='ligavertreter'
                required
-               value='<?= $team->details['ligavertreter'] ?>'
+               value='<?= $team->getDetails()->getLigavertreter() ?>'
         >
         <span class="w3-text-grey">
             <i>Nur eine Person kann als Ligavertreter angegeben werden</i>
@@ -127,7 +127,7 @@
     </p>
     <p>
         <input type="checkbox"
-               <?= !empty($team->details['ligavertreter']) ? 'checked' : '' ?>
+               <?= !empty($team->getDetails()->getLigavertreter()) ? 'checked' : '' ?>
                class="w3-check"
                value="zugestimmt"
                name="dsgvo"
@@ -143,7 +143,7 @@
                type='number'
                id='plz'
                name='plz'
-               value='<?= $team->details['plz'] ?>'
+               value='<?= $team->getDetails()->getPlz() ?>'
         >
     </p>
     <p>
@@ -152,7 +152,7 @@
                type='text'
                id='ort'
                name='ort'
-               value='<?= $team->details['ort'] ?>'
+               value='<?= $team->getDetails()->getOrt()?>'
         >
     </p>
     <p>
@@ -161,7 +161,7 @@
                type='text'
                id='verein'
                name='verein'
-               value='<?= $team->details['verein'] ?>'
+               value='<?= $team->getDetails()->getVerein() ?>'
         >
     </p>
     <p>
@@ -171,7 +171,7 @@
                id='homepage'
                name='homepage'
                placeholder='Muss mit https:// oder http:// beginnen.'
-               value='<?= $team->details['homepage'] ?>'>
+               value='<?= $team->getDetails()->getHomepage() ?>'>
     </p>
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped w3-centered">

@@ -108,7 +108,11 @@
             <a href='<?= Env::BASE_URL ?>/teamcenter/tc_logout.php' class="w3-button w3-right w3-hover-primary">
                 <?= Html::icon("logout", 24, 26) ?> Logout
             </a>
-        <?php }elseif (isset($_SESSION['logins']['la'])){?>
+        <?php }elseif (LigaLeitung::is_logged_in("oeffentlichkeitsausschuss")) {?>
+            <a href='<?= Env::BASE_URL ?>/oefficenter/oc_logout.php' class="w3-button w3-right w3-hover-primary">
+                <?= Html::icon("logout", tag:"h3") ?> Logout
+            </a>
+        <?php }elseif (LigaLeitung::is_logged_in("ligaausschuss")) {?>
             <a href='<?= Env::BASE_URL ?>/ligacenter/lc_logout.php' class="w3-button w3-right w3-hover-primary">
                 <?= Html::icon("logout", tag:"h3") ?> Logout
             </a>

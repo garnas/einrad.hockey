@@ -1,11 +1,12 @@
 <?php
 
 // Inititalisierung
+use App\Repository\Team\TeamRepository;
 
 $team_id = (Helper::$teamcenter) ? $_SESSION['logins']['team']['id'] : (int) @$_GET['team_id'];
 if (Team::is_ligateam($team_id)){
-    $team = new Team ($team_id);
-    $kontakte = new Kontakt ($team->id);
+    $team = TeamRepository::get()->team($team_id);
+    $kontakte = new Kontakt ($team_id);
     $emails = $kontakte->get_emails_with_details();
 }
 
@@ -22,25 +23,25 @@ if (
 ) {
     if (isset($_POST['color_1'])) {
         if (preg_match('/^#[a-f0-9]{6}$/i', $_POST['color_1'])) {
-            $team->set_detail('trikot_farbe_1', $_POST['color_1']);
+            $team->getDetails()->setTrikotFarbe1($_POST['color_1']);
         } else {
             Html::error("Es konnte keine Farbe fürs erste Trikot ermittelt werden.");
         }
     }
     if (isset($_POST['color_2'])) {
         if (preg_match('/^#[a-f0-9]{6}$/i', $_POST['color_2'])) {
-            $team->set_detail('trikot_farbe_2', $_POST['color_2']);
+            $team->getDetails()->setTrikotFarbe2($_POST['color_2']);
         } else {
             Html::error("Es konnte keine Farbe fürs zweite Trikot ermittelt werden.");
         }
     }
     if (isset($_POST['no_color_1']))
-        $team->set_detail('trikot_farbe_1', '');
+        $team->getDetails()->setTrikotFarbe1("");
     if (isset($_POST['no_color_2']))
-        $team->set_detail('trikot_farbe_2', '');
+        $team->getDetails()->setTrikotFarbe2("");
+    TeamRepository::get()->speichern($team);
     Html::info("Trikotfarbe geändert.");
-    header("Location:" . $path);
-    die();
+    Helper::reload($path);
 }
 
 // Teamdaten ändern
@@ -57,12 +58,13 @@ if (isset($_POST['teamdaten_aendern'])) {
     }
 
     if (!$error) {
-        $array = ['plz', 'ort', 'verein', 'homepage', 'ligavertreter'];
-        foreach ($array as $entry) {
-            if ($team->details[$entry] != $_POST[$entry]) {
-                $team->set_detail($entry, $_POST[$entry]);
-            }
-        }
+        $team->getDetails()
+            ->setPlz($_POST["plz"])
+            ->setOrt($_POST["ort"])
+            ->setVerein($_POST["verein"])
+            ->setHomepage($_POST["homepage"])
+            ->setLigavertreter($_POST["ligavertreter"])
+        ;
     }
 
     // Emails
@@ -81,9 +83,9 @@ if (isset($_POST['teamdaten_aendern'])) {
             }
         }
     }
+    TeamRepository::get()->speichern($team);
     Html::info("Teamdaten wurden gespeichert.");
-    header('Location: ' . $path);
-    die();
+    Helper::reload($path);
 }
 
 // Verarbeitung des Formulars zum Eintragen einer Email
@@ -95,8 +97,7 @@ if (isset($_POST['neue_email'])) {
     if (filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($email)) {
         $kontakte->set_email($email, $public, $infomail);
         Html::info("E-Mail-Adresse wurde hinzugefügt");
-        header('Location: ' . $path);
-        die();
+        Helper::reload($path);
     }
 
     Html::error("E-Mail-Adresse wurde nicht akzeptiert");
@@ -108,10 +109,10 @@ if (isset($_POST['teamfoto']) && !empty($_FILES["jpgupload"]["tmp_name"])) {
     $target_file_jpg = Neuigkeit::upload_bild($_FILES["jpgupload"]);
 
     if ($target_file_jpg !== false) {
-        $team->set_detail('teamfoto', $target_file_jpg);
+        $team->getDetails()->setTeamfoto($target_file_jpg);
+        TeamRepository::get()->speichern($team);
         Html::info("Teamfoto wurde hochgeladen.");
-        header('Location: ' . $path);
-        die();
+        Helper::reload($path);
     }
 
     Html::error("Es ist ein Fehler beim Fotoupload aufgetreten.");
@@ -119,8 +120,8 @@ if (isset($_POST['teamfoto']) && !empty($_FILES["jpgupload"]["tmp_name"])) {
 
 // Teamfoto löschen
 if (isset($_POST['delete_teamfoto'])) {
-    $team->delete_foto();
+    TeamRepository::get()->deleteFoto($team);
     Html::info("Teamfoto wurde gelöscht.");
-    header('Location: ' . $path);
-    die();
+    Helper::reload($path);
+
 }

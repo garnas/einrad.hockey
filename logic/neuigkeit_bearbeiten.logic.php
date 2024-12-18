@@ -8,6 +8,12 @@ if (!isset($neuigkeiten[$neuigkeiten_id])) {
 }
 
 $neuigkeit = $neuigkeiten[$neuigkeiten_id];
+
+if (!Neuigkeit::darf_bearbeiten($neuigkeit['eingetragen_von'])) {
+    Html::error("Neuigkeit darf nicht bearbeitet werden.");
+    Helper::reload("/liga/neues.php");
+}
+
 $error = false;
 
 // Neuigkeit löschen
@@ -54,7 +60,7 @@ if (isset($_POST['change_neuigkeit'])) {
     //////Titel, Text und Verlinkungen werden in die Datenbank eingetragen//////
     $titel = $_POST['titel'];
     $text = $_POST['text'];
-    $bild_verlinken = $_POST['bild_verlinken'] ?? '';
+    $bild_verlinken = Neuigkeit::darf_verlinken() ? $_POST['bild_verlinken'] : '';
 
     if (!$error) {
 

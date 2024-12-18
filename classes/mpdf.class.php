@@ -7,7 +7,6 @@ class mPDF
      */
     public static function load_mpdf(): \Mpdf\Mpdf
     {
-        require_once __DIR__ . "/../frameworks/composer/vendor/autoload.php";
 
         $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
         $fontDirs = $defaultConfig['fontDir'];

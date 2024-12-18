@@ -5,17 +5,10 @@ class Config
     /**
      * Saison
      */
-    public const SAISON = 27; // Saison 0 = Jahr 1995;
-    public const SAISON_ANFANG = '16.08.2021';
-    public const SAISON_ENDE = '29.05.2022';
-
-    /**
-     * Saisontermine
-     */
-    public const FINALE_EINS = '11.06.2022';
-    public const FINALE_ZWEI = '12.06.2022';
-    public const FINALE_DREI = '18.06.2022';
-    public const FINALE_VIER = '19.06.2022';
+    public const SAISON = 30; // Saison 0 = Jahr 1995;
+    public const SAISON_WECHSEL = "17.06.2024"; // Wichtig für zweites Freilos
+    public const SAISON_ANFANG = '17.08.2024';
+    public const SAISON_ENDE = '01.06.2025';
 
     /**
      * Log-Files
@@ -25,6 +18,8 @@ class Config
     public const LOG_KONTAKTFORMULAR = "kontakt.log";
     public const LOG_EMAILS = "emails.log";
     public const LOG_USER = "user.log";
+    public const LOG_SCHIRI_UEBUNGSTEST = "schiri_uebungstest.log";
+    public const LOG_SCHIRI_PRUEFUNG = "schiri_pruefung.log";
 
 
     /**
@@ -47,12 +42,6 @@ class Config
     public const BLOCK_ALL = ['ABCDEF', 'A', 'AB', 'ABC', 'BC', 'BCD', 'CD', 'CDE', 'DE', 'DEF', 'EF', 'F'];
 
     /**
-     * Mögliche Finalturnier-Blöcke
-     * Reihenfolge ist wichtig!
-     */
-    public const BLOCK_FINALE = ['AFINALE', 'BFINALE', 'CFINALE', 'DFINALE'];
-
-    /**
      * Rangtabellen-Zuordnung
      */
     public const RANG_TO_BLOCK = [
@@ -66,8 +55,18 @@ class Config
     ];
 
     /**
+     * Turnierarten
+     */
+    public const TURNIER_ARTEN = ['I', 'II'];
+
+    /**
      * Ligagebühr
      */
-    public const LIGAGEBUEHR = "30&nbsp;€";
+    public const LIGAGEBUEHR = "50&nbsp;€";
+
+    /**
+     * Kontaktcenter
+     */
+    public const BCC_GRENZE = 12;
 
 }

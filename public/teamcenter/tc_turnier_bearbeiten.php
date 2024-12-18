@@ -2,6 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Service\Turnier\TurnierSnippets;
+
 require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth
 
@@ -20,13 +22,11 @@ include '../../templates/header.tmp.php';
     <h2 class="w3-text-primary">
         <span class="w3-text-grey">Turnierdaten ändern</span>
         <br>
-        <?= $turnier->details['ort']
-        . ' (' . $turnier->details['tblock'] . ') '
-        . date("d.m.Y", strtotime($turnier->details['datum'])) ?>
+        <?= TurnierSnippets::nameBrTitel($turnier) ?>
     </h2>
 
     <p>
-        <?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->details['turnier_id'],
+        <?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(),
             'Alle Turnierdetails',
             icon: 'info') ?>
     </p>

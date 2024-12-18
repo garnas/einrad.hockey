@@ -1,9 +1,9 @@
 <?php
-// Max Anzahl bevor alle im BCC angeschrieben werden
-$grenze_bcc = 12; //TODO in Config oder Env
+// BCC Grenze
+$grenze_bcc = Config::BCC_GRENZE;
 
 // Für die Turnierauswahl
-$turniere = Turnier::get_turniere('alle', false, false);
+$turniere = nTurnier::get_turniere();
 
 // Für Sortierung der Teams nach Blöcken
 $akt_spieltag = Tabelle::get_aktuellen_spieltag();
@@ -14,6 +14,8 @@ if (Helper::$ligacenter) {
     $list_id = 'lc_emails' . $_SESSION['logins']['la']['id'];
 } elseif (Helper::$teamcenter) {
     $list_id = 'tc_emails' . $_SESSION['logins']['team']['id'];
+} elseif (Helper::$oeffentlichkeitsausschuss) {
+    $list_id = 'oc_emails' . $_SESSION['logins']['oa']['id'];
 }
 
 
@@ -27,14 +29,14 @@ if (isset($_POST['reset'])) {
 //Turnier wurde ausgewählt
 if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
     unset ($_SESSION[$list_id]);
-    $turnier = new Turnier((int) $_POST['turnier_id']);
-    if (empty($turnier->details)) {
+    $turnier = nTurnier::get((int) $_POST['turnier_id']);
+    if (empty($turnier->get_turnier_id())) {
         Html::error("Turnier wurde nicht gefunden");
         header('Location: ' . db::escape($_SERVER['PHP_SELF']));
         die();
     }
     $array = Kontakt::get_emails_turnier($_POST['turnier_id']);
-    $_SESSION[$list_id]['type'] = 'Turnier in ' . $turnier->details['ort'] . ' (' . date("d.m.Y", strtotime($turnier->details['datum'])) . ', ' . $turnier->details['tblock'] . ')';
+    $_SESSION[$list_id]['type'] = 'Turnier in ' . $turnier->get_ort() . ' (' . date("d.m.Y", strtotime($turnier->get_datum())) . ', ' . $turnier->get_tblock() . ')';
     $_SESSION[$list_id]['emails'] = $array['emails'];
     $_SESSION[$list_id]['empfaenger'] = $array['teamnamen'];
 
@@ -45,7 +47,6 @@ if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
 
     Html::notice("Achtung: Nichtligateams müssen seperat angeschrieben werden!");
 }
-
 
 // Rundmail wurde ausgewählt
 if (isset($_POST['rundmail'])) {
@@ -101,6 +102,9 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
         if (Helper::$ligacenter) {
             $mailer->setFrom(Env::LAMAIL, 'Ligaausschuss');
             $mailer->addBCC(Env::LAMAIL_ANTWORT);
+        } elseif (Helper::$oeffentlichkeitsausschuss) {
+            $mailer->setFrom(Env::LAMAIL, 'Öffentlichkeitsausschuss');
+            $mailer->addBCC(Env::OEFFIMAIL);
         } elseif (Helper::$teamcenter) {
             $akt_kontakt = new Kontakt($_SESSION['logins']['team']['id']); //Absender Mails bekommen
             $absender = $akt_kontakt->get_emails();
@@ -113,8 +117,9 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
             }
         }
 
-        //BCC oder Adressat?
-        if (count($emails) > $grenze_bcc) {
+        // BCC oder Adressat?
+        // Überprüfung, wann BCC angeschrieben werden muss
+        if (count($emails) > Config::BCC_GRENZE) {
             foreach ($emails as $email) {
                 $mailer->addBCC($email);
             }
@@ -126,7 +131,7 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
 
         // Text und Betreff hinzufügen
         $mailer->Subject = $betreff;
-        $mailer->Body = $text . "\r\nVersendet aus dem Kontaktcenter von einrad.hockey";
+        $mailer->Body = $text . "\r\n\r\nVersendet aus dem Kontaktcenter von einrad.hockey";
 
 
         Helper::log(Config::LOG_EMAILS, "Betreff: $betreff" . " an " . implode(',', $emails));
@@ -149,6 +154,9 @@ if (isset($_SESSION[$list_id])) {
     if (Helper::$ligacenter) {
         $from = Env::LAMAIL;
         $tos = $_SESSION[$list_id]['emails'];
+    } elseif (Helper::$oeffentlichkeitsausschuss) {
+        $from = Env::OEFFIMAIL;
+        $tos = $_SESSION[$list_id]['emails'];
     } elseif (Helper::$teamcenter) {
         $from = $_SESSION['logins']['team']['name'];
         $tos = $_SESSION[$list_id]['empfaenger'];
@@ -158,11 +166,15 @@ if (isset($_SESSION[$list_id])) {
     }
 }
 
-if (Helper::$ligacenter){
+if (Helper::$ligacenter) {
     $las = Ligaleitung::get_all('ligaausschuss');
     $signatur = "\r\n\r\n\r\nDein Ligaausschuss\r\n--\r\n";
     foreach ($las as $la){
         $signatur .= $la['vorname'] . ' ' . $la['nachname']
             . (!empty($la['teamname']) ? ' (' . $la['teamname'] . ')' : '') . "\r\n";
     }
+}
+
+if (Helper::$oeffentlichkeitsausschuss) {
+    $signatur = "\r\n\r\n\r\nDein Öffentlichkeitsausschuss";
 }

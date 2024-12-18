@@ -10,7 +10,6 @@ class PHPMailer
      */
     public static function load_phpmailer(): PHPMailer\PHPMailer\PHPMailer
     {
-        require_once __DIR__ . '/../frameworks/composer/vendor/autoload.php';
         return new \PHPMailer\PHPMailer\PHPMailer();
     }
 }

@@ -14,10 +14,20 @@ include '../../templates/header.tmp.php';
 
     <!-- Archiv -->
     <h1 class="w3-text-primary">Archiv</h1>
-    <p><?= HTML::link('tabelle.php?saison=26', 'Tabelle der Saison 2020/21') ?></p>
-    <p><?= Html::link('ergebnisse.php?saison=26', 'Turniere der Saison 2020/21') ?></p>
-
-    <!-- iframes sind ein sonderfall, html5 depreciated -->
+    <p>---</p>
+    <p><?= Html::link('ergebnisse.php?saison=29', 'Turniere der Saison 2023/2024') ?></p>
+    <p><?= HTML::link('tabelle.php?saison=29', 'Tabelle der Saison 2023/2024') ?></p>
+    <p>---</p>
+    <p>---</p>
+    <p><?= Html::link('ergebnisse.php?saison=28', 'Turniere der Saison 2022/2023') ?></p>
+    <p><?= HTML::link('tabelle.php?saison=28', 'Tabelle der Saison 2022/2023') ?></p>
+    <p>---</p>
+    <p><?= Html::link('ergebnisse.php?saison=27', 'Turniere der Saison 2021/2022') ?></p>
+    <p><?= HTML::link('tabelle.php?saison=27', 'Tabelle der Saison 2021/2022') ?></p>
+    <p>---</p>
+    <p><?= HTML::link('tabelle.php?saison=26', 'Tabelle der Saison 2020/2021') ?></p>
+    <p><?= Html::link('ergebnisse.php?saison=26', 'Turniere der Saison 2020/2021') ?></p>
+    <p>---</p>
     <iframe src="<?= Nav::LINK_ARCHIV ?>" style="width:100%;height:800px;" class="archiv w3-border-0"
             title="Archiv der Deutschen Einradhockeyliga"></iframe>
 

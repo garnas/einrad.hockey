@@ -21,18 +21,50 @@ Du hast Lust mitzuwirken? Oder Fragen darüber, wie die Webseite funktioniert? M
 * Kontaktcenter für die Teams untereinander
 * Einstellen von Neuigkeiten mit sicheren Dateianhängen
 * Google Maps Karte mit allen Ligateams
-* MailBot zum versenden von automatischen E-Mails
+* MailBot zum Versenden von automatischen E-Mails
 * LigaBot für die Phasenübergänge der Turniere und zum Losen von Spielen-Listen
 * und vieles mehr!
-
-## Dokumente
-
-* [Allgemeine Dokumentation](http://einrad.hockey/dokumente/dokumetation/allgemeine_dokumentation.pdf)
-
-* [Entwicklungsumgebung erstellen](http://einrad.hockey/dokumente/dokumetation/entwicklungsumgebung_erstellen.pdf)
 
 ## xml-Schnittstelle
 
 * [https://www.einrad.hockey/xml/turnierliste.php](https://www.einrad.hockey/xml/turnierliste.php)
 * [https://www.einrad.hockey/xml/turnieranmeldungen.php](https://www.einrad.hockey/xml/turnieranmeldungen.php)
 * [https://www.einrad.hockey/xml/rangtabelle.php](https://www.einrad.hockey/xml/rangtabelle.php)
+* [https://www.einrad.hockey/xml/spielplan.php?turnier_id=?](https://www.einrad.hockey/xml/spielplan.php?turnier_id=1021)
+
+## dev-Umgebung erstellen
+
+### 1. Voraussetzungen:
+* XAMPP installieren (PHP >=8.0), Composer installieren
+* Repository in den htdocs-Ordner herunterladen. Ordnerstruktur sollte so aussehen: 
+```
+htdocs
+└── einrad.hockey
+    └── example_env.php
+```
+* Im Verzeichnis der example_env.php eine Datei env.php erstellen und den Inhalt von example_env.php hereinkopieren
+
+### 2. Datenbank einrichten:
+* VIA XAMPP Control Panel, MySQL -> Admin -> phpMyAdmin eine Datenbank db_localhost erstellen
+* Die db_localhost.sql im Ordner _localhost in die Datenbank laden
+* In der oben erstellten env.php die Zugangsdaten der SQL-Datenbank eintragen (falls von den default Zugangsdaten abgewichen wird)
+
+### 3. Abhängigkeiten installieren
+* Im Verzeichnis der composer.json via CLI "composer update" ausführen
+* Anschließend via CLI "composer dump-autoload" ausführen, um den Autoloader der Klassen zu konfigurieren
+
+### 4. Seite öffnen
+* http://localhost/einrad.hockey/public/liga/neues.php
+* Hier sollte nun die Neuigkeitenseite angezeigt werden
+
+
+### Ionos Webspace:
+* composer.phar herunterladen
+<pre>
+curl -sS https://getcomposer.org/installer | /usr/bin/php8.2-cli
+</pre>
+
+* composer.phar ausführen
+<pre>
+/usr/bin/php8.2-cli composer.phar about
+</pre>

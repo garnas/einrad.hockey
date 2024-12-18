@@ -11,7 +11,8 @@ class Tabelle
     /**
      * Speichert die Erstellten Rangtabellen, damit diese nicht mehrfach erstellt werden müssen.
      */
-    public static array $rangtabellen = [];
+    public static array $cache_rangtabellen = [];
+    public static array $cache_meisterschaftstabelle;
 
     /**
      * Übergibt den Spieltag, bis zu welchem Ergebnisse eingetragen worden sind.
@@ -30,6 +31,20 @@ class Tabelle
                 AND phase = 'ergebnis'
                 ";
         return db::$db->query($sql, $saison)->fetch_one() ?? 1;
+    }
+    public static function is_spieltag_beendet(int $spieltag): bool
+    {
+        $sql = "
+                SELECT phase
+                FROM turniere_liga 
+                WHERE spieltag = ?
+                AND (art = 'I' OR art = 'II') 
+                AND saison = ?
+                AND canceled != 1
+                GROUP BY phase
+                ";
+        $result = db::$db->query($sql, $spieltag, Config::SAISON)->list("phase");
+        return $result == ["ergebnis"];
     }
 
     /**
@@ -51,34 +66,9 @@ class Tabelle
                 ";
         $result = db::$db->query($sql, $spieltag, $saison)->list('count(phase)','phase');
         return (
-                isset($result['spielplan']) or isset($result['melde']) or isset($result ['offen'])
+                isset($result['spielplan']) or isset($result['melde']) or isset($result['offen'])
                 )
                 && isset($result['ergebnis']);
-    }
-
-    /**
-     * True, wenn das Turnierergebnis eingetragen werden darf. Also jedes vorherige Turnier in der Ergebnisphase ist.
-     *
-     * @param Turnier $turnier
-     * @return bool
-     */
-    public static function check_ergebnis_eintragbar(Turnier $turnier): bool
-    {
-        if (!in_array($turnier->details['art'], ['I', 'II', 'III', 'final'])) {
-            Html::error("Für diesen Turniertyp können keine Ergebnisse eingetragen werden.");
-            // TODO ist der Check hier an der besten Stelle?
-            return false;
-        }
-        $sql = "
-                SELECT * 
-                FROM turniere_liga 
-                WHERE spieltag < ? 
-                AND spieltag != 0 
-                AND (art='I' OR art = 'II' OR art='III') 
-                AND saison = ?
-                AND phase != 'ergebnis'
-                ";
-        return db::$db->query($sql, $turnier->details['spieltag'], $turnier->details['saison'])->num_rows() === 0;
     }
 
     /**
@@ -86,19 +76,38 @@ class Tabelle
      *
      * @param int $team_id
      * @param int|null $spieltag
+     * @param int $saison
      * @return int|null
      */
-    public static function get_team_rang(int $team_id, NULL|int $spieltag = NULL): ?int
+    public static function get_team_rang(int $team_id, NULL|int $spieltag = NULL, int $saison = Config::SAISON): ?int
+    {
+        // Default: Aktueller Spieltag - 1 = Spieltag mit allen eingetragenen Ergebnissen
+        $spieltag = $spieltag ?? (self::get_aktuellen_spieltag($saison) - 1);
+
+        // Rangtabelle soll nicht jedes mal neu berechnet werden müssen
+        if (!isset(self::$cache_rangtabellen[$spieltag])){
+            self::$cache_rangtabellen[$spieltag] = self::get_rang_tabelle($spieltag, $saison);
+        }
+        // Nichtligateam haben den Rang NULL
+        return self::$cache_rangtabellen[$spieltag][$team_id]['rang'] ?? NULL;
+    }
+
+    /**
+     * Gibt die Platzierung eines Teams in der Meisterschaftstabelle zurück
+     *
+     * @param int $team_id
+     * @param int|null $spieltag
+     * @return int|null
+     */
+    public static function get_team_meister_platz(int $team_id, NULL|int $spieltag = NULL): ?int
     {
         // Default: Aktueller Spieltag - 1 = Spieltag mit allen eingetragenen Ergebnissen
         $spieltag = $spieltag ?? (self::get_aktuellen_spieltag() - 1);
-
-        // Rangtabelle soll nicht jedes mal neu berechnet werden müssen
-        if (!isset(self::$rangtabellen[$spieltag])){
-            self::$rangtabellen[$spieltag] = self::get_rang_tabelle($spieltag);
+        if (!isset(self::$cache_meisterschaftstabelle)){
+            self::$cache_meisterschaftstabelle = self::get_meisterschafts_tabelle($spieltag);
         }
-        // Nichtligateam haben den Rang NULL
-        return self::$rangtabellen[$spieltag][$team_id]['rang'] ?? NULL;
+        // Nichtligateam haben den Platz NULL
+        return self::$cache_meisterschaftstabelle[$team_id]['platz'] ?? NULL;
     }
 
     /**
@@ -121,9 +130,9 @@ class Tabelle
      * @param int|null $spieltag
      * @return int|null
      */
-    public static function get_team_wertigkeit(int $team_id, null|int $spieltag = null): ?int
+    public static function get_team_wertigkeit(int $team_id, null|int $spieltag = null, int $saison = Config::SAISON): ?int
     {
-        $rang = self::get_team_rang($team_id, $spieltag);
+        $rang = self::get_team_rang($team_id, $spieltag, $saison);
         return self::rang_to_wertigkeit($rang);
     }
 
@@ -144,6 +153,7 @@ class Tabelle
                 return $block;
             }
         }
+        trigger_error("Aus der Rangtabelle konnte kein Block abgeleitet werden.", E_USER_ERROR);
     }
 
     /**
@@ -177,7 +187,7 @@ class Tabelle
     public static function get_all_ergebnisse(int $saison = Config::SAISON): array
     {
         $sql = "
-                SELECT turniere_ergebnisse.*, teams_liga.teamname , teams_liga.ligateam
+                SELECT turniere_ergebnisse.*, teams_liga.teamname , teams_liga.ligateam, teams_liga.team_id
                 FROM turniere_ergebnisse
                 LEFT JOIN teams_liga
                 ON teams_liga.team_id = turniere_ergebnisse.team_id
@@ -188,6 +198,11 @@ class Tabelle
                 ORDER BY turniere_liga.datum DESC, platz
                 ";
         $result = db::$db->query($sql)->esc()->fetch();
+        if ($saison !== Config::SAISON) {
+            foreach ($result as $key => $ergebnis) {
+                $result[$key]['teamname'] = Team::id_to_name($ergebnis['team_id'], $saison);
+            }
+        }
         foreach ($result as $ergebnis){
             $return[$ergebnis['turnier_id']][] = $ergebnis;
         }
@@ -225,7 +240,7 @@ class Tabelle
             if (isset($return[$team_id])) {
                 if ($counter[$team_id] <= 5) {
                     $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
-                    $return[$team_id]['string'] .= "+" . Html::link("ergebnisse.php#" . $eintrag['turnier_id'], $eintrag['ergebnis']);
+                    $return[$team_id]['string'] .= "+" . Html::link("ergebnisse.php?saison=$saison#" . $eintrag['turnier_id'], $eintrag['ergebnis']);
                     $return[$team_id]['summe'] += $eintrag['ergebnis'];
                 }
             } else {
@@ -233,7 +248,7 @@ class Tabelle
                 $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
                 $return[$team_id]['team_id'] = $team_id;
                 $return[$team_id]['teamname'] = $eintrag['teamname'];
-                $return[$team_id]['string'] = Html::link("ergebnisse.php#" . $eintrag['turnier_id'], $eintrag['ergebnis']);
+                $return[$team_id]['string'] = Html::link("ergebnisse.php?saison=$saison#" . $eintrag['turnier_id'], $eintrag['ergebnis']);
                 $return[$team_id]['summe'] = (int) $eintrag['ergebnis'];
                 $counter[$team_id] = 1;
             }
@@ -244,6 +259,7 @@ class Tabelle
         // In vergangenen Saisons werden nur Teams mit Ergebnissen gelistet
         if ($saison == Config::SAISON) {
             $list_of_teamids = Team::get_liste_ids();
+            shuffle($list_of_teamids);
             foreach ($list_of_teamids as $team_id) {
                 if (!array_key_exists($team_id, $return)) {
                     $return[$team_id] = [];
@@ -259,6 +275,10 @@ class Tabelle
         // Hinzufügen der Strafen:
         $strafen = Team::get_strafen($saison);
         foreach ($strafen as $strafe) {
+            # Ist die Strafe überhaupt in den Ergebnissen enthalten?
+            if (!isset($return[$strafe['team_id']])) {
+                continue;
+            }
             // Hinzufügen des Sterns
             if (isset($return[$strafe['team_id']]['strafe_stern'])) {
                 $return[$strafe['team_id']]['strafe_stern'] .= '*';
@@ -301,6 +321,13 @@ class Tabelle
             $zeile_vorher['platz'] = $return[$key]['platz'];
             $platz++;
         }
+
+        if ($saison !== Config::SAISON) {
+            foreach ($return as $team_id => $team) {
+                $return[$team_id]['teamname'] = Team::id_to_name($team_id, $saison);
+            }
+        }
+
         return $return;
     }
 
@@ -388,6 +415,11 @@ class Tabelle
                     $return[$team_id]['avg'] = 0;
                     $return[$team_id]['einzel_ergebnisse'] = [0];
                 }
+            }
+        }
+        if ($saison !== Config::SAISON) {
+            foreach ($return as $team_id => $team) {
+                $return[$team_id]['teamname'] = Team::id_to_name($team_id, $saison);
             }
         }
 

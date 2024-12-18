@@ -65,7 +65,7 @@
                 <?php foreach ($direkter_vergleich as $team_id => $ergebnis) { ?>
                     <tr>
                         <td><?= $spielplan->platzierungstabelle[$team_id]['platz'] ?></td>
-                        <td style="white-space: nowrap"><?= $spielplan->teamliste[$team_id]['teamname'] ?></td>
+                        <td style="white-space: nowrap"><?= $spielplan->teamliste[$team_id]->teamname?></td>
                         <td><?= $ergebnis['spiele'] ?></td>
                         <td><?= $ergebnis['punkte'] ?></td>
                         <td><?= $ergebnis['tordifferenz'] ?></td>
@@ -120,24 +120,24 @@
                         Gegentore
                     </th>
                 </tr>
-                <?php foreach ($penalty as $team_id => $ergebnis) { ?>
+                <?php foreach ($penalty as $team_id => $ergebnis): ?>
                     <tr>
-                        <td><?= $spielplan->platzierungstabelle[$team_id]['platz'] ?></td>
-                        <td style="white-space: nowrap"><?= $spielplan->teamliste[$team_id]['teamname'] ?></td>
-                        <td><?= $ergebnis['penalty_spiele'] ?></td>
+                        <td><?=$spielplan->platzierungstabelle[$team_id]['platz']?></td>
+                        <td style="white-space: nowrap"><?=$spielplan->teamliste[$team_id]->teamname?></td>
+                        <td><?=$ergebnis['penalty_spiele']?></td>
                         <td>
-                            <?= $ergebnis['penalty_punkte'] ?? "--" ?>
+                            <?=$ergebnis['penalty_punkte'] ?? "--"?>
                         </td>
                         <td>
-                            <?= $ergebnis['penalty_diff'] ?? "--" ?></td>
+                            <?=$ergebnis['penalty_diff'] ?? "--"?></td>
                         <td>
-                            <?= $ergebnis['penalty_tore'] ?? "--" ?>
+                            <?=$ergebnis['penalty_tore'] ?? "--"?>
                         </td>
                         <td>
-                            <?= $ergebnis['penalty_gegentore'] ?? "--" ?>
+                            <?=$ergebnis['penalty_gegentore'] ?? "--"?>
                         </td>
                     </tr>
-                <?php } // end foreach ?>
+                <?php endforeach; ?>
             </table>
         </div>
     <?php }//end foreach ?>

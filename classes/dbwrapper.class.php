@@ -39,7 +39,7 @@ class dbWrapper
         if ($this->link->connect_errno) {
             Helper::log(Config::LOG_DB, "ERROR Verbindung: " . mysqli_connect_error());
         }
-        $this->link->set_charset("utf-8mb4");
+        $this->link->set_charset("utf8mb4");
     }
 
     /**
@@ -55,6 +55,10 @@ class dbWrapper
         $this->escape_result = false;
         unset($this->result, $this->stmt, $this->sql, $this->params);
 
+        // nötig, um vernünftige mysqli Fehlermeldungen zu erhalten:
+        // https://stackoverflow.com/questions/22662488/mysqli-fetch-assoc-expects-parameter-call-to-a-member-function-bind-param
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+        
         // Prepare
         if (!$this->stmt = $this->link->prepare($sql)) {
             Helper::log(Config::LOG_DB, "ERROR " . db::escape($this->link->error));
