@@ -155,6 +155,7 @@ class Nav
             [Env::BASE_URL . "/ligacenter/lc_turnierstats.php", "turniere.xlsx", "w3-light-grey"],
             [Env::BASE_URL . "/ligacenter/lc_spielerstats.php", "spieler.xlsx", "w3-light-grey"],
             [Env::BASE_URL . "/ligacenter/lc_teamstats.php", "teams.xlsx", "w3-light-grey"],
+            [Env::BASE_URL . "/ligacenter/lc_leihestats.php", "leihe.xlsx", "w3-light-grey"],
             [Env::BASE_URL . "/schiricenter/schiritest_stats.php", "schiritest.xlsx", "w3-light-grey"],
         );
     }
