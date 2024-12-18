@@ -99,3 +99,24 @@ input[type=number] {
 .w3-tertiary,.w3-hover-tertiary:hover{color:#000000!important;background-color:#EAB42E!important}
 .w3-text-tertiary,.w3-hover-text-tertiary:hover{color:#EAB42E!important}
 .w3-border-tertiary,.w3-hover-border-tertiary:hover{border-color:#EAB42E!important}
+
+/* Grid-Darstellung in den Centern */
+.flex-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.flex-item {
+  width: 20%;
+  min-height: 100px;
+  min-width: 130px;
+  margin: 10px;
+  padding: 10px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
