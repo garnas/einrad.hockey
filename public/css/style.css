@@ -120,3 +120,6 @@ input[type=number] {
   justify-content: center;
   align-items: center;
 }
+
+/*Ergaenzungen*/
+.w3-padding-8{padding:8px!important}
