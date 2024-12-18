@@ -129,10 +129,14 @@ include '../../templates/header.tmp.php';?>
 <div class="w3-responsive w3-card">
     <!-- Header der Meisterschaftstabelle -->
     <div class="w3-row w3-primary">
-        <div class="w3-col s1 m1 l1 w3-padding-8 w3-right-align"><b>#</b></div>
-        <div class="w3-col s8 m8 l8 w3-padding-8 w3-left-align"><b>Team</b></div>
-        <div class="w3-col s2 m2 l2 w3-padding-8 w3-right-align"><b>Summe</b></div>
-        <div class="w3-col s1 m1 l1 w3-padding-8 w3-center">&nbsp;</div>
+        <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width: 50px;"><b>#</b></div>
+        <div class="w3-col w3-right w3-padding-8" style="width: 42px;"></div>
+        <div class="w3-rest">
+            <div class="w3-row">
+                <div class="w3-col l10 m10 s10 w3-padding-8 w3-left-align"><b>Team</b></div>
+                <div class="w3-col l2 m2 s2 w3-padding-8 w3-right-align"><b>Summe</b></div>
+            </div>
+        </div>
     </div>
     <!-- Zeilen der Meisterschaftstabelle -->
     <div>
@@ -141,35 +145,29 @@ include '../../templates/header.tmp.php';?>
             <?php $row_style = $counter % 2 == 1 ? "background-color:#f1f1f1;" : ""; ?>
             <?php $counter++; ?>
             <div id="m-head-<?=$key?>" class="w3-row" style="<?=$row_style?>">
-                <div class="w3-col s1 m1 l1 w3-padding-8 w3-right-align <?=$platz_color[$zeile['platz']] ?? ''?>"><?=$zeile['platz']?></div>
-                <div class="w3-col s8 m8 l8 w3-padding-8 w3-left-align"><?=$zeile['teamname']?></div>
-                <div class="w3-col s2 m2 l2 w3-padding-8 w3-right-align">
-                    <?=number_format($zeile['summe'] ?: 0, 0, ",", ".") . (!empty($zeile['hat_strafe']) ? '<a class="no w3-text-primary w3-hover-text-secondary" href="#strafen">*</a>' : '')?>
-                </div>
-                <?php if (empty($zeile['details'])): ?>
-                    <div class="w3-col s1 m1 l1 w3-padding-8 w3-center">&nbsp;</div>
-                <?php else: ?>
-                    <div class="w3-col s1 m1 l1 w3-padding-8 w3-center">
+                <div class="w3-col w3-left w3-padding-8 w3-right-align <?=$platz_color[$zeile['platz']] ?? ''?>" style="width: 50px;"><?=$zeile['platz']?></div>
+                <div class="w3-col w3-right w3-padding-8" style="width: 42px;">
+                    <?php if (!empty($zeile['details'])): ?>
                         <span onclick="show_results('m', <?=$key?>)" style="cursor:pointer">
                             <span id="m-icon-on-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:block">arrow_drop_down</span>
                             <span id="m-icon-off-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:none">arrow_drop_up</span>
                         </span>
+                        <?php endif; ?>
                     </div>
-                <?php endif; ?>
+                <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width: 80px;">
+                    <?=number_format($zeile['summe'] ?: 0, 0, ",", ".") . (!empty($zeile['hat_strafe']) ? '<a class="no w3-text-primary w3-hover-text-secondary" href="#strafen">*</a>' : '')?>
+                </div>
+                <div class="w3-rest w3-padding-8 w3-left-align"><?=$zeile['teamname']?></div>
             </div>
             <?php if (!empty($zeile['details'])): ?>
                 <?php foreach ($zeile['details'] as $ergebnis): ?>
                     <div class="m-result-<?=$key?> w3-row" style="display: none; <?=$row_style?>">
-                        <div class="w3-col l2 m2 s3 w3-padding-8 w3-right-align"><?=date_format(date_create($ergebnis['datum']), "d.m.y")?></div>
-                        <div class="w3-col l2 w3-hide-medium w3-hide-small w3-padding-8 w3-left-align"><?=$ergebnis['tblock']?></div>
-                        <div class="w3-col l4 m5 s6 w3-padding-8 w3-left-align"><?=$ergebnis['ort']?></div>
-                        <div class="w3-col l2 m2 w3-hide-small w3-padding-8 w3-right-align"><?=$ergebnis['platz']?> / <?=$ergebnis['teilnehmer']?></div>
-                        <div class="w3-col l1 m2 s2 w3-padding-8 w3-right-align">
-                            <a href="ergebnisse.php#<?=$ergebnis['turnier_id']?>" class="no w3-text-primary w3-hover-text-secondary">
-                                <?=number_format($ergebnis['ergebnis'] ?: 0, 0, ",", ".")?>
-                            </a>
-                        </div>
-                        <div class="w3-col l1 m1 s1 w3-padding-8 w3-center">&nbsp;</div>
+                        <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width:100px;"><?=date_format(date_create($ergebnis['datum']), "d.m.y")?></div>
+                        <div class="w3-col w3-hide-small w3-left w3-padding-8 w3-left-align" style="width:85px;"><?=$ergebnis['tblock']?></div>
+                        <div class="w3-col w3-hide-small w3-right w3-padding-8" style="width: 42px;"></div>
+                        <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width: 80px;"><a href="ergebnisse.php#<?=$ergebnis['turnier_id']?>" class="no w3-text-primary w3-hover-text-secondary"><?=number_format($ergebnis['ergebnis'] ?: 0, 0, ",", ".")?></a></div>
+                        <div class="w3-col w3-hide-small w3-right w3-padding-8 w3-right-align" style="width: 65px;"><?=$ergebnis['platz']?> / <?=$ergebnis['teilnehmer']?></div>
+                        <div class="w3-rest w3-padding-8 w3-left-align"><?=$ergebnis['ort']?></div>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
@@ -179,17 +177,17 @@ include '../../templates/header.tmp.php';?>
 
 <!-- Auswahl des Spieltages unter der Meisterschaftstabelle-->    
 <div class="w3-row w3-text-primary w3-padding w3-small">
-    <div class="w3-col w3-quarter w3-left-align">
-        <a href="tabelle.php?saison=<?=$saison?>&spieltag=0#meister" class="no w3-hover-text-secondary"><span class="w3-hide-small"></span><?=Html::icon('first_page')?> Erster Spieltag</a>
+    <div class="w3-col l3 m1 s3 w3-left-align">
+        <a href="tabelle.php?saison=<?=$saison?>&spieltag=0#meister" class="no w3-hover-text-secondary"><?=Html::icon('first_page')?> <span class="w3-hide-small w3-hide-medium">Erster Spieltag</span></a>
     </div>
-    <div class="w3-col w3-quarter w3-left-align">
+    <div class="w3-col l3 m5 s3 w3-left-align">
         <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=max($gew_spieltag-1, 0)?>#meister" class="no w3-hover-text-secondary"><?=Html::icon('keyboard_arrow_left')?> <span class="w3-hide-small">Vorheriger Spieltag </span></a>
     </div>
-    <div class="w3-col w3-quarter w3-right-align">
+    <div class="w3-col l3 m5 s3 w3-right-align">
         <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=min($gew_spieltag+1, $akt_spieltag)?>#meister" class="no w3-hover-text-secondary"><span class="w3-hide-small"> Nächster Spieltag</span> <?=Html::icon('keyboard_arrow_right')?></a>
     </div>
-    <div class="w3-col w3-quarter w3-right-align">
-        <a href="tabelle.php?saison=<?=$saison?>#meister" class="no w3-hover-text-secondary"><?=Html::icon('last_page')?>Aktueller Spieltag <span class="w3-hide-small"></span></a>
+    <div class="w3-col l3 m1 s3 w3-right-align">
+        <a href="tabelle.php?saison=<?=$saison?>#meister" class="no w3-hover-text-secondary"><span class="w3-hide-small w3-hide-medium">Aktueller Spieltag</span> <?=Html::icon('last_page')?></a>
     </div>
 </div>
 
@@ -219,12 +217,12 @@ include '../../templates/header.tmp.php';?>
 <div class="w3-responsive w3-card">
     <!-- Header der Rangtabelle -->
     <div class="w3-row w3-primary"> 
-        <div class="w3-col s1 m1 l1 w3-padding-8 w3-right-align"><b>#</b></div>
-        <div class="w3-col s1 m1 l1 w3-padding-8 w3-left-align"><b>Bl.</b></div>
-        <div class="w3-col s1 m1 l1 w3-padding-8 w3-right-align"><b>Wert</b></div>
-        <div class="w3-col s6 m6 l6 w3-padding-8 w3-left-align"><b>Team</b></div>
-        <div class="w3-col s2 m2 l2 w3-padding-8 w3-right-align"><b>Mittelwert</b></div>
-        <div class="w3-col s1 m1 l1 w3-padding-8 w3-center">&nbsp;</div>
+        <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width:50px;"><b>#</b></div>
+        <div class="w3-col w3-left w3-padding-8 w3-left-align" style="width:50px;"><b>Bl.</b></div>
+        <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width:60px;"><b>Wert</b></div>
+        <div class="w3-col w3-right w3-padding-8" style="width: 42px;"></div>
+        <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width:100px;"><b>Mittelwert</b></div>
+        <div class="w3-rest w3-padding-8 w3-left-align"><b>Team</b></div>
     </div>
     <!-- Zeilen der Rangtabelle -->
     <div>
@@ -233,35 +231,33 @@ include '../../templates/header.tmp.php';?>
             <?php $row_style = $counter % 2 == 1 ? "background-color:#f1f1f1;" : ""; ?>
             <?php $counter++; ?>
             <div id="r-head-<?=$key?>" class="w3-row" style="<?=$row_style?>">
-                <div class="w3-col s1 m1 l1 w3-padding-8 w3-right-align w3-text-gray"><?=$zeile['rang']?></div>
-                <div class="w3-col s1 m1 l1 w3-padding-8 w3-left-align"><?=Tabelle::rang_to_block($zeile['rang'])?></div>
-                <div class="w3-col s1 m1 l1 w3-padding-8 w3-right-align"><?=Tabelle::rang_to_wertigkeit($zeile['rang'])?></div>
-                <div class="w3-col s6 m6 l6 w3-padding-8 w3-left-align"><?=$zeile['teamname']?></div>
-                <div class="w3-col s2 m2 l2 w3-padding-8 w3-right-align"><?=number_format($zeile['avg'] ?: 0, 1, ",", ".")?></div>
-                <?php if (empty($zeile['details'])): ?>
-                    <div class="w3-col s1 m1 l1 w3-padding-8 w3-center">&nbsp;</div>
-                <?php else: ?>
-                    <div class="w3-col s1 m1 l1 w3-padding-8 w3-center">
+                <div class="w3-col w3-left w3-padding-8 w3-right-align w3-text-gray" style="width: 50px;"><?=$zeile['rang']?></div>
+                <div class="w3-col w3-left w3-padding-8 w3-left-align" style="width: 50px;"><?=Tabelle::rang_to_block($zeile['rang'])?></div>
+                <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width: 60px;"><?=Tabelle::rang_to_wertigkeit($zeile['rang'])?></div>
+                <div class="w3-col w3-right w3-padding-8 w3-center" style="width: 42px;">
+                    <?php if (!empty($zeile['details'])): ?>
                         <span onclick="show_results('r', <?=$key?>)" style="cursor:pointer">
                             <span id="r-icon-on-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:block">arrow_drop_down</span>
-                            <span id="r-icon-off-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:none">arrow_drop_up</span>                        </span>
+                            <span id="r-icon-off-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:none">arrow_drop_up</span>
                         </span>
-                    </div>
-                <?php endif; ?>
+                    <?php endif; ?>
+                </div>
+                <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width:100px"><?=number_format($zeile['avg'] ?: 0, 1, ",", ".")?></div>
+                <div class="w3-rest w3-padding-8 w3-left-align"><?=$zeile['teamname']?></div>
             </div>
             <?php if (!empty($zeile['details'])): ?>
                 <?php foreach ($zeile['details'] as $dey => $ergebnis): ?>
                     <div class="r-result-<?=$key?> w3-row" style="display: none; <?=$row_style?>">
-                        <div class="w3-col l2 m2 s3 w3-padding-8 w3-right-align"><?=date_format(date_create($ergebnis['datum']), "d.m.y")?></div>
-                        <div class="w3-col l2 w3-hide-medium w3-hide-small w3-padding-8 w3-left-align"><?=$ergebnis['tblock']?></div>
-                        <div class="w3-col l4 m5 s6 w3-padding-8 w3-left-align"><?=$ergebnis['ort']?></div>
-                        <div class="w3-col l2 m2 w3-hide-small w3-padding-8 w3-right-align"><?=$ergebnis['platz']?> / <?=$ergebnis['teilnehmer']?></div>
-                        <div class="w3-col l1 m2 s2 w3-padding-8 w3-right-align">
+                        <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width: 100px;"><?=date_format(date_create($ergebnis['datum']), "d.m.y")?></div>
+                        <div class="w3-col w3-hide-small w3-left w3-padding-8 w3-left-align" style="width: 85px;"><?=$ergebnis['tblock']?></div>
+                        <div class="w3-col w3-hide-small w3-right w3-padding-8" style="width: 42px;"></div>
+                        <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width: 100px;">
                             <a href="ergebnisse.php?saison=<?=$ergebnis['saison']?>#<?=$ergebnis['turnier_id']?>" class="no <?=$saison != $ergebnis['saison'] ? 'w3-text-green' : 'w3-text-primary'?> w3-hover-text-secondary"> 
                                 <?=number_format($ergebnis['ergebnis'] ?: 0, 1, ",", ".")?>
                             </a>
                         </div>
-                        <div class="w3-col l1 m1 s1 w3-padding-8 w3-center">&nbsp;</div>
+                        <div class="w3-col w3-hide-small w3-right w3-padding-8 w3-right-align" style="width: 65px;"><?=$ergebnis['platz']?> / <?=$ergebnis['teilnehmer']?></div>
+                        <div class="w3-rest w3-padding-8 w3-left-align"><?=$ergebnis['ort']?></div>
                     </div>
                 <?php endforeach; ?>    
             <?php endif; ?>
@@ -271,17 +267,17 @@ include '../../templates/header.tmp.php';?>
 
 <!-- Auswahl des Spieltages unter der Rangtabelle -->
 <div class="w3-row w3-text-primary w3-padding w3-small">
-    <div class="w3-col w3-quarter w3-left-align">
-        <a href="tabelle.php?saison=<?=$saison?>&spieltag=0#rang" class="no w3-hover-text-secondary"><?=Html::icon('first_page')?> <span class="w3-hide-small">Erster Spieltag</span></a>
+    <div class="w3-col l3 m1 s3 w3-left-align">
+        <a href="tabelle.php?saison=<?=$saison?>&spieltag=0#rang" class="no w3-hover-text-secondary"><?=Html::icon('first_page')?> <span class="w3-hide-small w3-hide-medium">Erster Spieltag</span></a>
     </div>
-    <div class="w3-col w3-quarter w3-left-align">
+    <div class="w3-col l3 m5 s3 w3-left-align">
         <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=max($gew_spieltag-1, 0)?>#rang" class="no w3-hover-text-secondary"><?=Html::icon('keyboard_arrow_left')?> <span class="w3-hide-small">Vorheriger Spieltag</span></a>
     </div>
-    <div class="w3-col w3-quarter w3-right-align">
+    <div class="w3-col l3 m5 s3 w3-right-align">
         <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=min($gew_spieltag+1, $akt_spieltag)?>#rang" class="no w3-hover-text-secondary"><span class="w3-hide-small">Nächster Spieltag</span> <?=Html::icon('keyboard_arrow_right')?></a>
     </div>
-    <div class="w3-col w3-quarter w3-right-align">
-        <a href="tabelle.php?saison=<?=$saison?>#rang" class="no w3-hover-text-secondary"><span class="w3-hide-small">Aktueller Spieltag</span> <?=Html::icon('last_page')?></a>
+    <div class="w3-col l3 m1 s3 w3-right-align">
+        <a href="tabelle.php?saison=<?=$saison?>#rang" class="no w3-hover-text-secondary"><span class="w3-hide-small w3-hide-medium">Aktueller Spieltag</span> <?=Html::icon('last_page')?></a>
     </div>
 </div>
 
