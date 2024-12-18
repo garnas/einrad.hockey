@@ -221,7 +221,7 @@ class Tabelle
 
         $sql = "
             WITH tournaments as (
-                SELECT te.team_id, teams.teamname, te.turnier_id, tl.datum, te.ergebnis, td.ort, tl.tblock, te.platz, dense_rank() over (PARTITION BY te.team_id order by te.ergebnis) AS `rank`
+                SELECT te.team_id, teams.teamname, te.turnier_id, tl.datum, te.ergebnis, td.ort, tl.tblock, te.platz, dense_rank() over (PARTITION BY te.team_id order by te.ergebnis DESC) AS `rank`
                 FROM turniere_ergebnisse te
                 INNER JOIN turniere_liga tl ON tl.turnier_id = te.turnier_id
                 INNER JOIN teams_liga teams ON teams.team_id = te.team_id
