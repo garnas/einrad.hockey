@@ -4,44 +4,33 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
+// Waehle uebergebene Saison, sonst aktuelle Saison
 $saison = (int) ($_GET['saison'] ?? Config::SAISON);
 
-//Aktuellen Spieltag bekommen. Der aktuelle Spieltag ist der Spieltag, an dem das nächste Turnier eingetragen wird.
+// Erhalte aktuellen Spieltag. Der aktuelle Spieltag ist der Spieltag, an dem das nächste Turnier eingetragen wird.
 $akt_spieltag = Tabelle::get_aktuellen_spieltag($saison);
 
-if (Tabelle::check_spieltag_live($akt_spieltag)){
+// Anpassungen, sollte der Spieltag gerade gespielt werden
+if (Tabelle::check_spieltag_live($akt_spieltag)) {
     $live_spieltag = $akt_spieltag;
-}else{
+} else {
     $live_spieltag = -1;
     $akt_spieltag--;
 }
 
-if (isset($_GET['spieltag'])){
-    $gew_spieltag = (int)$_GET['spieltag'];
-}else{
-    $gew_spieltag = $akt_spieltag;
-}
+// Waehle uebergebenen Spieltag, sonst aktuellen Spieltag
+$gew_spieltag = isset($_GET['spieltag']) ? (int) $_GET['spieltag'] : $akt_spieltag;
 
-
-
-//Tabellen und Strafen, um sie an das Layout zu übergeben
-$meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag,$saison);
-$rang_tabelle = Tabelle::get_rang_tabelle($gew_spieltag,$saison);
+// Tabellen und Strafen, um sie an das Layout zu übergeben
+$meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag, $saison);
+$rang_tabelle = Tabelle::get_rang_tabelle($gew_spieltag, $saison);
 $strafen = Team::get_strafen($saison);
 
-//Testen ob Verwarnungen oder Strafen existieren.
+// Testen ob Verwarnungen oder Strafen existieren.
 $verwarnung_not_empty = $strafe_not_empty = false;
-foreach ($strafen as $key => $strafe){
-    if ($strafe['verwarnung'] == 'Ja'){
-        $verwarnung_not_empty = true;
-    }elseif ($strafe['verwarnung'] == 'Nein'){
-        $strafe_not_empty = true;
-    }
-    if (!empty($strafe['datum'])){
-        $strafen[$key]['datum'] = date("d.m.Y", strtotime($strafe['datum']));
-    }else{
-        $strafen[$key]['datum'] = "-";
-    }
+foreach ($strafen as $key => $strafe) {
+    $verwarnung_not_empty = $verwarnung_not_empty || $strafe['verwarnung'] == 'Ja';
+    $strafe_not_empty = $strafe_not_empty || $strafe['verwarnung'] == 'Nein';
 }
 
 // Den Plätzen der Meisterschaftstabelle eine Farbe zuordnen:
@@ -53,27 +42,6 @@ for ($i = 11; $i <= 16; $i++){
 }
 for ($i = 17; $i <= 22; $i++){
     $platz_color[$i] = "w3-text-brown";
-}
-
-// Spieltag wählen:
-for ($spieltag = $akt_spieltag; $spieltag >= 0; $spieltag--){
-    if($spieltag == $gew_spieltag){
-        $spieltag_color = 'w3-text-white';
-        $spieltag_button = 'w3-primary w3-border w3-border-primary';
-    }else{
-        $spieltag_color = 'w3-text-grey';
-        $spieltag_button = 'w3-light-grey w3-border';
-    }
-    $spieltag_string = "<span class='$spieltag_color'>$spieltag</span>";
-    if($spieltag == $live_spieltag){
-        $spieltag_string .= "<span class='$spieltag_color'> <i>(unvollständig)</i></span>";
-    }
-
-    $spieltage_array[$akt_spieltag-$spieltag] = array(
-        $spieltag,
-        "spieltag_string" =>$spieltag_string,
-        "spieltag_button" =>$spieltag_button
-    );
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -125,138 +93,269 @@ include '../../templates/header.tmp.php';?>
   </div>
 </div>
 <script>
-// Get the modal
-var modal = document.getElementById('id01');
+    // Get the modal
+    let modal = document.getElementById('id01');
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 </script>
 
-<!-- Meisterschaftstabelle -->
-<h1 class="w3-text-primary w3-border-primary" id='meister'>Meisterschaftstabelle</h1>
+<!-- ------------------------- MEISTERSCHAFTSTABELLE ------------------------- -->
+<h1 id='meister' class="w3-text-primary">Meisterschaftstabelle</h1>
 <p class="w3-border-top w3-border-grey w3-text-grey"><a href="#rang" class="no w3-hover-text-secondary">Zur Rangtabelle</a><span class="w3-right">Saison <?=Html::get_saison_string($saison)?></span></p>
 
-<!-- Spieltag wählen -->
-<div class="w3-bar">
-    <?php foreach ($spieltage_array as $spieltag_dict){?>
-        <a class='no w3-hover-text-secondary' href='tabelle.php?saison=<?=$saison?>&spieltag=<?=$spieltag_dict[0]?>#meister'><span class= 'w3-bar-item w3-button <?=$spieltag_dict['spieltag_button']?> w3-hover-primary'><?=$spieltag_dict["spieltag_string"]?></span></a>
-    <?php } //endforeach?>
+<!-- Auswahl des Spieltages ueber der Meisterschaftstabelle -->
+<div class="w3-row w3-xlarge w3-text-primary w3-padding">
+    <div class="w3-col w3-right w3-right-align" style="width: 36px;">
+        <a href="tabelle.php?saison=<?=$saison?>#meister" class="w3-hover-text-secondary"><?=Html::icon('last_page')?></a>
+    </div>
+    <div class="w3-col w3-right w3-right-align" style="width: 36px;">
+        <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=min($gew_spieltag+1, $akt_spieltag)?>#meister" class="w3-hover-text-secondary"><?=Html::icon('keyboard_arrow_right')?></a>
+    </div>
+    <div class="w3-col w3-right w3-right-align" style="width: 36px;">
+        <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=max($gew_spieltag-1, 0)?>#meister" class="w3-hover-text-secondary"><?=Html::icon('keyboard_arrow_left')?></a>
+    </div>
+    <div class="w3-col w3-right w3-right-align" style="width: 36px;">
+        <a href="tabelle.php?saison=<?=$saison?>&spieltag=0#meister" class="w3-hover-text-secondary"><?=Html::icon('first_page')?></a>
+    </div>
+    <div class="w3-rest">Spieltag <?=$gew_spieltag?></div>
 </div>
 
-<!--Tabelle-->
+<!-- Beginn der eigentlichen Meisterschaftstabelle -->
 <div class="w3-responsive w3-card">
-    <table class="w3-table w3-striped">
-        <thead class="w3-primary">
-            <tr>
-                <th class="w3-right-align"><b>Platz</b></th>
-                <th class="w3-left-align"><b>Team</b></th>
-                <th class="w3-left-align"><b>Turnierergebnisse</b></th>
-                <th class="w3-right-align"><b>&sum;</b></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($meisterschafts_tabelle as $spalte){?>
-                <tr>
-                    <td class="w3-right-align <?=$platz_color[$spalte['platz']] ?? ''?>"><?=$spalte['platz'] ?? ''?></td>
-                    <td class="w3-left-align"><?=$spalte['teamname']?></td>
-                    <td class="w3-left-align"><?=$spalte['string']?></td>
-                    <td class="w3-right-align"><?=number_format($spalte['summe'] ?: 0, 0, ",", ".")?><a class="no w3-text-primary w3-hover-text-secondary" href="#pranger"><?=$spalte['strafe_stern'] ?? ''?></a></td>
-                </tr>
-            <?php } //end foreach?>
-        </tbody>
-    </table>    
+    <!-- Header der Meisterschaftstabelle -->
+    <div class="w3-row w3-primary">
+        <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width: 50px;"><b>#</b></div>
+        <div class="w3-col w3-right w3-padding-8" style="width: 42px;"></div>
+        <div class="w3-rest">
+            <div class="w3-row">
+                <div class="w3-col l10 m10 s10 w3-padding-8 w3-left-align"><b>Team</b></div>
+                <div class="w3-col l2 m2 s2 w3-padding-8 w3-right-align"><b>Summe</b></div>
+            </div>
+        </div>
+    </div>
+    <!-- Zeilen der Meisterschaftstabelle -->
+    <div>
+        <?php $counter = 0; ?>
+        <?php foreach ($meisterschafts_tabelle as $key => $zeile): ?>
+            <?php $row_class = $counter % 2 == 1 ? "w3-light-grey" : ""; ?>
+            <!-- Kopfzeile fuer das Team -->
+            <div id="m-head-<?=$key?>" class="w3-row <?=$row_class?>">
+                <div class="w3-col w3-left w3-padding-8 w3-right-align <?=$platz_color[$zeile['platz']] ?? ''?>" style="width: 50px;"><?=$zeile['platz']?></div>
+                <div class="w3-col w3-right w3-padding-8" style="width: 42px;">
+                    <?php if (!empty($zeile['details'])): ?>
+                        <span onclick="show_results('m', <?=$key?>)" style="cursor:pointer">
+                            <span id="m-icon-on-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:block">arrow_drop_down</span>
+                            <span id="m-icon-off-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:none">arrow_drop_up</span>
+                        </span>
+                    <?php endif; ?>
+                </div>
+                <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width: 80px;">
+                    <?=number_format($zeile['summe'] ?: 0, 0, ",", ".") . (!empty($zeile['hat_strafe']) ? '<a class="no w3-text-primary w3-hover-text-secondary" href="#strafen">*</a>' : '')?>
+                </div>
+                <div class="w3-rest w3-padding-8 w3-left-align"><?=$zeile['teamname']?></div>
+            </div>
+            <!-- Details zu den Turnieren des Teams -->
+            <?php if (!empty($zeile['details'])): ?>
+                <?php foreach ($zeile['details'] as $ergebnis): ?>
+                    <div class="m-result-<?=$key?> w3-row <?=$row_class?>" style="display: none;">
+                        <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width:100px;"><?=date_format(date_create($ergebnis['datum']), "d.m.y")?></div>
+                        <div class="w3-col w3-hide-small w3-left w3-padding-8 w3-left-align" style="width:85px;"><?=$ergebnis['tblock']?></div>
+                        <div class="w3-col w3-hide-small w3-right w3-padding-8" style="width: 42px;"></div>
+                        <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width: 80px;"><a href="ergebnisse.php#<?=$ergebnis['turnier_id']?>" class="no w3-text-primary w3-hover-text-secondary"><?=number_format($ergebnis['ergebnis'] ?: 0, 0, ",", ".")?></a></div>
+                        <div class="w3-col w3-hide-small w3-right w3-padding-8 w3-right-align" style="width: 65px;"><?=$ergebnis['platz']?> / <?=$ergebnis['teilnehmer']?></div>
+                        <div class="w3-rest w3-padding-8 w3-left-align"><?=$ergebnis['ort']?></div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            <?php $counter++; ?>
+        <?php endforeach; ?>
+    </div>
 </div>
 
-<!--Rangtabelle-->
+<!-- Auswahl des Spieltages unter der Meisterschaftstabelle-->    
+<div class="w3-row w3-text-primary w3-padding w3-small">
+    <div class="w3-col l3 m1 s3 w3-left-align">
+        <a href="tabelle.php?saison=<?=$saison?>&spieltag=0#meister" class="no w3-hover-text-secondary"><?=Html::icon('first_page')?> <span class="w3-hide-small w3-hide-medium">Erster Spieltag</span></a>
+    </div>
+    <div class="w3-col l3 m5 s3 w3-left-align">
+        <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=max($gew_spieltag-1, 0)?>#meister" class="no w3-hover-text-secondary"><?=Html::icon('keyboard_arrow_left')?> <span class="w3-hide-small">Vorheriger Spieltag </span></a>
+    </div>
+    <div class="w3-col l3 m5 s3 w3-right-align">
+        <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=min($gew_spieltag+1, $akt_spieltag)?>#meister" class="no w3-hover-text-secondary"><span class="w3-hide-small"> Nächster Spieltag</span> <?=Html::icon('keyboard_arrow_right')?></a>
+    </div>
+    <div class="w3-col l3 m1 s3 w3-right-align">
+        <a href="tabelle.php?saison=<?=$saison?>#meister" class="no w3-hover-text-secondary"><span class="w3-hide-small w3-hide-medium">Aktueller Spieltag</span> <?=Html::icon('last_page')?></a>
+    </div>
+</div>
+
+
+<!-- ------------------------- RANGTABELLE ------------------------- -->
 <h1 id="rang" class="w3-text-primary w3-border-primary">Rangtabelle</h1>
 <p class="w3-border-top w3-border-grey w3-text-grey"><a href="#meister" class="no w3-hover-text-secondary">Zur Meisterschaftstabelle</a><span class="w3-right">Saison <?=Html::get_saison_string($saison)?></span></p>
 
-<!-- Spieltag wählen -->
-<div class="w3-bar">
-    <?php foreach ($spieltage_array as $spieltag_dict){?>
-        <a class='no w3-hover-text-secondary' href='tabelle.php?saison=<?=$saison?>&spieltag=<?=$spieltag_dict[0]?>#rang'><span class='w3-bar-item w3-button <?=$spieltag_dict['spieltag_button']?> w3-hover-primary'><?=$spieltag_dict["spieltag_string"]?></span></a>
-    <?php } //endforeach?>
+<!-- Auswahl des Spieltages ueber der Rangtabelle -->  
+<div class="w3-row w3-xlarge w3-text-primary w3-padding">
+    <div class="w3-col w3-right w3-right-align" style="width: 36px;">
+        <a href="tabelle.php?saison=<?=$saison?>#rang" class="no w3-hover-text-secondary"><?=Html::icon('last_page')?></a>
+    </div>  
+    <div class="w3-col w3-right w3-right-align" style="width: 36px;">
+        <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=min($gew_spieltag+1, $akt_spieltag)?>#rang" class="no w3-hover-text-secondary"><?=Html::icon('keyboard_arrow_right')?></a>
+    </div>
+    <div class="w3-col w3-right w3-right-align" style="width: 36px;">
+        <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=max($gew_spieltag-1, 0)?>#rang" class="no w3-hover-text-secondary"><?=Html::icon('keyboard_arrow_left')?></a>
+    </div>
+    <div class="w3-col w3-right w3-right-align" style="width: 36px;">
+        <a href="tabelle.php?saison=<?=$saison?>&spieltag=0#rang" class="no w3-hover-text-secondary"><?=Html::icon('first_page')?></a>
+    </div>
+    <div class="w3-rest">Spieltag <?=$gew_spieltag?></div>
 </div>
 
-
-<!--Tabelle -->
+<!-- Beginn der eigentlichen Rangtabelle -->
 <div class="w3-responsive w3-card">
-    <table class="w3-table w3-striped">
-        <thead>
-            <tr class="w3-primary">
-                <th class="w3-right-align"><b>#</b></th>
-                <th class="w3-left-align"><b>Block</b></th>
-                <th class="w3-right-align"><b>Wertung</b></th>
-                <th class="w3-left-align"><b>Team</b></th>
-                <th class="w3-left-align"><b>Turnierergebnisse</b></th>
-                <th class="w3-right-align"><b>&empty;</b></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($rang_tabelle as $spalte){?>
-                <tr>
-                    <td class="w3-right-align w3-text-grey"><?=$spalte['rang']?></td>
-                    <td class="w3-left-align"><?=Tabelle::rang_to_block($spalte['rang'])?></td>
-                    <td class="w3-right-align"><?=Tabelle::rang_to_wertigkeit($spalte['rang'])?></td>
-                    <td class="w3-left-align"><?=$spalte['teamname']?></td>
-                    <td class="w3-left-align"><?=$spalte['string']?></td>
-                    <td class="w3-right-align"><?=number_format($spalte['avg'] ?: 0, 1, ",", ".")?></td>
-                </tr>
-            <?php } //end foreach?>
-        </tbody>
-    </table>
+    <!-- Header der Rangtabelle -->
+    <div class="w3-row w3-primary"> 
+        <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width:50px;"><b>#</b></div>
+        <div class="w3-col w3-left w3-padding-8 w3-left-align" style="width:50px;"><b>Bl.</b></div>
+        <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width:60px;"><b>Wert</b></div>
+        <div class="w3-col w3-right w3-padding-8" style="width: 42px;"></div>
+        <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width:100px;"><b>Mittelwert</b></div>
+        <div class="w3-rest w3-padding-8 w3-left-align"><b>Team</b></div>
+    </div>
+    <!-- Zeilen der Rangtabelle -->
+    <div>
+        <?php $counter = 0; ?>
+        <?php foreach ($rang_tabelle as $key => $zeile): ?>
+            <?php $row_class = $counter % 2 == 1 ? "w3-light-grey" : ""; ?>
+            <!-- Kopfzeile fuer das Team -->
+            <div id="r-head-<?=$key?>" class="w3-row <?=$row_class?>" >
+                <div class="w3-col w3-left w3-padding-8 w3-right-align w3-text-gray" style="width: 50px;"><?=$zeile['rang']?></div>
+                <div class="w3-col w3-left w3-padding-8 w3-left-align" style="width: 50px;"><?=Tabelle::rang_to_block($zeile['rang'])?></div>
+                <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width: 60px;"><?=Tabelle::rang_to_wertigkeit($zeile['rang'])?></div>
+                <div class="w3-col w3-right w3-padding-8 w3-center" style="width: 42px;">
+                    <?php if (!empty($zeile['details'])): ?>
+                        <span onclick="show_results('r', <?=$key?>)" style="cursor:pointer">
+                            <span id="r-icon-on-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:block">arrow_drop_down</span>
+                            <span id="r-icon-off-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:none">arrow_drop_up</span>
+                        </span>
+                    <?php endif; ?>
+                </div>
+                <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width:100px"><?=number_format($zeile['avg'] ?: 0, 1, ",", ".")?></div>
+                <div class="w3-rest w3-padding-8 w3-left-align"><?=$zeile['teamname']?></div>
+            </div>
+            <!-- Details zu den Turnieren des Teams -->
+            <?php if (!empty($zeile['details'])): ?>
+                <?php foreach ($zeile['details'] as $dey => $ergebnis): ?>
+                    <div class="r-result-<?=$key?> w3-row <?=$row_class?>" style="display: none;">
+                        <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width: 100px;"><?=date_format(date_create($ergebnis['datum']), "d.m.y")?></div>
+                        <div class="w3-col w3-hide-small w3-left w3-padding-8 w3-left-align" style="width: 85px;"><?=$ergebnis['tblock']?></div>
+                        <div class="w3-col w3-hide-small w3-right w3-padding-8" style="width: 42px;"></div>
+                        <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width: 100px;">
+                            <a href="ergebnisse.php?saison=<?=$ergebnis['saison']?>#<?=$ergebnis['turnier_id']?>" class="no <?=$saison != $ergebnis['saison'] ? 'w3-text-green' : 'w3-text-primary'?> w3-hover-text-secondary"> 
+                                <?=number_format($ergebnis['ergebnis'] ?: 0, 1, ",", ".")?>
+                            </a>
+                        </div>
+                        <div class="w3-col w3-hide-small w3-right w3-padding-8 w3-right-align" style="width: 65px;"><?=$ergebnis['platz']?> / <?=$ergebnis['teilnehmer']?></div>
+                        <div class="w3-rest w3-padding-8 w3-left-align"><?=$ergebnis['ort']?></div>
+                    </div>
+                <?php endforeach; ?>    
+            <?php endif; ?>
+            <?php $counter++; ?>
+        <?php endforeach; ?>
+    </div>
+</div>
+
+<!-- Auswahl des Spieltages unter der Rangtabelle -->
+<div class="w3-row w3-text-primary w3-padding w3-small">
+    <div class="w3-col l3 m1 s3 w3-left-align">
+        <a href="tabelle.php?saison=<?=$saison?>&spieltag=0#rang" class="no w3-hover-text-secondary"><?=Html::icon('first_page')?> <span class="w3-hide-small w3-hide-medium">Erster Spieltag</span></a>
+    </div>
+    <div class="w3-col l3 m5 s3 w3-left-align">
+        <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=max($gew_spieltag-1, 0)?>#rang" class="no w3-hover-text-secondary"><?=Html::icon('keyboard_arrow_left')?> <span class="w3-hide-small">Vorheriger Spieltag</span></a>
+    </div>
+    <div class="w3-col l3 m5 s3 w3-right-align">
+        <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=min($gew_spieltag+1, $akt_spieltag)?>#rang" class="no w3-hover-text-secondary"><span class="w3-hide-small">Nächster Spieltag</span> <?=Html::icon('keyboard_arrow_right')?></a>
+    </div>
+    <div class="w3-col l3 m1 s3 w3-right-align">
+        <a href="tabelle.php?saison=<?=$saison?>#rang" class="no w3-hover-text-secondary"><span class="w3-hide-small w3-hide-medium">Aktueller Spieltag</span> <?=Html::icon('last_page')?></a>
+    </div>
 </div>
 
 
-<!-- Pranger -->
-<h3 id="pranger" class="w3-text-primary">Verwarnungen</h3>
-<?php if ($verwarnung_not_empty) {?>
+<!-- ---------------------------- -->
+<!-- - Verwarnungen und Strafen - -->
+<!-- ---------------------------- -->
+
+<?php if (!$verwarnung_not_empty && $strafe_not_empty): ?>
+    <h1 id="strafen" class="w3-text-primary">Strafen</h1>
+<?php elseif ($verwarnung_not_empty && !$strafe_not_empty): ?>
+    <h1 id="strafen" class="w3-text-primary">Verwarnungen</h1>
+<?php elseif ($verwarnung_not_empty && $strafe_not_empty): ?>
+    <h1 id="strafen" class="w3-text-primary">Verwarnungen & Strafen</h1>
+<?php endif; ?>
+
+<?php if ($verwarnung_not_empty): ?>
+    <h2 class="w3-text-secondary">Verwarnungen</h2>
     <div class="w3-responsive w3-card">
-        <table class="w3-table w3-striped">
-                <tr class="w3-primary">
-                    <th>Team</th>
-                    <th>Grund</th>
-                    <th class="w3-center">Turnier</th>
-                </tr>
-                <?php foreach ($strafen as $strafe){ if ($strafe['verwarnung'] == 'Ja'){?>
-                    <tr>
-                        <td style="white-space: nowrap; vertical-align: middle;"><?=$strafe['teamname']?></td>
-                        <td style="vertical-align: middle"><?=$strafe['grund']?></td>
-                        <td class="w3-center" style="vertical-align: middle"><?=$strafe['datum']?><br><?=($strafe['ort'] ?? '')?></td>
-                    </tr>
-                <?php }/*end if*/ }/*end foreach*/?>
-            
-        </table>
+        <!-- Header der Verwarnungen -->
+        <div class="w3-row w3-primary"> 
+            <div class="w3-col w3-padding-8 l3 m3 s3 w3-left-align"><b>Team</b></div>
+            <div class="w3-col w3-padding-8 l7 m7 s7 w3-left-align"><b>Grund</b></div>
+            <div class="w3-col w3-padding-8 l2 m2 s2 w3-left-align"><b>Datum (Ort)</b></div>
+        </div>
+        <!-- Zeilen der Verwarnungen -->
+        <?php $counter = 0; ?>
+        <?php foreach ($strafen as $strafe) : ?>
+            <?php if ($strafe['verwarnung'] == 'Ja') : ?>
+                <?php $row_class = $counter % 2 == 1 ? "w3-light-grey" : ""; ?>
+                <div class="w3-row <?=$row_class?>">
+                    <div class="w3-col w3-padding-8 l3 m3 s3 w3-left-align"><?=$strafe['teamname']?></div>
+                    <div class="w3-col w3-padding-8 l7 m7 s7 w3-left-align"><?=$strafe['grund']?></div>
+                    <?php if (!empty($strafe['datum'])) : ?>
+                        <div class="w3-col w3-padding-8 l2 m2 s2 w3-left-align"><?=date("d.m.Y", strtotime($strafe['datum']))?> (<?=($strafe['ort'])?>)</div>
+                    <?php else : ?>
+                        <div class="w3-col w3-padding-8 l2 m2 s2 w3-left-align">-</div>
+                    <?php endif; ?>
+                </div>
+                <?php $counter++; ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
     </div>
-<?php }else{?>
-    <p><i>Sehr gut! Es wurden noch keine Verwarnungen vergeben.</i></p>
-<?php } //endif?>  
-<h3 class="w3-text-primary">Strafen</h3>
-<?php if ($strafe_not_empty) {?>  
+<?php endif; ?>
+
+<?php if ($strafe_not_empty) : ?>
+    <h2 class="w3-text-secondary">Strafen</h2>
     <div class="w3-responsive w3-card">
-        <table class="w3-table w3-striped">
-                <tr class="w3-primary">
-                    <th>Team</th>
-                    <th>Grund</th>
-                    <th class="w3-center">Turnier</th>
-                </tr>
-                <?php foreach ($strafen as $strafe){ if ($strafe['verwarnung'] == 'Nein'){?>
-                    <tr>
-                        <td style="white-space: nowrap; vertical-align: middle;"><?=$strafe['teamname']?></td>
-                        <td style="vertical-align: middle">
-                            <?=$strafe['grund']?>
-                            <?php if ($strafe['prozentsatz'] != 0){?>(<?=$strafe['prozentsatz']?> %)<?php } //endif?>
-                        </td>
-                        <td class="w3-center" style="vertical-align: middle"><?=$strafe['datum']?><br><?=($strafe['ort'] ?? '')?></td>
-                    </tr>
-                <?php }/*end if*/ }/*end foreach*/?>
-        </table>
+        <!-- Header der Strafen -->
+        <div class="w3-row w3-primary"> 
+            <div class="w3-col w3-padding-8 l3 m3 s3 w3-left-align"><b>Team</b></div>
+            <div class="w3-col w3-padding-8 l6 m6 s6 w3-left-align"><b>Grund</b></div>
+            <div class="w3-col w3-padding-8 l1 m1 s1 w3-right-align"><b>Strafe</b></div>
+            <div class="w3-col w3-padding-8 l2 m2 s2 w3-left-align"><b>Datum (Ort)</b></div>
+        </div>
+        <!-- Zeilen der Strafen -->
+        <?php $counter = 0; ?>
+        <?php foreach ($strafen as $strafe) : ?>
+            <?php if ($strafe['verwarnung'] == 'Nein') : ?>
+                <?php $row_class = $counter % 2 == 1 ? "w3-light-grey" : ""; ?>
+                <div class="w3-row <?=$row_class?>">
+                    <div class="w3-col w3-padding-8 l3 m3 s3 w3-left-align"><?=$strafe['teamname']?></div>
+                    <div class="w3-col w3-padding-8 l6 m6 s6 w3-left-align"><?=$strafe['grund']?></div>
+                    <div class="w3-col w3-padding-8 l1 m1 s1 w3-right-align"><?=$strafe['prozentsatz']?>%</div>
+                    <?php if (!empty($strafe['datum'])) : ?>
+                        <div class="w3-col w3-padding-8 l2 m2 s2 w3-left-align"><?=date("d.m.Y", strtotime($strafe['datum']))?> (<?=($strafe['ort'])?>)</div>
+                    <?php else : ?>
+                        <div class="w3-col w3-padding-8 l2 m2 s2 w3-left-align">-</div>
+                    <?php endif; ?>
+                </div>
+                <?php $counter++; ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
     </div>
-<?php }else{?>
-    <p><i>Sehr gut! Es wurden noch keine Strafen vergeben.</i></p>
-<?php } //endif
-include '../../templates/footer.tmp.php';
+<?php endif; ?>
+
+<?php include '../../templates/footer.tmp.php'; ?>

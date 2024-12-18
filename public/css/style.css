@@ -99,3 +99,6 @@ input[type=number] {
 .w3-tertiary,.w3-hover-tertiary:hover{color:#000000!important;background-color:#EAB42E!important}
 .w3-text-tertiary,.w3-hover-text-tertiary:hover{color:#EAB42E!important}
 .w3-border-tertiary,.w3-hover-border-tertiary:hover{border-color:#EAB42E!important}
+
+/*Ergaenzungen*/
+.w3-padding-8{padding:8px!important}

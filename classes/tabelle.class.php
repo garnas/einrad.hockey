@@ -15,8 +15,8 @@ class Tabelle
     public static array $cache_meisterschaftstabelle;
 
     /**
-     * Übergibt den Spieltag, bis zu welchem Ergebnisse eingetragen worden sind.
-     * Also den nächsten, nicht vollendeten, noch zu spielenden Spieltag.
+     * Übergibt den Spieltag, der als naechstes gespielt wird
+     * 
      *
      * @param int $saison
      * @return int
@@ -220,39 +220,44 @@ class Tabelle
     {
 
         $sql = "
-                SELECT turniere_ergebnisse.ergebnis, turniere_ergebnisse.turnier_id, turniere_liga.datum, 
-                turniere_liga.saison, teams_liga.aktiv, teams_liga.teamname, teams_liga.team_id 
-                FROM turniere_ergebnisse
-                INNER JOIN teams_liga
-                ON teams_liga.team_id = turniere_ergebnisse.team_id
-                INNER JOIN turniere_liga
-                ON turniere_liga.turnier_id = turniere_ergebnisse.turnier_id
-                WHERE teams_liga.ligateam = 'Ja'
-                AND turniere_liga.art != 'final' 
-                AND (turniere_liga.saison = ?) 
-                AND (turniere_liga.spieltag <= ?)
-                ORDER BY ergebnis DESC, RAND()
-                ";
+            WITH tournaments as (
+                SELECT te.team_id, teams.teamname, te.turnier_id, tl.datum, te.ergebnis, td.ort, tl.tblock, te.platz, dense_rank() over (PARTITION BY te.team_id order by te.ergebnis) AS `rank`
+                FROM turniere_ergebnisse te
+                INNER JOIN turniere_liga tl ON tl.turnier_id = te.turnier_id
+                INNER JOIN teams_liga teams ON teams.team_id = te.team_id
+                INNER JOIN turniere_details td ON td.turnier_id = te.turnier_id
+                WHERE teams.ligateam = 'Ja'
+                AND tl.art != 'final' 
+                AND (tl.saison = ?) 
+                AND (tl.spieltag <= ?)
+            ), num_of_teams as (
+                SELECT turnier_id, count(*) as teilnehmer
+                FROM turniere_ergebnisse te
+                GROUP BY turnier_id
+            )
+
+            SELECT team_id, teamname, t.turnier_id, datum, ergebnis, ort, tblock, platz, teilnehmer
+            FROM tournaments t
+            INNER JOIN num_of_teams n ON n.turnier_id = t.turnier_id
+            WHERE `rank` <= 5 ORDER BY team_id, ergebnis DESC
+         ";
         $result = db::$db->query($sql, $saison, $spieltag)->esc()->fetch();
-        $counter = $return = [];
-        foreach($result as $eintrag){
+        $return = [];
+        foreach ($result as $eintrag) {
             $team_id = $eintrag['team_id'];
-            if (isset($return[$team_id])) {
-                if ($counter[$team_id] <= 5) {
-                    $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
-                    $return[$team_id]['string'] .= "+" . Html::link("ergebnisse.php?saison=$saison#" . $eintrag['turnier_id'], $eintrag['ergebnis']);
-                    $return[$team_id]['summe'] += $eintrag['ergebnis'];
-                }
-            } else {
-                $return[$team_id]['einzel_ergebnisse'] = [];
-                $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
+
+            if (!isset($return[$team_id])) {
                 $return[$team_id]['team_id'] = $team_id;
                 $return[$team_id]['teamname'] = $eintrag['teamname'];
-                $return[$team_id]['string'] = Html::link("ergebnisse.php?saison=$saison#" . $eintrag['turnier_id'], $eintrag['ergebnis']);
-                $return[$team_id]['summe'] = (int) $eintrag['ergebnis'];
-                $counter[$team_id] = 1;
+                $return[$team_id]['einzel_ergebnisse'] = [];
+                $return[$team_id]['details'] = [];
+                $return[$team_id]['summe'] = 0;
+                $return[$team_id]['hat_strafe'] = false;
             }
-            $counter[$team_id]++;
+
+            $return[$team_id]['summe'] += $eintrag['ergebnis'];        
+            $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
+            $return[$team_id]['details'][] = $eintrag;
         }
 
         // Tabelle mit aktiven Teams ohne Ergebnis auffüllen
@@ -268,6 +273,8 @@ class Tabelle
                     $return[$team_id]['string'] = '';
                     $return[$team_id]['summe'] = 0;
                     $return[$team_id]['einzel_ergebnisse'] = [0];
+                    $return[$team_id]['details'] = [];
+                    $return[$team_id]['hat_strafe'] = false;
                 }
             }
         }
@@ -279,17 +286,15 @@ class Tabelle
             if (!isset($return[$strafe['team_id']])) {
                 continue;
             }
-            // Hinzufügen des Sterns
-            if (isset($return[$strafe['team_id']]['strafe_stern'])) {
-                $return[$strafe['team_id']]['strafe_stern'] .= '*';
-            } else {
-                $return[$strafe['team_id']]['strafe_stern'] = '*';
-            }
+
+            $return[$strafe['team_id']]['hat_strafe'] = true;
+            
             // Addieren der Prozentstrafen
             if ($strafe['verwarnung'] == 'Nein' && !empty($strafe['prozentsatz'])) {
                 $return[$strafe['team_id']]['strafe'] = ($return[$strafe['team_id']]['strafe'] ?? 0) + $strafe['prozentsatz'] / 100;
             }
         }
+
         // Kumulierte Strafe mit der Summe der Turnierergebnisse des Teams verrechnen
         foreach ($return as $team_id => $team) {
             if (isset($team['strafe'])) {
@@ -342,63 +347,52 @@ class Tabelle
     {
 
         $ausnahme = match($saison) {
-            26 => 'OR turniere_liga.saison = 24',
-            27 => 'OR turniere_liga.saison = 24 OR turniere_liga.saison = 25',
+            26 => 'OR tl.saison = 24',
+            27 => 'OR tl.saison = 24 OR tl.saison = 25',
             default => '',
         };
 
         $sql = "
-                SELECT turniere_ergebnisse.ergebnis, turniere_ergebnisse.turnier_id, turniere_liga.datum, 
-                turniere_liga.saison, teams_liga.teamname, teams_liga.team_id, turniere_liga.spieltag 
-                FROM turniere_ergebnisse
-                INNER JOIN teams_liga
-                ON teams_liga.team_id = turniere_ergebnisse.team_id
-                INNER JOIN turniere_liga
-                ON turniere_liga.turnier_id = turniere_ergebnisse.turnier_id
-                WHERE teams_liga.ligateam = 'Ja'
-                AND teams_liga.aktiv = 'Ja'
-                AND turniere_liga.art != 'final'
-                AND (
-                    (turniere_liga.spieltag <= ? AND turniere_liga.saison = ?)
-                    OR turniere_liga.saison = ? - 1
-                    $ausnahme
-                    )
-                ORDER BY turniere_liga.saison DESC, turniere_liga.datum DESC";
+            WITH tournaments as (
+                SELECT te.team_id, teams.teamname, te.turnier_id, tl.saison, tl.datum, te.ergebnis, te.platz, tl.tblock, td.ort, row_number() over (PARTITION BY te.team_id order by tl.datum DESC) AS `turnier_rang`
+                FROM turniere_ergebnisse te
+                INNER JOIN turniere_liga tl ON tl.turnier_id = te.turnier_id
+                INNER JOIN teams_liga teams ON teams.team_id = te.team_id
+                INNER JOIN turniere_details td ON td.turnier_id = te.turnier_id
+                WHERE teams.ligateam = 'Ja'
+                AND teams.aktiv = 'Ja'
+                AND tl.art != 'final' 
+                AND ((tl.spieltag <= ? AND tl.saison = ?) OR tl.saison = ? - 1 $ausnahme)
+            ), num_of_teams as (
+                SELECT turnier_id, count(*) as teilnehmer
+                FROM turniere_ergebnisse te
+                GROUP BY turnier_id
+            )
+
+            SELECT t.saison, t.turnier_id, t.datum, t.team_id, t.teamname, t.platz, t.ergebnis, t.ort, t.tblock, t.saison, n.teilnehmer
+            FROM tournaments t
+            LEFT JOIN num_of_teams n ON n.turnier_id = t.turnier_id
+            WHERE `turnier_rang` <= 5
+            ORDER BY t.datum DESC
+        ";
         $result = db::$db->query($sql, $spieltag, $saison, $saison)->esc()->fetch();
         $return = [];
-        $counter = [];
 
-        foreach($result as $eintrag) {
+        foreach($result as $row) {
+            $team_id = $row['team_id'];
 
-            $team_id = $eintrag['team_id'];
-
-            //Farbe des Ergebnisses in der Rangtabelle festlegen.
-            $color =  ($eintrag['saison'] != $saison) ? "w3-text-green" : 'w3-text-primary';
-
-            //Verlinkung des Ergebnisses hinzufügen
-            $link = "ergebnisse.php?saison=" . $eintrag['saison'] . "#" . $eintrag['turnier_id'];
-
-            //Initialisierung
             if (!isset($return[$team_id])) {
-                //Zähler der Ergebnisse (Max 5)
-                $counter[$team_id] = 1;
-                $return[$team_id]['summe'] = $eintrag['ergebnis'];
-                $return[$team_id]['einzel_ergebnisse'] = [];
-                $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
-
-                $return[$team_id]['team_id'] = $team_id; //Wichtig, da bei Sortierung die $eintrag['team_id] überschrieben wird
-                $return[$team_id]['teamname'] = $eintrag['teamname'];
-                $return[$team_id]['string'] =
-                    "<a href='$link' class='no $color w3-hover-text-secondary'>" . $eintrag['ergebnis'] . "</a>";
-
-            } else if ($counter[$team_id] <= 5) {
-                $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
-                $return[$team_id]['string'] .=
-                    "+<a href='$link' class='no $color w3-hover-text-secondary'>" . $eintrag['ergebnis'] . "</a>";
-                $return[$team_id]['summe'] += $eintrag['ergebnis'];
+                $return[$team_id]['team_id'] = $team_id; //Wichtig, da bei Sortierung die $row['team_id] überschrieben wird
+                $return[$team_id]['teamname'] = $row['teamname'];
+                $return[$team_id]['summe'] = 0;
+                $return[$team_id]['ergebnisse'] = [];
+                $return[$team_id]['details'] = [];
             }
-            $counter[$team_id]++;
-            $return[$team_id]['avg'] = round($return[$team_id]['summe'] / count($return[$team_id]['einzel_ergebnisse']), 1);
+            
+            $return[$team_id]['summe'] += $row['ergebnis'];
+            $return[$team_id]['ergebnisse'][] = $row['ergebnis'];
+            $return[$team_id]['details'][] = $row;
+            $return[$team_id]['avg'] = round($return[$team_id]['summe'] / count($return[$team_id]['ergebnisse']), 1);
         }
 
         // Tabelle mit aktiven Teams ohne Ergebnis auffüllen
@@ -413,7 +407,8 @@ class Tabelle
                     $return[$team_id]['string'] = '';
                     $return[$team_id]['summe'] = 0;
                     $return[$team_id]['avg'] = 0;
-                    $return[$team_id]['einzel_ergebnisse'] = [0];
+                    $return[$team_id]['ergebnisse'] = [0];
+                    $return[$team_id]['details'] = [];
                 }
             }
         }
@@ -433,7 +428,7 @@ class Tabelle
         $zeile_vorher['summe'] = 0;
         $zeile_vorher['max_einzel'] = 0;
         foreach ($return as $key => $zeile) {
-            $zeile['max_einzel'] = max($zeile['einzel_ergebnisse']);
+            $zeile['max_einzel'] = max($zeile['ergebnisse']);
             if (
                 $zeile_vorher['summe'] == $zeile['summe']
                 && $zeile_vorher['max_einzel'] == $zeile['max_einzel']
@@ -475,6 +470,6 @@ class Tabelle
     {
         if ($value1['avg'] < $value2['avg']) return 1;
         if ($value1['avg'] > $value2['avg']) return -1;
-        return max($value2['einzel_ergebnisse']) <=> max($value1['einzel_ergebnisse']);
+        return max($value2['ergebnisse']) <=> max($value1['ergebnisse']);
     }
 }
