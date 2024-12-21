@@ -25,7 +25,7 @@ if (isset($_POST['strafe_eintragen'])) {
         $error = true;
         Html::error("Bitte Team auswählen und Begründung eintragen.");
     }
-    if ($_POST['verwarnung'] == 'Ja' && !empty($_POST['prozent'])) {
+    if (isset($_POST['verwarnung']) && !empty($_POST['prozent'])) {
         $error = true;
         Html::error("Prozentstrafen sind bei Vewarnungen nicht möglich.");
     }
