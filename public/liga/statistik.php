@@ -4,10 +4,10 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
-$max_turniere = Stats::get_turniere_team(limit: 999);
-$max_gew = Stats::get_gew_spiele_team(limit: 999);
-$max_ausrichter = Stats::get_max_ausrichter(limit: 999);
-$max_turnierorte = Stats::get_max_turnierorte(limit: 999);
+$max_turniere = Stats::get_turniere_team();
+$max_gew = Stats::get_gew_spiele_team();
+$max_ausrichter = Stats::get_max_ausrichter();
+$max_turnierorte = Stats::get_max_turnierorte();
 
 $gespielte_turniere = count(nTurnier::get_turniere_ergebnis($asc = false));
 $anstehende_turniere = count(nTurnier::get_turniere_kommend());

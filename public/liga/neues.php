@@ -22,8 +22,8 @@ $last_turniere = array_slice($turniere, 0, 4);
 $colors = ["w3-text-tertiary", "w3-text-grey", "w3-text-brown"];
 $icons = ["looks_one", "looks_two", "looks_3"];
 
-$statistik['max_gew'] = Stats::get_gew_spiele_team();
-$statistik['max_turniere'] = Stats::get_turniere_team();
+$statistik['max_gew'] = Stats::get_gew_spiele_team(limit: 3);
+$statistik['max_turniere'] = Stats::get_turniere_team(limit: 3);
 $statistik['ges_tore'] = Stats::get_tore_anzahl();
 $statistik['ges_spiele'] = Stats::get_spiele_anzahl();
 $statistik['spielminuten'] = Stats::get_spielminuten_anzahl();
