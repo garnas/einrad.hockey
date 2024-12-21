@@ -43,7 +43,7 @@ if (isset($_POST['strafe_eintragen'])) {
             (int) $_POST['prozent']
         );
         Html::info("Strafe wurde eingetragen.");
-        header("Location: ../liga/tabelle.php#pranger");
+        header("Location: ../liga/tabelle.php#strafen");
         die();
     }
 }

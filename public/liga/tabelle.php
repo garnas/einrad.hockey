@@ -290,16 +290,16 @@ include '../../templates/header.tmp.php';?>
 <!-- - Verwarnungen und Strafen - -->
 <!-- ---------------------------- -->
 
-<?php if (!$verwarnung_not_empty && $strafe_not_empty): ?>
-    <h1 id="strafen" class="w3-text-primary">Strafen</h1>
-<?php elseif ($verwarnung_not_empty && !$strafe_not_empty): ?>
-    <h1 id="strafen" class="w3-text-primary">Verwarnungen</h1>
-<?php elseif ($verwarnung_not_empty && $strafe_not_empty): ?>
+<?php if ($verwarnung_not_empty && $strafe_not_empty): ?>
     <h1 id="strafen" class="w3-text-primary">Verwarnungen & Strafen</h1>
 <?php endif; ?>
 
 <?php if ($verwarnung_not_empty): ?>
-    <h2 class="w3-text-secondary">Verwarnungen</h2>
+    <?php if ($strafe_not_empty): ?>
+        <h2 class="w3-text-secondary">Verwarnungen</h2>
+    <?php else: ?>
+        <h1 id="strafen" class="w3-text-primary">Verwarnungen</h1>
+    <?php endif; ?>
     <div class="w3-responsive w3-card">
         <!-- Header der Verwarnungen -->
         <div class="w3-row w3-primary"> 
@@ -328,7 +328,11 @@ include '../../templates/header.tmp.php';?>
 <?php endif; ?>
 
 <?php if ($strafe_not_empty) : ?>
-    <h2 class="w3-text-secondary">Strafen</h2>
+    <?php if ($verwarnung_not_empty) : ?>
+        <h2 class="w3-text-secondary">Strafen</h2>
+    <?php else : ?>
+        <h1 id="strafen" class="w3-text-primary">Strafen</h1>
+    <?php endif; ?>
     <div class="w3-responsive w3-card">
         <!-- Header der Strafen -->
         <div class="w3-row w3-primary"> 
