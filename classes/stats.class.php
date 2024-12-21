@@ -33,7 +33,7 @@ class Stats
                 SELECT count(*) 
                 FROM `spieler` 
                 INNER JOIN teams_liga 
-                ON teams_liga.team_id = spieler.team_id 
+                    ON teams_liga.team_id = spieler.team_id 
                 WHERE teams_liga.aktiv = 'Ja' 
                 AND spieler.schiri >= ?
                 ";
@@ -66,13 +66,16 @@ class Stats
     public static function get_spiele_anzahl(int $saison = Config::SAISON): int
     {
         $sql = "
-                SELECT count(*) AS spiele
-                FROM spiele
-                INNER JOIN turniere_liga tl on spiele.turnier_id = tl.turnier_id
-                WHERE tl.saison = ?
-                AND tore_b IS NOT NULL
-                AND tore_a IS NOT NULL
-                ";
+            SELECT count(*) AS spiele
+            FROM spiele s
+            INNER JOIN turniere_liga t
+                ON s.turnier_id = t.turnier_id
+            WHERE (t.art LIKE 'I' OR t.art LIKE 'II' OR t.art LIKE 'III')
+            AND s.tore_a IS NOT NULL
+            AND s.tore_b IS NOT NULL
+            AND t.canceled = 0
+            AND t.saison =	?
+        ";
         return db::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
     }
     
@@ -85,15 +88,17 @@ class Stats
     public static function get_spielminuten_anzahl(int $saison = Config::SAISON): int
     {
         $sql = "
-                SELECT sum(sd.anzahl_halbzeiten * sd.halbzeit_laenge)
-                FROM spiele
-                INNER JOIN turniere_liga tl on spiele.turnier_id = tl.turnier_id
-                INNER JOIN turniere_details td on spiele.turnier_id = td.turnier_id
-                INNER JOIN spielplan_details sd on tl.spielplan_vorlage = sd.spielplan
-                WHERE tl.saison = ?
-                AND tore_b IS NOT NULL
-                AND tore_a IS NOT NULL
-                ";
+            SELECT sum(sd.anzahl_halbzeiten * sd.halbzeit_laenge) as minuten
+            FROM spiele s
+            INNER JOIN turniere_liga tl on s.turnier_id = tl.turnier_id
+            INNER JOIN turniere_details td on s.turnier_id = td.turnier_id
+            INNER JOIN spielplan_details sd on tl.spielplan_vorlage = sd.spielplan
+            WHERE tl.art IN ('I', 'II', 'III')
+            AND s.tore_a IS NOT NULL
+            AND s.tore_b IS NOT NULL
+            AND tl.canceled = 0
+            AND tl.saison =	?
+        ";
         return db::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
     }
 
@@ -104,26 +109,25 @@ class Stats
      * @param int $limit
      * @return array
      */
-    public static function get_turniere_team(int $saison = Config::SAISON, int $limit = 3): array
+    public static function get_turniere_team(int $saison = Config::SAISON, int $limit = 999): array
     {
-        // Findet die Teams entsprechend des Limits, welche die meisten Turniere bisher gespielt haben
-        // Sortiert nach Zufall bei gleichstand
         $sql = "
-                SELECT teams_liga.teamname, count(*) as gespielt 
-                FROM turniere_liste 
-                INNER JOIN turniere_liga 
+            SELECT teams_liga.teamname, count(*) as gespielt 
+            FROM turniere_liste 
+            INNER JOIN turniere_liga 
                 ON turniere_liste.turnier_id = turniere_liga.turnier_id 
-                INNER JOIN teams_liga 
-                ON teams_liga.team_id = turniere_liste.team_id 
-                WHERE teams_liga.aktiv = 'Ja' 
-                AND teams_liga.ligateam = 'Ja'
-                AND turniere_liga.saison = ? 
-                AND turniere_liste.liste = 'setzliste' 
-                AND turniere_liga.phase = 'ergebnis' 
-                GROUP BY teams_liga.teamname 
-                ORDER BY gespielt desc, rand()
-                LIMIT ?
-                ";
+            INNER JOIN teams_liga 
+                ON teams_liga.team_id = turniere_liste.team_id
+            WHERE turniere_liga.saison = ?
+            AND turniere_liga.phase = 'ergebnis'
+            AND turniere_liga.art IN ('I', 'II', 'III')
+            AND turniere_liste.liste = 'setzliste'
+            AND teams_liga.aktiv = 'Ja' 
+            AND teams_liga.ligateam = 'Ja'
+            GROUP BY teams_liga.teamname 
+            ORDER BY gespielt desc, rand()
+            LIMIT ?
+        ";
         
         $teams = db::$db->query($sql, $saison, $limit)->esc()->fetch();
         
@@ -152,7 +156,7 @@ class Stats
      * @param int $limit
      * @return array
      */
-    public static function get_gew_spiele_team(int $saison = Config::SAISON, int $limit = 3): array
+    public static function get_gew_spiele_team(int $saison = Config::SAISON, int $limit = 999): array
     {
         // Gewonnen Team A
         $sqla = "
@@ -164,6 +168,7 @@ class Stats
                 ON spiele.team_id_a = teams_liga.team_id
                 WHERE (tore_a > tore_b OR penalty_a > penalty_b)
                 AND turniere_liga.saison = ?
+                AND turniere_liga.art IN ('I', 'II', 'III')
                 AND teams_liga.ligateam = 'Ja'
                 GROUP BY team_id_a
                 ORDER BY gew, RAND()
@@ -183,6 +188,7 @@ class Stats
                 ON spiele.team_id_b = teams_liga.team_id
                 WHERE (tore_a < tore_b OR penalty_a < penalty_b)
                 AND turniere_liga.saison = ?
+                AND turniere_liga.art IN ('I', 'II', 'III')
                 AND teams_liga.ligateam = 'Ja'
                 GROUP BY team_id_b
                 ORDER BY RAND()
@@ -226,7 +232,7 @@ class Stats
      * @param int $limit
      * @return array
      */
-    public static function get_max_ausrichter(int $saison = Config::SAISON, int $limit = 3): array
+    public static function get_max_ausrichter(int $saison = Config::SAISON, int $limit = 999): array
     {
         $sql = "
             SELECT teamname, COUNT(*) as anzahl
@@ -234,6 +240,7 @@ class Stats
             LEFT JOIN teams_liga ON turniere_liga.ausrichter = teams_liga.team_id
             WHERE saison = ?
             AND phase = 'ergebnis'
+            AND art IN ('I', 'II', 'III')
             GROUP BY ausrichter
             ORDER BY anzahl DESC, RAND()
             LIMIT ?
@@ -266,7 +273,7 @@ class Stats
      * @param int $limit
      * @return array
      */
-    public static function get_max_turnierorte(int $saison = Config::SAISON, int $limit = 3): array
+    public static function get_max_turnierorte(int $saison = Config::SAISON, int $limit = 999): array
     {   
         $sql = "
             SELECT turniere_details.ort, COUNT(*) AS anzahl
@@ -274,6 +281,7 @@ class Stats
             LEFT JOIN turniere_details ON turniere_liga.turnier_id = turniere_details.turnier_id
             WHERE saison = ?
             AND phase = 'ergebnis'
+            AND art IN ('I', 'II', 'III')
             GROUP BY turniere_details.ort
             ORDER BY anzahl DESC, RAND()
             LIMIT ?
