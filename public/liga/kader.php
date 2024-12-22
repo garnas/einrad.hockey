@@ -84,15 +84,15 @@ include '../../templates/header.tmp.php';
         B-Kader - Kontakt: <?=Html::mailto("nachwuchs@einrad.hockey")?>
     </p>
     <div class="w3-container w3-row-padding">
-        <div style="max-width: 200px"  class="w3-col l4 m4 s4">
+        <div style="max-width: 200px"  class="w3-col l4 m4 s6">
             <img src="<?= Env::BASE_URL ?>/bilder/kader/Def - 548.jpg" alt="Trainer" class="w3-image w3-card-4">
             <span>Maike Oles</span>
         </div>
-        <div style="max-width: 200px" class="w3-col l4 m4 s4">
+        <div style="max-width: 200px" class="w3-col l4 m4 s6">
             <img src="<?= Env::BASE_URL ?>/bilder/kader/Def - 874.jpg" alt="Trainer" class="w3-image w3-card-4">
             <span>Philipp Gross</span>
         </div>
-        <div style="max-width: 200px" class="w3-col l4 m4 s4">
+        <div style="max-width: 200px" class="w3-col l4 m4 s6">
             <img src="<?= Env::BASE_URL ?>/bilder/kader/Def - 245.jpg" alt="Trainer" class="w3-image w3-card-4">
             <span>Max Oles</span>
         </div>
