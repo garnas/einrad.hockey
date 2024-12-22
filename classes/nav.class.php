@@ -40,8 +40,8 @@ class Nav
             [Env::BASE_URL . "/liga/ueber_uns.php", "Interesse?"],
             [Env::BASE_URL . "/liga/teams.php", "Teams"],
             [Env::BASE_URL . "/liga/ligakarte.php", "Ligakarte"],
-            [self::LINK_FORUM . "index.php/board,7.0.html", "Rundschreibenarchiv"],
-            [self::LINK_FORUM, "Forum"]
+            [Env::BASE_URL . "/liga/kader.php", "Nationalkader"],
+            [Env::LINK_DISCORD, "Discord"]
         ];
     }
 
