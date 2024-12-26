@@ -21,6 +21,7 @@ SET time_zone = "+00:00";
 -- Datenbank: `db_localhost`
 --
 
+CREATE DATABASE IF NOT EXISTS db_localhost;
 USE db_localhost;
 SET FOREIGN_KEY_CHECKS = 0;
 
