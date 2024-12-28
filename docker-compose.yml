@@ -10,7 +10,8 @@ services:
     links:
       - mariadb
     volumes:
-      - '.:/var/www/html'
+      - .:/var/www/html
+      - notused:/var/www/html/vendor
     ports:
       - '80:80'
 
@@ -19,9 +20,7 @@ services:
     container_name: ligaseite-mariadb
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
-      MYSQL_USER: "${MYSQL_USER}"
-      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: root
     volumes:
       - 'mariadb-data:/var/lib/mysql/'
       - ./_localhost/db_localhost.sql:/docker-entrypoint-initdb.d/db_localhost.sql
@@ -39,3 +38,4 @@ services:
 
 volumes:
   mariadb-data:
+  notused:
