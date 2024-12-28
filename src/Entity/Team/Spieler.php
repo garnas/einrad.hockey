@@ -5,86 +5,28 @@ namespace App\Entity\Team;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Spieler
- *
- * @ORM\Table(name="spieler", indexes={@ORM\Index(name="team_id", columns={"team_id"})})
- * @ORM\Entity
- */
-class Spieler
+#[ORM\Entity] #[ORM\Table(name: "spieler", indexes: [new ORM\Index(columns: ["team_id"], name: "team_id")])] class Spieler
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="spieler_id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private int $spielerId;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="vorname", type="string", length=255, nullable=false)
-     */
-    private string $vorname;
+    #[ORM\GeneratedValue(strategy: "IDENTITY")] #[ORM\Id] #[ORM\Column(name: "spieler_id", type: "integer", nullable: false)] private int $spielerId;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nachname", type="string", length=255, nullable=false)
-     */
-    private string $nachname;
+    #[ORM\Column(name: "vorname", type: "string", length: 255, nullable: false)] private string $vorname;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="jahrgang", type="integer", nullable=false)
-     */
-    private int $jahrgang;
+    #[ORM\Column(name: "nachname", type: "string", length: 255, nullable: false)] private string $nachname;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="geschlecht", type="string", length=0, nullable=false)
-     */
-    private string $geschlecht;
+    #[ORM\Column(name: "jahrgang", type: "integer", nullable: false)] private int $jahrgang;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="schiri", type="integer", nullable=true)
-     */
-    private ?int $schiri;
+    #[ORM\Column(name: "geschlecht", type: "string", length: 0, nullable: false)] private string $geschlecht;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="junior", type="string", length=0, nullable=true)
-     */
-    private ?string $junior;
+    #[ORM\Column(name: "schiri", type: "integer", nullable: true)] private ?int $schiri;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="letzte_saison", type="integer", nullable=true)
-     */
-    private ?int $letzteSaison;
+    #[ORM\Column(name: "junior", type: "string", length: 0, nullable: true)] private ?string $junior;
 
-    /**
-     * @var DateTime|null
-     *
-     * @ORM\Column(name="timestamp", type="datetime", nullable=true)
-     */
-    private ?DateTime $timestamp;
+    #[ORM\Column(name: "letzte_saison", type: "integer", nullable: true)] private ?int $letzteSaison;
 
-    /**
-     * @var nTeam
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Team\nTeam", inversedBy="kader")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="team_id")
-     */
-    private nTeam $team;
+    #[ORM\Column(name: "timestamp", type: "datetime", nullable: true)] private ?DateTime $timestamp;
+
+    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")] #[ORM\ManyToOne(targetEntity: "App\Entity\Team\\nTeam", inversedBy: "kader")] private nTeam $team;
 
     public function getSpielerId(): ?int
     {

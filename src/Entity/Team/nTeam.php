@@ -14,40 +14,32 @@ use Config;
 /**
  * TeamsLiga
  *
- * @ORM\Table(name="teams_liga", uniqueConstraints={@ORM\UniqueConstraint(name="teamname", columns={"teamname"})})
- * @ORM\Entity
  */
-class nTeam
+#[ORM\Entity] #[ORM\Table(name: "teams_liga", uniqueConstraints: [new ORM\UniqueConstraint(name: "teamname", columns: ["teamname"])])] class nTeam
 {
     /**
      * @var int
      *
-     * @ORM\Column(name="team_id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    #[ORM\GeneratedValue(strategy: "IDENTITY")] #[ORM\Id] #[ORM\Column(name: "team_id", type: "integer", nullable: false)] private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="teamname", type="string", length=255, nullable=false)
      */
-    private $name;
+    #[ORM\Column(name: "teamname", type: "string", length: 255, nullable: false)] private $name;
 
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\TurniereListe", mappedBy="team", cascade={"all"}, indexBy="turnier_id")
      */
-    private Collection $turniereListe;
+    #[ORM\OneToMany(mappedBy: "team", targetEntity: "App\Entity\Turnier\TurniereListe", cascade: ["all"], indexBy: "turnier_id")] private Collection $turniereListe;
 
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Turnier\Turnier", mappedBy="ausrichter", cascade={"all"}, indexBy="turnier_id")
      */
-    private Collection $ausgerichteteTurniere;
+    #[ORM\OneToMany(mappedBy: "ausrichter", targetEntity: "App\Entity\Turnier\Turnier", cascade: ["all"], indexBy: "turnier_id")] private Collection $ausgerichteteTurniere;
 
     /**
      * @return Collection|Turnier[]
@@ -70,16 +62,14 @@ class nTeam
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Team\Freilos", mappedBy="team", cascade={"all"})
      */
-    private Collection $freilose;
+    #[ORM\OneToMany(targetEntity: "App\Entity\Team\Freilos", mappedBy: "team", cascade: ["all"])] private Collection $freilose;
 
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Team\Kontakt", mappedBy="team")
      */
-    private Collection $emails;
+    #[ORM\OneToMany(targetEntity: "App\Entity\Team\Kontakt", mappedBy: "team")] private Collection $emails;
 
     /**
      * @return Collection
@@ -132,10 +122,8 @@ class nTeam
     /**
      * @var TeamDetails
      *
-     * @ORM\OneToOne(targetEntity="TeamDetails", cascade={"all"}, orphanRemoval=true)
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="team_id")
      */
-    private TeamDetails $details;
+    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")] #[ORM\OneToOne(targetEntity: "TeamDetails", cascade: ["all"], orphanRemoval: true)] private TeamDetails $details;
 
     /**
      * @return TeamDetails
@@ -156,59 +144,50 @@ class nTeam
     /**
      * @var string
      *
-     * @ORM\Column(name="ligateam", type="string", length=0, nullable=false, options={"default"="Ja"})
      */
-    private $ligateam = 'Ja';
+    #[ORM\Column(name: "ligateam", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])] private $ligateam = 'Ja';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="terminplaner", type="string", length=0, nullable=false, options={"default"="Nein"})
      */
-    private $terminplaner = 'Nein';
+    #[ORM\Column(name: "terminplaner", type: "string", length: 0, nullable: false, options: ["default" => "Nein"])] private $terminplaner = 'Nein';
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="passwort", type="string", length=255, nullable=true)
      */
-    private $passwort;
+    #[ORM\Column(name: "passwort", type: "string", length: 255, nullable: true)] private $passwort;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="passwort_geaendert", type="string", length=0, nullable=false, options={"default"="Nein"})
      */
-    private $passwortGeaendert = 'Nein';
+    #[ORM\Column(name: "passwort_geaendert", type: "string", length: 0, nullable: false, options: ["default" => "Nein"])] private $passwortGeaendert = 'Nein';
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="freilose", type="integer", nullable=true)
      */
-    private $freilose_old;
+    #[ORM\Column(name: "freilose", type: "integer", nullable: true)] private $freilose_old;
 
     /**
      * @var DateTime|null
      *
-     * @ORM\Column(name="zweites_freilos", type="date", nullable=true, options={"comment"="2 Schiris 2 Freilose"})
      */
-    private ?DateTime $zweitesFreilos;
+    #[ORM\Column(name: "zweites_freilos", type: "date", nullable: true, options: ["comment" => "2 Schiris 2 Freilose"])] private ?DateTime $zweitesFreilos;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="aktiv", type="string", length=0, nullable=false, options={"default"="Ja"})
      */
-    private $aktiv = 'Ja';
+    #[ORM\Column(name: "aktiv", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])] private $aktiv = 'Ja';
 
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Team\Spieler", mappedBy="team", cascade={"all"})
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="team_id")
      */
-    private Collection $kader;
+    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")] #[ORM\OneToMany(targetEntity: "App\Entity\Team\Spieler", mappedBy: "team", cascade: ["all"])] private Collection $kader;
 
     /**
      * @return Collection

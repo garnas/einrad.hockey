@@ -7,71 +7,27 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SpielplanDetails
  *
- * @ORM\Table(name="spielplan_details", indexes={@ORM\Index(name="spielplan_paarung", columns={"spielplan_paarung"})})
- * @ORM\Entity
  */
-class SpielplanDetails
+#[ORM\Entity] #[ORM\Table(name: "spielplan_details", indexes: [new ORM\Index(name: "spielplan_paarung", columns: ["spielplan_paarung"])])] class SpielplanDetails
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="spielplan", type="string", length=30, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $spielplan;
+    #[ORM\Id] #[ORM\GeneratedValue(strategy: "IDENTITY")] #[ORM\Column(name: "spielplan", type: "string", length: 30, nullable: false)] private $spielplan;
 
-    /**
-     * @var bool|null
-     *
-     * @ORM\Column(name="plaetze", type="boolean", nullable=true)
-     */
-    private $plaetze;
+    #[ORM\Column(name: "plaetze", type: "boolean", nullable: true)] private $plaetze;
 
-    /**
-     * @var bool|null
-     *
-     * @ORM\Column(name="anzahl_halbzeiten", type="boolean", nullable=true)
-     */
-    private $anzahlHalbzeiten;
+    #[ORM\Column(name: "anzahl_halbzeiten", type: "boolean", nullable: true)] private $anzahlHalbzeiten;
 
-    /**
-     * @var bool|null
-     *
-     * @ORM\Column(name="halbzeit_laenge", type="boolean", nullable=true)
-     */
-    private $halbzeitLaenge;
+    #[ORM\Column(name: "halbzeit_laenge", type: "boolean", nullable: true)] private $halbzeitLaenge;
 
-    /**
-     * @var bool|null
-     *
-     * @ORM\Column(name="puffer", type="boolean", nullable=true)
-     */
-    private $puffer;
+    #[ORM\Column(name: "puffer", type: "boolean", nullable: true)] private $puffer;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="pausen", type="string", length=30, nullable=true, options={"comment"="nach Spiel,Minuten#next"})
-     */
-    private $pausen;
+    #[ORM\Column(name: "pausen", type: "string", length: 30, nullable: true, options: ["comment" => "nach Spiel,Minuten#next"])] private $pausen;
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="faktor", type="boolean", nullable=false, options={"comment"="Nur Nenner"})
-     */
-    private $faktor;
+    #[ORM\Column(name: "faktor", type: "boolean", nullable: false, options: ["comment" => "Nur Nenner"])] private $faktor;
 
-    /**
-     * @var \SpielplanPaarungen
-     *
-     * @ORM\ManyToOne(targetEntity="SpielplanPaarungen")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="spielplan_paarung", referencedColumnName="spielplan_paarung")
-     * })
-     */
-    private $spielplanPaarung;
+    #[ORM\ManyToOne(targetEntity: "SpielplanPaarungen")]
+    #[ORM\JoinColumn(name: "spielplan_paarung", referencedColumnName: "spielplan_paarung")]
+    private SpielplanPaarungen $spielplanPaarung;
+
 
     public function getSpielplan(): ?string
     {
