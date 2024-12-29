@@ -7,9 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: "turniere_details")] #[ORM\Entity] class TurnierDetails
 {
-
-    #[ORM\OneToOne(mappedBy: "details", targetEntity: "App\Entity\Turnier\Turnier")]
-    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")] #[ORM\Id] private $turnier;
+    #[ORM\Id]
+    #[ORM\OneToOne(mappedBy: "turnier", targetEntity: Turnier::class)]
+    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id", nullable: false)]
+    private Turnier $turnier;
 
     public function getTurnier(): Turnier
     {

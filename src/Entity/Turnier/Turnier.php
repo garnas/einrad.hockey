@@ -74,7 +74,7 @@ class Turnier
     private nTeam $ausrichter;
 
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
-    #[ORM\OneToOne(inversedBy: "turnier", targetEntity: "App\Entity\Turnier\TurnierDetails", cascade: ["all"])]
+    #[ORM\OneToOne(inversedBy: "turnier", targetEntity: TurnierDetails::class, cascade: ["all"])]
     private TurnierDetails $details;
 
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
