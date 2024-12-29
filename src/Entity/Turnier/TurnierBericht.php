@@ -8,16 +8,29 @@ use Doctrine\ORM\Mapping as ORM;
  * TurniereBerichte
  *
  */
-#[ORM\Entity] #[ORM\Table(name: "turniere_berichte", indexes: [new ORM\Index(columns: ["turnier_id"], name: "turnier_id")])] class TurnierBericht
+#[ORM\Entity]
+#[ORM\Table(
+    name: "turniere_berichte",
+    indexes: [
+        new ORM\Index(name: "turnier_id", columns: ["turnier_id"])
+    ])
+]
+class TurnierBericht
 {
 
-    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")] #[ORM\OneToOne(mappedBy: "turnier", targetEntity: "App\Entity\Turnier\Turnier")] #[ORM\Id] private $turnier;
+    #[ORM\OneToOne(targetEntity: Turnier::class)]
+    #[ORM\Id]
+    private Turnier $turnier;
 
-    #[ORM\Column(name: "turnier_id", type: "integer")] #[ORM\Id] private int $turnierId;
+    #[ORM\Column(name: "turnier_id", type: "integer")]
+    #[ORM\Id]
+    private int $turnierId;
 
-    #[ORM\Column(name: "bericht", type: "string", length: 1900, nullable: false)] private $bericht;
+    #[ORM\Column(name: "bericht", type: "string", length: 1900, nullable: false)]
+    private string $bericht;
 
-    #[ORM\Column(name: "kader_ueberprueft", type: "string", length: 0, nullable: false)] private $kaderUeberprueft;
+    #[ORM\Column(name: "kader_ueberprueft", type: "string", length: 0, nullable: false)]
+    private string $kaderUeberprueft;
 
     public function getBericht(): ?string
     {

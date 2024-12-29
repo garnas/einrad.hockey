@@ -21,8 +21,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(
     name: "turniere_liga",
     indexes: [
-        new ORM\Index(columns: ["ausrichter"], name: "ausrichter_team_id"),
-        new ORM\Index(columns: ["spielplan_vorlage"], name: "spielplan_vorlage")
+        new ORM\Index(name: "ausrichter_team_id", columns: ["ausrichter"]),
+        new ORM\Index(name: "spielplan_vorlage", columns: ["spielplan_vorlage"])
     ])
 ]
 class Turnier
@@ -30,8 +30,8 @@ class Turnier
 
     private TurnierLogService $logService;
 
-    #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Column(name: "turnier_id", type: "integer", nullable: false)]
     private int $id;
 
@@ -65,30 +65,29 @@ class Turnier
     #[ORM\Column(name: "saison", type: "integer", nullable: true)]
     private ?int $saison;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Spielplan\SpielplanDetails")]
+    #[ORM\ManyToOne(targetEntity: SpielplanDetails::class)]
     #[ORM\JoinColumn(name: "spielplan_vorlage", referencedColumnName: "spielplan")]
     private SpielplanDetails $spielplanVorlage;
 
     #[ORM\JoinColumn(name: "ausrichter", referencedColumnName: "team_id")]
-    #[ORM\OneToOne(targetEntity: "App\Entity\Team\\nTeam")]
+    #[ORM\OneToOne(targetEntity: nTeam::class)]
     private nTeam $ausrichter;
 
-    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
-    #[ORM\OneToOne(inversedBy: "turnier", targetEntity: TurnierDetails::class, cascade: ["all"])]
+    #[ORM\OneToOne(targetEntity: TurnierDetails::class, mappedBy: "turnier")]
     private TurnierDetails $details;
 
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
-    #[ORM\OneToMany(mappedBy: "turnier", targetEntity: "App\Entity\Turnier\TurniereLog", cascade: ["all"])]
+    #[ORM\OneToMany(targetEntity: TurniereLog::class, mappedBy: "turnier", cascade: ["all"])]
     private Collection $logs;
 
     #[ORM\Column(name: "erstellt_am", type: "datetime")]
     private DateTime $erstelltAm;
 
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
-    #[ORM\OneToMany(mappedBy: "turnier", targetEntity: "App\Entity\Turnier\TurnierErgebnis", cascade: ["all"], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: TurnierErgebnis::class, mappedBy: "turnier", cascade: ["all"], orphanRemoval: true)]
     private Collection $ergebnis;
 
-    #[ORM\OneToMany(mappedBy: "turnier", targetEntity: "App\Entity\Turnier\TurniereListe", cascade: ["all"], orphanRemoval: true, indexBy: "team_id")]
+    #[ORM\OneToMany(targetEntity: TurniereListe::class, mappedBy: "turnier", cascade: ["all"], orphanRemoval: true, indexBy: "team_id")]
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
     private Collection $liste;
 

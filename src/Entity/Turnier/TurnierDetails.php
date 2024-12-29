@@ -5,10 +5,12 @@ namespace App\Entity\Turnier;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Table(name: "turniere_details")] #[ORM\Entity] class TurnierDetails
+#[ORM\Table(name: "turniere_details")]
+#[ORM\Entity]
+class TurnierDetails
 {
     #[ORM\Id]
-    #[ORM\OneToOne(mappedBy: "turnier", targetEntity: Turnier::class)]
+    #[ORM\OneToOne(targetEntity: Turnier::class, inversedBy: "details", cascade: ["all"])]
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id", nullable: false)]
     private Turnier $turnier;
 
@@ -23,38 +25,47 @@ use Doctrine\ORM\Mapping as ORM;
         return $this;
     }
 
-    #[ORM\Column(name: "hallenname", type: "string", length: 255, nullable: true)] private $hallenname;
+    #[ORM\Column(name: "hallenname", type: "string", length: 255, nullable: true)]
+    private string $hallenname;
 
-    #[ORM\Column(name: "strasse", type: "string", length: 255, nullable: true)] private $strasse;
+    #[ORM\Column(name: "strasse", type: "string", length: 255, nullable: true)]
+    private string $strasse;
 
-    #[ORM\Column(name: "plz", type: "string", length: 6)] private $plz;
+    #[ORM\Column(name: "plz", type: "string", length: 6)]
+    private string $plz;
 
-    #[ORM\Column(name: "ort", type: "string", length: 255, nullable: true)] private $ort;
+    #[ORM\Column(name: "ort", type: "string", length: 255, nullable: true)]
+    private string $ort;
 
-    #[ORM\Column(name: "haltestellen", type: "string", length: 255, nullable: true)] private $haltestellen;
+    #[ORM\Column(name: "haltestellen", type: "string", length: 255, nullable: true)]
+    private string $haltestellen;
 
-    #[ORM\Column(name: "plaetze", type: "integer", nullable: true)] private $plaetze;
+    #[ORM\Column(name: "plaetze", type: "integer", nullable: true)]
+    private int $plaetze;
 
-    #[ORM\Column(name: "min_teams", type: "integer", nullable: true)] private ?int $minTeams;
+    #[ORM\Column(name: "min_teams", type: "integer", nullable: true)]
+    private ?int $minTeams;
 
-    #[ORM\Column(name: "format", type: "string", length: 255, nullable: true)] private $format;
+    #[ORM\Column(name: "format", type: "string", length: 255, nullable: true)]
+    private string $format;
 
-    #[ORM\Column(name: "startzeit", type: "time")] private $startzeit;
+    #[ORM\Column(name: "startzeit", type: "time")]
+    private DateTime $startzeit;
 
-    #[ORM\Column(name: "besprechung", type: "string", length: 0, nullable: true)] private $besprechung;
+    #[ORM\Column(name: "besprechung", type: "string", length: 0, nullable: true)]
+    private string $besprechung;
 
-    #[ORM\Column(name: "hinweis", type: "string", length: 1700, nullable: true)] private $hinweis;
+    #[ORM\Column(name: "hinweis", type: "string", length: 1700, nullable: true)]
+    private string $hinweis;
 
-    #[ORM\Column(name: "organisator", type: "string", length: 255, nullable: true)] private $organisator;
+    #[ORM\Column(name: "organisator", type: "string", length: 255, nullable: true)]
+    private string $organisator;
 
-    #[ORM\Column(name: "handy", type: "string", length: 255, nullable: true)] private $handy;
+    #[ORM\Column(name: "handy", type: "string", length: 255, nullable: true)]
+    private string $handy;
 
-    #[ORM\Column(name: "startgebuehr", type: "string", length: 255, nullable: true)] private $startgebuehr;
-
-    public function getTurnierId(): int
-    {
-        return $this->turnierId;
-    }
+    #[ORM\Column(name: "startgebuehr", type: "string", length: 255, nullable: true)]
+    private string $startgebuehr;
 
     public function getHallenname(): ?string
     {
