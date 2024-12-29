@@ -6,14 +6,21 @@ use App\Entity\Turnier\Turnier;
 use Config;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use DoctrineWrapper;
 
-#[ORM\Entity] #[ORM\Table(name: "freilose", indexes: [new ORM\Index(columns: ["turnier_id"], name: "freilose_ibfk_2"), new ORM\Index(columns: ["team_id"], name: "freilose_ibfk_1")])] class Freilos
+#[ORM\Entity]
+#[ORM\Table(
+    name: "freilose",
+    indexes: [
+        new ORM\Index(columns: ["turnier_id"], name: "freilose_ibfk_2"),
+        new ORM\Index(columns: ["team_id"], name: "freilose_ibfk_1")])
+]
+class Freilos
 {
 
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Id]
-    #[ORM\Column(name: "freilos_id", type: "integer", nullable: false)] private int $freilosId;
+    #[ORM\Column(name: "freilos_id", type: "integer", nullable: false)]
+    private int $freilosId;
 
     #[ORM\Column(name: "gesetzt_am", type: "datetime", nullable: true, options: ["default" => "current_timestamp(1)"])] private ?DateTime $gesetztAm;
 

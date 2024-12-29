@@ -8,7 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity] #[ORM\Table(name: "spieler", indexes: [new ORM\Index(columns: ["team_id"], name: "team_id")])] class Spieler
 {
 
-    #[ORM\GeneratedValue(strategy: "IDENTITY")] #[ORM\Id] #[ORM\Column(name: "spieler_id", type: "integer", nullable: false)] private int $spielerId;
+    #[ORM\GeneratedValue(strategy: "IDENTITY")]
+    #[ORM\Id] #[ORM\Column(name: "spieler_id", type: "integer", nullable: false)]
+    private int $spielerId;
 
     #[ORM\Column(name: "vorname", type: "string", length: 255, nullable: false)] private string $vorname;
 
