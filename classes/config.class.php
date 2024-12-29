@@ -15,6 +15,7 @@ class Config
      */
     public const LOG_LOGIN = "login.log";
     public const LOG_DB = "db.log";
+    public const LOG_DB_DOCTRINE = "db-doctrine.log";
     public const LOG_KONTAKTFORMULAR = "kontakt.log";
     public const LOG_EMAILS = "emails.log";
     public const LOG_USER = "user.log";
