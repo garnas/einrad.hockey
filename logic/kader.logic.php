@@ -1,7 +1,7 @@
 <?php
 
-// Neuer Spieler eintragen
-use App\Entity\Team\FreilosGrund;
+use App\Entity\Team\Spieler;
+use App\Repository\Spieler\SpielerRepository;
 use App\Repository\Team\TeamRepository;
 use App\Service\Team\TeamService;
 
@@ -22,20 +22,28 @@ if (isset($_POST['neuer_eintrag'])) {
     }
 
     if (!$error) {
-        $spieler = new nSpieler();
-        if ($spieler
-            ->set_vorname($vorname)
-            ->set_nachname($nachname)
-            ->set_jahrgang($jahrgang)
-            ->set_geschlecht($geschlecht)
-            ->set_team_id($team_id)
-            ->set_letzte_saison(Config::SAISON)
-            ->speichern(true)
-        ) {
+        $spieler = (new Spieler())
+            ->setVorname($vorname)
+            ->setNachname($nachname)
+            ->setJahrgang($jahrgang)
+            ->setGeschlecht($geschlecht)
+            ->setTeam($teamEntity)
+            ->setLetzteSaison(Config::SAISON);
+        $existingSpieler = SpielerRepository::get()->findBySpieler($spieler);
+        if ($existingSpieler === null) {
+            SpielerRepository::get()->speichern($spieler);
             Html::info("Der Spieler wurde erfolgreich eingetragen.");
             Helper::reload(get:'?team_id=' . $team_id);
+        } elseif ($existingSpieler->getLetzteSaison() < Config::SAISON) {
+            $vorherigesTeam = $existingSpieler->getTeam()->getName();
+            $existingSpieler->setTeam($teamEntity);
+            $existingSpieler->setLetzteSaison(Config::SAISON);
+            SpielerRepository::get()->speichern($existingSpieler);
+            Html::info("Der Spieler wurde erfolgreich vom vorherigen Team ($vorherigesTeam) übernommen.");
+            Helper::reload(get:'?team_id=' . $team_id);
         } else {
-            Html::error("Der Spieler konnte nicht eingetragen werden.");
+            $aktuellesTeam = $existingSpieler->getTeam()->getName();
+            Html::error("Der Spieler ist für diese Saison bereits in einem anderen Team gemeldet ($aktuellesTeam).");
         }
     }
 }
@@ -48,10 +56,9 @@ if (isset($_POST['submit_takeover'])) {
     } else {
         foreach (($_POST['takeover'] ?? []) as $spieler_id) {
             if (!empty($kader_vorsaison[$spieler_id])) { // Validation + Schutz gegen Html-Manipulation
-                $spieler = nSpieler::get($spieler_id);
-                $spieler
-                    ->set_letzte_saison(Config::SAISON)
-                    ->speichern();
+                $spieler = SpielerRepository::get()->spieler($spieler_id);
+                $spieler->setLetzteSaison(Config::SAISON);
+                SpielerRepository::get()->speichern($spieler);
                 $changed = true;
             }
         }

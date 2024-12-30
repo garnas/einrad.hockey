@@ -4,6 +4,7 @@ namespace App\Repository\Team;
 
 use App\Entity\Team\Freilos;
 use App\Entity\Team\nTeam;
+use App\Entity\Team\Spieler;
 use App\Entity\Turnier\Turnier;
 use App\Repository\TraitSingletonRepository;
 use App\Repository\DoctrineWrapper;
@@ -20,10 +21,13 @@ class TeamRepository
     private EntityRepository $team;
     private EntityRepository $freilos;
 
+    private EntityRepository $spieler;
+
     private function __construct()
     {
         $this->team = DoctrineWrapper::manager()->getRepository(nTeam::class);
         $this->freilos = DoctrineWrapper::manager()->getRepository(Freilos::class);
+        $this->spieler = DoctrineWrapper::manager()->getRepository(Spieler::class);
     }
 
     public function team(int $id): nTeam

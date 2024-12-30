@@ -7,114 +7,57 @@ use App\Entity\Team\nTeam;
 use DoctrineWrapper;
 use DateTime;
 
-/**
- * TurniereListe
- *
- * @ORM\Table(name="turniere_liste", indexes={@ORM\Index(name="turniere_liste_ibfk_2", columns={"turnier_id"}), @ORM\Index(name="turniere_liste_ibfk_1", columns={"team_id"})})
- * @ORM\Entity
- */
-class TurniereListe
+#[ORM\Entity] #[ORM\Table(name: "turniere_liste", indexes: [new ORM\Index(columns: ["turnier_id"], name: "turniere_liste_ibfk_2"), new ORM\Index(name: "turniere_liste_ibfk_1", columns: ["team_id"])])] class TurniereListe
 {
     /**
      * @var int
      *
-     * @ORM\Column(name="liste_id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $listeId;
+    #[ORM\GeneratedValue(strategy: "IDENTITY")] #[ORM\Id] #[ORM\Column(name: "liste_id", type: "integer", nullable: false)] private $listeId;
 
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="freilos_gesetzt_am", type="datetime", nullable=false, options={"default"="current_timestamp(1)"})
      */
-    private DateTime $freilosGesetztAm;
+    #[ORM\Column(name: "freilos_gesetzt_am", type: "datetime", nullable: false, options: ["default" => "current_timestamp(1)"])] private DateTime $freilosGesetztAm;
 
-    /**
-     * @return DateTime
-     */
     public function getFreilosGesetztAm(): DateTime
     {
         return $this->freilosGesetztAm;
     }
 
-    /**
-     * @param DateTime $freilosGesetztAm
-     * @return TurniereListe
-     */
     public function setFreilosGesetztAm(DateTime $freilosGesetztAm): TurniereListe
     {
         $this->freilosGesetztAm = $freilosGesetztAm;
         return $this;
     }
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="liste", type="string", length=0, nullable=false, options={"default"="setz"})
-     */
-    private string $liste = 'setz';
+    #[ORM\Column(name: "liste", type: "string", length: 0, nullable: false, options: ["default" => "setz"])] private string $liste = 'setz';
 
-    /**
-     * @var nTeam
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Team\nTeam", inversedBy="turniereListe")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="team_id")
-     */
-    private nTeam $team;
+    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")] #[ORM\ManyToOne(targetEntity: "App\Entity\Team\\nTeam", inversedBy: "turniereListe")] private nTeam $team;
 
-    /**
-     * @return nTeam
-     */
     public function getTeam(): nTeam
     {
         return $this->team;
     }
 
-    /**
-     * @param nTeam $team
-     * @return TurniereListe
-     */
     public function setTeam (nTeam $team): TurniereListe
     {
         $this->team = $team;
         return $this;
     }
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="position_warteliste", type="integer", nullable=true)
-     */
-    private ?int $positionWarteliste;
+    #[ORM\Column(name: "position_warteliste", type: "integer", nullable: true)] private ?int $positionWarteliste;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="freilos_gesetzt", type="string", length=0, nullable=false, options={"default"="Nein"})
-     */
-    private string $freilosGesetzt = 'Nein';
+    #[ORM\Column(name: "freilos_gesetzt", type: "string", length: 0, nullable: false, options: ["default" => "Nein"])] private string $freilosGesetzt = 'Nein';
 
-    /**
-     * @var Turnier
-     * @ORM\ManyToOne(targetEntity="App\Entity\Turnier\Turnier", inversedBy="liste")
-     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
-     */
-    private Turnier $turnier;
+    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")] #[ORM\ManyToOne(targetEntity: "App\Entity\Turnier\Turnier", inversedBy: "liste")] private Turnier $turnier;
 
-    /**
-     * @return Turnier
-     */
     public function getTurnier(): Turnier
     {
         return $this->turnier;
     }
 
-    /**
-     * @param Turnier $turnier
-     * @return TurniereListe
-     */
     public function setTurnier(Turnier $turnier): TurniereListe
     {
         $this->turnier = $turnier;
