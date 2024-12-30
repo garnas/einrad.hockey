@@ -8,7 +8,7 @@ use App\Service\Team\TeamService;
 if (isset($_POST['neuer_eintrag'])) {
     $error = false;
     $vorname = $_POST['vorname'];
-    $nachname  = $_POST['nachname'];
+    $nachname = $_POST['nachname'];
     $jahrgang = $_POST['jahrgang'];
     $geschlecht = $_POST['geschlecht'];
 
