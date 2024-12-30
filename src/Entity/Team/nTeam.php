@@ -3,6 +3,7 @@
 namespace App\Entity\Team;
 
 use App\Entity\Turnier\Turnier;
+use App\Entity\Turnier\TurniereListe;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,65 +13,46 @@ use Helper;
 use Config;
 
 #[ORM\Entity]
-#[ORM\Table(name: "teams_liga", uniqueConstraints: [new ORM\UniqueConstraint(name: "teamname", columns: ["teamname"])])] class nTeam
+#[ORM\Table(name: "teams_liga", uniqueConstraints: [new ORM\UniqueConstraint(name: "teamname", columns: ["teamname"])])]
+class nTeam
 {
-    /**
-     * @var int
-     *
-     */
-    #[ORM\GeneratedValue(strategy: "IDENTITY")] #[ORM\Id] #[ORM\Column(name: "team_id", type: "integer", nullable: false)] private $id;
 
-    /**
-     * @var string
-     *
-     */
-    #[ORM\Column(name: "teamname", type: "string", length: 255, nullable: false)] private $name;
+    #[ORM\GeneratedValue(strategy: "IDENTITY")]
+    #[ORM\Id]
+    #[ORM\Column(name: "team_id", type: "integer", nullable: false)]
+    private int $id;
+
+    #[ORM\Column(name: "teamname", type: "string", length: 255, nullable: false)]
+    private string $name;
 
     /**
      * @var Collection
      *
      */
-    #[ORM\OneToMany(mappedBy: "team", targetEntity: "App\Entity\Turnier\TurniereListe", cascade: ["all"], indexBy: "turnier_id")] private Collection $turniereListe;
+    #[ORM\OneToMany(targetEntity: TurniereListe::class, mappedBy: "team", cascade: ["all"], indexBy: "turnier_id")]
+    private Collection $turniereListe;
 
-    /**
-     * @var Collection
-     *
-     */
-    #[ORM\OneToMany(mappedBy: "ausrichter", targetEntity: "App\Entity\Turnier\Turnier", cascade: ["all"], indexBy: "turnier_id")] private Collection $ausgerichteteTurniere;
 
-    /**
-     * @return Collection|Turnier[]
-     */
+    #[ORM\OneToMany(targetEntity: Turnier::class, mappedBy: "ausrichter", cascade: ["all"], indexBy: "turnier_id")]
+    private Collection $ausgerichteteTurniere;
+
     public function getAusgerichteteTurniere(): Collection|array
     {
         return $this->ausgerichteteTurniere;
     }
 
-    /**
-     * @param Collection $ausgerichteteTurniere
-     * @return nTeam
-     */
     public function setAusgerichteteTurniere(Collection $ausgerichteteTurniere): nTeam
     {
         $this->ausgerichteteTurniere = $ausgerichteteTurniere;
         return $this;
     }
 
-    /**
-     * @var Collection
-     *
-     */
-    #[ORM\OneToMany(targetEntity: "App\Entity\Team\Freilos", mappedBy: "team", cascade: ["all"])] private Collection $freilose;
+    #[ORM\OneToMany(targetEntity: Freilos::class, mappedBy: "team", cascade: ["all"])]
+    private Collection $freilose;
 
-    /**
-     * @var Collection
-     *
-     */
-    #[ORM\OneToMany(targetEntity: "App\Entity\Team\Kontakt", mappedBy: "team")] private Collection $emails;
+    #[ORM\OneToMany(targetEntity: Kontakt::class, mappedBy: "team")]
+    private Collection $emails;
 
-    /**
-     * @return Collection
-     */
     public function getEmails(): Collection
     {
         return $this->emails;
@@ -84,27 +66,17 @@ use Config;
         return $this->emails->filter($filter);
     }
 
-    /**
-     * @param Collection $emails
-     * @return nTeam
-     */
     public function setEmails(Collection $emails): nTeam
     {
         $this->emails = $emails;
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
     public function getTurniereListe(): Collection
     {
         return $this->turniereListe;
     }
 
-    /**
-     * @param Collection $turniereListe
-     */
     public function setTurniere(Collection $turniereListe): void
     {
         $this->turniereListe = $turniereListe;
@@ -115,96 +87,55 @@ use Config;
         $this->ausgerichteteTurniere = new ArrayCollection();
     }
 
+    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
+    #[ORM\OneToOne(targetEntity: "TeamDetails", cascade: ["all"], orphanRemoval: true)]
+    private TeamDetails $details;
 
-    /**
-     * @var TeamDetails
-     *
-     */
-    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")] #[ORM\OneToOne(targetEntity: "TeamDetails", cascade: ["all"], orphanRemoval: true)] private TeamDetails $details;
-
-    /**
-     * @return TeamDetails
-     */
     public function getDetails(): TeamDetails
     {
         return $this->details;
     }
 
-    /**
-     * @param TeamDetails $details
-     */
     public function setDetails(TeamDetails $details): void
     {
         $this->details = $details;
     }
 
-    /**
-     * @var string
-     *
-     */
-    #[ORM\Column(name: "ligateam", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])] private $ligateam = 'Ja';
+    #[ORM\Column(name: "ligateam", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])]
+    private string $ligateam = 'Ja';
 
-    /**
-     * @var string
-     *
-     */
-    #[ORM\Column(name: "terminplaner", type: "string", length: 0, nullable: false, options: ["default" => "Nein"])] private $terminplaner = 'Nein';
+    #[ORM\Column(name: "terminplaner", type: "string", length: 0, nullable: false, options: ["default" => "Nein"])]
+    private string $terminplaner = 'Nein';
 
-    /**
-     * @var string|null
-     *
-     */
-    #[ORM\Column(name: "passwort", type: "string", length: 255, nullable: true)] private $passwort;
+    #[ORM\Column(name: "passwort", type: "string", length: 255, nullable: true)]
+    private ?string $passwort;
 
-    /**
-     * @var string
-     *
-     */
-    #[ORM\Column(name: "passwort_geaendert", type: "string", length: 0, nullable: false, options: ["default" => "Nein"])] private $passwortGeaendert = 'Nein';
+    #[ORM\Column(name: "passwort_geaendert", type: "string", length: 0, nullable: false, options: ["default" => "Nein"])]
+    private string $passwortGeaendert = 'Nein';
 
-    /**
-     * @var int|null
-     *
-     */
-    #[ORM\Column(name: "freilose", type: "integer", nullable: true)] private $freilose_old;
+    #[ORM\Column(name: "freilose", type: "integer", nullable: true)]
+    private ?int $freilose_old;
 
-    /**
-     * @var DateTime|null
-     *
-     */
-    #[ORM\Column(name: "zweites_freilos", type: "date", nullable: true, options: ["comment" => "2 Schiris 2 Freilose"])] private ?DateTime $zweitesFreilos;
+    #[ORM\Column(name: "zweites_freilos", type: "date", nullable: true, options: ["comment" => "2 Schiris 2 Freilose"])]
+    private ?DateTime $zweitesFreilos;
 
-    /**
-     * @var string
-     *
-     */
-    #[ORM\Column(name: "aktiv", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])] private $aktiv = 'Ja';
+    #[ORM\Column(name: "aktiv", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])]
+    private string $aktiv = 'Ja';
 
-    /**
-     * @var Collection
-     *
-     */
-    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")] #[ORM\OneToMany(targetEntity: "App\Entity\Team\Spieler", mappedBy: "team", cascade: ["all"])] private Collection $kader;
+    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
+    #[ORM\OneToMany(targetEntity: Spieler::class, mappedBy: "team", cascade: ["all"])]
+    private Collection $kader;
 
-    /**
-     * @return Collection
-     */
     public function getKader(): Collection
     {
         return $this->kader;
     }
 
-    /**
-     * @param Collection $kader
-     * @return nTeam
-     */
     public function setKader(Collection $kader): nTeam
     {
         $this->kader = $kader;
         return $this;
     }
-
-
 
     public function id(): ?int
     {
@@ -344,9 +275,6 @@ use Config;
         return $this;
     }
 
-    /**
-     * @return Freilos[]|Collection
-     */
     public function getGueltigeFreilose(): Collection|array
     {
         $filter = static function (Freilos $f) {
@@ -355,9 +283,6 @@ use Config;
         return $this->freilose->filter($filter);
     }
 
-    /**
-     * @return Freilos[]|Collection
-     */
     public function getFreiloseBySaison(int $saison = Config::SAISON): Collection|array
     {
         $filter = static function (Freilos $f) use ($saison) {
@@ -366,9 +291,6 @@ use Config;
         return $this->freilose->filter($filter);
     }
 
-    /**
-     * @return Collection|Freilos[]
-     */
     public function getOffeneFreilose(): Collection|array
     {
         $filter = static function (Freilos $f) {
@@ -385,7 +307,6 @@ use Config;
 
     /**
      * Gibt das älteste Freilos zurück, welches als nächstes gesetzt werden soll.
-     * @return Freilos
      */
     public function getNextFreilos(): Freilos
     {

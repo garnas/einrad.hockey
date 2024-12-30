@@ -11,8 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(
     name: "freilose",
     indexes: [
-        new ORM\Index(columns: ["turnier_id"], name: "freilose_ibfk_2"),
-        new ORM\Index(columns: ["team_id"], name: "freilose_ibfk_1")])
+        new ORM\Index(name: "freilose_ibfk_2", columns: ["turnier_id"]),
+        new ORM\Index(name: "freilose_ibfk_1", columns: ["team_id"])])
 ]
 class Freilos
 {

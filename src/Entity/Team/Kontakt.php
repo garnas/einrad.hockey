@@ -3,7 +3,6 @@
 namespace App\Entity\Team;
 
 use Doctrine\ORM\Mapping as ORM;
-use TeamsLiga;
 
 #[ORM\Entity]
 #[ORM\Table(name: "teams_kontakt", indexes: [new ORM\Index(name: "team_id", columns: ["team_id"])])]
