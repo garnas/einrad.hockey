@@ -24,4 +24,4 @@ Stellt neben dem Webserver die Datenbank und phpmyadmin als Client zur Verfügun
   - Die Seite ist erreichbar: http://localhost:80
   - phpmyadmin ist erreichbar: http://localhost:8080
 - Beenden: `docker compose down`: Die Daten in der Datenbank bleiben erhalten
-- Beenden: `docker compose down -b`: Die Datenbank wird vollständig zurückgesetzt
+- Beenden: `docker compose down -v`: Die Datenbank wird vollständig zurückgesetzt
