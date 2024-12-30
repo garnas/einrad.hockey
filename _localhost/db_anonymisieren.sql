@@ -7,7 +7,7 @@ TRUNCATE TABLE ligakarte_gesuch;
 TRUNCATE TABLE mailbot;
 # TRUNCATE TABLE abstimmung_ergebnisse;
 # TRUNCATE TABLE abstimmung_teams;
-# TRUNCATE TABLE oeffi_challenge;
+TRUNCATE TABLE oeffi_challenge;
 TRUNCATE TABLE spieler_ausleihen;
 TRUNCATE TABLE turniere_berichte;
 TRUNCATE TABLE turniere_geloescht;
