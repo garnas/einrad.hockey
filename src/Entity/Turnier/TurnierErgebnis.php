@@ -5,52 +5,23 @@ namespace App\Entity\Turnier;
 use App\Entity\Team\nTeam;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * TurniereErgebnisse
- *
- * @ORM\Table(name="turniere_ergebnisse", indexes={@ORM\Index(name="team_id", columns={"team_id"}), @ORM\Index(name="turniere_ergebnisse_ibfk_2", columns={"turnier_id"})})
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: "turniere_ergebnisse", indexes: [new ORM\Index(columns: ["team_id"], name: "team_id"), new ORM\Index(columns: ["turnier_id"], name: "turniere_ergebnisse_ibfk_2")])]
 class TurnierErgebnis
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="turnier_ergebnis_id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+
+    #[ORM\GeneratedValue(strategy: "IDENTITY")]
+    #[ORM\Id]
+    #[ORM\Column(name: "turnier_ergebnis_id", type: "integer", nullable: false)]
     private $turnierErgebnisId;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="ergebnis", type="integer", nullable=true)
-     */
-    private $ergebnis;
+    #[ORM\Column(name: "ergebnis", type: "integer", nullable: true)] private $ergebnis;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="platz", type="integer", nullable=false)
-     */
-    private $platz;
+    #[ORM\Column(name: "platz", type: "integer", nullable: false)] private $platz;
 
-    /**
-     * @var nTeam
-     *
-     * @ORM\OneToOne(targetEntity="App\Entity\Team\nTeam")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="team_id")
-     */
-    private nTeam $team;
+    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")] #[ORM\OneToOne(targetEntity: "App\Entity\Team\\nTeam")] private nTeam $team;
 
-    /**
-     * @var Turnier
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Turnier\Turnier", inversedBy="turnier")
-     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
-     */
-    private Turnier $turnier;
+    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")] #[ORM\ManyToOne(targetEntity: "App\Entity\Turnier\Turnier", inversedBy: "turnier")] private Turnier $turnier;
 
     public function getTurnierErgebnisId(): ?int
     {

@@ -4,76 +4,38 @@ namespace App\Entity\Team;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * TeamsDetails
- *
- * @ORM\Table(name="teams_details", uniqueConstraints={@ORM\UniqueConstraint(name="team_id", columns={"team_id"})})
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(name: "teams_details", uniqueConstraints: [new ORM\UniqueConstraint(name: "team_id", columns: ["team_id"])])]
 class TeamDetails
 {
-    /**
-     * @var string|null
-     * @ORM\Id
-     * @ORM\Column(name="team_id", type="integer")
-     */
-    private $team_id;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="plz", type="string", length=255, nullable=true)
-     */
-    private $plz;
+    #[ORM\Id]
+    #[ORM\Column(name: "team_id", type: "integer")]
+    private int $team_id;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="ort", type="string", length=255, nullable=true)
-     */
-    private $ort;
+    #[ORM\Column(name: "plz", type: "string", length: 255, nullable: true)]
+    private ?string $plz;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="verein", type="string", length=255, nullable=true)
-     */
-    private $verein;
+    #[ORM\Column(name: "ort", type: "string", length: 255, nullable: true)]
+    private ?string $ort;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="homepage", type="string", length=255, nullable=true)
-     */
-    private $homepage;
+    #[ORM\Column(name: "verein", type: "string", length: 255, nullable: true)]
+    private ?string $verein;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="ligavertreter", type="string", length=255, nullable=true)
-     */
-    private $ligavertreter;
+    #[ORM\Column(name: "homepage", type: "string", length: 255, nullable: true)]
+    private ?string $homepage;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="teamfoto", type="string", length=255, nullable=true)
-     */
-    private $teamfoto;
+    #[ORM\Column(name: "ligavertreter", type: "string", length: 255, nullable: true)]
+    private ?string $ligavertreter;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="trikot_farbe_1", type="string", length=9, nullable=true)
-     */
-    private $trikotFarbe1;
+    #[ORM\Column(name: "teamfoto", type: "string", length: 255, nullable: true)]
+    private ?string $teamfoto;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="trikot_farbe_2", type="string", length=9, nullable=true)
-     */
-    private $trikotFarbe2;
+    #[ORM\Column(name: "trikot_farbe_1", type: "string", length: 9, nullable: true)]
+    private ?string $trikotFarbe1;
+
+    #[ORM\Column(name: "trikot_farbe_2", type: "string", length: 9, nullable: true)]
+    private ?string $trikotFarbe2;
 
     public function getPlz(): ?string
     {
@@ -171,9 +133,6 @@ class TeamDetails
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function get_team_id(): ?string
     {
         return $this->team_id;

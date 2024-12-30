@@ -19,8 +19,6 @@ ini_set('session.cookie_secure', '1');
 
 // Sonstige Einstellungen
 ini_set('date.timezone', 'Europe/Berlin');
-ini_set('upload_max_filesize', '20M');
-ini_set('post_max_size', '20M');
 ini_set('memory_limit', '512M');
 ini_set('max_execution_time', '90');
 ini_set('error_reporting', E_ALL);

@@ -2,19 +2,15 @@
 
 namespace App\Repository;
 
+use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Logging\Middleware;
 use Doctrine\ORM\EntityManager;
-use Doctrine\DBAL\Logging\DebugStack;
-use Doctrine\Common\Util\Debug;
 use Doctrine\ORM\ORMSetup;
-
 use Env;
-use Db;
 
 class DoctrineWrapper
 {
     private static EntityManager $entity_manager;
-
-    public static DebugStack $logger;
 
     private function __construct(){}
 
@@ -23,31 +19,23 @@ class DoctrineWrapper
         return self::$entity_manager;
     }
 
-    public static function dump(mixed $var): void
-    {
-        db::debug(Debug::dump($var,3,true, false));
-    }
-
     public static function setup(): void
     {
-        // Create a simple "default" Doctrine ORM configuration for Annotations
-//        $isDevMode = Env::IS_LOCALHOST;
-        $isDevMode = false;
+        $isDevMode = Env::IS_LOCALHOST;
         $proxyDir = Env::BASE_PATH . "/tmp";
         $cache = null;
-        $config = ORMSetup::createAnnotationMetadataConfiguration(
-            array(__DIR__),
-            $isDevMode,
-            $proxyDir,
-            $cache,
+        $config = ORMSetup::createAttributeMetadataConfiguration(
+            paths: array(__DIR__),
+            isDevMode: $isDevMode,
+            proxyDir: $proxyDir,
+            cache: $cache,
         );
-
-        self::$logger = new DebugStack();
-
         $config->setAutoGenerateProxyClasses(true);
-        $config->setSQLLogger(self::$logger);
 
-        // database configuration parameters
+        # Log writing SQL queries
+        $middleware = new Middleware(new Logger());
+        $config->setMiddlewares([$middleware]);
+
         $connectionParams = [
             'dbname' => Env::DATABASE,
             'user' => Env::USER_NAME,
@@ -55,6 +43,8 @@ class DoctrineWrapper
             'host' => Env::HOST_NAME,
             'driver' => 'pdo_mysql',
         ];
-        self::$entity_manager = EntityManager::create($connectionParams, $config);
+        $connection = DriverManager::getConnection(params: $connectionParams, config: $config);
+
+        self::$entity_manager = new EntityManager($connection, $config);
     }
 }
