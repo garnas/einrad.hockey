@@ -25,13 +25,8 @@ class nTeam
     #[ORM\Column(name: "teamname", type: "string", length: 255, nullable: false)]
     private string $name;
 
-    /**
-     * @var Collection
-     *
-     */
     #[ORM\OneToMany(targetEntity: TurniereListe::class, mappedBy: "team", cascade: ["all"], indexBy: "turnier_id")]
     private Collection $turniereListe;
-
 
     #[ORM\OneToMany(targetEntity: Turnier::class, mappedBy: "ausrichter", cascade: ["all"], indexBy: "turnier_id")]
     private Collection $ausgerichteteTurniere;

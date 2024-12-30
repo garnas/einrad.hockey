@@ -14,28 +14,28 @@ class TeamDetails
     private int $team_id;
 
     #[ORM\Column(name: "plz", type: "string", length: 255, nullable: true)]
-    private string $plz;
+    private ?string $plz;
 
     #[ORM\Column(name: "ort", type: "string", length: 255, nullable: true)]
-    private string $ort;
+    private ?string $ort;
 
     #[ORM\Column(name: "verein", type: "string", length: 255, nullable: true)]
-    private string $verein;
+    private ?string $verein;
 
     #[ORM\Column(name: "homepage", type: "string", length: 255, nullable: true)]
-    private string $homepage;
+    private ?string $homepage;
 
     #[ORM\Column(name: "ligavertreter", type: "string", length: 255, nullable: true)]
-    private string $ligavertreter;
+    private ?string $ligavertreter;
 
     #[ORM\Column(name: "teamfoto", type: "string", length: 255, nullable: true)]
-    private string $teamfoto;
+    private ?string $teamfoto;
 
     #[ORM\Column(name: "trikot_farbe_1", type: "string", length: 9, nullable: true)]
-    private string $trikotFarbe1;
+    private ?string $trikotFarbe1;
 
     #[ORM\Column(name: "trikot_farbe_2", type: "string", length: 9, nullable: true)]
-    private string $trikotFarbe2;
+    private ?string $trikotFarbe2;
 
     public function getPlz(): ?string
     {

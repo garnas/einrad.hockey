@@ -70,7 +70,7 @@ class Turnier
     private SpielplanDetails $spielplanVorlage;
 
     #[ORM\JoinColumn(name: "ausrichter", referencedColumnName: "team_id")]
-    #[ORM\OneToOne(targetEntity: nTeam::class)]
+    #[ORM\ManyToOne(targetEntity: nTeam::class)]
     private nTeam $ausrichter;
 
     #[ORM\OneToOne(targetEntity: TurnierDetails::class, mappedBy: "turnier", cascade: ["all"])]
