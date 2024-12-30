@@ -653,12 +653,10 @@ class nTurnier
                     return ((int)$team_b->get_wertigkeit() <=> (int)$team_a->get_wertigkeit());
                 });
             }
-
-        }
-
-        if ($this->saison !== Config::SAISON) {
-            foreach ($spielenliste as $team_id => $team) {
-                $spielenliste[$team_id]->teamname = Team::id_to_name($team_id, $this->saison);
+            if ($this->saison !== Config::SAISON) {
+                foreach ($spielenliste as $team_id => $team) {
+                    $spielenliste[$team_id]->teamname = Team::id_to_name($team_id, $this->saison);
+                }
             }
         }
 
