@@ -14,12 +14,14 @@ Stellt neben dem Webserver die Datenbank und phpmyadmin als Client zur Verfügun
 # Setup
 ## Änderungen an der env.php
 - `BASE_URL = 'http://localhost'`
-- `DATABASE = 'db_localhost'`
 - `HOST_NAME = 'ligaseite-mariadb'`
+- `DATABASE = 'db_localhost'`
+- `USER_NAME = 'root'`
+- `PASSWORD = 'root'`
 
 ## Docker
 - Starten: `docker compose up -d`
   - Die Seite ist erreichbar: http://localhost:80
   - phpmyadmin ist erreichbar: http://localhost:8080
 - Beenden: `docker compose down`: Die Daten in der Datenbank bleiben erhalten
-- Beenden: `docker compose donw -b`: Die Datenbank wird vollständig zurückgesetzt
+- Beenden: `docker compose down -b`: Die Datenbank wird vollständig zurückgesetzt
