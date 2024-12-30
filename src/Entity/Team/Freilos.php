@@ -22,7 +22,8 @@ class Freilos
     #[ORM\Column(name: "freilos_id", type: "integer", nullable: false)]
     private int $freilosId;
 
-    #[ORM\Column(name: "gesetzt_am", type: "datetime", nullable: true, options: ["default" => "current_timestamp(1)"])] private ?DateTime $gesetztAm;
+    #[ORM\Column(name: "gesetzt_am", type: "datetime", nullable: true, options: ["default" => "current_timestamp(1)"])]
+    private ?DateTime $gesetztAm;
 
     public function getGesetztAm(): ?DateTime
     {
@@ -35,7 +36,8 @@ class Freilos
         return $this;
     }
 
-    #[ORM\Column(name: "erstellt_am", type: "datetime", nullable: false, options: ["default" => "current_timestamp(1)"])] private DateTime $erstelltAm;
+    #[ORM\Column(name: "erstellt_am", type: "datetime", nullable: false, options: ["default" => "current_timestamp(1)"])]
+    private DateTime $erstelltAm;
 
     public function getErstelltAm(): DateTime
     {
@@ -48,11 +50,13 @@ class Freilos
         return $this;
     }
 
-    #[ORM\Column(name: "grund", type: "string", nullable: false)] private string $grund;
+    #[ORM\Column(name: "grund", type: "string", nullable: false)]
+    private string $grund;
 
-    #[ORM\Column(name: "saison", type: "integer", nullable: false)] private int $saison = Config::SAISON;
+    #[ORM\Column(name: "saison", type: "integer", nullable: false)]
+    private int $saison = Config::SAISON;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Team\\nTeam", inversedBy: "freilos")]
+    #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "freilos")]
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
     private nTeam $team;
 
@@ -67,7 +71,9 @@ class Freilos
         return $this;
     }
 
-    #[ORM\OneToOne(targetEntity: "App\Entity\Turnier\Turnier")] #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")] private ?Turnier $turnier;
+    #[ORM\OneToOne(targetEntity: Turnier::class)]
+    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
+    private ?Turnier $turnier;
 
     public function getTurnier(): ?Turnier
     {

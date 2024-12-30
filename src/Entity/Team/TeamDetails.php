@@ -9,23 +9,33 @@ use Doctrine\ORM\Mapping as ORM;
 class TeamDetails
 {
 
-    #[ORM\Id] #[ORM\Column(name: "team_id", type: "integer")] private $team_id;
+    #[ORM\Id]
+    #[ORM\Column(name: "team_id", type: "integer")]
+    private int $team_id;
 
-    #[ORM\Column(name: "plz", type: "string", length: 255, nullable: true)] private $plz;
+    #[ORM\Column(name: "plz", type: "string", length: 255, nullable: true)]
+    private string $plz;
 
-    #[ORM\Column(name: "ort", type: "string", length: 255, nullable: true)] private $ort;
+    #[ORM\Column(name: "ort", type: "string", length: 255, nullable: true)]
+    private string $ort;
 
-    #[ORM\Column(name: "verein", type: "string", length: 255, nullable: true)] private $verein;
+    #[ORM\Column(name: "verein", type: "string", length: 255, nullable: true)]
+    private string $verein;
 
-    #[ORM\Column(name: "homepage", type: "string", length: 255, nullable: true)] private $homepage;
+    #[ORM\Column(name: "homepage", type: "string", length: 255, nullable: true)]
+    private string $homepage;
 
-    #[ORM\Column(name: "ligavertreter", type: "string", length: 255, nullable: true)] private $ligavertreter;
+    #[ORM\Column(name: "ligavertreter", type: "string", length: 255, nullable: true)]
+    private string $ligavertreter;
 
-    #[ORM\Column(name: "teamfoto", type: "string", length: 255, nullable: true)] private $teamfoto;
+    #[ORM\Column(name: "teamfoto", type: "string", length: 255, nullable: true)]
+    private string $teamfoto;
 
-    #[ORM\Column(name: "trikot_farbe_1", type: "string", length: 9, nullable: true)] private $trikotFarbe1;
+    #[ORM\Column(name: "trikot_farbe_1", type: "string", length: 9, nullable: true)]
+    private string $trikotFarbe1;
 
-    #[ORM\Column(name: "trikot_farbe_2", type: "string", length: 9, nullable: true)] private $trikotFarbe2;
+    #[ORM\Column(name: "trikot_farbe_2", type: "string", length: 9, nullable: true)]
+    private string $trikotFarbe2;
 
     public function getPlz(): ?string
     {

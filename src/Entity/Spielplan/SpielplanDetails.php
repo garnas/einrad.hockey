@@ -4,30 +4,46 @@ namespace App\Entity\Spielplan;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * SpielplanDetails
- *
- */
-#[ORM\Entity] #[ORM\Table(name: "spielplan_details", indexes: [new ORM\Index(name: "spielplan_paarung", columns: ["spielplan_paarung"])])] class SpielplanDetails
+#[ORM\Entity]
+#[ORM\Table(
+    name: "spielplan_details",
+    indexes: [
+        new ORM\Index(name: "spielplan_paarung", columns: ["spielplan_paarung"])
+    ])]
+class SpielplanDetails
 {
-    #[ORM\Id] #[ORM\GeneratedValue(strategy: "IDENTITY")] #[ORM\Column(name: "spielplan", type: "string", length: 30, nullable: false)] private $spielplan;
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: "IDENTITY")]
+    #[ORM\Column(name: "spielplan", type: "string", length: 30, nullable: false)]
+    private string $spielplan;
 
-    #[ORM\Column(name: "plaetze", type: "boolean", nullable: true)] private $plaetze;
+    #[ORM\Column(name: "plaetze", type: "integer", nullable: true)]
+    private int $plaetze;
 
-    #[ORM\Column(name: "anzahl_halbzeiten", type: "boolean", nullable: true)] private $anzahlHalbzeiten;
+    #[ORM\Column(name: "anzahl_halbzeiten", type: "integer", nullable: true)]
+    private int $anzahlHalbzeiten;
 
-    #[ORM\Column(name: "halbzeit_laenge", type: "boolean", nullable: true)] private $halbzeitLaenge;
+    #[ORM\Column(name: "halbzeit_laenge", type: "integer", nullable: true)]
+    private int $halbzeitLaenge;
 
-    #[ORM\Column(name: "puffer", type: "boolean", nullable: true)] private $puffer;
+    #[ORM\Column(name: "puffer", type: "integer", nullable: true)]
+    private int $puffer;
 
-    #[ORM\Column(name: "pausen", type: "string", length: 30, nullable: true, options: ["comment" => "nach Spiel,Minuten#next"])] private $pausen;
+    #[ORM\Column(
+        name: "pausen",
+        type: "string",
+        length: 30,
+        nullable: true,
+        options: ["comment" => "nach Spiel,Minuten#next"]
+    )]
+    private string $pausen;
 
-    #[ORM\Column(name: "faktor", type: "boolean", nullable: false, options: ["comment" => "Nur Nenner"])] private $faktor;
+    #[ORM\Column(name: "faktor", type: "integer", nullable: false, options: ["comment" => "Nur Nenner"])]
+    private int $faktor;
 
-    #[ORM\ManyToOne(targetEntity: "SpielplanPaarungen")]
+    #[ORM\ManyToOne(targetEntity: SpielplanPaarungen::class)]
     #[ORM\JoinColumn(name: "spielplan_paarung", referencedColumnName: "spielplan_paarung")]
     private SpielplanPaarungen $spielplanPaarung;
-
 
     public function getSpielplan(): ?string
     {

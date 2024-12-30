@@ -14,7 +14,8 @@ class SpielplanPaarungen
     private string $spielplanPaarung;
 
     #[ORM\Column(name: "spiel_id", type: "boolean", nullable: false)]
-    #[ORM\Id] #[ORM\GeneratedValue(strategy: "NONE")]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: "NONE")]
     private int $spielId;
 
     #[ORM\Column(name: "team_a", type: "int", nullable: false)]

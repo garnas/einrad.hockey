@@ -11,11 +11,8 @@ use Tabelle;
 use Helper;
 use Config;
 
-/**
- * TeamsLiga
- *
- */
-#[ORM\Entity] #[ORM\Table(name: "teams_liga", uniqueConstraints: [new ORM\UniqueConstraint(name: "teamname", columns: ["teamname"])])] class nTeam
+#[ORM\Entity]
+#[ORM\Table(name: "teams_liga", uniqueConstraints: [new ORM\UniqueConstraint(name: "teamname", columns: ["teamname"])])] class nTeam
 {
     /**
      * @var int
