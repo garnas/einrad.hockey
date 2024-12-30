@@ -1,5 +1,6 @@
 # Enviroment Einstellungen
 env.php
+.env
 
 # Webroot Dateien
 public/.htaccess
