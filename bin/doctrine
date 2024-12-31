@@ -1,0 +1,21 @@
+#!/usr/bin/env php
+<?php
+
+use App\Repository\DoctrineWrapper;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+
+require_once 'init.php';
+
+DoctrineWrapper::setup();
+$entityManager = DoctrineWrapper::manager();
+
+$commands = [
+    // If you want to add your own custom console commands,
+    // you can do so here.
+];
+
+ConsoleRunner::run(
+    new SingleManagerProvider($entityManager),
+    $commands
+);
