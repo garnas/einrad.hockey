@@ -24,7 +24,8 @@ services:
     volumes:
       - 'mariadb-data:/var/lib/mysql/'
       - ./_localhost/db_localhost.sql:/docker-entrypoint-initdb.d/db_localhost.sql
-
+    ports:
+      - '3306:3306'
   phpmyadmin:
     image: phpmyadmin
     container_name: ligaseite-phpmyadmin
