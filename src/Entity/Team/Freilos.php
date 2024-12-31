@@ -75,12 +75,27 @@ class Freilos
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id", nullable: true)]
     private ?Turnier $turnier;
 
+    #[ORM\OneToOne(targetEntity: Turnier::class)]
+    #[ORM\JoinColumn(name: "ausgerichtete_turnier_id", referencedColumnName: "turnier_id", nullable: True)]
+    private ?Turnier $turnierAusgerichtet;
+
+    public function getTurnierAusgerichtet(): ?Turnier
+    {
+        return $this->turnierAusgerichtet;
+    }
+
+    public function setTurnierAusgerichtet(?Turnier $turnierAusgerichtet): Freilos
+    {
+        $this->turnierAusgerichtet = $turnierAusgerichtet;
+        return $this;
+    }
+
     public function getTurnier(): ?Turnier
     {
         return $this->turnier;
     }
 
-    public function setTurnier(Turnier $turnier): Freilos
+    public function setTurnier(?Turnier $turnier): Freilos
     {
         $this->turnier = $turnier;
         return $this;

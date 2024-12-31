@@ -108,12 +108,6 @@ class nTeam
     #[ORM\Column(name: "passwort_geaendert", type: "string", length: 0, nullable: false, options: ["default" => "Nein"])]
     private string $passwortGeaendert = 'Nein';
 
-    #[ORM\Column(name: "freilose", type: "integer", nullable: true)]
-    private ?int $freilose_old;
-
-    #[ORM\Column(name: "zweites_freilos", type: "date", nullable: true, options: ["comment" => "2 Schiris 2 Freilose"])]
-    private ?DateTime $zweitesFreilos;
-
     #[ORM\Column(name: "aktiv", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])]
     private string $aktiv = 'Ja';
 
@@ -205,30 +199,6 @@ class nTeam
         return $this;
     }
 
-    public function getFreiloseOld(): ?int
-    {
-        return $this->freilose_old;
-    }
-
-    public function setFreiloseOld(?int $freilose_old): self
-    {
-        $this->freilose_old = $freilose_old;
-
-        return $this;
-    }
-
-    public function getZweitesFreilos(): ?DateTime
-    {
-        return $this->zweitesFreilos;
-    }
-
-    public function setZweitesFreilos(?DateTime $zweitesFreilos): self
-    {
-        $this->zweitesFreilos = $zweitesFreilos;
-
-        return $this;
-    }
-
     public function getAktiv(): ?string
     {
         return $this->aktiv;
@@ -259,13 +229,14 @@ class nTeam
         return $this->aktiv === 'Ja';
     }
 
-    public function addFreilos(FreilosGrund $grund, int $saison = Config::SAISON): nTeam
+    public function addFreilos(FreilosGrund $grund, int $saison = Config::SAISON, ?Turnier $turnierAusgerichtet = NULL): nTeam
     {
-        $freilos = new Freilos();
-        $freilos->setTeam($this);
-        $freilos->setErstelltAm();
-        $freilos->setGrund($grund);
-        $freilos->setSaison($saison);
+        $freilos = (new Freilos())
+            ->setTeam($this)
+            ->setErstelltAm()
+            ->setGrund($grund)
+            ->setTurnierAusgerichtet($turnierAusgerichtet)
+            ->setSaison($saison);
         $this->freilose[] = $freilos;
         return $this;
     }
@@ -278,6 +249,9 @@ class nTeam
         return $this->freilose->filter($filter);
     }
 
+    /**
+     * @return Collection|array|Freilos[]
+     */
     public function getFreiloseBySaison(int $saison = Config::SAISON): Collection|array
     {
         $filter = static function (Freilos $f) use ($saison) {

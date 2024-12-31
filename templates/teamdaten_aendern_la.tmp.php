@@ -15,7 +15,8 @@ use App\Entity\Team\FreilosGrund;
                            class='w3-input w3-border w3-border-primary'
                            type='text'
                            id='teamname'
-                           name='teamname'
+                           name='teamname
+                           <?php /** @var \App\Entity\Team\nTeam $team */ ?>
                            value='<?= $team->getName() ?>'
                     >
                 </p>
