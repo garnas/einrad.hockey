@@ -26,11 +26,11 @@ use Doctrine\ORM\Mapping as ORM;
     #[ORM\Column(name: "inhalt", type: "string", length: 2000, nullable: false)]
     private string $inhalt;
 
-    #[ORM\Column(name: "mail_status", type: "string", length: 0, nullable: false)]
+    #[ORM\Column(name: "mail_status", type: "string", length: 255, nullable: false)]
     private string $mailStatus;
 
     #[ORM\Column(name: "fehler", type: "string", length: 300, nullable: true)]
-    private ?string $fehler = '';
+    private ?string $fehler = NULL;
 
     #[ORM\Column(name: "zeit", type: "datetime", nullable: false, options: ["default" => "CURRENT_TIMESTAMP"])]
     private DateTime $zeit;

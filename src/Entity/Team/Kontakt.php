@@ -22,7 +22,7 @@ class Kontakt
     #[ORM\Column(name: "get_info_mail", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])]
     private string $getInfoMail = 'Ja';
 
-    #[ORM\ManyToOne(targetEntity: nTeam::class)]
+    #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "emails")]
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
     private nTeam $team;
 

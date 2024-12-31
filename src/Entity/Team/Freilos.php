@@ -56,7 +56,7 @@ class Freilos
     #[ORM\Column(name: "saison", type: "integer", nullable: false)]
     private int $saison = Config::SAISON;
 
-    #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "freilos")]
+    #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "freilose")]
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
     private nTeam $team;
 

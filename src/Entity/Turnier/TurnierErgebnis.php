@@ -15,13 +15,19 @@ class TurnierErgebnis
     #[ORM\Column(name: "turnier_ergebnis_id", type: "integer", nullable: false)]
     private $turnierErgebnisId;
 
-    #[ORM\Column(name: "ergebnis", type: "integer", nullable: true)] private $ergebnis;
+    #[ORM\Column(name: "ergebnis", type: "integer", nullable: true)]
+    private int $ergebnis;
 
-    #[ORM\Column(name: "platz", type: "integer", nullable: false)] private $platz;
+    #[ORM\Column(name: "platz", type: "integer", nullable: false)]
+    private int $platz;
 
-    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")] #[ORM\OneToOne(targetEntity: "App\Entity\Team\\nTeam")] private nTeam $team;
+    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
+    #[ORM\OneToOne(targetEntity: nTeam::class)]
+    private nTeam $team;
 
-    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")] #[ORM\ManyToOne(targetEntity: "App\Entity\Turnier\Turnier", inversedBy: "turnier")] private Turnier $turnier;
+    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
+    #[ORM\ManyToOne(targetEntity: Turnier::class, inversedBy: "ergebnis")]
+    private Turnier $turnier;
 
     public function getTurnierErgebnisId(): ?int
     {

@@ -4,10 +4,6 @@ namespace App\Entity\Turnier;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * TurniereBerichte
- *
- */
 #[ORM\Entity]
 #[ORM\Table(
     name: "turniere_berichte",
@@ -19,12 +15,15 @@ class TurnierBericht
 {
 
     #[ORM\OneToOne(targetEntity: Turnier::class)]
-    #[ORM\Id]
+    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
     private Turnier $turnier;
 
     #[ORM\Column(name: "turnier_id", type: "integer")]
-    #[ORM\Id]
     private int $turnierId;
+
+    #[ORM\Column(name: "bericht_id", type: "integer")]
+    #[ORM\Id]
+    private int $berichtId;
 
     #[ORM\Column(name: "bericht", type: "string", length: 1900, nullable: false)]
     private string $bericht;
