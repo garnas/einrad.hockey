@@ -1,4 +1,3 @@
-php bin/doctrine orm:clear-cache:metadata
-php bin/doctrine orm:clear-cache:query
-php bin/doctrine orm:clear-cache:result
-php bin/doctrine orm:generate-proxies
+/usr/bin/php8.3-cli bin/doctrine orm:clear-cache:metadata
+/usr/bin/php8.3-cli bin/doctrine orm:clear-cache:query
+/usr/bin/php8.3-cli bin/doctrine orm:generate-proxies
