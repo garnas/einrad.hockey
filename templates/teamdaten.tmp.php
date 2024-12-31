@@ -1,8 +1,9 @@
 <?php
 
+use App\Service\Team\FreilosService;
 use App\Service\Team\TeamService;
-use App\Service\Team\TeamValidator;
 use App\Service\Team\TeamSnippets;
+use App\Service\Team\TeamValidator;
 use App\Service\Turnier\TurnierSnippets;
 
 ?>
@@ -82,14 +83,14 @@ use App\Service\Turnier\TurnierSnippets;
             <tr>
                 <th class="w3-primary">Gesetzte Freilose</th>
                 <td>
-                    <?php if (TeamService::getGesetzteFreilose($teamEntity)->isEmpty()): ?>
+                    <?php if (FreilosService::getGesetzteFreilose($teamEntity)->isEmpty()): ?>
                         --
                     <?php endif; ?>
-                    <?php foreach (TeamService::getGesetzteFreilose($teamEntity) as $anmeldung): ?>
+                    <?php foreach (FreilosService::getGesetzteFreilose($teamEntity) as $anmeldung): ?>
                         <p>
                             Freilos gesetzt am <?= $anmeldung->getFreilosGesetztAm()->format("d.m.Y") ?> für das Turnier
                             <?= TurnierSnippets::ortDatumBlock($anmeldung->getTurnier()) ?>
-                            <?php if(TeamService::isFreilosRecyclebar($anmeldung)): ?>
+                            <?php if(FreilosService::isFreilosRecyclebar($anmeldung)): ?>
                                 <br>
                                 <span class="w3-text-green">Dieses Freilos könnt ihr auf Antrag beim Ligaausschuss zurückerhalten</span>
                             <?php endif; ?>
@@ -107,7 +108,7 @@ use App\Service\Turnier\TurnierSnippets;
                         <p>
                              Turnier in <?= TurnierSnippets::ortDatumBlock($turnier) ?> eingetragen am
                              <?= $turnier->getErstelltAm()->format("d.m.Y") ?>
-                            <?php if(TeamService::isAusrichterFreilosBerechtigt($turnier)
+                            <?php if(FreilosService::isAusrichterFreilosBerechtigt($turnier)
                                 && !$turnier->isCanceled()): ?>
                                 <br>
                                 <span class="w3-text-green">Für dieses Turnier könnt ihr nach dem Turnier ein Freilos
