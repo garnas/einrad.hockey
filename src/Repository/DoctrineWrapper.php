@@ -25,7 +25,7 @@ class DoctrineWrapper
         $proxyDir = Env::BASE_PATH . "/tmp";
         $cache = null;
         $config = ORMSetup::createAttributeMetadataConfiguration(
-            paths: array(__DIR__),
+            paths: array(Env::BASE_PATH . "/src"),
             isDevMode: $isDevMode,
             proxyDir: $proxyDir,
             cache: $cache,
