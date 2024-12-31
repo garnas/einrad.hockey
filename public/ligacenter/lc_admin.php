@@ -72,6 +72,10 @@ if (isset($_POST['gitpull'])){
 
             Helper::log("git.log", $output ?? 'EMPTY OUTPUT');
             db::debug($output);
+            $output = shell_exec("sh " . Env::BASE_PATH . "/system/shell/doctrine.sh");
+            Helper::log("doctrine.log", $output ?? 'EMPTY OUTPUT');
+            db::debug($output);
+
             Helper::reload();
 
         } else {
