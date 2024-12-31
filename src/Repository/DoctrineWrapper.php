@@ -21,16 +21,23 @@ class DoctrineWrapper
 
     public static function setup(): void
     {
-        $isDevMode = Env::IS_LOCALHOST;
-        $proxyDir = Env::BASE_PATH . "/tmp";
-        $cache = null;
-        $config = ORMSetup::createAttributeMetadataConfiguration(
-            paths: array(Env::BASE_PATH . "/src"),
-            isDevMode: $isDevMode,
-            proxyDir: $proxyDir,
-            cache: $cache,
-        );
-        $config->setAutoGenerateProxyClasses(true);
+        $isDevMode = ENV::IS_LOCALHOST;
+
+        $config = new Configuration();
+
+        $driverImpl = new AttributeDriver(paths: [Env::BASE_PATH . "/src/Entity"]);
+        $config->setMetadataDriverImpl($driverImpl);
+
+        $queryCache = ($isDevMode ? (new ArrayAdapter()) : (new PhpFilesAdapter("doctrine_queries")));
+        $config->setQueryCache($queryCache);
+
+        $metadataCache = ($isDevMode ? (new ArrayAdapter()) : (new PhpFilesAdapter("doctrine_metadata")));
+        $config->setMetadataCache($metadataCache);
+
+        $config->setProxyDir(Env::BASE_PATH . "/tmp");
+        $config->setProxyNamespace("App\Proxies");
+
+        $config->setAutoGenerateProxyClasses($isDevMode);
 
         # Log writing SQL queries
         $middleware = new Middleware(new Logger());
