@@ -1,6 +1,9 @@
 # einrad.hockey-Website
 ![Logo der Einradhockeyliga](https://einrad.hockey/bilder/logo_lang_small.png)
 
+
+php -d xdebug.mode=debug -d xdebug.client_host=127.0.0.1 -d xdebug.client_port=9003 -d xdebug.start_with_request=yes bin/doctrine
+
 Dies ist der Code der Website [einrad.hockey](https://einrad.hockey) der Deutschen Einradhockeyliga.
 
 einrad.hockey verwendet sein eigenes Framework. Dieses wurde von mir entwickelt, um Interessierten im Einradhockey 

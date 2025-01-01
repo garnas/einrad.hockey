@@ -1,6 +1,5 @@
 <?php
 
-// Turnier-ID
 $turnier_id = (int) @$_GET['turnier_id'];
 
 Spielplan_Final::routeToFinalSpielplan($turnier_id); // Todo, allgemeiner Router für spezialspielpläne?

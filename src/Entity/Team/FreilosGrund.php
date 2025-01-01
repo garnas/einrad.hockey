@@ -6,7 +6,7 @@ enum FreilosGrund: string
 {
     case SCHIRI = "Freilos für Schiris";
     case TURNIER_AUSGERICHTET = "Freilos für Turnierausrichtung";
-    case FREILOS_GESETZT = "Zurückerstattes Freilos";
+    case FREILOS_GESETZT = "Freilos für frühzeitig gesetztes Freilos";
     case SONSTIGES = "Freilos";
 
     public static function fromName(string $name): FreilosGrund

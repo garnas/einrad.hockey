@@ -3,7 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 use App\Repository\Team\TeamRepository;
-use App\Service\Team\TeamService;
+use App\Service\Team\FreilosService;
 
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
@@ -44,7 +44,7 @@ if (isset($_POST['spieler_aendern'])) {
 
         Html::info("Spielerdaten wurden gespeichert.");
         $team = TeamRepository::get()->team($spieler->team_id);
-        if (TeamService::handleSchiriFreilos($team)) {
+        if (FreilosService::handleSchiriFreilos($team)) {
             TeamRepository::get()->speichern($team);
             Html::info("Schirifreilos erhalten!");
         }

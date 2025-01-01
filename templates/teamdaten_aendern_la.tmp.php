@@ -2,6 +2,7 @@
 
 use App\Entity\Team\Freilos;
 use App\Entity\Team\FreilosGrund;
+use App\Service\Team\TeamSnippets;
 
 ?>
 <div class="w3-card-4 w3-responsive w3-panel">
@@ -38,7 +39,12 @@ use App\Entity\Team\FreilosGrund;
                     >
                         <option value='NO_CHANGE'>Auswählen zum Hinzufügen</option>
                         <?php foreach (FreilosGrund::cases() as $grund): ?>
-                            <option value=<?= $grund->name ?>><?= $grund->value ?></option>
+                            <option
+                                <?= ($grund == FreilosGrund::TURNIER_AUSGERICHTET
+                                    || $grund == FreilosGrund::FREILOS_GESETZT)
+                                    ? "disabled" : ""
+                                ?>
+                                    value=<?= $grund->name ?>><?= $grund->value ?></option>
                         <?php endforeach; ?>
                     </select>
                 </p>
@@ -55,6 +61,10 @@ use App\Entity\Team\FreilosGrund;
                     </select>
                 </p>
             </div>
+        </div>
+        <div class="w3-container">
+            <h3 class="w3-text-grey"><?= $team->getOffeneFreilose()->count() ?> Freilose</h3>
+            <div class="w3-section"><?= TeamSnippets::freilose($team) ?></div>
         </div>
         <div class="w3-container">
             <?php if ($team->getOffeneFreilose()->count() > 0): ?>

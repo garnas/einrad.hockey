@@ -1,12 +1,17 @@
 <?php
+
 use App\Event\Turnier\nLigaBot;
+use App\Repository\DoctrineWrapper;
+use App\Repository\Turnier\TurnierRepository;
+use App\Service\Team\FreilosService;
+
+$turnierEntity = TurnierRepository::get()->turnier($turnier_id);
 
 // Besteht die Berechtigung das Turnier zu bearbeiten?
 if(!Helper::$ligacenter){ // Ligacenter darf alles.
     if ((Helper::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $spielplan->turnier->get_ausrichter())){
         Html::error("Nur der Ausrichter kann Spielergebnisse eintragen");
-        header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
-        die();
+        Helper::reload("/liga/spielplan.php", '?turnier_id=' . $turnier_id);
     }
 
     // Wird das Turnierergebnis rechtzeitig eingetragen?
@@ -45,9 +50,8 @@ if (isset($_POST["tore_speichern"])) {
         Discord::tickerUpdate($spiel);
     }
 
-    Html::info('Spielergebnisse wurden gespeichert');
-    header('Location: ' . db::escape($_SERVER['REQUEST_URI']));
-    die();
+    Html::info("Spielergebnisse wurden gespeichert.");
+    Helper::reload(get: "?turnier_id=" . $turnier_id);
 }
 
 //Turnierergebnisse speichern
@@ -78,8 +82,10 @@ if (isset($_POST["turnierergebnis_speichern"])) {
         if (Tabelle::is_spieltag_beendet($spieltag)) {
             nLigaBot::blockWechsel();
         }
-        header('Location: ' . db::escape($_SERVER['REQUEST_URI']));
-        die();
+        DoctrineWrapper::manager()->refresh($turnierEntity); # Doctrine erkennt die Änderungen in set_ergebnisse nicht.
+        FreilosService::handleAusgerichtetesTurnierFreilos($turnierEntity);
+        FreilosService::handleFreilosRecycling($turnierEntity);
+        Helper::reload(get: "?turnier_id=" . $turnier_id);
     }
 
 }
@@ -113,5 +119,15 @@ if (!empty($vgl_data)) {
     }
     if ($error) {
         Html::notice("Turnierergebnis stimmt nicht mit dem in der Datenbank hinterlegtem Ergebnis überein.");
+    }
+}
+
+if (
+    FreilosService::isAusrichterFreilosBerechtigt($turnierEntity)
+) {
+    if (FreilosService::hasAusrichterFreilosForAusgerichtetesTurnier($turnierEntity)) {
+        HTML::info("Für dieses Turnier habt ihr mit Ergebniseintragung ein Freilos erhalten.");
+    } else {
+        HTML::notice("Für dieses Turnier erhaltet ihr mit Ergebniseintragung ein Freilos.");
     }
 }
