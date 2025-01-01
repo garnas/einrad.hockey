@@ -28,15 +28,22 @@ class FreilosService
         return $turnier->getAusrichter()->getFreiloseBySaison()->filter($filter)->count() > 0;
     }
 
+    public static function validateAusgerichtetesTurnierFreilos(Turnier $turnier): bool
+    {
+        $team = $turnier->getAusrichter();
+        return (
+            $turnier->getSaison() == Config::SAISON
+            && self::isAusrichterFreilosBerechtigt($turnier)
+            && !self::hasAusrichterFreilosForAusgerichtetesTurnier($turnier)
+            && !self::hasZweiAusgerichteteTurnierFreilose($team)
+        );
+    }
     public static function handleAusgerichtetesTurnierFreilos(Turnier $turnier, bool $sendMail = True): bool
     {
         $team = $turnier->getAusrichter();
         if (
             $turnier->isErgebnisPhase()
-            && $turnier->getSaison() == Config::SAISON
-            && self::isAusrichterFreilosBerechtigt($turnier)
-            && !self::hasAusrichterFreilosForAusgerichtetesTurnier($turnier)
-            && !self::hasZweiAusgerichteteTurnierFreilose($team)
+            && self::validateAusgerichtetesTurnierFreilos($turnier)
         ) {
             $team->addFreilos(
                 grund: FreilosGrund::TURNIER_AUSGERICHTET,

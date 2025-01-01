@@ -74,28 +74,10 @@ use App\Service\Turnier\TurnierSnippets;
                     <p>Verfügbare Freilose: <?= $teamEntity->getAnzahlOffenerFreilose() ?></p>
                     <?= TeamSnippets::freilose($teamEntity) ?>
                     <?php if(!TeamValidator::hasSchiriFreilosErhalten($teamEntity)): ?>
-                        <span class="w3-text-grey">
+                        <p class="w3-text-grey">
                              Dein Team hat noch kein Freilos für zwei Schiedsrichter erhalten.
-                        </span>
-                    <?php endif; ?>
-                </td>
-            </tr>
-            <tr>
-                <th class="w3-primary">Gesetzte Freilose</th>
-                <td>
-                    <?php if (FreilosService::getGesetzteFreilose($teamEntity)->isEmpty()): ?>
-                        --
-                    <?php endif; ?>
-                    <?php foreach (FreilosService::getGesetzteFreilose($teamEntity) as $anmeldung): ?>
-                        <p>
-                            Freilos gesetzt am <?= $anmeldung->getFreilosGesetztAm()->format("d.m.Y") ?> für das Turnier
-                            <?= TurnierSnippets::ortDatumBlock($anmeldung->getTurnier()) ?>
-                            <?php if(FreilosService::isFreilosRecyclebar($anmeldung)): ?>
-                                <br>
-                                <span class="w3-text-green">Dieses Freilos erhaltet ihr nach Eintragung der Turnierergebnisse zurück.</span>
-                            <?php endif; ?>
                         </p>
-                    <?php endforeach; ?>
+                    <?php endif; ?>
                 </td>
             </tr>
             <tr>
@@ -108,8 +90,7 @@ use App\Service\Turnier\TurnierSnippets;
                         <p>
                              Turnier in <?= TurnierSnippets::ortDatumBlock($turnier) ?> eingetragen am
                              <?= $turnier->getErstelltAm()->format("d.m.Y") ?>
-                            <?php if(FreilosService::isAusrichterFreilosBerechtigt($turnier)
-                                && !$turnier->isCanceled()): ?>
+                            <?php if(FreilosService::validateAusgerichtetesTurnierFreilos($turnier)): ?>
                                 <br>
                                 <span class="w3-text-green">Für dieses Turnier könnt ihr nach dem Turnier ein Freilos
                                     erhalten (insgesamt 2x möglich)</span>

@@ -248,6 +248,9 @@ class nTeam
         return $this;
     }
 
+    /**
+     * @return Collection|array|Freilos[]
+     */
     public function getGueltigeFreilose(): Collection|array
     {
         $filter = static function (Freilos $f) {
