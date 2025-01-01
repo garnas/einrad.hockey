@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+
+use App\Repository\DoctrineWrapper;
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+
+require_once 'init.php';
+
+DoctrineWrapper::setup();
+$entityManager = DoctrineWrapper::manager();
+
+
+ConsoleRunner::run(new SingleManagerProvider($entityManager));

@@ -22,7 +22,7 @@ class Freilos
     #[ORM\Column(name: "freilos_id", type: "integer", nullable: false)]
     private int $freilosId;
 
-    #[ORM\Column(name: "gesetzt_am", type: "datetime", nullable: true, options: ["default" => "current_timestamp(1)"])]
+    #[ORM\Column(name: "gesetzt_am", type: "datetime", nullable: true)]
     private ?DateTime $gesetztAm;
 
     public function getGesetztAm(): ?DateTime
@@ -56,7 +56,7 @@ class Freilos
     #[ORM\Column(name: "saison", type: "integer", nullable: false)]
     private int $saison = Config::SAISON;
 
-    #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "freilos")]
+    #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "freilose")]
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
     private nTeam $team;
 
@@ -71,8 +71,8 @@ class Freilos
         return $this;
     }
 
-    #[ORM\OneToOne(targetEntity: Turnier::class)]
-    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
+    #[ORM\ManyToOne(targetEntity: Turnier::class)]
+    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id", nullable: true)]
     private ?Turnier $turnier;
 
     public function getTurnier(): ?Turnier

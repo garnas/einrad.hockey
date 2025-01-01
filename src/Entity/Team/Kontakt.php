@@ -16,13 +16,13 @@ class Kontakt
     #[ORM\Column(name: "email", type: "string", length: 255, nullable: false)]
     private string $email;
 
-    #[ORM\Column(name: "public", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])]
+    #[ORM\Column(name: "public", type: "string", length: 255, nullable: false, options: ["default" => "Ja"])]
     private string $public = 'Ja';
 
-    #[ORM\Column(name: "get_info_mail", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])]
+    #[ORM\Column(name: "get_info_mail", type: "string", length: 255, nullable: false, options: ["default" => "Ja"])]
     private string $getInfoMail = 'Ja';
 
-    #[ORM\ManyToOne(targetEntity: nTeam::class)]
+    #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "emails")]
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
     private nTeam $team;
 
