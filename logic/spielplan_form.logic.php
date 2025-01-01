@@ -1,12 +1,15 @@
 <?php
+
 use App\Event\Turnier\nLigaBot;
+use App\Repository\DoctrineWrapper;
+use App\Repository\Turnier\TurnierRepository;
+use App\Service\Team\FreilosService;
 
 // Besteht die Berechtigung das Turnier zu bearbeiten?
 if(!Helper::$ligacenter){ // Ligacenter darf alles.
     if ((Helper::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $spielplan->turnier->get_ausrichter())){
         Html::error("Nur der Ausrichter kann Spielergebnisse eintragen");
-        header('Location: ../liga/spielplan.php?turnier_id=' . $turnier_id);
-        die();
+        Helper::reload("/liga/spielplan.php", '?turnier_id=' . $turnier_id);
     }
 
     // Wird das Turnierergebnis rechtzeitig eingetragen?
@@ -45,9 +48,8 @@ if (isset($_POST["tore_speichern"])) {
         Discord::tickerUpdate($spiel);
     }
 
-    Html::info('Spielergebnisse wurden gespeichert');
-    header('Location: ' . db::escape($_SERVER['REQUEST_URI']));
-    die();
+    Html::info("Spielergebnisse wurden gespeichert.");
+    Helper::reload(get: "?turnier_id=" . $turnier_id);
 }
 
 //Turnierergebnisse speichern
@@ -78,8 +80,9 @@ if (isset($_POST["turnierergebnis_speichern"])) {
         if (Tabelle::is_spieltag_beendet($spieltag)) {
             nLigaBot::blockWechsel();
         }
-        header('Location: ' . db::escape($_SERVER['REQUEST_URI']));
-        die();
+        DoctrineWrapper::manager()->refresh($turnierEntity); # Doctrine erkennt die Änderungen in set_ergebnisse nicht.
+        FreilosService::handleAusgerichtetesTurnierFreilos($turnierEntity);
+        Helper::reload(get: "?turnier_id=" . $turnier_id);
     }
 
 }

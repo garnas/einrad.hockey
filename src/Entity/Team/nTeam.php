@@ -80,6 +80,7 @@ class nTeam
     public function __construct() {
         $this->turniereListe = new ArrayCollection();
         $this->ausgerichteteTurniere = new ArrayCollection();
+        $this->freilose = new ArrayCollection();
     }
 
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]

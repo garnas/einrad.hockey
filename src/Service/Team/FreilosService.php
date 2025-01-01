@@ -19,13 +19,13 @@ use MailBot;
 class FreilosService
 {
 
-    public static function hasFreilosForAusgerichtetesTurnier(nTeam $team, Turnier $turnier): bool
+    public static function hasAusrichterFreilosForAusgerichtetesTurnier(Turnier $turnier): bool
     {
         $tunier_id = $turnier->id();
         $filter = static function (Freilos $f) use ($tunier_id) {
             return ($f->getTurnierAusgerichtet() !== null && $f->getTurnierAusgerichtet()->id() == $tunier_id);
         };
-        return $team->getFreiloseBySaison()->filter($filter)->count() > 0;
+        return $turnier->getAusrichter()->getFreiloseBySaison()->filter($filter)->count() > 0;
     }
 
     public static function handleAusgerichtetesTurnierFreilos(Turnier $turnier, bool $sendMail = True): bool
@@ -35,7 +35,7 @@ class FreilosService
             $turnier->isErgebnisPhase()
             && $turnier->getSaison() == Config::SAISON
             && self::isAusrichterFreilosBerechtigt($turnier)
-            && !self::hasFreilosForAusgerichtetesTurnier($team, $turnier)
+            && !self::hasAusrichterFreilosForAusgerichtetesTurnier($turnier)
             && !self::hasZweiAusgerichteteTurnierFreilose($team)
         ) {
             $team->addFreilos(
