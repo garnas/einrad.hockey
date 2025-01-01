@@ -37,7 +37,18 @@ class TeamSnippets
             $html .= $freilos->getGrund()->value;
             $html .= " (Saison " . Html::get_saison_string($freilos->getSaison()) . ")";
             $html .= ($freilos->isGesetzt()) ? "</s>" : "</span>";
+            $html .= "<br><span class='w3-text-grey'>Erhalten am " . $freilos->getErstelltAm()->format("d.m.Y") . "</span>";
 
+            if ($freilos->getTurnierAusgerichtet()) {
+                $html .= "<br><span class='w3-text-grey'>(";
+                $html .= TurnierSnippets::ortDatumBlock($freilos->getTurnierAusgerichtet());
+                $html .= ")</span>";
+            }
+            if ($freilos->getVorherigesFreilos()) {
+                $html .= "<br><span class='w3-text-grey'>(";
+                $html .=  TurnierSnippets::ortDatumBlock($freilos->getVorherigesFreilos()->getTurnier());
+                $html .= ")</span>";
+            }
             if ($freilos->isGesetzt()) {
                 $html .= "<span class='w3-text-grey'>";
                 $html .= "<br>Gesetzt am " . $freilos->getGesetztAm()->format("d.m.Y");
@@ -45,14 +56,10 @@ class TeamSnippets
                 $html .= " für " .TurnierSnippets::ortDatumBlock(turnier: $turnier, html: false);
                 $html .= "</span>";
             }
-            if ($freilos->getTurnierAusgerichtet()) {
-                $html .= "<br><span class='w3-text-grey'>";
-                $html .= TurnierSnippets::ortDatumBlock($freilos->getTurnierAusgerichtet());
-                $html .= "</span>";
-            }
             if ($freilos->isGesetzt() && FreilosService::validateFreilosRecycling($freilos)) {
                 $html .= "<br><span class='w3-text-green'>Nach dem Turnier erhaltet ihr ein neues Freilos.</span>";
             }
+
             $html .= "</li>";
         }
         $html .= '</ul>';
