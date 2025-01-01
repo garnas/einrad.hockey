@@ -42,7 +42,7 @@ class FreilosService
                 grund: FreilosGrund::TURNIER_AUSGERICHTET,
                 turnierAusgerichtet: $turnier
             );
-            Html::info("Freilos" . $turnier->id() . " für " . $team->getName());
+            Html::info("Das Team " . $team->getName() . " hat ein Freilos für ihr frühzeitig ausgeschriebenes Turnier erhalten.");
             TeamRepository::get()->speichern($team);
             if ($sendMail) {
                 Mailbot::mail_ausrichter_freilos($team);
@@ -150,7 +150,7 @@ class FreilosService
                 $vorherigesFreilos = $team->getGueltigeFreilose()->filter($filter)->first() ?: null;
                 $team->addFreilos(FreilosGrund::FREILOS_GESETZT, vorherigesFreilos: $vorherigesFreilos);
                 TeamRepository::get()->speichern($team);
-                Html::info($team->getName() . " neues Freilos erhalten für frühzeitig gesetztes Freilos.");
+                Html::info("Das Team " . $team->getName() . " hat ein neues Freilos erhalten für ihr frühzeitig gesetztes Freilos.");
             }
         }
 

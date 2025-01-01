@@ -2,7 +2,10 @@
 
 use App\Event\Turnier\nLigaBot;
 use App\Repository\DoctrineWrapper;
+use App\Repository\Turnier\TurnierRepository;
 use App\Service\Team\FreilosService;
+
+$turnierEntity = TurnierRepository::get()->turnier($turnier_id);
 
 // Besteht die Berechtigung das Turnier zu bearbeiten?
 if(!Helper::$ligacenter){ // Ligacenter darf alles.
@@ -81,6 +84,7 @@ if (isset($_POST["turnierergebnis_speichern"])) {
         }
         DoctrineWrapper::manager()->refresh($turnierEntity); # Doctrine erkennt die Änderungen in set_ergebnisse nicht.
         FreilosService::handleAusgerichtetesTurnierFreilos($turnierEntity);
+        FreilosService::handleFreilosRecycling($turnierEntity);
         Helper::reload(get: "?turnier_id=" . $turnier_id);
     }
 
@@ -115,5 +119,15 @@ if (!empty($vgl_data)) {
     }
     if ($error) {
         Html::notice("Turnierergebnis stimmt nicht mit dem in der Datenbank hinterlegtem Ergebnis überein.");
+    }
+}
+
+if (
+    FreilosService::isAusrichterFreilosBerechtigt($turnierEntity)
+) {
+    if (FreilosService::hasAusrichterFreilosForAusgerichtetesTurnier($turnierEntity)) {
+        HTML::info("Für dieses Turnier habt ihr mit Ergebniseintragung ein Freilos erhalten.");
+    } else {
+        HTML::notice("Für dieses Turnier erhaltet ihr mit Ergebniseintragung ein Freilos.");
     }
 }

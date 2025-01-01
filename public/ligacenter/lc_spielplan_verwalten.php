@@ -28,8 +28,7 @@ if (isset($_POST['ergebnis_loeschen'])) {
     $turnier->delete_ergebnis();
     $turnier->update_phase('spielplan');
     Html::info("Ergebnis wurde gelöscht. Das Turnier wurde in die Spielplanphase versetzt.");
-    header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->get_turnier_id());
-    die();
+    Helper::reload(get: "?turnier_id=" . $turnier->get_turnier_id());
 }
 
 //Ergebnis eintragen
@@ -65,6 +64,7 @@ if (isset($_POST['ergebnis_eintragen'])) {
     }
     $turnierEntity = TurnierRepository::get()->turnier($turnier_id);
     FreilosService::handleAusgerichtetesTurnierFreilos($turnierEntity);
+    FreilosService::handleFreilosRecycling($turnierEntity);
     Helper::reload(get: "?turnier_id=" . $turnier->get_turnier_id());
 }
 
