@@ -3,6 +3,8 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 use App\Event\Turnier\nLigaBot;
+use App\Repository\Turnier\TurnierRepository;
+use App\Service\Team\FreilosService;
 
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
@@ -48,8 +50,7 @@ if (isset($_POST['ergebnis_eintragen'])) {
         }
     }
     if ($error ?? false) {
-        header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->get_turnier_id());
-        die();
+        Helper::reload(get: "?turnier_id=" . $turnier->get_turnier_id());
     }
     // Kein Fehler
     $turnier->delete_ergebnis();
@@ -62,8 +63,9 @@ if (isset($_POST['ergebnis_eintragen'])) {
     if (Tabelle::is_spieltag_beendet($spieltag)) {
         nLigaBot::blockWechsel();
     }
-    header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->get_turnier_id());
-    die();
+    $turnierEntity = TurnierRepository::get()->turnier($turnier_id);
+    FreilosService::handleAusgerichtetesTurnierFreilos($turnierEntity);
+    Helper::reload(get: "?turnier_id=" . $turnier->get_turnier_id());
 }
 
 // Spielplan automatisch erstellen
@@ -80,8 +82,7 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
 if (isset($_POST['auto_spielplan_loeschen'])) {
     Spielplan::delete($turnier);
     Html::info("Der dynamisch erstellte Spielplan wurde gelöscht. Das Turnier wurde in die Setzphase versetzt!");
-    header('Location:' . db::escape($_SERVER['REQUEST_URI']));
-    die();
+    Helper::reload(get: "?turnier_id=" . $turnier->get_turnier_id());
 }
 
 // Spielplan oder Ergebnis manuell hochladen
@@ -102,11 +103,9 @@ if (isset($_POST['spielplan_hochladen'])) {
                 $turnier->upload_spielplan($target_file_pdf, 'spielplan');
                 Html::info("Manueller Spielplan hochgeladen. Das Turnier wurde in die Spielplan-Phase versetzt.");
             }
-            header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->get_turnier_id());
-            die();
+            Helper::reload(get: "?turnier_id=" . $turnier->get_turnier_id());
         }
         Html::error("Fehler beim Upload");
-
     } else {
         Html::error("Es wurde kein Spielplan gefunden");
     }
@@ -117,8 +116,7 @@ if (isset($_POST['spielplan_delete'])) {
     unlink($turnier->get_spielplan_datei());
     $turnier->upload_spielplan('', 'setz');
     Html::info("Spielplan- / Ergebnisdatei wurde gelöscht. Turnier wurde in die Setzphase versetzt.");
-    header("Location: lc_spielplan_verwalten.php?turnier_id=" . $turnier->get_turnier_id());
-    die();
+    Helper::reload(get: "?turnier_id=" . $turnier->get_turnier_id());
 }
 
 // Hinweis Finalturniere-Ergebnis
