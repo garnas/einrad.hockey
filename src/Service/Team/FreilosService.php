@@ -146,7 +146,7 @@ class FreilosService
             && !FreilosService::hasFreilosRecyclebarForTurnier($freilos);
     }
 
-    public static function handleFreilosRecycling(Turnier $turnier): void
+    public static function handleFreilosRecycling(Turnier $turnier, bool $sendMail = true): void
     {
         $freilose = $turnier->getGesetzteFreilose();
         foreach ($freilose as $freilos) {
@@ -163,6 +163,9 @@ class FreilosService
                 $team->addFreilos(FreilosGrund::FREILOS_GESETZT, vorherigesFreilos: $vorherigesFreilos);
                 TeamRepository::get()->speichern($team);
                 Html::info("Das Team " . $team->getName() . " hat ein neues Freilos erhalten für ihr frühzeitig gesetztes Freilos.");
+                if ($sendMail) {
+                    Mailbot::mail_freilos_recycle($team);
+                }
             }
         }
 
