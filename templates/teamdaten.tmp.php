@@ -92,7 +92,7 @@ use App\Service\Turnier\TurnierSnippets;
                             <?= TurnierSnippets::ortDatumBlock($anmeldung->getTurnier()) ?>
                             <?php if(FreilosService::isFreilosRecyclebar($anmeldung)): ?>
                                 <br>
-                                <span class="w3-text-green">Dieses Freilos könnt ihr auf Antrag beim Ligaausschuss zurückerhalten</span>
+                                <span class="w3-text-green">Dieses Freilos erhaltet ihr nach Eintragung der Turnierergebnisse zurück.</span>
                             <?php endif; ?>
                         </p>
                     <?php endforeach; ?>

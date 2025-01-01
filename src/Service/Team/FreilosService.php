@@ -130,6 +130,32 @@ class FreilosService
         return $turnierDatumUnix - $freilosGesetztUnix >= 8 * 7 * 24 * 60 * 60;
     }
 
+    public static function handleFreilosRecycling(Turnier $turnier): void
+    {
+        $spielenliste = $turnier->getSetzliste();
+        foreach ($spielenliste as $anmeldung) {
+            if (
+                $turnier->isErgebnisPhase()
+                && !$turnier->isCanceled()
+                && $turnier->isLigaturnier()
+                && $anmeldung->hasFreilosGesetzt()
+                && FreilosService::isFreilosRecyclebar($anmeldung)
+                && !FreilosService::hasFreilosRecyclebarForTurnier($anmeldung)
+            ) {
+                $team = $anmeldung->getTeam();
+                $turnier_id = $turnier->id();
+                $filter = static function (Freilos $f) use ($turnier_id) {
+                    return $f->getTurnier() && $f->getTurnier()->id() === $turnier_id;
+                };
+                $vorherigesFreilos = $team->getGueltigeFreilose()->filter($filter)->first() ?: null;
+                $team->addFreilos(FreilosGrund::FREILOS_GESETZT, vorherigesFreilos: $vorherigesFreilos);
+                TeamRepository::get()->speichern($team);
+                Html::info($team->getName() . " neues Freilos erhalten für frühzeitig gesetztes Freilos.");
+            }
+        }
+
+    }
+
     public static function handleSchiriFreilos(nTeam $team, bool $sendMail = True): bool
     {
         $filter = static function (Spieler $s) {
@@ -158,5 +184,18 @@ class FreilosService
                 && $anmeldung->getFreilosGesetzt() === "Ja");
         };
         return $team->getTurniereListe()->filter($filter);
+    }
+
+    private static function hasFreilosRecyclebarForTurnier(TurniereListe $anmeldung): bool
+    {
+        $turnier = $anmeldung->getTurnier();
+        $freilose = $anmeldung->getTeam()->getFreiloseBySaison();
+        foreach ($freilose as $freilos) {
+            if ($freilos->getVorherigesFreilos()
+                && $freilos->getVorherigesFreilos()->getTurnier()->id() === $turnier->id()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -79,6 +79,10 @@ class Freilos
     #[ORM\JoinColumn(name: "ausgerichtete_turnier_id", referencedColumnName: "turnier_id", nullable: True)]
     private ?Turnier $turnierAusgerichtet;
 
+    #[ORM\OneToOne(targetEntity: Freilos::class)]
+    #[ORM\JoinColumn(name: "vorheriges_freilos", referencedColumnName: "freilos_id", nullable: True)]
+    private ?Freilos $vorherigesFreilos;
+
     public function getTurnierAusgerichtet(): ?Turnier
     {
         return $this->turnierAusgerichtet;
@@ -142,6 +146,17 @@ class Freilos
     public function id(): int
     {
         return $this->freilosId;
+    }
+
+    public function getVorherigesFreilos(): ?Freilos
+    {
+        return $this->vorherigesFreilos;
+    }
+
+    public function setVorherigesFreilos(?Freilos $vorherigesFreilos): self
+    {
+        $this->vorherigesFreilos = $vorherigesFreilos;
+        return $this;
     }
 
 }

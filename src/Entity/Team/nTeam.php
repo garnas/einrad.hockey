@@ -230,13 +230,19 @@ class nTeam
         return $this->aktiv === 'Ja';
     }
 
-    public function addFreilos(FreilosGrund $grund, int $saison = Config::SAISON, ?Turnier $turnierAusgerichtet = NULL): nTeam
+    public function addFreilos(
+        FreilosGrund $grund,
+        int $saison = Config::SAISON,
+        ?Turnier $turnierAusgerichtet = null,
+        ?Freilos $vorherigesFreilos = null
+    ): nTeam
     {
         $freilos = (new Freilos())
             ->setTeam($this)
             ->setErstelltAm()
             ->setGrund($grund)
             ->setTurnierAusgerichtet($turnierAusgerichtet)
+            ->setVorherigesFreilos($vorherigesFreilos)
             ->setSaison($saison);
         $this->freilose[] = $freilos;
         return $this;

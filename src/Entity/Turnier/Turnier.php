@@ -241,9 +241,36 @@ class Turnier
         return $this;
     }
 
+    /**
+     * @return TurniereListe[]|ArrayCollection
+     */
     public function getListe(): Collection|array
     {
         return $this->liste;
+    }
+
+    /**
+     * @return TurniereListe[]|ArrayCollection
+     */
+    public function getSetzliste(): ArrayCollection|array
+    {
+        $filter = static function (TurniereListe $f) {
+            return $f->isSetzliste();
+        };
+
+        return $this->liste->filter($filter);
+    }
+
+    /**
+     * @return TurniereListe[]|ArrayCollection
+     */
+    public function getWarteliste(): ArrayCollection|array
+    {
+        $filter = static function (TurniereListe $f) {
+            return $f->isWarteliste();
+        };
+
+        return $this->liste->filter($filter);
     }
 
     public function setListe(Collection $liste): Turnier
