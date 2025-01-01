@@ -126,30 +126,35 @@ class FreilosService
         return $erhalteneFreilose->count() >= 2;
     }
 
-    /**
-     * @param TurniereListe $anmeldung
-     * @return bool
-     */
-    public static function isFreilosRecyclebar(TurniereListe $anmeldung): bool
+    public static function isFreilosRecyclebar(Freilos $freilos): bool
     {
-        $freilosGesetztUnix = $anmeldung->getFreilosGesetztAm()->getTimestamp();
-        $turnierDatumUnix = $anmeldung->getTurnier()->getDatum()->getTimestamp();
+        if (!$freilos->getGesetztAm()) {
+            return false;
+        }
+        $freilosGesetztUnix = $freilos->getGesetztAm()->getTimestamp();
+        $turnierDatumUnix = $freilos->getTurnier()->getDatum()->getTimestamp();
         return $turnierDatumUnix - $freilosGesetztUnix >= 8 * 7 * 24 * 60 * 60;
+    }
+
+    public static function validateFreilosRecycling(Freilos $freilos): bool
+    {
+        $turnier = $freilos->getTurnier();
+        return !$turnier->isCanceled()
+            && $turnier->isLigaturnier()
+            && TeamService::isAufSetzliste($freilos->getTeam(), $turnier)
+            && FreilosService::isFreilosRecyclebar($freilos)
+            && !FreilosService::hasFreilosRecyclebarForTurnier($freilos);
     }
 
     public static function handleFreilosRecycling(Turnier $turnier): void
     {
-        $spielenliste = $turnier->getSetzliste();
-        foreach ($spielenliste as $anmeldung) {
+        $freilose = $turnier->getGesetzteFreilose();
+        foreach ($freilose as $freilos) {
             if (
                 $turnier->isErgebnisPhase()
-                && !$turnier->isCanceled()
-                && $turnier->isLigaturnier()
-                && $anmeldung->hasFreilosGesetzt()
-                && FreilosService::isFreilosRecyclebar($anmeldung)
-                && !FreilosService::hasFreilosRecyclebarForTurnier($anmeldung)
+                && self::validateFreilosRecycling($freilos)
             ) {
-                $team = $anmeldung->getTeam();
+                $team = $freilos->getTeam();
                 $turnier_id = $turnier->id();
                 $filter = static function (Freilos $f) use ($turnier_id) {
                     return $f->getTurnier() && $f->getTurnier()->id() === $turnier_id;
@@ -190,13 +195,13 @@ class FreilosService
             return ($anmeldung->getTurnier()->getSaison() == Config::SAISON
                 && $anmeldung->getFreilosGesetzt() === "Ja");
         };
-        return $team->getTurniereListe()->filter($filter);
+        return $team->getGesetzteFreilose()->filter($filter);
     }
 
-    private static function hasFreilosRecyclebarForTurnier(TurniereListe $anmeldung): bool
+    private static function hasFreilosRecyclebarForTurnier(Freilos $freilos): bool
     {
-        $turnier = $anmeldung->getTurnier();
-        $freilose = $anmeldung->getTeam()->getFreiloseBySaison();
+        $turnier = $freilos->getTurnier();
+        $freilose = $freilos->getTeam()->getFreiloseBySaison();
         foreach ($freilose as $freilos) {
             if ($freilos->getVorherigesFreilos()
                 && $freilos->getVorherigesFreilos()->getTurnier()->id() === $turnier->id()) {
