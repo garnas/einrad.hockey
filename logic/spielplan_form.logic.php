@@ -2,7 +2,6 @@
 
 use App\Event\Turnier\nLigaBot;
 use App\Repository\DoctrineWrapper;
-use App\Repository\Turnier\TurnierRepository;
 use App\Service\Team\FreilosService;
 
 // Besteht die Berechtigung das Turnier zu bearbeiten?
