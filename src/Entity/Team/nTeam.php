@@ -299,4 +299,15 @@ class nTeam
         return $freilose[0];
     }
 
+    /**
+     * @return Collection|array|Freilos[]
+     */
+    public function getGesetzteFreilose(): Collection|array
+    {
+        $filter = static function (Freilos $f) {
+            return $f->isGesetzt() && $f->isGueltig();
+        };
+        return $this->freilose->filter($filter);
+    }
+
 }
