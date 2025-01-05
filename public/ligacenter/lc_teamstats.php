@@ -33,8 +33,6 @@ $header = [
     [
         "team_id",
         "teamname",
-        "freilose",
-        "zweites_freilos",
         "anzahl spieler",
         "block",
         "anzahl_gespielter_turniere_aktuelle_saison",
@@ -53,8 +51,6 @@ foreach ($result as $row) {
     $auswertung[] = [
         $team_id,
         $row["teamname"],
-        $row["freilose"],
-        $row["zweites_freilos"],
         $anzahl_spieler($team_id),
         Tabelle::get_team_block($row["team_id"]),
         $anzahl_turniere($team_id)
@@ -66,14 +62,6 @@ $spreadsheet
     ->getActiveSheet()
     ->setTitle("Auswertung Teams")
     ->fromArray($auswertung);
-
-#$spreadsheet->createSheet();
-// Zero based, so set the second tab as active sheet
-#$spreadsheet->setActiveSheetIndex(1);
-#$spreadsheet
-#    ->getActiveSheet()
-#    ->setTitle("Fragenauswertung")
-#    ->fromArray($auswertung_fragen);
 
 $writer = new Xlsx($spreadsheet);
 

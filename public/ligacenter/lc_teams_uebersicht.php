@@ -41,29 +41,6 @@ foreach ($teams as $team_id => $team){
     }
 }
 
-//Hinzufügen des zweiten Freiloses für zwei Schiris zu Saisonbeginn
-//$team_liste = '';
-//if (isset($_POST['zweites_freilos'])){
-//    foreach ($teams as $team_id => $team){
-//        if ($team['schiris'] >= 2){
-//            Team::add_freilos($team_id);
-//            $betreff = 'Zweites Freilos';
-//            $text =
-//                "<html>Hallo " . $team['teamname'] . ","
-//                ."<br><br>da ihr zwei ausgebildete Schiedsrichter im Kader eingetragen habt, wurde euch euer zweites Freilos gutgeschrieben."
-//                ."<br><br>Wir wünschen euch eine schöne Saison " . Html::get_saison_string() . "!"
-//                ."<br><br>Eure Einradhockeyliga</html>";
-//            $akt_kontakt = new Kontakt ($team_id);
-//            $adressaten = $akt_kontakt->get_emails();
-//            MailBot::add_mail($betreff, $text, $adressaten);
-//            $team_liste .= "<br>" . $team['teamname'];
-//        }
-//    }
-//    Html::info("Freilose vergeben an:<br>" . $team_liste);
-//    header('Location: lc_teams_uebersicht.php');
-//    die();
-//}
-
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -80,24 +57,12 @@ include '../../templates/header.tmp.php';
     <p>&sum; Teams mit zwei oder mehr Schiris: <span class="w3-text-green"><?=$teams_mit_zwei_schiris?></span></p>
 </div>
 
-<!-- Button 2. Freilos 
-<form class="w3-section" method='post'>
-    <input disabled type="submit" name="zweites_freilos" class="w3-button w3-secondary" value="Zweites Freilos vergeben">
-    <span class="w3-text-grey">Es werden Mails an die betroffenen Teams versendet<br></span>
-</form>-->
-<p><i>Legende:<br>
-    <span class="w3-pale-green">Freilos für zwei Schiris erhalten</span>
-    <br>
-    <span class="w3-pale-red">keine fünf Spieler im Kader</span>
-</i></p>
-
 <!-- Tabelle -->
 <div class="w3-responsive w3-card">
     <table style="white-space: nowrap" class="w3-table w3-striped w3-centered">
         <tr class=w3-primary>
             <th>Team ID</th>
             <th>Teamname</th>
-            <th>Freilose Old</th>
             <th>Freilose</th>
             <th>Kader</th>
             <th>Schiris</th>
@@ -113,7 +78,6 @@ include '../../templates/header.tmp.php';
                         <?php }//endif?>">
                 <td><?=$team['team_id']?></td>
                 <td><?=Html::link('lc_kader.php?team_id='. $team_id, $team['teamname'])?></td>
-                <td><?=$team['freilose']?></td>
                 <td><?= TeamRepository::get()->team($team_id)->getOffeneFreilose()->count()?></td>
                 <td><?=$team['kader']?></td>
                 <td><?=$team['schiris']?></td>

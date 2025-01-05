@@ -59,8 +59,7 @@ class TurnierEventMailBot
             include(Env::BASE_PATH . "/templates/mails/mail_turnier_canceled.tmp.php");
         $inhalt = ob_get_clean();
 
-        MailBot::add_mail($betreff, $inhalt, $emailAdressen);
-        MailBot::mail_bot($betreff);
+        MailBot::add_mail($betreff, $inhalt, $emailAdressen, send_instantly: True);
     }
 
     /**
@@ -79,7 +78,7 @@ class TurnierEventMailBot
         $inhalt = ob_get_clean();
         $akt_kontakt = new Kontakt ($team->id());
         $emails = $akt_kontakt->get_emails('info');
-        MailBot::add_mail($betreff, $inhalt, $emails);
+        MailBot::add_mail($betreff, $inhalt, $emails, send_instantly: True);
     }
 
     public static function mailDoppelAnmeldung(Turnier $turnier, nTeam $team): void
@@ -92,7 +91,7 @@ class TurnierEventMailBot
         $inhalt = ob_get_clean();
         $akt_kontakt = new Kontakt ($team->id());
         $emails = $akt_kontakt->get_emails('info');
-        MailBot::add_mail($betreff, $inhalt, $emails);
+        MailBot::add_mail($betreff, $inhalt, $emails, send_instantly: True);
     }
 
     /**
@@ -118,7 +117,7 @@ class TurnierEventMailBot
                     include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
                     $inhalt = ob_get_clean();
                     $emails = (new Kontakt ($anmeldung->getTeam()->id()))->get_emails('info');
-                MailBot::add_mail($betreff, $inhalt, $emails);
+                MailBot::add_mail($betreff, $inhalt, $emails, send_instantly: True);
             }
         }
     }
