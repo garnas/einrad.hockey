@@ -7,8 +7,11 @@ use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 
 require_once 'init.php';
 
+# Die doctrine Konsole soll auch im Wartungsmodus verfügbar sein!
+session_start();
+$_SESSION['wartungsmodus'] = False;
+
 DoctrineWrapper::setup();
 $entityManager = DoctrineWrapper::manager();
-
 
 ConsoleRunner::run(new SingleManagerProvider($entityManager));
