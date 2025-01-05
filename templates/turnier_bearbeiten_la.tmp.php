@@ -35,7 +35,7 @@ else: ?>
             </p>
             <p>
                 <label for='grund' class="w3-text-primary">Grund der Turnierabsage</label>
-                <input list="browsers" id="grund" name="grund" placeholder="Bitte eingeben.." class="w3-input w3-border w3-border-primary">
+                <input required list="browsers" id="grund" name="grund" placeholder="Bitte eingeben.." class="w3-input w3-border w3-border-primary">
                 <datalist id="browsers">
                     <option value="Zu wenig spielberechtigte Ligateams">
                     <option value="Vom Ausrichter im Vorfeld abgesagt">
