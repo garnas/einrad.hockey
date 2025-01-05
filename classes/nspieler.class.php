@@ -243,7 +243,7 @@ class nSpieler
             return "<span class='w3-text-green'>$icon $saison_text $junior $ausbilder</span>";
         } else {
             $icon = Html::icon("block");
-            return "<span class='w3-text-grey'><s>$icon $saison_text $junior $ausbilder</s></span>";
+            return "<span class='w3-text-grey'><s>$icon $saison_text $junior</s> $ausbilder</span>";
         }
 
     }
