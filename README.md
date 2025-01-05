@@ -72,3 +72,11 @@ curl -sS https://getcomposer.org/installer | /usr/bin/php8.3-cli
 <pre>
 /usr/bin/php8.3-cli composer.phar about
 </pre>
+
+## Sonstiges
+* Eine vorkonfigurierte php.ini ist in _localhost zu finden.
+
+* Doctrine CLI Debug
+   ```
+   php -d xdebug.mode=debug -d xdebug.client_host=127.0.0.1 -d xdebug.client_port=9003 -d xdebug.start_with_request=yes bin/doctrine
+   ```

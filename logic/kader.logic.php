@@ -3,7 +3,7 @@
 use App\Entity\Team\Spieler;
 use App\Repository\Spieler\SpielerRepository;
 use App\Repository\Team\TeamRepository;
-use App\Service\Team\TeamService;
+use App\Service\Team\FreilosService;
 
 if (isset($_POST['neuer_eintrag'])) {
     $error = false;
@@ -65,7 +65,7 @@ if (isset($_POST['submit_takeover'])) {
         if ($changed) {
             Html::info("Die Spieler wurden in die neue Saison übernommen.");
             $team = TeamRepository::get()->team($team_id);
-            if (TeamService::handleSchiriFreilos($team)) {
+            if (FreilosService::handleSchiriFreilos($team)) {
                 TeamRepository::get()->speichern($team);
                 Html::info("Schirifreilos erhalten!");
             }

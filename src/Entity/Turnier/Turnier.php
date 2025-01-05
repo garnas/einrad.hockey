@@ -3,6 +3,7 @@
 namespace App\Entity\Turnier;
 
 use App\Entity\Spielplan\SpielplanDetails;
+use App\Entity\Team\Freilos;
 use App\Entity\Team\nTeam;
 use App\Service\Turnier\TurnierLogService;
 use App\Service\Turnier\TurnierSnippets;
@@ -80,6 +81,10 @@ class Turnier
     #[ORM\OneToMany(targetEntity: TurniereLog::class, mappedBy: "turnier", cascade: ["all"])]
     private Collection $logs;
 
+    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
+    #[ORM\OneToMany(targetEntity: Freilos::class, mappedBy: "turnier")]
+    private Collection $gesetzteFreilose;
+
     #[ORM\Column(name: "erstellt_am", type: "datetime")]
     private DateTime $erstelltAm;
 
@@ -117,6 +122,7 @@ class Turnier
         $this->ergebnis = new ArrayCollection();
         $this->liste = new ArrayCollection();
         $this->logs = new ArrayCollection();
+        $this->gesetzteFreilose = new ArrayCollection();
         $this->logService = new TurnierLogService($this);
     }
 
@@ -241,9 +247,36 @@ class Turnier
         return $this;
     }
 
+    /**
+     * @return TurniereListe[]|ArrayCollection
+     */
     public function getListe(): Collection|array
     {
         return $this->liste;
+    }
+
+    /**
+     * @return TurniereListe[]|ArrayCollection
+     */
+    public function getSetzliste(): ArrayCollection|array
+    {
+        $filter = static function (TurniereListe $f) {
+            return $f->isSetzliste();
+        };
+
+        return $this->liste->filter($filter);
+    }
+
+    /**
+     * @return TurniereListe[]|ArrayCollection
+     */
+    public function getWarteliste(): ArrayCollection|array
+    {
+        $filter = static function (TurniereListe $f) {
+            return $f->isWarteliste();
+        };
+
+        return $this->liste->filter($filter);
     }
 
     public function setListe(Collection $liste): Turnier
@@ -396,6 +429,20 @@ class Turnier
     public function isLigaturnier(): bool
     {
         return $this->art == 'I' || $this->art == 'II';
+    }
+
+    public function setGesetzteFreilose(Collection $gesetzteFreilose): Turnier
+    {
+        $this->gesetzteFreilose = $gesetzteFreilose;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Freilos[]
+     */
+    public function getGesetzteFreilose(): Collection|array
+    {
+        return $this->gesetzteFreilose;
     }
 
 }

@@ -335,4 +335,28 @@ class MailBot
         self::add_mail($betreff, $inhalt, $emails);
     }
 
+    public static function mail_ausrichter_freilos(nTeam $team): void
+    {
+        $betreff = "Freilos für euer Turnier erhalten";
+        ob_start();
+        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_ausrichter_freilos.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+        $inhalt = ob_get_clean();
+        $emails = (new Kontakt ($team->id()))->get_emails('info');
+        self::add_mail($betreff, $inhalt, $emails);
+    }
+
+    public static function mail_freilos_recycle(nTeam $team)
+    {
+        $betreff = "Freilos für frühzeitig gesetztes Freilos";
+        ob_start();
+        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_freilos_recycle.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+        $inhalt = ob_get_clean();
+        $emails = (new Kontakt ($team->id()))->get_emails('info');
+        self::add_mail($betreff, $inhalt, $emails);
+    }
+
 }
