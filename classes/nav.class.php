@@ -69,6 +69,7 @@ class Nav
     {
         $class_text_color = (isset($_SESSION['logins']['team'])) ? "" : "w3-text-grey";
         $links = [
+            [Env::BASE_URL . "/teamcenter/tc_abstimmung.php", "Abstimmung Finalturnier", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_start.php", "Start", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_terminseite_erstellen.php", "Teamtermine", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_anmelden.php", "Turnieranmeldung", $class_text_color],
@@ -82,10 +83,6 @@ class Nav
             [Env::BASE_URL . "/teamcenter/tc_antrag.php", "Fördermittel", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_pw_aendern.php", "Passwort ändern", $class_text_color],
         ];
-        // Abstimmung Finalart
-        if (Helper::$teamcenter && Abstimmung::darf_abstimmen($_SESSION['logins']['team']['id'])) {
-            array_unshift($links, [Env::BASE_URL . "/teamcenter/tc_abstimmung.php", "Abstimmung Finalturnier", $class_text_color]);
-        }
         if (isset($_SESSION['logins']['team'])) {
             $links[] =
                 [Env::BASE_URL . "/teamcenter/tc_logout.php", Html::icon("logout") . " Logout", $class_text_color];
@@ -124,7 +121,7 @@ class Nav
     public static function get_lc_start(): array
     {
         return array(
-            [Env::BASE_URL . "/ligacenter/lc_abstimmung.php", "Abstimmung", "w3-secondary"],
+            [Env::BASE_URL . "/ligacenter/lc_abstimmung.php", "Abstimmung Fördermittel", "w3-secondary"],
             [Env::BASE_URL . "/schiricenter/schiritest_erstellen.php", "Schiritest", "w3-secondary"],
             [Env::BASE_URL . "/ligacenter/lc_turnierliste.php", "Turniere verwalten", "w3-primary"],
             [Env::BASE_URL . "/ligacenter/lc_turnier_erstellen.php", "Turnier erstellen", "w3-primary"],
@@ -168,6 +165,7 @@ class Nav
     public static function get_tc_start(): array
     {
         $links = array(
+            [Env::BASE_URL . "/teamcenter/tc_abstimmung.php", "Abstimmung Fördermittel", "w3-secondary"],
             [Env::BASE_URL . "/teamcenter/tc_terminseite_erstellen.php", "Teamtermine", "w3-green"],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_anmelden.php", "Turnieranmeldung", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_turnier_erstellen.php", "Turnier erstellen", "w3-primary"],
@@ -181,12 +179,6 @@ class Nav
             [Env::BASE_URL . "/teamcenter/tc_pw_aendern.php", "Passwort ändern", "w3-grey"],
             [Env::BASE_URL . "/teamcenter/tc_logout.php", "Logout", "w3-grey"],
         );
-        // Abstimmung Finalart
-//        if (Abstimmung::darf_abstimmen($_SESSION['logins']['team']['id'])) {
-//            array_unshift(
-//                $links,
-//                [Env::BASE_URL . "/teamcenter/tc_abstimmung.php", "Abstimmung Finalturnier", "w3-secondary"]);
-//        }
         return $links;
     }
 

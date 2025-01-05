@@ -12,29 +12,38 @@
 class Abstimmung
 {
     public const OPTIONS = [
-        "option_1" => "Option 1: Ein Samstag mit 8 Teams, Gruppenphase mit anschließenden Finalspielen",
-        "option_2" => "Option 2: Ein Wochenende 1,5 Tage mit 10 Teams, Samstag Gruppenphase, Sonntag Finalspiele",
-        "option_3" => "Option 3: Zwei Samstage mit 10 Teams, Quali- und Finalturnier als Standard 6-er Modus (alt)",
-        "enthaltung" => "Enthaltung"
+        "Ja" => "Ja",
+        "Nein" => "Nein",
+        "Keine_Angabe" => "Keine Angabe",
     ];
 
-    public const OPTIONS_COLOR = [
-        "option_1" => "w3-indigo",
-        "option_2" => "w3-red",
-        "option_3" => "w3-green",
-        "enthaltung" => "w3-grey"
+    public const OPTIONS_WICHTIGKEIT = [
+        "Trainingsmaterialien" => "Trainingsmaterialien für den A- und B-Kader",
+        "Trikots" => "Trikots und/oder Trainingsjacken für den A- und B-Kader",
+        "Hallenkosten" => "Hallenkosten bei Einradhockey-Veranstaltungen (Trainingslager, 24 Stunden Turniere etc.)",
+        "Verpflegung" => "Verpflegung für Teilnehmende bei Einradhockey-Veranstaltungen",
+        "Uebernachtungskosten" => "Übernachtungskosten bei Einradhockey-Veranstaltungen",
+        "Aufwandsentschaedigung" => "Aufwandsentschädigung von Übungsleitern bei Einradhockey-Veranstaltungen (z.B. Trainingslager)"
     ];
 
     public const ANZAHL_TEAMS = 24;
 
+    public static function selected(string $name, string $value, ?string $value_chosen): string
+    {
+        if ($value_chosen != null) {
+            return ($value === $value_chosen) ? "selected checked" : "";
+        }
+        return (($_POST[$name] ?? "") == $value) ? "selected checked" : "";
+    }
+
     /**
      * Frühstmöglicher Zeitpunkt der Stimmabgabe
      */
-    public const BEGINN = "02.01.2023 00:00";
+    public const BEGINN = "02.01.2025 00:00";
     /**
      * Letztmöglicher Zeitpunkt der Stimmabgabe
      */
-    public const ENDE = "06.01.2023 23:59";
+    public const ENDE = "12.01.2025 23:59";
     /**
      * Verschlüsselungsverfahren für die TeamIDs
      */
@@ -56,11 +65,6 @@ class Abstimmung
      * @var string Passwort-Hash, welcher für das Team bei erstmaliger Abstimmung hinterlegt war.
      */
     public string $passwort_hash;
-
-    public static function darf_abstimmen(int $team_id): bool
-    {
-        return Tabelle::get_team_rang($team_id, 13) <= 24;
-    }
 
     /**
      * Abstimmung constructor.
@@ -124,16 +128,17 @@ class Abstimmung
      * Gibt die einem $crypt zugeordneten Stimme aus.
      *
      * @param string $crypt
-     * @return string
+     * @return array
      */
-    public function get_stimme(string $crypt): string
+    public function get_stimme(string $crypt): array
     {
         $sql = "
             SELECT stimme 
             FROM abstimmung_ergebnisse
             WHERE crypt = ?
             ";
-        return db::$db->query($sql, $crypt)->esc()->fetch_one() ?? '';
+        $stimme =  db::$db->query($sql, $crypt)->fetch_one() ?? '';
+        return json_decode($stimme, associative: true) ?? [];
     }
 
     /**
@@ -149,7 +154,6 @@ class Abstimmung
         // Validierung
         if (
             (empty($this->team) xor empty($this->get_stimme($crypt))
-            || !(self::darf_abstimmen($this->team_id))
         )){
             Html::error("Fehler, bitte melde dich bei " . Html::mailto(Env::TECHNIKMAIL), esc:false);
             Helper::log("abstimmung.log", "Fehler: $this->team_id | $crypt");
