@@ -24,13 +24,13 @@ class Spieler
     #[ORM\Column(name: "jahrgang", type: "integer", nullable: false)]
     private int $jahrgang;
 
-    #[ORM\Column(name: "geschlecht", type: "string", length: 0, nullable: false)]
+    #[ORM\Column(name: "geschlecht", type: "string", length: 255, nullable: false)]
     private string $geschlecht;
 
     #[ORM\Column(name: "schiri", type: "integer", nullable: true)]
     private ?int $schiri;
 
-    #[ORM\Column(name: "junior", type: "string", length: 0, nullable: true)]
+    #[ORM\Column(name: "junior", type: "string", length: 255, nullable: true)]
     private ?string $junior;
 
     #[ORM\Column(name: "letzte_saison", type: "integer", nullable: true)]

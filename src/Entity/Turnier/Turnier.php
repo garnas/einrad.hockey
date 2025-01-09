@@ -39,7 +39,7 @@ class Turnier
     #[ORM\Column(name: "tname", type: "string", length: 255, nullable: true)]
     private ?string $name;
 
-    #[ORM\Column(name: "art", type: "string", length: 0, nullable: true)]
+    #[ORM\Column(name: "art", type: "string", length: 255, nullable: true)]
     private ?string $art;
 
     #[ORM\Column(name: "tblock", type: "string", length: 255, nullable: true)]

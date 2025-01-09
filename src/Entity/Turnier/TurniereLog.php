@@ -26,7 +26,7 @@ class TurniereLog
     #[ORM\Column(name: "autor", type: "string", length: 255, nullable: false)]
     private $autor;
 
-    #[ORM\Column(name: "zeit", type: "datetime", nullable: false, options: ["default" => "current_timestamp(1)"])]
+    #[ORM\Column(name: "zeit", type: "datetime", nullable: false, options: ["default" => "CURRENT_TIMESTAMP"])]
     private DateTime $zeit;
 
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]

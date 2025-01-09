@@ -36,7 +36,7 @@ class TurniereListe
         return $this;
     }
 
-    #[ORM\Column(name: "liste", type: "string", length: 0, nullable: false, options: ["default" => "setz"])]
+    #[ORM\Column(name: "liste", type: "string", length: 255, nullable: false, options: ["default" => "setz"])]
     private string $liste = 'setz';
 
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
@@ -57,7 +57,7 @@ class TurniereListe
     #[ORM\Column(name: "position_warteliste", type: "integer", nullable: true)]
     private ?int $positionWarteliste;
 
-    #[ORM\Column(name: "freilos_gesetzt", type: "string", length: 0, nullable: false, options: ["default" => "Nein"])]
+    #[ORM\Column(name: "freilos_gesetzt", type: "string", length: 4, nullable: false, options: ["default" => "Nein"])]
     private string $freilosGesetzt = 'Nein';
 
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]

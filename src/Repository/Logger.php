@@ -46,7 +46,14 @@ class Logger implements LoggerInterface
             && !$this->isInsertMailbot($context)
         ) {
             $sql = $context["sql"];
-            $params = "\n?: " . implode("\n?: ", $context["params"]);
+            $params = '';
+            if (isset($context["params"])) {
+                if (is_string($context["params"])) {
+                    $params = "\n?: " . $context["params"];
+                } elseif (is_array($context["params"])) {
+                    $params = "\n?: " . implode("\n?: ", $context["params"]);
+                }
+            }
             $log = $sql . $params;
             Helper::log(Config::LOG_DB_DOCTRINE, $log);
         }

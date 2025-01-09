@@ -36,7 +36,7 @@ class Freilos
         return $this;
     }
 
-    #[ORM\Column(name: "erstellt_am", type: "datetime", nullable: false, options: ["default" => "current_timestamp(1)"])]
+    #[ORM\Column(name: "erstellt_am", type: "datetime", nullable: false, options: ["default" => "CURRENT_TIMESTAMP"])]
     private DateTime $erstelltAm;
 
     public function getErstelltAm(): DateTime

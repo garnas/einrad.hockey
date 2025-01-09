@@ -97,19 +97,19 @@ class nTeam
         $this->details = $details;
     }
 
-    #[ORM\Column(name: "ligateam", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])]
+    #[ORM\Column(name: "ligateam", type: "string", length: 4, nullable: false, options: ["default" => "Ja"])]
     private string $ligateam = 'Ja';
 
-    #[ORM\Column(name: "terminplaner", type: "string", length: 0, nullable: false, options: ["default" => "Nein"])]
+    #[ORM\Column(name: "terminplaner", type: "string", length: 4, nullable: false, options: ["default" => "Nein"])]
     private string $terminplaner = 'Nein';
 
     #[ORM\Column(name: "passwort", type: "string", length: 255, nullable: true)]
     private ?string $passwort;
 
-    #[ORM\Column(name: "passwort_geaendert", type: "string", length: 0, nullable: false, options: ["default" => "Nein"])]
+    #[ORM\Column(name: "passwort_geaendert", type: "string", length: 4, nullable: false, options: ["default" => "Nein"])]
     private string $passwortGeaendert = 'Nein';
 
-    #[ORM\Column(name: "aktiv", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])]
+    #[ORM\Column(name: "aktiv", type: "string", length: 4, nullable: false, options: ["default" => "Ja"])]
     private string $aktiv = 'Ja';
 
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
