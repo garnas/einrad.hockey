@@ -2,7 +2,7 @@
 
 namespace App\Repository\Spieler;
 
-use App\Entity\Team\Spieler;
+use App\Entity\Spieler\Spieler;
 use App\Repository\DoctrineWrapper;
 use App\Repository\TraitSingletonRepository;
 use Doctrine\ORM\EntityRepository;

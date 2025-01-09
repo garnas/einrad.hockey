@@ -5,7 +5,7 @@ namespace App\Service\Team;
 use App\Entity\Team\Freilos;
 use App\Entity\Team\FreilosGrund;
 use App\Entity\Team\nTeam;
-use App\Entity\Team\Spieler;
+use App\Entity\Spieler\Spieler;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Repository\Team\TeamRepository;

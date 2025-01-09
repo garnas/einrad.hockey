@@ -4,6 +4,7 @@ namespace App\Entity\Team;
 
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
+use App\Entity\Spieler\Spieler;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

@@ -1,6 +1,6 @@
 <?php
 
-use App\Entity\Team\Spieler;
+use App\Entity\Spieler\Spieler;
 use App\Repository\Spieler\SpielerRepository;
 use App\Repository\Team\TeamRepository;
 use App\Service\Team\FreilosService;

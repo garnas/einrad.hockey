@@ -1,7 +1,7 @@
 <?php
 require_once '../../init.php';
 
-use App\Entity\Team\Spieler;
+use App\Entity\Spieler\Spieler;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 

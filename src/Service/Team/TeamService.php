@@ -4,7 +4,7 @@ namespace App\Service\Team;
 
 use App\Entity\Team\Kontakt;
 use App\Entity\Team\nTeam;
-use App\Entity\Team\Spieler;
+use App\Entity\Spieler\Spieler;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Service\Turnier\TurnierService;

@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Entity\Team;
+namespace App\Entity\Spieler;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Team\nTeam;
 
 #[ORM\Entity]
 #[ORM\Table(name: "spieler", indexes: [new ORM\Index(name: "team_id", columns: ["team_id"])])]
