@@ -24,22 +24,19 @@ if (Helper::$teamcenter) {
     }
 
     // Team will abstimmen
-    if (isset($_POST['abstimmung'])) {
+    if (isset($_POST['abgestimmt'])) {
         $error = false;
-        $stimme = $_POST['abstimmung'];
+        $stimme = $_POST;
+        unset($stimme["abgestimmt"]);
+        unset($stimme["passwort"]);
+        $stimme = json_encode($stimme);
+
         if (time() < $beginn || time() > $abschluss) {
             $error = true;
             Helper::log("abstimmung.log", "$abstimmung->team_id Falscher Zeitraum");
             Html::error("Die Abstimmung ist zurzeit nicht aktiv.");
         }
-        if (!isset(Abstimmung::OPTIONS[$stimme])) {
-            $error = true;
-            Helper::log(
-                "abstimmung.log",
-                "$abstimmung->team_id HTML-Manipulation " . implode(" ", $_POST)
-            );
-            Html::error("Ungültige Formularübermittlung");
-        }
+
         if (!password_verify($_POST['passwort'], $abstimmung->passwort_hash)) {
             $error = true;
             Helper::log("abstimmung.log", "$abstimmung->team_id Ungültiges Passwort (Abstimmen)");
