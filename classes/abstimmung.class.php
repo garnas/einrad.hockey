@@ -43,7 +43,7 @@ class Abstimmung
     /**
      * Letztmöglicher Zeitpunkt der Stimmabgabe
      */
-    public const ENDE = "12.01.2025 23:59";
+    public const ENDE = "12.03.2025 23:59";
     /**
      * Verschlüsselungsverfahren für die TeamIDs
      */
