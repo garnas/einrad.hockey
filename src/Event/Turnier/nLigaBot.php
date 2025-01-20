@@ -99,7 +99,6 @@ class nLigaBot
             DoctrineWrapper::manager()->persist($turnier);
         }
         DoctrineWrapper::manager()->flush();
-        DoctrineWrapper::manager()->clear();
     }
 
     /**

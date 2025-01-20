@@ -2,76 +2,54 @@
 
 namespace App\Entity\Spielplan;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * SpielplanDetails
- *
- * @ORM\Table(name="spielplan_details", indexes={@ORM\Index(name="spielplan_paarung", columns={"spielplan_paarung"})})
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(
+    name: "spielplan_details",
+)]
 class SpielplanDetails
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="spielplan", type="string", length=30, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $spielplan;
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: "IDENTITY")]
+    #[ORM\Column(name: "spielplan", type: "string", length: 30, nullable: false)]
+    private string $spielplan;
 
     /**
-     * @var bool|null
-     *
-     * @ORM\Column(name="plaetze", type="boolean", nullable=true)
+     * ACHTUNG: Hier liegt eine ManyToMany-Beziehung zu SpielplanPaarungen vor. Doctrine 3 kann diese nur mit einem
+     * dritten JoinTable verbinden, nicht aber mit dem aktuellen DB-Schema.
+     * Lösungsmöglichkeiten:
+     * 1. JoinTable einfügen (BestPractice, aber unnötig komplex)
+     * 2. Programmatisch mit einem Service SpielplanService::getSpielplanPaarungen
+     * 3. Zu OnToMany umbauen
      */
-    private $plaetze;
+    #[ORM\Column(name: "spielplan_paarung", type: "string", length: 30, nullable: false)]
+    private string $spielplanPaarung;
 
-    /**
-     * @var bool|null
-     *
-     * @ORM\Column(name="anzahl_halbzeiten", type="boolean", nullable=true)
-     */
-    private $anzahlHalbzeiten;
+    #[ORM\Column(name: "plaetze", type: "smallint", nullable: true)]
+    private int $plaetze;
 
-    /**
-     * @var bool|null
-     *
-     * @ORM\Column(name="halbzeit_laenge", type="boolean", nullable=true)
-     */
-    private $halbzeitLaenge;
+    #[ORM\Column(name: "anzahl_halbzeiten", type: "smallint", nullable: true)]
+    private int $anzahlHalbzeiten;
 
-    /**
-     * @var bool|null
-     *
-     * @ORM\Column(name="puffer", type="boolean", nullable=true)
-     */
-    private $puffer;
+    #[ORM\Column(name: "halbzeit_laenge", type: "smallint", nullable: true)]
+    private int $halbzeitLaenge;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="pausen", type="string", length=30, nullable=true, options={"comment"="nach Spiel,Minuten#next"})
-     */
-    private $pausen;
+    #[ORM\Column(name: "puffer", type: "smallint", nullable: true)]
+    private int $puffer;
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="faktor", type="boolean", nullable=false, options={"comment"="Nur Nenner"})
-     */
-    private $faktor;
+    #[ORM\Column(
+        name: "pausen",
+        type: "string",
+        length: 30,
+        nullable: true,
+        options: ["comment" => "nach Spiel,Minuten#next"]
+    )]
+    private string $pausen;
 
-    /**
-     * @var \SpielplanPaarungen
-     *
-     * @ORM\ManyToOne(targetEntity="SpielplanPaarungen")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="spielplan_paarung", referencedColumnName="spielplan_paarung")
-     * })
-     */
-    private $spielplanPaarung;
+    #[ORM\Column(name: "faktor", type: "integer", nullable: false, options: ["comment" => "Nur Nenner"])]
+    private int $faktor;
 
     public function getSpielplan(): ?string
     {
@@ -150,15 +128,14 @@ class SpielplanDetails
         return $this;
     }
 
-    public function getSpielplanPaarung(): ?SpielplanPaarungen
+    public function getSpielplanPaarung(): string
     {
         return $this->spielplanPaarung;
     }
 
-    public function setSpielplanPaarung(?SpielplanPaarungen $spielplanPaarung): self
+    public function setSpielplanPaarung(string $spielplanPaarung): self
     {
         $this->spielplanPaarung = $spielplanPaarung;
-
         return $this;
     }
 

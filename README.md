@@ -33,38 +33,50 @@ Du hast Lust mitzuwirken? Oder Fragen darüber, wie die Webseite funktioniert? M
 * [https://www.einrad.hockey/xml/spielplan.php?turnier_id=?](https://www.einrad.hockey/xml/spielplan.php?turnier_id=1021)
 
 ## dev-Umgebung erstellen
+* Eine Beispiel php.ini mit den notwendigen Extensions und Debug-Settings liegt in _Localhost/php.ini-example
 
-### 1. Voraussetzungen:
-* XAMPP installieren (PHP >=8.0), Composer installieren
-* Repository in den htdocs-Ordner herunterladen. Ordnerstruktur sollte so aussehen: 
-```
-htdocs
-└── einrad.hockey
-    └── example_env.php
-```
-* Im Verzeichnis der example_env.php eine Datei env.php erstellen und den Inhalt von example_env.php hereinkopieren
+### Möglichkeit 1: Docker
+> Siehe [docker-setup.md](docker-setup.md)
 
-### 2. Datenbank einrichten:
-* VIA XAMPP Control Panel, MySQL -> Admin -> phpMyAdmin eine Datenbank db_localhost erstellen
-* Die db_localhost.sql im Ordner _localhost in die Datenbank laden
-* In der oben erstellten env.php die Zugangsdaten der SQL-Datenbank eintragen (falls von den default Zugangsdaten abgewichen wird)
+### Möglichkeit 2: XAMPP
+1. Voraussetzungen:
+   * XAMPP installieren (PHP >=8.2, Stand 30.12.2024 noch nicht für PHP 8.3 verfügbar), Composer installieren
+   * Repository in den htdocs-Ordner herunterladen. Ordnerstruktur sollte so aussehen: 
+    ```
+    htdocs
+    └── einrad.hockey
+        └── example_env.php
+    ```
+   * Im Verzeichnis der example_env.php eine Datei env.php erstellen und den Inhalt von example_env.php hereinkopieren
 
-### 3. Abhängigkeiten installieren
-* Im Verzeichnis der composer.json via CLI "composer update" ausführen
-* Anschließend via CLI "composer dump-autoload" ausführen, um den Autoloader der Klassen zu konfigurieren
+2. Datenbank einrichten:
+   * VIA XAMPP Control Panel, MySQL -> Admin -> phpMyAdmin eine Datenbank db_localhost erstellen
+   * Die db_localhost.sql im Ordner _localhost in die Datenbank laden
+   * In der oben erstellten env.php die Zugangsdaten der SQL-Datenbank eintragen (falls von den default Zugangsdaten abgewichen wird)
 
-### 4. Seite öffnen
-* http://localhost/einrad.hockey/public/liga/neues.php
-* Hier sollte nun die Neuigkeitenseite angezeigt werden
+3. Abhängigkeiten installieren
+   * Im Verzeichnis der composer.json via CLI "composer update" ausführen
+   * Anschließend via CLI "composer dump-autoload" ausführen, um den Autoloader der Klassen zu konfigurieren
 
+4. Seite öffnen
+   * http://localhost/einrad.hockey/public/liga/neues.php
+   * Hier sollte nun die Neuigkeitenseite angezeigt werden
 
 ### Ionos Webspace:
 * composer.phar herunterladen
 <pre>
-curl -sS https://getcomposer.org/installer | /usr/bin/php8.2-cli
+curl -sS https://getcomposer.org/installer | /usr/bin/php8.3-cli
 </pre>
 
 * composer.phar ausführen
 <pre>
-/usr/bin/php8.2-cli composer.phar about
+/usr/bin/php8.3-cli composer.phar about
 </pre>
+
+## Sonstiges
+* Eine vorkonfigurierte php.ini ist in _localhost zu finden.
+
+* Doctrine CLI Debug
+   ```
+   php -d xdebug.mode=debug -d xdebug.client_host=127.0.0.1 -d xdebug.client_port=9003 -d xdebug.start_with_request=yes bin/doctrine
+   ```

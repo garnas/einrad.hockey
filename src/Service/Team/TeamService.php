@@ -2,19 +2,15 @@
 
 namespace App\Service\Team;
 
-use App\Entity\Team\FreilosGrund;
 use App\Entity\Team\Kontakt;
 use App\Entity\Team\nTeam;
 use App\Entity\Team\Spieler;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
-use App\Service\Turnier\BlockService;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierSnippets;
 use Config;
-use DateTime;
 use Doctrine\Common\Collections\Collection;
-use MailBot;
 
 class TeamService
 {
@@ -65,24 +61,6 @@ class TeamService
         }
     }
 
-    public static function freilos(nTeam $team, Turnier $turnier): void
-    {
-        if (self::isAufWarteliste($team, $turnier)) {
-            $anmeldung = $team->getTurniereListe()->get($turnier->id());
-        } else {
-            $anmeldung = new TurniereListe();
-            $anmeldung->setTeam($team)->setTurnier($turnier);
-        }
-
-        $anmeldung
-            ->setListe('setzliste')
-            ->setFreilosGesetzt('Ja')
-            ->setFreilosGesetztAm(new DateTime());
-        $team->getNextFreilos()->setzen($turnier);
-        $turnier->getListe()->add($anmeldung);
-        $turnier->getLogService()->addLog("Freilos: " . $team->getName() . " " . BlockService::toString($team->getBlock()));
-    }
-
     public static function abmelden(nTeam $team, Turnier $turnier): void
     {
         foreach ($turnier->getListe() as $anmeldung) {
@@ -128,64 +106,12 @@ class TeamService
      * @param nTeam $team
      * @return Collection|TurniereListe[]
      */
-    public static function getGesetzteFreilose(nTeam $team): Collection|array
-    {
-        $filter = static function (TurniereListe $anmeldung) {
-            return ($anmeldung->getTurnier()->getSaison() == Config::SAISON
-                && $anmeldung->getFreilosGesetzt() === "Ja");
-        };
-        return $team->getTurniereListe()->filter($filter);
-    }
-
-    /**
-     * @param nTeam $team
-     * @return Collection|TurniereListe[]
-     */
     public static function getEingetrageneTurniere(nTeam $team): Collection|array
     {
         $filter = static function (Turnier $turnier) {
             return ($turnier->getSaison() === Config::SAISON);
         };
         return $team->getAusgerichteteTurniere()->filter($filter);
-    }
-
-    /**
-     * @param Turnier $turnier
-     * @return bool
-     */
-    public static function isAusrichterFreilosBerechtigt(Turnier $turnier): bool
-    {
-        $erstelltAmUnix = $turnier->getErstelltAm()->getTimestamp();
-        $datumAmUnix = $turnier->getDatum()->getTimestamp();
-        return $datumAmUnix - $erstelltAmUnix >= 8 * 7 * 24 * 60 * 60;
-    }
-
-    /**
-     * @param TurniereListe $anmeldung
-     * @return bool
-     */
-    public static function isFreilosRecyclebar(TurniereListe $anmeldung): bool
-    {
-        $freilosGesetztUnix = $anmeldung->getFreilosGesetztAm()->getTimestamp();
-        $turnierDatumUnix = $anmeldung->getTurnier()->getDatum()->getTimestamp();
-        return $turnierDatumUnix - $freilosGesetztUnix >= 8 * 7 * 24 * 60 * 60;
-    }
-
-    public static function handleSchiriFreilos(nTeam $team, bool $sendMail = True): bool
-    {
-        $filter = static function (Spieler $s) {
-            return ($s->getLetzteSaison() == Config::SAISON && $s->getSchiri() >= Config::SAISON);
-        };
-        $aktiveSchiris = $team->getKader()->filter($filter);
-
-        if (!TeamValidator::hasSchiriFreilosErhalten($team) && $aktiveSchiris->count() >= 2) {
-            $team->addFreilos(FreilosGrund::SCHIRI);
-            if ($sendMail) {
-                Mailbot::mail_schiri_freilos($team);
-            }
-            return True;
-        }
-        return False;
     }
 
 }

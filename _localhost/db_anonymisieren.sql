@@ -5,8 +5,8 @@ TRUNCATE TABLE teams_strafen;
 TRUNCATE TABLE neuigkeiten;
 TRUNCATE TABLE ligakarte_gesuch;
 TRUNCATE TABLE mailbot;
-# TRUNCATE TABLE abstimmung_ergebnisse;
-# TRUNCATE TABLE abstimmung_teams;
+TRUNCATE TABLE abstimmung_ergebnisse;
+TRUNCATE TABLE abstimmung_teams;
 # TRUNCATE TABLE oeffi_challenge;
 TRUNCATE TABLE spieler_ausleihen;
 TRUNCATE TABLE turniere_berichte;
@@ -20,7 +20,7 @@ UPDATE spieler SET vorname= 'Vorname',nachname='Nachname',jahrgang= 2020, geschl
 
 -- Ligaleitung
 UPDATE ligaleitung SET passwort = NULL, email = 'test@einrad.hockey';
-INSERT INTO spieler (spieler_id, team_id, vorname, nachname, jahrgang, geschlecht, schiri, junior, letzte_saison, timestamp) VALUES ('3', NULL, 'Vorname', 'Entwickler', '1234', 'd', '', 'Nein', '26', current_timestamp());
+INSERT INTO spieler (spieler_id, team_id, vorname, nachname, jahrgang, geschlecht, letzte_saison, timestamp) VALUES (3, NULL, 'Vorname', 'Entwickler', '1234', 'd', 30, current_timestamp());
 INSERT INTO ligaleitung(funktion, login, passwort, spieler_id, email) VALUES ('ligaausschuss', 'entwickler', '$2y$10$ErHYjOnzowhPpBAqWRjOG.YsaaBJiR/IybP.1pdyWt4MBPlKNpN5e', '3', 'test@einrad.hockey');
 
 -- Turniere

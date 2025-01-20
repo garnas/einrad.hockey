@@ -240,12 +240,11 @@ class nSpieler
         $ausbilder = ($this->check_ausbilder()) ? "<i class='w3-text-grey'>Ausbilder/in</i>" : "";
         if ($this->schiri >= Config::SAISON) {
             $icon = Html::icon("check_circle_outline");
-            $color = "w3-text-green";
+            return "<span class='w3-text-green'>$icon $saison_text $junior $ausbilder</span>";
         } else {
             $icon = Html::icon("block");
-            $color = "w3-text-grey";
+            return "<span class='w3-text-grey'><s>$icon $saison_text $junior</s> $ausbilder</span>";
         }
-        return "<span class='$color'>$icon $saison_text $junior $ausbilder</span>";
 
     }
 

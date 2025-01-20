@@ -2,15 +2,12 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Repository\Team\TeamRepository;
+
 require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth
-
-if (!Abstimmung::darf_abstimmen($teamEntity->id())) {
-    Html::notice("Nur Teams bis Platz 24 in der Rangtabelle des 13. Spieltages können für das Finalturnier abstimmen.");
-    Helper::reload("/teamcenter/tc_start.php");
-}
-
 require_once '../../logic/abstimmung.logic.php';
+$teams = TeamRepository::get()->activeLigaTeams();
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -19,28 +16,17 @@ include '../../templates/header.tmp.php';
 ?>
     <div class="w3-card-4 w3-panel">
 
-        <h1 class="w3-text-primary">Abstimmung Finalturniermodus</h1>
+        <h1 class="w3-text-primary">Abstimmung Fördermittel</h1>
         <?php Html::message('notice',
             "Die Abstimmung startet hier am " . date("d.m.Y", $beginn) . " und endet am "
             . date("d.m.Y \u\m H:i", $abschluss) . " Uhr. "
-            . "Es haben bisher " . $ergebnisse["gesamt"] . " von " . Abstimmung::ANZAHL_TEAMS . " Teams abgestimmt.",
+            . "Es haben bisher " . $ergebnisse["gesamt"] . " von " . count($teams)  . " Teams abgestimmt.",
             Null); ?>
-        <!-- Informationstext für die Abstimmung -->
-        Der Ligaausschuss hat sich in den letzten Monaten intensiv mit dem Modus der Deutschen Meisterschaft
-        auseinandergesetzt.  Schlussendlich haben sich zwei Varianten herauskristallisiert, die der
-        Ligaausschuss zusammen mit dem alten Modus zur Abstimmung stellt.
-
         <p><strong>Informationen</strong></p>
-
-        <p>
-            <?= Html::link(Env::BASE_URL . "/dokumente/abstimmung_finalmodi/rundschreiben.pdf",
-                "Rundmail", true, "insert_drive_file") ?>
-        </p>
-
-        <p>
-            <?= Html::link(Env::BASE_URL . "/dokumente/abstimmung_finalmodi/finalmodi_beispielhaft.pdf",
-                "Anhang Beispiel-Spielpläne", true, "insert_drive_file") ?>
-        </p>
+        <p>Wie ihr bereits gehört habt, wurde der Ligabeitrag unter anderem erhöht, um Projekte wie die Förderung von Einradhockey-Initiativen zu unterstützen. Bislang haben wir vier Anträge erhalten. Um diese Mittel gerecht und transparent zu verteilen, haben wir ein vorläufiges Budget von 3.000,00 € festgelegt, über dessen Verteilung ihr mitentscheiden sollt.</p>
+        <p>Alle derzeit eingegangenen Anträge können gefördert werden, und es besteht weiterhin die Möglichkeit, weitere Anträge zu stellen, wenn ihr ein neues Projekt einbringen möchtet.</p>
+        <p>Jedes Team hat eine Stimme bei der Umfrage, sodass wir sicherstellen können, dass die Entscheidung gemeinsam getroffen wird.</p>
+        <p>Bitte nehmt euch einen Moment Zeit, um an der Umfrage teilzunehmen und uns eure Meinung zu den Fördermaßnahmen mitzuteilen. Die Umfrage wird bis zum  <?= date("d.m.Y", $abschluss) ?> offen sein.</p>
 
         <p><strong>Verbleibende Zeit</strong></p>
 
@@ -93,10 +79,7 @@ include '../../templates/header.tmp.php';
                         </p>
                     </form>
                 <?php else: ?>
-                    <p id="stimme">Dein Team hat wie folgt abgestimmt:</p>
-                    <p>
-                        <?= Abstimmung::OPTIONS[$einsicht] ?? "<span class='w3-text-red'>Fehler, bitte melde dich bei </span>" . Html::mailto(Env::TECHNIKMAIL) ?>
-                    </p>
+                    <p id="stimme">Deine Stimme wird unten im Formular angezeigt.</p>
                 <?php endif; ?>
             <?php endif; ?>
         </div>
@@ -107,18 +90,44 @@ include '../../templates/header.tmp.php';
         <!-- Formular zur Stimmabgabe -->
         <div class="w3-card-4 w3-panel">
             <h2 class="w3-text-primary"><?= (empty($abstimmung->team)) ? 'Jetzt abstimmen' : 'Stimme ändern' ?></h2>
+            <p>Seid Ihr damit einverstanden, dass die jährlichen Beiträge der Mitglieder der Liga für Fördermaßnahmen eingesetzt werden, die im Interesse der gesamten Liga stehen?</p>
             <form method="post">
                 <?php foreach (Abstimmung::OPTIONS as $id => $option): ?>
                     <p class="w3-hover-text-primary">
                         <!-- Erste Antwortmöglichkeit -->
                         <input required
+                               <?= Abstimmung::selected(name: "option", value: $id, value_chosen: $einsicht["option"] ?? null) ?>
                                type="radio"
-                               name="abstimmung"
+                               name="option"
                                id="<?= $id ?>"
                                value="<?= $id ?>"
                                class="w3-radio"
                         >
                         <label style="cursor: pointer;" for="<?= $id ?>"><?= $option ?></label>
+                    </p>
+                <?php endforeach; ?>
+                <p>Bitte bewertet die folgenden Fördermaßnahmen nach ihrer Wichtigkeit für die Liga (5 = sehr wichtig, 1 = weniger wichtig):</p>
+                <?php foreach (Abstimmung::OPTIONS_WICHTIGKEIT as $id => $option): ?>
+                    <p class="w3-hover-text-primary">
+                        <!-- Erste Antwortmöglichkeit -->
+                        <label style="cursor: pointer;" for="<?= $id ?>"><?= $option ?></label>
+                        <select
+                                id="<?= $id ?>"
+                                name="<?= $id ?>"
+                                class="w3-select w3-border w3-border-primary">
+                            <option <?= Abstimmung::selected(name: $id, value: "", value_chosen: $einsicht[$id] ?? "") ?>
+                                    value="">Enthaltung</option>
+                            <option <?= Abstimmung::selected(name: $id, value: "1", value_chosen: $einsicht[$id] ?? "") ?>
+                                    value="1">1 - weniger wichtig</option>
+                            <option <?= Abstimmung::selected(name: $id, value: "2", value_chosen: $einsicht[$id] ?? "") ?>
+                                    value="2">2</option>
+                            <option <?= Abstimmung::selected(name: $id, value: "3", value_chosen: $einsicht[$id] ?? "") ?>
+                                    value="3">3</option>
+                            <option <?= Abstimmung::selected(name: $id, value: "4", value_chosen: $einsicht[$id] ?? "") ?>
+                                    value="4">4</option>
+                            <option <?= Abstimmung::selected(name: $id, value: "5", value_chosen: $einsicht[$id] ?? "") ?>
+                                    value="5">5 - sehr wichtig</option>
+                        </select>
                     </p>
                 <?php endforeach; ?>
                 <p>
@@ -135,7 +144,7 @@ include '../../templates/header.tmp.php';
                     >
                 </p>
                 <p>
-                    <button type="submit" class="w3-block w3-primary w3-button">
+                    <button type="submit" name="abgestimmt" class="w3-block w3-primary w3-button">
                         <i class="material-icons">how_to_vote</i>
                         <?php if (empty($abstimmung->team)): ?>
                             Stimme abgeben

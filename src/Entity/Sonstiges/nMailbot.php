@@ -5,70 +5,34 @@ namespace App\Entity\Sonstiges;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Mailbot
- *
- * @ORM\Table(name="mailbot")
- * @ORM\Entity
- */
-class nMailbot
+#[ORM\Table(name: "mailbot")]
+#[ORM\Entity] class nMailbot
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="mail_id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $mailId;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="adressat", type="string", length=600, nullable=false)
-     */
-    private $adressat;
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: "IDENTITY")]
+    #[ORM\Column(name: "mail_id", type: "integer", nullable: false)]
+    private int $mailId;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="betreff", type="string", length=255, nullable=false)
-     */
-    private $betreff;
+    #[ORM\Column(name: "adressat", type: "string", length: 600, nullable: false)]
+    private string $adressat;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="absender", type="string", length=255, nullable=false)
-     */
-    private $absender;
+    #[ORM\Column(name: "betreff", type: "string", length: 255, nullable: false)]
+    private string $betreff;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="inhalt", type="string", length=2000, nullable=false)
-     */
-    private $inhalt;
+    #[ORM\Column(name: "absender", type: "string", length: 255, nullable: false)]
+    private string $absender;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="mail_status", type="string", length=0, nullable=false)
-     */
-    private $mailStatus;
+    #[ORM\Column(name: "inhalt", type: "string", length: 2000, nullable: false)]
+    private string $inhalt;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="fehler", type="string", length=300, nullable=true)
-     */
-    private $fehler = '';
+    #[ORM\Column(name: "mail_status", type: "string", length: 255, nullable: false)]
+    private string $mailStatus;
 
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="zeit", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
-     */
+    #[ORM\Column(name: "fehler", type: "string", length: 300, nullable: true)]
+    private ?string $fehler = NULL;
+
+    #[ORM\Column(name: "zeit", type: "datetime", nullable: false, options: ["default" => "CURRENT_TIMESTAMP"])]
     private DateTime $zeit;
 
     public function getMailId(): ?int

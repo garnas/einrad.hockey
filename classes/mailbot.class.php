@@ -61,18 +61,9 @@ class MailBot
      * Der Mailbot nimmt Emails aus der Datenbank und versendet diese
      *
      */
-    public static function mail_bot(string $betreff = ""): void
+    public static function mail_bot(?int $mail_id = null): void
     {
-        if ($betreff === "") {
-            $sql = "
-                SELECT * 
-                FROM mailbot 
-                WHERE mail_status = 'warte'
-                ORDER BY zeit 
-                LIMIT 50
-                ";
-            $mails = db::$db->query($sql)->fetch();
-        } else {
+        if ($mail_id === null) {
             $sql = "
                 SELECT * 
                 FROM mailbot 
@@ -80,7 +71,14 @@ class MailBot
                 ORDER BY zeit 
                 LIMIT 50
                 ";
-            $mails = db::$db->query($sql, $betreff)->fetch();
+            $mails = db::$db->query($sql, $mail_id)->fetch();
+        } else {
+            $sql = "
+                SELECT * 
+                FROM mailbot 
+                WHERE mail_id = ? AND mail_status = 'warte'
+                ";
+            $mails = db::$db->query($sql, $mail_id)->fetch();
         }
 
         foreach($mails as $mail){
@@ -120,7 +118,7 @@ class MailBot
      * @param string $absender
      */
     public static function add_mail(string $betreff, string $inhalt, string|array $adressaten,
-                                    string $absender = Env::SMTP_USER): void
+                                    string $absender = Env::SMTP_USER, bool $send_instantly = false): void
     {
         // Nur wenn Mailadressen vorhanden sind, wird eine Mail hinzugefügt
         if (empty($adressaten)){
@@ -138,6 +136,10 @@ class MailBot
                 ";
         $params = [$betreff, $inhalt, $adressaten, $absender];
         db::$db->query($sql, $params)->log();
+        if ($send_instantly) {
+            $mail_id = db::$db->get_last_insert_id();
+            self::mail_bot(mail_id: $mail_id);
+        }
     }
 
     /**
@@ -218,7 +220,7 @@ class MailBot
         $inhalt = ob_get_clean();
         $akt_kontakt = new Kontakt ($team_id);
         $emails = $akt_kontakt->get_emails('info');
-        self::add_mail($betreff, $inhalt, $emails);
+        self::add_mail($betreff, $inhalt, $emails, send_instantly: True);
     }
 
     /**
@@ -332,7 +334,31 @@ class MailBot
             include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
         $inhalt = ob_get_clean();
         $emails = (new Kontakt ($team->id()))->get_emails('info');
-        self::add_mail($betreff, $inhalt, $emails);
+        self::add_mail($betreff, $inhalt, $emails, send_instantly: true);
+    }
+
+    public static function mail_ausrichter_freilos(nTeam $team): void
+    {
+        $betreff = "Freilos für euer Turnier erhalten";
+        ob_start();
+        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_ausrichter_freilos.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+        $inhalt = ob_get_clean();
+        $emails = (new Kontakt ($team->id()))->get_emails('info');
+        self::add_mail($betreff, $inhalt, $emails, send_instantly: true);
+    }
+
+    public static function mail_freilos_recycle(nTeam $team): void
+    {
+        $betreff = "Freilos für frühzeitig gesetztes Freilos";
+        ob_start();
+        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_freilos_recycle.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+        $inhalt = ob_get_clean();
+        $emails = (new Kontakt ($team->id()))->get_emails('info');
+        self::add_mail($betreff, $inhalt, $emails, send_instantly: true);
     }
 
 }

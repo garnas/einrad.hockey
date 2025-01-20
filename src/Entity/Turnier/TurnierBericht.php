@@ -4,43 +4,32 @@ namespace App\Entity\Turnier;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * TurniereBerichte
- *
- * @ORM\Table(name="turniere_berichte", indexes={@ORM\Index(name="turnier_id", columns={"turnier_id"})})
- * @ORM\Entity
- */
+#[ORM\Entity]
+#[ORM\Table(
+    name: "turniere_berichte",
+    indexes: [
+        new ORM\Index(name: "turnier_id", columns: ["turnier_id"])
+    ])
+]
 class TurnierBericht
 {
 
-    /**
-     * @var Turnier
-     * @ORM\Id
-     * @ORM\OneToOne(targetEntity="App\Entity\Turnier\Turnier", mappedBy="turnier")
-     * @ORM\JoinColumn(name="turnier_id", referencedColumnName="turnier_id")
-     */
-    private $turnier;
+    #[ORM\OneToOne(targetEntity: Turnier::class)]
+    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
+    private Turnier $turnier;
 
-    /**
-     * @var int
-     * @ORM\Id
-     * @ORM\Column(name="turnier_id", type="integer")
-     */
+    #[ORM\Column(name: "turnier_id", type: "integer")]
     private int $turnierId;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="bericht", type="string", length=1900, nullable=false)
-     */
-    private $bericht;
+    #[ORM\Column(name: "bericht_id", type: "integer")]
+    #[ORM\Id]
+    private int $berichtId;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="kader_ueberprueft", type="string", length=0, nullable=false)
-     */
-    private $kaderUeberprueft;
+    #[ORM\Column(name: "bericht", type: "string", length: 1900, nullable: false)]
+    private string $bericht;
+
+    #[ORM\Column(name: "kader_ueberprueft", type: "string", length: 0, nullable: false)]
+    private string $kaderUeberprueft;
 
     public function getBericht(): ?string
     {
@@ -66,17 +55,11 @@ class TurnierBericht
         return $this;
     }
 
-    /**
-     * @return Turnier
-     */
     public function getTurnier(): Turnier
     {
         return $this->turnier;
     }
 
-    /**
-     * @param Turnier $turnier
-     */
     public function setTurnier(Turnier $turnier): void
     {
         $this->turnier = $turnier;

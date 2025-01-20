@@ -2,19 +2,18 @@
 
 namespace App\Repository;
 
+use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Logging\Middleware;
+use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
-use Doctrine\DBAL\Logging\DebugStack;
-use Doctrine\Common\Util\Debug;
-use Doctrine\ORM\ORMSetup;
-
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Env;
-use Db;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
 
 class DoctrineWrapper
 {
     private static EntityManager $entity_manager;
-
-    public static DebugStack $logger;
 
     private function __construct(){}
 
@@ -23,31 +22,30 @@ class DoctrineWrapper
         return self::$entity_manager;
     }
 
-    public static function dump(mixed $var): void
-    {
-        db::debug(Debug::dump($var,3,true, false));
-    }
-
     public static function setup(): void
     {
-        // Create a simple "default" Doctrine ORM configuration for Annotations
-//        $isDevMode = Env::IS_LOCALHOST;
-        $isDevMode = false;
-        $proxyDir = Env::BASE_PATH . "/tmp";
-        $cache = null;
-        $config = ORMSetup::createAnnotationMetadataConfiguration(
-            array(__DIR__),
-            $isDevMode,
-            $proxyDir,
-            $cache,
-        );
+        $isDevMode = ENV::IS_LOCALHOST;
 
-        self::$logger = new DebugStack();
+        $config = new Configuration();
 
-        $config->setAutoGenerateProxyClasses(true);
-        $config->setSQLLogger(self::$logger);
+        $driverImpl = new AttributeDriver(paths: [Env::BASE_PATH . "/src/Entity"]);
+        $config->setMetadataDriverImpl($driverImpl);
 
-        // database configuration parameters
+        $queryCache = ($isDevMode ? (new ArrayAdapter()) : (new PhpFilesAdapter("doctrine_queries")));
+        $config->setQueryCache($queryCache);
+
+        $metadataCache = ($isDevMode ? (new ArrayAdapter()) : (new PhpFilesAdapter("doctrine_metadata")));
+        $config->setMetadataCache($metadataCache);
+
+        $config->setProxyDir(Env::BASE_PATH . "/tmp");
+        $config->setProxyNamespace("App\Proxies");
+
+        $config->setAutoGenerateProxyClasses($isDevMode);
+
+        # Log writing SQL queries
+        $middleware = new Middleware(new Logger());
+        $config->setMiddlewares([$middleware]);
+
         $connectionParams = [
             'dbname' => Env::DATABASE,
             'user' => Env::USER_NAME,
@@ -55,6 +53,8 @@ class DoctrineWrapper
             'host' => Env::HOST_NAME,
             'driver' => 'pdo_mysql',
         ];
-        self::$entity_manager = EntityManager::create($connectionParams, $config);
+        $connection = DriverManager::getConnection(params: $connectionParams, config: $config);
+
+        self::$entity_manager = new EntityManager($connection, $config);
     }
 }

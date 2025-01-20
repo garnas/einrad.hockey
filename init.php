@@ -19,8 +19,6 @@ ini_set('session.cookie_secure', '1');
 
 // Sonstige Einstellungen
 ini_set('date.timezone', 'Europe/Berlin');
-ini_set('upload_max_filesize', '20M');
-ini_set('post_max_size', '20M');
 ini_set('memory_limit', '512M');
 ini_set('max_execution_time', '90');
 ini_set('error_reporting', E_ALL);
@@ -105,12 +103,12 @@ register_shutdown_function(static function () {
     ) {
         $referrer = '';
     } else {
-        $referrer = " | " . ($_SERVER['HTTP_REFERER'] ?? '') . " (Referrer)";
+        $referrer = " | " . ($_SERVER['HTTP_REFERER'] ?? "") . " (Referrer)";
     }
 
     // Logs schreiben
     Helper::log(Config::LOG_USER,
-        $_SERVER['REQUEST_URI']
+        ($_SERVER['REQUEST_URI'] ?? "")
         . " | " . round(microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"], 3) . " s (Load)"
         . " | " . ndbWrapper::$query_count . " (Querys)"
         . $referrer,
