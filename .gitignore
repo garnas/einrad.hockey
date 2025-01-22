@@ -20,8 +20,14 @@ system/logs/
 # IntelliJ IDE
 .idea/
 
+# Visual Studio Code
+.vscode/
+
 # npm
 node_modules/
+
+# Docker Shell Scripts
+*.docker.sh
 
 # composer
 vendor/

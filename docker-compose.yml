@@ -10,8 +10,14 @@ services:
     links:
       - mariadb
     volumes:
-      - .:/var/www/html
-      - notused:/var/www/html/vendor
+      - ./bin:/var/www/html/bin
+      - ./classes:/var/www/html/classes
+      - ./logic:/var/www/html/logic
+      - ./public:/var/www/html/public
+      - ./src:/var/www/html/src
+      - ./templates:/var/www/html/templates
+      - ./init.php:/var/www/html/init.php
+      - ./env.php:/var/www/html/env.php
     ports:
       - '80:80'
 
@@ -39,4 +45,3 @@ services:
 
 volumes:
   mariadb-data:
-  notused:

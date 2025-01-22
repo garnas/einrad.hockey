@@ -21,6 +21,11 @@ SET time_zone = "+00:00";
 -- Datenbank: `db_localhost`
 --
 
+CREATE DATABASE IF NOT EXISTS `db_localhost` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `db_localhost`;
+
+SET FOREIGN_KEY_CHECKS = 0;
+
 -- --------------------------------------------------------
 
 --
