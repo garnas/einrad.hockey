@@ -100,6 +100,13 @@ input[type=number] {
 .w3-text-tertiary,.w3-hover-text-tertiary:hover{color:#EAB42E!important}
 .w3-border-tertiary,.w3-hover-border-tertiary:hover{border-color:#EAB42E!important}
 
+.ehl-text-pink{color: #bd6b99!important}
+.ehl-text-red{color:#db756b!important}
+.ehl-text-orange{color:#bd946b!important}
+.ehl-text-yellow{color:#be9f4b!important}
+.ehl-text-green{color:#6bbd99!important}
+.ehl-text-blue{color:#6bb0bd!important}
+
 /* Grid-Darstellung in den Centern */
 .flex-container {
   display: flex;
