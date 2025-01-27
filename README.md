@@ -62,6 +62,13 @@ Du hast Lust mitzuwirken? Oder Fragen darüber, wie die Webseite funktioniert? M
    * http://localhost/einrad.hockey/public/liga/neues.php
    * Hier sollte nun die Neuigkeitenseite angezeigt werden
 
+5. Doctrine Cache Update
+```shell
+php bin/doctrine orm:clear-cache:metadata
+php bin/doctrine orm:clear-cache:query
+php bin/doctrine orm:generate-proxies
+```
+
 ### Ionos Webspace:
 * composer.phar herunterladen
 <pre>
@@ -72,6 +79,13 @@ curl -sS https://getcomposer.org/installer | /usr/bin/php8.3-cli
 <pre>
 /usr/bin/php8.3-cli composer.phar about
 </pre>
+
+* Doctrine Cache Update
+```shell
+/usr/bin/php8.3-cli bin/doctrine orm:clear-cache:metadata
+/usr/bin/php8.3-cli bin/doctrine orm:clear-cache:query
+/usr/bin/php8.3-cli bin/doctrine orm:generate-proxies
+```
 
 ## Sonstiges
 * Eine vorkonfigurierte php.ini ist in _localhost zu finden.

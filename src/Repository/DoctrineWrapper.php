@@ -31,13 +31,21 @@ class DoctrineWrapper
         $driverImpl = new AttributeDriver(paths: [Env::BASE_PATH . "/src/Entity"]);
         $config->setMetadataDriverImpl($driverImpl);
 
-        $queryCache = ($isDevMode ? (new ArrayAdapter()) : (new PhpFilesAdapter("doctrine_queries")));
+        $queryCache = (
+            $isDevMode
+                ? (new ArrayAdapter())
+                : (new PhpFilesAdapter(namespace: "doctrine_queries", directory: Env::BASE_PATH. "/cache"))
+        );
         $config->setQueryCache($queryCache);
 
-        $metadataCache = ($isDevMode ? (new ArrayAdapter()) : (new PhpFilesAdapter("doctrine_metadata")));
+        $metadataCache = (
+            $isDevMode
+                ? (new ArrayAdapter())
+                : (new PhpFilesAdapter(namespace: "doctrine_metadata", directory: Env::BASE_PATH . "/cache"))
+        );
         $config->setMetadataCache($metadataCache);
 
-        $config->setProxyDir(Env::BASE_PATH . "/tmp");
+        $config->setProxyDir(Env::BASE_PATH . "/cache/proxy");
         $config->setProxyNamespace("App\Proxies");
 
         $config->setAutoGenerateProxyClasses($isDevMode);
