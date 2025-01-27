@@ -1,7 +1,3 @@
-<?php
-    $block_color = array('A' => 'ehl-text-pink', 'B' => 'ehl-text-orange', 'C' => 'ehl-text-blue', 'D' => 'ehl-text-yellow', 'E' => 'ehl-text-green', 'F' => 'ehl-text-red');
-?>
-
 <!-- Header der Rangtabelle -->
 <div class="w3-row w3-primary">
     <div class="w3-col w3-right" style="width: 42px;">&nbsp;</div>
@@ -20,12 +16,11 @@
 <div>
     <?php $counter = 0; ?>
     <?php foreach ($rang_tabelle as $key => $zeile): ?>
-        <?php $header_style = $counter % 2 == 1 ? "background-color: #ebebeb;" : ""; ?>
-        <?php $details_style = $counter % 2 == 1 ? "background-color: #f5f5f5;" : ""; ?>
         <?php $block = Tabelle::rang_to_block($zeile['rang']); ?>
-
+        <?php $nthcolor = $counter % 2 == 0 ? '' : 'w3-light-grey'; ?>
+        
         <!-- Kopfzeile fuer das Team -->
-        <div id="large-rang-head-<?=$key?>" class="w3-row" style="<?=$header_style?>">
+        <div id="large-rang-head-<?=$key?>" class="w3-row <?=$nthcolor?> w3-border-bottom w3-border-grey">
             <div class="w3-col w3-right w3-padding-8 w3-center" style="width: 42px;">
                 <? if (!empty($zeile['details'])): ?>
                     <span onclick="show_large_results('rang', <?=$key?>)" style="cursor: pointer;">
@@ -47,20 +42,15 @@
         <!-- Details zu den Turnieren des Teams -->
         <?php if (!empty($zeile['details'])): ?>
             <?php foreach ($zeile['details'] as $dey => $ergebnis): ?>
-                <div class="large-rang-result-<?=$key?> w3-row <?=$saison != $ergebnis['saison'] ? 'w3-text-grey' : 'w3-text-primary'?> <?=$row_class?>" style="display: none; <?=$details_style?>">
-                    <div class="w3-col w3-right" style="width: 42px;">&nbsp;</div>
-                    <div class="w3-rest">
-                        <div class="w3-row">
-                            <div class="w3-col l3 m3 w3-padding-8 w3-right-align"><?=date_format(date_create($ergebnis['datum']), "d.m.y")?></div>
-                            <div class="w3-col l2 m2 w3-padding-8"><?=$ergebnis['tblock']?></div>
-                            <div class="w3-col l4 m4 w3-padding-8"><?=$ergebnis['ort']?></div>
-                            <div class="w3-col l2 m2 w3-padding-8 w3-right-align">Platz <?=$ergebnis['platz']?> / <?=$ergebnis['teilnehmer']?></div>
-                            <div class="w3-col l1 m1 w3-padding-8 w3-right-align">
-                                <a href="ergebnisse.php?saison=<?=$ergebnis['saison']?>#<?=$ergebnis['turnier_id']?>" class="no w3-hover-text-secondary"> 
-                                    <?=number_format($ergebnis['ergebnis'] ?: 0, 0, ",", ".")?>
-                                </a>
-                            </div>
-                        </div>
+                <div class="large-rang-result-<?=$key?> w3-row <?=$saison != $ergebnis['saison'] ? 'w3-text-grey' : 'w3-text-primary'?>" style="display: none; <?=$details_style?>">
+                    <div class="w3-col l2 m2 w3-padding-8 w3-right-align"><?=date_format(date_create($ergebnis['datum']), "d.m.y")?></div>
+                    <div class="w3-col l2 m2 w3-padding-8"><?=$ergebnis['tblock']?></div>
+                    <div class="w3-col l3 m3 w3-padding-8"><?=$ergebnis['ort']?></div>
+                    <div class="w3-col l3 m3 w3-padding-8 w3-right-align">Platz <?=$ergebnis['platz']?> / <?=$ergebnis['teilnehmer']?></div>
+                    <div class="w3-col l2 m2 w3-padding-8 w3-right-align">
+                        <a href="ergebnisse.php?saison=<?=$ergebnis['saison']?>#<?=$ergebnis['turnier_id']?>" class="no w3-hover-text-secondary"> 
+                            <?=number_format($ergebnis['ergebnis'] ?: 0, 0, ",", ".")?>
+                        </a>
                     </div>
                 </div>
             <?php endforeach; ?>    

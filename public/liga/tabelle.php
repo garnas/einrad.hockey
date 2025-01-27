@@ -44,6 +44,15 @@ for ($i = 17; $i <= 22; $i++){
     $platz_color[$i] = "w3-text-brown";
 }
 
+$block_color = array(
+    'A' => 'ehl-text-pink', 
+    'B' => 'ehl-text-orange', 
+    'C' => 'ehl-text-blue', 
+    'D' => 'ehl-text-yellow', 
+    'E' => 'ehl-text-green', 
+    'F' => 'ehl-text-red'
+);
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -126,55 +135,13 @@ include '../../templates/header.tmp.php';?>
 </div>
 
 <!-- Beginn der eigentlichen Meisterschaftstabelle -->
-<div class="w3-responsive w3-card">
-    <!-- Header der Meisterschaftstabelle -->
-    <div class="w3-row w3-primary">
-        <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width: 50px;"><b>#</b></div>
-        <div class="w3-col w3-right w3-padding-8" style="width: 42px;"></div>
-        <div class="w3-rest">
-            <div class="w3-row">
-                <div class="w3-col l10 m10 s10 w3-padding-8 w3-left-align"><b>Team</b></div>
-                <div class="w3-col l2 m2 s2 w3-padding-8 w3-right-align"><b>Summe</b></div>
-            </div>
-        </div>
-    </div>
-    <!-- Zeilen der Meisterschaftstabelle -->
-    <div>
-        <?php $counter = 0; ?>
-        <?php foreach ($meisterschafts_tabelle as $key => $zeile): ?>
-            <?php $row_class = $counter % 2 == 1 ? "w3-light-grey" : ""; ?>
-            <!-- Kopfzeile fuer das Team -->
-            <div id="m-head-<?=$key?>" class="w3-row <?=$row_class?>">
-                <div class="w3-col w3-left w3-padding-8 w3-right-align <?=$platz_color[$zeile['platz']] ?? ''?>" style="width: 50px;"><?=$zeile['platz']?></div>
-                <div class="w3-col w3-right w3-padding-8" style="width: 42px;">
-                    <?php if (!empty($zeile['details'])): ?>
-                        <span onclick="show_results('m', <?=$key?>)" style="cursor:pointer">
-                            <span id="m-icon-on-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:block">arrow_drop_down</span>
-                            <span id="m-icon-off-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:none">arrow_drop_up</span>
-                        </span>
-                    <?php endif; ?>
-                </div>
-                <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width: 80px;">
-                    <?=number_format($zeile['summe'] ?: 0, 0, ",", ".") . (!empty($zeile['hat_strafe']) ? '<a class="no w3-text-primary w3-hover-text-secondary" href="#strafen">*</a>' : '')?>
-                </div>
-                <div class="w3-rest w3-padding-8 w3-left-align"><?=$zeile['teamname']?></div>
-            </div>
-            <!-- Details zu den Turnieren des Teams -->
-            <?php if (!empty($zeile['details'])): ?>
-                <?php foreach ($zeile['details'] as $ergebnis): ?>
-                    <div class="m-result-<?=$key?> w3-row <?=$row_class?>" style="display: none;">
-                        <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width:100px;"><?=date_format(date_create($ergebnis['datum']), "d.m.y")?></div>
-                        <div class="w3-col w3-hide-small w3-left w3-padding-8 w3-left-align" style="width:85px;"><?=$ergebnis['tblock']?></div>
-                        <div class="w3-col w3-hide-small w3-right w3-padding-8" style="width: 42px;"></div>
-                        <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width: 80px;"><a href="ergebnisse.php#<?=$ergebnis['turnier_id']?>" class="no w3-text-primary w3-hover-text-secondary"><?=number_format($ergebnis['ergebnis'] ?: 0, 0, ",", ".")?></a></div>
-                        <div class="w3-col w3-hide-small w3-right w3-padding-8 w3-right-align" style="width: 65px;"><?=$ergebnis['platz']?> / <?=$ergebnis['teilnehmer']?></div>
-                        <div class="w3-rest w3-padding-8 w3-left-align"><?=$ergebnis['ort']?></div>
-                    </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
-            <?php $counter++; ?>
-        <?php endforeach; ?>
-    </div>
+<div class="w3-responsive w3-card w3-hide-small">
+    <?php include '../../templates/tables/large_meistertabelle.tmp.php'; ?>
+</div>
+
+<!-- Meisterschaftstabelle für mobile Geräte -->
+<div class="w3-responsive w3-card w3-hide-large w3-hide-medium">
+    <?php include '../../templates/tables/small_meistertabelle.tmp.php'; ?>
 </div>
 
 <!-- Auswahl des Spieltages unter der Meisterschaftstabelle-->    

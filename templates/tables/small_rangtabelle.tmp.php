@@ -1,7 +1,3 @@
-<?php
-    $block_color = array('A' => 'ehl-text-pink', 'B' => 'ehl-text-orange', 'C' => 'ehl-text-blue', 'D' => 'ehl-text-yellow', 'E' => 'ehl-text-green', 'F' => 'ehl-text-red');
-?>
-
 <!-- Header der Rangtabelle -->
 <div class="w3-row w3-primary"> 
     <div class="w3-col w3-left w3-padding-8" style="width: 2em;"><b>#</b></div>
@@ -14,12 +10,11 @@
 <div>
     <?php $counter = 0; ?>
     <?php foreach ($rang_tabelle as $key => $zeile): ?>
-        <?php $header_style = $counter % 2 == 1 ? "background-color: #ebebeb;" : ""; ?>
-        <?php $details_style = $counter % 2 == 1 ? "background-color: #f5f5f5;" : ""; ?>
         <?php $block = Tabelle::rang_to_block($zeile['rang']); ?>
+        <?php $nthcolor = $counter % 2 == 0 ? '' : 'w3-light-grey'; ?>
         
         <!-- Kopfzeile fuer das Team -->
-        <div id="small-rang-head-<?=$key?>" class="w3-row" style="<?=$header_style?>" >
+        <div id="small-rang-head-<?=$key?>" class="w3-row <?=$nthcolor?> w3-border-bottom w3-border-grey">
             <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width: 36px;"><?=$zeile['rang']?></div>
             <div class="w3-col w3-left w3-padding-8 <?=$block_color[substr($block, 0, 1)]?>" style="width: 40px;"><?=$block?></div>
             <div class="w3-col w3-right w3-padding-8 w3-center" style="width: 42px;">
@@ -32,15 +27,16 @@
             <div class="w3-rest w3-padding-8"><?=$zeile['teamname']?></div>
         </div>
 
-        <div id="small-rang-value-<?=$key?>" class="w3-row" style="display: none; <?=$header_style?>">
+        <!-- Wertigkeit des Ranges; Wird erst nach Klicken angezeigt -->
+        <div id="small-rang-value-<?=$key?>" class="w3-row <?=$nthcolor?>" style="display: none;">
             <div class="w3-col w3-left" style="width: 84px;">&nbsp;</div>
             <div class="w3-rest w3-small w3-text-primary">Wertigkeit: <?=Tabelle::rang_to_wertigkeit($zeile['rang'])?></div>
         </div>
         
         <!-- Lade Turnierdetails nur, wenn es auch gespielte Turniere gibt -->
         <?php if (!empty($zeile['details'])): ?>
-            <?php foreach ($zeile['details'] as $dey => $ergebnis): ?>
-                <div class="small-rang-result-<?=$key?> w3-row <?=$saison != $ergebnis['saison'] ? 'w3-text-grey' : 'w3-text-primary'?>" style="display: none; <?=$details_style?>">
+            <?php foreach ($zeile['details'] as $ergebnis): ?>
+                <div class="small-rang-result-<?=$key?> w3-row <?=$nthcolor?> <?=$saison != $ergebnis['saison'] ? 'w3-text-dark-grey' : 'w3-text-primary'?>" style="display: none;">
                     <div class="w3-col w3-left w3-padding-8" style="width: 36px;">&nbsp;</div>
                     <div class="w3-col w3-left w3-padding-8" style="width: 90px;"><?=date_format(date_create($ergebnis['datum']), "d.m.y")?></div>
                     <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width: 100px;">
@@ -51,7 +47,6 @@
                     <div class="w3-rest w3-padding-8 w3-left-align"><?=$ergebnis['ort']?></div>
                 </div>
             <?php endforeach; ?>    
-    
         <?php endif; ?>    
         <?php $counter++; ?>
     <?php endforeach; ?>

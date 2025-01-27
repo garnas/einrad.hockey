@@ -157,9 +157,12 @@ function show_small_results(table, id) {
     icon_show_element.style.display = "none";
     icon_hide_element.style.display = "block";
     
-    value_element.style.display = "block";
-    value_element.classList.add('w3-border-primary');
-    value_element.classList.add('w3-border-bottom');
+    if (table === 'rang') {
+      value_element.style.display = "block";
+      value_element.classList.add('w3-border-primary');
+      value_element.classList.add('w3-border-bottom');
+      head_element.classList.remove('w3-border-bottom');
+    }
 
     result_elements.forEach(function(element) {
       element.style.display = "block";
@@ -169,15 +172,18 @@ function show_small_results(table, id) {
 
   } else {
     // hide results
+    head_element.classList.remove('w3-border-primary');
+    head_element.classList.remove('w3-topbar');
+    
     icon_show_element.style.display = "block";
     icon_hide_element.style.display = "none";
     
-    value_element.style.display = "none";
-    value_element.classList.remove('w3-border-primary');
-    value_element.classList.remove('w3-border-bottom');
-
-    head_element.classList.remove('w3-border-primary');
-    head_element.classList.remove('w3-topbar');
+    if (table === 'rang') {
+      value_element.style.display = "none";
+      value_element.classList.remove('w3-border-primary');
+      value_element.classList.remove('w3-border-bottom');
+      head_element.classList.add('w3-border-bottom');
+    }
 
     result_elements.forEach(element => {
       element.style.display = "none";
@@ -202,7 +208,6 @@ function show_large_results(table, id) {
 
     head_element.classList.add('w3-topbar');
     head_element.classList.add('w3-border-primary');
-    head_element.classList.add('w3-border-bottom');
     
     result_elements.forEach(function(element) {
       element.style.display = "block";
@@ -216,7 +221,6 @@ function show_large_results(table, id) {
     icon_hide_element.style.display = "none";
 
     head_element.classList.remove('w3-border-primary');
-    head_element.classList.remove('w3-border-bottom');
     head_element.classList.remove('w3-topbar');
     
     result_elements.forEach(element => {
