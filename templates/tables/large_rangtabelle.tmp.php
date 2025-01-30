@@ -42,7 +42,7 @@
         <!-- Details zu den Turnieren des Teams -->
         <?php if (!empty($zeile['details'])): ?>
             <?php foreach ($zeile['details'] as $dey => $ergebnis): ?>
-                <div class="large-rang-result-<?=$key?> w3-row <?=$saison != $ergebnis['saison'] ? 'w3-text-grey' : 'w3-text-primary'?>" style="display: none; <?=$details_style?>">
+                <div class="large-rang-result-<?=$key?> w3-row <?=$nthcolor?> <?=$saison != $ergebnis['saison'] ? 'w3-text-grey' : 'w3-text-primary'?>" style="display: none; <?=$details_style?>">
                     <div class="w3-col l2 m2 w3-padding-8 w3-right-align"><?=date_format(date_create($ergebnis['datum']), "d.m.y")?></div>
                     <div class="w3-col l2 m2 w3-padding-8"><?=$ergebnis['tblock']?></div>
                     <div class="w3-col l3 m3 w3-padding-8"><?=$ergebnis['ort']?></div>

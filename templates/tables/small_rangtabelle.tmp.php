@@ -36,7 +36,7 @@
         <!-- Lade Turnierdetails nur, wenn es auch gespielte Turniere gibt -->
         <?php if (!empty($zeile['details'])): ?>
             <?php foreach ($zeile['details'] as $ergebnis): ?>
-                <div class="small-rang-result-<?=$key?> w3-row <?=$nthcolor?> <?=$saison != $ergebnis['saison'] ? 'w3-text-dark-grey' : 'w3-text-primary'?>" style="display: none;">
+                <div class="small-rang-result-<?=$key?> w3-row <?=$nthcolor?> <?=$saison != $ergebnis['saison'] ? 'w3-text-grey' : 'w3-text-primary'?>" style="display: none;">
                     <div class="w3-col w3-left w3-padding-8" style="width: 36px;">&nbsp;</div>
                     <div class="w3-col w3-left w3-padding-8" style="width: 90px;"><?=date_format(date_create($ergebnis['datum']), "d.m.y")?></div>
                     <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width: 100px;">

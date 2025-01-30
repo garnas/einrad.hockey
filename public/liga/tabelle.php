@@ -50,7 +50,7 @@ $block_color = array(
     'C' => 'ehl-text-blue', 
     'D' => 'ehl-text-yellow', 
     'E' => 'ehl-text-green', 
-    'F' => 'ehl-text-red'
+    'F' => 'ehl-text-green'
 );
 
 /////////////////////////////////////////////////////////////////////////////
