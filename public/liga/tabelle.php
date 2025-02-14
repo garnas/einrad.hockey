@@ -223,30 +223,11 @@ include '../../templates/header.tmp.php';?>
     <?php else: ?>
         <h1 id="strafen" class="w3-text-primary">Verwarnungen</h1>
     <?php endif; ?>
-    <div class="w3-responsive w3-card">
-        <!-- Header der Verwarnungen -->
-        <div class="w3-row w3-primary"> 
-            <div class="w3-col w3-padding-8 l3 m3 s3 w3-left-align"><b>Team</b></div>
-            <div class="w3-col w3-padding-8 l7 m7 s7 w3-left-align"><b>Grund</b></div>
-            <div class="w3-col w3-padding-8 l2 m2 s2 w3-left-align"><b>Datum (Ort)</b></div>
-        </div>
-        <!-- Zeilen der Verwarnungen -->
-        <?php $counter = 0; ?>
-        <?php foreach ($strafen as $strafe) : ?>
-            <?php if ($strafe['verwarnung'] == 'Ja') : ?>
-                <?php $row_class = $counter % 2 == 1 ? "w3-light-grey" : ""; ?>
-                <div class="w3-row <?=$row_class?>">
-                    <div class="w3-col w3-padding-8 l3 m3 s3 w3-left-align"><?=$strafe['teamname']?></div>
-                    <div class="w3-col w3-padding-8 l7 m7 s7 w3-left-align"><?=$strafe['grund']?></div>
-                    <?php if (!empty($strafe['datum'])) : ?>
-                        <div class="w3-col w3-padding-8 l2 m2 s2 w3-left-align"><?=date("d.m.Y", strtotime($strafe['datum']))?> (<?=($strafe['ort'])?>)</div>
-                    <?php else : ?>
-                        <div class="w3-col w3-padding-8 l2 m2 s2 w3-left-align">-</div>
-                    <?php endif; ?>
-                </div>
-                <?php $counter++; ?>
-            <?php endif; ?>
-        <?php endforeach; ?>
+    <div class="w3-responsive w3-card w3-hide-small">
+        <?php include '../../templates/tables/large_verwarnungen.tmp.php'; ?>
+    </div>
+    <div class="w3-hide-large w3-hide-medium">
+        <?php include '../../templates/tables/small_verwarnungen.tmp.php'; ?>
     </div>
 <?php endif; ?>
 
@@ -256,32 +237,11 @@ include '../../templates/header.tmp.php';?>
     <?php else : ?>
         <h1 id="strafen" class="w3-text-primary">Strafen</h1>
     <?php endif; ?>
-    <div class="w3-responsive w3-card">
-        <!-- Header der Strafen -->
-        <div class="w3-row w3-primary"> 
-            <div class="w3-col w3-padding-8 l3 m3 s3 w3-left-align"><b>Team</b></div>
-            <div class="w3-col w3-padding-8 l6 m6 s6 w3-left-align"><b>Grund</b></div>
-            <div class="w3-col w3-padding-8 l1 m1 s1 w3-right-align"><b>Strafe</b></div>
-            <div class="w3-col w3-padding-8 l2 m2 s2 w3-left-align"><b>Datum (Ort)</b></div>
-        </div>
-        <!-- Zeilen der Strafen -->
-        <?php $counter = 0; ?>
-        <?php foreach ($strafen as $strafe) : ?>
-            <?php if ($strafe['verwarnung'] == 'Nein') : ?>
-                <?php $row_class = $counter % 2 == 1 ? "w3-light-grey" : ""; ?>
-                <div class="w3-row <?=$row_class?>">
-                    <div class="w3-col w3-padding-8 l3 m3 s3 w3-left-align"><?=$strafe['teamname']?></div>
-                    <div class="w3-col w3-padding-8 l6 m6 s6 w3-left-align"><?=$strafe['grund']?></div>
-                    <div class="w3-col w3-padding-8 l1 m1 s1 w3-right-align"><?=$strafe['prozentsatz']?>%</div>
-                    <?php if (!empty($strafe['datum'])) : ?>
-                        <div class="w3-col w3-padding-8 l2 m2 s2 w3-left-align"><?=date("d.m.Y", strtotime($strafe['datum']))?> (<?=($strafe['ort'])?>)</div>
-                    <?php else : ?>
-                        <div class="w3-col w3-padding-8 l2 m2 s2 w3-left-align">-</div>
-                    <?php endif; ?>
-                </div>
-                <?php $counter++; ?>
-            <?php endif; ?>
-        <?php endforeach; ?>
+    <div class="w3-responsive w3-card w3-hide-small">
+        <?php include '../../templates/tables/large_strafen.tmp.php'; ?>
+    </div>
+    <div class="w3-hide-large w3-hide-medium">
+        <?php include '../../templates/tables/small_strafen.tmp.php'; ?>
     </div>
 <?php endif; ?>
 
