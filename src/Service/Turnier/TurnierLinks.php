@@ -87,6 +87,9 @@ class TurnierLinks {
                 "Turnierreport verändern",
                 icon:"article");
         }
+        $links[] = Html::link("../teamcenter/tc_quittungen.php?turnier_id=$turnierId",
+            "Quittungsvorlagen erstellen",
+            icon:"euro");
         return $links;
     }
 

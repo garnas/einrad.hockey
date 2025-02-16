@@ -40,6 +40,16 @@ class Helper
         die();
     }
 
+    public static function zahlen_ausschreiben($string): string
+    {
+        $formatter = new NumberFormatter('de', NumberFormatter::SPELLOUT);
+
+        // Ersetze alle Zahlen durch ihre ausgeschriebene Form
+        return preg_replace_callback('/\d+/', function ($matches) use ($formatter) {
+            return ucfirst($formatter->format($matches[0]));
+        }, $string);
+    }
+
 
     /**
      * Weiterletiung zur 404.php not_found
