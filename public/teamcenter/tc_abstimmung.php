@@ -28,13 +28,14 @@ include '../../templates/header.tmp.php';
         <p>Jedes Team hat eine Stimme bei der Umfrage, sodass wir sicherstellen können, dass die Entscheidung gemeinsam getroffen wird.</p>
         <p>Bitte nehmt euch einen Moment Zeit, um an der Umfrage teilzunehmen und uns eure Meinung zu den Fördermaßnahmen mitzuteilen. Die Umfrage wird bis zum  <?= date("d.m.Y", $abschluss) ?> offen sein.</p>
 
-        <p><strong>Verbleibende Zeit</strong></p>
-
-        <?php Html::countdown(strtotime(Abstimmung::ENDE)) ?>
+        <?php if (time() > $beginn && time() < $abschluss): ?>
+            <p><strong>Verbleibende Zeit</strong></p>
+            <?php Html::countdown(strtotime(Abstimmung::ENDE)) ?>
+        <?php endif; ?>
 
         <p><strong>Fragen</strong></p>
         <p>
-            <?= Html::link(Nav::LINK_FORUM, "Forum", "true", "chat") ?>
+            <?= Html::link(Nav::LINK_FORUM, "Discord", "true", "chat") ?>
             oder <?= Html::mailto(Env::LAMAIL) ?>
         </p>
 
@@ -92,20 +93,6 @@ include '../../templates/header.tmp.php';
             <h2 class="w3-text-primary"><?= (empty($abstimmung->team)) ? 'Jetzt abstimmen' : 'Stimme ändern' ?></h2>
             <p>Seid Ihr damit einverstanden, dass die jährlichen Beiträge der Mitglieder der Liga für Fördermaßnahmen eingesetzt werden, die im Interesse der gesamten Liga stehen?</p>
             <form method="post">
-                <?php foreach (Abstimmung::OPTIONS as $id => $option): ?>
-                    <p class="w3-hover-text-primary">
-                        <!-- Erste Antwortmöglichkeit -->
-                        <input required
-                               <?= Abstimmung::selected(name: "option", value: $id, value_chosen: $einsicht["option"] ?? null) ?>
-                               type="radio"
-                               name="option"
-                               id="<?= $id ?>"
-                               value="<?= $id ?>"
-                               class="w3-radio"
-                        >
-                        <label style="cursor: pointer;" for="<?= $id ?>"><?= $option ?></label>
-                    </p>
-                <?php endforeach; ?>
                 <p>Bitte bewertet die folgenden Fördermaßnahmen nach ihrer Wichtigkeit für die Liga (5 = sehr wichtig, 1 = weniger wichtig):</p>
                 <?php foreach (Abstimmung::OPTIONS_WICHTIGKEIT as $id => $option): ?>
                     <p class="w3-hover-text-primary">
@@ -130,6 +117,25 @@ include '../../templates/header.tmp.php';
                         </select>
                     </p>
                 <?php endforeach; ?>
+                <p>Weitere Ideen:</p>
+                <textarea name="weiteres" class="w3-input w3-border w3-border-primary"><?=$einsicht['weiteres']?></textarea>
+                <hr>
+                <p>Seid Ihr damit einverstanden, dass auch zukünftig ein Teil der jährlichen Beiträge der Mitglieder der Liga für Fördermaßnahmen eingesetzt werden, die im Interesse der gesamten Liga stehen?</p>
+                <?php foreach (Abstimmung::OPTIONS as $id => $option): ?>
+                    <p class="w3-hover-text-primary">
+                        <!-- Erste Antwortmöglichkeit -->
+                        <input required
+                               <?= Abstimmung::selected(name: "option", value: $id, value_chosen: $einsicht["option"] ?? null) ?>
+                               type="radio"
+                               name="option"
+                               id="<?= $id ?>"
+                               value="<?= $id ?>"
+                               class="w3-radio"
+                        >
+                        <label style="cursor: pointer;" for="<?= $id ?>"><?= $option ?></label>
+                    </p>
+                <?php endforeach; ?>
+                <hr>
                 <p>
                     <!-- Passwort -->
                     <label for="passwort" style="cursor: pointer;">
