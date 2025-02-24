@@ -140,46 +140,98 @@ function countdown(countDownDate, countdown_id){
 }
 
 // Ergebnisse der Tabelle ausklappen
-function show_results(table, id) {
+function show_small_results(table, id) {
   
-  head = document.getElementById(table + '-head-' + id);
-  head.classList.toggle('active');
+  let head_element = document.getElementById('small-' + table + '-head-' + id);
+  let value_element = document.getElementById('small-' + table + '-value-' + id);
+  let icon_show_element = document.getElementById('small-' + table + '-icon-show-' + id);
+  let icon_hide_element = document.getElementById('small-' + table + '-icon-hide-' + id);
+  let result_elements = document.querySelectorAll('.' + 'small-' + table + '-result-' + id);
   
-  icon_on = document.getElementById(table + '-icon-on-' + id);
-  icon_off = document.getElementById(table + '-icon-off-' + id);
+  head_element.classList.toggle('active'); // switches between active and inactive
+  if (head_element.classList.contains('active')) {
+    // show results
+    head_element.classList.add('w3-topbar');
+    head_element.classList.add('w3-border-primary');
+    
+    icon_show_element.style.display = "none";
+    icon_hide_element.style.display = "block";
+    
+    if (table === 'rang') {
+      value_element.style.display = "block";
+      value_element.classList.add('w3-border-primary');
+      value_element.classList.add('w3-border-bottom');
+      head_element.classList.remove('w3-border-bottom');
+    }
 
-  results = document.querySelectorAll('.' + table + '-result-' + id);
-
-  if (head.classList.contains('active')) {
-    head.classList.add('w3-border-top');
-    head.classList.add('w3-border-bottom');
-    head.classList.add('w3-border-primary');
-
-    icon_on.style.display = "none";
-    icon_off.style.display = "block";
-
-    results.forEach(function(element, index, array) {
+    result_elements.forEach(function(element) {
       element.style.display = "block";
       element.classList.add('w3-border-bottom');
-      
-      if (index === array.length - 1) {
-        element.classList.add('w3-border-primary');
-      }
+      element.classList.add('w3-border-grey');
     });
 
   } else {
-    head.classList.remove('w3-border-top');
-    head.classList.remove('w3-border-bottom');
-    head.classList.remove('w3-border-primary');
+    // hide results
+    head_element.classList.remove('w3-border-primary');
+    head_element.classList.remove('w3-topbar');
+    
+    icon_show_element.style.display = "block";
+    icon_hide_element.style.display = "none";
+    
+    if (table === 'rang') {
+      value_element.style.display = "none";
+      value_element.classList.remove('w3-border-primary');
+      value_element.classList.remove('w3-border-bottom');
+      head_element.classList.add('w3-border-bottom');
+    }
 
-    icon_on.style.display = "block";
-    icon_off.style.display = "none";
-
-    results.forEach(elem => {
-      elem.style.display = "none";
-      elem.classList.remove('w3-border-primary');
-      elem.classList.remove('w3-border-bottom');
+    result_elements.forEach(element => {
+      element.style.display = "none";
+      element.classList.remove('w3-border-bottom');
+      element.classList.remove('w3-border-grey');
     });
 
   }
+}
+
+function show_large_results(table, id) {
+  let head_element = document.getElementById('large-' + table + '-head-' + id);
+  let icon_show_element = document.getElementById('large-' + table + '-icon-show-' + id);
+  let icon_hide_element = document.getElementById('large-' + table + '-icon-hide-' + id);
+  let result_elements = document.querySelectorAll('.' + 'large-' + table + '-result-' + id);
+
+  head_element.classList.toggle('active'); // switches between active and inactive
+  if (head_element.classList.contains('active')) {
+    // show results
+    icon_show_element.style.display = "none";
+    icon_hide_element.style.display = "block";
+
+    head_element.classList.add('w3-topbar');
+    head_element.classList.add('w3-border-primary');
+    
+    result_elements.forEach(function(element) {
+      element.style.display = "block";
+      element.classList.add('w3-border-bottom');
+      element.classList.add('w3-border-grey');
+    });
+
+  } else {
+    // hide results
+    icon_show_element.style.display = "block";
+    icon_hide_element.style.display = "none";
+
+    head_element.classList.remove('w3-border-primary');
+    head_element.classList.remove('w3-topbar');
+    
+    result_elements.forEach(element => {
+      element.style.display = "none";
+      element.classList.remove('w3-border-bottom');
+      element.classList.remove('w3-border-grey');
+    });
+
+  }
+}
+
+function show_medium_results(table, id) {
+  show_large_results(table, id);
 }
