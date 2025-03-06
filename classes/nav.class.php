@@ -186,7 +186,7 @@ class Nav
      *  Ligalinks
      */
     public const LINK_TERMINPLANER = 'https://team.einrad.hockey';
-    public const LINK_FORUM = 'https://forum.einrad.hockey/';
+    public const LINK_FORUM = 'https://discord.gg/jQrFefqz';
     public const LINK_FACE = 'https://www.facebook.com/DeutscheEinradhockeyliga';
     public const LINK_GIT = 'https://github.com/garnas/einrad.hockey';
     /**

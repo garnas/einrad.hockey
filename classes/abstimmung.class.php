@@ -26,8 +26,6 @@ class Abstimmung
         "Aufwandsentschaedigung" => "Aufwandsentschädigung von Übungsleitern bei Einradhockey-Veranstaltungen (z.B. Trainingslager)"
     ];
 
-    public const ANZAHL_TEAMS = 24;
-
     public static function selected(string $name, string $value, ?string $value_chosen): string
     {
         if ($value_chosen != null) {
@@ -39,11 +37,11 @@ class Abstimmung
     /**
      * Frühstmöglicher Zeitpunkt der Stimmabgabe
      */
-    public const BEGINN = "02.01.2025 00:00";
+    public const BEGINN = "17.03.2025 00:00";
     /**
      * Letztmöglicher Zeitpunkt der Stimmabgabe
      */
-    public const ENDE = "12.03.2025 23:59";
+    public const ENDE = "14.04.2025 18:00";
     /**
      * Verschlüsselungsverfahren für die TeamIDs
      */
@@ -199,32 +197,29 @@ class Abstimmung
      */
     public static function get_ergebnisse(int $min = 0): array
     {
-        $sql = "
-            SELECT stimme, COUNT(stimme) AS stimmen 
-            FROM abstimmung_ergebnisse
-            GROUP BY stimme
-            ";
-        $result = db::$db->query($sql)->esc()->list('stimmen', 'stimme');
-        $ergebnisse['gesamt'] = 0;
-        foreach ($result as $stimmen) {
-            $ergebnisse['gesamt'] += $stimmen;
-        }
-        $ergebnisse['%'] = round($ergebnisse['gesamt'] / self::ANZAHL_TEAMS * 100);
-        foreach (self::OPTIONS as $option => $text) {
-            if (
-                isset($result[$option])
-                && $ergebnisse['gesamt'] >= $min // Mindestanzahl an Stimmen muss erreicht werden, um Ergebnisse anzuzeigen
-            ) {
-                $ergebnisse[$option]["%"] = round(($result[$option] / $ergebnisse['gesamt']) * 100);
-                $ergebnisse[$option]["anzahl"] = $result[$option];
-            } else {
-                $ergebnisse[$option]["%"] = 0;
-                $ergebnisse[$option]["anzahl"] = 0;
+        $sql = 'select * from abstimmung_ergebnisse';
+        $stimmen = db::$db->query($sql)->list('stimme');
+
+        $ergebnisse = array();
+        foreach ($stimmen as $key => $stimme) {
+            $decode = json_decode($stimme, associative: true);
+            foreach ($decode as $key => $value) {
+                $ergebnisse[$key][$value] = ($ergebnisse[$key][$value] ?? 0) + 1;
             }
         }
 
         return $ergebnisse;
     }
 
+    /**
+     * Gibt die Anzahl der abgegebenen Stimmen zurück.
+     *
+     * @return int
+     */
+    public static function get_anzahl_stimmen(): int
+    {
+        $sql = 'select count(*) from abstimmung_ergebnisse';
+        return db::$db->query($sql)->fetch_one();
+    }
 
 }
