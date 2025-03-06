@@ -19,8 +19,7 @@ include '../../templates/header.tmp.php';
         <h1 class="w3-text-primary">Abstimmung Fördermittel</h1>
         <?php Html::message('notice',
             "Die Abstimmung startet hier am " . date("d.m.Y", $beginn) . " und endet am "
-            . date("d.m.Y \u\m H:i", $abschluss) . " Uhr. "
-            . "Es haben bisher " . $ergebnisse["gesamt"] . " von " . count($teams)  . " Teams abgestimmt.",
+            . date("d.m.Y \u\m H:i", $abschluss) . " Uhr. ",
             Null); ?>
         <p><strong>Informationen</strong></p>
         <p>Wie ihr bereits gehört habt, wurde der Ligabeitrag unter anderem erhöht, um Projekte wie die Förderung von Einradhockey-Initiativen zu unterstützen. Bislang haben wir vier Anträge erhalten. Um diese Mittel gerecht und transparent zu verteilen, haben wir ein vorläufiges Budget von 3.000,00 € festgelegt, über dessen Verteilung ihr mitentscheiden sollt.</p>
@@ -102,8 +101,8 @@ include '../../templates/header.tmp.php';
                                 id="<?= $id ?>"
                                 name="<?= $id ?>"
                                 class="w3-select w3-border w3-border-primary">
-                            <option <?= Abstimmung::selected(name: $id, value: "", value_chosen: $einsicht[$id] ?? "") ?>
-                                    value="">Enthaltung</option>
+                            <option <?= Abstimmung::selected(name: $id, value: "0", value_chosen: $einsicht[$id] ?? "") ?>
+                                    value="0">Enthaltung</option>
                             <option <?= Abstimmung::selected(name: $id, value: "1", value_chosen: $einsicht[$id] ?? "") ?>
                                     value="1">1 - weniger wichtig</option>
                             <option <?= Abstimmung::selected(name: $id, value: "2", value_chosen: $einsicht[$id] ?? "") ?>
@@ -118,7 +117,7 @@ include '../../templates/header.tmp.php';
                     </p>
                 <?php endforeach; ?>
                 <p>Weitere Ideen:</p>
-                <textarea name="weiteres" class="w3-input w3-border w3-border-primary"><?=$einsicht['weiteres']?></textarea>
+                <textarea name="Weiteres" class="w3-input w3-border w3-border-primary"><?=$einsicht['Weiteres'] ?? ""?></textarea>
                 <hr>
                 <p>Seid Ihr damit einverstanden, dass auch zukünftig ein Teil der jährlichen Beiträge der Mitglieder der Liga für Fördermaßnahmen eingesetzt werden, die im Interesse der gesamten Liga stehen?</p>
                 <?php foreach (Abstimmung::OPTIONS as $id => $option): ?>
