@@ -17,31 +17,35 @@ include '../../templates/header.tmp.php';
     <div class="w3-card-4 w3-panel">
 
         <h1 class="w3-text-primary">Abstimmung Fördermittel</h1>
-        <?php Html::message('notice',
-            "Die Abstimmung startet hier am " . date("d.m.Y", $beginn) . " und endet am "
-            . date("d.m.Y \u\m H:i", $abschluss) . " Uhr. "
-            . "Es haben bisher " . $ergebnisse["gesamt"] . " von " . count($teams)  . " Teams abgestimmt.",
-            Null); ?>
+        <?php 
+            if (time() < $beginn):
+                Html::message('notice',
+                "Die Abstimmung startet hier am " . date("d.m.Y", $beginn) . " und endet am "
+                . date("d.m.Y \u\m H:i", $abschluss) . " Uhr. ",
+                Null);
+            endif;
+        ?>
         <p><strong>Informationen</strong></p>
         <p>Wie ihr bereits gehört habt, wurde der Ligabeitrag unter anderem erhöht, um Projekte wie die Förderung von Einradhockey-Initiativen zu unterstützen. Bislang haben wir vier Anträge erhalten. Um diese Mittel gerecht und transparent zu verteilen, haben wir ein vorläufiges Budget von 3.000,00 € festgelegt, über dessen Verteilung ihr mitentscheiden sollt.</p>
         <p>Alle derzeit eingegangenen Anträge können gefördert werden, und es besteht weiterhin die Möglichkeit, weitere Anträge zu stellen, wenn ihr ein neues Projekt einbringen möchtet.</p>
         <p>Jedes Team hat eine Stimme bei der Umfrage, sodass wir sicherstellen können, dass die Entscheidung gemeinsam getroffen wird.</p>
         <p>Bitte nehmt euch einen Moment Zeit, um an der Umfrage teilzunehmen und uns eure Meinung zu den Fördermaßnahmen mitzuteilen. Die Umfrage wird bis zum  <?= date("d.m.Y", $abschluss) ?> offen sein.</p>
 
-        <p><strong>Verbleibende Zeit</strong></p>
-
-        <?php Html::countdown(strtotime(Abstimmung::ENDE)) ?>
+        <?php if (time() > $beginn && time() < $abschluss): ?>
+            <p><strong>Verbleibende Zeit</strong></p>
+            <?php Html::countdown(strtotime(Abstimmung::ENDE)) ?>
+        <?php endif; ?>
 
         <p><strong>Fragen</strong></p>
         <p>
-            <?= Html::link(Nav::LINK_FORUM, "Forum", "true", "chat") ?>
+            <?= Html::link(Nav::LINK_FORUM, "Discord", "true", "chat") ?>
             oder <?= Html::mailto(Env::LAMAIL) ?>
         </p>
 
     </div>
 
     <!-- Nach Beginn der Abstimmung -->
-    <?php if (time() > $beginn): ?>
+    <?php if (time() > $beginn && time() < $abschluss): ?>
         <!-- Informationstext für die Stimmeinsicht -->
         <div class="w3-card-4 w3-panel">
             <h2 class="w3-text-primary">Status</h2>
@@ -85,13 +89,40 @@ include '../../templates/header.tmp.php';
         </div>
     <?php endif; ?>
 
-    <!-- Während der Abstimmung -->
     <?php if (time() > $beginn && time() < $abschluss): ?>
         <!-- Formular zur Stimmabgabe -->
         <div class="w3-card-4 w3-panel">
             <h2 class="w3-text-primary"><?= (empty($abstimmung->team)) ? 'Jetzt abstimmen' : 'Stimme ändern' ?></h2>
             <p>Seid Ihr damit einverstanden, dass die jährlichen Beiträge der Mitglieder der Liga für Fördermaßnahmen eingesetzt werden, die im Interesse der gesamten Liga stehen?</p>
             <form method="post">
+                <p>Bitte bewertet die folgenden Fördermaßnahmen nach ihrer Wichtigkeit für die Liga (5 = sehr wichtig, 1 = weniger wichtig):</p>
+                <?php foreach (Abstimmung::OPTIONS_WICHTIGKEIT as $id => $option): ?>
+                    <p class="w3-hover-text-primary">
+                        <!-- Erste Antwortmöglichkeit -->
+                        <label style="cursor: pointer;" for="<?= $id ?>"><?= $option ?></label>
+                        <select
+                                id="<?= $id ?>"
+                                name="<?= $id ?>"
+                                class="w3-select w3-border w3-border-primary">
+                            <option <?= Abstimmung::selected(name: $id, value: "0", value_chosen: $einsicht[$id] ?? "") ?>
+                                    value="0">Enthaltung</option>
+                            <option <?= Abstimmung::selected(name: $id, value: "1", value_chosen: $einsicht[$id] ?? "") ?>
+                                    value="1">1 - weniger wichtig</option>
+                            <option <?= Abstimmung::selected(name: $id, value: "2", value_chosen: $einsicht[$id] ?? "") ?>
+                                    value="2">2</option>
+                            <option <?= Abstimmung::selected(name: $id, value: "3", value_chosen: $einsicht[$id] ?? "") ?>
+                                    value="3">3</option>
+                            <option <?= Abstimmung::selected(name: $id, value: "4", value_chosen: $einsicht[$id] ?? "") ?>
+                                    value="4">4</option>
+                            <option <?= Abstimmung::selected(name: $id, value: "5", value_chosen: $einsicht[$id] ?? "") ?>
+                                    value="5">5 - sehr wichtig</option>
+                        </select>
+                    </p>
+                <?php endforeach; ?>
+                <p>Weitere Ideen und Anmerkungen:</p>
+                <textarea name="Weiteres" class="w3-input w3-border w3-border-primary"><?=$einsicht['Weiteres'] ?? ""?></textarea>
+                <hr>
+                <p>Seid Ihr damit einverstanden, dass auch zukünftig ein Teil der jährlichen Beiträge der Mitglieder der Liga für Fördermaßnahmen eingesetzt werden, die im Interesse der gesamten Liga stehen?</p>
                 <?php foreach (Abstimmung::OPTIONS as $id => $option): ?>
                     <p class="w3-hover-text-primary">
                         <!-- Erste Antwortmöglichkeit -->
@@ -106,30 +137,7 @@ include '../../templates/header.tmp.php';
                         <label style="cursor: pointer;" for="<?= $id ?>"><?= $option ?></label>
                     </p>
                 <?php endforeach; ?>
-                <p>Bitte bewertet die folgenden Fördermaßnahmen nach ihrer Wichtigkeit für die Liga (5 = sehr wichtig, 1 = weniger wichtig):</p>
-                <?php foreach (Abstimmung::OPTIONS_WICHTIGKEIT as $id => $option): ?>
-                    <p class="w3-hover-text-primary">
-                        <!-- Erste Antwortmöglichkeit -->
-                        <label style="cursor: pointer;" for="<?= $id ?>"><?= $option ?></label>
-                        <select
-                                id="<?= $id ?>"
-                                name="<?= $id ?>"
-                                class="w3-select w3-border w3-border-primary">
-                            <option <?= Abstimmung::selected(name: $id, value: "", value_chosen: $einsicht[$id] ?? "") ?>
-                                    value="">Enthaltung</option>
-                            <option <?= Abstimmung::selected(name: $id, value: "1", value_chosen: $einsicht[$id] ?? "") ?>
-                                    value="1">1 - weniger wichtig</option>
-                            <option <?= Abstimmung::selected(name: $id, value: "2", value_chosen: $einsicht[$id] ?? "") ?>
-                                    value="2">2</option>
-                            <option <?= Abstimmung::selected(name: $id, value: "3", value_chosen: $einsicht[$id] ?? "") ?>
-                                    value="3">3</option>
-                            <option <?= Abstimmung::selected(name: $id, value: "4", value_chosen: $einsicht[$id] ?? "") ?>
-                                    value="4">4</option>
-                            <option <?= Abstimmung::selected(name: $id, value: "5", value_chosen: $einsicht[$id] ?? "") ?>
-                                    value="5">5 - sehr wichtig</option>
-                        </select>
-                    </p>
-                <?php endforeach; ?>
+                <hr>
                 <p>
                     <!-- Passwort -->
                     <label for="passwort" style="cursor: pointer;">
