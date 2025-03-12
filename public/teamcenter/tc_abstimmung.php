@@ -17,10 +17,14 @@ include '../../templates/header.tmp.php';
     <div class="w3-card-4 w3-panel">
 
         <h1 class="w3-text-primary">Abstimmung Fördermittel</h1>
-        <?php Html::message('notice',
-            "Die Abstimmung startet hier am " . date("d.m.Y", $beginn) . " und endet am "
-            . date("d.m.Y \u\m H:i", $abschluss) . " Uhr. ",
-            Null); ?>
+        <?php 
+            if (time() < $beginn):
+                Html::message('notice',
+                "Die Abstimmung startet hier am " . date("d.m.Y", $beginn) . " und endet am "
+                . date("d.m.Y \u\m H:i", $abschluss) . " Uhr. ",
+                Null);
+            endif;
+        ?>
         <p><strong>Informationen</strong></p>
         <p>Wie ihr bereits gehört habt, wurde der Ligabeitrag unter anderem erhöht, um Projekte wie die Förderung von Einradhockey-Initiativen zu unterstützen. Bislang haben wir vier Anträge erhalten. Um diese Mittel gerecht und transparent zu verteilen, haben wir ein vorläufiges Budget von 3.000,00 € festgelegt, über dessen Verteilung ihr mitentscheiden sollt.</p>
         <p>Alle derzeit eingegangenen Anträge können gefördert werden, und es besteht weiterhin die Möglichkeit, weitere Anträge zu stellen, wenn ihr ein neues Projekt einbringen möchtet.</p>
@@ -41,7 +45,7 @@ include '../../templates/header.tmp.php';
     </div>
 
     <!-- Nach Beginn der Abstimmung -->
-    <?php if (time() > $beginn): ?>
+    <?php if (time() > $beginn && time() < $abschluss): ?>
         <!-- Informationstext für die Stimmeinsicht -->
         <div class="w3-card-4 w3-panel">
             <h2 class="w3-text-primary">Status</h2>
@@ -85,7 +89,6 @@ include '../../templates/header.tmp.php';
         </div>
     <?php endif; ?>
 
-    <!-- Während der Abstimmung -->
     <?php if (time() > $beginn && time() < $abschluss): ?>
         <!-- Formular zur Stimmabgabe -->
         <div class="w3-card-4 w3-panel">
@@ -116,7 +119,7 @@ include '../../templates/header.tmp.php';
                         </select>
                     </p>
                 <?php endforeach; ?>
-                <p>Weitere Ideen:</p>
+                <p>Weitere Ideen und Anmerkungen:</p>
                 <textarea name="Weiteres" class="w3-input w3-border w3-border-primary"><?=$einsicht['Weiteres'] ?? ""?></textarea>
                 <hr>
                 <p>Seid Ihr damit einverstanden, dass auch zukünftig ein Teil der jährlichen Beiträge der Mitglieder der Liga für Fördermaßnahmen eingesetzt werden, die im Interesse der gesamten Liga stehen?</p>

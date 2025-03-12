@@ -20,16 +20,14 @@ include '../../templates/header.tmp.php';
 <p>Alle derzeit eingegangenen Anträge können gefördert werden, und es besteht weiterhin die Möglichkeit, weitere Anträge zu stellen, wenn ihr ein neues Projekt einbringen möchtet.</p>
 
 <?php
-if (time() > strtotime(Abstimmung::ENDE)){
+if (time() > strtotime(Abstimmung::ENDE)) {
     include '../../templates/abstimmung_ergebnis.tmp.php';
-} else {
-    Html::message('notice', "Das Abstimmungsergebnis wird hier am " . Abstimmung::ENDE . " Uhr veröffentlicht.", "");
-?>
-
-<a href="../teamcenter/tc_abstimmung.php" class="w3-button w3-section w3-block w3-primary">
-    <?= Html::icon("how_to_vote") ?> Jetzt abstimmen!
-</a>
-
+} elseif (time() < strtotime(Abstimmung::BEGINN)) {
+    Html::message('notice', "Die Abstimmung startet am " . date("d.m.Y", $beginn) . ". Das Abstimmungsergebnis wird am " . Abstimmung::ENDE . " Uhr veröffentlicht.", "");
+} else { ?>
+    <a href="../teamcenter/tc_abstimmung.php" class="w3-button w3-section w3-block w3-primary">
+        <?= Html::icon("how_to_vote") ?> Jetzt abstimmen!
+    </a>
 <?php } //end if
 
 include '../../templates/footer.tmp.php';

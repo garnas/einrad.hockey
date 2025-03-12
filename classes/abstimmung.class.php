@@ -37,7 +37,7 @@ class Abstimmung
     /**
      * Frühstmöglicher Zeitpunkt der Stimmabgabe
      */
-    public const BEGINN = "17.03.2025 00:00";
+    public const BEGINN = "12.03.2025 00:00";
     /**
      * Letztmöglicher Zeitpunkt der Stimmabgabe
      */
