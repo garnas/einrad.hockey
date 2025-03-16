@@ -46,7 +46,7 @@ $massnahme_key = [
 <?php endforeach;?>
 
 
-<h2 class="w3-large w3-text-secondary">Seid Ihr damit einverstanden, dass auch zukünftig ein Teil der jährlichen Beiträge der Mitglieder der Liga für Fördermaßnahmen eingesetzt werden, die im Interesse der gesamten Liga stehen?</h2>
+<h2 class="w3-large w3-text-secondary">Seid Ihr damit einverstanden, dass die jährlichen Beiträge der Mitglieder der Liga für Fördermaßnahmen eingesetzt werden, die zur Förderung der deutschen Einradhockeyliga und des Sports beitragen?</h2>
 <table class="w3-table w3-striped w3-border-left w3-border-primary">
     <tr>
         <td class="w3-right-align"><?=round(($option['option']['Ja'] ?? 0) / get_sum($option['option']) * 100)?>%</td>

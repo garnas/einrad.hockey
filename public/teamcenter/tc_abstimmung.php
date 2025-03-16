@@ -93,7 +93,6 @@ include '../../templates/header.tmp.php';
         <!-- Formular zur Stimmabgabe -->
         <div class="w3-card-4 w3-panel">
             <h2 class="w3-text-primary"><?= (empty($abstimmung->team)) ? 'Jetzt abstimmen' : 'Stimme ändern' ?></h2>
-            <p>Seid Ihr damit einverstanden, dass die jährlichen Beiträge der Mitglieder der Liga für Fördermaßnahmen eingesetzt werden, die im Interesse der gesamten Liga stehen?</p>
             <form method="post">
                 <p>Bitte bewertet die folgenden Fördermaßnahmen nach ihrer Wichtigkeit für die Liga (5 = sehr wichtig, 1 = weniger wichtig):</p>
                 <?php foreach (Abstimmung::OPTIONS_WICHTIGKEIT as $id => $option): ?>
@@ -122,7 +121,7 @@ include '../../templates/header.tmp.php';
                 <p>Weitere Ideen und Anmerkungen:</p>
                 <textarea name="Weiteres" class="w3-input w3-border w3-border-primary"><?=$einsicht['Weiteres'] ?? ""?></textarea>
                 <hr>
-                <p>Seid Ihr damit einverstanden, dass auch zukünftig ein Teil der jährlichen Beiträge der Mitglieder der Liga für Fördermaßnahmen eingesetzt werden, die im Interesse der gesamten Liga stehen?</p>
+                <p>Seid Ihr damit einverstanden, dass die jährlichen Beiträge der Mitglieder der Liga für Fördermaßnahmen eingesetzt werden, die zur Förderung der deutschen Einradhockeyliga und des Sports beitragen?</p>
                 <?php foreach (Abstimmung::OPTIONS as $id => $option): ?>
                     <p class="w3-hover-text-primary">
                         <!-- Erste Antwortmöglichkeit -->
