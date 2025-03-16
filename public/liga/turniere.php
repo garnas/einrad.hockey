@@ -64,14 +64,14 @@ include '../../templates/header.tmp.php';
                                 <?= $turnier->getName() ?>
                             </h3>
                             <h4>
-                                <?= TurnierSnippets::datum($turnier) ?> <span class="w3-text-primary"><?= e($turnier->getDetails()->getOrt()) ?></span>
+                            <?= substr(TurnierSnippets::wochentag($turnier), 0, 2) ?>, <?= TurnierSnippets::datum($turnier) ?> <span class="w3-text-primary"><?= e($turnier->getDetails()->getOrt()) ?></span>
                             </h4>
                         <?php else: ?>
                             <p class='w3-text-grey'>
                                 <?= e($turnier->getName())?>
                             </p>
                             <h4>
-                                <?= TurnierSnippets::datum($turnier) ?>
+                                <?= substr(TurnierSnippets::wochentag($turnier), 0, 2) ?>, <?= TurnierSnippets::datum($turnier) ?>
                                 <span class="w3-text-primary">
                                     <?= e($turnier->getDetails()->getOrt()) ?>
                                 </span>
