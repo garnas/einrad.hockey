@@ -19,8 +19,8 @@
             <div class="w3-col w3-left w3-padding-8 <?=$block_color[substr($block, 0, 1)]?>" style="width: 40px;"><?=$block?></div>
             <div class="w3-col w3-right w3-padding-8 w3-center" style="width: 42px;">
                 <span onclick="show_small_results('rang', <?=$key?>)">
-                    <span id="small-rang-icon-show-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:block">arrow_drop_up</span>
-                    <span id="small-rang-icon-hide-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:none">arrow_drop_down</span>
+                    <span id="small-rang-icon-show-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:block">arrow_drop_down</span>
+                    <span id="small-rang-icon-hide-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:none">arrow_drop_up</span>
                 </span>
             </div>
             <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width: 4em"><?=number_format($zeile['avg'] ?: 0, 1, ",", ".")?></div>
