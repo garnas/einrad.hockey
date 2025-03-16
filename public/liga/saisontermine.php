@@ -34,7 +34,7 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
         </tr>
         <tr>
             <th class="w3-primary-3">Reguläre Spielzeit</th>
-            <td>16. August 2025 – 31. Mai 2026</td>
+            <td>16. August 2025 - 31. Mai 2026</td>
         </tr>
         <tr>
             <th class="w3-primary-3">B/C-Finalwochenende</th>
