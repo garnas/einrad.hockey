@@ -119,7 +119,7 @@ include '../../templates/header.tmp.php';
                     </p>
                 <?php endforeach; ?>
                 <p>Weitere Ideen und Anmerkungen:</p>
-                <textarea name="Weiteres" class="w3-input w3-border w3-border-primary"><?=$einsicht['Weiteres'] ?? ""?></textarea>
+                <textarea maxlength="1000" name="Weiteres" class="w3-input w3-border w3-border-primary"><?=$einsicht['Weiteres'] ?? ""?></textarea>
                 <hr>
                 <p>Seid Ihr damit einverstanden, dass die jährlichen Beiträge der Mitglieder der Liga für Fördermaßnahmen eingesetzt werden, die zur Förderung der deutschen Einradhockeyliga und des Sports beitragen?</p>
                 <?php foreach (Abstimmung::OPTIONS as $id => $option): ?>
