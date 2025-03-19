@@ -3,8 +3,6 @@
 $abschluss = strtotime(Abstimmung::ENDE);
 $beginn = strtotime(Abstimmung::BEGINN);
 
-$ergebnisse = Abstimmung::get_ergebnisse(0);
-
 // Nur für das Teamcenter und im Zeitraum der Abstimmung
 if (Helper::$teamcenter) {
     $abstimmung = new Abstimmung($_SESSION['logins']['team']['id']);
