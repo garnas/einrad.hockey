@@ -208,6 +208,11 @@ class Abstimmung
             }
         }
 
+        // Wenn die Anzahl der Stimmen unter dem Minimum ist, dann wird nichts ausgegeben.
+        if (count($stimmen) < $min) {
+            return [];
+        }
+        
         return $ergebnisse;
     }
 
