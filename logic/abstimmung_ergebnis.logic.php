@@ -9,6 +9,20 @@ function get_sum($arr) {
     return $sum == 0 ? 1 : $sum;
 }
 
+function get_average($arr) {
+    $sum = 0;
+    $count = 0;
+
+    foreach ($arr as $key => $value) {
+        if ($key > 0) {
+            $sum += $value * $key;
+            $count += $value;
+        }
+    }
+
+    return $count == 0 ? 1 : round($sum / $count, 2);
+}
+
 use App\Repository\Team\TeamRepository;
 $teams = TeamRepository::get()->activeLigaTeams();
 

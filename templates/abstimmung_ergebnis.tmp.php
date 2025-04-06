@@ -15,6 +15,10 @@
                     <td><?=$massnahme_text[$idx] ?? $idx?></td>
                 </tr>
             <?php endfor;?>
+            <tr class="w3-border-top">
+                <td class="w3-right-align"><?=get_average($massnahme)?></td>
+                <td>Durchschnitt</td>
+            </tr>
         </table>
     <?php endforeach;?>
 
