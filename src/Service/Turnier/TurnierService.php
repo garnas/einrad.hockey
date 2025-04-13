@@ -7,19 +7,14 @@ use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Event\Turnier\TurnierEventMailBot;
-use App\Service\Team\NLTeamService;
 use App\Service\Team\NLTeamValidator;
-use App\Service\Team\TeamService;
 use Config;
-use DateInterval;
 use DateMalformedStringException;
-use DateTime;
 use DateTimeImmutable;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Jenssegers\Date\Date;
-use DB;
+
 class TurnierService
 {
 
@@ -75,9 +70,6 @@ class TurnierService
         return self::warteToSetzUnix($turnier);
     }
 
-    /**
-     * @throws DateMalformedStringException
-     */
     public static function getAbmeldeFristUnix(Turnier $turnier): int
     {
         $warte_zu_setz = new DateTimeImmutable('@' . ((string) self::warteToSetzUnix($turnier)));
