@@ -7,15 +7,14 @@ use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Event\Turnier\TurnierEventMailBot;
-use App\Service\Team\NLTeamService;
 use App\Service\Team\NLTeamValidator;
-use App\Service\Team\TeamService;
 use Config;
-use Doctrine\Common\Collections\ArrayCollection;
+use DateMalformedStringException;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Jenssegers\Date\Date;
-use DB;
+
 class TurnierService
 {
 
@@ -73,7 +72,8 @@ class TurnierService
 
     public static function getAbmeldeFristUnix(Turnier $turnier): int
     {
-        return self::warteToSetzUnix($turnier) + 2 * 7 * 24 * 60 * 60;
+        $warte_zu_setz = new DateTimeImmutable('@' . ((string) self::warteToSetzUnix($turnier)));
+        return (int) $warte_zu_setz->modify("-2 weeks")->format('U');
     }
 
     public static function getAbmeldeFrist(Turnier $turnier): string
@@ -85,13 +85,21 @@ class TurnierService
 
     public static function warteToSetzUnix(Turnier $turnier): int
     {
-        $unix = $turnier->getDatum()->getTimestamp();
-        $tag = $turnier->getDatum()->format('N'); // Numerische Zahl des Wochentages 1-7
-        // Faktor 3.93 und strtotime(date("d-M-Y"..)) -> Reset von 12 Uhr Mittags auf Null Uhr, um Winter <-> Sommerzeit korrekt handzuhaben
+        $turnier_datum = DateTimeImmutable::createFromMutable($turnier->getDatum());
+
+        $datum_warte_zu_setzphase = $turnier_datum->modify('-4 weeks');
+        $tag = (int)$datum_warte_zu_setzphase->format('N'); // Numerische Zahl des Wochentages 1-7
+
+        # Findet das Turnier am Mittwoch oder später statt, wird es dem nächsten Wochenende zugeordnet
+        # Mi == 3 -> hochrechnen auf nächsten Samstag also +(6-3) Tage
         if ($tag >= 3) {
-            return strtotime(date("d-M-Y", $unix - 3.93 * 7 * 24 * 60 * 60 + (6 - $tag) * 24 * 60 * 60));
+            $delta = (string)(6 - $tag);
+            return (int)$datum_warte_zu_setzphase->modify("+$delta days")->format("U");
         }
-        return strtotime(date("d-M-Y", $unix - 3.93 * 7 * 24 * 60 * 60 - $tag * 24 * 60 * 60));
+        # Findet das Turnier am Montag oder Dienstag statt, wird es dem vorherigen Wochenende zugeordnet
+        # Di == 2 -> herunterrechnen auf letzten Samstag also -(2+1) Tage
+        $delta = (string)(1 + $tag);
+        return (int)$datum_warte_zu_setzphase->modify("-$delta days")->format("U");
     }
 
     public static function getLosDatum(Turnier $turnier): string
