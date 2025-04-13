@@ -111,10 +111,6 @@ include '../../templates/header.tmp.php';
                                         <?php endif; ?>
                                     </td>
                                 </tr>
-                                <tr style="white-space: nowrap;">
-                                    <td class="w3-text-primary" style=""><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), '<i class="material-icons">event</i> Wochentag') ?></td>
-                                    <td><?= TurnierSnippets::wochentag($turnier)?></td>
-                                </tr>
                                 <tr>
                                     <td style="white-space: nowrap; vertical-align: middle;" class="w3-text-primary"><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), '<i class="material-icons">announcement</i> Hinweis') ?></td>
                                     <td style="white-space: normal"><?= nl2br(e($turnier->getDetails()->getHinweis())) ?></td>
