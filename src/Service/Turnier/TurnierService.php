@@ -73,7 +73,7 @@ class TurnierService
     public static function getAbmeldeFristUnix(Turnier $turnier): int
     {
         $warte_zu_setz = new DateTimeImmutable('@' . ((string) self::warteToSetzUnix($turnier)));
-        return (int) $warte_zu_setz->modify("-2 weeks")->format('U');
+        return (int) $warte_zu_setz->modify("+2 weeks")->format('U');
     }
 
     public static function getAbmeldeFrist(Turnier $turnier): string
