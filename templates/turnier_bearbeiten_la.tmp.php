@@ -62,7 +62,22 @@ else: ?>
         </p>
         <p>
             <label class="w3-text-primary" for="datum">Datum</label>
-            <input required type="date" value="<?= e($turnier->getDatum()->format('Y-m-d')) ?>" class="w3-input w3-border w3-border-primary" style="max-width: 320px" id="datum" name="datum">
+            <input required
+                   type="date"
+                   value="<?= e($turnier->getDatum()->format('Y-m-d')) ?>"
+                   class="w3-input w3-border w3-border-primary"
+                   style="max-width: 320px"
+                   id="datum"
+                   name="datum">
+        </p>
+        <p>
+            <label class="w3-text-primary" for="datum_bis">Bis Datum</label>
+            <input type="date"
+                   value="<?= e($turnier->getDatumBis()?->format('Y-m-d') ?? "") ?>"
+                   class="w3-input w3-border w3-border-primary"
+                   style="max-width: 320px"
+                   id="datum_bis"
+                   name="datum_bis">
         </p>
         <h3>Ligalogik <span class="w3-text-gray">- nur Ligaausschuss</span></h3>
         <p>
@@ -84,17 +99,15 @@ else: ?>
                 <option <?php if($turnier->getArt() == 'fixed'){?> selected <?php }?> value='fixed'>Manuelles (fixed) Turnier</option>
             </select>
         </p>
-        <?php if ($turnier->getArt() !== "final"): ?>
-            <p>
-                <label class="w3-text-primary" for="block">Turnierblock</label>
-                <select required class="w3-select w3-border w3-border-primary" id="block" name="block">
-                    <?php foreach (Config::BLOCK_ALL as $block): ?>
-                        <option <?= ($turnier->getBlock() === $block) ? 'selected' : '' ?>> <?=$block?></option>
-                    <?php endforeach; ?>
-                </select>
-                <i class="w3-text-primary">Nach ändern des Blockes sollten die Anmeldelisten kontrolliert werden.</i>
-            </p>
-        <?php endif; ?>
+        <p>
+            <label class="w3-text-primary" for="block">Turnierblock</label>
+            <select required class="w3-select w3-border w3-border-primary" id="block" name="block">
+                <?php foreach (Config::BLOCK_ALL as $block): ?>
+                    <option <?= ($turnier->getBlock() === $block) ? 'selected' : '' ?>> <?=$block?></option>
+                <?php endforeach; ?>
+            </select>
+            <i class="w3-text-primary">Nach ändern des Blockes sollten die Anmeldelisten kontrolliert werden.</i>
+        </p>
         <p>
             <input type="submit" value="Turnierdaten ändern" name="turnier_bearbeiten_la" class="w3-tertiary w3-button w3-block">
         </p>
