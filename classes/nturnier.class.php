@@ -16,6 +16,7 @@ class nTurnier
     private ?string $tblock;
     private ?string $tblock_fixed;
     private ?string $datum;
+    private ?string $datum_bis;
     private ?int $spieltag;
     private ?string $phase;
     private ?string $spielplan_vorlage;
