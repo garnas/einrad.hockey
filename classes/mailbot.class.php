@@ -67,11 +67,11 @@ class MailBot
             $sql = "
                 SELECT * 
                 FROM mailbot 
-                WHERE mail_status = 'warte' AND betreff = ?
+                WHERE mail_status = 'warte'
                 ORDER BY zeit 
-                LIMIT 50
+                LIMIT 75
                 ";
-            $mails = db::$db->query($sql, $mail_id)->fetch();
+            $mails = db::$db->query($sql)->fetch();
         } else {
             $sql = "
                 SELECT * 
