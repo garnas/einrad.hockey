@@ -43,13 +43,15 @@ if (isset($_POST['turnier_bearbeiten_la'])) {
     // Restliche Daten:
     $block = $_POST['block'];
     $unixTime = strtotime($_POST['datum']);
-    $datum = (new DateTime)->setTimestamp($unixTime);
+    $datum = new DateTime($_POST['datum']);
+    $datum_bis = (!isset($_POST['datum_bis']) || $_POST['datum_bis'] === '') ? null : new DateTime($_POST['datum_bis']);
     $phase = $_POST['phase'];
 
     $turnier
         ->setAusrichter($ausrichter)
         ->setArt($art)
         ->setDatum($datum)
+        ->setDatumBis($datum_bis)
         ->setBlock($block)
         ->setPhase($phase);
 

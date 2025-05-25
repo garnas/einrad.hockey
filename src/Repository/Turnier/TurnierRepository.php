@@ -103,6 +103,28 @@ class TurnierRepository
         return new ArrayCollection($query->getQuery()->execute());
     }
 
+    /**
+     * @return Turnier[]|Collection
+     */
+    public static function getErgebnisTurniere(int $saison = Config::SAISON): array|Collection
+    {
+        $query = DoctrineWrapper::manager()
+            ->createQueryBuilder()
+            ->select('t', 'details', 'l', 'ausrichter', 'team')
+            ->from(Turnier::class, 't')
+            ->innerJoin('t.details', 'details')
+            ->leftJoin('t.ausrichter', 'ausrichter')
+            ->leftJoin('t.liste', 'l')
+            ->leftJoin('l.team', 'team')
+            ->where('t.saison = :saison')
+            ->andWhere('t.phase = :phase')
+            ->orderBy('t.datum', 'asc')
+            ->setParameter('saison', $saison)
+            ->setParameter('phase', "ergebnis")
+        ;
+
+        return new ArrayCollection($query->getQuery()->execute());
+    }
 
     public function last_turnier(int $ausrichter_id): ?Turnier
     {

@@ -16,7 +16,7 @@ class TurnierErgebnis
     private $turnierErgebnisId;
 
     #[ORM\Column(name: "ergebnis", type: "integer", nullable: true)]
-    private int $ergebnis;
+    private ?int $ergebnis;
 
     #[ORM\Column(name: "platz", type: "integer", nullable: false)]
     private int $platz;

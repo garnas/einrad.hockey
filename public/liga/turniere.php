@@ -58,20 +58,21 @@ include '../../templates/header.tmp.php';
                      id='<?= $turnier->id() ?>'>
                 <!-- Angezeigtes Turnierpanel -->
                 <div class='w3-panel'>
-                    <div class="w3-center">
+                    <div class="w3-center w3-padding-16">
                         <?php if ($turnier->isFinalTurnier()): ?>
                             <h3 class='w3-text-secondary'>
                                 <?= $turnier->getName() ?>
                             </h3>
                             <h4>
-                            <?= substr(TurnierSnippets::wochentag($turnier), 0, 2) ?>, <?= TurnierSnippets::datum($turnier) ?> <span class="w3-text-primary"><?= e($turnier->getDetails()->getOrt()) ?></span>
+                            <?= TurnierSnippets::wochentag($turnier, short: true)?>, <?= TurnierSnippets::datum($turnier) ?><br>
+                            <span class="w3-text-primary"><?= e($turnier->getDetails()->getOrt()) ?></span>
                             </h4>
                         <?php else: ?>
                             <p class='w3-text-grey'>
                                 <?= e($turnier->getName())?>
                             </p>
                             <h4>
-                                <?= substr(TurnierSnippets::wochentag($turnier), 0, 2) ?>, <?= TurnierSnippets::datum($turnier) ?>
+                                <?= TurnierSnippets::wochentag($turnier) ?>, <?= TurnierSnippets::datum($turnier) ?>
                                 <span class="w3-text-primary">
                                     <?= e($turnier->getDetails()->getOrt()) ?>
                                 </span>

@@ -14,8 +14,8 @@ $block_higher_str = BlockService::toString($block_higher);
 // Formularauswertung
 if (isset($_POST['create_turnier'])) {    
 
-    $unixTime = strtotime($_POST['datum']);
-    $datum = (new DateTime)->setTimestamp($unixTime);
+    $datum = new DateTime($_POST['datum']);
+    $datum_bis = (!isset($_POST['datum_bis']) || $_POST['datum_bis'] === '') ? null : new DateTime($_POST['datum_bis']);
 
     $name = (string)$_POST['tname'];
     $hallenname = (string)$_POST['hallenname'];
@@ -46,6 +46,7 @@ if (isset($_POST['create_turnier'])) {
     $turnier = new App\Entity\Turnier\Turnier();
     $turnier
         ->setDatum($datum)
+        ->setDatumBis($datum_bis)
         ->setName($name)
         ->setArt($art)
         ->setAusrichter($ausrichter)

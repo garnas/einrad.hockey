@@ -48,6 +48,8 @@ class Turnier
     #[ORM\Column(name: "datum", type: "date")]
     private ?DateTime $datum;
 
+    #[ORM\Column(name: "datum_bis", type: "date")]
+    private ?DateTime $datumBis;
     #[ORM\Column(name: "spieltag", type: "integer", nullable: true)]
     private int|null $spieltag = 0;
 
@@ -285,6 +287,10 @@ class Turnier
         return $this;
     }
 
+
+    /**
+     * @return Collection|TurnierErgebnis[]
+     */
     public function getErgebnis(): Collection|array
     {
         return $this->ergebnis;
@@ -340,6 +346,22 @@ class Turnier
     {
         $this->logService->autoLog("Datum", $this->datum ?? null, $datum->format("d.m.Y"));
         $this->datum = $datum;
+        return $this;
+    }
+
+    public function getDatumBis(): ?DateTime
+    {
+        return $this->datumBis;
+    }
+
+    public function setDatumBis(?DateTime $datumBis): Turnier
+    {
+        $this->logService->autoLog(
+            name: "Bis Datum",
+            alt: $this->datumBis ?? null,
+            neu: $datumBis?->format("d.m.Y")
+        );
+        $this->datumBis = $datumBis;
         return $this;
     }
 

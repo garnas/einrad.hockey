@@ -2,16 +2,19 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Repository\Turnier\TurnierRepository;
+use App\Service\Turnier\TurnierLinks;
+use App\Service\Turnier\TurnierService;
+use App\Service\Turnier\TurnierSnippets;
+
 require_once '../../init.php';
 
 $saison = (isset($_GET['saison'])) ? (int)$_GET['saison'] : Config::SAISON;
-$turnier_ergebnisse = Tabelle::get_all_ergebnisse($saison);
+$turniere = TurnierRepository::getErgebnisTurniere(saison: $saison);
 
-if (empty($turnier_ergebnisse)) {
+if (empty($turniere)) {
     Html::info("Es wurden keine Turnierergebnisse der Saison " . Html::get_saison_string($saison) . " eingetragen");
 }
-$turniere = nTurnier::get_turniere_ergebnis(false, $saison);
-
 //Farbe für die Plätze auf dem Turnier
 $color[0] = "w3-text-tertiary";
 $color[1] = "w3-text-grey";
@@ -63,15 +66,13 @@ include '../../templates/header.tmp.php'; ?>
 
     <!--Turnierergebnisse-->
     <div id="myDIV">
-        <?php foreach ($turnier_ergebnisse as $turnier_id => $ergebnisse) { ?>
+        <?php foreach ($turniere as $turnier_id => $turnier) { ?>
             <section class="w3-section" id="<?= $turnier_id ?>">
                 <h3>
-                    <?= date("d.m.Y", strtotime($turniere[$turnier_id]->get_datum())) ?>
-                    <span class="w3-text-primary"><?= $turniere[$turnier_id]->get_ort() ?></span>
-                    <i>(<?= $turniere[$turnier_id]->get_tblock() ?>)</i>
+                    <?= TurnierSnippets::datumOrtBlock($turnier) ?>
                     <br>
-                    <span class="<?= ($turniere[$turnier_id]->get_art() == 'final') ? "w3-text-secondary" : "w3-text-grey" ?>">
-                        <?= $turniere[$turnier_id]->get_tname() ?? '' ?>
+                    <span class="<?= $turnier->isFinalTurnier() ? "w3-text-secondary" : "w3-text-grey" ?>">
+                        <?= $turnier->getName() ?? '' ?>
                     </span>
                 </h3>
                 <div class="w3-responsive w3-card-4">
@@ -90,25 +91,25 @@ include '../../templates/header.tmp.php'; ?>
                                 <br>Ergebnis
                             </th>
                         </tr>
-                        <?php foreach ($ergebnisse as $key => $ergebnis) { ?>
+                        <?php foreach ($turnier->getErgebnis() as $key => $ergebnis): ?>
                             <tr class="<?= $color[$key] ?? '' ?>">
-                                <td><?= $ergebnis['platz'] ?></td>
-                                <td style="white-space: nowrap"><?= $ergebnis['teamname'] ?></td>
-                                <td><?= $ergebnis['ergebnis'] ?: '-' ?></td>
+                                <td><?= $ergebnis->getPlatz() ?></td>
+                                <td style="white-space: nowrap"><?= $ergebnis->getTeam()->getName() ?></td>
+                                <td><?= $ergebnis->getErgebnis() ?: '-' ?></td>
                             </tr>
-                        <?php } //end foreach?>
+                        <?php endforeach; ?>
                     </table>
                 </div>
-                <?php if (in_array('Nein', array_column($ergebnisse, 'ligateam'))) { ?>
-                    <span class="w3-text-grey w3-small">* Nichtligateam</span>
-                <?php } //endif?>
+                <?= TurnierService::hasNlTeamErgebnis($turnier)
+                    ? "<span class='w3-text-grey w3-small'>* Nichtligateam</span>"
+                    : "" ?>
                 <p>
                     <?php if ($saison <= 25) { ?>
                         <?= Html::link('archiv.php', 'Details', icon:'info') ?>
                     <?php } else { ?>
                         <span>
-                        <?= Html::link($turniere[$turnier_id]->get_spielplan_link(), 'Spielergebnisse', icon:'info') ?>
-                    </span>
+                        <?= Html::link(TurnierLinks::spielplan($turnier), 'Spielergebnisse', icon:'info') ?>
+                        </span>
                         <?= Html::link("../teamcenter/tc_turnier_report.php?turnier_id=$turnier_id", 'Turnierreport', icon:$icon) ?>
                         <?php if (isset($_SESSION['logins']['la'])) { ?>
                             <?= Html::link("../ligacenter/lc_turnier_report.php?turnier_id=$turnier_id", 'Turnierreport (Ligaausschuss)', icon:'article') ?>
