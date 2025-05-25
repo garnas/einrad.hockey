@@ -13,6 +13,7 @@ if ($last_turnier) {
     $last_startgebuehr = '';
     $last_plaetze = '';
     $last_hinweis = '';
+    $last_min_teams = null;
 }
 
 ?>

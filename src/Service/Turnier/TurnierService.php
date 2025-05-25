@@ -9,7 +9,6 @@ use App\Entity\Turnier\TurniereListe;
 use App\Event\Turnier\TurnierEventMailBot;
 use App\Service\Team\NLTeamValidator;
 use Config;
-use DateMalformedStringException;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -26,6 +25,17 @@ class TurnierService
     public static function hasFreieSetzPlaetze(Turnier $turnier): bool
     {
         return self::getFreieSetzPlaetze($turnier) > 0;
+    }
+
+    public static function hasNlTeamErgebnis(Turnier $turnier): bool
+    {
+        $ergebnisse = $turnier->getErgebnis();
+        foreach ($ergebnisse as $ergebnis) {
+            if (!$ergebnis->getTeam()->isLigaTeam()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static function isLosen(Turnier $turnier): bool

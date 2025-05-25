@@ -16,6 +16,9 @@ class TurnierSnippets {
         if ($turnier->isCanceled()) {
             return '<span class="w3-text-red">abgesagt</span>';
         }
+        if ($turnier->isFinalTurnier()) {
+            return '<span class="w3-text-gray">Finalturnier</span>';
+        }
         if ($turnier->isSpielplanPhase()) {
             return '<span class="w3-text-gray">geschlossen</span>';
         }
@@ -73,6 +76,10 @@ class TurnierSnippets {
             Html::link($link, $phase, true);
         }
 
+        if ($turnier->isFinalTurnier()) {
+            return 'Warten auf Spielplan';
+        }
+
         if ($turnier->isSpassTurnier()) {
             return 'Nichtligaturnier';
         }
@@ -100,12 +107,29 @@ class TurnierSnippets {
         return e($ort) . " am " . $datum . " " . $block;
     }
 
+    public static function datumOrtBlock(Turnier $turnier, $html = true): string
+    {
+        $block = BlockService::toString(($html) ? $turnier : $turnier->getBlock());
+        $block = $turnier->isCanceled() ? "(Abgesagt)" : $block;
+        $datum = self::datum($turnier);
+        $ort = $turnier->getDetails()->getOrt();
+        return $datum . " " . "<span class='w3-text-primary'>" . e($ort) . "</span>" . " " . $block;
+    }
+
     public static function ortWochentagDatumBlock(Turnier $turnier): string
     {
         Date::setLocale('de');
-        $date = Date::createFromTimestamp($turnier->getDatum()->getTimestamp());
-        $datum = $date->format("D d.m.Y");
+        $datum = Date::createFromTimestamp($turnier->getDatum()->getTimestamp());
 
+        if ($turnier->getDatumBis()) {
+            $datum_bis = Date::createFromTimestamp($turnier->getDatumBis()->getTimestamp());
+
+            $datum = $datum->format("d.m")
+                . " - "
+                . $datum_bis->format("d.m.Y");
+        } else {
+            $datum = $datum->format("D d.m.Y");
+        }
         $block = BlockService::toString($turnier);
         $ort = e($turnier->getDetails()->getOrt());
         return $ort . " am " . $datum . " " . $block;
@@ -121,13 +145,25 @@ class TurnierSnippets {
 
     public static function datum(Turnier $turnier): string
     {
+        if ($turnier->getDatumBis()) {
+            return $turnier->getDatum()->format("d.m") . " - " . $turnier->getDatumBis()->format("d.m.Y");
+        }
         return $turnier->getDatum()->format("d.m.Y");
     }
 
-    public static function wochentag(Turnier $turnier): string
+    public static function wochentag(Turnier $turnier, bool $short = True): string
     {
         Date::setLocale('de');
-        return Date::createFromTimestamp($turnier->getDatum()->getTimestamp())->format("l");
+
+        $wochentag = Date::createFromTimestamp($turnier->getDatum()->getTimestamp())->format("l");
+        $wochentag = ($short) ? substr($wochentag, 0, 2) : $wochentag;
+
+        if ($turnier->getDatumBis()) {
+            $wochentag_bis = Date::createFromTimestamp($turnier->getDatumBis()->getTimestamp())->format("l");
+            $wochentag_bis = ($short) ? substr($wochentag_bis, 0, 2) : $wochentag_bis;
+            return $wochentag . " - " . $wochentag_bis;
+        }
+        return $wochentag;
     }
 
 
