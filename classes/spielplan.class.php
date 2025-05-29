@@ -12,11 +12,11 @@ class Spielplan
         $anzahl_teams = count($turnier->get_spielenliste());
         $error = false;
 
-        if ($turnier->get_phase() != "setz") { //TODO and is ligaturnier
+        if ($turnier->is_ligaturnier() && $turnier->get_phase() != "setz") { //TODO and is ligaturnier
             Html::error("Das Turnier muss in der Setzphase sein.");
             $error = true;
         }
-        if ($anzahl_teams < 3 || $anzahl_teams > 8) {
+        if ($turnier->is_ligaturnier() && ($anzahl_teams < 3 || $anzahl_teams > 8)) {
             Html::error("Falsche Anzahl an Teams. Nur 4er - 8er Jeder-gegen-Jeden Spielpläne können erstellt werden.");
             $error = true;
         }
