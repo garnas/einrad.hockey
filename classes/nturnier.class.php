@@ -639,8 +639,8 @@ class nTurnier
                 $spielenliste[$team_id] = $temp;
             }
 
-            // Sortierung nach Wertigkeit
-            if ($this->get_art() === "final") {
+            // A-Finals werden nach Meisterschaftstabelle sortiert, rest nach Rangtabelle
+            if ($this->get_art() === "final" && str_contains($this->get_tblock(), "A")) {
                 $spieltag = Tabelle::get_aktuellen_spieltag();
                 uasort($spielenliste, static function ($team_a, $team_b) use ($spieltag) {
                     return (
