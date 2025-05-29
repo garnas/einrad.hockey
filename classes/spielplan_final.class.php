@@ -31,7 +31,7 @@ class spielplan_final
 
     public static function routeToFinalSpielplan(int $turnier_id): void
     {
-        if ($turnier_id == 1239) {
+        if ($turnier_id == 1239 && !str_contains($_SERVER['PHP_SELF'], 'center')) {
             Helper::reload('/liga/spielplan_24.php');
         }
         if ($turnier_id == self::FINAL_B_ID) {
