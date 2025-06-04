@@ -38,7 +38,7 @@ class Nav
         return [
             [Env::BASE_URL . "/liga/neues.php", "Neuigkeiten"],
             [Env::BASE_URL . "/liga/ueber_uns.php", "Interesse?"],
-            [Env::BASE_URL . "/liga/teams.php", "Teams"],
+            [Env::BASE_URL . "/liga/ligaleitung.php", "Ligaleitung"],
             [Env::BASE_URL . "/liga/ligakarte.php", "Ligakarte"],
             [Env::BASE_URL . "/liga/kader.php", "Nationalkader"],
             [Env::LINK_DISCORD, "Discord"]
@@ -55,7 +55,6 @@ class Nav
         return [
             [Env::BASE_URL . "/schiricenter/schiri_infos.php", "Schiritest"],
             [Env::BASE_URL . "/liga/dokumente.php", "Dokumente"],
-            [Env::BASE_URL . "/liga/ligaleitung.php", "Ligaleitung"],
         ];
     }
 
