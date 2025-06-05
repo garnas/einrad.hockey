@@ -60,59 +60,6 @@ Html::$titel = "Aktuelle Tabellen der Deutschen Einradhockeyliga";
 Html::$content = "Die Rang- und Meisterschaftstabelle welche aus den Turnieren der Deutschen Einradhockeyliga entstehen.";
 include '../../templates/header.tmp.php';?>
 
-<!-- Erklärungen zur Tabelle -->
-
-<!-- Trigger/Open the Modal -->
-<button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-text-primary">
-    <?= Html::icon("info") ?> Infos zu den Tabellen
-</button>
-<!-- The Modal -->
-<div id="id01" class="w3-modal">
-  <div class="w3-modal-content w3-card-4" style="max-width:660px">
-    <div class="w3-panel">
-        <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-display-topright">&times;</span>
-        <h3 class="w3-text-primary w3-border-bottom w3-border-grey">Spieltage</h3>
-        <div class="w3-margin-left">
-            <ul class="w3-ul w3-leftbar w3-border-tertiary">
-                <li>Alle Turniere welche an einem Wochenende stattfinden, werden einem Spieltag zugeordnet.</li>
-                <li>Oberhalb der jeweiligen Tabelle kann man auch vergangene Spieltage auswählen.</li>
-                <li>Für die Turnieranmeldungen ist jedoch immer der vorherige (und damit vollständige) Spieltag relevant, also nicht der aktuelle Spieltag.</li>
-            </ul>
-        </div>
-        <h3 class="w3-text-primary w3-border-bottom w3-border-grey">Die Rangtabelle</h3>
-        <div class="w3-margin-left">
-            <ul class="w3-ul w3-leftbar w3-border-tertiary">
-                <li>Für jedes Team, welches du auf einem Turnier besiegst, bekommt dein Team Punkte. Starke Teams geben die meisten Punkte.</li>
-                <li>Wie viele Punkte du für welches Team bekommst und auf welchen Turnieren du spielen kannst, wird in der Rangtabelle festgelegt.</li>
-                <li>Die Rangtabelle ist nach dem durchschnittlichen Turnierergebnis deiner bis zu fünf letzten Turniere sortiert.</li>
-            </ul>
-        </div>
-        <h3 class="w3-text-primary w3-border-bottom w3-border-grey">Die Meisterschaftstabelle</h3>
-        <div class="w3-panel w3-container">
-            <ul class="w3-ul w3-leftbar w3-border-tertiary">
-                <li>In der Meisterschaftstabelle werden die besten fünf Turnierergebnisse deines Teams in der aktuellen Saison aufaddiert.</li>
-                <li>Der Platz in der Meisterschaftstabelle bestimmt, für welche Meisterschaft sich dein Team qualifizieren kann.</li>
-                <li><b>Finalturniere</b> <i>(Plätze)</i><br>Finale der Deutschen Einradhockeyliga (<span class="w3-text-tertiary">1-10</span>)
-                    <br>B-Finale der Deutschen Einradhockeyliga (<span class="w3-text-brown">11-16</span>)
-                    <br>C-Finale der Deutschen Einradhockeyliga (<span class="w3-text-primary">17-22</span>)
-                </li>
-            </ul>
-        </div>
-    </div>
-  </div>
-</div>
-<script>
-    // Get the modal
-    let modal = document.getElementById('id01');
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-</script>
-
 <!-- ------------------------- MEISTERSCHAFTSTABELLE ------------------------- -->
 <h1 id='meister' class="w3-text-primary">Meisterschaftstabelle</h1>
 <p class="w3-border-top w3-border-grey w3-text-grey"><a href="#rang" class="no w3-hover-text-secondary">Zur Rangtabelle</a><span class="w3-right">Saison <?=Html::get_saison_string($saison)?></span></p>
@@ -160,6 +107,11 @@ include '../../templates/header.tmp.php';?>
     </div>
 </div>
 
+<!-- Legende für die Farbgebung -->
+<div>
+    <p><b>Weiß hinterlegt</b>: Das Team hat die notwendige Anzahl an Turnieren gespielt und ist zu einer Teilnahme an einer Meisterschaft berechtigt.</p>
+    <p><b>Grau hinterlegt</b>: Das Team hat noch nicht die notwendige Anzahl an Turnieren gespielt und ist noch nicht zu einer Teilnahme an einer Meisterschaft berechtigt.</p>
+</div>
 
 <!-- ------------------------- RANGTABELLE ------------------------- -->
 <h1 id="rang" class="w3-text-primary w3-border-primary">Rangtabelle</h1>

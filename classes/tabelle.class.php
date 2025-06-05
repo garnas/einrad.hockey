@@ -239,7 +239,7 @@ class Tabelle
             SELECT team_id, teamname, t.turnier_id, datum, ergebnis, ort, tblock, platz, teilnehmer
             FROM tournaments t
             INNER JOIN num_of_teams n ON n.turnier_id = t.turnier_id
-            WHERE `rank` <= 5 ORDER BY team_id, ergebnis DESC
+            WHERE `rank` <= 4 ORDER BY team_id, ergebnis DESC
          ";
         $result = db::$db->query($sql, $saison, $spieltag)->esc()->fetch();
         $return = [];
