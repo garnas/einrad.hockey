@@ -11,10 +11,10 @@
 <div>
     <?php $counter = 0; ?>
     <?php foreach ($meisterschafts_tabelle as $key => $zeile): ?>
-        <?php $nthcolor = $counter % 2 == 0 ? '' : 'w3-light-grey'; ?>
+        <?php $color = (count($zeile['details']) >= 4) ? '' : 'w3-light-grey'; ?>
         
         <!-- Kopfzeile fuer das Team -->
-        <div id="small-meister-head-<?=$key?>" class="w3-row <?=$nthcolor?> w3-border-bottom w3-border-grey">
+        <div id="small-meister-head-<?=$key?>" class="w3-row <?=$color?> w3-border-bottom w3-border-grey">
             <div class="w3-col w3-left w3-padding-8 w3-right-align <?=$platz_color[$zeile['platz']] ?? ''?>" style="width: 36px;"><?=$zeile['platz']?></div>
             <div class="w3-col w3-right w3-padding-8 w3-center" style="width: 42px;">
                 <span onclick="show_small_results('meister', <?=$key?>)">
@@ -29,7 +29,7 @@
         <!-- Details zu den Turnieren des Teams -->
         <?php if (!empty($zeile['details'])): ?>
             <?php foreach ($zeile['details'] as $ergebnis): ?>
-                <div class="small-meister-result-<?=$key?> w3-row w3-text-primary <?=$nthcolor?>" style="display: none;">
+                <div class="small-meister-result-<?=$key?> w3-row w3-text-primary <?=$color?>" style="display: none;">
                     <div class="w3-col w3-left w3-padding-8" style="width: 36px;">&nbsp;</div>
                     <div class="w3-col w3-left w3-padding-8" style="width: 90px;"><?=date_format(date_create($ergebnis['datum']), "d.m.y")?></div>
                     <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width: 100px;">

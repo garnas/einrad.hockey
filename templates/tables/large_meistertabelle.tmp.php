@@ -14,10 +14,10 @@
 <div>
     <?php $counter = 0; ?>
     <?php foreach ($meisterschafts_tabelle as $key => $zeile): ?>
-        <?php $nthcolor = $counter % 2 == 0 ? '' : 'w3-light-grey'; ?>
+        <?php $color = (count($zeile['details']) >= 4) ? '' : 'w3-light-grey'; ?>
 
         <!-- Kopfzeile fuer das Team -->
-        <div id="large-meister-head-<?=$key?>" class="w3-row <?=$nthcolor?> w3-border-bottom w3-border-grey">
+        <div id="large-meister-head-<?=$key?>" class="w3-row <?=$color?> w3-border-bottom w3-border-grey">
             <div class="w3-col w3-right w3-padding-8 w3-center" style="width: 42px;">
                 <? if (!empty($zeile['details'])): ?>
                     <span onclick="show_large_results('meister', <?=$key?>)" style="cursor: pointer;">
@@ -38,7 +38,7 @@
         <!-- Details zu den Turnieren des Teams -->
         <?php if (!empty($zeile['details'])): ?>
             <?php foreach ($zeile['details'] as $dey => $ergebnis): ?>
-                <div class="large-meister-result-<?=$key?> w3-row w3-text-primary" style="display: none;">
+                <div class="large-meister-result-<?=$key?> w3-row w3-text-primary <?=$color?>" style="display: none;">
                     <div class="w3-col l2 m2 w3-padding-8 w3-right-align"><?=date_format(date_create($ergebnis['datum']), "d.m.y")?></div>
                     <div class="w3-col l2 m2 w3-padding-8"><?=$ergebnis['tblock']?></div>
                     <div class="w3-col l3 m3 w3-padding-8"><?=$ergebnis['ort']?></div>
