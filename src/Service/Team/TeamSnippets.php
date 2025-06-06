@@ -4,7 +4,9 @@ namespace App\Service\Team;
 
 use App\Entity\Team\Freilos;
 use App\Entity\Team\nTeam;
+use App\Entity\Team\Spieler;
 use App\Service\Turnier\TurnierSnippets;
+use Config;
 use Html;
 
 class TeamSnippets
@@ -65,5 +67,23 @@ class TeamSnippets
         $html .= '</ul>';
         return $html;
     }
+
+    public static function schiritag(Spieler $spieler): string
+    {
+        if (empty($spieler->getSchiri())) {
+            return '';
+        }
+        $saison_text = Html::get_saison_string($spieler->getSchiri());
+        $junior = ($spieler->isJunior()) ? "<i class='w3-text-grey'>junior</i>" : "";
+        $ausbilder = (SpielerService::isAusbilder($spieler)) ? "<i class='w3-text-grey'>Ausbilder/in</i>" : "";
+        if ($spieler->getSchiri() >= Config::SAISON) {
+            $icon = Html::icon("check_circle_outline");
+            return "<span class='w3-text-green'>$icon $saison_text $junior $ausbilder</span>";
+        } else {
+            $icon = Html::icon("block");
+            return "<span class='w3-text-grey'><s>$icon $saison_text $junior</s> $ausbilder</span>";
+        }
+    }
+
 
 }

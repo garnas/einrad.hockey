@@ -25,7 +25,7 @@ class Spieler
     private int $jahrgang;
 
     #[ORM\Column(name: "geschlecht", type: "string", length: 0, nullable: false)]
-    private string $geschlecht;
+    private ?string $geschlecht;
 
     #[ORM\Column(name: "schiri", type: "integer", nullable: true)]
     private ?int $schiri;
@@ -46,6 +46,10 @@ class Spieler
     public function getSpielerId(): ?int
     {
         return $this->spielerId;
+    }
+    public function getName(): ?string
+    {
+        return $this->vorname . " " . $this->nachname;
     }
 
     public function getVorname(): ?string
@@ -89,7 +93,7 @@ class Spieler
         return $this->geschlecht;
     }
 
-    public function setGeschlecht(string $geschlecht): self
+    public function setGeschlecht(?string $geschlecht): self
     {
         $this->geschlecht = $geschlecht;
 
@@ -156,5 +160,9 @@ class Spieler
         return $this;
     }
 
+    public function isJunior(): bool
+    {
+        return $this->junior === "Ja";
+    }
 
 }
