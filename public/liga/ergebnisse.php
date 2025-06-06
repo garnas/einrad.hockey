@@ -110,10 +110,10 @@ include '../../templates/header.tmp.php'; ?>
                         <span>
                         <?= Html::link(TurnierLinks::spielplan($turnier), 'Spielergebnisse', icon:'info') ?>
                         </span>
-                        <?= Html::link("../teamcenter/tc_turnier_report.php?turnier_id=$turnier_id", 'Turnierreport', icon:$icon) ?>
+                        <?= Html::link("../teamcenter/tc_turnier_report.php?turnier_id=" . $turnier->id(), 'Turnierreport', icon:$icon) ?>
                         <?php if (isset($_SESSION['logins']['la'])) { ?>
-                            <?= Html::link("../ligacenter/lc_turnier_report.php?turnier_id=$turnier_id", 'Turnierreport (Ligaausschuss)', icon:'article') ?>
-                            <?= Html::link("../ligacenter/lc_spielplan.php?turnier_id=$turnier_id", 'Spielergebnisse verwalten (Ligaausschuss)', icon:'info') ?>
+                            <?= Html::link("../ligacenter/lc_turnier_report.php?turnier_id=" . $turnier->id(), 'Turnierreport (Ligaausschuss)', icon:'article') ?>
+                            <?= Html::link("../ligacenter/lc_spielplan.php?turnier_id=" . $turnier->id(), 'Spielergebnisse verwalten (Ligaausschuss)', icon:'info') ?>
                         <?php }//endif?>
                     <?php }//end if?>
                 </p>
