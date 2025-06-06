@@ -4,6 +4,8 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
+$teams = Team::get_liste(); // Holen der Liste der Teamnamen
+
 // Formularauswertung
 if (isset($_POST['login'])) {
     $teamname = $_POST['teamname'] ?? '';
@@ -46,19 +48,16 @@ include '../../templates/header.tmp.php'; ?>
              class="no w3-right w3-text-red w3-hover-text-secondary" style="cursor: pointer;">
             <i class="material-icons">clear</i>
         </div>
-        <label for="teamname">
-            <i class="material-icons">group</i>
-            Team:</label>
-        <input class="w3-input w3-border-primary"
-               value="<?= $_POST['teamname'] ?? '' ?>"
-               placeholder="Team"
-               type="text"
-               list="teams"
-               id="teamname"
-               name="teamname"
-               required
-        >
-        <?= Html::datalist_teams() ?>
+        <label for="teamname">Wählen Sie ein Team:</label>
+        <select class="w3-input w3-border-primary" id="teamname" name="teamname" required>
+            <option value="" disabled <?= empty($_POST['teamname']) ? 'selected' : '' ?>>Team auswählen</option>
+
+            <?php foreach ($teams as $teamId => $teamName): ?>
+                <option value="<?= htmlspecialchars($teamName) ?>" <?= isset($_POST['teamname']) && $_POST['teamname'] == $teamName ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($teamName) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
         <p>
             <label for="passwort">
                 <?=Html::icon("account_circle")?> Passwort:</label>
