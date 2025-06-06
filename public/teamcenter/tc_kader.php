@@ -2,13 +2,16 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Repository\Team\TeamRepository;
+
 require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth
 
 $team_id = $_SESSION['logins']['team']['id'];
 
-$kader = nSpieler::get_kader($team_id);
-$kader_vorsaison = nSpieler::get_kader($team_id, Config::SAISON - 1);
+$teamEntity = TeamRepository::get()->team($team_id);
+$kader = $teamEntity->getKader();
+$kaderVorsaison = $teamEntity->getKaderVorsaison();
 
 //Formularauswertung neuer Spieler
 require_once '../../logic/kader.logic.php';
