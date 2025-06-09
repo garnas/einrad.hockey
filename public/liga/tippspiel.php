@@ -12,17 +12,11 @@ include '../../templates/header.tmp.php';
 <p>
     In dieser Saison möchten wir ein Tippspiel für die Meisterschaften anbieten. Hier bekommst du alle Informationen für die Teilnahme.
 </p>
-<ul>
-    <li><a href="#teilnahme">Teilnahme</a></li>
-    <li><a href="#punkte">Punktevergabe</a></li>
-    <li><a href="#hinweise">Hinweise</a></li>
-    <li><a href="#downloads">Downloads</a></li>
-</ul>
 
 <h3 id="teilnahme" class="w3-text-secondary">Teilnahme am Tippspiel</span></h3>
 <p>
-    Untenstehend findest Du eine Excel-Datei, mit der Du am Tippspiel für die jeweilige Meisterschaft teilnehmen kannst. Bitte lade die Datei 
-    herunter, fülle sie aus und sende sie an <?Html::mailto('oeffentlichkeitsausschuss@einrad.hockey')?>. Bitte teile uns dort auch deinen 
+    Im Abschnitt <a class="no w3-text-primary w3-hover-text-secondary" href="#downloads">Downloads</a> findest Du eine Excel-Datei, mit der Du am Tippspiel für die jeweilige Meisterschaft teilnehmen kannst. Bitte lade die Datei 
+    herunter, fülle sie aus und sende sie an <?=Html::mailto('oeffentlichkeitsausschuss@einrad.hockey')?>. Bitte teile uns dort auch deinen 
     Namen und ggfs. dein Team mit. Solltest Du nicht wollten, dass dein Name am Ende evtl. veröffentlicht wird, dann teile uns dies bitte auch mit.
 </p>
 <p>
@@ -33,8 +27,8 @@ include '../../templates/header.tmp.php';
     Nach der jeweiligen Meisterschaft werden die eingeschickten Tipps schnellstmöglich ausgewertet.
 </p>
 
-<p class="w3-leftbar w3-border-primary w3-padding">
-    Der Teilnahmeschluss für die Tipps ist jeweils der Freitag vor dem Turnierbeginn um 23:59 Uhr. Für die <b>B-Meisterschaft</b> ist 
+<p class="w3-leftbar w3-border-secondary w3-padding">
+    Der <b>Teilnahmeschluss</b> für die Tipps ist jeweils der Freitag vor dem Turnierbeginn um 23:59 Uhr. Für die <b>B-Meisterschaft</b> ist 
     dies der <b>13.06.2025</b> um 23:59 Uhr. Für die <b>Deutsche Meisterschaft</b> ist dies der <b>20.06.2025</b> um 23:59 Uhr.
 </p>
 
@@ -60,13 +54,14 @@ include '../../templates/header.tmp.php';
 </ul>
 
 <h3 id="downloads" class="w3-text-secondary">Downloads</h3>
-<ul>
-    <li><a href="<?= Nav::LINK_TIPPSPIEL_BM_XLSX ?>" >Tippspiel B-Meisterschaft 2025 (Excel)</a></li>
-    <li><a href="<?= Nav::LINK_TIPPSPIEL_BM_PDF ?>" >Tippspiel B-Meisterschaft 2025 (PDF)</a></li>
-    <li><a href="<?= Nav::LINK_TIPPSPIEL_DM_XLSX ?>" >Tippspiel Deutsche Meisterschaft 2025 (Excel)</a></li>
-    <li><a href="<?= Nav::LINK_TIPPSPIEL_DM_PDF ?>" >Tippspiel Deutsche Meisterschaft 2025 (PDF)</a></li>
-    <li><a href="<?= Nav::LINK_TIPPSPIEL_ANLEITUNG_BM ?>" >Anleitung zum Tippspiel der B-Meisterschaft (PDF)</a></li>
-    <li><a href="<?= Nav::LINK_TIPPSPIEL_ANLEITUNG_DM ?>" >Anleitung zum Tippspiel der Deutschen Meisterschaft (PDF)</a></li>
-</ul>
+<div>
+    <p><a class="no w3-hover-text-secondary" href="<?= Nav::LINK_TIPPSPIEL_ANLEITUNG_BM ?>"><i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i> Anleitung zum Tippspiel der B-Meisterschaft (PDF)</a></p>
+    <p><a class="no w3-hover-text-secondary" href="<?= Nav::LINK_TIPPSPIEL_BM_XLSX ?>"><i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i> Tippspiel B-Meisterschaft 2025 (Excel)</a></p>
+    <p><a class="no w3-hover-text-secondary" href="<?= Nav::LINK_TIPPSPIEL_BM_PDF ?>"><i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i> Tippspiel B-Meisterschaft 2025 (PDF)</a></p>
+    <hr>
+    <p><a class="no w3-hover-text-secondary" href="<?= Nav::LINK_TIPPSPIEL_ANLEITUNG_DM ?>"><i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i> Anleitung zum Tippspiel der Deutschen Meisterschaft (PDF)</a></p>
+    <p><a class="no w3-hover-text-secondary" href="<?= Nav::LINK_TIPPSPIEL_DM_XLSX ?>"><i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i> Tippspiel Deutsche Meisterschaft 2025 (Excel)</a></p>
+    <p><a class="no w3-hover-text-secondary" href="<?= Nav::LINK_TIPPSPIEL_DM_PDF ?>"><i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i> Tippspiel Deutsche Meisterschaft 2025 (PDF)</a></p>
+</div>
 
 <?php include '../../templates/footer.tmp.php';
