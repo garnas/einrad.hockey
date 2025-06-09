@@ -15,9 +15,10 @@ include '../../templates/header.tmp.php';
 
 <h3 id="teilnahme" class="w3-text-secondary">Teilnahme am Tippspiel</span></h3>
 <p>
-    Im Abschnitt <a class="no w3-text-primary w3-hover-text-secondary" href="#downloads">Downloads</a> findest Du eine Excel-Datei, mit der Du am Tippspiel für die jeweilige Meisterschaft teilnehmen kannst. Bitte lade die Datei 
-    herunter, fülle sie aus und sende sie an <?=Html::mailto('oeffentlichkeitsausschuss@einrad.hockey')?>. Bitte teile uns dort auch deinen 
-    Namen und ggfs. dein Team mit. Solltest Du nicht wollten, dass dein Name am Ende evtl. veröffentlicht wird, dann teile uns dies bitte auch mit.
+    Im Abschnitt <a class="no w3-text-primary w3-hover-text-secondary" href="#downloads">Downloads</a> findest Du eine Excel-Datei, mit der Du am Tippspiel für die jeweilige 
+    Meisterschaft teilnehmen kannst. Bitte lade die Datei herunter, fülle sie aus und sende sie an <?=Html::mailto('oeffentlichkeitsausschuss@einrad.hockey')?>. Bitte teile uns dort 
+    auch deinen Namen und ggfs. dein Team mit. Die im Rahmen des Tippspiels übermittelten personenbezogenen Daten (z. B. Name, Teamzugehörigkeit) werden 
+    ausschließlich zur Durchführung und Auswertung des Tippspiels verwendet.
 </p>
 <p>
     Wenn Du nicht die Excel-Datei nutzen möchtest, so steht auch eine PDF-Datei zur Verfügung, die Du stattdessen an den 
