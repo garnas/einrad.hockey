@@ -105,6 +105,7 @@ class Nav
         return [
             [Env::BASE_URL . "/liga/ueber_uns.php", "Über uns"],
             [Env::BASE_URL . "/liga/jubilaeum.php", "25 Jahre Liga"],
+            [Env::BASE_URL . "/liga/tippspiel.php", "Tippspiel"],
             [Env::BASE_URL . "/liga/archiv.php", "Archiv"],
             [Env::BASE_URL . "/login.php", "Ausschusslogin"],
             [Env::BASE_URL . "/liga/kontakt.php", "Kontakt"],
@@ -225,6 +226,16 @@ class Nav
     public const LINK_IUF = 'https://unicycling.org/';
     public const LINK_MODUS_KURZ_ENG = Env::BASE_URL . '/dokumente/summary_modus.pdf';
     public const LINK_SWISS = 'https://www.swiss-iuc.ch/Wettkaempfe/Einradhockey';
+
+    /**
+     * Dokumente für das Tippspiel 2025
+     */
+    public const LINK_TIPPSPIEL_BM_XLSX = Env::BASE_URL . '/dokumente/Tippspiel_B-Meisterschaft_Borken.xlsx';
+    public const LINK_TIPPSPIEL_BM_PDF = Env::BASE_URL . '/dokumente/Tippspiel_B-Meisterschaft_Borken.pdf';
+    public const LINK_TIPPSPIEL_DM_XLSX = Env::BASE_URL . '/dokumente/Tippspiel_Deutsche_Meisterschaft_Dresden.xlsx';
+    public const LINK_TIPPSPIEL_DM_PDF = Env::BASE_URL . '/dokumente/Tippspiel_Deutsche_Meisterschaft_Dresden.pdf';
+    public const LINK_TIPPSPIEL_ANLEITUNG_BM = Env::BASE_URL . '/dokumente/Erklaerung_Tippspiel_B-Meisterschaft_Borken.pdf';
+    public const LINK_TIPPSPIEL_ANLEITUNG_DM = Env::BASE_URL . '/dokumente/Erklaerung_Tippspiel_Deutsche_Meisterschaft_Dresden.pdf';
 
     public static function get_oc_start(): array
     {
