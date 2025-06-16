@@ -5,6 +5,7 @@ namespace App\Repository\Spieler;
 use App\Entity\Team\Spieler;
 use App\Repository\DoctrineWrapper;
 use App\Repository\TraitSingletonRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
 
 class SpielerRepository
@@ -19,7 +20,7 @@ class SpielerRepository
         $this->spieler = DoctrineWrapper::manager()->getRepository(Spieler::class);
     }
 
-    public function spieler(int $id): Spieler
+    public function spieler(int $id): ?Spieler
     {
         return $this->spieler->find($id);
     }
@@ -41,6 +42,19 @@ class SpielerRepository
             ->setParameter('geschlecht', $spieler->getGeschlecht())
         ;
         return $query->getQuery()->getOneOrNullResult();
+    }
+    /**
+     * @return Collection|Spieler[]
+     */
+    public function getSpielerAndTeam(): Collection|array
+    {
+        $query = DoctrineWrapper::manager()
+            ->createQueryBuilder()
+            ->select('s')
+            ->from(Spieler::class, 's')
+            ->leftJoin('s.team', 't')
+        ;
+        return $query->getQuery()->getResult();
     }
 
     public function speichern(Spieler $spieler): void
