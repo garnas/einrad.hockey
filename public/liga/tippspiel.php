@@ -94,10 +94,11 @@ include '../../templates/header.tmp.php';
     <tr><td>14</td><td>Ole</td><td>Dresdner Einradtiger</td><td>30</td><td><a class='no w3-text-primary w3-hover-text-secondary' href='/dokumente/tippspiel/bm_ergebnisse/BM_EIT_Ole.pdf'>PDF</a></td></tr>
     <tr><td>15</td><td>Lukas</td><td>MUH-Bande Jena</td><td>28</td><td><a class='no w3-text-primary w3-hover-text-secondary' href='/dokumente/tippspiel/bm_ergebnisse/BM_MUH_Lukas.pdf'>PDF</a></td></tr>
     <tr><td>16</td><td>Tiara</td><td>SKV Mörfelden UniThunder</td><td>27</td><td><a class='no w3-text-primary w3-hover-text-secondary' href='/dokumente/tippspiel/bm_ergebnisse/BM_UTH_Tiara.pdf'>PDF</a></td></tr>
-    <tr><td>17</td><td>Dustin</td><td>SKV Mörfelden UniThunder</td><td>24</td><td><a class='no w3-text-primary w3-hover-text-secondary' href='/dokumente/tippspiel/bm_ergebnisse/BM_UTH_Dustin.pdf'>PDF</a></td></tr>
-    <tr><td>18</td><td>Fin</td><td>MUH-Bande Jena</td><td>23</td><td><a class='no w3-text-primary w3-hover-text-secondary' href='/dokumente/tippspiel/bm_ergebnisse/BM_MUH_Fin.pdf'>PDF</a></td></tr>
-    <tr><td>19</td><td>Carina</td><td>SKV Mörfelden UniThunder</td><td>18</td><td><a class='no w3-text-primary w3-hover-text-secondary' href='/dokumente/tippspiel/bm_ergebnisse/BM_UTH_Carina.pdf'>PDF</a></td></tr>
-    <tr><td>20</td><td>Kristin</td><td>MUH-Bande Jena</td><td>13</td><td><a class='no w3-text-primary w3-hover-text-secondary' href='/dokumente/tippspiel/bm_ergebnisse/BM_MUH_Kristin.pdf'>PDF</a></td></tr>
+    <tr><td>17</td><td>Lea</td><td>SKV Mörfelden UniThunder</td><td>25</td><td><a class='no w3-text-primary w3-hover-text-secondary' href='/dokumente/tippspiel/bm_ergebnisse/BM_UTH_Lea.pdf'>PDF</a></td></tr>
+    <tr><td>18</td><td>Dustin</td><td>SKV Mörfelden UniThunder</td><td>24</td><td><a class='no w3-text-primary w3-hover-text-secondary' href='/dokumente/tippspiel/bm_ergebnisse/BM_UTH_Dustin.pdf'>PDF</a></td></tr>
+    <tr><td>19</td><td>Fin</td><td>MUH-Bande Jena</td><td>23</td><td><a class='no w3-text-primary w3-hover-text-secondary' href='/dokumente/tippspiel/bm_ergebnisse/BM_MUH_Fin.pdf'>PDF</a></td></tr>
+    <tr><td>20</td><td>Carina</td><td>SKV Mörfelden UniThunder</td><td>18</td><td><a class='no w3-text-primary w3-hover-text-secondary' href='/dokumente/tippspiel/bm_ergebnisse/BM_UTH_Carina.pdf'>PDF</a></td></tr>
+    <tr><td>21</td><td>Kristin</td><td>MUH-Bande Jena</td><td>13</td><td><a class='no w3-text-primary w3-hover-text-secondary' href='/dokumente/tippspiel/bm_ergebnisse/BM_MUH_Kristin.pdf'>PDF</a></td></tr>
 </table>
 
 <?php include '../../templates/footer.tmp.php';
