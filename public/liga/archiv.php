@@ -36,6 +36,11 @@ include '../../templates/header.tmp.php';
         <th>Veranstaltung</th>
         <th>Spielplan / Ergebnisse</th>
     </tr>
+    <tr>
+        <td>31.05. + 01.06.2025</td>
+        <td>2. Lilienthaler 24 Stunden Einradhockeyturnier</td>
+        <td><a class='no w3-text-primary w3-hover-text-secondary' href='/dokumente/spielplaene/2025_Lilienthal_24h-Turnier.pdf'>Ergebnisse</a></td>
+    </tr>
 </table>
 
 <?php include '../../templates/footer.tmp.php';
