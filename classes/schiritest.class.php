@@ -18,7 +18,7 @@ class SchiriTest
     # 11 -> Strafen
     #                             0  1  2  3  4  5  6  7  8  9 10 11
     public const anzahl_L = array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-    public const anzahl_J = array(0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1);
+    public const anzahl_J = array(0, 2, 2, 2, 0, 2, 1, 2, 3, 2, 2, 2);
     public const anzahl_B = array(0, 1, 2, 1, 0, 2, 2, 2, 4, 3, 1, 2);
     public const anzahl_F = array(0, 2, 3, 1, 1, 3, 3, 3, 6, 4, 1, 3);
     public const lev_infos = array(
@@ -30,8 +30,8 @@ class SchiriTest
         'J'=>array(
             'name'        => 'Junior',
             'anzahl'      => self::anzahl_J,
-            'timelimit'   => 45,  # in Minuten
-            'richtig_min' => 9),  # Minimum zum Bestehen
+            'timelimit'   => 60,  # in Minuten
+            'richtig_min' => 15),  # Minimum zum Bestehen
         'B'=>array(
             'name'        => 'Basis',
             'anzahl'      => self::anzahl_B,
