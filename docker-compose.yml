@@ -38,6 +38,7 @@ services:
     restart: always
     environment:
       PMA_HOST: mariadb
+      UPLOAD_LIMIT: 300M
     links:
       - mariadb
     ports:
