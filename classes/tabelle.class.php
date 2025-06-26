@@ -209,6 +209,22 @@ class Tabelle
         return $return ?? [];
     }
 
+    public static function get_meisterschafts_tabelle_templates(int $saison = Config::SAISON): array
+    {        
+        return array(
+            'desktop' => 'templates/tabellen/desktop_meistertabelle.tmp.php',
+            'mobil' => 'templates/tabellen/mobil_meistertabelle.tmp.php',
+        );
+    }
+
+    public static function get_rang_tabelle_templates(int $saison = Config::SAISON): array
+    {
+        return array(
+            'desktop' => 'templates/tabellen/desktop_rangtabelle.tmp.php',
+            'mobil' => 'templates/tabellen/mobil_rangtabelle.tmp.php',
+        );
+    }
+    
     /**
      * Gibt das Array der Meisterschaftstabelle aus
      *

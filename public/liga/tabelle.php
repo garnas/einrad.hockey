@@ -21,9 +21,20 @@ if (Tabelle::check_spieltag_live($akt_spieltag)) {
 // Waehle uebergebenen Spieltag, sonst aktuellen Spieltag
 $gew_spieltag = isset($_GET['spieltag']) ? (int) $_GET['spieltag'] : $akt_spieltag;
 
-// Tabellen und Strafen, um sie an das Layout zu übergeben
-$meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag, $saison);
+// Daten der Meisterschaftstabelle, um sie an das Layout zu uebergeben
+if ($saison >= Config::SAISON) {
+    $meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag, $saison);
+    $meisterschafts_tabelle_templates = Tabelle::get_meisterschafts_tabelle_templates($saison);
+} else {
+    $meisterschafts_tabelle = ArchivTabelle::get_meisterschafts_tabelle($gew_spieltag, $saison);
+    $meisterschafts_tabelle_templates = ArchivTabelle::get_meisterschafts_tabelle_templates($saison);
+}
+
+// Daten der Rangtabelle, um sie an das Layout zu uebergeben
 $rang_tabelle = Tabelle::get_rang_tabelle($gew_spieltag, $saison);
+$rang_tabelle_templates = Tabelle::get_rang_tabelle_templates($saison);
+
+// Daten der Strafen, um sie an das Layout zu uebergeben
 $strafen = Team::get_strafen($saison);
 
 // Testen ob Verwarnungen oder Strafen existieren.
@@ -83,12 +94,12 @@ include '../../templates/header.tmp.php';?>
 
 <!-- Beginn der eigentlichen Meisterschaftstabelle -->
 <div class="w3-responsive w3-card w3-hide-small">
-    <?php include '../../templates/tabellen/desktop_meistertabelle.tmp.php'; ?>
+    <?php include '../../' . $meisterschafts_tabelle_templates['desktop']; ?>
 </div>
 
 <!-- Meisterschaftstabelle für mobile Geräte -->
 <div class="w3-responsive w3-card w3-hide-large w3-hide-medium">
-    <?php include '../../templates/tabellen/mobil_meistertabelle.tmp.php'; ?>
+    <?php include '../../' . $meisterschafts_tabelle_templates['mobil']; ?>
 </div>
 
 <!-- Auswahl des Spieltages unter der Meisterschaftstabelle-->    
@@ -136,12 +147,12 @@ include '../../templates/header.tmp.php';?>
 
 <!-- Beginn der eigentlichen Rangtabelle -->
 <div class="w3-responsive w3-card w3-hide-small">
-    <?php include '../../templates/tabellen/desktop_rangtabelle.tmp.php'; ?>
+    <?php include '../../' . $rang_tabelle_templates['desktop']; ?>
 </div>
 
 <!-- Rangtabelle für mobile Geräte -->
 <div class="w3-responsive w3-card w3-hide-large w3-hide-medium">
-    <?php include '../../templates/tabellen/mobil_rangtabelle.tmp.php'; ?>
+    <?php include '../../' . $rang_tabelle_templates['mobil']; ?>
 </div>
 
 <!-- Auswahl des Spieltages unter der Rangtabelle -->
