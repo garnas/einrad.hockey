@@ -83,12 +83,12 @@ include '../../templates/header.tmp.php';?>
 
 <!-- Beginn der eigentlichen Meisterschaftstabelle -->
 <div class="w3-responsive w3-card w3-hide-small">
-    <?php include '../../templates/tables/large_meistertabelle.tmp.php'; ?>
+    <?php include '../../templates/tabellen/desktop_meistertabelle.tmp.php'; ?>
 </div>
 
 <!-- Meisterschaftstabelle für mobile Geräte -->
 <div class="w3-responsive w3-card w3-hide-large w3-hide-medium">
-    <?php include '../../templates/tables/small_meistertabelle.tmp.php'; ?>
+    <?php include '../../templates/tabellen/mobil_meistertabelle.tmp.php'; ?>
 </div>
 
 <!-- Auswahl des Spieltages unter der Meisterschaftstabelle-->    
@@ -136,12 +136,12 @@ include '../../templates/header.tmp.php';?>
 
 <!-- Beginn der eigentlichen Rangtabelle -->
 <div class="w3-responsive w3-card w3-hide-small">
-    <?php include '../../templates/tables/large_rangtabelle.tmp.php'; ?>
+    <?php include '../../templates/tabellen/desktop_rangtabelle.tmp.php'; ?>
 </div>
 
 <!-- Rangtabelle für mobile Geräte -->
 <div class="w3-responsive w3-card w3-hide-large w3-hide-medium">
-    <?php include '../../templates/tables/small_rangtabelle.tmp.php'; ?>
+    <?php include '../../templates/tabellen/mobil_rangtabelle.tmp.php'; ?>
 </div>
 
 <!-- Auswahl des Spieltages unter der Rangtabelle -->
@@ -176,10 +176,10 @@ include '../../templates/header.tmp.php';?>
         <h1 id="strafen" class="w3-text-primary">Verwarnungen</h1>
     <?php endif; ?>
     <div class="w3-responsive w3-card w3-hide-small">
-        <?php include '../../templates/tables/large_verwarnungen.tmp.php'; ?>
+        <?php include '../../templates/tabellen/desktop_verwarnungen.tmp.php'; ?>
     </div>
     <div class="w3-hide-large w3-hide-medium">
-        <?php include '../../templates/tables/small_verwarnungen.tmp.php'; ?>
+        <?php include '../../templates/tabellen/mobil_verwarnungen.tmp.php'; ?>
     </div>
 <?php endif; ?>
 
@@ -190,10 +190,10 @@ include '../../templates/header.tmp.php';?>
         <h1 id="strafen" class="w3-text-primary">Strafen</h1>
     <?php endif; ?>
     <div class="w3-responsive w3-card w3-hide-small">
-        <?php include '../../templates/tables/large_strafen.tmp.php'; ?>
+        <?php include '../../templates/tabellen/desktop_strafen.tmp.php'; ?>
     </div>
     <div class="w3-hide-large w3-hide-medium">
-        <?php include '../../templates/tables/small_strafen.tmp.php'; ?>
+        <?php include '../../templates/tabellen/mobil_strafen.tmp.php'; ?>
     </div>
 <?php endif; ?>
 
