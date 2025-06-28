@@ -38,7 +38,7 @@ class Nav
         return [
             [Env::BASE_URL . "/liga/neues.php", "Neuigkeiten"],
             [Env::BASE_URL . "/liga/ueber_uns.php", "Interesse?"],
-            [Env::BASE_URL . "/liga/teams.php", "Teams"],
+            [Env::BASE_URL . "/liga/ligaleitung.php", "Ligaleitung"],
             [Env::BASE_URL . "/liga/ligakarte.php", "Ligakarte"],
             [Env::BASE_URL . "/liga/kader.php", "Nationalkader"],
             [Env::LINK_DISCORD, "Discord"]
@@ -55,7 +55,6 @@ class Nav
         return [
             [Env::BASE_URL . "/schiricenter/schiri_infos.php", "Schiritest"],
             [Env::BASE_URL . "/liga/dokumente.php", "Dokumente"],
-            [Env::BASE_URL . "/liga/ligaleitung.php", "Ligaleitung"],
         ];
     }
 
@@ -105,6 +104,7 @@ class Nav
         return [
             [Env::BASE_URL . "/liga/ueber_uns.php", "Über uns"],
             [Env::BASE_URL . "/liga/jubilaeum.php", "25 Jahre Liga"],
+            [Env::BASE_URL . "/liga/tippspiel.php", "Tippspiel"],
             [Env::BASE_URL . "/liga/archiv.php", "Archiv"],
             [Env::BASE_URL . "/login.php", "Ausschusslogin"],
             [Env::BASE_URL . "/liga/kontakt.php", "Kontakt"],
@@ -169,6 +169,7 @@ class Nav
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_anmelden.php", "Turnieranmeldung", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_turnier_erstellen.php", "Turnier erstellen", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_verwalten.php", "Eigene Turniere", "w3-primary"],
+            [Env::BASE_URL . "/teamcenter/tc_turnier_report_liste.php", "Turnierreports", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_neuigkeit_eintragen.php", "Neuigkeiten eintragen", "w3-tertiary"],
             [Env::BASE_URL . "/teamcenter/tc_neuigkeit_liste.php", "Neuigkeit bearbeiten", "w3-tertiary"],
             [Env::BASE_URL . "/teamcenter/tc_kontaktcenter.php", "Kontaktcenter", "w3-tertiary"],
@@ -212,6 +213,7 @@ class Nav
     public const LINK_SCHIRIWESEN = Env::BASE_URL . '/dokumente/schiriwesen.pdf';
 
     public const LINK_SCHIRI_CHECKLIST = Env::BASE_URL . '/dokumente/schiri_checkliste.pdf';
+    public const LINK_SCHIRI_LEITLINIE = Env::BASE_URL . '/dokumente/schiri_leitlinie.pdf';
     public const LINK_MODUS_ENTWURF = Env::BASE_URL . '/dokumente/ligamodus_entwurf.pdf';
     public const LINK_FINALE = Env::BASE_URL . '/dokumente/finalturnier.pdf';
     public const LINK_FINALE_MODI = Env::BASE_URL . '/dokumente/finalturnier_spielmodi.pdf';
@@ -225,6 +227,16 @@ class Nav
     public const LINK_IUF = 'https://unicycling.org/';
     public const LINK_MODUS_KURZ_ENG = Env::BASE_URL . '/dokumente/summary_modus.pdf';
     public const LINK_SWISS = 'https://www.swiss-iuc.ch/Wettkaempfe/Einradhockey';
+
+    /**
+     * Dokumente für das Tippspiel 2025
+     */
+    public const LINK_TIPPSPIEL_BM_XLSX = Env::BASE_URL . '/dokumente/tippspiel/Tippspiel_B-Meisterschaft_Borken.xlsx';
+    public const LINK_TIPPSPIEL_BM_PDF = Env::BASE_URL . '/dokumente/tippspiel/Tippspiel_B-Meisterschaft_Borken.pdf';
+    public const LINK_TIPPSPIEL_DM_XLSX = Env::BASE_URL . '/dokumente/tippspiel/Tippspiel_Deutsche_Meisterschaft_Dresden.xlsx';
+    public const LINK_TIPPSPIEL_DM_PDF = Env::BASE_URL . '/dokumente/tippspiel/Tippspiel_Deutsche_Meisterschaft_Dresden.pdf';
+    public const LINK_TIPPSPIEL_ANLEITUNG_BM = Env::BASE_URL . '/dokumente/tippspiel/Erklaerung_Tippspiel_B-Meisterschaft_Borken.pdf';
+    public const LINK_TIPPSPIEL_ANLEITUNG_DM = Env::BASE_URL . '/dokumente/tippspiel/Erklaerung_Tippspiel_Deutsche_Meisterschaft_Dresden.pdf';
 
     public static function get_oc_start(): array
     {

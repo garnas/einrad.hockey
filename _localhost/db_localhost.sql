@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mariadb
--- Erstellungszeit: 25. Mai 2025 um 21:27
+-- Erstellungszeit: 06. Jun 2025 um 17:29
 -- Server-Version: 10.11.11-MariaDB-ubu2204
 -- PHP-Version: 8.2.28
 
@@ -12747,7 +12747,7 @@ CREATE TABLE `spieler` (
   `vorname` varchar(255) NOT NULL,
   `nachname` varchar(255) NOT NULL,
   `jahrgang` int(11) NOT NULL,
-  `geschlecht` enum('m','w','d') NOT NULL,
+  `geschlecht` enum('m','w','d') DEFAULT NULL,
   `schiri` int(11) DEFAULT NULL,
   `junior` enum('Ja') DEFAULT NULL,
   `letzte_saison` int(11) DEFAULT NULL,
@@ -21244,16 +21244,6 @@ ALTER TABLE `freilose`
 --
 ALTER TABLE `ligaleitung`
   ADD CONSTRAINT `ligaleitung_ibfk_1` FOREIGN KEY (`spieler_id`) REFERENCES `spieler` (`spieler_id`);
-
---
--- Constraints der Tabelle `spiele`
---
-ALTER TABLE `spiele`
-  ADD CONSTRAINT `spiele_ibfk_1` FOREIGN KEY (`team_id_a`) REFERENCES `teams_liga` (`team_id`),
-  ADD CONSTRAINT `spiele_ibfk_2` FOREIGN KEY (`team_id_b`) REFERENCES `teams_liga` (`team_id`),
-  ADD CONSTRAINT `spiele_ibfk_3` FOREIGN KEY (`schiri_team_id_a`) REFERENCES `teams_liga` (`team_id`),
-  ADD CONSTRAINT `spiele_ibfk_4` FOREIGN KEY (`schiri_team_id_b`) REFERENCES `teams_liga` (`team_id`),
-  ADD CONSTRAINT `spiele_ibfk_5` FOREIGN KEY (`turnier_id`) REFERENCES `turniere_liga` (`turnier_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints der Tabelle `spieler`

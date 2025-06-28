@@ -37,6 +37,7 @@ final class Spielplan_JgJ extends Spielplan {
 
         if (!$skip_init) {
             $this->set_wertigkeiten();
+            $this->set_ligapunkte();
         }
 
         if (!empty($this->penaltys['kontrolle']) && $this->check_turnier_beendet()) {

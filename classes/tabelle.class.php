@@ -209,6 +209,22 @@ class Tabelle
         return $return ?? [];
     }
 
+    public static function get_meisterschafts_tabelle_templates(int $saison = Config::SAISON): array
+    {        
+        return array(
+            'desktop' => 'templates/tabellen/desktop_meistertabelle.tmp.php',
+            'mobil' => 'templates/tabellen/mobil_meistertabelle.tmp.php',
+        );
+    }
+
+    public static function get_rang_tabelle_templates(int $saison = Config::SAISON): array
+    {
+        return array(
+            'desktop' => 'templates/tabellen/desktop_rangtabelle.tmp.php',
+            'mobil' => 'templates/tabellen/mobil_rangtabelle.tmp.php',
+        );
+    }
+    
     /**
      * Gibt das Array der Meisterschaftstabelle aus
      *
@@ -239,7 +255,7 @@ class Tabelle
             SELECT team_id, teamname, t.turnier_id, datum, ergebnis, ort, tblock, platz, teilnehmer
             FROM tournaments t
             INNER JOIN num_of_teams n ON n.turnier_id = t.turnier_id
-            WHERE `rank` <= 5 ORDER BY team_id, ergebnis DESC
+            WHERE `rank` <= 4 ORDER BY team_id, ergebnis DESC
          ";
         $result = db::$db->query($sql, $saison, $spieltag)->esc()->fetch();
         $return = [];

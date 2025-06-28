@@ -12,8 +12,8 @@ if (isset($_GET['team_id'])) {
     $team_id = (int)$_GET['team_id'];
     $teamEntity = TeamRepository::get()->team($team_id);
     if (Team::is_ligateam($team_id)) {
-        $kader = nSpieler::get_kader($team_id);
-        $kader_vorsaison = nSpieler::get_kader($team_id, Config::SAISON - 1);
+        $kader = $teamEntity->getKader();
+        $kaderVorsaison = $teamEntity->getKaderVorsaison();
     } else {
         Html::error("Team wurde nicht gefunden");
     }

@@ -1,5 +1,7 @@
 <?php # -*- php -*-
 
+use App\Entity\Team\Spieler;
+
 class SchiriTest
 {
 
@@ -18,7 +20,7 @@ class SchiriTest
     # 11 -> Strafen
     #                             0  1  2  3  4  5  6  7  8  9 10 11
     public const anzahl_L = array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-    public const anzahl_J = array(0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1);
+    public const anzahl_J = array(0, 2, 2, 2, 0, 2, 1, 2, 3, 2, 2, 2);
     public const anzahl_B = array(0, 1, 2, 1, 0, 2, 2, 2, 4, 3, 1, 2);
     public const anzahl_F = array(0, 2, 3, 1, 1, 3, 3, 3, 6, 4, 1, 3);
     public const lev_infos = array(
@@ -30,8 +32,8 @@ class SchiriTest
         'J'=>array(
             'name'        => 'Junior',
             'anzahl'      => self::anzahl_J,
-            'timelimit'   => 45,  # in Minuten
-            'richtig_min' => 9),  # Minimum zum Bestehen
+            'timelimit'   => 60,  # in Minuten
+            'richtig_min' => 15),  # Minimum zum Bestehen
         'B'=>array(
             'name'        => 'Basis',
             'anzahl'      => self::anzahl_B,
@@ -415,7 +417,7 @@ class SchiriTest
     #-------------------------------------------------------------------------
 
     public array $pruefungs_fragen;
-    public nSpieler $spieler;
+    public Spieler $spieler;
     public string $test_level;
     public string $gestellte_fragen;
     public bool $error = false;
@@ -455,11 +457,7 @@ class SchiriTest
         return $this;
     }
 
-    /**
-     * @param nSpieler $spieler
-     * @return SchiriTest
-     */
-    public function set_spieler(nSpieler $spieler): SchiriTest
+    public function set_spieler(Spieler $spieler): SchiriTest
     {
         $this->spieler = $spieler;
 
@@ -508,14 +506,14 @@ class SchiriTest
             gestellte_fragen, test_level, t_erstellt, saison, schiri_test_version)
             VALUES (?, ?, ?, ?, ?, ?, ?, '1')
             ";
-        $params = [$this->md5, $this->spieler->id(), $this->email,
+        $params = [$this->md5, $this->spieler->getSpielerId(), $this->email,
             $this->gestellte_fragen, $this->test_level, $this->zeitstempel, Config::SAISON];
 
         db::$db->query($sql, $params)->log();
 
         $this->url = Env::BASE_URL . '/schiricenter/schiritest.php?md5sum=' . $this->md5;
 
-        Helper::log(Config::LOG_SCHIRI_PRUEFUNG, $this->spieler->id() . ": Test wurde erstellt ($this->md5)");
+        Helper::log(Config::LOG_SCHIRI_PRUEFUNG, $this->spieler->getSpielerId() . ": Test wurde erstellt ($this->md5)");
 
         return $this;
     }
@@ -526,7 +524,7 @@ class SchiriTest
         $richtig_min = self::lev_infos[$this->test_level]['richtig_min'];
         $timelimit = self::lev_infos[$this->test_level]['timelimit'];
         $text = <<<Mail
-Hallo {$this->spieler->get_name()},
+Hallo {$this->spieler->getName()},
 
 dein Online Schiritest (Level: $levelname) ist jetzt erstellt
 worden. Du kannst ihn hier starten:
@@ -548,9 +546,9 @@ Mail;
         # Email an Prüfling senden:
         $mailer = MailBot::start_mailer();
         $mailer->setFrom(Env::SCHIRIMAIL); # Absender ist Schiriausschuss
-        $mailer->addAddress($this->email, $this->spieler->get_name()); # Empfänger
+        $mailer->addAddress($this->email, $this->spieler->getName()); # Empfänger
         $mailer->addCC(Env::SCHIRIMAIL); # cc: an Schiriausschuss
-        $mailer->Subject = 'Online Schiritest für ' . $this->spieler->get_name(); # Betreff
+        $mailer->Subject = 'Online Schiritest für ' . $this->spieler->getName(); # Betreff
         $mailer->Body = $text; # Text der E-Mail
         return (MailBot::send_mail($mailer)); // Booleanwert, ob Mail erfolgreich versendet wurde
     }
