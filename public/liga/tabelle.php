@@ -26,8 +26,8 @@ if ($saison >= Config::SAISON) {
     $meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag, $saison);
     $meisterschafts_tabelle_templates = Tabelle::get_meisterschafts_tabelle_templates($saison);
 } else {
-    $meisterschafts_tabelle = ArchivTabelle::get_meisterschafts_tabelle($gew_spieltag, $saison);
-    $meisterschafts_tabelle_templates = ArchivTabelle::get_meisterschafts_tabelle_templates($saison);
+    $meisterschafts_tabelle = Archiv_Tabelle::get_meisterschafts_tabelle($gew_spieltag, $saison);
+    $meisterschafts_tabelle_templates = Archiv_Tabelle::get_meisterschafts_tabelle_templates($saison);
 }
 
 // Daten der Rangtabelle, um sie an das Layout zu uebergeben

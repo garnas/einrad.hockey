@@ -1,6 +1,6 @@
 <?php
 
-final class Spielplan_JgJ extends Spielplan {
+class Spielplan_JgJ extends Spielplan {
 
     /**
      * Tabellen
