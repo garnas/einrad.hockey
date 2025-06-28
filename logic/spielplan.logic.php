@@ -11,4 +11,9 @@ if (!Spielplan::check_exist($turnier_id)) {
 }
 
 // Spielplan laden
-$spielplan = new Spielplan_JgJ($turnier);
+$saison = $turnier->get_saison();
+if ($saison <= 30) {
+    $spielplan = new Archiv_Spielplan_JgJ($turnier);
+} else {
+    $spielplan = new Spielplan_JgJ($turnier);
+}
