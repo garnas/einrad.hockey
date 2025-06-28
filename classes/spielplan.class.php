@@ -12,7 +12,7 @@ class Spielplan
         $anzahl_teams = count($turnier->get_spielenliste());
         $error = false;
 
-        if ($turnier->is_ligaturnier() && $turnier->get_phase() != "setz") { //TODO and is ligaturnier
+        if ($turnier->is_ligaturnier() && $turnier->get_phase() != "setz") {
             Html::error("Das Turnier muss in der Setzphase sein.");
             $error = true;
         }
