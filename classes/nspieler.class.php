@@ -143,6 +143,9 @@ class nSpieler
     public function set_teamname(string $teamname): nSpieler
     {
         $team_id = Team::name_to_id($teamname);
+        if ($team_id != $this->team_id) {
+            $this->set_timestamp();
+        }
         $this->set_team_id($team_id);
 
         return $this;
@@ -245,7 +248,6 @@ class nSpieler
             $icon = Html::icon("block");
             return "<span class='w3-text-grey'><s>$icon $saison_text $junior</s> $ausbilder</span>";
         }
-
     }
 
     /**

@@ -1,4 +1,9 @@
-<h3 class="w3-text-primary">Teamkader der <?= Team::id_to_name($team_id) ?></h3>
+<?php
+
+use App\Service\Team\TeamSnippets;
+
+?>
+<h3 class="w3-text-primary">Teamkader der <?= $teamEntity->getName() ?></h3>
 <!-- Aktuelle Saison -->
 <div class="w3-responsive w3-section w3-card">
     <table class="w3-table w3-striped">
@@ -6,34 +11,34 @@
         <tr>
             <th class="w3-primary">ID</th>
             <th class="w3-primary">Name</th>
-            <th class="w3-primary w3-center">J/G</th>
+            <th class="w3-primary w3-center">Jahrgang</th>
             <th class="w3-primary w3-center">Schiri<sup>*</sup></th>
             <?php if (Helper::$ligacenter): ?>
                 <th class="w3-primary w3-center">Hinzugefügt am:</th>
-            <?php endif; // endif?>
+            <?php endif; ?>
         </tr>
         </thead>
-        <?php foreach ($kader as $spieler): ?>
+        <?php foreach ($teamEntity->getKaderAktuell() as $spieler): ?>
             <tr>
-                <td><?= $spieler->id() ?></td>
+                <td><?= $spieler->getSpielerId() ?></td>
                 <?php if (Helper::$ligacenter): // Link zum Bearbeiten als LA ?>
                     <td>
-                        <?= Html::link('lc_spieler_aendern.php?spieler_id=' . $spieler->id(), $spieler->get_name()) ?>
+                        <?= Html::link('lc_spieler_aendern.php?spieler_id=' . $spieler->getSpielerId(), $spieler->getName()) ?>
                     </td>
                 <?php else: ?>
                     <td>
-                        <?= $spieler->get_name() ?>
+                        <?= $spieler->getName() ?>
                     </td>
                 <?php endif; ?>
                 <td class='w3-center'>
-                    <?= $spieler->get_jahrgang() . " " . $spieler->get_geschlecht() ?>
+                    <?= $spieler->getJahrgang() ?>
                 </td>
                 <td class='w3-center'>
-                    <?= $spieler->get_schiri_as_html() ?>
+                    <?= TeamSnippets::schiritag($spieler) ?>
                 </td>
                 <?php if (Helper::$ligacenter): ?>
                     <td class="w3-center">
-                        <?= $spieler->get_timestamp() ?>
+                        <?= $spieler->getTimestamp()->format("d.m.y H:i:s") ?>
                     </td>
                 <?php endif; ?>
             </tr>
@@ -44,7 +49,7 @@
     <sup>*</sup>Schirilizenz ist gültig bis zum Ende der angezeigten Saison
 </span>
 <!-- Aus Vorsaison übernehmen -->
-<?php if (!empty($kader_vorsaison)): ?>
+<?php if (!empty($kaderVorsaison)): ?>
     <form method="post" class="w3-section w3-text-grey">
         <h3>Spieler aus der Vorsaison übernehmen</h3>
         <div class="w3-responsive w3-section w3-card">
@@ -52,39 +57,39 @@
                 <tr>
                     <th class="w3-primary">ID</th>
                     <th class="w3-primary">Name</th>
-                    <th class="w3-primary w3-center">J/G</th>
+                    <th class="w3-primary w3-center">Jahrgang</th>
                     <th class="w3-primary w3-center">Schiri</th>
                     <th class="w3-primary ">Übernehmen</th>
                 </tr>
-                <?php foreach ($kader_vorsaison as $spieler): ?>
+                <?php foreach ($kaderVorsaison as $spieler): ?>
                     <tr>
-                        <td><?= $spieler->id() ?></td>
+                        <td><?= $spieler->getSpielerId() ?></td>
 
                         <?php if (Helper::$ligacenter): // Link zum Bearbeiten als LA ?>
                             <td>
-                                <?= Html::link('lc_spieler_aendern.php?spieler_id=' . $spieler->id(), $spieler->get_name()) ?>
+                                <?= Html::link('lc_spieler_aendern.php?spieler_id=' . $spieler->getSpielerId(), $spieler->getName()) ?>
                             </td>
                         <?php else: ?>
                             <td>
-                                <?= $spieler->get_name() ?>
+                                <?= $spieler->getName() ?>
                             </td>
                         <?php endif; ?>
 
                         <td class='w3-center'>
-                            <?= $spieler->get_jahrgang() . " " . $spieler->get_geschlecht() ?>
+                            <?= $spieler->getJahrgang() ?>
                         </td>
                         <td class='w3-center'>
-                            <?= $spieler->get_schiri_as_html() ?>
+                            <?= TeamSnippets::schiritag($spieler) ?>
                         </td>
                         <td>
                             <input type="checkbox"
                                    class="w3-check"
-                                   id="<?= $spieler->id() ?>"
+                                   id="<?= $spieler->getSpielerId() ?>"
                                    name="takeover[]"
-                                   value="<?= $spieler->id() ?>">
+                                   value="<?= $spieler->getSpielerId() ?>">
                             <label style="cursor: pointer"
                                    class="w3-hover-text-secondary w3-text-primary"
-                                   for="<?= $spieler->id() ?>">
+                                   for="<?= $spieler->getSpielerId() ?>">
                                 Spieler übernehmen
                             </label>
                         </td>
@@ -156,9 +161,10 @@
                 <label class="w3-text-primary" for="geschlecht">Geschlecht</labeL>
                 <select style="height:40px" class='w3-input w3-border w3-border-primary' name='geschlecht' id='geschlecht'>
                     <option <?= $_POST['geschlecht'] ?? 'selected' ?> disabled>Bitte wählen</option>
-                    <option <?php if (($_POST['geschlecht'] ?? '') === 'm'){ ?>selected<?php } ?> value='m'>m</option>
-                    <option <?php if (($_POST['geschlecht'] ?? '') === 'w'){ ?>selected<?php } ?> value='w'>w</option>
-                    <option <?php if (($_POST['geschlecht'] ?? '') === 'd'){ ?>selected<?php } ?> value='d'>d</option>
+                    <option <?php if (($_POST['geschlecht'] ?? null) === 'm'){ ?>selected<?php } ?> value='m'>m</option>
+                    <option <?php if (($_POST['geschlecht'] ?? null) === 'w'){ ?>selected<?php } ?> value='w'>w</option>
+                    <option <?php if (($_POST['geschlecht'] ?? null) === 'd'){ ?>selected<?php } ?> value='d'>d</option>
+                    <option <?php if (($_POST['geschlecht'] ?? null) === ''){ ?>selected<?php } ?> value=''>Keine Angabe</option>
                 </select>
             </p>
             <p>
