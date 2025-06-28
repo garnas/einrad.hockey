@@ -118,7 +118,7 @@ class TurnierRepository
             ->leftJoin('l.team', 'team')
             ->where('t.saison = :saison')
             ->andWhere('t.phase = :phase')
-            ->orderBy('t.datum', 'asc')
+            ->orderBy('t.datum', 'desc')
             ->setParameter('saison', $saison)
             ->setParameter('phase', "ergebnis")
         ;

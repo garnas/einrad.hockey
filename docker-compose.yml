@@ -15,6 +15,7 @@ services:
       - ./logic:/var/www/html/logic
       - ./public:/var/www/html/public
       - ./src:/var/www/html/src
+      - ./system:/var/www/html/system
       - ./templates:/var/www/html/templates
       - ./init.php:/var/www/html/init.php
       - ./env.php:/var/www/html/env.php
