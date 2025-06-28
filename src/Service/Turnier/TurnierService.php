@@ -251,6 +251,11 @@ class TurnierService
         $turnier->setBlock(BlockService::nextTurnierBlock($turnier));
     }
 
+    public static function blockrunterErweitern(Turnier $turnier): void
+    {
+        $turnier->setBlock(BlockService::previousTurnierBlock($turnier));
+    }
+
     public static function blockOeffnen(Turnier $turnier): void
     {
         $turnier->setBlock(Config::BLOCK_ALL[0]);

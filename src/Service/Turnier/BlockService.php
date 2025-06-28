@@ -67,6 +67,11 @@ class BlockService
         return Config::BLOCK_ALL[array_search($turnier->getBlock(), Config::BLOCK_ALL)-1];
     }
 
+    public static function previousTurnierBlock(Turnier $turnier): string
+    {
+        return Config::BLOCK_ALL[array_search($turnier->getBlock(), Config::BLOCK_ALL)+1];
+    }
+
     public static function isBlockPassend(Turnier $turnier, nTeam $team): bool
     {
         $blockTurnier = $turnier->getBlock();

@@ -9,9 +9,22 @@ use App\Service\Turnier\TurnierValidatorService;
 // Block erweitern
 
 // Um den nächsten höheren Buchstaben erweitern
-if (isset($_POST['block_erweitern'])) {
+if (isset($_POST['block_erweitern_hoch'])) {
     if (TurnierValidatorService::isErweiterbarBlockhoch($turnier)) {
         TurnierService::blockhochErweitern($turnier);
+        TurnierService::setzListeAuffuellen($turnier);
+        TurnierRepository::get()->speichern($turnier);
+        Html::info("Das Turnier wurde auf den nächst höheren Block geöffnet.");
+        Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
+    } else {
+        Html::error("Das Turnier kann nicht um den nächsthöheren Block erweitert werden.");
+    }
+}
+
+// Um den nächsten niedrigeren Buchstaben erweitern
+if (isset($_POST['block_erweitern_runter'])) {
+    if (TurnierValidatorService::isErweiterbarBlockrunter($turnier)) {
+        TurnierService::blockrunterErweitern($turnier);
         TurnierService::setzListeAuffuellen($turnier);
         TurnierRepository::get()->speichern($turnier);
         Html::info("Das Turnier wurde auf den nächst höheren Block geöffnet.");
