@@ -11,6 +11,7 @@ public/uploads/s/*
 
 cache/
 !cache/.gitkeep
+*.cache
 
 # System Backups und Logs
 system/backups/
