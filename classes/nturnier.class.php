@@ -62,6 +62,8 @@ class nTurnier
     public ?string $canceled_grund;
     public ?string $sofort_oeffnen;
     public ?string $canceled;
+    public ?string $block_erweitert_hoch;
+    public ?string $block_erweitert_runter;
     public ?string $teamname;
 
     /**

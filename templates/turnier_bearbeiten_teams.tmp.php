@@ -31,9 +31,10 @@ use App\Service\Turnier\TurnierValidatorService;
             </p>
         <?php endif; ?>
         <?php if (!TurnierValidatorService::isErweiterbarBlockfrei($turnier)
+            && !TurnierValidatorService::isErweiterbarBlockrunter($turnier)
             && !TurnierValidatorService::isErweiterbarBlockhoch($turnier)): ?>
             <p>
-                Turnierblock kann nicht auf den nächsten höheren BLock oder auf ABCDEF erweitert werden.
+                Turnierblock kann nicht auf den nächsten höheren/niedrigeren BLock oder auf ABCDEF erweitert werden.
             </p>
             <?php if ($turnier->isWartePhase()):?>
                 <p>
