@@ -38,6 +38,12 @@ include '../../templates/header.tmp.php';
         });
     </script>
 
+    <?php //include '../../templates/finalturniere22.tmp.php'; ?>
+
+    <div class='w3-card w3-panel w3-leftbar w3-border-yellow w3-pale-yellow'>
+        <h3>Kadertermine</h3>
+        <div class='w3-section'>Die Termine der beiden Nationalkader sind hier einsehbar: <span><?= Html::link("kader.php", " Termine des A- und B-Kaders", false, "") ?></span></div>
+    </div>
     <h1 class="w3-text-primary">
         <?= Html::icon("access_time", tag: "h1") ?> Kommende Turniere
         <br>

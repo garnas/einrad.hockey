@@ -62,6 +62,8 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
     </table>
 </div>
 
+<h1 class="w3-text-primary w3-margin-top" id='kader'>Kadertermine</h1>
+Die Termine der beiden Nationalkader sind hier einsehbar: <span><?= Html::link("kader.php", " Termine des A- und B-Kaders", false, "") ?></span>
 <?php
 
 include Env::BASE_PATH . '/templates/footer.tmp.php';
