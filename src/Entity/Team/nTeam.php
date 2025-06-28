@@ -138,7 +138,7 @@ class nTeam
     public function getKaderVorsaison(): Collection|array
     {
         $filter = static function (Spieler $s) {
-            return $s->getLetzteSaison() < Config::SAISON;
+            return $s->getLetzteSaison() < Config::SAISON and $s->getLetzteSaison() >= (Config::SAISON - 2);
         };
         return $this->kader->filter($filter);
     }
