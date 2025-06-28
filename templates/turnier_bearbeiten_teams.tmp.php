@@ -12,7 +12,7 @@ use App\Service\Turnier\TurnierValidatorService;
         <?php if (TurnierValidatorService::isErweiterbarBlockhoch($turnier)): ?>
             <p>
                 <button type="submit" class="w3-button w3-block w3-tertiary" name="block_erweitern_hoch">
-                    Turnierblock erweitern auf <?= BlockService::nextTurnierBlock($turnier)?>
+                    Turnierblock erweitern auf <?= BlockService::hoehererTurnierBlock($turnier)?>
                 </button>
             </p>
         <?php endif; ?>
@@ -26,7 +26,7 @@ use App\Service\Turnier\TurnierValidatorService;
         <?php if (TurnierValidatorService::isErweiterbarBlockrunter($turnier)): ?>
             <p>
                 <button type="submit" class="w3-button w3-block w3-tertiary" name="block_erweitern_runter">
-                    Turnierblock erweitern auf <?= BlockService::previousTurnierBlock($turnier)?>
+                    Turnierblock erweitern auf <?= BlockService::niedrigererTurnierBlock($turnier)?>
                 </button>
             </p>
         <?php endif; ?>

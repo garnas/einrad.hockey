@@ -62,14 +62,35 @@ class BlockService
         return "";
     }
 
-    public static function nextTurnierBlock(Turnier $turnier): string
+    public static function hoehererTurnierBlock(Turnier $turnier): string
     {
-        return Config::BLOCK_ALL[array_search($turnier->getBlock(), Config::BLOCK_ALL)-1];
+        // Nimm den ersten Buchstaben
+        $firstChar = substr($turnier->getBlock(), 0);
+
+        // Berechne den vorhergehenden Buchstaben im Alphabet
+        $ascii = ord(strtoupper($firstChar));
+
+        // Vorhergehenden Buchstaben bestimmen
+        $prevChar = chr($ascii - 1);
+
+        // Rückgabe: vorhergehenden Buchstaben an den Anfang setzen
+        return $prevChar . $turnier->getBlock();
     }
 
-    public static function previousTurnierBlock(Turnier $turnier): string
+    public static function niedrigererTurnierBlock(Turnier $turnier): string
     {
-        return Config::BLOCK_ALL[array_search($turnier->getBlock(), Config::BLOCK_ALL)+1];
+
+        // Letzten Buchstaben holen
+        $lastChar = substr($turnier->getBlock(), -1);
+
+        // ASCII-Wert ermitteln
+        $ascii = ord(strtoupper($lastChar));
+
+        // Nachfolgenden Buchstaben bestimmen
+        $nextChar = chr($ascii + 1);
+
+        // Rückgabe: Nachfolgenden Buchstaben an den Block anhängen
+        return $turnier->getBlock() . $nextChar;
     }
 
     public static function isBlockPassend(Turnier $turnier, nTeam $team): bool
