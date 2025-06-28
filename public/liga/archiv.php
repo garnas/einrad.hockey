@@ -12,7 +12,10 @@ Html::$content = 'Hier kann man die Ergebnisse und Tabellen seit der ersten Sais
 include '../../templates/header.tmp.php';
 ?>
 
-    <h1 class="w3-text-primary">Saison-Archiv der Deutschen Einradhockeyliga</h1>
+<h1 class="w3-text-primary">Saison-Archiv der Deutschen Einradhockeyliga</h1>
+    <p><?= Html::link('ergebnisse.php?saison=30', 'Turniere der Saison 2024/2025') ?></p>
+    <p><?= HTML::link('tabelle.php?saison=30', 'Tabelle der Saison 2024/2025') ?></p>
+    <hr>
     <p><?= Html::link('ergebnisse.php?saison=29', 'Turniere der Saison 2023/2024') ?></p>
     <p><?= HTML::link('tabelle.php?saison=29', 'Tabelle der Saison 2023/2024') ?></p>
     <hr>

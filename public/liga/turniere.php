@@ -38,14 +38,23 @@ include '../../templates/header.tmp.php';
         });
     </script>
 
-    <?php //include '../../templates/finalturniere22.tmp.php'; ?>
-
-    <h1 class="w3-text-primary">Turniere der Saison <?= Html::get_saison_string() ?></h1>
+    <h1 class="w3-text-primary">
+        <?= Html::icon("access_time", tag: "h1") ?> Kommende Turniere
+        <br>
+        <span class="w3-text-grey">
+            Saison <?= Html::get_saison_string() ?>
+        </span>
+    </h1>
 
     <!-- Turnier suchen -->
     <div class="w3-section w3-text-grey w3-border-bottom" style="width: 250px;">
-        <label for="myInput"><?= Html::icon("search") ?></label>
-        <input id="myInput" class='w3-padding w3-border-0' style="width: 225px;" type="text" placeholder="Turnier suchen">
+        <label for="myInput" class="w3-left"><?= Html::icon("search", 70) ?></label>
+        <input id="myInput"
+               class='w3-padding w3-border-0'
+               style="width: 225px; display: inline-block;"
+               type="text"
+               placeholder="Turnier suchen"
+        >
     </div>
 
     <!-- zu durchsuchendes div -->

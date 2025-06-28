@@ -169,6 +169,7 @@ class Nav
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_anmelden.php", "Turnieranmeldung", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_turnier_erstellen.php", "Turnier erstellen", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_verwalten.php", "Eigene Turniere", "w3-primary"],
+            [Env::BASE_URL . "/teamcenter/tc_turnier_report_liste.php", "Turnierreports", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_neuigkeit_eintragen.php", "Neuigkeiten eintragen", "w3-tertiary"],
             [Env::BASE_URL . "/teamcenter/tc_neuigkeit_liste.php", "Neuigkeit bearbeiten", "w3-tertiary"],
             [Env::BASE_URL . "/teamcenter/tc_kontaktcenter.php", "Kontaktcenter", "w3-tertiary"],
