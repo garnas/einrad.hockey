@@ -42,26 +42,22 @@ include '../../templates/header.tmp.php';
             <li><?= Html::icon("emoji_events", class: "w3-text-brown") ?> 2023 Europameisterschaft EUHC Mörfelden, B-Turnier, 3. Platz</li>
         </ul>
     </div>
-    <h3 class="w3-text-primary">A-Kader: Termine für die Trainingslager der Saison 2024/25</h3>
+    <h3 class="w3-text-primary">A-Kader: Termine für die Trainingslager der Saison 2025/26</h3>
     <div class="w3-container">
         <ul class="w3-ul w3-leftbar w3-border-tertiary">
-            <li>12. + 13. Oktober 2024 in Remscheid</li>
-            <li>09. + 10. November 2024 in Bottrop</li>
-            <li>11. + 12. Januar 2025 in Bottrop</li>
-            <li>01. + 02. März 2025 in Mörfelden</li>
-            <li>17. + 18. Mai 2025 in Meerbusch</li>
-            <li>07. + 08. Juni 2025 in Mörfelden</li>
+            <li>Bisher sind keine Termine bekannt</li>
         </ul>
     </div>
-    <h3 class="w3-text-primary">B-Kader: Termine für die Trainingslager der Saison 2024/25</h3>
+    <h3 class="w3-text-primary">B-Kader: Termine für die Trainingslager der Saison 2025/26</h3>
     <div class="w3-container">
         <ul class="w3-ul w3-leftbar w3-border-tertiary">
-            <li>26. + 27. Oktober 2024 (Sichtungstraining) in Mörfelden</li>
-            <li>09. + 10. November 2024 in Mörfelden</li>
-            <li>18. Januar 2025 in Münster (bei Dieburg)</li>
-            <li>08. + 09. Februar 2025 in Augustdorf</li>
-            <li>29. + 30. März 2025 in Mörfelden</li>
-            <li>03. + 04. Mai 2025 in Remscheid</li>
+            <li>13. + 14. September 2025 (Ort unbekannt; Sichtungstraining)</li>
+            <li>01. + 02. November 2025 (Ort unbekannt)</li>
+            <li>13. + 14. Dezember 2025 (Augustdorf)</li>
+            <li>31. Januar + 01. Februar 2026 (Ort unbekannt)</li>
+            <li>21. + 22. März 2026 (Ort unbekannt)</li>
+            <li>09. + 10. Mai 2026 (Mörfelden)</li>
+            <li>04. + 05. Juli 2026 (Augustdorf)</li>
         </ul>
     </div>
 

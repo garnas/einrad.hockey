@@ -1,14 +1,14 @@
 {
     "require": {
-        "phpmailer/phpmailer": "6.9.3",
-        "mpdf/mpdf": "8.2.5",
-        "gregwar/captcha": "v1.2.1",
-        "doctrine/orm": "3.3.1",
-        "symfony/cache": "v7.2.1",
+        "phpmailer/phpmailer": "v6.10.0",
+        "mpdf/mpdf": "v8.2.5",
+        "gregwar/captcha": "v1.3.0",
+        "doctrine/orm": "3.4.3",
+        "symfony/cache": "v7.3.1",
         "doctrine/annotations": "2.0.2",
         "jenssegers/date": "v4.0.0",
         "spatie/array-to-xml": "3.4.0",
-        "phpoffice/phpspreadsheet": "3.9.0"
+        "phpoffice/phpspreadsheet": "4.4.0"
     },
 
     "autoload": {

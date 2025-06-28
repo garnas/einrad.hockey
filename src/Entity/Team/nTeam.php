@@ -121,6 +121,28 @@ class nTeam
         return $this->kader;
     }
 
+    /**
+     * @return Collection|Spieler[]
+     */
+    public function getKaderAktuell(): Collection|array
+    {
+        $filter = static function (Spieler $s) {
+            return $s->getLetzteSaison() == Config::SAISON;
+        };
+        return $this->kader->filter($filter);
+    }
+
+    /**
+     * @return Collection|Spieler[]
+     */
+    public function getKaderVorsaison(): Collection|array
+    {
+        $filter = static function (Spieler $s) {
+            return $s->getLetzteSaison() < Config::SAISON and $s->getLetzteSaison() >= (Config::SAISON - 2);
+        };
+        return $this->kader->filter($filter);
+    }
+
     public function setKader(Collection $kader): nTeam
     {
         $this->kader = $kader;

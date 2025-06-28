@@ -12,7 +12,7 @@ class Spielplan
         $anzahl_teams = count($turnier->get_spielenliste());
         $error = false;
 
-        if ($turnier->is_ligaturnier() && $turnier->get_phase() != "setz") { //TODO and is ligaturnier
+        if ($turnier->is_ligaturnier() && $turnier->get_phase() != "setz") {
             Html::error("Das Turnier muss in der Setzphase sein.");
             $error = true;
         }
@@ -555,7 +555,6 @@ class Spielplan
             return NULL;
         };
 
-        $ligapunkte = 0;
         foreach ($reverse_tabelle as $team_id => $eintrag) {
             if (is_null($this->teamliste[$team_id]->wertigkeit)) {
                 // Es handelt sich um ein Nichtligateam // max($werte) + 1 wenn nicht Letzter.
@@ -564,10 +563,43 @@ class Spielplan
                 // Normales Ligateam
                 $wert = $this->teamliste[$team_id]->wertigkeit;
             }
-            $werte[] = $wert;
-            $ligapunkte += $wert;
-            $this->platzierungstabelle[$team_id]['ligapunkte'] = round($ligapunkte * 6 / $this->details['faktor']);
+            $this->platzierungstabelle[$team_id]['wertigkeit'] = $wert;
         }
     }
 
+    /**
+     * Berechnet und fügt die Ligapunkte in die Platzierungstabelle ein.
+     */
+    public function set_ligapunkte(): void
+    {
+        $plaetze = $this->details['plaetze'];
+        
+        // Invertiere die Tabelle um die Punkte addieren zu können
+        $reverse_tabelle = array_reverse($this->platzierungstabelle, true);
+        if ($plaetze > 3) {
+            // Addiere die Wertigkeiten der Teams zu den Ligapunkten und verrechne den Faktor
+            $ligapunkte = 0;
+            foreach ($reverse_tabelle as $team_id => $eintrag) {
+                $ligapunkte += $this->platzierungstabelle[$team_id]['wertigkeit'];
+                $this->platzierungstabelle[$team_id]['ligapunkte'] = round($ligapunkte * $this->details['faktor']);
+            }
+        
+        } else {
+            // Erhalte die Wertigkeit des erstplatzierten Teams
+            $wertung = 0;
+            foreach ($reverse_tabelle as $team_id => $eintrag) {
+                $wertung = $this->platzierungstabelle[$team_id]['wertigkeit'];
+            }
+            
+            // Berechne die Punkte für jedes Team anhand der Wertigkeit des ersten Teams
+            $counter = 0;
+            $faktoren = [1.5, 0.75, 0.5];
+            foreach ($reverse_tabelle as $team_id => $eintrag) {
+                $this->platzierungstabelle[$team_id]['ligapunkte'] = round($wertung * $faktoren[$counter]);
+                $counter++;
+            }
+        }
+
+    }
 }
+
