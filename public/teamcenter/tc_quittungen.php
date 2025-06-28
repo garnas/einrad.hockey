@@ -50,7 +50,7 @@ foreach ($teams as $team_fuer_liste) {
     }
     $html = ob_start();
     ?>
-    <div>
+    <div style="color: #3a3a3a; font-size: 16px">
         <h1 class="w3-center" style="padding-top: 64px">Quittung: <?= e($team_fuer->getName()) ?></h1>
         <div>
             <p>
