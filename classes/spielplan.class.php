@@ -592,11 +592,11 @@ class Spielplan
             }
             
             // Berechne die Punkte für jedes Team anhand der Wertigkeit des ersten Teams
-            $counter = 0;
+            $counter = 3;
             $faktoren = [1.5, 0.75, 0.5];
             foreach ($reverse_tabelle as $team_id => $eintrag) {
-                $this->platzierungstabelle[$team_id]['ligapunkte'] = round($wertung * $faktoren[$counter]);
-                $counter++;
+                $this->platzierungstabelle[$team_id]['ligapunkte'] = round($wertung * $faktoren[$counter - 1]);
+                $counter--;
             }
         }
 
