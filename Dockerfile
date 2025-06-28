@@ -34,5 +34,7 @@ RUN composer install --no-dev --optimize-autoloader
 # Expose port 80 for web traffic
 EXPOSE 80
 
-# Start the Apache server
-CMD ["apache2-foreground"]
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]
