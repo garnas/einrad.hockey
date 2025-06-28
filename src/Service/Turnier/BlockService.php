@@ -100,10 +100,10 @@ class BlockService
 
         // Block-String in Array auflösen
         $buchstabenTurnier = str_split($blockTurnier);
-        $buchstachenTeam = str_split($blockTeam);
+        $buchstabenTeam = str_split($blockTeam);
 
         // Check ob ein Buchstabe des Team-Blocks im Turnier-Block vorkommt
-        foreach ($buchstachenTeam as $buchstabe) {
+        foreach ($buchstabenTeam as $buchstabe) {
             if (in_array($buchstabe, $buchstabenTurnier)) {
                 return true;
             }
