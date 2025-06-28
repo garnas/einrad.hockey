@@ -7,8 +7,6 @@
  */
 class Spielplan
 {
-    private $reverse_tabelle;
-
     public static function spielplan_erstellen(nTurnier $turnier): bool
     {
         $anzahl_teams = count($turnier->get_spielenliste());
