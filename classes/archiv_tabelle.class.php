@@ -5,7 +5,7 @@
  *
  * Alles zum Anzeigen der Tabelle
  */
-class ArchivTabelle extends Tabelle
+class Archiv_Tabelle extends Tabelle
 {
     /**
      * Gibt die Templates für die Meisterschaftstabelle zurück
