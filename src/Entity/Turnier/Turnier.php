@@ -104,6 +104,12 @@ class Turnier
     #[ORM\Column(name: "sofort_oeffnen", type: "boolean")]
     private bool $sofortOeffnen;
 
+    #[ORM\Column(name: "block_erweitert_runter", type: "boolean")]
+    private ?bool $blockErweitertRunter;
+
+    #[ORM\Column(name: "block_erweitert_hoch", type: "boolean")]
+    private ?bool $blockErweitertHoch;
+
     public function isSofortOeffnen(): bool
     {
         return $this->sofortOeffnen;
@@ -465,6 +471,28 @@ class Turnier
     public function getGesetzteFreilose(): Collection|array
     {
         return $this->gesetzteFreilose;
+    }
+
+    public function setBlockErweitertRunter(?bool $blockErweitertRunter): Turnier
+    {
+        $this->blockErweitertRunter = $blockErweitertRunter;
+        return $this;
+    }
+
+    public function isBlockErweitertRunter(): bool
+    {
+        return $this->blockErweitertRunter ?? false;
+    }
+
+    public function isBlockErweitertHoch(): bool
+    {
+        return $this->blockErweitertHoch ?? false;
+    }
+
+    public function setBlockErweitertHoch(?bool $blockErweitertHoch): Turnier
+    {
+        $this->blockErweitertHoch = $blockErweitertHoch;
+        return $this;
     }
 
 }

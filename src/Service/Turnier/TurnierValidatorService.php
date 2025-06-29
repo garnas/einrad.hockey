@@ -269,14 +269,32 @@ class TurnierValidatorService
     public static function isErweiterbarBlockhoch(Turnier $turnier): bool
     {
         return $turnier->getPhase() === 'setz'
-            && strlen($turnier->getBlock()) < 3
+            && !$turnier->isBlockErweitertHoch()
+            && strlen($turnier->getBlock()) < 4
             && $turnier->getBlock() !== 'AB'
             && $turnier->getBlock() !== 'A'
             && $turnier->isLigaTurnier();
     }
 
     /**
-     * Ermittelt, ob ein Turnier nach oben erweiterbar ist
+     * Ermittelt, ob ein Turnier nach unten erweiterbar ist
+     *
+     * @param Turnier $turnier
+     * @return bool
+     */
+    public static function isErweiterbarBlockrunter(Turnier $turnier): bool
+    {
+        return $turnier->getPhase() === 'setz'
+            && !$turnier->isBlockErweitertRunter()
+            && strlen($turnier->getBlock()) < 4
+            && $turnier->getBlock() !== 'DEF'
+            && $turnier->getBlock() !== 'EF'
+            && $turnier->getBlock() !== 'F'
+            && $turnier->isLigaTurnier();
+    }
+
+    /**
+     * Ermittelt, ob ein Turnier blockfrei erweiterbar ist
      *
      * @param Turnier $turnier
      * @return bool

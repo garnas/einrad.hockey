@@ -40,7 +40,7 @@ class Config
      * Mögliche Turnier-Blöcke
      * Reihenfolge ist wichtig!
      */
-    public const BLOCK_ALL = ['ABCDEF', 'A', 'AB', 'ABC', 'BC', 'BCD', 'CD', 'CDE', 'DE', 'DEF', 'EF', 'F'];
+    public const BLOCK_ALL = ['ABCDEF', 'A', 'AB', 'ABC', 'ABCD', 'BC', 'BCD', 'BCDE', 'CD', 'CDE', 'CDEF', 'DE', 'DEF', 'EF', 'F'];
 
     /**
      * Rangtabellen-Zuordnung
