@@ -330,61 +330,6 @@ class Team
     }
 
     /**
-     * Set nach dem Login die Session des Teamcenters.
-     *
-     * @param Team $team
-     */
-    public static function set_team_session(Team $team): void
-    {
-        $_SESSION['logins']['team']['id'] = $team->id;
-        $_SESSION['logins']['team']['name'] = $team->details['teamname'];
-        $_SESSION['logins']['team']['block'] = Tabelle::get_team_block($team->id);
-    }
-
-    /**
-     * Login Teamcenter
-     *
-     * @param string $teamname
-     * @param string $passwort
-     * @return bool
-     */
-    public static function login(string $teamname, string $passwort): bool
-    {
-        // Existenz prüfen
-        $team_id = self::name_to_id($teamname);
-
-        if (!self::is_ligateam($team_id)) {
-            Html::error("Falscher Loginname");
-            Helper::log(Config::LOG_LOGIN, "Falscher TC-Login | Teamname: " . $teamname);
-            return false;
-        }
-
-        $team = new Team ($team_id);
-        // Passwort prüfen
-        if (password_verify($passwort, $team->details['passwort'] ?? '')) {
-            self::set_team_session($team);
-            Helper::log(Config::LOG_LOGIN, "Erfolgreich       | Teamname: " . $teamname);
-
-            if (empty($team->details['trikot_farbe_1'])) {
-                $link = Html::link("tc_teamdaten_aendern.php", ' Link.', icon: "launch");
-                Html::info("Ihr könnt nun eure Trikotfarben hinzufügen - " . $link, ' ', esc: false);
-            }
-            if (empty($team->details['teamfoto'])) {
-                $link = Html::link("../teamcenter/tc_teamdaten_aendern.php", ' Link.', icon: "launch");
-                Html::info("Hier könnt ihr noch ein Teamfoto hochladen - " . $link, ' ', esc: false);
-            }
-
-            return true;
-        }
-
-        // Passwort falsch
-        Helper::log(Config::LOG_LOGIN, "Falsches Passwort | Teamname: " . $teamname);
-        Html::error("Falsches Passwort");
-        return false;
-    }
-
-
-    /**
      * Setzt die Wertigkeit vor dem benannten Spieltag
      * 
      * @param int $spieltag
