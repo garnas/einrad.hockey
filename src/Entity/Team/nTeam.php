@@ -45,7 +45,7 @@ class nTeam
     #[ORM\OneToMany(targetEntity: Freilos::class, mappedBy: "team", cascade: ["all"])]
     private Collection $freilose;
 
-    #[ORM\OneToMany(targetEntity: Kontakt::class, mappedBy: "team")]
+    #[ORM\OneToMany(targetEntity: Kontakt::class, mappedBy: "team", cascade: ["all"])]
     private Collection $emails;
 
     public function getEmails(): Collection
@@ -81,10 +81,10 @@ class nTeam
         $this->turniereListe = new ArrayCollection();
         $this->ausgerichteteTurniere = new ArrayCollection();
         $this->freilose = new ArrayCollection();
+        $this->emails = new ArrayCollection();
     }
 
-    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
-    #[ORM\OneToOne(targetEntity: "TeamDetails", cascade: ["all"], orphanRemoval: true)]
+    #[ORM\OneToOne(targetEntity: TeamDetails::class, mappedBy: "team", cascade: ["all"])]
     private TeamDetails $details;
 
     public function getDetails(): TeamDetails
@@ -330,6 +330,11 @@ class nTeam
             return $f->isGesetzt() && $f->isGueltig();
         };
         return $this->freilose->filter($filter);
+    }
+
+    public function addEmail(Kontakt $kontakt)
+    {
+        $this->emails->add($kontakt);
     }
 
 }

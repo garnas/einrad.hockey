@@ -603,7 +603,7 @@ class Team
 
         $team = new Team ($team_id);
         // Passwort prüfen
-        if (password_verify($passwort, $team->details['passwort'])) {
+        if (password_verify($passwort, $team->details['passwort'] ?? '')) {
             self::set_team_session($team);
             Helper::log(Config::LOG_LOGIN, "Erfolgreich       | Teamname: " . $teamname);
 
