@@ -75,7 +75,7 @@ use App\Service\Turnier\TurnierSnippets;
                     <?= TeamSnippets::freilose($teamEntity) ?>
                     <?php if(!TeamValidator::hasSchiriFreilosErhalten($teamEntity)): ?>
                         <p class="w3-text-grey">
-                             Dein Team hat noch kein Freilos für zwei Schiedsrichter erhalten.
+                             Dein Team hat für diese Saison noch kein Freilos für zwei Schiedsrichter erhalten.
                         </p>
                     <?php endif; ?>
                 </td>
