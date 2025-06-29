@@ -16,9 +16,7 @@ include '../../templates/header.tmp.php';
 include '../../templates/spielplan/spielplan_titel.tmp.php';
 include '../../templates/spielplan/spielplan_teamliste.tmp.php'; // Teamliste
 include '../../templates/spielplan/spielplan_spiele.tmp.php'; // Spiele
-if ($spielplan->anzahl_teams != 3) {
-    include '../../templates/spielplan/spielplan_turniertabelle.tmp.php'; // Abschlusstabelle
-    include '../../templates/spielplan/spielplan_direkter_vergleich.tmp.php'; // Direkter Vergleich Tabellen
-}
+include '../../templates/spielplan/spielplan_turniertabelle.tmp.php'; // Abschlusstabelle
+include '../../templates/spielplan/spielplan_direkter_vergleich.tmp.php'; // Direkter Vergleich Tabellen
 include '../../templates/footer.tmp.php';
 

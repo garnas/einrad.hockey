@@ -443,7 +443,7 @@ class Spielplan
      * @param bool $penaltys Mit oder ohne Penalty-Ergebnissen
      * @return array Torematrix aller Teams untereinander
      */
-    public function get_toretabelle($penaltys = true): array
+    public function get_torematrix($penaltys = true): array
     {
         foreach ($this->spiele as $spiel) {
 
@@ -451,75 +451,94 @@ class Spielplan
                 $spiel['penalty_a'] = $spiel['penalty_b'] = NULL;
             }
 
-            $tore_tabelle[$spiel['team_id_a']][$spiel['team_id_b']] =
-                [
-                    'tore' => $spiel['tore_a'],
-                    'gegentore' => $spiel['tore_b'],
-                    'penalty_tore' => $spiel['penalty_a'],
-                    'penalty_gegentore' => $spiel['penalty_b'],
-                ];
-            $tore_tabelle[$spiel['team_id_b']][$spiel['team_id_a']] =
-                [
-                    'tore' => $spiel['tore_b'],
-                    'gegentore' => $spiel['tore_a'],
-                    'penalty_tore' => $spiel['penalty_b'],
-                    'penalty_gegentore' => $spiel['penalty_a'],
-                ];
+            // lege ein leeres array an, wenn das spiel zwischen den teams noch nicht existiert
+            if (!isset($tore_tabelle[$spiel['team_id_a']][$spiel['team_id_b']])) {
+                $tore_tabelle[$spiel['team_id_a']][$spiel['team_id_b']] = [];
+            }
+            
+            // pushe das spiel in die toretabelle fuer dieses aufeinandertreffen
+            $tore_tabelle[$spiel['team_id_a']][$spiel['team_id_b']][] = [
+                'tore'              => $spiel['tore_a'],
+                'gegentore'         => $spiel['tore_b'],
+                'penalty_tore'      => $spiel['penalty_a'],
+                'penalty_gegentore' => $spiel['penalty_b'],
+            ];
+            
+            // pushe das spiel in die toretabelle fuer dieses aufeinandertreffen
+            $tore_tabelle[$spiel['team_id_b']][$spiel['team_id_a']][] = [
+                'tore'              => $spiel['tore_b'],
+                'gegentore'         => $spiel['tore_a'],
+                'penalty_tore'      => $spiel['penalty_b'],
+                'penalty_gegentore' => $spiel['penalty_a'],
+            ];
+            
         }
+
         return $tore_tabelle ?? [];
     }
 
     /**
-     * Erstellt eine Turniertabelle mit Punkten, Tordifferenz, etc.
+     * Berechnet fuer das Turnier die Punkte, Tore, Gegentore, ... fuer jedes Team.
+     * tore_matrix[team_id][gegner_id] = [[spiel1], [spiel2], ...]
      *
-     * @param array $tore_tabelle Toretabelle aus get_toretabelle()
-     * @return array unsortierte Turniertabelle
+     * @param array $tore_tabelle Matrix der Tore zwischen den Teams aus den einzelnen Spielen
+     * @return array *unsortierte* Turniertabelle
      */
-    protected static function get_turniertabelle(array $tore_tabelle): array
+    protected static function get_turniertabelle(array $tore_matrix): array
     {
-        // Punkte zählen
-        foreach ($tore_tabelle as $team_id => $team_spiele) {
+        
+        foreach ($tore_matrix as $team_id => $gegner) {
+            // in dieser schleife finden sich die informationen zu dem team im gesamten turnier
             $punkte = $tordifferenz = $gegentore = $tore = $penalty_diff = $penalty_tore = $penalty_gegentore = $penalty_punkte = NULL;
-            $spiele = $penalty_spiele = 0;
-            foreach ($team_spiele as $spiel) {
-                // Spielbegegnungen
-                if (is_null($spiel['tore']) || is_null($spiel['gegentore'])) {
-                    continue;
-                }
-                $punkte += ($spiel['tore'] > $spiel['gegentore']) ? 3 : 0;
-                $punkte += ($spiel['tore'] === $spiel['gegentore']) ? 1 : 0;
-                $tordifferenz += $spiel['tore'] - $spiel['gegentore'];
-                $tore += $spiel['tore'];
-                $gegentore += $spiel['gegentore'];
-                $spiele++;
+            $normale_spiele = $penalty_spiele = 0;
+            
+            foreach ($gegner as $gegner_id => $spiele) {
+                // gehe durch das array der spiele zwischen team_id und gegner_id
+                
+                foreach ($spiele as $spiel) {
+                    // schaue dir jedes einzelne spiel an
+                    
+                    // liegen keine tore vor, dann ueberspringe das spiel
+                    if (is_null($spiel['tore']) || is_null($spiel['gegentore'])) {
+                        continue;
+                    }
 
-                // Penaltybegegnungen
-                if (is_null($spiel['penalty_tore']) || is_null($spiel['penalty_gegentore'])) {
-                    continue;
+                    $punkte += ($spiel['tore'] > $spiel['gegentore']) ? 3 : 0; // spiel gewonnen
+                    $punkte += ($spiel['tore'] === $spiel['gegentore']) ? 1 : 0; // spiel unentschieden
+                    $tordifferenz += $spiel['tore'] - $spiel['gegentore'];
+                    $tore += $spiel['tore'];
+                    $gegentore += $spiel['gegentore'];
+                    $normale_spiele++;
+
+                    // liegt kein penalty-ergebnis vor, dann ueberspringe
+                    if (is_null($spiel['penalty_tore']) || is_null($spiel['penalty_gegentore'])) {
+                        continue;
+                    }
+                    
+                    $penalty_punkte += ($spiel['penalty_tore'] > $spiel['penalty_gegentore']) ? 3 : 0;
+                    $penalty_punkte += ($spiel['penalty_tore'] === $spiel['penalty_gegentore']) ? 1 : 0;
+                    $penalty_diff += $spiel['penalty_tore'] - $spiel['penalty_gegentore'];
+                    $penalty_tore += $spiel['penalty_tore'];
+                    $penalty_gegentore += $spiel['penalty_gegentore'];
+                    $penalty_spiele++;
                 }
-                $penalty_punkte += ($spiel['penalty_tore'] > $spiel['penalty_gegentore']) ? 3 : 0;
-                $penalty_punkte += ($spiel['penalty_tore'] === $spiel['penalty_gegentore']) ? 1 : 0;
-                $penalty_diff += $spiel['penalty_tore'] - $spiel['penalty_gegentore'];
-                $penalty_tore += $spiel['penalty_tore'];
-                $penalty_gegentore += $spiel['penalty_gegentore'];
-                $penalty_spiele++;
             }
 
-            // Turniertabelle erstellen
-            $turnier_tabelle[$team_id] =
-                [
-                    'spiele' => $spiele,
-                    'punkte' => $punkte,
-                    'penalty_spiele' => $penalty_spiele,
-                    'tordifferenz' => $tordifferenz,
-                    'tore' => $tore,
-                    'gegentore' => $gegentore,
-                    'penalty_punkte' => $penalty_punkte,
-                    'penalty_diff' => $penalty_diff,
-                    'penalty_tore' => $penalty_tore,
-                    'penalty_gegentore' => $penalty_gegentore
-                ];
+            // turniertabelle mit den informationen fuer das team fuellen
+            $turnier_tabelle[$team_id] = [
+                'spiele' => $normale_spiele,
+                'punkte' => $punkte,
+                'penalty_spiele' => $penalty_spiele,
+                'tordifferenz' => $tordifferenz,
+                'tore' => $tore,
+                'gegentore' => $gegentore,
+                'penalty_punkte' => $penalty_punkte,
+                'penalty_diff' => $penalty_diff,
+                'penalty_tore' => $penalty_tore,
+                'penalty_gegentore' => $penalty_gegentore
+            ];
         }
+
         return $turnier_tabelle ?? [];
     }
 
