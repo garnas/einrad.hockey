@@ -119,6 +119,28 @@ class TeamService
     }
 
     /**
+     * Löscht die Session des aktuell angemeldeten Teams
+     * @return void
+     */
+    public static function remove_team_session(): void
+    {
+        unset($_SESSION['logins']['team']);
+    }
+
+    /**
+     * Erstellt eine Session für das Team nach einem Login
+     * @param nTeam $team
+     * @return void
+     */
+    public static function create_team_session(nTeam $team): void
+    {
+        $_SESSION['logins']['team']['id'] = $team->id();
+        $_SESSION['logins']['team']['name'] = $team->getName();
+        $_SESSION['logins']['team']['block'] = Tabelle::get_team_block($team->id());
+
+    }
+
+    /**
      * Login ins Teamcenter und setzen der notwendigen Session-Daten
      *
      * @param string $teamname
@@ -137,9 +159,7 @@ class TeamService
         }
         // Passwort prüfen
         if (password_verify($passwort, $team->getPasswort())) {
-            $_SESSION['logins']['team']['id'] = $team->id();
-            $_SESSION['logins']['team']['name'] = $team->getName();
-            $_SESSION['logins']['team']['block'] = Tabelle::get_team_block($team->id());
+            self::create_team_session($team);
 
             Helper::log(Config::LOG_LOGIN, "Erfolgreich       | Teamname: " . $teamname);
 
