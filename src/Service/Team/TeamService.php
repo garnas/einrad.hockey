@@ -7,10 +7,14 @@ use App\Entity\Team\nTeam;
 use App\Entity\Team\Spieler;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
+use App\Repository\Team\TeamRepository;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierSnippets;
 use Config;
 use Doctrine\Common\Collections\Collection;
+use Helper;
+use Html;
+use Tabelle;
 
 class TeamService
 {
@@ -113,5 +117,49 @@ class TeamService
         };
         return $team->getAusgerichteteTurniere()->filter($filter);
     }
+
+    /**
+     * Login ins Teamcenter und setzen der notwendigen Session-Daten
+     *
+     * @param string $teamname
+     * @param string $passwort
+     * @return bool
+     */
+    public static function login(string $teamname, string $passwort): bool
+    {
+        // Existenz prüfen
+        $team = TeamRepository::get()->findByName($teamname);
+
+        if (!$team->isLigaTeam()) {
+            Html::error("Falscher Loginname");
+            Helper::log(Config::LOG_LOGIN, "Falscher TC-Login | Teamname: " . $teamname);
+            return false;
+        }
+        // Passwort prüfen
+        if (password_verify($passwort, $team->getPasswort())) {
+            $_SESSION['logins']['team']['id'] = $team->id();
+            $_SESSION['logins']['team']['name'] = $team->getName();
+            $_SESSION['logins']['team']['block'] = Tabelle::get_team_block($team->id());
+
+            Helper::log(Config::LOG_LOGIN, "Erfolgreich       | Teamname: " . $teamname);
+
+            if (empty($team->getDetails()->getTrikotFarbe1())) {
+                $link = Html::link("tc_teamdaten_aendern.php", ' Link.', icon: "launch");
+                Html::info("Ihr könnt nun eure Trikotfarben hinzufügen - " . $link, ' ', esc: false);
+            }
+            if (empty($team->getDetails()->getTeamfoto())) {
+                $link = Html::link("../teamcenter/tc_teamdaten_aendern.php", ' Link.', icon: "launch");
+                Html::info("Hier könnt ihr noch ein Teamfoto hochladen - " . $link, ' ', esc: false);
+            }
+
+            return true;
+        }
+
+        // Passwort falsch
+        Helper::log(Config::LOG_LOGIN, "Falsches Passwort | Teamname: " . $teamname);
+        Html::error("Falsches Passwort");
+        return false;
+    }
+
 
 }
