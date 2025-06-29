@@ -122,7 +122,7 @@ class TeamService
      * Löscht die Session des aktuell angemeldeten Teams
      * @return void
      */
-    public static function remove_team_session(): void
+    public static function removeTeamSession(): void
     {
         unset($_SESSION['logins']['team']);
     }
@@ -132,12 +132,11 @@ class TeamService
      * @param nTeam $team
      * @return void
      */
-    public static function create_team_session(nTeam $team): void
+    public static function createTeamSession(nTeam $team): void
     {
         $_SESSION['logins']['team']['id'] = $team->id();
         $_SESSION['logins']['team']['name'] = $team->getName();
         $_SESSION['logins']['team']['block'] = Tabelle::get_team_block($team->id());
-
     }
 
     /**
@@ -159,7 +158,7 @@ class TeamService
         }
         // Passwort prüfen
         if (password_verify($passwort, $team->getPasswort())) {
-            self::create_team_session($team);
+            self::createTeamSession($team);
 
             Helper::log(Config::LOG_LOGIN, "Erfolgreich       | Teamname: " . $teamname);
 

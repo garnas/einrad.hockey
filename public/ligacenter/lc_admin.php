@@ -19,8 +19,8 @@ if (isset($_POST['anmelden'])){
     $team = TeamRepository::get()->findByName($_POST['teamname']);
     
     if ($team && $team->isLigaTeam()){
-        TeamService::remove_team_session();
-        TeamService::create_team_session($team);
+        TeamService::removeTeamSession();
+        TeamService::createTeamSession($team);
         Helper::log("login.log", "Erfolgreich       | via Ligacenter: " . $_SESSION['logins']['la']['login']
             . " als " . $_SESSION['logins']['team']['name']);
         Html::info("Login via Ligaausschuss erfolgreich");
