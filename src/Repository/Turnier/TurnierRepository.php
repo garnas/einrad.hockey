@@ -106,7 +106,7 @@ class TurnierRepository
     /**
      * @return Turnier[]|Collection
      */
-    public static function getErgebnisTurniere(int $saison = Config::SAISON): array|Collection
+    public static function getErgebnisTurniere(int $saison = Config::SAISON, bool $desc = True): array|Collection
     {
         $query = DoctrineWrapper::manager()
             ->createQueryBuilder()
@@ -118,12 +118,12 @@ class TurnierRepository
             ->leftJoin('l.team', 'team')
             ->where('t.saison = :saison')
             ->andWhere('t.phase = :phase')
-            ->orderBy('t.datum', 'desc')
+            ->orderBy('t.datum', ($desc ? 'desc' : 'asc'))
             ->setParameter('saison', $saison)
             ->setParameter('phase', "ergebnis")
         ;
 
-        return $query->getQuery()->getResult();
+        return new ArrayCollection($query->getQuery()->execute());
     }
 
     /**

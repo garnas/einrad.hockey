@@ -2,6 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Repository\Team\TeamRepository;
+
 require_once '../../init.php'; // autoloader und Session
 Helper::$teamcenter_no_redirect = true; // Verhindert die Endlosschleife, bei der Überprüfung, ob Passwort erneuert wurde
 require_once '../../logic/session_team.logic.php'; // Auth
@@ -23,13 +25,14 @@ if(isset($_POST['change'])) {
         Html::error("Euer neues Passwort muss mindestens 6 Zeichen lang sein");
     }
 
-    if(!password_verify($passwort_alt, $team->details['passwort'])) {
+    if(!password_verify($passwort_alt, $teamEntity->getPasswort())) {
         $error = true;
         Html::error("Falsches altes Passwort");
     }
 
     if(!$error){
-        $team->set_passwort($passwort_neu);
+        $teamEntity->setPasswort($passwort_neu);
+        TeamRepository::get()->speichern($teamEntity);
         Html::info("Euer Passwort wurde geändert.");
         header('Location: tc_start.php');
         die();

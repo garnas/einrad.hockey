@@ -2,6 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Repository\Turnier\TurnierRepository;
+
 require_once '../../init.php';
 
 // Todo eigene Funktion
@@ -10,11 +12,11 @@ $tage = round((strtotime(Config::SAISON_ANFANG) - time()) / (24 * 60 * 60));
 
 $neuigkeiten = Neuigkeit::get_neuigkeiten();
 
-$turniere = nTurnier::get_turniere_kommend();
+$turniere = TurnierRepository::getKommendeTurniere()->toArray();
 $anz_next_turniere = count($turniere);
 $next_turniere = array_slice($turniere, 0, 4);
 
-$turniere = nTurnier::get_turniere_ergebnis($asc = false);
+$turniere = TurnierRepository::getErgebnisTurniere()->toArray();
 $anz_last_turniere = count($turniere);
 $last_turniere = array_slice($turniere, 0, 4);
 
@@ -102,13 +104,14 @@ include '../../templates/header.tmp.php'; ?>
                 <?php } //end if?>
                 <?php foreach ($next_turniere as $turnier): ?>
                     <p class="w3-text-dark-gray">
-                        <?= date("d.m", strtotime($turnier->get_datum())) ?>
+                        <?= /** @var \App\Entity\Turnier\Turnier $turnier */
+                        $turnier->getDatum()->format("d.m") ?>
                         <?= Html::link(
-                            'turnier_details.php?turnier_id=' . $turnier->get_turnier_id(),
-                            $turnier->get_ort(),
+                            'turnier_details.php?turnier_id=' . $turnier->id(),
+                            $turnier->getDetails()->getOrt(),
                             false,
                             "open_in_new") ?>
-                        <i>(<?= $turnier->get_art() == 'spass' ? "Spaß" : $turnier->get_tblock() ?>)</i>
+                        <i>(<?= $turnier->getArt() == 'spass' ? "Spaß" : $turnier->getBlock() ?>)</i>
                     </p>
                 <?php endforeach;?>
             </div>
@@ -128,13 +131,13 @@ include '../../templates/header.tmp.php'; ?>
                 <?php endif;?>
                 <?php foreach ($last_turniere as $turnier): ?>
                     <p class="w3-text-dark-gray">
-                        <?= date("d.m", strtotime($turnier->get_datum())) ?>
+                        <?= $turnier->getDatum()->format("d.m") ?>
                         <?= Html::link(
-                            'ergebnisse.php#' . $turnier->get_turnier_id(),
-                            $turnier->get_ort(),
+                            'ergebnisse.php#' . $turnier->id(),
+                            $turnier->getDetails()->getOrt(),
                             false,
                             'open_in_new') ?>
-                        <i>(<?= $turnier->get_tblock() ?>)</i>
+                        <i>(<?= $turnier->getBlock() ?>)</i>
                     </p>
                 <?php endforeach;?>
             </div>
