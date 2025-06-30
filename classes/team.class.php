@@ -330,6 +330,16 @@ class Team
     }
 
     /**
+     * Gibt die Teamwertigkeit
+     * 
+     * @return null|int
+     */
+    public function get_wertigkeit(): null|int
+    {
+        return $this->wertigkeit;
+    }
+
+    /**
      * Setzt die Wertigkeit vor dem benannten Spieltag
      * 
      * @param int $spieltag
