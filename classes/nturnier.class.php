@@ -195,6 +195,14 @@ class nTurnier
     }
 
     /**
+     * @return int
+     */
+    public function get_saison(): int
+    {
+        return $this->saison;
+    }
+
+    /**
      * @return string
      */
     public function get_ort(): string
