@@ -11,4 +11,5 @@ $rang_tabelle = tabelle::get_rang_tabelle(Tabelle::get_aktuellen_spieltag()-1);
 
 $xml = new SimpleXMLElement('<rangtabelle/>');
 
-xml::array_to_xml($rang_tabelle, $xml, "platz");
+header('Content-type: text/xml');
+echo xml::array_to_xml($rang_tabelle, $xml, "platz");

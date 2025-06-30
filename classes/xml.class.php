@@ -1,5 +1,7 @@
 <?php
 
+use App\Entity\Turnier\Turnier;
+
 /**
  * Class xml
  *
@@ -16,7 +18,7 @@ class xml
      * @param string $ebene1
      * @param string $ebene3
      */
-    public static function array_to_xml($array, SimpleXMLElement $xml, $ebene1 = "node1", $ebene3 = "node3")
+    public static function array_to_xml($array, SimpleXMLElement $xml, $ebene1 = "node1", $ebene3 = "node3"): bool|string
     {
         foreach ($array as $key1 => $value1) {
             if ($ebene1 == "meldungen") {
@@ -69,51 +71,44 @@ class xml
                 }
             }
         }
-        Header('Content-type: text/xml');
-        print($xml->asXML());
+        return $xml->asXML();
     }
 
     /**
      * Function definition to convert array to xml
      *
-     * @param $array
-     * @param SimpleXMLElement $xml
-     * @param string $ebene1
-     * @param string $ebene3
+     * @param Turnier[] $turniere
      */
-    public static function turnier_array_to_xml($array, SimpleXMLElement $xml)
+    public static function turniereToXml(array $turniere): string|bool
     {
-        foreach ($array as $turnier) {
+        $xml = new SimpleXMLElement('<turniere/>');
+        foreach ($turniere as $turnier) {
             $xml_child = $xml->addChild('turnier');
-
-            $xml_child->addChild('turnier_id', $turnier->get_turnier_id());
-            $xml_child->addChild('tname', $turnier->get_tname());
-            $xml_child->addChild('ausrichter', $turnier->get_ausrichter());
-            $xml_child->addChild('tblock', $turnier->get_tblock());
-            $xml_child->addChild('datum', $turnier->get_datum());
-            $xml_child->addChild('spieltag', $turnier->get_spieltag());
-            $xml_child->addChild('phase', $turnier->get_phase());
-            $xml_child->addChild('spielplan_vorlage', $turnier->get_spielplan_vorlage());
-            $xml_child->addChild('spielplan_datei', $turnier->get_spielplan_datei());
-            $xml_child->addChild('saison', $turnier->get_saison());
-            $xml_child->addChild('hallenname', $turnier->get_hallenname());
-            $xml_child->addChild('strasse', $turnier->get_strasse());
-            $xml_child->addChild('plz', $turnier->get_plz());
-            $xml_child->addChild('ort', $turnier->get_ort());
-            $xml_child->addChild('haltestellen', $turnier->get_haltestellen());
-            $xml_child->addChild('plaetze', $turnier->get_plaetze());
-            $xml_child->addChild('format', $turnier->get_format());
-            $xml_child->addChild('startzeit', $turnier->get_startzeit());
-            $xml_child->addChild('besprechung', $turnier->get_besprechung());
-            $xml_child->addChild('hinweis', $turnier->get_hinweis());
-            $xml_child->addChild('organisator', $turnier->get_organisator());
-            $xml_child->addChild('handy', $turnier->get_handy());
-            $xml_child->addChild('startgebuehr', $turnier->get_startgebuehr());
-            $xml_child->addChild('teamname', Team::id_to_name($turnier->get_ausrichter()));
+            $xml_child->addChild('turnier_id', $turnier->id());
+            $xml_child->addChild('tname', $turnier->getName());
+            $xml_child->addChild('ausrichter', $turnier->getAusrichter()->id());
+            $xml_child->addChild('tblock', $turnier->getBlock());
+            $xml_child->addChild('datum', $turnier->getDatum()->format('Y-m-d'));
+            $xml_child->addChild('spieltag', $turnier->getSpieltag());
+            $xml_child->addChild('phase', $turnier->getPhase());
+            $xml_child->addChild('spielplan_vorlage', $turnier->getSpielplanVorlage());
+            $xml_child->addChild('spielplan_datei', $turnier->getSpielplanDatei());
+            $xml_child->addChild('saison', $turnier->getSaison());
+            $xml_child->addChild('hallenname', $turnier->getDetails()->getHallenname());
+            $xml_child->addChild('strasse', $turnier->getDetails()->getStrasse());
+            $xml_child->addChild('plz', $turnier->getDetails()->getPlz());
+            $xml_child->addChild('ort', $turnier->getDetails()->getOrt());
+            $xml_child->addChild('haltestellen', $turnier->getDetails()->getHaltestellen());
+            $xml_child->addChild('plaetze', $turnier->getDetails()->getPlaetze());
+            $xml_child->addChild('format', $turnier->getDetails()->getFormat());
+            $xml_child->addChild('startzeit', $turnier->getDetails()->getStartzeit()->format('H:i'));
+            $xml_child->addChild('besprechung', $turnier->getDetails()->getBesprechung());
+            $xml_child->addChild('hinweis', $turnier->getDetails()->getHinweis());
+            $xml_child->addChild('organisator', $turnier->getDetails()->getOrganisator());
+            $xml_child->addChild('handy', $turnier->getDetails()->getHandy());
+            $xml_child->addChild('startgebuehr', $turnier->getDetails()->getStartgebuehr());
+            $xml_child->addChild('teamname', $turnier->getAusrichter()->getName());
         }
-
-        Header('Content-type: text/xml');
-        print($xml->asXML());
+        return $xml->asXML();
     }
-
 }
