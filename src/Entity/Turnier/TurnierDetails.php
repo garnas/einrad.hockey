@@ -47,7 +47,7 @@ class TurnierDetails
     private ?int $minTeams;
 
     #[ORM\Column(name: "format", type: "string", length: 255, nullable: true)]
-    private string $format;
+    private ?string $format;
 
     #[ORM\Column(name: "startzeit", type: "time")]
     private DateTime $startzeit;
