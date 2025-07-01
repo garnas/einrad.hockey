@@ -10,7 +10,7 @@ class Archiv_Spielplan_JgJ extends Spielplan_JgJ {
         $ligapunkte = 0;
         foreach ($reverse_tabelle as $team_id => $eintrag) {
             $ligapunkte += $this->platzierungstabelle[$team_id]['wertigkeit'];
-            $this->platzierungstabelle[$team_id]['ligapunkte'] = round($ligapunkte * $this->details['faktor']);
+            $this->platzierungstabelle[$team_id]['ligapunkte'] = round($ligapunkte * $this->details->getFaktor());
         }
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Entity\Turnier\Turnier;
+
 class Spielplan_JgJ extends Spielplan {
 
     /**
@@ -27,7 +29,7 @@ class Spielplan_JgJ extends Spielplan {
      * @param bool $penaltys Penaltys werden ignoriert. Dies ist für eine zweite Instanz der Klasse, aus welcher die
      * gesamt zu spielenden Penaltys in Erfahrung gebracht werden.
      */
-    public function __construct(nTurnier $turnier, bool $penaltys = true, $skip_init = false)
+    public function __construct(Turnier $turnier, bool $penaltys = true, $skip_init = false)
     {
         parent:: __construct($turnier);
 
@@ -454,7 +456,8 @@ class Spielplan_JgJ extends Spielplan {
      */
     public function validate_penalty_ergebnisse(): bool
     {
-        foreach ($this->spiele as $spiel_id => $spiel) {
+        $spiele = $this->get_spiele();
+        foreach ($spiele as $spiel_id => $spiel) {
             if ((!is_null($spiel['penalty_a']) || !is_null($spiel['penalty_b']))
                 && !in_array($spiel_id, $this->penaltys['gesamt'])
             ) {

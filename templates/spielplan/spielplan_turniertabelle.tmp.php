@@ -15,7 +15,7 @@
                 <?= Html::icon("workspaces") ?>
                 <br>Punkte
             </th>
-            <?php if (in_array($spielplan->turnier->get_art(), Config::TURNIER_ARTEN)) { ?>
+            <?php if (in_array($spielplan->turnier->getArt(), Config::TURNIER_ARTEN)) { ?>
                 <th>
                     <?= Html::icon("emoji_events") ?>
                     <br>Ergebnis
@@ -39,7 +39,7 @@
                     <?= $x["teamname"] ?>
                 </td>
                 <td class="w3-hide-small"><?= $x['statistik']["punkte"] ?? '--' ?></td>
-                <?php if (in_array($spielplan->turnier->get_art(), Config::TURNIER_ARTEN)) { ?>
+                <?php if (in_array($spielplan->turnier->getArt(), Config::TURNIER_ARTEN)) { ?>
                     <td>
                         <?= ($spielplan->check_penalty_team($team_id) || !$spielplan->check_tabelle_einblenden())
                             ? '--'
@@ -88,25 +88,25 @@
                         <?= Html::icon("remove") ?>
                         <br>Gegentore
                     </th>
-                    <?php if (in_array($spielplan->turnier->get_art(), Config::TURNIER_ARTEN)) { ?>
+                    <?php if (in_array($spielplan->turnier->getArt(), Config::TURNIER_ARTEN)): ?>
                         <th>
                             <?= Html::icon("emoji_events") ?>
                             <br>Ergebnis
                         </th>
-                    <?php } //end if ?>
+                    <?php endif; ?>
                 </tr>
-                <?php foreach ($spielplan->platzierungstabelle as $team_id => $x) { ?>
+                <?php foreach ($spielplan->platzierungstabelle as $team_id => $x): ?>
                     <tr>
                         <td style="white-space: nowrap;">
-                            <?php if (!$spielplan->check_tabelle_einblenden()) { ?>
+                            <?php if (!$spielplan->check_tabelle_einblenden()): ?>
                                 <span>--</span>
-                            <?php } elseif ($spielplan->check_penalty_team($team_id)) { ?>
+                            <?php elseif ($spielplan->check_penalty_team($team_id)): ?>
                                 <span class='w3-text-secondary'>
                             <?= Html::icon("priority_high") ?>PENALTY
                         </span>
-                            <?php } else { ?>
+                            <?php else: ?>
                                 <?= $x['platz'] ?>
-                            <?php } // end if ?>
+                            <?php endif; ?>
                         </td>
                         <td style="white-space: nowrap;"><?= $x["teamname"] ?></td>
                         <td><?= $x['statistik']["spiele"] ?></td>
@@ -114,15 +114,15 @@
                         <td><?= $x['statistik']["tordifferenz"] ?? '--' ?></td>
                         <td><?= $x['statistik']["tore"] ?? '--' ?></td>
                         <td><?= $x['statistik']["gegentore"] ?? '--' ?></td>
-                        <?php if (in_array($spielplan->turnier->get_art(), Config::TURNIER_ARTEN)) { ?>
+                        <?php if (in_array($spielplan->turnier->getArt(), Config::TURNIER_ARTEN)): ?>
                             <td>
                                 <?= ($spielplan->check_penalty_team($team_id) || !$spielplan->check_tabelle_einblenden())
                                     ? '--'
                                     : $x["ligapunkte"] ?>
                             </td>
-                        <?php } //end if ?>
+                        <?php endif; ?>
                     </tr>
-                <?php }//end foreach?>
+                <?php endforeach; ?>
             </table>
         </div>
     </div>

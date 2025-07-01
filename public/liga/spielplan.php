@@ -9,8 +9,8 @@ require_once '../../logic/spielplan.logic.php'; //Erstellt Spielplanobjekt nach 
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 Html::$titel = "Spielplan | Einradhockey";
-Html::$content = "Der Spielplan für das Einradhockey-Turnier in " . $spielplan->turnier->get_ort()
-                    . " am " . date("d.m.Y", strtotime($spielplan->turnier->get_datum()));
+Html::$content = "Der Spielplan für das Einradhockey-Turnier in " . $spielplan->turnier->getDetails()->getOrt()
+                    . " am " . $spielplan->turnier->getDatum()->format("Y-m-d");
 
 include '../../templates/header.tmp.php';
 include '../../templates/spielplan/spielplan_titel.tmp.php';

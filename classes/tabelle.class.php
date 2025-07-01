@@ -117,9 +117,9 @@ class Tabelle
      * @param int|null $spieltag
      * @return string|null
      */
-    public static function get_team_block(int $team_id, NULL|int $spieltag = NULL): ?string
+    public static function get_team_block(int $team_id, null|int $spieltag = null, int $saison = Config::SAISON): ?string
     {
-        $rang = self::get_team_rang($team_id, $spieltag);
+        $rang = self::get_team_rang($team_id, $spieltag, $saison);
         return self::rang_to_block($rang);
     }
 

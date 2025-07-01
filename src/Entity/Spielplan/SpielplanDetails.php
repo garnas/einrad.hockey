@@ -48,15 +48,15 @@ class SpielplanDetails
     )]
     private string $pausen;
 
-    #[ORM\Column(name: "faktor", type: "integer", nullable: false, options: ["comment" => "Nur Nenner"])]
-    private int $faktor;
+    #[ORM\Column(name: "faktor", type: "decimal", precision: 3, scale: 2, nullable: false)]
+    private float $faktor;
 
     public function getSpielplan(): ?string
     {
         return $this->spielplan;
     }
 
-    public function isPlaetze(): ?bool
+    public function getPlaetze(): int
     {
         return $this->plaetze;
     }
@@ -68,7 +68,7 @@ class SpielplanDetails
         return $this;
     }
 
-    public function isAnzahlHalbzeiten(): ?bool
+    public function getAnzahlHalbzeiten(): int
     {
         return $this->anzahlHalbzeiten;
     }
@@ -80,7 +80,7 @@ class SpielplanDetails
         return $this;
     }
 
-    public function isHalbzeitLaenge(): ?bool
+    public function getHalbzeitLaenge(): int
     {
         return $this->halbzeitLaenge;
     }
@@ -92,7 +92,7 @@ class SpielplanDetails
         return $this;
     }
 
-    public function isPuffer(): ?bool
+    public function getPuffer(): int
     {
         return $this->puffer;
     }
@@ -116,15 +116,14 @@ class SpielplanDetails
         return $this;
     }
 
-    public function isFaktor(): ?bool
+    public function getFaktor(): float
     {
         return $this->faktor;
     }
 
-    public function setFaktor(bool $faktor): self
+    public function setFaktor(float $faktor): self
     {
         $this->faktor = $faktor;
-
         return $this;
     }
 

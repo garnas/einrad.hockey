@@ -1,8 +1,8 @@
 <!-- Spielzeiten -->
 <h1 class="w3-text-secondary">Spiele</h1>
 <span class="w3-text-grey w3-margin-top">
-    Spielzeit: <?= $spielplan->details['anzahl_halbzeiten'] ?> x <?= $spielplan->details['halbzeit_laenge'] ?>&nbsp;min
-    | Puffer: <?= $spielplan->details['puffer'] ?>&nbsp;min
+    Spielzeit: <?= $spielplan->details->getAnzahlHalbzeiten() ?> x <?= $spielplan->details->getHalbzeitLaenge() ?>&nbsp;min
+    | Puffer: <?= $spielplan->details->getPuffer() ?>&nbsp;min
 </span>
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-centered w3-striped">
@@ -57,22 +57,17 @@
                 </th>
             <?php }//endif?>
         </tr>
-        <?php if ($spielplan->turnier->get_besprechung() === 'Ja') { ?>
+        <?php if ($spielplan->turnier->hasBesprechung()) { ?>
             <tr class="w3-primary-3">
-                <td><?= date('H:i', strtotime($spielplan->turnier->get_startzeit()) - 15 * 60) ?></td>
-                <td></td>
-                <td></td>
-                <td colspan="3">
-                    <i><span class="w3-hide-small">Gemeinsame </span>Turnierbesprechung</i>
-                </td>
-                <td></td>
+                <td><?= ($spielplan->turnier->details->getStartzeit()->sub(new DateIntervall('P15M')))->format("H:i") ?></td>
+                <td colspan="5">Turnierbesprechung</td>
                 <td class="w3-hide-small"></td>
                 <?php if ($spielplan->check_penalty_anzeigen()) { ?>
                     <td></td>
                 <?php } //endif ?>
             </tr>
         <?php }//endif?>
-        <?php foreach ($spielplan->spiele as $spiel_id => $spiel) { ?>
+        <?php foreach ($spielplan->get_spiele() as $spiel_id => $spiel) { ?>
             <tr>
                 <!-- Uhrzeit -->
                 <td><?= $spiel["zeit"] ?></td>

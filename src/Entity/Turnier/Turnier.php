@@ -266,7 +266,7 @@ class Turnier
     /**
      * @return TurniereListe[]|ArrayCollection
      */
-    public function getSetzliste(): ArrayCollection|array
+    public function getSetzliste(): array|ArrayCollection
     {
         $filter = static function (TurniereListe $f) {
             return $f->isSetzliste();

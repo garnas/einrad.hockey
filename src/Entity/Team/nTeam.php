@@ -234,12 +234,22 @@ class nTeam
         return $this;
     }
 
-    public function getBlock(int $spieltag = null): ?string
+    public function getBlock(int $spieltag = null, $saison = Config::SAISON): ?string
     {
         if (!$this->isLigaTeam()) {
             return null;
         }
-        return Tabelle::get_team_block($this->id(), $spieltag); // TODO Symfonyfy
+        
+        return Tabelle::get_team_block($this->id(), $spieltag, $saison); // TODO Symfonyfy
+    }
+
+    public function getWertigkeit(int $spieltag = null, $saison = Config::SAISON): ?int
+    {
+        if (!$this->isLigaTeam()) {
+            return null;
+        }
+        
+        return Tabelle::get_team_wertigkeit($this->id(), $spieltag, $saison); // TODO Symfonyfy
     }
 
     public function isLigaTeam(): bool
