@@ -116,13 +116,6 @@ class TurnierLinks {
                 default => Env::BASE_URL . '/liga/spielplan.php?turnier_id=' . $turnier->id()
             };
         }
-        if($turnier->isFinalTurnier()) {
-            return match ($scope) {
-                'lc' => Env::BASE_URL . '/ligacenter/lc_spielplan.php?turnier_id=' . $turnier->id(),
-                'tc' => Env::BASE_URL . '/teamcenter/tc_spielplan.php?turnier_id=' . $turnier->id(),
-                default => Env::BASE_URL . '/liga/spielplan_finale.php?turnier_id=' . $turnier->id()
-            };
-        }
 
         return false;
     }
