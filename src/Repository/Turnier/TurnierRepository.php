@@ -22,8 +22,8 @@ class TurnierRepository
 
     private function __construct()
     {
-        $this->liste = DoctrineWrapper::manager()->getRepository(TurniereListe::class);
         $this->turnier = DoctrineWrapper::manager()->getRepository(Turnier::class);
+        $this->liste = DoctrineWrapper::manager()->getRepository(TurniereListe::class);
         $this->bericht = DoctrineWrapper::manager()->getRepository(TurnierBericht::class);
     }
 
@@ -106,7 +106,7 @@ class TurnierRepository
     /**
      * @return Turnier[]|Collection
      */
-    public static function getErgebnisTurniere(int $saison = Config::SAISON): array|Collection
+    public static function getErgebnisTurniere(int $saison = Config::SAISON, bool $desc = True): array|Collection
     {
         $query = DoctrineWrapper::manager()
             ->createQueryBuilder()
@@ -118,13 +118,38 @@ class TurnierRepository
             ->leftJoin('l.team', 'team')
             ->where('t.saison = :saison')
             ->andWhere('t.phase = :phase')
-            ->orderBy('t.datum', 'asc')
+            ->orderBy('t.datum', ($desc ? 'desc' : 'asc'))
             ->setParameter('saison', $saison)
             ->setParameter('phase', "ergebnis")
         ;
 
         return new ArrayCollection($query->getQuery()->execute());
     }
+
+    /**
+     * @return Turnier[]|Collection
+     */
+    public static function getSetzlisteTurniere(int $team_id): array|Collection
+    {
+        $query = DoctrineWrapper::manager()
+            ->createQueryBuilder()
+            ->select('t')
+            ->from(Turnier::class, 't')
+            ->leftJoin('t.liste', 'l')
+            ->where('t.saison = :saison')
+            ->andWhere('t.canceled = false')
+            ->andWhere('l.team = :team_id')
+            ->andWhere('l.liste = :liste')
+            ->orderBy('t.datum', 'ASC')
+            ->setParameter('saison', Config::SAISON)
+            ->setParameter('team_id', $team_id)
+            ->setParameter('liste', 'setzliste')
+        ;
+
+        return new ArrayCollection($query->getQuery()->execute());
+    }
+
+
 
     public function last_turnier(int $ausrichter_id): ?Turnier
     {

@@ -2,6 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Service\Team\TeamService;
+
 require_once '../../init.php';
 
 // Formularauswertung
@@ -16,7 +18,7 @@ if (isset($_POST['login'])) {
     }
 
     // Passwort überprüfen
-    if (Team::login($teamname, $passwort)) {
+    if (TeamService::login($teamname, $passwort)) {
         if (isset($_SESSION['tc_redirect'], $_GET['redirect'])) {
             $redirect = $_SESSION['tc_redirect'];
             unset($_SESSION['tc_redirect']);

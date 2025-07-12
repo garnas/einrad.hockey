@@ -15,6 +15,8 @@ services:
       - ./logic:/var/www/html/logic
       - ./public:/var/www/html/public
       - ./src:/var/www/html/src
+      - ./system:/var/www/html/system
+      - ./cache/proxy:/var/www/html/cache/proxy
       - ./templates:/var/www/html/templates
       - ./init.php:/var/www/html/init.php
       - ./env.php:/var/www/html/env.php
@@ -38,6 +40,7 @@ services:
     restart: always
     environment:
       PMA_HOST: mariadb
+      UPLOAD_LIMIT: 300M
     links:
       - mariadb
     ports:

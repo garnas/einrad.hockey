@@ -1,6 +1,6 @@
 <?php
 
-final class Spielplan_JgJ extends Spielplan {
+class Spielplan_JgJ extends Spielplan {
 
     /**
      * Tabellen
@@ -31,12 +31,13 @@ final class Spielplan_JgJ extends Spielplan {
     {
         parent:: __construct($turnier);
 
-        $this->tore_tabelle = $this->get_toretabelle($penaltys);
+        $this->tore_tabelle = $this->get_torematrix($penaltys);
         $this->turnier_tabelle = self::get_sorted_turniertabelle($this->tore_tabelle);
         $this->set_platzierungen($this->tore_tabelle);
 
         if (!$skip_init) {
             $this->set_wertigkeiten();
+            $this->set_ligapunkte();
         }
 
         if (!empty($this->penaltys['kontrolle']) && $this->check_turnier_beendet()) {
@@ -47,10 +48,10 @@ final class Spielplan_JgJ extends Spielplan {
     /**
      * Sortiert die Turniertabelle
      *
-     * @param array $tore_tabelle Toretabelle aus get_toretabelle
+     * @param array $tore_tabelle Toretabelle aus get_torematrix()
      * @return array Sortierte Turniertabelle
      */
-    public static function get_sorted_turniertabelle(array $tore_tabelle): array
+    public static function get_sorted_turniertabelle(array $tore_matrix): array
     {
         $sort_function = static function ($ergebnis_a, $ergebnis_b) {
             if ($ergebnis_a['punkte'] > $ergebnis_b['punkte']) return -1;
@@ -68,7 +69,7 @@ final class Spielplan_JgJ extends Spielplan {
             return -1; // Team welches links steht kommt nach oben, also das Team mit der höheren Rangtabellenwertung
         };
 
-        $turnier_tabelle = self::get_turniertabelle($tore_tabelle);
+        $turnier_tabelle = self::get_turniertabelle($tore_matrix);
         uasort($turnier_tabelle, $sort_function);
         return $turnier_tabelle;
     }

@@ -8,6 +8,7 @@ enum FreilosGrund: string
     case TURNIER_AUSGERICHTET = "Freilos für Turnierausrichtung";
     case FREILOS_GESETZT = "Freilos für frühzeitig gesetztes Freilos";
     case SONSTIGES = "Freilos";
+    case NEUES_LIGATEAM = "Neues Ligateam";
 
     public static function fromName(string $name): FreilosGrund
     {

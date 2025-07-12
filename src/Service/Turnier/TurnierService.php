@@ -246,9 +246,18 @@ class TurnierService
         return count(self::getWarteliste($turnier));
     }
 
-    public static function blockhochErweitern(Turnier $turnier): void
+    public static function erweitereBlockHoch(Turnier $turnier): void
     {
-        $turnier->setBlock(BlockService::nextTurnierBlock($turnier));
+        $hoehererBlock = BlockService::hoehererTurnierBlock($turnier);
+        $turnier
+            ->setBlockErweitertHoch(true)
+            ->setBlock($hoehererBlock);
+    }
+
+    public static function erweitereBlockRunter(Turnier $turnier): void
+    {
+        $turnier->setBlockErweitertRunter(true);
+        $turnier->setBlock(BlockService::niedrigererTurnierBlock($turnier));
     }
 
     public static function blockOeffnen(Turnier $turnier): void

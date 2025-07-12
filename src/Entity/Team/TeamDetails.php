@@ -10,8 +10,9 @@ class TeamDetails
 {
 
     #[ORM\Id]
-    #[ORM\Column(name: "team_id", type: "integer")]
-    private int $team_id;
+    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id", nullable: false)]
+    #[ORM\OneToOne(targetEntity: "nTeam", inversedBy: "details", cascade: ["all"])]
+    private nTeam $team;
 
     #[ORM\Column(name: "plz", type: "string", length: 255, nullable: true)]
     private ?string $plz;
@@ -133,9 +134,15 @@ class TeamDetails
         return $this;
     }
 
-    public function get_team_id(): ?string
+    public function setTeam(nTeam $team): TeamDetails
     {
-        return $this->team_id;
+        $this->team = $team;
+        return $this;
+    }
+
+    public function getTeam(): nTeam
+    {
+        return $this->team;
     }
 
 }

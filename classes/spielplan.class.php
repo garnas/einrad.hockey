@@ -12,7 +12,7 @@ class Spielplan
         $anzahl_teams = count($turnier->get_spielenliste());
         $error = false;
 
-        if ($turnier->is_ligaturnier() && $turnier->get_phase() != "setz") { //TODO and is ligaturnier
+        if ($turnier->is_ligaturnier() && $turnier->get_phase() != "setz") {
             Html::error("Das Turnier muss in der Setzphase sein.");
             $error = true;
         }
@@ -443,7 +443,7 @@ class Spielplan
      * @param bool $penaltys Mit oder ohne Penalty-Ergebnissen
      * @return array Torematrix aller Teams untereinander
      */
-    public function get_toretabelle($penaltys = true): array
+    public function get_torematrix($penaltys = true): array
     {
         foreach ($this->spiele as $spiel) {
 
@@ -451,75 +451,94 @@ class Spielplan
                 $spiel['penalty_a'] = $spiel['penalty_b'] = NULL;
             }
 
-            $tore_tabelle[$spiel['team_id_a']][$spiel['team_id_b']] =
-                [
-                    'tore' => $spiel['tore_a'],
-                    'gegentore' => $spiel['tore_b'],
-                    'penalty_tore' => $spiel['penalty_a'],
-                    'penalty_gegentore' => $spiel['penalty_b'],
-                ];
-            $tore_tabelle[$spiel['team_id_b']][$spiel['team_id_a']] =
-                [
-                    'tore' => $spiel['tore_b'],
-                    'gegentore' => $spiel['tore_a'],
-                    'penalty_tore' => $spiel['penalty_b'],
-                    'penalty_gegentore' => $spiel['penalty_a'],
-                ];
+            // lege ein leeres array an, wenn das spiel zwischen den teams noch nicht existiert
+            if (!isset($tore_tabelle[$spiel['team_id_a']][$spiel['team_id_b']])) {
+                $tore_tabelle[$spiel['team_id_a']][$spiel['team_id_b']] = [];
+            }
+            
+            // pushe das spiel in die toretabelle fuer dieses aufeinandertreffen
+            $tore_tabelle[$spiel['team_id_a']][$spiel['team_id_b']][] = [
+                'tore'              => $spiel['tore_a'],
+                'gegentore'         => $spiel['tore_b'],
+                'penalty_tore'      => $spiel['penalty_a'],
+                'penalty_gegentore' => $spiel['penalty_b'],
+            ];
+            
+            // pushe das spiel in die toretabelle fuer dieses aufeinandertreffen
+            $tore_tabelle[$spiel['team_id_b']][$spiel['team_id_a']][] = [
+                'tore'              => $spiel['tore_b'],
+                'gegentore'         => $spiel['tore_a'],
+                'penalty_tore'      => $spiel['penalty_b'],
+                'penalty_gegentore' => $spiel['penalty_a'],
+            ];
+            
         }
+
         return $tore_tabelle ?? [];
     }
 
     /**
-     * Erstellt eine Turniertabelle mit Punkten, Tordifferenz, etc.
+     * Berechnet fuer das Turnier die Punkte, Tore, Gegentore, ... fuer jedes Team.
+     * tore_matrix[team_id][gegner_id] = [[spiel1], [spiel2], ...]
      *
-     * @param array $tore_tabelle Toretabelle aus get_toretabelle()
-     * @return array unsortierte Turniertabelle
+     * @param array $tore_tabelle Matrix der Tore zwischen den Teams aus den einzelnen Spielen
+     * @return array *unsortierte* Turniertabelle
      */
-    protected static function get_turniertabelle(array $tore_tabelle): array
+    protected static function get_turniertabelle(array $tore_matrix): array
     {
-        // Punkte zählen
-        foreach ($tore_tabelle as $team_id => $team_spiele) {
+        
+        foreach ($tore_matrix as $team_id => $gegner) {
+            // in dieser schleife finden sich die informationen zu dem team im gesamten turnier
             $punkte = $tordifferenz = $gegentore = $tore = $penalty_diff = $penalty_tore = $penalty_gegentore = $penalty_punkte = NULL;
-            $spiele = $penalty_spiele = 0;
-            foreach ($team_spiele as $spiel) {
-                // Spielbegegnungen
-                if (is_null($spiel['tore']) || is_null($spiel['gegentore'])) {
-                    continue;
-                }
-                $punkte += ($spiel['tore'] > $spiel['gegentore']) ? 3 : 0;
-                $punkte += ($spiel['tore'] === $spiel['gegentore']) ? 1 : 0;
-                $tordifferenz += $spiel['tore'] - $spiel['gegentore'];
-                $tore += $spiel['tore'];
-                $gegentore += $spiel['gegentore'];
-                $spiele++;
+            $normale_spiele = $penalty_spiele = 0;
+            
+            foreach ($gegner as $gegner_id => $spiele) {
+                // gehe durch das array der spiele zwischen team_id und gegner_id
+                
+                foreach ($spiele as $spiel) {
+                    // schaue dir jedes einzelne spiel an
+                    
+                    // liegen keine tore vor, dann ueberspringe das spiel
+                    if (is_null($spiel['tore']) || is_null($spiel['gegentore'])) {
+                        continue;
+                    }
 
-                // Penaltybegegnungen
-                if (is_null($spiel['penalty_tore']) || is_null($spiel['penalty_gegentore'])) {
-                    continue;
+                    $punkte += ($spiel['tore'] > $spiel['gegentore']) ? 3 : 0; // spiel gewonnen
+                    $punkte += ($spiel['tore'] === $spiel['gegentore']) ? 1 : 0; // spiel unentschieden
+                    $tordifferenz += $spiel['tore'] - $spiel['gegentore'];
+                    $tore += $spiel['tore'];
+                    $gegentore += $spiel['gegentore'];
+                    $normale_spiele++;
+
+                    // liegt kein penalty-ergebnis vor, dann ueberspringe
+                    if (is_null($spiel['penalty_tore']) || is_null($spiel['penalty_gegentore'])) {
+                        continue;
+                    }
+                    
+                    $penalty_punkte += ($spiel['penalty_tore'] > $spiel['penalty_gegentore']) ? 3 : 0;
+                    $penalty_punkte += ($spiel['penalty_tore'] === $spiel['penalty_gegentore']) ? 1 : 0;
+                    $penalty_diff += $spiel['penalty_tore'] - $spiel['penalty_gegentore'];
+                    $penalty_tore += $spiel['penalty_tore'];
+                    $penalty_gegentore += $spiel['penalty_gegentore'];
+                    $penalty_spiele++;
                 }
-                $penalty_punkte += ($spiel['penalty_tore'] > $spiel['penalty_gegentore']) ? 3 : 0;
-                $penalty_punkte += ($spiel['penalty_tore'] === $spiel['penalty_gegentore']) ? 1 : 0;
-                $penalty_diff += $spiel['penalty_tore'] - $spiel['penalty_gegentore'];
-                $penalty_tore += $spiel['penalty_tore'];
-                $penalty_gegentore += $spiel['penalty_gegentore'];
-                $penalty_spiele++;
             }
 
-            // Turniertabelle erstellen
-            $turnier_tabelle[$team_id] =
-                [
-                    'spiele' => $spiele,
-                    'punkte' => $punkte,
-                    'penalty_spiele' => $penalty_spiele,
-                    'tordifferenz' => $tordifferenz,
-                    'tore' => $tore,
-                    'gegentore' => $gegentore,
-                    'penalty_punkte' => $penalty_punkte,
-                    'penalty_diff' => $penalty_diff,
-                    'penalty_tore' => $penalty_tore,
-                    'penalty_gegentore' => $penalty_gegentore
-                ];
+            // turniertabelle mit den informationen fuer das team fuellen
+            $turnier_tabelle[$team_id] = [
+                'spiele' => $normale_spiele,
+                'punkte' => $punkte,
+                'penalty_spiele' => $penalty_spiele,
+                'tordifferenz' => $tordifferenz,
+                'tore' => $tore,
+                'gegentore' => $gegentore,
+                'penalty_punkte' => $penalty_punkte,
+                'penalty_diff' => $penalty_diff,
+                'penalty_tore' => $penalty_tore,
+                'penalty_gegentore' => $penalty_gegentore
+            ];
         }
+
         return $turnier_tabelle ?? [];
     }
 
@@ -555,7 +574,6 @@ class Spielplan
             return NULL;
         };
 
-        $ligapunkte = 0;
         foreach ($reverse_tabelle as $team_id => $eintrag) {
             if (is_null($this->teamliste[$team_id]->wertigkeit)) {
                 // Es handelt sich um ein Nichtligateam // max($werte) + 1 wenn nicht Letzter.
@@ -564,10 +582,43 @@ class Spielplan
                 // Normales Ligateam
                 $wert = $this->teamliste[$team_id]->wertigkeit;
             }
-            $werte[] = $wert;
-            $ligapunkte += $wert;
-            $this->platzierungstabelle[$team_id]['ligapunkte'] = round($ligapunkte * 6 / $this->details['faktor']);
+            $this->platzierungstabelle[$team_id]['wertigkeit'] = $wert;
         }
     }
 
+    /**
+     * Berechnet und fügt die Ligapunkte in die Platzierungstabelle ein.
+     */
+    public function set_ligapunkte(): void
+    {
+        $plaetze = $this->details['plaetze'];
+        
+        // Invertiere die Tabelle um die Punkte addieren zu können
+        $reverse_tabelle = array_reverse($this->platzierungstabelle, true);
+        if ($plaetze > 3) {
+            // Addiere die Wertigkeiten der Teams zu den Ligapunkten und verrechne den Faktor
+            $ligapunkte = 0;
+            foreach ($reverse_tabelle as $team_id => $eintrag) {
+                $ligapunkte += $this->platzierungstabelle[$team_id]['wertigkeit'];
+                $this->platzierungstabelle[$team_id]['ligapunkte'] = round($ligapunkte * $this->details['faktor']);
+            }
+        
+        } else {
+            // Erhalte die Wertigkeit des erstplatzierten Teams
+            $wertung = 0;
+            foreach ($reverse_tabelle as $team_id => $eintrag) {
+                $wertung = $this->platzierungstabelle[$team_id]['wertigkeit'];
+            }
+            
+            // Berechne die Punkte für jedes Team anhand der Wertigkeit des ersten Teams
+            $counter = 3;
+            $faktoren = [1.5, 0.75, 0.5];
+            foreach ($reverse_tabelle as $team_id => $eintrag) {
+                $this->platzierungstabelle[$team_id]['ligapunkte'] = round($wertung * $faktoren[$counter - 1]);
+                $counter--;
+            }
+        }
+
+    }
 }
+

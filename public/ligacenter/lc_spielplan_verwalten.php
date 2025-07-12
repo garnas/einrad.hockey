@@ -41,13 +41,6 @@ if (isset($_POST['ergebnis_eintragen'])) {
         Html::error("Es wurden Teams doppelt eingetragen!");
         $error = true;
     }
-    for ($platz = 1; $platz <= $anzahl_teams; $platz++) {
-        if (empty($_POST['team_id'][$platz]) || empty($_POST['ergebnis'][$platz])) {
-            $error = true;
-            Html::error("Formular wurde unvollständig übermittelt");
-            break;
-        }
-    }
     if ($error ?? false) {
         Helper::reload(get: "?turnier_id=" . $turnier->get_turnier_id());
     }

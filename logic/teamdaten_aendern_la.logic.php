@@ -9,8 +9,8 @@ if (isset($_POST['change_la']) && Helper::$ligacenter) {
     $passwort = $_POST['passwort'];
 
     if (
-        !empty(Team::name_to_id($neuer_teamname))
-        && $neuer_teamname != htmlspecialchars_decode($team->getName())
+        $neuer_teamname != htmlspecialchars_decode($team->getName())
+        && TeamRepository::get()->findByName($neuer_teamname)
     ) {
         Html::error("Der Teamname existiert bereits.");
         $error = true;
@@ -20,13 +20,13 @@ if (isset($_POST['change_la']) && Helper::$ligacenter) {
     if (!$error) {
         if ($neuer_teamname != $team->getName()) {
             $team->setName($neuer_teamname);
-            Html::info("Der Teamname wird geändert");
+            Html::info("Der Teamname wurde geändert.");
         }
         if (!empty($_POST["freilos_grund"]) && $_POST["freilos_grund"] != "NO_CHANGE") {
             $grund = FreilosGrund::fromName($_POST["freilos_grund"]);
             $saison = (int) $_POST["freilos_saison"];
             $team->addFreilos($grund, $saison);
-            Html::info("Freilos wird hinzugefügt");
+            Html::info("Freilos wurde hinzugefügt.");
         }
         if (!empty($_POST["freilos_delete"]) && $_POST["freilos_delete"] != "NO_CHANGE") {
             $id = (int) $_POST["freilos_delete"];
@@ -35,7 +35,7 @@ if (isset($_POST['change_la']) && Helper::$ligacenter) {
         }
         if (!empty($passwort)) {
             $team->setPasswort($passwort);
-            Html::info("Passwort wird geändert");
+            Html::info("Passwort wurde geändert.");
         }
         TeamRepository::get()->speichern($team);
     }

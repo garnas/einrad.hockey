@@ -5,10 +5,10 @@ class Config
     /**
      * Saison
      */
-    public const SAISON = 30; // Saison 0 = Jahr 1995;
-    public const SAISON_WECHSEL = "17.06.2024"; // Wichtig für zweites Freilos
-    public const SAISON_ANFANG = '17.08.2024';
-    public const SAISON_ENDE = '01.06.2025';
+    public const SAISON = 31; // Saison 0 = Jahr 1995;
+    public const SAISON_WECHSEL = "28.06.2025"; // Wichtig für zweites Freilos
+    public const SAISON_ANFANG = '16.08.2025';
+    public const SAISON_ENDE = '31.05.2026';
 
     /**
      * Log-Files
@@ -40,7 +40,7 @@ class Config
      * Mögliche Turnier-Blöcke
      * Reihenfolge ist wichtig!
      */
-    public const BLOCK_ALL = ['ABCDEF', 'A', 'AB', 'ABC', 'BC', 'BCD', 'CD', 'CDE', 'DE', 'DEF', 'EF', 'F'];
+    public const BLOCK_ALL = ['ABCDEF', 'A', 'AB', 'ABC', 'ABCD', 'BC', 'BCD', 'BCDE', 'CD', 'CDE', 'CDEF', 'DE', 'DEF', 'EF', 'F'];
 
     /**
      * Rangtabellen-Zuordnung

@@ -3,6 +3,8 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 use App\Event\Turnier\nLigaBot;
+use App\Repository\Team\TeamRepository;
+use App\Service\Team\TeamService;
 
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
@@ -14,16 +16,15 @@ $deaktivierte_teams = Team::get_deactive();
 // Als Ligateam anmelden
 if (isset($_POST['anmelden'])){
 
-    $team_id = Team::name_to_id($_POST['teamname']);
+    $team = TeamRepository::get()->findByName($_POST['teamname']);
     
-    if (Team::is_ligateam($team_id)){
-        unset($_SESSION['logins']['team']);
-        Team::set_team_session(new Team($team_id));
+    if ($team && $team->isLigaTeam()){
+        TeamService::removeTeamSession();
+        TeamService::createTeamSession($team);
         Helper::log("login.log", "Erfolgreich       | via Ligacenter: " . $_SESSION['logins']['la']['login']
             . " als " . $_SESSION['logins']['team']['name']);
         Html::info("Login via Ligaausschuss erfolgreich");
-        header('Location: ' . Env::BASE_URL . '/teamcenter/tc_start.php');
-        die();
+        Helper::reload('/teamcenter/tc_start.php');
     }
     Html::error("Anmeldung als Team nicht möglich, da der Teamname keinem Ligateam zugeordnet werden konnte.");
 }
@@ -155,7 +156,7 @@ include '../../templates/header.tmp.php';?>
 <h4 class="w3-bottombar w3-text-primary">Team reaktivieren</h4>
 <form method='post'>
     <label class="w3-text-primary" for="team_id">Team wählen</label>
-    <select required class="w3-select w3-border w3-border-primary" list="teams" id="team_id" name="team_id">
+    <select required class="w3-select w3-border w3-border-primary" id="team_id" name="team_id">
         <option disabled selected>Bitte deaktives Team wählen</option>
             <?php foreach ($deaktivierte_teams as $team){?>
                 <option value=<?=$team['team_id']?>><?=$team['teamname']?></option>
@@ -202,8 +203,8 @@ include '../../templates/header.tmp.php';?>
 <form method='post'>
     <h4 class="w3-bottombar w3-text-primary">Git Update Website</h4>
     <p>
-        <label>LA-Passwort eingeben:</label>
-        <input type='password' name='password' class="w3-input w3-light-grey">
+        <label for='password'>LA-Passwort eingeben:</label>
+        <input type='password' id ='password' name='password' class="w3-input w3-light-grey">
     </p>
     <p>
         <input type='submit' name='gitpull' value='Update Website von Master' class="w3-button w3-green w3-block">
