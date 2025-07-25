@@ -46,7 +46,7 @@ class Spielplan
     public Turnier $turnier;
     public ArrayCollection $teamliste;
     public SpielplanDetails $details;
-    public array $spiele;
+    protected array $spiele;
     protected array $pausen;
     public int $anzahl_spiele; // Anzahl der Spiele in einem Jeder-gegen-Jeden Turnier pro Team
 
@@ -60,7 +60,7 @@ class Spielplan
     /**
      * Zweite Runde Penaltys im JgJ sind zB out of scope
      */
-    public bool $out_of_scope = false;
+    private bool $out_of_scope = false;
 
     /**
      * Spielplan constructor.
@@ -256,6 +256,11 @@ class Spielplan
      */
     public function get_spiele(): array
     {
+        
+        if (isset($this->spiele)) {
+            return $this->spiele;
+        }
+        
         $sql = "
                 SELECT spiel_id, team_id_a, t1.teamname AS teamname_a, team_id_b, t2.teamname AS teamname_b,
                 schiri_team_id_a, schiri_team_id_b, tore_a, tore_b, penalty_a, penalty_b
@@ -282,8 +287,9 @@ class Spielplan
             $interval = new DateInterval('PT' . $spielzeitSekunden . 'S');
             $startzeit->add($interval);
         }
-
-        return $spiele;
+        
+        $this->spiele = $spiele;
+        return $this->spiele;
     }
 
     /**
@@ -602,6 +608,38 @@ class Spielplan
             }
         }
 
+    }
+
+    /**
+     * True, wenn das Turnierergebnis eingetragen werden darf. Also jedes vorherige Turnier in der Ergebnisphase ist.
+     *
+     * @return bool
+     */
+    public function is_ergebnis_eintragbar(): bool
+    {
+        if (!in_array($this->art, ['I', 'II', 'III', 'final'])) {
+            Html::error("Für diesen Turniertyp können keine Ergebnisse eingetragen werden.");
+            // TODO ist der Check hier an der besten Stelle?
+            return false;
+        }
+        
+        $sql = "
+            SELECT * 
+            FROM turniere_liga 
+            WHERE spieltag < ? 
+            AND spieltag != 0 
+            AND (art='I' OR art = 'II' OR art='III' OR art='final') 
+            AND saison = ?
+            AND canceled = 0
+            AND phase != 'ergebnis'
+        ";
+        
+        return db::$db->query($sql, $this->spieltag, $this->saison)->num_rows() === 0;
+    }
+
+    public function is_out_of_scope(): bool
+    {
+        return $this->out_of_scope;
     }
 }
 

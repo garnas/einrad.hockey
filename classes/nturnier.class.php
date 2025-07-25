@@ -973,29 +973,4 @@ class nTurnier
     {
         return $team_id == $this->ausrichter;
     }
-
-    /**
-     * True, wenn das Turnierergebnis eingetragen werden darf. Also jedes vorherige Turnier in der Ergebnisphase ist.
-     *
-     * @return bool
-     */
-    public function is_ergebnis_eintragbar(): bool
-    {
-        if (!in_array($this->art, ['I', 'II', 'III', 'final'])) {
-            Html::error("Für diesen Turniertyp können keine Ergebnisse eingetragen werden.");
-            // TODO ist der Check hier an der besten Stelle?
-            return false;
-        }
-        $sql = "
-                SELECT * 
-                FROM turniere_liga 
-                WHERE spieltag < ? 
-                AND spieltag != 0 
-                AND (art='I' OR art = 'II' OR art='III' OR art='final') 
-                AND saison = ?
-                AND canceled = 0
-                AND phase != 'ergebnis'
-                ";
-        return db::$db->query($sql, $this->spieltag, $this->saison)->num_rows() === 0;
-    }
 }

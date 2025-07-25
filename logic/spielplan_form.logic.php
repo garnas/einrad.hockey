@@ -9,15 +9,16 @@ $turnierEntity = TurnierRepository::get()->turnier($turnier_id);
 
 // Besteht die Berechtigung das Turnier zu bearbeiten?
 if(!Helper::$ligacenter){ // Ligacenter darf alles.
-    if ((Helper::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $spielplan->turnier->get_ausrichter())){
+    if ((Helper::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $spielplan->turnier->getAusrichter()->id())){
         Html::error("Nur der Ausrichter kann Spielergebnisse eintragen");
         Helper::reload("/liga/spielplan.php", '?turnier_id=' . $turnier_id);
     }
 
     // Wird das Turnierergebnis rechtzeitig eingetragen?
-    $N = date("N", strtotime($spielplan->turnier->get_datum())); // Numerischer Wochentag.
-    $delta = (8-$N) * 24*60*60 + 18*60*60; // Die Zeit bis zum nächsten Montag 18:00 Uhr von 0:00 Uhr aus gesehen.
-    $abgabe = strtotime($spielplan->turnier->get_datum()) + $delta;
+    $weekday = $spielplan->turnier->getDatum()->format("N"); // Numerischer Wochentag.
+    $time_to_deadline = (8-$weekday) * 24*60*60 + 18*60*60; // Zeit bis zu nächsten Montag 18:00 Uhr in Sekunden.
+    $interval = new DateInterval('PT' . $time_to_deadline . 'S');
+    $abgabe = $spielplan->turnier->getDatum()->add($delta);
 
     if ($abgabe < time()){
         Html::error("Bitte wende dich an den Ligaausschuss um Ergebnisse nachträglich zu verändern.");
@@ -27,7 +28,7 @@ if(!Helper::$ligacenter){ // Ligacenter darf alles.
 
 if (isset($_POST["tore_speichern"])) {
     // Neu eingetragene Tore speichern
-    foreach ($spielplan->spiele as $spiel_id => $spiel) {
+    foreach ($spielplan->get_spiele() as $spiel_id => $spiel) {
         if (
             (string) $spiel['tore_a'] === ($_POST["tore_a"][$spiel_id] ?? '')
             && (string) $spiel['tore_b'] === ($_POST["tore_b"][$spiel_id] ?? '')
@@ -64,25 +65,25 @@ if (isset($_POST["turnierergebnis_speichern"])) {
     }
 
     // Testen ob Turnier tabellentechnisch eingetragen werden darf.
-    if (!$turnier->is_ergebnis_eintragbar()) {
+    if (!$spielplan->is_ergebnis_eintragbar()) {
         Html::error("Turnierergebnis kann nicht eingetragen werden. Kontaktiere bitte den Ligaausschuss.");
         $error = true;
     }
 
     // Testen ob Zweite Runde Penaltys gespielt werden müssen
-    if ($spielplan->out_of_scope) {
+    if ($spielplan->is_out_of_scope()) {
         Html::error("Es muss noch eine zweite Runde Penaltys gespielt werden.");
         $error = true;
     }
 
     if (!($error ?? false)) {
-        $spielplan->turnier->set_ergebnisse($spielplan->platzierungstabelle);
+        $spielplan->turnier->setErgebnis($spielplan->platzierungstabelle);
         Html::info("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
-        $spieltag = $spielplan->turnier->get_spieltag();
+        $spieltag = $spielplan->turnier->getSpieltag();
         if (Tabelle::is_spieltag_beendet($spieltag)) {
             nLigaBot::blockWechsel();
         }
-        DoctrineWrapper::manager()->refresh($turnierEntity); # Doctrine erkennt die Änderungen in set_ergebnisse nicht.
+        DoctrineWrapper::manager()->refresh($turnierEntity); # Doctrine erkennt die Änderungen in setErgebnis nicht.
         FreilosService::handleAusgerichtetesTurnierFreilos($turnierEntity);
         FreilosService::handleFreilosRecycling($turnierEntity);
         Helper::reload(get: "?turnier_id=" . $turnier_id);
@@ -103,14 +104,14 @@ if(!$spielplan->validate_penalty_ergebnisse()){
 
 // Gibt es eine Diskrepanz zwischen Turnierergebnis und in der Datenbank hinterlegtem Turnierergebnis?
 $error = false;
-$vgl_data = $spielplan->turnier->get_ergebnis();
+$vgl_data = $spielplan->turnier->getErgebnis();
 if (!empty($vgl_data)) {
     if (
         !$spielplan->check_turnier_beendet()
-        || count($vgl_data) != $spielplan->anzahl_teams
+        || count($vgl_data) != count($turnier->getSetzliste())
     ) {
         $error = true;
-    } elseif ($turnier->get_art() != 'final') {
+    } elseif (!$turnier->isFinalTurnier()) {
         foreach ($spielplan->platzierungstabelle as $ergebnis) {
             if ($vgl_data[$ergebnis['platz']]['ergebnis'] != $ergebnis['ligapunkte']) {
                 $error = true;
