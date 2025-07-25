@@ -78,7 +78,6 @@ class Nav
             [Env::BASE_URL . "/teamcenter/tc_kontaktcenter.php", "Kontaktcenter", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_teamdaten.php", "Teamdaten", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_kader.php", "Kader", $class_text_color],
-            [Env::BASE_URL . "/teamcenter/tc_abstimmung.php", "Abstimmung Fördermittel", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_antrag.php", "Fördermittel", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_pw_aendern.php", "Passwort ändern", $class_text_color],
         ];
@@ -121,7 +120,6 @@ class Nav
     public static function get_lc_start(): array
     {
         return array(
-            [Env::BASE_URL . "/ligacenter/lc_abstimmung.php", "Abstimmung Fördermittel", "w3-purple"],
             [Env::BASE_URL . "/schiricenter/schiritest_erstellen.php", "Schiritest", "w3-secondary"],
             [Env::BASE_URL . "/ligacenter/lc_turnierliste.php", "Turniere verwalten", "w3-primary"],
             [Env::BASE_URL . "/ligacenter/lc_turnier_erstellen.php", "Turnier erstellen", "w3-primary"],
@@ -175,7 +173,6 @@ class Nav
             [Env::BASE_URL . "/teamcenter/tc_kontaktcenter.php", "Kontaktcenter", "w3-tertiary"],
             [Env::BASE_URL . "/teamcenter/tc_teamdaten.php", "Teamdaten", "w3-green"],
             [Env::BASE_URL . "/teamcenter/tc_kader.php", "Kader", "w3-green"],
-            [Env::BASE_URL . "/teamcenter/tc_abstimmung.php", "Fördermittel Abstimmung", "w3-purple"],
             [Env::BASE_URL . "/teamcenter/tc_antrag.php", "Fördermittel", "w3-purple"],
             [Env::BASE_URL . "/teamcenter/tc_pw_aendern.php", "Passwort ändern", "w3-grey"],
             [Env::BASE_URL . "/teamcenter/tc_logout.php", "Logout", "w3-grey"],
