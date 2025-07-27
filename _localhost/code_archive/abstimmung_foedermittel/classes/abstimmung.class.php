@@ -11,6 +11,20 @@
  */
 class Abstimmung
 {
+    public const OPTIONS = [
+        "Ja" => "Ja",
+        "Nein" => "Nein",
+        "Keine_Angabe" => "Keine Angabe",
+    ];
+
+    public const OPTIONS_WICHTIGKEIT = [
+        "Trainingsmaterialien" => "Trainingsmaterialien für den A- und B-Kader",
+        "Trikots" => "Trikots und/oder Trainingsjacken für den A- und B-Kader",
+        "Hallenkosten" => "Hallenkosten bei Einradhockey-Veranstaltungen (Trainingslager, 24 Stunden Turniere etc.)",
+        "Verpflegung" => "Verpflegung für Teilnehmende bei Einradhockey-Veranstaltungen",
+        "Uebernachtungskosten" => "Übernachtungskosten bei Einradhockey-Veranstaltungen",
+        "Aufwandsentschaedigung" => "Aufwandsentschädigung von Übungsleitern bei Einradhockey-Veranstaltungen (z.B. Trainingslager)"
+    ];
 
     public static function selected(string $name, string $value, ?string $value_chosen): string
     {
@@ -21,43 +35,34 @@ class Abstimmung
     }
 
     /**
+     * Frühstmöglicher Zeitpunkt der Stimmabgabe
+     */
+    public const BEGINN = "17.03.2025 00:00";
+    /**
+     * Letztmöglicher Zeitpunkt der Stimmabgabe
+     */
+    public const ENDE = "13.04.2025 23:59";
+    /**
      * Verschlüsselungsverfahren für die TeamIDs
      */
     private const CIPHER = 'AES-256-CBC';
-    
     /**
      * Verhindert, dass bei einer neuen Abstimmung der gleiche Crypt bei gleichen Passwort und TeamID entsteht.
      * Muss für jede Liga-Abstimmung erneuert werden.
      */
-    private const IV = 'QwfeeKIxCI6qnvw6';
-
-    /**
-     * Frühstmöglicher Zeitpunkt der Stimmabgabe
-     */
-    public const BEGINN = "27.07.2025 11:00";
-    
-    /**
-     * Letztmöglicher Zeitpunkt der Stimmabgabe
-     */
-    public const ENDE = "27.07.2025 11:30";
-
-    public const LOGO1 = "/bilder/logo_kurz_small.png";
-    public const LOGO2 = "/bilder/logo_kurz_small.png";
-
+    private const IV = 'ZUEvrHAovY29t/bA';
     /**
      * @var array|string[] Daten aus der DB-Tabelle abstimmung_teams
      */
-    private array $team;
-    
+    public array $team;
     /**
      * @var int Eindeutige ligaweite TeamID
      */
-    private int $team_id;
-    
+    public int $team_id;
     /**
      * @var string Passwort-Hash, welcher für das Team bei erstmaliger Abstimmung hinterlegt war.
      */
-    private string $password_hash;
+    public string $passwort_hash;
 
     /**
      * Abstimmung constructor.
@@ -70,11 +75,9 @@ class Abstimmung
     public function __construct($team_id)
     {
         $this->team_id = $team_id;
-        
         if (!Team::is_ligateam($team_id)) {
             trigger_error("Ungültige Team-ID", E_USER_ERROR);
         }
-
         // Details aus abstimmung_teams bekommen
         $sql = "
                 SELECT *
@@ -85,36 +88,25 @@ class Abstimmung
 
         // Beim ersten Mal Abstimmen den für die Verschlüsselung benutzen Passwort-Hash speichern.
         if (empty($this->team)) {
-            $this->password_hash = (new Team($team_id))->details['passwort'];
+            $this->passwort_hash = (new Team($team_id))->details['passwort'];
         } else {
-            $this->password_hash = $this->team['passwort'];
+            $this->passwort_hash = $this->team['passwort'];
         }
 
     }
 
-    public function get_begin(): string
+    /**
+     * Optional: Entschlüsselung einer TeamID
+     *
+     * @param $passwort
+     * @param $crypt
+     * @return string
+     */
+    public function crypt_to_teamid($passwort, $crypt): string
     {
-        return self::BEGINN;
-    }
-
-    public function get_end(): string
-    {
-        return self::ENDE;
-    }
-
-    public function get_password_hash(): string
-    {
-        return $this->password_hash;
-    }
-
-    public function get_team_id(): int
-    {
-        return $this->team_id;
-    }
-
-    public function get_team(): array
-    {
-        return $this->team;
+        // Verwendete password-based key derivation, das User-Passwort kein geeigner Key ist zum verschlüsseln.
+        $key = hash_pbkdf2("sha256", $passwort, $this->passwort_hash, 8000);
+        return openssl_decrypt($crypt, self::CIPHER, $key, 0, self::IV);
     }
 
     /**
@@ -126,7 +118,7 @@ class Abstimmung
     public function teamid_to_crypt(string $passwort): string
     {
         // Verwendete password-based key derivation, das User-Passwort kein geeigner Key ist zum verschlüsseln.
-        $key = hash_pbkdf2("sha256", $passwort, $this->password_hash, 8000);
+        $key = hash_pbkdf2("sha256", $passwort, $this->passwort_hash, 8000);
         return openssl_encrypt($this->team_id, self::CIPHER, $key, 0, self::IV);
     }
 
@@ -143,7 +135,7 @@ class Abstimmung
             FROM abstimmung_ergebnisse
             WHERE crypt = ?
             ";
-        $stimme = db::$db->query($sql, $crypt)->fetch_one() ?? '';
+        $stimme =  db::$db->query($sql, $crypt)->fetch_one() ?? '';
         return json_decode($stimme, associative: true) ?? [];
     }
 
@@ -167,36 +159,30 @@ class Abstimmung
         }
 
         if (empty($this->team)) { // Team stimmt zum ersten Mal ab.
-            
             $sql = "
                 INSERT INTO abstimmung_teams (team_id, passwort)
                 VALUES ($this->team_id, ?)";
-            db::$db->query($sql, $this->password_hash)->log(true);
-            
+            db::$db->query($sql, $this->passwort_hash)->log(true);
             $sql = "
                 INSERT INTO abstimmung_ergebnisse (stimme, crypt) 
                 VALUES (?, ?)
                 ";
             db::$db->query($sql, $stimme, $crypt)->log(true);
-            
             Helper::log("abstimmung.log", "$this->team_id hat seine Stimme abgegeben");
             Html::info("Dein Team hat erfolgreich abgestimmt. Vielen Dank!");
         } else { // Team korrigiert seine Stimme
-            
             $sql = "
                 UPDATE abstimmung_ergebnisse
                 SET stimme = ?
                 WHERE crypt = ?
                 ";
             db::$db->query($sql, $stimme, $crypt)->log(true);
-            
             $sql = "
                 UPDATE abstimmung_teams
                 SET aenderungen = aenderungen + 1
                 WHERE team_id = $this->team_id
                 ";
             db::$db->query($sql)->log(true);
-            
             Helper::log("abstimmung.log", "$this->team_id hat seine Stimme geändert");
             Html::info("Dein Team hat erfolgreich neu abgestimmt. Vielen Dank!");
         }
@@ -209,16 +195,11 @@ class Abstimmung
      * @param int $min Minimale anzahl an Stimmen bis zur Veröffentlichung
      * @return array Array mit den Ergebnissen der Abstimmung
      */
-    public static function get_ergebnisse(int $min = 3): array
+    public static function get_ergebnisse(int $min = 0): array
     {
         $sql = 'select * from abstimmung_ergebnisse';
         $stimmen = db::$db->query($sql)->list('stimme');
-        
-        // Wenn die Anzahl der Stimmen unter dem Minimum ist, dann wird nichts ausgegeben.
-        if (count($stimmen) < $min) {
-            return [];
-        }
-        
+
         $ergebnisse = array();
         foreach ($stimmen as $key => $stimme) {
             $decode = json_decode($stimme, associative: true);
@@ -227,6 +208,11 @@ class Abstimmung
             }
         }
 
+        // Wenn die Anzahl der Stimmen unter dem Minimum ist, dann wird nichts ausgegeben.
+        if (count($stimmen) < $min) {
+            return [];
+        }
+        
         return $ergebnisse;
     }
 
