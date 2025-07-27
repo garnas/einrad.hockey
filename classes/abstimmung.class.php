@@ -34,13 +34,16 @@ class Abstimmung
     /**
      * Frühstmöglicher Zeitpunkt der Stimmabgabe
      */
-    private const BEGINN = "26.07.2025 00:00";
+    public const BEGINN = "27.07.2025 11:00";
     
     /**
      * Letztmöglicher Zeitpunkt der Stimmabgabe
      */
-    private const ENDE = "26.07.2025 17:00";
-    
+    public const ENDE = "27.07.2025 11:30";
+
+    public const LOGO1 = "/bilder/logo_kurz_small.png";
+    public const LOGO2 = "/bilder/logo_kurz_small.png";
+
     /**
      * @var array|string[] Daten aus der DB-Tabelle abstimmung_teams
      */
@@ -210,7 +213,12 @@ class Abstimmung
     {
         $sql = 'select * from abstimmung_ergebnisse';
         $stimmen = db::$db->query($sql)->list('stimme');
-
+        
+        // Wenn die Anzahl der Stimmen unter dem Minimum ist, dann wird nichts ausgegeben.
+        if (count($stimmen) < $min) {
+            return [];
+        }
+        
         $ergebnisse = array();
         foreach ($stimmen as $key => $stimme) {
             $decode = json_decode($stimme, associative: true);
@@ -219,11 +227,6 @@ class Abstimmung
             }
         }
 
-        // Wenn die Anzahl der Stimmen unter dem Minimum ist, dann wird nichts ausgegeben.
-        if (count($stimmen) < $min) {
-            return [];
-        }
-        
         return $ergebnisse;
     }
 
