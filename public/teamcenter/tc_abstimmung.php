@@ -68,9 +68,8 @@ include '../../templates/header.tmp.php';
 <!-- nach der abstimmung -->
 <?php if ($abschluss <= time()): ?>
     <section class="w3-section w3-padding w3-light-grey">
-        <p>
-            Die Abstimmung ist beendet. Vielen Dank für eure Teilnahme!
-        </p>
+        <p>Die Abstimmung ist beendet. Vielen Dank für eure Teilnahme!</p>
+        <p><?= Html::link('../liga/abstimmung.php', "Zu den Ergebnissen") ?></p>
     </section>
 <?php endif; ?>
 
