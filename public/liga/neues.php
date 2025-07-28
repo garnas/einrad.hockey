@@ -306,7 +306,8 @@ include '../../templates/header.tmp.php'; ?>
                         <!-- Darstellungen des Ligaausschusses; Die Berechtigung wird nicht geprüft -->
                         <div class="w3-section">
                             <div class="w3-row">
-                                <a class='no w3-button w3-tertiary' href="../ligacenter/lc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>"><?= Html::icon("create") ?> Bearbeiten</a>
+                                <a class='no w3-button w3-light-grey' href="../ligacenter/lc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>"><?= Html::icon("create") ?> Bearbeiten</a>
+                                <a class='no w3-button w3-light-grey' href="../ligacenter/lc_neuigkeit_archivieren.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>"><?= Html::icon("archive") ?> Archivieren</a>
                                 <a class='no w3-button w3-secondary' href="../ligacenter/lc_neuigkeit_loeschen.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>" ><?= Html::icon("delete") ?> Löschen</a>
                             </div>
                         </div>
@@ -316,17 +317,19 @@ include '../../templates/header.tmp.php'; ?>
                         <!-- Darstellungen des Öffentlichkeitsausschusses; Die Berechtigung wird nicht geprüft -->
                         <div class="w3-section">
                             <div class="w3-row">
-                                <a class='no w3-button w3-tertiary' href="../oefficenter/oc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>"><?= Html::icon("create") ?> Bearbeiten</a>
+                                <a class='no w3-button w3-light-grey' href="../oefficenter/oc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>"><?= Html::icon("create") ?> Bearbeiten</a>
+                                <a class='no w3-button w3-light-grey' href="../oefficenter/oc_neuigkeit_archivieren.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>"><?= Html::icon("archive") ?> Archivieren</a>
                                 <a class='no w3-button w3-secondary' href="../oefficenter/oc_neuigkeit_loeschen.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>" ><?= Html::icon("delete") ?> Löschen</a>
                             </div>
                         </div>
                     <?php endif ?>
 
-                    <?php if (Neuigkeit::darf_bearbeiten($neuigkeit['eingetragen_von'])): ?>
+                    <?php if (isset($_SESSION['logins']['team']['name']) && $_SESSION['logins']['team']['name'] === $neuigkeit['eingetragen_von']): ?>
                         <!-- Darstellungen des Teams; Die Berechtigung wird nicht geprüft -->
                         <div class="w3-section">
                             <div class="w3-row">
-                                <a class='no w3-button w3-tertiary' href="../teamcenter/tc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>"><?= Html::icon("create") ?> Bearbeiten</a>
+                                <a class='no w3-button w3-light-grey' href="../teamcenter/tc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>"><?= Html::icon("create") ?> Bearbeiten</a>
+                                <a class='no w3-button w3-light-grey' href="../teamcenter/tc_neuigkeit_archivieren.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>"><?= Html::icon("archive") ?> Archivieren</a>
                                 <a class='no w3-button w3-secondary' href="../teamcenter/tc_neuigkeit_loeschen.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>" ><?= Html::icon("delete") ?> Löschen</a>
                             </div>
                         </div>

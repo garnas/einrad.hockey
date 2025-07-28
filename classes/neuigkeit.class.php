@@ -72,6 +72,15 @@ class Neuigkeit
         db::$db->query($sql, $params)->log();
     }
 
+    public static function archive(int $neuigkeiten_id): void
+    {
+        $sql = "
+            UPDATE neuigkeiten 
+            SET aktiv = 0 
+            WHERE neuigkeiten_id = ?
+        ";
+        db::$db->query($sql, $neuigkeiten_id)->log();
+    }
 
     /**
      * Wandelt die Zeichen in den Neuigkeiten-Einträgen um, damit sie HTML-Entities sind
@@ -404,6 +413,21 @@ class Neuigkeit
         }
 
         // Das Team darf nur löschen, wenn es die Neuigkeit selbst eingetragen hat
+        if (isset($_SESSION['logins']['team']['name']) && $_SESSION['logins']['team']['name'] === $eingetragen_von) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    public static function darf_archivieren(string $eingetragen_von): bool
+    {
+        // Der Ligaausschuss und der Öffentlichkeitsausschuss dürfen immer archivieren
+        if (Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss) {
+            return true;
+        }
+
+        // Das Team darf nur archivieren, wenn es die Neuigkeit selbst eingetragen hat
         if (isset($_SESSION['logins']['team']['name']) && $_SESSION['logins']['team']['name'] === $eingetragen_von) {
             return true;
         }
