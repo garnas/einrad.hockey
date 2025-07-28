@@ -1,37 +1,54 @@
 <!-- Neuigkeit eintragen -->
-<h3>Neuigkeit eintragen</h3>
-<p id="counter"><i>Es dürfen 750 Zeichen verwendet werden. Für mehr Infos kannst du ein Bild und/oder ein PDF hochladen.</i><p>
+<h1 class="w3-text-primary">Neuigkeit eintragen</h1>
+
 <form action="" method="post" enctype="multipart/form-data">
-    <p>
-        <label class="" for="titel">Titel (Optional)</label>
-        <input class="w3-input w3-border w3-border-primary" type="text" id="titel" name="titel" value="<?=$_POST['titel'] ?? ''?>" >
-    </p><p>
-        <label class="" for="text">Text</label>
-        <textarea required class="w3-input w3-border w3-border-primary" rows="10" id="text" name="text" onkeyup="woerter_zaehlen(750)" maxlength="750"><?=stripcslashes($_POST['text'] ?? '')?></textarea>
-    </p>
-    <div class="w3-border w3-border-primary">
-        <div class="w3-panel">
-            <h3>Bild einfügen</h3>
-            <p><i>Es können nur Bilder im <b>.jpg, .jpeg, .gif, .png</b> Format mit bis zu 11,9 Megabyte hochgeladen werden. Bilder werden webtauglich verarbeitet - exif-Daten der Bilder werden gelöscht.</i></p>
-            <p>
-                <input class="w3-button w3-block w3-primary" type="file" name="jpgupload" id="jpgupload">
-            </p>
-            <?php if(Neuigkeit::darf_verlinken()){?>
-                <p>
-                    <label class="" for="bild_verlinken">Bild verlinken (optional) | nur Ausschuss</label>
-                    <input class="w3-input w3-border w3-border-primary" placeholder="Link angeben" type="url" id="bild_verlinken" name="bild_verlinken" value="<?=$_POST['bild_verlinken'] ?? ''?>" >
-                </p>
-            <?php } //endif?>
-        </div>
-        <div class="w3-panel">
-            <h3>Dokument anhängen</h3>
-            <p><i>Es können nur Dateien im <b>.pdf / .xlsx</b> Format mit bis zu <b>3 MB</b> hochgeladen werden.</i></p>
-            <p>
-                <input class="w3-button w3-block w3-primary" type="file" name="pdfupload" id="pdfupload">
-            </p>
+    <div class="w3-section">
+        <div class="w3-border w3-border-primary" style="padding: 16px;">
+            <label for="titel">Titel (Optional)</label>
+            <input class="w3-input w3-border w3-border-grey" type="text" id="titel" name="titel" placeholder="Titel der Neuigkeit" value="<?=$_POST['titel'] ?? ''?>" >
         </div>
     </div>
-    <p>
-        <input type="submit" class="w3-secondary w3-block w3-button" id="submit" name="create_neuigkeit" value="Neuigkeit eintragen">
-    </p>
+    
+    <div class="w3-section">
+        <div class="w3-border w3-border-primary" style="padding: 16px;">
+            <label for="text">Text</label>
+            <textarea required class="w3-input w3-border w3-border-grey" rows="10" id="text" name="text" placeholder="Text der Neuigkeit" onkeyup="woerter_zaehlen(750)" maxlength="750"><?=stripcslashes($_POST['text'] ?? '')?></textarea>
+            <p id="counter"><i>Es dürfen 750 Zeichen verwendet werden. Für mehr Infos kannst du ein Bild und/oder ein PDF hochladen.</i><p>
+        </div>
+    </div>
+    
+    <div class="w3-section">
+        <div class="w3-border w3-border-primary" style="padding: 16px;">
+            <label for="jpgupload">Bild (Optional)</label><br>
+            <input class="w3-primary w3-padding" type="file" name="jpgupload" id="jpgupload">
+            <p><i>Es können nur Bilder im <b>.jpg, .jpeg, .gif, .png</b> Format mit bis zu 11,9 Megabyte hochgeladen werden. Bilder werden webtauglich verarbeitet - exif-Daten der Bilder werden gelöscht.</i></p>
+            
+            <?php if(Neuigkeit::darf_verlinken()):?>
+                <label for="bild_verlinken">Bild verlinken (Optional)</label><br>
+                <input class="w3-input w3-border w3-border-grey" placeholder="Link angeben" type="url" id="bild_verlinken" name="bild_verlinken" value="<?=$_POST['bild_verlinken'] ?? ''?>" >
+            <?php endif; ?>
+
+        </div>
+    </div>
+    
+    <div class="w3-section">
+        <div class="w3-border w3-border-primary" style="padding: 16px;">
+            <label for="pdfupload">Dokument (Optional)</label><br>
+            <input class="w3-primary w3-padding" type="file" name="pdfupload" id="pdfupload">
+            <p><i>Es können nur Dateien im <b>.pdf / .xlsx</b> Format mit bis zu <b>3 MB</b> hochgeladen werden.</i></p>
+        </div>
+    </div>
+
+    <?php if(Neuigkeit::darf_datum_festlegen()): ?>
+        <div class="w3-section">
+            <div class="w3-border w3-border-primary" style="padding: 16px;">
+                <label for="zeitpunkt">Veröffentlichungszeitpunkt</label><br>
+                <input type="datetime-local" class="w3-input w3-border w3-border-grey" id="zeitpunkt" name="zeitpunkt" value="<?=date('Y-m-d\TH:i')?>">
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <div class="w3-section">
+        <input type="submit" class="w3-button w3-primary" id="submit" name="create_neuigkeit" value="Neuigkeit eintragen">
+    </div>
 </form>

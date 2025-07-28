@@ -14,17 +14,18 @@ class Neuigkeit
      * @param string $titel
      * @param string $text
      * @param string $name
+     * @param string $zeitpunkt
      * @param string $link_jpg
      * @param string $link_pdf
      * @param string $bild_verlinken
      */
-    public static function create(string $titel, string $text, string $name, string $link_jpg = '', string $link_pdf = '', string $bild_verlinken = '')
+    public static function create(string $titel, string $text, string $name, string $zeitpunkt, string $link_jpg = '', string $link_pdf = '', string $bild_verlinken = '')
     {
         $sql = "
-                INSERT INTO neuigkeiten (titel, inhalt, eingetragen_von, link_jpg, link_pdf, bild_verlinken) 
-                VALUES (?, ?, ?, ?, ?, ?)
-                ";
-        $params = [$titel, $text, $name, $link_jpg, $link_pdf, $bild_verlinken];
+            INSERT INTO neuigkeiten (titel, inhalt, link_pdf, link_jpg, bild_verlinken, eingetragen_von, zeit) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ";
+        $params = [$titel, $text, $link_pdf, $link_jpg, $bild_verlinken, $name, $zeitpunkt];
         db::$db->query($sql, $params)->log();
     }
 
@@ -36,8 +37,7 @@ class Neuigkeit
     public static function delete($neuigkeiten_id): void
     {
         // Bilder und Dokumente der Neuigkeit löschen
-        $neuigkeit = self::get_neuigkeiten($neuigkeiten_id);
-        $neuigkeit = $neuigkeit[$neuigkeiten_id];
+        $neuigkeit = self::get_neuigkeit_by_id($neuigkeiten_id);
 
         if (file_exists($neuigkeit['link_jpg'])) unlink($neuigkeit['link_jpg']);
         if (file_exists($neuigkeit['link_pdf'])) unlink($neuigkeit['link_pdf']);
@@ -66,38 +66,21 @@ class Neuigkeit
     {
         $sql = "
                 UPDATE neuigkeiten 
-                SET titel = ?, inhalt = ?, link_jpg = ?, link_pdf = ?, bild_verlinken = ?, zeit = zeit 
+                SET titel = ?, inhalt = ?, link_jpg = ?, link_pdf = ?, bild_verlinken = ?, zeit=zeit
                 WHERE neuigkeiten_id = '$neuigkeiten_id'
-                "; // zeit=zeit, damit der timestamp nicht erneuert wird
+                ";
         $params = [$titel, $inhalt, $link_jpg, $link_pdf, $bild_verlinken];
         db::$db->query($sql, $params)->log();
     }
 
     /**
-     * Neuigkeiten aus der DB
+     * Wandelt die Zeichen in den Neuigkeiten-Einträgen um, damit sie HTML-Entities sind
      *
-     * Wenn keine Neuigkeit ausgewählt wird, werden die letzten 10 ausgegeben
-     * @param int $neuigkeiten_id
+     * @param array $neuigkeiten
      * @return array
      */
-    public static function get_neuigkeiten(int $neuigkeiten_id = 0): array
+    private static function characters(array $neuigkeiten): array
     {
-        if (empty($neuigkeiten_id)) { // Alle Neuigkeiten
-            $sql = "
-                SELECT * 
-                FROM neuigkeiten 
-                ORDER BY zeit DESC 
-                LIMIT 10
-                "; // Es werden max. 10 Neuigkeiten angezeigt
-            $neuigkeiten = db::$db->query($sql)->esc()->fetch('neuigkeiten_id');
-        } else { // Eine Neuigkeit
-            $sql = "
-                SELECT * 
-                FROM neuigkeiten 
-                WHERE neuigkeiten_id = ? 
-                ";
-            $neuigkeiten = db::$db->query($sql, $neuigkeiten_id)->esc()->fetch('neuigkeiten_id');
-        }
         foreach ($neuigkeiten as $key => $neuigkeit) {
             if (
                 $neuigkeit['eingetragen_von'] === 'Ligaausschuss'
@@ -108,7 +91,47 @@ class Neuigkeit
                 $neuigkeiten[$key]['titel'] = htmlspecialchars_decode($neuigkeit['titel'], ENT_QUOTES);
             }
         }
+
         return $neuigkeiten;
+    }
+
+    /**
+     * Erhalte die Neuigkeiten aus der Datenbank.
+     *
+     * Gibt die letzten 10 Neuigkeiten zurück, wenn $limit true ist.
+     * @param bool $limit
+     * @return array
+     */
+    public static function get_neuigkeiten(bool $limit = true): array
+    {
+        $sql = "
+            SELECT * 
+            FROM neuigkeiten
+            WHERE zeit <= '" . date("Y-m-d H:i:s") . "'
+            AND aktiv = 1
+            ORDER BY zeit DESC 
+            " . ($limit ? "LIMIT 10" : "") . "
+        ";
+        $neuigkeiten = db::$db->query($sql)->esc()->fetch('neuigkeiten_id');
+        $neuigkeiten = self::characters($neuigkeiten);
+        return $neuigkeiten;
+    }
+
+    /**
+     * Erhalte eine Neuigkeit aus der Datenbank.
+     *
+     * @param int $neuigkeiten_id
+     * @return array
+     */
+    public static function get_neuigkeit_by_id(int $neuigkeiten_id): array
+    {
+        $sql = "
+            SELECT * 
+            FROM neuigkeiten 
+            WHERE neuigkeiten_id = ? 
+        ";
+        $neuigkeit = db::$db->query($sql, $neuigkeiten_id)->esc()->fetch('neuigkeiten_id');
+        return $neuigkeit[$neuigkeiten_id] ?? [];
     }
 
     /**
@@ -335,6 +358,11 @@ class Neuigkeit
     }
 
     public static function darf_verlinken(): bool
+    {
+        return Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss;
+    }
+
+    public static function darf_datum_festlegen(): bool
     {
         return Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss;
     }
