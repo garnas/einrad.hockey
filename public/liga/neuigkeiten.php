@@ -56,7 +56,7 @@ include '../../templates/header.tmp.php'; ?>
 <div class="w3-row-padding w3-stretch">
     
     <div class="w3-col l3 m4 w3-hide-small">
-        <div class="w3-panel w3-card-4 w3-round w3-bottombar">
+        <div class="w3-panel w3-card-4">
             <div class="w3-stretch w3-container w3-primary">
                 <h3>Zeitleiste</h3>
             </div>
@@ -80,7 +80,7 @@ include '../../templates/header.tmp.php'; ?>
     <div class="w3-col l9 m8">
         <?php foreach ($neuigkeiten_nach_jahr as $jahr => $neuigkeiten_nach_monat): ?>
             <?php foreach ($neuigkeiten_nach_monat as $monat => $neuigkeiten): ?>
-                <h2 id="<?= $jahr ?><?= $monat ?>" class="w3-text-primary"><?= $monate[$monat] ?> <?= $jahr ?></h2>
+                <h2 id="<?= $jahr ?><?= $monat ?>" class="w3-text-primary w3-border-bottom w3-border-grey"><?= $monate[$monat] ?> <?= $jahr ?></h2>
                 <?php foreach ($neuigkeiten as $neuigkeit): ?>
                     <?php include '../../templates/neuigkeiten/neuigkeit.tmp.php'; ?>
                 <?php endforeach; ?>

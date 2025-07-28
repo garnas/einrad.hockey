@@ -1,4 +1,4 @@
-<div class='w3-panel w3-card-4 w3-round w3-responsive w3-bottombar'>
+<div class='w3-panel w3-card-4 w3-responsive <?=$neuigkeit['titel'] ? "" : "w3-topbar w3-border-primary"?>'>
     <?php if ($neuigkeit['titel']): ?>
         <!-- Überschrift -->
         <h3 class="w3-center w3-primary w3-padding-small" style="margin: 0 -16px;">

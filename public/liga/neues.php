@@ -80,7 +80,7 @@ include '../../templates/header.tmp.php'; ?>
         <div class="w3-col l4 m5 w3-hide-small" id="infobar">
 
             <!-- Interesse -->
-            <div class="w3-panel w3-card-4 w3-responsive w3-round w3-bottombar">
+            <div class="w3-panel w3-card-4 w3-responsive">
                 <div class="w3-stretch w3-container w3-primary w3-hover-tertiary">
                     <a href='ueber_uns.php' class="no">
                         <h3><?= Html::icon("help_outline", tag: "h1") ?> Interesse</h3>
@@ -92,7 +92,7 @@ include '../../templates/header.tmp.php'; ?>
             </div>
 
             <!-- Anstehende Turniere -->
-            <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
+            <div class="w3-panel w3-card-4 w3-responsive">
                 <div class="w3-stretch w3-container w3-primary w3-hover-tertiary">
                     <a href='turniere.php' class="no">
                         <h3><?= Html::icon("event", tag: "h2") ?> Turniere</h3>
@@ -117,7 +117,7 @@ include '../../templates/header.tmp.php'; ?>
             </div>
 
             <!-- Ergebnisse -->
-            <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
+            <div class="w3-panel w3-card-4 w3-responsive">
                 <div class="w3-stretch w3-container w3-primary w3-hover-tertiary">
                     <a href='ergebnisse.php' class="no">
                         <h3><?= Html::icon("sports_hockey", tag: "h2") ?> Ergebnisse</h3>
@@ -143,7 +143,7 @@ include '../../templates/header.tmp.php'; ?>
             </div>
 
             <!-- Statistik -->
-            <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
+            <div class="w3-panel w3-card-4 w3-responsive">
                 <div class="w3-stretch w3-container w3-primary w3-hover-tertiary">
                     <a href='statistik.php' class="no">
                         <h3><?= Html::icon("insert_chart_outlined", tag: "h2") ?> Statistik</h3>
@@ -155,7 +155,7 @@ include '../../templates/header.tmp.php'; ?>
                 <div class="w3-section">
                     <div class="w3-responsive">
                         <table class="w3-table w3-bordered">
-                            <tr class="w3-bottombar w3-text-grey w3-large w3-border-primary">
+                            <tr class="w3-text-grey w3-large w3-border-primary">
                                 <td colspan="3"><?= Html::icon("insert_chart_outlined") ?> Allgemein</td>
                             </tr>
                             <tr>
@@ -192,7 +192,7 @@ include '../../templates/header.tmp.php'; ?>
                     <div class="w3-section">
                         <div class="w3-responsive">
                             <table class="w3-table w3-centered w3-bordered">
-                                <tr class="w3-bottombar w3-text-grey w3-large w3-border-primary">
+                                <tr class="w3-text-grey w3-large w3-border-primary">
                                     <td><?= Html::icon("leaderboard") ?></td>
                                     <td>Turnierspieler</td>
                                     <td><?= Html::icon("assistant_photo") ?></td>
@@ -218,7 +218,7 @@ include '../../templates/header.tmp.php'; ?>
                     <div class="w3-section">
                         <div class="w3-responsive">
                             <table class="w3-table w3-centered w3-bordered">
-                                <tr class="w3-bottombar w3-text-grey w3-large w3-border-primary">
+                                <tr class="w3-text-grey w3-large w3-border-primary">
                                     <td><?= Html::icon("leaderboard") ?></td>
                                     <td>Spielgewinner</td>
                                     <td><?= Html::icon("sports_hockey") ?></td>
@@ -241,7 +241,7 @@ include '../../templates/header.tmp.php'; ?>
             </div>
 
             <!-- Links -->
-            <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
+            <div class="w3-panel w3-card-4 w3-responsive">
                 <div class="w3-stretch w3-container w3-primary">
                     <h3><?= Html::icon("public", tag: "h2") ?> Links</h3>
                 </div>
