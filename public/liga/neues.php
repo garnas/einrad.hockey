@@ -262,21 +262,21 @@ include '../../templates/header.tmp.php'; ?>
 
         <!-- Neuigkeiten-Einträge -->
         <div class="w3-col l8 m7">
-            <?php foreach ($neuigkeiten as $neuigkeit): //Schleife für jede Neuigkeit?>
-                <div class='w3-card-4 w3-panel w3-responsive w3-round w3-bottombar'>
+            <?php foreach ($neuigkeiten as $neuigkeit):?>
+                <div class='w3-panel w3-card-4 w3-round w3-responsive w3-bottombar'>
 
                     <!-- Überschrift -->
                     <?php if ($neuigkeit['titel']): ?>
-                        <div class="w3-stretch w3-container w3-primary w3-center">
-                            <h3><?= $neuigkeit['titel'] ?></h3>
-                        </div>
+                        <h3 class="w3-center w3-primary w3-padding-small" style="margin: 0 -16px;">
+                            <?= $neuigkeit['titel'] ?>
+                        </h3>
                     <?php endif; ?>
 
                     <!-- Bild -->
                     <?php if ($neuigkeit['link_jpg'] != ''): ?>
-                        <div class='w3-center w3-card w3-section'>
+                        <div class='w3-section w3-center w3-stretch w3-light-grey'>
                             <a href='<?= $neuigkeit['bild_verlinken'] ?: $neuigkeit['link_jpg'] ?>'>
-                                <img class='w3-image w3-hover-opacity' alt="<?= $neuigkeit['titel'] ?? "Foto"?>" src=<?= $neuigkeit['link_jpg'] ?>>
+                                <img class='w3-image w3-hover-opacity' alt="Bild für die Neuigkeit '<?= $neuigkeit['titel'] ?? "Ohne Titel" ?>' " src=<?= $neuigkeit['link_jpg'] ?>>
                             </a>
                         </div>
                     <?php endif; ?>
@@ -285,57 +285,52 @@ include '../../templates/header.tmp.php'; ?>
                     <div class="w3-section">
                         <?= nl2br($neuigkeit['inhalt']) ?>
                     </div>
-
-                    <!-- PDF -->
+                    
                     <?php if ($neuigkeit['link_pdf'] != ''): ?>
+                        <!-- PDF -->
                         <?= Html::link($neuigkeit['link_pdf'], "PDF-Anhang", true, "insert_drive_file") ?>
                     <?php endif; ?>
 
-                    <!-- Autor + Zeitstempel -->
-                    <div class='w3-text-grey w3-hide-small w3-hide-medium'>
-                        <p class="w3-left">
-                            <?= Html::icon("create") ?> <?= ($neuigkeit['eingetragen_von']) ?>
-                        </p>
-                        <p class='w3-right'>
-                            <?= Html::icon("schedule") ?> <?= $neuigkeit['zeit'] ?>
-                        </p>
+                    <div class='w3-section w3-text-grey'>
+                        <div class="w3-row w3-hide-medium w3-hide-small">
+                            <div class="w3-col l6 w3-left-align"><?= Html::icon("create") ?> <?= ($neuigkeit['eingetragen_von']) ?></div>
+                            <div class="w3-col l6 w3-right-align"><?= Html::icon("schedule") ?> <?= $neuigkeit['zeit'] ?></div>
+                        </div>
+                        <div class="w3-row w3-hide-large">
+                            <div class="w3-right-align"><?= Html::icon("schedule") ?> <?= $neuigkeit['zeit'] ?></div>
+                            <div class="w3-right-align"><?= Html::icon("create") ?> <?= ($neuigkeit['eingetragen_von']) ?></div>
+                        </div>
                     </div>
-                    <div class='w3-text-grey w3-hide-large'>
-                        <p class="w3-right">
-                            <?= Html::icon("create") ?> <?= ($neuigkeit['eingetragen_von']) ?>
-                            <br>
-                            <?= Html::icon("schedule") ?> <?= $neuigkeit['zeit'] ?>
-                        </p>
-                    </div>
-                    <!-- Link zum Bearbeiten falls man im Ligacenter oder Teamcenter eingeloggt ist -->
-                    <?php if (LigaLeitung::is_logged_in("ligaausschuss")){ ?>
-                        <p>
-                            <a href='../ligacenter/lc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>' class='no'>
-                                <button class="w3-button w3-block w3-tertiary">
-                                    <?= Html::icon("create") ?> Bearbeiten
-                                </button>
-                            </a>
-                        </p>
-                    <?php } elseif (
-                            LigaLeitung::is_logged_in("oeffentlichkeitsausschuss")
-                            && $neuigkeit["eingetragen_von"] == "Öffentlichkeitsausschuss"
-                          ){ ?>
-                    <p>
-                        <a href='../oefficenter/oc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>' class='no'>
-                            <button class="w3-button w3-block w3-tertiary">
-                                <?= Html::icon("create") ?> Bearbeiten
-                            </button>
-                        </a>
-                    </p>
-                    <?php } elseif (Neuigkeit::darf_bearbeiten($neuigkeit['eingetragen_von'])){ ?>
-                        <p>
-                            <a href='../teamcenter/tc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>' class='no'>
-                                <button class="w3-button w3-block w3-tertiary">
-                                    <?= Html::icon("create") ?> Bearbeiten
-                                </button>
-                            </a>
-                        </p>
-                    <?php } //end if?>
+                    
+                    <?php if (LigaLeitung::is_logged_in("ligaausschuss")): ?>
+                        <!-- Darstellungen des Ligaausschusses; Die Berechtigung wird nicht geprüft -->
+                        <div class="w3-section">
+                            <div class="w3-row">
+                                <a class='no w3-button w3-tertiary' href="../ligacenter/lc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>"><?= Html::icon("create") ?> Bearbeiten</a>
+                                <a class='no w3-button w3-secondary' href="../ligacenter/lc_neuigkeit_loeschen.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>" ><?= Html::icon("delete") ?> Löschen</a>
+                            </div>
+                        </div>
+                    <?php endif ?>
+
+                    <?php if (LigaLeitung::is_logged_in("oeffentlichkeitsausschuss")): ?>
+                        <!-- Darstellungen des Öffentlichkeitsausschusses; Die Berechtigung wird nicht geprüft -->
+                        <div class="w3-section">
+                            <div class="w3-row">
+                                <a class='no w3-button w3-tertiary' href="../oefficenter/oc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>"><?= Html::icon("create") ?> Bearbeiten</a>
+                                <a class='no w3-button w3-secondary' href="../oefficenter/oc_neuigkeit_loeschen.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>" ><?= Html::icon("delete") ?> Löschen</a>
+                            </div>
+                        </div>
+                    <?php endif ?>
+
+                    <?php if (Neuigkeit::darf_bearbeiten($neuigkeit['eingetragen_von'])): ?>
+                        <!-- Darstellungen des Teams; Die Berechtigung wird nicht geprüft -->
+                        <div class="w3-section">
+                            <div class="w3-row">
+                                <a class='no w3-button w3-tertiary' href="../teamcenter/tc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>"><?= Html::icon("create") ?> Bearbeiten</a>
+                                <a class='no w3-button w3-secondary' href="../teamcenter/tc_neuigkeit_loeschen.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>" ><?= Html::icon("delete") ?> Löschen</a>
+                            </div>
+                        </div>
+                    <?php endif ?>
                 </div>
             <?php endforeach; ?>
         </div>

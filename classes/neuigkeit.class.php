@@ -88,7 +88,11 @@ class Neuigkeit
                 || $neuigkeit['eingetragen_von'] === "Nationalkader"
             ) {
                 $neuigkeiten[$key]['inhalt'] = htmlspecialchars_decode($neuigkeit['inhalt'], ENT_QUOTES);
-                $neuigkeiten[$key]['titel'] = htmlspecialchars_decode($neuigkeit['titel'], ENT_QUOTES);
+                
+                if (isset($neuigkeit['titel'])) {
+                    // Titel wird nur dekodiert, wenn er gesetzt ist
+                    $neuigkeiten[$key]['titel'] = htmlspecialchars_decode($neuigkeit['titel'], ENT_QUOTES);
+                }
             }
         }
 
@@ -366,32 +370,44 @@ class Neuigkeit
     {
         return Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss;
     }
-
+       
     public static function darf_bearbeiten(string $eingetragen_von): bool
     {
-        // LA?
+        // Der Ligaausschuss darf immer bearbeiten
         if (Helper::$ligacenter) {
             return true;
         }
 
+        // Der Öffentlichkeitsausschuss darf bearbeiten, wenn es nicht vom Ligaausschuss eingetragen wurde
+        if (Helper::$oeffentlichkeitsausschuss && !($eingetragen_von === "Ligaausschuss")) {
+            return true;
+        }
+
         // Vom Team eingetragen?
-        if (
-            isset($_SESSION['logins']['team']['name'])
-            && $_SESSION['logins']['team']['name'] == $eingetragen_von
-        ) {
+        if (isset($_SESSION['logins']['team']['name']) && $_SESSION['logins']['team']['name'] === $eingetragen_von) {
             return true;
         }
-
-        // Team Teil des Öffis?
-        if (
-            $eingetragen_von === "Öffentlichkeitsausschuss"
-            && Helper::$oeffentlichkeitsausschuss
-        ) {
-            return true;
-        }
-
+        
         return false;
-
     }
 
+    public static function darf_loeschen(string $eingetragen_von): bool
+    {
+        // Der Ligaausschuss darf immer löschen
+        if (Helper::$ligacenter) {
+            return true;
+        }
+
+        // Der Öffentlichkeitsausschuss darf nur löschen, wenn er die Neuigkeit selbst eingetragen hat
+        if (Helper::$oeffentlichkeitsausschuss && $eingetragen_von === "Öffentlichkeitsausschuss") {
+            return true;
+        }
+
+        // Das Team darf nur löschen, wenn es die Neuigkeit selbst eingetragen hat
+        if (isset($_SESSION['logins']['team']['name']) && $_SESSION['logins']['team']['name'] === $eingetragen_von) {
+            return true;
+        }
+        
+        return false;
+    }
 }

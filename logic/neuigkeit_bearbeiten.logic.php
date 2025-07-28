@@ -13,14 +13,6 @@ if (!Neuigkeit::darf_bearbeiten($neuigkeit['eingetragen_von'])) {
 
 $error = false;
 
-// Neuigkeit löschen
-if (isset($_POST['delete_neuigkeit'])) {
-    Neuigkeit::delete($neuigkeiten_id);
-    Html::info("Neuigkeit wurde gelöscht");
-    header('Location: ../liga/neues.php');
-    die();
-}
-
 // Neuigkeiten verändern
 if (isset($_POST['change_neuigkeit'])) {
 
