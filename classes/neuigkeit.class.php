@@ -61,7 +61,7 @@ class Neuigkeit
      * @param string $link_pdf
      * @param string $bild_verlinken
      */
-    public static function update_neuigkeit(int $neuigkeiten_id, string $titel, string $inhalt, string $zeitpunkt, string $link_jpg, string $link_pdf, string $bild_verlinken = '')
+    public static function update(int $neuigkeiten_id, string $titel, string $inhalt, string $zeitpunkt, string $link_jpg, string $link_pdf, string $bild_verlinken = '')
     {
         $sql = "
                 UPDATE neuigkeiten 

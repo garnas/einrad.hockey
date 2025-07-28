@@ -87,7 +87,7 @@ if (isset($_POST['change_neuigkeit'])) {
         unlink($neuigkeit['link_pdf']);
     }
 
-    Neuigkeit::update_neuigkeit($neuigkeiten_id, $titel, $text, $zeitpunkt, $target_file_jpg, $target_file_pdf, $bild_verlinken);
+    Neuigkeit::update($neuigkeiten_id, $titel, $text, $zeitpunkt, $target_file_jpg, $target_file_pdf, $bild_verlinken);
     
     Html::info("Die Neuigkeit wurde bearbeitet.");
     header('Location: ../liga/neues.php');
