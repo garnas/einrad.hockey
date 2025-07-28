@@ -40,8 +40,8 @@
         <div class='w3-section w3-text-grey'>
             <div class="w3-row w3-hide-medium w3-hide-small">
                 <div class="w3-col l6 w3-left-align"><?= Html::icon("create") ?> <?= ($neuigkeit['eingetragen_von']) ?></div>
-                <div class="w3-col l4 w3-right-align"><?= Html::icon("archive") ?> Archiviert</div>
-                <div class="w3-col l2 w3-right-align"><?= Html::icon("schedule") ?> <?= $neuigkeit['zeit'] ?></div>
+                <div class="w3-col l3 w3-right-align"><?= Html::icon("archive") ?> Archiviert</div>
+                <div class="w3-col l3 w3-right-align"><?= Html::icon("schedule") ?> <?= $neuigkeit['zeit'] ?></div>
             </div>
             <div class="w3-row w3-hide-large">
                 <div class="w3-right-align"><?= Html::icon("schedule") ?> <?= $neuigkeit['zeit'] ?></div>

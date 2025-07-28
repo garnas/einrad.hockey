@@ -5,9 +5,15 @@
 
 require_once '../../init.php';
 
+$saison = (isset($_GET['saison'])) ? (int)$_GET['saison'] : Config::SAISON;
 $neuigkeiten = Neuigkeit::get_neuigkeiten(limit: false, aktiv: null);
 
-foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit) {
+// gruppiere die neuigkeiten nach jahr und monaten
+$neuigkeiten_nach_jahr = [];
+foreach ($neuigkeiten as $neuigkeit) {
+    $jahr = date("Y", strtotime($neuigkeit['zeit']));
+    $monat = date("m", strtotime($neuigkeit['zeit']));
+
     $delta_zeit = (time() - strtotime($neuigkeit['zeit'])) / (60 * 60); //in Stunden
     if ($delta_zeit < 24) {
         $zeit = ($delta_zeit <= 1.5) ? "gerade eben" : "vor " . round($delta_zeit) . " Stunden";
@@ -16,8 +22,25 @@ foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit) {
     } else {
         $zeit = date("d.m.Y", strtotime($neuigkeit['zeit']));
     }
-    $neuigkeiten[$neuigkeiten_id]['zeit'] = $zeit;
+
+    $neuigkeit['zeit'] = $zeit;
+    $neuigkeiten_nach_jahr[$jahr][$monat][] = $neuigkeit;
 }
+
+$monate = [
+    '01' => 'Januar',
+    '02' => 'Februar',
+    '03' => 'März',
+    '04' => 'April',
+    '05' => 'Mai',
+    '06' => 'Juni',
+    '07' => 'Juli',
+    '08' => 'August',
+    '09' => 'September',
+    '10' => 'Oktober',
+    '11' => 'November',
+    '12' => 'Dezember'
+];
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -27,6 +50,42 @@ Html::$titel = "Neuigkeiten | Deutsche Einradhockeyliga";
 Html::$content = "Hier findet man alle Neuigkeiteneinträge des Ligaausschusses und der Teams der Deutschen Einradhockeyliga.";
 include '../../templates/header.tmp.php'; ?>
 
-<?php foreach ($neuigkeiten as $neuigkeit):?>
-    <?php include '../../templates/neuigkeiten/neuigkeit.tmp.php'; ?>
-<?php endforeach; ?>
+<h1 class="w3-text-primary">Neuigkeiten</h1>
+<p class="w3-border-top w3-border-grey w3-text-grey">Saison <?=Html::get_saison_string($saison)?></p>
+
+<div class="w3-row-padding w3-stretch">
+    
+    <div class="w3-col l3 m4 w3-hide-small">
+        <div class="w3-panel w3-card-4 w3-round w3-bottombar">
+            <div class="w3-stretch w3-container w3-primary">
+                <h3>Zeitleiste</h3>
+            </div>
+            <?php foreach ($neuigkeiten_nach_jahr as $jahr => $neuigkeiten_nach_monat): ?>
+                <div class="w3-section">
+                    <h4 class="w3-text-primary"><?= $jahr ?></h4>
+                    <ul class="w3-ul w3-hoverable">
+                        <?php foreach ($neuigkeiten_nach_monat as $monat => $neuigkeiten): ?>
+                            <li class="w3-padding-small">
+                                <a class="" href="#<?= $jahr ?><?= $monat ?>" style="display:block; color:inherit; text-decoration:none;">
+                                    <?= $monate[$monat] ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <div class="w3-col l9 m8">
+        <?php foreach ($neuigkeiten_nach_jahr as $jahr => $neuigkeiten_nach_monat): ?>
+            <?php foreach ($neuigkeiten_nach_monat as $monat => $neuigkeiten): ?>
+                <h2 id="<?= $jahr ?><?= $monat ?>" class="w3-text-primary"><?= $monate[$monat] ?> <?= $jahr ?></h2>
+                <?php foreach ($neuigkeiten as $neuigkeit): ?>
+                    <?php include '../../templates/neuigkeiten/neuigkeit.tmp.php'; ?>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        <?php endforeach; ?>
+    </div>
+
+</div>
