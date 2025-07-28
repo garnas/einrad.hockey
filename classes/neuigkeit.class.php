@@ -61,17 +61,17 @@ class Neuigkeit
      * @param string $link_pdf
      * @param string $bild_verlinken
      */
-    public static function update_neuigkeit(int $neuigkeiten_id, string $titel, string $inhalt, string $link_jpg,
-                                            string $link_pdf, string $bild_verlinken = '')
+    public static function update_neuigkeit(int $neuigkeiten_id, string $titel, string $inhalt, string $zeitpunkt, string $link_jpg, string $link_pdf, string $bild_verlinken = '')
     {
         $sql = "
                 UPDATE neuigkeiten 
-                SET titel = ?, inhalt = ?, link_jpg = ?, link_pdf = ?, bild_verlinken = ?, zeit=zeit
-                WHERE neuigkeiten_id = '$neuigkeiten_id'
-                ";
-        $params = [$titel, $inhalt, $link_jpg, $link_pdf, $bild_verlinken];
+                SET titel = ?, inhalt = ?, link_jpg = ?, link_pdf = ?, bild_verlinken = ?, zeit=?
+                WHERE neuigkeiten_id = ?
+        ";
+        $params = [$titel, $inhalt, $link_jpg, $link_pdf, $bild_verlinken, $zeitpunkt, $neuigkeiten_id];
         db::$db->query($sql, $params)->log();
     }
+
 
     /**
      * Wandelt die Zeichen in den Neuigkeiten-Einträgen um, damit sie HTML-Entities sind
