@@ -115,19 +115,29 @@ class Neuigkeit
      * @param bool $limit
      * @return array
      */
-    public static function get_neuigkeiten(bool $limit = true): array
+    public static function get_neuigkeiten(bool $limit = true, ?bool $aktiv = true): array
     {
         $sql = "
             SELECT * 
             FROM neuigkeiten
-            WHERE zeit <= '" . date("Y-m-d H:i:s") . "'
-            AND aktiv = 1
-            ORDER BY zeit DESC 
-            " . ($limit ? "LIMIT 10" : "") . "
+            WHERE zeit <= ?
         ";
-        $neuigkeiten = db::$db->query($sql)->esc()->fetch('neuigkeiten_id');
-        $neuigkeiten = self::characters($neuigkeiten);
-        return $neuigkeiten;
+        $params = [date("Y-m-d H:i:s")];
+
+        if ($aktiv !== null) {
+            $sql .= " AND aktiv = ?";
+            $params[] = (int)$aktiv;
+        }
+
+        $sql .= " ORDER BY zeit DESC";
+
+        if ($limit) {
+            $sql .= " LIMIT 10";
+        }
+
+        $neuigkeiten = db::$db->query($sql, $params)->esc()->fetch('neuigkeiten_id');
+        
+        return self::characters($neuigkeiten);
     }
 
     /**

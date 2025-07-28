@@ -12,5 +12,5 @@ require_once '../../logic/neuigkeit_bearbeiten.logic.php';
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 include '../../templates/header.tmp.php';
-include '../../templates/neuigkeit_bearbeiten.tmp.php';
+include '../../templates/neuigkeiten/neuigkeit_bearbeiten.tmp.php';
 include '../../templates/footer.tmp.php';
