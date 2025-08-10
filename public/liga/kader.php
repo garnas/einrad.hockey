@@ -25,33 +25,20 @@ include '../../templates/header.tmp.php';
         <span class="w3-text-grey">Video der Europameisterschaft 2023</span>
     </div>
 
-    <h3 class="w3-text-primary">A-Kader: Erfolge</h3>
+    <h3 class="w3-text-primary">A-Kader Termine</h3>
     <div class="w3-container">
         <ul class="w3-ul w3-leftbar w3-border-tertiary">
-            <li><?= Html::icon("emoji_events", class: "w3-text-grey") ?> 2024 Weltmeisterschaft UNICON Bemidji, A-Turnier, 2. Platz</li>
-            <li><?= Html::icon("emoji_events", class: "w3-text-brown") ?> 2023 Europameisterschaft EUHC Mörfelden, A-Turnier, 3. Platz</li>
-            <li><?= Html::icon("emoji_events", class: "w3-text-grey") ?> 2022 Weltmeisterschaft UNICON Grenoble, A-Turnier, 2. Platz</li>
-            <li><?= Html::icon("emoji_events", class: "w3-text-brown") ?> 2022 Weltmeisterschaft UNICON Grenoble, A-Turnier, 3. Platz</li>
+            <li>20. + 21. September 2025 (Remscheid)</li>
+            <li>06. + 07. Dezember 2025 (Mörfelden)</li>
+            <li>28. Februar + 01. März 2026 (Mörfelden)</li>
+            <li>04. + 05. Juli 2026 (Augustdorf)</li>
         </ul>
     </div>
-    <h3 class="w3-text-primary">B-Kader: Erfolge</h3>
+    
+    <h3 class="w3-text-primary">B-Kader Termine</h3>
     <div class="w3-container">
         <ul class="w3-ul w3-leftbar w3-border-tertiary">
-            <li><?= Html::icon("emoji_events", class: "w3-text-tertiary") ?> 2023 Europameisterschaft EUHC Mörfelden, B-Turnier, 1. Platz</li>
-            <li><?= Html::icon("emoji_events", class: "w3-text-grey") ?> 2023 Europameisterschaft EUHC Mörfelden, B-Turnier, 2. Platz</li>
-            <li><?= Html::icon("emoji_events", class: "w3-text-brown") ?> 2023 Europameisterschaft EUHC Mörfelden, B-Turnier, 3. Platz</li>
-        </ul>
-    </div>
-    <h3 class="w3-text-primary">A-Kader: Termine für die Trainingslager der Saison 2025/26</h3>
-    <div class="w3-container">
-        <ul class="w3-ul w3-leftbar w3-border-tertiary">
-            <li>Bisher sind keine Termine bekannt</li>
-        </ul>
-    </div>
-    <h3 class="w3-text-primary">B-Kader: Termine für die Trainingslager der Saison 2025/26</h3>
-    <div class="w3-container">
-        <ul class="w3-ul w3-leftbar w3-border-tertiary">
-            <li>13. + 14. September 2025 (Ort unbekannt; Sichtungstraining)</li>
+            <li>13. + 14. September 2025 (Münster (Dieburg); Sichtungstraining)</li>
             <li>01. + 02. November 2025 (Ort unbekannt)</li>
             <li>13. + 14. Dezember 2025 (Augustdorf)</li>
             <li>31. Januar + 01. Februar 2026 (Ort unbekannt)</li>
@@ -61,6 +48,24 @@ include '../../templates/header.tmp.php';
         </ul>
     </div>
 
+    <h3 class="w3-text-primary">A-Kader Erfolge</h3>
+    <div class="w3-container">
+        <ul class="w3-ul w3-leftbar w3-border-tertiary">
+            <li><?= Html::icon("emoji_events", class: "w3-text-grey") ?> 2024 Weltmeisterschaft UNICON Bemidji, A-Turnier, 2. Platz</li>
+            <li><?= Html::icon("emoji_events", class: "w3-text-brown") ?> 2023 Europameisterschaft EUHC Mörfelden, A-Turnier, 3. Platz</li>
+            <li><?= Html::icon("emoji_events", class: "w3-text-grey") ?> 2022 Weltmeisterschaft UNICON Grenoble, A-Turnier, 2. Platz</li>
+            <li><?= Html::icon("emoji_events", class: "w3-text-brown") ?> 2022 Weltmeisterschaft UNICON Grenoble, A-Turnier, 3. Platz</li>
+        </ul>
+    </div>
+    
+    <h3 class="w3-text-primary">B-Kader Erfolge</h3>
+    <div class="w3-container">
+        <ul class="w3-ul w3-leftbar w3-border-tertiary">
+            <li><?= Html::icon("emoji_events", class: "w3-text-tertiary") ?> 2023 Europameisterschaft EUHC Mörfelden, B-Turnier, 1. Platz</li>
+            <li><?= Html::icon("emoji_events", class: "w3-text-grey") ?> 2023 Europameisterschaft EUHC Mörfelden, B-Turnier, 2. Platz</li>
+            <li><?= Html::icon("emoji_events", class: "w3-text-brown") ?> 2023 Europameisterschaft EUHC Mörfelden, B-Turnier, 3. Platz</li>
+        </ul>
+    </div>
 
     <h3 class="w3-text-primary">Trainerstab</h3>
     <p>
