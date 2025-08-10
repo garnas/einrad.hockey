@@ -39,6 +39,7 @@ class nLigaBot
         self::setSpieltage();
 //        self::blockWechsel(); # Der Blockwechsel wird Moduskonform 23/24 nur noch mit Ende eines Spieltages vollzogen
         self::phasenWechsel();
+        self::archiveNeuigkeiten();
 
         DoctrineWrapper::manager()->flush();
 
@@ -195,6 +196,20 @@ class nLigaBot
         }
         DoctrineWrapper::manager()->flush();
         DoctrineWrapper::manager()->clear();
+    }
+
+    /**
+     * Archiviert Neuigkeiten, die älter als 9 Monate sind.
+     * @throws ORMException
+     */
+    public static function archiveNeuigkeiten(): void
+    {
+        $sql = "
+            UPDATE neuigkeiten 
+            SET aktiv = 0 
+            WHERE zeit < ? AND aktiv = 1
+        ";
+        db::$db->query($sql, [date("Y-m-d H:i:s", strtotime("-9 months"))])->log();
     }
 
     /**

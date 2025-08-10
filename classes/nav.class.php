@@ -36,7 +36,7 @@ class Nav
     public static function get_info(): array
     {
         return [
-            [Env::BASE_URL . "/liga/neues.php", "Neuigkeiten"],
+            [Env::BASE_URL . "/liga/neuigkeiten.php", "Neuigkeiten"],
             [Env::BASE_URL . "/liga/ueber_uns.php", "Interesse?"],
             [Env::BASE_URL . "/liga/ligaleitung.php", "Ligaleitung"],
             [Env::BASE_URL . "/liga/ligakarte.php", "Ligakarte"],
