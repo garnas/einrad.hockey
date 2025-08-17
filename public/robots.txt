@@ -1,5 +1,8 @@
 User-agent: *
 Disallow: /uploads/
 Disallow: /liga/turnier_details.php
+Disallow: /liga/turnier_details
+Disallow: /impressum.php
+Disallow: /impressum
 
 Sitemap: https://einrad.hockey/sitemap.xml
