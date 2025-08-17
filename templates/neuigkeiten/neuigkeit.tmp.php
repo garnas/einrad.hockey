@@ -61,6 +61,7 @@
                     <a class='no w3-button w3-light-grey' href="../ligacenter/lc_neuigkeit_archivieren.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>"><?= Html::icon("archive") ?> Archivieren</a>
                 <?php endif; ?>
                 <a class='no w3-button w3-secondary' href="../ligacenter/lc_neuigkeit_loeschen.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>" ><?= Html::icon("delete") ?> Löschen</a>
+                <br><span class="w3-tiny w3-text-gray">als Ligaausschuss</span>
             </div>
         </div>
     <?php endif; ?>
@@ -76,6 +77,7 @@
                 <?php endif; ?>
                 <a class='no w3-button w3-secondary' href="../oefficenter/oc_neuigkeit_loeschen.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>" ><?= Html::icon("delete") ?> Löschen</a>
             </div>
+            <br><span class="w3-small w3-text-gray">als Öffentlichkeitsausschuss</span>
         </div>
     <?php endif; ?>
     

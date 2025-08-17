@@ -265,6 +265,7 @@ include '../../templates/header.tmp.php'; ?>
             <?php foreach ($neuigkeiten as $neuigkeit):?>
                 <?php include '../../templates/neuigkeiten/neuigkeit.tmp.php'; ?>
             <?php endforeach; ?>
+            <?= Html::link(link: "neuigkeiten.php", bezeichnung: "Hier gibt es weitere Neuigkeiten", icon: "archive") ?>
         </div>
     </div>
 
