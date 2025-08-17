@@ -2,32 +2,72 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Repository\Team\TeamRepository;
+
 require_once '../../init.php';
-require_once '../../logic/abstimmung_ergebnis.logic.php';
+require_once '../../logic/session_la.logic.php'; //Auth
+require_once '../../logic/abstimmung.logic.php';
+
+$teams = TeamRepository::get()->activeLigaTeams();
+$saison = (isset($_GET['saison'])) ? (int)$_GET['saison'] : Config::SAISON;
+
+$abschluss = strtotime(Abstimmung::ENDE);
+$beginn = strtotime(Abstimmung::BEGINN);
+
+$num_stimmen = Abstimmung::get_anzahl_stimmen();
+$ergebnisse = Abstimmung::get_ergebnisse(0);
+
+$logo = $ergebnisse['logo'] ?? [];
+
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Html::$titel = "Fördermittel Abstimmung | Deutsche Einradhockeyliga";
-Html::$content = "Das aktuelle Abstimmungsergebnis der Teams über die Fördermittel.";
 include '../../templates/header.tmp.php';
 ?>
 
-<h1 class="w3-text-primary">Abstimmung Fördermittel</h1>
+<h1 class="w3-text-primary">Abstimmung zum Ligalogo</h1>
+<p class="w3-border-top w3-border-grey w3-text-grey">Saison <?=Html::get_saison_string($saison)?></p>
 
-<!-- Informationstext für die Abstimmung -->
-<p>Der Ligabeitrag wurde unter anderem erhöht, um Projekte wie die Förderung von Einradhockey-Initiativen zu unterstützen. Bislang haben wir vier Anträge erhalten. Um diese Mittel gerecht und transparent zu verteilen, haben wir ein vorläufiges Budget von 3.000,00 € festgelegt, über dessen Verteilung ihr mitentscheiden sollt.</p>
-<p>Alle derzeit eingegangenen Anträge können gefördert werden, und es besteht weiterhin die Möglichkeit, weitere Anträge zu stellen, wenn ihr ein neues Projekt einbringen möchtet.</p>
+<?php include '../../templates/abstimmung/intro.tmp.php'; ?>
+
+<!-- vor der abstimmung -->
+<?php if (time() < $beginn): ?>
+    
+    <section class="w3-section w3-padding w3-light-grey">
+        <h2 class="w3-large w3-text-secondary">Status der Abstimmung</h2>
+        <p>
+            Die Abstimmung beginnt am
+            <strong><?=date("d.m.Y", $beginn)?></strong> um <strong><?=date("H:i", $beginn)?> Uhr</strong>
+            und endet am
+            <strong><?=date("d.m.Y", $abschluss)?></strong> um <strong><?=date("H:i", $abschluss)?> Uhr</strong>.
+        </p>
+        <?php Html::countdown($beginn); ?>
+    </section>
+<?php endif; ?>
+
+<!-- waehrend der abstimmung -->
+<?php if ($beginn <= time() && time() < $abschluss): ?>
+    <section class="w3-section w3-padding w3-light-grey">
+        <h2 class="w3-large w3-text-secondary">Status der Abstimmung</h2>
+        <p>
+            Die Abstimmung endet am
+            <strong><?=date("d.m.Y", $abschluss)?></strong> um <strong><?=date("H:i", $abschluss)?> Uhr</strong>.
+        </p>
+        <?php Html::countdown($abschluss); ?>
+    </section>
+<?php endif; ?>
+
+<!-- nach der abstimmung -->
+<?php if ($abschluss <= time()): ?>
+    <section class="w3-section w3-padding w3-light-grey">
+        <h2 class="w3-large w3-text-secondary">Status der Abstimmung</h2>
+        <p>Die Abstimmung ist abgeschlossen.</p>
+    </section>
+
+    <?php include '../../templates/abstimmung/beteiligung.tmp.php'; ?>
+    <?php include '../../templates/abstimmung/frage_logo.tmp.php'; ?>
+<?php endif; ?>
 
 <?php
-if (time() > strtotime(Abstimmung::ENDE)) {
-    include '../../templates/abstimmung_ergebnis.tmp.php';
-} elseif (time() < strtotime(Abstimmung::BEGINN)) {
-    Html::message('notice', "Die Abstimmung startet am " . date("d.m.Y", $beginn) . ". Das Abstimmungsergebnis wird am " . Abstimmung::ENDE . " Uhr veröffentlicht.", "");
-} else { ?>
-    <a href="../teamcenter/tc_abstimmung.php" class="w3-button w3-section w3-block w3-primary">
-        <?= Html::icon("how_to_vote") ?> Jetzt abstimmen!
-    </a>
-<?php } //end if
-
 include '../../templates/footer.tmp.php';
