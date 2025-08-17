@@ -4,21 +4,12 @@ namespace integration;
 
 use App\Entity\Team\nTeam;
 use App\Entity\Team\TeamDetails;
-use App\Repository\DoctrineWrapper;
 use App\Repository\Team\TeamRepository;
 use App\Service\Team\TeamService;
-use db;
 use PHPUnit\Framework\TestCase;
 
 class TurnierServiceTest extends TestCase
 {
-
-    public static function setUpBeforeClass(): void
-    {
-        db::initialize();
-        DoctrineWrapper::setup();
-    }
-
     protected function provideTeamForLogin($teamname, $ligateam, $aktiv, $password)
     {
         $team = TeamRepository::get()->findByName($teamname);
