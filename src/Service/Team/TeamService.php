@@ -151,7 +151,7 @@ class TeamService
         // Existenz prüfen
         $team = TeamRepository::get()->findByName($teamname);
 
-        if (!$team->isLigaTeam()) {
+        if (!($team && $team->isLigaTeam())) {
             Html::error("Falscher Loginname");
             Helper::log(Config::LOG_LOGIN, "Falscher TC-Login | Teamname: " . $teamname);
             return false;

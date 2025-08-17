@@ -72,9 +72,10 @@ class nTeam
         return $this->turniereListe;
     }
 
-    public function setTurniere(Collection $turniereListe): void
+    public function setTurniere(Collection $turniereListe): nTeam
     {
         $this->turniereListe = $turniereListe;
+        return $this;
     }
 
     public function __construct() {
@@ -92,9 +93,10 @@ class nTeam
         return $this->details;
     }
 
-    public function setDetails(TeamDetails $details): void
+    public function setDetails(TeamDetails $details): nTeam
     {
         $this->details = $details;
+        return $this;
     }
 
     #[ORM\Column(name: "ligateam", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])]
