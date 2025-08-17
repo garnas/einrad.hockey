@@ -1,4 +1,4 @@
-<h3 class="w3-text-grey"><?= $team->getName() ?></h3>
+<h3 class="w3-text-grey"><?= e($team->getName()) ?></h3>
 
 
 <form class="w3-card w3-panel" method="post" enctype="multipart/form-data">
@@ -17,7 +17,7 @@
         </p>
     <?php } else { ?>
         <p>
-            <img src="<?= $team->getDetails()->getTeamfoto() ?>" alt="<?= $team->getName() ?>" class="w3-card w3-image"
+            <img src="<?= e($team->getDetails()->getTeamfoto()) ?>" alt="<?= e($team->getName()) ?>" class="w3-card w3-image"
                  style="max-height: 360px">
         </p>
         <p>
@@ -51,7 +51,7 @@
             <form method="post">
                 <label for="color_1" style="cursor:pointer;">
                     <span class="w3-card-4" style="height:70px;width:70px;background-color:<?= empty($team->getDetails()->getTrikotFarbe1()) ? '#bbb' : $team->getDetails()->getTrikotFarbe1()?>;border-radius:50%;display:inline-block;">
-                        <br><?= (empty($team->getDetails()->getTrikotFarbe1())) ? Html::icon('not_interested') : '' ?>
+                        <br><?= (empty(e($team->getDetails()->getTrikotFarbe1()))) ? Html::icon('not_interested') : '' ?>
                     </span>
 
                 </label>
@@ -60,7 +60,7 @@
                            name='color_1'
                            id='color_1'
                            class="w3-white"
-                           value="<?= empty($team->getDetails()->getTrikotFarbe1()) ? '#bbbbbb' : $team->getDetails()->getTrikotFarbe1() ?>"
+                           value="<?= empty($team->getDetails()->getTrikotFarbe1()) ? '#bbbbbb' : e($team->getDetails()->getTrikotFarbe1()) ?>"
                            style="cursor: pointer;"
                            onchange="this.form.submit()"
                     >
@@ -94,7 +94,7 @@
                            name='color_2'
                            id='color_2'
                            class="w3-white"
-                           value="<?= empty($team->getDetails()->getTrikotFarbe2()) ? '#bbbbbb' : $team->getDetails()->getTrikotFarbe2() ?>"
+                           value="<?= empty($team->getDetails()->getTrikotFarbe2()) ? '#bbbbbb' : e($team->getDetails()->getTrikotFarbe2()) ?>"
                            style="cursor: pointer;"
                            onchange="this.form.submit()"
                     >
@@ -119,7 +119,7 @@
                id='ligavertreter'
                name='ligavertreter'
                required
-               value='<?= $team->getDetails()->getLigavertreter() ?>'
+               value='<?= e($team->getDetails()->getLigavertreter()) ?>'
         >
         <span class="w3-text-grey">
             <i>Nur eine Person kann als Ligavertreter angegeben werden</i>
@@ -127,7 +127,7 @@
     </p>
     <p>
         <input type="checkbox"
-               <?= !empty($team->getDetails()->getLigavertreter()) ? 'checked' : '' ?>
+               <?= !empty(e($team->getDetails()->getLigavertreter())) ? 'checked' : '' ?>
                class="w3-check"
                value="zugestimmt"
                name="dsgvo"
@@ -143,7 +143,7 @@
                type='number'
                id='plz'
                name='plz'
-               value='<?= $team->getDetails()->getPlz() ?>'
+               value='<?= e($team->getDetails()->getPlz()) ?>'
         >
     </p>
     <p>
@@ -152,7 +152,7 @@
                type='text'
                id='ort'
                name='ort'
-               value='<?= $team->getDetails()->getOrt()?>'
+               value='<?= e($team->getDetails()->getOrt()) ?>'
         >
     </p>
     <p>
@@ -161,7 +161,7 @@
                type='text'
                id='verein'
                name='verein'
-               value='<?= $team->getDetails()->getVerein() ?>'
+               value='<?= e($team->getDetails()->getVerein()) ?>'
         >
     </p>
     <p>
@@ -171,7 +171,7 @@
                id='homepage'
                name='homepage'
                placeholder='Muss mit https:// oder http:// beginnen.'
-               value='<?= $team->getDetails()->getHomepage() ?>'>
+               value='<?= e($team->getDetails()->getHomepage()) ?>'>
     </p>
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped w3-centered">
@@ -185,7 +185,7 @@
             </thead>
             <?php foreach ($emails as $email) { ?>
                 <tr>
-                    <td style='vertical-align: middle'><?= $email['email'] ?></td>
+                    <td style='vertical-align: middle'><?= e($email['email']) ?></td>
                     <td>
                         <select style='max-width: 100px'
                                 class='w3-select w3-border w3-centered w3-border-primary'

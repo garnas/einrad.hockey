@@ -120,7 +120,7 @@ include '../../templates/header.tmp.php';
                         <div class="w3-responsive w3-stretch">
                             <table class="w3-table">
                                 <tr style="white-space: nowrap;">
-                                    <td class="w3-text-primary"><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), '<i class="material-icons">schedule</i> Beginn') ?></td>
+                                    <td class="w3-text-primary"><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), 'Beginn', icon: "schedule") ?></td>
                                     <td><?= $turnier->getDetails()->getStartzeit()->format("H:i") ?> Uhr
                                         <?php if ($turnier->hasBesprechung()): ?>
                                             <i>Gemeinsame Teambesprechung um <?= $turnier->getDetails()->getBesprechungUhrzeit() ?>&nbsp;Uhr</i>
@@ -128,12 +128,12 @@ include '../../templates/header.tmp.php';
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="white-space: nowrap; vertical-align: middle;" class="w3-text-primary"><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), '<i class="material-icons">announcement</i> Hinweis') ?></td>
+                                    <td style="white-space: nowrap; vertical-align: middle;" class="w3-text-primary"><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), 'Hinweis', icon: "announcement") ?></td>
                                     <td style="white-space: normal"><?= nl2br(e($turnier->getDetails()->getHinweis())) ?></td>
                                 </tr>
                                 <?php if($turnier->isWartePhase() && $turnier->isLigaturnier()): ?>
                                     <tr style="white-space: nowrap;">
-                                        <td class="w3-text-primary" style=""><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), '<i class="material-icons">event</i> Phasenwechsel') ?></td>
+                                        <td class="w3-text-primary" style=""><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), 'Phasenwechsel', icon: "event") ?></td>
                                         <td>
                                             <?= TurnierService::getLosDatum($turnier)?> (Loszeitpunkt)
                                             <?php if ($turnier->isSofortOeffnen() && $turnier->isWartePhase()): ?>
@@ -145,7 +145,7 @@ include '../../templates/header.tmp.php';
                                 <?php endif; ?>
                                 <?php if($turnier->isLigaturnier()): ?>
                                     <tr style="white-space: nowrap;">
-                                        <td class="w3-text-primary" style=""><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), '<i class="material-icons">event</i> Abmeldefrist') ?></td>
+                                        <td class="w3-text-primary" style=""><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), 'Abmeldefrist', icon: "event") ?></td>
                                         <td><?= TurnierService::getAbmeldeFrist($turnier)?></td>
                                     </tr>
                                 <?php endif; ?>

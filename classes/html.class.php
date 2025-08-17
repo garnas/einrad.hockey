@@ -145,6 +145,9 @@ class Html
         } // Für Schleifen
 
         $new_tab = ($extern) ? 'target="_blank" rel="noopener noreferrer"' : '';
+        if ($bezeichnung !== '') {
+            $bezeichnung = e($bezeichnung);
+        }
         $bezeichnung = (!empty($icon)) ? self::icon($icon) . ' ' . $bezeichnung : $bezeichnung;
         $bezeichnung = empty($bezeichnung) ? $link : $bezeichnung;
 

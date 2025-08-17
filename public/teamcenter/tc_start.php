@@ -14,7 +14,7 @@ Html::info("In euren " . Html::link(Env::BASE_URL . "/teamcenter/tc_teamdaten.ph
 /////////////////////////////////////////////////////////////////////////////
 include '../../templates/header.tmp.php'; ?>
 
-<h1 class='w3-center w3-text-primary'>Hallo <?= $_SESSION['logins']['team']['name'] ?>!</h1>
+<h1 class='w3-center w3-text-primary'>Hallo <?= e($_SESSION['logins']['team']['name']) ?>!</h1>
 <div class="flex-container">
     <?php foreach ($panels as $panel): ?>
         <a class="no flex-item <?= $panel[2] ?> w3-round-xlarge w3-hover-opacity" href="<?= $panel[0] ?>">

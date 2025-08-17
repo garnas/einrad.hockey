@@ -20,7 +20,7 @@
     <script src="<?= Env::BASE_URL ?>/javascript/script.js?v=20250212"></script>
     <script src="<?= Env::BASE_URL ?>/javascript/360search/360search.js?v=20210308" async></script>
 
-    <title><?= Html::$titel ?></title>
+    <title><?= e(Html::$titel) ?></title>
 </head>
 
 <body class="w3-white w3-auto w3-card-4">
