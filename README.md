@@ -87,6 +87,13 @@ curl -sS https://getcomposer.org/installer | /usr/bin/php8.3-cli
 /usr/bin/php8.3-cli bin/doctrine orm:generate-proxies
 ```
 
+## Run tests
+* Für die Integrationstests muss die Datenbank in der env.php aufgesetzt sein.
+
+```shell
+   vendor/bin/phpunit tests/
+```
+
 ## Sonstiges
 * Eine vorkonfigurierte php.ini ist in _localhost zu finden.
 
