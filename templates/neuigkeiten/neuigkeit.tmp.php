@@ -77,7 +77,7 @@
                 <?php endif; ?>
                 <a class='no w3-button w3-secondary' href="../oefficenter/oc_neuigkeit_loeschen.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>" ><?= Html::icon("delete") ?> Löschen</a>
             </div>
-            <br><span class="w3-small w3-text-gray">als Öffentlichkeitsausschuss</span>
+            <br><span class="w3-tiny w3-text-gray">als Öffentlichkeitsausschuss</span>
         </div>
     <?php endif; ?>
     
