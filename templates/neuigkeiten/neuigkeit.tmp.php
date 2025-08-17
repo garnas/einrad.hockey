@@ -2,15 +2,15 @@
     <?php if ($neuigkeit['titel']): ?>
         <!-- Überschrift -->
         <h3 class="w3-center w3-primary w3-padding-small" style="margin: 0 -16px;">
-            <?= $neuigkeit['titel'] ?>
+            <?= e($neuigkeit['titel']) ?>
         </h3>
     <?php endif; ?>
 
     <?php if ($neuigkeit['link_jpg'] != ''): ?>
         <!-- Bild -->
         <div class='w3-section w3-center w3-stretch w3-light-grey'>
-            <a href='<?= $neuigkeit['bild_verlinken'] ?: $neuigkeit['link_jpg'] ?>'>
-                <img class='w3-image w3-hover-opacity' alt="Bild für die Neuigkeit '<?= $neuigkeit['titel'] ?? "Ohne Titel" ?>' " src=<?= $neuigkeit['link_jpg'] ?>>
+            <a href='<?= $neuigkeit['bild_verlinken'] ?: e($neuigkeit['link_jpg']) ?>'>
+                <img class='w3-image w3-hover-opacity' alt="Bild für die Neuigkeit '<?= e($neuigkeit['titel'] ?? "Ohne Titel") ?>' " src=<?= e($neuigkeit['link_jpg']) ?>>
             </a>
         </div>
     <?php endif; ?>
@@ -20,33 +20,33 @@
         <?= nl2br($neuigkeit['inhalt']) ?>
     </div>
     
-    <?php if ($neuigkeit['link_pdf'] != ''): ?>
+    <?php if (e($neuigkeit['link_pdf']) != ''): ?>
         <!-- PDF -->
-        <?= Html::link($neuigkeit['link_pdf'], "PDF-Anhang", true, "insert_drive_file") ?>
+        <?= Html::link(e($neuigkeit['link_pdf']), "PDF-Anhang", true, "insert_drive_file") ?>
     <?php endif; ?>
 
     <?php if ($neuigkeit['aktiv']): ?>
         <div class='w3-section w3-text-grey'>
             <div class="w3-row w3-hide-medium w3-hide-small">
-                <div class="w3-col l6 w3-left-align"><?= Html::icon("create") ?> <?= ($neuigkeit['eingetragen_von']) ?></div>
+                <div class="w3-col l6 w3-left-align"><?= Html::icon("create") ?> <?= e($neuigkeit['eingetragen_von']) ?></div>
                 <div class="w3-col l6 w3-right-align"><?= Html::icon("schedule") ?> <?= $neuigkeit['zeit'] ?></div>
             </div>
             <div class="w3-row w3-hide-large">
                 <div class="w3-right-align"><?= Html::icon("schedule") ?> <?= $neuigkeit['zeit'] ?></div>
-                <div class="w3-right-align"><?= Html::icon("create") ?> <?= ($neuigkeit['eingetragen_von']) ?></div>
+                <div class="w3-right-align"><?= Html::icon("create") ?> <?= e($neuigkeit['eingetragen_von']) ?></div>
             </div>
         </div>
     <?php else: ?>
         <div class='w3-section w3-text-grey'>
             <div class="w3-row w3-hide-medium w3-hide-small">
-                <div class="w3-col l6 w3-left-align"><?= Html::icon("create") ?> <?= ($neuigkeit['eingetragen_von']) ?></div>
+                <div class="w3-col l6 w3-left-align"><?= Html::icon("create") ?> <?= e($neuigkeit['eingetragen_von']) ?></div>
                 <div class="w3-col l3 w3-right-align"><?= Html::icon("archive") ?> Archiviert</div>
                 <div class="w3-col l3 w3-right-align"><?= Html::icon("schedule") ?> <?= $neuigkeit['zeit'] ?></div>
             </div>
             <div class="w3-row w3-hide-large">
                 <div class="w3-right-align"><?= Html::icon("schedule") ?> <?= $neuigkeit['zeit'] ?></div>
                 <div class="w3-right-align"><?= Html::icon("archive") ?> Archiviert</div>
-                <div class="w3-right-align"><?= Html::icon("create") ?> <?= ($neuigkeit['eingetragen_von']) ?></div>
+                <div class="w3-right-align"><?= Html::icon("create") ?> <?= e($neuigkeit['eingetragen_von']) ?></div>
             </div>
         </div>
     <?php endif; ?>

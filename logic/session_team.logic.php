@@ -26,5 +26,5 @@ if (!Helper::$teamcenter_no_redirect && empty($team->details['ligavertreter'])){
   die();
 }
 
-Html::$titel = $_SESSION['logins']['team']['name'];
+Html::$titel = e($_SESSION['logins']['team']['name']);
 Helper::$teamcenter = true; // Dies zeigt allen Dateien (insbeondere .tmp.php), dass man sich im Teamcenter befindet.

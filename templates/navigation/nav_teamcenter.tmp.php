@@ -3,7 +3,7 @@
     <nav class="w3-primary w3-container w3-hover-grey w3-card-4 w3-padding-small">
         <?= Html::icon("apps") ?>
         <span>
-            Teamcenter - <?= $_SESSION['logins']['team']['name']. " (" . $_SESSION['logins']['team']['block'] . ")" ?>
+            Teamcenter - <?= e($_SESSION['logins']['team']['name']). " (" . e($_SESSION['logins']['team']['block']) . ")" ?>
         </span>
     </nav>
 </a>

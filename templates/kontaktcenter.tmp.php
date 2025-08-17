@@ -41,7 +41,7 @@ if (empty($_SESSION[$list_id ?? '']['emails'])): ?>
                 <option disabled <?php if(empty($_GET['turnier_id'])){?>selected<?php }?>></option>
                 <?php foreach ($turniere as $turnier):?>
                     <option <?php if($turnier->get_turnier_id() === (int) @$_GET['turnier_id']) {?>selected<?php }?> value="<?=$turnier->get_turnier_id()?>">
-                    <?=date('d.m.Y', strtotime($turnier->get_datum())) . ' '. $turnier->get_ort(). ' ' . $turnier->get_tname() . ' (' . $turnier->get_tblock() . ')'?>
+                    <?=date('d.m.Y', strtotime($turnier->get_datum())) . ' '. e($turnier->get_ort()). ' ' . e($turnier->get_tname()) . ' (' . $turnier->get_tblock() . ')'?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -61,7 +61,7 @@ if (empty($_SESSION[$list_id ?? '']['emails'])): ?>
             <?php foreach ($teams as $team):?>
                 <div class="w3-col s12 m6">
                     <input style="cursor: pointer;" class="w3-check" type="checkbox" id="email<?=$team['team_id']?>" name="team[]" value="<?=$team['team_id']?>">
-                    <label style="cursor: pointer; color: red;" class="w3-text-primary w3-hover-text-secondary" for="email<?=$team['team_id']?>"><?=$team['teamname']?> (<?=Tabelle::get_team_block($team['team_id'], $akt_spieltag - 1)?>)</label>
+                    <label style="cursor: pointer; color: red;" class="w3-text-primary w3-hover-text-secondary" for="email<?=$team['team_id']?>"><?=e($team['teamname'])?> (<?=Tabelle::get_team_block($team['team_id'], $akt_spieltag - 1)?>)</label>
                 </div>
             <?php endforeach; ?>
         </div>
@@ -80,7 +80,7 @@ if (empty($_SESSION[$list_id ?? '']['emails'])): ?>
         <h2 class="w3-text-primary">Kontaktformular: <?=$_SESSION[$list_id]['type']?></h2>
         <form method="post" onsubmit="return confirm('Soll die Email wirklich abgeschickt werden?')">
             <p class=""><b><i class=material-icons>mail</i> Absender</b></p>
-            <p><?= $from ?? [] ?></p>
+            <p><?= e($from ?? "") ?></p>
             <p class=""><b><i class=material-icons>mail</i> Empfänger
                     <?php if(Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss){?>
                         (<?=$anzahl_emails ?? ""?>)
@@ -88,7 +88,7 @@ if (empty($_SESSION[$list_id ?? '']['emails'])): ?>
             <div class="w3-row w3-section">
                 <i>
                     <?php foreach($tos ?? [] as $to):?>
-                       <div class="w3-col m6 s12"><?= $to ?><br></div>
+                       <div class="w3-col m6 s12"><?= e($to) ?><br></div>
                     <?php endforeach; ?>
                 </i>
             </div>
