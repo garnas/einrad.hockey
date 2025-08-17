@@ -12,5 +12,5 @@ Html::notice("Die Verwendung von Html-Tags ist als Öffentlichkeitsausschuss sta
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 include '../../templates/header.tmp.php';
-include '../../templates/neuigkeit_eintragen.tmp.php';
+include '../../templates/neuigkeiten/neuigkeit_eintragen.tmp.php';
 include '../../templates/footer.tmp.php';

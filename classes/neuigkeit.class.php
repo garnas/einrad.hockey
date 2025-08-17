@@ -14,17 +14,18 @@ class Neuigkeit
      * @param string $titel
      * @param string $text
      * @param string $name
+     * @param string $zeitpunkt
      * @param string $link_jpg
      * @param string $link_pdf
      * @param string $bild_verlinken
      */
-    public static function create(string $titel, string $text, string $name, string $link_jpg = '', string $link_pdf = '', string $bild_verlinken = '')
+    public static function create(string $titel, string $text, string $name, string $zeitpunkt, string $link_jpg = '', string $link_pdf = '', string $bild_verlinken = '')
     {
         $sql = "
-                INSERT INTO neuigkeiten (titel, inhalt, eingetragen_von, link_jpg, link_pdf, bild_verlinken) 
-                VALUES (?, ?, ?, ?, ?, ?)
-                ";
-        $params = [$titel, $text, $name, $link_jpg, $link_pdf, $bild_verlinken];
+            INSERT INTO neuigkeiten (titel, inhalt, link_pdf, link_jpg, bild_verlinken, eingetragen_von, zeit) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ";
+        $params = [$titel, $text, $link_pdf, $link_jpg, $bild_verlinken, $name, $zeitpunkt];
         db::$db->query($sql, $params)->log();
     }
 
@@ -36,8 +37,7 @@ class Neuigkeit
     public static function delete($neuigkeiten_id): void
     {
         // Bilder und Dokumente der Neuigkeit löschen
-        $neuigkeit = self::get_neuigkeiten($neuigkeiten_id);
-        $neuigkeit = $neuigkeit[$neuigkeiten_id];
+        $neuigkeit = self::get_neuigkeit_by_id($neuigkeiten_id);
 
         if (file_exists($neuigkeit['link_jpg'])) unlink($neuigkeit['link_jpg']);
         if (file_exists($neuigkeit['link_pdf'])) unlink($neuigkeit['link_pdf']);
@@ -61,43 +61,35 @@ class Neuigkeit
      * @param string $link_pdf
      * @param string $bild_verlinken
      */
-    public static function update_neuigkeit(int $neuigkeiten_id, string $titel, string $inhalt, string $link_jpg,
-                                            string $link_pdf, string $bild_verlinken = '')
+    public static function update(int $neuigkeiten_id, string $titel, string $inhalt, string $zeitpunkt, string $link_jpg, string $link_pdf, string $bild_verlinken = '')
     {
         $sql = "
                 UPDATE neuigkeiten 
-                SET titel = ?, inhalt = ?, link_jpg = ?, link_pdf = ?, bild_verlinken = ?, zeit = zeit 
-                WHERE neuigkeiten_id = '$neuigkeiten_id'
-                "; // zeit=zeit, damit der timestamp nicht erneuert wird
-        $params = [$titel, $inhalt, $link_jpg, $link_pdf, $bild_verlinken];
+                SET titel = ?, inhalt = ?, link_jpg = ?, link_pdf = ?, bild_verlinken = ?, zeit=?
+                WHERE neuigkeiten_id = ?
+        ";
+        $params = [$titel, $inhalt, $link_jpg, $link_pdf, $bild_verlinken, $zeitpunkt, $neuigkeiten_id];
         db::$db->query($sql, $params)->log();
     }
 
+    public static function archive(int $neuigkeiten_id): void
+    {
+        $sql = "
+            UPDATE neuigkeiten 
+            SET aktiv = 0 
+            WHERE neuigkeiten_id = ?
+        ";
+        db::$db->query($sql, $neuigkeiten_id)->log();
+    }
+
     /**
-     * Neuigkeiten aus der DB
+     * Wandelt die Zeichen in den Neuigkeiten-Einträgen um, damit sie HTML-Entities sind
      *
-     * Wenn keine Neuigkeit ausgewählt wird, werden die letzten 10 ausgegeben
-     * @param int $neuigkeiten_id
+     * @param array $neuigkeiten
      * @return array
      */
-    public static function get_neuigkeiten(int $neuigkeiten_id = 0): array
+    private static function characters(array $neuigkeiten): array
     {
-        if (empty($neuigkeiten_id)) { // Alle Neuigkeiten
-            $sql = "
-                SELECT * 
-                FROM neuigkeiten 
-                ORDER BY zeit DESC 
-                LIMIT 10
-                "; // Es werden max. 10 Neuigkeiten angezeigt
-            $neuigkeiten = db::$db->query($sql)->esc()->fetch('neuigkeiten_id');
-        } else { // Eine Neuigkeit
-            $sql = "
-                SELECT * 
-                FROM neuigkeiten 
-                WHERE neuigkeiten_id = ? 
-                ";
-            $neuigkeiten = db::$db->query($sql, $neuigkeiten_id)->esc()->fetch('neuigkeiten_id');
-        }
         foreach ($neuigkeiten as $key => $neuigkeit) {
             if (
                 $neuigkeit['eingetragen_von'] === 'Ligaausschuss'
@@ -105,10 +97,64 @@ class Neuigkeit
                 || $neuigkeit['eingetragen_von'] === "Nationalkader"
             ) {
                 $neuigkeiten[$key]['inhalt'] = htmlspecialchars_decode($neuigkeit['inhalt'], ENT_QUOTES);
-                $neuigkeiten[$key]['titel'] = htmlspecialchars_decode($neuigkeit['titel'], ENT_QUOTES);
+                
+                if (isset($neuigkeit['titel'])) {
+                    // Titel wird nur dekodiert, wenn er gesetzt ist
+                    $neuigkeiten[$key]['titel'] = htmlspecialchars_decode($neuigkeit['titel'], ENT_QUOTES);
+                }
             }
         }
+
         return $neuigkeiten;
+    }
+
+    /**
+     * Erhalte die Neuigkeiten aus der Datenbank.
+     *
+     * Gibt die letzten 10 Neuigkeiten zurück, wenn $limit true ist.
+     * @param bool $limit
+     * @return array
+     */
+    public static function get_neuigkeiten(bool $limit = true, ?bool $aktiv = true): array
+    {
+        $sql = "
+            SELECT * 
+            FROM neuigkeiten
+            WHERE zeit <= ?
+        ";
+        $params = [date("Y-m-d H:i:s")];
+
+        if ($aktiv !== null) {
+            $sql .= " AND aktiv = ?";
+            $params[] = (int)$aktiv;
+        }
+
+        $sql .= " ORDER BY zeit DESC";
+
+        if ($limit) {
+            $sql .= " LIMIT 10";
+        }
+
+        $neuigkeiten = db::$db->query($sql, $params)->esc()->fetch('neuigkeiten_id');
+        
+        return self::characters($neuigkeiten);
+    }
+
+    /**
+     * Erhalte eine Neuigkeit aus der Datenbank.
+     *
+     * @param int $neuigkeiten_id
+     * @return array
+     */
+    public static function get_neuigkeit_by_id(int $neuigkeiten_id): array
+    {
+        $sql = "
+            SELECT * 
+            FROM neuigkeiten 
+            WHERE neuigkeiten_id = ? 
+        ";
+        $neuigkeit = db::$db->query($sql, $neuigkeiten_id)->esc()->fetch('neuigkeiten_id');
+        return $neuigkeit[$neuigkeiten_id] ?? [];
     }
 
     /**
@@ -339,31 +385,63 @@ class Neuigkeit
         return Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss;
     }
 
+    public static function darf_datum_festlegen(): bool
+    {
+        return Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss;
+    }
+       
     public static function darf_bearbeiten(string $eingetragen_von): bool
     {
-        // LA?
+        // Der Ligaausschuss darf immer bearbeiten
         if (Helper::$ligacenter) {
             return true;
         }
 
+        // Der Öffentlichkeitsausschuss darf bearbeiten, wenn es nicht vom Ligaausschuss eingetragen wurde
+        if (Helper::$oeffentlichkeitsausschuss && !($eingetragen_von === "Ligaausschuss")) {
+            return true;
+        }
+
         // Vom Team eingetragen?
-        if (
-            isset($_SESSION['logins']['team']['name'])
-            && $_SESSION['logins']['team']['name'] == $eingetragen_von
-        ) {
+        if (isset($_SESSION['logins']['team']['name']) && $_SESSION['logins']['team']['name'] === $eingetragen_von) {
             return true;
         }
-
-        // Team Teil des Öffis?
-        if (
-            $eingetragen_von === "Öffentlichkeitsausschuss"
-            && Helper::$oeffentlichkeitsausschuss
-        ) {
-            return true;
-        }
-
+        
         return false;
-
     }
 
+    public static function darf_loeschen(string $eingetragen_von): bool
+    {
+        // Der Ligaausschuss darf immer löschen
+        if (Helper::$ligacenter) {
+            return true;
+        }
+
+        // Der Öffentlichkeitsausschuss darf nur löschen, wenn er die Neuigkeit selbst eingetragen hat
+        if (Helper::$oeffentlichkeitsausschuss && $eingetragen_von === "Öffentlichkeitsausschuss") {
+            return true;
+        }
+
+        // Das Team darf nur löschen, wenn es die Neuigkeit selbst eingetragen hat
+        if (isset($_SESSION['logins']['team']['name']) && $_SESSION['logins']['team']['name'] === $eingetragen_von) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    public static function darf_archivieren(string $eingetragen_von): bool
+    {
+        // Der Ligaausschuss und der Öffentlichkeitsausschuss dürfen immer archivieren
+        if (Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss) {
+            return true;
+        }
+
+        // Das Team darf nur archivieren, wenn es die Neuigkeit selbst eingetragen hat
+        if (isset($_SESSION['logins']['team']['name']) && $_SESSION['logins']['team']['name'] === $eingetragen_von) {
+            return true;
+        }
+        
+        return false;
+    }
 }

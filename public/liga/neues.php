@@ -47,8 +47,8 @@ foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit) { //Todo in get_neuikgei
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-Html::$titel = "Neuigkeiten | Deutsche Einradhockeyliga";
-Html::$content = "Hier findet man die Neuigkeiteneinträge des Ligaausschusses und der Teams der Deutschen Einradhockeyliga.";
+Html::$titel = "Deutsche Einradhockeyliga";
+Html::$content = "Hier findet man die Neuigkeiteneinträge des Ligaausschusses und der Teams der Deutschen Einradhockeyliga und weitere Informationen zu Turnieren, Ergebnissen und Statistiken.";
 include '../../templates/header.tmp.php'; ?>
 
     <!-- Links (u. a zum Ein- und Ausblenden der Infobar bei Mobils) -->
@@ -80,7 +80,7 @@ include '../../templates/header.tmp.php'; ?>
         <div class="w3-col l4 m5 w3-hide-small" id="infobar">
 
             <!-- Interesse -->
-            <div class="w3-panel w3-card-4 w3-responsive w3-round w3-bottombar">
+            <div class="w3-panel w3-card-4 w3-responsive">
                 <div class="w3-stretch w3-container w3-primary w3-hover-tertiary">
                     <a href='ueber_uns.php' class="no">
                         <h3><?= Html::icon("help_outline", tag: "h1") ?> Interesse</h3>
@@ -92,7 +92,7 @@ include '../../templates/header.tmp.php'; ?>
             </div>
 
             <!-- Anstehende Turniere -->
-            <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
+            <div class="w3-panel w3-card-4 w3-responsive">
                 <div class="w3-stretch w3-container w3-primary w3-hover-tertiary">
                     <a href='turniere.php' class="no">
                         <h3><?= Html::icon("event", tag: "h2") ?> Turniere</h3>
@@ -117,7 +117,7 @@ include '../../templates/header.tmp.php'; ?>
             </div>
 
             <!-- Ergebnisse -->
-            <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
+            <div class="w3-panel w3-card-4 w3-responsive">
                 <div class="w3-stretch w3-container w3-primary w3-hover-tertiary">
                     <a href='ergebnisse.php' class="no">
                         <h3><?= Html::icon("sports_hockey", tag: "h2") ?> Ergebnisse</h3>
@@ -143,7 +143,7 @@ include '../../templates/header.tmp.php'; ?>
             </div>
 
             <!-- Statistik -->
-            <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
+            <div class="w3-panel w3-card-4 w3-responsive">
                 <div class="w3-stretch w3-container w3-primary w3-hover-tertiary">
                     <a href='statistik.php' class="no">
                         <h3><?= Html::icon("insert_chart_outlined", tag: "h2") ?> Statistik</h3>
@@ -155,7 +155,7 @@ include '../../templates/header.tmp.php'; ?>
                 <div class="w3-section">
                     <div class="w3-responsive">
                         <table class="w3-table w3-bordered">
-                            <tr class="w3-bottombar w3-text-grey w3-large w3-border-primary">
+                            <tr class="w3-text-grey w3-large w3-border-primary">
                                 <td colspan="3"><?= Html::icon("insert_chart_outlined") ?> Allgemein</td>
                             </tr>
                             <tr>
@@ -192,7 +192,7 @@ include '../../templates/header.tmp.php'; ?>
                     <div class="w3-section">
                         <div class="w3-responsive">
                             <table class="w3-table w3-centered w3-bordered">
-                                <tr class="w3-bottombar w3-text-grey w3-large w3-border-primary">
+                                <tr class="w3-text-grey w3-large w3-border-primary">
                                     <td><?= Html::icon("leaderboard") ?></td>
                                     <td>Turnierspieler</td>
                                     <td><?= Html::icon("assistant_photo") ?></td>
@@ -218,7 +218,7 @@ include '../../templates/header.tmp.php'; ?>
                     <div class="w3-section">
                         <div class="w3-responsive">
                             <table class="w3-table w3-centered w3-bordered">
-                                <tr class="w3-bottombar w3-text-grey w3-large w3-border-primary">
+                                <tr class="w3-text-grey w3-large w3-border-primary">
                                     <td><?= Html::icon("leaderboard") ?></td>
                                     <td>Spielgewinner</td>
                                     <td><?= Html::icon("sports_hockey") ?></td>
@@ -241,7 +241,7 @@ include '../../templates/header.tmp.php'; ?>
             </div>
 
             <!-- Links -->
-            <div class="w3-panel w3-card-4 w3-bottombar  w3-responsive w3-round">
+            <div class="w3-panel w3-card-4 w3-responsive">
                 <div class="w3-stretch w3-container w3-primary">
                     <h3><?= Html::icon("public", tag: "h2") ?> Links</h3>
                 </div>
@@ -262,82 +262,10 @@ include '../../templates/header.tmp.php'; ?>
 
         <!-- Neuigkeiten-Einträge -->
         <div class="w3-col l8 m7">
-            <?php foreach ($neuigkeiten as $neuigkeit): //Schleife für jede Neuigkeit?>
-                <div class='w3-card-4 w3-panel w3-responsive w3-round w3-bottombar'>
-
-                    <!-- Überschrift -->
-                    <?php if ($neuigkeit['titel']): ?>
-                        <div class="w3-stretch w3-container w3-primary w3-center">
-                            <h3><?= $neuigkeit['titel'] ?></h3>
-                        </div>
-                    <?php endif; ?>
-
-                    <!-- Bild -->
-                    <?php if ($neuigkeit['link_jpg'] != ''): ?>
-                        <div class='w3-center w3-card w3-section'>
-                            <a href='<?= $neuigkeit['bild_verlinken'] ?: $neuigkeit['link_jpg'] ?>'>
-                                <img class='w3-image w3-hover-opacity' alt="<?= $neuigkeit['titel'] ?? "Foto"?>" src=<?= $neuigkeit['link_jpg'] ?>>
-                            </a>
-                        </div>
-                    <?php endif; ?>
-
-                    <!-- Text -->
-                    <div class="w3-section">
-                        <?= nl2br($neuigkeit['inhalt']) ?>
-                    </div>
-
-                    <!-- PDF -->
-                    <?php if ($neuigkeit['link_pdf'] != ''): ?>
-                        <?= Html::link($neuigkeit['link_pdf'], "PDF-Anhang", true, "insert_drive_file") ?>
-                    <?php endif; ?>
-
-                    <!-- Autor + Zeitstempel -->
-                    <div class='w3-text-grey w3-hide-small w3-hide-medium'>
-                        <p class="w3-left">
-                            <?= Html::icon("create") ?> <?= ($neuigkeit['eingetragen_von']) ?>
-                        </p>
-                        <p class='w3-right'>
-                            <?= Html::icon("schedule") ?> <?= $neuigkeit['zeit'] ?>
-                        </p>
-                    </div>
-                    <div class='w3-text-grey w3-hide-large'>
-                        <p class="w3-right">
-                            <?= Html::icon("create") ?> <?= ($neuigkeit['eingetragen_von']) ?>
-                            <br>
-                            <?= Html::icon("schedule") ?> <?= $neuigkeit['zeit'] ?>
-                        </p>
-                    </div>
-                    <!-- Link zum Bearbeiten falls man im Ligacenter oder Teamcenter eingeloggt ist -->
-                    <?php if (LigaLeitung::is_logged_in("ligaausschuss")){ ?>
-                        <p>
-                            <a href='../ligacenter/lc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>' class='no'>
-                                <button class="w3-button w3-block w3-tertiary">
-                                    <?= Html::icon("create") ?> Bearbeiten
-                                </button>
-                            </a>
-                        </p>
-                    <?php } elseif (
-                            LigaLeitung::is_logged_in("oeffentlichkeitsausschuss")
-                            && $neuigkeit["eingetragen_von"] == "Öffentlichkeitsausschuss"
-                          ){ ?>
-                    <p>
-                        <a href='../oefficenter/oc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>' class='no'>
-                            <button class="w3-button w3-block w3-tertiary">
-                                <?= Html::icon("create") ?> Bearbeiten
-                            </button>
-                        </a>
-                    </p>
-                    <?php } elseif (Neuigkeit::darf_bearbeiten($neuigkeit['eingetragen_von'])){ ?>
-                        <p>
-                            <a href='../teamcenter/tc_neuigkeit_bearbeiten.php?neuigkeiten_id=<?= $neuigkeit['neuigkeiten_id'] ?>' class='no'>
-                                <button class="w3-button w3-block w3-tertiary">
-                                    <?= Html::icon("create") ?> Bearbeiten
-                                </button>
-                            </a>
-                        </p>
-                    <?php } //end if?>
-                </div>
+            <?php foreach ($neuigkeiten as $neuigkeit):?>
+                <?php include '../../templates/neuigkeiten/neuigkeit.tmp.php'; ?>
             <?php endforeach; ?>
+            <?= Html::link(link: "neuigkeiten.php", bezeichnung: "Hier gibt es weitere Neuigkeiten", icon: "archive") ?>
         </div>
     </div>
 

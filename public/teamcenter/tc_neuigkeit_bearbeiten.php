@@ -4,11 +4,13 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth
-require_once '../../logic/neuigkeit_bearbeiten.logic.php'; //Formularauswertung
+
+//Formularauswertung
+require_once '../../logic/neuigkeit_bearbeiten.logic.php';
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 include '../../templates/header.tmp.php';
-include '../../templates/neuigkeit_bearbeiten.tmp.php';
+include '../../templates/neuigkeiten/neuigkeit_bearbeiten.tmp.php';
 include '../../templates/footer.tmp.php';
