@@ -20,7 +20,7 @@ include '../../templates/header.tmp.php';
             Zusammenfassung Ligamodus
         </p>
     </a>
-    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS ?>?version=2024-07-25">
+    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_MODUS ?>?version=2025-07-13">
         <p>
             <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i>
             Ligamodus
