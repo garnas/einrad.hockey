@@ -190,7 +190,7 @@ class TurnierSnippets {
         $handyNumbers = preg_replace('/[^0-9.]+/', '', $handy);
         return Html::link(
             'tel:' . str_replace(' ', '', $handyNumbers),
-            "<i class='material-icons'>smartphone</i>" . $handy
+            $handy, icon:"smartphone"
         );
     }
 
