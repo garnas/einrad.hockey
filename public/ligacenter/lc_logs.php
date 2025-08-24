@@ -21,7 +21,7 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 <?= Html::link('lc_turnierliste.php', '<span class="material-icons">sports_hockey</span> Zurück zur Turnierliste') ?>
 <h2 class="w3-text-grey">Gesamtübersicht über alle Vorgänge</h2>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="<?= Env::BASE_URL ?>/javascript/jquery.min.js?v=20250825"></script>
 <script>
     $(document).ready(function() {
         $("#myInput").on("keyup", function() {

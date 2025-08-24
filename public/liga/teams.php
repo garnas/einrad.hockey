@@ -14,7 +14,7 @@ Html::$content = "Liste der Teams der Deutschen Einradhockeyliga mit Teamfoto un
 include '../../templates/header.tmp.php';
 ?>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="<?= Env::BASE_URL ?>/javascript/jquery.min.js?v=20250825"></script>
     <script>
         //Turnierergebnisse filtern
         $(document).ready(function () {
