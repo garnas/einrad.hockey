@@ -30,7 +30,7 @@ class TeamRepository
         $this->spieler = DoctrineWrapper::manager()->getRepository(Spieler::class);
     }
 
-    public function team(int $id): nTeam
+    public function team(int $id): ?nTeam
     {
         return $this->team->find($id);
     }
