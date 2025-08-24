@@ -24,7 +24,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
         <h2 class="w3-text-primary"><?= Html::icon('school', tag:'h2') ?> Schiedsrichter-Prüfende</h2>
         <ul class='w3-ul w3-margin-left w3-leftbar w3-border-tertiary'>
             <?php foreach ($ausbilder_liste as $spieler): ?>
-                <li><?= $spieler->get_name() ?> (<i><?=$spieler->get_team()?></i>)</li>
+                <li><?= $spieler->getName(fullName: false) ?> (<i><?=$spieler->getTeam()->getName()?></i>)</li>
             <?php endforeach; ?>
         </ul>
     <?php endif; ?>
