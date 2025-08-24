@@ -37,4 +37,6 @@ vendor/
 classes/xml.class.php_bak
 public/xml/test.php
 
+# sql
 schiri_test.sql
+dbs*.sql
