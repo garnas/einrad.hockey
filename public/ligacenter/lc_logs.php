@@ -18,7 +18,7 @@ Html::$content = "Hier wird der gesamte Log aller Turniere angezeigt.";
 include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 
 <br>
-<?= Html::link('lc_turnierliste.php', '<span class="material-icons">sports_hockey</span> Zurück zur Turnierliste') ?>
+<?= Html::link('lc_turnierliste.php', 'Zurück zur Turnierliste', icon: 'sports_hockey') ?>
 <h2 class="w3-text-grey">Gesamtübersicht über alle Vorgänge</h2>
 
 <script src="<?= Env::BASE_URL ?>/javascript/jquery.min.js?v=20250825"></script>
