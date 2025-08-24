@@ -45,10 +45,10 @@ include '../../templates/header.tmp.php'; ?>
     <?= Html::icon("mail") ?> <?= Env::LAMAIL ?>
 </a>
 
-<!-- Technik -->
-<h2 class="w3-text-primary"><?= Html::icon("engineering", tag:"h2") ?> Technikausschuss</h2>
+<!-- Technikteam -->
+<h2 class="w3-text-primary"><?= Html::icon("engineering", tag:"h2") ?> Technikteam</h2>
 <p>
-    Der Technikausschuss ist verantwortlich für die Instandhaltung und Weiterentwicklung der IT der Deutschen
+    Das Technikteam ist verantwortlich für die Instandhaltung und Weiterentwicklung der IT der Deutschen
     Einradhockeyliga. Dazu gehört unter anderem die Aktualisierung der technischen Werkzeuge entsprechend des Ligamodus.
 </p>
 <div class="w3-responsive">
@@ -65,10 +65,10 @@ include '../../templates/header.tmp.php'; ?>
         <?= Html::icon("mail") ?> <?= Env::TECHNIKMAIL ?>
     </a>
 
-<!-- Öffntlichkeits-Ausschuss -->
-<h2 class="w3-text-primary"><?= Html::icon("public", tag:"h2") ?> Öffentlichkeitsausschuss</h2>
+<!-- Öffentlichkeitsteam -->
+<h2 class="w3-text-primary"><?= Html::icon("public", tag:"h2") ?> Öffentlichkeitsteam</h2>
 <p>
-    Der Öffentlichkeitsausschuss ist zuständig für die redaktionellen Inhalte der Internetseite. Darüber hinaus organisiert er Veranstaltungen und informiert über die Social-Media-Kanäle der Deutschen Einradhockeyliga.
+    Das Öffentlichkeitsteam ist zuständig für die redaktionellen Inhalte der Internetseite. Darüber hinaus organisiert es Veranstaltungen und informiert über die Social-Media-Kanäle der Deutschen Einradhockeyliga.
 </p>
 <div class="w3-responsive">
     <table class="w3-leftbar w3-container w3-margin-left w3-border-tertiary" style="white-space: nowrap">
