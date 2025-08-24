@@ -4,7 +4,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 use App\Repository\Turnier\TurnierRepository;
-use App\Service\Turnier\BlockService;
 use App\Service\Turnier\TurnierSnippets;
 
 require_once '../../init.php';

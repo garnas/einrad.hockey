@@ -1,6 +1,5 @@
 <?php
 
-use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierSnippets;
 
 ?>

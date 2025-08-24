@@ -3,9 +3,7 @@
 use App\Repository\Team\TeamRepository;
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Form\FormLogicTeam;
-use App\Service\Team\NLTeamService;
 use App\Service\Team\TeamService;
-use App\Service\Team\TeamValidator;
 use App\Service\Turnier\TurnierService;
 
 $turnierId = (int) @$_GET['turnier_id'];

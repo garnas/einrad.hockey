@@ -1,8 +1,8 @@
 <?php
 
-use App\Service\Turnier\TurnierSnippets;
-use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierLinks;
+use App\Service\Turnier\TurnierService;
+use App\Service\Turnier\TurnierSnippets;
 
 ?>
 

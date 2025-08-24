@@ -24,6 +24,7 @@ function get_average($arr) {
 }
 
 use App\Repository\Team\TeamRepository;
+
 $teams = TeamRepository::get()->activeLigaTeams();
 
 $abschluss = strtotime(Abstimmung::ENDE);

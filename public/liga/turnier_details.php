@@ -7,6 +7,7 @@ use App\Service\Team\TeamSnippets;
 use App\Service\Turnier\TurnierLinks;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierSnippets;
+
 require_once '../../init.php';
 
 $turnier_id = (int) @$_GET['turnier_id'];

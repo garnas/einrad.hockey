@@ -3,8 +3,8 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 use App\Repository\Team\TeamRepository;
-use App\Service\Turnier\TurnierService;
 use App\Repository\Turnier\TurnierRepository;
+use App\Service\Turnier\TurnierService;
 use Mpdf\HTMLParserMode;
 
 require_once '../../init.php'; // autoloader und Session

@@ -1,7 +1,5 @@
 <?php
 
-use App\Service\Team\SpielerService;
-
 require_once '../../init.php';
 
 Html::$titel = "Kader | Deutsche Einradhockeyliga";

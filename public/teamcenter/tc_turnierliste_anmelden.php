@@ -2,11 +2,11 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-use App\Repository\Turnier\TurnierRepository;
 use App\Entity\Turnier\Turnier;
+use App\Repository\Turnier\TurnierRepository;
 use App\Service\Team\TeamService;
-use App\Service\Turnier\TurnierSnippets;
 use App\Service\Turnier\TurnierLinks;
+use App\Service\Turnier\TurnierSnippets;
 
 require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth

@@ -3,8 +3,8 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 use App\Entity\Team\FreilosGrund;
-use App\Entity\Team\nTeam;
 use App\Entity\Team\Kontakt;
+use App\Entity\Team\nTeam;
 use App\Entity\Team\TeamDetails;
 use App\Repository\Team\TeamRepository;
 

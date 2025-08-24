@@ -972,16 +972,6 @@ class nTurnier
     }
 
     /**
-     * Ermittelt, ob das angegebene Team der Ausrichter ist
-     * 
-     * @return bool
-     */
-    public function is_ausrichter(int $team_id): bool
-    {
-        return $team_id == $this->ausrichter;
-    }
-
-    /**
      * True, wenn das Turnierergebnis eingetragen werden darf. Also jedes vorherige Turnier in der Ergebnisphase ist.
      *
      * @return bool

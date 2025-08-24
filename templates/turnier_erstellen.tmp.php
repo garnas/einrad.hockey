@@ -1,7 +1,7 @@
 <?php
 
-use App\Service\Turnier\BlockService;
 use App\Repository\Turnier\TurnierRepository;
+use App\Service\Turnier\BlockService;
 
 $last_turnier = TurnierRepository::get()->last_turnier($ausrichter_team_id);
 if ($last_turnier) {
