@@ -3,6 +3,7 @@
 namespace App\Service\Team;
 
 use App\Entity\Team\Spieler;
+use Config;
 use db;
 
 class SpielerService
@@ -18,6 +19,11 @@ class SpielerService
                 AND funktion = 'schiriausbilder'
                 ";
         return db::$db->query($sql, $spieler->getSpielerId())->affected_rows() > 0;
+    }
+
+    public static function isSchiri(Spieler $spieler): bool
+    {
+        return $spieler->getSchiri() >= Config::SAISON;
     }
 
 }

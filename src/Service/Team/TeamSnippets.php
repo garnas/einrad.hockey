@@ -76,7 +76,7 @@ class TeamSnippets
         $saison_text = Html::get_saison_string($spieler->getSchiri());
         $junior = ($spieler->isJunior()) ? "<i class='w3-text-grey'>junior</i>" : "";
         $ausbilder = (SpielerService::isAusbilder($spieler)) ? "<i class='w3-text-grey'>Ausbilder/in</i>" : "";
-        if ($spieler->getSchiri() >= Config::SAISON) {
+        if (SpielerService::isSchiri($spieler)) {
             $icon = Html::icon("check_circle_outline");
             return "<span class='w3-text-green'>$icon $saison_text $junior $ausbilder</span>";
         } else {

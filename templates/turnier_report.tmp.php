@@ -1,6 +1,13 @@
+<?php
+
+use App\Entity\Team\Spieler;
+use App\Service\Team\SpielerService;
+use App\Service\Team\TeamSnippets;
+use App\Service\Turnier\TurnierSnippets;
+
+?>
 <h1 class="w3-text-primary">
-    <?=date("d.m.Y", strtotime($turnier->get_datum()))?>
-    <?=$turnier->get_ort()?> <i>(<?=$turnier->get_tblock()?>)</i>
+    <?= TurnierSnippets::ortDatumBlock($turnier) ?>
 </h1>
 <h2 class="w3-text-grey">
     <?= Html::icon('article', tag:'h2') ?> Turnier-Report
@@ -9,8 +16,9 @@
             "Der Turnierreport ist nur von teilnehmenden Ligateams und dem Ligaausschuss einsehbar.",
             "") ?>
 <!-- Link Spielplan -->
-<p><?=Html::link('../liga/spielplan.php?turnier_id=' . $turnier_id, '<i class="material-icons">reorder</i> Zum Spielplan')?></p>
-<?php if ((time() - strtotime($turnier->get_datum())) < (8 * 24 * 60 * 60)): ?>
+<p><?=Html::link('../liga/spielplan.php?turnier_id=' . $turnier->id(), 'Zum Spielplan', icon: "reorder")?></p>
+<?php $turnier_datum = DateTimeImmutable::createFromMutable($turnier->getDatum());
+if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
     <!-- Ausbilder -->
     <?php if (!empty($ausbilder_liste)): ?>
         <h2 class="w3-text-primary"><?= Html::icon('school', tag:'h2') ?> Schiedsrichter-Prüfende</h2>
@@ -42,13 +50,14 @@
                             <th><?= Html::icon("sports") ?> Schiri<sup>*</sup></th>
                         </tr>
                         <?php foreach ($kader as $spieler): ?>
-                            <tr class="<?php $spieler->schiri ? "w3-pale-green" : ""; ?>">
-                                <td><?=$spieler->id()?></td>
+                            <?php /** @var Spieler $spieler */ ?>
+                            <tr class="<?php SpielerService::isSchiri($spieler) ? "w3-pale-green" : ""; ?>">
+                                <td><?=$spieler->getSpielerId()?></td>
                                 <td>
-                                    <?= $spieler->get_name(true) ?>
+                                    <?= $spieler->getName(fullName: false) ?>
                                 </td>
                                 <td>
-                                    <?= $spieler->get_schiri_as_html() ?>
+                                    <?= TeamSnippets::schiritag($spieler) ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -135,7 +144,7 @@
                 >
                     <option selected disabled>--</option>
                     <?php foreach($teams as $team): ?>
-                        <option><?=$team->teamname?></option>
+                        <option><?=$team->getName()?></option>
                     <?php endforeach; ?>
                 </select>
             </p>
@@ -214,7 +223,7 @@
                     <datalist id="spielerliste">
                         <?php
                         foreach ($spieler_liste as $spieler): ?>
-                            <option value='<?= $spieler->get_name(true) ?> | <?= $spieler->get_team() ?>'>
+                            <option value='<?= $spieler->getName(fullName: false) ?> | <?= $spieler->getTeam()->getName() ?>'>
                         <?php endforeach; ?>
                     </datalist>
             </p>
@@ -228,17 +237,25 @@
             </p>
             <p>
                 <label for="zeitstrafe_team_a">Spielpaarung</label>
-                <select id="zeitstrafe_team_a" name="zeitstrafe_team_a" class="w3-select w3-input w3-border w3-border-primary">
-                    <option disabled selected>--</option>
-                    <?php foreach($teams as $team): ?>
-                        <option><?=$team->teamname?></option>
+                <select id="zeitstrafe_team_a"
+                        name="zeitstrafe_team_a"
+                        class="w3-select w3-input w3-border w3-border-primary"
+                        required
+                >
+                    <option disabled selected value="">--</option>
+                    <?php foreach ($teams as $team): ?>
+                        <option><?= $team->getName() ?></option>
                     <?php endforeach; ?>
                 </select>
                 <label for="zeitstrafe_team_b" class="w3-text-grey">versus</label>
-                <select id="zeitstrafe_team_b" name="zeitstrafe_team_b" class="w3-select w3-input w3-border w3-border-primary">
-                    <option disabled selected>--</option>
-                    <?php foreach($teams as $team): ?>
-                        <option><?=$team->teamname?></option>
+                <select id="zeitstrafe_team_b"
+                        name="zeitstrafe_team_b"
+                        class="w3-select w3-input w3-border w3-border-primary"
+                        required
+                >
+                    <option disabled selected value="">--</option>
+                    <?php foreach ($teams as $team): ?>
+                        <option><?= $team->getName() ?></option>
                     <?php endforeach; ?>
                 </select>
             </p>

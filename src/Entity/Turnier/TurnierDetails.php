@@ -3,6 +3,7 @@
 namespace App\Entity\Turnier;
 
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: "turniere_details")]
@@ -214,7 +215,8 @@ class TurnierDetails
 
     public function getBesprechungUhrzeit(): string
     {
-        return $this->getStartzeit()->modify("- 15 minutes")->format("H:i");
+        $startzeit = DateTimeImmutable::createFromMutable($this->getStartzeit());
+        return $startzeit->modify("- 15 minutes")->format("H:i");
     }
 
     public function getStartgebuehr(): ?string
