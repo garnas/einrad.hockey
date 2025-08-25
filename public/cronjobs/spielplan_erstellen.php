@@ -44,7 +44,8 @@ foreach ($turniere as $turnier) {
         $ligateams = array_filter($teams, static function ($team) {
             return ($team->details["ligateam"] ?? "Nein") == "Ja";
         });
-        if (count($ligateams) < 4) {
+        $min_ligateams = count($teams) === 4 ? 3 : 4;
+        if (count($ligateams) < $min_ligateams) {
             $absage_grund = "Zu wenige Ligateams";
         }
         if ($turnier_new->getDetails()->getMinTeams() && count($teams) < $turnier_new->getDetails()->getMinTeams()) {
