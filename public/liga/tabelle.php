@@ -22,12 +22,16 @@ if (Tabelle::check_spieltag_live($akt_spieltag)) {
 $gew_spieltag = isset($_GET['spieltag']) ? (int) $_GET['spieltag'] : $akt_spieltag;
 
 // Daten der Meisterschaftstabelle, um sie an das Layout zu uebergeben
-if ($saison >= Config::SAISON) {
+if ($saison >= 30) {
     $meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag, $saison);
     $meisterschafts_tabelle_templates = Tabelle::get_meisterschafts_tabelle_templates($saison);
+    $show_filter = true;
+    $filter = (isset($_GET['filter'])) ? $_GET['filter'] : 'tabelle';
 } else {
     $meisterschafts_tabelle = Archiv_Tabelle::get_meisterschafts_tabelle($gew_spieltag, $saison);
     $meisterschafts_tabelle_templates = Archiv_Tabelle::get_meisterschafts_tabelle_templates($saison);
+    $show_filter = false;
+    $filter = 'tabelle';
 }
 
 // Daten der Rangtabelle, um sie an das Layout zu uebergeben
@@ -45,14 +49,14 @@ foreach ($strafen as $key => $strafe) {
 }
 
 // Den Plätzen der Meisterschaftstabelle eine Farbe zuordnen:
-for ($i = 1; $i <= 10 ; $i++){
-    $platz_color[$i] = "w3-text-tertiary";
+foreach (range(1, 10) as $i) {
+    $platz_color[$i] = "ehl-text-pink";
 }
-for ($i = 11; $i <= 16; $i++){
-    $platz_color[$i] = "w3-text-grey";
+foreach (range(11, 16) as $i) {
+    $platz_color[$i] = "ehl-text-orange";
 }
-for ($i = 17; $i <= 22; $i++){
-    $platz_color[$i] = "w3-text-brown";
+foreach (range(17, 22) as $i) {
+    $platz_color[$i] = "ehl-text-blue";
 }
 
 $block_color = array(
@@ -75,75 +79,37 @@ include '../../templates/header.tmp.php';?>
 <h1 id='meister' class="w3-text-primary">Meisterschaftstabelle</h1>
 <p class="w3-border-top w3-border-grey w3-text-grey"><a href="#rang" class="no w3-hover-text-secondary">Zur Rangtabelle</a><span class="w3-right">Saison <?=Html::get_saison_string($saison)?></span></p>
 
+<h2 class="w3-text-secondary w3-xlarge">Spieltag <?=$gew_spieltag?></h2>
+
+<!-- Filter fuer die unterschiedlichen Darstellungen -->
+<?php if ($show_filter): ?>
+    <?php include '../../templates/tabellen/mt_filterauswahl.tmp.php'; ?>
+<?php endif; ?>
+
 <!-- Auswahl des Spieltages ueber der Meisterschaftstabelle -->
-<div class="w3-row w3-xlarge w3-text-primary w3-padding">
-    <div class="w3-col w3-right w3-right-align" style="width: 36px;">
-        <a href="tabelle.php?saison=<?=$saison?>#meister" class="w3-hover-text-secondary"><?=Html::icon('last_page')?></a>
-    </div>
-    <div class="w3-col w3-right w3-right-align" style="width: 36px;">
-        <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=min($gew_spieltag+1, $akt_spieltag)?>#meister" class="w3-hover-text-secondary"><?=Html::icon('keyboard_arrow_right')?></a>
-    </div>
-    <div class="w3-col w3-right w3-right-align" style="width: 36px;">
-        <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=max($gew_spieltag-1, 0)?>#meister" class="w3-hover-text-secondary"><?=Html::icon('keyboard_arrow_left')?></a>
-    </div>
-    <div class="w3-col w3-right w3-right-align" style="width: 36px;">
-        <a href="tabelle.php?saison=<?=$saison?>&spieltag=0#meister" class="w3-hover-text-secondary"><?=Html::icon('first_page')?></a>
-    </div>
-    <div class="w3-rest">Spieltag <?=$gew_spieltag?></div>
-</div>
+<?php include '../../templates/tabellen/spieltagsauswahl.tmp.php'; ?>
 
-<!-- Beginn der eigentlichen Meisterschaftstabelle -->
+<!-- Meisterschaftstabelle fuer large + medium -->
 <div class="w3-responsive w3-card w3-hide-small">
-    <?php include '../../' . $meisterschafts_tabelle_templates['desktop']; ?>
+    <?php include '../../' . $meisterschafts_tabelle_templates['desktop'][$filter]; ?>
 </div>
 
-<!-- Meisterschaftstabelle für mobile Geräte -->
+<!-- Meisterschaftstabelle fuer small -->
 <div class="w3-responsive w3-card w3-hide-large w3-hide-medium">
-    <?php include '../../' . $meisterschafts_tabelle_templates['mobil']; ?>
+    <?php include '../../' . $meisterschafts_tabelle_templates['mobil'][$filter]; ?>
 </div>
 
-<!-- Auswahl des Spieltages unter der Meisterschaftstabelle-->    
-<div class="w3-row w3-text-primary w3-padding w3-small">
-    <div class="w3-col l3 m1 s3 w3-left-align">
-        <a href="tabelle.php?saison=<?=$saison?>&spieltag=0#meister" class="no w3-hover-text-secondary"><?=Html::icon('first_page')?> <span class="w3-hide-small w3-hide-medium">Erster Spieltag</span></a>
-    </div>
-    <div class="w3-col l3 m5 s3 w3-left-align">
-        <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=max($gew_spieltag-1, 0)?>#meister" class="no w3-hover-text-secondary"><?=Html::icon('keyboard_arrow_left')?> <span class="w3-hide-small">Vorheriger Spieltag </span></a>
-    </div>
-    <div class="w3-col l3 m5 s3 w3-right-align">
-        <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=min($gew_spieltag+1, $akt_spieltag)?>#meister" class="no w3-hover-text-secondary"><span class="w3-hide-small"> Nächster Spieltag</span> <?=Html::icon('keyboard_arrow_right')?></a>
-    </div>
-    <div class="w3-col l3 m1 s3 w3-right-align">
-        <a href="tabelle.php?saison=<?=$saison?>#meister" class="no w3-hover-text-secondary"><span class="w3-hide-small w3-hide-medium">Aktueller Spieltag</span> <?=Html::icon('last_page')?></a>
-    </div>
-</div>
-
-<!-- Legende für die Farbgebung -->
-<div>
-    <p><b>Weiß hinterlegt</b>: Das Team hat die notwendige Anzahl an Turnieren gespielt und ist zu einer Teilnahme an einer Meisterschaft berechtigt.</p>
-    <p><b>Grau hinterlegt</b>: Das Team hat noch nicht die notwendige Anzahl an Turnieren gespielt und ist noch nicht zu einer Teilnahme an einer Meisterschaft berechtigt.</p>
-</div>
+<!-- Auswahl des Spieltages unter der Meisterschaftstabelle -->    
+<?php include '../../templates/tabellen/spieltagsauswahl.tmp.php'; ?>
 
 <!-- ------------------------- RANGTABELLE ------------------------- -->
 <h1 id="rang" class="w3-text-primary w3-border-primary">Rangtabelle</h1>
 <p class="w3-border-top w3-border-grey w3-text-grey"><a href="#meister" class="no w3-hover-text-secondary">Zur Meisterschaftstabelle</a><span class="w3-right">Saison <?=Html::get_saison_string($saison)?></span></p>
 
+<h2 class="w3-text-secondary w3-xlarge">Spieltag <?=$gew_spieltag?></h2>
+
 <!-- Auswahl des Spieltages ueber der Rangtabelle -->  
-<div class="w3-row w3-xlarge w3-text-primary w3-padding">
-    <div class="w3-col w3-right w3-right-align" style="width: 36px;">
-        <a href="tabelle.php?saison=<?=$saison?>#rang" class="no w3-hover-text-secondary"><?=Html::icon('last_page')?></a>
-    </div>  
-    <div class="w3-col w3-right w3-right-align" style="width: 36px;">
-        <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=min($gew_spieltag+1, $akt_spieltag)?>#rang" class="no w3-hover-text-secondary"><?=Html::icon('keyboard_arrow_right')?></a>
-    </div>
-    <div class="w3-col w3-right w3-right-align" style="width: 36px;">
-        <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=max($gew_spieltag-1, 0)?>#rang" class="no w3-hover-text-secondary"><?=Html::icon('keyboard_arrow_left')?></a>
-    </div>
-    <div class="w3-col w3-right w3-right-align" style="width: 36px;">
-        <a href="tabelle.php?saison=<?=$saison?>&spieltag=0#rang" class="no w3-hover-text-secondary"><?=Html::icon('first_page')?></a>
-    </div>
-    <div class="w3-rest">Spieltag <?=$gew_spieltag?></div>
-</div>
+<?php include '../../templates/tabellen/spieltagsauswahl.tmp.php'; ?>
 
 <!-- Beginn der eigentlichen Rangtabelle -->
 <div class="w3-responsive w3-card w3-hide-small">
@@ -156,20 +122,7 @@ include '../../templates/header.tmp.php';?>
 </div>
 
 <!-- Auswahl des Spieltages unter der Rangtabelle -->
-<div class="w3-row w3-text-primary w3-padding w3-small">
-    <div class="w3-col l3 m1 s3 w3-left-align">
-        <a href="tabelle.php?saison=<?=$saison?>&spieltag=0#rang" class="no w3-hover-text-secondary"><?=Html::icon('first_page')?> <span class="w3-hide-small w3-hide-medium">Erster Spieltag</span></a>
-    </div>
-    <div class="w3-col l3 m5 s3 w3-left-align">
-        <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=max($gew_spieltag-1, 0)?>#rang" class="no w3-hover-text-secondary"><?=Html::icon('keyboard_arrow_left')?> <span class="w3-hide-small">Vorheriger Spieltag</span></a>
-    </div>
-    <div class="w3-col l3 m5 s3 w3-right-align">
-        <a href="tabelle.php?saison=<?=$saison?>&spieltag=<?=min($gew_spieltag+1, $akt_spieltag)?>#rang" class="no w3-hover-text-secondary"><span class="w3-hide-small">Nächster Spieltag</span> <?=Html::icon('keyboard_arrow_right')?></a>
-    </div>
-    <div class="w3-col l3 m1 s3 w3-right-align">
-        <a href="tabelle.php?saison=<?=$saison?>#rang" class="no w3-hover-text-secondary"><span class="w3-hide-small w3-hide-medium">Aktueller Spieltag</span> <?=Html::icon('last_page')?></a>
-    </div>
-</div>
+<?php include '../../templates/tabellen/spieltagsauswahl.tmp.php'; ?>
 
 
 <!-- ---------------------------- -->
