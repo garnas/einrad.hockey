@@ -3,8 +3,8 @@
     <div class="w3-col w3-right w3-padding-8" style="width: 42px;"><!-- Platz fuer das Icon --></div>
     <div class="w3-rest">
         <div class="w3-row">
-            <div class="w3-col l1 m1 w3-padding-8 w3-right-align"><b>Punkte</b></div>
-            <div class="w3-col l10 m10 w3-padding-8 w3-left-align"><b>Team</b></div>
+            <div class="w3-col l1 m2 w3-padding-8 w3-right-align"><b>Punkte</b></div>
+            <div class="w3-col l11 m10 w3-padding-8 w3-left-align"><b>Team</b></div>
         </div>
     </div>
 </div>
@@ -27,8 +27,8 @@
             </div>
             <div class="w3-rest">
                 <div class="w3-row">
-                    <div class="w3-col l1 m1 w3-padding-8 w3-right-align"><?=number_format($zeile['summe'] ?: 0, 0, ",", ".")?></div>
-                    <div class="w3-col l11 m11 w3-padding-8"><?=$zeile['teamname'] . (!empty($zeile['hat_strafe']) ? '<a class="no w3-text-primary w3-hover-text-secondary" href="#strafen">*</a>' : '')?></div>
+                    <div class="w3-col l1 m2 w3-padding-8 w3-right-align"><?=number_format($zeile['summe'] ?: 0, 0, ",", ".")?></div>
+                    <div class="w3-col l11 m10 w3-padding-8"><?=$zeile['teamname'] . (!empty($zeile['hat_strafe']) ? '<a class="no w3-text-primary w3-hover-text-secondary" href="#strafen">*</a>' : '')?></div>
                 </div>
             </div>
         </div>
