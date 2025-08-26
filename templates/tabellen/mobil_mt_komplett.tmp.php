@@ -15,10 +15,12 @@
         <!-- Kopfzeile fuer das Team -->
         <div id="small-meister-head-<?=$key?>" class="w3-row <?=$nthcolor?> w3-border-bottom w3-border-grey">
             <div class="w3-col w3-right w3-padding-8 w3-center" style="width: 42px;">
+                <?php if (!empty($zeile['details'])): ?>
                 <span onclick="show_small_results('meister', <?=$key?>)">
                     <span id="small-meister-icon-show-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:block">arrow_drop_down</span>
                     <span id="small-meister-icon-hide-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:none">arrow_drop_up</span>
                 </span>
+                <?php endif; ?>
             </div>
             <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width: 5em"><?=number_format($zeile['summe'] ?: 0, 0, ",", ".")?></div>
             <div class="w3-rest w3-padding-8"><?=$zeile['teamname'] . (!empty($zeile['hat_strafe']) ? '<a class="no w3-text-primary w3-hover-text-secondary" href="#strafen">*</a>' : '')?></div>

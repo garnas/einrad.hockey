@@ -18,12 +18,12 @@
         <!-- Kopfzeile fuer das Team -->
         <div id="large-meister-head-<?=$key?>" class="w3-row <?=$color?> w3-border-bottom w3-border-grey">
             <div class="w3-col w3-right w3-padding-8 w3-center" style="width: 42px;">
-                <? if (!empty($zeile['details'])): ?>
+                <?php if (!empty($zeile['details'])): ?>
                     <span onclick="show_large_results('meister', <?=$key?>)" style="cursor: pointer;">
                         <span id="large-meister-icon-show-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:block">arrow_drop_down</span>
                         <span id="large-meister-icon-hide-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:none">arrow_drop_up</span>
                     </span>
-                <? endif; ?>
+                <?php endif; ?>
             </div>
             <div class="w3-rest">
                 <div class="w3-row">
