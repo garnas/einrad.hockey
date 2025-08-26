@@ -34,6 +34,17 @@ if ($saison >= Config::SAISON) {
     $filter = 'tabelle';
 }
 
+$meisterschafts_tabelle_meister = array();
+foreach ($meisterschafts_tabelle as $row) {
+    // Prüfe, ob Einzelergebnisse vorhanden sind
+    if (count($row['details']) < 4) {
+        continue;
+    }
+    
+    // Füge die Zeile zur gefilterten Tabelle hinzu
+    $meisterschafts_tabelle_meister[] = $row;
+}
+
 // Daten der Rangtabelle, um sie an das Layout zu uebergeben
 $rang_tabelle = Tabelle::get_rang_tabelle($gew_spieltag, $saison);
 $rang_tabelle_templates = Tabelle::get_rang_tabelle_templates($saison);
