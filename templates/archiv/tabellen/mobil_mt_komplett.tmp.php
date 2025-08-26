@@ -3,7 +3,7 @@
     <div class="w3-row">
         <div class="w3-col s1 w3-padding-8 w3-right-align"><b>#</b></div>
         <div class="w3-col s8 w3-padding-8 w3-left-align"><b>Team</b></div>
-        <div class="w3-col s3 w3-padding-8 w3-right-align"><b>Summe</b></div>
+        <div class="w3-col s3 w3-padding-8 w3-right-align"><b>Punkte</b></div>
     </div>
 </div>
 
@@ -22,8 +22,8 @@
                     <span id="small-meister-icon-hide-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:none">arrow_drop_up</span>
                 </span>
             </div>
-            <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width: 4em"><?=number_format($zeile['summe'] ?: 0, 0, ",", ".") . (!empty($zeile['hat_strafe']) ? '<a class="no w3-text-primary w3-hover-text-secondary" href="#strafen">*</a>' : '')?></div>
-            <div class="w3-rest w3-padding-8"><?=$zeile['teamname']?></div>
+            <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width: 4em"><?=number_format($zeile['summe'] ?: 0, 0, ",", ".")?></div>
+            <div class="w3-rest w3-padding-8"><?=$zeile['teamname'] . (!empty($zeile['hat_strafe']) ? '<a class="no w3-text-primary w3-hover-text-secondary" href="#strafen">*</a>' : '')?></div>
         </div>
 
         <!-- Details zu den Turnieren des Teams -->
