@@ -5,7 +5,7 @@
         <div class="w3-row">
             <div class="w3-col l1 m1 w3-padding-8 w3-right-align"><b>#</b></div>
             <div class="w3-col l8 m8 w3-padding-8 w3-left-align"><b>Team</b></div>
-            <div class="w3-col l3 m3 w3-padding-8 w3-right-align"><b>Summe</b></div>
+            <div class="w3-col l3 m3 w3-padding-8 w3-right-align"><b>Punkte</b></div>
         </div>
     </div>
 </div>
@@ -29,8 +29,8 @@
             <div class="w3-rest">
                 <div class="w3-row">
                     <div class="w3-col l1 m1 w3-padding-8 w3-right-align <?=$platz_color[$zeile['platz']] ?? ''?>"><?=$zeile['platz']?></div>
-                    <div class="w3-col l8 m8 w3-padding-8"><?=$zeile['teamname']?></div>
-                    <div class="w3-col l3 m3 w3-padding-8 w3-right-align"><?=number_format($zeile['summe'] ?: 0, 0, ",", ".") . (!empty($zeile['hat_strafe']) ? '<a class="no w3-text-primary w3-hover-text-secondary" href="#strafen">*</a>' : '')?></div>
+                    <div class="w3-col l8 m8 w3-padding-8"><?=$zeile['teamname'] . (!empty($zeile['hat_strafe']) ? '<a class="no w3-text-primary w3-hover-text-secondary" href="#strafen">*</a>' : '')?></div>
+                    <div class="w3-col l3 m3 w3-padding-8 w3-right-align"><?=number_format($zeile['summe'] ?: 0, 0, ",", ".")?></div>
                 </div>
             </div>
         </div>
