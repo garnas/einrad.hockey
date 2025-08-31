@@ -577,11 +577,12 @@ class Spielplan
         foreach ($reverse_tabelle as $team_id => $eintrag) {
             if (is_null($this->teamliste[$team_id]->wertigkeit)) {
                 // Es handelt sich um ein Nichtligateam // max($werte) + 1 wenn nicht Letzter.
-                $wert = max($werte ?? [round($last_ligateam() / 2 - 1), 14]) + 1;
+                $wert = max($bisherige_wertigkeiten ?? [round($last_ligateam() / 2 - 1), 14]) + 1;
             } else {
                 // Normales Ligateam
                 $wert = $this->teamliste[$team_id]->wertigkeit;
             }
+            $bisherige_wertigkeiten[] = $wert;
             $this->platzierungstabelle[$team_id]['wertigkeit'] = $wert;
         }
     }
