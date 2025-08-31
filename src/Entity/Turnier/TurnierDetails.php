@@ -27,19 +27,19 @@ class TurnierDetails
     }
 
     #[ORM\Column(name: "hallenname", type: "string", length: 255, nullable: true)]
-    private string $hallenname;
+    private ?string $hallenname;
 
     #[ORM\Column(name: "strasse", type: "string", length: 255, nullable: true)]
-    private string $strasse;
+    private ?string $strasse;
 
-    #[ORM\Column(name: "plz", type: "string", length: 6)]
-    private string $plz;
+    #[ORM\Column(name: "plz", type: "string", length: 6, nullable: true)]
+    private ?string $plz;
 
     #[ORM\Column(name: "ort", type: "string", length: 255, nullable: true)]
-    private string $ort;
+    private ?string $ort;
 
     #[ORM\Column(name: "haltestellen", type: "string", length: 255, nullable: true)]
-    private string $haltestellen;
+    private ?string $haltestellen;
 
     #[ORM\Column(name: "plaetze", type: "integer", nullable: true)]
     private int $plaetze;
@@ -50,23 +50,23 @@ class TurnierDetails
     #[ORM\Column(name: "format", type: "string", length: 255, nullable: true)]
     private ?string $format;
 
-    #[ORM\Column(name: "startzeit", type: "time")]
-    private DateTime $startzeit;
+    #[ORM\Column(name: "startzeit", type: "time", nullable: true)]
+    private ?DateTime $startzeit;
 
     #[ORM\Column(name: "besprechung", type: "string", length: 0, nullable: true)]
-    private string $besprechung;
+    private ?string $besprechung;
 
     #[ORM\Column(name: "hinweis", type: "string", length: 1700, nullable: true)]
     private string $hinweis;
 
     #[ORM\Column(name: "organisator", type: "string", length: 255, nullable: true)]
-    private string $organisator;
+    private ?string $organisator;
 
     #[ORM\Column(name: "handy", type: "string", length: 255, nullable: true)]
-    private string $handy;
+    private ?string $handy;
 
     #[ORM\Column(name: "startgebuehr", type: "string", length: 255, nullable: true)]
-    private string $startgebuehr;
+    private ?string $startgebuehr;
 
     public function getHallenname(): ?string
     {
@@ -151,7 +151,7 @@ class TurnierDetails
         return $this;
     }
 
-    public function getStartzeit(): DateTime
+    public function getStartzeit(): ?DateTime
     {
         return $this->startzeit;
     }
