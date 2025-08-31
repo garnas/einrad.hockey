@@ -52,8 +52,9 @@ if (isset($_POST['spieler_aendern'])) {
 
 //Formularauswertung Spieler löschen
 if (isset($_POST['delete_spieler'])) {
+    $id = $spieler->getSpielerId(); // Die Spieler-ID ist nach dem löschen nicht mehr in der Doctrine Instanz des Spielers
     SpielerRepository::get()->delete($spieler);
-    Html::info("Der Spieler " . $spieler->getVorname() . " " . $spieler->getNachname() . " mit der ID " . $spieler->getSpielerId() . " wurde gelöscht.");
+    Html::info("Der Spieler " . $spieler->getVorname() . " " . $spieler->getNachname() . " mit der ID " . $id . " wurde gelöscht.");
     Helper::reload();
 }
 
@@ -175,7 +176,7 @@ include '../../templates/header.tmp.php'; ?>
         </p>
     </form>
     <form onsubmit="return confirm(
-            'Der Spieler mit der ID <?= $spieler->getSpielerId() ?> <?= $spieler->getVorname() ?>) wird gelöscht werden.');"
+            'Der Spieler mit der ID <?= $spieler->getSpielerId() ?> (<?= $spieler->getVorname() ?>) wird gelöscht werden.');"
           class="w3-container w3-card-4 w3-panel"
           method="POST">
         <p>
