@@ -38,6 +38,7 @@ include '../../templates/header.tmp.php';
         <tr style="white-space: nowrap;">
             <td class="w3-primary" style="vertical-align: middle; width: 100px;"><i class="material-icons">map</i> Adresse</td>
             <td>
+            <?php if ($turnier->getDetails()->getOrt()): ?>
                 <?= e($turnier->getDetails()->getHallenname())?><br>
                 <?= e($turnier->getDetails()->getStrasse())?><br>
                 <?= e($turnier->getDetails()->getPlz() .' '.$turnier->getDetails()->getOrt())?><br>
@@ -58,37 +59,52 @@ include '../../templates/header.tmp.php';
                         <i>Haltestellen: <?= e($turnier->getDetails()->getHaltestellen()) ?></i>
                     </p>
                 <?php endif; ?>
+            <?php else: ?>
+                Ausrichter noch offen
+            <?php endif; ?>
             </td>
         </tr>
+        <?php if ($turnier->getDetails()->getStartzeit()): ?>
+             <tr>
+                <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;">
+                    <i class="material-icons">schedule</i> Beginn
+                </td>
+                <td>
+                    <?=$turnier->getDetails()->getStartzeit()?->format("H:i")?>&nbsp;Uhr
+                    <?php if ($turnier->hasBesprechung()): ?>
+                        <p>
+                            <i>Alle Teams sollen sich um <?= $turnier->getDetails()->getBesprechungUhrzeit() ?> Uhr zu einer gemeinsamen Turnierbesprechung einfinden.</i>
+                        </p>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endif; ?>
         <tr>
             <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;">
-                <i class="material-icons">schedule</i> Beginn
+                <i class="material-icons">mail</i> Kontakt
             </td>
             <td>
-                <?=$turnier->getDetails()->getStartzeit()->format("H:i")?>&nbsp;Uhr
-                <?php if ($turnier->hasBesprechung()): ?>
+                <?php if ($turnier->getAusrichter()): ?>
                     <p>
-                        <i>Alle Teams sollen sich um <?= $turnier->getDetails()->getBesprechungUhrzeit() ?> Uhr zu einer gemeinsamen Turnierbesprechung einfinden.</i>
+                        <i>Ausrichter:</i>
+                        <br>
+                        <?php if ($ausrichter = $turnier->getAusrichter()): ?>
+                            <?= TeamSnippets::getEmailLink($ausrichter) ?? e($ausrichter->getName()) ?>
+                        <?php endif; ?>
                     </p>
+                    <p><i>Organisator:</i><br><?= e($turnier->getDetails()->getOrganisator()) ?></p>
+                    <p><i>Handy:</i><br><?= TurnierSnippets::getHandy($turnier) ?></p>
+                <?php else: ?>
+                    <?= Html::mailto(Env::LAMAIL) ?>
                 <?php endif; ?>
             </td>
         </tr>
-        <tr>
-            <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;"><i class="material-icons">mail</i> Kontakt</td>
-            <td>
-                <p>
-                    <i>Ausrichter:</i>
-                    <br>
-                    <?= TeamSnippets::getEmailLink($turnier->getAusrichter()) ?: e($turnier->getAusrichter()->getName())?>
-                </p> 
-                <p><i>Organisator:</i><br><?= e($turnier->getDetails()->getOrganisator()) ?></p>
-                <p><i>Handy:</i><br><?= TurnierSnippets::getHandy($turnier) ?></p>
-            </td>
-        </tr>
-        <tr>
-            <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;"><i class="material-icons">payments</i> Startgebühr</td>
-            <td><?= e($turnier->getDetails()->getStartgebuehr()) ?></td>
-        </tr>
+        <?php if ($turnier->getDetails()->getStartgebuehr()): ?>
+            <tr>
+                <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;"><i class="material-icons">payments</i> Startgebühr</td>
+                <td><?= e($turnier->getDetails()->getStartgebuehr()) ?></td>
+            </tr>
+        <?php endif; ?>
         <tr>
             <td class="w3-primary" style="white-space: nowrap; vertical-align: middle;"><i class="material-icons">announcement</i> Hinweis</td>
             <td><?=nl2br(e($turnier->getDetails()->getHinweis()))?></td>
@@ -109,21 +125,24 @@ include '../../templates/header.tmp.php';
         </tr>
         <tr>
             <td class="w3-primary" style="vertical-align: middle">Phase</td>
-            <td><?= TurnierSnippets::translate($turnier->getPhase()) ?></td>
+            <td><?= TurnierSnippets::phase($turnier) ?></td>
         </tr>
-        <tr>
-            <td class="w3-primary" style="vertical-align: middle">Losung</td>
-            <td>
-                <?= ($turnier->isLigaturnier())
-                    ? TurnierService::getLosDatum($turnier)
-                    : '--' ?>
-                (Übergang von Wartephase zur Setzphase)
-            </td>
-        </tr>
-        <tr>
-            <td class="w3-primary" style="vertical-align: middle">Spieltag</td>
-            <td><?= $turnier->getSpieltag() ?></td>
-        </tr>
+        <?php if ($turnier->isLigaturnier()): ?>
+            <tr>
+                <td class="w3-primary" style="vertical-align: middle">Losung</td>
+                <td>
+                    <?= ($turnier->isLigaturnier())
+                        ? TurnierService::getLosDatum($turnier)
+                        : '--' ?>
+                    (Übergang von Wartephase zur Setzphase)
+                </td>
+            </tr>
+            <tr>
+                <td class="w3-primary" style="vertical-align: middle">Spieltag</td>
+                <td><?= $turnier->getSpieltag() ?></td>
+            </tr>
+        <?php endif; ?>
+
         <tr>
             <td class="w3-primary" style="vertical-align: middle">Art</td>
             <td><?= TurnierSnippets::translate($turnier->getArt()) ?></td>
@@ -142,15 +161,18 @@ include '../../templates/header.tmp.php';
             <td class="w3-primary" style="vertical-align: middle">Plätze</td>
             <td><?= $turnier->getDetails()->getPlaetze() ?></td>
         </tr>
-        <tr>
-            <td class="w3-primary" style="vertical-align: middle">Min. Teams</td>
-            <td>
-                <?php if ($turnier->getDetails()->getMinTeams()): ?>
-                <?= e($turnier->getDetails()->getMinTeams()) ?>
-                <span class="w3-text-grey">(Das Turnier findet ab dieser Anzahl an Teams auf der Setzliste statt.)</span>
-                <?php endif; ?>
-            </td>
-        </tr>
+        <?php if ($turnier->isLigaturnier()): ?>
+            <tr>
+                <td class="w3-primary" style="vertical-align: middle">Min. Teams</td>
+                <td>
+                    <?php if ($turnier->getDetails()->getMinTeams()): ?>
+                    <?= e($turnier->getDetails()->getMinTeams()) ?>
+                    <span class="w3-text-grey">(Das Turnier findet ab dieser Anzahl an Teams auf der Setzliste statt.)</span>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endif; ?>
+
         <tr>
             <td class="w3-primary" style="vertical-align: middle">Erstellt am</td>
             <td><?= $turnier->getErstelltAm()->format("d.m.Y") ?></td>

@@ -19,7 +19,7 @@ class TurnierService
 
     public static function isAusrichter(Turnier $turnier, int $teamId): bool
     {
-        return $turnier->getAusrichter()->id() === $teamId;
+        return $turnier->getAusrichter()?->id() === $teamId;
     }
 
     public static function hasFreieSetzPlaetze(Turnier $turnier): bool

@@ -76,6 +76,10 @@ class TurnierSnippets {
             Html::link($link, $phase, true);
         }
 
+        if ($turnier->isFinalTurnier() && $turnier->getAusrichter() === null) {
+            return 'Ausrichter offen';
+        }
+
         if ($turnier->isFinalTurnier()) {
             return 'Warten auf Spielplan';
         }
@@ -187,6 +191,9 @@ class TurnierSnippets {
     public static function getHandy(Turnier $turnier): string
     {
         $handy = e($turnier->getDetails()->getHandy());
+        if (!$handy) {
+            return "";
+        }
         $handyNumbers = preg_replace('/[^0-9.]+/', '', $handy);
         return Html::link(
             'tel:' . str_replace(' ', '', $handyNumbers),

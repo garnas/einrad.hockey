@@ -72,9 +72,9 @@ class Turnier
     #[ORM\JoinColumn(name: "spielplan_vorlage", referencedColumnName: "spielplan")]
     private SpielplanDetails $spielplanVorlage;
 
-    #[ORM\JoinColumn(name: "ausrichter", referencedColumnName: "team_id")]
+    #[ORM\JoinColumn(name: "ausrichter", referencedColumnName: "team_id", nullable: true)]
     #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "ausgerichteteTurniere")]
-    private nTeam $ausrichter;
+    private ?nTeam $ausrichter;
 
     #[ORM\OneToOne(targetEntity: TurnierDetails::class, mappedBy: "turnier", cascade: ["all"])]
     private TurnierDetails $details;
@@ -431,7 +431,7 @@ class Turnier
         return $this;
     }
 
-    public function getAusrichter(): nTeam
+    public function getAusrichter(): ?nTeam
     {
         return $this->ausrichter;
     }

@@ -107,7 +107,7 @@ include '../../templates/header.tmp.php';
                         <i class='w3-display-topright w3-padding'>
                             <?= TurnierSnippets::plaetze($turnier) ?>
                         </i>
-                        <i class='w3-display-bottomright w3-padding'><?= e($turnier->getAusrichter()->getName()) ?></i>
+                        <i class='w3-display-bottomright w3-padding'><?= e($turnier->getAusrichter()?->getName()) ?></i>
                     </div>
 
                     <!-- Ausklappbarer Content -->
@@ -121,7 +121,10 @@ include '../../templates/header.tmp.php';
                             <table class="w3-table">
                                 <tr style="white-space: nowrap;">
                                     <td class="w3-text-primary"><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), 'Beginn', icon: "schedule") ?></td>
-                                    <td><?= $turnier->getDetails()->getStartzeit()->format("H:i") ?> Uhr
+                                    <td>
+                                        <?php if ($turnier->getDetails()->getStartzeit()): ?>
+                                            <?= $turnier->getDetails()->getStartzeit()->format("H:i") ?> Uhr
+                                        <?php endif; ?>
                                         <?php if ($turnier->hasBesprechung()): ?>
                                             <i>Gemeinsame Teambesprechung um <?= $turnier->getDetails()->getBesprechungUhrzeit() ?>&nbsp;Uhr</i>
                                         <?php endif; ?>
@@ -165,7 +168,7 @@ include '../../templates/header.tmp.php';
                             <?php } else { ?>
                                 <p><?= Html::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier->id(), 'Zum Turnierreport', icon:'lock') ?></p>
                             <?php } //endif?>
-                            <?php if (($_SESSION['logins']['team']['id'] ?? 0) === $turnier->getAusrichter()->id()) { ?>
+                            <?php if (($_SESSION['logins']['team']['id'] ?? 0) === $turnier->getAusrichter()?->id()) { ?>
                                 <p><?= Html::link('../teamcenter/tc_turnier_bearbeiten.php?turnier_id=' . $turnier->id(), 'Turnier als Ausrichter bearbeiten', icon:'create') ?></p>
                             <?php } //endif?>
                             <?php if (isset($_SESSION['logins']['la'])) { ?>
