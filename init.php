@@ -83,7 +83,7 @@ register_shutdown_function(static function () {
         $script = basename($_SERVER['SCRIPT_NAME'] ?? '');
         $line = "Custom Log Details for " . $_SERVER["REQUEST_URI"];
         if (!in_array(needle: $script, haystack: Config::NEVER_LOG_REQUEST)) {
-            $line .= " - " . print_r($_REQUEST, true);
+            $line .= " - " . print_r($_REQUEST ?? [], true);
         }
         Helper::log(file_name: Config::LOG_ERRORS, line: $line);
 
