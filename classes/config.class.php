@@ -21,6 +21,9 @@ class Config
     public const LOG_USER = "user.log";
     public const LOG_SCHIRI_UEBUNGSTEST = "schiri_uebungstest.log";
     public const LOG_SCHIRI_PRUEFUNG = "schiri_pruefung.log";
+    public const LOG_ERRORS = "errors.log";
+
+    public const NEVER_LOG_REQUEST = ["tc_login.php", "login.php", "lc_admin.php", "tc_abstimmung.php"];
 
 
     /**

@@ -114,5 +114,13 @@ class Helper
         return implode(" | ", array_filter($akteure)) ?: 'Unbekannt';
     }
 
+    public static function ensure_no_request_logging(): void
+    {
+        $script = basename($_SERVER['SCRIPT_NAME'] ?? '');
+        if (!in_array(needle: $script, haystack: Config::NEVER_LOG_REQUEST, strict: true)) {
+            die("Request Logging (z.b im Fehlerfall) muss für diese Seite deaktiviert sein.");
+        }
+    }
+
 }
 

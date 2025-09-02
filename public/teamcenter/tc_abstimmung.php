@@ -5,6 +5,8 @@
 use App\Repository\Team\TeamRepository;
 
 require_once '../../init.php';
+Helper::ensure_no_request_logging();
+
 require_once '../../logic/session_team.logic.php'; //Auth
 require_once '../../logic/abstimmung.logic.php';
 $teams = TeamRepository::get()->activeLigaTeams();

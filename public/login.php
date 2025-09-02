@@ -3,6 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../init.php';
+Helper::ensure_no_request_logging();
 
 if (LigaLeitung::is_logged_in("ligaausschuss") || LigaLeitung::is_logged_in("admin")) {
     Helper::reload("/ligacenter/lc_start.php");
