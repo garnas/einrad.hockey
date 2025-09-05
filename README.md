@@ -58,16 +58,23 @@ Du hast Lust mitzuwirken? Oder Fragen darüber, wie die Webseite funktioniert? M
    * Im Verzeichnis der composer.json via CLI "composer update" ausführen
    * Anschließend via CLI "composer dump-autoload" ausführen, um den Autoloader der Klassen zu konfigurieren
 
-4. Seite öffnen
-   * http://localhost/einrad.hockey/public/liga/neues.php
-   * Hier sollte nun die Neuigkeitenseite angezeigt werden
+```shell
+composer install
+composer dump-autoload
+```
 
-5. Doctrine Cache Update
+> Composer dump-autoload ist ebenfalls wichtig, damit neu erstellte oder umbenannte Klassen in unserem Code richtig geladen werden ;)
+
+4. Doctrine Cache Update
 ```shell
 php bin/doctrine orm:clear-cache:metadata
 php bin/doctrine orm:clear-cache:query
 php bin/doctrine orm:generate-proxies
 ```
+
+5. Seite öffnen
+   * http://localhost/einrad.hockey/public/liga/neues.php
+   * Hier sollte nun die Neuigkeitenseite angezeigt werden
 
 ### Ionos Webspace:
 * composer.phar herunterladen

@@ -91,7 +91,7 @@ class xml
             $xml_child->addChild('datum', e($turnier->getDatum()->format('Y-m-d')));
             $xml_child->addChild('spieltag', e($turnier->getSpieltag()));
             $xml_child->addChild('phase', e($turnier->getPhase()));
-            $xml_child->addChild('spielplan_vorlage', e($turnier->getSpielplanVorlage()));
+            $xml_child->addChild('spielplan_vorlage', e($turnier->getSpielplanVorlage()?->getSpielplan()));
             $xml_child->addChild('spielplan_datei', e($turnier->getSpielplanDatei()));
             $xml_child->addChild('saison', e($turnier->getSaison()));
             $xml_child->addChild('hallenname', e($turnier->getDetails()->getHallenname()));
