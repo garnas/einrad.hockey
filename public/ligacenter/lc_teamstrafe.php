@@ -2,20 +2,23 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Entity\Team\Strafe;
+use App\Repository\Team\TeamRepository;
+use App\Repository\Turnier\TurnierRepository;
+
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
 //Turnierdaten für Select
-$turniere = nTurnier::get_turniere();
-$strafen = Team::get_strafen();
+$turniere = TurnierRepository::getAlleTurniere();
+$strafen = TeamRepository::get()->getStrafenBySaison();
 
 //Formularauswertung
 foreach ($strafen as $strafe) {
-    if (isset($_POST['delete' . $strafe['strafe_id']])) {
-        Team::unset_strafe((int) $strafe['strafe_id']);
+    if (isset($_POST['delete' . $strafe->getStrafeId()])) {
+        TeamRepository::get()->deleteStrafe(strafeId: $strafe->getStrafeId());
         Html::info("Strafe wurde gelöscht.");
-        header("Location: lc_teamstrafe.php");
-        die();
+        Helper::reload("ligacenter/lc_teamstrafe.php");
     }
 }
 
@@ -29,22 +32,29 @@ if (isset($_POST['strafe_eintragen'])) {
         $error = true;
         Html::error("Prozentstrafen sind bei Vewarnungen nicht möglich.");
     }
-    $team_id = Team::name_to_id($_POST['teamname']);
-    if (!Team::is_ligateam($team_id)) {
+    $team = TeamRepository::get()->findByName($_POST['teamname']);
+    if (!$team->isLigaTeam()) {
         $error = true;
         Html::error("Teamname gehört zu keinem Ligateam");
     }
     if (!$error) {
-        Team::set_strafe(
-            $team_id,
-            $_POST['verwarnung'] ?? 'Nein',
-            (int) $_POST['turnier'],
-            $_POST['grund'],
-            (int) $_POST['prozent']
-        );
+        $strafe = new Strafe();
+        $strafe
+            ->setTeam($team)
+            ->setGrund($_POST['grund'])
+            ->setProzentsatz($_POST['prozent'])
+            ->setVerwarnung($_POST['verwarnung'] ?? 'Nein')
+            ->setSaison(Config::SAISON)
+        ;
+        $turnier_id = $_POST['turnier'];
+        if ($turnier_id) {
+            $turnier = TurnierRepository::get()->turnier(turnier_id: $_POST['turnier']);
+            $strafe->setTurnier($turnier);
+        }
+        $team->getStrafen()->add($strafe);
+        TeamRepository::get()->speichern($team);
         Html::info("Strafe wurde eingetragen.");
-        header("Location: ../liga/tabelle.php#strafen");
-        die();
+        Helper::reload("/liga/tabelle.php#strafen");
     }
 }
 
@@ -70,19 +80,19 @@ include '../../templates/header.tmp.php';
         </thead>
         <?php foreach ($strafen as $strafe) { ?>
             <tr>
-                <td style="vertical-align: middle"><?= $strafe['strafe_id'] ?></td>
-                <td style="vertical-align: middle"><?= $strafe['verwarnung'] ?></td>
-                <td style="white-space: nowrap; vertical-align: middle;"><?= $strafe['teamname'] ?></td>
+                <td style="vertical-align: middle"><?= $strafe->getStrafeId() ?></td>
+                <td style="vertical-align: middle"><?= $strafe->getVerwarnung() ?></td>
+                <td style="white-space: nowrap; vertical-align: middle;"><?= $strafe->getTeam()->getName() ?></td>
                 <td style="vertical-align: middle">
-                    <?= $strafe['grund'] ?>
-                    <?php if (!empty($strafe['prozentsatz'])) { ?>(<?= $strafe['prozentsatz'] ?>&nbsp;%)<?php } //endif
+                    <?= $strafe->getGrund() ?>
+                    <?php if (!empty($strafe->getProzentsatz())) { ?>(<?= $strafe->getProzentsatz() ?>&nbsp;%)<?php } //endif
                                                                                                     ?>
                 </td>
-                <td style="vertical-align: middle"><?= ($strafe['datum'] ?? '') . ' ' . ($strafe['ort'] ?? '') ?></td>
+                <td style="vertical-align: middle"><?= ($strafe->getTurnier()?->getDatum()?->format("d.m.Y") ?? '') . ' ' . ($strafe->getTurnier()?->getDetails()?->getOrt() ?? '') ?></td>
                 <td style="vertical-align: middle">
-                    <form method="POST" onsubmit="return confirm('Soll die Strafe/Verwarnung für das Team <?= $strafe['teamname'] ?> wirklich gelöscht werden?')">
-                        <input type="hidden" name="delete<?= $strafe['strafe_id'] ?>" value='delete'>
-                        <input class="w3-button w3-text-primary" type="submit" name="delete<?= $strafe['strafe_id'] ?>" value="Löschen">
+                    <form method="POST" onsubmit="return confirm('Soll die Strafe/Verwarnung für das Team <?= $strafe->getTeam()->getName() ?> wirklich gelöscht werden?')">
+                        <input type="hidden" name="delete<?= $strafe->getStrafeId() ?>" value='delete'>
+                        <input class="w3-button w3-text-primary" type="submit" name="delete<?= $strafe->getStrafeId()  ?>" value="Löschen">
                     </form>
                 </td>
             </tr>
@@ -105,16 +115,16 @@ include '../../templates/header.tmp.php';
     </p>
     <p>
         <label class="w3-text-primary" for="turnier">Turnier (optional)</label>
-        <select placeholder="Optional" class="w3-select w3-border w3-border-primary" name="turnier" id="turnier">
+        <select class="w3-select w3-border w3-border-primary" name="turnier" id="turnier">
             <option value="" selected></option>
             <?php foreach ($turniere as $turnier) { ?>
-                <option value="<?= $turnier->get_turnier_id() ?>"><?= $turnier->get_datum() . ' ' . $turnier->get_ort() . ' (' . $turnier->get_tblock() . ')' ?></option>
+                <option value="<?= $turnier->id() ?>"><?= $turnier->getDatum()->format("d.m.Y") . ' ' . $turnier->getDetails()->getOrt() . ' (' . $turnier->getBlock() . ')' ?></option>
             <?php } //end foreach
             ?>
         </select>
     <p>
     <p>
-        <label class="w3-text-primary" for="teamname">Grund</label>
+        <label class="w3-text-primary" for="grund">Grund</label>
         <input required class="w3-input w3-border w3-border-primary" type="text" name="grund" id="grund">
     <p>
     <p>

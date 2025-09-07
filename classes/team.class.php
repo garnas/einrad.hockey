@@ -221,41 +221,6 @@ class Team
     }
 
     /**
-     * Teamstrafe eintragen
-     *
-     * @param int $team_id
-     * @param string $verwarnung
-     * @param int $turnier_id
-     * @param string $grund
-     * @param int $prozentsatz
-     * @param int $saison
-     */
-    public static function set_strafe(int $team_id, string $verwarnung, int $turnier_id, string $grund,
-                                      int $prozentsatz, int $saison = Config::SAISON): void
-    {
-        $sql = "
-                INSERT INTO teams_strafen (team_id, verwarnung, turnier_id, grund, prozentsatz, saison)
-                VALUES (?, ?, ?, ?, ?, ?)
-                ";
-        $params = [$team_id, $verwarnung, $turnier_id, $grund, $prozentsatz, $saison];
-        db::$db->query($sql, $params)->log();
-    }
-
-    /**
-     * Teamstrafe löschen
-     *
-     * @param int $strafe_id
-     */
-    public static function unset_strafe(int $strafe_id): void
-    {
-        $sql = "
-                DELETE FROM teams_strafen
-                WHERE strafe_id = ?
-                ";
-        db::$db->query($sql, $strafe_id)->log();
-    }
-
-    /**
      * Hinterlegt, dass das Team den Terminplaner nutzt.
      */
     public function set_terminplaner(): void
@@ -281,30 +246,6 @@ class Team
                 WHERE team_id = $this->id
                 ";
         return db::$db->query($sql)->fetch_one() === 'Ja';
-    }
-    
-    /**
-     * Gibt die Teamstrafen aller Teams zurück
-     *
-     * @param int $saison
-     * @return array
-     */
-    public static function get_strafen(int $saison = Config::SAISON): array
-    {
-        $sql = "
-                SELECT teams_strafen.*, teams_liga.teamname, turniere_details.ort, turniere_liga.datum 
-                FROM teams_strafen
-                INNER JOIN teams_liga
-                ON teams_liga.team_id = teams_strafen.team_id
-                LEFT JOIN turniere_liga
-                ON turniere_liga.turnier_id = teams_strafen.turnier_id
-                LEFT JOIN turniere_details
-                ON turniere_details.turnier_id = teams_strafen.turnier_id
-                WHERE teams_strafen.saison = ?
-                AND teams_liga.aktiv = 'Ja'
-                ORDER BY turniere_liga.datum DESC
-                ";
-        return db::$db->query($sql, $saison)->esc()->fetch('strafe_id');
     }
 
     /**

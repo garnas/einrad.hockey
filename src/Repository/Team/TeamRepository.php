@@ -5,6 +5,7 @@ namespace App\Repository\Team;
 use App\Entity\Team\Freilos;
 use App\Entity\Team\nTeam;
 use App\Entity\Team\Spieler;
+use App\Entity\Team\Strafe;
 use App\Entity\Turnier\Turnier;
 use App\Repository\TraitSingletonRepository;
 use App\Repository\DoctrineWrapper;
@@ -22,12 +23,14 @@ class TeamRepository
     private EntityRepository $freilos;
 
     private EntityRepository $spieler;
+    private EntityRepository $strafen;
 
     private function __construct()
     {
         $this->team = DoctrineWrapper::manager()->getRepository(nTeam::class);
         $this->freilos = DoctrineWrapper::manager()->getRepository(Freilos::class);
         $this->spieler = DoctrineWrapper::manager()->getRepository(Spieler::class);
+        $this->strafen = DoctrineWrapper::manager()->getRepository(Strafe::class);
     }
 
     public function team(int $id): ?nTeam
@@ -100,6 +103,27 @@ class TeamRepository
         }
         DoctrineWrapper::manager()->remove($freilos);
         DoctrineWrapper::manager()->flush();
+    }
+
+    public function deleteStrafe(int $strafeId): void
+    {
+        $strafe = $this->strafen->find($strafeId);
+        DoctrineWrapper::manager()->remove($strafe);
+        DoctrineWrapper::manager()->flush();
+    }
+
+    /**
+     * @param int $saison
+     * @return Strafe[]|Collection
+     */
+    public function getStrafenBySaison(int $saison = Config::SAISON): array|Collection
+    {
+        return $this->strafen->findBy(["saison" => $saison]);
+    }
+
+    public function strafe(int $strafeId): Strafe
+    {
+        return $this->strafen->find($strafeId);
     }
 
     /**
