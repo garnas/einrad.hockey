@@ -8,6 +8,7 @@ use App\Service\Team\TeamService;
 
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
+Helper::ensure_no_request_logging();
 
 $deaktivierte_teams = Team::get_deactive();
 

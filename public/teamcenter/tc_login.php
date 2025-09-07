@@ -5,6 +5,7 @@
 use App\Service\Team\TeamService;
 
 require_once '../../init.php';
+Helper::ensure_no_request_logging();
 
 // Formularauswertung
 if (isset($_POST['login'])) {

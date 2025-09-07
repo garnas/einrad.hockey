@@ -77,20 +77,33 @@ spl_autoload_register(
  */
 register_shutdown_function(static function () {
 
-    // Fehlerseiten aufrufen
+    // Lag ein Fehler vor?
+    if (($error = error_get_last()) !== null) {
+        // Fehlerlogs von PHP ergänzen.
+        $script = basename($_SERVER['SCRIPT_NAME'] ?? '');
+        $line = "Custom Log Details for " . $_SERVER["REQUEST_URI"];
+        if (!in_array(needle: $script, haystack: Config::NEVER_LOG_REQUEST)) {
+            $line .= " - " . print_r($_REQUEST ?? [], true);
+        }
+        Helper::log(file_name: Config::LOG_ERRORS, line: $line);
 
-    if (
-        // Kein Fehlerhandling für localhost (Debugging)
-        !Env::IS_LOCALHOST
-        // Es lag ein Fehler vor
-        && ($error = error_get_last()) !== null
-    ) {
-        if ($error['type'] === E_USER_ERROR) { // Ein von uns hervorgerufener Fehler (zB. falscher Spielplan)
-            $_SESSION['error']['text'] = $error['message'];
-            $_SESSION['error']['url'] = $_SERVER['REQUEST_URI'];
-            Helper::reload("/errors/409.php");
-        } else if ($error['type'] === E_ERROR) { // Ein von PHP hervorgerufener Fehler (zB. durch Null geteilt)
-            Helper::reload("/errors/500.html");
+        // Weiterleitung auf eine der Fehlerseiten nur im live-Betrieb von einrad.hockey.
+        if (!Env::IS_LOCALHOST) {
+            switch ($error['type']) {
+                // Ein von uns hervorgerufener Fehler (zB. falscher Spielplan)
+                case E_USER_ERROR:
+                    $_SESSION['error'] = [
+                        'text' => $error['message'],
+                        'url'  => $_SERVER['REQUEST_URI'],
+                    ];
+                    Helper::reload('/errors/409.php');
+                    break;
+
+                // Ein von PHP hervorgerufener Fehler (zB. durch Null geteilt)
+                case E_ERROR:
+                    Helper::reload('/errors/500.html');
+                    break;
+            }
         }
     }
 
