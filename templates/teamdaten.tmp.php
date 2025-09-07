@@ -12,7 +12,8 @@ use App\Service\Turnier\TurnierSnippets;
     <p>
         <?= Html::link(
                 (Helper::$ligacenter) ? 'lc_teamdaten_aendern.php?team_id=' . $team->id : 'tc_teamdaten_aendern.php',
-                Html::icon('create') . ' Team- und Kontaktdaten ändern'
+                'Team- und Kontaktdaten ändern',
+            icon: "create"
         ) ?>
     </p>
 <div class="w3-panel w3-card-4">
