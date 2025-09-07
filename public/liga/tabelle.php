@@ -2,6 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Repository\Team\TeamRepository;
+
 require_once '../../init.php';
 
 // Waehle uebergebene Saison, sonst aktuelle Saison
@@ -35,13 +37,13 @@ $rang_tabelle = Tabelle::get_rang_tabelle($gew_spieltag, $saison);
 $rang_tabelle_templates = Tabelle::get_rang_tabelle_templates($saison);
 
 // Daten der Strafen, um sie an das Layout zu uebergeben
-$strafen = Team::get_strafen($saison);
+$strafen = TeamRepository::get()->getStrafenBySaison($saison);
 
 // Testen ob Verwarnungen oder Strafen existieren.
 $verwarnung_not_empty = $strafe_not_empty = false;
-foreach ($strafen as $key => $strafe) {
-    $verwarnung_not_empty = $verwarnung_not_empty || $strafe['verwarnung'] == 'Ja';
-    $strafe_not_empty = $strafe_not_empty || $strafe['verwarnung'] == 'Nein';
+foreach ($strafen as $strafe) {
+    $verwarnung_not_empty = $verwarnung_not_empty || $strafe->isVerwarnung();
+    $strafe_not_empty = $strafe_not_empty || $strafe->isStrafe();
 }
 
 // Den Plätzen der Meisterschaftstabelle eine Farbe zuordnen:

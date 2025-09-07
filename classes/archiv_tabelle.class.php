@@ -1,5 +1,7 @@
 <?php
 
+use App\Repository\Team\TeamRepository;
+
 /**
  * Class Tabelle
  *
@@ -84,18 +86,18 @@ class Archiv_Tabelle extends Tabelle
         }
 
         // Hinzufügen der Strafen:
-        $strafen = Team::get_strafen($saison);
+        $strafen = TeamRepository::get()->getStrafenBySaison($saison);
         foreach ($strafen as $strafe) {
             # Ist die Strafe überhaupt in den Ergebnissen enthalten?
-            if (!isset($return[$strafe['team_id']])) {
+            if (!isset($return[$strafe->getTeam()->id()])) {
                 continue;
             }
 
-            $return[$strafe['team_id']]['hat_strafe'] = true;
-            
+            $return[$strafe->getTeam()->id()]['hat_strafe'] = true;
+
             // Addieren der Prozentstrafen
-            if ($strafe['verwarnung'] == 'Nein' && !empty($strafe['prozentsatz'])) {
-                $return[$strafe['team_id']]['strafe'] = ($return[$strafe['team_id']]['strafe'] ?? 0) + $strafe['prozentsatz'] / 100;
+            if ($strafe->isStrafe() && !empty($strafe->getProzentsatz())) {
+                $return[$strafe->getTeam()->id()]['strafe'] = ($return[$strafe->getTeam()->id()]['strafe'] ?? 0) + $strafe->getProzentsatz() / 100;
             }
         }
 
