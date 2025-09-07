@@ -44,6 +44,20 @@ if (isset($_POST['deaktivieren'])){
     Html::error("Teamname wurde nicht gefunden. Team wurde nicht deaktiviert.");
 }
 
+if (isset($_POST['ergebnisuebernahme_verhindern'])){
+    $teamname = $_POST['teamname'] ?? '';
+    $team = TeamRepository::get()->findByName($teamname);
+
+    if ($team && $team->isLigaTeam()){
+        TeamService::verhindereTurnierergebnisSaisonuebernahme(team: $team);
+        TeamRepository::get()->speichern($team);
+        Html::info("Die Ergebnisübernahme in die nächste Saison für das Team " . $team->getName() . " ist verhindert.");
+        Helper::reload();
+    }
+    Html::error("Teamname wurde nicht gefunden. Ergebnisübernahme wurde nicht verhindert");
+}
+
+
 // Ligateam reaktivieren
 if (isset($_POST['reaktivieren'])){
     $team_id = $_POST['team_id'] ?? '';
@@ -167,6 +181,22 @@ include '../../templates/header.tmp.php';?>
         <input type='submit' name='reaktivieren' value='Team reaktiveren' class="w3-button w3-secondary">
     </p>
 </form>
+
+<h4 class="w3-bottombar w3-text-primary">Team Ergebnisübernahme der Vorsaison verhindern</h4>
+<form method='post' onsubmit="return confirm('Soll die Ergebnisübernahme der Vorsaison verhindert werden?')">
+    <label class="w3-text-primary" for="teamname_ergb">Team wählen</label>
+    <input type="text"
+           class="w3-input w3-border w3-border-primary"
+           placeholder="Team eingeben"
+           list="teams"
+           id="teamname_ergb"
+           name="teamname">
+    <?= Html::datalist_teams() ?>
+    <p>
+        <input type='submit' name='ergebnisuebernahme_verhindern' value='Ergebnisübernahme verhindern' class="w3-button w3-secondary">
+    </p>
+</form>
+
 <!-- Mailbot -->
 <form method='post'>
     <h4 class="w3-bottombar w3-text-primary">Automatische Mails versenden</h4>
