@@ -169,6 +169,7 @@ class nLigaBot
 
         shuffle($turniere);
 
+        // Übergang in die Setzphase
         foreach ($turniere as $turnier) {
             if (
                 $turnier->isWartePhase()
@@ -180,18 +181,24 @@ class nLigaBot
                 self::losen($turnier);
                 self::$gelosteTurniere[] = $turnier;
 
-                if($turnier->isSofortOeffnen()) {
-                    TurnierService::blockOeffnen($turnier);
-                    TurnierService::setzListeAuffuellen($turnier, false);
-                }
-
                 // Info-Mails versenden.
                 TurnierEventMailBot::mailGelost($turnier);
                 if (TurnierService::hasFreieSetzPlaetze($turnier)) {
                     TurnierEventMailBot::mailPlaetzeFrei($turnier);
                 }
-
             }
+        }
+
+        // Nachdem die Turniere in der Setzphase sind, können sie auf ABCDEF geöffnet werden.
+        foreach (self::$gelosteTurniere as $turnier) {
+            if($turnier->isSofortOeffnen()) {
+                TurnierService::blockOeffnen($turnier);
+                TurnierService::setzListeAuffuellen($turnier, false);
+            }
+        }
+
+        // Abschließend die Änderungen in der DB persistieren.
+        foreach (self::$gelosteTurniere as $turnier) {
             DoctrineWrapper::manager()->persist($turnier);
         }
         DoctrineWrapper::manager()->flush();
@@ -200,7 +207,6 @@ class nLigaBot
 
     /**
      * Archiviert Neuigkeiten, die älter als 9 Monate sind.
-     * @throws ORMException
      */
     public static function archiveNeuigkeiten(): void
     {
@@ -220,26 +226,15 @@ class nLigaBot
      */
     public static function losen(Turnier $turnier): void
     {
-
-        // Falsche Freilosanmeldungen beim Übergang in die Meldephase abmelden
-        $setzListe = TurnierService::getSetzListe($turnier);
-        foreach ($setzListe as $anmeldung) {
-            // Das Team hat ein Freilos gesetzt, aber den falschen Freilosblock. Nicht mehr im Modus vorhanden,
-            // aber interessant zu wissen wie oft es vorkommt
-            $team = $anmeldung->getTeam();
-            if ($anmeldung->hasFreilosGesetzt() && !TurnierService::isSpielBerechtigtFreilos($turnier, $team)) {
-                Discord::send("'Falsches' Freilos eingetreten. "
-                    . $team->getName() . " in " . $turnier->getDetails()->getOrt()
-                );
-            }
-        }
-
         if (TurnierService::hasFreieSetzPlaetze($turnier)) {
             $turnier->getLogService()->addLog("Turnierplätze werden verlost.");
         }
 
         // 3 Lostöpfe für Nichtligateams, Teams mit richtigem Block und Teams mit falschem Block
-        $lostopNLTeams = $losttopRichtigerBlock = $lostopfFalscherBlock = [];
+        $lostopNLTeams = [];
+        $losttopRichtigerBlock = [];
+        $lostopfFalscherBlock = [];
+
         $warteliste = TurnierService::getWarteliste($turnier);
         foreach ($warteliste as $anmeldung) {
             $team = $anmeldung->getTeam();
