@@ -2,10 +2,10 @@
 
 namespace App\Service\Turnier;
 
+use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
 use App\Service\Team\NLTeamService;
 use App\Service\Team\TeamValidator;
-use App\Entity\Team\nTeam;
 use Html;
 use Jenssegers\Date\Date;
 

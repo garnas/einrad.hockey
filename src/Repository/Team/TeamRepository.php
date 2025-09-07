@@ -7,12 +7,12 @@ use App\Entity\Team\nTeam;
 use App\Entity\Team\Spieler;
 use App\Entity\Team\Strafe;
 use App\Entity\Turnier\Turnier;
-use App\Repository\TraitSingletonRepository;
 use App\Repository\DoctrineWrapper;
+use App\Repository\TraitSingletonRepository;
+use Config;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
-use Config;
 
 class TeamRepository
 {

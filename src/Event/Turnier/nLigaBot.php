@@ -11,7 +11,6 @@ use App\Service\Turnier\BlockService;
 use App\Service\Turnier\TurnierService;
 use Config;
 use db;
-use Discord;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\Mapping\MappingException;

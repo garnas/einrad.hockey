@@ -3,14 +3,7 @@
 namespace App\Entity\Team;
 
 use App\Entity\Turnier\Turnier;
-use App\Entity\Turnier\TurniereListe;
-use App\Entity\Turnier\TurnierErgebnis;
-use Config;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Helper;
-use Tabelle;
 
 #[ORM\Entity]
 #[ORM\Table(name: "teams_strafen", uniqueConstraints: [new ORM\UniqueConstraint(name: "teamname", columns: ["teamname"])])]

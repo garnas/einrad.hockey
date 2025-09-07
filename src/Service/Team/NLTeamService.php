@@ -8,7 +8,6 @@ use App\Entity\Turnier\TurniereListe;
 use App\Repository\DoctrineWrapper;
 use App\Repository\Team\TeamRepository;
 use App\Service\Turnier\TurnierService;
-use App\Service\Turnier\TurnierValidatorService;
 
 class NLTeamService
 {

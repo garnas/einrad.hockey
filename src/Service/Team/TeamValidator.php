@@ -10,7 +10,6 @@ use App\Repository\DoctrineWrapper;
 use App\Service\Turnier\TurnierService;
 use Env;
 use Html;
-use Config;
 
 class TeamValidator
 {

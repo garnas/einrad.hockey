@@ -2,9 +2,9 @@
 
 namespace App\Entity\Turnier;
 
-use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Team\nTeam;
 use DateTime;
+use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(

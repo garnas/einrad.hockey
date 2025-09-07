@@ -6,7 +6,6 @@ use App\Entity\Team\Freilos;
 use App\Entity\Team\nTeam;
 use App\Entity\Team\Spieler;
 use App\Service\Turnier\TurnierSnippets;
-use Config;
 use Html;
 
 class TeamSnippets
