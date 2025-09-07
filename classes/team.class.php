@@ -247,30 +247,6 @@ class Team
                 ";
         return db::$db->query($sql)->fetch_one() === 'Ja';
     }
-    
-    /**
-     * Gibt die Teamstrafen aller Teams zurück
-     *
-     * @param int $saison
-     * @return array
-     */
-    public static function get_strafen(int $saison = Config::SAISON): array
-    {
-        $sql = "
-                SELECT teams_strafen.*, teams_liga.teamname, turniere_details.ort, turniere_liga.datum 
-                FROM teams_strafen
-                INNER JOIN teams_liga
-                ON teams_liga.team_id = teams_strafen.team_id
-                LEFT JOIN turniere_liga
-                ON turniere_liga.turnier_id = teams_strafen.turnier_id
-                LEFT JOIN turniere_details
-                ON turniere_details.turnier_id = teams_strafen.turnier_id
-                WHERE teams_strafen.saison = ?
-                AND teams_liga.aktiv = 'Ja'
-                ORDER BY turniere_liga.datum DESC
-                ";
-        return db::$db->query($sql, $saison)->esc()->fetch('strafe_id');
-    }
 
     /**
      * Ein Array aller Daten eines Teams, welche man brauchen könnte
