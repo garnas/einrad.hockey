@@ -5,7 +5,6 @@
 use App\Entity\Team\Strafe;
 use App\Repository\Team\TeamRepository;
 use App\Repository\Turnier\TurnierRepository;
-use App\Service\Team\TeamService;
 
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
