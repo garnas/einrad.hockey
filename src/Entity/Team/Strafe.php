@@ -32,7 +32,7 @@ class Strafe
     private ?string $prozentsatz;
 
     #[ORM\Column(name: "saison", type: "integer", length: 255, nullable: false)]
-    private string $saison;
+    private int $saison;
 
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
     #[ORM\ManyToOne(targetEntity: nTeam::class)]
@@ -128,18 +128,18 @@ class Strafe
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getSaison(): string
+    public function getSaison(): int
     {
         return $this->saison;
     }
 
     /**
-     * @param string $saison
+     * @param int $saison
      * @return Strafe
      */
-    public function setSaison(string $saison): Strafe
+    public function setSaison(int $saison): Strafe
     {
         $this->saison = $saison;
         return $this;
