@@ -13,6 +13,7 @@ if (isset($_POST['block_erweitern_hoch'])) {
     if (TurnierValidatorService::isErweiterbarBlockhoch($turnier)) {
         TurnierService::erweitereBlockHoch($turnier);
         TurnierService::setzListeAuffuellen($turnier);
+        TurnierService::neueWartelistePositionen($turnier);
         TurnierRepository::get()->speichern($turnier);
         Html::info("Das Turnier wurde auf den nächst höheren Block geöffnet.");
         Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
@@ -26,6 +27,7 @@ if (isset($_POST['block_erweitern_runter'])) {
     if (TurnierValidatorService::isErweiterbarBlockrunter($turnier)) {
         TurnierService::erweitereBlockRunter($turnier);
         TurnierService::setzListeAuffuellen($turnier);
+        TurnierService::neueWartelistePositionen($turnier);
         TurnierRepository::get()->speichern($turnier);
         Html::info("Das Turnier wurde auf den nächst höheren Block geöffnet.");
         Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
@@ -39,6 +41,7 @@ if (isset($_POST['block_frei'])) {
     if (TurnierValidatorService::isErweiterbarBlockfrei($turnier)) {
         TurnierService::blockOeffnen($turnier);
         TurnierService::setzListeAuffuellen($turnier);
+        TurnierService::neueWartelistePositionen($turnier);
         TurnierRepository::get()->speichern($turnier);
         Html::info("Das Turnier wurde auf alle Blöcke geöffnet.");
         Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
