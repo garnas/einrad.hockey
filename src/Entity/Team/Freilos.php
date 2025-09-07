@@ -71,7 +71,7 @@ class Freilos
         return $this;
     }
 
-    #[ORM\ManyToOne(targetEntity: Turnier::class)]
+    #[ORM\ManyToOne(targetEntity: Turnier::class, inversedBy: "gesetzteFreilose")]
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id", nullable: true)]
     private ?Turnier $turnier;
 
