@@ -379,6 +379,7 @@ class Tabelle
                 AND teams.aktiv = 'Ja'
                 AND tl.art != 'final' 
                 AND ((tl.spieltag <= ? AND tl.saison = ?) OR tl.saison = ? - 1 $ausnahme)
+                AND not te.saison_uebernahme_verhindern
             ), num_of_teams as (
                 SELECT turnier_id, count(*) as teilnehmer
                 FROM turniere_ergebnisse te

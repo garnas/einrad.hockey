@@ -180,5 +180,13 @@ class TeamService
         return false;
     }
 
+    public static function verhindereTurnierergebnisSaisonuebernahme(nTeam $team, bool $value = true): void
+    {
+        $ergebnisse = $team->getErgebnisseVorsaison();
+        foreach ($ergebnisse as $ergebnis) {
+            $ergebnis->setSaisonUebernahmeVerhindern($value);
+        }
+    }
+
 
 }

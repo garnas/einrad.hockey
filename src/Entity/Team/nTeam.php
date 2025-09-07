@@ -4,13 +4,13 @@ namespace App\Entity\Team;
 
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
-use DateTime;
+use App\Entity\Turnier\TurnierErgebnis;
+use Config;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Tabelle;
 use Helper;
-use Config;
+use Tabelle;
 
 #[ORM\Entity]
 #[ORM\Table(name: "teams_liga", uniqueConstraints: [new ORM\UniqueConstraint(name: "teamname", columns: ["teamname"])])]
@@ -30,6 +30,12 @@ class nTeam
 
     #[ORM\OneToMany(targetEntity: Turnier::class, mappedBy: "ausrichter", cascade: ["all"], indexBy: "turnier_id")]
     private Collection $ausgerichteteTurniere;
+
+    #[ORM\OneToMany(targetEntity: TurnierErgebnis::class, mappedBy: "team", cascade: ["all"], indexBy: "turnier_id")]
+    private Collection $ergebnisse;
+
+    #[ORM\OneToMany(targetEntity: Strafe::class, mappedBy: "team", cascade: ["all"], indexBy: "strafe_id")]
+    private Collection $strafen;
 
     public function getAusgerichteteTurniere(): Collection|array
     {
@@ -83,6 +89,8 @@ class nTeam
         $this->ausgerichteteTurniere = new ArrayCollection();
         $this->freilose = new ArrayCollection();
         $this->emails = new ArrayCollection();
+        $this->ergebnisse = new ArrayCollection();
+        $this->strafen = new ArrayCollection();
     }
 
     #[ORM\OneToOne(targetEntity: TeamDetails::class, mappedBy: "team", cascade: ["all"])]
@@ -337,6 +345,41 @@ class nTeam
     public function addEmail(Kontakt $kontakt)
     {
         $this->emails->add($kontakt);
+    }
+
+    public function setErgebnisse(Collection $ergebnisse): nTeam
+    {
+        $this->ergebnisse = $ergebnisse;
+        return $this;
+    }
+
+    /**
+     * @return Collection|TurnierErgebnis[]
+     */
+    public function getErgebnisse(): Collection | array
+    {
+        return $this->ergebnisse;
+    }
+
+    /**
+     * @return Collection|TurnierErgebnis[]
+     */
+    public function getErgebnisseVorsaison(): Collection | array
+    {
+        return $this->ergebnisse->filter(
+            fn (TurnierErgebnis $e) => $e->getTurnier()->getSaison() === (Config::SAISON - 1)
+        );
+    }
+
+    public function setStrafen(Collection $strafen): nTeam
+    {
+        $this->strafen = $strafen;
+        return $this;
+    }
+
+    public function getStrafen(): Collection
+    {
+        return $this->strafen;
     }
 
 }

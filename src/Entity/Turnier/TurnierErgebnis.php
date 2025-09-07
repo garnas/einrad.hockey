@@ -21,8 +21,11 @@ class TurnierErgebnis
     #[ORM\Column(name: "platz", type: "integer", nullable: false)]
     private int $platz;
 
+    #[ORM\Column(name: "saison_uebernahme_verhindern", type: "boolean", nullable: false)]
+    private bool $saisonUebernahmeVerhindern;
+
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
-    #[ORM\OneToOne(targetEntity: nTeam::class)]
+    #[ORM\ManyToOne(targetEntity: nTeam::class)]
     private nTeam $team;
 
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
@@ -79,6 +82,17 @@ class TurnierErgebnis
     {
         $this->team = $team;
 
+        return $this;
+    }
+
+    public function isSaisonUebernahmeVerhindern(): bool
+    {
+        return $this->saisonUebernahmeVerhindern;
+    }
+
+    public function setSaisonUebernahmeVerhindern(bool $saisonUebernahmeVerhindern): self
+    {
+        $this->saisonUebernahmeVerhindern = $saisonUebernahmeVerhindern;
         return $this;
     }
 
