@@ -17,10 +17,16 @@ class Archiv_Tabelle extends Tabelle
      */
     public static function get_meisterschafts_tabelle_templates(int $saison = Config::SAISON): array
     {
-        return [
-            'desktop' => 'templates/archiv/tabellen/desktop_meistertabelle.tmp.php',
-            'mobil' => 'templates/archiv/tabellen/mobil_meistertabelle.tmp.php',
-        ];
+        return array(
+            'desktop' => array(
+                'tabelle' => "templates/archiv/tabellen/desktop_mt_komplett.tmp.php",
+                'meister' => "templates/archiv/tabellen/desktop_mt_komplett.tmp.php",
+            ),
+            'mobil' => array(
+                'tabelle' => "templates/archiv/tabellen/mobil_mt_komplett.tmp.php",
+                'meister' => "templates/archiv/tabellen/mobil_mt_komplett.tmp.php",
+            ),
+        );
     }
 
     public static function get_meisterschafts_tabelle(int $spieltag, int $saison = Config::SAISON): array

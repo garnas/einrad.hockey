@@ -214,8 +214,14 @@ class Tabelle
     public static function get_meisterschafts_tabelle_templates(int $saison = Config::SAISON): array
     {        
         return array(
-            'desktop' => 'templates/tabellen/desktop_meistertabelle.tmp.php',
-            'mobil' => 'templates/tabellen/mobil_meistertabelle.tmp.php',
+            'desktop' => array(
+                'tabelle' => 'templates/tabellen/desktop_mt_komplett.tmp.php',
+                'meister' => 'templates/tabellen/desktop_mt_meister.tmp.php'
+            ),
+            'mobil' => array(
+                'tabelle' => 'templates/tabellen/mobil_mt_komplett.tmp.php',
+                'meister' => 'templates/tabellen/mobil_mt_meister.tmp.php'
+            ),
         );
     }
 
@@ -330,19 +336,26 @@ class Tabelle
         $zeile_vorher['summe'] = 0;
         $zeile_vorher['max_einzel'] = 0;
         foreach ($return as $key => $zeile) {
+            $anzahl_ergebnisse = count($zeile['einzel_ergebnisse'] ?? []);
             $zeile['max_einzel'] = max($zeile['einzel_ergebnisse'] ?? [0]);
-            if (
-                $zeile_vorher['summe'] === $zeile['summe']
-                && $zeile_vorher['max_einzel'] === $zeile['max_einzel']
-            ) {
-                $return[$key]['platz'] = $zeile_vorher['platz'];
+            
+            if ($anzahl_ergebnisse < 4) {
+                $return[$key]['platz'] = null;
             } else {
-                $return[$key]['platz'] = $platz;
+                if (
+                    $zeile_vorher['summe'] === $zeile['summe']
+                    && $zeile_vorher['max_einzel'] === $zeile['max_einzel']
+                ) {
+                    $return[$key]['platz'] = $zeile_vorher['platz'];
+                } else {
+                    $return[$key]['platz'] = $platz;
+                }
+                $zeile_vorher['summe'] = $zeile['summe'];
+                $zeile_vorher['max_einzel'] = $zeile['max_einzel'];
+                $zeile_vorher['platz'] = $return[$key]['platz'];
+                $platz++;
             }
-            $zeile_vorher['summe'] = $zeile['summe'];
-            $zeile_vorher['max_einzel'] = $zeile['max_einzel'];
-            $zeile_vorher['platz'] = $return[$key]['platz'];
-            $platz++;
+        
         }
 
         if ($saison !== Config::SAISON) {
