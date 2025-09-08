@@ -148,7 +148,7 @@ include '../../templates/header.tmp.php';
             <?php foreach ($teamliste as $team) { ?>
                 <tr>
                     <td><?= $team->id ?></td>
-                    <td><?= $team->get_teamname() ?></td>
+                    <td><?= $team->teamname ?></td>
                     <td class="w3-center"><?= $team->get_tblock() ?: 'NL' ?></td>
                     <td class="w3-center"><?= $team->get_wertigkeit() ?: 'Siehe Modus' ?></td>
                 </tr>
@@ -251,7 +251,7 @@ include '../../templates/header.tmp.php';
                                     <?php if (($turnier_ergebnis[$platz]['team_id'] ?? 0) == $team->id) { ?>
                                         selected
                                     <?php } //endif?>
-                                    value="<?= $team->id ?>"><?= $team->get_teamname() ?>
+                                    value="<?= $team->id ?>"><?= $team->teamname ?>
                                 </option>
                             <?php } //end foreach?>
                         </select>
