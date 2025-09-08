@@ -1,6 +1,6 @@
 <div class="w3-bar">
-    <button class="w3-hide-small w3-button w3-round w3-border w3-border-primary <?=$filter == 'tabelle' ? 'w3-text-white w3-primary' : 'w3-text-primary'?>"><a class="no" href="tabelle.php?saison=<?=$saison?>#meister">Tabelle</a></button>
-    <button class="w3-hide-small w3-button w3-round w3-border w3-border-primary <?=$filter == 'meister' ? 'w3-text-white w3-primary' : 'w3-text-primary'?>"><a class="no" href="tabelle.php?saison=<?=$saison?>&filter=meister#meister">Meisterschaften</a></button>
-    <button class="w3-hide-large w3-hide-medium w3-button w3-round w3-border w3-border-primary w3-padding-small <?=$filter == 'tabelle' ? 'w3-text-white w3-primary' : 'w3-text-primary'?>"><a class="no" href="tabelle.php?saison=<?=$saison?>#meister">Tabelle</a></button>
-    <button class="w3-hide-large w3-hide-medium w3-button w3-round w3-border w3-border-primary w3-padding-small <?=$filter == 'meister' ? 'w3-text-white w3-primary' : 'w3-text-primary'?>"><a class="no" href="tabelle.php?saison=<?=$saison?>&filter=meister#meister">Meisterschaften</a></button>
+    <button class="w3-hide-small w3-button w3-round w3-border w3-border-primary <?=$filter == 'tabelle' ? 'w3-text-white w3-primary' : 'w3-text-primary'?>"><a class="no" href="tabelle.php?saison=<?=$saison?>#meister">Gesamt</a></button>
+    <button class="w3-hide-small w3-button w3-round w3-border w3-border-primary <?=$filter == 'meister' ? 'w3-text-white w3-primary' : 'w3-text-primary'?>"><a class="no" href="tabelle.php?saison=<?=$saison?>&filter=meister#meister">Qualifiziert</a></button>
+    <button class="w3-hide-large w3-hide-medium w3-button w3-round w3-border w3-border-primary w3-padding-small <?=$filter == 'tabelle' ? 'w3-text-white w3-primary' : 'w3-text-primary'?>"><a class="no" href="tabelle.php?saison=<?=$saison?>#meister">Gesamt</a></button>
+    <button class="w3-hide-large w3-hide-medium w3-button w3-round w3-border w3-border-primary w3-padding-small <?=$filter == 'meister' ? 'w3-text-white w3-primary' : 'w3-text-primary'?>"><a class="no" href="tabelle.php?saison=<?=$saison?>&filter=meister#meister">Qualifiziert</a></button>
 </div>

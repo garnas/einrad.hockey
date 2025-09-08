@@ -60,7 +60,7 @@
         <?php endforeach; ?>
     </div>
 <?php else: ?>
-    <div class="w3-row w3-light-grey">
-        <div class="w3-col w3-padding-8 w3-center">Keine Daten vorhanden</div>
+    <div class="w3-row">
+        <div class="w3-col w3-padding-8 w3-center"><i>Kein Team mit ausreichender Anzahl an Turnieren vorhanden</i></div>
     </div>
 <?php endif; ?>

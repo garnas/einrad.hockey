@@ -3,8 +3,9 @@
     <div class="w3-col w3-right w3-padding-8" style="width: 42px;"><!-- Platz fuer das Icon --></div>
     <div class="w3-rest">
         <div class="w3-row">
+            <div class="w3-col l1 m1 w3-padding-8 w3-right-align"><!-- Platzierung --></div>
+            <div class="w3-col l10 m9 w3-padding-8 w3-left-align"><b>Team</b></div>
             <div class="w3-col l1 m2 w3-padding-8 w3-right-align"><b>Punkte</b></div>
-            <div class="w3-col l11 m10 w3-padding-8 w3-left-align"><b>Team</b></div>
         </div>
     </div>
 </div>
@@ -18,17 +19,18 @@
         <!-- Kopfzeile fuer das Team -->
         <div id="large-meister-head-<?=$key?>" class="w3-row <?=$color?> w3-border-bottom w3-border-grey">
             <div class="w3-col w3-right w3-padding-8 w3-center" style="width: 42px;">
-                <?php if (!empty($zeile['details'])): ?>
+                <? if (!empty($zeile['details'])): ?>
                     <span onclick="show_large_results('meister', <?=$key?>)" style="cursor: pointer;">
                         <span id="large-meister-icon-show-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:block">arrow_drop_down</span>
                         <span id="large-meister-icon-hide-<?=$key?>" class="material-icons w3-text-primary w3-hover-text-secondary" style="display:none">arrow_drop_up</span>
                     </span>
-                <?php endif; ?>
+                <? endif; ?>
             </div>
             <div class="w3-rest">
                 <div class="w3-row">
-                    <div class="w3-col l1 m2 w3-padding-8 w3-right-align"><?=number_format($zeile['summe'] ?: 0, 0, ",", ".")?></div>
-                    <div class="w3-col l11 m10 w3-padding-8"><?=$zeile['teamname'] . (!empty($zeile['hat_strafe']) ? '<a class="no w3-text-primary w3-hover-text-secondary" href="#strafen">*</a>' : '')?></div>
+                    <div class="w3-col l1 m1 w3-padding-8 w3-right-align?>"><!-- Platzierung --></div>
+                    <div class="w3-col l8 m8 w3-padding-8"><?=$zeile['teamname'] . (!empty($zeile['hat_strafe']) ? '<a class="no w3-text-primary w3-hover-text-secondary" href="#strafen">*</a>' : '')?></div>
+                    <div class="w3-col l3 m3 w3-padding-8 w3-right-align"><?=number_format($zeile['summe'] ?: 0, 0, ",", ".")?></div>
                 </div>
             </div>
         </div>
