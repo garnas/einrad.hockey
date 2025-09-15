@@ -18,7 +18,7 @@ class Stats
                 WHERE letzte_saison >= ?
                 AND team_id IS NOT NULL
                 ";
-        return db::$db->query($sql, $saison - 1 )->fetch_one() ?? 0;
+        return db::$db->query($sql, $saison )->fetch_one() ?? 0;
     }
 
     /**
