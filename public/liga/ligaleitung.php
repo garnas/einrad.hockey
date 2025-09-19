@@ -120,4 +120,31 @@ include '../../templates/header.tmp.php'; ?>
 
 <hr>
 
+<!-- Team Praktische Schiriprüfer -->
+<h2 class="w3-text-secondary w3-xlarge">Team Praktische Schiriprüfer</h2>
+<div class="w3-section">
+    <p>
+        Das Team für die praktische Schiriprüfung ist verantwortlich für die Organisation und Durchführung der praktischen Prüfungen für Schiedsrichter in der Deutschen Einradhockeyliga.
+    </p>
+</div>
+
+<div class="w3-section">
+    <?php foreach (LigaLeitung::get_all('schiripruefer') as $sp): ?>
+        <div class="w3-row">
+            <div class="w3-quarter w3-text-primary">
+                <?= $sp['email'], $sp['vorname'] . ' ' . $sp['nachname'] ?>
+            </div>
+            <div class="w3-threequarter">
+                <span class="w3-padding-small"><?= $sp['teamname'] ?></span>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<div class="w3-section">
+    <a href="mailto:<?= Env::LAMAIL ?>" class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top">
+        <?= Html::icon("mail") ?> E-Mail an das Team Praktische Schiriprüfer
+    </a>
+</div>
+
 <?php include '../../templates/footer.tmp.php';
