@@ -29,6 +29,7 @@ include '../../templates/header.tmp.php';
             <li>20. + 21. September 2025 (Remscheid)</li>
             <li>06. + 07. Dezember 2025 (Mörfelden)</li>
             <li>28. Februar + 01. März 2026 (Mörfelden)</li>
+            <li>25. + 26. April 2026 (Bottrop)</li>
             <li>04. + 05. Juli 2026 (Augustdorf)</li>
         </ul>
     </div>
@@ -37,7 +38,7 @@ include '../../templates/header.tmp.php';
     <div class="w3-container">
         <ul class="w3-ul w3-leftbar w3-border-tertiary">
             <li>13. + 14. September 2025 (Münster (Dieburg); Sichtungstraining)</li>
-            <li>01. + 02. November 2025 (Ort unbekannt)</li>
+            <li>01. + 02. November 2025 (Winsen (Luhe))</li>
             <li>13. + 14. Dezember 2025 (Augustdorf)</li>
             <li>31. Januar + 01. Februar 2026 (Ort unbekannt)</li>
             <li>21. + 22. März 2026 (Ort unbekannt)</li>
