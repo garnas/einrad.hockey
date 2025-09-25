@@ -33,10 +33,10 @@ include '../../templates/header.tmp.php'; ?>
 
 <div class="w3-section w3-center">
     <div>
-        <img src="<?= Env::BASE_URL ?>/bilder/ligaausschuss.jpg" alt="Ligaausschuss" class="w3-image">
+        <img src="<?= Env::BASE_URL ?>/bilder/ligaausschuss.jpg" alt="Ligaausschuss" style="width: 100%; max-width:600px">
     </div>
     <div>
-        <i class="w3-text-grey">Ligaausschuss der Saison <?= Html::get_saison_string() ?>: Larissa, Matthias (ausgeschieden), Max, Malte, Janina, Fin (von links nach rechts)</i>
+        <i class="w3-text-grey" style="display: block; margin: auto; width: 100%; max-width:600px">Ligaausschuss der Saison <?= Html::get_saison_string() ?>: Larissa, Matthias (ausgeschieden), Max, Malte, Janina, Fin (von links nach rechts)</i>
     </div>
 </div>
 
