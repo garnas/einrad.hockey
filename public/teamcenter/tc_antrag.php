@@ -75,9 +75,6 @@ include '../../templates/header.tmp.php';
             <br>
             <?= Html::mailto(Env::LAMAIL) ?>
         </p>
-        <p><span class="">
-                - Anträge bitte bis zum 31.07 stellen -
-            </span></p>
         <form method="post">
             <p>
                 <label class="w3-text-grey" for="name">
