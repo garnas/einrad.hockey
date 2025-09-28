@@ -189,7 +189,7 @@ include '../../templates/header.tmp.php';
     <?php if (time() > $abschluss): ?>
         <div class="w3-panel w3-light-grey">
             <p class="w3-large">Die Abstimmung ist beendet.</p>
-            <p><?= Html::link('../liga/abstimmung.php', "<i class='material-icons'>info</i> Zu den Ergebnissen") ?></p>
+            <p><?= Html::link('../liga/abstimmung.php', "Zu den Ergebnissen", icon:"info") ?></p>
         </div>
     <?php endif; ?>
 
