@@ -79,13 +79,15 @@ register_shutdown_function(static function () {
 
     // Lag ein Fehler vor?
     if (($error = error_get_last()) !== null) {
-        // Fehlerlogs von PHP ergänzen.
-        $script = basename($_SERVER['SCRIPT_NAME'] ?? '');
-        $line = "Custom Log Details for " . $_SERVER["REQUEST_URI"];
-        if (!in_array(needle: $script, haystack: Config::NEVER_LOG_REQUEST)) {
-            $line .= " - " . print_r($_REQUEST ?? [], true);
+        if (!in_array(needle: $error['type'], haystack: [E_USER_NOTICE, E_USER_WARNING, E_USER_ERROR])) {
+            // Fehlerlogs von PHP ergänzen.
+            $script = basename($_SERVER['SCRIPT_NAME'] ?? '');
+            $line = "Custom Log Details for " . $_SERVER["REQUEST_URI"];
+            if (!in_array(needle: $script, haystack: Config::NEVER_LOG_REQUEST)) {
+                $line .= " - " . print_r($_REQUEST ?? [], true);
+            }
+            Helper::log(file_name: Config::LOG_ERRORS, line: $line);
         }
-        Helper::log(file_name: Config::LOG_ERRORS, line: $line);
 
         // Weiterleitung auf eine der Fehlerseiten nur im live-Betrieb von einrad.hockey.
         if (!Env::IS_LOCALHOST) {
