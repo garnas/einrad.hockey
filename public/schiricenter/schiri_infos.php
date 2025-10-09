@@ -99,6 +99,11 @@ include '../../templates/header.tmp.php';
             <td>Schiedsrichtermodus der Deutschen Einradhockeyliga</td>
         </tr>
         <tr>
+            <th class="w3-primary-3"><?=Html::link(Nav::LINK_SCHIRI_LEITLINIE,
+                                                   'Schiri-Leitlinie', false, false)?></th>
+            <td>Schiri-Leitlinie für Spiele auf Fortgeschrittenem Niveau</td>
+        </tr>
+        <tr>
             <th class="w3-primary-3"><?=Html::link(Nav::LINK_SCHIRI_CHECKLIST,
                                                    'Checkliste', false, false)?></th>
             <td>Checkliste für die praktische Prüfung</td>
