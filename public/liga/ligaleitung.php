@@ -59,6 +59,15 @@ include '../../templates/header.tmp.php'; ?>
 
 <!-- Team Technik -->
 <h2 class="w3-text-secondary w3-xlarge">Team Technik</h2>
+
+<div class="w3-section">
+    <p>
+        Das Team Technik kümmert sich um die technische Infrastruktur der Deutschen Einradhockeyliga.
+        Hierzu gehört vor allem die Webseite mit den umfassenden Funktionen.
+        Diese Arbeit wird stetig fortgesetzt, um den Ligabetrieb reibungslos zu ermöglichen.
+    </p>
+</div>
+
 <div class="w3-section">
     <?php foreach (LigaLeitung::get_all('team_technik') as $tk): ?>
         <div class="w3-row">
@@ -82,6 +91,14 @@ include '../../templates/header.tmp.php'; ?>
 
 <!-- Team Social Media -->
 <h2 class="w3-text-secondary w3-xlarge">Team Social Media</h2>
+
+<div class="w3-section">
+    <p>
+        Das Team Social Media kümmert sich um die Präsenz der Deutschen Einradhockeyliga in den sozialen Medien.
+        Hier wird vor allem über die Turniere und Meisterschaften berichtet, aber auch über die wichtigsten Neuigkeiten.
+    </p>
+</div>
+
 <div class="w3-section">
     <?php foreach (LigaLeitung::get_all('team_social_media') as $oa): ?>
         <div class="w3-row">
@@ -105,6 +122,14 @@ include '../../templates/header.tmp.php'; ?>
 
 <!-- Team Praktische Schiriprüfer -->
 <h2 class="w3-text-secondary w3-xlarge">Team Praktische Schiriprüfer</h2>
+
+<div class="w3-section">
+    <p>
+        In einem Kernteam werden die praktischen Schiedsrichterprüfungen organisiert.
+        Neben der Entwicklung einer Schiedsrichterleitlinie für fortgeschrittenes Niveau     liegt der Fokus auf der Vereinheitkung der Prüfungsdurchführung.
+    </p>
+</div>
+
 <div class="w3-section">
     <?php foreach (LigaLeitung::get_all('team_schiripruefer') as $sp): ?>
         <div class="w3-row">
@@ -128,6 +153,14 @@ include '../../templates/header.tmp.php'; ?>
 
 <!-- Team Jugendarbeit -->
 <h2 class="w3-text-secondary w3-xlarge">Team Jugendarbeit</h2>
+
+<div class="w3-section">
+    <p>
+        Es geht darum, über die Vereine hinaus, Angebote für Jugendliche zu schaffen.
+        Beispielsweise können gemeinsame Trainingseinheiten mit Übernachtungen organisiert werden.
+    </p>
+</div>
+
 <div class="w3-section">
     <?php foreach (LigaLeitung::get_all('team_jugendarbeit') as $sp): ?>
         <div class="w3-row">
@@ -151,6 +184,14 @@ include '../../templates/header.tmp.php'; ?>
 
 <!-- Team Branding und Merch -->
 <h2 class="w3-text-secondary w3-xlarge">Team Branding und Merch</h2>
+
+<div class="w3-section">
+    <p>
+        Ziel ist es, für eine einheitliche Präsenz der Deutschen Einradhockeyliga nach innen und nach außen zu sorgen.
+        Dazu gehört die Neu- oder Weiterentwicklung eines Ligalogos, aber auch Werbemittel.
+    </p>
+</div>
+
 <div class="w3-section">
     <?php foreach (LigaLeitung::get_all('team_branding_merch') as $sp): ?>
         <div class="w3-row">
@@ -178,6 +219,15 @@ include '../../templates/header.tmp.php'; ?>
 
 <!-- Team Schirileitfaden -->
 <h2 class="w3-text-secondary w3-xlarge">Team Schirileitfaden</h2>
+
+<div class="w3-section">
+    <p>
+        Hier wird eine Leitfaden entwickelt, der als Vorbereitung zur theoretischen Prüfung dienen soll. 
+        Dieser ist ergänzend zum eigentlichen Regelwerk und soll einige Regeln genauer erörtern. 
+        Dieser Leitfaden soll auch in angemessener oder leicht verständlicher Sprache ausgearbeitet werden.
+    </p>
+</div>
+
 <div class="w3-section">
     <?php foreach (LigaLeitung::get_all('team_schirileitfaden') as $sp): ?>
         <div class="w3-row">
