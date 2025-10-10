@@ -32,12 +32,8 @@ include '../../templates/header.tmp.php'; ?>
 </div>
 
 <div class="w3-section w3-center">
-    <div>
-        <img src="<?= Env::BASE_URL ?>/bilder/ligaausschuss.jpg" alt="Ligaausschuss" style="width: 100%; max-width:600px">
-    </div>
-    <div>
-        <i class="w3-text-grey" style="display: block; margin: auto; width: 100%; max-width:600px">Ligaausschuss der Saison <?= Html::get_saison_string() ?>: Larissa, Matthias (ausgeschieden), Max, Malte, Janina, Fin (von links nach rechts)</i>
-    </div>
+    <div><img src="<?= Env::BASE_URL ?>/bilder/ligaausschuss.jpg" alt="Ligaausschuss" style="width: 100%; max-width: 600px"></div>
+    <div><i class="w3-text-grey" style="display: block; margin: auto; width: 100%; max-width:600px">Ligaausschuss der Saison <?= Html::get_saison_string() ?>: Larissa, Matthias (ausgeschieden), Max, Malte, Janina, Fin (von links nach rechts)</i></div>
 </div>
 
 <div class="w3-section">
@@ -46,7 +42,7 @@ include '../../templates/header.tmp.php'; ?>
             <div class="w3-quarter">
                 <?= Html::mailto($la['email'], $la ['vorname'] . ' ' . $la['nachname']) ?>
             </div>
-            <div class="w3-quarter">
+            <div class="w3-quarter w3-text-grey">
                 <span class="w3-padding-small"><?= $la['teamname'] ?></span>
             </div>
         </div>
@@ -55,28 +51,21 @@ include '../../templates/header.tmp.php'; ?>
 
 <div class="w3-section">
     <a href="mailto:<?= Env::LAMAIL ?>" class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top">
-        <?= Html::icon("mail") ?> E-Mail an den Ligaausschuss
+        <?= Html::icon("mail") ?> Ligaausschuss
     </a>
 </div>
 
 <hr>
 
-<!-- Technikteam -->
-<h2 class="w3-text-secondary w3-xlarge">Technikteam</h2>
+<!-- Team Technik -->
+<h2 class="w3-text-secondary w3-xlarge">Team Technik</h2>
 <div class="w3-section">
-    <p>
-        Das Technikteam ist verantwortlich für die Instandhaltung und Weiterentwicklung der IT der Deutschen
-        Einradhockeyliga. Dazu gehört unter anderem die Aktualisierung der technischen Werkzeuge entsprechend des Ligamodus.
-    </p>
-</div>
-
-<div class="w3-section">
-    <?php foreach (LigaLeitung::get_all('technikausschuss') as $tk): ?>
+    <?php foreach (LigaLeitung::get_all('team_technik') as $tk): ?>
         <div class="w3-row">
-            <div class="w3-quarter w3-text-primary">
+            <div class="w3-quarter">
                 <?= $tk['email'], $tk['vorname'] . ' ' . $tk['nachname'] ?>
             </div>
-            <div class="w3-threequarter">
+            <div class="w3-threequarter w3-text-grey">
                 <span class="w3-padding-small"><?= $tk['teamname'] ?></span>
             </div>
         </div>
@@ -85,27 +74,21 @@ include '../../templates/header.tmp.php'; ?>
 
 <div class="w3-section">
     <a href="mailto:<?= Env::TECHNIKMAIL ?>" class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top">
-        <?= Html::icon("mail") ?> E-Mail an das Technikteam
+        <?= Html::icon("mail") ?> Team Technik
     </a>
 </div>
 
 <hr>
 
-<!-- Öffentlichkeitsteam -->
-<h2 class="w3-text-secondary w3-xlarge">Öffentlichkeitsteam</h2>
+<!-- Team Social Media -->
+<h2 class="w3-text-secondary w3-xlarge">Team Social Media</h2>
 <div class="w3-section">
-    <p>
-        Das Öffentlichkeitsteam ist zuständig für die redaktionellen Inhalte der Internetseite. Darüber hinaus organisiert es Veranstaltungen und informiert über die Social-Media-Kanäle der Deutschen Einradhockeyliga.
-    </p>
-</div>
-
-<div class="w3-section">
-    <?php foreach (LigaLeitung::get_all('oeffentlichkeitsausschuss') as $oa): ?>
+    <?php foreach (LigaLeitung::get_all('team_social_media') as $oa): ?>
         <div class="w3-row">
-            <div class="w3-quarter w3-text-primary">
+            <div class="w3-quarter">
                 <?= $oa['email'], $oa['vorname'] . ' ' . $oa['nachname'] ?>
             </div>
-            <div class="w3-threequarter">
+            <div class="w3-threequarter w3-text-grey">
                 <span class="w3-padding-small"><?= $oa['teamname'] ?></span>
             </div>
         </div>
@@ -114,7 +97,7 @@ include '../../templates/header.tmp.php'; ?>
 
 <div class="w3-section">
     <a href="mailto:<?= Env::OEFFIMAIL ?>" class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top">
-        <?= Html::icon("mail") ?> E-Mail an das Öffentlichkeitsteam
+        <?= Html::icon("mail") ?> Team Social Media
     </a>
 </div>
 
@@ -123,18 +106,12 @@ include '../../templates/header.tmp.php'; ?>
 <!-- Team Praktische Schiriprüfer -->
 <h2 class="w3-text-secondary w3-xlarge">Team Praktische Schiriprüfer</h2>
 <div class="w3-section">
-    <p>
-        Das Team für die praktische Schiriprüfung ist verantwortlich für die Organisation und Durchführung der praktischen Prüfungen für Schiedsrichter in der Deutschen Einradhockeyliga.
-    </p>
-</div>
-
-<div class="w3-section">
-    <?php foreach (LigaLeitung::get_all('schiripruefer') as $sp): ?>
+    <?php foreach (LigaLeitung::get_all('team_schiripruefer') as $sp): ?>
         <div class="w3-row">
-            <div class="w3-quarter w3-text-primary">
+            <div class="w3-quarter">
                 <?= $sp['email'], $sp['vorname'] . ' ' . $sp['nachname'] ?>
             </div>
-            <div class="w3-threequarter">
+            <div class="w3-threequarter w3-text-grey">
                 <span class="w3-padding-small"><?= $sp['teamname'] ?></span>
             </div>
         </div>
@@ -143,8 +120,106 @@ include '../../templates/header.tmp.php'; ?>
 
 <div class="w3-section">
     <a href="mailto:<?= Env::LAMAIL ?>" class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top">
-        <?= Html::icon("mail") ?> E-Mail an das Team Praktische Schiriprüfer
+        <?= Html::icon("mail") ?> Team Praktische Schiriprüfer
     </a>
 </div>
+
+<hr>
+
+<!-- Team Jugendarbeit -->
+<h2 class="w3-text-secondary w3-xlarge">Team Jugendarbeit</h2>
+<div class="w3-section">
+    <?php foreach (LigaLeitung::get_all('team_jugendarbeit') as $sp): ?>
+        <div class="w3-row">
+            <div class="w3-quarter">
+                <?= $sp['email'], $sp['vorname'] . ' ' . $sp['nachname'] ?>
+            </div>
+            <div class="w3-threequarter w3-text-grey">
+                <span class="w3-padding-small"><?= $sp['teamname'] ?></span>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<div class="w3-section">
+    <a href="mailto:<?= Env::LAMAIL ?>" class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top">
+        <?= Html::icon("mail") ?> Team Jugendarbeit
+    </a>
+</div>
+
+<hr>
+
+<!-- Team Branding und Merch -->
+<h2 class="w3-text-secondary w3-xlarge">Team Branding und Merch</h2>
+<div class="w3-section">
+    <?php foreach (LigaLeitung::get_all('team_branding_merch') as $sp): ?>
+        <div class="w3-row">
+            <div class="w3-quarter">
+                <?= $sp['email'], $sp['vorname'] . ' ' . $sp['nachname'] ?>
+            </div>
+            <div class="w3-threequarter w3-text-grey">
+                <span class="w3-padding-small"><?= $sp['teamname'] ?></span>
+            </div>
+        </div>
+    <?php endforeach; ?>
+    
+    <div class="w3-row">
+        <div class="w3-quarter">Denis Rätzel</div>
+    </div>
+</div>
+
+<div class="w3-section">
+    <a href="mailto:<?= Env::LAMAIL ?>" class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top">
+        <?= Html::icon("mail") ?> Team Branding und Merch
+    </a>
+</div>
+
+<hr>
+
+<!-- Team Schirileitfaden -->
+<h2 class="w3-text-secondary w3-xlarge">Team Schirileitfaden</h2>
+<div class="w3-section">
+    <?php foreach (LigaLeitung::get_all('team_schirileitfaden') as $sp): ?>
+        <div class="w3-row">
+            <div class="w3-quarter">
+                <?= $sp['email'], $sp['vorname'] . ' ' . $sp['nachname'] ?>
+            </div>
+            <div class="w3-threequarter w3-text-grey">
+                <span class="w3-padding-small"><?= $sp['teamname'] ?></span>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<div class="w3-section">
+    <a href="mailto:<?= Env::LAMAIL ?>" class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top">
+        <?= Html::icon("mail") ?> Team Schirileitfaden
+    </a>
+</div>
+
+<hr>
+
+<!-- Team Juniortests -->
+<h2 class="w3-text-secondary w3-xlarge">Team Juniortests (Abgeschlossen)</h2>
+Das Team überarbeitete die insgesamt 241 Fragen des Juniorschiritests.
+Ziel war es, die Inhalte zu aktualisieren und sprachlich zu verbessern.
+Siehe auch: <a href="/schiricenter/schiri-infos.php" class="no w3-text-primary w3-hover-text-secondary">Schiedsrichter-Infos</a>.
+
+<hr>
+
+<!-- Team Traineraustausch -->
+<h2 class="w3-text-secondary w3-xlarge">Team Traineraustausch (Abgeschlossen)</h2>
+Das Team erstellte ein Wiki-Dokument mit verschiedenen Übungen für das eigene Training.
+Ziel war es, eine zentrale und übersichtliche Sammlung von Trainingsmaterialien bereitzustellen.
+Siehe auch: <a href="https://tinyurl.com/bddm2yd6" target="_blank" class="no w3-text-primary w3-hover-text-secondary">Wiki-Dokument</a>.
+
+
+<hr>
+
+<!-- Team IUF -->
+<h2 class="w3-text-secondary w3-xlarge">Team IUF (Abgeschlossen)</h2>
+Das Team war im IUF Rulebook Committee an der Überarbeitung des internationalen Regelwerks beteiligt.
+Ziel war es, die Regeln im Hinblick auf die Weltmeisterschaft 2026 zu aktualisieren und zu präzisieren.
+Siehe auch: <a href="https://unicycling.org/publications/" target="_blank" class="no w3-text-primary w3-hover-text-secondary">IUF Rulebook</a>.
 
 <?php include '../../templates/footer.tmp.php';
