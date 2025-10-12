@@ -6,7 +6,7 @@ use App\Service\Turnier\TurnierSnippets;
 
 ?>
 
-<section id="<?= $turnier_id ?>" style="padding-top: 16px; padding-bottom: 32px;">
+<section id="<?= $turnier->id() ?>" style="padding-top: 16px; padding-bottom: 32px;">
     <div class="w3-row">
         <div class="w3-col">
             <h3><?= TurnierSnippets::datumOrtBlock($turnier) ?></h3>
