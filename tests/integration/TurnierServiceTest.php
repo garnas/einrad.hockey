@@ -30,6 +30,7 @@ class TurnierServiceTest extends TestCase
 
     public function testLoginTeamUnbekannt(): void
     {
+        unset($_SESSION);
         $isSuccess = TeamService::login("nicht-existierender-Teamname'\"\\123455--#//?%", "");
         $this->assertFalse($isSuccess);
         $this->assertEquals(expected: "Falscher Loginname", actual: $_SESSION["messages"][0]["text"]);
@@ -37,6 +38,7 @@ class TurnierServiceTest extends TestCase
 
     public function testLoginNichtligateam(): void
     {
+        unset($_SESSION);
         self::provideTeamForLogin(teamname: "Int-Test", ligateam: "Nein", aktiv: "Ja", password: "test");
         $isSuccess = TeamService::login("Int-Test", "test");
         $this->assertFalse($isSuccess);
@@ -45,6 +47,7 @@ class TurnierServiceTest extends TestCase
 
     public function testLoginInaktivesLigateam(): void
     {
+        unset($_SESSION);
         self::provideTeamForLogin(teamname: "Int-Test", ligateam: "Ja", aktiv: "Nein", password: "0!\"\\§$%&/()=*'-.,--//?");
         $isSuccess = TeamService::login("Int-Test", "0!\"\\§$%&/()=*'-.,--//?");
         $this->assertTrue($isSuccess);
@@ -52,6 +55,7 @@ class TurnierServiceTest extends TestCase
 
     public function testLoginLigateamSuccess(): void
     {
+        unset($_SESSION);
         self::provideTeamForLogin(teamname: "Int-Test", ligateam: "Ja", aktiv: "Ja", password: "0!\"\\§$%&/()=*'-.,--//?");
         $isSuccess = TeamService::login("Int-Test", "0!\"\\§$%&/()=*'-.,--//?");
         $this->assertTrue($isSuccess);
@@ -59,6 +63,7 @@ class TurnierServiceTest extends TestCase
 
     public function testLoginLigateamFail(): void
     {
+        unset($_SESSION);
         self::provideTeamForLogin(teamname: "Int-Test", ligateam: "Ja", aktiv: "Ja", password: "0!\"\\§$%&/()=*'-.,--//?");
         $isSuccess = TeamService::login("Int-Test", "falsches-pw");
         $this->assertFalse($isSuccess);

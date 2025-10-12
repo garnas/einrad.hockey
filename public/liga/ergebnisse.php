@@ -57,7 +57,7 @@ include '../../templates/header.tmp.php';
 
 <!-- Turnierergebnisse -->
 <div id="myDIV" class="ergebnisse-container">
-    <?php foreach ($turniere as $turnier_id => $turnier): ?>
+    <?php foreach ($turniere as $turnier): ?>
         <?php include '../../templates/turnier_ergebnis.tmp.php'; ?>
     <?php endforeach; ?>
 </div>
