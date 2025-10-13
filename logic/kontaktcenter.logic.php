@@ -56,7 +56,7 @@ if (isset($_POST['rundmail'])) {
     $_SESSION[$list_id]['emails'] = Kontakt::get_emails_rundmail();
 
     array_unshift($_SESSION[$list_id]['emails'], Env::LAMAIL);
-    array_unshift($_SESSION[$list_id]['empfaenger'], '<b>Ligaausschuss</b>');
+    array_unshift($_SESSION[$list_id]['empfaenger'], 'Ligaausschuss');
 }
 
 // Teams wurden ausgewählt
@@ -80,7 +80,7 @@ if (isset($_POST['teams_emails'])) {
     $_SESSION[$list_id]['empfaenger'] = $teamnamen;
     if (isset($_POST['la'])) {
         array_unshift($_SESSION[$list_id]['emails'], Env::LAMAIL);
-        array_unshift($_SESSION[$list_id]['empfaenger'], '<b>Ligaausschuss</b>');
+        array_unshift($_SESSION[$list_id]['empfaenger'], 'Ligaausschuss');
     }
 
 }
