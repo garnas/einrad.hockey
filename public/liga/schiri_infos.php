@@ -87,13 +87,19 @@ include '../../templates/header.tmp.php';
     </p>
 </div>
 
-<h2 class="w3-text-secondary w3-xlarge">Gültigkeit</h2>
 <div class="w3-section">
+    <h2 class="w3-text-secondary w3-xlarge">Gültigkeit</h2>
     <p>
         Durch die bestandene theoretische und praktische Prüfung erhält der Spieler den Schiedsrichterstatus 
         für die aktuelle und folgende Saison. 
     </p>
 </div>
+
+<div class="w3-section">
+    <p class="w3-text-grey"><i>Stand: 09. Oktober 2025</i></p>
+</div>
+
+<hr>
 
 <div class="w3-section">
     <h2 class="w3-text-secondary w3-xlarge">Vorbereitung auf die theoretische Prüfung</h2>
