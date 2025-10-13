@@ -38,7 +38,6 @@ INSERT INTO `ligaleitung` (`ligaleitung_id`, `spieler_id`, `funktion`, `email`, 
 
 INSERT INTO `ligaleitung` (`ligaleitung_id`, `spieler_id`, `funktion`, `email`, `login`, `passwort`) VALUES 
 (NULL, '600', 'team_branding_merch', NULL, NULL, NULL),
-(NULL, '874', 'team_branding_merch', NULL, NULL, NULL),
 (NULL, '153', 'team_branding_merch', NULL, NULL, NULL),
 (NULL, '2398', 'team_branding_merch', NULL, NULL, NULL),
-(NULL, '', 'team_branding_merch', NULL, NULL, NULL);
+(NULL, '3070', 'team_branding_merch', NULL, NULL, NULL);
