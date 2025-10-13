@@ -306,6 +306,22 @@ class TurnierValidatorServiceTest extends TestCase
                 "isErweiterbar" => true
             ],
             [
+                "block" => "AB",
+                "art" => "II",
+                "phase" => "setz",
+                "isErweitertBlockhoch" => null,
+                "isErweitertBlockrunter" => true,
+                "isErweiterbar" => false
+            ],
+            [
+                "block" => "EF",
+                "art" => "II",
+                "phase" => "setz",
+                "isErweitertBlockhoch" => true,
+                "isErweitertBlockrunter" => false,
+                "isErweiterbar" => false
+            ],
+            [
                 "block" => "CD",
                 "art" => "final",
                 "phase" => "setz",
