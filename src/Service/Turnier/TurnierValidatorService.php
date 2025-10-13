@@ -270,7 +270,7 @@ class TurnierValidatorService
     {
         return $turnier->getPhase() === 'setz'
             && !$turnier->isBlockErweitertHoch()
-            && strlen($turnier->getBlock()) < 4
+            && strlen($turnier->getBlock()) < 3
             && $turnier->getBlock() !== 'AB'
             && $turnier->getBlock() !== 'A'
             && $turnier->isLigaTurnier();
@@ -286,8 +286,7 @@ class TurnierValidatorService
     {
         return $turnier->getPhase() === 'setz'
             && !$turnier->isBlockErweitertRunter()
-            && strlen($turnier->getBlock()) < 4
-            && $turnier->getBlock() !== 'DEF'
+            && strlen($turnier->getBlock()) < 3
             && $turnier->getBlock() !== 'EF'
             && $turnier->getBlock() !== 'F'
             && $turnier->isLigaTurnier();
@@ -303,6 +302,8 @@ class TurnierValidatorService
     {
         return $turnier->getPhase() === 'setz'
             && $turnier->isLigaturnier()
+            && !$turnier->isBlockErweitertHoch()
+            && !$turnier->isBlockErweitertRunter()
             && $turnier->getBlock() != Config::BLOCK_ALL[0];
     }
 
