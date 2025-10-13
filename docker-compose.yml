@@ -2,24 +2,24 @@ version: "3.8"
 
 services:
   web:
-    image: einradhockeyliga-apache
     build:
       context: .
     container_name: ligaseite-web
     restart: always
     links:
       - mariadb
+    
+    # Schlüssel für die Dev-Umgebung: Code-Synchronisation
     volumes:
-      - ./bin:/var/www/html/bin
-      - ./classes:/var/www/html/classes
-      - ./logic:/var/www/html/logic
-      - ./public:/var/www/html/public
-      - ./src:/var/www/html/src
-      - ./system:/var/www/html/system
-      - ./cache/proxy:/var/www/html/cache/proxy
-      - ./templates:/var/www/html/templates
-      - ./init.php:/var/www/html/init.php
-      - ./env.php:/var/www/html/env.php
+      # Mountet das gesamte lokale Repository in den Container
+      - .:/var/www/html
+      
+      # Verhindert, dass der "vendor" Ordner zwischen Host und Container synchronisiert wird
+      - vendor_data:/var/www/html/vendor
+      
+      # Benanntes Volume für den Cache-Ordner
+      - cache_data:/var/www/html/cache
+      
     ports:
       - '80:80'
 
@@ -32,8 +32,10 @@ services:
     volumes:
       - 'mariadb-data:/var/lib/mysql/'
       - ./_localhost/db_localhost.sql:/docker-entrypoint-initdb.d/db_localhost.sql
+    # Port 3306 für den Host freigeben, falls Sie ein externes Tool nutzen möchten
     ports:
       - '3306:3306'
+
   phpmyadmin:
     image: phpmyadmin
     container_name: ligaseite-phpmyadmin
@@ -48,3 +50,5 @@ services:
 
 volumes:
   mariadb-data:
+  vendor_data: # Für Composer-Abhängigkeiten
+  cache_data: # Für den App-Cache

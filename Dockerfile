@@ -1,7 +1,7 @@
 # Dockerfile
 FROM php:8.3-apache
 
-# Install necessary packages
+# Installiere notwendige Systempakete und Git
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
@@ -9,32 +9,32 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
     libpng-dev \
-    git
+    git \
+    # Cleanup, um das Image klein zu halten
+    && rm -rf /var/lib/apt/lists/*
 
-# Install necessary PHP extensions
+# Installiere notwendige PHP Erweiterungen (GD, PDO_MySQL, ZIP) und Xdebug
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo_mysql zip
+    && docker-php-ext-install gd pdo_mysql zip \
+    && pecl install xdebug \
+    && docker-php-ext-enable xdebug
 
-# Activate Apache modules headers & rewrite
+# Aktiviere Apache Module headers & rewrite
 RUN a2enmod headers rewrite
 
-# Copy virtual host configuration from current path onto existing 000-default.conf
+# Kopiere Ihre eigene Apache Konfiguration
 COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 
-# Set the working directory and copy the composer.json and composer.lock files
+# Setze das Arbeitsverzeichnis. Der Code wird später hierhin gemountet.
 WORKDIR /var/www/html
-COPY composer.json composer.lock ./
-    
-# Copy Composer from the official Composer image
+
+# Composer wird erst beim Dev Container Start ausgeführt, nicht hier
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Install Composer dependencies
-RUN composer install --no-dev --optimize-autoloader
-
-# Expose port 80 for web traffic
+# Expose port 80 für Web-Traffic
 EXPOSE 80
 
+# Ihr existierendes Entrypoint-Skript
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
 ENTRYPOINT ["docker-entrypoint.sh"]
