@@ -96,14 +96,8 @@ include '../../templates/header.tmp.php';
 </div>
 
 <div class="w3-section">
-    <p class="w3-text-grey"><i>Stand: 09. Oktober 2025</i></p>
-</div>
-
-<hr>
-
-<div class="w3-section">
     <h2 class="w3-text-secondary w3-xlarge">Vorbereitung auf die theoretische Prüfung</h2>
-    <ul class="w3-ul">
+    <ul class="w3-ul w3-light-grey">
         <li>Einzelne Fragen zur Vorbereitung auf die Schiedsrichterprüfung finden sich hier:<br><?=Html::link("uebungstest_l.php", "Einzelne Fragen der Basis-Prüfung", false, false)?></li>
         <li>Eine Simulation des kompletten Tests (<?=array_sum(SchiriTest::anzahl_J)?> Fragen) als Vorbereitung auf die <b>Junior-Schiriprüfung</b> findet sich hier:<br><?=Html::link("uebungstest_j.php", "Übungstest für die Junior-Prüfung", false, false)?></li>
         <li>Eine Simulation des kompletten Tests (<?=array_sum(SchiriTest::anzahl_B)?> Fragen) als Vorbereitung auf die <b>Basis-Schiriprüfung</b> findet sich hier:<br><?=Html::link("uebungstest_b.php", "Übungstest für die Basis-Prüfung", false, false)?></li>
@@ -112,7 +106,7 @@ include '../../templates/header.tmp.php';
 
 <div class="w3-section">
     <h2 class="w3-text-secondary w3-xlarge">Weitere Infos</h2>
-    <ul class="w3-ul">
+    <ul class="w3-ul w3-light-grey">
         <li>Hier gibt es die kompletten Regeln der Deutschen Einradhockeyliga als pdf:<br><?=Html::link(Nav::LINK_REGELN, 'Regelwerk', false, false)?></li>
         <li>Schiri-Leitlinie für Spiele auf Fortgeschrittenem Niveau:<br><?=Html::link(Nav::LINK_SCHIRI_LEITLINIE, 'Schiri-Leitlinie', false, false)?></li>
         <li>Checkliste für die praktische Prüfung:<br><?=Html::link(Nav::LINK_SCHIRI_CHECKLIST, 'Checkliste', false, false)?></li>
@@ -120,10 +114,8 @@ include '../../templates/header.tmp.php';
 </div>
 
 <div class="w3-section">
-    <div class="w3-panel w3-primary w3-text-white">
-        <h2 class="w3-xlarge">Kontakt</h2>
-        <p>Wer Einradhockey-Schiedsrichter werden möchte oder Fragen hat, kann sich jederzeit an <a href="mailto:<?=Env::SCHIRIMAIL?>" class="no w3-text-tertiary w3-hover-text-secondary"> <?=Env::SCHIRIMAIL?></a> wenden.</p>
-    </div>
+    <h2 class="w3-text-secondary w3-xlarge">Kontakt</h2>
+    <p>Wer Einradhockey-Schiedsrichter werden möchte oder Fragen hat, kann sich jederzeit an <a href="mailto:<?=Env::SCHIRIMAIL?>" class="no w3-text-primary w3-hover-text-secondary"> <?=Env::SCHIRIMAIL?></a> wenden.</p>
 </div>
 
 <?php include '../../templates/footer.tmp.php';
