@@ -40,7 +40,7 @@ include '../../templates/header.tmp.php'; ?>
     <?php foreach (LigaLeitung::get_all('ligaausschuss') as $la): ?>
         <div class="w3-row">
             <div class="w3-quarter">
-                <?= Html::mailto($la['email'], $la ['vorname'] . ' ' . $la['nachname']) ?>
+                <?= $la ['vorname'] . ' ' . $la['nachname'] ?>
             </div>
             <div class="w3-quarter w3-text-grey">
                 <span class="w3-padding-small"><?= $la['teamname'] ?></span>
@@ -72,7 +72,7 @@ include '../../templates/header.tmp.php'; ?>
     <?php foreach (LigaLeitung::get_all('team_technik') as $tk): ?>
         <div class="w3-row">
             <div class="w3-quarter">
-                <?= $tk['email'], $tk['vorname'] . ' ' . $tk['nachname'] ?>
+                <?=$tk['vorname'] . ' ' . $tk['nachname'] ?>
             </div>
             <div class="w3-threequarter w3-text-grey">
                 <span class="w3-padding-small"><?= $tk['teamname'] ?></span>
@@ -103,7 +103,7 @@ include '../../templates/header.tmp.php'; ?>
     <?php foreach (LigaLeitung::get_all('team_social_media') as $oa): ?>
         <div class="w3-row">
             <div class="w3-quarter">
-                <?= $oa['email'], $oa['vorname'] . ' ' . $oa['nachname'] ?>
+                <?= $oa['vorname'] . ' ' . $oa['nachname'] ?>
             </div>
             <div class="w3-threequarter w3-text-grey">
                 <span class="w3-padding-small"><?= $oa['teamname'] ?></span>
@@ -125,8 +125,9 @@ include '../../templates/header.tmp.php'; ?>
 
 <div class="w3-section">
     <p>
-        In einem Kernteam werden die praktischen Schiedsrichterprüfungen organisiert.
-        Neben der Entwicklung einer Schiedsrichterleitlinie für fortgeschrittenes Niveau     liegt der Fokus auf der Vereinheitkung der Prüfungsdurchführung.
+        Im Team Praktische Schiriprüfer werden die praktischen Schiedsrichterprüfungen organisiert. 
+        Neben der Entwicklung einer Schiedsrichterleitlinie für fortgeschrittenes Niveau liegt der Fokus auf der 
+        Vereinheitlichung der Prüfungsdurchführung.
     </p>
 </div>
 
@@ -134,7 +135,7 @@ include '../../templates/header.tmp.php'; ?>
     <?php foreach (LigaLeitung::get_all('team_schiripruefer') as $sp): ?>
         <div class="w3-row">
             <div class="w3-quarter">
-                <?= $sp['email'], $sp['vorname'] . ' ' . $sp['nachname'] ?>
+                <?= $sp['vorname'] . ' ' . $sp['nachname'] ?>
             </div>
             <div class="w3-threequarter w3-text-grey">
                 <span class="w3-padding-small"><?= $sp['teamname'] ?></span>
@@ -151,13 +152,45 @@ include '../../templates/header.tmp.php'; ?>
 
 <hr>
 
+<!-- Team Schirileitfaden -->
+<h2 class="w3-text-secondary w3-xlarge">Team Schirileitfaden</h2>
+
+<div class="w3-section">
+    <p>
+        Hier wird ein Leitfaden entwickelt, der als Vorbereitung zur theoretischen Prüfung dienen soll. 
+        Dieser ist ergänzend zum eigentlichen Regelwerk, soll einige Regeln genauer erörtern und in 
+        angemessener oder leicht verständlicher Sprache ausgearbeitet werden.
+    </p>
+</div>
+
+<div class="w3-section">
+    <?php foreach (LigaLeitung::get_all('team_schirileitfaden') as $sp): ?>
+        <div class="w3-row">
+            <div class="w3-quarter">
+                <?= $sp['vorname'] . ' ' . $sp['nachname'] ?>
+            </div>
+            <div class="w3-threequarter w3-text-grey">
+                <span class="w3-padding-small"><?= $sp['teamname'] ?></span>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<div class="w3-section">
+    <a href="mailto:<?= Env::LAMAIL ?>" class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top">
+        <?= Html::icon("mail") ?> Team Schirileitfaden
+    </a>
+</div>
+
+<hr>
+
 <!-- Team Jugendarbeit -->
 <h2 class="w3-text-secondary w3-xlarge">Team Jugendarbeit</h2>
 
 <div class="w3-section">
     <p>
         Es geht darum, über die Vereine hinaus, Angebote für Jugendliche zu schaffen.
-        Beispielsweise können gemeinsame Trainingseinheiten mit Übernachtungen organisiert werden.
+        Beispielsweise können gemeinsame Trainingtage mit Übernachtungen organisiert werden.
     </p>
 </div>
 
@@ -165,7 +198,7 @@ include '../../templates/header.tmp.php'; ?>
     <?php foreach (LigaLeitung::get_all('team_jugendarbeit') as $sp): ?>
         <div class="w3-row">
             <div class="w3-quarter">
-                <?= $sp['email'], $sp['vorname'] . ' ' . $sp['nachname'] ?>
+                <?= $sp['vorname'] . ' ' . $sp['nachname'] ?>
             </div>
             <div class="w3-threequarter w3-text-grey">
                 <span class="w3-padding-small"><?= $sp['teamname'] ?></span>
@@ -188,7 +221,7 @@ include '../../templates/header.tmp.php'; ?>
 <div class="w3-section">
     <p>
         Ziel ist es, für eine einheitliche Präsenz der Deutschen Einradhockeyliga nach innen und nach außen zu sorgen.
-        Dazu gehört die Neu- oder Weiterentwicklung eines Ligalogos, aber auch Werbemittel.
+        Dazu gehört die Neu- und Weiterentwicklung eines Ligalogos, aber auch Werbemittel.
     </p>
 </div>
 
@@ -196,7 +229,7 @@ include '../../templates/header.tmp.php'; ?>
     <?php foreach (LigaLeitung::get_all('team_branding_merch') as $sp): ?>
         <div class="w3-row">
             <div class="w3-quarter">
-                <?= $sp['email'], $sp['vorname'] . ' ' . $sp['nachname'] ?>
+                <?= $sp['vorname'] . ' ' . $sp['nachname'] ?>
             </div>
             <div class="w3-threequarter w3-text-grey">
                 <span class="w3-padding-small"><?= $sp['teamname'] ?></span>
@@ -217,49 +250,17 @@ include '../../templates/header.tmp.php'; ?>
 
 <hr>
 
-<!-- Team Schirileitfaden -->
-<h2 class="w3-text-secondary w3-xlarge">Team Schirileitfaden</h2>
-
-<div class="w3-section">
-    <p>
-        Hier wird eine Leitfaden entwickelt, der als Vorbereitung zur theoretischen Prüfung dienen soll. 
-        Dieser ist ergänzend zum eigentlichen Regelwerk und soll einige Regeln genauer erörtern. 
-        Dieser Leitfaden soll auch in angemessener oder leicht verständlicher Sprache ausgearbeitet werden.
-    </p>
-</div>
-
-<div class="w3-section">
-    <?php foreach (LigaLeitung::get_all('team_schirileitfaden') as $sp): ?>
-        <div class="w3-row">
-            <div class="w3-quarter">
-                <?= $sp['email'], $sp['vorname'] . ' ' . $sp['nachname'] ?>
-            </div>
-            <div class="w3-threequarter w3-text-grey">
-                <span class="w3-padding-small"><?= $sp['teamname'] ?></span>
-            </div>
-        </div>
-    <?php endforeach; ?>
-</div>
-
-<div class="w3-section">
-    <a href="mailto:<?= Env::LAMAIL ?>" class="w3-button w3-ripple w3-round w3-tertiary w3-margin-top">
-        <?= Html::icon("mail") ?> Team Schirileitfaden
-    </a>
-</div>
-
-<hr>
-
 <!-- Team Juniortests -->
 <h2 class="w3-text-secondary w3-xlarge">Team Juniortests (Abgeschlossen)</h2>
 Das Team überarbeitete die insgesamt 241 Fragen des Juniorschiritests.
 Ziel war es, die Inhalte zu aktualisieren und sprachlich zu verbessern.
-Siehe auch: <a href="/schiricenter/schiri-infos.php" class="no w3-text-primary w3-hover-text-secondary">Schiedsrichter-Infos</a>.
+Siehe auch: <a href="/schiricenter/schiri_infos.php" class="no w3-text-primary w3-hover-text-secondary">Schiedsrichter-Infos</a>.
 
 <hr>
 
 <!-- Team Traineraustausch -->
 <h2 class="w3-text-secondary w3-xlarge">Team Traineraustausch (Abgeschlossen)</h2>
-Das Team erstellte ein Wiki-Dokument mit verschiedenen Übungen für das eigene Training.
+Das Team erstellte ein Wiki-Dokument mit verschiedenen Übungen für das Vereinstraining.
 Ziel war es, eine zentrale und übersichtliche Sammlung von Trainingsmaterialien bereitzustellen.
 Siehe auch: <a href="https://tinyurl.com/bddm2yd6" target="_blank" class="no w3-text-primary w3-hover-text-secondary">Wiki-Dokument</a>.
 
@@ -267,7 +268,7 @@ Siehe auch: <a href="https://tinyurl.com/bddm2yd6" target="_blank" class="no w3-
 <hr>
 
 <!-- Team IUF -->
-<h2 class="w3-text-secondary w3-xlarge">Team IUF (Abgeschlossen)</h2>
+<h2 class="w3-text-secondary w3-xlarge">Team IUF Rulebook Committee (Abgeschlossen)</h2>
 Das Team war im IUF Rulebook Committee an der Überarbeitung des internationalen Regelwerks beteiligt.
 Ziel war es, die Regeln im Hinblick auf die Weltmeisterschaft 2026 zu aktualisieren und zu präzisieren.
 Siehe auch: <a href="https://unicycling.org/publications/" target="_blank" class="no w3-text-primary w3-hover-text-secondary">IUF Rulebook</a>.
