@@ -192,7 +192,7 @@ class nLigaBot
         foreach (self::$gelosteTurniere as $turnier) {
             if($turnier->isSofortOeffnen()) {
                 TurnierService::blockOeffnen($turnier);
-                TurnierService::setzListeAuffuellen($turnier, false);
+                TurnierService::setzListeAuffuellen($turnier);
             }
         }
 
