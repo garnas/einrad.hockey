@@ -32,12 +32,6 @@ include '../../templates/header.tmp.php';
             Turniermodi
         </p>
     </a>
-    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_SCHIRIWESEN ?>">
-        <p>
-            <i class="w3-xxlarge w3-text-primary material-icons">insert_drive_file</i>
-            Schiedsrichterwesen
-        </p>
-    </a>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_SCHIRI_CHECKLIST ?>">
         <p>
             <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file</i>
