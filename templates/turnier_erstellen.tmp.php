@@ -53,24 +53,29 @@ if ($last_turnier) {
     <!-- Modusspezifisch -->
     <div class="w3-panel w3-card-4">
         <h3 id="result">Liga</h3>
-        <p>
-            <label class="w3-text-primary" for="art">Turnierart</label>
-            <select required class="w3-select w3-border w3-border-primary" id="art" name="art" onchange="onchange_show_block(this)">
-                <option <?php if (($_POST['art'] ?? '') == 'I'){?> selected <?php } ?> value="I">I: Blockeigenes Turnier <?= BlockService::toString($ausrichter_block)?></option>
-                <option <?php if (($_POST['art'] ?? '') == 'II'){?> selected <?php } ?> value="II">II: Blockhöheres Turnier <?=$block_higher_str?></option>
-                <option <?php if (($_POST['art'] ?? '') == 'spass'){?> selected <?php } ?> value="spass">Spaßturnier (außerhalb der Liga, Anmeldung beim Ausrichter, Datum und Uhrzeit beliebig)</option>
-                <?php if (Helper::$ligacenter){?>
-                    <option <?php if (($_POST['art'] ?? '') == 'final'){?> selected <?php } ?> value='final'>Abschlussturnier</option>
-                    <option <?php if (($_POST['art'] ?? '') == 'fixed'){?> selected <?php } ?> value='fixed'>Fixierter Turnierblock (<?=implode(", ", Config::BLOCK)?>)</option>
-                <?php } //endif?>
-            </select>
-        </p>
-        <p>
-            <input class="w3-check" type="checkbox" id="sofort_oeffnen" name="sofort_oeffnen" <?php if(($_POST['sofort_oeffnen'] ?? '') == "Ja"){?> checked <?php }//endif?> value="Ja">
-            <label for="sofort_oeffnen" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer"> Das Turnier soll beim Übergang von Wartephase auf Setzphase sofort auf ABCDEF geöffnet werden.</label>
-            <br>
-            <span class="w3-text-grey">Entspricht dem früheren blockfreien Turnier und wird auf der Webseite auch so angezeigt.</span>
-        </p>
+        <div>
+            <p>
+                <label class="w3-text-primary" for="art">Turnierart</label>
+                <select required class="w3-select w3-border w3-border-primary" id="art" name="art" onchange="onchange_show_block(this)">
+                    <option selected>Wähle eine Turnierart aus</option>
+                    <option <?php if (($_POST['art'] ?? '') == 'I'){?> selected <?php } ?> value="I">I: Blockeigenes Turnier <?= BlockService::toString($ausrichter_block)?></option>
+                    <option <?php if (($_POST['art'] ?? '') == 'II'){?> selected <?php } ?> value="II">II: Blockhöheres Turnier <?=$block_higher_str?></option>
+                    <option <?php if (($_POST['art'] ?? '') == 'spass'){?> selected <?php } ?> value="spass">Spaßturnier (außerhalb der Liga, Anmeldung beim Ausrichter, Datum und Uhrzeit beliebig)</option>
+                    <?php if (Helper::$ligacenter): ?>
+                        <option <?php if (($_POST['art'] ?? '') == 'final'){?> selected <?php } ?> value='final'>Abschlussturnier</option>
+                        <option <?php if (($_POST['art'] ?? '') == 'fixed'){?> selected <?php } ?> value='fixed'>Fixierter Turnierblock (<?=implode(", ", Config::BLOCK)?>)</option>
+                    <?php endif; ?>
+                </select>
+            </p>
+        </div>
+        
+        <div id="immediately_open_div" style="display: none">
+            <p>
+                <input class="w3-check" type="checkbox" id="sofort_oeffnen" name="sofort_oeffnen" <?php if(($_POST['sofort_oeffnen'] ?? '') == "Ja"){?> checked <?php }//endif?> value="Ja">
+                <label for="sofort_oeffnen" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer"> Das Turnier soll beim Übergang von Wartephase auf Setzphase sofort auf ABCDEF geöffnet werden.</label>
+            </p>
+        </div>
+        
         <div id="block_higher_div" style="display: none">
             <p><label class="w3-text-primary" for="block">Höheren Turnierblock wählen</label>
             <select required class="w3-select w3-border w3-border-primary" id="block" name="block">
@@ -98,30 +103,34 @@ if ($last_turnier) {
             </div>
         <?php } //endif?>
 
-        <p>
-            <label class="w3-text-primary" for="plaetze">Plätze</label>
-            <select required class="w3-select w3-border w3-border-primary" id="plaetze" name="plaetze">
-                <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '4'){?> selected <?php } //endif?> value="4">4 Teams</option>
-                <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '5'){?> selected <?php } //endif?> value="5">5 Teams</option>
-                <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '6'){?> selected <?php } //endif?> value="6">6 Teams</option>
-                <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '7'){?> selected <?php } //endif?> value="7">7 Teams</option>
-                <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '8'){?> selected <?php } //endif?> value="8">8 Teams</option>
-                <?php if(Helper::$ligacenter): ?>
-                    <option <?php if (($_POST['plaetze'] ?? '') == '9'){?> selected <?php } //endif?> value="9">9 Teams</option>
-                    <option <?php if (($_POST['plaetze'] ?? '') == '10'){?> selected <?php } //endif?> value="10">10 Teams</option>
-                    <option <?php if (($_POST['plaetze'] ?? '') == '11'){?> selected <?php } //endif?> value="11">11 Teams</option>
-                    <option <?php if (($_POST['plaetze'] ?? '') == '12'){?> selected <?php } //endif?> value="12">12 Teams</option>
-                <?php endif; ?>
-            </select>
-            <span class="w3-text-grey">Achtung: Ab der Setzphase ist eine Erweiterung des Turniers auf mehr Plätze nicht mehr möglich.</span>
-        </p>
-        <p>
-            <label class="w3-text-primary" for="min_teams">Mindestanzahl an Teams damit das Turnier stattfindet</label>
-            <select required class="w3-select w3-border w3-border-primary" id="min_teams" name="min_teams">
-                <option <?php if (($_POST['min_teams'] ?? $last_min_teams) == '5'){?> selected <?php } //endif?> value="5">5 Teams</option>
-                <option <?php if (($_POST['min_teams'] ?? $last_min_teams) == '4'){?> selected <?php } //endif?> value="4">4 Teams</option>
-            </select>
-        </p>
+        <div id="number_of_teams_div" style="display: none">
+            <p>
+                <label class="w3-text-primary" for="plaetze">Plätze</label>
+                <select required class="w3-select w3-border w3-border-primary" id="plaetze" name="plaetze">
+                    <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '4'){?> selected <?php } //endif?> value="4">4 Teams</option>
+                    <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '5'){?> selected <?php } //endif?> value="5">5 Teams</option>
+                    <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '6'){?> selected <?php } //endif?> value="6">6 Teams</option>
+                    <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '7'){?> selected <?php } //endif?> value="7">7 Teams</option>
+                    <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '8'){?> selected <?php } //endif?> value="8">8 Teams</option>
+                    <?php if(Helper::$ligacenter): ?>
+                        <option <?php if (($_POST['plaetze'] ?? '') == '9'){?> selected <?php } //endif?> value="9">9 Teams</option>
+                        <option <?php if (($_POST['plaetze'] ?? '') == '10'){?> selected <?php } //endif?> value="10">10 Teams</option>
+                        <option <?php if (($_POST['plaetze'] ?? '') == '11'){?> selected <?php } //endif?> value="11">11 Teams</option>
+                        <option <?php if (($_POST['plaetze'] ?? '') == '12'){?> selected <?php } //endif?> value="12">12 Teams</option>
+                    <?php endif; ?>
+                </select>
+            </p>
+        </div>
+        
+        <div id="min_number_of_teams_div" style="display: none">
+            <p>
+                <label class="w3-text-primary" for="min_teams">Mindestanzahl an Teams damit das Turnier stattfindet</label>
+                <select required class="w3-select w3-border w3-border-primary" id="min_teams" name="min_teams">
+                    <option <?php if (($_POST['min_teams'] ?? $last_min_teams) == '5'){?> selected <?php } //endif?> value="5">5 Teams</option>
+                    <option <?php if (($_POST['min_teams'] ?? $last_min_teams) == '4'){?> selected <?php } //endif?> value="4">4 Teams</option>
+                </select>
+            </p>
+        </div>
     </div>
 
     <!-- Anfahrt -->
@@ -237,57 +246,59 @@ if ($last_turnier) {
 </form>
 
 <script>
-/* Skript zum ein- und ausblenden von zusätzlichen Optionen je nach gewählter Turnierart.
-Bei übermittlung des fixierten Blockes ist eine zusätzliche Überprüfung notwendig, ob man als Ligaausschuss eingeloggt ist*/
 
-function onstart_show_block(){
-    
-    var e = document.getElementById("art");
-    var result = e.options[e.selectedIndex].value;
-
-    /* Einblenden der Auswahl fixierten Turnierblocks */
-    <?php if(Helper::$ligacenter){?>
-    if (result === "fixed"){
-        document.getElementById("block_fixed_div").style.display = "block";
-    }
-    <?php } //endif?>
-    
-    /* Einblenden der Auswahl Abschlussturniere */
-    <?php if(Helper::$ligacenter){?>
-    if (result === "final"){
-        document.getElementById("block_final_div").style.display = "block";
-    }
-    <?php } //endif?>
-
-    /* Einblenden der Auswahl des höheren Turnierblocks */
-    if (result === "II"){
-        document.getElementById("block_higher_div").style.display = "block";
-    }
-}
-
-onstart_show_block();
+/* 
+    Skript zum ein- und ausblenden von zusätzlichen Optionen je nach gewählter Turnierart.
+    Bei übermittlung des fixierten Blockes ist eine zusätzliche Überprüfung notwendig, ob man als Ligaausschuss eingeloggt ist
+*/
 
 function onchange_show_block(selectObject) {
-    /* Einblenden der Auswahl des fixierten Turnierblocks */
-    <?php if(Helper::$ligacenter){?>
+    
+    <?php if(Helper::$ligacenter): ?>
+        /* Einblenden der Optionen des fixierten Turnierblocks */
         if (selectObject.value ===  "fixed") {
             document.getElementById("block_fixed_div").style.display = "block";
-        }else{
+        } else {
             document.getElementById("block_fixed_div").style.display = "none";
         }
-    <?php } //endif?>
 
-    /* Einblenden der Auswahl des höheren Turnierblocks */
-    if (selectObject.value ===  "II") {
+        /* Einblenden der Optionen des final Turnierblocks */
+        if (selectObject.value ===  "final") {
+            document.getElementById("block_final_div").style.display = "block";
+        } else {
+            document.getElementById("block_final_div").style.display = "none";
+        }
+    <?php endif; ?>
+
+    document.getElementById("block_higher_div").style.display = "none";
+    document.getElementById("immediately_open_div").style.display = "none";
+    document.getElementById("number_of_teams_div").style.display = "none";
+    document.getElementById("min_number_of_teams_div").style.display = "none";
+    
+    /* Einblenden der Optionen der Turnierart I */
+    if (selectObject.value === "I") {
+        document.getElementById("immediately_open_div").style.display = "block";
+        document.getElementById("number_of_teams_div").style.display = "block";
+        document.getElementById("min_number_of_teams_div").style.display = "block";
+    }
+    
+    /* Einblenden der Optionen der Turnierart II */  
+    if (selectObject.value === "II") {
         document.getElementById("block_higher_div").style.display = "block";
-    }else{
-        document.getElementById("block_higher_div").style.display = "none";
+        document.getElementById("immediately_open_div").style.display = "block";
+        document.getElementById("number_of_teams_div").style.display = "block";
+        document.getElementById("min_number_of_teams_div").style.display = "block";
     }
 
+    /* Einblenden der Optionen der Turnierart spass */
+    if (selectObject.value === "spass") {
+        document.getElementById("number_of_teams_div").style.display = "block";
+        document.getElementById("min_number_of_teams_div").style.display = "block";
+    }
 }
-const turnier_array = <?= Html::turnier_adressen_javascript_array() ?>;
 
 // Automatisches Ausfüllen der Adresse bei Auswahl der Halle
+const turnier_array = <?= Html::turnier_adressen_javascript_array() ?>;
 function onchange_fill_address(selectObject) {
     if (selectObject.value && turnier_array[selectObject.value] !== undefined) {
         document.getElementById("strasse").value = turnier_array[selectObject.value]["strasse"];
@@ -304,4 +315,5 @@ function onchange_fill_handy(selectObject) {
         document.getElementById("handy").value = organisator_array[selectObject.value]["handy"];
     }
 }
+
 </script>
