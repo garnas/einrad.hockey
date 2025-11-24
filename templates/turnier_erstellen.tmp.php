@@ -57,7 +57,6 @@ if ($last_turnier) {
             <p>
                 <label class="w3-text-primary" for="art">Turnierart</label>
                 <select required class="w3-select w3-border w3-border-primary" id="art" name="art" onchange="onchange_show_block(this)">
-                    <option selected>Wähle eine Turnierart aus</option>
                     <option <?php if (($_POST['art'] ?? '') == 'I'){?> selected <?php } ?> value="I">I: Blockeigenes Turnier <?= BlockService::toString($ausrichter_block)?></option>
                     <option <?php if (($_POST['art'] ?? '') == 'II'){?> selected <?php } ?> value="II">II: Blockhöheres Turnier <?=$block_higher_str?></option>
                     <option <?php if (($_POST['art'] ?? '') == 'spass'){?> selected <?php } ?> value="spass">Spaßturnier (außerhalb der Liga, Anmeldung beim Ausrichter, Datum und Uhrzeit beliebig)</option>
@@ -296,6 +295,8 @@ function onchange_show_block(selectObject) {
         document.getElementById("min_number_of_teams_div").style.display = "block";
     }
 }
+
+onchange_show_block(document.getElementById("art"))
 
 // Automatisches Ausfüllen der Adresse bei Auswahl der Halle
 const turnier_array = <?= Html::turnier_adressen_javascript_array() ?>;
