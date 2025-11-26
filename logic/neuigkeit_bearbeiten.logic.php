@@ -1,12 +1,17 @@
 <?php
+
+use App\Service\Neuigkeit\PermissionService;
+use App\Service\Neuigkeit\FileService;
+use App\Repository\Neuigkeit\NeuigkeitRepository;
+
 $neuigkeiten_id = (int) @$_GET['neuigkeiten_id'];
-$neuigkeit = Neuigkeit::get_neuigkeit_by_id($neuigkeiten_id);
+$neuigkeit = NeuigkeitRepository::get()->findById($neuigkeiten_id);
 
 if (empty($neuigkeit)) {
     Helper::not_found("Neuigkeiteneintrag konnte nicht gefunden werden.");
 }
 
-if (!Neuigkeit::darf_bearbeiten($neuigkeit['eingetragen_von'])) {
+if (!PermissionService::canEdit($neuigkeit->getEingetragenVon())) {
     Html::error("Neuigkeit darf nicht bearbeitet werden.");
     Helper::reload("/liga/neues.php");
 }
@@ -23,27 +28,27 @@ if (isset($_POST['change_neuigkeit'])) {
     $text = $_POST['text']; // ist required, daher kein isset nötig
 
     // Bild
-    $bild_verlinken = Neuigkeit::darf_verlinken() ? $_POST['bild_verlinken'] : '';
+    $bild_verlinken = PermissionService::canEmbedLink() ? $_POST['bild_verlinken'] : '';
     if (!empty($_FILES["jpgupload"]["tmp_name"])) {
-        $target_file_jpg = Neuigkeit::upload_bild($_FILES["jpgupload"]);
+        $target_file_jpg = FileService::uploadImage($_FILES["jpgupload"]);
         if (!$target_file_jpg) {
             $error = true;
         }
     } else {
-        $target_file_jpg = $neuigkeit['link_jpg'];
+        $target_file_jpg = $neuigkeit->getLinkJpg();
     }
     
     // Dokument
     if (!empty($_FILES["pdfupload"]["tmp_name"])) {
-        $target_file_pdf = Neuigkeit::upload_dokument($_FILES["pdfupload"]);
+        $target_file_pdf = FileService::uploadPDF($_FILES["pdfupload"]);
         if (!$target_file_pdf) {
             $error = true;
         }
     } else {
-        $target_file_pdf = $neuigkeit['link_pdf'];
+        $target_file_pdf = $neuigkeit->getLinkPdf();
     }
 
-    $zeitpunkt = Neuigkeit::darf_datum_festlegen() ? date('Y-m-d H:i', strtotime($_POST['zeitpunkt'])) : date('Y-m-d H:i');
+    $zeitpunkt = PermissionService::canSetTime() ? new Datetime($_POST['zeitpunkt']) : new DateTime('now');
 
     if ($error) {
         Html::error("Es wurden keine Änderungen vorgenommen. Fehler beim Hochladen der Dateien.");
@@ -52,43 +57,49 @@ if (isset($_POST['change_neuigkeit'])) {
     }
     
     // Bild
-    if ($_POST['delete_jpg'] === 'Ja' && !empty($neuigkeit['link_jpg'])) {
-        unlink($neuigkeit['link_jpg']);
+    if ($_POST['delete_jpg'] === 'Ja' && !empty($neuigkeit->getLinkJpg())) {
+        unlink($neuigkeit->getLinkJpg());
         Html::info("Bild wurde gelöscht.");
-        if ($neuigkeit['link_jpg'] === $target_file_jpg) {
+        if ($neuigkeit->getLinkJpg() === $target_file_jpg) {
             $target_file_jpg = '';
         }
     }
 
     // Dokument
-    if ($_POST['delete_pdf'] === 'Ja' && !empty($neuigkeit['link_pdf'])) {
-        unlink($neuigkeit['link_pdf']);
+    if ($_POST['delete_pdf'] === 'Ja' && !empty($neuigkeit->getLinkPdf())) {
+        unlink($neuigkeit->getLinkPdf());
         Html::info("PDF wurde gelöscht.");
-        if ($neuigkeit['link_pdf'] === $target_file_pdf) {
+        if ($neuigkeit->getLinkPdf() === $target_file_pdf) {
             $target_file_pdf = '';
         }
     }
     
     // Altes Bild löschen
     if (
-        $neuigkeit['link_jpg'] !== $target_file_jpg
-        && !empty($neuigkeit['link_jpg'])
-        && file_exists($neuigkeit['link_jpg'])
+        $neuigkeit->getLinkJpg() !== $target_file_jpg
+        && !empty($neuigkeit->getLinkJpg())
+        && file_exists($neuigkeit->getLinkJpg())
     ) {
-        unlink($neuigkeit['link_jpg']);
+        unlink($neuigkeit->getLinkJpg());
     }
     
     // Altes Dokument löschen
     if (
-        $neuigkeit['link_pdf'] !== $target_file_pdf
-        && !empty($neuigkeit['link_pdf'])
-        && file_exists($neuigkeit['link_pdf'])
+        $neuigkeit->getLinkPdf() !== $target_file_pdf
+        && !empty($neuigkeit->getLinkPdf())
+        && file_exists($neuigkeit->getLinkPdf())
     ) {
-        unlink($neuigkeit['link_pdf']);
+        unlink($neuigkeit->getLinkPdf());
     }
 
-    Neuigkeit::update($neuigkeiten_id, $titel, $text, $zeitpunkt, $target_file_jpg, $target_file_pdf, $bild_verlinken);
-    
+    $neuigkeit->setTitel($titel);
+    $neuigkeit->setInhalt($text);
+    $neuigkeit->setLinkPdf($target_file_pdf);
+    $neuigkeit->setLinkJpg($target_file_jpg);
+    $neuigkeit->setBildVerlinken($bild_verlinken);
+    $neuigkeit->setZeit($zeitpunkt);
+    NeuigkeitRepository::get()->update($neuigkeit);
+        
     Html::info("Die Neuigkeit wurde bearbeitet.");
     header('Location: ../liga/neues.php');
     die();

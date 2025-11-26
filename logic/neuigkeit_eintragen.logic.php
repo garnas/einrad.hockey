@@ -3,6 +3,11 @@
 // Dadurch weiß man, ob vom Teamcenter oder vom Ligacenter auf dieses Skript zugegriffen wird
 // Dies ermöglicht den gleichzeitgen Login von Ligaausschuss und Ligateams in einem Browser
 
+use App\Entity\Sonstiges\Neuigkeit;
+use App\Repository\Neuigkeit\NeuigkeitRepository;
+use App\Service\Neuigkeit\PermissionService;
+use App\Service\Neuigkeit\FileService;
+
 // Autor
 if (Helper::$ligacenter) {
     $name = "Ligaausschuss";
@@ -24,9 +29,9 @@ if (isset($_POST['create_neuigkeit'])) {
     $text = $_POST['text']; // ist required, daher kein isset nötig
     
     // Bild
-    $bild_verlinken = Neuigkeit::darf_verlinken() ? $_POST['bild_verlinken'] : '';
+    $bild_verlinken = PermissionService::canEmbedLink() ? $_POST['bild_verlinken'] : '';
     if (!empty($_FILES["jpgupload"]["tmp_name"])) {
-        $target_file_jpg = Neuigkeit::upload_bild($_FILES["jpgupload"]);
+        $target_file_jpg = FileService::uploadImage($_FILES["jpgupload"]);
         if (!$target_file_jpg) {
             $error = true;
         }
@@ -36,7 +41,7 @@ if (isset($_POST['create_neuigkeit'])) {
     
     // Dokument
     if (!empty($_FILES["pdfupload"]["tmp_name"])) {
-        $target_file_pdf = Neuigkeit::upload_dokument($_FILES["pdfupload"]);
+        $target_file_pdf = FileService::uploadPDF($_FILES["pdfupload"]);
         if (!$target_file_pdf) {
             $error = true;
         }
@@ -45,7 +50,7 @@ if (isset($_POST['create_neuigkeit'])) {
     }
 
     // Zeitpunkt
-    $zeitpunkt = Neuigkeit::darf_datum_festlegen() ? date('Y-m-d H:i', strtotime($_POST['zeitpunkt'])) : date('Y-m-d H:i');
+    $zeitpunkt = PermissionService::canSetTime() ? new Datetime($_POST['zeitpunkt']) : new DateTime('now');
 
     if ($error) {
         // evtl hochgeladene Dateien löschen.
@@ -53,7 +58,17 @@ if (isset($_POST['create_neuigkeit'])) {
         if (($target_file_jpg ?? false) !== false) unlink($target_file_jpg);
         Html::error("Neuigkeit wurde nicht erstellt, hochgeladene Dateien müssen erneut hochgeladen werden.");
     } else {
-        Neuigkeit::create($titel, $text, $name, $zeitpunkt, $target_file_jpg, $target_file_pdf, $bild_verlinken);
+        
+        $neuigkeit = new Neuigkeit();
+        $neuigkeit->setTitel($titel);
+        $neuigkeit->setInhalt($text);
+        $neuigkeit->setLinkPdf($target_file_pdf);
+        $neuigkeit->setLinkJpg($target_file_jpg);
+        $neuigkeit->setBildVerlinken($bild_verlinken);
+        $neuigkeit->setEingetragenVon($name);
+        $neuigkeit->setZeit($zeitpunkt);
+        NeuigkeitRepository::get()->create($neuigkeit);
+
         Html::info("Deine Neuigkeit wurde erfolgreich eingetragen");
         header('Location: ../liga/neues.php');
         die(); // Damit das Skript nicht zu auf dem Server zu ende ausgeführt wird.

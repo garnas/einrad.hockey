@@ -21,6 +21,28 @@ class NeuigkeitRepository
         $this->neuigkeit = DoctrineWrapper::manager()->getRepository(Neuigkeit::class);
     }
 
+    public function create(Neuigkeit $neuigkeit): void
+    {
+        DoctrineWrapper::manager()->persist($neuigkeit);
+        DoctrineWrapper::manager()->flush();
+    }
+
+    public function delete(Neuigkeit $neuigkeit): void
+    {
+        DoctrineWrapper::manager()->remove($neuigkeit);
+        DoctrineWrapper::manager()->flush();
+    }
+
+    public function update(Neuigkeit $neuigkeit): void
+    {
+        DoctrineWrapper::manager()->flush();
+    }
+
+    public function findById(int $id): Neuigkeit
+    {
+        return $this->neuigkeit->find($id);
+    }
+    
     public function findAll(): array
     {
         $query = DoctrineWrapper::manager()
