@@ -3,27 +3,18 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
+use App\Repository\Neuigkeit\NeuigkeitRepository;
+
 require_once '../../init.php';
 
 $saison = (isset($_GET['saison'])) ? (int)$_GET['saison'] : Config::SAISON;
-$neuigkeiten = Neuigkeit::get_neuigkeiten(limit: false, aktiv: null);
+$neuigkeiten = NeuigkeitRepository::get()->findAll();
 
 // gruppiere die neuigkeiten nach jahr und monaten
 $neuigkeiten_nach_jahr = [];
 foreach ($neuigkeiten as $neuigkeit) {
-    $jahr = date("Y", strtotime($neuigkeit['zeit']));
-    $monat = date("m", strtotime($neuigkeit['zeit']));
-
-    $delta_zeit = (time() - strtotime($neuigkeit['zeit'])) / (60 * 60); //in Stunden
-    if ($delta_zeit < 24) {
-        $zeit = ($delta_zeit <= 1.5) ? "gerade eben" : "vor " . round($delta_zeit) . " Stunden";
-    } elseif ($delta_zeit < 7 * 24) {
-        $zeit = ($delta_zeit <= 1.5 * 24) ? "vor einem Tag" : "vor " . round($delta_zeit / 24) . " Tagen";
-    } else {
-        $zeit = date("d.m.Y", strtotime($neuigkeit['zeit']));
-    }
-
-    $neuigkeit['zeit'] = $zeit;
+    $jahr = $neuigkeit->getZeit()->format('Y');
+    $monat = $neuigkeit->getZeit()->format('m');
     $neuigkeiten_nach_jahr[$jahr][$monat][] = $neuigkeit;
 }
 
