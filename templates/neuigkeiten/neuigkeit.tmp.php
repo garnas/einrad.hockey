@@ -1,9 +1,13 @@
-<?php use App\Service\Neuigkeit\FormatService; ?>
+<?php 
+    use App\Service\Neuigkeit\FormatService; 
+    use App\Service\Neuigkeit\ColorService; 
+    use App\Enum\Neuigkeit\NeuigkeitArt;
+?>
 
 <div class='w3-panel w3-card-4 w3-responsive <?=$neuigkeit->getTitel() ? "" : "w3-topbar w3-border-primary"?>'>
     <?php if ($neuigkeit->getTitel()): ?>
         <!-- Überschrift -->
-        <h3 class="w3-center w3-primary w3-padding-small" style="margin: 0 -16px;">
+        <h3 class="w3-center w3-padding-small <?=ColorService::getColor($neuigkeit->getArt())?>" style="margin: 0 -16px;">
             <?= e($neuigkeit->getTitel()) ?>
         </h3>
     <?php endif; ?>
