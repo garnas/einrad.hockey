@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Service\Neuigkeit;
+use Html;
 
 class FileService    
 {
