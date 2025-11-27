@@ -1,8 +1,9 @@
 <?php
 
+use App\Repository\Neuigkeit\NeuigkeitRepository;
+use App\Enum\NeuigkeitArt;
 use App\Service\Neuigkeit\PermissionService;
 use App\Service\Neuigkeit\FileService;
-use App\Repository\Neuigkeit\NeuigkeitRepository;
 
 $neuigkeiten_id = (int) @$_GET['neuigkeiten_id'];
 $neuigkeit = NeuigkeitRepository::get()->findById($neuigkeiten_id);
@@ -23,6 +24,9 @@ if (isset($_POST['change_neuigkeit'])) {
 
     // Titel
     $titel = !empty($_POST['titel']) ? $_POST['titel'] : '';
+
+    // Art
+    $art = !empty($_POST['art']) ? NeuigkeitArt::from($_POST['art']) : NeuigkeitArt::NEUIGKEIT;
 
     // Text
     $text = $_POST['text']; // ist required, daher kein isset nötig
@@ -93,6 +97,7 @@ if (isset($_POST['change_neuigkeit'])) {
     }
 
     $neuigkeit->setTitel($titel);
+    $neuigkeit->setArt($art);
     $neuigkeit->setInhalt($text);
     $neuigkeit->setLinkPdf($target_file_pdf);
     $neuigkeit->setLinkJpg($target_file_jpg);

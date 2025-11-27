@@ -2,6 +2,7 @@
 
 namespace App\Service\Neuigkeit;
 use Helper;
+use App\Enum\NeuigkeitArt;
 
 class PermissionService
 {
@@ -13,6 +14,21 @@ class PermissionService
     public static function canSetTime(): bool
     {
         return Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss;
+    }
+
+    public static function canSetArt(NeuigkeitArt $art): bool
+    {
+        // Der Ligaausschuss und der Öffentlichkeitsausschuss dürfen jede Art anlegen
+        if (Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss) {
+            return true;
+        }
+
+        // Teams dürfen nur Fördermittel und Neuigkeiten anlegen
+        if ($art == NeuigkeitArt::FOERDERMITTEL || $art == NeuigkeitArt::NEUIGKEIT) {
+            return true;
+        }
+
+        return false;
     }
 
     public static function canEdit(string $eingetragen_von): bool
@@ -27,7 +43,7 @@ class PermissionService
             return true;
         }
 
-        // DDas Team darf nur bearbeiten, wenn es die Neuigkeit selbst eingetragen hat
+        // Das Team darf nur bearbeiten, wenn es die Neuigkeit selbst eingetragen hat
         if (isset($_SESSION['logins']['team']['name']) && $_SESSION['logins']['team']['name'] === $eingetragen_von) {
             return true;
         }

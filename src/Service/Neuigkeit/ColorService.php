@@ -10,8 +10,6 @@ class ColorService
         switch($art) {
             case NeuigkeitArt::FOERDERMITTEL:
                 return 'ehl-green';
-            case NeuigkeitArt::ADVENTSKALENDER:
-                return 'ehl-red';
             default:
                 return 'w3-primary';
         }

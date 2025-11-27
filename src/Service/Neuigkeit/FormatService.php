@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Service\Neuigkeit;
+use App\Enum\NeuigkeitArt;
 
 class FormatService
 {
@@ -29,6 +30,17 @@ class FormatService
         }
 
         return $time->format('d.m.Y');
+    }
+
+
+    public static function getArtString(NeuigkeitArt $art): string
+    {
+        $text = $art->value;
+        $text = str_replace("oe", "ö", $text);
+        $text = str_replace("ae", "ä", $text);
+        $text = str_replace("ue", "ü", $text);
+        $text = ucfirst($text);
+        return $text;
     }
 
     

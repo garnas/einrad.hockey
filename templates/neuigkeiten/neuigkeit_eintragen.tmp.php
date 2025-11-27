@@ -1,5 +1,7 @@
 <?php 
     use App\Service\Neuigkeit\PermissionService; 
+    use App\Service\Neuigkeit\FormatService; 
+    use App\Enum\NeuigkeitArt;
 ?>
 
 <!-- Neuigkeit eintragen -->
@@ -10,6 +12,19 @@
         <div class="w3-border w3-border-primary" style="padding: 16px;">
             <label for="titel">Titel (Optional)</label>
             <input class="w3-input w3-border w3-border-grey" type="text" id="titel" name="titel" placeholder="Titel der Neuigkeit" value="<?=$_POST['titel'] ?? ''?>" >
+        </div>
+    </div>
+
+    <div class="w3-section">
+        <div class="w3-border w3-border-primary" style="padding: 16px;">
+            <label for="text">Art der Neuigkeit</label>
+            <select id="art" name="art" class="w3-input">
+                <?php foreach (NeuigkeitArt::cases() as $case): ?>
+                    <?php if (PermissionService::canSetArt($case)): ?>
+                        <option value="<?=$case->value?>"><?=FormatService::getArtString($case)?></option>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </select>
         </div>
     </div>
     
