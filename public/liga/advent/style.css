@@ -1,0 +1,30 @@
+.flex-container {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 20px;
+}
+
+.flex-item {
+  width: 20%;
+  min-height: 100px;
+  min-width: 130px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+
+.slide-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.slide {
+  width: 100%;
+  height: auto;
+  display: block;
+
+}
