@@ -75,8 +75,8 @@ include '../../templates/header.tmp.php';
             <li>13. + 14. September 2025 (Münster (Dieburg))</li>
             <li>01. + 02. November 2025 (Winsen (Luhe))</li>
             <li>13. + 14. Dezember 2025 (Augustdorf)</li>
-            <li>31. Januar + 01. Februar 2026 (Ort unbekannt)</li>
-            <li>21. + 22. März 2026 (Ort unbekannt)</li>
+            <li>31. Januar + 01. Februar 2026 (Münster (Dieburg))</li>
+            <li>21. + 22. März 2026 (Mörfelden)</li>
             <li>09. + 10. Mai 2026 (Mörfelden)</li>
             <li>04. + 05. Juli 2026 (Augustdorf)</li>
         </ul>
