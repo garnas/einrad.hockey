@@ -81,6 +81,7 @@ include '../../templates/header.tmp.php'; ?>
 
             <!-- Kalender -->
             <?php if (new DateTime() >= new DateTime('2025-12-01')): ?>
+                <link type="text/css" rel="stylesheet" href="advent/colors.css?20251127">
                 <link type="text/css" rel="stylesheet" href="advent/style.css?20251127">
                 <div class="w3-panel w3-card-4 w3-responsive">
                     <div class="w3-stretch w3-container panel">
