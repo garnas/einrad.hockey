@@ -80,7 +80,7 @@ class LigaLeitung
      *
      * @param string $login
      * @param string $passwort
-     * @param string $funktion 'ligaausschuss', 'schiriausschuss', 'oeffentlichkeitsausschuss', 'technikausschuss', 'ausbilder
+     * @param string $funktion 'ligaausschuss', 'schiriausschuss', 'team_social_media', 'technikausschuss', 'ausbilder
      * @return bool
      */
     public static function login(string $login, string $passwort, string $funktion): bool
@@ -127,7 +127,7 @@ class LigaLeitung
     {
         return match($funktion) {
             "admin", "ligaausschuss" => "la",
-            "oeffentlichkeitsausschuss" => "oa",
+            "team_social_media" => "oa",
         };
     }
 

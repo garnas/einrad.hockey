@@ -8,7 +8,7 @@ class Helper
      */
     public static bool $ligacenter = false; // Befindet sich der Ligaausschuss auf einer Seite im Ligacenter?
     public static bool $teamcenter = false; // Befindet sich das Team auf einer Seite im Teamcenter?
-    public static bool $oeffentlichkeitsausschuss = false;
+    public static bool $team_social_media = false;
     public static bool $log_user = true; // Soll der User geloggt werden? // false für XML
 
 

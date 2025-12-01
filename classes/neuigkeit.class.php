@@ -382,12 +382,12 @@ class Neuigkeit
 
     public static function darf_verlinken(): bool
     {
-        return Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss;
+        return Helper::$ligacenter || Helper::$team_social_media;
     }
 
     public static function darf_datum_festlegen(): bool
     {
-        return Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss;
+        return Helper::$ligacenter || Helper::$team_social_media;
     }
        
     public static function darf_bearbeiten(string $eingetragen_von): bool
@@ -398,7 +398,7 @@ class Neuigkeit
         }
 
         // Der Öffentlichkeitsausschuss darf bearbeiten, wenn es nicht vom Ligaausschuss eingetragen wurde
-        if (Helper::$oeffentlichkeitsausschuss && !($eingetragen_von === "Ligaausschuss")) {
+        if (Helper::$team_social_media && !($eingetragen_von === "Ligaausschuss")) {
             return true;
         }
 
@@ -418,7 +418,7 @@ class Neuigkeit
         }
 
         // Der Öffentlichkeitsausschuss darf nur löschen, wenn er die Neuigkeit selbst eingetragen hat
-        if (Helper::$oeffentlichkeitsausschuss && $eingetragen_von === "Öffentlichkeitsausschuss") {
+        if (Helper::$team_social_media && $eingetragen_von === "Öffentlichkeitsausschuss") {
             return true;
         }
 
@@ -433,7 +433,7 @@ class Neuigkeit
     public static function darf_archivieren(string $eingetragen_von): bool
     {
         // Der Ligaausschuss und der Öffentlichkeitsausschuss dürfen immer archivieren
-        if (Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss) {
+        if (Helper::$ligacenter || Helper::$team_social_media) {
             return true;
         }
 
