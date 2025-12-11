@@ -214,7 +214,7 @@ class Nav
 
     public const LINK_SCHIRI_CHECKLIST = Env::BASE_URL . '/dokumente/schiri_checkliste.pdf';
     public const LINK_SCHIRI_LEITLINIE = Env::BASE_URL . '/dokumente/schiri_leitlinie.pdf';
-    public const LINK_SCHIRI_ABLAUF_PRAKTISCHE_PRUEFUNG = Env::BASE_URL . 'dokumente/ablauf_praktische_schiripruefung.pdf';
+    public const LINK_SCHIRI_ABLAUF_PRAKTISCHE_PRUEFUNG = Env::BASE_URL . '/dokumente/ablauf_praktische_schiripruefung.pdf';
     public const LINK_MODUS_ENTWURF = Env::BASE_URL . '/dokumente/ligamodus_entwurf.pdf';
     public const LINK_ABZEICHEN = Env::BASE_URL . '/dokumente/einradhockey_abzeichen.pdf';
     public const LINK_SCHLAEGERTECHNIK = Env::BASE_URL . '/dokumente/schlaegertechnik_einradhockey.pdf';
