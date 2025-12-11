@@ -44,6 +44,12 @@ include '../../templates/header.tmp.php';
             Schiedsrichter-Leitlinie für Spiele auf fortgeschrittenem Niveau
         </p>
     </a>
+    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_SCHIRI_ABLAUF_PRAKTISCHE_PRUEFUNG ?>">
+        <p>
+            <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file</i>
+            Ablauf einer praktischen Schiriprüfung in der Deutschen Einradhockeyliga
+        </p>
+    </a>
 </div>
 <div class="w3-panel w3-card">
     <h2 class="w3-text-primary">Spielregeln</h2>
