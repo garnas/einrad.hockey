@@ -44,6 +44,12 @@ include '../../templates/header.tmp.php';
             Schiedsrichter-Leitlinie für Spiele auf fortgeschrittenem Niveau
         </p>
     </a>
+    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_SCHIRI_ABLAUF_PRAKTISCHE_PRUEFUNG ?>">
+        <p>
+            <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file</i>
+            Ablauf einer praktischen Schiriprüfung in der Deutschen Einradhockeyliga
+        </p>
+    </a>
 </div>
 <div class="w3-panel w3-card">
     <h2 class="w3-text-primary">Spielregeln</h2>
@@ -71,6 +77,20 @@ include '../../templates/header.tmp.php';
 </div>
 <div class="w3-panel w3-card">
     <h2 class="w3-text-primary">Sonstiges</h2>
+    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_ABZEICHEN ?>">
+        <p>
+            <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file
+            </i>
+            Einradhockeyabzeichen
+        </p>
+    </a>
+    <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_SCHLAEGERTECHNIK ?>">
+        <p>
+            <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file
+            </i>
+            Technikleitfaden Schlägertechnik
+        </p>
+    </a>
     <a class="no w3-hover-text-secondary" href="<?= Nav::LINK_CHECK_PDF ?>">
         <p>
             <i class="w3-xxlarge w3-text-tertiary material-icons">insert_drive_file
