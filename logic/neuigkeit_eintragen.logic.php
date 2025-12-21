@@ -6,8 +6,8 @@
 // Autor
 if (Helper::$ligacenter) {
     $name = "Ligaausschuss";
-} elseif (Helper::$oeffentlichkeitsausschuss) {
-    $name = "Öffentlichkeitsausschuss";
+} elseif (Helper::$team_social_media) {
+    $name = "Team Social Media";
 } else {
     $name = $_SESSION['logins']['team']['name'];
 }
