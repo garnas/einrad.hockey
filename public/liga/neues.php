@@ -79,19 +79,6 @@ include '../../templates/header.tmp.php'; ?>
         <!-- Infobar -->
         <div class="w3-col l4 m5 w3-hide-small" id="infobar">
 
-            <!-- Kalender -->
-            <?php if (new DateTime() >= new DateTime('2025-12-01')): ?>
-                <link type="text/css" rel="stylesheet" href="advent/colors.css?20251127">
-                <link type="text/css" rel="stylesheet" href="advent/style.css?20251127">
-                <div class="w3-panel w3-card-4 w3-responsive">
-                    <div class="w3-stretch w3-container panel">
-                        <a href='advent/advent.php' class="no">
-                            <h3><?= Html::icon("star", tag: "h1") ?> Adventskalender</h3>
-                        </a>
-                    </div>
-                </div>
-            <?php endif; ?>
-
             <!-- Interesse -->
             <div class="w3-panel w3-card-4 w3-responsive">
                 <div class="w3-stretch w3-container w3-primary w3-hover-tertiary">
