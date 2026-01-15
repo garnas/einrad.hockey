@@ -21,7 +21,7 @@
 
     <!-- Info -->
     <a href="<?= Env::BASE_URL ?>/liga/ueber_uns.php" class="no">
-        <h3 class="w3-margin-left w3-text-primary"><i style="vertical-align: -16%" class="material-icons w3-xlarge">info</i> INFO</h3>
+        <h3 class="w3-margin-left w3-text-primary"><i style="vertical-align: -16%" class="material-icons">info</i> INFO</h3>
     </a>
     <?php foreach(Nav::get_info() as Nav::$link){ ?>
         <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
@@ -30,7 +30,7 @@
     <!-- Liga -->
     <div class="w3-text-black">
         <h3 class="w3-margin-left w3-text-primary">
-            <?= Html::icon("emoji_events", tag:"h3") ?> LIGA
+            <?= Html::icon("emoji_events", tag:"h3") ?> SAISON <?=Html::get_saison_string()?>
         </h3>
     </div>
     <?php foreach(Nav::get_liga() as Nav::$link){ ?>
@@ -45,24 +45,25 @@
         <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
     <?php } //end for ?>
 
-    <!-- Teamcenter -->
+    <!-- Berichte -->
     <div class="w3-text-primary">
-        <a style="text-decoration: none" href="<?= Env::BASE_URL ?>/teamcenter/tc_start.php">
-            <h3 class="w3-margin-left"><i style="vertical-align: -20%" class="material-icons w3-xlarge">group</i> TEAMCENTER</h3>
-        </a>
+        <h3 class="w3-margin-left"><i style="vertical-align: -16%" class="material-icons">article</i> BERICHTE</h3>
     </div>
-    <?php foreach(Nav::get_teamcenter() as Nav::$link){ ?>
-        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button <?= Nav::$link[2] ?>"><?= Nav::$link[1] ?></a>
-    <?php } //end for ?>
-
-    <!-- Sonstiges -->
-    <div class="w3-text-primary">
-        <h3 class="w3-margin-left"><i style="vertical-align: -16%" class="material-icons w3-xlarge">format_list_bulleted</i> SONSTIGES</h3>
-    </div>
-    <?php foreach(Nav::get_sonstiges() as Nav::$link){ ?>
+    <?php foreach(Nav::get_berichte() as Nav::$link){ ?>
         <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button <?= Nav::$link[2] ?? '' ?>"><?= Nav::$link[1] ?></a>
     <?php } //end for ?>
     <a href="#" class="w3-bar-item w3-button"></a>
+    
+    <!-- Organisation -->
+    <div class="w3-text-primary">
+        <a style="text-decoration: none" href="<?= Env::BASE_URL ?>/teamcenter/tc_login.php">
+            <h3 class="w3-margin-left"><i style="vertical-align: -20%" class="material-icons">group</i> ORGA</h3>
+        </a>
+    </div>
+    <?php foreach(Nav::get_organisation() as Nav::$link){ ?>
+        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button <?= Nav::$link[2] ?>"><?= Nav::$link[1] ?></a>
+    <?php } //end for ?>
+
 </div>
 
 <!-- Sidebar Overlay -->

@@ -35,28 +35,28 @@
     <!-- oben rechts -->
     <div class="w3-display-topright w3-margin w3-padding-large w3-large">
 
-        <!-- Sonstiges -->
+        <!-- Organisation -->
         <div class="w3-dropdown-hover w3-right w3-text-primary" style="background-color: transparent;">
             <a class="w3-button w3-hover-primary">
-                <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">format_list_bulleted</i>
-                <span style="font-size: 22px">SONSTIGES</span>
+                <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">group</i>
+                <span style="font-size: 22px">ORGA</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach(Nav::get_sonstiges() as Nav::$link){ ?>
+                <?php foreach(Nav::get_organisation() as Nav::$link){ ?>
                     <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
                 <?php } //end for ?>
             </div>
         </div>
 
-        <!-- Teamcenter -->
-        <div class="w3-dropdown-hover w3-right w3-text-primary">
+        <!-- Berichte -->
+        <div class="w3-dropdown-hover w3-right w3-text-primary" style="background-color: transparent;">
             <a class="w3-button w3-hover-primary">
-                <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">group</i>
-                <span style="font-size: 22px">TEAMCENTER</span>
+                <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">article</i>
+                <span style="font-size: 22px">BERICHTE</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach(Nav::get_teamcenter() as Nav::$link){ ?>
-                    <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button <?= Nav::$link[2] ?>"><?= Nav::$link[1] ?></a>
+                <?php foreach(Nav::get_berichte() as Nav::$link){ ?>
+                    <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
                 <?php } //end for ?>
             </div>
         </div>
@@ -78,7 +78,7 @@
         <div class="w3-dropdown-hover w3-right w3-text-primary">
             <a class=" w3-button w3-hover-primary">
                 <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">emoji_events</i>
-                <span style="font-size: 22px">LIGA</span>
+                <span style="font-size: 22px">SAISON <?=Html::get_saison_string()?></span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
                 <?php foreach(Nav::get_liga() as Nav::$link){ ?>
