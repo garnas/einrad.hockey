@@ -108,7 +108,6 @@ class Nav
             [Env::BASE_URL . "/liga/content/dm2005.php", "DM 2005"],
             [Env::BASE_URL . "/liga/content/dm2019.php", "DM 2019"],
             [Env::BASE_URL . "/liga/content/ausland.php", "Im Ausland"],
-            [Env::BASE_URL . "/liga/tippspiel.php", "Tippspiel"],
             [Env::BASE_URL . "/liga/archiv.php", "Archiv"],
             [Env::BASE_URL . "/login.php", "Ausschusslogin"],
             [Env::BASE_URL . "/liga/kontakt.php", "Kontakt"],
