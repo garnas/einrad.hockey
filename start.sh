@@ -1,3 +1,5 @@
+/bin/php -S localhost:8000 -t /home/ansgar/Desktop/einrad.hockey/public
+
 sudo su -
 sudo chmod -R 777 .
 sudo chmod -R 777 /var/lib/php/sessions
