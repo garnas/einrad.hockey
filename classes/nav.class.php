@@ -103,8 +103,8 @@ class Nav
     {
         return [
             [Env::BASE_URL . "/liga/ueber_uns.php", "Über uns"],
-            [Env::BASE_URL . "/liga/content/30jubilaeum.php", "25 Jahre Liga"],
-            [Env::BASE_URL . "/liga/content/25jubilaeum.php", "30 Jahre Liga"],
+            [Env::BASE_URL . "/liga/content/25jubilaeum.php", "25 Jahre Liga"],
+            [Env::BASE_URL . "/liga/content/30jubilaeum.php", "30 Jahre Liga"],
             [Env::BASE_URL . "/liga/content/dm2005.php", "DM 2005"],
             [Env::BASE_URL . "/liga/content/dm2019.php", "DM 2019"],
             [Env::BASE_URL . "/liga/content/ausland.php", "Im Ausland"],
