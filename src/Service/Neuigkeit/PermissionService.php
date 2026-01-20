@@ -8,18 +8,18 @@ class PermissionService
 {
     public static function canEmbedLink(): bool
     {
-        return Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss;
+        return Helper::$ligacenter || Helper::$team_social_media;
     }
 
     public static function canSetTime(): bool
     {
-        return Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss;
+        return Helper::$ligacenter || Helper::$team_social_media;
     }
 
     public static function canSetArt(NeuigkeitArt $art): bool
     {
         // Der Ligaausschuss und der Öffentlichkeitsausschuss dürfen jede Art anlegen
-        if (Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss) {
+        if (Helper::$ligacenter || Helper::$team_social_media) {
             return true;
         }
 
@@ -39,7 +39,7 @@ class PermissionService
         }
 
         // Der Öffentlichkeitsausschuss darf bearbeiten, wenn es nicht vom Ligaausschuss eingetragen wurde
-        if (Helper::$oeffentlichkeitsausschuss && !($eingetragen_von === "Ligaausschuss")) {
+        if (Helper::$team_social_media && !($eingetragen_von === "Ligaausschuss")) {
             return true;
         }
 
@@ -59,7 +59,7 @@ class PermissionService
         }
 
         // Der Öffentlichkeitsausschuss darf nur löschen, wenn er die Neuigkeit selbst eingetragen hat
-        if (Helper::$oeffentlichkeitsausschuss && $eingetragen_von === "Öffentlichkeitsausschuss") {
+        if (Helper::$team_social_media && $eingetragen_von === "Öffentlichkeitsausschuss") {
             return true;
         }
 
@@ -74,7 +74,7 @@ class PermissionService
     public static function canArchive(string $eingetragen_von): bool
     {
         // Der Ligaausschuss und der Öffentlichkeitsausschuss dürfen immer archivieren
-        if (Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss) {
+        if (Helper::$ligacenter || Helper::$team_social_media) {
             return true;
         }
 
