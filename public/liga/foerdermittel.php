@@ -38,11 +38,11 @@ $monate = [
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-Html::$titel = "Neuigkeiten | Deutsche Einradhockeyliga";
-Html::$content = "Hier findet man alle Neuigkeiteneinträge des Ligaausschusses und der Teams der Deutschen Einradhockeyliga.";
+Html::$titel = "Fördermittel | Deutsche Einradhockeyliga";
+Html::$content = "Hier findet man alle Fördermittel-Einträge des Ligaausschusses und der Teams der Deutschen Einradhockeyliga.";
 include '../../templates/header.tmp.php'; ?>
 
-<h1 class="w3-text-primary">Neuigkeiten</h1>
+<h1 class="w3-text-primary">Fördermittel</h1>
 <p class="w3-border-top w3-border-grey w3-text-grey">Saison <?=Html::get_saison_string($saison)?></p>
 
 <div class='w3-card w3-panel w3-leftbar w3-border-yellow w3-pale-yellow'>
