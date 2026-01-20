@@ -2,14 +2,14 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-require_once '../../init.php';
+require_once '../../../init.php';
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 Html::$titel = "25 Jahre | Deutsche Einradhockeyliga";
 Html::$content = "Spielerprofile für das 25. Jubiläum der Deutschen Einradhockeyliga";
-include '../../templates/header.tmp.php';
+include '../../../templates/header.tmp.php';
 
 $header = "w3-white w3-padding w3-text-primary w3-large";
 $answer = "w3-margin w3-display-bottomleft";
@@ -73,10 +73,10 @@ $answer = "w3-margin w3-display-bottomleft";
 </div>
 
 <!-- Für mobile Darstellung -->
-<img alt="Guenther" src="../bilder/spielerprofile/Guenther_Post2.jpg" style="width: 100%; margin-left: auto; margin-right: auto;" class="w3-hide-large w3-hide-medium w3-section">
+<img alt="Guenther" src="../../bilder/spielerprofile/Guenther_Post2.jpg" style="width: 100%; margin-left: auto; margin-right: auto;" class="w3-hide-large w3-hide-medium w3-section">
 
 <!-- Für Desktop Darstellung -->
-<img alt="Guenther" src="../bilder/spielerprofile/Guenther_Post2.jpg" style="width: 350px; float: right;" class="w3-section w3-hide-small w3-margin-left">
+<img alt="Guenther" src="../../bilder/spielerprofile/Guenther_Post2.jpg" style="width: 350px; float: right;" class="w3-section w3-hide-small w3-margin-left">
 
 <!-- Antworten erster Abschnitt -->
 <p class="w3-text-secondary"><b>Welche Modusänderung war dringend notwendig?</b></p>
@@ -164,10 +164,10 @@ $answer = "w3-margin w3-display-bottomleft";
 </div>
 
 <!-- Für mobile Darstellung -->
-<img alt="Robert" src="../bilder/spielerprofile/Robert.jpg" style="width: 100%; margin-left: auto; margin-right: auto;" class="w3-hide-large w3-hide-medium w3-section">
+<img alt="Robert" src="../../bilder/spielerprofile/Robert.jpg" style="width: 100%; margin-left: auto; margin-right: auto;" class="w3-hide-large w3-hide-medium w3-section">
 
 <!-- Für Desktop Darstellung -->
-<img alt="Robert" src="../bilder/spielerprofile/Robert.jpg" style="width: 350px; float: right;" class="w3-section w3-hide-small w3-margin-left">
+<img alt="Robert" src="../../bilder/spielerprofile/Robert.jpg" style="width: 350px; float: right;" class="w3-section w3-hide-small w3-margin-left">
 
 <!-- Antworten zweiter Abschnitt -->
 <p class="w3-text-secondary"><b>Was vermisste du aus den vergangenen Saisons am meisten?</b></p>
@@ -237,10 +237,10 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
 </div>
 
 <!-- Für mobile Darstellung -->
-<img alt="Adrian" src="../bilder/spielerprofile/Adrian2.jpg" style="width: 100%; margin-left: auto; margin-right: auto;" class="w3-hide-large w3-hide-medium w3-section">
+<img alt="Adrian" src="../../bilder/spielerprofile/Adrian2.jpg" style="width: 100%; margin-left: auto; margin-right: auto;" class="w3-hide-large w3-hide-medium w3-section">
 
 <!-- Für Desktop Darstellung -->
-<img alt="Adrian" src="../bilder/spielerprofile/Adrian2.jpg" style="width: 350px; float: right;" class="w3-section w3-hide-small w3-margin-left">
+<img alt="Adrian" src="../../bilder/spielerprofile/Adrian2.jpg" style="width: 350px; float: right;" class="w3-section w3-hide-small w3-margin-left">
 
 <!-- Antworten dritter Abschnitt -->
 <p class="w3-text-secondary"><b>Wie bist du zum Einradhockey gekommen?</b></p>
@@ -315,10 +315,10 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
 </div>
 
 <!-- Für mobile Darstellung -->
-<img alt="Jan" src="../bilder/spielerprofile/Jan_Schubert.jpg" style="width: 100%; margin-left: auto; margin-right: auto;" class="w3-hide-large w3-hide-medium w3-section">
+<img alt="Jan" src="../../bilder/spielerprofile/Jan_Schubert.jpg" style="width: 100%; margin-left: auto; margin-right: auto;" class="w3-hide-large w3-hide-medium w3-section">
 
 <!-- Für Desktop Darstellung -->
-<img alt="Jan" src="../bilder/spielerprofile/Jan_Schubert.jpg" style="width: 350px; float: right;" class="w3-section w3-hide-small w3-margin-left">
+<img alt="Jan" src="../../bilder/spielerprofile/Jan_Schubert.jpg" style="width: 350px; float: right;" class="w3-section w3-hide-small w3-margin-left">
 
 <!-- Antworten vierter Abschnitt -->
 <p class="w3-text-secondary"><b>Wie bist du zum Einradhockey gekommen?</b></p>
@@ -393,10 +393,10 @@ Auch deshalb war ich ein Verfechter für Spiele ohne Schiedsrichter, weil da jed
 </div>
 
 <!-- Für mobile Darstellung -->
-<img alt="Gaby" src="../bilder/spielerprofile/Gaby_Scherer2.jpg" style="width: 100%; margin-left: auto; margin-right: auto;" class="w3-hide-large w3-hide-medium w3-section">
+<img alt="Gaby" src="../../bilder/spielerprofile/Gaby_Scherer2.jpg" style="width: 100%; margin-left: auto; margin-right: auto;" class="w3-hide-large w3-hide-medium w3-section">
 
 <!-- Für Desktop Darstellung -->
-<img alt="Gaby" src="../bilder/spielerprofile/Gaby_Scherer2.jpg" style="width: 350px; float: right;" class="w3-section w3-hide-small w3-margin-left">
+<img alt="Gaby" src="../../bilder/spielerprofile/Gaby_Scherer2.jpg" style="width: 350px; float: right;" class="w3-section w3-hide-small w3-margin-left">
 
 <!-- Antworten vierter Abschnitt -->
 <p class="w3-text-secondary"><b>Wie lange willst du noch spielen?</b></p>
@@ -429,4 +429,4 @@ function showDivs(n, no) {
 </script>
 
 
-<?php include '../../templates/footer.tmp.php';
+<?php include '../../../templates/footer.tmp.php';

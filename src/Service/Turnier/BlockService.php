@@ -36,6 +36,10 @@ class BlockService
     public static function toString(mixed $blockContext): string
     {
         if (is_a($blockContext, Turnier::class)) {
+            if ($blockContext->isSpassTurnier()) {
+                return "(NL)";
+            }
+            
             if ($blockContext->isSofortOeffnen() && $blockContext->isWartePhase()) {
                 $blockToHighlight = $blockContext->getBlock();
                 $string = str_replace(
@@ -44,6 +48,7 @@ class BlockService
                     Config::BLOCK_ALL[0]);
                 return "(<span class='w3-text-gray' style='font-style: italic'>" . $string . "</span>)";
             }
+            
             return "(" . $blockContext->getBlock() . ")";
         }
 

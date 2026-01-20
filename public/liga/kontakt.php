@@ -33,7 +33,7 @@ if (isset($_POST['absenden'])) {
     // Zeitmessung vs Bots
     /* Um die Ausfüllzeit verdeckt gegenüber Spambots zu messen, wird time() verschlüsselt im Hidden-Feld gespeichert
     Hier dann entschlüsselt. Key ist der Database-Name, welcher nicht auf Github veröffentlicht ist */
-    $time = time() - @openssl_decrypt($_POST['no_bot'], 'AES-256-CBC', Env::DATABASE);
+    $time = time() - openssl_decrypt($_POST['no_bot'], 'AES-256-CBC', Env::DATABASE, 0, str_repeat("\0", 16));
     if ($time < 4) { //Bot, wenn in unter 4 Sekunden das Formular abgeschickt wurde
         Html::error("E-Mail konnte wegen Spamverdacht nicht versendet werden,
          da das Formular zu schnell ausgefüllt wurde. Schreib uns bitte an via "
@@ -100,7 +100,7 @@ include '../../templates/header.tmp.php';
         <form method="post">
             <input type="hidden"
                    name="no_bot"
-                   value="<?= @openssl_encrypt(time(), 'AES-256-CBC', Env::DATABASE) ?>"
+                   value="<?= openssl_encrypt(time(), 'AES-256-CBC', Env::DATABASE, 0, str_repeat("\0", 16)) ?>"
             >
             <p>
                 <label class="w3-text-grey" for="name">

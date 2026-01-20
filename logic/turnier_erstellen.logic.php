@@ -28,11 +28,19 @@ if (isset($_POST['create_turnier'])) {
     $organisator = (string)$_POST['organisator'];
     $handy = (string)$_POST['handy'];
     $art = (string)$_POST['art'];
-    $block = ($art === 'I') ? $ausrichter_block : $_POST['block'];
     $startzeit = DateTime::createFromFormat("H:i", ((string)($_POST['startzeit'] ?? '')));
     $plaetze = (string)($_POST['plaetze'] ?? '');
     $min_teams = (int)($_POST['min_teams'] ?? '');
     $sofotOeffnen = @(($_POST['sofort_oeffnen'] ?? '') === "Ja");
+    
+    // Turnierblock
+    $block = $_POST['block'];
+    if ($art === 'I') {
+        $block = $ausrichter_block;
+    }
+    if ($art === 'spass') {
+        $block = null;
+    }
 
     // Besprechung
     if (($_POST['besprechung'] ?? '') === 'Ja') {

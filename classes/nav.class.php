@@ -104,8 +104,11 @@ class Nav
         return [
             [Env::BASE_URL . "/liga/ueber_uns.php", "Über uns"],
             [Env::BASE_URL . "/liga/foerdermittel.php", "Fördermittel"],
-            [Env::BASE_URL . "/liga/jubilaeum.php", "25 Jahre Liga"],
-            [Env::BASE_URL . "/liga/tippspiel.php", "Tippspiel"],
+            [Env::BASE_URL . "/liga/content/25jubilaeum.php", "25 Jahre Liga"],
+            [Env::BASE_URL . "/liga/content/30jubilaeum.php", "30 Jahre Liga"],
+            [Env::BASE_URL . "/liga/content/dm2005.php", "DM 2005"],
+            [Env::BASE_URL . "/liga/content/dm2019.php", "DM 2019"],
+            [Env::BASE_URL . "/liga/content/ausland.php", "Im Ausland"],
             [Env::BASE_URL . "/liga/archiv.php", "Archiv"],
             [Env::BASE_URL . "/login.php", "Ausschusslogin"],
             [Env::BASE_URL . "/liga/kontakt.php", "Kontakt"],
@@ -215,7 +218,10 @@ class Nav
 
     public const LINK_SCHIRI_CHECKLIST = Env::BASE_URL . '/dokumente/schiri_checkliste.pdf';
     public const LINK_SCHIRI_LEITLINIE = Env::BASE_URL . '/dokumente/schiri_leitlinie.pdf';
+    public const LINK_SCHIRI_ABLAUF_PRAKTISCHE_PRUEFUNG = Env::BASE_URL . '/dokumente/ablauf_praktische_schiripruefung.pdf';
     public const LINK_MODUS_ENTWURF = Env::BASE_URL . '/dokumente/ligamodus_entwurf.pdf';
+    public const LINK_ABZEICHEN = Env::BASE_URL . '/dokumente/einradhockey_abzeichen.pdf';
+    public const LINK_SCHLAEGERTECHNIK = Env::BASE_URL . '/dokumente/schlaegertechnik_einradhockey.pdf';
     public const LINK_FINALE = Env::BASE_URL . '/dokumente/finalturnier.pdf';
     public const LINK_FINALE_MODI = Env::BASE_URL . '/dokumente/finalturnier_spielmodi.pdf';
     public const LINK_CHECK_XLSX = Env::BASE_URL . '/dokumente/checkliste_einradhockeyturnier_fuer_ausrichter.xlsx';

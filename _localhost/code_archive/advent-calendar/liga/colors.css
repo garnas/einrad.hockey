@@ -1,0 +1,35 @@
+.advent-color {
+  background-color: #7A0000;
+}
+
+.advent-text {
+  color: #7A0000;
+}
+
+.advent-text-secondary {
+  color: #8b0025;
+}
+
+.advent-text-tertiary {
+  color: #edddd1;
+}
+
+.panel {
+  background-color: #7A0000;
+  color: #edddd1;
+}
+
+.panel:hover {
+  background-color: #8b0025;
+  color: #edddd1;
+}
+
+.panel-done{
+  background-color: #233D00;
+  color: #edddd1;
+}
+
+.panel-done:hover{
+  background-color: #2b4b01;
+  color: #edddd1;
+}

@@ -72,7 +72,7 @@
         </div>
     <?php endif; ?>
     
-    <?php if (LigaLeitung::is_logged_in("oeffentlichkeitsausschuss")): ?>
+    <?php if (LigaLeitung::is_logged_in("team_social_media")): ?>
         <!-- Darstellungen des Öffentlichkeitsausschusses; Die Berechtigung wird nicht geprüft -->
         <hr>
         <div class="w3-section">

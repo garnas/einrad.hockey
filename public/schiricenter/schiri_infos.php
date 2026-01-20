@@ -110,6 +110,7 @@ include '../../templates/header.tmp.php';
         <li>Hier gibt es die kompletten Regeln der Deutschen Einradhockeyliga als pdf:<br><?=Html::link(Nav::LINK_REGELN, 'Regelwerk', false, false)?></li>
         <li>Schiri-Leitlinie für Spiele auf Fortgeschrittenem Niveau:<br><?=Html::link(Nav::LINK_SCHIRI_LEITLINIE, 'Schiri-Leitlinie', false, false)?></li>
         <li>Checkliste für die praktische Prüfung:<br><?=Html::link(Nav::LINK_SCHIRI_CHECKLIST, 'Checkliste', false, false)?></li>
+        <li>Ablauf einer praktischen Schiriprüfung in der Deutschen Einradhockeyliga:<br><?=Html::link(Nav::LINK_SCHIRI_ABLAUF_PRAKTISCHE_PRUEFUNG, 'Ablauf einer praktischen Schiriprüfung', false, false)?></li>
     </ul>
 </div>
 

@@ -244,26 +244,49 @@ class Tabelle
     {
 
         $sql = "
-            WITH tournaments as (
-                SELECT te.team_id, teams.teamname, te.turnier_id, tl.datum, te.ergebnis, td.ort, tl.tblock, te.platz, dense_rank() over (PARTITION BY te.team_id order by te.ergebnis DESC) AS `rank`
-                FROM turniere_ergebnisse te
-                INNER JOIN turniere_liga tl ON tl.turnier_id = te.turnier_id
-                INNER JOIN teams_liga teams ON teams.team_id = te.team_id
-                INNER JOIN turniere_details td ON td.turnier_id = te.turnier_id
-                WHERE teams.ligateam = 'Ja'
-                AND tl.art != 'final' 
-                AND (tl.saison = ?) 
-                AND (tl.spieltag <= ?)
-            ), num_of_teams as (
-                SELECT turnier_id, count(*) as teilnehmer
-                FROM turniere_ergebnisse te
-                GROUP BY turnier_id
-            )
-
-            SELECT team_id, teamname, t.turnier_id, datum, ergebnis, ort, tblock, platz, teilnehmer
-            FROM tournaments t
-            INNER JOIN num_of_teams n ON n.turnier_id = t.turnier_id
-            WHERE `rank` <= 4 ORDER BY team_id, ergebnis DESC
+                WITH tournaments AS (
+                    SELECT 
+                        te.team_id,
+                        teams.teamname,
+                        te.turnier_id,
+                        tl.datum,
+                        te.ergebnis,
+                        td.ort,
+                        tl.tblock,
+                        te.platz,
+                        ROW_NUMBER() OVER (
+                            PARTITION BY te.team_id
+                            ORDER BY te.ergebnis DESC, tl.datum DESC, te.turnier_id DESC
+                        ) AS rn
+                    FROM turniere_ergebnisse te
+                    INNER JOIN turniere_liga tl ON tl.turnier_id = te.turnier_id
+                    INNER JOIN teams_liga teams ON teams.team_id = te.team_id
+                    INNER JOIN turniere_details td ON td.turnier_id = te.turnier_id
+                    WHERE teams.ligateam = 'Ja'
+                      AND tl.art != 'final'
+                      AND (tl.saison = ?)
+                      AND (tl.spieltag <= ?)
+                ),
+                num_of_teams AS (
+                    SELECT turnier_id, COUNT(*) AS teilnehmer
+                    FROM turniere_ergebnisse
+                    GROUP BY turnier_id
+                )
+                
+                SELECT 
+                    t.team_id,
+                    t.teamname,
+                    t.turnier_id,
+                    t.datum,
+                    t.ergebnis,
+                    t.ort,
+                    t.tblock,
+                    t.platz,
+                    teilnehmer
+                FROM tournaments t
+                JOIN num_of_teams n ON n.turnier_id = t.turnier_id
+                WHERE rn <= 4
+                ORDER BY team_id, ergebnis DESC;
          ";
         $result = db::$db->query($sql, $saison, $spieltag)->esc()->fetch();
         $return = [];
@@ -292,7 +315,7 @@ class Tabelle
             foreach ($list_of_teamids as $team_id) {
                 if (!array_key_exists($team_id, $return)) {
                     $return[$team_id] = [];
-                    $return[$team_id]['teamname'] = Team::id_to_name($team_id); //Ansonsten doppel dbi::escape --> fehler in der Darstellung
+                    $return[$team_id]['teamname'] = Team::id_to_name($team_id);
                     $return[$team_id]['team_id'] = $team_id;
                     $return[$team_id]['string'] = '';
                     $return[$team_id]['summe'] = 0;
