@@ -45,6 +45,11 @@ include '../../templates/header.tmp.php'; ?>
 <h1 class="w3-text-primary">Neuigkeiten</h1>
 <p class="w3-border-top w3-border-grey w3-text-grey">Saison <?=Html::get_saison_string($saison)?></p>
 
+<div class='w3-card w3-panel w3-leftbar w3-border-yellow w3-pale-yellow'>
+    <h3>Fördermittelantrag</h3>
+    <div class='w3-section'>Der Fördermittelantrag ist hier zu finden: <span><?= Html::link("foerdermittel_antrag.php", " Fördermittelantrag", false, "") ?></span></div>
+</div>
+
 <div class="w3-row-padding w3-stretch">
     
     <div class="w3-col l3 m4 w3-hide-small">
