@@ -14,7 +14,7 @@ if (Helper::$ligacenter) {
     $list_id = 'lc_emails' . $_SESSION['logins']['la']['id'];
 } elseif (Helper::$teamcenter) {
     $list_id = 'tc_emails' . $_SESSION['logins']['team']['id'];
-} elseif (Helper::$oeffentlichkeitsausschuss) {
+} elseif (Helper::$team_social_media) {
     $list_id = 'oc_emails' . $_SESSION['logins']['oa']['id'];
 }
 
@@ -56,7 +56,7 @@ if (isset($_POST['rundmail'])) {
     $_SESSION[$list_id]['emails'] = Kontakt::get_emails_rundmail();
 
     array_unshift($_SESSION[$list_id]['emails'], Env::LAMAIL);
-    array_unshift($_SESSION[$list_id]['empfaenger'], '<b>Ligaausschuss</b>');
+    array_unshift($_SESSION[$list_id]['empfaenger'], 'Ligaausschuss');
 }
 
 // Teams wurden ausgewählt
@@ -80,7 +80,7 @@ if (isset($_POST['teams_emails'])) {
     $_SESSION[$list_id]['empfaenger'] = $teamnamen;
     if (isset($_POST['la'])) {
         array_unshift($_SESSION[$list_id]['emails'], Env::LAMAIL);
-        array_unshift($_SESSION[$list_id]['empfaenger'], '<b>Ligaausschuss</b>');
+        array_unshift($_SESSION[$list_id]['empfaenger'], 'Ligaausschuss');
     }
 
 }
@@ -102,7 +102,7 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
         if (Helper::$ligacenter) {
             $mailer->setFrom(Env::LAMAIL, 'Ligaausschuss');
             $mailer->addBCC(Env::LAMAIL_ANTWORT);
-        } elseif (Helper::$oeffentlichkeitsausschuss) {
+        } elseif (Helper::$team_social_media) {
             $mailer->setFrom(Env::LAMAIL, 'Öffentlichkeitsausschuss');
             $mailer->addBCC(Env::OEFFIMAIL);
         } elseif (Helper::$teamcenter) {
@@ -154,7 +154,7 @@ if (isset($_SESSION[$list_id])) {
     if (Helper::$ligacenter) {
         $from = Env::LAMAIL;
         $tos = $_SESSION[$list_id]['emails'];
-    } elseif (Helper::$oeffentlichkeitsausschuss) {
+    } elseif (Helper::$team_social_media) {
         $from = Env::OEFFIMAIL;
         $tos = $_SESSION[$list_id]['emails'];
     } elseif (Helper::$teamcenter) {
@@ -175,6 +175,6 @@ if (Helper::$ligacenter) {
     }
 }
 
-if (Helper::$oeffentlichkeitsausschuss) {
+if (Helper::$team_social_media) {
     $signatur = "\r\n\r\n\r\nDein Öffentlichkeitsausschuss";
 }

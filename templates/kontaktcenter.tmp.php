@@ -82,7 +82,7 @@ if (empty($_SESSION[$list_id ?? '']['emails'])): ?>
             <p class=""><b><i class=material-icons>mail</i> Absender</b></p>
             <p><?= e($from ?? "") ?></p>
             <p class=""><b><i class=material-icons>mail</i> Empfänger
-                    <?php if(Helper::$ligacenter || Helper::$oeffentlichkeitsausschuss){?>
+                    <?php if(Helper::$ligacenter || Helper::$team_social_media){?>
                         (<?=$anzahl_emails ?? ""?>)
                     <?php }//end if?></b></p>
             <div class="w3-row w3-section">

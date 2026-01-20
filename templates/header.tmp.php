@@ -37,7 +37,7 @@
     if (LigaLeitung::is_logged_in("ligaausschuss")) {
         include 'navigation/nav_ligacenter.tmp.php';
     }
-    if (LigaLeitung::is_logged_in("oeffentlichkeitsausschuss")) {
+    if (LigaLeitung::is_logged_in("team_social_media")) {
         include 'navigation/nav_oefficenter.tmp.php';
     }
     if (isset($_SESSION['logins']['team'])) {
