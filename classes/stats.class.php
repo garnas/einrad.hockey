@@ -18,8 +18,46 @@ class Stats
                 WHERE letzte_saison >= ?
                 AND team_id IS NOT NULL
                 ";
-        return db::$db->query($sql, $saison )->fetch_one() ?? 0;
+        return db::$db->query($sql, $saison-1)->fetch_one() ?? 0;
     }
+
+    /**
+     * Anzahl der Spieler zu unterschiedlichen Stichtagen im aktuellen Jahr
+     *
+     * 
+     * @return int
+     */
+    public static function get_aktuelle_spieler_anzahl(): array
+    {
+        $year = date('Y');
+        $cutoff = [ 
+            "$year-06-30 23:59:59", 
+            "$year-01-31 23:59:59", 
+            ($year - 1) . "-06-30 23:59:59", 
+            ($year - 1) . "-01-31 23:59:59"
+        ];
+
+        foreach ($cutoff as $c) {
+            if (($cs = strtotime($c)) <= time()) {
+                $lastCutoff = $cs;
+                break; 
+            }
+        }
+    
+        $sql = "
+                SELECT SUM(anzahl) 
+                FROM spieler_statistik
+                WHERE date = (
+                    SELECT max(date) 
+                    FROM spieler_statistik 
+                    WHERE date <= ?
+                );
+                ";
+        
+        $number = db::$db->query($sql, date('Y-m-d H:i:s', $lastCutoff))->fetch_one() ?? 0;
+        return ['cutoff' => date('d.m.Y', $lastCutoff), 'number' => $number];
+    }
+
 
     /**
      * Anzahl der gültigen Schiedsrichter in aktiven Teams
