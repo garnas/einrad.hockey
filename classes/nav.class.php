@@ -204,12 +204,12 @@ class Nav
     public const LINK_INSTA = 'https://www.instagram.com/einradhockeyde/';
     public const LINK_EV_BY = 'http://einradverband-bayern.de/';
     public const LINK_REGELN_KURZ = Env::BASE_URL . '/dokumente/zusammenfassung_regeln.pdf';
-    public const LINK_MODUS_KURZ = Env::BASE_URL . '/dokumente/zusammenfassung_modus.pdf';
-    public const LINK_TURNIER = Env::BASE_URL . '/dokumente/turniermodi.pdf';
+    public const LINK_MODUS_KURZ = Env::BASE_URL . '/dokumente/zusammenfassung_modus.pdf?version=20260123';
+    public const LINK_TURNIER = Env::BASE_URL . '/dokumente/turniermodi.pdf?version=20240725';
     /**
      * Dokumente
      */
-    public const LINK_MODUS = Env::BASE_URL . '/dokumente/ligamodus.pdf';
+    public const LINK_MODUS = Env::BASE_URL . '/dokumente/ligamodus.pdf?version=20260123';
     public const LINK_SCHIRIWESEN = Env::BASE_URL . '/dokumente/schiriwesen.pdf';
 
     public const LINK_SCHIRI_CHECKLIST = Env::BASE_URL . '/dokumente/schiri_checkliste.pdf';
