@@ -18,13 +18,13 @@ class Nav
     public static function get_liga(): array
     {
         return [
-            [Env::BASE_URL . "/liga/saisontermine.php", "Saisontermine"],
             [Env::BASE_URL . "/liga/turniere.php", "Turniere"],
             [Env::BASE_URL . "/liga/ergebnisse.php", "Ergebnisse"],
             [Env::BASE_URL . "/liga/teams.php", "Teams"],
             [Env::BASE_URL . "/liga/tabelle.php#meister", "Meisterschaftstabelle"],
             [Env::BASE_URL . "/liga/tabelle.php#rang", "Rangtabelle"],
-            [Env::BASE_URL . "/liga/statistik.php", "Statistik"]
+            [Env::BASE_URL . "/liga/statistik.php", "Statistik"],
+            [Env::BASE_URL . "/liga/archiv.php", "Archiv"]
         ];
     }
 
@@ -37,11 +37,12 @@ class Nav
     {
         return [
             [Env::BASE_URL . "/liga/neuigkeiten.php", "Neuigkeiten"],
-            [Env::BASE_URL . "/liga/ueber_uns.php", "Interesse?"],
+            [Env::BASE_URL . "/liga/saisontermine.php", "Saisontermine"],
             [Env::BASE_URL . "/liga/ligaleitung.php", "Ligaleitung"],
             [Env::BASE_URL . "/liga/ligakarte.php", "Ligakarte"],
             [Env::BASE_URL . "/liga/kader.php", "Nationalkader"],
-            [Env::LINK_DISCORD, "Discord"]
+            [Env::LINK_DISCORD, "Discord"],
+            [Env::BASE_URL . "/liga/ueber_uns.php", "Über Uns"]
         ];
     }
 
@@ -58,7 +59,19 @@ class Nav
         ];
     }
 
-
+    /**
+     * Organisation-Links für die Navigation
+     * 
+     * @return string[][]
+     */
+    public static function get_organisation(): array
+    {
+        return [
+            [Env::BASE_URL . "/teamcenter/tc_login.php", "Teamcenter"],
+            [Env::BASE_URL . "/login.php", "Ausschusslogin"]
+        ];
+    }
+    
     /**
      * Teamcenterlinks für die Navigation
      *
@@ -99,20 +112,14 @@ class Nav
      *
      * @return string[][]
      */
-    public static function get_sonstiges(): array
+    public static function get_berichte(): array
     {
         return [
-            [Env::BASE_URL . "/liga/ueber_uns.php", "Über uns"],
-            [Env::BASE_URL . "/liga/content/30jubilaeum.php", "25 Jahre Liga"],
-            [Env::BASE_URL . "/liga/content/25jubilaeum.php", "30 Jahre Liga"],
+            [Env::BASE_URL . "/liga/content/25jubilaeum.php", "25 Jahre Liga"],
+            [Env::BASE_URL . "/liga/content/30jubilaeum.php", "30 Jahre Liga"],
             [Env::BASE_URL . "/liga/content/dm2005.php", "DM 2005"],
             [Env::BASE_URL . "/liga/content/dm2019.php", "DM 2019"],
-            [Env::BASE_URL . "/liga/content/ausland.php", "Im Ausland"],
-            [Env::BASE_URL . "/liga/archiv.php", "Archiv"],
-            [Env::BASE_URL . "/login.php", "Ausschusslogin"],
-            [Env::BASE_URL . "/liga/kontakt.php", "Kontakt"],
-            [Env::BASE_URL . "/liga/datenschutz.php", "Datenschutz"],
-            [Env::BASE_URL . "/liga/impressum.php", "Impressum"],
+            [Env::BASE_URL . "/liga/content/ausland.php", "Einradhockey im Ausland"],
         ];
     }
 
