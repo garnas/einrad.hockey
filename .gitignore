@@ -32,6 +32,7 @@ node_modules/
 
 # composer
 vendor/
+composer.phar
 
 # xml
 classes/xml.class.php_bak

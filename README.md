@@ -1,3 +1,91 @@
+# Fedora
+
+# PHP installieren
+
+> https://www.php.net/downloads?usage=web&os=linux&osvariant=linux-fedora&version=8.3
+
+```shell
+# Add the Remi's RPM repository.
+sudo dnf install -y dnf-plugins-core
+sudo dnf install -y https://rpms.remirepo.net/fedora/remi-release-$(rpm -E %fedora).rpm
+sudo dnf module reset php -y
+sudo dnf module enable php:remi-8.3 -y
+
+# Install PHP (single/default version).
+sudo dnf install -y php
+
+# Install Extensions
+sudo dnf -y install php-mysql
+sudo dnf -y install php-tokenizer
+sudo dnf -y install php-sysvsem
+sudo dnf -y install php-sockets
+sudo dnf -y install php-readline
+sudo dnf -y install php-posix
+sudo dnf -y install php-phar
+sudo dnf -y install php-mbstring
+sudo dnf -y install php-intl
+sudo dnf -y install php-iconv
+sudo dnf -y install php-ftp
+sudo dnf -y install php-fileinfo
+sudo dnf -y install php-ffi
+sudo dnf -y install php-exif
+sudo dnf -y install php-curl
+sudo dnf -y install php-ctype
+sudo dnf -y install php-calendar
+sudo dnf -y install php-pdo
+sudo dnf -y install php-mysql
+sudo dnf -y install php-gd
+sudo dnf -y install php-exif
+sudo dnf -y install php-mbstring
+sudo dnf -y install php-xsl
+sudo dnf -y install php-zip
+sudo dnf -y install php-xdebug
+```
+
+# Composer installieren
+> https://getcomposer.org/download/
+```shell
+   php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+   php -r "if (hash_file('sha384', 'composer-setup.php') === 'c8b085408188070d5f52bcfe4ecfbee5f727afa458b2573b8eaaf77b3419b0bf2768dc67c86944da1544f06fa544fd47') { echo 'Installer verified'.PHP_EOL; } else { echo 'Installer corrupt'.PHP_EOL; unlink('composer-setup.php'); exit(1); }"
+   php composer-setup.php
+   php -r "unlink('composer-setup.php');"
+```
+
+# Composer dependencys installieren
+```shell
+   sudo php composer.phar install
+   sudo php composer.phar dump-autoload
+```
+
+# Docker
+
+> https://docs.docker.com/engine/install/fedora/#installation-methods
+
+```shell
+    sudo dnf config-manager addrepo --from-repofile https://download.docker.com/linux/fedora/docker-ce.repo
+    sudo dnf -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    sudo systemctl enable --now docker
+```
+
+# Database
+```shell
+    # Datenbank starten
+    sudo docker compose up mariadb -d
+    (echo "CREATE DATABASE IF NOT EXISTS db_localhost; USE db_localhost;"; cat ./_localhost/db_localhost.sql) | sudo docker exec -i ligaseite-mariadb mariadb -u root -proot
+```
+
+# Enviroment
+```shell
+    # env.php erstellen
+    cp example_env.php env.php
+```
+
+# Class loader
+```shell
+    # env.php erstellen
+    cp example_env.php env.php
+```
+
 # einrad.hockey-Website
 ![Logo der Einradhockeyliga](https://einrad.hockey/bilder/logo_lang_small.png)
 
@@ -67,9 +155,9 @@ composer dump-autoload
 
 4. Doctrine Cache Update
 ```shell
-php bin/doctrine orm:clear-cache:metadata
-php bin/doctrine orm:clear-cache:query
-php bin/doctrine orm:generate-proxies
+sudo php bin/doctrine orm:clear-cache:metadata
+sudo php bin/doctrine orm:clear-cache:query
+sudo php bin/doctrine orm:generate-proxies
 ```
 
 5. Seite öffnen

@@ -35,10 +35,10 @@ class env
     /**
      * SQL-Datenbank Zugangsdaten
      */
-    public const HOST_NAME = 'localhost';
+    public const HOST_NAME = '127.0.0.1';
     public const DATABASE = 'db_localhost';
     public const USER_NAME = 'root';
-    public const PASSWORD = '';
+    public const PASSWORD = 'root';
 
     /**
      * Mailserver
