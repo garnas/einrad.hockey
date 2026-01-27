@@ -9,11 +9,12 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
     libpng-dev \
+    libicu-dev \
     git
 
 # Install necessary PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo_mysql zip
+    && docker-php-ext-install gd pdo_mysql zip intl
 
 # Activate Apache modules headers & rewrite
 RUN a2enmod headers rewrite
