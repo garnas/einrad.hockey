@@ -23,7 +23,7 @@
 
     <!-- Text -->
     <div class="w3-section">
-        <?= nl2br($neuigkeit->getInhalt()) ?>
+        <?= nl2br(e($neuigkeit->getInhalt())) ?>
     </div>
     
     <?php if (e($neuigkeit->getLinkPdf()) != ''): ?>
