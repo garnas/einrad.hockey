@@ -80,3 +80,5 @@ include '../../templates/header.tmp.php'; ?>
     </div>
 
 </div>
+
+<?php include '../../templates/footer.tmp.php';
