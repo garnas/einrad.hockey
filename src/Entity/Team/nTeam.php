@@ -244,7 +244,7 @@ class nTeam
         return $this;
     }
 
-    public function getBlock(int $spieltag = null): ?string
+    public function getBlock(?int $spieltag = null): ?string
     {
         if (!$this->isLigaTeam()) {
             return null;

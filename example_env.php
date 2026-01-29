@@ -10,7 +10,7 @@
  * (3) Passe die Einstellungen in env.php entsprechend deiner Entwicklungsumgebung an (Mailsachen und Discord erstmal unwichtig).
  * (4) Deine Einstellungen in env.php liegen im Gitignore und werden nicht auf Github hochgeladen.
  */
-class env
+class example_env
 {
     /**
      * Auf der Live-Seite sollte dies auf false gesetzt werden.
@@ -18,7 +18,7 @@ class env
      * Außerdem werden bei true Fehler im Browser fürs Debugging angezeigt.
      * Siehe _localhost/nur_localhost.php und /init.php.
      */
-     public const IS_LOCALHOST = true;
+    public const IS_LOCALHOST = true;
 
     /**
      * Webadresse für Verlinkungen, unabhängig der Ordnerstruktur.

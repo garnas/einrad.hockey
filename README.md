@@ -2,44 +2,42 @@
 
 # PHP installieren
 
-> https://www.php.net/downloads?usage=web&os=linux&osvariant=linux-fedora&version=8.3
+> https://www.php.net/downloads.php?usage=web&os=linux&osvariant=linux-fedora&version=8.3&multiversion=Y
 
 ```shell
 # Add the Remi's RPM repository.
 sudo dnf install -y dnf-plugins-core
 sudo dnf install -y https://rpms.remirepo.net/fedora/remi-release-$(rpm -E %fedora).rpm
-sudo dnf module reset php -y
-sudo dnf module enable php:remi-8.3 -y
 
-# Install PHP (single/default version).
-sudo dnf install -y php
+# Install PHP (multiple versions).
+sudo dnf install -y php84
 
 # Install Extensions
-sudo dnf -y install php-mysql
-sudo dnf -y install php-tokenizer
-sudo dnf -y install php-sysvsem
-sudo dnf -y install php-sockets
-sudo dnf -y install php-readline
-sudo dnf -y install php-posix
-sudo dnf -y install php-phar
-sudo dnf -y install php-mbstring
-sudo dnf -y install php-intl
-sudo dnf -y install php-iconv
-sudo dnf -y install php-ftp
-sudo dnf -y install php-fileinfo
-sudo dnf -y install php-ffi
-sudo dnf -y install php-exif
-sudo dnf -y install php-curl
-sudo dnf -y install php-ctype
-sudo dnf -y install php-calendar
-sudo dnf -y install php-pdo
-sudo dnf -y install php-mysql
-sudo dnf -y install php-gd
-sudo dnf -y install php-exif
-sudo dnf -y install php-mbstring
-sudo dnf -y install php-xsl
-sudo dnf -y install php-zip
-sudo dnf -y install php-xdebug
+sudo dnf -y install php84-php-mysql
+sudo dnf -y install php84-php-tokenizer
+sudo dnf -y install php84-php-sysvsem
+sudo dnf -y install php84-php-sockets
+sudo dnf -y install php84-php-readline
+sudo dnf -y install php84-php-posix
+sudo dnf -y install php84-php-phar
+sudo dnf -y install php84-php-mbstring
+sudo dnf -y install php84-php-intl
+sudo dnf -y install php84-php-iconv
+sudo dnf -y install php84-php-ftp
+sudo dnf -y install php84-php-fileinfo
+sudo dnf -y install php84-php-ffi
+sudo dnf -y install php84-php-exif
+sudo dnf -y install php84-php-curl
+sudo dnf -y install php84-php-ctype
+sudo dnf -y install php84-php-calendar
+sudo dnf -y install php84-php-pdo
+sudo dnf -y install php84-php-mysql
+sudo dnf -y install php84-php-gd
+sudo dnf -y install php84-php-exif
+sudo dnf -y install php84-php-mbstring
+sudo dnf -y install php84-php-xsl
+sudo dnf -y install php84-php-zip
+sudo dnf -y install php84-php-xdebug
 ```
 
 # Composer installieren
@@ -55,6 +53,7 @@ sudo dnf -y install php-xdebug
 ```shell
    sudo php composer.phar install
    sudo php composer.phar dump-autoload
+   sudo php composer.phar require --dev friendsofphp/php-cs-fixer
 ```
 
 # Docker

@@ -1,4 +1,4 @@
-/bin/php -S localhost:8000 -t /home/ansgar/Desktop/einrad.hockey/public
+/bin/php -S localhost:8080 -t /public
 
 sudo su -
 sudo chmod -R 777 .
