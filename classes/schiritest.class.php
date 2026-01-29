@@ -406,7 +406,7 @@ class SchiriTest
         $mailer->Body = $text;
 
         if (MailBot::send_mail($mailer)) {
-            Html::info("Eine E-Mail mit deinem Testergebis wurde versandt.");
+            Html::info("Eine E-Mail mit deinem Testergebnis wurde versandt.");
         } else {
             Html::error("E-Mail konnte nicht versendet werden.");
             Helper::log(Config::LOG_SCHIRI_PRUEFUNG, "Fehler: Email wurde nicht versendet!");
