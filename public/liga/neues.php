@@ -3,6 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 use App\Repository\Turnier\TurnierRepository;
+use App\Repository\Neuigkeit\NeuigkeitRepository;
 
 require_once '../../init.php';
 
@@ -10,7 +11,7 @@ require_once '../../init.php';
 $fortschritt = round(100 * (time() - strtotime(Config::SAISON_ANFANG)) / (strtotime(Config::SAISON_ENDE) - strtotime(Config::SAISON_ANFANG)));
 $tage = round((strtotime(Config::SAISON_ANFANG) - time()) / (24 * 60 * 60));
 
-$neuigkeiten = Neuigkeit::get_neuigkeiten();
+$neuigkeiten = NeuigkeitRepository::get()->findActive();
 
 $turniere = TurnierRepository::getKommendeTurniere()->toArray();
 $anz_next_turniere = count($turniere);
@@ -29,19 +30,6 @@ $statistik['max_turniere'] = Stats::get_turniere_team(limit: 3);
 $statistik['ges_tore'] = Stats::get_tore_anzahl();
 $statistik['ges_spiele'] = Stats::get_spiele_anzahl();
 $statistik['spielminuten'] = Stats::get_spielminuten_anzahl();
-
-// Zeitanzeige der Neuigkeiteneinträge verschönern
-foreach ($neuigkeiten as $neuigkeiten_id => $neuigkeit) { //Todo in get_neuikgeiten rein
-    $delta_zeit = (time() - strtotime($neuigkeit['zeit'])) / (60 * 60); //in Stunden
-    if ($delta_zeit < 24) {
-        $zeit = ($delta_zeit <= 1.5) ? "gerade eben" : "vor " . round($delta_zeit) . " Stunden";
-    } elseif ($delta_zeit < 7 * 24) {
-        $zeit = ($delta_zeit <= 1.5 * 24) ? "vor einem Tag" : "vor " . round($delta_zeit / 24) . " Tagen";
-    } else {
-        $zeit = date("d.m.Y", strtotime($neuigkeit['zeit']));
-    }
-    $neuigkeiten[$neuigkeiten_id]['zeit'] = $zeit;
-}
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
