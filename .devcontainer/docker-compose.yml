@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    ports:
+      - '80:80'
+    volumes:
+      - ..:/var/www/html
+    environment:
+      PHP_POST_MAX_SIZE: 20M
+      PHP_UPLOAD_MAX_FILESIZE: 20M
+  db:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: db_localhost
+      MARIADB_USER: appuser
+      MARIADB_PASSWORD: apppass
+    volumes:  
+      - db-data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - '8081:80'
+    environment:
+      PMA_HOST: db
+      PMA_USER: appuser
+      PMA_PASSWORD: apppass
+      UPLOAD_LIMIT: 256M
+    depends_on:
+    - db
+
+volumes:
+  db-data:

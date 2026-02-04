@@ -1,34 +1,30 @@
-// .devcontainer/devcontainer.json
 {
-    // Verwendet die bestehende docker-compose.yml Datei
-    "dockerComposeFile": [
-        "../docker-compose.yml" 
-    ],
-    
-    // Wählt den "web"-Service als primären Entwicklungshost
-    "service": "web", 
-    
-    // Das Arbeitsverzeichnis im Container
-    "workspaceFolder": "/var/www/html",
-    
-    // Führt "composer install" aus, sobald der Container gestartet ist (installiert Dependencies ins 'vendor_data' Volume)
-    "postCreateCommand": "composer install",
+  "name": "PHP Ligaseite Stack",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/var/www/html",
+  
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  
+  "forwardPorts": [80, 8080],
 
-    "customizations": {
-        "vscode": {
-            // Empfohlene Erweiterungen, die im Container installiert werden
-            "extensions": [
-                "bmewburn.vscode-intelephense", // Starkes PHP IntelliSense
-                "xdebug.php-debug",            // PHP Debugging Support
-                "ms-azuretools.vscode-docker", // Docker-Verwaltung
-                "editorconfig.editorconfig"
-            ],
-            // Einstellungen für den Container
-            "settings": {
-                // Xdebug Konfiguration für den Dev Container
-                "php.debug.port": 9003,
-                "xdebug.clientPort": 9003
-            }
-        }
+  "portsAttributes": {
+    "80": {
+      "label": "webseite",
+      "onAutoForward": "openBrowser"
+    },
+    "8081": {
+      "label": "phpmyadmin"
     }
+  },
+  
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client",
+        "xdebug.php-debug"
+      ]
+    }
+  },
+  "remoteUser": "root"
 }
