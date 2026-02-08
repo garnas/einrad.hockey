@@ -44,6 +44,9 @@ if (isset($_POST["abgestimmt"])) {
 $hasVote = $abstimmung->hasVote($team);
 $data = $hasVote ? $abstimmung->getStimme($crypt) : [];
 
+$beginn = strtotime(ConfigService::BEGINN);
+$abschluss = strtotime(ConfigService::ENDE);
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -52,44 +55,61 @@ include '../../templates/header.tmp.php';
 
 <h1 class="w3-text-primary">Ligaausschuss-Wahlen 2026</h1>
 
-<div class="w3-panel w3-light-grey">
-    <h3 class="w3-text-primary">Status</h3>
-    <?php if ($hasVote): ?>
-        <p class="w3-text-green">Es wurde eine Stimme für dein Team hinterlegt.</p>
-    <?php else: ?>
-        <p class="w3-text-red">Es ist keine Stimme für dein Team hinterlegt.</p>
-    <?php endif; ?>
-</div>
+<?php if (ConfigService::isPreparing()): ?>
 
-<form id="stimme" method="post">
+    <div class="w3-margin-top">
+        <p class="w3-text-secondary"><strong>Beginn der Abstimmung</strong></p>
+        <?php Html::countdown($beginn) ?>
+    </div>
+
+<?php elseif (ConfigService::isFinished()): ?>
+
+    <div class="w3-margin-top">
+        <p class="w3-text-secondary"><strong>Die Abstimmung ist abgeschlossen.</strong></p>
+    </div>
+
+<?php else: ?>
+
     <div class="w3-panel w3-light-grey">
-        
-        <h2 class="w3-text-primary"><?= (!$hasVote) ? 'Jetzt abstimmen' : 'Stimme ändern' ?></h2>
-        
-        <p>Das Team <?= $team->getName() ?> stimmt für die folgende(n) Person(en):</p>
-        <?php foreach (ConfigService::NAMES as $id => $name): ?>
+        <h3 class="w3-text-primary">Status</h3>
+        <?php if ($hasVote): ?>
+            <p class="w3-text-green">Es wurde eine Stimme für dein Team hinterlegt.</p>
+        <?php else: ?>
+            <p class="w3-text-red">Es ist keine Stimme für dein Team hinterlegt.</p>
+        <?php endif; ?>
+    </div>
+
+    <form id="stimme" method="post">
+        <div class="w3-panel w3-light-grey">
+            
+            <h2 class="w3-text-primary"><?= (!$hasVote) ? 'Jetzt abstimmen' : 'Stimme ändern' ?></h2>
+            
+            <p>Das Team <?= $team->getName() ?> stimmt für die folgende(n) Person(en):</p>
+            <?php foreach (ConfigService::NAMES as $id => $values): ?>
+                <p>
+                    <input id="<?= $id ?>" type="checkbox" name="<?= $id ?>" <?= in_array($id, $data) ? 'checked' : '' ?> class="w3-check" >
+                    <label class="w3-hover-text-primary" style="cursor: pointer;" for="<?= $id ?>"><strong><?= $values['name'] ?></strong> (<?= $values['team'] ?>)</label>
+                </p>
+            <?php endforeach; ?>
             <p>
-                <input id="<?= $id ?>" type="checkbox" name="<?= $id ?>" <?= in_array($id, $data) ? 'checked' : '' ?> class="w3-check" >
-                <label class="w3-hover-text-primary" style="cursor: pointer;" for="<?= $id ?>"><?= $name ?></label>
+                <em>Die Namen sind in alphabetischer Reihenfolge nach Nach- und Vornamen angeordnet.</em>
             </p>
-        <?php endforeach; ?>
-        <p>
-            <em>Die Namen sind in alphabetischer Reihenfolge nach Nach- und Vornamen angeordnet.</em>
-        </p>
-        
-    </div>
+            
+        </div>
 
-    <div class="w3-panel w3-light-grey">
+        <div class="w3-panel w3-light-grey">
+            
+            <p>
+                <button type="submit" name="abgestimmt" class="w3-block w3-button w3-primary w3-hover-secondary">
+                    <i class="material-icons">how_to_vote</i> <?= (!$hasVote) ? 'Stimme abgeben' : 'Stimme ändern' ?>
+                </button>
+            </p>
         
-        <p>
-            <button type="submit" name="abgestimmt" class="w3-block w3-button w3-primary w3-hover-secondary">
-                <i class="material-icons">how_to_vote</i> <?= (!$hasVote) ? 'Stimme abgeben' : 'Stimme ändern' ?>
-            </button>
-        </p>
-    
-    </div>
+        </div>
 
-</form>
+    </form>
+
+<?php endif; ?>
 
 <?php
 include '../../templates/footer.tmp.php';

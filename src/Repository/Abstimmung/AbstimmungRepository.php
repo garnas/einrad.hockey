@@ -80,4 +80,18 @@ class AbstimmungRepository
         
     }
 
+    public function getAllVotes() {
+        $result = $this->vote_repo->createQueryBuilder('v')
+            ->select('v.stimme')
+            ->getQuery()
+            ->getScalarResult();
+
+        return $result;
+    }
+
+    public function getParticipation() {
+        $result = $this->team_repo->findAll();
+        return $result;
+    }
+
 }
