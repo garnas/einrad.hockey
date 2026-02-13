@@ -5,7 +5,7 @@ namespace App\Entity\Abstimmung;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: "abstimmung_stimmen")]
+#[ORM\Table(name: "abstimmung_ergebnisse")]
 class AbstimmungVote
 {
     #[ORM\Id]

@@ -22,7 +22,7 @@ $teams = count(TeamRepository::get()->activeLigaTeams());
 include '../../templates/header.tmp.php';
 ?>
 
-<h1 class="w3-text-primary">Ligaausschuss-Wahlen 2026</h1>
+<h1 class="w3-text-primary">Ligaausschusswahlen 2026</h1>
 
 <?php if (!ConfigService::isFinished()): ?>
 

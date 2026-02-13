@@ -6,7 +6,7 @@ use App\Entity\Team\nTeam;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: "abstimmung_team")]
+#[ORM\Table(name: "abstimmung_teams")]
 class AbstimmungTeam
 {
     #[ORM\Id]

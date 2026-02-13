@@ -2,10 +2,6 @@
 
 namespace App\Service\Abstimmung;
 
-use db;
-
-use App\Service\Abstimmung\ConfigService;
-
 class ValidatorService
 {
     public static function validate(array $data): array
@@ -14,8 +10,8 @@ class ValidatorService
             return array("valid" => false, "message" => "Es wurden zu viele Stimmen vergeben.");
         }
 
-        if (count($data) <= 0) {
-            return array("valid" => false, "message" => "Es wurde keine Stimme vergeben.");
+        if (count($data) === 0) {
+            return array("valid" => true, "message" => "Es wurde abgestimme, aber keine Stimme vergeben.");
         }
         
         $valid_keys = array_keys(ConfigService::NAMES);

@@ -1,21 +1,20 @@
 <?php
 
 namespace App\Service\Abstimmung;
-use App\Service\Abstimmung\ConfigService;
 use App\Entity\Team\nTeam;
+use env;
 
 class VotingService
 {
-    
     /**
-     * Verschlüsselung der TeamID
+     * Verschlüsselung der Team-ID
      *
-     * @param string $passkey
+     * @param nTeam $team
      * @return string
      */
-    public static function teamid_to_hash(nTeam $team): string
+    public static function teamIdToHash(nTeam $team): string
     {
-        return hash_hmac('sha256', $team->id(), ConfigService::KEY);
+        return hash_hmac('sha256', $team->id(), Env::ABSTIMMUNG_KEY);
     }
 
 }

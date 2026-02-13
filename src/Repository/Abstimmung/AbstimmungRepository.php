@@ -2,42 +2,37 @@
 
 namespace App\Repository\Abstimmung;
 
-use Doctrine\ORM\EntityRepository;
-
-use Helper;
-use Html;
-use Env;
-use db;
-
+use App\Entity\Abstimmung\AbstimmungTeam;
+use App\Entity\Abstimmung\AbstimmungVote;
+use App\Entity\Team\nTeam;
 use App\Repository\DoctrineWrapper;
 use App\Repository\TraitSingletonRepository;
-use App\Entity\Abstimmung\AbstimmungVote;
-use App\Entity\Abstimmung\AbstimmungTeam;
-use App\Entity\Team\nTeam;
+use Doctrine\ORM\EntityRepository;
+use Helper;
 
 class AbstimmungRepository
 {
     
     use TraitSingletonRepository;
 
-    private EntityRepository $vote_repo;
-    private EntityRepository $team_repo;
+    private EntityRepository $abstimmungVote;
+    private EntityRepository $abstimmungTeam;
 
     private function __construct()
     {
-        $this->vote_repo = DoctrineWrapper::manager()->getRepository(AbstimmungVote::class);
-        $this->team_repo = DoctrineWrapper::manager()->getRepository(AbstimmungTeam::class);
+        $this->abstimmungVote = DoctrineWrapper::manager()->getRepository(AbstimmungVote::class);
+        $this->abstimmungTeam = DoctrineWrapper::manager()->getRepository(AbstimmungTeam::class);
     }
 
    
     public function hasVote(nTeam $team): bool
     {
-        return $this->team_repo->find($team->id()) !== null;
+        return $this->abstimmungTeam->find($team->id()) !== null;
     }
     
     public function getStimme(string $crypt): array
     {
-        $vote = $this->vote_repo->find($crypt);
+        $vote = $this->abstimmungVote->find($crypt);
         $plain = $vote->getStimme();
         return json_decode($plain);
     }
@@ -45,20 +40,19 @@ class AbstimmungRepository
     public function setStimme(nTeam $team, string $crypt, array $stimme): string
     {
         
-        $hasVote = $this->hasVote($team);
         $parsed = json_encode(array_keys($stimme));
         
-        if (!$hasVote) {
+        if (!$this->hasVote($team)) {
         
-            $new_team = new AbstimmungTeam();
-            $new_team->setTeam($team);
-            $new_team->setAenderungen(0);
-            DoctrineWrapper::manager()->persist($new_team);
+            $abstimmungTeam = new AbstimmungTeam();
+            $abstimmungTeam->setTeam($team);
+            $abstimmungTeam->setAenderungen(0);
+            DoctrineWrapper::manager()->persist($abstimmungTeam);
             
-            $new_vote = new AbstimmungVote();
-            $new_vote->setCrypt($crypt);
-            $new_vote->setStimme($parsed);
-            DoctrineWrapper::manager()->persist($new_vote);
+            $abstimmungVote = new AbstimmungVote();
+            $abstimmungVote->setCrypt($crypt);
+            $abstimmungVote->setStimme($parsed);
+            DoctrineWrapper::manager()->persist($abstimmungVote);
             
             DoctrineWrapper::manager()->flush();
             Helper::log("abstimmung.log", $team->getName() . " hat seine Stimme abgegeben");
@@ -66,11 +60,11 @@ class AbstimmungRepository
         
         } else {
 
-            $old_team = $this->team_repo->find($team->id());
-            $old_team->addAenderung(1);
-        
-            $old_vote = $this->vote_repo->find($crypt);
-            $old_vote->setStimme($parsed);
+            $abstimmungTeam = $this->abstimmungTeam->find($team->id());
+            $abstimmungTeam->addAenderung(1);
+
+            $abstimmungVote = $this->abstimmungVote->find($crypt);
+            $abstimmungVote->setStimme($parsed);
             DoctrineWrapper::manager()->flush();
             
             Helper::log("abstimmung.log", $team->getName() . " hat seine Stimme geändert");
@@ -81,7 +75,7 @@ class AbstimmungRepository
     }
 
     public function getAllVotes() {
-        $result = $this->vote_repo->createQueryBuilder('v')
+        $result = $this->abstimmungVote->createQueryBuilder('v')
             ->select('v.stimme')
             ->getQuery()
             ->getScalarResult();
@@ -90,7 +84,7 @@ class AbstimmungRepository
     }
 
     public function getParticipation() {
-        $result = $this->team_repo->findAll();
+        $result = $this->abstimmungTeam->findAll();
         return $result;
     }
 

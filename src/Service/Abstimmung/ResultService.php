@@ -3,12 +3,12 @@
 namespace App\Service\Abstimmung;
 
 use App\Repository\Abstimmung\AbstimmungRepository;
-use App\Service\Abstimmung\ConfigService;
 
 
 class ResultService
 {
-    public static function getResult() {
+    public static function getResult(): array
+    {
         $abstimmung = AbstimmungRepository::get();
         $votes = $abstimmung->getAllVotes();
         

@@ -18,7 +18,6 @@ class ConfigService
 
     public const BEGINN = "15.02.2026 00:00";
     public const ENDE = "01.03.2026 23:59";
-    public const KEY = 'PMYaWnctK1407nyu';
 
     public static function isPreparing(): bool {
         return time() < strtotime(ConfigService::BEGINN);
