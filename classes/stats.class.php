@@ -342,4 +342,5 @@ class Stats
 
         return $orte;
     }
+
 }
