@@ -1,7 +1,9 @@
-<?php 
-    use App\Service\Neuigkeit\PermissionService; 
-    use App\Service\Neuigkeit\FormatService; 
-    use App\Enum\NeuigkeitArt;
+<?php
+
+use App\Enum\NeuigkeitArt;
+use App\Service\Neuigkeit\FormatService;
+use App\Service\Neuigkeit\PermissionService;
+
 ?>
 
 <!-- Neuigkeit eintragen -->

@@ -1,7 +1,8 @@
-<?php 
-    use App\Service\Neuigkeit\FormatService; 
-    use App\Service\Neuigkeit\ColorService; 
-    use App\Enum\Neuigkeit\NeuigkeitArt;
+<?php
+
+use App\Service\Neuigkeit\ColorService;
+use App\Service\Neuigkeit\FormatService;
+
 ?>
 
 <div class='w3-panel w3-card-4 w3-responsive <?=$neuigkeit->getTitel() ? "" : "w3-topbar w3-border-primary"?>'>

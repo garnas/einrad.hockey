@@ -1,9 +1,8 @@
 <?php
 
-use App\Entity\Sonstiges\Neuigkeit;
-use App\Service\Neuigkeit\PermissionService;
-use App\Service\Neuigkeit\FormatService; 
 use App\Enum\NeuigkeitArt;
+use App\Service\Neuigkeit\FormatService;
+use App\Service\Neuigkeit\PermissionService;
 
 ?>
 
