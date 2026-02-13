@@ -70,16 +70,15 @@ include '../../templates/header.tmp.php';
     <div class="w3-margin-top">
         <p class="w3-text-secondary"><strong>Informationen</strong></p>
         <p>Jedes Team kann bis zu drei Kandidaten jeweils eine Stimme geben. Dein Team kann auch abstimmen, ohne eine
-            Stimme
-            an einen der Kandidaten zu vergeben (Enthaltung).</p>
+            Stimme an einen der Kandidaten zu vergeben (Enthaltung).</p>
     </div>
 
     <div class="w3-margin-top">
         <p class="w3-text-secondary"><strong>Hinweise zur Abstimmung</strong></p>
         <p>Die Abstimmung ist anonym - die Stimmzuordnung zu den Teams wird verschlüsselt. Aus technischen Gründen ist
             eine nachträgliche Zuordnung von Stimmen jedoch theoretisch möglich.</p>
-        <p>Eine Einsicht und Änderung eurer abgegebenen Stimmen ist im Nachhinein möglich.
-        <p>
+        <p>Eine Einsicht und Änderung eurer abgegebenen Stimmen ist im Nachhinein möglich.</p>
+        <p><strong>Auf dieser Seite hier könnt ihr abstimmen und direkt nach Ende der Wahlen das Ergebnis einsehen.</strong></p>
     </div>
 
 <?php if (ConfigService::isPreparing()): ?>
@@ -118,7 +117,7 @@ include '../../templates/header.tmp.php';
 
             <p>Das Team <?= $team->getName() ?> stimmt für die folgende(n) Person(en):</p>
             <?php if (!$data): ?>
-                <p>Dein Team hat abgestimmt, aber keine Stimme für einen der Kandidaten vergeben.</p>
+                <p><strong>Dein Team hat abgestimmt, aber keine Stimme für einen der Kandidaten vergeben.</strong></p>
             <?php endif; ?>
             <?php foreach (ConfigService::NAMES as $id => $values): ?>
                 <p>
@@ -147,6 +146,12 @@ include '../../templates/header.tmp.php';
 
     </form>
 
+<?php endif; ?>
+
+<?php if (ConfigService::isFinished()): ?>
+    <div class="w3-margin-top">
+        <a class="w3-button w3-primary w3-hover-secondary w3-block" href="tc_abstimmung_ergebnis.php"><i class="material-icons">how_to_vote</i> Zum Ergebnis</a>
+    </div>
 <?php endif; ?>
 
 <?php
