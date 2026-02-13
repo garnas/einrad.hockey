@@ -79,6 +79,7 @@ class Nav
             [Env::BASE_URL . "/teamcenter/tc_kontaktcenter.php", "Kontaktcenter", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_teamdaten.php", "Teamdaten", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_kader.php", "Kader", $class_text_color],
+            [Env::BASE_URL . "/teamcenter/tc_antrag.php", "Fördermittel", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_pw_aendern.php", "Passwort ändern", $class_text_color],
         ];
         if (isset($_SESSION['logins']['team'])) {
@@ -102,6 +103,8 @@ class Nav
     {
         return [
             [Env::BASE_URL . "/liga/ueber_uns.php", "Über uns"],
+            [Env::BASE_URL . "/liga/foerdermittel.php", "Fördermittel"],
+            [Env::BASE_URL . "/liga/foerdermittel_antrag.php", "Fördermittelantrag"],
             [Env::BASE_URL . "/liga/content/25jubilaeum.php", "25 Jahre Liga"],
             [Env::BASE_URL . "/liga/content/30jubilaeum.php", "30 Jahre Liga"],
             [Env::BASE_URL . "/liga/content/dm2005.php", "DM 2005"],
