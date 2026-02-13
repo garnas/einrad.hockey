@@ -61,7 +61,7 @@
     <?php if(PermissionService::canSetTime()): ?>
         <div class="w3-section">
             <div class="w3-border w3-border-primary" style="padding: 16px;">
-                <label for="zeitpunkt">Veröffentlichungszeitpunkt</label><br>
+                <label for="zeitpunkt">Angezeigter Veröffentlichungszeitpunkt</label><br>
                 <input type="datetime-local" class="w3-input w3-border w3-border-grey" id="zeitpunkt" name="zeitpunkt" value="<?=date('Y-m-d\TH:i')?>">
             </div>
         </div>

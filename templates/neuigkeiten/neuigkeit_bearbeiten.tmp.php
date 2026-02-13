@@ -19,7 +19,7 @@ use App\Enum\NeuigkeitArt;
 
     <div class="w3-section">
         <div class="w3-border w3-border-primary" style="padding: 16px;">
-            <label for="text">Art der Neuigkeit</label>
+            <label for="art">Art der Neuigkeit</label>
             <select class="w3-input" name="art" id="art">
                 <?php foreach (NeuigkeitArt::cases() as $case): ?>
                     <?php if (PermissionService::canSetArt($case)): ?>
@@ -76,7 +76,7 @@ use App\Enum\NeuigkeitArt;
     <?php if(PermissionService::canSetTime()): ?>
         <div class="w3-section">
             <div class="w3-border w3-border-primary" style="padding: 16px;">
-                <label for="zeitpunkt">Veröffentlichungszeitpunkt</label><br>
+                <label for="zeitpunkt">Angezeigter Veröffentlichungszeitpunkt</label><br>
                 <input type="datetime-local" class="w3-input w3-border w3-border-grey" id="zeitpunkt" name="zeitpunkt" value="<?=$neuigkeit->getZeit() ? $neuigkeit->getZeit()->format('Y-m-d\TH:i') : date('Y-m-d\TH:i')?>">
             </div>
         </div>
