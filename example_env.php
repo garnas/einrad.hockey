@@ -79,4 +79,6 @@ class env
     public const LINK_DISCORD = "https://discord.gg/jQrFefqz";
 
     public const ACTIVE_FINAL_DISCORD = true;
+
+    public const ABSTIMMUNG_KEY = "asdfsdfasfdasdfa";
 }

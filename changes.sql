@@ -10,3 +10,6 @@ CREATE TABLE IF NOT EXISTS `db_localhost`.`spieler_statistik`
     `anzahl`     INT      NOT NULL,
     PRIMARY KEY (`id`)
 );
+
+alter table abstimmung_teams
+    drop column passwort;
