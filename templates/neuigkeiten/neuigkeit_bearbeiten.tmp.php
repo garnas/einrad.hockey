@@ -13,7 +13,7 @@ use App\Enum\NeuigkeitArt;
     <div class="w3-section">
         <div class="w3-border w3-border-primary" style="padding: 16px;">
             <label for="titel">Titel (Optional)</label>
-            <input class="w3-input w3-border w3-border-grey" type="text" id="titel" name="titel" placeholder="Titel der Neuigkeit" value="<?=$neuigkeit->getTitel()?>" >
+            <input class="w3-input w3-border w3-border-grey" type="text" id="titel" name="titel" placeholder="Titel der Neuigkeit" value="<?=e($neuigkeit->getTitel())?>" >
         </div>
     </div>
 
@@ -33,7 +33,7 @@ use App\Enum\NeuigkeitArt;
     <div class="w3-section">
         <div class="w3-border w3-border-primary" style="padding: 16px;">
             <label for="text">Text</label>
-            <textarea required class="w3-input w3-border w3-border-grey" rows="10" id="text" name="text" placeholder="Text der Neuigkeit" onkeyup="woerter_zaehlen(750)" maxlength="750"><?=$neuigkeit->getInhalt()?></textarea>
+            <textarea required class="w3-input w3-border w3-border-grey" rows="10" id="text" name="text" placeholder="Text der Neuigkeit" onkeyup="woerter_zaehlen(750)" maxlength="750"><?=e($neuigkeit->getInhalt())?></textarea>
             <p id="counter"><i>Es dürfen 750 Zeichen verwendet werden. Für mehr Infos kannst du ein Bild und/oder ein PDF hochladen.</i><p>
         </div>
     </div>
