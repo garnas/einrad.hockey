@@ -15,6 +15,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\Mapping\MappingException;
 use Html;
+use Stats;
 
 /**
  *
@@ -39,9 +40,10 @@ class nLigaBot
 //        self::blockWechsel(); # Der Blockwechsel wird Moduskonform 23/24 nur noch mit Ende eines Spieltages vollzogen
         self::phasenWechsel();
         self::archiveNeuigkeiten();
-
         DoctrineWrapper::manager()->flush();
 
+        // Spielerstatistik befüllen
+        Stats::persist_spieler_statistik();
 
         unset($_SESSION['logins']['ligabot']);
         Html::info("Ligabot erfolgreich ausgeführt");
