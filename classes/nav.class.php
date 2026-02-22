@@ -126,6 +126,7 @@ class Nav
     public static function get_lc_start(): array
     {
         return array(
+            [Env::BASE_URL . "/ligacenter/lc_abstimmung.php", "LA-Wahl 2026", "w3-secondary"],
             [Env::BASE_URL . "/schiricenter/schiritest_erstellen.php", "Schiritest", "w3-secondary"],
             [Env::BASE_URL . "/ligacenter/lc_turnierliste.php", "Turniere verwalten", "w3-primary"],
             [Env::BASE_URL . "/ligacenter/lc_turnier_erstellen.php", "Turnier erstellen", "w3-primary"],
