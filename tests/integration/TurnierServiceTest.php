@@ -50,7 +50,7 @@ class TurnierServiceTest extends TestCase
         unset($_SESSION);
         self::provideTeamForLogin(teamname: "Int-Test", ligateam: "Ja", aktiv: "Nein", password: "0!\"\\§$%&/()=*'-.,--//?");
         $isSuccess = TeamService::login("Int-Test", "0!\"\\§$%&/()=*'-.,--//?");
-        $this->assertTrue($isSuccess);
+        $this->assertFalse($isSuccess);
     }
 
     public function testLoginLigateamSuccess(): void
