@@ -34,6 +34,16 @@ class Logger implements LoggerInterface
         return stripos($sql, "insert into mailbot") === 0;
     }
 
+    private function isAbstimmung(array $context): bool
+    {
+        if (!key_exists("sql", $context)) {
+            return false;
+        }
+        $sql = strtolower($context["sql"]);
+        return stripos($sql, "UPDATE abstimmung_ergebnisse SET") === 0
+            || stripos($sql, "INSERT INTO abstimmung_ergebnisse") === 0;
+    }
+
     private function superLog(string $level, string $message, array $context = []): void
     {
         if (!in_array($level, ["debug", "info" , "notice"])) {
@@ -44,6 +54,7 @@ class Logger implements LoggerInterface
             $this->isWriteOperation($context)
             && !$this->isInsertTurniereLog($context)
             && !$this->isInsertMailbot($context)
+            && !$this->isAbstimmung($context)
         ) {
             $sql = $context["sql"];
             $params = "\n?: " . implode("\n?: ", $context["params"]);
