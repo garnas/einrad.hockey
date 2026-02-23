@@ -156,6 +156,11 @@ class TeamService
             Helper::log(Config::LOG_LOGIN, "Falscher TC-Login | Teamname: " . $teamname);
             return false;
         }
+        if (!($team->isAktiv())) {
+            Html::error("Inaktives Team");
+            Helper::log(Config::LOG_LOGIN, "Inaktiver TC-Login | Teamname: " . $teamname);
+            return false;
+        }
         // Passwort prüfen
         if (password_verify($passwort, $team->getPasswort())) {
             self::createTeamSession($team);

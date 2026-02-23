@@ -38,7 +38,6 @@ if (isset($_POST["abgestimmt"])) {
     ) {
         trigger_error("Ungültiger CSRF-Token", E_USER_ERROR);
     }
-    unset ($_SESSION['csrf_token']);
 
     $stimme = $_POST;
     unset($stimme['abgestimmt']);
@@ -47,6 +46,7 @@ if (isset($_POST["abgestimmt"])) {
     $valid = ValidatorService::validate($stimme);
     if ($valid['valid']) {
         $message = $abstimmung->setStimme($team, $crypt, $stimme);
+        unset ($_SESSION['csrf_token']);
         Html::info($message);
         Helper::reload();
     } else {
