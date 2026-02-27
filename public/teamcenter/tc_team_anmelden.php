@@ -139,7 +139,7 @@ include '../../templates/header.tmp.php';
                        value='Anmelden <?php if (!BlockService::isBlockPassend($turnier, $teamEntity) && $turnier->isSetzPhase()): ?> (Warteliste)<?php endif; ?>'>
             </p>
         </form>
-        <form method="post"">
+        <form method="post">
             <p>
                 <input type='submit'
                     class='w3-button w3-margin-bottom w3-block w3-tertiary
@@ -149,7 +149,7 @@ include '../../templates/header.tmp.php';
                              ): ?> w3-opacity<?php endif; ?>'
                     name='freilos' value='Freilos setzen (<?=$teamEntity->getAnzahlOffenerFreilose()?> vorhanden)'>
             </p>
-            <span><?= Html::link("teamcenter/tc_teamdaten.php#freilose", "Übersicht der Freilose", extern: True)?></span>
+            <span><?= Html::link(Env::BASE_URL . "/teamcenter/tc_teamdaten.php#freilose", "Übersicht der Freilose", extern: True, icon: "launch")?></span>
             <span class="w3-text-grey">Freilose setzen dein Team in der Wartephase direkt auf die Setzliste. Ein Team kann auch für blockhöhere Turnieren ein Freilos einsetzen, nicht jedoch für blockniedrigere Turniere.</span>
         </form>
     <?php } //endif?>
