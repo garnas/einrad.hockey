@@ -1,15 +1,15 @@
 #!/bin/bash
 set -e
 
-git config --global --add safe.directory /var/www/html
+git config --global --add safe.directory /workspace
 git config core.fileMode false
 
 echo "Installing composer dependencies..."
 composer install --no-interaction
 
 echo "Setting permissions..."
-chgrp -R www-data /var/www/html
-chmod -R g+w /var/www/html
+chgrp -R www-data /workspace
+chmod -R g+w /workspace
 
 echo "Cleaning Doctrine..."
 composer dump-autoload --optimize
