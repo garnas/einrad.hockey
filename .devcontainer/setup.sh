@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-git config core.fileMode false
 git config --global --add safe.directory /var/www/html
+git config core.fileMode false
 
 echo "Installing composer dependencies..."
 composer install --no-interaction
