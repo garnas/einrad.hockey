@@ -60,6 +60,8 @@ Nach dem Start öffnet VS Code automatisch http://localhost im Browser.
 - **Intelephense** — PHP-Autocompletion und Analyse
 - **PHP Debug** — Xdebug-Integration
 
+> Debugging: Unter "Run and Debug" → "Listen for Xdebug" aktivieren!
+
 ## Mit PHPStorm
 
 **Voraussetzungen:** PHPStorm 2023.2 oder neuer
