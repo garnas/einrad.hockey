@@ -10,7 +10,7 @@
  * (3) Passe die Einstellungen in env.php entsprechend deiner Entwicklungsumgebung an (Mailsachen und Discord erstmal unwichtig).
  * (4) Deine Einstellungen in env.php liegen im Gitignore und werden nicht auf Github hochgeladen.
  */
-class env
+class Env
 {
     /**
      * Auf der Live-Seite sollte dies auf false gesetzt werden.
@@ -30,7 +30,7 @@ class env
      * Basispfad für includes, requires
      * Root-Pfad von deinem System in den Ordner dieser Datei
      */
-    public const BASE_PATH = __DIR__;
+    public const BASE_PATH = __DIR__ . "/..";
 
     /**
      * SQL-Datenbank Zugangsdaten
