@@ -89,7 +89,7 @@ register_shutdown_function(static function () {
         if (!in_array(needle: $error['type'], haystack: [E_USER_NOTICE, E_USER_WARNING, E_USER_ERROR])) {
             // Fehlerlogs von PHP ergänzen.
             $script = basename($_SERVER['SCRIPT_NAME'] ?? '');
-            $line = "Custom Log Details for " . $_SERVER["REQUEST_URI"];
+            $line = "Custom Log Details for " . $_SERVER["REQUEST_URI"] ?? "?";
             if (!in_array(needle: $script, haystack: Config::NEVER_LOG_REQUEST)) {
                 $line .= " - " . print_r($_REQUEST ?? [], true);
             }
