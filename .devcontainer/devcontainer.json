@@ -5,6 +5,7 @@
   "workspaceFolder": "/var/www/html",
   
   "postCreateCommand": "bash .devcontainer/setup.sh",
+  "postStartCommand": "apache2ctl start",
   
   "forwardPorts": [80, 8080],
 
