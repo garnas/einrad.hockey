@@ -10,23 +10,19 @@ Du hast Lust mitzuwirken? Oder Fragen darüber, wie die Webseite funktioniert? M
 
 ## Features
 
-| Bereich         | Funktionen                                                              |
-|-----------------|-------------------------------------------------------------------------|
-| Turniere        | Einstellen, Anmeldung von Teams, automatische Spielpläne & Reports      |
-| Spielbetrieb    | Spiel- und Turnierergebnisse live eintragen                             |
-| Ranglisten      | Turnierergebnisse und Ligatabellen                                      |
-| Teamverwaltung  | Stammdaten, Kader, Kontaktcenter                                        |
-| Kommunikation   | Neuigkeiten mit Dateianhängen, Google Maps mit allen Teams              |
-| Automatisierung | MailBot (automatische E-Mails), LigaBot (Phasenübergänge & Auslosungen) |
-
-## XML-Schnittstelle
-
-| Endpunkt                                                                                            | Beschreibung             |
-|-----------------------------------------------------------------------------------------------------|--------------------------|
-| [`/xml/turnierliste.php`](https://www.einrad.hockey/xml/turnierliste.php)                           | Alle Turniere            |
-| [`/xml/turnieranmeldungen.php`](https://www.einrad.hockey/xml/turnieranmeldungen.php)               | Turnieranmeldungen       |
-| [`/xml/rangtabelle.php`](https://www.einrad.hockey/xml/rangtabelle.php)                             | Rangtabelle              |
-| [`/xml/spielplan.php?turnier_id=1021`](https://www.einrad.hockey/xml/spielplan.php?turnier_id=1021) | Spielplan eines Turniers |
+* Einstellen von Turnieren
+* Anmeldung von Teams zu Turnieren
+* Automatische Erstellung von Spielplänen und Turnierreports
+* Spiel- und Turnierergebnissen live eintragen
+* Turnierergebnisse und Ligatabellen
+* Teamdatenverwaltung
+* Teamkaderverwaltung
+* Kontaktcenter für die Teams untereinander
+* Einstellen von Neuigkeiten mit sicheren Dateianhängen
+* Google Maps Karte mit allen Ligateams
+* MailBot zum Versenden von automatischen E-Mails
+* LigaBot für die Phasenübergänge der Turniere und zum Losen von Spielen-Listen
+* und vieles mehr!
 
 ---
 
@@ -138,3 +134,12 @@ curl -sS https://getcomposer.org/installer | /usr/bin/php8.3-cli
 /usr/bin/php8.3-cli bin/doctrine orm:clear-cache:query
 /usr/bin/php8.3-cli bin/doctrine orm:generate-proxies
 ```
+
+# XML-Schnittstelle
+
+| Endpunkt                                                                                            | Beschreibung             |
+|-----------------------------------------------------------------------------------------------------|--------------------------|
+| [`/xml/turnierliste.php`](https://www.einrad.hockey/xml/turnierliste.php)                           | Alle Turniere            |
+| [`/xml/turnieranmeldungen.php`](https://www.einrad.hockey/xml/turnieranmeldungen.php)               | Turnieranmeldungen       |
+| [`/xml/rangtabelle.php`](https://www.einrad.hockey/xml/rangtabelle.php)                             | Rangtabelle              |
+| [`/xml/spielplan.php?turnier_id=1021`](https://www.einrad.hockey/xml/spielplan.php?turnier_id=1021) | Spielplan eines Turniers |
