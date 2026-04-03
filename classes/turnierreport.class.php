@@ -7,14 +7,13 @@
  */
 class TurnierReport
 {
-
     public int $turnier_id;
 
     /**
      * TurnierReport constructor.
      * @param $turnier_id
      */
-    function __construct(int $turnier_id)
+    public function __construct(int $turnier_id)
     {
         $this->turnier_id = $turnier_id;
     }
@@ -24,7 +23,7 @@ class TurnierReport
      * Zeitstrafen des Turniers aus der DB
      * @return array
      */
-    function get_zeitstrafen(): array
+    public function get_zeitstrafen(): array
     {
         $sql = "
                 SELECT * 
@@ -43,14 +42,14 @@ class TurnierReport
      * @param string $team_b
      * @param string $grund
      */
-    function new_zeitstrafe(string $spieler_name, string $dauer, string $team_a, string $team_b, string $grund)
+    public function new_zeitstrafe(string $spieler_name, string $dauer, string $team_a, string $team_b, string $grund)
     {
         $sql = "
                 INSERT INTO spieler_zeitstrafen (turnier_id, spieler, dauer, team_a, team_b, grund) 
                 VALUES ($this->turnier_id, ?, ?, ?, ?, ?)
                 ";
         $params = [$spieler_name, $dauer, $team_a, $team_b, $grund];
-        db::$db->query($sql,$params)->log();
+        db::$db->query($sql, $params)->log();
     }
 
     /**
@@ -58,7 +57,7 @@ class TurnierReport
      *
      * @param int $zeitstrafe_id
      */
-    function delete_zeitstrafe(int $zeitstrafe_id)
+    public function delete_zeitstrafe(int $zeitstrafe_id)
     {
         $sql = "
                 DELETE FROM spieler_zeitstrafen
@@ -72,7 +71,7 @@ class TurnierReport
      * Get Spielerausleihen als Array
      * @return array
      */
-    function get_spieler_ausleihen(): array
+    public function get_spieler_ausleihen(): array
     {
         $sql = "
                 SELECT * 
@@ -90,13 +89,13 @@ class TurnierReport
      * @param string $team_auf
      * @param string $team_ab
      */
-    function set_spieler_ausleihe(string $spieler, string $team_auf, string $team_ab)
+    public function set_spieler_ausleihe(string $spieler, string $team_auf, string $team_ab)
     {
         $sql = "
                 INSERT INTO spieler_ausleihen (turnier_id, spieler, team_auf, team_ab) 
                 VALUES ($this->turnier_id, ?, ?, ?)
                 ";
-        db::$db->query($sql,$spieler, $team_auf, $team_ab)->log();
+        db::$db->query($sql, $spieler, $team_auf, $team_ab)->log();
     }
 
     /**
@@ -104,7 +103,7 @@ class TurnierReport
      *
      * @param int $ausleihe_id
      */
-    function delete_spieler_ausleihe(int $ausleihe_id)
+    public function delete_spieler_ausleihe(int $ausleihe_id)
     {
         $sql = "
                 DELETE FROM spieler_ausleihen 
@@ -119,7 +118,7 @@ class TurnierReport
      *
      * @return string
      */
-    function get_turnier_bericht(): string
+    public function get_turnier_bericht(): string
     {
         $sql = "
             SELECT bericht 
@@ -134,7 +133,7 @@ class TurnierReport
      *
      * @return bool
      */
-    function kader_check(): bool
+    public function kader_check(): bool
     {
         $sql = "
                 SELECT kader_ueberprueft
@@ -150,7 +149,7 @@ class TurnierReport
      * @param string $bericht
      * @param bool $kader_check
      */
-    function set_turnier_bericht(string $bericht, ?string $kader_check)
+    public function set_turnier_bericht(string $bericht, ?string $kader_check)
     {
         $kader_check = ($kader_check) ? 'Ja' : 'Nein';
 

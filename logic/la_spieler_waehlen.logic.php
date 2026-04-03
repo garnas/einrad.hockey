@@ -11,8 +11,8 @@ if (isset($_POST['spieler_auswahl'])) {
 }
 
 if (isset($_GET['spieler_id'])) {
-    $spieler = SpielerRepository::get()->spieler((int)$_GET['spieler_id']);
-    if  ($spieler === null) {
+    $spieler = SpielerRepository::get()->spieler((int) $_GET['spieler_id']);
+    if ($spieler === null) {
         Html::error("Spieler wurde nicht gefunden");
     }
 }

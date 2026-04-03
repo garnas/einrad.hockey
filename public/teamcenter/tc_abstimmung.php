@@ -8,7 +8,6 @@ use App\Repository\Abstimmung\AbstimmungRepository;
 use App\Repository\Team\TeamRepository;
 use App\Service\Abstimmung\ConfigService;
 
-
 require_once '../../init.php';
 Helper::ensure_no_request_logging();
 
@@ -33,10 +32,10 @@ if (!empty($_SESSION['flash_info'])) {
 
 if (isset($_POST["abgestimmt"])) {
     if (
-            !isset($_POST['csrf_token']) ||
-            !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+        !isset($_POST['csrf_token'])
+        || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
     ) {
-        trigger_error("Ungültiger CSRF-Token", E_USER_ERROR);
+        trigger_error("Ungültiger CSRF-Token", \E_USER_ERROR);
     }
 
     $stimme = $_POST;
@@ -46,7 +45,7 @@ if (isset($_POST["abgestimmt"])) {
     $valid = ValidatorService::validate($stimme);
     if ($valid['valid']) {
         $message = $abstimmung->setStimme($team, $crypt, $stimme);
-        unset ($_SESSION['csrf_token']);
+        unset($_SESSION['csrf_token']);
         Html::info($message);
         Helper::reload();
     } else {

@@ -22,7 +22,6 @@ use Stats;
  */
 class nLigaBot
 {
-
     /** @var Turnier[] $gelosteTurniere */
     private static array $gelosteTurniere = [];
 
@@ -37,7 +36,7 @@ class nLigaBot
         db::sql_backup();
 
         self::setSpieltage();
-//        self::blockWechsel(); # Der Blockwechsel wird Moduskonform 23/24 nur noch mit Ende eines Spieltages vollzogen
+        //        self::blockWechsel(); # Der Blockwechsel wird Moduskonform 23/24 nur noch mit Ende eines Spieltages vollzogen
         self::phasenWechsel();
         self::archiveNeuigkeiten();
         DoctrineWrapper::manager()->flush();
@@ -56,7 +55,7 @@ class nLigaBot
     {
         /** @var Turnier[] $turniere */
         $turniere = DoctrineWrapper::manager()->createQueryBuilder()
-            ->select('t', 'l','ausrichter')
+            ->select('t', 'l', 'ausrichter')
             ->from(Turnier::class, 't')
             ->join('t.liste', 'l')
             ->join('t.ausrichter', 'ausrichter')
@@ -81,7 +80,7 @@ class nLigaBot
 
             if ($rangAusrichterBlock === false || $rangTurnierBlock === false) {
                 Html::error("Ligabot konnte nicht die Differenz der Turnierblöcke ermitteln.");
-                trigger_error("Ligabot konnte nicht die Differenz der Turnierblöcke ermitteln.", E_USER_WARNING);
+                trigger_error("Ligabot konnte nicht die Differenz der Turnierblöcke ermitteln.", \E_USER_WARNING);
             }
 
             if (
@@ -192,7 +191,7 @@ class nLigaBot
 
         // Nachdem die Turniere in der Setzphase sind, können sie auf ABCDEF geöffnet werden.
         foreach (self::$gelosteTurniere as $turnier) {
-            if($turnier->isSofortOeffnen()) {
+            if ($turnier->isSofortOeffnen()) {
                 TurnierService::blockOeffnen($turnier);
                 TurnierService::setzListeAuffuellen($turnier);
             }
@@ -259,7 +258,7 @@ class nLigaBot
 
         $turnier->getLogService()->addLog("Geloste Reihenfolge:");
         $turnier->getLogService()->addLog("-----");
-        foreach($reihenfolgeAnmeldungen as $anmeldung) {
+        foreach ($reihenfolgeAnmeldungen as $anmeldung) {
             $turnier->getLogService()->addLog($anmeldung->getTeam()->getName());
         }
         $turnier->getLogService()->addLog("-----");
@@ -272,11 +271,11 @@ class nLigaBot
             // Check ob das Team am Kalendertag des Turnieres schon auf einer Spiele-Liste steht
             if (self::isBereitsAufSetzlisteGelostAmGleichenKalendertag($turnier, $team)) {
                 $turnier->getLogService()->addLog(
-                    "$name war schon auf einer Setzliste eines anderen Turnieres und wurde daher abgemeldet."
+                    "$name war schon auf einer Setzliste eines anderen Turnieres und wurde daher abgemeldet.",
                 );
                 $turnier->getListe()->removeElement($anmeldung);
                 TurnierEventMailBot::mailDoppelAnmeldung($turnier, $team);
-            } else if (
+            } elseif (
                 TurnierService::hasFreieSetzPlaetze($turnier)
                 && TurnierService::isSetzBerechtigt($turnier, $team)
             ) {
@@ -291,7 +290,8 @@ class nLigaBot
         }
     }
 
-    public static function isBereitsAufSetzlisteGelostAmGleichenKalendertag(Turnier $turnier, nTeam $team): bool {
+    public static function isBereitsAufSetzlisteGelostAmGleichenKalendertag(Turnier $turnier, nTeam $team): bool
+    {
         foreach (self::$gelosteTurniere as $vglTurnier) {
             if (
                 $turnier->getDatum() == $vglTurnier->getDatum()

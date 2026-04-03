@@ -18,7 +18,6 @@ use Tabelle;
 
 class TeamService
 {
-
     public static function getPublicEmailsAsString(nTeam $team): string
     {
         $filter = static function (Kontakt $kontakt) {

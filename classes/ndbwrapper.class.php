@@ -2,7 +2,6 @@
 
 class ndbwrapper
 {
-
     private PDO $pdo;
     private false|PDOStatement $stmt;
     private bool $escape_result = false;
@@ -44,7 +43,7 @@ class ndbwrapper
      * @param mixed ...$params Parameter in Reihenfolge der ?, entweder als Array oder als mehrere Argumente
      * @return $this
      */
-    public function query(string $sql, mixed ...$params): ndbWrapper
+    public function query(string $sql, mixed ...$params): self
     {
         // Reset Optionen
         $this->escape_result = false;
@@ -86,23 +85,25 @@ class ndbwrapper
      */
     public function fetch_one(): mixed
     {
-        if ($this->escape_result) return db::escape($this->stmt->fetch(PDO::FETCH_NUM)[0] ?? NULL);
-        return $this->stmt->fetch(PDO::FETCH_NUM)[0] ?? NULL;
+        if ($this->escape_result) {
+            return db::escape($this->stmt->fetch(PDO::FETCH_NUM)[0] ?? null);
+        }
+        return $this->stmt->fetch(PDO::FETCH_NUM)[0] ?? null;
     }
 
-    public function fetch_object(String $class, array $args = []): object|null
+    public function fetch_object(String $class, array $args = []): ?object
     {
-        return $this->stmt->fetchObject($class, $args) ?: NULL;
+        return $this->stmt->fetchObject($class, $args) ?: null;
     }
 
-    public function fetch_objects(string $class, ?String $key = NULL, array $constructor_args = []): array
+    public function fetch_objects(string $class, ?String $key = null, array $constructor_args = []): array
     {
         // Ansonsten kann das stmt bei weiteren Querys im Constructor überschrieben werden.
         // Die while-Schleife läuft dann nicht durch.
         $safe_stmt = $this->stmt;
 
         while ($object = $safe_stmt->fetchObject($class, $constructor_args)) {
-            is_null($key) ? $objects[] = $object : $objects[$object->$key] = $object;
+            null === $key ? $objects[] = $object : $objects[$object->$key] = $object;
         }
 
         return $objects ?? [];
@@ -204,7 +205,7 @@ class ndbwrapper
      *
      * @return ndbWrapper
      */
-    public function esc(): ndbWrapper
+    public function esc(): self
     {
         $this->escape_result = true;
         return $this;
@@ -216,7 +217,7 @@ class ndbwrapper
      * @param bool $anonym Anonyme Params (zB. für Abstimmungen)
      * @return $this
      */
-    public function log(bool $anonym = false): ndbWrapper
+    public function log(bool $anonym = false): self
     {
         // Query formatieren
         $sql = trim(preg_replace("/(^\h+|\h+$)/m", '', $this->sql)); // Schönere Formatierung

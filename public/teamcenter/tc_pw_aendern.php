@@ -9,7 +9,7 @@ Helper::$teamcenter_no_redirect = true; // Verhindert die Endlosschleife, bei de
 require_once '../../logic/session_team.logic.php'; // Auth
 
 // Formularauswertung
-if(isset($_POST['change'])) {
+if (isset($_POST['change'])) {
 
     $passwort_alt = $_POST['passwort_alt'] ?? '';
     $passwort_neu = $_POST['passwort_neu'] ?? '';
@@ -25,12 +25,12 @@ if(isset($_POST['change'])) {
         Html::error("Euer neues Passwort muss mindestens 6 Zeichen lang sein");
     }
 
-    if(!password_verify($passwort_alt, $teamEntity->getPasswort())) {
+    if (!password_verify($passwort_alt, $teamEntity->getPasswort())) {
         $error = true;
         Html::error("Falsches altes Passwort");
     }
 
-    if(!$error){
+    if (!$error) {
         $teamEntity->setPasswort($passwort_neu);
         TeamRepository::get()->speichern($teamEntity);
         Html::info("Euer Passwort wurde geändert.");

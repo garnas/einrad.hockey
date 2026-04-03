@@ -10,31 +10,31 @@ $turnierId = (int) @$_GET['turnier_id'];
 $turnier = TurnierRepository::get()->turnier($turnierId);
 
 // Existiert das Turnier?
-if (!$turnier){
+if (!$turnier) {
     Helper::not_found("Turnier wurde nicht gefunden.");
 }
 
 // im Teamcenter testen, ob es sich um den Ausrichter handelt
-if (Helper::$teamcenter && ($turnier->getAusrichter()->id() != $_SESSION['logins']['team']['id'] || !$turnier->isSpassTurnier())){
+if (Helper::$teamcenter && ($turnier->getAusrichter()->id() != $_SESSION['logins']['team']['id'] || !$turnier->isSpassTurnier())) {
     Html::error("Fehlende Berechtigung Teams zu diesem Turnier anzumelden");
     Helper::reload('/liga/turniere.php');
 }
 
 // Team als Ligaausschuss abmelden
-if (isset($_POST['abmelden'])){
+if (isset($_POST['abmelden'])) {
     foreach ($turnier->getListe() as $anmeldung) {
         $team = $anmeldung->getTeam();
         if (isset($_POST['team_abmelden'][$team->id()])) {
             TeamService::abmelden($team, $turnier);
-            Html::info ($team->getName(). " wurde abgemeldet");
+            Html::info($team->getName() . " wurde abgemeldet");
         }
     }
     TurnierRepository::get()->speichern($turnier);
-    Helper::reload(get: '?turnier_id='. $turnier->id());
+    Helper::reload(get: '?turnier_id=' . $turnier->id());
 }
 
 // Ligateam als Ligaausschuss anmelden
-if (isset($_POST['team_anmelden'])){
+if (isset($_POST['team_anmelden'])) {
     $liste = $_POST['liste'];
     $team = TeamRepository::get()->findByName($_POST['teamname']);
     $error = false;
@@ -42,13 +42,13 @@ if (isset($_POST['team_anmelden'])){
     if (!$team) {
         Html::error("Team wurde nicht gefunden");
         $error = true;
-    } elseif (TeamService::isAngemeldet($team, $turnier)){
+    } elseif (TeamService::isAngemeldet($team, $turnier)) {
         $error = true;
         Html::error("Team ist bereits angemeldet");
     }
 
     // Ist das Team bereits angemeldet?
-    if ($liste === 'setz' && !TurnierService::hasFreieSetzPlaetze($turnier)){
+    if ($liste === 'setz' && !TurnierService::hasFreieSetzPlaetze($turnier)) {
         $error = true;
         Html::error("Setzliste ist voll.");
     }
@@ -60,14 +60,14 @@ if (isset($_POST['team_anmelden'])){
             TurnierService::addToSetzListe($turnier, $team);
         }
         TurnierRepository::get()->speichern($turnier);
-        Html::info ($team->getName() . " wurde angemeldet");
-        Helper::reload(get: '?turnier_id='. $turnier->id());
+        Html::info($team->getName() . " wurde angemeldet");
+        Helper::reload(get: '?turnier_id=' . $turnier->id());
     }
 }
 
 // Nichtligateam anmelden
-if (isset($_POST['nl_anmelden'])){
-   FormLogicTeam::nlTeamAnmelden($turnier);
+if (isset($_POST['nl_anmelden'])) {
+    FormLogicTeam::nlTeamAnmelden($turnier);
 }
 
 // Warteliste neu Durchnummerieren
@@ -75,13 +75,13 @@ if (isset($_POST['warteliste_aktualisieren'])) {
     TurnierService::neueWartelistePositionen($turnier);
     TurnierRepository::get()->speichern($turnier);
     Html::info("Warteliste wurde aktualisiert");
-    Helper::reload(get: '?turnier_id='. $turnier->id());
+    Helper::reload(get: '?turnier_id=' . $turnier->id());
 }
 
 // Setzliste von der Warteliste neu auffuellen
-if (isset($_POST['setzliste_auffuellen'])){
+if (isset($_POST['setzliste_auffuellen'])) {
     TurnierService::setzListeAuffuellen($turnier);
     TurnierRepository::get()->speichern($turnier);
     Html::info("Warteliste wurde aktualisiert");
-    Helper::reload(get: '?turnier_id='. $turnier->id());
+    Helper::reload(get: '?turnier_id=' . $turnier->id());
 }

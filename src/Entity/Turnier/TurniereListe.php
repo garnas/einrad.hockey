@@ -11,12 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
     name: "turniere_liste",
     indexes: [
         new ORM\Index(name: "turniere_liste_ibfk_2", columns: ["turnier_id"]),
-        new ORM\Index(name: "turniere_liste_ibfk_1", columns: ["team_id"])
-    ]
+        new ORM\Index(name: "turniere_liste_ibfk_1", columns: ["team_id"]),
+    ],
 )]
 class TurniereListe
 {
-
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Id]
     #[ORM\Column(name: "liste_id", type: "integer", nullable: false)]
@@ -30,7 +29,7 @@ class TurniereListe
         return $this->freilosGesetztAm;
     }
 
-    public function setFreilosGesetztAm(DateTime $freilosGesetztAm): TurniereListe
+    public function setFreilosGesetztAm(DateTime $freilosGesetztAm): self
     {
         $this->freilosGesetztAm = $freilosGesetztAm;
         return $this;
@@ -48,7 +47,7 @@ class TurniereListe
         return $this->team;
     }
 
-    public function setTeam (nTeam $team): TurniereListe
+    public function setTeam(nTeam $team): self
     {
         $this->team = $team;
         return $this;
@@ -69,7 +68,7 @@ class TurniereListe
         return $this->turnier;
     }
 
-    public function setTurnier(Turnier $turnier): TurniereListe
+    public function setTurnier(Turnier $turnier): self
     {
         $this->turnier = $turnier;
         return $this;

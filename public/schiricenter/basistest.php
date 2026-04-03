@@ -24,19 +24,19 @@ if (isset($_POST['beantworten'])) {
     $anzahl      = $lev_info['anzahl'];
     $timelimit   = $lev_info['timelimit'];
     $richtig_min = $lev_info['richtig_min'];
-    $fragen01 = SchiriTest::get_fragen($test_level,  1, $anzahl[1]); # Vor dem Spiel / Rund ums Spiel
-    $fragen02 = SchiriTest::get_fragen($test_level,  2, $anzahl[2]); # Schiedsrichterverhalten
-    $fragen03 = SchiriTest::get_fragen($test_level,  3, $anzahl[3]); # Handzeichen
-    $fragen04 = SchiriTest::get_fragen($test_level,  4, $anzahl[4]); # Penaltyschießen
-    $fragen05 = SchiriTest::get_fragen($test_level,  5, $anzahl[5]); # Vorfahrt
-    $fragen06 = SchiriTest::get_fragen($test_level,  6, $anzahl[6]); # Übertriebene Härte
-    $fragen07 = SchiriTest::get_fragen($test_level,  7, $anzahl[7]); # Eingriff ins Spiel
-    $fragen08 = SchiriTest::get_fragen($test_level,  8, $anzahl[8]); # Sonstige Fouls
-    $fragen09 = SchiriTest::get_fragen($test_level,  9, $anzahl[9]); # Torschüsse
+    $fragen01 = SchiriTest::get_fragen($test_level, 1, $anzahl[1]); # Vor dem Spiel / Rund ums Spiel
+    $fragen02 = SchiriTest::get_fragen($test_level, 2, $anzahl[2]); # Schiedsrichterverhalten
+    $fragen03 = SchiriTest::get_fragen($test_level, 3, $anzahl[3]); # Handzeichen
+    $fragen04 = SchiriTest::get_fragen($test_level, 4, $anzahl[4]); # Penaltyschießen
+    $fragen05 = SchiriTest::get_fragen($test_level, 5, $anzahl[5]); # Vorfahrt
+    $fragen06 = SchiriTest::get_fragen($test_level, 6, $anzahl[6]); # Übertriebene Härte
+    $fragen07 = SchiriTest::get_fragen($test_level, 7, $anzahl[7]); # Eingriff ins Spiel
+    $fragen08 = SchiriTest::get_fragen($test_level, 8, $anzahl[8]); # Sonstige Fouls
+    $fragen09 = SchiriTest::get_fragen($test_level, 9, $anzahl[9]); # Torschüsse
     $fragen10 = SchiriTest::get_fragen($test_level, 10, $anzahl[10]); # Zeitstrafen / Unsportlichkeiten
     $fragen11 = SchiriTest::get_fragen($test_level, 11, $anzahl[11]); # Strafen
-    $fragen = $fragen01 + $fragen02 + $fragen03 + $fragen04 + $fragen05 + $fragen06 +
-        $fragen07 + $fragen08 + $fragen09 + $fragen10 + $fragen11;
+    $fragen = $fragen01 + $fragen02 + $fragen03 + $fragen04 + $fragen05 + $fragen06
+        + $fragen07 + $fragen08 + $fragen09 + $fragen10 + $fragen11;
     $_SESSION['sc_test_fragen'] = $fragen;
 }
 
@@ -47,9 +47,9 @@ Html::$titel = 'Basis-Schiritest der Deutschen Einradhockeyliga';
 include '../../templates/header.tmp.php'; # Html-header und Navigation
 
 # Start Debug Modus
-echo '<H4><form method="post">' .
-    '<input type="submit" class="w3-btn w3-block w3-pale-red"' .
-    ' value="Neuen Test erzeugen"></form></H4>';
+echo '<H4><form method="post">'
+    . '<input type="submit" class="w3-btn w3-block w3-pale-red"'
+    . ' value="Neuen Test erzeugen"></form></H4>';
 if (Env::DEBUGMODUS) {
     $index = 0;
     echo '<table class="w3-table w3-pale-red w3-bordered">';
@@ -70,13 +70,13 @@ if (isset($_POST['beantworten'])) { # Test auswerten:
     $text_bestanden = ' Herzlichen Glückwunsch, du hast bestanden! ';
     $text_durchgefallen = ' Du hast leider nicht bestanden. ';
     if ($richtig >= 25) { # bestanden:
-        echo '<H1 class="w3-center w3-text-green">' .
-            Html::icon("sentiment_satisfied_alt", class:"md-36") . $text_bestanden .
-            Html::icon("sentiment_satisfied_alt", class:"md-36") . '</H1>';
+        echo '<H1 class="w3-center w3-text-green">'
+            . Html::icon("sentiment_satisfied_alt", class: "md-36") . $text_bestanden
+            . Html::icon("sentiment_satisfied_alt", class: "md-36") . '</H1>';
     } else {
-        echo '<H1 class="w3-center w3-text-red">' .
-            Html::icon("sentiment_very_dissatisfied", class: "md-36") . $text_durchgefallen .
-            Html::icon("sentiment_very_dissatisfied", class: "md-36") . '</H1>';
+        echo '<H1 class="w3-center w3-text-red">'
+            . Html::icon("sentiment_very_dissatisfied", class: "md-36") . $text_durchgefallen
+            . Html::icon("sentiment_very_dissatisfied", class: "md-36") . '</H1>';
     }
     echo '<H4>Es wurden ' . $richtig . ' von ' . count($fragen) . ' Fragen ';
     echo 'richtig beantwortet, eine ausführliche Auswertung findest du hier:</H4>';
@@ -96,8 +96,8 @@ if (isset($_POST['beantworten'])) { # Test auswerten:
     <div class="w3-center w3-white w3-bottombar w3-border-primary"
          style="position: sticky; top: 0; z-index: 1000;">
         <?php
-        Html::countdown(time() + 60*$timelimit);
-        ?>
+        Html::countdown(time() + 60 * $timelimit);
+    ?>
     </div>
     <?php
 }

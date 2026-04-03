@@ -1,4 +1,6 @@
-<?php /** @noinspection IssetArgumentExistenceInspection */
+<?php
+
+/** @noinspection IssetArgumentExistenceInspection */
 
 /**
  * Class Spielplan
@@ -63,20 +65,22 @@ class Spielplan
     {
         // Turnier
         $this->turnier = $turnier;
-        $this->turnier_id = $turnier->get_turnier_id();  
+        $this->turnier_id = $turnier->get_turnier_id();
 
         // Spielplan
         $this->teamliste = $this->turnier->get_spielenliste();
         $this->anzahl_teams = $this->turnier->get_anz_spielenliste();
         $this->details = $this->get_details();
         if (empty($this->details)) {
-            trigger_error("Spielplan konnte nicht ermittelt werden. (Turnier-ID $this->turnier_id)",
-                E_USER_ERROR);
+            trigger_error(
+                "Spielplan konnte nicht ermittelt werden. (Turnier-ID $this->turnier_id)",
+                \E_USER_ERROR,
+            );
         }
 
         $this->pausen = $this->get_pausen();
         $this->spiele = $this->get_spiele();
-        
+
         $this->anzahl_spiele = $this->anzahl_teams - 1;
 
         // Passen die angemeldeten Teams zu den im Spielplan hinterlegten Teams?
@@ -85,8 +89,10 @@ class Spielplan
                 !array_key_exists($spiel['team_id_a'], $this->teamliste)
                 || !array_key_exists($spiel['team_id_b'], $this->teamliste)
             ) {
-                trigger_error("Teams und Spielplan passen nicht zusammen. (Turnier-ID $this->turnier_id)",
-                    E_USER_ERROR);
+                trigger_error(
+                    "Teams und Spielplan passen nicht zusammen. (Turnier-ID $this->turnier_id)",
+                    \E_USER_ERROR,
+                );
             }
         }
     }
@@ -173,7 +179,7 @@ class Spielplan
                 $teamliste[$spiel["team_a"]]->id,
                 $teamliste[$spiel["team_b"]]->id,
                 $teamliste[$spiel["schiri_a"]]->id,
-                $teamliste[$spiel["schiri_b"]]->id
+                $teamliste[$spiel["schiri_b"]]->id,
             ];
             db::$db->query($sql, $params)->log();
         }
@@ -193,7 +199,7 @@ class Spielplan
      * @param int|null $anzahl_teams
      * @return false|string
      */
-    public static function get_vorlage(nTurnier $turnier, ?int $anzahl_teams = NULL): false|string
+    public static function get_vorlage(nTurnier $turnier, ?int $anzahl_teams = null): false|string
     {
         if ($turnier->turnier_id == 1191) {
             return "12er_jgj";
@@ -209,7 +215,7 @@ class Spielplan
         }
 
         // Wie viele Teams sind angemeldet?
-        if (is_null($anzahl_teams)) {
+        if (null === $anzahl_teams) {
             $anzahl_teams = $turnier->get_anz_spielenliste();
         }
 
@@ -239,7 +245,7 @@ class Spielplan
         if (!empty($turnier->get_spielplan_vorlage())) {
             $turnier->set_spielplan_vorlage(null);
         }
-        
+
         // Es existiert kein dynamischer Spielplan
         if (!self::check_exist($turnier->get_turnier_id())) {
             return;
@@ -290,10 +296,10 @@ class Spielplan
 
         // Uhrzeiten berechnen
         $spielzeit = (
-                $this->details["anzahl_halbzeiten"]
+            $this->details["anzahl_halbzeiten"]
                 * $this->details["halbzeit_laenge"]
                 + $this->details["puffer"]
-            ) * 60; // In Sekunden für Unixzeit
+        ) * 60; // In Sekunden für Unixzeit
 
         $startzeit = strtotime($this->turnier->get_startzeit());
 
@@ -324,12 +330,12 @@ class Spielplan
 
         // Damit die nicht eingetragene Tore nicht als 0 : 0 gewertet werden, müssen '' --> NULL werden
         $params = [
-            !is_numeric($tore_a) ? NULL : (int)$tore_a,
-            !is_numeric($tore_b) ? NULL : (int)$tore_b,
-            !is_numeric($penalty_a) ? NULL : (int)$penalty_a,
-            !is_numeric($penalty_b) ? NULL : (int)$penalty_b,
+            !is_numeric($tore_a) ? null : (int) $tore_a,
+            !is_numeric($tore_b) ? null : (int) $tore_b,
+            !is_numeric($penalty_a) ? null : (int) $penalty_a,
+            !is_numeric($penalty_b) ? null : (int) $penalty_b,
             $this->turnier_id,
-            $spiel_id
+            $spiel_id,
         ];
         db::$db->query($sql, $params)->log();
     }
@@ -388,12 +394,12 @@ class Spielplan
         $farben = [
             $team_id_a => [
                 1 => $this->teamliste[$team_id_a]->details['trikot_farbe_1'] ?? null,
-                2 => $this->teamliste[$team_id_a]->details['trikot_farbe_2'] ?? null
+                2 => $this->teamliste[$team_id_a]->details['trikot_farbe_2'] ?? null,
             ],
             $team_id_b => [
                 1 => $this->teamliste[$team_id_b]->details['trikot_farbe_1'] ?? null,
-                2 => $this->teamliste[$team_id_b]->details['trikot_farbe_2'] ?? null
-            ]
+                2 => $this->teamliste[$team_id_b]->details['trikot_farbe_2'] ?? null,
+            ],
         ];
 
         // Nicht hinterlegte Farben entfernen
@@ -448,14 +454,14 @@ class Spielplan
         foreach ($this->spiele as $spiel) {
 
             if (!$penaltys) {
-                $spiel['penalty_a'] = $spiel['penalty_b'] = NULL;
+                $spiel['penalty_a'] = $spiel['penalty_b'] = null;
             }
 
             // lege ein leeres array an, wenn das spiel zwischen den teams noch nicht existiert
             if (!isset($tore_tabelle[$spiel['team_id_a']][$spiel['team_id_b']])) {
                 $tore_tabelle[$spiel['team_id_a']][$spiel['team_id_b']] = [];
             }
-            
+
             // pushe das spiel in die toretabelle fuer dieses aufeinandertreffen
             $tore_tabelle[$spiel['team_id_a']][$spiel['team_id_b']][] = [
                 'tore'              => $spiel['tore_a'],
@@ -463,7 +469,7 @@ class Spielplan
                 'penalty_tore'      => $spiel['penalty_a'],
                 'penalty_gegentore' => $spiel['penalty_b'],
             ];
-            
+
             // pushe das spiel in die toretabelle fuer dieses aufeinandertreffen
             $tore_tabelle[$spiel['team_id_b']][$spiel['team_id_a']][] = [
                 'tore'              => $spiel['tore_b'],
@@ -471,7 +477,7 @@ class Spielplan
                 'penalty_tore'      => $spiel['penalty_b'],
                 'penalty_gegentore' => $spiel['penalty_a'],
             ];
-            
+
         }
 
         return $tore_tabelle ?? [];
@@ -486,20 +492,20 @@ class Spielplan
      */
     protected static function get_turniertabelle(array $tore_matrix): array
     {
-        
+
         foreach ($tore_matrix as $team_id => $gegner) {
             // in dieser schleife finden sich die informationen zu dem team im gesamten turnier
-            $punkte = $tordifferenz = $gegentore = $tore = $penalty_diff = $penalty_tore = $penalty_gegentore = $penalty_punkte = NULL;
+            $punkte = $tordifferenz = $gegentore = $tore = $penalty_diff = $penalty_tore = $penalty_gegentore = $penalty_punkte = null;
             $normale_spiele = $penalty_spiele = 0;
-            
+
             foreach ($gegner as $gegner_id => $spiele) {
                 // gehe durch das array der spiele zwischen team_id und gegner_id
-                
+
                 foreach ($spiele as $spiel) {
                     // schaue dir jedes einzelne spiel an
-                    
+
                     // liegen keine tore vor, dann ueberspringe das spiel
-                    if (is_null($spiel['tore']) || is_null($spiel['gegentore'])) {
+                    if (null === $spiel['tore'] || null === $spiel['gegentore']) {
                         continue;
                     }
 
@@ -511,10 +517,10 @@ class Spielplan
                     $normale_spiele++;
 
                     // liegt kein penalty-ergebnis vor, dann ueberspringe
-                    if (is_null($spiel['penalty_tore']) || is_null($spiel['penalty_gegentore'])) {
+                    if (null === $spiel['penalty_tore'] || null === $spiel['penalty_gegentore']) {
                         continue;
                     }
-                    
+
                     $penalty_punkte += ($spiel['penalty_tore'] > $spiel['penalty_gegentore']) ? 3 : 0;
                     $penalty_punkte += ($spiel['penalty_tore'] === $spiel['penalty_gegentore']) ? 1 : 0;
                     $penalty_diff += $spiel['penalty_tore'] - $spiel['penalty_gegentore'];
@@ -535,7 +541,7 @@ class Spielplan
                 'penalty_punkte' => $penalty_punkte,
                 'penalty_diff' => $penalty_diff,
                 'penalty_tore' => $penalty_tore,
-                'penalty_gegentore' => $penalty_gegentore
+                'penalty_gegentore' => $penalty_gegentore,
             ];
         }
 
@@ -549,8 +555,8 @@ class Spielplan
      */
     protected function set_platzierung(int $team_id): void
     {
-        $this->platzierungstabelle[$team_id] =
-            [
+        $this->platzierungstabelle[$team_id]
+            = [
                 'platz' => count($this->platzierungstabelle) + 1,
                 'teamname' => $this->teamliste[$team_id]->teamname,
                 'ligapunkte' => 0,
@@ -567,15 +573,15 @@ class Spielplan
         $reverse_tabelle = array_reverse($this->platzierungstabelle, true);
         $last_ligateam = function () use ($reverse_tabelle) {
             foreach ($reverse_tabelle as $team_id => $eintrag) {
-                if ($this->teamliste[$team_id]->wertigkeit !== NULL) {
+                if ($this->teamliste[$team_id]->wertigkeit !== null) {
                     return $this->teamliste[$team_id]->wertigkeit;
                 }
             }
-            return NULL;
+            return null;
         };
 
         foreach ($reverse_tabelle as $team_id => $eintrag) {
-            if (is_null($this->teamliste[$team_id]->wertigkeit)) {
+            if (null === $this->teamliste[$team_id]->wertigkeit) {
                 // Es handelt sich um ein Nichtligateam // max($werte) + 1 wenn nicht Letzter.
                 $wert = max($bisherige_wertigkeiten ?? [round($last_ligateam() / 2 - 1), 14]) + 1;
             } else {
@@ -593,7 +599,7 @@ class Spielplan
     public function set_ligapunkte(): void
     {
         $plaetze = $this->details['plaetze'];
-        
+
         // Invertiere die Tabelle um die Punkte addieren zu können
         $reverse_tabelle = array_reverse($this->platzierungstabelle, true);
         if ($plaetze > 3) {
@@ -603,14 +609,14 @@ class Spielplan
                 $ligapunkte += $this->platzierungstabelle[$team_id]['wertigkeit'];
                 $this->platzierungstabelle[$team_id]['ligapunkte'] = round($ligapunkte * $this->details['faktor']);
             }
-        
+
         } else {
             // Erhalte die Wertigkeit des erstplatzierten Teams
             $wertung = 0;
             foreach ($reverse_tabelle as $team_id => $eintrag) {
                 $wertung = $this->platzierungstabelle[$team_id]['wertigkeit'];
             }
-            
+
             // Berechne die Punkte für jedes Team anhand der Wertigkeit des ersten Teams
             $counter = 3;
             $faktoren = [1.5, 0.75, 0.5];
@@ -622,4 +628,3 @@ class Spielplan
 
     }
 }
-

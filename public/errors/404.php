@@ -7,7 +7,7 @@ require_once '../../init.php';
 $text = $_SESSION['error']['text'] ?? 'Es ist ein interner Fehler aufgetreten.';
 $link = $_SESSION['error']['url'] ?? '';
 
-unset ($_SESSION['error']);
+unset($_SESSION['error']);
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -23,9 +23,9 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
                 <?= $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . $link ?>
             </p>
             <p>
-                <?= Html::link($link, 'Erneut versuchen', icon:'settings_backup_restore') ?>
+                <?= Html::link($link, 'Erneut versuchen', icon: 'settings_backup_restore') ?>
             </p>
-        <?php } // end if ?>
+        <?php } // end if?>
 
         <p class="w3-text-grey">
             E-Mail-Adresse Technikausschuss

@@ -15,13 +15,11 @@ class TurnierValidatorService
     {
         return
             Helper::$ligacenter
-            ||
-            (
-                $turnier->isFinalTurnier() &&
-                TurnierService::isAusrichter($turnier, $_SESSION['logins']['team']['id'])
+            || (
+                $turnier->isFinalTurnier()
+                && TurnierService::isAusrichter($turnier, $_SESSION['logins']['team']['id'])
             )
-            ||
-            $turnier->isSpassTurnier();
+            || $turnier->isSpassTurnier();
     }
 
     private Turnier $turnier;
@@ -33,7 +31,7 @@ class TurnierValidatorService
 
     public static function onCreate(Turnier $turnier): bool
     {
-        $validator = new TurnierValidatorService($turnier);
+        $validator = new self($turnier);
         return $validator->hasValidArt()
             && $validator->hasValidAusrichter()
             && $validator->hasValidBlock()
@@ -55,7 +53,7 @@ class TurnierValidatorService
             return false;
         }
 
-        $validator = new TurnierValidatorService($turnier);
+        $validator = new self($turnier);
 
         return $validator->mayChange()
             && $validator->hasValidArt()
@@ -89,7 +87,7 @@ class TurnierValidatorService
 
     public function hasValidPhase(): bool
     {
-        if (!in_array($this->turnier->getPhase(), ['warte', 'setz', 'spielplan', 'ergebnis'], true)) {
+        if (!\in_array($this->turnier->getPhase(), ['warte', 'setz', 'spielplan', 'ergebnis'], true)) {
             Html::error("Ungültige Phase");
             return false;
         }
@@ -102,16 +100,14 @@ class TurnierValidatorService
 
         if (
             (Helper::$teamcenter && !self::hasLaRights($this->turnier))
-            &&
-            in_array($this->turnier->getArt(), ['I', 'II', 'spass'], true)
+            && \in_array($this->turnier->getArt(), ['I', 'II', 'spass'], true)
         ) {
             return true;
         }
 
         if (
             self::hasLaRights($this->turnier)
-            &&
-            in_array($this->turnier->getArt(), ['I', 'II', 'spass', 'final', 'fixed'], true)
+            && \in_array($this->turnier->getArt(), ['I', 'II', 'spass', 'final', 'fixed'], true)
         ) {
             return true;
         }
@@ -132,13 +128,13 @@ class TurnierValidatorService
                 $valid = ($turnierBlock == $ausrichterBlock);
                 break;
 
-            case('II'):
+            case ('II'):
                 $higherBlocks = BlockService::getHigherBlocks($ausrichterBlock);
-                $valid = in_array($turnierBlock, $higherBlocks, true);
+                $valid = \in_array($turnierBlock, $higherBlocks, true);
                 break;
 
             default:
-                $valid = (in_array($turnierBlock, Config::BLOCK_ALL, true) || $turnierBlock === null);
+                $valid = (\in_array($turnierBlock, Config::BLOCK_ALL, true) || $turnierBlock === null);
                 break;
 
         }
@@ -192,7 +188,8 @@ class TurnierValidatorService
         if ($this->turnier->isLigaturnier()) {
             if (
                 $unixTime < strtotime(Config::SAISON_ANFANG)
-                || ($unixTime > strtotime(Config::SAISON_ENDE)
+                || (
+                    $unixTime > strtotime(Config::SAISON_ENDE)
                 )
             ) {
                 Html::error("Das Datum liegt außerhalb der Saison.");
@@ -201,7 +198,7 @@ class TurnierValidatorService
 
             $feiertage = Feiertage::finden(date("Y", $unixTime));
             if ((Helper::$teamcenter && !self::hasLaRights($this->turnier))
-                && !in_array($unixTime, $feiertage) && date('N', $unixTime) < 6) {
+                && !\in_array($unixTime, $feiertage) && date('N', $unixTime) < 6) {
                 Html::error("Das Datum liegt nicht am Wochende und ist kein bundesweiter Feiertag.");
                 return false;
             }
@@ -222,7 +219,7 @@ class TurnierValidatorService
             return true;
         }
 
-        $stunde = (int)$this->turnier->getDetails()->getStartzeit()->format('G');
+        $stunde = (int) $this->turnier->getDetails()->getStartzeit()->format('G');
 
         // Validierung Startzeit:
         if ($stunde < 9 || $stunde > 15) {
@@ -270,7 +267,7 @@ class TurnierValidatorService
     {
         return $turnier->getPhase() === 'setz'
             && !$turnier->isBlockErweitertHoch()
-            && strlen($turnier->getBlock()) < 3
+            && \strlen($turnier->getBlock()) < 3
             && $turnier->getBlock() !== 'AB'
             && $turnier->getBlock() !== 'A'
             && $turnier->isLigaTurnier();
@@ -286,7 +283,7 @@ class TurnierValidatorService
     {
         return $turnier->getPhase() === 'setz'
             && !$turnier->isBlockErweitertRunter()
-            && strlen($turnier->getBlock()) < 3
+            && \strlen($turnier->getBlock()) < 3
             && $turnier->getBlock() !== 'EF'
             && $turnier->getBlock() !== 'F'
             && $turnier->isLigaTurnier();
@@ -311,13 +308,13 @@ class TurnierValidatorService
     {
         if ($this->turnier->getDetails()->getPlaetze() < $this->turnier->getDetails()->getMinTeams()) {
             Html::error("Anzahl der Plätze ist kleiner als die minimal Anzahl der Teams.");
-            return False;
+            return false;
         }
-        if (!in_array($this->turnier->getDetails()->getMinTeams(), [4,5])) {
+        if (!\in_array($this->turnier->getDetails()->getMinTeams(), [4,5])) {
             Html::error("Ungültige MinTeams Anzahl");
-            return False;
+            return false;
         }
-        return True;
+        return true;
     }
 
 }

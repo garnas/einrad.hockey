@@ -98,7 +98,8 @@ include '../../templates/header.tmp.php'; ?>
                             'turnier_details.php?turnier_id=' . $turnier->id(),
                             $turnier->getDetails()->getOrt(),
                             false,
-                            "open_in_new") ?>
+                            "open_in_new",
+                        ) ?>
                         <i>(<?= $turnier->getArt() == 'spass' ? "Spaß" : $turnier->getBlock() ?>)</i>
                     </p>
                 <?php endforeach;?>
@@ -186,7 +187,7 @@ include '../../templates/header.tmp.php'; ?>
                                     <td><?= Html::icon("assistant_photo") ?></td>
                                 </tr>
                                 <?php $i = 0;
-                                foreach ($statistik['max_turniere'] as $team): ?>
+                    foreach ($statistik['max_turniere'] as $team): ?>
                                     <tr class="<?= $colors[$i] ?>">
                                         <td><?= Html::icon($icons[$i++]) ?></td>
                                         <td style="white-space: nowrap;" class="w3-small"><?= $team['teamname'] ?></td>
@@ -212,7 +213,7 @@ include '../../templates/header.tmp.php'; ?>
                                     <td><?= Html::icon("sports_hockey") ?></td>
                                 </tr>
                                 <?php $i = 0;
-                                foreach ($statistik['max_gew'] as $team): ?>
+                    foreach ($statistik['max_gew'] as $team): ?>
                                     <tr class="<?= $colors[$i] ?>">
                                         <td><?= Html::icon($icons[$i++]) ?></td>
                                         <td style="white-space: nowrap;" class="w3-small"><?= $team['teamname'] ?></td>

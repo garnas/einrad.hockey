@@ -11,7 +11,6 @@ use Doctrine\Common\Collections\Collection;
 
 class NeuigkeitRepository
 {
-    
     use TraitSingletonRepository;
 
     private EntityRepository $neuigkeit;
@@ -42,7 +41,7 @@ class NeuigkeitRepository
     {
         return $this->neuigkeit->find($id);
     }
-    
+
     public function findAll(): array
     {
         $query = DoctrineWrapper::manager()
@@ -76,7 +75,7 @@ class NeuigkeitRepository
             ->where('n.art = :art')
             ->setParameter('art', $art)
             ->orderBy('n.zeit', 'DESC');
-        
+
         return $query->getQuery()->getResult();
     }
 

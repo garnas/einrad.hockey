@@ -11,19 +11,19 @@ use App\Service\Turnier\TurnierSnippets;
 <h1 class="w3-text-primary"><?= Html::icon("group", tag: "h1") ?> <?= e($teamEntity->getName()) ?></h1>
     <p>
         <?= Html::link(
-                (Helper::$ligacenter) ? 'lc_teamdaten_aendern.php?team_id=' . $team->id : 'tc_teamdaten_aendern.php',
-                'Team- und Kontaktdaten ändern',
-            icon: "create"
+            (Helper::$ligacenter) ? 'lc_teamdaten_aendern.php?team_id=' . $team->id : 'tc_teamdaten_aendern.php',
+            'Team- und Kontaktdaten ändern',
+            icon: "create",
         ) ?>
     </p>
 <div class="w3-panel w3-card-4">
     <h2 class="w3-text-primary"><?= Html::icon("image", tag: "h2") ?> Teamfoto</h2>
-    <?php if ($teamEntity->getDetails()->getTeamfoto()){?>
+    <?php if ($teamEntity->getDetails()->getTeamfoto()) {?>
         <p>
             <img src="<?= e($teamEntity->getDetails()->getTeamfoto()) ?>" class="w3-card w3-image"
                  alt="<?= e($teamEntity->getName())?>" style="max-height: 360px;">
         </p>
-    <?php }else{?>
+    <?php } else {?>
         <p class="w3-text-grey">Es wurde noch kein Teamfoto hochgeladen.</p>
     <?php } //end if?>
 </div>
@@ -39,7 +39,7 @@ use App\Service\Turnier\TurnierSnippets;
                     1. Trikotfarbe
                 </p>
                     <span class="w3-card-4" style="height:70px;width:70px;background-color:<?= empty($team->details['trikot_farbe_1']) ? '#bbb' : $team->details['trikot_farbe_1']?>;border-radius:50%;display:inline-block;">
-                        <br><?= $teamEntity->getDetails()->getTrikotFarbe1() ? '' :  Html::icon('not_interested')?>
+                        <br><?= $teamEntity->getDetails()->getTrikotFarbe1() ? '' : Html::icon('not_interested')?>
                     </span>
         </div>
 
@@ -48,7 +48,7 @@ use App\Service\Turnier\TurnierSnippets;
                     2. Trikotfarbe
                 </p>
                     <span class="w3-card-4" style="height:70px;width:70px; background-color:<?= empty($team->details['trikot_farbe_2']) ? '#bbb' : $team->details['trikot_farbe_2'] ?>;border-radius:50%;display:inline-block;">
-                        <br><?= $teamEntity->getDetails()->getTrikotFarbe2() ? '' :  Html::icon('not_interested')?>
+                        <br><?= $teamEntity->getDetails()->getTrikotFarbe2() ? '' : Html::icon('not_interested')?>
                     </span>
         </div>
     </div>
@@ -74,7 +74,7 @@ use App\Service\Turnier\TurnierSnippets;
                 <td>
                     <p>Verfügbare Freilose: <?= $teamEntity->getAnzahlOffenerFreilose() ?></p>
                     <?= TeamSnippets::freilose($teamEntity) ?>
-                    <?php if(!TeamValidator::hasSchiriFreilosErhalten($teamEntity)): ?>
+                    <?php if (!TeamValidator::hasSchiriFreilosErhalten($teamEntity)): ?>
                         <p class="w3-text-grey">
                              Dein Team hat für diese Saison noch kein Freilos für zwei Schiedsrichter erhalten.
                         </p>
@@ -91,7 +91,7 @@ use App\Service\Turnier\TurnierSnippets;
                         <p>
                              Turnier in <?= TurnierSnippets::ortDatumBlock($turnier) ?> eingetragen am
                              <?= $turnier->getErstelltAm()->format("d.m.Y") ?>
-                            <?php if(FreilosService::validateAusgerichtetesTurnierFreilos($turnier)): ?>
+                            <?php if (FreilosService::validateAusgerichtetesTurnierFreilos($turnier)): ?>
                                 <br>
                                 <span class="w3-text-green">Für dieses Turnier könnt ihr nach dem Turnier ein Freilos
                                     erhalten (insgesamt 2x möglich)</span>
@@ -131,7 +131,7 @@ use App\Service\Turnier\TurnierSnippets;
             <th class="w3-primary w3-center">Auf Webseite anzeigen?</th>
             <th class="w3-primary w3-center">Infomails erhalten?</th>
         </tr>
-        <?php foreach($emails as $email){?>
+        <?php foreach ($emails as $email) {?>
             <tr>
                 <td><?=e($email['email'])?></td>
                 <td class='w3-center'><?=e($email['public'])?></td>

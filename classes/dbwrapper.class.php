@@ -9,7 +9,6 @@
  */
 class dbWrapper
 {
-
     private false|mysqli $link;
     private false|mysqli_stmt $stmt;
     private false|mysqli_result $result;
@@ -49,7 +48,7 @@ class dbWrapper
      * @param mixed ...$params Parameter in Reihenfolge der ?, entweder als Array oder als mehrere Argumente
      * @return $this
      */
-    public function query(string $sql, mixed ...$params): dbWrapper
+    public function query(string $sql, mixed ...$params): self
     {
         // Reset Optionen
         $this->escape_result = false;
@@ -58,7 +57,7 @@ class dbWrapper
         // nötig, um vernünftige mysqli Fehlermeldungen zu erhalten:
         // https://stackoverflow.com/questions/22662488/mysqli-fetch-assoc-expects-parameter-call-to-a-member-function-bind-param
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-        
+
         // Prepare
         if (!$this->stmt = $this->link->prepare($sql)) {
             Helper::log(Config::LOG_DB, "ERROR " . db::escape($this->link->error));
@@ -118,19 +117,21 @@ class dbWrapper
      */
     public function fetch_one(): mixed
     {
-        if ($this->escape_result) return db::escape($this->result->fetch_array()[0] ?? null);
+        if ($this->escape_result) {
+            return db::escape($this->result->fetch_array()[0] ?? null);
+        }
         return $this->result->fetch_array()[0] ?? null;
     }
 
-    public function fetch_object(String $class, array $args = []): object|null
+    public function fetch_object(String $class, array $args = []): ?object
     {
         return $this->result->fetch_object($class, $args);
     }
 
-    public function fetch_objects(string $class, ?String $key = NULL, array $constructor_args = []): array
+    public function fetch_objects(string $class, ?String $key = null, array $constructor_args = []): array
     {
         while ($object = $this->result->fetch_object($class, ...$constructor_args)) {
-            is_null($key) ? $objects[] = $object : $objects[$object->$key] = $object;
+            null === $key ? $objects[] = $object : $objects[$object->$key] = $object;
         }
         return $objects ?? [];
     }
@@ -142,7 +143,9 @@ class dbWrapper
      */
     public function fetch_row(): array
     {
-        if ($this->escape_result) return db::escape($this->result->fetch_assoc() ?? []);
+        if ($this->escape_result) {
+            return db::escape($this->result->fetch_assoc() ?? []);
+        }
         return $this->result->fetch_assoc() ?? [];
     }
 
@@ -223,7 +226,7 @@ class dbWrapper
      *
      * @return $this
      */
-    public function esc(): dbWrapper
+    public function esc(): self
     {
         $this->escape_result = true;
         return $this;
@@ -237,9 +240,15 @@ class dbWrapper
      */
     private function get_type(mixed $var): string
     {
-        if (is_string($var)) return 's';
-        if (is_int($var)) return 'i';
-        if (is_float($var)) return 'd';
+        if (is_string($var)) {
+            return 's';
+        }
+        if (is_int($var)) {
+            return 'i';
+        }
+        if (is_float($var)) {
+            return 'd';
+        }
         return 'b';
     }
 
@@ -249,7 +258,7 @@ class dbWrapper
      * @param bool $anonym Anonyme Params (zB. für Abstimmungen)
      * @return $this
      */
-    public function log(bool $anonym = false): dbWrapper
+    public function log(bool $anonym = false): self
     {
         // Query formatieren
         $sql = trim(preg_replace("/(^\h+|\h+$)/m", '', $this->sql)); // Schönere Formatierung

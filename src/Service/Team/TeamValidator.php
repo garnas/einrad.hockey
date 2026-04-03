@@ -13,7 +13,6 @@ use Html;
 
 class TeamValidator
 {
-
     public static function hasGenugSpieler(nTeam $team): bool
     {
         return TeamService::getAnzahlAktiveSpieler($team) >= 5;
@@ -24,10 +23,10 @@ class TeamValidator
         $freilose = $team->getFreiloseBySaison();
         foreach ($freilose as $freilos) {
             if ($freilos->getGrund() == FreilosGrund::SCHIRI) {
-                return True;
+                return true;
             }
         }
-        return False;
+        return false;
     }
 
     /**
@@ -60,7 +59,7 @@ class TeamValidator
             ->setParameter('team', $team)
             ->setParameter('datum', $turnier->getDatum());
 
-        return count($query->getQuery()->getResult()) > 0;
+        return \count($query->getQuery()->getResult()) > 0;
     }
 
     public static function isValidTurnierForAnmeldung(nTeam $team, Turnier $turnier, $showError = true): bool
@@ -115,16 +114,17 @@ class TeamValidator
             && TurnierService::getAbmeldeFristUnix($turnier) < time()
         ) {
             $valid = false;
-            Html::error ("Abmeldungen von der Spielen-Liste sind nur bis Freitag 23:59 zwei Wochen vor dem 
+            Html::error(
+                "Abmeldungen von der Spielen-Liste sind nur bis Freitag 23:59 zwei Wochen vor dem 
                 Turnier möglich. Bitte nehmt via Email Kontakt mit dem Ligaausschuss auf: "
-                . Html::mailto(Env::LAMAIL). "",
-                esc:false
+                . Html::mailto(Env::LAMAIL) . "",
+                esc: false,
             );
         }
 
-        if (!TeamService::isAngemeldet($team, $turnier)){
+        if (!TeamService::isAngemeldet($team, $turnier)) {
             $valid = false;
-            Html::error ("Abmeldung nicht möglich, da ihr nicht zum Turnier angemeldet seid.");
+            Html::error("Abmeldung nicht möglich, da ihr nicht zum Turnier angemeldet seid.");
         }
 
         return $valid;
@@ -137,7 +137,7 @@ class TeamValidator
         if (!TurnierService::hasFreieSetzPlaetze($turnier)) {
             $error[] = "Es gibt keine freien Plätze mehr auf der Setzliste.";
             $valid = false;
-        } else if ($turnier->isSetzPhase() && TurnierService::isSetzBerechtigt($turnier, $team)){
+        } elseif ($turnier->isSetzPhase() && TurnierService::isSetzBerechtigt($turnier, $team)) {
             $error[] = "Dein Team würde auch ohne Freilos auf die Setzliste kommen.";
             $valid = false;
         }
@@ -153,7 +153,7 @@ class TeamValidator
         }
 
         if ($showError && isset($error)) {
-            Html::error(implode("<br>", $error), esc:false);
+            Html::error(implode("<br>", $error), esc: false);
         }
 
         return $valid;
@@ -161,12 +161,12 @@ class TeamValidator
 
     public static function isValidFinalMeldung(nTeam $teamEntity, Turnier $turnier): bool
     {
-        if (!$turnier->isFinalTurnier()){
-            Html::error ("Anmeldung fehlgeschlagen.");
+        if (!$turnier->isFinalTurnier()) {
+            Html::error("Anmeldung fehlgeschlagen.");
             return false;
         }
-        if (TeamService::isAngemeldet($teamEntity, $turnier)){
-            Html::error ("Dein Team ist schon angemeldet.");
+        if (TeamService::isAngemeldet($teamEntity, $turnier)) {
+            Html::error("Dein Team ist schon angemeldet.");
             return false;
         }
         return true;

@@ -5,7 +5,6 @@ namespace integration;
 use App\Event\Turnier\nLigaBot;
 use PHPUnit\Framework\TestCase;
 
-
 class LigaBotTest extends TestCase
 {
     /**

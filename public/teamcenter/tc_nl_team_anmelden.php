@@ -12,11 +12,11 @@ $turnierId = (int) @$_GET['turnier_id'];
 $turnier = TurnierRepository::get()->turnier($turnierId);
 
 //Existiert das Turnier?
-if ($turnier === null){
+if ($turnier === null) {
     Helper::not_found("Das Turnier konnte nicht gefunden werden.");
 }
 
-if (isset($_POST['nl_anmelden'])){
+if (isset($_POST['nl_anmelden'])) {
     FormLogicTeam::nlTeamAnmelden($turnier);
 }
 

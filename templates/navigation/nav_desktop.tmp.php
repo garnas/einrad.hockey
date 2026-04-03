@@ -3,7 +3,7 @@
     
     <!-- Hintergrundbild -->
     <img src="<?= Html::get_hintergrund_bild() ?>"
-         class="<?php if (!isset($_SESSION['logins']['la']) && !isset($_SESSION['logins']['team'])){?>w3-card-4<?php } ?>" 
+         class="<?php if (!isset($_SESSION['logins']['la']) && !isset($_SESSION['logins']['team'])) {?>w3-card-4<?php } ?>" 
          alt="Hintergrundbild" 
          style="width:100%; opacity: 0.3;">
     
@@ -42,9 +42,9 @@
                 <span style="font-size: 22px">SONSTIGES</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach(Nav::get_sonstiges() as Nav::$link){ ?>
+                <?php foreach (Nav::get_sonstiges() as Nav::$link) { ?>
                     <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
-                <?php } //end for ?>
+                <?php } //end for?>
             </div>
         </div>
 
@@ -55,9 +55,9 @@
                 <span style="font-size: 22px">TEAMCENTER</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach(Nav::get_teamcenter() as Nav::$link){ ?>
+                <?php foreach (Nav::get_teamcenter() as Nav::$link) { ?>
                     <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button <?= Nav::$link[2] ?>"><?= Nav::$link[1] ?></a>
-                <?php } //end for ?>
+                <?php } //end for?>
             </div>
         </div>
 
@@ -68,9 +68,9 @@
                 <span style="font-size: 22px">MODUS</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach(Nav::get_modus() as Nav::$link){ ?>
+                <?php foreach (Nav::get_modus() as Nav::$link) { ?>
                     <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
-                <?php } //end for ?>
+                <?php } //end for?>
             </div>
         </div>
 
@@ -81,9 +81,9 @@
                 <span style="font-size: 22px">LIGA</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach(Nav::get_liga() as Nav::$link){ ?>
+                <?php foreach (Nav::get_liga() as Nav::$link) { ?>
                     <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
-                <?php } //end for ?>
+                <?php } //end for?>
             </div>
         </div>
 
@@ -94,9 +94,9 @@
                 <span style="font-size: 22px">INFO</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach(Nav::get_info() as Nav::$link){ ?>
+                <?php foreach (Nav::get_info() as Nav::$link) { ?>
                     <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
-                <?php } //end for ?>
+                <?php } //end for?>
             </div>
         </div>
     </div>
@@ -104,17 +104,17 @@
     <!-- unten rechts -->
     <div class="w3-display-bottomright w3-text-primary w3-margin w3-padding-large w3-large">
         <!-- Logout -->
-        <?php if (isset($_SESSION['logins']['team'])){?>
+        <?php if (isset($_SESSION['logins']['team'])) {?>
             <a href='<?= Env::BASE_URL ?>/teamcenter/tc_logout.php' class="w3-button w3-right w3-hover-primary">
                 <?= Html::icon("logout", 24, 26) ?> Logout
             </a>
-        <?php }elseif (LigaLeitung::is_logged_in("team_social_media")) {?>
+        <?php } elseif (LigaLeitung::is_logged_in("team_social_media")) {?>
             <a href='<?= Env::BASE_URL ?>/oefficenter/oc_logout.php' class="w3-button w3-right w3-hover-primary">
-                <?= Html::icon("logout", tag:"h3") ?> Logout
+                <?= Html::icon("logout", tag: "h3") ?> Logout
             </a>
-        <?php }elseif (LigaLeitung::is_logged_in("ligaausschuss")) {?>
+        <?php } elseif (LigaLeitung::is_logged_in("ligaausschuss")) {?>
             <a href='<?= Env::BASE_URL ?>/ligacenter/lc_logout.php' class="w3-button w3-right w3-hover-primary">
-                <?= Html::icon("logout", tag:"h3") ?> Logout
+                <?= Html::icon("logout", tag: "h3") ?> Logout
             </a>
         <?php } //end if?>
 

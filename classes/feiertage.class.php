@@ -7,7 +7,8 @@
  *
  * Quelle: https://www.symcon.de/forum/threads/5983-Feiertage-berechnen
  */
-class Feiertage {
+class Feiertage
+{
     /**
      * Errechnet das Datum des Ostersonntags für ein gegebenes Jahr
      *
@@ -16,7 +17,7 @@ class Feiertage {
      */
     public static function easter(int $year): int|false
     {
-        if($year > 2038 || $year < 1970) {
+        if ($year > 2038 || $year < 1970) {
             return false;
         }
 
@@ -53,16 +54,16 @@ class Feiertage {
     {
         $OneDay = 24 * 60 * 60;
         $easter = self::easter($year);
-        if(!$easter) {
+        if (!$easter) {
             return false;
         } else {
-            $holidays['Neujahr']                   = mktime(0, 0, 0,  1,  1, $year);
+            $holidays['Neujahr']                   = mktime(0, 0, 0, 1, 1, $year);
             $holidays['Karfreitag']                = $easter - (2 * $OneDay);
             $holidays['Ostermontag']               = $easter + (1 * $OneDay);
-            $holidays['Tag der Arbeit']            = mktime(0, 0, 0,  5,  1, $year);
+            $holidays['Tag der Arbeit']            = mktime(0, 0, 0, 5, 1, $year);
             $holidays['Christi Himmelfahrt']       = $easter + (39 * $OneDay);
             $holidays['Pfingstmontag']             = $easter + (50 * $OneDay);
-            $holidays['Tag der deutschen Einheit'] = mktime(0, 0, 0, 10,  3, $year);
+            $holidays['Tag der deutschen Einheit'] = mktime(0, 0, 0, 10, 3, $year);
             $holidays['1. Weihnachtsfeiertag']     = mktime(0, 0, 0, 12, 25, $year);
             $holidays['2. weihnachtsfeiertag']     = mktime(0, 0, 0, 12, 26, $year);
             array_walk($holidays, 'ResetHours');

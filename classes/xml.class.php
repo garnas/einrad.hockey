@@ -60,7 +60,7 @@ class xml
                     }
                 }
                 if ($ebene1 == "platz") {
-                    $block = Tabelle::rang_to_block((int)$subnode1->rang);
+                    $block = Tabelle::rang_to_block((int) $subnode1->rang);
                     $subnode1->addChild("block", htmlspecialchars("$block"));
                 }
             } else {

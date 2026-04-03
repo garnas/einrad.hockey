@@ -7,7 +7,6 @@ use App\Service\Turnier\TurnierValidatorService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-
 class TurnierValidatorServiceTest extends TestCase
 {
     public static function provideIsErweiterbarBlockrunter(): array
@@ -19,7 +18,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockrunter" => false,
                 "isErweitertBlockhoch" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "DE",
@@ -27,7 +26,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockrunter" => false,
                 "isErweitertBlockhoch" => false,
-                "isErweiterbar" => true
+                "isErweiterbar" => true,
             ],
             [
                 "block" => "F",
@@ -35,7 +34,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockrunter" => false,
                 "isErweitertBlockhoch" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "A",
@@ -43,7 +42,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockrunter" => null,
                 "isErweitertBlockhoch" => null,
-                "isErweiterbar" => true
+                "isErweiterbar" => true,
             ],
             [
                 "block" => "CD",
@@ -51,7 +50,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockrunter" => false,
                 "isErweitertBlockhoch" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "ABCDEF",
@@ -59,7 +58,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockrunter" => false,
                 "isErweitertBlockhoch" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "AB",
@@ -67,7 +66,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockrunter" => true,
                 "isErweitertBlockhoch" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "ABC",
@@ -75,7 +74,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockrunter" => false,
                 "isErweitertBlockhoch" => true,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "EF",
@@ -83,7 +82,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "warte",
                 "isErweitertBlockrunter" => false,
                 "isErweitertBlockhoch" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "EF",
@@ -91,7 +90,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "spielplan",
                 "isErweitertBlockrunter" => false,
                 "isErweitertBlockhoch" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "EF",
@@ -99,7 +98,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "ergebnis",
                 "isErweitertBlockrunter" => false,
                 "isErweitertBlockhoch" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
         ];
     }
@@ -129,7 +128,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => true,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "DE",
@@ -137,7 +136,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "spielplan",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "DE",
@@ -145,7 +144,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => true
+                "isErweiterbar" => true,
             ],
             [
                 "block" => "DE",
@@ -153,7 +152,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "warte",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "F",
@@ -161,7 +160,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => null,
                 "isErweitertBlockrunter" => null,
-                "isErweiterbar" => true
+                "isErweiterbar" => true,
             ],
             [
                 "block" => "A",
@@ -169,7 +168,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "CD",
@@ -177,7 +176,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "ABCDEF",
@@ -185,7 +184,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "BC",
@@ -193,7 +192,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => null,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => true
+                "isErweiterbar" => true,
             ],
             [
                 "block" => "BC",
@@ -201,7 +200,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => true
+                "isErweiterbar" => true,
             ],
             [
                 "block" => "BCD",
@@ -209,7 +208,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => true,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "BCD",
@@ -217,7 +216,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => true,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
         ];
     }
@@ -247,7 +246,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "DE",
@@ -255,7 +254,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "spielplan",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "DE",
@@ -263,7 +262,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => true
+                "isErweiterbar" => true,
             ],
             [
                 "block" => "DE",
@@ -271,7 +270,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "warte",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "DE",
@@ -279,7 +278,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "spielplan",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "DE",
@@ -287,7 +286,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "ergebnis",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "F",
@@ -295,7 +294,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => null,
                 "isErweitertBlockrunter" => null,
-                "isErweiterbar" => true
+                "isErweiterbar" => true,
             ],
             [
                 "block" => "A",
@@ -303,7 +302,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => true
+                "isErweiterbar" => true,
             ],
             [
                 "block" => "AB",
@@ -311,7 +310,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => null,
                 "isErweitertBlockrunter" => true,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "EF",
@@ -319,7 +318,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => true,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "CD",
@@ -327,7 +326,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "ABCDEF",
@@ -335,7 +334,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "BC",
@@ -343,7 +342,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => null,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => true
+                "isErweiterbar" => true,
             ],
             [
                 "block" => "BC",
@@ -351,7 +350,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => true
+                "isErweiterbar" => true,
             ],
             [
                 "block" => "BCD",
@@ -359,7 +358,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => true,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
             [
                 "block" => "BCD",
@@ -367,7 +366,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => true,
-                "isErweiterbar" => false
+                "isErweiterbar" => false,
             ],
         ];
     }

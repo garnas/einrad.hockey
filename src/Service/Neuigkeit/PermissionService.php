@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Service\Neuigkeit;
+
 use Helper;
 use App\Enum\NeuigkeitArt;
 
@@ -47,7 +48,7 @@ class PermissionService
         if (isset($_SESSION['logins']['team']['name']) && $_SESSION['logins']['team']['name'] === $eingetragen_von) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -67,7 +68,7 @@ class PermissionService
         if (isset($_SESSION['logins']['team']['name']) && $_SESSION['logins']['team']['name'] === $eingetragen_von) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -82,7 +83,7 @@ class PermissionService
         if (isset($_SESSION['logins']['team']['name']) && $_SESSION['logins']['team']['name'] === $eingetragen_von) {
             return true;
         }
-        
+
         return false;
     }
 }

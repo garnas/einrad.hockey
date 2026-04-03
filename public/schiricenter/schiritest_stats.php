@@ -1,4 +1,5 @@
 <?php
+
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
@@ -37,7 +38,7 @@ $auswertung_fragen = [
         "Testlevel",
         "t_erstellt",
 
-    ]
+    ],
 ];
 
 $auswertung_test = [
@@ -52,8 +53,8 @@ $auswertung_test = [
         "anzahl_richtige_fragen",
         "t_erstellt",
         "t_gestartet",
-        "t_abgegeben"
-    ]
+        "t_abgegeben",
+    ],
 ];
 
 foreach ($result as $test) {
@@ -97,7 +98,7 @@ foreach ($result as $test) {
         $anzahl_richtiger_fragen,
         $test["t_erstellt"],
         $test["t_gestartet"],
-        $test["t_abgegeben"]
+        $test["t_abgegeben"],
     ];
 }
 

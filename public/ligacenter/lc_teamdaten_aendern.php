@@ -1,4 +1,5 @@
 <?php
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -14,7 +15,7 @@ require_once '../../logic/teamdaten_aendern_la.logic.php'; // Formularverarbeitu
 
 include '../../templates/header.tmp.php';
 include '../../templates/la_team_waehlen.tmp.php';
-if (isset($team)){
+if (isset($team)) {
     include '../../templates/teamdaten_aendern_la.tmp.php';
     include '../../templates/teamdaten_aendern.tmp.php';
 }

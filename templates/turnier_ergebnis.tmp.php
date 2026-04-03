@@ -44,7 +44,7 @@ use App\Service\Turnier\TurnierSnippets;
             <?php endif; ?>
         </div>
         <div class="w3-rest w3-padding-8 w3-right-align">
-            <?= Html::link(TurnierLinks::spielplan($turnier), 'Spielergebnisse', icon:'open_in_new') ?>
+            <?= Html::link(TurnierLinks::spielplan($turnier), 'Spielergebnisse', icon: 'open_in_new') ?>
         </div>
     </div>
 </section>

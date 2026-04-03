@@ -8,7 +8,7 @@ use App\Enum\NeuigkeitArt;
 
 require_once '../../init.php';
 
-$saison = (isset($_GET['saison'])) ? (int)$_GET['saison'] : Config::SAISON;
+$saison = (isset($_GET['saison'])) ? (int) $_GET['saison'] : Config::SAISON;
 $foerdermittel = NeuigkeitRepository::get()->findByType(NeuigkeitArt::FOERDERMITTEL);
 
 $foerdermittel_nach_jahr = [];

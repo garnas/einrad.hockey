@@ -26,7 +26,7 @@ if (isset($_POST["team_erstellen"])) {
     }
 
     //Email wird auf gültigkeit überprüft
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if (!filter_var($email, \FILTER_VALIDATE_EMAIL)) {
         Html::error("Ungültige Email");
         $error = true;
     }

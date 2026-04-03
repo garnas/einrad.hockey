@@ -43,7 +43,7 @@ class SpielplanDetails
         type: "string",
         length: 30,
         nullable: true,
-        options: ["comment" => "nach Spiel,Minuten#next"]
+        options: ["comment" => "nach Spiel,Minuten#next"],
     )]
     private string $pausen;
 

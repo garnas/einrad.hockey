@@ -22,7 +22,7 @@ class FormLogicTeam
             DoctrineWrapper::manager()->persist($turnier);
             DoctrineWrapper::manager()->flush();
             Html::info("$teamname wurde angemeldet auf Liste: $liste");
-            Helper::reload(get:'?turnier_id='. $turnier->id());
+            Helper::reload(get: '?turnier_id=' . $turnier->id());
         } else {
             Html::error("Nichtligateam konnte nicht angemeldet werden.");
         }

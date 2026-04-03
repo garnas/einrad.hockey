@@ -10,7 +10,7 @@ require_once '../../logic/la_team_waehlen.logic.php';
 use App\Repository\Team\TeamRepository;
 
 $show_form = false;
-if (isset($_GET['team_id'])){
+if (isset($_GET['team_id'])) {
 
     $ausrichter_team_id = (int) $_GET['team_id'];
     if (Team::is_ligateam($ausrichter_team_id)) {

@@ -9,7 +9,6 @@ use App\Repository\Team\TeamRepository;
  */
 class Tabelle
 {
-
     /**
      * Speichert die Erstellten Rangtabellen, damit diese nicht mehrfach erstellt werden müssen.
      */
@@ -18,7 +17,7 @@ class Tabelle
 
     /**
      * Übergibt den Spieltag, der als naechstes gespielt wird
-     * 
+     *
      *
      * @param int $saison
      * @return int
@@ -66,10 +65,10 @@ class Tabelle
                 AND saison = ?
                 GROUP BY phase
                 ";
-        $result = db::$db->query($sql, $spieltag, $saison)->list('count(phase)','phase');
+        $result = db::$db->query($sql, $spieltag, $saison)->list('count(phase)', 'phase');
         return (
-                isset($result['spielplan']) or isset($result['melde']) or isset($result['offen'])
-                )
+            isset($result['spielplan']) || isset($result['melde']) || isset($result['offen'])
+        )
                 && isset($result['ergebnis']);
     }
 
@@ -81,17 +80,17 @@ class Tabelle
      * @param int $saison
      * @return int|null
      */
-    public static function get_team_rang(int $team_id, NULL|int $spieltag = NULL, int $saison = Config::SAISON): ?int
+    public static function get_team_rang(int $team_id, ?int $spieltag = null, int $saison = Config::SAISON): ?int
     {
         // Default: Aktueller Spieltag - 1 = Spieltag mit allen eingetragenen Ergebnissen
         $spieltag = $spieltag ?? (self::get_aktuellen_spieltag($saison) - 1);
 
         // Rangtabelle soll nicht jedes mal neu berechnet werden müssen
-        if (!isset(self::$cache_rangtabellen[$spieltag])){
+        if (!isset(self::$cache_rangtabellen[$spieltag])) {
             self::$cache_rangtabellen[$spieltag] = self::get_rang_tabelle($spieltag, $saison);
         }
         // Nichtligateam haben den Rang NULL
-        return self::$cache_rangtabellen[$spieltag][$team_id]['rang'] ?? NULL;
+        return self::$cache_rangtabellen[$spieltag][$team_id]['rang'] ?? null;
     }
 
     /**
@@ -101,15 +100,15 @@ class Tabelle
      * @param int|null $spieltag
      * @return int|null
      */
-    public static function get_team_meister_platz(int $team_id, NULL|int $spieltag = NULL): ?int
+    public static function get_team_meister_platz(int $team_id, ?int $spieltag = null): ?int
     {
         // Default: Aktueller Spieltag - 1 = Spieltag mit allen eingetragenen Ergebnissen
         $spieltag = $spieltag ?? (self::get_aktuellen_spieltag() - 1);
-        if (!isset(self::$cache_meisterschaftstabelle)){
+        if (!isset(self::$cache_meisterschaftstabelle)) {
             self::$cache_meisterschaftstabelle = self::get_meisterschafts_tabelle($spieltag);
         }
         // Nichtligateam haben den Platz NULL
-        return self::$cache_meisterschaftstabelle[$team_id]['platz'] ?? NULL;
+        return self::$cache_meisterschaftstabelle[$team_id]['platz'] ?? null;
     }
 
     /**
@@ -119,7 +118,7 @@ class Tabelle
      * @param int|null $spieltag
      * @return string|null
      */
-    public static function get_team_block(int $team_id, NULL|int $spieltag = NULL): ?string
+    public static function get_team_block(int $team_id, ?int $spieltag = null): ?string
     {
         $rang = self::get_team_rang($team_id, $spieltag);
         return self::rang_to_block($rang);
@@ -132,7 +131,7 @@ class Tabelle
      * @param int|null $spieltag
      * @return int|null
      */
-    public static function get_team_wertigkeit(int $team_id, null|int $spieltag = null, int $saison = Config::SAISON): ?int
+    public static function get_team_wertigkeit(int $team_id, ?int $spieltag = null, int $saison = Config::SAISON): ?int
     {
         $rang = self::get_team_rang($team_id, $spieltag, $saison);
         return self::rang_to_wertigkeit($rang);
@@ -147,15 +146,17 @@ class Tabelle
     public static function rang_to_block(?int $rang): ?string
     {
         // Nichtligateam
-        if (is_null($rang)) return NULL;
+        if (null === $rang) {
+            return null;
+        }
 
         // Blockzuordnung
         foreach (Config::RANG_TO_BLOCK as $block => $range) {
-            if ($range[0] <= $rang && $range[1] >= $rang){
+            if ($range[0] <= $rang && $range[1] >= $rang) {
                 return $block;
             }
         }
-        trigger_error("Aus der Rangtabelle konnte kein Block abgeleitet werden.", E_USER_ERROR);
+        trigger_error("Aus der Rangtabelle konnte kein Block abgeleitet werden.", \E_USER_ERROR);
     }
 
     /**
@@ -167,12 +168,12 @@ class Tabelle
     public static function rang_to_wertigkeit(?int $rang): ?int
     {
         // Nichtligateam
-        if (is_null($rang)){
-            return NULL;
+        if (null === $rang) {
+            return null;
         }
 
         // Platz 1 bis 43;
-        if (1 <= $rang && 43 >= $rang){
+        if (1 <= $rang && 43 >= $rang) {
             return round(250 * 0.955 ** ($rang - 1));
         }
 
@@ -205,34 +206,34 @@ class Tabelle
                 $result[$key]['teamname'] = Team::id_to_name($ergebnis['team_id'], $saison);
             }
         }
-        foreach ($result as $ergebnis){
+        foreach ($result as $ergebnis) {
             $return[$ergebnis['turnier_id']][] = $ergebnis;
         }
         return $return ?? [];
     }
 
     public static function get_meisterschafts_tabelle_templates(int $saison = Config::SAISON): array
-    {        
-        return array(
-            'desktop' => array(
+    {
+        return [
+            'desktop' => [
                 'tabelle' => 'templates/tabellen/desktop_mt_komplett.tmp.php',
-                'meister' => 'templates/tabellen/desktop_mt_meister.tmp.php'
-            ),
-            'mobil' => array(
+                'meister' => 'templates/tabellen/desktop_mt_meister.tmp.php',
+            ],
+            'mobil' => [
                 'tabelle' => 'templates/tabellen/mobil_mt_komplett.tmp.php',
-                'meister' => 'templates/tabellen/mobil_mt_meister.tmp.php'
-            ),
-        );
+                'meister' => 'templates/tabellen/mobil_mt_meister.tmp.php',
+            ],
+        ];
     }
 
     public static function get_rang_tabelle_templates(int $saison = Config::SAISON): array
     {
-        return array(
+        return [
             'desktop' => 'templates/tabellen/desktop_rangtabelle.tmp.php',
             'mobil' => 'templates/tabellen/mobil_rangtabelle.tmp.php',
-        );
+        ];
     }
-    
+
     /**
      * Gibt das Array der Meisterschaftstabelle aus
      *
@@ -302,7 +303,7 @@ class Tabelle
                 $return[$team_id]['hat_strafe'] = false;
             }
 
-            $return[$team_id]['summe'] += $eintrag['ergebnis'];        
+            $return[$team_id]['summe'] += $eintrag['ergebnis'];
             $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
             $return[$team_id]['details'][] = $eintrag;
         }
@@ -335,7 +336,7 @@ class Tabelle
             }
 
             $return[$strafe->getTeam()->id()]['hat_strafe'] = true;
-            
+
             // Addieren der Prozentstrafen
             if ($strafe->isStrafe() && !empty($strafe->getProzentsatz())) {
                 $return[$strafe->getTeam()->id()]['strafe'] = ($return[$strafe->getTeam()->id()]['strafe'] ?? 0) + $strafe->getProzentsatz() / 100;
@@ -361,7 +362,7 @@ class Tabelle
         foreach ($return as $key => $zeile) {
             $anzahl_ergebnisse = count($zeile['einzel_ergebnisse'] ?? []);
             $zeile['max_einzel'] = max($zeile['einzel_ergebnisse'] ?? [0]);
-            
+
             if ($anzahl_ergebnisse < 4) {
                 $return[$key]['platz'] = null;
             } else {
@@ -378,7 +379,7 @@ class Tabelle
                 $zeile_vorher['platz'] = $return[$key]['platz'];
                 $platz++;
             }
-        
+
         }
 
         if ($saison !== Config::SAISON) {
@@ -400,7 +401,7 @@ class Tabelle
     public static function get_rang_tabelle(int $spieltag, int $saison = Config::SAISON): array
     {
 
-        $ausnahme = match($saison) {
+        $ausnahme = match ($saison) {
             26 => 'OR tl.saison = 24',
             27 => 'OR tl.saison = 24 OR tl.saison = 25',
             default => '',
@@ -433,7 +434,7 @@ class Tabelle
         $result = db::$db->query($sql, $spieltag, $saison, $saison)->esc()->fetch();
         $return = [];
 
-        foreach($result as $row) {
+        foreach ($result as $row) {
             $team_id = $row['team_id'];
 
             if (!isset($return[$team_id])) {
@@ -443,7 +444,7 @@ class Tabelle
                 $return[$team_id]['ergebnisse'] = [];
                 $return[$team_id]['details'] = [];
             }
-            
+
             $return[$team_id]['summe'] += $row['ergebnis'];
             $return[$team_id]['ergebnisse'][] = $row['ergebnis'];
             $return[$team_id]['details'][] = $row;
@@ -509,8 +510,12 @@ class Tabelle
      */
     public static function sortieren_summe(array $value1, array $value2): int
     {
-        if ($value1['summe'] < $value2['summe']) return 1;
-        if ($value1['summe'] > $value2['summe']) return -1;
+        if ($value1['summe'] < $value2['summe']) {
+            return 1;
+        }
+        if ($value1['summe'] > $value2['summe']) {
+            return -1;
+        }
         return max($value2['einzel_ergebnisse']) <=> max($value1['einzel_ergebnisse']);
     }
 
@@ -523,8 +528,12 @@ class Tabelle
      */
     public static function sortieren_avg(array $value1, array $value2): int
     {
-        if ($value1['avg'] < $value2['avg']) return 1;
-        if ($value1['avg'] > $value2['avg']) return -1;
+        if ($value1['avg'] < $value2['avg']) {
+            return 1;
+        }
+        if ($value1['avg'] > $value2['avg']) {
+            return -1;
+        }
         return max($value2['ergebnisse']) <=> max($value1['ergebnisse']);
     }
 }

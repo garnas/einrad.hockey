@@ -8,12 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(
     name: "turniere_berichte",
     indexes: [
-        new ORM\Index(name: "turnier_id", columns: ["turnier_id"])
-    ])
-]
+        new ORM\Index(name: "turnier_id", columns: ["turnier_id"]),
+    ],
+)]
 class TurnierBericht
 {
-
     #[ORM\OneToOne(targetEntity: Turnier::class)]
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
     private Turnier $turnier;

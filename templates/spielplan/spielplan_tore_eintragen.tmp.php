@@ -40,8 +40,8 @@
                 </th>
             </tr>
             <?php foreach ($spielplan->spiele as $spiel_id => $spiel) { ?>
-                <tr <?php if (!is_null($spiel["tore_a"])
-                        && !is_null($spiel["tore_b"])
+                <tr <?php if (null !== $spiel["tore_a"]
+                        && null !== $spiel["tore_b"]
                         && !$spielplan->check_penalty_spiel($spiel_id, true)) { ?>
                         class="w3-pale-green"
                     <?php } //endif?>
@@ -131,7 +131,7 @@
                     <tr>
                         <td>
                             <?= date("H:i",
-                                strtotime($spielplan->spiele[$spiel_id+1]['zeit'])
+                                strtotime($spielplan->spiele[$spiel_id + 1]['zeit'])
                                 - $spielplan->get_pause($spiel_id) * 60) ?>
                         </td>
                         <td></td>
@@ -142,7 +142,7 @@
                         </td>
                         <td colspan="2"></td>
                     </tr>
-                <?php }// endif pause ?>
+                <?php }// endif pause?>
             <?php }// end foreach spiele?>
         </table>
     </div>

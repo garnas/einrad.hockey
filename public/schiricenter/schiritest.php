@@ -7,8 +7,9 @@ require_once '../../init.php'; # Autoloader und Session, muss immer geladen werd
 if (isset($_GET['md5sum'])) {
     [$pruefling_id, $pruefling, $test_level, $fragen, $neu] = SchiriTest::offizieller_test($_GET['md5sum']);
     Helper::log(Config::LOG_SCHIRI_PRUEFUNG, "$pruefling_id: hat die Seite geladen oder lässt das Ergebnis anzeigen.");
-    Helper::log(Config::LOG_SCHIRI_PRUEFUNG,
-        "$pruefling_id: " . print_r([$_SERVER['REQUEST_URI'], $_SERVER['HTTP_REFERER'] ?? '', $_SERVER['REMOTE_ADDR']], true)
+    Helper::log(
+        Config::LOG_SCHIRI_PRUEFUNG,
+        "$pruefling_id: " . print_r([$_SERVER['REQUEST_URI'], $_SERVER['HTTP_REFERER'] ?? '', $_SERVER['REMOTE_ADDR']], true),
     );
 }
 
@@ -27,7 +28,7 @@ if (isset($test_level)) {
 # Antwort auswerten oder neue Frage stellen?
 if (isset($_POST['beantworten'])) {
 
-    $alle_antworten_user = array();
+    $alle_antworten_user = [];
     $pruefling = $_SESSION['pruefling'];
     $titel = 'Auswertung des Schiritests';
     $fragen = $_SESSION['sc_test_fragen'];
@@ -41,7 +42,7 @@ if (isset($_POST['beantworten'])) {
         }
     }
 
-    if (!empty($pruefling)){
+    if (!empty($pruefling)) {
         SchiriTest::testergebnis_melden($fragen, $richtig, $alle_antworten_user);
     } elseif (count($fragen) > 1) {
         Helper::log(Config::LOG_SCHIRI_UEBUNGSTEST, "$richtig von " . count($fragen));
@@ -64,25 +65,25 @@ if (isset($_POST['beantworten'])) {
         $pruefling = '';
         $titel = 'Übungstest (' . $levelname . ')';
         $frage_id = 0; # zufällige Frage
-        if (($test_level=='L') && (isset($_POST['ausgewaehlte_nummer']))) {
+        if (($test_level == 'L') && (isset($_POST['ausgewaehlte_nummer']))) {
             $frage_id = $_POST['ausgewaehlte_nummer'];
             if (!ctype_digit($frage_id)) { # input ist kein integer
                 $frage_id = 0; # zufällige Frage
             }
         }
-        $fragen = 
-            SchiriTest::get_fragen($test_level,  0, $anzahl[0],  $frage_id) + 
-            SchiriTest::get_fragen($test_level,  1, $anzahl[1],  $frage_id) + 
-            SchiriTest::get_fragen($test_level,  2, $anzahl[2],  $frage_id) + 
-            SchiriTest::get_fragen($test_level,  3, $anzahl[3],  $frage_id) + 
-            SchiriTest::get_fragen($test_level,  4, $anzahl[4],  $frage_id) + 
-            SchiriTest::get_fragen($test_level,  5, $anzahl[5],  $frage_id) + 
-            SchiriTest::get_fragen($test_level,  6, $anzahl[6],  $frage_id) + 
-            SchiriTest::get_fragen($test_level,  7, $anzahl[7],  $frage_id) + 
-            SchiriTest::get_fragen($test_level,  8, $anzahl[8],  $frage_id) + 
-            SchiriTest::get_fragen($test_level,  9, $anzahl[9],  $frage_id) + 
-            SchiriTest::get_fragen($test_level, 10, $anzahl[10], $frage_id) +
-            SchiriTest::get_fragen($test_level, 11, $anzahl[11], $frage_id); 
+        $fragen
+            = SchiriTest::get_fragen($test_level, 0, $anzahl[0], $frage_id)
+            + SchiriTest::get_fragen($test_level, 1, $anzahl[1], $frage_id)
+            + SchiriTest::get_fragen($test_level, 2, $anzahl[2], $frage_id)
+            + SchiriTest::get_fragen($test_level, 3, $anzahl[3], $frage_id)
+            + SchiriTest::get_fragen($test_level, 4, $anzahl[4], $frage_id)
+            + SchiriTest::get_fragen($test_level, 5, $anzahl[5], $frage_id)
+            + SchiriTest::get_fragen($test_level, 6, $anzahl[6], $frage_id)
+            + SchiriTest::get_fragen($test_level, 7, $anzahl[7], $frage_id)
+            + SchiriTest::get_fragen($test_level, 8, $anzahl[8], $frage_id)
+            + SchiriTest::get_fragen($test_level, 9, $anzahl[9], $frage_id)
+            + SchiriTest::get_fragen($test_level, 10, $anzahl[10], $frage_id)
+            + SchiriTest::get_fragen($test_level, 11, $anzahl[11], $frage_id);
     }
     $_SESSION['sc_test_fragen'] = $fragen;
     $_SESSION['pruefling'] = $pruefling;
@@ -131,13 +132,13 @@ if (isset($_POST['beantworten'])) { # Test auswerten:
         $text_durchgefallen = ' Du hast leider nicht bestanden, ' . $pruefling . '. ';
     }
     if ($richtig >= $richtig_min) { # bestanden:
-        echo '<H1 class="w3-center w3-text-green">' .
-            Html::icon("sentiment_satisfied_alt", class:"md-36") . $text_bestanden .
-            Html::icon("sentiment_satisfied_alt", class:"md-36") . '</H1>';
+        echo '<H1 class="w3-center w3-text-green">'
+            . Html::icon("sentiment_satisfied_alt", class: "md-36") . $text_bestanden
+            . Html::icon("sentiment_satisfied_alt", class: "md-36") . '</H1>';
     } else {
-        echo '<H1 class="w3-center w3-text-red">' .
-            Html::icon("sentiment_very_dissatisfied", class: "md-36") . $text_durchgefallen .
-            Html::icon("sentiment_very_dissatisfied", class: "md-36") . '</H1>';
+        echo '<H1 class="w3-center w3-text-red">'
+            . Html::icon("sentiment_very_dissatisfied", class: "md-36") . $text_durchgefallen
+            . Html::icon("sentiment_very_dissatisfied", class: "md-36") . '</H1>';
     }
     echo '<H4>Es wurden ' . $richtig . ' von ' . count($fragen) . ' Fragen ';
     echo 'richtig beantwortet, eine ausführliche Auswertung findest du hier:</H4>';
@@ -149,7 +150,7 @@ if (isset($_POST['beantworten'])) { # Test auswerten:
     echo 'manchen Fragen gibt es auch noch eine zusätzliche Erklärung.</LI></UL>';
 } else { # Test anzeigen:
     echo '<H2>' . $titel . '</H2><UL>';
-    if ($test_level!='L') {
+    if ($test_level != 'L') {
         echo '<LI>Der Test besteht aus ' . count($fragen) . ' Fragen.</LI>';
         echo '<LI>Du hast ' . $timelimit . ' Minuten Zeit.</LI>';
     }
@@ -160,10 +161,10 @@ if (isset($_POST['beantworten'])) { # Test auswerten:
         echo '<LI>Achtung: Seite nicht neu laden, während der Test ausgefüllt wird!</LI>';
     }
     echo '</UL>';
-    if ($test_level!='L') { # Timer, außer für Lehrgang
+    if ($test_level != 'L') { # Timer, außer für Lehrgang
         echo '<div class="w3-center w3-white w3-bottombar w3-border-primary"';
         echo ' style="position: sticky; top: 0; z-index: 1000;">';
-        Html::countdown(time() + 60*$timelimit);
+        Html::countdown(time() + 60 * $timelimit);
         echo '</div>';
     }
 }
@@ -173,7 +174,7 @@ $frage_index = 0;
 foreach ($fragen as $frage_id => $frage) { # Schleife über alle Fragen:
     echo '<div class="w3-section w3-display-container">';
     $frage_index++;
-    if ($test_level=='L') {
+    if ($test_level == 'L') {
         SchiriTest::frage_anzeigen($frage_id, 0, $frage); # Fragen-Nr. nicht anzeigen
     } else {
         SchiriTest::frage_anzeigen($frage_id, $frage_index, $frage);
@@ -199,7 +200,7 @@ foreach ($fragen as $frage_id => $frage) { # Schleife über alle Fragen:
 } # end foreach fragen
 $_SESSION['frage_id'] = $frage_id; # Fragennummer abspeichern
 if (!isset($_POST['beantworten'])) {
-    if ($test_level!='L') {
+    if ($test_level != 'L') {
         echo '<h3 class="w3-topbar">Fertig!</h3>';
         echo '<P>Du kannst dir alle Fragen nochmals ansehen, und du kannst deine ';
         echo 'Antworten jetzt noch ändern. Dann bitte auf "Test abgeben" klicken, ';

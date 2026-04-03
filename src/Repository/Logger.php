@@ -11,15 +11,16 @@ class Logger implements LoggerInterface
 {
     private function isWriteOperation(array $context): bool
     {
-        if (!key_exists("sql", $context)) {
+        if (!\array_key_exists("sql", $context)) {
             return false;
         }
         $sql = strtolower($context["sql"]);
-        return stripos($sql, "select") !== 0;    }
+        return stripos($sql, "select") !== 0;
+    }
 
     private function isInsertTurniereLog(array $context): bool
     {
-        if (!key_exists("sql", $context)) {
+        if (!\array_key_exists("sql", $context)) {
             return false;
         }
         $sql = strtolower($context["sql"]);
@@ -27,7 +28,7 @@ class Logger implements LoggerInterface
     }
     private function isInsertMailbot(array $context): bool
     {
-        if (!key_exists("sql", $context)) {
+        if (!\array_key_exists("sql", $context)) {
             return false;
         }
         $sql = strtolower($context["sql"]);
@@ -36,7 +37,7 @@ class Logger implements LoggerInterface
 
     private function isAbstimmung(array $context): bool
     {
-        if (!key_exists("sql", $context)) {
+        if (!\array_key_exists("sql", $context)) {
             return false;
         }
         $sql = strtolower($context["sql"]);
@@ -46,7 +47,7 @@ class Logger implements LoggerInterface
 
     private function superLog(string $level, string $message, array $context = []): void
     {
-        if (!in_array($level, ["debug", "info" , "notice"])) {
+        if (!\in_array($level, ["debug", "info" , "notice"])) {
             $log = $level . " - " . $message . " - " . print_r($context, true);
             Helper::log(Config::LOG_DB_DOCTRINE, $log);
         }

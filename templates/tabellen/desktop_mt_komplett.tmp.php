@@ -14,16 +14,20 @@
 <div>
     <?php $counter = 0; ?>
     <?php foreach ($meisterschafts_tabelle as $key => $zeile): ?>        
-        <?php if ($counter % 2 == 0) { $color = "w3-light-grey"; } else { $color = "w3-white"; } ?>
+        <?php if ($counter % 2 == 0) {
+            $color = "w3-light-grey";
+        } else {
+            $color = "w3-white";
+        } ?>
         <!-- Kopfzeile fuer das Team -->
         <div  onclick="show_large_results('meister', <?=$key?>)" style="cursor: pointer;" id="large-meister-head-<?=$key?>" class="w3-row <?=$color?> w3-border-bottom w3-border-grey w3-hover-text-secondary">
             <div class="w3-col w3-right w3-padding-8 w3-center" style="width: 42px;">
-                <? if (!empty($zeile['details'])): ?>
+                <?php if (!empty($zeile['details'])): ?>
                     <span>
                         <span id="large-meister-icon-show-<?=$key?>" class="material-icons w3-text-primary" style="display:block">arrow_drop_down</span>
                         <span id="large-meister-icon-hide-<?=$key?>" class="material-icons w3-text-primary" style="display:none">arrow_drop_up</span>
                     </span>
-                <? endif; ?>
+                <?php endif; ?>
             </div>
             <div class="w3-rest">
                 <div class="w3-row">

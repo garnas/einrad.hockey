@@ -8,7 +8,6 @@ use App\Service\Turnier\BlockService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-
 class BlockServiceTest extends TestCase
 {
     public static function provideHoehereTurnierBlocks(): array
@@ -28,7 +27,7 @@ class BlockServiceTest extends TestCase
         $turnier->setBlock($block);
         $this->assertEquals(
             expected: $hoehererBlock,
-            actual: BlockService::hoehererTurnierBlock($turnier)
+            actual: BlockService::hoehererTurnierBlock($turnier),
         );
     }
 
@@ -49,7 +48,7 @@ class BlockServiceTest extends TestCase
         $turnier->setBlock($block);
         $this->assertEquals(
             expected: $hoehererBlock,
-            actual: BlockService::niedrigererTurnierBlock($turnier)
+            actual: BlockService::niedrigererTurnierBlock($turnier),
         );
     }
 
@@ -82,7 +81,7 @@ class BlockServiceTest extends TestCase
         $teamMock->method('getBlock')->willReturn($teamblock);
         $this->assertEquals(
             expected: $passend,
-            actual: BlockService::isBlockPassend($turnier, $teamMock)
+            actual: BlockService::isBlockPassend($turnier, $teamMock),
         );
     }
 
@@ -113,7 +112,7 @@ class BlockServiceTest extends TestCase
         $teamMock->method('getBlock')->willReturn($teamblock);
         $this->assertEquals(
             expected: $hoeher,
-            actual: BlockService::isTurnierBlockHigher($turnier, $teamMock)
+            actual: BlockService::isTurnierBlockHigher($turnier, $teamMock),
         );
     }
 }

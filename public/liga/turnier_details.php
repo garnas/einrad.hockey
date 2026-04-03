@@ -13,14 +13,14 @@ require_once '../../init.php';
 $turnier_id = (int) @$_GET['turnier_id'];
 $turnier = TurnierRepository::get()->turnier($turnier_id);
 
-if ($turnier === null){
+if ($turnier === null) {
     Helper::not_found("Das Turnier konnte nicht gefunden werden.");
 }
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-Html::$titel = $turnier->getName() ?: $turnier->getDetails()->getOrt() ." | Deutsche Einradhockeyliga";
+Html::$titel = $turnier->getName() ?: $turnier->getDetails()->getOrt() . " | Deutsche Einradhockeyliga";
 Html::$content = "Alle wichtigen Turnierdetails werden hier angezeigt.";
 include '../../templates/header.tmp.php';
 ?>
@@ -40,19 +40,17 @@ include '../../templates/header.tmp.php';
             <td>
                 <?= e($turnier->getDetails()->getHallenname())?><br>
                 <?= e($turnier->getDetails()->getStrasse())?><br>
-                <?= e($turnier->getDetails()->getPlz() .' '.$turnier->getDetails()->getOrt())?><br>
+                <?= e($turnier->getDetails()->getPlz() . ' ' . $turnier->getDetails()->getOrt())?><br>
                 <?= Html::link(
-                        str_replace(' '
-                            , '%20'
-                            , 'https://www.google.de/maps/search/'
-                                .       e($turnier->getDetails()->getHallenname())
-                                . "+" . e($turnier->getDetails()->getStrasse())
-                                . "+" . e($turnier->getDetails()->getPlz())
-                                . "+" . e($turnier->getDetails()->getOrt())
-                                . '/'),
-                        'Google Maps',
-                        true,
-                        'launch') ?>
+                    str_replace(' ', '%20', 'https://www.google.de/maps/search/'
+                            . e($turnier->getDetails()->getHallenname())
+                            . "+" . e($turnier->getDetails()->getStrasse())
+                            . "+" . e($turnier->getDetails()->getPlz())
+                            . "+" . e($turnier->getDetails()->getOrt())
+                            . '/'),
+                    'Google Maps',
+                    true,
+                    'launch') ?>
                 <?php if (!empty($turnier->getDetails()->getHaltestellen())): ?>
                     <p style="white-space: normal;">
                         <i>Haltestellen: <?= e($turnier->getDetails()->getHaltestellen()) ?></i>
@@ -161,14 +159,14 @@ include '../../templates/header.tmp.php';
 <!-- Weiterführende Links -->
 <p class="w3-text-grey w3-border-bottom w3-border-grey">Links</p>
 <p><?=Html::link('../liga/turniere.php#' . $turnier_id, 'Anstehende Turniere', icon: "event")?></p>
-<?php if($turnier->isSpielplanPhase()){?>
+<?php if ($turnier->isSpielplanPhase()) {?>
     <p><?=Html::link(TurnierLinks::spielplan($turnier), 'Zum Spielplan', true, "reorder")?></p>
 <?php }//end if?>
 
-<?php if (isset($_SESSION['logins']['team'])){?>
+<?php if (isset($_SESSION['logins']['team'])) {?>
     <p><?=Html::link('../teamcenter/tc_team_anmelden.php?turnier_id=' . $turnier_id, 'Zum Turnier anmelden', icon: "how_to_reg")?></p>
     <p><?=Html::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, 'Zum Turnierreport', icon: "article")?></p>
-<?php }else{ ?>
+<?php } else { ?>
     <p><?=Html::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier_id, 'Zum Turnierreport', icon: "lock")?></p>
 <?php } //endif?>
 
@@ -176,7 +174,7 @@ include '../../templates/header.tmp.php';
     <p><?=Html::link('../teamcenter/tc_turnier_bearbeiten.php?turnier_id=' . $turnier_id, 'Turnier als Ausrichter bearbeiten', icon: "create")?></p>
 <?php } //endif?>
 
-<?php if (isset($_SESSION['logins']['la'])){?>
+<?php if (isset($_SESSION['logins']['la'])) {?>
     <p><?=Html::link('../ligacenter/lc_turnier_bearbeiten.php?turnier_id=' . $turnier_id, 'Turnier bearbeiten (Ligaausschuss)')?></p>
     <p><?=Html::link('../ligacenter/lc_team_anmelden.php?turnier_id=' . $turnier_id, 'Teams anmelden (Ligaausschuss)')?></p>
     <p><?=Html::link('../ligacenter/lc_turnier_log.php?turnier_id=' . $turnier_id, 'Turnierlog einsehen (Ligaausschuss)')?></p>

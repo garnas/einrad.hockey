@@ -43,7 +43,7 @@ use App\Service\Team\TeamSnippets;
                                 <?= ($grund == FreilosGrund::TURNIER_AUSGERICHTET
                                     || $grund == FreilosGrund::FREILOS_GESETZT)
                                     ? "disabled" : ""
-                                ?>
+                            ?>
                                     value=<?= $grund->name ?>><?= $grund->value ?></option>
                         <?php endforeach; ?>
                     </select>

@@ -59,9 +59,9 @@ class LigaLeitung
         }
 
         // Passwort Hashen
-        $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
+        $passwort_hash = password_hash($passwort, \PASSWORD_DEFAULT);
         if (!is_string($passwort_hash)) {
-            trigger_error("set_passwort fehlgeschlagen.", E_USER_ERROR);
+            trigger_error("set_passwort fehlgeschlagen.", \E_USER_ERROR);
         }
 
         // Neues Passwort in die Datenbank schreiben
@@ -106,7 +106,8 @@ class LigaLeitung
             $_SESSION['logins'][$context]['id'] = $details['ligaleitung_id'];
             $_SESSION['logins'][$context]['login'] = $details['login'];
             Helper::log(
-                Config::LOG_LOGIN, "Erfolgreich       | Loginname: " . $login . " | Kontext: " . $context
+                Config::LOG_LOGIN,
+                "Erfolgreich       | Loginname: " . $login . " | Kontext: " . $context,
             );
             return true;
         }
@@ -125,7 +126,7 @@ class LigaLeitung
 
     private static function get_context(string $funktion): string
     {
-        return match($funktion) {
+        return match ($funktion) {
             "admin", "ligaausschuss" => "la",
             "team_social_media" => "oa",
         };

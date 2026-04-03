@@ -13,7 +13,9 @@ class TurnierServiceTest extends TestCase
     protected function provideTeamForLogin($teamname, $ligateam, $aktiv, $password)
     {
         $team = TeamRepository::get()->findByName($teamname);
-        if ($team) TeamRepository::get()->delete($team);
+        if ($team) {
+            TeamRepository::get()->delete($team);
+        }
         $team = (new nTeam())
             ->setName($teamname)
             ->setLigateam($ligateam)
@@ -22,7 +24,7 @@ class TurnierServiceTest extends TestCase
         $team->setDetails(
             (new TeamDetails())
                 ->setTeam($team)
-                ->setTeamfoto(null)->setTrikotFarbe1(null)->setTrikotFarbe2(null)
+                ->setTeamfoto(null)->setTrikotFarbe1(null)->setTrikotFarbe2(null),
         );
 
         TeamRepository::get()->speichern($team);
