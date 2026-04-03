@@ -24,7 +24,7 @@ class env
      * Webadresse für Verlinkungen, unabhängig der Ordnerstruktur.
      * Auf dem Server ist der public-Ordner mit der Domain verknüpft.
      */
-    public const BASE_URL = 'http://localhost/einrad.hockey/public';
+    public const BASE_URL = 'http://localhost';
 
     /**
      * Basispfad für includes, requires
@@ -35,10 +35,10 @@ class env
     /**
      * SQL-Datenbank Zugangsdaten
      */
-    public const HOST_NAME = 'localhost';
+    public const HOST_NAME = 'db';
     public const DATABASE = 'db_localhost';
     public const USER_NAME = 'root';
-    public const PASSWORD = '';
+    public const PASSWORD = 'root';
 
     /**
      * Mailserver

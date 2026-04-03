@@ -28,9 +28,16 @@ ini_set('error_log', __DIR__ . '/system/logs/errors.log');
 
 
 /**
- * Enviroment-Variablen laden
+ * Initialisiert Umgebungsvariablen.
+ * Priorisiert die im .gitignore liegende - 'env.php' im Root-Verzeichnis.
+ * Wenn diese env.php nicht existiert wird die '_localhost/env.php' verwendet.
+ * Diese env.php beinhaltet alle Default-Werte für eine lokale Entwicklungsumgebung.
  */
-require_once __DIR__ . '/env.php';
+try {
+    require_once __DIR__ . '/env.php';
+}catch (Throwable $_){
+    require_once __DIR__ . '/_localhost/env.php';
+}
 
 
 // Nur für Localhost-Einstellungen
