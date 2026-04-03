@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  pull_request:
+jobs:
+  php-cs-fixer:
+    name: PHP CS Fixer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run PHP CS Fixer
+        run: vendor/bin/php-cs-fixer check --diff
+
+  phpunit:
+    name: PHPUnit
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mariadb:12.2.2
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: db_localhost
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=2s
+          --health-timeout=2s
+          --health-retries=10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+          extensions: pdo_mysql
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Import database
+        run: mysql -h 127.0.0.1 -u root -proot db_localhost < _localhost/db_localhost.sql
+
+      - name: Create env.php
+        run: |
+          cat > env.php << 'EOF'
+          <?php
+          class env
+          {
+              public const IS_LOCALHOST = true;
+              public const BASE_URL = 'http://localhost';
+              public const BASE_PATH = __DIR__;
+              public const HOST_NAME = '127.0.0.1';
+              public const DATABASE = 'db_localhost';
+              public const USER_NAME = 'root';
+              public const PASSWORD = 'root';
+              public const ACTIVATE_EMAIL = false;
+              public const SMTP_HOST = '';
+              public const SMTP_USER = '';
+              public const SMTP_PW = '';
+              public const SMTP_PORT = 0;
+              public const LAMAIL = 'test@einrad.hockey';
+              public const LAMAIL_ANTWORT = 'test@einrad.hockey';
+              public const TECHNIKMAIL = 'test@einrad.hockey';
+              public const SCHIRIMAIL = 'test@einrad.hockey';
+              public const OEFFIMAIL = 'test@einrad.hockey';
+              public const WARTUNGSMODUS = false;
+              public const DEBUGMODUS = false;
+              public const TERMINPLANER_KEY = 'NotValid';
+              public const WEBHOOK_DISCORD = '';
+              public const LINK_DISCORD = '';
+              public const ACTIVE_FINAL_DISCORD = false;
+              public const ABSTIMMUNG_KEY = '';
+          }
+          EOF
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit tests/
