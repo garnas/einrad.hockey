@@ -20,8 +20,9 @@ services:
       MARIADB_DATABASE: db_localhost
       MARIADB_USER: appuser
       MARIADB_PASSWORD: apppass
-    volumes:  
+    volumes:
       - db-data:/var/lib/mysql
+      - ../_localhost/db_localhost.sql:/docker-entrypoint-initdb.d/db_localhost.sql:ro
     ports:
       - '3306:3306'
 
