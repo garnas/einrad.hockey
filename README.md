@@ -82,6 +82,13 @@ vendor/bin/phpunit tests/
 
 > Für die Integrationstests muss die Datenbank in `env.php` konfiguriert sein.
 
+### CI (GitHub Actions)
+
+Bei jedem Pull Request werden automatisch ausgeführt:
+
+- **PHP CS Fixer** — prüft den Code-Style (`vendor/bin/php-cs-fixer check`)
+- **PHPUnit** — führt alle Tests aus (inklusive Integrationstests mit Datenbank)
+
 ### Dependencies
 
 ```shell
