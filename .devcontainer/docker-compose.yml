@@ -16,10 +16,8 @@ services:
     image: mariadb:12.2.2
     restart: always
     environment:
-      MARIADB_ROOT_PASSWORD: root
+      MARIADB_ROOT_PASSWORD: root  # Username: root
       MARIADB_DATABASE: db_localhost
-      MARIADB_USER: appuser
-      MARIADB_PASSWORD: apppass
     volumes:
       - db-data:/var/lib/mysql
       - ../_localhost/db_localhost.sql:/docker-entrypoint-initdb.d/db_localhost.sql:ro
@@ -33,8 +31,8 @@ services:
       - '8081:80'
     environment:
       PMA_HOST: db
-      PMA_USER: appuser
-      PMA_PASSWORD: apppass
+      PMA_USER: root
+      PMA_PASSWORD: root
       UPLOAD_LIMIT: 256M
     depends_on:
     - db
