@@ -10,6 +10,11 @@ services:
     environment:
       PHP_POST_MAX_SIZE: 20M
       PHP_UPLOAD_MAX_FILESIZE: 20M
+    depends_on:
+      db:
+        condition: service_healthy
+        # Race Condition mit der Datenbank verhindern
+        # Ansonsten werden bin/doctrine-Skripte ausgeführt, bevor die Datenbank da ist
   db:
     image: mariadb:12.2.2
     restart: always
@@ -21,6 +26,11 @@ services:
       - ../_localhost/db_localhost.sql:/docker-entrypoint-initdb.d/db_localhost.sql:ro
     ports:
       - '3306:3306'
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
 
   phpmyadmin:
     image: phpmyadmin:5.2.3
