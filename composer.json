@@ -1,5 +1,27 @@
 {
     "require": {
+        "php": "8.3.30",
+        "ext-calendar" :  "*",
+        "ext-ctype" : "*",
+        "ext-curl" :  "*",
+        "ext-exif" :  "*",
+        "ext-ffi" :  "*",
+        "ext-fileinfo" : "*",
+        "ext-ftp" :  "*",
+        "ext-gd" : "*",
+        "ext-iconv" : "*",
+        "ext-intl": "*",
+        "ext-mbstring" : "*",
+        "ext-mysql" : "*",
+        "ext-pdo" : "*",
+        "ext-phar" :  "*",
+        "ext-posix" : "*",
+        "ext-readline" :  "*",
+        "ext-sockets" : "*",
+        "ext-sysvsem" :  "*",
+        "ext-tokenizer" : "*",
+        "ext-xsl" :  "*",
+        "ext-zip" : "*",
         "phpmailer/phpmailer": "v6.10.0",
         "mpdf/mpdf": "v8.2.5",
         "gregwar/captcha": "v1.3.0",
@@ -17,6 +39,7 @@
         }
     },
     "require-dev": {
+        "ext-xdebug" :  "*",
         "phpunit/phpunit": "12.5.8",
         "friendsofphp/php-cs-fixer": "^3.94"
     }

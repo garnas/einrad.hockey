@@ -4,14 +4,18 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
     unzip \
-    libfreetype6-dev \
+    libfreetype-dev \
     libjpeg62-turbo-dev \
     libpng-dev \
     libicu-dev \
+    libcurl4-openssl-dev \
+    libffi-dev \
+    libonig-dev \
+    libedit-dev \
     git
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo_mysql zip intl \
+    && docker-php-ext-install ctype curl exif ffi fileinfo ftp gd iconv intl mbstring pdo_mysql phar posix readline sockets sysvsem tokenizer xsl zip \
     && pecl install xdebug \
     && docker-php-ext-enable xdebug
 
