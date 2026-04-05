@@ -1,9 +1,9 @@
 <?php
 
-    if(!Env::WARTUNGSMODUS){
-        header("Location: " . Env::BASE_URL . "/liga/neues.php");
-        die();
-    }
+if (!Env::WARTUNGSMODUS) {
+    header("Location: " . Env::BASE_URL . "/liga/neues.php");
+    die();
+}
 
 ?>
 <html lang="de">

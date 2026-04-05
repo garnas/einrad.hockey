@@ -39,28 +39,29 @@ class BlockService
             if ($blockContext->isSpassTurnier()) {
                 return "(NL)";
             }
-            
+
             if ($blockContext->isSofortOeffnen() && $blockContext->isWartePhase()) {
                 $blockToHighlight = $blockContext->getBlock();
                 $string = str_replace(
                     $blockToHighlight,
                     "<span class='w3-text-black' style='font-style: normal'>$blockToHighlight</span>",
-                    Config::BLOCK_ALL[0]);
+                    Config::BLOCK_ALL[0],
+                );
                 return "(<span class='w3-text-gray' style='font-style: italic'>" . $string . "</span>)";
             }
-            
+
             return "(" . $blockContext->getBlock() . ")";
         }
 
-        if (is_a($blockContext, nTeam::class)){
+        if (is_a($blockContext, nTeam::class)) {
             return $blockContext->isLigaTeam() ? "(" . $blockContext->getBlock() . ")" : "";
         }
 
-        if (is_string($blockContext)) {
+        if (\is_string($blockContext)) {
             return "(" . $blockContext . ")";
         }
 
-        if (is_array($blockContext)) {
+        if (\is_array($blockContext)) {
             return "(" . implode(",", $blockContext) . ")";
         }
 
@@ -73,10 +74,10 @@ class BlockService
         $firstChar = substr($turnier->getBlock(), 0);
 
         // Berechne den vorhergehenden Buchstaben im Alphabet
-        $ascii = ord(strtoupper($firstChar));
+        $ascii = \ord(strtoupper($firstChar));
 
         // Vorhergehenden Buchstaben bestimmen
-        $prevChar = chr($ascii - 1);
+        $prevChar = \chr($ascii - 1);
 
         // Rückgabe: vorhergehenden Buchstaben an den Anfang setzen
         return $prevChar . $turnier->getBlock();
@@ -89,10 +90,10 @@ class BlockService
         $lastChar = substr($turnier->getBlock(), -1);
 
         // ASCII-Wert ermitteln
-        $ascii = ord(strtoupper($lastChar));
+        $ascii = \ord(strtoupper($lastChar));
 
         // Nachfolgenden Buchstaben bestimmen
-        $nextChar = chr($ascii + 1);
+        $nextChar = \chr($ascii + 1);
 
         // Rückgabe: Nachfolgenden Buchstaben an den Block anhängen
         return $turnier->getBlock() . $nextChar;
@@ -109,7 +110,7 @@ class BlockService
 
         // Check ob ein Buchstabe des Team-Blocks im Turnier-Block vorkommt
         foreach ($buchstabenTeam as $buchstabe) {
-            if (in_array($buchstabe, $buchstabenTurnier)) {
+            if (\in_array($buchstabe, $buchstabenTurnier)) {
                 return true;
             }
         }

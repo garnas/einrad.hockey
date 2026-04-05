@@ -23,27 +23,27 @@
     <a href="<?= Env::BASE_URL ?>/liga/ueber_uns.php" class="no">
         <h3 class="w3-margin-left w3-text-primary"><i style="vertical-align: -16%" class="material-icons w3-xlarge">info</i> INFO</h3>
     </a>
-    <?php foreach(Nav::get_info() as Nav::$link){ ?>
+    <?php foreach (Nav::get_info() as Nav::$link) { ?>
         <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
-    <?php } //end for ?>
+    <?php } //end for?>
 
     <!-- Liga -->
     <div class="w3-text-black">
         <h3 class="w3-margin-left w3-text-primary">
-            <?= Html::icon("emoji_events", tag:"h3") ?> LIGA
+            <?= Html::icon("emoji_events", tag: "h3") ?> LIGA
         </h3>
     </div>
-    <?php foreach(Nav::get_liga() as Nav::$link){ ?>
+    <?php foreach (Nav::get_liga() as Nav::$link) { ?>
         <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
-    <?php } //end for ?>
+    <?php } //end for?>
 
     <!-- Modus -->
     <div class="w3-text-primary">
         <h3 class="w3-margin-left"><i style="vertical-align: -16%" class="material-icons">settings</i> MODUS</h3>
     </div>
-    <?php foreach(Nav::get_modus() as Nav::$link){ ?>
+    <?php foreach (Nav::get_modus() as Nav::$link) { ?>
         <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
-    <?php } //end for ?>
+    <?php } //end for?>
 
     <!-- Teamcenter -->
     <div class="w3-text-primary">
@@ -51,17 +51,17 @@
             <h3 class="w3-margin-left"><i style="vertical-align: -20%" class="material-icons w3-xlarge">group</i> TEAMCENTER</h3>
         </a>
     </div>
-    <?php foreach(Nav::get_teamcenter() as Nav::$link){ ?>
+    <?php foreach (Nav::get_teamcenter() as Nav::$link) { ?>
         <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button <?= Nav::$link[2] ?>"><?= Nav::$link[1] ?></a>
-    <?php } //end for ?>
+    <?php } //end for?>
 
     <!-- Sonstiges -->
     <div class="w3-text-primary">
         <h3 class="w3-margin-left"><i style="vertical-align: -16%" class="material-icons w3-xlarge">format_list_bulleted</i> SONSTIGES</h3>
     </div>
-    <?php foreach(Nav::get_sonstiges() as Nav::$link){ ?>
+    <?php foreach (Nav::get_sonstiges() as Nav::$link) { ?>
         <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button <?= Nav::$link[2] ?? '' ?>"><?= Nav::$link[1] ?></a>
-    <?php } //end for ?>
+    <?php } //end for?>
     <a href="#" class="w3-bar-item w3-button"></a>
 </div>
 
@@ -71,7 +71,7 @@
 <!--Navigation für Smartphones -->
 <div class="w3-display-container">
     <!-- Hintergrundbild -->
-    <img src="<?= Html::get_hintergrund_bild() ?>" class="<?php if (!isset($_SESSION['logins']['la']) && !isset($_SESSION['logins']['team'])){?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.4;">
+    <img src="<?= Html::get_hintergrund_bild() ?>" class="<?php if (!isset($_SESSION['logins']['la']) && !isset($_SESSION['logins']['team'])) {?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.4;">
     <div class="w3-display-left w3-margin-left">
         <img src="<?= Env::BASE_URL ?>/bilder/logo_lang_small.png" onclick="open_sidebar()" class="w3-image" alt="langes Logo" style="max-width: 80%; vertical-align: 22%; cursor: pointer">
     </div>
@@ -86,9 +86,9 @@
 
     <!-- Logout Button -->
     <div class="w3-display-bottomright w3-text-primary w3-large">
-        <?php if (isset($_SESSION['logins']['team'])){?>
+        <?php if (isset($_SESSION['logins']['team'])) {?>
             <a href='<?= Env::BASE_URL ?>/teamcenter/tc_logout.php' class="w3-button w3-hover-primary"><i class="material-icons w3-xlarge">block</i> Logout</a>
-        <?php }elseif (isset($_SESSION['logins']['la'])){?>
+        <?php } elseif (isset($_SESSION['logins']['la'])) {?>
             <a href='<?= Env::BASE_URL ?>/ligacenter/lc_logout.php' class="w3-button w3-hover-primary"><i class="material-icons w3-xlarge">block</i> Logout</a>
         <?php }?>
     </div>

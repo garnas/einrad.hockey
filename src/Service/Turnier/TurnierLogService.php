@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Service\Turnier;
 
 use App\Entity\Turnier\Turnier;
@@ -6,8 +7,8 @@ use App\Entity\Turnier\TurniereLog;
 use DateTime;
 use Helper;
 
-class TurnierLogService {
-
+class TurnierLogService
+{
     private array $logTexts;
     private Turnier $turnier;
 
@@ -54,8 +55,8 @@ class TurnierLogService {
             $neu = $neu->format("d.m.Y");
         }
 
-        if ($alt !== $neu){
-            $this->addLog($name . ": " . $alt . " -> " . $neu );
+        if ($alt !== $neu) {
+            $this->addLog($name . ": " . $alt . " -> " . $neu);
         }
     }
 

@@ -81,7 +81,7 @@ class MailBot
             $mails = db::$db->query($sql, $mail_id)->fetch();
         }
 
-        foreach($mails as $mail){
+        foreach ($mails as $mail) {
             $mailer = self::start_mailer();
             $mailer->isHTML(true); // Für die Links
             $mailer->setFrom($mail['absender'], 'Einradhockey-Mailbot'); // Absenderemail und -name setzen
@@ -117,16 +117,20 @@ class MailBot
      * @param string|array $adressaten
      * @param string $absender
      */
-    public static function add_mail(string $betreff, string $inhalt, string|array $adressaten,
-                                    string $absender = Env::SMTP_USER, bool $send_instantly = false): void
-    {
+    public static function add_mail(
+        string $betreff,
+        string $inhalt,
+        string|array $adressaten,
+        string $absender = Env::SMTP_USER,
+        bool $send_instantly = false,
+    ): void {
         // Nur wenn Mailadressen vorhanden sind, wird eine Mail hinzugefügt
-        if (empty($adressaten)){
+        if (empty($adressaten)) {
             return;
         }
 
         // In String umwandeln
-        if (is_array($adressaten)){
+        if (is_array($adressaten)) {
             $adressaten = implode(",", $adressaten);
         }
 
@@ -149,7 +153,7 @@ class MailBot
      * @param string $mail_status
      * @param string|null $fehler
      */
-    public static function set_status(int $mail_id, string $mail_status, string $fehler = NULL): void
+    public static function set_status(int $mail_id, string $mail_status, string $fehler = null): void
     {
         $sql = "
             UPDATE mailbot 
@@ -193,11 +197,11 @@ class MailBot
                 ) {
                     $betreff = "Freie Plätze: " . $turnier->get_tblock() . "-Turnier in " . $turnier->get_ort();
                     ob_start();
-                        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
-                        include(Env::BASE_PATH . "/templates/mails/mail_plaetze_frei.tmp.php");
-                        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+                    include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+                    include(Env::BASE_PATH . "/templates/mails/mail_plaetze_frei.tmp.php");
+                    include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
                     $inhalt = ob_get_clean();
-                    $emails = (new Kontakt ($team_id))->get_emails('info');
+                    $emails = (new Kontakt($team_id))->get_emails('info');
                     self::add_mail($betreff, $inhalt, $emails);
                 }
             }
@@ -214,13 +218,13 @@ class MailBot
     {
         $betreff = "Spielen-Liste: " . $turnier->get_tblock() . "-Turnier in " . $turnier->get_ort();
         ob_start();
-            include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
-            include(Env::BASE_PATH . "/templates/mails/mail_warte_zu_spiele.tmp.php");
-            include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_warte_zu_spiele.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
         $inhalt = ob_get_clean();
-        $akt_kontakt = new Kontakt ($team_id);
+        $akt_kontakt = new Kontakt($team_id);
         $emails = $akt_kontakt->get_emails('info');
-        self::add_mail($betreff, $inhalt, $emails, send_instantly: True);
+        self::add_mail($betreff, $inhalt, $emails, send_instantly: true);
     }
 
     /**
@@ -246,11 +250,11 @@ class MailBot
                     }
                     $betreff = "$liste: " . $turnier->get_tblock() . "-Turnier in " . $turnier->get_ort();
                     ob_start();
-                        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
-                        include(Env::BASE_PATH . "/templates/mails/mail_gelost.tmp.php");
-                        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+                    include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+                    include(Env::BASE_PATH . "/templates/mails/mail_gelost.tmp.php");
+                    include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
                     $inhalt = ob_get_clean();
-                    $emails = (new Kontakt ($team_id))->get_emails('info');
+                    $emails = (new Kontakt($team_id))->get_emails('info');
                     self::add_mail($betreff, $inhalt, $emails);
                 }
             }
@@ -271,11 +275,11 @@ class MailBot
                 if ($turnier->is_spielberechtigt($team_id) && !$turnier->is_doppelmeldung($team_id)) {
                     $betreff = "Neues " . $turnier->get_tblock() . "-Turnier in " . $turnier->get_ort();
                     ob_start();
-                        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
-                        include(Env::BASE_PATH . "/templates/mails/mail_neues_turnier.tmp.php");
-                        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+                    include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+                    include(Env::BASE_PATH . "/templates/mails/mail_neues_turnier.tmp.php");
+                    include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
                     $inhalt = ob_get_clean();
-                    $emails = (new Kontakt ($team_id))->get_emails('info');
+                    $emails = (new Kontakt($team_id))->get_emails('info');
                     self::add_mail($betreff, $inhalt, $emails);
                 }
             }
@@ -290,15 +294,17 @@ class MailBot
      */
     public static function mail_freilos_abmeldung(nTurnier $turnier, int $team_id): void
     {
-        if (!in_array($turnier->get_art(), Config::TURNIER_ARTEN)) return;
+        if (!in_array($turnier->get_art(), Config::TURNIER_ARTEN)) {
+            return;
+        }
 
         $betreff = "Falscher Freilosblock: " . $turnier->get_tblock() . "-Turnier in " . $turnier->get_ort();
         ob_start();
-            include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
-            include(Env::BASE_PATH . "/templates/mails/mail_freilos_abmeldung.tmp.php");
-            include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_freilos_abmeldung.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
         $inhalt = ob_get_clean();
-        $emails = (new Kontakt ($team_id))->get_emails('info');
+        $emails = (new Kontakt($team_id))->get_emails('info');
 
         self::add_mail($betreff, $inhalt, $emails);
     }
@@ -315,7 +321,7 @@ class MailBot
         }
         $betreff = "Turnierdaten geändert: " . $turnier->get_tblock() . "-Turnier in " . $turnier->get_ort();
         ob_start();
-            include(Env::BASE_PATH . "/templates/mails/mail_turnierdaten_geaendert.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_turnierdaten_geaendert.tmp.php");
         $inhalt = ob_get_clean();
         self::add_mail($betreff, $inhalt, Env::LAMAIL);
     }
@@ -329,11 +335,11 @@ class MailBot
     {
         $betreff = "Freilos für zwei Schiris erhalten";
         ob_start();
-            include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
-            include(Env::BASE_PATH . "/templates/mails/mail_schiri_freilos.tmp.php");
-            include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_schiri_freilos.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
         $inhalt = ob_get_clean();
-        $emails = (new Kontakt ($team->id()))->get_emails('info');
+        $emails = (new Kontakt($team->id()))->get_emails('info');
         self::add_mail($betreff, $inhalt, $emails, send_instantly: true);
     }
 
@@ -345,7 +351,7 @@ class MailBot
         include(Env::BASE_PATH . "/templates/mails/mail_ausrichter_freilos.tmp.php");
         include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
         $inhalt = ob_get_clean();
-        $emails = (new Kontakt ($team->id()))->get_emails('info');
+        $emails = (new Kontakt($team->id()))->get_emails('info');
         self::add_mail($betreff, $inhalt, $emails, send_instantly: true);
     }
 
@@ -357,7 +363,7 @@ class MailBot
         include(Env::BASE_PATH . "/templates/mails/mail_freilos_recycle.tmp.php");
         include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
         $inhalt = ob_get_clean();
-        $emails = (new Kontakt ($team->id()))->get_emails('info');
+        $emails = (new Kontakt($team->id()))->get_emails('info');
         self::add_mail($betreff, $inhalt, $emails, send_instantly: true);
     }
 

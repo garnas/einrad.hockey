@@ -15,9 +15,9 @@
                    name="spieler_auswahl"
             >
             <datalist id="spielerliste">
-                <?php foreach ($spielerAlle as $s){ ?>
+                <?php foreach ($spielerAlle as $s) { ?>
                 <option value='<?= $s->getSpielerId() . ' | ' . $s->getName() ?>'>
-                    <?php } //end foreach ?>
+                    <?php } //end foreach?>
             </datalist>
         </p>
         <p>

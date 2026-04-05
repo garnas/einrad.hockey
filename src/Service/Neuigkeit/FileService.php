@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Service\Neuigkeit;
+
 use Html;
 
-class FileService    
+class FileService
 {
-
     /**
      * Speichert die Datei im als standard im Upload-Ordner und benennt sie nach Unix-Timestamp um
      *
@@ -21,7 +21,7 @@ class FileService
         }
 
         // Gibt den Pfad mit neuem unix-time Namen zurück, wo die hochgeladene Datei gespeichert werden soll.
-        $file_type = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $file_type = strtolower(pathinfo($file['name'], \PATHINFO_EXTENSION));
 
         // Speicherpfad des Uploads mit neuem Dateinamen
         $file_dir = $target_dir . date("Y_m_d_H_i_s") . "." . $file_type;
@@ -31,7 +31,7 @@ class FileService
             Html::error("PDF konnte nicht hochgeladen werden.");
             return false;
         }
-        
+
         return $file_dir;
     }
 
@@ -54,7 +54,7 @@ class FileService
             return false;
         }
 
-        $pdfFileType = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $pdfFileType = strtolower(pathinfo($file['name'], \PATHINFO_EXTENSION));
         // Test auf richtigen Dateityp
         if ($pdfFileType != "pdf" && $pdfFileType != "xlsx") {
             Html::error("Ungültiger Dateityp");
@@ -73,7 +73,7 @@ class FileService
      */
     public static function compress_image(string $source, int $quality, int $max_pix): void
     {
-        if (!(extension_loaded('gd') && function_exists('gd_info'))) {
+        if (!(\extension_loaded('gd') && \function_exists('gd_info'))) {
             Html::error("Bild konnte nicht kompressiert werden - keine GD-Extension.");
             return;
         }
@@ -124,7 +124,7 @@ class FileService
      */
     public static function check_error_image(array $file): bool
     {
-        $imageFileType = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $imageFileType = strtolower(pathinfo($file['name'], \PATHINFO_EXTENSION));
 
         // Test auf Filegröße
         if ($file["size"] > 12582912) {
@@ -145,7 +145,7 @@ class FileService
         }
 
         // Test auf richtigen Dateityp
-        if (!in_array($imageFileType, ["jpg", "jpeg", "png", "gif"])) {
+        if (!\in_array($imageFileType, ["jpg", "jpeg", "png", "gif"])) {
             Html::error("Für das Bild können nur die Formate JPG, JPEG, PNG & GIF verwendet werden.");
             return true;
         }
@@ -170,7 +170,7 @@ class FileService
         }
 
         // Gibt den Pfad mit neuem unix-time Namen zurück, wo die hochgeladene Datei gespeichert werden soll.
-        $file_type = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $file_type = strtolower(pathinfo($file['name'], \PATHINFO_EXTENSION));
 
         // Speicherpfad des Uploads mit neuem Dateinamen
         $file_dir = $target_dir . date("Y_m_d_H_i_s") . "." . $file_type;

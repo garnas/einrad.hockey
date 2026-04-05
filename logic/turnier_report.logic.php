@@ -1,11 +1,12 @@
 <?php
+
 // Turnierobjekt erstellen
 use App\Repository\Team\TeamRepository;
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Team\TeamService;
 use App\Service\Turnier\TurnierService;
 
-$turnier_id = (int)@$_GET['turnier_id'];
+$turnier_id = (int) @$_GET['turnier_id'];
 $turnier = TurnierRepository::get()->turnier($turnier_id);
 if (!$turnier) {
     Helper::not_found("Turnier wurde nicht gefunden.");
@@ -17,8 +18,8 @@ $team = TeamRepository::get()->team($team_id);
 
 // Berechtigung zum Verändern des Reports
 $change_tbericht = (TurnierService::isAusrichter($turnier, $team_id) || Helper::$ligacenter);
-$read_tbericht =
-    Helper::$ligacenter
+$read_tbericht
+    = Helper::$ligacenter
     || $team && TeamService::isAufSetzliste(team: $team, turnier: $turnier)
     || TurnierService::isAusrichter($turnier, $team_id);
 
@@ -34,11 +35,10 @@ if (
     }
 }
 
-$tbericht = new TurnierReport ($turnier_id);
+$tbericht = new TurnierReport($turnier_id);
 
 // Gibt es eine Leseberechtigung?
-if (!$read_tbericht) 
-{
+if (!$read_tbericht) {
     Html::error("Der Turnierreport kann nur von teilnehmenden Teams eingesehen werden.");
     Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
 }
@@ -134,8 +134,3 @@ if ($change_tbericht) {
         Helper::reload(get: "?turnier_id=" . $turnier->id());
     }
 }
-
-
-
-
-

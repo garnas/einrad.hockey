@@ -4,14 +4,13 @@ namespace App\Service\Abstimmung;
 
 use App\Repository\Abstimmung\AbstimmungRepository;
 
-
 class ResultService
 {
     public static function getResult(): array
     {
         $abstimmung = AbstimmungRepository::get();
         $votes = $abstimmung->getAllVotes();
-        
+
         $result = [];
         foreach (array_keys(ConfigService::NAMES) as $key) {
             $result[$key] = 0;
@@ -28,12 +27,14 @@ class ResultService
         return $result;
     }
 
-    public static function getParticipation() {
+    public static function getParticipation()
+    {
         $abstimmung = AbstimmungRepository::get();
-        return count($abstimmung->getParticipation());
+        return \count($abstimmung->getParticipation());
     }
 
-    public static function getPercentString(int $value, int $base): string {
+    public static function getPercentString(int $value, int $base): string
+    {
         if ($base == 0) {
             return "0 %";
         }

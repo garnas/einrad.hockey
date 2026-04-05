@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  pull_request:
+jobs:
+  php-cs-fixer:
+    name: PHP CS Fixer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Run PHP CS Fixer
+        run: vendor/bin/php-cs-fixer check --diff
+
+  phpunit:
+    name: PHPUnit
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mariadb:12.2.2
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: db_localhost
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=2s
+          --health-timeout=2s
+          --health-retries=10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+          extensions: pdo_mysql
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Import database
+        run: mysql -h 127.0.0.1 -u root -proot db_localhost < _localhost/db_localhost.sql
+
+        # Für CI muss der DB-Host auf localhost zeigen.
+        # Daher wird der Host 'db' durch '127.0.0.1' ersetzt.
+      - name: Patch DB host for CI
+        run: sed -i "s/'db'/'127.0.0.1'/" _localhost/env.php
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit tests/

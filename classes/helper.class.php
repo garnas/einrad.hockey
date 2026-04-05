@@ -28,12 +28,14 @@ class Helper
      * @param string|null $path
      * @param string|null $get
      */
-    public static function reload(?string $path = null, ?string $get = null ): void
+    public static function reload(?string $path = null, ?string $get = null): void
     {
         if ($path === null) {
             $url = db::escape($_SERVER['PHP_SELF'] . $get);
         } else {
-            if ($path[0] != "/") $path = "/" . $path;
+            if ($path[0] != "/") {
+                $path = "/" . $path;
+            }
             $url = Env::BASE_URL . $path . $get;
         }
         header("Location: $url");
@@ -45,7 +47,7 @@ class Helper
         $formatter = new NumberFormatter('de', NumberFormatter::SPELLOUT);
 
         // Ersetze alle Zahlen durch ihre ausgeschriebene Form
-        return preg_replace_callback('/\d+/', function ($matches) use ($formatter) {
+        return preg_replace_callback('/\d+/', static function ($matches) use ($formatter) {
             return ucfirst($formatter->format($matches[0]));
         }, $string);
     }
@@ -58,7 +60,7 @@ class Helper
      */
     public static function not_found(string $text): void
     {
-        trigger_error($text, E_USER_NOTICE);
+        trigger_error($text, \E_USER_NOTICE);
         $_SESSION['error']['text'] = $text;
         $_SESSION['error']['url'] = $_SERVER['REQUEST_URI'];
         self::reload('/errors/404.php');
@@ -74,10 +76,12 @@ class Helper
      */
     public static function log(string $file_name, string $line, bool $hide_akteur = false): void
     {
-        if (!self::$log_user) return;
+        if (!self::$log_user) {
+            return;
+        }
 
         $path = Env::BASE_PATH . '/system/logs/';
-        $log_file = fopen($path . $file_name, 'ab');
+        $log_file = fopen($path . $file_name, 'a');
         $akteur = ($hide_akteur) ? '' : ' [' . self::get_akteur() . ']';
         $line = date('[Y-m-d\TH:i:s]') . $akteur . ":\n" . $line . "\n\n";
 
@@ -109,7 +113,7 @@ class Helper
             $_SESSION['logins']['team']['name'] ?? '',
             $_SESSION['logins']['la']['login'] ?? '',
             $_SESSION['logins']['ligabot'] ?? '',
-            $_SESSION['logins']['cronjob'] ?? ''
+            $_SESSION['logins']['cronjob'] ?? '',
         ];
         return implode(" | ", array_filter($akteure)) ?: 'Unbekannt';
     }
@@ -123,4 +127,3 @@ class Helper
     }
 
 }
-

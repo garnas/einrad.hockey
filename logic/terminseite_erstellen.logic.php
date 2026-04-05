@@ -1,4 +1,5 @@
 <?php
+
 // Formularauswertung
 if (isset($_POST['create_team']) && !$akt_team->check_terminplaner()) {
     $error = false;

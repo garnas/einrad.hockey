@@ -48,7 +48,7 @@ use App\Service\Turnier\TurnierValidatorService;
 </form>
 <form method="post">
     <div class="w3-panel w3-card-4">
-        <?php if($turnier->isWartePhase()): ?>
+        <?php if ($turnier->isWartePhase()): ?>
             <h3>Block</h3>
             <p>
                 <input class="w3-check" type="checkbox" id="sofort_oeffnen" name="sofort_oeffnen" <?= $turnier->isSofortOeffnen() ? "checked" : "" ?> value="Ja">
@@ -78,16 +78,16 @@ use App\Service\Turnier\TurnierValidatorService;
         <p>
             <label class="w3-text-primary" for="plaetze">Plätze</label>
             <select required class="w3-select w3-border w3-border-primary" id="plaetze" name="plaetze">
-                <option <?php if($turnier->getDetails()->getPlaetze() == '4'){?>selected<?php }?> value="4">4 Teams</option>
-                <option <?php if($turnier->getDetails()->getPlaetze() == '5'){?>selected<?php }?> value="5">5 Teams</option>
-                <option <?php if($turnier->getDetails()->getPlaetze() == '6'){?>selected<?php }?> value="6">6 Teams</option>
-                <option <?php if($turnier->getDetails()->getPlaetze() == '7'){?>selected<?php }?> value="7">7 Teams</option>
-                <option <?php if($turnier->getDetails()->getPlaetze() == '8'){?>selected<?php }?> value="8">8 Teams</option>
+                <option <?php if ($turnier->getDetails()->getPlaetze() == '4') {?>selected<?php }?> value="4">4 Teams</option>
+                <option <?php if ($turnier->getDetails()->getPlaetze() == '5') {?>selected<?php }?> value="5">5 Teams</option>
+                <option <?php if ($turnier->getDetails()->getPlaetze() == '6') {?>selected<?php }?> value="6">6 Teams</option>
+                <option <?php if ($turnier->getDetails()->getPlaetze() == '7') {?>selected<?php }?> value="7">7 Teams</option>
+                <option <?php if ($turnier->getDetails()->getPlaetze() == '8') {?>selected<?php }?> value="8">8 Teams</option>
                 <?php if (TurnierValidatorService::hasLaRights($turnier)): ?>
-                    <option <?php if($turnier->getDetails()->getPlaetze() == '9'){?>selected<?php }?> value="9">9 Teams</option>
-                    <option <?php if($turnier->getDetails()->getPlaetze() == '10'){?>selected<?php }?> value="10">10 Teams</option>
-                    <option <?php if($turnier->getDetails()->getPlaetze() == '11'){?>selected<?php }?> value="11">11 Teams</option>
-                    <option <?php if($turnier->getDetails()->getPlaetze() == '12'){?>selected<?php }?> value="12">12 Teams</option>
+                    <option <?php if ($turnier->getDetails()->getPlaetze() == '9') {?>selected<?php }?> value="9">9 Teams</option>
+                    <option <?php if ($turnier->getDetails()->getPlaetze() == '10') {?>selected<?php }?> value="10">10 Teams</option>
+                    <option <?php if ($turnier->getDetails()->getPlaetze() == '11') {?>selected<?php }?> value="11">11 Teams</option>
+                    <option <?php if ($turnier->getDetails()->getPlaetze() == '12') {?>selected<?php }?> value="12">12 Teams</option>
                 <?php endif; ?>
             </select>
             <span class="w3-text-grey">Achtung: Ab der Setzphase ist eine Erweiterung des Turniers auf mehr Plätze nicht mehr möglich.</span>
@@ -140,22 +140,22 @@ use App\Service\Turnier\TurnierValidatorService;
         </p>
         <p>
             <label class="w3-text-primary" for="startgebuehr">Startgebühr</label>
-            <?php if(TurnierValidatorService::hasLaRights($turnier)) { ?>
+            <?php if (TurnierValidatorService::hasLaRights($turnier)) { ?>
                 <input type="text" class="w3-input w3-border w3-border-primary" placeholder="z. B. 5 Euro" value="<?=$turnier->getDetails()->getStartgebuehr()?>" id="startgebuehr" name="startgebuehr">
             <?php } else { ?>
                 <select class="w3-input w3-border w3-border-primary" id="startgebuehr" name="startgebuehr">
-                    <option <?php if($turnier->getDetails()->getStartgebuehr() == 'keine'){?>selected<?php }?> value="keine">keine</option>
-                    <option <?php if($turnier->getDetails()->getStartgebuehr() == '5 Euro'){?>selected<?php }?> value="5 Euro">5 Euro</option>
-                    <option <?php if($turnier->getDetails()->getStartgebuehr() == '6 Euro'){?>selected<?php }?> value="6 Euro">6 Euro</option>
-                    <option <?php if($turnier->getDetails()->getStartgebuehr() == '7 Euro'){?>selected<?php }?> value="7 Euro">7 Euro</option>
-                    <option <?php if($turnier->getDetails()->getStartgebuehr() == '8 Euro'){?>selected<?php }?> value="8 Euro">8 Euro</option>
-                    <option <?php if($turnier->getDetails()->getStartgebuehr() == '9 Euro'){?>selected<?php }?> value="9 Euro">9 Euro</option>
-                    <option <?php if($turnier->getDetails()->getStartgebuehr() == '10 Euro'){?>selected<?php }?> value="10 Euro">10 Euro</option>
-                    <option <?php if($turnier->getDetails()->getStartgebuehr() == '11 Euro'){?>selected<?php }?> value="11 Euro">11 Euro</option>
-                    <option <?php if($turnier->getDetails()->getStartgebuehr() == '12 Euro'){?>selected<?php }?> value="12 Euro">12 Euro</option>
-                    <option <?php if($turnier->getDetails()->getStartgebuehr() == '13 Euro'){?>selected<?php }?> value="13 Euro">13 Euro</option>
-                    <option <?php if($turnier->getDetails()->getStartgebuehr() == '14 Euro'){?>selected<?php }?> value="14 Euro">14 Euro</option>
-                    <option <?php if($turnier->getDetails()->getStartgebuehr() == '15 Euro'){?>selected<?php }?> value="15 Euro">15 Euro</option>
+                    <option <?php if ($turnier->getDetails()->getStartgebuehr() == 'keine') {?>selected<?php }?> value="keine">keine</option>
+                    <option <?php if ($turnier->getDetails()->getStartgebuehr() == '5 Euro') {?>selected<?php }?> value="5 Euro">5 Euro</option>
+                    <option <?php if ($turnier->getDetails()->getStartgebuehr() == '6 Euro') {?>selected<?php }?> value="6 Euro">6 Euro</option>
+                    <option <?php if ($turnier->getDetails()->getStartgebuehr() == '7 Euro') {?>selected<?php }?> value="7 Euro">7 Euro</option>
+                    <option <?php if ($turnier->getDetails()->getStartgebuehr() == '8 Euro') {?>selected<?php }?> value="8 Euro">8 Euro</option>
+                    <option <?php if ($turnier->getDetails()->getStartgebuehr() == '9 Euro') {?>selected<?php }?> value="9 Euro">9 Euro</option>
+                    <option <?php if ($turnier->getDetails()->getStartgebuehr() == '10 Euro') {?>selected<?php }?> value="10 Euro">10 Euro</option>
+                    <option <?php if ($turnier->getDetails()->getStartgebuehr() == '11 Euro') {?>selected<?php }?> value="11 Euro">11 Euro</option>
+                    <option <?php if ($turnier->getDetails()->getStartgebuehr() == '12 Euro') {?>selected<?php }?> value="12 Euro">12 Euro</option>
+                    <option <?php if ($turnier->getDetails()->getStartgebuehr() == '13 Euro') {?>selected<?php }?> value="13 Euro">13 Euro</option>
+                    <option <?php if ($turnier->getDetails()->getStartgebuehr() == '14 Euro') {?>selected<?php }?> value="14 Euro">14 Euro</option>
+                    <option <?php if ($turnier->getDetails()->getStartgebuehr() == '15 Euro') {?>selected<?php }?> value="15 Euro">15 Euro</option>
                 </select>
             <?php } //end if?>
         </p>

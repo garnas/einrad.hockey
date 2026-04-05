@@ -21,7 +21,7 @@ use App\Service\Team\TeamSnippets;
         <?php foreach ($teamEntity->getKaderAktuell() as $spieler): ?>
             <tr>
                 <td><?= $spieler->getSpielerId() ?></td>
-                <?php if (Helper::$ligacenter): // Link zum Bearbeiten als LA ?>
+                <?php if (Helper::$ligacenter): // Link zum Bearbeiten als LA?>
                     <td>
                         <?= Html::link('lc_spieler_aendern.php?spieler_id=' . $spieler->getSpielerId(), $spieler->getName()) ?>
                     </td>
@@ -65,7 +65,7 @@ use App\Service\Team\TeamSnippets;
                     <tr>
                         <td><?= $spieler->getSpielerId() ?></td>
 
-                        <?php if (Helper::$ligacenter): // Link zum Bearbeiten als LA ?>
+                        <?php if (Helper::$ligacenter): // Link zum Bearbeiten als LA?>
                             <td>
                                 <?= Html::link('lc_spieler_aendern.php?spieler_id=' . $spieler->getSpielerId(), $spieler->getName()) ?>
                             </td>
@@ -161,10 +161,10 @@ use App\Service\Team\TeamSnippets;
                 <label class="w3-text-primary" for="geschlecht">Geschlecht</labeL>
                 <select style="height:40px" class='w3-input w3-border w3-border-primary' name='geschlecht' id='geschlecht'>
                     <option <?= $_POST['geschlecht'] ?? 'selected' ?> disabled>Bitte wählen</option>
-                    <option <?php if (($_POST['geschlecht'] ?? null) === 'm'){ ?>selected<?php } ?> value='m'>m</option>
-                    <option <?php if (($_POST['geschlecht'] ?? null) === 'w'){ ?>selected<?php } ?> value='w'>w</option>
-                    <option <?php if (($_POST['geschlecht'] ?? null) === 'd'){ ?>selected<?php } ?> value='d'>d</option>
-                    <option <?php if (($_POST['geschlecht'] ?? null) === ''){ ?>selected<?php } ?> value=''>Keine Angabe</option>
+                    <option <?php if (($_POST['geschlecht'] ?? null) === 'm') { ?>selected<?php } ?> value='m'>m</option>
+                    <option <?php if (($_POST['geschlecht'] ?? null) === 'w') { ?>selected<?php } ?> value='w'>w</option>
+                    <option <?php if (($_POST['geschlecht'] ?? null) === 'd') { ?>selected<?php } ?> value='d'>d</option>
+                    <option <?php if (($_POST['geschlecht'] ?? null) === '') { ?>selected<?php } ?> value=''>Keine Angabe</option>
                 </select>
             </p>
             <p>

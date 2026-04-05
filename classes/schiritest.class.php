@@ -4,7 +4,6 @@ use App\Entity\Team\Spieler;
 
 class SchiriTest
 {
-
     # Anzahl der Fragen in den einzelnen Kategorien festlegen:
     #  0 -> beliebige Kategorie
     #  1 -> Vor dem Spiel/Rund ums Spiel
@@ -19,32 +18,32 @@ class SchiriTest
     # 10 -> Zeitstrafen/Unsportlichkeiten
     # 11 -> Strafen
     #                             0  1  2  3  4  5  6  7  8  9 10 11
-    public const anzahl_L = array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-    public const anzahl_J = array(0, 2, 2, 2, 0, 2, 1, 2, 3, 2, 2, 2);
-    public const anzahl_B = array(0, 1, 2, 1, 0, 2, 2, 2, 4, 3, 1, 2);
-    public const anzahl_F = array(0, 2, 3, 1, 1, 3, 3, 3, 6, 4, 1, 3);
-    public const lev_infos = array(
-        'L'=>array(
+    public const anzahl_L = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    public const anzahl_J = [0, 2, 2, 2, 0, 2, 1, 2, 3, 2, 2, 2];
+    public const anzahl_B = [0, 1, 2, 1, 0, 2, 2, 2, 4, 3, 1, 2];
+    public const anzahl_F = [0, 2, 3, 1, 1, 3, 3, 3, 6, 4, 1, 3];
+    public const lev_infos = [
+        'L' => [
             'name'        => 'einzelne Fragen',
             'anzahl'      => self::anzahl_L,
             'timelimit'   => 10,  # in Minuten
-            'richtig_min' => 1),  # Minimum zum Bestehen
-        'J'=>array(
+            'richtig_min' => 1],  # Minimum zum Bestehen
+        'J' => [
             'name'        => 'Junior',
             'anzahl'      => self::anzahl_J,
             'timelimit'   => 60,  # in Minuten
-            'richtig_min' => 15),  # Minimum zum Bestehen
-        'B'=>array(
+            'richtig_min' => 15],  # Minimum zum Bestehen
+        'B' => [
             'name'        => 'Basis',
             'anzahl'      => self::anzahl_B,
             'timelimit'   => 30,  # in Minuten
-            'richtig_min' => 15), # Minimum zum Bestehen
-        'F'=>array(
+            'richtig_min' => 15], # Minimum zum Bestehen
+        'F' => [
             'name'        => 'Fortgeschrittene',
             'anzahl'      => self::anzahl_F,
             'timelimit'   => 30,  # in Minuten
-            'richtig_min' => 25)  # Minimum zum Bestehen
-    );
+            'richtig_min' => 25],  # Minimum zum Bestehen
+    ];
 
     #-------------------------------------------------------------------------
 
@@ -60,9 +59,12 @@ class SchiriTest
     public string $url;
     public string $md5;
 
-    public static function get_fragen(string $LJBF, int $kategorie,
-                                      int $anzahl, int $frage_id = 0): array
-    {
+    public static function get_fragen(
+        string $LJBF,
+        int $kategorie,
+        int $anzahl,
+        int $frage_id = 0,
+    ): array {
         if ($kategorie === 0) {
             $sql = "
                 SELECT *
@@ -128,7 +130,7 @@ class SchiriTest
             foreach ($fragen_IDs as $frage_ID) {
                 $fragen += self::get_fragen('DUMMY', 0, 1, $frage_ID);
             }
-            $neu = ($result['t_gestartet'] === NULL);
+            $neu = ($result['t_gestartet'] === null);
 
             return [$pruefling_id, $pruefling, $level, $fragen, $neu];
         }
@@ -138,13 +140,13 @@ class SchiriTest
         Helper::not_found("");
         return [];
     }
-    
+
     #-------------------------------------------------------------------------
 
     # Frage anzeigen:
     public static function frage_anzeigen(int $frage_id, int $index, array $frage): void
     {
-        if ($index>0) {
+        if ($index > 0) {
             $fragennummer = 'Frage Nr. ' . $index ;
         } else {
             $fragennummer = '';
@@ -154,9 +156,9 @@ class SchiriTest
         } else {
             $id_infotext = '(ID: ' . $frage_id . ')' ;
         }
-        echo '<h3 class="w3-topbar">' . $fragennummer .
-            '<span style="float:right;color:gray;font-size:60%">' .
-            $id_infotext . '</span></h3>';
+        echo '<h3 class="w3-topbar">' . $fragennummer
+            . '<span style="float:right;color:gray;font-size:60%">'
+            . $id_infotext . '</span></h3>';
         echo '<h4>' . $frage['frage'] . '</h4>';
         if (!empty($frage['name_video'])) { # Video zur Frage:
             echo '<div style="max-width: 500px">';
@@ -216,30 +218,30 @@ class SchiriTest
             if ($antwort_richtig) { # ist diese Antwort richtig?
                 echo '<b>' . $antwort . '</b></p>';
             } else {
-                echo '<span class="w3-text-grey"><s><i>' . $antwort .
-                    '</i></s></span></p>';
+                echo '<span class="w3-text-grey"><s><i>' . $antwort
+                    . '</i></s></span></p>';
             }
         }
         $antworten_user = $_POST['abgabe'][$frage_id] ?? []; # leer, wenn keine Antwort
         if (self::validate_frage($frage_id, $antworten_user)) {
-            echo '<h3 class="w3-border-bottom w3-text-green">' .
-                Html::icon("thumb_up", class:"md-36") .
-                'Alles korrekt beantwortet!</h3>';
+            echo '<h3 class="w3-border-bottom w3-text-green">'
+                . Html::icon("thumb_up", class: "md-36")
+                . 'Alles korrekt beantwortet!</h3>';
         } else {
-            echo '<h3 class="w3-border-bottom w3-text-red">' .
-                Html::icon("thumb_down", class: "md-36") .
-                'Da war etwas falsch!</h3>';
+            echo '<h3 class="w3-border-bottom w3-text-red">'
+                . Html::icon("thumb_down", class: "md-36")
+                . 'Da war etwas falsch!</h3>';
         }
         echo '<p><b>Erklärung: </b>' . $frage['erklaerung'] . '</p>';
         if (!empty($frage['erklaerung_video'])) { # Video zur Frage:
-            echo '<div style="max-width: 500px"><video class="w3-image w3-card"' .
-                ' src="videos/' . $frage['erklaerung_video'] . '" controls playsinline>' .
-                '</video></div>';
+            echo '<div style="max-width: 500px"><video class="w3-image w3-card"'
+                . ' src="videos/' . $frage['erklaerung_video'] . '" controls playsinline>'
+                . '</video></div>';
         }
         if (!empty($frage['erklaerung_bild'])) { # Bild zur Frage:
-            echo '<div style="max-width: 500px">' .
-                '<img alt="Bild zur Frage" class="w3-image w3-card"' .
-                ' src="bilder/' . $frage['erklaerung_bild'] . '"></div>';
+            echo '<div style="max-width: 500px">'
+                . '<img alt="Bild zur Frage" class="w3-image w3-card"'
+                . ' src="bilder/' . $frage['erklaerung_bild'] . '"></div>';
         }
 
         $regelnr = $frage['regelnr'];
@@ -249,11 +251,17 @@ class SchiriTest
             foreach (preg_split('/[\s#\s]+/', $regelnr) as $regelnr1) {
                 [$nr, $part, $titel, $text] = self::get_regel($regelnr1);
                 if (empty($nr)) {
-                    Html::message('error',
-                        'Regel |' . $regelnr1 . '| nicht in der Datenbank.');
+                    Html::message(
+                        'error',
+                        'Regel |' . $regelnr1 . '| nicht in der Datenbank.',
+                    );
                 } else {
-                    Html::message('info',
-                        $text, 'Offizielle Regel ' . $nr . ": " . $titel, esc: false);
+                    Html::message(
+                        'info',
+                        $text,
+                        'Offizielle Regel ' . $nr . ": " . $titel,
+                        esc: false,
+                    );
                 }
             }
         }
@@ -359,7 +367,7 @@ class SchiriTest
         $result = db::$db->query($sql, $_GET['md5sum'])->fetch_row();
 
         $test_level = $result['test_level'];
-        $pruefling  = $result['vorname'] .  ' '. $result['nachname'] ;
+        $pruefling  = $result['vorname'] . ' ' . $result['nachname'] ;
         $pruefling_id = $result['spieler_id'];
         $email      = $result['spieler_email'];
 
@@ -392,9 +400,9 @@ class SchiriTest
         foreach ($fragen as $frage) {
             $text .= "<P>Frage Nr. " . ++$index . " (ID " . $frage['frage_id'] . "): ";
             $text .= $frage['frage'] . "<br>";
-            $text .= "Richtige Antwort: " . implode(",",$frage['richtig']) . "<br>";
-            $text .= "Antwort des Prüflings: " . implode(",",$abgabe[$index-1]) . "<br>";
-        #echo '<pre>' . $text . '</pre>'; # qqq diese Zeile nur zum debugging aktivieren
+            $text .= "Richtige Antwort: " . implode(",", $frage['richtig']) . "<br>";
+            $text .= "Antwort des Prüflings: " . implode(",", $abgabe[$index - 1]) . "<br>";
+            #echo '<pre>' . $text . '</pre>'; # qqq diese Zeile nur zum debugging aktivieren
         }
         # Email an Prüfling und Schiriausschuss senden:
         $mailer = MailBot::start_mailer();
@@ -402,7 +410,7 @@ class SchiriTest
         $mailer->setFrom(Env::SCHIRIMAIL);
         $mailer->addAddress($email, $pruefling);
         $mailer->addCC(Env::SCHIRIMAIL);
-        $mailer->Subject = 'Testergebnis von ' . $pruefling; # Betreff 
+        $mailer->Subject = 'Testergebnis von ' . $pruefling; # Betreff
         $mailer->Body = $text;
 
         if (MailBot::send_mail($mailer)) {
@@ -422,7 +430,7 @@ class SchiriTest
     public string $gestellte_fragen;
     public bool $error = false;
 
-    public function __construct(){}
+    public function __construct() {}
 
     public static function test_gestartet(string $zeitstempel, string $md5sum): void
     {
@@ -434,22 +442,22 @@ class SchiriTest
     /**
      * @return SchiriTest
      */
-    public function set_pruefungs_fragen(): SchiriTest
+    public function set_pruefungs_fragen(): self
     {
-        $anzahl = self::lev_infos[$this->test_level]['anzahl'];            
+        $anzahl = self::lev_infos[$this->test_level]['anzahl'];
 
-        $this->pruefungs_fragen =
-            self::get_fragen($this->test_level,  1, $anzahl[1])  +
-            self::get_fragen($this->test_level,  2, $anzahl[2])  +
-            self::get_fragen($this->test_level,  3, $anzahl[3])  +
-            self::get_fragen($this->test_level,  4, $anzahl[4])  +
-            self::get_fragen($this->test_level,  5, $anzahl[5])  +
-            self::get_fragen($this->test_level,  6, $anzahl[6])  +
-            self::get_fragen($this->test_level,  7, $anzahl[7])  +
-            self::get_fragen($this->test_level,  8, $anzahl[8])  +
-            self::get_fragen($this->test_level,  9, $anzahl[9])  +
-            self::get_fragen($this->test_level, 10, $anzahl[10]) +
-            self::get_fragen($this->test_level, 11, $anzahl[11]); 
+        $this->pruefungs_fragen
+            = self::get_fragen($this->test_level, 1, $anzahl[1])
+            + self::get_fragen($this->test_level, 2, $anzahl[2])
+            + self::get_fragen($this->test_level, 3, $anzahl[3])
+            + self::get_fragen($this->test_level, 4, $anzahl[4])
+            + self::get_fragen($this->test_level, 5, $anzahl[5])
+            + self::get_fragen($this->test_level, 6, $anzahl[6])
+            + self::get_fragen($this->test_level, 7, $anzahl[7])
+            + self::get_fragen($this->test_level, 8, $anzahl[8])
+            + self::get_fragen($this->test_level, 9, $anzahl[9])
+            + self::get_fragen($this->test_level, 10, $anzahl[10])
+            + self::get_fragen($this->test_level, 11, $anzahl[11]);
         $this->set_gestellte_fragen(); # Ids in CSV-Form speichern
 
         $this->zeitstempel = date('Y-m-d H:i:s'); # heutiges Datum + Uhrzeit abspeichern
@@ -457,7 +465,7 @@ class SchiriTest
         return $this;
     }
 
-    public function set_spieler(Spieler $spieler): SchiriTest
+    public function set_spieler(Spieler $spieler): self
     {
         $this->spieler = $spieler;
 
@@ -468,7 +476,7 @@ class SchiriTest
      * @param string $test_level
      * @return SchiriTest
      */
-    public function set_level(string $test_level): SchiriTest
+    public function set_level(string $test_level): self
     {
         if (in_array($test_level, ['J', 'B', 'F'])) {
             $this->test_level = $test_level;
@@ -483,19 +491,19 @@ class SchiriTest
      * @param string $email
      * @return SchiriTest
      */
-    public function set_email(string $email): SchiriTest
+    public function set_email(string $email): self
     {
         $this->email = $email;
         return $this;
     }
 
-    public function set_gestellte_fragen (): SchiriTest
+    public function set_gestellte_fragen(): self
     {
         $this->gestellte_fragen = implode(',', array_keys($this->pruefungs_fragen));
         return $this;
     }
 
-    public function create(): bool|SchiriTest
+    public function create(): bool|self
     {
         if ($this->error) {
             return false;
@@ -518,7 +526,8 @@ class SchiriTest
         return $this;
     }
 
-    public function mail_on_create() {
+    public function mail_on_create()
+    {
         $levelname = self::lev_infos[$this->test_level]['name'];
         $anzahl = array_sum(self::lev_infos[$this->test_level]['anzahl']);
         $richtig_min = self::lev_infos[$this->test_level]['richtig_min'];
@@ -541,8 +550,12 @@ beantwortet werden.
 Viele Grüße
 Der Schiriausschuss
 Mail;
-        Html::message('info', '<pre>' . $text . '</pre>',
-            'Text der automatischen E-Mail:', esc:false);
+        Html::message(
+            'info',
+            '<pre>' . $text . '</pre>',
+            'Text der automatischen E-Mail:',
+            esc: false,
+        );
         # Email an Prüfling senden:
         $mailer = MailBot::start_mailer();
         $mailer->setFrom(Env::SCHIRIMAIL); # Absender ist Schiriausschuss

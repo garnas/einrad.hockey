@@ -34,9 +34,9 @@ class Config
      *
      */
 
-     /**
-     * Mögliche Team-Blöcke
-     */
+    /**
+    * Mögliche Team-Blöcke
+    */
     public const BLOCK = ['A', 'AB', 'BC', 'CD', 'DE', 'EF', 'F'];
 
     /**
@@ -55,7 +55,7 @@ class Config
         "CD" => [25, 34],
         "DE" => [35, 46],
         "EF" => [47, 58],
-        "F" => [59, INF]
+        "F" => [59, \INF],
     ];
 
     /**

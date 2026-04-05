@@ -12,19 +12,19 @@ Html::$content = "Infos für Schiedsrichter und alle, die es werden wollen.";
 include '../../templates/header.tmp.php';
 ?>
 
-<?php if (Env::DEBUGMODUS) { # Start Debug Modus ?>
+<?php if (Env::DEBUGMODUS) { # Start Debug Modus?>
     <P><div class="w3-ul w3-pale-red w3-bordered">
         DEBUGGING:
         <?=Html::link("../schiricenter/uebungstest_l.php", "Einzelne Fragen",
-                      false, false)?> /
+            false, false)?> /
         <?=Html::link("../schiricenter/uebungstest_j.php", "Übungstest (Junior)",
-                      false, false)?> /
+            false, false)?> /
         <?=Html::link("../schiricenter/uebungstest_b.php", "Übungstest (Basis)",
-                      false, false)?> /
+            false, false)?> /
         <?=Html::link("../schiricenter/uebungstest_f.php", "Übungstest (Fortgeschrittene)",
-                      false, false)?>
+            false, false)?>
     </div>
-<?php } # Ende Debug Modus ?> 
+<?php } # Ende Debug Modus?> 
 
 <h1 class="w3-text-primary">Schiedsrichterprüfungen der Deutschen Einradhockeyliga</h1>
 <p class="w3-border-top w3-border-grey w3-text-grey">Saison <?=Html::get_saison_string()?></p>

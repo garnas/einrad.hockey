@@ -1,7 +1,7 @@
 <?php
 
-class nTurnierGeloescht {
-    
+class nTurnierGeloescht
+{
     private $grund;
 
     /**
@@ -24,7 +24,7 @@ class nTurnierGeloescht {
     {
         return $this->grund;
     }
-    
+
     /**
      * Liste an gelöschten Turnieren
      *
@@ -39,6 +39,6 @@ class nTurnierGeloescht {
                 WHERE saison = ? 
                 ORDER BY datum DESC
                 ";
-        return db::$db->query($sql, $saison)->fetch_objects(__CLASS__, key:'turnier_id');
+        return db::$db->query($sql, $saison)->fetch_objects(__CLASS__, key: 'turnier_id');
     }
 }

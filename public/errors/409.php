@@ -8,7 +8,7 @@ require_once '../../init.php';
 $text = $_SESSION['error']['text'] ?? 'Es ist ein Konflikt aufgetreten.';
 $link = $_SESSION['error']['url'] ?? '';
 
-unset ($_SESSION['error']);
+unset($_SESSION['error']);
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -24,9 +24,9 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 
         <?php if (!empty($link)) { ?>
             <p>
-                <?= Html::link($link, 'Erneut versuchen', icon:'settings_backup_restore') ?>
+                <?= Html::link($link, 'Erneut versuchen', icon: 'settings_backup_restore') ?>
             </p>
-        <?php } // end if ?>
+        <?php } // end if?>
 
         <p class="w3-text-grey">
             E-Mail-Adresse Technikausschuss

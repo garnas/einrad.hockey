@@ -6,18 +6,18 @@ require_once '../../init.php';
 require_once '../../logic/session_oa.logic.php'; //auth
 
 //Formularauswertung
-if(isset($_POST['change'])) {
+if (isset($_POST['change'])) {
     $passwort_alt = $_POST['passwort_alt'];
     $passwort_neu = $_POST['passwort_neu'];
-    if (strlen($passwort_neu) >= 8){
-        if(LigaLeitung::set_passwort($_SESSION['logins']['oa']['login'], $passwort_neu, $passwort_alt)) {
+    if (strlen($passwort_neu) >= 8) {
+        if (LigaLeitung::set_passwort($_SESSION['logins']['oa']['login'], $passwort_neu, $passwort_alt)) {
             Html::info("Dein Passwort wurde geändert");
             Helper::reload("oefficenter/oc_start.php");
         }
         Html::error("Falsches Passwort");
-    }else{
+    } else {
         Html::error("Das Passwort muss mindestens acht Zeichen lang sein.");
-    }    
+    }
 }
 
 

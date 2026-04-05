@@ -32,7 +32,7 @@ class TurniereListeTest extends TestCase
         $teamMock->method('id')->willReturn($id);
 
         $turnier->getListe()->add($anmeldung);
-        
+
         return $id;
     }
 

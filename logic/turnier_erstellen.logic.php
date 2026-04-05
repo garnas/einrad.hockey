@@ -12,27 +12,27 @@ $block_higher = BlockService::getHigherBlocks($ausrichter_block);
 $block_higher_str = BlockService::toString($block_higher);
 
 // Formularauswertung
-if (isset($_POST['create_turnier'])) {    
+if (isset($_POST['create_turnier'])) {
 
     $datum = new DateTime($_POST['datum']);
     $datum_bis = (!isset($_POST['datum_bis']) || $_POST['datum_bis'] === '') ? null : new DateTime($_POST['datum_bis']);
 
-    $name = (string)$_POST['tname'];
-    $hallenname = (string)$_POST['hallenname'];
-    $strasse = (string)$_POST['strasse'];
-    $plz = (string)$_POST['plz'];
-    $ort = (string)$_POST['ort'];
-    $haltestellen = (string)$_POST['haltestellen'];
-    $hinweis = (string)$_POST['hinweis'];
-    $startgebuehr = (string)$_POST['startgebuehr'];
-    $organisator = (string)$_POST['organisator'];
-    $handy = (string)$_POST['handy'];
-    $art = (string)$_POST['art'];
-    $startzeit = DateTime::createFromFormat("H:i", ((string)($_POST['startzeit'] ?? '')));
-    $plaetze = (string)($_POST['plaetze'] ?? '');
-    $min_teams = (int)($_POST['min_teams'] ?? '');
+    $name = (string) $_POST['tname'];
+    $hallenname = (string) $_POST['hallenname'];
+    $strasse = (string) $_POST['strasse'];
+    $plz = (string) $_POST['plz'];
+    $ort = (string) $_POST['ort'];
+    $haltestellen = (string) $_POST['haltestellen'];
+    $hinweis = (string) $_POST['hinweis'];
+    $startgebuehr = (string) $_POST['startgebuehr'];
+    $organisator = (string) $_POST['organisator'];
+    $handy = (string) $_POST['handy'];
+    $art = (string) $_POST['art'];
+    $startzeit = DateTime::createFromFormat("H:i", ((string) ($_POST['startzeit'] ?? '')));
+    $plaetze = (string) ($_POST['plaetze'] ?? '');
+    $min_teams = (int) ($_POST['min_teams'] ?? '');
     $sofotOeffnen = @(($_POST['sofort_oeffnen'] ?? '') === "Ja");
-    
+
     // Turnierblock
     $block = $_POST['block'];
     if ($art === 'I') {
@@ -85,23 +85,23 @@ if (isset($_POST['create_turnier'])) {
 
 
 
-        if (TurnierValidatorService::onCreate($turnier)) {
+    if (TurnierValidatorService::onCreate($turnier)) {
 
-                TurnierService::addToSetzListe($turnier, $ausrichter);
+        TurnierService::addToSetzListe($turnier, $ausrichter);
 
-                TurnierRepository::get()->speichern($turnier);
-                nLigaBot::setSpieltage();
+        TurnierRepository::get()->speichern($turnier);
+        nLigaBot::setSpieltage();
 
-                if (Helper::$teamcenter) {
-                    TurnierEventMailBot::mailNeuesTurnier($turnier);
-                }
-
-                Html::info("Euer Turnier wurde erfolgreich eingetragen.");
-
-                Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
-
-        } else {
-            Html::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht eingetragen.");
+        if (Helper::$teamcenter) {
+            TurnierEventMailBot::mailNeuesTurnier($turnier);
         }
+
+        Html::info("Euer Turnier wurde erfolgreich eingetragen.");
+
+        Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
+
+    } else {
+        Html::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht eingetragen.");
+    }
 
 }

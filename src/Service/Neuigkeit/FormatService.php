@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Service\Neuigkeit;
+
 use App\Enum\NeuigkeitArt;
 
 class FormatService
@@ -8,7 +9,7 @@ class FormatService
     public static function getTimespan(\DateTimeInterface $time): string
     {
         $delta = (time() - $time->getTimestamp()) / 3600; // in hours
-        
+
         if ($delta < 1) {
             return "gerade eben";
         }
@@ -21,11 +22,11 @@ class FormatService
             return "vor " . round($delta) . " Stunden";
         }
 
-        if ($delta < 2*24) {
+        if ($delta < 2 * 24) {
             return "vor einem Tag";
         }
 
-        if ($delta < 7*24) {
+        if ($delta < 7 * 24) {
             return "vor " . round($delta / 24) . " Tagen";
         }
 
@@ -43,7 +44,7 @@ class FormatService
         return $text;
     }
 
-    
+
     /**
      * Wandelt die Zeichen in den Neuigkeiten-Einträgen um, damit sie HTML-Entities sind
      *
@@ -58,11 +59,11 @@ class FormatService
                 || $neuigkeit['eingetragen_von'] === "Öffentlichkeitsausschuss"
                 || $neuigkeit['eingetragen_von'] === "Nationalkader"
             ) {
-                $neuigkeiten[$key]['inhalt'] = htmlspecialchars_decode($neuigkeit['inhalt'], ENT_QUOTES);
-                
+                $neuigkeiten[$key]['inhalt'] = htmlspecialchars_decode($neuigkeit['inhalt'], \ENT_QUOTES);
+
                 if (isset($neuigkeit['titel'])) {
                     // Titel wird nur dekodiert, wenn er gesetzt ist
-                    $neuigkeiten[$key]['titel'] = htmlspecialchars_decode($neuigkeit['titel'], ENT_QUOTES);
+                    $neuigkeiten[$key]['titel'] = htmlspecialchars_decode($neuigkeit['titel'], \ENT_QUOTES);
                 }
             }
         }

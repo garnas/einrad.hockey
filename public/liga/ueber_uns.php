@@ -42,7 +42,7 @@ include '../../templates/header.tmp.php';
     <ul class="w3-ul w3-leftbar w3-border-tertiary">
         <li><?=Html::link(Nav::LINK_REGELN_KURZ, 'Die wichtigsten Regeln', false, "sports")?></li>
         <li><?=Html::link("ligakarte.php", "Deutschlandkarte aller Ligateams", false, "flag")?></li>
-        <li><?=Html::link("teams.php","Kontaktliste aller Ligateams", false, "mail")?></li>
+        <li><?=Html::link("teams.php", "Kontaktliste aller Ligateams", false, "mail")?></li>
     </ul>
 </div>
 

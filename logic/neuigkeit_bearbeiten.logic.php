@@ -41,7 +41,7 @@ if (isset($_POST['change_neuigkeit'])) {
     } else {
         $target_file_jpg = $neuigkeit->getLinkJpg();
     }
-    
+
     // Dokument
     if (!empty($_FILES["pdfupload"]["tmp_name"])) {
         $target_file_pdf = FileService::uploadPDF($_FILES["pdfupload"]);
@@ -59,7 +59,7 @@ if (isset($_POST['change_neuigkeit'])) {
         header('Location: ../liga/neues.php');
         die();
     }
-    
+
     // Bild
     if ($_POST['delete_jpg'] === 'Ja' && !empty($neuigkeit->getLinkJpg())) {
         unlink($neuigkeit->getLinkJpg());
@@ -77,7 +77,7 @@ if (isset($_POST['change_neuigkeit'])) {
             $target_file_pdf = '';
         }
     }
-    
+
     // Altes Bild löschen
     if (
         $neuigkeit->getLinkJpg() !== $target_file_jpg
@@ -86,7 +86,7 @@ if (isset($_POST['change_neuigkeit'])) {
     ) {
         unlink($neuigkeit->getLinkJpg());
     }
-    
+
     // Altes Dokument löschen
     if (
         $neuigkeit->getLinkPdf() !== $target_file_pdf
@@ -104,7 +104,7 @@ if (isset($_POST['change_neuigkeit'])) {
     $neuigkeit->setBildVerlinken($bild_verlinken);
     $neuigkeit->setZeit($zeitpunkt);
     NeuigkeitRepository::get()->update($neuigkeit);
-        
+
     Html::info("Die Neuigkeit wurde bearbeitet.");
     header('Location: ../liga/neues.php');
     die();

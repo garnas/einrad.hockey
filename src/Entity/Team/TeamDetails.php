@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: "teams_details", uniqueConstraints: [new ORM\UniqueConstraint(name: "team_id", columns: ["team_id"])])]
 class TeamDetails
 {
-
     #[ORM\Id]
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id", nullable: false)]
     #[ORM\OneToOne(targetEntity: "nTeam", inversedBy: "details", cascade: ["all"])]
@@ -134,7 +133,7 @@ class TeamDetails
         return $this;
     }
 
-    public function setTeam(nTeam $team): TeamDetails
+    public function setTeam(nTeam $team): self
     {
         $this->team = $team;
         return $this;

@@ -19,7 +19,7 @@ $team_von = $turnier->getAusrichter();
 $team_fuer = TeamRepository::get()->team(16);
 
 // Besteht die Berechtigung das Turnier zu bearbeiten?
-if (Helper::$teamcenter && !TurnierService::isAusrichter($turnier, $teamId)){
+if (Helper::$teamcenter && !TurnierService::isAusrichter($turnier, $teamId)) {
     Html::error("Keine Berechtigung Quittungen zu erstellen.");
     Helper::reload('/liga/turniere.php');
 }
@@ -109,4 +109,4 @@ foreach ($teams as $team_fuer_liste) {
 }
 
 // Output - Otpion 'D' für Download, 'I' für im Browser anzeigen
-$mpdf->Output('Quittungen '. e($turnier->getDetails()->getOrt()) . '.pdf', 'I');
+$mpdf->Output('Quittungen ' . e($turnier->getDetails()->getOrt()) . '.pdf', 'I');

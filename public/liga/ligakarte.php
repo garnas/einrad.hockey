@@ -8,45 +8,45 @@ $koordinaten = LigaKarte::get_all_team_koordinaten();
 
 //Doppelte PLZ Einträge werden zusammengefasst
 $koordinaten_hilf = $koordinaten;
-$array = $array_hilf = array();
-foreach ($koordinaten as $keya => $teama){
-    $latlnga = array($teama['LAT'], $teama['Lon']);
+$array = $array_hilf = [];
+foreach ($koordinaten as $keya => $teama) {
+    $latlnga = [$teama['LAT'], $teama['Lon']];
     $doppelt = false;
     unset($koordinaten_hilf[$keya]);
 
-    foreach ($koordinaten_hilf as $keyb => $teamb){
-        $latlngb = array($teamb['LAT'], $teamb['Lon']);
-        if ($latlnga == $latlngb){
+    foreach ($koordinaten_hilf as $keyb => $teamb) {
+        $latlngb = [$teamb['LAT'], $teamb['Lon']];
+        if ($latlnga == $latlngb) {
             $array_hilf[] = $teamb;
             $teama['teamname'] .= "</h5><h5 class=\"w3-text-primary\">" . $teamb['teamname'];
             unset($koordinaten_hilf[$keyb]);
             $doppelt = true;
         }
     }
-    if (!in_array($teama,$array_hilf)){
-    $array[] = $teama;
+    if (!in_array($teama, $array_hilf)) {
+        $array[] = $teama;
     }
 }
 
 //Teamgesuche Formularauswertung
-if (isset($_POST['eintragen'])){
+if (isset($_POST['eintragen'])) {
     $error = false;
-    if (empty($_POST['name']) or empty($_POST['kontakt']) or empty($_POST['plz']) or empty($_POST['ort'])){
+    if (empty($_POST['name']) || empty($_POST['kontakt']) || empty($_POST['plz']) || empty($_POST['ort'])) {
         Html::error("Bitte Formular vollständig ausfüllen");
         $error = true;
     }
-    if (LigaKarte::check_gesuch_for_plz_exists($_POST['plz'])){
+    if (LigaKarte::check_gesuch_for_plz_exists($_POST['plz'])) {
         Html::error("Es existiert bereits ein Teamgesuch für diese PLZ, bitte wähle eine andere PLZ in der Nähe.");
         $error = true;
     }
     $lonlat = LigaKarte::plz_to_lonlat($_POST['plz']);
-    if(empty($lonlat)){
+    if (empty($lonlat)) {
         Html::error("Deine eingegebene Postleitzahl wurde nicht gefunden.");
         $error = true;
     }
 
-    if(!$error){
-        LigaKarte::gesuch_eintragen_db($_POST['plz'],$_POST['ort'],$lonlat['LAT'],$lonlat['Lon'],$_POST['name'],$_POST['kontakt']);
+    if (!$error) {
+        LigaKarte::gesuch_eintragen_db($_POST['plz'], $_POST['ort'], $lonlat['LAT'], $lonlat['Lon'], $_POST['name'], $_POST['kontakt']);
         Html::info("Dein Gesuch wurde eingetragen");
         header("Location: ligakarte.php");
         die();
@@ -63,7 +63,7 @@ include '../../templates/header.tmp.php';
 ?>
 
 <h1 class='w3-border-bottom w3-text-primary'>Karte der Ligateams<span class="w3-right w3-hide-small"><?=Html::get_saison_string()?></span></h1>
-<p>Es spielen zurzeit <?=count(Team::get_liste())?> Teams in der Deutschen Einradhockeyliga. <?=Html::link("teams.php","Hier")?>findest du eine Liste aller Teams mit ihrer hinterlegten E-Mail-Adresse.</p>
+<p>Es spielen zurzeit <?=count(Team::get_liste())?> Teams in der Deutschen Einradhockeyliga. <?=Html::link("teams.php", "Hier")?>findest du eine Liste aller Teams mit ihrer hinterlegten E-Mail-Adresse.</p>
   
 <p><i>If your team resides outside of Germany, please contact <?=Html::mailto(Env::TECHNIKMAIL)?> to be included in the map.</i></p>
 
@@ -113,7 +113,7 @@ function initMap() {
   });
 
   //Ligateams eintragen
-  <?php foreach ($array as $team){?>
+  <?php foreach ($array as $team) {?>
 
     var contentString<?=$team['team_id']?> = 
     '<div id="content">'+
@@ -121,7 +121,7 @@ function initMap() {
         '</div>'+
         '<h5 class="w3-text-primary"><?=$team['teamname']?></h5>'+
         '<div class="w3-bottombar"></div>'+
-            '<p><?=$team['plz'] . " " .  $team['ort']?></p>'+
+            '<p><?=$team['plz'] . " " . $team['ort']?></p>'+
             '<a href="teams.php#<?=$team['team_id']?>" class="no w3-text-primary w3-hover-text-secondary" style="white-space: nowrap;" >Zur Kontaktliste </a>'+
         '</div>';
 
@@ -142,7 +142,7 @@ function initMap() {
   <?php } //endforeach?>
 
   //Gesuche Eintragen
-  <?php foreach ($gesuche as $gesuch){?>
+  <?php foreach ($gesuche as $gesuch) {?>
 
     var scontentString<?=$gesuch['gesuch_id']?> = 
     '<div id="content">'+

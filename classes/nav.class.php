@@ -2,7 +2,6 @@
 
 class Nav
 {
-
     /**
      * Iterator für die Navigation, um globale Variablen zu verhindern.
      *
@@ -24,7 +23,7 @@ class Nav
             [Env::BASE_URL . "/liga/teams.php", "Teams"],
             [Env::BASE_URL . "/liga/tabelle.php#meister", "Meisterschaftstabelle"],
             [Env::BASE_URL . "/liga/tabelle.php#rang", "Rangtabelle"],
-            [Env::BASE_URL . "/liga/statistik.php", "Statistik"]
+            [Env::BASE_URL . "/liga/statistik.php", "Statistik"],
         ];
     }
 
@@ -41,7 +40,7 @@ class Nav
             [Env::BASE_URL . "/liga/ligaleitung.php", "Ligaleitung"],
             [Env::BASE_URL . "/liga/ligakarte.php", "Ligakarte"],
             [Env::BASE_URL . "/liga/kader.php", "Nationalkader"],
-            [Env::LINK_DISCORD, "Discord"]
+            [Env::LINK_DISCORD, "Discord"],
         ];
     }
 
@@ -83,12 +82,12 @@ class Nav
             [Env::BASE_URL . "/teamcenter/tc_pw_aendern.php", "Passwort ändern", $class_text_color],
         ];
         if (isset($_SESSION['logins']['team'])) {
-            $links[] =
-                [Env::BASE_URL . "/teamcenter/tc_logout.php", Html::icon("logout") . " Logout", $class_text_color];
+            $links[]
+                = [Env::BASE_URL . "/teamcenter/tc_logout.php", Html::icon("logout") . " Logout", $class_text_color];
         } else {
             array_unshift(
                 $links,
-                [Env::BASE_URL . "/teamcenter/tc_login.php", Html::icon("login") . " Login", "w3-text-black"]
+                [Env::BASE_URL . "/teamcenter/tc_login.php", Html::icon("login") . " Login", "w3-text-black"],
             );
         }
         return $links;
@@ -125,7 +124,7 @@ class Nav
      */
     public static function get_lc_start(): array
     {
-        return array(
+        return [
             [Env::BASE_URL . "/ligacenter/lc_abstimmung.php", "LA-Wahl 2026", "w3-secondary"],
             [Env::BASE_URL . "/schiricenter/schiritest_erstellen.php", "Schiritest", "w3-secondary"],
             [Env::BASE_URL . "/ligacenter/lc_turnierliste.php", "Turniere verwalten", "w3-primary"],
@@ -143,23 +142,23 @@ class Nav
             [Env::BASE_URL . "/ligacenter/lc_admin.php", "Admin", "w3-grey"],
             [Env::BASE_URL . "/ligacenter/lc_checkmail.php", "Mail-Bot", "w3-blue"],
             [Env::BASE_URL . "/ligacenter/lc_logout.php", "Logout", "w3-grey"],
-        );
+        ];
     }
 
     /**
      * Downloadlinks für die Startseite des Ligacenters
-     * 
+     *
      * @return string[][]
      */
     public static function get_lc_downloads(): array
     {
-        return array(
+        return [
             [Env::BASE_URL . "/ligacenter/lc_turnierstats.php", "turniere.xlsx", "w3-light-grey"],
             [Env::BASE_URL . "/ligacenter/lc_spielerstats.php", "spieler.xlsx", "w3-light-grey"],
             [Env::BASE_URL . "/ligacenter/lc_teamstats.php", "teams.xlsx", "w3-light-grey"],
             [Env::BASE_URL . "/ligacenter/lc_leihestats.php", "leihe.xlsx", "w3-light-grey"],
             [Env::BASE_URL . "/schiricenter/schiritest_stats.php", "schiritest.xlsx", "w3-light-grey"],
-        );
+        ];
     }
 
     /**
@@ -169,7 +168,7 @@ class Nav
      */
     public static function get_tc_start(): array
     {
-        $links = array(
+        $links = [
             [Env::BASE_URL . "/teamcenter/tc_abstimmung.php", "LA-Wahl 2026", "w3-secondary"],
             [Env::BASE_URL . "/teamcenter/tc_terminseite_erstellen.php", "Teamtermine", "w3-green"],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_anmelden.php", "Turnieranmeldung", "w3-primary"],
@@ -183,7 +182,7 @@ class Nav
             [Env::BASE_URL . "/teamcenter/tc_kader.php", "Kader", "w3-green"],
             [Env::BASE_URL . "/teamcenter/tc_pw_aendern.php", "Passwort ändern", "w3-grey"],
             [Env::BASE_URL . "/teamcenter/tc_logout.php", "Logout", "w3-grey"],
-        );
+        ];
         return $links;
     }
 
@@ -247,12 +246,12 @@ class Nav
 
     public static function get_oc_start(): array
     {
-        return array(
+        return [
             [Env::BASE_URL . "/oefficenter/oc_kontaktcenter.php", "Kontaktcenter", "w3-tertiary"],
             [Env::BASE_URL . "/oefficenter/oc_neuigkeit_eintragen.php", "Neuigkeit eintragen", "w3-tertiary"],
             [Env::BASE_URL . "/liga/neues.php", "Neuigkeit bearbeiten", "w3-tertiary"],
             [Env::BASE_URL . "/oefficenter/oc_pw_aendern.php", "Passwort ändern", "w3-grey"],
             [Env::BASE_URL . "/oefficenter/oc_logout.php", "Logout", "w3-grey"],
-        );
+        ];
     }
 }

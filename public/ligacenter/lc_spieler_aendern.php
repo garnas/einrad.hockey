@@ -16,11 +16,11 @@ if (isset($_POST['spieler_aendern'])) {
 
     $vorname = $_POST['vorname'];
     $nachname = $_POST['nachname'];
-    $jahrgang = (int)$_POST['jahrgang'];
+    $jahrgang = (int) $_POST['jahrgang'];
     $geschlecht = $_POST['geschlecht'] === "" ? null : $_POST['geschlecht'];
     $teamname = $_POST['teamname'];
-    $letzte_saison = (int)$_POST['letzte_saison'];
-    $schiri = (int)$_POST['schiri'];
+    $letzte_saison = (int) $_POST['letzte_saison'];
+    $schiri = (int) $_POST['schiri'];
     $junior = $_POST['junior'] ?? null;
     $team = TeamRepository::get()->findByName($teamname);
     if ($team === null) {
@@ -125,7 +125,7 @@ include '../../templates/header.tmp.php'; ?>
                         value='<?= Config::SAISON ?>'>
                     bis inkl. Saison <?= Html::get_saison_string() ?>
                 </option>
-                <option <?= (is_null($spieler->getSchiri())) ? 'selected' : '' ?>
+                <option <?= (null === $spieler->getSchiri()) ? 'selected' : '' ?>
                         value=''>kein Schiri
                 </option>
             </select>

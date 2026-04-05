@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Stats;
 
-
 class StatsTest extends TestCase
 {
     protected function deleteSpielerstatistik(): void
@@ -70,16 +69,16 @@ class StatsTest extends TestCase
         Stats::persist_spieler_statistik();
         $spieleranzahl = Stats::get_aktuelle_spieler_anzahl();
         $this->assertTrue(
-            condition: is_string($spieleranzahl["cutoff"]),
+            condition: \is_string($spieleranzahl["cutoff"]),
         );
         $this->assertEquals(
             expected: 0,
             actual: $spieleranzahl["number"],
         );
         # Sechs Monate in die Zukunft
-        $spieleranzahl = Stats::get_aktuelle_spieler_anzahl(time() + 6*30*24*3600);
+        $spieleranzahl = Stats::get_aktuelle_spieler_anzahl(time() + 6 * 30 * 24 * 3600);
         $this->assertTrue(
-            condition: is_string($spieleranzahl["cutoff"]),
+            condition: \is_string($spieleranzahl["cutoff"]),
         );
         $this->assertTrue(
             condition: $spieleranzahl["number"] >= 1,

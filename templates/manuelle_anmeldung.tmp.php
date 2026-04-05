@@ -13,16 +13,16 @@ use App\Service\Turnier\TurnierSnippets;
 <!-- Links -->
 <p>
     <?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(),
-        'Turnierdetails', icon:'info') ?>
+        'Turnierdetails', icon: 'info') ?>
 </p>
 <?php if (Helper::$ligacenter): ?>
     <p>
         <?= Html::link('../ligacenter/lc_turnier_bearbeiten.php?turnier_id=' . $turnier->id(),
-            'Turnier bearbeiten (Ligaausschuss)', icon:'create') ?>
+            'Turnier bearbeiten (Ligaausschuss)', icon: 'create') ?>
     </p>
     <p>
         <?= Html::link('../ligacenter/lc_turnier_log.php?turnier_id=' . $turnier->id(),
-            'Turnierlog einsehen (Ligaausschuss)', icon:'list') ?>
+            'Turnierlog einsehen (Ligaausschuss)', icon: 'list') ?>
     </p>
 <?php endif; ?>
 

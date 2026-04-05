@@ -18,6 +18,7 @@ class mPDF
             [
                 'mode' => 'utf-8',
                 'format' => 'A4-P',
-            ]);
+            ],
+        );
     }
 }

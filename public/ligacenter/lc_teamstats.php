@@ -1,4 +1,5 @@
 <?php
+
 require_once '../../init.php';
 
 use App\Entity\Team\Spieler;
@@ -36,13 +37,13 @@ $header = [
         "anzahl spieler",
         "block",
         "anzahl_gespielter_turniere_aktuelle_saison",
-    ]
+    ],
 ];
 
-$filter = static function(Spieler $spieler) {
+$filter = static function (Spieler $spieler) {
     return $spieler->getLetzteSaison() < Config::SAISON;
 };
-$filter2 = static function(\App\Entity\Turnier\TurniereListe $liste) {
+$filter2 = static function (\App\Entity\Turnier\TurniereListe $liste) {
     return $liste->getTurnier()->getSaison() != Config::SAISON;
 };
 $auswertung = $header;
@@ -53,7 +54,7 @@ foreach ($result as $row) {
         $row["teamname"],
         $anzahl_spieler($team_id),
         Tabelle::get_team_block($row["team_id"]),
-        $anzahl_turniere($team_id)
+        $anzahl_turniere($team_id),
     ];
 }
 

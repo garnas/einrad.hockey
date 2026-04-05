@@ -28,6 +28,6 @@ foreach ($mails as $mail) {
         <p><?=$mail->getInhalt()?></p>
         <h3 class="w3-bottombar"></h3>
     <?php }
-}
+    }
 
 include '../../templates/footer.tmp.php';

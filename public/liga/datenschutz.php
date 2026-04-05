@@ -12,7 +12,7 @@ Html::$content = 'Datenschutzerklärung der Deutschen Eirnadhockeyliga';
 include '../../templates/header.tmp.php';
 ?>
 
-<p class="w3-large w3-text-secondary">Beachte bitte auch unsere Datenschutzhinweise für Ligateams, Spieler, Schiedsrichterprüfende, Turnierorganisatoren und Ligavertreter, welche <?= Html::link(Nav::LINK_DSGVO, "hier", icon:"launch") ?> zu finden sind.</p>
+<p class="w3-large w3-text-secondary">Beachte bitte auch unsere Datenschutzhinweise für Ligateams, Spieler, Schiedsrichterprüfende, Turnierorganisatoren und Ligavertreter, welche <?= Html::link(Nav::LINK_DSGVO, "hier", icon: "launch") ?> zu finden sind.</p>
 
     <h1>Datenschutz&shy;erkl&auml;rung</h1>
     <h2>1. Datenschutz auf einen Blick</h2>
@@ -56,4 +56,3 @@ include '../../templates/header.tmp.php';
     <p>Quelle: <a href="https://www.e-recht24.de">eRecht24</a></p>
 
 <?php include '../../templates/footer.tmp.php';
-

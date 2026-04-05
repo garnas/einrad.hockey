@@ -10,7 +10,7 @@ require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
 //Turnierklasse erstellen
-$turnier_id = (int)@$_GET['turnier_id'];
+$turnier_id = (int) @$_GET['turnier_id'];
 $turnier = nTurnier::get($turnier_id);
 
 //Existiert das Turnier?
@@ -174,11 +174,11 @@ include '../../templates/header.tmp.php';
                        value="JgJ-Spielplan erstellen"
                        class="w3-button w3-tertiary">
             </p>
-        <?php } // endif ?>
+        <?php } // endif?>
     </form>
 <?php } else { ?>
     <p>Bitte zuerst den manuell hochgeladenen Spielplan löschen.</p>
-<?php } // endif ?>
+<?php } // endif?>
 
     <!-- Manuellen Spielplan hochladen -->
     <h2 class="w3-text-primary w3-bottombar">oder PDF- oder XLSX-Spielplan hochladen</h2>

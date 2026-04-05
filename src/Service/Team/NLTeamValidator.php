@@ -10,10 +10,9 @@ use Html;
 
 class NLTeamValidator
 {
-
     public static function isValidNLAnmeldungListe(Turnier $turnier, $liste): bool
     {
-        return in_array($liste, NLTeamService::getPossibleAnmeldungListe($turnier), true);
+        return \in_array($liste, NLTeamService::getPossibleAnmeldungListe($turnier), true);
     }
 
     public static function isValidNLAnmeldung(nTeam $team, Turnier $turnier, string $liste): bool

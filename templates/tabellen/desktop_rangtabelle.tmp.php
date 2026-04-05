@@ -22,12 +22,12 @@
         <!-- Kopfzeile fuer das Team -->
         <div style="cursor: pointer;" onclick="show_large_results('rang', <?=$key?>)" id="large-rang-head-<?=$key?>" class="w3-row <?=$nthcolor?> w3-border-bottom w3-border-grey w3-hover-text-secondary">
             <div class="w3-col w3-right w3-padding-8 w3-center" style="width: 42px;">
-                <? if (!empty($zeile['details'])): ?>
+                <?php if (!empty($zeile['details'])): ?>
                     <span>
                         <span id="large-rang-icon-show-<?=$key?>" class="material-icons w3-text-primary" style="display:block">arrow_drop_down</span>
                         <span id="large-rang-icon-hide-<?=$key?>" class="material-icons w3-text-primary" style="display:none">arrow_drop_up</span>
                     </span>
-                <? endif; ?>
+                <?php endif; ?>
             </div>
             <div class="w3-rest">
                 <div class="w3-row">

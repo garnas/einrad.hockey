@@ -14,7 +14,7 @@ $turnier_id = (int) @$_GET['turnier_id'];
 
 $turnierEntity = TurnierRepository::get()->turnier($turnier_id);
 
-if ($turnierEntity === null){
+if ($turnierEntity === null) {
     Html::notice("Turnier wurde nicht gefunden.");
 }
 
@@ -28,7 +28,7 @@ include '../../templates/header.tmp.php'; ?>
 
     <h2>Turnierlog</h2>
     <h2><?= TurnierSnippets::nameBrTitel($turnierEntity) ?></h2>
-    <?= Html::link(TurnierLinks::details($turnierEntity), "Turnierdetails", icon:'info') ?>
+    <?= Html::link(TurnierLinks::details($turnierEntity), "Turnierdetails", icon: 'info') ?>
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped">
             <tr class="w3-primary">
@@ -36,7 +36,7 @@ include '../../templates/header.tmp.php'; ?>
                 <th>Akteur</th>
                 <th>Aktion</th>
             </tr>
-            <?php foreach ($turnierEntity->getLogs() as $log){?>
+            <?php foreach ($turnierEntity->getLogs() as $log) {?>
                 <tr>
                     <td style="white-space: pre;"><?= $log->getZeit()->format("d.m.y (D) H:i:s") ?></td>
                     <td><?= $log->getAutor() ?></td>

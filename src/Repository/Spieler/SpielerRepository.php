@@ -10,7 +10,6 @@ use Doctrine\ORM\EntityRepository;
 
 class SpielerRepository
 {
-
     use TraitSingletonRepository;
 
     private EntityRepository $spieler;

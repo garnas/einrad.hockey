@@ -24,7 +24,7 @@ foreach ($strafen as $strafe) {
 
 if (isset($_POST['strafe_eintragen'])) {
     $error = false;
-    if (empty($_POST['teamname']) or empty($_POST['grund'])) {
+    if (empty($_POST['teamname']) || empty($_POST['grund'])) {
         $error = true;
         Html::error("Bitte Team auswählen und Begründung eintragen.");
     }
@@ -86,7 +86,7 @@ include '../../templates/header.tmp.php';
                 <td style="vertical-align: middle">
                     <?= $strafe->getGrund() ?>
                     <?php if (!empty($strafe->getProzentsatz())) { ?>(<?= $strafe->getProzentsatz() ?>&nbsp;%)<?php } //endif
-                                                                                                    ?>
+            ?>
                 </td>
                 <td style="vertical-align: middle"><?= ($strafe->getTurnier()?->getDatum()?->format("d.m.Y") ?? '') . ' ' . ($strafe->getTurnier()?->getDetails()?->getOrt() ?? '') ?></td>
                 <td style="vertical-align: middle">
@@ -97,7 +97,7 @@ include '../../templates/header.tmp.php';
                 </td>
             </tr>
         <?php } //end foreach
-        ?>
+?>
     </table>
 </div>
 
@@ -120,7 +120,7 @@ include '../../templates/header.tmp.php';
             <?php foreach ($turniere as $turnier) { ?>
                 <option value="<?= $turnier->id() ?>"><?= $turnier->getDatum()->format("d.m.Y") . ' ' . $turnier->getDetails()->getOrt() . ' (' . $turnier->getBlock() . ')' ?></option>
             <?php } //end foreach
-            ?>
+?>
         </select>
     <p>
     <p>

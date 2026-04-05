@@ -8,9 +8,9 @@ use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierValidatorService;
 
 if (isset($_POST['delete_turnier'])) {
-        TurnierRepository::get()->delete($turnier);
-        Html::info("Turnier wurde gelöscht.");
-        Helper::reload('/liga/turniere.php');
+    TurnierRepository::get()->delete($turnier);
+    Html::info("Turnier wurde gelöscht.");
+    Helper::reload('/liga/turniere.php');
 }
 
 if (isset($_POST['absagen_turnier'])) {
@@ -29,7 +29,7 @@ if (isset($_POST['turnier_bearbeiten_la'])) {
     // Ausrichter setzen
     $ausrichter = TeamRepository::get()->findByName($_POST['ausrichter']);
 
-    if (is_null($ausrichter)) {
+    if (null === $ausrichter) {
         $error = true;
         Html::error('Der Ausrichter wurde nicht gefunden.');
     } elseif (!$ausrichter->isLigaTeam()) {

@@ -15,27 +15,27 @@ $deaktivierte_teams = Team::get_deactive();
 //Formularauswertung
 
 // Als Ligateam anmelden
-if (isset($_POST['anmelden'])){
+if (isset($_POST['anmelden'])) {
 
     $team = TeamRepository::get()->findByName($_POST['teamname']);
     Html::notice("Der Login als Team ist für die Dauer der Ligaausschusswahlen deaktiviert.");
-//    if ($team && $team->isLigaTeam()){
-//        TeamService::removeTeamSession();
-//        TeamService::createTeamSession($team);
-//        Helper::log("login.log", "Erfolgreich       | via Ligacenter: " . $_SESSION['logins']['la']['login']
-//            . " als " . $_SESSION['logins']['team']['name']);
-//        Html::info("Login via Ligaausschuss erfolgreich");
-//        Helper::reload('/teamcenter/tc_start.php');
-//    }
-//    Html::error("Anmeldung als Team nicht möglich, da der Teamname keinem Ligateam zugeordnet werden konnte.");
+    //    if ($team && $team->isLigaTeam()){
+    //        TeamService::removeTeamSession();
+    //        TeamService::createTeamSession($team);
+    //        Helper::log("login.log", "Erfolgreich       | via Ligacenter: " . $_SESSION['logins']['la']['login']
+    //            . " als " . $_SESSION['logins']['team']['name']);
+    //        Html::info("Login via Ligaausschuss erfolgreich");
+    //        Helper::reload('/teamcenter/tc_start.php');
+    //    }
+    //    Html::error("Anmeldung als Team nicht möglich, da der Teamname keinem Ligateam zugeordnet werden konnte.");
 }
 
 // Ligateam deativieren
-if (isset($_POST['deaktivieren'])){
+if (isset($_POST['deaktivieren'])) {
     $teamname = $_POST['teamname'] ?? '';
     $team_id = Team::name_to_id($teamname);
 
-    if (Team::is_ligateam($team_id)){
+    if (Team::is_ligateam($team_id)) {
         Team::deactivate($team_id);
         Html::info("Das Team $teamname wurde deaktiviert.");
         header('Location: ../ligacenter/lc_admin.php');
@@ -44,11 +44,11 @@ if (isset($_POST['deaktivieren'])){
     Html::error("Teamname wurde nicht gefunden. Team wurde nicht deaktiviert.");
 }
 
-if (isset($_POST['ergebnisuebernahme_verhindern'])){
+if (isset($_POST['ergebnisuebernahme_verhindern'])) {
     $teamname = $_POST['teamname'] ?? '';
     $team = TeamRepository::get()->findByName($teamname);
 
-    if ($team && $team->isLigaTeam()){
+    if ($team && $team->isLigaTeam()) {
         TeamService::verhindereTurnierergebnisSaisonuebernahme(team: $team);
         TeamRepository::get()->speichern($team);
         Html::info("Die Ergebnisübernahme in die nächste Saison für das Team " . $team->getName() . " ist verhindert.");
@@ -59,11 +59,11 @@ if (isset($_POST['ergebnisuebernahme_verhindern'])){
 
 
 // Ligateam reaktivieren
-if (isset($_POST['reaktivieren'])){
+if (isset($_POST['reaktivieren'])) {
     $team_id = $_POST['team_id'] ?? '';
     $teamname = Team::id_to_name($team_id);
-    
-    if (!empty($teamname)){
+
+    if (!empty($teamname)) {
         Team::activate($team_id);
         Html::info("Das Team $teamname wurde reaktiviert.");
         header('Location: ../ligacenter/lc_admin.php');
@@ -72,7 +72,7 @@ if (isset($_POST['reaktivieren'])){
     Html::error("Teamname wurde nicht gefunden. Team wurde nicht deaktiviert.");
 }
 
-if (isset($_POST['gitpull'])){
+if (isset($_POST['gitpull'])) {
 
     if (Env::IS_LOCALHOST ?? true) {
 
@@ -103,14 +103,14 @@ if (isset($_POST['gitpull'])){
     }
 }
 
-if (isset($_POST['gitlogs'])){
+if (isset($_POST['gitlogs'])) {
 
     $output = shell_exec("sh " . Env::BASE_PATH . "/system/shell/gitlog.sh");
     db::debug($output);
 
 }
 
-if (isset($_POST['gitstatus'])){
+if (isset($_POST['gitstatus'])) {
 
     $output = shell_exec("sh " . Env::BASE_PATH . "/system/shell/gitstatus.sh");
     db::debug($output);
@@ -118,17 +118,17 @@ if (isset($_POST['gitstatus'])){
 }
 
 //Ligabot ausführen
-if (isset($_POST['ligabot'])){
+if (isset($_POST['ligabot'])) {
     nLigaBot::ligaBot();
 }
 
 //Datenbank sichern
-if (isset($_POST['sichern'])){
+if (isset($_POST['sichern'])) {
     db::sql_backup();
 }
 
 //Datenbank sichern
-if (isset($_POST['mailbot'])){
+if (isset($_POST['mailbot'])) {
     MailBot::mail_bot();
 }
 
@@ -173,7 +173,7 @@ include '../../templates/header.tmp.php';?>
     <label class="w3-text-primary" for="team_id">Team wählen</label>
     <select required class="w3-select w3-border w3-border-primary" id="team_id" name="team_id">
         <option disabled selected>Bitte deaktives Team wählen</option>
-            <?php foreach ($deaktivierte_teams as $team){?>
+            <?php foreach ($deaktivierte_teams as $team) {?>
                 <option value=<?=$team['team_id']?>><?=$team['teamname']?></option>
             <?php } //end foreach?>
     </select>

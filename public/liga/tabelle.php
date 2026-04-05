@@ -36,13 +36,13 @@ if ($saison >= Config::SAISON) {
     $filter = 'tabelle';
 }
 
-$meisterschafts_tabelle_meister = array();
+$meisterschafts_tabelle_meister = [];
 foreach ($meisterschafts_tabelle as $row) {
     // Prüfe, ob Einzelergebnisse vorhanden sind
     if (count($row['details']) < 4) {
         continue;
     }
-    
+
     // Füge die Zeile zur gefilterten Tabelle hinzu
     $meisterschafts_tabelle_meister[] = $row;
 }
@@ -72,14 +72,14 @@ foreach (range(17, 22) as $i) {
     $platz_color[$i] = "ehl-text-blue";
 }
 
-$block_color = array(
-    'A' => 'ehl-text-pink', 
-    'B' => 'ehl-text-orange', 
-    'C' => 'ehl-text-blue', 
-    'D' => 'ehl-text-yellow', 
-    'E' => 'ehl-text-green', 
-    'F' => 'ehl-text-green'
-);
+$block_color = [
+    'A' => 'ehl-text-pink',
+    'B' => 'ehl-text-orange',
+    'C' => 'ehl-text-blue',
+    'D' => 'ehl-text-yellow',
+    'E' => 'ehl-text-green',
+    'F' => 'ehl-text-green',
+];
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////

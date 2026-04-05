@@ -21,7 +21,7 @@ ini_set('session.cookie_secure', '1');
 ini_set('date.timezone', 'Europe/Berlin');
 ini_set('memory_limit', '512M');
 ini_set('max_execution_time', '90');
-ini_set('error_reporting', E_ALL);
+ini_set('error_reporting', \E_ALL);
 ini_set('log_errors', 'On');
 ini_set('display_errors', 'Off');
 ini_set('error_log', __DIR__ . '/system/logs/errors.log');
@@ -35,7 +35,7 @@ ini_set('error_log', __DIR__ . '/system/logs/errors.log');
  */
 try {
     require_once __DIR__ . '/env.php';
-}catch (Throwable $_){
+} catch (Throwable $_) {
     require_once __DIR__ . '/_localhost/env.php';
 }
 
@@ -72,8 +72,7 @@ spl_autoload_register(
         if (file_exists($path)) {
             include $path;
         }
-    }
-
+    },
 );
 
 /**
@@ -86,7 +85,7 @@ register_shutdown_function(static function () {
 
     // Lag ein Fehler vor?
     if (($error = error_get_last()) !== null) {
-        if (!in_array(needle: $error['type'], haystack: [E_USER_NOTICE, E_USER_WARNING, E_USER_ERROR])) {
+        if (!in_array(needle: $error['type'], haystack: [\E_USER_NOTICE, \E_USER_WARNING, \E_USER_ERROR])) {
             // Fehlerlogs von PHP ergänzen.
             $script = basename($_SERVER['SCRIPT_NAME'] ?? '');
             $line = "Custom Log Details for " . $_SERVER["REQUEST_URI"] ?? "?";
@@ -100,7 +99,7 @@ register_shutdown_function(static function () {
         if (!Env::IS_LOCALHOST) {
             switch ($error['type']) {
                 // Ein von uns hervorgerufener Fehler (zB. falscher Spielplan)
-                case E_USER_ERROR:
+                case \E_USER_ERROR:
                     $_SESSION['error'] = [
                         'text' => $error['message'],
                         'url'  => $_SERVER['REQUEST_URI'],
@@ -108,8 +107,8 @@ register_shutdown_function(static function () {
                     Helper::reload('/errors/409.php');
                     break;
 
-                // Ein von PHP hervorgerufener Fehler (zB. durch Null geteilt)
-                case E_ERROR:
+                    // Ein von PHP hervorgerufener Fehler (zB. durch Null geteilt)
+                case \E_ERROR:
                     Helper::reload('/errors/500.html');
                     break;
             }
@@ -129,12 +128,14 @@ register_shutdown_function(static function () {
     }
 
     // Logs schreiben
-    Helper::log(Config::LOG_USER,
+    Helper::log(
+        Config::LOG_USER,
         ($_SERVER['REQUEST_URI'] ?? "")
-        . " | " . round(microtime(TRUE) - $_SERVER["REQUEST_TIME_FLOAT"], 3) . " s (Load)"
+        . " | " . round(microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"], 3) . " s (Load)"
         . " | " . ndbWrapper::$query_count . " (Querys)"
         . $referrer,
-        true);
+        true,
+    );
 });
 
 /**
@@ -152,7 +153,7 @@ if (
     && $_SESSION['destroyed'] < time()  - 15
 ) {
     session_unset();
-    trigger_error("Ungültige Session-ID.", E_USER_ERROR);
+    trigger_error("Ungültige Session-ID.", \E_USER_ERROR);
 }
 
 $_SESSION['destroyed'] = time(); // Legt den Destroy-Zeitstempel fest
@@ -168,7 +169,7 @@ db::initialize(); // Neue DB-Verbindung mit Prepared-Statements
 /**
  * Sprache für Zeitformate in Deutsch --> strftime()
  */
-setlocale(LC_ALL, 'de_DE@euro', 'de_DE', 'de', 'ge');
+setlocale(\LC_ALL, 'de_DE@euro', 'de_DE', 'de', 'ge');
 
 
 /**
@@ -185,7 +186,8 @@ if (
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-function e(mixed $value) {
+function e(mixed $value)
+{
     return db::escape($value);
 }
 

@@ -11,7 +11,7 @@ use App\Service\Turnier\TurnierService;
 
 class NLTeamService
 {
-    public static function findByName(string $name): nTeam|null
+    public static function findByName(string $name): ?nTeam
     {
         return TeamRepository::get()->findByName($name . "*");
     }
@@ -31,7 +31,7 @@ class NLTeamService
 
     public static function getPossibleAnmeldungListe(Turnier $turnier): array
     {
-        if($turnier->isWartePhase()) {
+        if ($turnier->isWartePhase()) {
             if (self::hasNLTeamAufSetzliste($turnier) || !TurnierService::hasFreieSetzPlaetze($turnier)) {
                 return ['warteliste'];
             }

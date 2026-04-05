@@ -18,7 +18,6 @@ use MailBot;
 
 class FreilosService
 {
-
     public static function hasAusrichterFreilosForAusgerichtetesTurnier(Turnier $turnier): bool
     {
         $tunier_id = $turnier->id();
@@ -38,7 +37,7 @@ class FreilosService
             && !self::hasZweiAusgerichteteTurnierFreilose($team)
         );
     }
-    public static function handleAusgerichtetesTurnierFreilos(Turnier $turnier, bool $sendMail = True): bool
+    public static function handleAusgerichtetesTurnierFreilos(Turnier $turnier, bool $sendMail = true): bool
     {
         $team = $turnier->getAusrichter();
         if (
@@ -47,7 +46,7 @@ class FreilosService
         ) {
             $team->addFreilos(
                 grund: FreilosGrund::TURNIER_AUSGERICHTET,
-                turnierAusgerichtet: $turnier
+                turnierAusgerichtet: $turnier,
             );
             Html::info("Das Team " . $team->getName() . " hat ein Freilos für ihr frühzeitig ausgeschriebenes Turnier erhalten.");
             TeamRepository::get()->speichern($team);
@@ -142,8 +141,8 @@ class FreilosService
         return !$turnier->isCanceled()
             && $turnier->isLigaturnier()
             && TeamService::isAufSetzliste($freilos->getTeam(), $turnier)
-            && FreilosService::isFreilosRecyclebar($freilos)
-            && !FreilosService::hasFreilosRecyclebarForTurnier($freilos);
+            && self::isFreilosRecyclebar($freilos)
+            && !self::hasFreilosRecyclebarForTurnier($freilos);
     }
 
     public static function handleFreilosRecycling(Turnier $turnier, bool $sendMail = true): void
@@ -171,7 +170,7 @@ class FreilosService
 
     }
 
-    public static function handleSchiriFreilos(nTeam $team, bool $sendMail = True): bool
+    public static function handleSchiriFreilos(nTeam $team, bool $sendMail = true): bool
     {
         $filter = static function (Spieler $s) {
             return ($s->getLetzteSaison() == Config::SAISON && $s->getSchiri() >= Config::SAISON);
@@ -183,9 +182,9 @@ class FreilosService
             if ($sendMail) {
                 Mailbot::mail_schiri_freilos($team);
             }
-            return True;
+            return true;
         }
-        return False;
+        return false;
     }
 
     /**

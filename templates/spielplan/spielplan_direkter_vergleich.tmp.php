@@ -1,4 +1,4 @@
-<?php if (!empty($spielplan->direkter_vergleich_tabellen)){ ?>
+<?php if (!empty($spielplan->direkter_vergleich_tabellen)) { ?>
     <!-- Buttons zum Ein/Ausblenden der Vergleiche -->
     <div class="w3-section w3-margin-top">
         <div id='button_da'>
@@ -18,7 +18,7 @@
             </button>
         </div>
     </div>
-<?php } //endif ?>
+<?php } //endif?>
 
 <div id="vergleichs_tabellen" style="display: none">
     <!-- Tabellen für den direkten Vergleich -->
@@ -72,14 +72,14 @@
                         <td><?= $ergebnis['tore'] ?></td>
                         <td><?= $ergebnis['gegentore'] ?></td>
                     </tr>
-                <?php } // end foreach ?>
+                <?php } // end foreach?>
             </table>
         </div>
-    <?php }//end foreach ?>
+    <?php }//end foreach?>
     <!-- Tabellen für den direkten Vergleich -->
-    <?php if (!empty($spielplan->penalty_tabellen)){ ?>
+    <?php if (!empty($spielplan->penalty_tabellen)) { ?>
         <h3 class="w3-text-secondary">Penalty Vergleich</h3>
-    <?php }//end if ?>
+    <?php }//end if?>
     <?php foreach ($spielplan->penalty_tabellen as $penalty) { ?>
         <div class="w3-card-4 w3-responsive w3-section">
             <table class="w3-table w3-centered">
@@ -140,5 +140,5 @@
                 <?php endforeach; ?>
             </table>
         </div>
-    <?php }//end foreach ?>
+    <?php }//end foreach?>
 </div>

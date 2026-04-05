@@ -29,19 +29,19 @@ class Stats
             $time = time();
         }
         $year = date('Y', $time);
-        $cutoff = [ 
-            "$year-06-30 23:59:59", 
-            "$year-01-31 23:59:59", 
+        $cutoff = [
+            "$year-06-30 23:59:59",
+            "$year-01-31 23:59:59",
             ($year - 1) . "-06-30 23:59:59",
         ];
 
         foreach ($cutoff as $c) {
             if (($cs = strtotime($c)) <= $time) {
                 $lastCutoff = $cs;
-                break; 
+                break;
             }
         }
-    
+
         $sql = "
                 SELECT SUM(anzahl) 
                 FROM spieler_statistik
@@ -51,7 +51,7 @@ class Stats
                     WHERE date <= ?
                 );
                 ";
-        
+
         $number = db::$db->query($sql, date('Y-m-d H:i:s', $lastCutoff))->fetch_one() ?? 0;
         return ['cutoff' => date('d.m.Y', $lastCutoff), 'number' => $number];
     }
@@ -75,7 +75,7 @@ class Stats
                 ";
         return db::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
     }
-    
+
     /**
      * Gibt alle gefallenen Tore inklusive Penaltys einer Saison aus.
      *
@@ -114,7 +114,7 @@ class Stats
         ";
         return db::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
     }
-    
+
     /**
      * Gespielte Minuten
      *
@@ -164,9 +164,9 @@ class Stats
             ORDER BY gespielt desc, rand()
             LIMIT ?
         ";
-        
+
         $teams = db::$db->query($sql, $saison, $limit)->esc()->fetch();
-        
+
         $rang = 1;
         $vorher_rang = 1;
         $vorher_anz = 0;
@@ -183,11 +183,11 @@ class Stats
         }
 
         return $teams;
-    }    
+    }
 
     /**
      * Gewonnene Spiele pro Team
-     * 
+     *
      * @param int $saison
      * @param int $limit
      * @return array
@@ -283,7 +283,7 @@ class Stats
         ";
 
         $teams = db::$db->query($sql, $saison, $limit)->esc()->fetch();
-        
+
         $rang = 1;
         $vorher_rang = 1;
         $vorher_anz = 0;
@@ -310,7 +310,7 @@ class Stats
      * @return array
      */
     public static function get_max_turnierorte(int $saison = Config::SAISON, int $limit = 999): array
-    {   
+    {
         $sql = "
             SELECT turniere_details.ort, COUNT(*) AS anzahl
             FROM turniere_liga
@@ -324,7 +324,7 @@ class Stats
         ";
 
         $orte = db::$db->query($sql, $saison, $limit)->esc()->fetch();
-        
+
         $rang = 1;
         $vorher_rang = 1;
         $vorher_anz = 0;

@@ -28,22 +28,23 @@ $turnier_id = (int) @$_GET['turnier_id'];
 $turnier = TurnierRepository::get()->turnier($turnier_id);
 
 // Existiert das Turnier?
-if (is_null($turnier)) {
+if (null === $turnier) {
     Helper::not_found("Turnier wurde nicht gefunden.");
 }
 
-if ($turnier->isSpassTurnier()){
-    $kontakt = new Kontakt ($turnier->getAusrichter()->id());
+if ($turnier->isSpassTurnier()) {
+    $kontakt = new Kontakt($turnier->getAusrichter()->id());
     $email = $kontakt->get_emails();
-    Html::notice("Anmeldung zu Spass-Turnieren erfolgt über den Ausrichter: "
+    Html::notice(
+        "Anmeldung zu Spass-Turnieren erfolgt über den Ausrichter: "
         . Html::mailto($email, $turnier->getAusrichter()->getName()),
-        esc:false
+        esc: false,
     );
     Helper::reload('/liga/turnier_details.php', '?turnier_id=' . $turnier->id());
 }
 
 // Reguläres Anmelden
-if (isset($_POST['anmelden'])){
+if (isset($_POST['anmelden'])) {
     if (TeamValidator::isValidRegularAnmeldung($teamEntity, $turnier)) {
         TeamService::anmelden($teamEntity, $turnier);
         TurnierRepository::get()->speichern($turnier);
@@ -55,14 +56,14 @@ if (isset($_POST['anmelden'])){
 }
 
 //Freilos setzen
-if (isset($_POST['freilos'])){
+if (isset($_POST['freilos'])) {
     if (TeamValidator::isValidFreilos($teamEntity, $turnier)) {
         FreilosService::freilos($teamEntity, $turnier);
         TeamRepository::get()->speichern($teamEntity);
-        Html::info ("Dein Team wurde zum Turnier via Freilos angemeldet.");
+        Html::info("Dein Team wurde zum Turnier via Freilos angemeldet.");
         Helper::reload("/teamcenter/tc_team_anmelden.php", "?turnier_id=" . $turnier->id());
     } else {
-        Html::error ("Dein Team wurde nicht angemeldet.");
+        Html::error("Dein Team wurde nicht angemeldet.");
     }
 }
 
@@ -71,7 +72,7 @@ if (isset($_POST['abmelden']) && Helper::$teamcenter) {
     if (TeamValidator::isValidAbmeldung($teamEntity, $turnier)) {
         TeamService::abmelden($teamEntity, $turnier);
         TurnierRepository::get()->speichern($turnier);
-        Html::info ("Dein Team wurde erfolgreich abgemeldet");
+        Html::info("Dein Team wurde erfolgreich abgemeldet");
         Helper::reload("/teamcenter/tc_team_anmelden.php", "?turnier_id=" . $turnier->id());
     } else {
         Html::error("Abmeldung war nicht möglich.");
@@ -79,7 +80,7 @@ if (isset($_POST['abmelden']) && Helper::$teamcenter) {
 }
 
 // Für Abschlussturnier bewerben
-if (isset($_POST['bewerben'])){
+if (isset($_POST['bewerben'])) {
     if (TeamValidator::isValidFinalMeldung($teamEntity, $turnier)) {
         TurnierService::addToWarteListe($turnier, $teamEntity);
         TurnierRepository::get()->speichern($turnier);
@@ -104,10 +105,12 @@ include '../../templates/header.tmp.php';
     "Turnierdetails",
     false,
     "launch") ?>
-<?= Html::link('../teamcenter/tc_turnierliste_anmelden.php?turnier_id=' . $turnier->id(),
-    "Zurück zur Turnieranmeldeliste",
-    false,
-    "launch") ?>
+<?= Html::link(
+        '../teamcenter/tc_turnierliste_anmelden.php?turnier_id=' . $turnier->id(),
+        "Zurück zur Turnieranmeldeliste",
+        false,
+        "launch",
+    ) ?>
 
 <!-- Anzeigen der angemeldeten Teams und gleichzeitig Abmeldeformular -->
 <div class="w3-card w3-container">
@@ -146,16 +149,16 @@ include '../../templates/header.tmp.php';
                     <?php if (TeamService::isAufSetzliste($teamEntity, $turnier)
                                 || !TurnierService::isSpielBerechtigtFreilos($turnier, $teamEntity)
                                 || $teamEntity->getAnzahlOffenerFreilose() == 0
-                             ): ?> w3-opacity<?php endif; ?>'
+                    ): ?> w3-opacity<?php endif; ?>'
                     name='freilos' value='Freilos setzen (<?=$teamEntity->getAnzahlOffenerFreilose()?> vorhanden)'>
             </p>
-            <span><?= Html::link(Env::BASE_URL . "/teamcenter/tc_teamdaten.php#freilose", "Übersicht der Freilose", extern: True, icon: "launch")?></span>
+            <span><?= Html::link(Env::BASE_URL . "/teamcenter/tc_teamdaten.php#freilose", "Übersicht der Freilose", extern: true, icon: "launch")?></span>
             <span class="w3-text-grey">Freilose setzen dein Team in der Wartephase direkt auf die Setzliste. Ein Team kann auch für blockhöhere Turniere ein Freilos einsetzen, nicht jedoch für blockniedrigere Turniere.</span>
         </form>
     <?php } //endif?>
         <form method="post" onsubmit="return confirm('Dein Team wird vom Turnier abgemeldet werden.');">
             <p><input type='submit' class='<?php if (!TeamService::isAngemeldet($teamEntity, $turnier)): ?>w3-opacity<?php endif;?> w3-button w3-margin-bottom w3-block w3-tertiary w3-right' name='abmelden' value='Abmelden'></p>
-            <?php if($turnier->isLigaturnier()): ?>
+            <?php if ($turnier->isLigaturnier()): ?>
                 <p class="w3-text-grey">Abmeldung von der Setzliste ist möglich bis <?= TurnierService::getAbmeldeFrist($turnier) ?></p>
             <?php endif; ?>
         </form>
