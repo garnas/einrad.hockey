@@ -1,17 +1,16 @@
-# einrad.hockey-Website
+# einrad.hockey
+
 ![Logo der Einradhockeyliga](https://einrad.hockey/bilder/logo_lang_small.png)
 
 Dies ist der Code der Website [einrad.hockey](https://einrad.hockey) der Deutschen Einradhockeyliga.
 
-einrad.hockey verwendet sein eigenes Framework. Dieses wurde von mir entwickelt, um Interessierten im Einradhockey 
-nach einer möglichst kurzen Einrichtungs- und Einarbeitungsphase die Möglichkeit zu geben, an der Website mitzuarbeiten. 
-Dafür sind nur grundlegende PHP- und/oder HTML/CSS-Kenntnisse notwendig, welche man sich schnell aneignen kann.
+Du hast Lust mitzuwirken? Oder Fragen darüber, wie die Webseite funktioniert? Melde dich gerne bei uns.
 
-Du hast Lust mitzuwirken? Oder Fragen darüber, wie die Webseite funktioniert? Melde dich gerne bei ansgar@einrad.hockey
+---
 
-## Was kann einrad.hockey?
+## Features
 
-* Einstellen von Turnieren 
+* Einstellen von Turnieren
 * Anmeldung von Teams zu Turnieren
 * Automatische Erstellung von Spielplänen und Turnierreports
 * Spiel- und Turnierergebnissen live eintragen
@@ -25,86 +24,124 @@ Du hast Lust mitzuwirken? Oder Fragen darüber, wie die Webseite funktioniert? M
 * LigaBot für die Phasenübergänge der Turniere und zum Losen von Spielen-Listen
 * und vieles mehr!
 
-## xml-Schnittstelle
+---
 
-* [https://www.einrad.hockey/xml/turnierliste.php](https://www.einrad.hockey/xml/turnierliste.php)
-* [https://www.einrad.hockey/xml/turnieranmeldungen.php](https://www.einrad.hockey/xml/turnieranmeldungen.php)
-* [https://www.einrad.hockey/xml/rangtabelle.php](https://www.einrad.hockey/xml/rangtabelle.php)
-* [https://www.einrad.hockey/xml/spielplan.php?turnier_id=?](https://www.einrad.hockey/xml/spielplan.php?turnier_id=1021)
+# Entwicklungsumgebung aufsetzen mit Dev-Container
 
-## dev-Umgebung erstellen
-* Eine Beispiel php.ini mit den notwendigen Extensions und Debug-Settings liegt in _Localhost/php.ini-example
+## Voraussetzungen
 
-### Möglichkeit 1: Docker
-> Siehe [docker-setup.md](docker-setup.md)
+- Docker installiert und den Docker Daemon gestartet (z. B. via Docker Desktop)
+- Repository lokal klonen
 
-### Möglichkeit 2: XAMPP
-1. Voraussetzungen:
-   * XAMPP installieren (PHP >=8.2, Stand 30.12.2024 noch nicht für PHP 8.3 verfügbar), Composer installieren
-   * Repository in den htdocs-Ordner herunterladen. Ordnerstruktur sollte so aussehen: 
-    ```
-    htdocs
-    └── einrad.hockey
-        └── example_env.php
-    ```
-   * Im Verzeichnis der example_env.php eine Datei env.php erstellen und den Inhalt von example_env.php hereinkopieren
+## Enthaltene Dienste
 
-2. Datenbank einrichten:
-   * VIA XAMPP Control Panel, MySQL -> Admin -> phpMyAdmin eine Datenbank db_localhost erstellen
-   * Die db_localhost.sql im Ordner _localhost in die Datenbank laden
-   * In der oben erstellten env.php die Zugangsdaten der SQL-Datenbank eintragen (falls von den default Zugangsdaten abgewichen wird)
+- PHP 8.3, Apache, MariaDB und phpMyAdmin
+- Datenbank wird beim ersten Start automatisch aus `_localhost/db_localhost.sql` befüllt
+- Debugging mit Breakpoints direkt einsatzbereit
 
-3. Abhängigkeiten installieren
-   * Im Verzeichnis der composer.json via CLI "composer update" ausführen
-   * Anschließend via CLI "composer dump-autoload" ausführen, um den Autoloader der Klassen zu konfigurieren
+| Dienst     | URL                   | Info                              |
+|------------|-----------------------|-----------------------------------|
+| Webseite   | http://localhost      | einrad.hockey Website (Port 80)   |
+| phpMyAdmin | http://localhost:8081 | Datenbank GUI Tool (Port 8081)    |
+| MariaDB    | localhost:3306        | DB-Verbindung (in Docker db:3306) |
+
+
+## Mit Visual Studio Code
+
+**Voraussetzungen:** [VS Code](https://code.visualstudio.com/) + Extension [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+
+1. Projekt in VS Code öffnen.
+2. Popup "Reopen in Container" bestätigen — oder: `F1` → `Dev Containers: Open Folder in Container`.
+3. VS Code baut den Container und führt automatisch `setup.sh` aus (Composer-Install, Doctrine-Setup).
+
+Nach dem Start öffnet VS Code automatisch http://localhost im Browser.
+
+**Vorinstallierte Extensions:**
+- **Intelephense** — PHP-Autocompletion und Analyse
+- **PHP Debug** — Xdebug-Integration
+
+> Debugging: Unter "Run and Debug" → "Listen for Xdebug" aktivieren!
+
+## Mit PHPStorm
+
+**Voraussetzungen:** PHPStorm 2023.2 oder neuer
+
+1. Projekt in PHPStorm öffnen.
+2. PHPStorm erkennt `.devcontainer/devcontainer.json` automatisch → Popup "Dev Containers" → Container starten.
+   - Alternativ: `Strg+Shift+A` → `Dev Containers` oder via Services.
+
+---
+
+# Wichtige Commands
+
+### Tests
+
+```shell
+vendor/bin/phpunit tests/
+```
+
+> Für die Integrationstests muss die Datenbank in `env.php` konfiguriert sein.
+
+### Dependencies
 
 ```shell
 composer install
 composer dump-autoload
 ```
 
-> Composer dump-autoload ist ebenfalls wichtig, damit neu erstellte oder umbenannte Klassen in unserem Code richtig geladen werden ;)
+> `dump-autoload` nach neu erstellten oder umbenannten Klassen ausführen.
 
-4. Doctrine Cache Update
+### Doctrine Cache aktualisieren
+
 ```shell
 php bin/doctrine orm:clear-cache:metadata
 php bin/doctrine orm:clear-cache:query
 php bin/doctrine orm:generate-proxies
 ```
 
-5. Seite öffnen
-   * http://localhost/einrad.hockey/public/liga/neues.php
-   * Hier sollte nun die Neuigkeitenseite angezeigt werden
+> Nötig bei Änderungen an Entities, damit das Mapping korrekt aktualisiert wird.
 
-### Ionos Webspace:
-* composer.phar herunterladen
-<pre>
+### Doctrine CLI mit Xdebug
+
+```shell
+php -d xdebug.mode=debug -d xdebug.client_host=127.0.0.1 -d xdebug.client_port=9003 -d xdebug.start_with_request=yes bin/doctrine
+```
+
+### Docker zurücksetzen (alles löschen)
+
+```bash
+docker rm -vf $(docker ps -aq)
+docker rmi -f $(docker images -aq)
+docker system prune --all --volumes
+```
+
+---
+
+# Ionos Webspace
+
+### Composer einrichten
+
+```shell
+# composer.phar herunterladen
 curl -sS https://getcomposer.org/installer | /usr/bin/php8.3-cli
-</pre>
 
-* composer.phar ausführen
-<pre>
+# Ausführen
 /usr/bin/php8.3-cli composer.phar about
-</pre>
+```
 
-* Doctrine Cache Update
+### Doctrine Cache aktualisieren
+
 ```shell
 /usr/bin/php8.3-cli bin/doctrine orm:clear-cache:metadata
 /usr/bin/php8.3-cli bin/doctrine orm:clear-cache:query
 /usr/bin/php8.3-cli bin/doctrine orm:generate-proxies
 ```
 
-## Run tests
-* Für die Integrationstests muss die Datenbank in der env.php aufgesetzt sein.
+# XML-Schnittstelle
 
-```shell
-   vendor/bin/phpunit tests/
-```
-
-## Sonstiges
-* Eine vorkonfigurierte php.ini ist in _localhost zu finden.
-
-* Doctrine CLI Debug
-   ```
-   php -d xdebug.mode=debug -d xdebug.client_host=127.0.0.1 -d xdebug.client_port=9003 -d xdebug.start_with_request=yes bin/doctrine
-   ```
+| Endpunkt                                                                                            | Beschreibung             |
+|-----------------------------------------------------------------------------------------------------|--------------------------|
+| [`/xml/turnierliste.php`](https://www.einrad.hockey/xml/turnierliste.php)                           | Alle Turniere            |
+| [`/xml/turnieranmeldungen.php`](https://www.einrad.hockey/xml/turnieranmeldungen.php)               | Turnieranmeldungen       |
+| [`/xml/rangtabelle.php`](https://www.einrad.hockey/xml/rangtabelle.php)                             | Rangtabelle              |
+| [`/xml/spielplan.php?turnier_id=1021`](https://www.einrad.hockey/xml/spielplan.php?turnier_id=1021) | Spielplan eines Turniers |

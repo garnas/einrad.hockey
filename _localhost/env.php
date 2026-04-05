@@ -10,7 +10,7 @@
  * (3) Passe die Einstellungen in env.php entsprechend deiner Entwicklungsumgebung an (Mailsachen und Discord erstmal unwichtig).
  * (4) Deine Einstellungen in env.php liegen im Gitignore und werden nicht auf Github hochgeladen.
  */
-class env
+class Env
 {
     /**
      * Auf der Live-Seite sollte dies auf false gesetzt werden.
@@ -24,21 +24,21 @@ class env
      * Webadresse für Verlinkungen, unabhängig der Ordnerstruktur.
      * Auf dem Server ist der public-Ordner mit der Domain verknüpft.
      */
-    public const BASE_URL = 'http://localhost/einrad.hockey/public';
+    public const BASE_URL = 'http://localhost';
 
     /**
      * Basispfad für includes, requires
      * Root-Pfad von deinem System in den Ordner dieser Datei
      */
-    public const BASE_PATH = __DIR__;
+    public const BASE_PATH = __DIR__ . "/..";
 
     /**
      * SQL-Datenbank Zugangsdaten
      */
-    public const HOST_NAME = 'localhost';
+    public const HOST_NAME = 'db';
     public const DATABASE = 'db_localhost';
     public const USER_NAME = 'root';
-    public const PASSWORD = '';
+    public const PASSWORD = 'root';
 
     /**
      * Mailserver

@@ -8,6 +8,7 @@ use App\Entity\Turnier\TurnierDetails;
 use App\Entity\Turnier\TurniereListe;
 use App\Event\Turnier\nLigaBot;
 use App\Service\Turnier\TurnierService;
+use DateTime;
 use PHPUnit\Framework\TestCase;
 
 class TurniereListeTest extends TestCase
@@ -40,7 +41,8 @@ class TurniereListeTest extends TestCase
         $turnier = new Turnier();
         $turnier
             ->setBlock($block)
-            ->setPhase($phase);
+            ->setPhase($phase)
+            ->setDatum(DateTime::createFromFormat('Y-m-d', '2020-01-01'));
         $turnier->setDetails((new TurnierDetails())->setTurnier($turnier));
         $turnier->getDetails()
             ->setPlaetze($plaetze);

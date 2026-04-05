@@ -2,11 +2,12 @@
   "name": "PHP Ligaseite Stack",
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
-  "workspaceFolder": "/var/www/html",
+  "workspaceFolder": "/workspace",
   
   "postCreateCommand": "bash .devcontainer/setup.sh",
+  "postStartCommand": "apache2ctl start",
   
-  "forwardPorts": [80, 8080],
+  "forwardPorts": [80, 8081],
 
   "portsAttributes": {
     "80": {
@@ -22,7 +23,8 @@
     "vscode": {
       "extensions": [
         "bmewburn.vscode-intelephense-client",
-        "xdebug.php-debug"
+        "xdebug.php-debug",
+        "emallin.phpunit"
       ]
     }
   },
