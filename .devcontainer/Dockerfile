@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     libffi-dev \
     libonig-dev \
-    libedit-dev \
+    libreadline-dev \
     git
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
