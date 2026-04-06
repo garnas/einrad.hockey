@@ -17,4 +17,7 @@ php bin/doctrine orm:clear-cache:metadata || true
 php bin/doctrine orm:clear-cache:query || true
 php bin/doctrine orm:generate-proxies || true
 
+echo "Adding bin folder to path ..."
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> /root/.bashrc
+
 echo "Setup finished successfully!"
