@@ -11,7 +11,7 @@ ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/relea
 # PHP: Install required extensions
 RUN install-php-extensions \
     calendar ctype curl exif ffi fileinfo ftp \
-    gd iconv intl mbstring pdo_mysql phar \
+    gd iconv intl mbstring openssl pdo_mysql phar \
     readline posix sockets sysvsem tokenizer \
     xsl zip xdebug
 

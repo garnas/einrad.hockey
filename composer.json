@@ -12,6 +12,7 @@
         "ext-iconv" : "*",
         "ext-intl": "*",
         "ext-mbstring" : "*",
+        "ext-openssl": "*",
         "ext-pdo_mysql" : "*",
         "ext-phar" :  "*",
         "ext-posix" : "*",
