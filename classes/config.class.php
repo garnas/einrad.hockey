@@ -71,6 +71,6 @@ class Config
     /**
      * Kontaktcenter
      */
-    public const BCC_GRENZE = 12;
+    public const BCC_GRENZE = 15;
 
 }

@@ -106,8 +106,8 @@ if (empty($_SESSION[$list_id ?? '']['emails'])): ?>
             <?php if (Helper::$teamcenter): ?>
                 <p class="w3-text-green">Es wird ebenfalls eine Email an dein Team gesendet, falls ihr nicht schon auf der Empfängerliste steht.</p>
             <?php endif; ?>
-            <?php if ($anzahl_emails > $grenze_bcc): ?>
-                <p class="w3-text-green">Hinweis: Da mehr als <?=$grenze_bcc?> Email-Adressen angeschrieben werden, werden alle im BCC angeschrieben. 
+            <?php if ($anzahl_emails > Config::BCC_GRENZE): ?>
+                <p class="w3-text-green">Hinweis: Da mehr als <?=Config::BCC_GRENZE?> Email-Adressen angeschrieben werden, werden alle im BCC angeschrieben.
             <?php endif; ?>
             <p>
                 <input type="submit" class="w3-secondary w3-round w3-ripple w3-button" name="send_mail" value="Senden">

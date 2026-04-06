@@ -1,7 +1,6 @@
 <?php
 
-// BCC Grenze
-$grenze_bcc = Config::BCC_GRENZE;
+use App\Service\Mail\MailService;
 
 // Für die Turnierauswahl
 $turniere = nTurnier::get_turniere();
@@ -17,6 +16,8 @@ if (Helper::$ligacenter) {
     $list_id = 'tc_emails' . $_SESSION['logins']['team']['id'];
 } elseif (Helper::$team_social_media) {
     $list_id = 'oc_emails' . $_SESSION['logins']['oa']['id'];
+} else {
+    trigger_error("Kontaktcenter List-ID konnte nicht ermittelt werden.", E_USER_ERROR);
 }
 
 
@@ -99,51 +100,41 @@ if (isset($_POST['send_mail'], $_SESSION[$list_id])) {
     }
 
     if (!$error) {
-        $mailer = MailBot::start_mailer();
         if (Helper::$ligacenter) {
-            $mailer->setFrom(Env::LAMAIL, 'Ligaausschuss');
-            $mailer->addBCC(Env::LAMAIL_ANTWORT);
+            $from = Env::LAMAIL;
+            $fromName = "Ligaausschuss";
+            $bccs = [Env::LAMAIL_ANTWORT];
         } elseif (Helper::$team_social_media) {
-            $mailer->setFrom(Env::LAMAIL, 'Öffentlichkeitsausschuss');
-            $mailer->addBCC(Env::OEFFIMAIL);
+            $from = Env::LAMAIL;
+            $fromName = 'Öffentlichkeitsausschuss';
+            $bccs = [Env::OEFFIMAIL];
         } elseif (Helper::$teamcenter) {
-            $akt_kontakt = new Kontakt($_SESSION['logins']['team']['id']); //Absender Mails bekommen
-            $absender = $akt_kontakt->get_emails();
-            foreach ($absender as $email) {
-                $mailer->AddReplyTo($email, $_SESSION['logins']['team']['name']); //Antwort an den Absender
-                if (!in_array($email, $emails)) {
-                    $mailer->addBCC($email); //Als Kontroll-Email an den Absender
-                }
-                $mailer->setFrom("noreply@einrad.hockey", $_SESSION['logins']['team']['name']);
-            }
-        }
-
-        // BCC oder Adressat?
-        // Überprüfung, wann BCC angeschrieben werden muss
-        if (count($emails) > Config::BCC_GRENZE) {
-            foreach ($emails as $email) {
-                $mailer->addBCC($email);
-            }
+            $from = "noreply@einrad.hockey";
+            $fromName = $_SESSION['logins']['team']['name'];
+            $absenderKontakt = new Kontakt($_SESSION['logins']['team']['id']); //Absender Mails bekommen
+            $replysTo = $absenderKontakt->get_emails();
+            $bccs = $absenderKontakt->get_emails(); // Als Kontroll-Email an den Absender
         } else {
-            foreach ($emails as $email) {
-                $mailer->addAddress($email);
-            }
+            trigger_error("Kontaktcenter Absender konnte nicht ermittelt werden.", E_USER_ERROR);
         }
 
         // Text und Betreff hinzufügen
-        $mailer->Subject = $betreff;
-        $mailer->Body = $text . "\r\n\r\nVersendet aus dem Kontaktcenter von einrad.hockey";
-
+        $text = $text . "\r\n\r\nVersendet aus dem Kontaktcenter von einrad.hockey";
 
         Helper::log(Config::LOG_EMAILS, "Betreff: $betreff" . " an " . implode(',', $emails));
         // Email-versenden
-        if (MailBot::send_mail($mailer)) {
+        if (MailService::send(
+            subject: $betreff,
+            body: $text,
+            addresses: $emails,
+            from: $from,
+            bccs: $bccs ?? [],
+            replyTos: $replysTo ?? [],
+        )) {
             Html::info("Die E-Mail wurde versandt.");
             unset($_SESSION[$list_id]);
-            header('Location: ' . db::escape($_SERVER['PHP_SELF']));
-            die();
+            Helper::reload();
         }
-
         Html::error("Es ist ein Fehler aufgetreten. Mail konnte nicht versendet werden.");
     }
 }

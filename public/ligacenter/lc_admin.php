@@ -4,6 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 use App\Event\Turnier\nLigaBot;
 use App\Repository\Team\TeamRepository;
+use App\Service\Mail\MailService;
 use App\Service\Team\TeamService;
 
 require_once '../../init.php';
@@ -129,7 +130,7 @@ if (isset($_POST['sichern'])) {
 
 //Datenbank sichern
 if (isset($_POST['mailbot'])) {
-    MailBot::mail_bot();
+    MailService::dispatch();
 }
 
 /////////////////////////////////////////////////////////////////////////////

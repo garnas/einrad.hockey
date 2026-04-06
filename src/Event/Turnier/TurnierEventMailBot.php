@@ -9,9 +9,9 @@ use App\Service\Team\TeamService;
 use App\Service\Team\TeamValidator;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierSnippets;
+use App\Service\Mail\MailService;
 use Env;
 use Kontakt;
-use MailBot;
 
 class TurnierEventMailBot
 {
@@ -40,7 +40,7 @@ class TurnierEventMailBot
                     $inhalt = ob_get_clean();
 
                     $emails = (new Kontakt($team->id()))->get_emails('info');
-                    MailBot::add_mail($betreff, $inhalt, $emails);
+                    MailService::queue($betreff, $inhalt, $emails);
                 }
             }
         }
@@ -59,7 +59,7 @@ class TurnierEventMailBot
         include(Env::BASE_PATH . "/templates/mails/mail_turnier_canceled.tmp.php");
         $inhalt = ob_get_clean();
 
-        MailBot::add_mail($betreff, $inhalt, $emailAdressen, send_instantly: true);
+        MailService::queue($betreff, $inhalt, $emailAdressen, immediately: true);
     }
 
     /**
@@ -78,7 +78,7 @@ class TurnierEventMailBot
         $inhalt = ob_get_clean();
         $akt_kontakt = new Kontakt($team->id());
         $emails = $akt_kontakt->get_emails('info');
-        MailBot::add_mail($betreff, $inhalt, $emails, send_instantly: true);
+        MailService::queue($betreff, $inhalt, $emails, immediately: true);
     }
 
     public static function mailDoppelAnmeldung(Turnier $turnier, nTeam $team): void
@@ -91,7 +91,7 @@ class TurnierEventMailBot
         $inhalt = ob_get_clean();
         $akt_kontakt = new Kontakt($team->id());
         $emails = $akt_kontakt->get_emails('info');
-        MailBot::add_mail($betreff, $inhalt, $emails, send_instantly: true);
+        MailService::queue($betreff, $inhalt, $emails, immediately: true);
     }
 
     /**
@@ -117,7 +117,7 @@ class TurnierEventMailBot
                 include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
                 $inhalt = ob_get_clean();
                 $emails = (new Kontakt($anmeldung->getTeam()->id()))->get_emails('info');
-                MailBot::add_mail($betreff, $inhalt, $emails, send_instantly: true);
+                MailService::queue($betreff, $inhalt, $emails, immediately: true);
             }
         }
     }
@@ -146,7 +146,7 @@ class TurnierEventMailBot
                     include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
                     $inhalt = ob_get_clean();
                     $emails = (new Kontakt($team->id()))->get_emails('info');
-                    MailBot::add_mail($betreff, $inhalt, $emails);
+                    MailService::queue($betreff, $inhalt, $emails);
                 }
             }
         }

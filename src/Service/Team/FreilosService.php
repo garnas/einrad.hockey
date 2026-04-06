@@ -9,12 +9,14 @@ use App\Entity\Team\Spieler;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Repository\Team\TeamRepository;
+use App\Service\Mail\MailService;
 use App\Service\Turnier\BlockService;
 use Config;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
+use Env;
 use Html;
-use MailBot;
+use Kontakt;
 
 class FreilosService
 {
@@ -51,7 +53,7 @@ class FreilosService
             Html::info("Das Team " . $team->getName() . " hat ein Freilos für ihr frühzeitig ausgeschriebenes Turnier erhalten.");
             TeamRepository::get()->speichern($team);
             if ($sendMail) {
-                Mailbot::mail_ausrichter_freilos($team);
+                self::sendAusrichterFreilosMail($team);
             }
             return true;
         }
@@ -163,7 +165,7 @@ class FreilosService
                 TeamRepository::get()->speichern($team);
                 Html::info("Das Team " . $team->getName() . " hat ein neues Freilos erhalten für ihr frühzeitig gesetztes Freilos.");
                 if ($sendMail) {
-                    Mailbot::mail_freilos_recycle($team);
+                    self::sendFreilosRecycleMail($team);
                 }
             }
         }
@@ -180,7 +182,7 @@ class FreilosService
         if (!TeamValidator::hasSchiriFreilosErhalten($team) && $aktiveSchiris->count() >= 2) {
             $team->addFreilos(FreilosGrund::SCHIRI);
             if ($sendMail) {
-                Mailbot::mail_schiri_freilos($team);
+                self::sendSchiriFreilosMail($team);
             }
             return true;
         }
@@ -211,5 +213,38 @@ class FreilosService
             }
         }
         return false;
+    }
+
+    private static function sendSchiriFreilosMail(nTeam $team): void
+    {
+        ob_start();
+        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_schiri_freilos.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+        $inhalt = ob_get_clean();
+        $emails = (new Kontakt($team->id()))->get_emails('info');
+        MailService::queue("Freilos für zwei Schiris erhalten", $inhalt, $emails, immediately: true);
+    }
+
+    private static function sendAusrichterFreilosMail(nTeam $team): void
+    {
+        ob_start();
+        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_ausrichter_freilos.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+        $inhalt = ob_get_clean();
+        $emails = (new Kontakt($team->id()))->get_emails('info');
+        MailService::queue("Freilos für euer Turnier erhalten", $inhalt, $emails, immediately: true);
+    }
+
+    private static function sendFreilosRecycleMail(nTeam $team): void
+    {
+        ob_start();
+        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_freilos_recycle.tmp.php");
+        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
+        $inhalt = ob_get_clean();
+        $emails = (new Kontakt($team->id()))->get_emails('info');
+        MailService::queue("Freilos für frühzeitig gesetztes Freilos", $inhalt, $emails, immediately: true);
     }
 }

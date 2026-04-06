@@ -2,6 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Service\Mail\MailService;
+
 require_once '../../init.php';
 
 // Captcha erstellen
@@ -44,41 +46,41 @@ if (isset($_POST['absenden'])) {
     }
 
     if (!$error) {
-        //Mail an die Liga
-        $mailer = MailBot::start_mailer();
-        $mailer->setFrom("noreply@einrad.hockey", $name);
-        $mailer->addReplyTo($absender, $name); // Absenderemail und -name setzen
-        $mailer->addAddress(Env::LAMAIL); // Empfängeradresse
-        $mailer->Subject = 'Kontaktformular: ' . $betreff; // Betreff der Email
-        $mailer->Body = $text . "\n\n\nAntwort an: " . $absender;
-
         // Email an den Ligaausschuss versenden
-        if (MailBot::send_mail($mailer)) {
+        if (MailService::send(
+            subject: 'Kontaktformular: ' . $betreff,
+            body: $text . "\n\n\nAntwort an: " . $absender,
+            addresses: [$absender],
+            fromName: $name,
+            replyTos: [$absender],
+        )) {
             Html::info("Die E-Mail wurde versandt.");
-            $send = true; //Email an den User nur schicken, wenn die Mail an LA rausging
+            $send = true; // Email an den User nur schicken, wenn die Mail an LA rausging
         } else {
             Html::error("Es ist ein Fehler aufgetreten. E-Mail konnte nicht versendet werden.
              Manuell versenden: " . Html::mailto(Env::LAMAIL), esc: false);
-            Helper::log(Config::LOG_KONTAKTFORMULAR, "Error Mail:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
+            Helper::log(Config::LOG_KONTAKTFORMULAR, "Error Mail:\n" . print_r($_POST, true));
         }
         if ($send) {
             // Confirmation Mail an die angegebene Absendeadresse
-            $mailer = MailBot::start_mailer();
-            $mailer->setFrom(Env::LAMAIL); // Absenderemail und -name setzen
-            $mailer->addAddress($_POST['absender'], $_POST['name']); // Empfängeradresse
-            $mailer->Subject = 'Kontaktformular: ' . $_POST['betreff']; // Betreff der Email
-            $mailer->Body = "Danke für deine Mail! Du hast uns folgendes gesendet:\r\n\r\n" . $text;
             // Email-versenden
-            if (MailBot::send_mail($mailer)) {
+            if (MailService::send(
+                subject: 'Kontaktformular: ' . $betreff,
+                body: "Danke für deine Mail! Du hast uns folgendes gesendet:\r\n\r\n" . $text,
+                addresses: [$absender],
+                addressesName: $name,
+                from: Env::LAMAIL,
+                fromName: "Ligaausschuss",
+            )) {
                 Html::info("Es wurde eine Kopie an $absender gesendet.");
                 unset($_SESSION['captcha']); // Captcha aus der Session löschen
                 Helper::reload('/liga/neues.php');
             }
             Html::error("Es ist ein Fehler aufgetreten: Eine Kopie der E-Mail wurde nicht an dich versendet! Stimmt \"$absender\"?");
-            Helper::log(Config::LOG_KONTAKTFORMULAR, "Error Mailback:\n" . print_r($_POST, true) . $mailer->ErrorInfo);
-        } // send
-    } // error
-} // Form
+            Helper::log(Config::LOG_KONTAKTFORMULAR, "Error Mailback:\n" . print_r($_POST, true));
+        }
+    }
+}
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////

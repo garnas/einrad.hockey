@@ -1,6 +1,7 @@
 <?php # -*- php -*-
 
 use App\Entity\Team\Spieler;
+use App\Service\Mail\MailService;
 
 class SchiriTest
 {
@@ -394,30 +395,29 @@ class SchiriTest
         db::$db->query($sql, $params)->log();
 
         # Text der Email zusammenstellen:
-        $text = "<p>Prüfling: " . $pruefling;
-        $text .= "<P>Es wurden " . $richtig . " Fragen richtig beantwortet.";
+        $body = "<p>Prüfling: " . $pruefling;
+        $body .= "<P>Es wurden " . $richtig . " Fragen richtig beantwortet.";
         $index = 0;
         foreach ($fragen as $frage) {
-            $text .= "<P>Frage Nr. " . ++$index . " (ID " . $frage['frage_id'] . "): ";
-            $text .= $frage['frage'] . "<br>";
-            $text .= "Richtige Antwort: " . implode(",", $frage['richtig']) . "<br>";
-            $text .= "Antwort des Prüflings: " . implode(",", $abgabe[$index - 1]) . "<br>";
-            #echo '<pre>' . $text . '</pre>'; # qqq diese Zeile nur zum debugging aktivieren
+            $body .= "<P>Frage Nr. " . ++$index . " (ID " . $frage['frage_id'] . "): ";
+            $body .= $frage['frage'] . "<br>";
+            $body .= "Richtige Antwort: " . implode(",", $frage['richtig']) . "<br>";
+            $body .= "Antwort des Prüflings: " . implode(",", $abgabe[$index - 1]) . "<br>";
         }
-        # Email an Prüfling und Schiriausschuss senden:
-        $mailer = MailBot::start_mailer();
-        $mailer->isHTML(true);
-        $mailer->setFrom(Env::SCHIRIMAIL);
-        $mailer->addAddress($email, $pruefling);
-        $mailer->addCC(Env::SCHIRIMAIL);
-        $mailer->Subject = 'Testergebnis von ' . $pruefling; # Betreff
-        $mailer->Body = $text;
 
-        if (MailBot::send_mail($mailer)) {
+        # Email an Prüfling und Schiriausschuss senden:
+        if (MailService::send(
+            subject: 'Testergebnis von ' . $pruefling,
+            body: $body,
+            addresses: [$email],
+            from: Env::SCHIRIMAIL,
+            ccs: [Env::SCHIRIMAIL],
+            replyTos: [Env::LAMAIL]
+        )) {
             Html::info("Eine E-Mail mit deinem Testergebnis wurde versandt.");
         } else {
             Html::error("E-Mail konnte nicht versendet werden.");
-            Helper::log(Config::LOG_SCHIRI_PRUEFUNG, "Fehler: Email wurde nicht versendet!");
+            Helper::log(Config::LOG_SCHIRI_PRUEFUNG, "Fehler: Email wurde nicht versendet.");
         }
 
     }
@@ -526,14 +526,15 @@ class SchiriTest
         return $this;
     }
 
-    public function mail_on_create()
+    public function mail_on_create(): bool
     {
         $levelname = self::lev_infos[$this->test_level]['name'];
         $anzahl = array_sum(self::lev_infos[$this->test_level]['anzahl']);
         $richtig_min = self::lev_infos[$this->test_level]['richtig_min'];
         $timelimit = self::lev_infos[$this->test_level]['timelimit'];
-        $text = <<<Mail
-            Hallo {$this->spieler->getName()},
+        $name = e($this->spieler->getName());
+        $body = <<<Mail
+            Hallo {$name},
 
             dein Online Schiritest (Level: $levelname) ist jetzt erstellt
             worden. Du kannst ihn hier starten:
@@ -552,17 +553,18 @@ class SchiriTest
             Mail;
         Html::message(
             'info',
-            '<pre>' . $text . '</pre>',
+            '<pre>' . $body . '</pre>',
             'Text der automatischen E-Mail:',
             esc: false,
         );
         # Email an Prüfling senden:
-        $mailer = MailBot::start_mailer();
-        $mailer->setFrom(Env::SCHIRIMAIL); # Absender ist Schiriausschuss
-        $mailer->addAddress($this->email, $this->spieler->getName()); # Empfänger
-        $mailer->addCC(Env::SCHIRIMAIL); # cc: an Schiriausschuss
-        $mailer->Subject = 'Online Schiritest für ' . $this->spieler->getName(); # Betreff
-        $mailer->Body = $text; # Text der E-Mail
-        return (MailBot::send_mail($mailer)); // Booleanwert, ob Mail erfolgreich versendet wurde
+        return (MailService::send(
+            subject: 'Online Schiritest für ' . $name,
+            body: $body,
+            addresses: [$this->email],
+            addressesName: $name,
+            from: Env::SCHIRIMAIL,
+            ccs: [Env::SCHIRIMAIL],
+        ));
     }
 }
