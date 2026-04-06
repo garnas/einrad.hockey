@@ -106,6 +106,5 @@ if (isset($_POST['change_neuigkeit'])) {
     NeuigkeitRepository::get()->update($neuigkeit);
 
     Html::info("Die Neuigkeit wurde bearbeitet.");
-    header('Location: ../liga/neues.php');
-    die();
+    Helper::reload("/liga/neues.php");
 }

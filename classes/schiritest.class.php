@@ -533,23 +533,23 @@ class SchiriTest
         $richtig_min = self::lev_infos[$this->test_level]['richtig_min'];
         $timelimit = self::lev_infos[$this->test_level]['timelimit'];
         $text = <<<Mail
-Hallo {$this->spieler->getName()},
+            Hallo {$this->spieler->getName()},
 
-dein Online Schiritest (Level: $levelname) ist jetzt erstellt
-worden. Du kannst ihn hier starten:
+            dein Online Schiritest (Level: $levelname) ist jetzt erstellt
+            worden. Du kannst ihn hier starten:
 
-$this->url
+            $this->url
 
-Sobald du die Webseite aufrufst, hast du $timelimit Minuten Zeit.
+            Sobald du die Webseite aufrufst, hast du $timelimit Minuten Zeit.
 
-Achtung: Webseite nicht neu laden, während der Test ausgefüllt wird!
+            Achtung: Webseite nicht neu laden, während der Test ausgefüllt wird!
 
-Von den $anzahl Fragen müssen mindestens $richtig_min richtig
-beantwortet werden.
+            Von den $anzahl Fragen müssen mindestens $richtig_min richtig
+            beantwortet werden.
 
-Viele Grüße
-Der Schiriausschuss
-Mail;
+            Viele Grüße
+            Der Schiriausschuss
+            Mail;
         Html::message(
             'info',
             '<pre>' . $text . '</pre>',

@@ -83,7 +83,7 @@ class Tabelle
     public static function get_team_rang(int $team_id, ?int $spieltag = null, int $saison = Config::SAISON): ?int
     {
         // Default: Aktueller Spieltag - 1 = Spieltag mit allen eingetragenen Ergebnissen
-        $spieltag = $spieltag ?? (self::get_aktuellen_spieltag($saison) - 1);
+        $spieltag ??= (self::get_aktuellen_spieltag($saison) - 1);
 
         // Rangtabelle soll nicht jedes mal neu berechnet werden müssen
         if (!isset(self::$cache_rangtabellen[$spieltag])) {
@@ -103,7 +103,7 @@ class Tabelle
     public static function get_team_meister_platz(int $team_id, ?int $spieltag = null): ?int
     {
         // Default: Aktueller Spieltag - 1 = Spieltag mit allen eingetragenen Ergebnissen
-        $spieltag = $spieltag ?? (self::get_aktuellen_spieltag() - 1);
+        $spieltag ??= (self::get_aktuellen_spieltag() - 1);
         if (!isset(self::$cache_meisterschaftstabelle)) {
             self::$cache_meisterschaftstabelle = self::get_meisterschafts_tabelle($spieltag);
         }

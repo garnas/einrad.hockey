@@ -6,11 +6,11 @@ use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
 
 return (new Config())
-    ->setRiskyAllowed(true)
+    ->setRiskyAllowed(false)
     ->setRules([
         '@auto' => true,
-        '@auto:risky' => true,
-        '@Symfony:risky' => true
+        '@auto:risky' => false,
+        '@Symfony:risky' => false
     ])
     // 💡 by default, Fixer looks for `*.php` files excluding `./vendor/` - here, you can groom this config
     ->setFinder(
