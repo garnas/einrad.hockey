@@ -79,6 +79,11 @@ Nach dem Start öffnet VS Code automatisch http://localhost im Browser.
 ```shell
 vendor/bin/phpunit tests/
 ```
+### Formatting
+
+```shell
+vendor/bin/php-cs-fixer fix
+```
 
 > Für die Integrationstests muss die Datenbank in `env.php` konfiguriert sein.
 
@@ -86,7 +91,7 @@ vendor/bin/phpunit tests/
 
 Bei jedem Pull Request werden automatisch ausgeführt:
 
-- **PHP CS Fixer** — prüft den Code-Style (`vendor/bin/php-cs-fixer check`)
+- **PHP CS Fixer** — prüft den Code-Style (`vendor/bin/php-cs-fixer check --diff`)
 - **PHPUnit** — führt alle Tests aus (inklusive Integrationstests mit Datenbank)
 
 ### Dependencies
