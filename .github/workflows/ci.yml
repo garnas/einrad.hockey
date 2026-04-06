@@ -60,5 +60,18 @@ jobs:
       - name: Patch DB host for CI
         run: sed -i "s/'db'/'127.0.0.1'/" _localhost/env.php
 
+        # Port 80 erfordert Root-Rechte; daher Port 8080 verwenden.
+      - name: Patch BASE_URL for CI
+        run: sed -i "s|'http://localhost'|'http://localhost:8080'|" _localhost/env.php
+
+      - name: Start PHP built-in server
+        run: php -S localhost:8080 -t public/ &
+
+      - name: Wait for PHP server
+        run: |
+          for i in {1..15}; do
+            curl -s http://localhost:8080 && break || sleep 1
+          done
+
       - name: Run PHPUnit
         run: vendor/bin/phpunit tests/
