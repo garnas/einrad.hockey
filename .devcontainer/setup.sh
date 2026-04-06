@@ -10,6 +10,7 @@ composer install --no-interaction
 echo "Setting permissions..."
 chgrp -R www-data /workspace
 chmod -R g+w /workspace
+chmod -R 733 /workspace/system/logs
 
 echo "Cleaning Doctrine..."
 composer dump-autoload --optimize
