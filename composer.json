@@ -21,7 +21,7 @@
         "ext-tokenizer" : "*",
         "ext-xsl" :  "*",
         "ext-zip" : "*",
-        "phpmailer/phpmailer": "v6.10.0",
+        "phpmailer/phpmailer": "v7.0.2",
         "mpdf/mpdf": "v8.2.5",
         "gregwar/captcha": "v1.3.0",
         "doctrine/orm": "3.4.3",
