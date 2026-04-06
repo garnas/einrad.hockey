@@ -58,7 +58,7 @@ class NavigationTest extends TestCase
 
         $data = [];
         foreach ($constants as $_ => $value) {
-            if (!str_starts_with(haystack: $value, needle: "http")) {
+            if (str_starts_with(haystack: $value, needle: Env::BASE_URL)) {
                 $data[] = [$value];
             }
         }
