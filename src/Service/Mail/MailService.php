@@ -6,6 +6,7 @@ use App\Entity\Sonstiges\nMailbot;
 use App\Repository\Mailbot\MailbotRepository;
 use Config;
 use DateTime;
+use db;
 use Deprecated;
 use Env;
 use Helper;
@@ -55,7 +56,17 @@ class MailService
             }
             return false;
         }
+        if (Env::IS_LOCALHOST) {
+            // Debugging
+            if (!(Helper::$ligacenter || Helper::$team_social_media)) {
+                $mailer->Password = '***********'; // Passwort verstecken
+                $mailer->ClearAllRecipients();
+            }
+            Helper::log(Config::LOG_EMAILS, 'E-Mail-Debug-Pseudo-Versand erfolgreich');
+            db::debug($mailer);
+        }
         return true;
+
     }
 
     /**
