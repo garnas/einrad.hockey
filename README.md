@@ -75,12 +75,11 @@ Nach dem Start öffnet VS Code automatisch http://localhost im Browser.
 # Wichtige Commands
 
 ### Tests
-
 ```shell
 vendor/bin/phpunit tests/
 ```
-### Formatting
 
+### Formatting
 ```shell
 vendor/bin/php-cs-fixer fix
 ```
