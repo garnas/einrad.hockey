@@ -168,18 +168,6 @@ class MailService
         Html::info('Mailbot wurde ausgeführt.');
     }
 
-
-    /**
-     * @throws Exception
-     */
-    public static function applyRecipients(PHPMailer $mailer, array $addresses): void
-    {
-        $useBcc = count($addresses) > 15;
-        foreach ($addresses as $address) {
-            $useBcc ? $mailer->addBCC($address) : $mailer->addAddress($address);
-        }
-    }
-
     private static function setStatus(nMailbot $mail, string $status, ?string $error = null): void
     {
         $mail->setMailStatus($status);
