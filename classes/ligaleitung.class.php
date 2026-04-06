@@ -102,7 +102,7 @@ class LigaLeitung
         $context = self::get_context($funktion);
 
         // Passwort prüfen
-        if (password_verify($passwort, $details['passwort'])) {
+        if (password_verify($passwort, $details['passwort'] ?? '')) {
             $_SESSION['logins'][$context]['id'] = $details['ligaleitung_id'];
             $_SESSION['logins'][$context]['login'] = $details['login'];
             Helper::log(
