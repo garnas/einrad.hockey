@@ -30,7 +30,7 @@ class MailService
         $mailer->SMTPAuth = true;
         $mailer->Username = Env::SMTP_USER;
         $mailer->Password = Env::SMTP_PW;
-        $mailer->SMTPSecure = 'tls';
+        $mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mailer->Port = Env::SMTP_PORT;
         $mailer->CharSet = 'UTF-8';
         return $mailer;
@@ -77,7 +77,7 @@ class MailService
         string $body,
         array  $addresses,
         string $addressesName = "",
-        string $from = Env::SMTP_HOST,
+        string $from = Env::SMTP_USER,
         string $fromName = "",
         array  $ccs = [],
         array  $bccs = [],
@@ -85,7 +85,7 @@ class MailService
         bool   $isHtml = false,
     ): bool {
         $mailer = self::createMailer();
-        $mailer->setFrom(address: $from, name: $addressesName);
+        $mailer->setFrom(address: $from, name: $fromName);
         foreach ($ccs as $cc) {
             $mailer->addCC($cc);
         }
@@ -172,10 +172,10 @@ class MailService
 
         foreach ($mails as $mail) {
             if (self::send(
-                subject: $mail->getSubject(),
-                body: $mail->getBody(),
-                addresses: $mail->getAddresses(),
-                from: $mail->getAdressat(),
+                subject: $mail->getBetreff(),
+                body: $mail->getInhalt(),
+                addresses: explode(',', $mail->getAdressat()),
+                from: $mail->getAbsender(),
                 replyTos: [Env::LAMAIL],
             )) {
                 self::setStatus($mail, 'versendet');
