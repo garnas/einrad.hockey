@@ -2,7 +2,7 @@
 FROM php:8.3-apache
 
 # Debian: Install system dependencies
-RUN apt-get update && apt-get install -y git
+RUN apt-get update && apt-get install -y git unzip
 
 # PHP: Install the extension installer script
 # See: https://hub.docker.com/_/php#php-core-extensions and https://github.com/mlocati/docker-php-extension-installer
