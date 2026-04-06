@@ -213,36 +213,19 @@ class Nav
      * Dokumente
      */
     public const LINK_MODUS = Env::BASE_URL . '/dokumente/ligamodus.pdf?version=20260123';
-    public const LINK_SCHIRIWESEN = Env::BASE_URL . '/dokumente/schiriwesen.pdf';
-
     public const LINK_SCHIRI_CHECKLIST = Env::BASE_URL . '/dokumente/schiri_checkliste.pdf';
     public const LINK_SCHIRI_LEITLINIE = Env::BASE_URL . '/dokumente/schiri_leitlinie.pdf';
     public const LINK_SCHIRI_ABLAUF_PRAKTISCHE_PRUEFUNG = Env::BASE_URL . '/dokumente/ablauf_praktische_schiripruefung.pdf';
-    public const LINK_MODUS_ENTWURF = Env::BASE_URL . '/dokumente/ligamodus_entwurf.pdf';
     public const LINK_ABZEICHEN = Env::BASE_URL . '/dokumente/einradhockey_abzeichen.pdf';
     public const LINK_SCHLAEGERTECHNIK = Env::BASE_URL . '/dokumente/schlaegertechnik_einradhockey.pdf';
-    public const LINK_FINALE = Env::BASE_URL . '/dokumente/finalturnier.pdf';
-    public const LINK_FINALE_MODI = Env::BASE_URL . '/dokumente/finalturnier_spielmodi.pdf';
     public const LINK_CHECK_XLSX = Env::BASE_URL . '/dokumente/checkliste_einradhockeyturnier_fuer_ausrichter.xlsx';
     public const LINK_CHECK_PDF = Env::BASE_URL . '/dokumente/checkliste_einradhockeyturnier_fuer_ausrichter.pdf';
-    public const LINK_HYGIENE = Env::BASE_URL . '/dokumente/empfohlenes_hygienekonzept.pdf';
     public const LINK_DSGVO = Env::BASE_URL . '/dokumente/datenschutz-hinweise.pdf';
     public const LINK_FRANCE = 'https://monocycle.info/ligue-de-monocycle-basket-remaniement-co/';
     public const LINK_SPIELPLAENE_ALT = Env::BASE_URL . '/dokumente/alte_spielplan_vorlagen.zip';
     public const LINK_EV_SH = 'https://www.einradverband-sh.de/';
     public const LINK_IUF = 'https://unicycling.org/';
-    public const LINK_MODUS_KURZ_ENG = Env::BASE_URL . '/dokumente/summary_modus.pdf';
     public const LINK_SWISS = 'https://www.swiss-iuc.ch/Wettkaempfe/Einradhockey';
-
-    /**
-     * Dokumente für das Tippspiel 2025
-     */
-    public const LINK_TIPPSPIEL_BM_XLSX = Env::BASE_URL . '/dokumente/tippspiel/Tippspiel_B-Meisterschaft_Borken.xlsx';
-    public const LINK_TIPPSPIEL_BM_PDF = Env::BASE_URL . '/dokumente/tippspiel/Tippspiel_B-Meisterschaft_Borken.pdf';
-    public const LINK_TIPPSPIEL_DM_XLSX = Env::BASE_URL . '/dokumente/tippspiel/Tippspiel_Deutsche_Meisterschaft_Dresden.xlsx';
-    public const LINK_TIPPSPIEL_DM_PDF = Env::BASE_URL . '/dokumente/tippspiel/Tippspiel_Deutsche_Meisterschaft_Dresden.pdf';
-    public const LINK_TIPPSPIEL_ANLEITUNG_BM = Env::BASE_URL . '/dokumente/tippspiel/Erklaerung_Tippspiel_B-Meisterschaft_Borken.pdf';
-    public const LINK_TIPPSPIEL_ANLEITUNG_DM = Env::BASE_URL . '/dokumente/tippspiel/Erklaerung_Tippspiel_Deutsche_Meisterschaft_Dresden.pdf';
 
     public static function get_oc_start(): array
     {
