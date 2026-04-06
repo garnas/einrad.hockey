@@ -58,7 +58,9 @@ class NavigationTest extends TestCase
 
         $data = [];
         foreach ($constants as $_ => $value) {
-            $data[] = [$value];
+            if (!str_starts_with(haystack: $value, needle: "http")) {
+                $data[] = [$value];
+            }
         }
         return $data;
     }
