@@ -33,9 +33,9 @@ ini_set('error_log', __DIR__ . '/system/logs/errors.log');
  * Wenn diese env.php nicht existiert wird die '_localhost/env.php' verwendet.
  * Diese env.php beinhaltet alle Default-Werte für eine lokale Entwicklungsumgebung.
  */
-try {
+if (file_exists(__DIR__ . '/env.php')) {
     require_once __DIR__ . '/env.php';
-} catch (Throwable $_) {
+} else {
     require_once __DIR__ . '/_localhost/env.php';
 }
 
@@ -88,7 +88,7 @@ register_shutdown_function(static function () {
         if (!in_array(needle: $error['type'], haystack: [\E_USER_NOTICE, \E_USER_WARNING, \E_USER_ERROR])) {
             // Fehlerlogs von PHP ergänzen.
             $script = basename($_SERVER['SCRIPT_NAME'] ?? '');
-            $line = "Custom Log Details for " . $_SERVER["REQUEST_URI"] ?? "?";
+            $line = "Custom Log Details for " . ($_SERVER["REQUEST_URI"] ?? "?");
             if (!in_array(needle: $script, haystack: Config::NEVER_LOG_REQUEST)) {
                 $line .= " - " . print_r($_REQUEST ?? [], true);
             }
@@ -102,7 +102,7 @@ register_shutdown_function(static function () {
                 case \E_USER_ERROR:
                     $_SESSION['error'] = [
                         'text' => $error['message'],
-                        'url'  => $_SERVER['REQUEST_URI'],
+                        'url'  => ($_SERVER["REQUEST_URI"] ?? "?"),
                     ];
                     Helper::reload('/errors/409.php');
                     break;
