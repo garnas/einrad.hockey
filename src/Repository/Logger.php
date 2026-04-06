@@ -47,7 +47,7 @@ class Logger implements LoggerInterface
 
     private function superLog(string $level, string $message, array $context = []): void
     {
-        if (!\in_array($level, ["debug", "info" , "notice"])) {
+        if (!\in_array($level, ["debug", "info", "notice"])) {
             $log = $level . " - " . $message . " - " . print_r($context, true);
             Helper::log(Config::LOG_DB_DOCTRINE, $log);
         }
