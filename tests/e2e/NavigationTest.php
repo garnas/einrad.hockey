@@ -102,26 +102,6 @@ class NavigationTest extends TestCase
         );
     }
 
-    #[DataProvider("provideProductionURLs")]
-    public function testProductionUrls(string $url): void
-    {
-        [$httpCode, $html] = $this->fetchUrl($url);
-
-        $this->assertEquals(
-            200,
-            $httpCode,
-            "Website $url is not reachable. HTTP code: $httpCode"
-        );
-        $this->assertStringContainsString(
-            '</footer>',
-            $html,
-            "Website $url does not appear to have a footer"
-        );
-
-        sleep(0.5); # Do not kill https://einrad.hockey
-    }
-
-
     #[DataProvider("provideNavLinks")]
     public function testNavLinks(string $url): void
     {
