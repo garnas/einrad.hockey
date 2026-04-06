@@ -6,6 +6,7 @@ use App\Entity\Sonstiges\nMailbot;
 use App\Repository\Mailbot\MailbotRepository;
 use Config;
 use DateTime;
+use Deprecated;
 use Env;
 use Helper;
 use Html;
@@ -14,6 +15,12 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 class MailService
 {
+    #[Deprecated('Nicht verwenden: Existiert noch, um team.einrad.hockey am Laufen zu halten.')]
+    public static function start_mailer()
+    {
+        return MailService::createMailer();
+    }
+
     private static function createMailer(): PHPMailer
     {
         $mailer = new PHPMailer();
