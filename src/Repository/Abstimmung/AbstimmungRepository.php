@@ -6,6 +6,7 @@ use App\Entity\Abstimmung\AbstimmungTeam;
 use App\Entity\Abstimmung\AbstimmungVote;
 use App\Entity\Team\nTeam;
 use App\Repository\DoctrineWrapper;
+use App\Repository\Team\TeamRepository;
 use App\Repository\TraitSingletonRepository;
 use Doctrine\ORM\EntityRepository;
 use Helper;
@@ -54,7 +55,7 @@ class AbstimmungRepository
             DoctrineWrapper::manager()->persist($abstimmungVote);
 
             DoctrineWrapper::manager()->flush();
-            Helper::log("abstimmung.log", $team->getName() . " hat seine Stimme abgegeben");
+            Helper::log("abstimmung.log", TeamRepository::get()->getTeamName($team) . " hat seine Stimme abgegeben");
             return "Dein Team hat erfolgreich abgestimmt. Vielen Dank!";
 
         } else {
@@ -66,7 +67,7 @@ class AbstimmungRepository
             $abstimmungVote->setStimme($parsed);
             DoctrineWrapper::manager()->flush();
 
-            Helper::log("abstimmung.log", $team->getName() . " hat seine Stimme geändert");
+            Helper::log("abstimmung.log", TeamRepository::get()->getTeamName($team) . " hat seine Stimme geändert");
             return "Dein Team hat erfolgreich neu abgestimmt. Vielen Dank!";
 
         }

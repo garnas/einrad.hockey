@@ -5,10 +5,11 @@ use App\Service\Team\TeamService;
 use App\Service\Team\TeamSnippets;
 use App\Service\Team\TeamValidator;
 use App\Service\Turnier\TurnierSnippets;
+use App\Repository\Team\TeamRepository;
 
 ?>
 <!-- Link Teamdaten ändern -->
-<h1 class="w3-text-primary"><?= Html::icon("group", tag: "h1") ?> <?= e($teamEntity->getName()) ?></h1>
+<h1 class="w3-text-primary"><?= Html::icon("group", tag: "h1") ?> <?= e(TeamRepository::get()->getTeamName($teamEntity)) ?></h1>
     <p>
         <?= Html::link(
             (Helper::$ligacenter) ? 'lc_teamdaten_aendern.php?team_id=' . $team->id : 'tc_teamdaten_aendern.php',
@@ -21,7 +22,7 @@ use App\Service\Turnier\TurnierSnippets;
     <?php if ($teamEntity->getDetails()->getTeamfoto()) {?>
         <p>
             <img src="<?= e($teamEntity->getDetails()->getTeamfoto()) ?>" class="w3-card w3-image"
-                 alt="<?= e($teamEntity->getName())?>" style="max-height: 360px;">
+                 alt="<?= e(TeamRepository::get()->getTeamName($teamEntity))?>" style="max-height: 360px;">
         </p>
     <?php } else {?>
         <p class="w3-text-grey">Es wurde noch kein Teamfoto hochgeladen.</p>
@@ -63,7 +64,7 @@ use App\Service\Turnier\TurnierSnippets;
         <table class="w3-table w3-striped">
             <tr>
                 <th class="w3-primary" style="width: 140px">Teamname</th>
-                <td><b><?= e($teamEntity->getName()) ?></b></td>
+                <td><b><?= e(TeamRepository::get()->getTeamName($teamEntity)) ?></b></td>
             </tr>
             <tr>
                 <th class="w3-primary">Team ID</th>

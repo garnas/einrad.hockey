@@ -4,6 +4,7 @@ use App\Entity\Team\Spieler;
 use App\Service\Team\SpielerService;
 use App\Service\Team\TeamSnippets;
 use App\Service\Turnier\TurnierSnippets;
+use App\Repository\Team\TeamRepository;
 
 ?>
 <h1 class="w3-text-primary">
@@ -144,7 +145,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                 >
                     <option selected disabled>--</option>
                     <?php foreach ($teams as $team): ?>
-                        <option><?=$team->getName()?></option>
+                        <option><?=TeamRepository::get()->getTeamName($team)?></option>
                     <?php endforeach; ?>
                 </select>
             </p>
@@ -223,7 +224,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                     <datalist id="spielerliste">
                         <?php
                         foreach ($spieler_liste as $spieler): ?>
-                            <option value='<?= $spieler->getName(fullName: false) ?> | <?= $spieler->getTeam()->getName() ?>'>
+                            <option value='<?= $spieler->getName(fullName: false) ?> | <?= TeamRepository::get()->getTeamName($spieler->getTeam()) ?>'>
                         <?php endforeach; ?>
                     </datalist>
             </p>
@@ -244,7 +245,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                 >
                     <option disabled selected value="">--</option>
                     <?php foreach ($teams as $team): ?>
-                        <option><?= $team->getName() ?></option>
+                        <option><?= TeamRepository::get()->getTeamName($team) ?></option>
                     <?php endforeach; ?>
                 </select>
                 <label for="zeitstrafe_team_b" class="w3-text-grey">versus</label>
@@ -255,7 +256,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                 >
                     <option disabled selected value="">--</option>
                     <?php foreach ($teams as $team): ?>
-                        <option><?= $team->getName() ?></option>
+                        <option><?= TeamRepository::get()->getTeamName($team) ?></option>
                     <?php endforeach; ?>
                 </select>
             </p>

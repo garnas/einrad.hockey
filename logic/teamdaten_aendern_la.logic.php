@@ -9,7 +9,7 @@ if (isset($_POST['change_la']) && Helper::$ligacenter) {
     $passwort = $_POST['passwort'];
 
     if (
-        $neuer_teamname != htmlspecialchars_decode($team->getName())
+        $neuer_teamname != htmlspecialchars_decode(TeamRepository::get()->getTeamName($team))
         && TeamRepository::get()->findByName($neuer_teamname)
     ) {
         Html::error("Der Teamname existiert bereits.");
@@ -18,7 +18,7 @@ if (isset($_POST['change_la']) && Helper::$ligacenter) {
 
 
     if (!$error) {
-        if ($neuer_teamname != $team->getName()) {
+        if ($neuer_teamname != TeamRepository::get()->getTeamName($team)) {
             $team->setName($neuer_teamname);
             Html::info("Der Teamname wurde geändert.");
         }

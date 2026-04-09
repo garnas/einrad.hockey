@@ -7,6 +7,7 @@ use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurnierDetails;
 use App\Entity\Turnier\TurniereListe;
 use App\Event\Turnier\nLigaBot;
+use App\Repository\Team\TeamRepository;
 use App\Service\Turnier\TurnierService;
 use DateTime;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +19,6 @@ class TurniereListeTest extends TestCase
         $teamMock = $this->createMock(nTeam::class);
         $teamMock->method('getBlock')->willReturn($block);
         $teamMock->method('isLigaTeam')->willReturn($ligateam);
-        $teamMock->method('getName')->willReturn($name);
 
 
         $anmeldung = new TurniereListe();
@@ -70,7 +70,7 @@ class TurniereListeTest extends TestCase
         $teamnamenSetzliste = [];
         $setzliste = TurnierService::getSetzListe($turnier);
         foreach ($setzliste as $anmeldung) {
-            $teamnamenSetzliste[] = $anmeldung->getTeam()->getName();
+            $teamnamenSetzliste[] = TeamRepository::get()->getTeamName($anmeldung->getTeam());
         }
         $this->assertContains(needle: "ausrichterCD", haystack: $teamnamenSetzliste);
         $this->assertContains(needle: "teamBC", haystack: $teamnamenSetzliste);
@@ -83,7 +83,7 @@ class TurniereListeTest extends TestCase
         $teamnamenWarteliste = [];
         $warteliste = TurnierService::getWarteliste($turnier);
         foreach ($warteliste as $anmeldung) {
-            $teamnamenWarteliste[] = $anmeldung->getTeam()->getName();
+            $teamnamenWarteliste[] = TeamRepository::get()->getTeamName($anmeldung->getTeam());
             $this->assertContains(needle: $anmeldung->getPositionWarteliste(), haystack: [1, 2, 3]);
         }
         $this->assertContains(needle: "teamAB", haystack: $teamnamenWarteliste);
@@ -113,7 +113,7 @@ class TurniereListeTest extends TestCase
         $teamnamenSetzliste = [];
         $setzliste = TurnierService::getSetzListe($turnier);
         foreach ($setzliste as $anmeldung) {
-            $teamnamenSetzliste[] = $anmeldung->getTeam()->getName();
+            $teamnamenSetzliste[] = TeamRepository::get()->getTeamName($anmeldung->getTeam());
         }
         $this->assertContains(needle: "ausrichterCD", haystack: $teamnamenSetzliste);
         $this->assertContains(needle: "teamBC", haystack: $teamnamenSetzliste);
@@ -124,11 +124,11 @@ class TurniereListeTest extends TestCase
 
         // Validiere Warteliste
         $warteliste = TurnierService::getWarteliste($turnier);
-        $this->assertEquals(expected: "teamAB", actual: $warteliste->get($idAB)->getTeam()->getName());
+        $this->assertEquals(expected: "teamAB", actual: TeamRepository::get()->getTeamName($warteliste->get($idAB)->getTeam()));
         $this->assertEquals(expected: 1, actual: $warteliste->get($idAB)->getPositionWarteliste());
-        $this->assertEquals(expected: "teamEF", actual: $warteliste->get($idEF)->getTeam()->getName());
+        $this->assertEquals(expected: "teamEF", actual: TeamRepository::get()->getTeamName($warteliste->get($idEF)->getTeam()));
         $this->assertEquals(expected: 2, actual: $warteliste->get($idEF)->getPositionWarteliste());
-        $this->assertEquals(expected: "teamF", actual: $warteliste->get($idF)->getTeam()->getName());
+        $this->assertEquals(expected: "teamF", actual: TeamRepository::get()->getTeamName($warteliste->get($idF)->getTeam()));
         $this->assertEquals(expected: 3, actual: $warteliste->get($idF)->getPositionWarteliste());
     }
 
@@ -154,7 +154,7 @@ class TurniereListeTest extends TestCase
         $teamnamenSetzliste = [];
         $setzliste = TurnierService::getSetzListe($turnier);
         foreach ($setzliste as $anmeldung) {
-            $teamnamenSetzliste[] = $anmeldung->getTeam()->getName();
+            $teamnamenSetzliste[] = TeamRepository::get()->getTeamName($anmeldung->getTeam());
         }
         $this->assertContains(needle: "ausrichterCD", haystack: $teamnamenSetzliste);
         $this->assertContains(needle: "teamAB", haystack: $teamnamenSetzliste);
@@ -164,13 +164,13 @@ class TurniereListeTest extends TestCase
 
         // Validiere Warteliste
         $warteliste = TurnierService::getWarteliste($turnier);
-        $this->assertEquals(expected: "teamEF", actual: $warteliste->get($idEF)->getTeam()->getName());
+        $this->assertEquals(expected: "teamEF", actual: TeamRepository::get()->getTeamName($warteliste->get($idEF)->getTeam()));
         $this->assertEquals(expected: 1, actual: $warteliste->get($idEF)->getPositionWarteliste());
-        $this->assertEquals(expected: "teamF", actual: $warteliste->get($idF)->getTeam()->getName());
+        $this->assertEquals(expected: "teamF", actual: TeamRepository::get()->getTeamName($warteliste->get($idF)->getTeam()));
         $this->assertEquals(expected: 2, actual: $warteliste->get($idF)->getPositionWarteliste());
-        $this->assertEquals(expected: "teamNL_1", actual: $warteliste->get($idNL_1)->getTeam()->getName());
+        $this->assertEquals(expected: "teamNL_1", actual: TeamRepository::get()->getTeamName($warteliste->get($idNL_1)->getTeam()));
         $this->assertEquals(expected: 3, actual: $warteliste->get($idNL_1)->getPositionWarteliste());
-        $this->assertEquals(expected: "teamNL_2", actual: $warteliste->get($idNL_2)->getTeam()->getName());
+        $this->assertEquals(expected: "teamNL_2", actual: TeamRepository::get()->getTeamName($warteliste->get($idNL_2)->getTeam()));
         $this->assertEquals(expected: 4, actual: $warteliste->get($idNL_2)->getPositionWarteliste());
     }
 
@@ -188,12 +188,12 @@ class TurniereListeTest extends TestCase
         // Validiere Setzliste
         $teamnamenSetzliste = [];
         $setzliste = TurnierService::getSetzListe($turnier);
-        $this->assertEquals(expected: "ausrichterCD", actual: $setzliste->first()->getTeam()->getName());
+        $this->assertEquals(expected: "ausrichterCD", actual: TeamRepository::get()->getTeamName($setzliste->first()->getTeam()));
         $this->assertEquals(expected: 1, actual: $setzliste->count());
 
         // Validiere Warteliste
         $warteliste = TurnierService::getWarteliste($turnier);
-        $this->assertEquals(expected: "teamCD", actual: $warteliste->first()->getTeam()->getName());
+        $this->assertEquals(expected: "teamCD", actual: TeamRepository::get()->getTeamName($warteliste->first()->getTeam()));
         $this->assertEquals(expected: 1, actual: $warteliste->count());
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Entity\Turnier\Turnier;
+use App\Repository\Team\TeamRepository;
 
 /**
  * Class xml
@@ -107,7 +108,7 @@ class xml
             $xml_child->addChild('organisator', e($turnier->getDetails()->getOrganisator()));
             $xml_child->addChild('handy', e($turnier->getDetails()->getHandy()));
             $xml_child->addChild('startgebuehr', e($turnier->getDetails()->getStartgebuehr()));
-            $xml_child->addChild('teamname', e($turnier->getAusrichter()->getName()));
+            $xml_child->addChild('teamname', e(TeamRepository::get()->getTeamName($turnier->getAusrichter())));
         }
         return $xml->asXML();
     }

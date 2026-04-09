@@ -3,6 +3,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+
+use App\Repository\Team\TeamRepository;
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Turnier\BlockService;
 use App\Service\Turnier\TurnierLinks;
@@ -12,6 +14,7 @@ use App\Service\Turnier\TurnierSnippets;
 require_once '../../init.php';
 
 $turniere = TurnierRepository::getKommendeTurniere();
+$team_repo = TeamRepository::get();
 
 if ($turniere->isEmpty()) {
     Html::info("Es stehen zurzeit keine Turniere aus.");
@@ -107,7 +110,7 @@ include '../../templates/header.tmp.php';
                         <i class='w3-display-topright w3-padding'>
                             <?= TurnierSnippets::plaetze($turnier) ?>
                         </i>
-                        <i class='w3-display-bottomright w3-padding'><?= e($turnier->getAusrichter()->getName()) ?></i>
+                        <i class='w3-display-bottomright w3-padding'><?= e($team_repo->getTeamName($turnier->getAusrichter())) ?></i>
                     </div>
 
                     <!-- Ausklappbarer Content -->

@@ -1,4 +1,11 @@
-<h3 class="w3-text-grey"><?= e($team->getName()) ?></h3>
+<?php
+
+use App\Repository\Team\TeamRepository;
+
+?>
+
+
+<h3 class="w3-text-grey"><?= e(TeamRepository::get()->getTeamName($team)) ?></h3>
 
 
 <form class="w3-card w3-panel" method="post" enctype="multipart/form-data">
@@ -17,7 +24,7 @@
         </p>
     <?php } else { ?>
         <p>
-            <img src="<?= e($team->getDetails()->getTeamfoto()) ?>" alt="<?= e($team->getName()) ?>" class="w3-card w3-image"
+            <img src="<?= e($team->getDetails()->getTeamfoto()) ?>" alt="<?= e(TeamRepository::get()->getTeamName($team)) ?>" class="w3-card w3-image"
                  style="max-height: 360px">
         </p>
         <p>

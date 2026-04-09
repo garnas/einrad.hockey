@@ -1,9 +1,15 @@
 <!-- Zeilen der Verwarnungen -->
+<?php
+
+use App\Repository\Team\TeamRepository;
+
+?>
+
 <?php foreach ($strafen as $strafe) : ?>
     <?php if ($strafe->isStrafe()) : ?>
         <div class="w3-card w3-leftbar w3-border-primary" style="margin-bottom: 15px;">
             <ul class="w3-ul">
-                <li class="w3-text-primary"><b><?=$strafe->getTeam()->getName()?></b></li>
+                <li class="w3-text-primary"><b><?=TeamRepository::get()->getTeamName($strafe->getTeam(), $strafe->getTurnier()->getSaison())?></b></li>
                 <li><?=$strafe->getGrund()?></li>
                 <li><?=$strafe->getProzentsatz()?> %</li>
                 <?php if ($strafe->getTurnier()): ?>

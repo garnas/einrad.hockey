@@ -51,7 +51,7 @@ foreach ($teams as $team_fuer_liste) {
     $html = ob_start();
     ?>
     <div style="color: #3a3a3a; font-size: 16px">
-        <h1 class="w3-center" style="padding-top: 64px">Quittung: <?= e($team_fuer->getName()) ?></h1>
+        <h1 class="w3-center" style="padding-top: 64px">Quittung: <?= e(TeamRepository::get()->getTeamName($team_fuer)) ?></h1>
         <div>
             <p>
                 <b>Betrag</b>
@@ -65,7 +65,7 @@ foreach ($teams as $team_fuer_liste) {
             <br>
             <?=e($turnier->getDetails()->getOrganisator())?>
             <br>
-            Ausrichter: <?= e($team_von->getName()) ?>
+            Ausrichter: <?= e(TeamRepository::get()->getTeamName($team_von)) ?>
             <?php if ($team_von->getDetails()->getVerein()): ?>
                 <i>(Verein: <?=e($team_von->getDetails()->getVerein())?>)</i>
             <?php endif; ?>
@@ -74,7 +74,7 @@ foreach ($teams as $team_fuer_liste) {
         <div style="padding-top: 24px">
             <b>Für</b>
             <br>
-            Team: <?= str_replace("*", "", e($team_fuer->getName()), ) ?>
+            Team: <?= str_replace("*", "", e(TeamRepository::get()->getTeamName($team_fuer)), ) ?>
             <?php if ($team_fuer->isLigaTeam() && $team_fuer->getDetails()->getVerein()): ?>
                 <i>(Verein: <?=e($team_fuer->getDetails()->getVerein())?>)</i>
             <?php endif; ?>

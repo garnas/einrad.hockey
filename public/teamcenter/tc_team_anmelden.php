@@ -37,7 +37,7 @@ if ($turnier->isSpassTurnier()) {
     $email = $kontakt->get_emails();
     Html::notice(
         "Anmeldung zu Spass-Turnieren erfolgt über den Ausrichter: "
-        . Html::mailto($email, $turnier->getAusrichter()->getName()),
+        . Html::mailto($email, TeamRepository::get()->getTeamName($turnier->getAusrichter())),
         esc: false,
     );
     Helper::reload('/liga/turnier_details.php', '?turnier_id=' . $turnier->id());

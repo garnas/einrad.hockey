@@ -51,7 +51,7 @@ if (isset($_POST['ergebnisuebernahme_verhindern'])) {
     if ($team && $team->isLigaTeam()) {
         TeamService::verhindereTurnierergebnisSaisonuebernahme(team: $team);
         TeamRepository::get()->speichern($team);
-        Html::info("Die Ergebnisübernahme in die nächste Saison für das Team " . $team->getName() . " ist verhindert.");
+        Html::info("Die Ergebnisübernahme in die nächste Saison für das Team " . TeamRepository::get()->getTeamName($team) . " ist verhindert.");
         Helper::reload();
     }
     Html::error("Teamname wurde nicht gefunden. Ergebnisübernahme wurde nicht verhindert");

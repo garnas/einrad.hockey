@@ -147,13 +147,13 @@ include '../../templates/header.tmp.php'; ?>
             <label class="w3-text-primary" for="teamname">Team ändern</label>
             <input type="text"
                    class="w3-input w3-border w3-border-primary"
-                   value="<?= $spieler->getTeam()->getName() ?>"
+                   value="<?= TeamRepository::get()->getTeamName($spieler->getTeam()) ?>"
                    list="teams"
                    id="teamname"
                    name="teamname">
             <?= Html::datalist_teams() ?>
             <?= Html::link("lc_kader.php?team_id=" . $spieler->getTeam()?->id(),
-                'Zum Teamkader der ' . $spieler->getTeam()?->getName(),
+                'Zum Teamkader der ' . TeamRepository::get()->getTeamName($spieler->getTeam()),
                 true,
                 'group') ?>
         </p>

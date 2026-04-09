@@ -1,5 +1,6 @@
 <?php
 
+use App\Repository\Team\TeamRepository;
 use App\Service\Turnier\TurnierSnippets;
 
 ?>
@@ -88,7 +89,7 @@ use App\Service\Turnier\TurnierSnippets;
                 >
                 <label class="w3-hover-text-secondary w3-text-primary"
                        for="<?= $anmeldung->getTeam()->id() ?>">
-                    <?= e($anmeldung->getTeam()->getName()) ?>
+                    <?= e(TeamRepository::get()->getTeamName($anmeldung->getTeam())) ?>
                 </label>
             </p>
         <?php endforeach; ?>

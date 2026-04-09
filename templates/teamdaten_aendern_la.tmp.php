@@ -3,6 +3,7 @@
 use App\Entity\Team\Freilos;
 use App\Entity\Team\FreilosGrund;
 use App\Service\Team\TeamSnippets;
+use App\Repository\Team\TeamRepository;
 
 ?>
 <div class="w3-card-4 w3-responsive w3-panel">
@@ -17,7 +18,7 @@ use App\Service\Team\TeamSnippets;
                            type='text'
                            id='teamname'
                            name='teamname'
-                           value='<?= $team->getName() ?>'
+                           value='<?= TeamRepository::get()->getTeamName($team) ?>'
                     >
                 </p>
             </div>

@@ -3,6 +3,7 @@
 namespace App\Repository\Team;
 
 use App\Entity\Team\Freilos;
+use App\Entity\Team\Names;
 use App\Entity\Team\nTeam;
 use App\Entity\Team\Spieler;
 use App\Entity\Team\Strafe;
@@ -24,12 +25,15 @@ class TeamRepository
     private EntityRepository $spieler;
     private EntityRepository $strafen;
 
+    private EntityRepository $names;
+
     private function __construct()
     {
         $this->team = DoctrineWrapper::manager()->getRepository(nTeam::class);
         $this->freilos = DoctrineWrapper::manager()->getRepository(Freilos::class);
         $this->spieler = DoctrineWrapper::manager()->getRepository(Spieler::class);
         $this->strafen = DoctrineWrapper::manager()->getRepository(Strafe::class);
+        $this->names = DoctrineWrapper::manager()->getRepository(Names::class);
     }
 
     public function team(int $id): ?nTeam
@@ -132,6 +136,11 @@ class TeamRepository
     public function findByName(string $name): ?nTeam
     {
         return $this->team->findOneBy(['name' => $name]);
+    }
+
+    public function getTeamName(nTeam $team, int $saison = Config::SAISON): string
+    {
+        return $this->names->findOneBy(['team' => $team, 'saison' => $saison])?->getName() ?? 'unbekannt';
     }
 
     public function deleteFoto(nTeam $team): void

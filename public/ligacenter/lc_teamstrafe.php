@@ -82,7 +82,7 @@ include '../../templates/header.tmp.php';
             <tr>
                 <td style="vertical-align: middle"><?= $strafe->getStrafeId() ?></td>
                 <td style="vertical-align: middle"><?= $strafe->getVerwarnung() ?></td>
-                <td style="white-space: nowrap; vertical-align: middle;"><?= $strafe->getTeam()->getName() ?></td>
+                <td style="white-space: nowrap; vertical-align: middle;"><?= TeamRepository::get()->getTeamName($strafe->getTeam()) ?></td>
                 <td style="vertical-align: middle">
                     <?= $strafe->getGrund() ?>
                     <?php if (!empty($strafe->getProzentsatz())) { ?>(<?= $strafe->getProzentsatz() ?>&nbsp;%)<?php } //endif
@@ -90,7 +90,7 @@ include '../../templates/header.tmp.php';
                 </td>
                 <td style="vertical-align: middle"><?= ($strafe->getTurnier()?->getDatum()?->format("d.m.Y") ?? '') . ' ' . ($strafe->getTurnier()?->getDetails()?->getOrt() ?? '') ?></td>
                 <td style="vertical-align: middle">
-                    <form method="POST" onsubmit="return confirm('Soll die Strafe/Verwarnung für das Team <?= $strafe->getTeam()->getName() ?> wirklich gelöscht werden?')">
+                    <form method="POST" onsubmit="return confirm('Soll die Strafe/Verwarnung für das Team <?= TeamRepository::get()->getTeamName($strafe->getTeam()) ?> wirklich gelöscht werden?')">
                         <input type="hidden" name="delete<?= $strafe->getStrafeId() ?>" value='delete'>
                         <input class="w3-button w3-text-primary" type="submit" name="delete<?= $strafe->getStrafeId()  ?>" value="Löschen">
                     </form>

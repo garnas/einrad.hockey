@@ -26,7 +26,7 @@ if (isset($_POST['abmelden'])) {
         $team = $anmeldung->getTeam();
         if (isset($_POST['team_abmelden'][$team->id()])) {
             TeamService::abmelden($team, $turnier);
-            Html::info($team->getName() . " wurde abgemeldet");
+            Html::info(TeamRepository::get()->getTeamName($team) . " wurde abgemeldet");
         }
     }
     TurnierRepository::get()->speichern($turnier);
@@ -60,7 +60,7 @@ if (isset($_POST['team_anmelden'])) {
             TurnierService::addToSetzListe($turnier, $team);
         }
         TurnierRepository::get()->speichern($turnier);
-        Html::info($team->getName() . " wurde angemeldet");
+        Html::info(TeamRepository::get()->getTeamName($team) . " wurde angemeldet");
         Helper::reload(get: '?turnier_id=' . $turnier->id());
     }
 }

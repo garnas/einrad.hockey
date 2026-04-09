@@ -7,6 +7,7 @@ use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Event\Turnier\TurnierEventMailBot;
+use App\Repository\Team\TeamRepository;
 use App\Service\Team\NLTeamValidator;
 use Config;
 use DateTimeImmutable;
@@ -149,7 +150,7 @@ class TurnierService
             ->setTurnier($turnier)
             ->setFreilosGesetzt('Nein');
         $turnier->getListe()->add($anmeldung);
-        $turnier->getLogService()->addLog("Auf Setzliste: " . $team->getName() . " " . BlockService::toString($team));
+        $turnier->getLogService()->addLog("Auf Setzliste: " . TeamRepository::get()->getTeamName($team) . " " . BlockService::toString($team));
     }
 
     public static function nlAnmelden(Turnier $turnier, nTeam $nlTeam, string $liste): void
@@ -181,7 +182,7 @@ class TurnierService
         $turnier->getLogService()->addLog(
             "Auf Warteliste: "
             . ($positionWarteliste ? $positionWarteliste . ". " : "")
-            . $team->getName()
+            . TeamRepository::get()->getTeamName($team)
             . " " . BlockService::toString($team),
         );
     }
@@ -192,7 +193,7 @@ class TurnierService
         $pos = 0;
         foreach ($warteliste as $anmeldung) {
             $anmeldung->setPositionWarteliste(++$pos);
-            $name = $anmeldung->getTeam()->getName();
+            $name = TeamRepository::get()->getTeamName($anmeldung->getTeam());
             $turnier->getLogService()->addLog("Warteliste: $pos. $name");
         }
     }
@@ -295,7 +296,7 @@ class TurnierService
                         # Immer vom Parent aus verändern, sonst kann es hier zu Problemem kommen.
                         $turnier->getListe()->get($anmeldung->getTeam()->id())->setListe('setzliste');
                         $freie_plaetze--;
-                        $turnier->getLogService()->addLog("Von Warteliste auf Setzliste: " . $team->getName());
+                        $turnier->getLogService()->addLog("Von Warteliste auf Setzliste: " . TeamRepository::get()->getTeamName($team));
                         if ($send_mail) {
                             TurnierEventMailBot::mailWarteZuSetzliste($turnier, $team);
                         }

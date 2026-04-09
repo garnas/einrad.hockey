@@ -70,7 +70,7 @@ class TeamService
             if ($anmeldung->getTeam()->id() === $team->id()) {
                 $turnier->getListe()->removeElement($anmeldung);
                 $liste = TurnierSnippets::translate($anmeldung->getListe());
-                $name = $team->getName();
+                $name = TeamRepository::get()->getTeamName($team);
                 $turnier->getLogService()->addLog("Abmeldung: $name von der $liste");
             }
         }
@@ -134,7 +134,7 @@ class TeamService
     public static function createTeamSession(nTeam $team): void
     {
         $_SESSION['logins']['team']['id'] = $team->id();
-        $_SESSION['logins']['team']['name'] = $team->getName();
+        $_SESSION['logins']['team']['name'] = TeamRepository::get()->getTeamName($team);
         $_SESSION['logins']['team']['block'] = Tabelle::get_team_block($team->id());
     }
 

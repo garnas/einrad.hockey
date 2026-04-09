@@ -1,9 +1,10 @@
 <?php
 
+use App\Repository\Team\TeamRepository;
 use App\Service\Turnier\TurnierSnippets;
 
 ?>
-<p>Hallo <?= $anmeldung->getTeam()->getName() ?>,</p>
+<p>Hallo <?= TeamRepository::get()->getTeamName($anmeldung->getTeam()) ?>,</p>
 <p>
     das Turnier in <?= TurnierSnippets::ortDatumBlock($turnier) ?> ist in die Setzphase übergegangen und
     die freien Plätze wurden vergeben. Euer Team steht nun auf der <?= TurnierSnippets::translate($anmeldung->getListe()) ?>

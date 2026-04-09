@@ -5,6 +5,7 @@ namespace App\Entity\Team;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Entity\Turnier\TurnierErgebnis;
+use App\Entity\Team\Names;
 use Config;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,7 +14,7 @@ use Helper;
 use Tabelle;
 
 #[ORM\Entity]
-#[ORM\Table(name: "teams_liga", uniqueConstraints: [new ORM\UniqueConstraint(name: "teamname", columns: ["teamname"])])]
+#[ORM\Table(name: "teams_liga")]
 class nTeam
 {
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
@@ -21,8 +22,8 @@ class nTeam
     #[ORM\Column(name: "team_id", type: "integer", nullable: false)]
     private int $id;
 
-    #[ORM\Column(name: "teamname", type: "string", length: 255, nullable: false)]
-    private string $name;
+    #[ORM\OneToMany(targetEntity: Names::class, mappedBy: "team", cascade: ["persist"], orphanRemoval: true)]
+    private Collection $names;
 
     #[ORM\OneToMany(targetEntity: TurniereListe::class, mappedBy: "team", cascade: ["all"], indexBy: "turnier_id")]
     private Collection $turniereListe;
@@ -36,6 +37,45 @@ class nTeam
     #[ORM\OneToMany(targetEntity: Strafe::class, mappedBy: "team", cascade: ["all"], indexBy: "strafe_id")]
     private Collection $strafen;
 
+    #[ORM\OneToMany(targetEntity: Freilos::class, mappedBy: "team", cascade: ["all"])]
+    private Collection $freilose;
+
+    #[ORM\OneToMany(targetEntity: Kontakt::class, mappedBy: "team", cascade: ["all"])]
+    private Collection $emails;
+
+    #[ORM\OneToOne(targetEntity: TeamDetails::class, mappedBy: "team", cascade: ["all"])]
+    private TeamDetails $details;
+
+    #[ORM\Column(name: "ligateam", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])]
+    private string $ligateam = 'Ja';
+
+    #[ORM\Column(name: "terminplaner", type: "string", length: 0, nullable: false, options: ["default" => "Nein"])]
+    private string $terminplaner = 'Nein';
+
+    #[ORM\Column(name: "passwort", type: "string", length: 255, nullable: true)]
+    private ?string $passwort;
+
+    #[ORM\Column(name: "passwort_geaendert", type: "string", length: 0, nullable: false, options: ["default" => "Nein"])]
+    private string $passwortGeaendert = 'Nein';
+
+    #[ORM\Column(name: "aktiv", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])]
+    private string $aktiv = 'Ja';
+
+    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
+    #[ORM\OneToMany(targetEntity: Spieler::class, mappedBy: "team", cascade: ["all"])]
+    private Collection $kader;
+
+    public function __construct()
+    {
+        $this->turniereListe = new ArrayCollection();
+        $this->ausgerichteteTurniere = new ArrayCollection();
+        $this->freilose = new ArrayCollection();
+        $this->emails = new ArrayCollection();
+        $this->ergebnisse = new ArrayCollection();
+        $this->strafen = new ArrayCollection();
+        $this->names = new ArrayCollection();
+    }
+    
     public function getAusgerichteteTurniere(): Collection|array
     {
         return $this->ausgerichteteTurniere;
@@ -46,12 +86,6 @@ class nTeam
         $this->ausgerichteteTurniere = $ausgerichteteTurniere;
         return $this;
     }
-
-    #[ORM\OneToMany(targetEntity: Freilos::class, mappedBy: "team", cascade: ["all"])]
-    private Collection $freilose;
-
-    #[ORM\OneToMany(targetEntity: Kontakt::class, mappedBy: "team", cascade: ["all"])]
-    private Collection $emails;
 
     public function getEmails(): Collection
     {
@@ -83,18 +117,6 @@ class nTeam
         return $this;
     }
 
-    public function __construct()
-    {
-        $this->turniereListe = new ArrayCollection();
-        $this->ausgerichteteTurniere = new ArrayCollection();
-        $this->freilose = new ArrayCollection();
-        $this->emails = new ArrayCollection();
-        $this->ergebnisse = new ArrayCollection();
-        $this->strafen = new ArrayCollection();
-    }
-
-    #[ORM\OneToOne(targetEntity: TeamDetails::class, mappedBy: "team", cascade: ["all"])]
-    private TeamDetails $details;
 
     public function getDetails(): TeamDetails
     {
@@ -106,25 +128,6 @@ class nTeam
         $this->details = $details;
         return $this;
     }
-
-    #[ORM\Column(name: "ligateam", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])]
-    private string $ligateam = 'Ja';
-
-    #[ORM\Column(name: "terminplaner", type: "string", length: 0, nullable: false, options: ["default" => "Nein"])]
-    private string $terminplaner = 'Nein';
-
-    #[ORM\Column(name: "passwort", type: "string", length: 255, nullable: true)]
-    private ?string $passwort;
-
-    #[ORM\Column(name: "passwort_geaendert", type: "string", length: 0, nullable: false, options: ["default" => "Nein"])]
-    private string $passwortGeaendert = 'Nein';
-
-    #[ORM\Column(name: "aktiv", type: "string", length: 0, nullable: false, options: ["default" => "Ja"])]
-    private string $aktiv = 'Ja';
-
-    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
-    #[ORM\OneToMany(targetEntity: Spieler::class, mappedBy: "team", cascade: ["all"])]
-    private Collection $kader;
 
     public function getKader(): Collection
     {
@@ -164,16 +167,9 @@ class nTeam
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getNames(): Collection
     {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
+        return $this->names;
     }
 
     public function getLigateam(): ?string

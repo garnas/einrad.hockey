@@ -48,7 +48,7 @@ class FreilosService
                 grund: FreilosGrund::TURNIER_AUSGERICHTET,
                 turnierAusgerichtet: $turnier,
             );
-            Html::info("Das Team " . $team->getName() . " hat ein Freilos für ihr frühzeitig ausgeschriebenes Turnier erhalten.");
+            Html::info("Das Team " . TeamRepository::get()->getTeamName($team) . " hat ein Freilos für ihr frühzeitig ausgeschriebenes Turnier erhalten.");
             TeamRepository::get()->speichern($team);
             if ($sendMail) {
                 Mailbot::mail_ausrichter_freilos($team);
@@ -86,7 +86,7 @@ class FreilosService
             ->setFreilosGesetztAm(new DateTime());
         $team->getNextFreilos()->setzen($turnier);
         $turnier->getListe()->add($anmeldung);
-        $turnier->getLogService()->addLog("Freilos: " . $team->getName() . " " . BlockService::toString($team->getBlock()));
+        $turnier->getLogService()->addLog("Freilos: " . TeamRepository::get()->getTeamName($team) . " " . BlockService::toString($team->getBlock()));
     }
 
     public static function update_bestehender_turnier_ausgerichtet_freilose(): void
@@ -161,7 +161,7 @@ class FreilosService
                 $vorherigesFreilos = $team->getGueltigeFreilose()->filter($filter)->first() ?: null;
                 $team->addFreilos(FreilosGrund::FREILOS_GESETZT, vorherigesFreilos: $vorherigesFreilos);
                 TeamRepository::get()->speichern($team);
-                Html::info("Das Team " . $team->getName() . " hat ein neues Freilos erhalten für ihr frühzeitig gesetztes Freilos.");
+                Html::info("Das Team " . TeamRepository::get()->getTeamName($team) . " hat ein neues Freilos erhalten für ihr frühzeitig gesetztes Freilos.");
                 if ($sendMail) {
                     Mailbot::mail_freilos_recycle($team);
                 }

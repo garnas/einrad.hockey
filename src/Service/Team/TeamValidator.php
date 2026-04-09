@@ -7,6 +7,7 @@ use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Repository\DoctrineWrapper;
+use App\Repository\Team\TeamRepository;
 use App\Service\Turnier\TurnierService;
 use Env;
 use Html;
@@ -65,7 +66,7 @@ class TeamValidator
     public static function isValidTurnierForAnmeldung(nTeam $team, Turnier $turnier, $showError = true): bool
     {
         $valid = true;
-        $name = $team->getName();
+        $name = TeamRepository::get()->getTeamName($team);
         if (TeamService::isAufSetzliste($team, $turnier)) {
             $error[] = "Das Team $name ist bereits auf der Setzliste.";
             $valid = false;
@@ -96,7 +97,7 @@ class TeamValidator
         $valid = self::isValidTurnierForAnmeldung($team, $turnier, $showError);
 
         if (TeamService::isAufWarteliste($team, $turnier)) {
-            $error[] = "Das Team " . $team->getName() . " ist bereits auf der Warteliste angemeldet.";
+            $error[] = "Das Team " . TeamRepository::get()->getTeamName($team) . " ist bereits auf der Warteliste angemeldet.";
             $valid = false;
         }
         if ($showError && isset($error)) {

@@ -2,6 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+
+use App\Repository\Team\TeamRepository;
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Team\TeamSnippets;
 use App\Service\Turnier\TurnierLinks;
@@ -77,7 +79,7 @@ include '../../templates/header.tmp.php';
                 <p>
                     <i>Ausrichter:</i>
                     <br>
-                    <?= TeamSnippets::getEmailLink($turnier->getAusrichter()) ?: e($turnier->getAusrichter()->getName())?>
+                    <?= TeamSnippets::getEmailLink($turnier->getAusrichter()) ?: e(TeamRepository::get()->getTeamName($turnier->getAusrichter()))?>
                 </p> 
                 <p><i>Organisator:</i><br><?= e($turnier->getDetails()->getOrganisator()) ?></p>
                 <p><i>Handy:</i><br><?= TurnierSnippets::getHandy($turnier) ?></p>

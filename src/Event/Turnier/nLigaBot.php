@@ -6,6 +6,7 @@ use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Repository\DoctrineWrapper;
+use App\Repository\Team\TeamRepository;
 use App\Service\Team\TeamService;
 use App\Service\Turnier\BlockService;
 use App\Service\Turnier\TurnierService;
@@ -259,14 +260,14 @@ class nLigaBot
         $turnier->getLogService()->addLog("Geloste Reihenfolge:");
         $turnier->getLogService()->addLog("-----");
         foreach ($reihenfolgeAnmeldungen as $anmeldung) {
-            $turnier->getLogService()->addLog($anmeldung->getTeam()->getName());
+            $turnier->getLogService()->addLog(TeamRepository::get()->getTeamName($anmeldung->getTeam()));
         }
         $turnier->getLogService()->addLog("-----");
 
         $pos = 1;
         foreach ($reihenfolgeAnmeldungen as $anmeldung) {
             $team = $anmeldung->getTeam();
-            $name = $team->getName();
+            $name = TeamRepository::get()->getTeamName($team);
             $blockString = BlockService::toString($team->getBlock());
             // Check ob das Team am Kalendertag des Turnieres schon auf einer Spiele-Liste steht
             if (self::isBereitsAufSetzlisteGelostAmGleichenKalendertag($turnier, $team)) {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Repository\Team\TeamRepository;
 use App\Service\Turnier\TurnierSnippets;
 
 ?>
@@ -57,7 +58,7 @@ else: ?>
         <h3>Turnierdaten <span class="w3-text-gray">- nur Ligaausschuss</span></h3>
         <p>
             <label for="ausrichter" class='w3-text-primary'>Ausrichter ändern</label><br>
-            <input type="text" class="w3-input w3-border w3-border-primary" value="<?=e($turnier->getAusrichter()->getName())?>" list="teams" id="ausrichter" name="ausrichter">
+            <input type="text" class="w3-input w3-border w3-border-primary" value="<?=e(TeamRepository::get()->getTeamName($turnier->getAusrichter()))?>" list="teams" id="ausrichter" name="ausrichter">
                 <?=Html::datalist_teams()?>
         </p>
         <p>

@@ -6,6 +6,7 @@ use App\Entity\Team\Freilos;
 use App\Entity\Team\nTeam;
 use App\Entity\Team\Spieler;
 use App\Service\Turnier\TurnierSnippets;
+use App\Repository\Team\TeamRepository;
 use Html;
 
 class TeamSnippets
@@ -13,7 +14,7 @@ class TeamSnippets
     public static function getEmailLink(nTeam $team): string
     {
         $emailsString = TeamService::getPublicEmailsAsString($team);
-        return Html::mailto($emailsString, $team->getName());
+        return Html::mailto($emailsString, TeamRepository::get()->getTeamName($team));
     }
 
     /**

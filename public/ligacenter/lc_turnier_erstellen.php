@@ -16,7 +16,7 @@ if (isset($_GET['team_id'])) {
     if (Team::is_ligateam($ausrichter_team_id)) {
         $ausrichter = TeamRepository::get()->team($ausrichter_team_id);
         $show_form = true;
-        $ausrichter_name = $ausrichter->getName();
+        $ausrichter_name = TeamRepository::get()->getTeamName($ausrichter);
         $ausrichter_block = $ausrichter->getBlock();
         require_once '../../logic/turnier_erstellen.logic.php';
 

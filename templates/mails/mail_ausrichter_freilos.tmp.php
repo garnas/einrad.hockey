@@ -1,4 +1,10 @@
-<p>Hallo <?= $team->getName() ?>, </p>
+<?php
+
+use App\Repository\Team\TeamRepository;
+
+?>
+
+<p>Hallo <?= TeamRepository::get()->getTeamName($team) ?>, </p>
 <p>
     da ihr euer Turnier acht Wochen vor Turnierbeginn ausgeschrieben habt, wurde euch ein Freilos gutgeschrieben.
     Dies ist insgesamt bis zu zwei Mal möglich. Eine Übersicht über eure Freilose findet ihr

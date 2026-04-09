@@ -40,7 +40,7 @@ if (isset($_POST['neuer_eintrag'])) {
             Html::info("Der Spieler wurde erfolgreich eingetragen.");
             Helper::reload(get: '?team_id=' . $team_id);
         } elseif ($existingSpieler->getLetzteSaison() < Config::SAISON) {
-            $vorherigesTeam = $existingSpieler->getTeam()->getName();
+            $vorherigesTeam = TeamRepository::get()->getTeamName($existingSpieler->getTeam());
             $existingSpieler->setTeam($teamEntity);
             $existingSpieler->setLetzteSaison(Config::SAISON);
             $existingSpieler->setTimestamp(new DateTime());
@@ -48,7 +48,7 @@ if (isset($_POST['neuer_eintrag'])) {
             Html::info("Der Spieler wurde erfolgreich vom vorherigen Team ($vorherigesTeam) übernommen.");
             Helper::reload(get: '?team_id=' . $team_id);
         } else {
-            $aktuellesTeam = $existingSpieler->getTeam()->getName();
+            $aktuellesTeam = TeamRepository::get()->getTeamName($existingSpieler->getTeam());
             Html::error("Der Spieler ist für diese Saison bereits in einem anderen Team gemeldet ($aktuellesTeam).");
         }
     }

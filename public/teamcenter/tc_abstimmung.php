@@ -114,7 +114,7 @@ include '../../templates/header.tmp.php';
 
             <h2 class="w3-text-primary"><?= (!$hasVote) ? 'Jetzt abstimmen' : 'Stimme ändern' ?></h2>
 
-            <p>Das Team <?= $team->getName() ?> stimmt für die folgende(n) Person(en):</p>
+            <p>Das Team <?= TeamRepository::get()->getTeamName($team) ?> stimmt für die folgende(n) Person(en):</p>
             <?php if (!$data): ?>
                 <p><strong>Dein Team hat abgestimmt, aber keine Stimme für einen der Kandidaten vergeben.</strong></p>
             <?php endif; ?>

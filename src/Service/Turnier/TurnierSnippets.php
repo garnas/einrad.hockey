@@ -4,6 +4,7 @@ namespace App\Service\Turnier;
 
 use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
+use App\Repository\Team\TeamRepository;
 use App\Service\Team\NLTeamService;
 use App\Service\Team\TeamValidator;
 use Html;
@@ -199,13 +200,14 @@ class TurnierSnippets
     {
         $warteliste = TurnierService::getWarteliste($turnier);
         $setzliste = TurnierService::getSetzListe($turnier);
+        $repo = TeamRepository::get();
 
         $html = '<p class="w3-text-grey w3-border-bottom w3-border-grey">Setzliste</p>';
         $html .= '<p>';
         if (TurnierService::getAnzahlGesetzteTeams($turnier) > 0) {
             $html .= '<i>';
             foreach ($setzliste as $anmeldung) {
-                $teamname = e($anmeldung->getTeam()->getName());
+                $teamname = e($repo->getTeamName($anmeldung->getTeam()));
                 $block = BlockService::toString($anmeldung->getTeam());
                 if ($anmeldung->getTeam()->id() === ($_SESSION['logins']['team']['id'] ?? 0)) {
                     $html .= "<span class='w3-text-green'><b>$teamname</b></span>";
@@ -227,7 +229,7 @@ class TurnierSnippets
             $html .= '<i>';
             foreach ($warteliste as $anmeldung) {
                 $warteplatz = ($turnier->isSetzPhase()) ? $anmeldung->getPositionWarteliste() . ". " : "";
-                $teamname = e($anmeldung->getTeam()->getName());
+                $teamname = e($repo->getTeamName($anmeldung->getTeam()));
                 $block = BlockService::toString($anmeldung->getTeam());
                 if ($anmeldung->getTeam()->id() === ($_SESSION['logins']['team']['id'] ?? 0)) {
                     $html .= "<span class='w3-text-yellow'><b>" . $warteplatz . " " . $teamname . "</b></span>";

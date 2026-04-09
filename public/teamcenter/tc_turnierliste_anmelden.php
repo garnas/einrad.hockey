@@ -3,6 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 use App\Entity\Turnier\Turnier;
+use App\Repository\Team\TeamRepository;
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Team\TeamService;
 use App\Service\Turnier\TurnierLinks;
@@ -102,7 +103,7 @@ include '../../templates/header.tmp.php';?>
                 <td><?= e($turnier->getDetails()->getOrt()) ?></td>
                 <td><?= TurnierSnippets::blockColor($turnier, $teamEntity) ?></td>
                 <td><?= TurnierSnippets::phase($turnier) ?></td>
-                <td><?= e($turnier->getAusrichter()->getName()) ?></i></td>
+                <td><?= e(TeamRepository::get()->getTeamName($turnier->getAusrichter())) ?></i></td>
             </tr>
             <tr>
                 <td colspan="4" style="white-space:normal;" class="w3-left-align">
