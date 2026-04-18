@@ -38,7 +38,7 @@
     },
     "require-dev": {
         "ext-xdebug" :  "*",
-        "phpunit/phpunit": "12.5.8",
+        "phpunit/phpunit": "12.5.22",
         "friendsofphp/php-cs-fixer": "^3.94"
     }
 }
