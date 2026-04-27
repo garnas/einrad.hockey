@@ -71,7 +71,7 @@ $map
         54 => '04:14',
         55 => '04:40',
     ];
-  
+
 foreach ($spielplan->spiele as $id => $spiel) {
     $spielplan->spiele[$id]["zeit"] = $map[$id];
 }
@@ -85,7 +85,7 @@ $halbfinale = [
     6 => ['zeit' => '07:45', 'name' => 'Halbfinale 4', 'team_a' => 'Vorrunde Platz 1', 'team_b' => 'Vorrunde Platz 4', 'schiri_a' => 'Vorrunde Platz 2', 'schiri_b' => 'Vorrunde Platz 3'],
 ];
 
-$finale = [    
+$finale = [
     11 => ['zeit' => '08:30', 'name' => 'Gruppe um Platz 9 - 11', 'team_a' => 'Vorrunde Platz 9', 'team_b' => 'Vorrunde Platz 10', 'schiri_a' => 'Vorrunde Platz 1', 'schiri_b' => 'Vorrunde Platz 2'],
     12 => ['zeit' => '09:00', 'name' => 'Spiel um Platz 7', 'team_a' => 'Verlierer HF 1', 'team_b' => 'Verlierer HF 2', 'schiri_a' => 'Vorrunde Platz 9', 'schiri_b' => 'Vorrunde Platz 10'],
     13 => ['zeit' => '09:30', 'name' => 'Spiel um Platz 5', 'team_a' => 'Gewinner HF 1', 'team_b' => 'Gewinner HF 2', 'schiri_a' => 'Verlierer HF 1', 'schiri_b' => 'Verlierer HF 2'],
