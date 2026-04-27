@@ -76,6 +76,18 @@ foreach ($spielplan->spiele as $id => $spiel) {
     $spielplan->spiele[$id]["zeit"] = $map[$id];
 }
 
+$ostlandhalle_ids = [3,5,7,11,13,15,17,19,21,23,25,27,29,31,33];
+$ostlandhalle_spiele = [];
+$ballsporthalle_spiele = [];
+
+foreach ($spielplan->spiele as $spielId => $spiel) {
+    if (in_array($spielId, $ostlandhalle_ids, true)) {
+        $ostlandhalle_spiele[$spielId] = $spiel;
+    } else {
+        $ballsporthalle_spiele[$spielId] = $spiel;
+    }
+}
+
 $halbfinale = [
     1 => ['zeit' => '05:15', 'name' => 'Gruppe um Platz 9 - 11', 'team_a' => 'Vorrunde Platz 9', 'team_b' => 'Vorrunde Platz 11', 'schiri_a' => 'Vorrunde Platz 5', 'schiri_b' => 'Vorrunde Platz 8'],
     2 => ['zeit' => '05:45', 'name' => 'Halbfinale 1', 'team_a' => 'Vorrunde Platz 6', 'team_b' => 'Vorrunde Platz 7', 'schiri_a' => 'Vorrunde Platz 10', 'schiri_b' => 'Vorrunde Platz 1'],
@@ -105,8 +117,13 @@ include '../../templates/spielplan/spielplan_titel.tmp.php';
 include '../../templates/spielplan/spielplan_teamliste.tmp.php'; // Teamliste
 
 // Hauptrunde
-
+?><h1 class="w3-text-primary">Ostlandhalle</h1><?php
+$spielplan->spiele = $ostlandhalle_spiele;
 include '../../templates/spielplan/spielplan_spiele.tmp.php'; // Spiele
+?><h1 class="w3-text-primary">Ballsporthalle</h1><?php
+$spielplan->spiele = $ballsporthalle_spiele;
+include '../../templates/spielplan/spielplan_spiele.tmp.php'; // Spiele
+
 if ($spielplan->anzahl_teams != 3) {
     include '../../templates/spielplan/spielplan_turniertabelle.tmp.php'; // Abschlusstabelle
     include '../../templates/spielplan/spielplan_direkter_vergleich.tmp.php'; // Direkter Vergleich Tabellen
