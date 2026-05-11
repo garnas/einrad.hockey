@@ -1,6 +1,6 @@
 {
     "require": {
-        "php": "8.3.30",
+        "php": "8.3.*",
         "ext-calendar" :  "*",
         "ext-ctype" : "*",
         "ext-curl" :  "*",
