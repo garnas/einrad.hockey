@@ -40,9 +40,29 @@ include '../../templates/header.tmp.php';
         <th>Spielplan / Ergebnisse</th>
     </tr>
     <tr>
+        <td>04. - 06.08.2023</td>
+        <td>European Unicycle Hockey Championship 2023 (A-Tournament)</td>
+        <td><a class='no w3-text-primary w3-hover-text-secondary' target="_blank" href='/dokumente/spielplaene/2023-EUHC-A-results.pdf'>Ergebnisse</a></td>
+    </tr>
+    <tr>
+        <td>02. - 06.08.2023</td>
+        <td>European Unicycle Hockey Championship 2023 (B-Tournament)</td>
+        <td><a class='no w3-text-primary w3-hover-text-secondary' target="_blank" href='/dokumente/spielplaene/2023-EUHC-B-results.pdf'>Ergebnisse</a></td>
+    </tr>
+    <tr>
+        <td>30.09. + 01.10.2023</td>
+        <td>24 Stunden Einradhockeyturnier Winsen</td>
+        <td><a class='no w3-text-primary w3-hover-text-secondary' target="_blank" href='/dokumente/spielplaene/2023-Winsen-24h-Turnier.pdf'>Ergebnisse</a></td>
+    </tr>
+    <tr>
         <td>31.05. + 01.06.2025</td>
         <td>2. Lilienthaler 24 Stunden Einradhockeyturnier</td>
-        <td><a class='no w3-text-primary w3-hover-text-secondary' href='/dokumente/spielplaene/2025_Lilienthal_24h-Turnier.pdf'>Ergebnisse</a></td>
+        <td><a class='no w3-text-primary w3-hover-text-secondary' target="_blank" href='/dokumente/spielplaene/2025_Lilienthal_24h-Turnier.pdf'>Ergebnisse</a></td>
+    </tr>
+    <tr>
+        <td>02. + 03.05.2026</td>
+        <td>3. Lilienthaler 24 Stunden Einradhockeyturnier</td>
+        <td><a class='no w3-text-primary w3-hover-text-secondary' target="_blank" href='/dokumente/spielplaene/2026_Lilienthal-24h-Turnier.pdf'>Ergebnisse</a></td>
     </tr>
 </table>
 
