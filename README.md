@@ -77,7 +77,7 @@ Nach dem Start öffnet VS Code automatisch http://localhost im Browser.
 ### Tests
 
 ```shell
-vendor/bin/phpunit tests/
+php83 vendor/bin/phpunit tests/
 ```
 ### Formatting
 
@@ -139,6 +139,7 @@ curl -sS https://getcomposer.org/installer | /usr/bin/php8.3-cli
 
 # Ausführen
 /usr/bin/php8.3-cli composer.phar about
+/usr/bin/php8.3-cli composer.phar install --no-dev --optimize-autoloader
 ```
 
 ### Doctrine Cache aktualisieren
