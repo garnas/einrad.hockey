@@ -18,16 +18,15 @@ $deaktivierte_teams = Team::get_deactive();
 if (isset($_POST['anmelden'])) {
 
     $team = TeamRepository::get()->findByName($_POST['teamname']);
-    Html::notice("Der Login als Team ist für die Dauer der Ligaausschusswahlen deaktiviert.");
-    //    if ($team && $team->isLigaTeam()){
-    //        TeamService::removeTeamSession();
-    //        TeamService::createTeamSession($team);
-    //        Helper::log("login.log", "Erfolgreich       | via Ligacenter: " . $_SESSION['logins']['la']['login']
-    //            . " als " . $_SESSION['logins']['team']['name']);
-    //        Html::info("Login via Ligaausschuss erfolgreich");
-    //        Helper::reload('/teamcenter/tc_start.php');
-    //    }
-    //    Html::error("Anmeldung als Team nicht möglich, da der Teamname keinem Ligateam zugeordnet werden konnte.");
+    if ($team && $team->isLigaTeam()) {
+        TeamService::removeTeamSession();
+        TeamService::createTeamSession($team);
+        Helper::log("login.log", "Erfolgreich       | via Ligacenter: " . $_SESSION['logins']['la']['login']
+            . " als " . $_SESSION['logins']['team']['name']);
+        Html::info("Login via Ligaausschuss erfolgreich");
+        Helper::reload('/teamcenter/tc_start.php');
+    }
+    Html::error("Anmeldung als Team nicht möglich, da der Teamname keinem Ligateam zugeordnet werden konnte.");
 }
 
 // Ligateam deativieren

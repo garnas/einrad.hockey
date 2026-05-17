@@ -68,7 +68,7 @@ class Nav
         $class_text_color = (isset($_SESSION['logins']['team'])) ? "" : "w3-text-grey";
         $links = [
             [Env::BASE_URL . "/teamcenter/tc_start.php", "Start", $class_text_color],
-            [Env::BASE_URL . "/teamcenter/tc_abstimmung.php", "LA-Wahl 2026", $class_text_color],
+            [Env::BASE_URL . "/teamcenter/tc_abstimmung_ergebnis.php", "LA-Wahl 2026", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_terminseite_erstellen.php", "Teamtermine", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_anmelden.php", "Turnieranmeldung", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_turnier_erstellen.php", "Turnier erstellen", $class_text_color],
