@@ -169,7 +169,7 @@ class Nav
     public static function get_tc_start(): array
     {
         $links = [
-            [Env::BASE_URL . "/teamcenter/tc_abstimmung.php", "LA-Wahl 2026", "w3-secondary"],
+            [Env::BASE_URL . "/teamcenter/tc_abstimmung_ergebnis.php", "LA-Wahl 2026", "w3-secondary"],
             [Env::BASE_URL . "/teamcenter/tc_terminseite_erstellen.php", "Teamtermine", "w3-green"],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_anmelden.php", "Turnieranmeldung", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_turnier_erstellen.php", "Turnier erstellen", "w3-primary"],
