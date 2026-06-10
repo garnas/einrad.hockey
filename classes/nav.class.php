@@ -213,11 +213,11 @@ class Nav
      * Dokumente
      */
     public const LINK_MODUS = Env::BASE_URL . '/dokumente/ligamodus.pdf?version=20260123';
-    public const LINK_SCHIRI_CHECKLIST = Env::BASE_URL . '/dokumente/schiri_checkliste.pdf';
-    public const LINK_SCHIRI_LEITLINIE = Env::BASE_URL . '/dokumente/schiri_leitlinie.pdf';
+    public const LINK_SCHIRI_CHECKLIST = Env::BASE_URL . '/dokumente/schiri_checkliste.pdf?version=20230126';
+    public const LINK_SCHIRI_LEITLINIE = Env::BASE_URL . '/dokumente/schiri_leitlinie.pdf?version=20260531';
     public const LINK_SCHIRI_ABLAUF_PRAKTISCHE_PRUEFUNG = Env::BASE_URL . '/dokumente/ablauf_praktische_schiripruefung.pdf';
     public const LINK_ABZEICHEN = Env::BASE_URL . '/dokumente/einradhockey_abzeichen.pdf';
-    public const LINK_SCHLAEGERTECHNIK = Env::BASE_URL . '/dokumente/schlaegertechnik_einradhockey.pdf';
+    public const LINK_SCHLAEGERTECHNIK = Env::BASE_URL . '/dokumente/schlaegertechnik_einradhockey.pdf?version=20251001';
     public const LINK_CHECK_XLSX = Env::BASE_URL . '/dokumente/checkliste_einradhockeyturnier_fuer_ausrichter.xlsx';
     public const LINK_CHECK_PDF = Env::BASE_URL . '/dokumente/checkliste_einradhockeyturnier_fuer_ausrichter.pdf';
     public const LINK_DSGVO = Env::BASE_URL . '/dokumente/datenschutz-hinweise.pdf';
