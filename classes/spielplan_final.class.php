@@ -38,6 +38,14 @@ class spielplan_final
             Helper::reload('/liga/spielplan_24h_2026.php');
         }
 
+        if ($turnier_id == 1413 && !str_contains($_SERVER['PHP_SELF'], 'center')) {
+            Helper::reload('/liga/b_meisterschaft.php');
+        }
+
+        if ($turnier_id == 1412 && !str_contains($_SERVER['PHP_SELF'], 'center')) {
+            Helper::reload('/liga/deutsche_meisterschaft.php');
+        }
+
         if ($turnier_id == self::FINAL_B_ID) {
             if (Helper::$teamcenter) {
                 Helper::reload('/teamcenter/tc_spielplan_finale.php', '?turnier_id=' . $turnier_id);
