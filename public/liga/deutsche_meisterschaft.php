@@ -16,7 +16,7 @@ include '../../templates/header.tmp.php';
 
 <h3 class="w3-text-secondary">Spielplan zur Deutschen Meisterschaft 2026</h3>
 <p>
-    <?= HTML::link("https://docs.google.com/spreadsheets/d/e/2PACX-1vR3vFzPu8B8igO9O2ksa-WHe6U-PFPsqsuEAK_t3KC0k_NsB4eyAfdRfYji0lRGhA/pubhtml?gid=1218227795&amp;single=true&amp;widget=true&amp;headers=false",
+    <?= HTML::link("https://docs.google.com/spreadsheets/d/e/2PACX-1vQfaSM7O1sYp02dzPGz9jtMU3Zd7n0KInu8IXoTGiU90RpdzfW9e7-VnIVvADL6aQ/pubhtml?gid=96926240&amp;single=true&amp;widget=true&amp;headers=false",
         bezeichnung: "Direkter Link zum Spielplan",
         extern: true,
         icon: "launch") ?>    
@@ -32,7 +32,15 @@ include '../../templates/header.tmp.php';
 <iframe 
     style="width:100%; height:800px"
     class="w3-border-0"
-    src="https://docs.google.com/spreadsheets/d/e/2PACX-1vR3vFzPu8B8igO9O2ksa-WHe6U-PFPsqsuEAK_t3KC0k_NsB4eyAfdRfYji0lRGhA/pubhtml?gid=1218227795&amp;single=true&amp;widget=true&amp;headers=false">
+    src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQfaSM7O1sYp02dzPGz9jtMU3Zd7n0KInu8IXoTGiU90RpdzfW9e7-VnIVvADL6aQ/pubhtml?gid=96926240&amp;single=true&amp;widget=true&amp;headers=false">
 </iframe>
+
+<h3 class="w3-text-secondary">Livestream zur Deutschen Meisterschaft 2026</h3>
+<p>
+    <?= HTML::link("https://www.twitch.tv/einradhockeytv",
+        bezeichnung: "Zum Livestream",
+        extern: true,
+        icon: "launch") ?>    
+</p>
 
 <?php include '../../templates/footer.tmp.php';
