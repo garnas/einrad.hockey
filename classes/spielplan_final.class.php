@@ -58,7 +58,7 @@ class spielplan_final
             Helper::reload('/liga/spielplan_b_finale.php', '?turnier_id=' . $turnier_id);
 
         }
-        
+
         if ($turnier_id === self::FINAL_TOP_ID || $turnier_id === self::FINAL_BOTTOM_ID) {
             Helper::reload('/liga/spielplan_finale.php', '?turnier_id=' . $turnier_id);
         }
