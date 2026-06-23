@@ -5,6 +5,7 @@
 use App\Event\Turnier\nLigaBot;
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Team\FreilosService;
+use App\Service\Neuigkeit\FileService;
 
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
@@ -87,7 +88,7 @@ if (isset($_POST['spielplan_hochladen'])) {
     if (!empty($_FILES["spielplan_file"]["tmp_name"])) {
         $target_dir = "../uploads/s/spielplan/";
         // PDF wird hochgeladen, target_file_pdf = false, falls fehlgeschlagen.
-        $target_file_pdf = Neuigkeit::upload_dokument($_FILES["spielplan_file"], $target_dir);
+        $target_file_pdf = FileService::uploadPDF($_FILES["spielplan_file"], $target_dir);
         if ($target_file_pdf !== false) {
             if ($_POST['sp_or_erg'] === 'ergebnis') {
                 $turnier->upload_spielplan($target_file_pdf, 'ergebnis');
