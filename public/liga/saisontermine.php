@@ -20,31 +20,11 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 <div class="w3-responsive w3-section">
     <table class="w3-table w3-bordered">
         <tr>
-            <td class="w3-primary" colspan="2"><b>Saison 2025/2026</b></td>
-        </tr>
-        <tr>
-            <td class="w3-primary-3">Reguläre Spielzeit</td>
-            <td>16. August 2025 - 31. Mai 2026</td>
-        </tr>
-        <tr>
-            <td class="w3-primary-3">B/C-Finalwochenende</td>
-            <td>13. Juni 2026 + 14. Juni 2026</td>
-        </tr>
-        <tr>
-            <td class="w3-primary-3">Deutsche Meisterschaft</td>
-            <td>20. Juni 2026 + 21. Juni 2026</td>
-        </tr>
-    </table>
-</div>
-
-<div class="w3-responsive w3-section">
-    <table class="w3-table w3-bordered">
-        <tr>
             <td class="w3-primary" colspan="2"><b>Saison 2026/2027</b></td>
         </tr>
         <tr>
             <td class="w3-primary-3">Reguläre Spielzeit</td>
-            <td>15. August 2026 - 30. Mai 2027</td>
+            <td>15. August 2026 - 17. Mai 2027</td>
         </tr>
         <tr>
             <td class="w3-primary-3">B/C-Finalwochenende</td>
