@@ -2,7 +2,6 @@
 
 class Discord
 {
-
     private static string $webhook = Env::WEBHOOK_DISCORD;
 
     private static function body(string $message): false|string
@@ -12,7 +11,7 @@ class Discord
                 "content" => $message,
                 "username" => "DieFlotteSpeiche",
                 "avatar_url" => "https://einrad.hockey/bilder/logo_kurz_small.png",
-            ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            ], \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
         } catch (JsonException $exception) {
             Helper::log("discord.log", $exception->getMessage() . "/r/n" . $exception->getTraceAsString());
             return false;
@@ -41,17 +40,17 @@ class Discord
         $body = self::body($message);
 
         // JsonEncode Error
-        if ($body === false){
+        if ($body === false) {
             return;
         }
 
         $send = curl_init(self::$webhook);
-        curl_setopt($send, CURLOPT_HTTPHEADER, array("Content-type: application/json"));
-        curl_setopt($send, CURLOPT_POST, 1);
-        curl_setopt($send, CURLOPT_POSTFIELDS, $body);
-        curl_setopt($send, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($send, CURLOPT_HEADER, 0);
-        curl_setopt($send, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($send, \CURLOPT_HTTPHEADER, ["Content-type: application/json"]);
+        curl_setopt($send, \CURLOPT_POST, 1);
+        curl_setopt($send, \CURLOPT_POSTFIELDS, $body);
+        curl_setopt($send, \CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($send, \CURLOPT_HEADER, 0);
+        curl_setopt($send, \CURLOPT_RETURNTRANSFER, 1);
 
 
         $output = curl_exec($send);
@@ -60,7 +59,7 @@ class Discord
             Helper::log("discord.log", "Error:/r/n" . self::$webhook . "/r/n" . $body);
         }
 
-        if(!empty($output)) {
+        if (!empty($output)) {
             Helper::log("discord.log", "Error:/r/n" . $output);
         }
 
@@ -68,16 +67,17 @@ class Discord
 
     }
 
-    public static function send_with_turnier(string $message, nTurnier $turnier): void {
-            $message = "**"
-                . $turnier->get_datum()
-                . " " . $turnier->get_ort()
-                . " (" . $turnier->get_tblock() . ")"
-                . "**"
-                . " - *" . Helper::get_akteur() . "*"
-                . "\r\n"
-                . $message;
-           // self::send($message);
+    public static function send_with_turnier(string $message, nTurnier $turnier): void
+    {
+        $message = "**"
+            . $turnier->get_datum()
+            . " " . $turnier->get_ort()
+            . " (" . $turnier->get_tblock() . ")"
+            . "**"
+            . " - *" . Helper::get_akteur() . "*"
+            . "\r\n"
+            . $message;
+        // self::send($message);
     }
 
 }

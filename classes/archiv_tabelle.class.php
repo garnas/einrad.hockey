@@ -17,16 +17,16 @@ class Archiv_Tabelle extends Tabelle
      */
     public static function get_meisterschafts_tabelle_templates(int $saison = Config::SAISON): array
     {
-        return array(
-            'desktop' => array(
+        return [
+            'desktop' => [
                 'tabelle' => "templates/archiv/tabellen/desktop_mt_komplett.tmp.php",
                 'meister' => "templates/archiv/tabellen/desktop_mt_komplett.tmp.php",
-            ),
-            'mobil' => array(
+            ],
+            'mobil' => [
                 'tabelle' => "templates/archiv/tabellen/mobil_mt_komplett.tmp.php",
                 'meister' => "templates/archiv/tabellen/mobil_mt_komplett.tmp.php",
-            ),
-        );
+            ],
+        ];
     }
 
     public static function get_meisterschafts_tabelle(int $spieltag, int $saison = Config::SAISON): array
@@ -67,7 +67,7 @@ class Archiv_Tabelle extends Tabelle
                 $return[$team_id]['hat_strafe'] = false;
             }
 
-            $return[$team_id]['summe'] += $eintrag['ergebnis'];        
+            $return[$team_id]['summe'] += $eintrag['ergebnis'];
             $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
             $return[$team_id]['details'][] = $eintrag;
         }

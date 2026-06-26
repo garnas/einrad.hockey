@@ -9,7 +9,7 @@ require_once '../../logic/session_la.logic.php'; //Auth
 
 $teams = Team::get_teams();
 $max_schiris = $max_spieler = $teams_mit_zwei_schiris = $teams_zweites_freilos_erhalten = 0;
-foreach ($teams as $team_id => $team){
+foreach ($teams as $team_id => $team) {
     $genug_schiris = false;
     $kader = nSpieler::get_kader($team_id, Config::SAISON);
     $kader_alt = nSpieler::get_kader($team_id, Config::SAISON - 1) + nSpieler::get_kader($team_id, Config::SAISON - 2);
@@ -21,14 +21,16 @@ foreach ($teams as $team_id => $team){
     $teams[$team_id]['schiris'] = $teams[$team_id]['schiris_alt'] = 0;
 
     //Schiris zählen:
-    foreach ($kader as $spieler){
-        if ($spieler->schiri >= Config::SAISON){
+    foreach ($kader as $spieler) {
+        if ($spieler->schiri >= Config::SAISON) {
             $teams[$team_id]['schiris']++;
-            if ($teams[$team_id]['schiris'] >= 2){ $genug_schiris = true;}
+            if ($teams[$team_id]['schiris'] >= 2) {
+                $genug_schiris = true;
+            }
         }
     }
-    foreach ($kader_alt as $spieler){
-        if ($spieler->schiri >= Config::SAISON){
+    foreach ($kader_alt as $spieler) {
+        if ($spieler->schiri >= Config::SAISON) {
             $teams[$team_id]['schiris_alt']++;
         }
     }
@@ -36,7 +38,7 @@ foreach ($teams as $team_id => $team){
     $max_schiris += $teams[$team_id]['schiris'];
     $max_spieler += $teams[$team_id]['kader'];
 
-    if ($genug_schiris){
+    if ($genug_schiris) {
         ++$teams_mit_zwei_schiris;
     }
 }
@@ -69,15 +71,15 @@ include '../../templates/header.tmp.php';
             <th>Kader (alt)</th>
             <th>Schiris (alt)</th>
         </tr>
-        <?php foreach ($teams as $team_id => $team){?>
+        <?php foreach ($teams as $team_id => $team) {?>
             <tr class="w3-center
-                        <?php if($team["schiris"] >= 2){ ?>
+                        <?php if ($team["schiris"] >= 2) { ?>
                             w3-pale-green
-                        <?php }elseif($team['kader'] < 5){?>
+                        <?php } elseif ($team['kader'] < 5) {?>
                             w3-pale-red
                         <?php }//endif?>">
                 <td><?=$team['team_id']?></td>
-                <td><?=Html::link('lc_kader.php?team_id='. $team_id, $team['teamname'])?></td>
+                <td><?=Html::link('lc_kader.php?team_id=' . $team_id, $team['teamname'])?></td>
                 <td><?= TeamRepository::get()->team($team_id)->getOffeneFreilose()->count()?></td>
                 <td><?=$team['kader']?></td>
                 <td><?=$team['schiris']?></td>

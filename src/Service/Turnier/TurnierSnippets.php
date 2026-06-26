@@ -9,8 +9,8 @@ use App\Service\Team\TeamValidator;
 use Html;
 use Jenssegers\Date\Date;
 
-class TurnierSnippets {
-
+class TurnierSnippets
+{
     public static function status(Turnier $turnier): string
     {
         if ($turnier->isCanceled()) {
@@ -57,7 +57,7 @@ class TurnierSnippets {
 
     public static function blockColor(Turnier $turnier, nTeam $team): string
     {
-        if(
+        if (
             TeamValidator::isValidRegularAnmeldung($team, $turnier, false)
         ) {
             return "<span class='w3-text-green'>" . $turnier->getBlock() . "</span>";
@@ -151,7 +151,7 @@ class TurnierSnippets {
         return $turnier->getDatum()->format("d.m.Y");
     }
 
-    public static function wochentag(Turnier $turnier, bool $short = True): string
+    public static function wochentag(Turnier $turnier, bool $short = true): string
     {
         Date::setLocale('de');
 
@@ -169,7 +169,7 @@ class TurnierSnippets {
 
     public static function translate(string $begriff): string
     {
-        return match($begriff) {
+        return match ($begriff) {
             "warteliste" => "Warteliste",
             "setzliste" => "Setzliste",
             "warte" => "Wartephase",
@@ -180,7 +180,7 @@ class TurnierSnippets {
             "II" => "Blockhöheres Turnier (II)",
             "final" => "Abschlussturnier",
             "spass" => "Nichtligaturnier",
-            default => e($begriff)
+            default => e($begriff),
         };
     }
 
@@ -190,7 +190,8 @@ class TurnierSnippets {
         $handyNumbers = preg_replace('/[^0-9.]+/', '', $handy);
         return Html::link(
             'tel:' . str_replace(' ', '', $handyNumbers),
-            $handy, icon:"smartphone"
+            $handy,
+            icon: "smartphone",
         );
     }
 

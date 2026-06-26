@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: "teams_strafen", uniqueConstraints: [new ORM\UniqueConstraint(name: "teamname", columns: ["teamname"])])]
 class Strafe
 {
-
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Id]
     #[ORM\Column(name: "strafe_id", type: "integer", nullable: false)]
@@ -47,7 +46,7 @@ class Strafe
      * @param int $strafeId
      * @return Strafe
      */
-    public function setStrafeId(int $strafeId): Strafe
+    public function setStrafeId(int $strafeId): self
     {
         $this->strafeId = $strafeId;
         return $this;
@@ -78,7 +77,7 @@ class Strafe
      * @param string|null $verwarnung
      * @return Strafe
      */
-    public function setVerwarnung(?string $verwarnung): Strafe
+    public function setVerwarnung(?string $verwarnung): self
     {
         $this->verwarnung = $verwarnung;
         return $this;
@@ -96,7 +95,7 @@ class Strafe
      * @param string $grund
      * @return Strafe
      */
-    public function setGrund(string $grund): Strafe
+    public function setGrund(string $grund): self
     {
         $this->grund = $grund;
         return $this;
@@ -114,7 +113,7 @@ class Strafe
      * @param string|null $prozentsatz
      * @return Strafe
      */
-    public function setProzentsatz(?string $prozentsatz): Strafe
+    public function setProzentsatz(?string $prozentsatz): self
     {
         $this->prozentsatz = $prozentsatz;
         return $this;
@@ -132,7 +131,7 @@ class Strafe
      * @param int $saison
      * @return Strafe
      */
-    public function setSaison(int $saison): Strafe
+    public function setSaison(int $saison): self
     {
         $this->saison = $saison;
         return $this;
@@ -150,7 +149,7 @@ class Strafe
      * @param nTeam $team
      * @return Strafe
      */
-    public function setTeam(nTeam $team): Strafe
+    public function setTeam(nTeam $team): self
     {
         $this->team = $team;
         return $this;
@@ -168,7 +167,7 @@ class Strafe
      * @param Turnier|null $turnier
      * @return Strafe
      */
-    public function setTurnier(?Turnier $turnier): Strafe
+    public function setTurnier(?Turnier $turnier): self
     {
         $this->turnier = $turnier;
         return $this;

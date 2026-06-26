@@ -31,7 +31,9 @@ foreach ($spiele as $key => $spiel) {
 }
 
 // Values in String casten, für Xml-Erstellung
-array_walk_recursive($spiele, static function (&$value) { $value = (string)$value; });
+array_walk_recursive($spiele, static function (&$value) {
+    $value = (string) $value;
+});
 
 // Array als XML ausgeben
 $spiele = ArrayToXml::convert(
@@ -41,7 +43,7 @@ $spiele = ArrayToXml::convert(
     'UTF-8',
     '1.0',
     [],
-    null
+    null,
 );
 
 header('Content-type: text/xml');

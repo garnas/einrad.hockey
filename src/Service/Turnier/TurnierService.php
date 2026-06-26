@@ -16,7 +16,6 @@ use Jenssegers\Date\Date;
 
 class TurnierService
 {
-
     public static function isAusrichter(Turnier $turnier, int $teamId): bool
     {
         return $turnier->getAusrichter()->id() === $teamId;
@@ -40,7 +39,7 @@ class TurnierService
 
     public static function isLosen(Turnier $turnier): bool
     {
-        if (!$turnier->isWartePhase()){
+        if (!$turnier->isWartePhase()) {
             return false;
         }
         return $turnier->getDetails()->getPlaetze() < self::getAnzahlAngemeldeteTeams($turnier);
@@ -98,18 +97,18 @@ class TurnierService
         $turnier_datum = DateTimeImmutable::createFromMutable($turnier->getDatum());
 
         $datum_warte_zu_setzphase = $turnier_datum->modify('-4 weeks');
-        $tag = (int)$datum_warte_zu_setzphase->format('N'); // Numerische Zahl des Wochentages 1-7
+        $tag = (int) $datum_warte_zu_setzphase->format('N'); // Numerische Zahl des Wochentages 1-7
 
         # Findet das Turnier am Mittwoch oder später statt, wird es dem nächsten Wochenende zugeordnet
         # Mi == 3 -> hochrechnen auf nächsten Samstag also +(6-3) Tage
         if ($tag >= 3) {
-            $delta = (string)(6 - $tag);
-            return (int)$datum_warte_zu_setzphase->modify("+$delta days")->format("U");
+            $delta = (string) (6 - $tag);
+            return (int) $datum_warte_zu_setzphase->modify("+$delta days")->format("U");
         }
         # Findet das Turnier am Montag oder Dienstag statt, wird es dem vorherigen Wochenende zugeordnet
         # Di == 2 -> herunterrechnen auf letzten Samstag also -(2+1) Tage
-        $delta = (string)(1 + $tag);
-        return (int)$datum_warte_zu_setzphase->modify("-$delta days")->format("U");
+        $delta = (string) (1 + $tag);
+        return (int) $datum_warte_zu_setzphase->modify("-$delta days")->format("U");
     }
 
     public static function getLosDatum(Turnier $turnier): string
@@ -149,22 +148,22 @@ class TurnierService
             ->setListe('setzliste')
             ->setTurnier($turnier)
             ->setFreilosGesetzt('Nein');
-         $turnier->getListe()->add($anmeldung);
-         $turnier->getLogService()->addLog("Auf Setzliste: " . $team->getName() . " " . BlockService::toString($team));
+        $turnier->getListe()->add($anmeldung);
+        $turnier->getLogService()->addLog("Auf Setzliste: " . $team->getName() . " " . BlockService::toString($team));
     }
 
     public static function nlAnmelden(Turnier $turnier, nTeam $nlTeam, string $liste): void
     {
-            if($nlTeam->isLigaTeam()) {
-                trigger_error("Ligateam soll als NL-Team angemeldet werden", E_USER_ERROR);
-            }
-            if ($liste === "warteliste") {
-                self::addToWarteListe($turnier, $nlTeam);
-            } elseif ($liste === "setzliste") {
-                self::addToSetzListe($turnier, $nlTeam);
-            } else {
-                trigger_error("Falsche Liste", E_USER_ERROR);
-            }
+        if ($nlTeam->isLigaTeam()) {
+            trigger_error("Ligateam soll als NL-Team angemeldet werden", \E_USER_ERROR);
+        }
+        if ($liste === "warteliste") {
+            self::addToWarteListe($turnier, $nlTeam);
+        } elseif ($liste === "setzliste") {
+            self::addToSetzListe($turnier, $nlTeam);
+        } else {
+            trigger_error("Falsche Liste", \E_USER_ERROR);
+        }
     }
 
     public static function addToWarteListe(Turnier $turnier, nTeam $team): void
@@ -181,9 +180,9 @@ class TurnierService
         $turnier->getListe()->add($anmeldung);
         $turnier->getLogService()->addLog(
             "Auf Warteliste: "
-            .  ($positionWarteliste ? $positionWarteliste . ". " : "")
+            . ($positionWarteliste ? $positionWarteliste . ". " : "")
             . $team->getName()
-            . " " . BlockService::toString($team)
+            . " " . BlockService::toString($team),
         );
     }
 
@@ -243,7 +242,7 @@ class TurnierService
 
     public static function getAnzahlWartelisteTeams(Turnier $turnier): int
     {
-        return count(self::getWarteliste($turnier));
+        return \count(self::getWarteliste($turnier));
     }
 
     public static function erweitereBlockHoch(Turnier $turnier): void
@@ -269,7 +268,7 @@ class TurnierService
     {
         $plaetze = $turnier->getDetails()->getPlaetze();
         $aufSetzListe = self::getAnzahlGesetzteTeams($turnier);
-        return max(0,  $plaetze - $aufSetzListe);
+        return max(0, $plaetze - $aufSetzListe);
     }
 
 

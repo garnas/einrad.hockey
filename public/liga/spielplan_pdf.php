@@ -1,4 +1,5 @@
 <?php
+
 require_once '../../init.php'; // Autoloader und Session
 require_once '../../logic/spielplan.logic.php'; // Erstellt Spielplanobjekt nach Validation
 
@@ -22,15 +23,15 @@ include '../../templates/spielplan/spielplan_titel.tmp.php';
 include '../../templates/spielplan/spielplan_teamliste.tmp.php';
 include '../../templates/spielplan/spielplan_spiele.tmp.php';
 
-$html = 
-    '<html>
+$html
+    = '<html>
         <head>
             <meta charset="UTF-8">
             <link rel="shortcut icon" href="../bilder/favicon/favicon.png">
-        </head>' 
-        .ob_get_clean() 
-    .'</html>';
-$html = str_replace('<br>','', $html);
+        </head>'
+        . ob_get_clean()
+    . '</html>';
+$html = str_replace('<br>', '', $html);
 
 // PDF-Erstellung
 $mpdf = MPDF::load_mpdf(); // Erstellt ein MPDF-Objekt aus dem Framework
@@ -42,13 +43,13 @@ $mpdf->SetHTMLHeader('<img src="../bilder/logo_lang_small.png" style="margin-top
 $mpdf->SetHTMLFooter(
     '<table style="width: 100%">
         <tr>
-            <td>' . Html::link('https://www.einrad.hockey/liga/spielplan?turnier_id=' . $turnier_id,'www.einrad.hockey').'</td>
-            <td class="w3-right-align">'.date("d.m.Y").'</td>
+            <td>' . Html::link('https://www.einrad.hockey/liga/spielplan?turnier_id=' . $turnier_id, 'www.einrad.hockey') . '</td>
+            <td class="w3-right-align">' . date("d.m.Y") . '</td>
         </tr>
-    </table>'
+    </table>',
 );
-$mpdf->WriteHTML($css_style,\Mpdf\HTMLParserMode::HEADER_CSS);
-$mpdf->WriteHTML($html,\Mpdf\HTMLParserMode::HTML_BODY);
+$mpdf->WriteHTML($css_style, \Mpdf\HTMLParserMode::HEADER_CSS);
+$mpdf->WriteHTML($html, \Mpdf\HTMLParserMode::HTML_BODY);
 
 // Output - Otpion 'D' für Download, 'I' für im Browser anzeigen
-$mpdf->Output('Spielplan '. $spielplan->turnier->get_ort() . '.pdf', 'I');
+$mpdf->Output('Spielplan ' . $spielplan->turnier->get_ort() . '.pdf', 'I');

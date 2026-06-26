@@ -10,18 +10,18 @@ use App\Service\Turnier\TurnierSnippets;
     <?= TurnierSnippets::ortDatumBlock($turnier) ?>
 </h1>
 <h2 class="w3-text-grey">
-    <?= Html::icon('article', tag:'h2') ?> Turnier-Report
+    <?= Html::icon('article', tag: 'h2') ?> Turnier-Report
 </h2>
 <?php Html::message('notice',
-            "Der Turnierreport ist nur von teilnehmenden Ligateams und dem Ligaausschuss einsehbar.",
-            "") ?>
+    "Der Turnierreport ist nur von teilnehmenden Ligateams und dem Ligaausschuss einsehbar.",
+    "") ?>
 <!-- Link Spielplan -->
 <p><?=Html::link('../liga/spielplan.php?turnier_id=' . $turnier->id(), 'Zum Spielplan', icon: "reorder")?></p>
 <?php $turnier_datum = DateTimeImmutable::createFromMutable($turnier->getDatum());
 if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
     <!-- Ausbilder -->
     <?php if (!empty($ausbilder_liste)): ?>
-        <h2 class="w3-text-primary"><?= Html::icon('school', tag:'h2') ?> Schiedsrichter-Prüfende</h2>
+        <h2 class="w3-text-primary"><?= Html::icon('school', tag: 'h2') ?> Schiedsrichter-Prüfende</h2>
         <ul class='w3-ul w3-margin-left w3-leftbar w3-border-tertiary'>
             <?php foreach ($ausbilder_liste as $spieler): ?>
                 <li><?= $spieler->getName(fullName: false) ?> (<i><?=$spieler->getTeam()->getName()?></i>)</li>
@@ -30,17 +30,17 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
     <?php endif; ?>
 
     <!-- Kader -->
-    <h2 class="w3-text-primary"><?= Html::icon('groups', tag:'h2') ?> Kader und Schiedsrichter</h2>
+    <h2 class="w3-text-primary"><?= Html::icon('groups', tag: 'h2') ?> Kader und Schiedsrichter</h2>
     <ul class='w3-ul w3-margin-left w3-leftbar w3-border-primary'>
         <?php foreach ($kader_array as $team_id => $kader): ?>
             <li class="w3-hover-primary" style="cursor: pointer;" onclick="openTab('<?=$team_id?>')">
-                <?= Html::icon('launch', class:'w3-text-tertiary') ?> <?=Team::id_to_name($team_id)?>
+                <?= Html::icon('launch', class: 'w3-text-tertiary') ?> <?=Team::id_to_name($team_id)?>
             </li>
         <?php endforeach; ?>
     </ul>
     <?php foreach ($kader_array as $team_id => $kader): ?>
         <div id="<?=$team_id?>" class="tab" style="display:none; max-width: 600px">
-            <?php if(!empty($kader)): ?>
+            <?php if (!empty($kader)): ?>
                 <h3><?=Team::id_to_name($team_id)?></h3>
                 <div class="w3-responsive w3-card">
                     <table class="w3-table w3-striped">
@@ -67,7 +67,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                     <sup>*</sup>Schirilizenz ist gültig bis inkl. der angezeigten Saison
                 </span>
             <?php endif; ?>
-            <?php if(!Team::is_ligateam($team_id)): ?>
+            <?php if (!Team::is_ligateam($team_id)): ?>
                 <p class="w3-text-grey">
                     Nichtligateams haben keinen zugewiesenen Kader.
                 </p>
@@ -78,15 +78,15 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
 
 <!-- Spielerausleihe -->
 <h2 class="w3-text-primary">
-    <?= Html::icon('accessibility', tag:'h2') ?>Spielerausleihe</h2>
-<?php if(!empty($spieler_ausleihen)): ?>
+    <?= Html::icon('accessibility', tag: 'h2') ?>Spielerausleihe</h2>
+<?php if (!empty($spieler_ausleihen)): ?>
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped w3-centered">
             <tr class="w3-primary">
                 <th><?= Html::icon("account_circle") ?> Spieler</th>
                 <th><?= Html::icon("add") ?> Aufnehmendes Team</th>
                 <th><?= Html::icon("remove") ?> Abgebendes Team</th>
-                <?php if($change_tbericht): ?>
+                <?php if ($change_tbericht): ?>
                     <th>Löschen</th>
                 <?php endif; ?>
             </tr>
@@ -95,7 +95,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                     <td><?=$ausleihe['spieler']?></td>
                     <td><?=$ausleihe['team_auf']?></td>
                     <td><?=$ausleihe['team_ab']?></td>
-                    <?php if($change_tbericht): ?>
+                    <?php if ($change_tbericht): ?>
                         <td>
                             <form method="post">
                                 <button type="submit"
@@ -115,7 +115,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
 <?php endif; ?>
 
 <!-- Spielerausleihe hinzufügen -->
-<?php if($change_tbericht): ?> 
+<?php if ($change_tbericht): ?> 
     <button onclick="document.getElementById('modal_ausleihe').style.display='block'"
             class="w3-section w3-button w3-tertiary">
         <?= Html::icon("save_alt") ?> Spielerausleihe hinzufügen
@@ -143,7 +143,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                         class="w3-select w3-input w3-border w3-border-primary"
                 >
                     <option selected disabled>--</option>
-                    <?php foreach($teams as $team): ?>
+                    <?php foreach ($teams as $team): ?>
                         <option><?=$team->getName()?></option>
                     <?php endforeach; ?>
                 </select>
@@ -161,19 +161,19 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
 <?php endif; ?>
 
 <!-- Zeitstrafen -->
-<h2 class="w3-text-primary"><?= Html::icon('schedule', tag:'h2') ?> Zeitstrafen</h2>
+<h2 class="w3-text-primary"><?= Html::icon('schedule', tag: 'h2') ?> Zeitstrafen</h2>
 <span class="w3-text-grey">
     Auffällige Situationen oder zerstrittene Spiele sollten auch immer dem Ligaausschuss gemeldet werden. Dieser kann
     mit den Teams reden und dafür sorgen, dass zukünftig ausgewählte Schiedsrichter die Begegnung pfeifen.
 </span>
-<?php if(!empty($zeitstrafen)): ?>
+<?php if (!empty($zeitstrafen)): ?>
     <div class="w3-responsive w3-card">
         <table class="w3-table w3-striped w3-centered">
             <tr class="w3-primary">
                 <th><?= Html::icon("account_circle") ?> Spieler</th>
                 <th><?= Html::icon("schedule") ?> Dauer</th>
                 <th><?= Html::icon("sports_hockey") ?> Spielpaarung</th>
-                <?php if($change_tbericht): ?>
+                <?php if ($change_tbericht): ?>
                     <th>Löschen</th>
                 <?php endif; ?>
             </tr>
@@ -208,7 +208,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
 <?php endif; ?>
 
 <!-- Zeitstrafe hinzufügen -->
-<?php if($change_tbericht): ?>
+<?php if ($change_tbericht): ?>
     <button onclick="document.getElementById('modal_zeitstrafe').style.display='block'"
             class="w3-section w3-button w3-tertiary">
         <?= Html::icon("save_alt") ?> Zeitstrafe hinzufügen
@@ -272,8 +272,8 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
 <?php endif; ?>
 
 <!-- Turnierbericht -->
-<h2 class="w3-text-primary"><?= Html::icon('info', tag:'h2') ?> Turnierbericht</h2>
-<?php if($change_tbericht): ?>
+<h2 class="w3-text-primary"><?= Html::icon('info', tag: 'h2') ?> Turnierbericht</h2>
+<?php if ($change_tbericht): ?>
     <form method="post">
         <p>
             <input <?= $tbericht->kader_check() ? 'checked' : '' ?>

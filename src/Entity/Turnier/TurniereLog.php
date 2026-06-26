@@ -7,11 +7,9 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: "turniere_log", indexes: [new ORM\Index(name: "turnier_id", columns: ["turnier_id"])])
-]
+#[ORM\Table(name: "turniere_log", indexes: [new ORM\Index(name: "turnier_id", columns: ["turnier_id"])])]
 class TurniereLog
 {
-
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Id]
     #[ORM\Column(name: "turnier_log_id", type: "integer", nullable: false)]
@@ -38,7 +36,7 @@ class TurniereLog
         return $this->turnier;
     }
 
-    public function setTurnier(Turnier $turnier): TurniereLog
+    public function setTurnier(Turnier $turnier): self
     {
         $this->turnier = $turnier;
         return $this;

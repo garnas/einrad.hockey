@@ -1,4 +1,5 @@
 <?php
+
 // BCC Grenze
 $grenze_bcc = Config::BCC_GRENZE;
 
@@ -23,12 +24,12 @@ if (Helper::$ligacenter) {
 
 // Emails zurücksetzen
 if (isset($_POST['reset'])) {
-    unset ($_SESSION[$list_id]);
+    unset($_SESSION[$list_id]);
 }
 
 //Turnier wurde ausgewählt
 if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
-    unset ($_SESSION[$list_id]);
+    unset($_SESSION[$list_id]);
     $turnier = nTurnier::get((int) $_POST['turnier_id']);
     if (empty($turnier->get_turnier_id())) {
         Html::error("Turnier wurde nicht gefunden");
@@ -50,7 +51,7 @@ if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
 
 // Rundmail wurde ausgewählt
 if (isset($_POST['rundmail'])) {
-    unset ($_SESSION[$list_id]);
+    unset($_SESSION[$list_id]);
     $_SESSION[$list_id]['type'] = 'Rundmail';
     $_SESSION[$list_id]['empfaenger'] = Team::get_liste();
     $_SESSION[$list_id]['emails'] = Kontakt::get_emails_rundmail();
@@ -61,7 +62,7 @@ if (isset($_POST['rundmail'])) {
 
 // Teams wurden ausgewählt
 if (isset($_POST['teams_emails'])) {
-    unset ($_SESSION[$list_id]);
+    unset($_SESSION[$list_id]);
     $_SESSION[$list_id]['type'] = 'Teamauswahl';
 
     $emails = $teamnamen = [];
@@ -169,7 +170,7 @@ if (isset($_SESSION[$list_id])) {
 if (Helper::$ligacenter) {
     $las = Ligaleitung::get_all('ligaausschuss');
     $signatur = "\r\n\r\n\r\nDein Ligaausschuss\r\n--\r\n";
-    foreach ($las as $la){
+    foreach ($las as $la) {
         $signatur .= $la['vorname'] . ' ' . $la['nachname']
             . (!empty($la['teamname']) ? ' (' . $la['teamname'] . ')' : '') . "\r\n";
     }

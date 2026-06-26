@@ -48,13 +48,13 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
             </tr>
             <?php foreach ($logs as $log) { ?>
                 <tr class="row">
-                    <td style="white-space: pre;"><?= date("d.m.Y (D)- H:i:s",strtotime($log['zeit'])) ?></td>
+                    <td style="white-space: pre;"><?= date("d.m.Y (D)- H:i:s", strtotime($log['zeit'])) ?></td>
                     <td><?= $log['turnier_id'] ?></td>
                     <td style="white-space: pre;"><?= $log['log_text'] ?></td>
                     <td><?= $log['autor'] ?></td>
                 </tr>
             <?php } //end forach
-            ?>
+?>
         </table>
     </div>
 </div>

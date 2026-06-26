@@ -1,4 +1,5 @@
 <?php
+
 require_once '../../init.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -32,8 +33,8 @@ $header = [
         "anzahl_spielend",
         "ausrichter_id",
         "teamname",
-        "plaetze"
-    ]
+        "plaetze",
+    ],
 ];
 
 $auswertung = $header;
@@ -52,7 +53,7 @@ foreach ($result as $row) {
         $anzahl_teams($row["turnier_id"]),
         $row["team_id"],
         $row["teamname"],
-        $row["plaetze"]
+        $row["plaetze"],
     ];
 }
 

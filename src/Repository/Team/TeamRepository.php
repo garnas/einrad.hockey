@@ -16,7 +16,6 @@ use Doctrine\ORM\EntityRepository;
 
 class TeamRepository
 {
-
     use TraitSingletonRepository;
 
     private EntityRepository $team;
@@ -59,7 +58,7 @@ class TeamRepository
             ->setParameter('ausrichter', $team)
         ;
 
-        $sort = static function(Turnier $turnier) {
+        $sort = static function (Turnier $turnier) {
             if ($turnier->isCanceled()) {
                 return 1;
             }
@@ -99,7 +98,7 @@ class TeamRepository
     {
         $freilos = $this->freilos->find($id);
         if ($freilos->getTeam()->id() != $team->id()) {
-            trigger_error("Freilos löschen fehlgeschlagen", E_USER_ERROR);
+            trigger_error("Freilos löschen fehlgeschlagen", \E_USER_ERROR);
         }
         DoctrineWrapper::manager()->remove($freilos);
         DoctrineWrapper::manager()->flush();

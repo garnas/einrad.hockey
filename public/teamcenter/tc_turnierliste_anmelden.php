@@ -16,10 +16,10 @@ $team_id = $_SESSION['logins']['team']['id'];
 $turniere = TurnierRepository::getKommendeTurniere();
 
 if ($turniere->isEmpty()) {
-  Html::notice(
-    'Zurzeit sind keine Turniere ausgeschrieben.',
-    esc: false
-  );
+    Html::notice(
+        'Zurzeit sind keine Turniere ausgeschrieben.',
+        esc: false,
+    );
 }
 
 // Einfärben wenn schon angemeldet

@@ -23,7 +23,7 @@ class TeamSnippets
     public static function freilose(nTeam $team): string
     {
         $freilose = $team->getGueltigeFreilose()->toArray();
-        usort($freilose, static function(Freilos $a, Freilos $b) {
+        usort($freilose, static function (Freilos $a, Freilos $b) {
             if ($a->getSaison() == $b->getSaison()) {
                 return $b->getErstelltAm() <=> $a->getErstelltAm();
             }
@@ -54,7 +54,7 @@ class TeamSnippets
                 $html .= "<span class='w3-text-grey'>";
                 $html .= "<br>Gesetzt am " . $freilos->getGesetztAm()->format("d.m.Y");
                 $turnier = $freilos->getTurnier();
-                $html .= " für " .TurnierSnippets::ortDatumBlock(turnier: $turnier, html: false);
+                $html .= " für " . TurnierSnippets::ortDatumBlock(turnier: $turnier, html: false);
                 $html .= "</span>";
             }
             if ($freilos->isGesetzt() && FreilosService::validateFreilosRecycling($freilos)) {

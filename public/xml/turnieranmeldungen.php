@@ -1,4 +1,5 @@
 <?php
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -10,7 +11,7 @@ Helper::$log_user = false; // Keine User-Logs
 $turnieranmeldungen = nTurnier::get_all_anmeldungen();
 
 $xml = new SimpleXMLElement('<turnieranmeldungen/>');
-$xml_content = xml::array_to_xml($turnieranmeldungen,$xml,"meldungen","team");
+$xml_content = xml::array_to_xml($turnieranmeldungen, $xml, "meldungen", "team");
 
 header('Content-type: text/xml');
 echo $xml_content;

@@ -17,7 +17,7 @@ class TurnierServiceTest extends TestCase
 
         $this->assertEquals(
             expected: "ABCDEF",
-            actual: $turnier->getBlock()
+            actual: $turnier->getBlock(),
         );
     }
 
@@ -30,7 +30,7 @@ class TurnierServiceTest extends TestCase
 
         $this->assertEquals(
             expected: "ABC",
-            actual: $turnier->getBlock()
+            actual: $turnier->getBlock(),
         );
     }
 
@@ -43,7 +43,7 @@ class TurnierServiceTest extends TestCase
 
         $this->assertEquals(
             expected: "ABCD",
-            actual: $turnier->getBlock()
+            actual: $turnier->getBlock(),
         );
     }
 }

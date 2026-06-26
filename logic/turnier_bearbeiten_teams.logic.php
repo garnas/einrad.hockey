@@ -5,7 +5,6 @@ use App\Repository\Turnier\TurnierRepository;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierValidatorService;
 
-
 // Block erweitern
 
 // Um den nächsten höheren Buchstaben erweitern
@@ -101,7 +100,7 @@ if (isset($_POST['change_turnier'])) {
         ->setOrganisator($organisator)
         ->setHandy($handy)
         ->setHinweis($hinweis)
-        ;
+    ;
 
     if (
         TurnierValidatorService::onChange($turnier)

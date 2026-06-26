@@ -2,24 +2,60 @@
 
 class Stats
 {
-    /**
-     * Anzahl der Spieler in der Datenbank
-     *
-     * Zählt die Spieler welche in der angegebenen Saison im Kader waren
-     * 
-     * @param int saison
-     * @return int
-     */
-    public static function get_spieler_anzahl(int $saison = Config::SAISON): int
+    public static function persist_spieler_statistik(): void
     {
         $sql = "
-                SELECT count(*) 
-                FROM spieler 
-                WHERE letzte_saison >= ?
-                AND team_id IS NOT NULL
-                ";
-        return db::$db->query($sql, $saison - 1 )->fetch_one() ?? 0;
+            INSERT INTO `spieler_statistik` (`id`, `date`, `saison`, `geschlecht`, `anzahl`)
+            SELECT NULL, current_timestamp() as date, max(letzte_saison) as saison, geschlecht, count(*) as anzahl
+            FROM spieler
+            WHERE letzte_saison >= ?
+            AND team_id IS NOT NULL
+            GROUP BY geschlecht;
+        ";
+
+        db::$db->query($sql, Config::SAISON)->log();
     }
+    /**
+     * Anzahl der Spieler zu unterschiedlichen Stichtagen im aktuellen Jahr
+     *
+     *
+     * @param int|null $time
+     * @return array
+     */
+    public static function get_aktuelle_spieler_anzahl(?int $time = null): array
+    {
+        // $time parameter for unit testing
+        if ($time === null) {
+            $time = time();
+        }
+        $year = date('Y', $time);
+        $cutoff = [
+            "$year-06-30 23:59:59",
+            "$year-01-31 23:59:59",
+            ($year - 1) . "-06-30 23:59:59",
+        ];
+
+        foreach ($cutoff as $c) {
+            if (($cs = strtotime($c)) <= $time) {
+                $lastCutoff = $cs;
+                break;
+            }
+        }
+
+        $sql = "
+                SELECT SUM(anzahl) 
+                FROM spieler_statistik
+                WHERE date = (
+                    SELECT max(date) 
+                    FROM spieler_statistik 
+                    WHERE date <= ?
+                );
+                ";
+
+        $number = db::$db->query($sql, date('Y-m-d H:i:s', $lastCutoff))->fetch_one() ?? 0;
+        return ['cutoff' => date('d.m.Y', $lastCutoff), 'number' => $number];
+    }
+
 
     /**
      * Anzahl der gültigen Schiedsrichter in aktiven Teams
@@ -39,7 +75,7 @@ class Stats
                 ";
         return db::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
     }
-    
+
     /**
      * Gibt alle gefallenen Tore inklusive Penaltys einer Saison aus.
      *
@@ -78,7 +114,7 @@ class Stats
         ";
         return db::$db->query($sql, $saison)->esc()->fetch_one() ?? 0;
     }
-    
+
     /**
      * Gespielte Minuten
      *
@@ -128,9 +164,9 @@ class Stats
             ORDER BY gespielt desc, rand()
             LIMIT ?
         ";
-        
+
         $teams = db::$db->query($sql, $saison, $limit)->esc()->fetch();
-        
+
         $rang = 1;
         $vorher_rang = 1;
         $vorher_anz = 0;
@@ -147,11 +183,11 @@ class Stats
         }
 
         return $teams;
-    }    
+    }
 
     /**
      * Gewonnene Spiele pro Team
-     * 
+     *
      * @param int $saison
      * @param int $limit
      * @return array
@@ -247,7 +283,7 @@ class Stats
         ";
 
         $teams = db::$db->query($sql, $saison, $limit)->esc()->fetch();
-        
+
         $rang = 1;
         $vorher_rang = 1;
         $vorher_anz = 0;
@@ -274,7 +310,7 @@ class Stats
      * @return array
      */
     public static function get_max_turnierorte(int $saison = Config::SAISON, int $limit = 999): array
-    {   
+    {
         $sql = "
             SELECT turniere_details.ort, COUNT(*) AS anzahl
             FROM turniere_liga
@@ -288,7 +324,7 @@ class Stats
         ";
 
         $orte = db::$db->query($sql, $saison, $limit)->esc()->fetch();
-        
+
         $rang = 1;
         $vorher_rang = 1;
         $vorher_anz = 0;
@@ -306,4 +342,5 @@ class Stats
 
         return $orte;
     }
+
 }

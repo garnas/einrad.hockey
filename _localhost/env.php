@@ -18,27 +18,27 @@ class env
      * Außerdem werden bei true Fehler im Browser fürs Debugging angezeigt.
      * Siehe _localhost/nur_localhost.php und /init.php.
      */
-     public const IS_LOCALHOST = true;
+    public const IS_LOCALHOST = true;
 
     /**
      * Webadresse für Verlinkungen, unabhängig der Ordnerstruktur.
      * Auf dem Server ist der public-Ordner mit der Domain verknüpft.
      */
-    public const BASE_URL = 'http://localhost/einrad.hockey/public';
+    public const BASE_URL = 'http://localhost';
 
     /**
      * Basispfad für includes, requires
      * Root-Pfad von deinem System in den Ordner dieser Datei
      */
-    public const BASE_PATH = __DIR__;
+    public const BASE_PATH = __DIR__ . "/..";
 
     /**
      * SQL-Datenbank Zugangsdaten
      */
-    public const HOST_NAME = 'localhost';
+    public const HOST_NAME = 'db';
     public const DATABASE = 'db_localhost';
     public const USER_NAME = 'root';
-    public const PASSWORD = '';
+    public const PASSWORD = 'root';
 
     /**
      * Mailserver
@@ -79,4 +79,6 @@ class env
     public const LINK_DISCORD = "https://discord.gg/jQrFefqz";
 
     public const ACTIVE_FINAL_DISCORD = true;
+
+    public const ABSTIMMUNG_KEY = "asdfsdfasfdasdfa";
 }

@@ -3,7 +3,7 @@
 // Diese Datei schaltet bei Aufruf die Seite im Wartungsmodus für den jeweiligen Nutzer frei.
 require_once '../env.php';
 
-if(!Env::WARTUNGSMODUS) {
+if (!Env::WARTUNGSMODUS) {
     die("Nicht im Wartungsmodus");
 }
 session_start();

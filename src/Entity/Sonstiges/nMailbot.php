@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: "mailbot")]
 #[ORM\Entity] class nMailbot
 {
-
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Column(name: "mail_id", type: "integer", nullable: false)]
@@ -30,7 +29,7 @@ use Doctrine\ORM\Mapping as ORM;
     private string $mailStatus;
 
     #[ORM\Column(name: "fehler", type: "string", length: 300, nullable: true)]
-    private ?string $fehler = NULL;
+    private ?string $fehler = null;
 
     #[ORM\Column(name: "zeit", type: "datetime", nullable: false, options: ["default" => "CURRENT_TIMESTAMP"])]
     private DateTime $zeit;

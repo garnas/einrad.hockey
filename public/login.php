@@ -22,7 +22,7 @@ if (isset($_POST['login'])) {
         $error = true;
         Html::error("Bitte beide Felder ausfüllen");
     }
-    
+
     // Login Check
     if (!$error && LigaLeitung::login($login, $passwort, 'ligaausschuss')) {
         if (isset($_SESSION['lc_redirect'], $_GET['redirect'])) {

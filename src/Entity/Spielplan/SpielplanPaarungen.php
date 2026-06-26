@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: "spielplan_paarungen")]
 class SpielplanPaarungen
 {
-
     /**
      * Hinweise zur ManyToMany-Beziehung in SpielplanDetails::class
      */
@@ -39,7 +38,7 @@ class SpielplanPaarungen
         return $this->spielplanPaarung;
     }
 
-    public function setSpielplanPaarung(string $spielplanPaarung): SpielplanPaarungen
+    public function setSpielplanPaarung(string $spielplanPaarung): self
     {
         $this->spielplanPaarung = $spielplanPaarung;
         return $this;
@@ -50,7 +49,7 @@ class SpielplanPaarungen
         return $this->spielId;
     }
 
-    public function setSpielId(int $spielId): SpielplanPaarungen
+    public function setSpielId(int $spielId): self
     {
         $this->spielId = $spielId;
         return $this;
@@ -61,7 +60,7 @@ class SpielplanPaarungen
         return $this->teamA;
     }
 
-    public function setTeamA(bool $teamA): SpielplanPaarungen
+    public function setTeamA(bool $teamA): self
     {
         $this->teamA = $teamA;
         return $this;
@@ -72,7 +71,7 @@ class SpielplanPaarungen
         return $this->teamB;
     }
 
-    public function setTeamB(int $teamB): SpielplanPaarungen
+    public function setTeamB(int $teamB): self
     {
         $this->teamB = $teamB;
         return $this;
@@ -83,7 +82,7 @@ class SpielplanPaarungen
         return $this->schiriA;
     }
 
-    public function setSchiriA(int $schiriA): SpielplanPaarungen
+    public function setSchiriA(int $schiriA): self
     {
         $this->schiriA = $schiriA;
         return $this;
@@ -94,7 +93,7 @@ class SpielplanPaarungen
         return $this->schiriB;
     }
 
-    public function setSchiriB(int $schiriB): SpielplanPaarungen
+    public function setSchiriB(int $schiriB): self
     {
         $this->schiriB = $schiriB;
         return $this;

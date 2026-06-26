@@ -1,4 +1,5 @@
 <?php
+
 require_once '../../init.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -28,8 +29,8 @@ $header = [
         "teamname",
         "plz",
         "ort",
-        "verein"
-    ]
+        "verein",
+    ],
 ];
 
 $auswertung = $header;

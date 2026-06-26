@@ -37,7 +37,7 @@ include '../../templates/header.tmp.php';
         <div class="w3-quarter w3-padding-8"><?=TurnierSnippets::datum($turnier)?></div>
         <div class="w3-quarter w3-padding-8"><?=$turnier->getDetails()->getOrt()?></div>
         <div class="w3-quarter w3-padding-8"><?=$turnier->getBlock()?></div>
-        <div class="w3-quarter w3-padding-8"><?=Html::link("../teamcenter/tc_turnier_report.php?turnier_id=" . $turnier->id(), 'Turnierreport', icon:'')?></div>
+        <div class="w3-quarter w3-padding-8"><?=Html::link("../teamcenter/tc_turnier_report.php?turnier_id=" . $turnier->id(), 'Turnierreport', icon: '')?></div>
     </div>
 <?php endforeach; ?>
 

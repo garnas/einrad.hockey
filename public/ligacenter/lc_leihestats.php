@@ -1,4 +1,5 @@
 <?php
+
 require_once '../../init.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -14,8 +15,8 @@ $sql = "
 
 $result = db::$db->query($sql, )->fetch();
 
-$header = array(
-    array(
+$header = [
+    [
         "ausleihe_id",
         "spieler",
         "team_auf",
@@ -25,12 +26,12 @@ $header = array(
         "turnier_id",
         "tblock",
         "datum",
-    )
-);
+    ],
+];
 
 $auswertung = $header;
 foreach ($result as $row) {
-    $auswertung[] = array(
+    $auswertung[] = [
         $row["ausleihe_id"],
         $row["spieler"],
         $row["team_auf"],
@@ -40,7 +41,7 @@ foreach ($result as $row) {
         $row["turnier_id"],
         $row["tblock"],
         $row["datum"],
-    );
+    ];
 }
 
 $spreadsheet = new Spreadsheet();

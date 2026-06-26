@@ -1,0 +1,49 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    ports:
+      - '80:80'
+    volumes:
+      - ..:/workspace
+    environment:
+      PHP_POST_MAX_SIZE: 20M
+      PHP_UPLOAD_MAX_FILESIZE: 20M
+    depends_on:
+      db:
+        condition: service_healthy
+        # Race Condition mit der Datenbank verhindern
+        # Ansonsten werden bin/doctrine-Skripte ausgeführt, bevor die Datenbank da ist
+  db:
+    image: mariadb:12.2.2
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root  # Username: root
+      MARIADB_DATABASE: db_localhost
+    volumes:
+      - db-data:/var/lib/mysql
+      - ../_localhost/db_localhost.sql:/docker-entrypoint-initdb.d/db_localhost.sql:ro
+    ports:
+      - '3306:3306'
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.3
+    restart: always
+    ports:
+      - '8081:80'
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+      UPLOAD_LIMIT: 256M
+    depends_on:
+    - db
+
+volumes:
+  db-data:

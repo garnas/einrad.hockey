@@ -69,7 +69,7 @@
                 <td class="w3-hide-small"></td>
                 <?php if ($spielplan->check_penalty_anzeigen()) { ?>
                     <td></td>
-                <?php } //endif ?>
+                <?php } //endif?>
             </tr>
         <?php }//endif?>
         <?php foreach ($spielplan->spiele as $spiel_id => $spiel) { ?>
@@ -189,7 +189,7 @@
                 <tr>
                     <td>
                         <?= date("H:i",
-                            strtotime($spielplan->spiele[$spiel_id+1]['zeit'])
+                            strtotime($spielplan->spiele[$spiel_id + 1]['zeit'])
                                         - $spielplan->get_pause($spiel_id) * 60) ?>
                     </td>
                     <td></td>
@@ -203,7 +203,7 @@
                     <td class="w3-hide-small"></td>
                     <?php if ($spielplan->check_penalty_anzeigen()) { ?>
                         <td></td>
-                    <?php } //endif ?>
+                    <?php } //endif?>
                 </tr>
             <?php }// endif?>
         <?php }// end foreach?>

@@ -18,7 +18,7 @@ foreach ($turniere as $turnier) {
     $datum_turnier = strtotime($datum_string);
     $aktuelles_datum = time();
     $absage_grund = "";
-    $erstellen = True;
+    $erstellen = true;
     # Wenn heute Dienstag ist, dann einen Tag weiter gehen
     if (date("N", $aktuelles_datum) == 2) {
         $aktuelles_datum = strtotime("+1 day", $aktuelles_datum);
@@ -27,14 +27,14 @@ foreach ($turniere as $turnier) {
     while ($aktuelles_datum < $datum_turnier) {
         # Dienstag = 2. Wochentag
         if (date("N", $aktuelles_datum) == 2) {
-            $erstellen = False;
+            $erstellen = false;
             break;
         }
         $aktuelles_datum = strtotime("+1 day", $aktuelles_datum);
     }
 
     if ($turnier->get_phase() != "setz") {
-        $erstellen = False;
+        $erstellen = false;
     }
 
     if ($erstellen) {

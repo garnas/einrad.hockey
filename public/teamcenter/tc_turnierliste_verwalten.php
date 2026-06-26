@@ -18,7 +18,7 @@ if ($turniere->isEmpty()) {
         'Dein Team richtet zurzeit kein Turnier aus - '
         . Html::link('tc_turnier_erstellen.php', 'Erstelle ein Turnier', icon: 'create')
         . 'um es verwalten zu können und Turniereinstellungen zu ändern.',
-        esc: false
+        esc: false,
     );
 }
 

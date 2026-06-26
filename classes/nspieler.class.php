@@ -13,8 +13,8 @@ class nSpieler
     public ?string $nachname;
     public ?int $jahrgang;
     public ?string $geschlecht;
-    public ?int $schiri = NULL;
-    public ?string $junior = NULL;
+    public ?int $schiri = null;
+    public ?string $junior = null;
     public ?string $timestamp;
 
     public bool $error = false;
@@ -47,7 +47,7 @@ class nSpieler
                 WHERE spieler.team_id = ?
                 AND spieler.letzte_saison = ?
                 ";
-        return db::$db->query($sql, $team_id, $saison)->fetch_objects(__CLASS__, key:'spieler_id');
+        return db::$db->query($sql, $team_id, $saison)->fetch_objects(__CLASS__, key: 'spieler_id');
     }
 
 }

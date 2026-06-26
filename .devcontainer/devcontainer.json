@@ -1,0 +1,32 @@
+{
+  "name": "PHP Ligaseite Stack",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "postStartCommand": "apache2ctl start",
+  
+  "forwardPorts": [80, 8081],
+
+  "portsAttributes": {
+    "80": {
+      "label": "webseite",
+      "onAutoForward": "openBrowser"
+    },
+    "8081": {
+      "label": "phpmyadmin"
+    }
+  },
+  
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client",
+        "xdebug.php-debug",
+        "emallin.phpunit"
+      ]
+    }
+  },
+  "remoteUser": "root"
+}

@@ -11,15 +11,16 @@ class Logger implements LoggerInterface
 {
     private function isWriteOperation(array $context): bool
     {
-        if (!key_exists("sql", $context)) {
+        if (!\array_key_exists("sql", $context)) {
             return false;
         }
         $sql = strtolower($context["sql"]);
-        return stripos($sql, "select") !== 0;    }
+        return stripos($sql, "select") !== 0;
+    }
 
     private function isInsertTurniereLog(array $context): bool
     {
-        if (!key_exists("sql", $context)) {
+        if (!\array_key_exists("sql", $context)) {
             return false;
         }
         $sql = strtolower($context["sql"]);
@@ -27,16 +28,26 @@ class Logger implements LoggerInterface
     }
     private function isInsertMailbot(array $context): bool
     {
-        if (!key_exists("sql", $context)) {
+        if (!\array_key_exists("sql", $context)) {
             return false;
         }
         $sql = strtolower($context["sql"]);
         return stripos($sql, "insert into mailbot") === 0;
     }
 
+    private function isAbstimmung(array $context): bool
+    {
+        if (!\array_key_exists("sql", $context)) {
+            return false;
+        }
+        $sql = strtolower($context["sql"]);
+        return stripos($sql, "UPDATE abstimmung_ergebnisse SET") === 0
+            || stripos($sql, "INSERT INTO abstimmung_ergebnisse") === 0;
+    }
+
     private function superLog(string $level, string $message, array $context = []): void
     {
-        if (!in_array($level, ["debug", "info" , "notice"])) {
+        if (!\in_array($level, ["debug", "info", "notice"])) {
             $log = $level . " - " . $message . " - " . print_r($context, true);
             Helper::log(Config::LOG_DB_DOCTRINE, $log);
         }
@@ -44,6 +55,7 @@ class Logger implements LoggerInterface
             $this->isWriteOperation($context)
             && !$this->isInsertTurniereLog($context)
             && !$this->isInsertMailbot($context)
+            && !$this->isAbstimmung($context)
         ) {
             $sql = $context["sql"];
             $params = "\n?: " . implode("\n?: ", $context["params"]);

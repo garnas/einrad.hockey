@@ -7,7 +7,6 @@
  */
 class nTurnier
 {
-
     // turniere_liga
     public int $turnier_id;
     private ?string $tname;
@@ -181,15 +180,15 @@ class nTurnier
     /**
      * @return ?|string
      */
-    public function get_spielplan_vorlage(): null|string
+    public function get_spielplan_vorlage(): ?string
     {
         return $this->spielplan_vorlage;
     }
 
-    /** 
+    /**
      * @return ?|string
      */
-    public function get_spielplan_datei(): null|string
+    public function get_spielplan_datei(): ?string
     {
         return $this->spielplan_datei;
     }
@@ -262,7 +261,7 @@ class nTurnier
      * @param int $id
      * @return nTurnier
      */
-    public static function get(int $turnier_id): ?nTurnier
+    public static function get(int $turnier_id): ?self
     {
         $sql = "
             SELECT turniere_liga.*, turniere_details.*
@@ -358,7 +357,7 @@ class nTurnier
                 AND saison = ?
                 AND canceled = 0
                 ORDER BY turniere_liga.datum " . ($asc ? "asc" : "desc")
-                ;
+        ;
         return db::$db->query($sql, $saison)->fetch_objects(__CLASS__, key: 'turnier_id');
     }
 
@@ -469,7 +468,7 @@ class nTurnier
         if (!empty($liste)) {
 
             // Blöcke und Wertungen hinzufügen
-            $spielenliste = array();
+            $spielenliste = [];
             foreach ($liste as $team) {
                 $team_id = $team['team_id'];
 
@@ -485,14 +484,13 @@ class nTurnier
                 $spieltag = Tabelle::get_aktuellen_spieltag();
                 uasort($spielenliste, static function ($team_a, $team_b) use ($spieltag) {
                     return (
-                        (int)Tabelle::get_team_meister_platz($team_a->id, $spieltag)
-                        <=>
-                        (int)Tabelle::get_team_meister_platz($team_b->id, $spieltag)
+                        (int) Tabelle::get_team_meister_platz($team_a->id, $spieltag)
+                        <=> (int) Tabelle::get_team_meister_platz($team_b->id, $spieltag)
                     );
                 });
             } else {
                 uasort($spielenliste, static function ($team_a, $team_b) {
-                    return ((int)$team_b->get_wertigkeit() <=> (int)$team_a->get_wertigkeit());
+                    return ((int) $team_b->get_wertigkeit() <=> (int) $team_a->get_wertigkeit());
                 });
             }
             if ($this->saison !== Config::SAISON) {
@@ -530,7 +528,7 @@ class nTurnier
         if (!empty($liste)) {
 
             // Blöcke und Wertungen hinzufügen
-            $warteliste = array();
+            $warteliste = [];
             foreach ($liste as $team) {
                 $team_id = $team['team_id'];
 
@@ -569,7 +567,7 @@ class nTurnier
         if (!empty($liste)) {
 
             // Blöcke und Wertungen hinzufügen
-            $meldeliste = array();
+            $meldeliste = [];
             foreach ($liste as $team) {
                 $team_id = $team['team_id'];
 
@@ -581,7 +579,7 @@ class nTurnier
 
             // Sortierung nach Wertigkeit
             uasort($meldeliste, static function ($team_a, $team_b) {
-                return ((int)$team_b->get_wertigkeit() <=> (int)$team_a->get_wertigkeit());
+                return ((int) $team_b->get_wertigkeit() <=> (int) $team_a->get_wertigkeit());
             });
         }
 
@@ -605,7 +603,7 @@ class nTurnier
     /**
      * Get Turnierergebnis des Turnieres
      * TODO: Umstellung zu einem Array mit nTeam?
-     * 
+     *
      * @return array
      */
     public function get_ergebnis(): array
@@ -638,14 +636,14 @@ class nTurnier
             return match ($scope) {
                 'lc' => Env::BASE_URL . '/ligacenter/lc_spielplan.php?turnier_id=' . $this->turnier_id,
                 'tc' => Env::BASE_URL . '/teamcenter/tc_spielplan.php?turnier_id=' . $this->turnier_id,
-                default => Env::BASE_URL . '/liga/spielplan.php?turnier_id=' . $this->turnier_id
+                default => Env::BASE_URL . '/liga/spielplan.php?turnier_id=' . $this->turnier_id,
             };
         }
-        if($this->get_art() == 'final') {
+        if ($this->get_art() == 'final') {
             return match ($scope) {
                 'lc' => Env::BASE_URL . '/ligacenter/lc_spielplan.php?turnier_id=' . $this->turnier_id,
                 'tc' => Env::BASE_URL . '/teamcenter/tc_spielplan.php?turnier_id=' . $this->turnier_id,
-                default => Env::BASE_URL . '/liga/spielplan_finale.php?turnier_id=' . $this->turnier_id
+                default => Env::BASE_URL . '/liga/spielplan_finale.php?turnier_id=' . $this->turnier_id,
             };
         }
 
@@ -671,7 +669,7 @@ class nTurnier
 
     /**
      * Set Anzahl der freien Plätze auf der Spielen-Liste
-     * 
+     *
      * @return int
      */
     public function set_freie_plaetze(): int
@@ -681,7 +679,7 @@ class nTurnier
 
     /**
      * Erhalte den Status der freien Plätze als String im entsprechenden Color-Code
-     * 
+     *
      * @return string
      */
     public function set_freie_plaetze_status()
@@ -715,17 +713,17 @@ class nTurnier
 
     public function auto_log(string $name, mixed $alt, mixed $neu): void
     {
-        if ($alt !== $neu){
-            $this->set_log($name . ": " . $alt . " -> " . $neu );
+        if ($alt !== $neu) {
+            $this->set_log($name . ": " . $alt . " -> " . $neu);
         }
     }
 
     /**
      * Setzt die Turnierart
-     * 
+     *
      * @return nTurnier
      */
-    public function set_art(string $art): nTurnier
+    public function set_art(string $art): self
     {
         $this->auto_log("Turnierart", $this->art ?? "", $art);
         $this->art = $art;
@@ -734,12 +732,12 @@ class nTurnier
 
     /**
      * Setzt die Phase
-     * 
+     *
      * @return nTurnier
      */
-    public function set_phase(string $phase): nTurnier
+    public function set_phase(string $phase): self
     {
-        $this->auto_log("Phase", $this->phase ?? "" , $phase);
+        $this->auto_log("Phase", $this->phase ?? "", $phase);
         $this->phase = $phase;
         return $this;
     }
@@ -747,7 +745,7 @@ class nTurnier
     /**
      * Setzt die Spielplanvorlage
      */
-    public function set_spielplan_vorlage(null|string $vorlage): void
+    public function set_spielplan_vorlage(?string $vorlage): void
     {
         $sql = "
             UPDATE turniere_liga
@@ -756,14 +754,14 @@ class nTurnier
         ";
         db::$db->query($sql, $vorlage, $this->turnier_id)->log();
     }
-    public function set_spielplan_vorlage_object(null|string $vorlage): void
+    public function set_spielplan_vorlage_object(?string $vorlage): void
     {
         $this->spielplan_vorlage = $vorlage;
     }
 
     /**
      * Setzt die Anzahl der Teams auf der Melden-Liste
-     * 
+     *
      * @return int
      */
     public function set_anz_meldeliste(): int
@@ -773,7 +771,7 @@ class nTurnier
 
     /**
      * Setzt die Anzahl der Teams auf der Warte-Liste
-     * 
+     *
      * @return int
      */
     public function set_anz_warteliste(): int
@@ -783,7 +781,7 @@ class nTurnier
 
     /**
      * Setzt die Anzahl der Tems auf der Spielen-Liste
-     * 
+     *
      * @return int
      */
     public function set_anz_spielenliste(): int
@@ -801,7 +799,9 @@ class nTurnier
                 WHERE turnier_id = ?
                 ";
         db::$db->query($sql, $this->turnier_id)->log();
-        if (db::$db->affected_rows() > 0) $this->set_log("Turnierergebnisse wurden gelöscht.");
+        if (db::$db->affected_rows() > 0) {
+            $this->set_log("Turnierergebnisse wurden gelöscht.");
+        }
     }
 
     /**
@@ -811,7 +811,7 @@ class nTurnier
      * @param int|null $ergebnis
      * @param int $platz
      */
-    public function set_ergebnis(int $team_id, int|null $ergebnis, int $platz): void
+    public function set_ergebnis(int $team_id, ?int $ergebnis, int $platz): void
     {
         if (!in_array($this->art, Config::TURNIER_ARTEN)) {
             $ergebnis = null;
@@ -865,7 +865,7 @@ class nTurnier
 
     /**
      * Ändert die Phase des Turniers, ohne dass das gesamte Turnier durch ein Update muss
-     * 
+     *
      * @param string $phase
      */
     public function update_phase(string $phase): void
@@ -881,7 +881,7 @@ class nTurnier
 
     /**
      * Ermittelt, ob es sich um ein Ligaturnier handelt
-     * 
+     *
      * @return bool
      */
     public function is_ligaturnier(): bool

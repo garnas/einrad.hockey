@@ -4,9 +4,9 @@
 use App\Repository\Team\TeamRepository;
 
 $team_id = (Helper::$teamcenter) ? $_SESSION['logins']['team']['id'] : (int) @$_GET['team_id'];
-if (Team::is_ligateam($team_id)){
+if (Team::is_ligateam($team_id)) {
     $team = TeamRepository::get()->team($team_id);
-    $kontakte = new Kontakt ($team_id);
+    $kontakte = new Kontakt($team_id);
     $emails = $kontakte->get_emails_with_details();
 }
 
@@ -35,10 +35,12 @@ if (
             Html::error("Es konnte keine Farbe fürs zweite Trikot ermittelt werden.");
         }
     }
-    if (isset($_POST['no_color_1']))
+    if (isset($_POST['no_color_1'])) {
         $team->getDetails()->setTrikotFarbe1("");
-    if (isset($_POST['no_color_2']))
+    }
+    if (isset($_POST['no_color_2'])) {
         $team->getDetails()->setTrikotFarbe2("");
+    }
     TeamRepository::get()->speichern($team);
     Html::info("Trikotfarbe geändert.");
     Helper::reload($path);
@@ -94,7 +96,7 @@ if (isset($_POST['neue_email'])) {
     $infomail = $_POST['get_info_mail'];
     $public = $_POST['public'];
 
-    if (filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($email)) {
+    if (filter_var($email, \FILTER_VALIDATE_EMAIL) && !empty($email)) {
         $kontakte->set_email($email, $public, $infomail);
         Html::info("E-Mail-Adresse wurde hinzugefügt");
         Helper::reload($path);

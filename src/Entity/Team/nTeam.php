@@ -16,7 +16,6 @@ use Tabelle;
 #[ORM\Table(name: "teams_liga", uniqueConstraints: [new ORM\UniqueConstraint(name: "teamname", columns: ["teamname"])])]
 class nTeam
 {
-
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Id]
     #[ORM\Column(name: "team_id", type: "integer", nullable: false)]
@@ -42,7 +41,7 @@ class nTeam
         return $this->ausgerichteteTurniere;
     }
 
-    public function setAusgerichteteTurniere(Collection $ausgerichteteTurniere): nTeam
+    public function setAusgerichteteTurniere(Collection $ausgerichteteTurniere): self
     {
         $this->ausgerichteteTurniere = $ausgerichteteTurniere;
         return $this;
@@ -67,7 +66,7 @@ class nTeam
         return $this->emails->filter($filter);
     }
 
-    public function setEmails(Collection $emails): nTeam
+    public function setEmails(Collection $emails): self
     {
         $this->emails = $emails;
         return $this;
@@ -78,13 +77,14 @@ class nTeam
         return $this->turniereListe;
     }
 
-    public function setTurniere(Collection $turniereListe): nTeam
+    public function setTurniere(Collection $turniereListe): self
     {
         $this->turniereListe = $turniereListe;
         return $this;
     }
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->turniereListe = new ArrayCollection();
         $this->ausgerichteteTurniere = new ArrayCollection();
         $this->freilose = new ArrayCollection();
@@ -101,7 +101,7 @@ class nTeam
         return $this->details;
     }
 
-    public function setDetails(TeamDetails $details): nTeam
+    public function setDetails(TeamDetails $details): self
     {
         $this->details = $details;
         return $this;
@@ -148,12 +148,12 @@ class nTeam
     public function getKaderVorsaison(): Collection|array
     {
         $filter = static function (Spieler $s) {
-            return $s->getLetzteSaison() < Config::SAISON and $s->getLetzteSaison() >= (Config::SAISON - 2);
+            return $s->getLetzteSaison() < Config::SAISON && $s->getLetzteSaison() >= (Config::SAISON - 2);
         };
         return $this->kader->filter($filter);
     }
 
-    public function setKader(Collection $kader): nTeam
+    public function setKader(Collection $kader): self
     {
         $this->kader = $kader;
         return $this;
@@ -207,9 +207,9 @@ class nTeam
 
     public function setPasswort(?string $passwort): self
     {
-        $passwort_hash = password_hash($passwort, PASSWORD_DEFAULT);
-        if (!is_string($passwort)) {
-            trigger_error("set_passwort fehlgeschlagen.", E_USER_ERROR);
+        $passwort_hash = password_hash($passwort, \PASSWORD_DEFAULT);
+        if (!\is_string($passwort)) {
+            trigger_error("set_passwort fehlgeschlagen.", \E_USER_ERROR);
         }
 
         // Befindet sich das Team im Teamcenter ihr Passwort geändert?
@@ -266,9 +266,8 @@ class nTeam
         FreilosGrund $grund,
         int $saison = Config::SAISON,
         ?Turnier $turnierAusgerichtet = null,
-        ?Freilos $vorherigesFreilos = null
-    ): nTeam
-    {
+        ?Freilos $vorherigesFreilos = null,
+    ): self {
         $freilos = (new Freilos())
             ->setTeam($this)
             ->setErstelltAm()
@@ -322,7 +321,7 @@ class nTeam
     public function getNextFreilos(): Freilos
     {
         $freilose = $this->getOffeneFreilose()->toArray();
-        usort($freilose, static function(Freilos $a, Freilos $b) {
+        usort($freilose, static function (Freilos $a, Freilos $b) {
             if ($a->getSaison() == $b->getSaison()) {
                 return $a->getErstelltAm() <=> $b->getErstelltAm();
             }
@@ -347,7 +346,7 @@ class nTeam
         $this->emails->add($kontakt);
     }
 
-    public function setErgebnisse(Collection $ergebnisse): nTeam
+    public function setErgebnisse(Collection $ergebnisse): self
     {
         $this->ergebnisse = $ergebnisse;
         return $this;
@@ -356,7 +355,7 @@ class nTeam
     /**
      * @return Collection|TurnierErgebnis[]
      */
-    public function getErgebnisse(): Collection | array
+    public function getErgebnisse(): Collection|array
     {
         return $this->ergebnisse;
     }
@@ -364,14 +363,14 @@ class nTeam
     /**
      * @return Collection|TurnierErgebnis[]
      */
-    public function getErgebnisseVorsaison(): Collection | array
+    public function getErgebnisseVorsaison(): Collection|array
     {
         return $this->ergebnisse->filter(
-            fn (TurnierErgebnis $e) => $e->getTurnier()->getSaison() === (Config::SAISON - 1)
+            static fn(TurnierErgebnis $e) => $e->getTurnier()->getSaison() === (Config::SAISON - 1),
         );
     }
 
-    public function setStrafen(Collection $strafen): nTeam
+    public function setStrafen(Collection $strafen): self
     {
         $this->strafen = $strafen;
         return $this;

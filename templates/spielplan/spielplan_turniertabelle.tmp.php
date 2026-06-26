@@ -20,7 +20,7 @@
                     <?= Html::icon("emoji_events") ?>
                     <br>Ergebnis
                 </th>
-            <?php } //end if ?>
+            <?php } //end if?>
         </tr>
         <?php foreach ($spielplan->platzierungstabelle as $team_id => $x) { ?>
             <tr>
@@ -33,7 +33,7 @@
                         </span>
                     <?php } else { ?>
                         <?= $x['platz'] ?>
-                    <?php } // end if ?>
+                    <?php } // end if?>
                 </td>
                 <td style="white-space: nowrap;">
                     <?= $x["teamname"] ?>
@@ -45,7 +45,7 @@
                             ? '--'
                         : $x["ligapunkte"] ?>
                     </td>
-                <?php } //end if ?>
+                <?php } //end if?>
             </tr>
         <?php }//end foreach?>
     </table>
@@ -93,7 +93,7 @@
                             <?= Html::icon("emoji_events") ?>
                             <br>Ergebnis
                         </th>
-                    <?php } //end if ?>
+                    <?php } //end if?>
                 </tr>
                 <?php foreach ($spielplan->platzierungstabelle as $team_id => $x) { ?>
                     <tr>
@@ -106,7 +106,7 @@
                         </span>
                             <?php } else { ?>
                                 <?= $x['platz'] ?>
-                            <?php } // end if ?>
+                            <?php } // end if?>
                         </td>
                         <td style="white-space: nowrap;"><?= $x["teamname"] ?></td>
                         <td><?= $x['statistik']["spiele"] ?></td>
@@ -120,7 +120,7 @@
                                     ? '--'
                                     : $x["ligapunkte"] ?>
                             </td>
-                        <?php } //end if ?>
+                        <?php } //end if?>
                     </tr>
                 <?php }//end foreach?>
             </table>

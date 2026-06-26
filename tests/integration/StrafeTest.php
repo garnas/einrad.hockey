@@ -15,14 +15,16 @@ class StrafeTest extends TestCase
     protected function provideTeam(): nTeam
     {
         $team = TeamRepository::get()->findByName("ABC Testteam");
-        if ($team) TeamRepository::get()->delete($team);
+        if ($team) {
+            TeamRepository::get()->delete($team);
+        }
         $team = (new nTeam())
             ->setName("ABC Testteam")
             ->setLigateam("Ja")
             ->setAktiv("Ja");
         $team->setDetails(
             (new TeamDetails())
-                ->setTeam($team)
+                ->setTeam($team),
         );
         TeamRepository::get()->speichern($team);
         return TeamRepository::get()->team($team->id());

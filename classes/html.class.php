@@ -9,8 +9,8 @@ class Html
 {
     public static string $titel = 'Deutsche Einradhockeyliga';
     public static string $content = 'Jeder Einradhockeybegeisterte soll in der Deutschen Einradhockeyliga die Möglichkeit haben, sein Hobby in '
-    . 'einem sportlichen Rahmen auszuüben. Die Einradhockeyliga hat maßgeblich zur Verbreitung von Einradhockey '
-    . 'beigetragen und ist in ihrer Art und Konstanz weltweit einzigartig.';
+        . 'einem sportlichen Rahmen auszuüben. Die Einradhockeyliga hat maßgeblich zur Verbreitung von Einradhockey '
+        . 'beigetragen und ist in ihrer Art und Konstanz weltweit einzigartig.';
     /**
      * HTML-Anzeige
      */
@@ -28,9 +28,9 @@ class Html
         if (
             !isset($_SESSION['bild_navigation']['path'])
             || (time() - $_SESSION['bild_navigation']['zeit']) > 600
-        ){
+        ) {
             $imagesDir = Env::BASE_PATH . '/public/bilder/hintergrund/';
-            $images = glob($imagesDir . '*.{jpg,JPG,jpeg,png,gif}', GLOB_BRACE);
+            $images = glob($imagesDir . '*.{jpg,JPG,jpeg,png,gif}', \GLOB_BRACE);
             $randomImage = $images[array_rand($images)];
             $_SESSION['bild_navigation']['path'] = Env::BASE_URL . '/bilder/hintergrund/' . basename($randomImage);
             $_SESSION['bild_navigation']['zeit'] = time();
@@ -86,24 +86,24 @@ class Html
      * @param string|null $caption Überschrift
      * @param bool $esc Standardmäßig wird der String gegen XSS escaped
      */
-    public static function message(string $type, string $message, string|null $caption = '', bool $esc = true): void
+    public static function message(string $type, string $message, ?string $caption = '', bool $esc = true): void
     {
         if ($caption === '') {
             $caption = match ($type) {
                 'error' => 'Fehler',
                 'info' => 'Info',
-                'notice' => 'Hinweis'
+                'notice' => 'Hinweis',
             };
         }
 
         $color = match ($type) {
             'error' => 'w3-border-red w3-pale-red',
             'info' => 'w3-border-green w3-pale-green',
-            'notice' => 'w3-border-yellow w3-pale-yellow'
+            'notice' => 'w3-border-yellow w3-pale-yellow',
         };
 
         $caption = ($esc) ? db::escape($caption) : $caption;
-        $caption = is_null($caption) ? '' : "<h3>$caption</h3>";
+        $caption = null === $caption ? '' : "<h3>$caption</h3>";
         $message = ($esc) ? db::escape($message) : $message;
 
         echo "
@@ -180,7 +180,7 @@ class Html
     {
         $whitelist = ["organisator", "handy"];
         if (!in_array($field, $whitelist)) {
-            trigger_error("Whitelist-Error Datalist Turnier Ausrichter $field", E_USER_ERROR);
+            trigger_error("Whitelist-Error Datalist Turnier Ausrichter $field", \E_USER_ERROR);
         }
         $sql = "
             SELECT $field
@@ -204,7 +204,7 @@ class Html
     {
         $whitelist = ["hallenname", "strasse", "plz", "ort", "haltestellen"];
         if (!in_array($field, $whitelist)) {
-            trigger_error("Whitelist-Error Datalist Turnier Allgemein $field", E_USER_ERROR);
+            trigger_error("Whitelist-Error Datalist Turnier Allgemein $field", \E_USER_ERROR);
         }
 
         $sql = "
@@ -270,9 +270,9 @@ class Html
      * @param string|null $name Wenn $name nicht übergeben wird ist, dann wird $email als Bezeichner übernommen
      * @return string
      */
-    public static function mailto(null|string|array $email, null|string $name = NULL): string
+    public static function mailto(string|array|null $email, ?string $name = null): string
     {
-        if (empty ($email)) {
+        if (empty($email)) {
             return '';
         }
 
@@ -365,15 +365,19 @@ class Html
      * @param string $class
      * @return string
      */
-    public static function icon(string $icon, int $vertical_align = 0, int $font_size = 0, string $tag = 'p',
-                                string $class = ''): string
-    {
+    public static function icon(
+        string $icon,
+        int $vertical_align = 0,
+        int $font_size = 0,
+        string $tag = 'p',
+        string $class = '',
+    ): string {
         $style = '';
         if ($tag !== 'p') {
             $style = match ($tag) {
                 'h1', 'h2' => 'style="font-size: 31px; vertical-align: -19%;"',
                 'h3' => 'style="vertical-align: -16%;"',
-                default => ''
+                default => '',
             };
         } elseif (!(empty($vertical_align) && empty($font_size))) {
             $style = "style='"
@@ -391,15 +395,15 @@ class Html
      * @param string|null $color_2
      * @return string Html-Code
      */
-    public static function trikot_punkt(null|string $color_1 = null, null|string $color_2 = null): string
+    public static function trikot_punkt(?string $color_1 = null, ?string $color_2 = null): string
     {
-        if(!empty($color_1)) {
+        if (!empty($color_1)) {
             $punkt_1 = "
             <span class = 'w3-card-4'
                 style = 'height:14px;width:14px; background-color:$color_1;border-radius:50%;display:inline-block;'>
             </span>";
         }
-        if(!empty($color_2)) {
+        if (!empty($color_2)) {
             $punkt_2 = "
             <span class = 'w3-card-4'
                 style = 'height:14px;width:14px; background-color:$color_2;border-radius:50%;display:inline-block;'>
@@ -407,8 +411,9 @@ class Html
         }
         return ($punkt_1 ?? '') . ($punkt_2 ?? '');
     }
-    
-    public static function include_widget_bot($server = '494602271447842856', $channel = '984536643107180594') {
+
+    public static function include_widget_bot($server = '494602271447842856', $channel = '984536643107180594')
+    {
         echo "
         <widgetbot
                 server='$server'
@@ -421,9 +426,9 @@ class Html
         ";
     }
 
-    public static function selected_from_post(string $key, ?string $condition_value = Null): string
+    public static function selected_from_post(string $key, ?string $condition_value = null): string
     {
-        $value = $_POST[$key] ?? Null;
+        $value = $_POST[$key] ?? null;
 
         if ($value === $condition_value) {
             return "selected";
@@ -432,7 +437,8 @@ class Html
     }
 
     public static function value_from_post(string $betrag): string
-    {   $value = $_POST[$betrag] ?? null;
+    {
+        $value = $_POST[$betrag] ?? null;
         return $value ? "value='$value'" : "";
     }
 

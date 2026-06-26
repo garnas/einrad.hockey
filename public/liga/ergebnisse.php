@@ -7,7 +7,7 @@ use App\Repository\Turnier\TurnierRepository;
 
 require_once '../../init.php';
 
-$saison = (isset($_GET['saison'])) ? (int)$_GET['saison'] : Config::SAISON;
+$saison = (isset($_GET['saison'])) ? (int) $_GET['saison'] : Config::SAISON;
 $turniere = TurnierRepository::getErgebnisTurniere(saison: $saison);
 
 if (empty($turniere)) {

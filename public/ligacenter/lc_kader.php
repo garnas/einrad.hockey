@@ -1,4 +1,5 @@
 <?php
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -9,7 +10,7 @@ require_once '../../logic/session_la.logic.php'; //Auth
 require_once '../../logic/la_team_waehlen.logic.php'; //Auswahlfeld für ein Team
 
 if (isset($_GET['team_id'])) {
-    $team_id = (int)$_GET['team_id'];
+    $team_id = (int) $_GET['team_id'];
     $teamEntity = TeamRepository::get()->team($team_id);
     if (Team::is_ligateam($team_id)) {
         $kader = $teamEntity->getKader();
@@ -33,4 +34,3 @@ if (isset($kader)) {
 }
 
 include '../../templates/footer.tmp.php';
-

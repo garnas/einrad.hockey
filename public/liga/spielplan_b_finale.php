@@ -14,10 +14,10 @@ $turnier_id = (int) @$_GET['turnier_id'];
 
 // Spielplan laden
 $turnier = nTurnier::get($turnier_id);
-$datum =
-    strftime("%d.%m.", strtotime($turnier->get_datum()))
+$datum
+    = strftime("%d.%m.", strtotime($turnier->get_datum()))
     . " & "
-    . strftime("%d.%m.", strtotime($turnier->get_datum()) + 24*60*60) ;
+    . strftime("%d.%m.", strtotime($turnier->get_datum()) + 24 * 60 * 60) ;
 $spielplan = (new spielplan_final($turnier))->get_spielplan_b();
 
 /////////////////////////////////////////////////////////////////////////////
@@ -41,10 +41,12 @@ if ($turnier->get_phase() == "ergebnis") {
     </h2>
     <h3><?= $spielplan->turnier->get_tname() ?></h3>
 <?php if ($spielplan->out_of_scope) {
-    Html::message("notice",
+    Html::message(
+        "notice",
         "Achtung es muss eine zweite Runde Penaltys gespielt werden. Bitte vermerkt dies im Turnierbericht und
                  tragt die Penaltys so ein, dass die Turniertabelle am Ende stimmt.",
-        "Zweite Runde Penaltys");
+        "Zweite Runde Penaltys",
+    );
 } // end if?>
     <!-- Links -->
     <div class="pdf-hide">
@@ -154,11 +156,11 @@ if (Env::ACTIVE_FINAL_DISCORD) {
         <td class="w3-hide-small"></td>
         <?php if ($spielplan->check_penalty_anzeigen()) { ?>
             <td></td>
-        <?php } //endif ?>
+        <?php } //endif?>
     </tr>
 <?php }//endif?>
 <?php foreach ($spielplan->spiele as $spiel_id => $spiel) { ?>
-    <?php if($spiel_id == 15): ?>
+    <?php if ($spiel_id == 15): ?>
         </table>
         </div>
         <h1 class="w3-text-secondary">Vorrunde - Spielfeld 2</h1>
@@ -337,7 +339,7 @@ if (Env::ACTIVE_FINAL_DISCORD) {
         <tr>
             <td>
                 <?= date("H:i",
-                    strtotime($spielplan->spiele[$spiel_id+1]['zeit'])
+                    strtotime($spielplan->spiele[$spiel_id + 1]['zeit'])
                     - $spielplan->get_pause($spiel_id) * 60) ?>
             </td>
             <td></td>
@@ -351,7 +353,7 @@ if (Env::ACTIVE_FINAL_DISCORD) {
             <td class="w3-hide-small"></td>
             <?php if ($spielplan->check_penalty_anzeigen()) { ?>
                 <td></td>
-            <?php } //endif ?>
+            <?php } //endif?>
         </tr>
     <?php }// endif?>
 <?php }// end foreach?>
@@ -375,4 +377,3 @@ include '../../templates/spielplan/spielplan_direkter_vergleich.tmp.php'; // Dir
 </div>
 <?php
 include '../../templates/footer.tmp.php';
-

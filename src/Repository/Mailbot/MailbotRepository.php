@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Repository\Mailbot;
 
 use App\Entity\Sonstiges\nMailbot;
@@ -10,7 +9,6 @@ use Doctrine\ORM\EntityRepository;
 
 class MailbotRepository
 {
-
     use TraitSingletonRepository;
 
     private EntityRepository $mailBot;

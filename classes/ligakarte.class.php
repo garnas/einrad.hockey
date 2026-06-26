@@ -6,7 +6,6 @@
  */
 class LigaKarte
 {
-
     /**
      * Trägt ein Mitspielergesuch in die Datenbank ein
      *

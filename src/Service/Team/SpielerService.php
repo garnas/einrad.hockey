@@ -8,8 +8,6 @@ use db;
 
 class SpielerService
 {
-
-
     public static function isAusbilder(Spieler $spieler): bool
     {
         $sql = "

@@ -19,7 +19,11 @@
                 <?php continue; ?>
             <?php endif; ?>
 
-            <?php if ($counter % 2 == 0) { $color = "w3-light-grey"; } else { $color = "w3-white"; } ?>
+            <?php if ($counter % 2 == 0) {
+                $color = "w3-light-grey";
+            } else {
+                $color = "w3-white";
+            } ?>
 
             <!-- Kopfzeile fuer das Team -->
             <div onclick="show_large_results('meister', <?=$key?>)" style="cursor: pointer;" id="large-meister-head-<?=$key?>" class="w3-hover-text-secondary w3-row <?=$color?> w3-border-bottom w3-border-grey">

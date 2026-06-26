@@ -6,10 +6,12 @@
 </h2>
 <h3><?= $spielplan->turnier->get_tname() ?></h3>
 <?php if ($spielplan->out_of_scope) {
-    Html::message("notice",
+    Html::message(
+        "notice",
         "Achtung es muss eine zweite Runde Penaltys gespielt werden. Bitte vermerkt dies im Turnierbericht und
                  tragt die Penaltys so ein, dass die Turniertabelle am Ende stimmt.",
-        "Zweite Runde Penaltys");
+        "Zweite Runde Penaltys",
+    );
 } // end if?>
 <!-- Links -->
 <div class="pdf-hide">

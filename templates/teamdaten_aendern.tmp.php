@@ -2,7 +2,7 @@
 
 
 <form class="w3-card w3-panel" method="post" enctype="multipart/form-data">
-    <h2 class="w3-text-primary"><?= Html::icon("group", 16,28 ) ?> Teamfoto</h2>
+    <h2 class="w3-text-primary"><?= Html::icon("group", 16, 28) ?> Teamfoto</h2>
     <?php if (empty($team->getDetails()->getTeamfoto())) { ?>
         <p>
             <i>Es können Bilder im <b>.jpg, .jpeg, .gif, .png</b> Format mit bis zu 11,9 Megabyte hochgeladen werden.</i>
@@ -32,7 +32,7 @@
 </form>
 <div class="w3-card-4 w3-panel">
     <h2 id="trikotfarbe" class="w3-text-primary">
-        <?= Html::icon("brush", 16,28 ) ?> Trikotfarben
+        <?= Html::icon("brush", 16, 28) ?> Trikotfarben
     </h2>
     <div class="w3-row-padding w3-center w3-strech">
         <div class="w3-half">
@@ -111,7 +111,7 @@
     </p>
 </div>
 <form method='post' class="w3-panel w3-card">
-    <h2 class="w3-text-primary"><?= Html::icon("info", 16,28 ) ?> Teamdetails</h2>
+    <h2 class="w3-text-primary"><?= Html::icon("info", 16, 28) ?> Teamdetails</h2>
     <p>
         <label for='ligavertreter' class="w3-text-primary">Ligavertreter</label>
         <input class='w3-input w3-border w3-border-primary'
@@ -235,7 +235,7 @@
 </form>
 
 <form method='post' class="w3-card-4 w3-panel">
-    <h2 class="w3-text-primary"><?= Html::icon("mail", 16,28 ) ?> Email hinzufügen</h2>
+    <h2 class="w3-text-primary"><?= Html::icon("mail", 16, 28) ?> Email hinzufügen</h2>
         <p>
             <label for='email' class="w3-text-primary">Email</label>
             <input class='w3-input w3-border w3-border-primary'

@@ -4,7 +4,7 @@
  * Class PHPMailer
  */
 class PHPMailer
-{   
+{
     /**
      * Lädt das PHPMailer-Framework und erstellt ein PHPMailer-Objekt
      */

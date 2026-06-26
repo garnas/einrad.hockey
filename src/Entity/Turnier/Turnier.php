@@ -23,12 +23,11 @@ use Doctrine\ORM\Mapping as ORM;
     name: "turniere_liga",
     indexes: [
         new ORM\Index(name: "ausrichter_team_id", columns: ["ausrichter"]),
-        new ORM\Index(name: "spielplan_vorlage", columns: ["spielplan_vorlage"])
-    ])
-]
+        new ORM\Index(name: "spielplan_vorlage", columns: ["spielplan_vorlage"]),
+    ],
+)]
 class Turnier
 {
-
     private TurnierLogService $logService;
 
     #[ORM\Id]
@@ -51,7 +50,7 @@ class Turnier
     #[ORM\Column(name: "datum_bis", type: "date")]
     private ?DateTime $datumBis;
     #[ORM\Column(name: "spieltag", type: "integer", nullable: true)]
-    private int|null $spieltag = 0;
+    private ?int $spieltag = 0;
 
     #[ORM\Column(name: "phase", type: "string", nullable: true)]
     private ?string $phase;
@@ -115,11 +114,13 @@ class Turnier
         return $this->sofortOeffnen;
     }
 
-    public function setSofortOeffnen(bool $sofortOeffnen): Turnier
+    public function setSofortOeffnen(bool $sofortOeffnen): self
     {
-        $this->logService->autoLog("Sofort öffnen nach dem Phasenwechsel",
+        $this->logService->autoLog(
+            "Sofort öffnen nach dem Phasenwechsel",
             $this->sofortOeffnen ?? false,
-            $sofortOeffnen);
+            $sofortOeffnen,
+        );
         $this->sofortOeffnen = $sofortOeffnen;
         return $this;
     }
@@ -199,7 +200,7 @@ class Turnier
      * @param TurnierDetails $details
      * @return Turnier
      */
-    public function setDetails(TurnierDetails $details): Turnier
+    public function setDetails(TurnierDetails $details): self
     {
         $this->details = $details;
         return $this;
@@ -215,7 +216,7 @@ class Turnier
         return $this->art;
     }
 
-    public function setArt(?string $art): Turnier
+    public function setArt(?string $art): self
     {
         $this->logService->autoLog("Art", $this->art ?? '', $art);
         $this->art = $art;
@@ -227,7 +228,7 @@ class Turnier
         return $this->canceledGrund;
     }
 
-    public function setCanceledGrund(?string $canceledGrund): Turnier
+    public function setCanceledGrund(?string $canceledGrund): self
     {
         $this->canceledGrund = $canceledGrund;
         return $this;
@@ -238,7 +239,7 @@ class Turnier
         return $this->erstelltAm;
     }
 
-    public function setErstelltAm(DateTime $erstelltAm): Turnier
+    public function setErstelltAm(DateTime $erstelltAm): self
     {
         $this->erstelltAm = $erstelltAm;
         return $this;
@@ -249,7 +250,7 @@ class Turnier
         return $this->canceled;
     }
 
-    public function setCanceled(bool $canceled): Turnier
+    public function setCanceled(bool $canceled): self
     {
         $this->canceled = $canceled;
         return $this;
@@ -287,7 +288,7 @@ class Turnier
         return $this->liste->filter($filter);
     }
 
-    public function setListe(Collection $liste): Turnier
+    public function setListe(Collection $liste): self
     {
         $this->liste = $liste;
         return $this;
@@ -302,7 +303,7 @@ class Turnier
         return $this->ergebnis;
     }
 
-    public function setErgebnis(Collection $ergebnis): Turnier
+    public function setErgebnis(Collection $ergebnis): self
     {
         $this->ergebnis = $ergebnis;
         return $this;
@@ -313,7 +314,7 @@ class Turnier
         return $this->id ?? null;
     }
 
-    public function setId(int $id): Turnier
+    public function setId(int $id): self
     {
         $this->id = $id;
         return $this;
@@ -324,7 +325,7 @@ class Turnier
         return $this->name;
     }
 
-    public function setName(?string $name): Turnier
+    public function setName(?string $name): self
     {
         $this->logService->autoLog("Turniername", $this->name ?? '', $name);
         $this->name = $name;
@@ -336,7 +337,7 @@ class Turnier
         return $this->block;
     }
 
-    public function setBlock(?string $block): Turnier
+    public function setBlock(?string $block): self
     {
         $this->logService->autoLog("Block", $this->block ?? null, $block);
         $this->block = $block;
@@ -348,7 +349,7 @@ class Turnier
         return $this->datum;
     }
 
-    public function setDatum(DateTime $datum): Turnier
+    public function setDatum(DateTime $datum): self
     {
         $this->logService->autoLog("Datum", $this->datum ?? null, $datum->format("d.m.Y"));
         $this->datum = $datum;
@@ -360,12 +361,12 @@ class Turnier
         return $this->datumBis;
     }
 
-    public function setDatumBis(?DateTime $datumBis): Turnier
+    public function setDatumBis(?DateTime $datumBis): self
     {
         $this->logService->autoLog(
             name: "Bis Datum",
             alt: $this->datumBis ?? null,
-            neu: $datumBis?->format("d.m.Y")
+            neu: $datumBis?->format("d.m.Y"),
         );
         $this->datumBis = $datumBis;
         return $this;
@@ -376,7 +377,7 @@ class Turnier
         return $this->spieltag;
     }
 
-    public function setSpieltag(?int $spieltag): Turnier
+    public function setSpieltag(?int $spieltag): self
     {
         $this->logService->autoLog("Spieltag", $this->spieltag ?? null, $spieltag);
         $this->spieltag = $spieltag;
@@ -388,7 +389,7 @@ class Turnier
         return $this->phase;
     }
 
-    public function setPhase(?string $phase): Turnier
+    public function setPhase(?string $phase): self
     {
         $this->logService->autoLog("Phase", $this->phase ?? null, $phase);
         $this->phase = $phase;
@@ -400,7 +401,7 @@ class Turnier
         return $this->spielplanDatei;
     }
 
-    public function setSpielplanDatei(?string $spielplanDatei): Turnier
+    public function setSpielplanDatei(?string $spielplanDatei): self
     {
         $this->logService->autoLog("Spielplandatei", $this->spielplanDatei ?? null, $spielplanDatei);
         $this->spielplanDatei = $spielplanDatei;
@@ -412,7 +413,7 @@ class Turnier
         return $this->saison;
     }
 
-    public function setSaison(?int $saison): Turnier
+    public function setSaison(?int $saison): self
     {
         $this->logService->autoLog("Saison", $this->saison ?? null, $saison);
         $this->saison = $saison;
@@ -424,7 +425,7 @@ class Turnier
         return $this->spielplanVorlage ?? null;
     }
 
-    public function setSpielplanVorlage(SpielplanDetails $spielplanVorlage): Turnier
+    public function setSpielplanVorlage(SpielplanDetails $spielplanVorlage): self
     {
         $this->logService->autoLog("Spielplanvorlage", $this->spielplanVorlage ?? null, $spielplanVorlage);
         $this->spielplanVorlage = $spielplanVorlage;
@@ -436,9 +437,9 @@ class Turnier
         return $this->ausrichter;
     }
 
-    public function setAusrichter(nTeam $ausrichter): Turnier
+    public function setAusrichter(nTeam $ausrichter): self
     {
-        $ausrichterText = isset ($this->ausrichter) ? $this->ausrichter->getName() : null;
+        $ausrichterText = isset($this->ausrichter) ? $this->ausrichter->getName() : null;
         $this->logService->autoLog("Ausrichter", $ausrichterText, $ausrichter->getName());
         $this->ausrichter = $ausrichter;
         return $this;
@@ -459,7 +460,7 @@ class Turnier
         return $this->art == 'I' || $this->art == 'II';
     }
 
-    public function setGesetzteFreilose(Collection $gesetzteFreilose): Turnier
+    public function setGesetzteFreilose(Collection $gesetzteFreilose): self
     {
         $this->gesetzteFreilose = $gesetzteFreilose;
         return $this;
@@ -473,7 +474,7 @@ class Turnier
         return $this->gesetzteFreilose;
     }
 
-    public function setBlockErweitertRunter(?bool $blockErweitertRunter): Turnier
+    public function setBlockErweitertRunter(?bool $blockErweitertRunter): self
     {
         $this->blockErweitertRunter = $blockErweitertRunter;
         return $this;
@@ -489,7 +490,7 @@ class Turnier
         return $this->blockErweitertHoch ?? false;
     }
 
-    public function setBlockErweitertHoch(?bool $blockErweitertHoch): Turnier
+    public function setBlockErweitertHoch(?bool $blockErweitertHoch): self
     {
         $this->blockErweitertHoch = $blockErweitertHoch;
         return $this;

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
--- Host: mariadb
--- Erstellungszeit: 01. Dez 2025 um 21:54
--- Server-Version: 10.11.10-MariaDB-ubu2204
--- PHP-Version: 8.2.19
+-- Host: db
+-- Generation Time: Apr 03, 2026 at 04:56 PM
+-- Server version: 12.2.2-MariaDB-ubu2404
+-- PHP Version: 8.3.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Datenbank: `db_localhost`
+-- Database: `db_localhost`
 --
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `abstimmung_ergebnisse`
+-- Table structure for table `abstimmung_ergebnisse`
 --
 
 CREATE TABLE `abstimmung_ergebnisse` (
@@ -35,19 +35,18 @@ CREATE TABLE `abstimmung_ergebnisse` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `abstimmung_teams`
+-- Table structure for table `abstimmung_teams`
 --
 
 CREATE TABLE `abstimmung_teams` (
   `team_id` int(11) NOT NULL,
-  `aenderungen` int(11) NOT NULL DEFAULT 0,
-  `passwort` varchar(255) NOT NULL
+  `aenderungen` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `freilose`
+-- Table structure for table `freilose`
 --
 
 CREATE TABLE `freilose` (
@@ -63,7 +62,7 @@ CREATE TABLE `freilose` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Daten für Tabelle `freilose`
+-- Dumping data for table `freilose`
 --
 
 INSERT INTO `freilose` (`freilos_id`, `gesetzt_am`, `erstellt_am`, `team_id`, `turnier_id`, `grund`, `saison`, `ausgerichtete_turnier_id`, `vorheriges_freilos`) VALUES
@@ -205,7 +204,7 @@ INSERT INTO `freilose` (`freilos_id`, `gesetzt_am`, `erstellt_am`, `team_id`, `t
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `ligakarte_gesuch`
+-- Table structure for table `ligakarte_gesuch`
 --
 
 CREATE TABLE `ligakarte_gesuch` (
@@ -222,7 +221,7 @@ CREATE TABLE `ligakarte_gesuch` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `ligaleitung`
+-- Table structure for table `ligaleitung`
 --
 
 CREATE TABLE `ligaleitung` (
@@ -235,7 +234,7 @@ CREATE TABLE `ligaleitung` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Daten für Tabelle `ligaleitung`
+-- Dumping data for table `ligaleitung`
 --
 
 INSERT INTO `ligaleitung` (`ligaleitung_id`, `spieler_id`, `funktion`, `email`, `login`, `passwort`) VALUES
@@ -292,7 +291,7 @@ INSERT INTO `ligaleitung` (`ligaleitung_id`, `spieler_id`, `funktion`, `email`, 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `mailbot`
+-- Table structure for table `mailbot`
 --
 
 CREATE TABLE `mailbot` (
@@ -309,7 +308,7 @@ CREATE TABLE `mailbot` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `neuigkeiten`
+-- Table structure for table `neuigkeiten`
 --
 
 CREATE TABLE `neuigkeiten` (
@@ -321,20 +320,21 @@ CREATE TABLE `neuigkeiten` (
   `bild_verlinken` varchar(255) NOT NULL,
   `eingetragen_von` varchar(255) NOT NULL,
   `aktiv` tinyint(1) NOT NULL DEFAULT 1,
+  `art` enum('neuigkeit','foerdermittel') NOT NULL DEFAULT 'neuigkeit',
   `zeit` timestamp NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Daten für Tabelle `neuigkeiten`
+-- Dumping data for table `neuigkeiten`
 --
 
-INSERT INTO `neuigkeiten` (`neuigkeiten_id`, `titel`, `inhalt`, `link_pdf`, `link_jpg`, `bild_verlinken`, `eingetragen_von`, `aktiv`, `zeit`) VALUES
-(1, 'Passwörter für die Logins', '<u>Teamcenter</u>\nName: <i>für jedes Team</i>\nPasswort: <b>test</b>\n\n<u>Ligacenter</u>\nName: <b>entwickler</b>\nPasswort: <b>einrad</b>\n\n<u>Team Social Media</u>\nName: <b>team_social_media</b>\nPasswort: <b>einrad</b>\n\nIm _localhost-Ordner befindet sich ein Tutorial, wie man eine Seite erstellt.', '', '', '', 'Ligaausschuss', 1, '2025-12-01 21:54:15');
+INSERT INTO `neuigkeiten` (`neuigkeiten_id`, `titel`, `inhalt`, `link_pdf`, `link_jpg`, `bild_verlinken`, `eingetragen_von`, `aktiv`, `art`, `zeit`) VALUES
+(1, 'Passwörter für die Logins', '<u>Teamcenter</u>\nName: <i>für jedes Team</i>\nPasswort: <b>test</b>\n\n<u>Ligacenter</u>\nName: <b>entwickler</b>\nPasswort: <b>einrad</b>\n\n<u>Team Social Media</u>\nName: <b>team_social_media</b>\nPasswort: <b>einrad</b>\n\nIm _localhost-Ordner befindet sich ein Tutorial, wie man eine Seite erstellt.', '', '', '', 'Ligaausschuss', 1, 'neuigkeit', '2025-12-01 21:54:15');
 
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `plz`
+-- Table structure for table `plz`
 --
 
 CREATE TABLE `plz` (
@@ -345,7 +345,7 @@ CREATE TABLE `plz` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Daten für Tabelle `plz`
+-- Dumping data for table `plz`
 --
 
 INSERT INTO `plz` (`PLZ`, `Ort`, `Lon`, `LAT`) VALUES
@@ -8651,7 +8651,7 @@ INSERT INTO `plz` (`PLZ`, `Ort`, `Lon`, `LAT`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `regelwerk`
+-- Table structure for table `regelwerk`
 --
 
 CREATE TABLE `regelwerk` (
@@ -8661,7 +8661,7 @@ CREATE TABLE `regelwerk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Daten für Tabelle `regelwerk`
+-- Dumping data for table `regelwerk`
 --
 
 INSERT INTO `regelwerk` (`regelnummer`, `regeltitel`, `regeltext`) VALUES
@@ -8719,7 +8719,7 @@ INSERT INTO `regelwerk` (`regelnummer`, `regeltitel`, `regeltext`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `schiri_ergebnis`
+-- Table structure for table `schiri_ergebnis`
 --
 
 CREATE TABLE `schiri_ergebnis` (
@@ -8742,7 +8742,7 @@ CREATE TABLE `schiri_ergebnis` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `schiri_test`
+-- Table structure for table `schiri_test`
 --
 
 CREATE TABLE `schiri_test` (
@@ -8771,7 +8771,7 @@ CREATE TABLE `schiri_test` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `spiele`
+-- Table structure for table `spiele`
 --
 
 CREATE TABLE `spiele` (
@@ -8788,7 +8788,7 @@ CREATE TABLE `spiele` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Daten für Tabelle `spiele`
+-- Dumping data for table `spiele`
 --
 
 INSERT INTO `spiele` (`turnier_id`, `spiel_id`, `team_id_a`, `team_id_b`, `schiri_team_id_a`, `schiri_team_id_b`, `tore_a`, `tore_b`, `penalty_a`, `penalty_b`) VALUES
@@ -13200,7 +13200,7 @@ INSERT INTO `spiele` (`turnier_id`, `spiel_id`, `team_id_a`, `team_id_b`, `schir
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `spieler`
+-- Table structure for table `spieler`
 --
 
 CREATE TABLE `spieler` (
@@ -13217,7 +13217,7 @@ CREATE TABLE `spieler` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Daten für Tabelle `spieler`
+-- Dumping data for table `spieler`
 --
 
 INSERT INTO `spieler` (`spieler_id`, `team_id`, `vorname`, `nachname`, `jahrgang`, `geschlecht`, `schiri`, `junior`, `letzte_saison`, `timestamp`) VALUES
@@ -14392,7 +14392,7 @@ INSERT INTO `spieler` (`spieler_id`, `team_id`, `vorname`, `nachname`, `jahrgang
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `spieler_ausleihen`
+-- Table structure for table `spieler_ausleihen`
 --
 
 CREATE TABLE `spieler_ausleihen` (
@@ -14406,7 +14406,21 @@ CREATE TABLE `spieler_ausleihen` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `spieler_zeitstrafen`
+-- Table structure for table `spieler_statistik`
+--
+
+CREATE TABLE `spieler_statistik` (
+  `id` int(11) NOT NULL,
+  `date` datetime NOT NULL DEFAULT current_timestamp(),
+  `saison` int(11) NOT NULL,
+  `geschlecht` enum('m','w','d') DEFAULT NULL,
+  `anzahl` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `spieler_zeitstrafen`
 --
 
 CREATE TABLE `spieler_zeitstrafen` (
@@ -14422,7 +14436,7 @@ CREATE TABLE `spieler_zeitstrafen` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `spielplan_details`
+-- Table structure for table `spielplan_details`
 --
 
 CREATE TABLE `spielplan_details` (
@@ -14437,7 +14451,7 @@ CREATE TABLE `spielplan_details` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Daten für Tabelle `spielplan_details`
+-- Dumping data for table `spielplan_details`
 --
 
 INSERT INTO `spielplan_details` (`spielplan`, `spielplan_paarung`, `plaetze`, `anzahl_halbzeiten`, `halbzeit_laenge`, `puffer`, `pausen`, `faktor`) VALUES
@@ -14459,7 +14473,7 @@ INSERT INTO `spielplan_details` (`spielplan`, `spielplan_paarung`, `plaetze`, `a
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `spielplan_paarungen`
+-- Table structure for table `spielplan_paarungen`
 --
 
 CREATE TABLE `spielplan_paarungen` (
@@ -14472,7 +14486,7 @@ CREATE TABLE `spielplan_paarungen` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Daten für Tabelle `spielplan_paarungen`
+-- Dumping data for table `spielplan_paarungen`
 --
 
 INSERT INTO `spielplan_paarungen` (`spielplan_paarung`, `spiel_id`, `team_a`, `team_b`, `schiri_a`, `schiri_b`) VALUES
@@ -14677,7 +14691,7 @@ INSERT INTO `spielplan_paarungen` (`spielplan_paarung`, `spiel_id`, `team_a`, `t
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `teams_details`
+-- Table structure for table `teams_details`
 --
 
 CREATE TABLE `teams_details` (
@@ -14693,7 +14707,7 @@ CREATE TABLE `teams_details` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Daten für Tabelle `teams_details`
+-- Dumping data for table `teams_details`
 --
 
 INSERT INTO `teams_details` (`team_id`, `plz`, `ort`, `verein`, `homepage`, `ligavertreter`, `teamfoto`, `trikot_farbe_1`, `trikot_farbe_2`) VALUES
@@ -14830,7 +14844,7 @@ INSERT INTO `teams_details` (`team_id`, `plz`, `ort`, `verein`, `homepage`, `lig
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `teams_kontakt`
+-- Table structure for table `teams_kontakt`
 --
 
 CREATE TABLE `teams_kontakt` (
@@ -14842,7 +14856,7 @@ CREATE TABLE `teams_kontakt` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Daten für Tabelle `teams_kontakt`
+-- Dumping data for table `teams_kontakt`
 --
 
 INSERT INTO `teams_kontakt` (`teams_kontakt_id`, `team_id`, `email`, `public`, `get_info_mail`) VALUES
@@ -15069,7 +15083,7 @@ INSERT INTO `teams_kontakt` (`teams_kontakt_id`, `team_id`, `email`, `public`, `
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `teams_liga`
+-- Table structure for table `teams_liga`
 --
 
 CREATE TABLE `teams_liga` (
@@ -15085,7 +15099,7 @@ CREATE TABLE `teams_liga` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Teamdaten, welche nur vom LA geändert werden können';
 
 --
--- Daten für Tabelle `teams_liga`
+-- Dumping data for table `teams_liga`
 --
 
 INSERT INTO `teams_liga` (`team_id`, `teamname`, `ligateam`, `terminplaner`, `passwort`, `passwort_geaendert`, `freilose`, `zweites_freilos`, `aktiv`) VALUES
@@ -15550,7 +15564,7 @@ INSERT INTO `teams_liga` (`team_id`, `teamname`, `ligateam`, `terminplaner`, `pa
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `teams_name_historic`
+-- Table structure for table `teams_name_historic`
 --
 
 CREATE TABLE `teams_name_historic` (
@@ -15560,7 +15574,7 @@ CREATE TABLE `teams_name_historic` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Daten für Tabelle `teams_name_historic`
+-- Dumping data for table `teams_name_historic`
 --
 
 INSERT INTO `teams_name_historic` (`saison`, `team_id`, `name`) VALUES
@@ -16576,7 +16590,7 @@ INSERT INTO `teams_name_historic` (`saison`, `team_id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `teams_strafen`
+-- Table structure for table `teams_strafen`
 --
 
 CREATE TABLE `teams_strafen` (
@@ -16592,7 +16606,7 @@ CREATE TABLE `teams_strafen` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `turniere_berichte`
+-- Table structure for table `turniere_berichte`
 --
 
 CREATE TABLE `turniere_berichte` (
@@ -16605,7 +16619,7 @@ CREATE TABLE `turniere_berichte` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `turniere_details`
+-- Table structure for table `turniere_details`
 --
 
 CREATE TABLE `turniere_details` (
@@ -16627,7 +16641,7 @@ CREATE TABLE `turniere_details` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Daten für Tabelle `turniere_details`
+-- Dumping data for table `turniere_details`
 --
 
 INSERT INTO `turniere_details` (`turnier_id`, `hallenname`, `strasse`, `plz`, `ort`, `haltestellen`, `plaetze`, `format`, `startzeit`, `besprechung`, `hinweis`, `organisator`, `handy`, `startgebuehr`, `min_teams`) VALUES
@@ -17140,7 +17154,7 @@ INSERT INTO `turniere_details` (`turnier_id`, `hallenname`, `strasse`, `plz`, `o
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `turniere_ergebnisse`
+-- Table structure for table `turniere_ergebnisse`
 --
 
 CREATE TABLE `turniere_ergebnisse` (
@@ -17153,7 +17167,7 @@ CREATE TABLE `turniere_ergebnisse` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Daten für Tabelle `turniere_ergebnisse`
+-- Dumping data for table `turniere_ergebnisse`
 --
 
 INSERT INTO `turniere_ergebnisse` (`turnier_ergebnis_id`, `team_id`, `turnier_id`, `ergebnis`, `platz`, `saison_uebernahme_verhindern`) VALUES
@@ -19459,7 +19473,7 @@ INSERT INTO `turniere_ergebnisse` (`turnier_ergebnis_id`, `team_id`, `turnier_id
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `turniere_geloescht`
+-- Table structure for table `turniere_geloescht`
 --
 
 CREATE TABLE `turniere_geloescht` (
@@ -19473,7 +19487,7 @@ CREATE TABLE `turniere_geloescht` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `turniere_liga`
+-- Table structure for table `turniere_liga`
 --
 
 CREATE TABLE `turniere_liga` (
@@ -19499,7 +19513,7 @@ CREATE TABLE `turniere_liga` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Daten für Tabelle `turniere_liga`
+-- Dumping data for table `turniere_liga`
 --
 
 INSERT INTO `turniere_liga` (`turnier_id`, `tname`, `ausrichter`, `art`, `tblock`, `tblock_fixed`, `datum`, `datum_bis`, `spieltag`, `phase`, `spielplan_vorlage`, `spielplan_datei`, `sofort_oeffnen`, `saison`, `canceled`, `canceled_grund`, `erstellt_am`, `block_erweitert_hoch`, `block_erweitert_runter`) VALUES
@@ -20012,7 +20026,7 @@ INSERT INTO `turniere_liga` (`turnier_id`, `tname`, `ausrichter`, `art`, `tblock
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `turniere_liste`
+-- Table structure for table `turniere_liste`
 --
 
 CREATE TABLE `turniere_liste` (
@@ -20026,7 +20040,7 @@ CREATE TABLE `turniere_liste` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Daten für Tabelle `turniere_liste`
+-- Dumping data for table `turniere_liste`
 --
 
 INSERT INTO `turniere_liste` (`liste_id`, `turnier_id`, `team_id`, `liste`, `position_warteliste`, `freilos_gesetzt`, `freilos_gesetzt_am`) VALUES
@@ -22226,7 +22240,7 @@ INSERT INTO `turniere_liste` (`liste_id`, `turnier_id`, `team_id`, `liste`, `pos
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `turniere_log`
+-- Table structure for table `turniere_log`
 --
 
 CREATE TABLE `turniere_log` (
@@ -22238,23 +22252,23 @@ CREATE TABLE `turniere_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Indizes der exportierten Tabellen
+-- Indexes for dumped tables
 --
 
 --
--- Indizes für die Tabelle `abstimmung_ergebnisse`
+-- Indexes for table `abstimmung_ergebnisse`
 --
 ALTER TABLE `abstimmung_ergebnisse`
   ADD PRIMARY KEY (`crypt`);
 
 --
--- Indizes für die Tabelle `abstimmung_teams`
+-- Indexes for table `abstimmung_teams`
 --
 ALTER TABLE `abstimmung_teams`
   ADD PRIMARY KEY (`team_id`);
 
 --
--- Indizes für die Tabelle `freilose`
+-- Indexes for table `freilose`
 --
 ALTER TABLE `freilose`
   ADD PRIMARY KEY (`freilos_id`),
@@ -22264,13 +22278,13 @@ ALTER TABLE `freilose`
   ADD KEY `freilose_ibfk_4` (`ausgerichtete_turnier_id`);
 
 --
--- Indizes für die Tabelle `ligakarte_gesuch`
+-- Indexes for table `ligakarte_gesuch`
 --
 ALTER TABLE `ligakarte_gesuch`
   ADD PRIMARY KEY (`gesuch_id`);
 
 --
--- Indizes für die Tabelle `ligaleitung`
+-- Indexes for table `ligaleitung`
 --
 ALTER TABLE `ligaleitung`
   ADD PRIMARY KEY (`ligaleitung_id`),
@@ -22278,31 +22292,31 @@ ALTER TABLE `ligaleitung`
   ADD KEY `spieler_id` (`spieler_id`);
 
 --
--- Indizes für die Tabelle `mailbot`
+-- Indexes for table `mailbot`
 --
 ALTER TABLE `mailbot`
   ADD PRIMARY KEY (`mail_id`);
 
 --
--- Indizes für die Tabelle `neuigkeiten`
+-- Indexes for table `neuigkeiten`
 --
 ALTER TABLE `neuigkeiten`
   ADD PRIMARY KEY (`neuigkeiten_id`);
 
 --
--- Indizes für die Tabelle `plz`
+-- Indexes for table `plz`
 --
 ALTER TABLE `plz`
   ADD PRIMARY KEY (`PLZ`);
 
 --
--- Indizes für die Tabelle `schiri_ergebnis`
+-- Indexes for table `schiri_ergebnis`
 --
 ALTER TABLE `schiri_ergebnis`
   ADD PRIMARY KEY (`schiri_test_id`);
 
 --
--- Indizes für die Tabelle `spiele`
+-- Indexes for table `spiele`
 --
 ALTER TABLE `spiele`
   ADD PRIMARY KEY (`turnier_id`,`spiel_id`) USING BTREE,
@@ -22312,86 +22326,92 @@ ALTER TABLE `spiele`
   ADD KEY `schiri_team_id_b` (`schiri_team_id_b`);
 
 --
--- Indizes für die Tabelle `spieler`
+-- Indexes for table `spieler`
 --
 ALTER TABLE `spieler`
   ADD PRIMARY KEY (`spieler_id`),
   ADD KEY `team_id` (`team_id`);
 
 --
--- Indizes für die Tabelle `spieler_ausleihen`
+-- Indexes for table `spieler_ausleihen`
 --
 ALTER TABLE `spieler_ausleihen`
   ADD PRIMARY KEY (`ausleihe_id`);
 
 --
--- Indizes für die Tabelle `spieler_zeitstrafen`
+-- Indexes for table `spieler_statistik`
+--
+ALTER TABLE `spieler_statistik`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `spieler_zeitstrafen`
 --
 ALTER TABLE `spieler_zeitstrafen`
   ADD PRIMARY KEY (`zeitstrafe_id`);
 
 --
--- Indizes für die Tabelle `spielplan_details`
+-- Indexes for table `spielplan_details`
 --
 ALTER TABLE `spielplan_details`
   ADD PRIMARY KEY (`spielplan`),
   ADD KEY `spielplan_paarung` (`spielplan_paarung`);
 
 --
--- Indizes für die Tabelle `spielplan_paarungen`
+-- Indexes for table `spielplan_paarungen`
 --
 ALTER TABLE `spielplan_paarungen`
   ADD PRIMARY KEY (`spielplan_paarung`,`spiel_id`);
 
 --
--- Indizes für die Tabelle `teams_details`
+-- Indexes for table `teams_details`
 --
 ALTER TABLE `teams_details`
   ADD UNIQUE KEY `team_id` (`team_id`);
 
 --
--- Indizes für die Tabelle `teams_kontakt`
+-- Indexes for table `teams_kontakt`
 --
 ALTER TABLE `teams_kontakt`
   ADD PRIMARY KEY (`teams_kontakt_id`),
   ADD KEY `team_id` (`team_id`);
 
 --
--- Indizes für die Tabelle `teams_liga`
+-- Indexes for table `teams_liga`
 --
 ALTER TABLE `teams_liga`
   ADD PRIMARY KEY (`team_id`),
   ADD UNIQUE KEY `teamname` (`teamname`);
 
 --
--- Indizes für die Tabelle `teams_name_historic`
+-- Indexes for table `teams_name_historic`
 --
 ALTER TABLE `teams_name_historic`
   ADD PRIMARY KEY (`saison`,`team_id`),
   ADD KEY `team_id` (`team_id`);
 
 --
--- Indizes für die Tabelle `teams_strafen`
+-- Indexes for table `teams_strafen`
 --
 ALTER TABLE `teams_strafen`
   ADD PRIMARY KEY (`strafe_id`),
   ADD KEY `team_id` (`team_id`);
 
 --
--- Indizes für die Tabelle `turniere_berichte`
+-- Indexes for table `turniere_berichte`
 --
 ALTER TABLE `turniere_berichte`
   ADD PRIMARY KEY (`bericht_id`),
   ADD KEY `turnier_id` (`turnier_id`);
 
 --
--- Indizes für die Tabelle `turniere_details`
+-- Indexes for table `turniere_details`
 --
 ALTER TABLE `turniere_details`
   ADD PRIMARY KEY (`turnier_id`);
 
 --
--- Indizes für die Tabelle `turniere_ergebnisse`
+-- Indexes for table `turniere_ergebnisse`
 --
 ALTER TABLE `turniere_ergebnisse`
   ADD PRIMARY KEY (`turnier_ergebnis_id`),
@@ -22399,13 +22419,13 @@ ALTER TABLE `turniere_ergebnisse`
   ADD KEY `turniere_ergebnisse_ibfk_2` (`turnier_id`);
 
 --
--- Indizes für die Tabelle `turniere_geloescht`
+-- Indexes for table `turniere_geloescht`
 --
 ALTER TABLE `turniere_geloescht`
   ADD PRIMARY KEY (`turnier_id`);
 
 --
--- Indizes für die Tabelle `turniere_liga`
+-- Indexes for table `turniere_liga`
 --
 ALTER TABLE `turniere_liga`
   ADD PRIMARY KEY (`turnier_id`),
@@ -22413,7 +22433,7 @@ ALTER TABLE `turniere_liga`
   ADD KEY `spielplan_vorlage` (`spielplan_vorlage`);
 
 --
--- Indizes für die Tabelle `turniere_liste`
+-- Indexes for table `turniere_liste`
 --
 ALTER TABLE `turniere_liste`
   ADD PRIMARY KEY (`liste_id`),
@@ -22421,124 +22441,130 @@ ALTER TABLE `turniere_liste`
   ADD KEY `turniere_liste_ibfk_1` (`team_id`);
 
 --
--- Indizes für die Tabelle `turniere_log`
+-- Indexes for table `turniere_log`
 --
 ALTER TABLE `turniere_log`
   ADD PRIMARY KEY (`turnier_log_id`),
   ADD KEY `turnier_id` (`turnier_id`);
 
 --
--- AUTO_INCREMENT für exportierte Tabellen
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT für Tabelle `freilose`
+-- AUTO_INCREMENT for table `freilose`
 --
 ALTER TABLE `freilose`
   MODIFY `freilos_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=136;
 
 --
--- AUTO_INCREMENT für Tabelle `ligakarte_gesuch`
+-- AUTO_INCREMENT for table `ligakarte_gesuch`
 --
 ALTER TABLE `ligakarte_gesuch`
   MODIFY `gesuch_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `ligaleitung`
+-- AUTO_INCREMENT for table `ligaleitung`
 --
 ALTER TABLE `ligaleitung`
   MODIFY `ligaleitung_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
--- AUTO_INCREMENT für Tabelle `mailbot`
+-- AUTO_INCREMENT for table `mailbot`
 --
 ALTER TABLE `mailbot`
   MODIFY `mail_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `neuigkeiten`
+-- AUTO_INCREMENT for table `neuigkeiten`
 --
 ALTER TABLE `neuigkeiten`
   MODIFY `neuigkeiten_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT für Tabelle `schiri_ergebnis`
+-- AUTO_INCREMENT for table `schiri_ergebnis`
 --
 ALTER TABLE `schiri_ergebnis`
   MODIFY `schiri_test_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `spieler`
+-- AUTO_INCREMENT for table `spieler`
 --
 ALTER TABLE `spieler`
   MODIFY `spieler_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3095;
 
 --
--- AUTO_INCREMENT für Tabelle `spieler_ausleihen`
+-- AUTO_INCREMENT for table `spieler_ausleihen`
 --
 ALTER TABLE `spieler_ausleihen`
   MODIFY `ausleihe_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `spieler_zeitstrafen`
+-- AUTO_INCREMENT for table `spieler_statistik`
+--
+ALTER TABLE `spieler_statistik`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `spieler_zeitstrafen`
 --
 ALTER TABLE `spieler_zeitstrafen`
   MODIFY `zeitstrafe_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `teams_kontakt`
+-- AUTO_INCREMENT for table `teams_kontakt`
 --
 ALTER TABLE `teams_kontakt`
   MODIFY `teams_kontakt_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=303;
 
 --
--- AUTO_INCREMENT für Tabelle `teams_liga`
+-- AUTO_INCREMENT for table `teams_liga`
 --
 ALTER TABLE `teams_liga`
   MODIFY `team_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1137;
 
 --
--- AUTO_INCREMENT für Tabelle `teams_strafen`
+-- AUTO_INCREMENT for table `teams_strafen`
 --
 ALTER TABLE `teams_strafen`
   MODIFY `strafe_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `turniere_berichte`
+-- AUTO_INCREMENT for table `turniere_berichte`
 --
 ALTER TABLE `turniere_berichte`
   MODIFY `bericht_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT für Tabelle `turniere_ergebnisse`
+-- AUTO_INCREMENT for table `turniere_ergebnisse`
 --
 ALTER TABLE `turniere_ergebnisse`
   MODIFY `turnier_ergebnis_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2462;
 
 --
--- AUTO_INCREMENT für Tabelle `turniere_liga`
+-- AUTO_INCREMENT for table `turniere_liga`
 --
 ALTER TABLE `turniere_liga`
   MODIFY `turnier_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1389;
 
 --
--- AUTO_INCREMENT für Tabelle `turniere_liste`
+-- AUTO_INCREMENT for table `turniere_liste`
 --
 ALTER TABLE `turniere_liste`
   MODIFY `liste_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3109;
 
 --
--- AUTO_INCREMENT für Tabelle `turniere_log`
+-- AUTO_INCREMENT for table `turniere_log`
 --
 ALTER TABLE `turniere_log`
   MODIFY `turnier_log_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Constraints der exportierten Tabellen
+-- Constraints for dumped tables
 --
 
 --
--- Constraints der Tabelle `freilose`
+-- Constraints for table `freilose`
 --
 ALTER TABLE `freilose`
   ADD CONSTRAINT `freilose_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams_liga` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -22547,13 +22573,13 @@ ALTER TABLE `freilose`
   ADD CONSTRAINT `freilose_ibfk_4` FOREIGN KEY (`ausgerichtete_turnier_id`) REFERENCES `turniere_liga` (`turnier_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `ligaleitung`
+-- Constraints for table `ligaleitung`
 --
 ALTER TABLE `ligaleitung`
   ADD CONSTRAINT `ligaleitung_ibfk_1` FOREIGN KEY (`spieler_id`) REFERENCES `spieler` (`spieler_id`);
 
 --
--- Constraints der Tabelle `spiele`
+-- Constraints for table `spiele`
 --
 ALTER TABLE `spiele`
   ADD CONSTRAINT `spiele_ibfk_1` FOREIGN KEY (`team_id_a`) REFERENCES `teams_liga` (`team_id`),
@@ -22563,69 +22589,69 @@ ALTER TABLE `spiele`
   ADD CONSTRAINT `spiele_ibfk_5` FOREIGN KEY (`turnier_id`) REFERENCES `turniere_liga` (`turnier_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `spieler`
+-- Constraints for table `spieler`
 --
 ALTER TABLE `spieler`
   ADD CONSTRAINT `spieler_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams_liga` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `spielplan_details`
+-- Constraints for table `spielplan_details`
 --
 ALTER TABLE `spielplan_details`
   ADD CONSTRAINT `spielplan_details_ibfk_1` FOREIGN KEY (`spielplan_paarung`) REFERENCES `spielplan_paarungen` (`spielplan_paarung`);
 
 --
--- Constraints der Tabelle `teams_details`
+-- Constraints for table `teams_details`
 --
 ALTER TABLE `teams_details`
   ADD CONSTRAINT `teams_details_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams_liga` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `teams_kontakt`
+-- Constraints for table `teams_kontakt`
 --
 ALTER TABLE `teams_kontakt`
   ADD CONSTRAINT `teams_kontakt_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams_liga` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `teams_name_historic`
+-- Constraints for table `teams_name_historic`
 --
 ALTER TABLE `teams_name_historic`
   ADD CONSTRAINT `teams_name_historic_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams_liga` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `teams_strafen`
+-- Constraints for table `teams_strafen`
 --
 ALTER TABLE `teams_strafen`
   ADD CONSTRAINT `teams_strafen_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams_liga` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `turniere_berichte`
+-- Constraints for table `turniere_berichte`
 --
 ALTER TABLE `turniere_berichte`
   ADD CONSTRAINT `turniere_berichte_ibfk_1` FOREIGN KEY (`turnier_id`) REFERENCES `turniere_liga` (`turnier_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `turniere_details`
+-- Constraints for table `turniere_details`
 --
 ALTER TABLE `turniere_details`
   ADD CONSTRAINT `turniere_details_ibfk_1` FOREIGN KEY (`turnier_id`) REFERENCES `turniere_liga` (`turnier_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `turniere_ergebnisse`
+-- Constraints for table `turniere_ergebnisse`
 --
 ALTER TABLE `turniere_ergebnisse`
   ADD CONSTRAINT `turniere_ergebnisse_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams_liga` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `turniere_ergebnisse_ibfk_2` FOREIGN KEY (`turnier_id`) REFERENCES `turniere_liga` (`turnier_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `turniere_liga`
+-- Constraints for table `turniere_liga`
 --
 ALTER TABLE `turniere_liga`
   ADD CONSTRAINT `turniere_liga_ibfk_1` FOREIGN KEY (`ausrichter`) REFERENCES `teams_liga` (`team_id`),
   ADD CONSTRAINT `turniere_liga_ibfk_2` FOREIGN KEY (`spielplan_vorlage`) REFERENCES `spielplan_details` (`spielplan`);
 
 --
--- Constraints der Tabelle `turniere_liste`
+-- Constraints for table `turniere_liste`
 --
 ALTER TABLE `turniere_liste`
   ADD CONSTRAINT `turniere_liste_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams_liga` (`team_id`) ON DELETE CASCADE ON UPDATE CASCADE,

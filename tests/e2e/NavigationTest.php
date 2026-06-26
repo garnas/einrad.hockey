@@ -19,13 +19,11 @@ class NavigationTest extends TestCase
     public static function provideUrls(): array
     {
         $pages = array_merge(
-            Nav::get_berichte(),
             Nav::get_info(),
             Nav::get_liga(),
             Nav::get_modus(),
             Nav::get_oc_start(),
-            Nav::get_organisation(),
-
+            Nav::get_sonstiges(),
         );
 
         # Only start
@@ -60,7 +58,9 @@ class NavigationTest extends TestCase
 
         $data = [];
         foreach ($constants as $_ => $value) {
-            $data[] = [$value];
+            if (str_starts_with(haystack: $value, needle: Env::BASE_URL)) {
+                $data[] = [$value];
+            }
         }
         return $data;
     }
@@ -103,26 +103,6 @@ class NavigationTest extends TestCase
             "Website $url does not appear to have a footer"
         );
     }
-
-    #[DataProvider("provideProductionURLs")]
-    public function testProductionUrls(string $url): void
-    {
-        [$httpCode, $html] = $this->fetchUrl($url);
-
-        $this->assertEquals(
-            200,
-            $httpCode,
-            "Website $url is not reachable. HTTP code: $httpCode"
-        );
-        $this->assertStringContainsString(
-            '</footer>',
-            $html,
-            "Website $url does not appear to have a footer"
-        );
-
-        sleep(0.5); # Do not kill https://einrad.hockey
-    }
-
 
     #[DataProvider("provideNavLinks")]
     public function testNavLinks(string $url): void

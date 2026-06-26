@@ -2,7 +2,7 @@
 
 class db
 {
-    public static null|ndbWrapper $db;
+    public static ?ndbWrapper $db;
 
     /**
      * Stellt die Verbindung zur Datenbank her
@@ -15,11 +15,12 @@ class db
      * @param string $password
      * @param string $database
      */
-    public static function initialize(string $host = Env::HOST_NAME,
-                                      string $user = Env::USER_NAME,
-                                      string $password = Env::PASSWORD,
-                                      string $database = Env::DATABASE): void
-    {
+    public static function initialize(
+        string $host = Env::HOST_NAME,
+        string $user = Env::USER_NAME,
+        string $password = Env::PASSWORD,
+        string $database = Env::DATABASE,
+    ): void {
         self::$db = new ndbWrapper($host, $user, $password, $database);
     }
 
@@ -28,7 +29,7 @@ class db
      */
     public static function terminate(): void
     {
-        self::$db = NULL;
+        self::$db = null;
     }
 
     /**
@@ -48,7 +49,7 @@ class db
             }
         } else {
             $output = (is_string($input))
-                ? htmlspecialchars($input, ENT_QUOTES, 'UTF-8', false)
+                ? htmlspecialchars($input, \ENT_QUOTES, 'UTF-8', false)
                 : $input;
         }
         return $output ?? $input;
@@ -71,14 +72,14 @@ class db
                 ";
         $tables = self::$db->query($sql, ENV::DATABASE)->list('TABLE_NAME');
         if (!in_array($table, $tables, true)) {
-            trigger_error("Ungültiger Tabellenname $table", E_USER_ERROR);
+            trigger_error("Ungültiger Tabellenname $table", \E_USER_ERROR);
         }
 
         // Validieren, ob der Spaltenname ein echter Spaltenname ist
         $sql = "SHOW FIELDS FROM $table";
         $columns = self::$db->query($sql)->list('Field');
         if (!in_array($column, $columns, true)) {
-            trigger_error("Ungültiger Spaltenname $column", E_USER_ERROR);
+            trigger_error("Ungültiger Spaltenname $column", \E_USER_ERROR);
         }
         return "`" . $column . "`";
     }
@@ -97,7 +98,7 @@ class db
                     $params[$key] = trim($param);
                 }
             }
-        } else if (is_string($params)) {
+        } elseif (is_string($params)) {
             $params = trim($params);
         }
         return $params;
@@ -123,11 +124,13 @@ class db
             $string = print_r($input, true);
         }
         $backtrace = debug_backtrace();
-        Html::info('<p>File: ' . $backtrace[0]['file']
+        Html::info(
+            '<p>File: ' . $backtrace[0]['file']
             . '<br>Line: ' . $backtrace[0]['line']
             . '</p><pre>' . $string . '</pre>',
             'DEBUG',
-            false);
+            false,
+        );
     }
 
     /**

@@ -18,7 +18,6 @@ use Tabelle;
 
 class TeamService
 {
-
     public static function getPublicEmailsAsString(nTeam $team): string
     {
         $filter = static function (Kontakt $kontakt) {
@@ -154,6 +153,11 @@ class TeamService
         if (!($team && $team->isLigaTeam())) {
             Html::error("Falscher Loginname");
             Helper::log(Config::LOG_LOGIN, "Falscher TC-Login | Teamname: " . $teamname);
+            return false;
+        }
+        if (!($team->isAktiv())) {
+            Html::error("Inaktives Team");
+            Helper::log(Config::LOG_LOGIN, "Inaktiver TC-Login | Teamname: " . $teamname);
             return false;
         }
         // Passwort prüfen

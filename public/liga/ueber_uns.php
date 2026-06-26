@@ -4,6 +4,10 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
+$spieler = Stats::get_aktuelle_spieler_anzahl();
+// $anzahl_spieler = $spieler['number'];
+// $stichtag = date($spieler);
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -22,7 +26,8 @@ include '../../templates/header.tmp.php';
 <h3 class="w3-text-grey">Ligadaten</h3>
 <div class="w3-container">
     <ul class="w3-ul w3-leftbar w3-border-tertiary">
-        <li><?=count(Team::get_liste())?> Teams mit <?=Stats::get_spieler_anzahl()?> Spielern</li>
+        <li><?=count(Team::get_liste())?> Teams</li>
+        <li><?=$spieler['number']?> Spieler (Stand: <?=$spieler['cutoff']?>)</li>
         <li><?=count(Config::BLOCK)?> Spielstärken (<?=implode(", ", Config::BLOCK)?>)</li>
         <li><?=Stats::get_schiris_anzahl()?> Schiedsrichter</li>
         <li>Saison: <?=Config::SAISON_ANFANG . ' - ' . Config::SAISON_ENDE?></li>
@@ -37,7 +42,7 @@ include '../../templates/header.tmp.php';
     <ul class="w3-ul w3-leftbar w3-border-tertiary">
         <li><?=Html::link(Nav::LINK_REGELN_KURZ, 'Die wichtigsten Regeln', false, "sports")?></li>
         <li><?=Html::link("ligakarte.php", "Deutschlandkarte aller Ligateams", false, "flag")?></li>
-        <li><?=Html::link("teams.php","Kontaktliste aller Ligateams", false, "mail")?></li>
+        <li><?=Html::link("teams.php", "Kontaktliste aller Ligateams", false, "mail")?></li>
     </ul>
 </div>
 

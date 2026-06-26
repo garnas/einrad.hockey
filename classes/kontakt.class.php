@@ -62,11 +62,11 @@ class Kontakt
 
         $return['emails'] = $return['teamnamen'] = [];
         // Doppelte Teamnamen und Email-Adressen filtern
-        foreach (db::$db->query($sql, $turnier_id)->esc()->fetch() as $x){
+        foreach (db::$db->query($sql, $turnier_id)->esc()->fetch() as $x) {
             if (!in_array($x['teamname'], $return['teamnamen'])) {
                 $return['teamnamen'][] = $x['teamname'];
             }
-            if (!in_array($x['email'], $return['emails'])){
+            if (!in_array($x['email'], $return['emails'])) {
                 $return['emails'][] = $x['email'];
             }
         }
@@ -101,7 +101,7 @@ class Kontakt
         $and_clause = match ($scope) {
             '' => '',
             'public' => "AND public = 'Ja'",
-            'info' => "AND get_info_mail = 'Ja'"
+            'info' => "AND get_info_mail = 'Ja'",
         };
         $sql = "
                 SELECT email

@@ -12,11 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
     name: "freilose",
     indexes: [
         new ORM\Index(name: "freilose_ibfk_2", columns: ["turnier_id"]),
-        new ORM\Index(name: "freilose_ibfk_1", columns: ["team_id"])])
-]
+        new ORM\Index(name: "freilose_ibfk_1", columns: ["team_id"])],
+)]
 class Freilos
 {
-
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Id]
     #[ORM\Column(name: "freilos_id", type: "integer", nullable: false)]
@@ -30,7 +29,7 @@ class Freilos
         return $this->gesetztAm;
     }
 
-    public function setGesetztAm(DateTime $gesetztAm = new DateTime()): Freilos
+    public function setGesetztAm(DateTime $gesetztAm = new DateTime()): self
     {
         $this->gesetztAm = $gesetztAm;
         return $this;
@@ -44,7 +43,7 @@ class Freilos
         return $this->erstelltAm;
     }
 
-    public function setErstelltAm(DateTime $erstelltAm = new DateTime()): Freilos
+    public function setErstelltAm(DateTime $erstelltAm = new DateTime()): self
     {
         $this->erstelltAm = $erstelltAm;
         return $this;
@@ -65,7 +64,7 @@ class Freilos
         return $this->team;
     }
 
-    public function setTeam (nTeam $team): Freilos
+    public function setTeam(nTeam $team): self
     {
         $this->team = $team;
         return $this;
@@ -76,11 +75,11 @@ class Freilos
     private ?Turnier $turnier;
 
     #[ORM\OneToOne(targetEntity: Turnier::class)]
-    #[ORM\JoinColumn(name: "ausgerichtete_turnier_id", referencedColumnName: "turnier_id", nullable: True)]
+    #[ORM\JoinColumn(name: "ausgerichtete_turnier_id", referencedColumnName: "turnier_id", nullable: true)]
     private ?Turnier $turnierAusgerichtet;
 
-    #[ORM\OneToOne(targetEntity: Freilos::class)]
-    #[ORM\JoinColumn(name: "vorheriges_freilos", referencedColumnName: "freilos_id", nullable: True)]
+    #[ORM\OneToOne(targetEntity: self::class)]
+    #[ORM\JoinColumn(name: "vorheriges_freilos", referencedColumnName: "freilos_id", nullable: true)]
     private ?Freilos $vorherigesFreilos;
 
     public function getTurnierAusgerichtet(): ?Turnier
@@ -88,7 +87,7 @@ class Freilos
         return $this->turnierAusgerichtet;
     }
 
-    public function setTurnierAusgerichtet(?Turnier $turnierAusgerichtet): Freilos
+    public function setTurnierAusgerichtet(?Turnier $turnierAusgerichtet): self
     {
         $this->turnierAusgerichtet = $turnierAusgerichtet;
         return $this;
@@ -99,7 +98,7 @@ class Freilos
         return $this->turnier;
     }
 
-    public function setTurnier(?Turnier $turnier): Freilos
+    public function setTurnier(?Turnier $turnier): self
     {
         $this->turnier = $turnier;
         return $this;
@@ -116,7 +115,7 @@ class Freilos
         $this->setGesetztAm();
     }
 
-    public function setGrund(FreilosGrund $grund): Freilos
+    public function setGrund(FreilosGrund $grund): self
     {
         $this->grund = $grund->name;
         return $this;
@@ -127,7 +126,7 @@ class Freilos
         return FreilosGrund::fromName($this->grund);
     }
 
-    public function setSaison(int $saison): Freilos
+    public function setSaison(int $saison): self
     {
         $this->saison = $saison;
         return $this;
@@ -135,7 +134,7 @@ class Freilos
 
     public function isGueltig(): bool
     {
-        return $this->saison >= Config::SAISON -1;
+        return $this->saison >= Config::SAISON - 1;
     }
 
     public function getSaison(): int
@@ -148,12 +147,12 @@ class Freilos
         return $this->freilosId;
     }
 
-    public function getVorherigesFreilos(): ?Freilos
+    public function getVorherigesFreilos(): ?self
     {
         return $this->vorherigesFreilos;
     }
 
-    public function setVorherigesFreilos(?Freilos $vorherigesFreilos): self
+    public function setVorherigesFreilos(?self $vorherigesFreilos): self
     {
         $this->vorherigesFreilos = $vorherigesFreilos;
         return $this;

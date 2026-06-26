@@ -46,19 +46,19 @@ if (!isset($_POST['create'])) {
             </form>
         </div>
     <?php }
-} else {
-    $errortext ='';
-    $email = $_POST['email'];
-    $test_level = $_POST['test_level'];
-    $test = new SchiriTest();
-    $test->set_spieler($spieler)
-        ->set_level($test_level)
-        ->set_email($email)
-        ->set_pruefungs_fragen();
-    if (!$test->create()) {
-        Html::message('error', 'Test für ' . $test->spieler->getName() .
-            ' konnte nicht erstellt werden.', 'Fehler:');
-    } else { ?>
+    } else {
+        $errortext = '';
+        $email = $_POST['email'];
+        $test_level = $_POST['test_level'];
+        $test = new SchiriTest();
+        $test->set_spieler($spieler)
+            ->set_level($test_level)
+            ->set_email($email)
+            ->set_pruefungs_fragen();
+        if (!$test->create()) {
+            Html::message('error', 'Test für ' . $test->spieler->getName()
+                . ' konnte nicht erstellt werden.', 'Fehler:');
+        } else { ?>
         <H3>Der Test wurde erfolgreich erstellt und in die Datenbank eingetragen.</H3>
         <table>
         <tr><td>Zeitstempel: </td><td><?= $test->zeitstempel ?>                   </td></tr>
@@ -70,15 +70,15 @@ if (!isset($_POST['create'])) {
         <tr><td>Fragen-IDs:  </td><td><?= $test->gestellte_fragen ?>              </td></tr>
         </table>
         <?php
-        if (!$test->mail_on_create()) {
-            Html::message('error', 'E-Mail an ' . $test->spieler->getName() .
-                ' konnte nicht versendet werden.', 'Fehler:');
-        } else { 
-            echo '<H4>' . $test->spieler->getName() . ' &lt;' . $test->email . '&gt';
-            echo ' hat eine E-Mail mit dem Link zur Prüfung bekommen.</H4>';
+            if (!$test->mail_on_create()) {
+                Html::message('error', 'E-Mail an ' . $test->spieler->getName()
+                    . ' konnte nicht versendet werden.', 'Fehler:');
+            } else {
+                echo '<H4>' . $test->spieler->getName() . ' &lt;' . $test->email . '&gt';
+                echo ' hat eine E-Mail mit dem Link zur Prüfung bekommen.</H4>';
+            }
         }
     }
-}
 
 echo '<P><form method="post">';
 echo '<button type="submit" class="w3-button w3-hover-indigo w3-block w3-primary"';

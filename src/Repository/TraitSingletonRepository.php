@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-trait TraitSingletonRepository {
-
+trait TraitSingletonRepository
+{
     private static self $instance;
     private static bool $isSetup = false;
 

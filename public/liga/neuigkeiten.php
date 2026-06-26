@@ -3,44 +3,22 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
+use App\Repository\Neuigkeit\NeuigkeitRepository;
+
 require_once '../../init.php';
 
-$saison = (isset($_GET['saison'])) ? (int)$_GET['saison'] : Config::SAISON;
-$neuigkeiten = Neuigkeit::get_neuigkeiten(limit: false, aktiv: null);
+$saison = (isset($_GET['saison'])) ? (int) $_GET['saison'] : Config::SAISON;
+$neuigkeiten = NeuigkeitRepository::get()->findAll();
+
+$neuigkeiten_nach_jahr = [];
 
 // gruppiere die neuigkeiten nach jahr und monaten
-$neuigkeiten_nach_jahr = [];
+$formatter = new IntlDateFormatter('de_DE', pattern: 'MMMM');
 foreach ($neuigkeiten as $neuigkeit) {
-    $jahr = date("Y", strtotime($neuigkeit['zeit']));
-    $monat = date("m", strtotime($neuigkeit['zeit']));
-
-    $delta_zeit = (time() - strtotime($neuigkeit['zeit'])) / (60 * 60); //in Stunden
-    if ($delta_zeit < 24) {
-        $zeit = ($delta_zeit <= 1.5) ? "gerade eben" : "vor " . round($delta_zeit) . " Stunden";
-    } elseif ($delta_zeit < 7 * 24) {
-        $zeit = ($delta_zeit <= 1.5 * 24) ? "vor einem Tag" : "vor " . round($delta_zeit / 24) . " Tagen";
-    } else {
-        $zeit = date("d.m.Y", strtotime($neuigkeit['zeit']));
-    }
-
-    $neuigkeit['zeit'] = $zeit;
+    $jahr = $neuigkeit->getZeit()->format('Y');
+    $monat = $formatter->format($neuigkeit->getZeit());
     $neuigkeiten_nach_jahr[$jahr][$monat][] = $neuigkeit;
 }
-
-$monate = [
-    '01' => 'Januar',
-    '02' => 'Februar',
-    '03' => 'März',
-    '04' => 'April',
-    '05' => 'Mai',
-    '06' => 'Juni',
-    '07' => 'Juli',
-    '08' => 'August',
-    '09' => 'September',
-    '10' => 'Oktober',
-    '11' => 'November',
-    '12' => 'Dezember'
-];
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -67,7 +45,7 @@ include '../../templates/header.tmp.php'; ?>
                         <?php foreach ($neuigkeiten_nach_monat as $monat => $neuigkeiten): ?>
                             <li class="w3-padding-small">
                                 <a class="" href="#<?= $jahr ?><?= $monat ?>" style="display:block; color:inherit; text-decoration:none;">
-                                    <?= $monate[$monat] ?>
+                                    <?= $monat ?>
                                 </a>
                             </li>
                         <?php endforeach; ?>
@@ -80,7 +58,7 @@ include '../../templates/header.tmp.php'; ?>
     <div class="w3-col l9 m8">
         <?php foreach ($neuigkeiten_nach_jahr as $jahr => $neuigkeiten_nach_monat): ?>
             <?php foreach ($neuigkeiten_nach_monat as $monat => $neuigkeiten): ?>
-                <h2 id="<?= $jahr ?><?= $monat ?>" class="w3-text-primary w3-border-bottom w3-border-grey"><?= $monate[$monat] ?> <?= $jahr ?></h2>
+                <h2 id="<?= $jahr ?><?= $monat ?>" class="w3-text-primary w3-border-bottom w3-border-grey"><?= $monat ?> <?= $jahr ?></h2>
                 <?php foreach ($neuigkeiten as $neuigkeit): ?>
                     <?php include '../../templates/neuigkeiten/neuigkeit.tmp.php'; ?>
                 <?php endforeach; ?>
@@ -89,3 +67,5 @@ include '../../templates/header.tmp.php'; ?>
     </div>
 
 </div>
+
+<?php include '../../templates/footer.tmp.php';

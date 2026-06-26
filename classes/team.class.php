@@ -92,7 +92,7 @@ class Team
      * @param $teamname
      * @return int|null
      */
-    public static function name_to_id($teamname): null|int
+    public static function name_to_id($teamname): ?int
     {
         $sql = " 
                 SELECT team_id 
@@ -109,18 +109,18 @@ class Team
      * @param int $saison
      * @return string|null
      */
-    public static function id_to_name(int $team_id, int $saison = Config::SAISON): null|string
+    public static function id_to_name(int $team_id, int $saison = Config::SAISON): ?string
     {
 
         if (isset(self::$cache_id_to_name[$team_id])) {
             return self::$cache_id_to_name[$team_id];
         }
-            $sql = "
+        $sql = "
                 SELECT teamname 
                 FROM teams_liga 
                 WHERE team_id = ?
             ";
-            $params = [$team_id];
+        $params = [$team_id];
 
         if ($saison != Config::SAISON) {
             $teamname = self::id_to_historic_name($team_id, $saison);
@@ -142,7 +142,7 @@ class Team
      * @param int $saison
      * @return string|null
      */
-    public static function id_to_historic_name(int $team_id, int $saison = Config::SAISON): null|string
+    public static function id_to_historic_name(int $team_id, int $saison = Config::SAISON): ?string
     {
         $sql = "
             SELECT name
@@ -160,7 +160,7 @@ class Team
      * @param null|int $team_id
      * @return bool
      */
-    public static function is_ligateam(null|int $team_id): bool
+    public static function is_ligateam(?int $team_id): bool
     {
         $sql = "
                 SELECT team_id
@@ -272,17 +272,17 @@ class Team
 
     /**
      * Gibt die Teamwertigkeit
-     * 
+     *
      * @return null|int
      */
-    public function get_wertigkeit(): null|int
+    public function get_wertigkeit(): ?int
     {
         return $this->wertigkeit;
     }
 
     /**
      * Setzt die Wertigkeit vor dem benannten Spieltag
-     * 
+     *
      * @param int $spieltag
      */
     public function set_wertigkeit(int $spieltag, int $saison = Config::SAISON): void
@@ -292,7 +292,7 @@ class Team
 
     /**
      * Setzt den Teamblock vor dem benannten Spieltag
-     * 
+     *
      * @param int $spieltag
      */
     public function set_tblock(int $spieltag): void
@@ -302,7 +302,7 @@ class Team
 
     /**
      * Setzt die Information, ob ein Freilos gesetzt wurde
-     * 
+     *
      * @param string $freilos_gesetzt
      */
     public function set_freilos_gesetzt(string $freilos_gesetzt): void
@@ -312,7 +312,7 @@ class Team
 
     /**
      * Setzte die Wartelisteposition des Teams auf einem Turnier
-     * 
+     *
      * @param int $spieltag
      */
     public function set_position_warteliste(int $pos): void
@@ -322,10 +322,10 @@ class Team
 
     /**
      * Gibt den Teamblock
-     * 
+     *
      * @return null|string
      */
-    public function get_tblock(): null|string
+    public function get_tblock(): ?string
     {
         return $this->tblock;
     }

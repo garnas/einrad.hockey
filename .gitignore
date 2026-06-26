@@ -1,5 +1,5 @@
 # Enviroment Einstellungen
-env.php
+/env.php
 .env
 
 # Webroot Dateien
@@ -31,6 +31,7 @@ node_modules/
 *.docker.sh
 
 # composer
+composer.phar
 vendor/
 
 # xml

@@ -1,8 +1,10 @@
 <?php
+
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
+require_once '../../logic/spielplan.logic.php';
 
 // Turnier-ID
 $turnier_id = (int) @$_GET['turnier_id'];
@@ -35,4 +37,3 @@ include '../../templates/spielplan/spielplan_spiele.tmp.php'; // Spiele
 include '../../templates/spielplan/spielplan_turniertabelle.tmp.php'; // Abschlusstabelle
 include '../../templates/spielplan/spielplan_direkter_vergleich.tmp.php'; // Direkter Vergleich Tabellen
 include '../../templates/footer.tmp.php';
-

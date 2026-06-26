@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: "turniere_ergebnisse", indexes: [new ORM\Index(columns: ["team_id"], name: "team_id"), new ORM\Index(columns: ["turnier_id"], name: "turniere_ergebnisse_ibfk_2")])]
 class TurnierErgebnis
 {
-
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Id]
     #[ORM\Column(name: "turnier_ergebnis_id", type: "integer", nullable: false)]

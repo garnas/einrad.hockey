@@ -15,7 +15,7 @@ class DoctrineWrapper
 {
     private static EntityManager $entity_manager;
 
-    private function __construct(){}
+    private function __construct() {}
 
     public static function manager(): EntityManager
     {
@@ -34,7 +34,7 @@ class DoctrineWrapper
         $queryCache = (
             $isDevMode
                 ? (new ArrayAdapter())
-                : (new PhpFilesAdapter(namespace: "doctrine_queries", directory: Env::BASE_PATH. "/cache"))
+                : (new PhpFilesAdapter(namespace: "doctrine_queries", directory: Env::BASE_PATH . "/cache"))
         );
         $config->setQueryCache($queryCache);
 

@@ -1,7 +1,7 @@
 <?php
 
-class Spielplan_JgJ extends Spielplan {
-
+class Spielplan_JgJ extends Spielplan
+{
     /**
      * Tabellen
      */
@@ -18,7 +18,7 @@ class Spielplan_JgJ extends Spielplan {
     public array $penaltys = [
         'gesamt' => [],
         'ausstehend' => [],
-        'kontrolle' => []
+        'kontrolle' => [],
     ];
 
     /**
@@ -29,7 +29,7 @@ class Spielplan_JgJ extends Spielplan {
      */
     public function __construct(nTurnier $turnier, bool $penaltys = true, $skip_init = false)
     {
-        parent:: __construct($turnier);
+        parent::__construct($turnier);
 
         $this->tore_tabelle = $this->get_torematrix($penaltys);
         $this->turnier_tabelle = self::get_sorted_turniertabelle($this->tore_tabelle);
@@ -54,18 +54,42 @@ class Spielplan_JgJ extends Spielplan {
     public static function get_sorted_turniertabelle(array $tore_matrix): array
     {
         $sort_function = static function ($ergebnis_a, $ergebnis_b) {
-            if ($ergebnis_a['punkte'] > $ergebnis_b['punkte']) return -1;
-            if ($ergebnis_a['punkte'] < $ergebnis_b['punkte']) return 1;
-            if ($ergebnis_a['tordifferenz'] > $ergebnis_b['tordifferenz']) return -1;
-            if ($ergebnis_a['tordifferenz'] < $ergebnis_b['tordifferenz']) return 1;
-            if ($ergebnis_a['tore'] > $ergebnis_b['tore']) return -1;
-            if ($ergebnis_a['tore'] < $ergebnis_b['tore']) return 1;
-            if ($ergebnis_a['penalty_punkte'] > $ergebnis_b['penalty_punkte']) return -1;
-            if ($ergebnis_a['penalty_punkte'] < $ergebnis_b['penalty_punkte']) return 1;
-            if ($ergebnis_a['penalty_diff'] > $ergebnis_b['penalty_diff']) return -1;
-            if ($ergebnis_a['penalty_diff'] < $ergebnis_b['penalty_diff']) return 1;
-            if ($ergebnis_a['penalty_tore'] > $ergebnis_b['penalty_tore']) return -1;
-            if ($ergebnis_a['penalty_tore'] < $ergebnis_b['penalty_tore']) return 1;
+            if ($ergebnis_a['punkte'] > $ergebnis_b['punkte']) {
+                return -1;
+            }
+            if ($ergebnis_a['punkte'] < $ergebnis_b['punkte']) {
+                return 1;
+            }
+            if ($ergebnis_a['tordifferenz'] > $ergebnis_b['tordifferenz']) {
+                return -1;
+            }
+            if ($ergebnis_a['tordifferenz'] < $ergebnis_b['tordifferenz']) {
+                return 1;
+            }
+            if ($ergebnis_a['tore'] > $ergebnis_b['tore']) {
+                return -1;
+            }
+            if ($ergebnis_a['tore'] < $ergebnis_b['tore']) {
+                return 1;
+            }
+            if ($ergebnis_a['penalty_punkte'] > $ergebnis_b['penalty_punkte']) {
+                return -1;
+            }
+            if ($ergebnis_a['penalty_punkte'] < $ergebnis_b['penalty_punkte']) {
+                return 1;
+            }
+            if ($ergebnis_a['penalty_diff'] > $ergebnis_b['penalty_diff']) {
+                return -1;
+            }
+            if ($ergebnis_a['penalty_diff'] < $ergebnis_b['penalty_diff']) {
+                return 1;
+            }
+            if ($ergebnis_a['penalty_tore'] > $ergebnis_b['penalty_tore']) {
+                return -1;
+            }
+            if ($ergebnis_a['penalty_tore'] < $ergebnis_b['penalty_tore']) {
+                return 1;
+            }
             return -1; // Team welches links steht kommt nach oben, also das Team mit der höheren Rangtabellenwertung
         };
 
@@ -101,9 +125,9 @@ class Spielplan_JgJ extends Spielplan {
             return in_array($team_id, $team_ids); // Alle Team-IDs, bis auf die Übergebenen, werden entfernt
         };
         foreach ($tore_tabelle as &$ergebnis) {
-            $ergebnis = array_filter($ergebnis, $filter_function, ARRAY_FILTER_USE_KEY);
+            $ergebnis = array_filter($ergebnis, $filter_function, \ARRAY_FILTER_USE_KEY);
         }
-        return array_filter($tore_tabelle, $filter_function, ARRAY_FILTER_USE_KEY);
+        return array_filter($tore_tabelle, $filter_function, \ARRAY_FILTER_USE_KEY);
     }
 
     /**
@@ -179,8 +203,8 @@ class Spielplan_JgJ extends Spielplan {
         if (count($tore_tabelle) === 0) { // Zuletzt werden die noch zu spielenden Penaltys ermittelt
             foreach ($this->penaltys['gesamt'] as $spiel_id) {
                 if (
-                    is_null($this->spiele[$spiel_id]['penalty_a'])
-                    || is_null($this->spiele[$spiel_id]['penalty_b'])
+                    null === $this->spiele[$spiel_id]['penalty_a']
+                    || null === $this->spiele[$spiel_id]['penalty_b']
                 ) {
                     $this->penaltys['ausstehend'][] = $spiel_id;
                 }
@@ -203,8 +227,9 @@ class Spielplan_JgJ extends Spielplan {
         }
         $turnier_tabelle = self::get_sorted_turniertabelle($tore_tabelle); // neue Turniertabelle erstellen
         // Direktervergleich Tabelle ausgeben
-        if ($print && $this->check_ergebnis_fix(array_keys($tore_tabelle)))
+        if ($print && $this->check_ergebnis_fix(array_keys($tore_tabelle))) {
             $this->direkter_vergleich_tabellen[] = $turnier_tabelle;
+        }
 
         // Mit dem ersten Team gleichplatzierte Teams suchen
         $first_team_id = array_key_first($turnier_tabelle);
@@ -242,8 +267,8 @@ class Spielplan_JgJ extends Spielplan {
             $this->direkter_vergleich($tore_tabelle_gefiltert, true);
         } else {
             if ($this->check_ergebnis_fix($gleichplatzierte_teams)) {
-                $this->penaltys['gesamt'] =
-                    array_merge($this->penaltys['gesamt'], $this->get_spiel_ids($gleichplatzierte_teams));
+                $this->penaltys['gesamt']
+                    = array_merge($this->penaltys['gesamt'], $this->get_spiel_ids($gleichplatzierte_teams));
             }
             $this->penalty_vergleich($tore_tabelle, true);
         }
@@ -328,8 +353,8 @@ class Spielplan_JgJ extends Spielplan {
         // Hilfsfunktion für erreichbare Punkte eines Teams
         $vergleich = function ($team_id) {
             $return['punkte_min'] = $this->turnier_tabelle[$team_id]['punkte'];
-            $return['punkte_max'] =
-                $return['punkte_min'] + ($this->anzahl_spiele - $this->turnier_tabelle[$team_id]['spiele']) * 3;
+            $return['punkte_max']
+                = $return['punkte_min'] + ($this->anzahl_spiele - $this->turnier_tabelle[$team_id]['spiele']) * 3;
             $return['nicht_erreichbar'] = $return['punkte_max'] - 1;
             return $return;
         };
@@ -441,9 +466,9 @@ class Spielplan_JgJ extends Spielplan {
     public function validate_penalty_spiel(array $spiel): bool
     {
         return (
-                !is_null($spiel["penalty_a"])
-                or !is_null($spiel["penalty_b"])
-            )
+            null !== $spiel["penalty_a"]
+            || null !== $spiel["penalty_b"]
+        )
             && !$this->check_penalty_spiel($spiel["spiel_id"]);
     }
 
@@ -455,7 +480,7 @@ class Spielplan_JgJ extends Spielplan {
     public function validate_penalty_ergebnisse(): bool
     {
         foreach ($this->spiele as $spiel_id => $spiel) {
-            if ((!is_null($spiel['penalty_a']) || !is_null($spiel['penalty_b']))
+            if ((null !== $spiel['penalty_a'] || null !== $spiel['penalty_b'])
                 && !in_array($spiel_id, $this->penaltys['gesamt'])
             ) {
                 return false;

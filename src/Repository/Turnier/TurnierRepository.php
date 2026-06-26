@@ -106,7 +106,7 @@ class TurnierRepository
     /**
      * @return Turnier[]|Collection
      */
-    public static function getErgebnisTurniere(int $saison = Config::SAISON, bool $desc = True): array|Collection
+    public static function getErgebnisTurniere(int $saison = Config::SAISON, bool $desc = true): array|Collection
     {
         $query = DoctrineWrapper::manager()
             ->createQueryBuilder()

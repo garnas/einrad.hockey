@@ -19,7 +19,7 @@
             <?php }//end foreach?>
         </table>
     </div>
-    <?php if (in_array(NULL, array_column($spielplan->teamliste, 'tblock'), true)) { ?>
+    <?php if (in_array(null, array_column($spielplan->teamliste, 'tblock'), true)) { ?>
         <span class="w3-text-grey">* Nichtligateam</span>
     <?php } //endif?>
     <!-- Modal-Button -->
@@ -58,7 +58,7 @@
                                     <?= Html::trikot_punkt($team->details['trikot_farbe_1'] ?? null, $team->details['trikot_farbe_2'] ?? null) ?>
                                 </span>
                             </td>
-                        <?php } // end if ?>
+                        <?php } // end if?>
                         <td>
                             <span class="pdf-hide"><?= $team->details["ligavertreter"] ?? null?></span>
                         </td>
@@ -68,7 +68,7 @@
                             </span>
                         </td>
                     </tr>
-                <?php }//end foreach ?>
+                <?php }//end foreach?>
             </table>
         </div>
     </div>

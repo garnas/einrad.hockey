@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: "spieler", indexes: [new ORM\Index(name: "team_id", columns: ["team_id"])])]
 class Spieler
 {
-
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Id]
     #[ORM\Column(name: "spieler_id", type: "integer", nullable: false)]
@@ -47,11 +46,12 @@ class Spieler
     {
         return $this->spielerId;
     }
-    public function getName(bool $fullName = True): ?string
-    {   if ($fullName) {
+    public function getName(bool $fullName = true): ?string
+    {
+        if ($fullName) {
             return $this->vorname . " " . $this->nachname;
         }
-        return $this->vorname . " " . mb_substr($this->nachname,0,1, "utf-8") . '.';
+        return $this->vorname . " " . mb_substr($this->nachname, 0, 1, "utf-8") . '.';
     }
 
     public function getVorname(): ?string
