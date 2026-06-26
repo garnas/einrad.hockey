@@ -68,13 +68,6 @@ if ($last_turnier) {
             </p>
         </div>
         
-        <div id="immediately_open_div" style="display: none">
-            <p>
-                <input class="w3-check" type="checkbox" id="sofort_oeffnen" name="sofort_oeffnen" <?php if (($_POST['sofort_oeffnen'] ?? '') == "Ja") {?> checked <?php }//endif?> value="Ja">
-                <label for="sofort_oeffnen" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer"> Das Turnier soll beim Übergang von Wartephase auf Setzphase sofort auf ABCDEF geöffnet werden.</label>
-            </p>
-        </div>
-        
         <div id="block_higher_div" style="display: none">
             <p><label class="w3-text-primary" for="block">Höheren Turnierblock wählen</label>
             <select required class="w3-select w3-border w3-border-primary" id="block" name="block">
