@@ -31,8 +31,19 @@ if (isset($_POST['create_turnier'])) {
     $startzeit = DateTime::createFromFormat("H:i", ((string) ($_POST['startzeit'] ?? '')));
     $plaetze = (string) ($_POST['plaetze'] ?? '');
     $min_teams = (int) ($_POST['min_teams'] ?? '');
-    $sofotOeffnen = @(($_POST['sofort_oeffnen'] ?? '') === "Ja");
 
+    // Sofort oeffnen
+    $sofortOeffnen = false;
+    $higher = false;
+    $lower = false;
+    if ($_POST['sofort_oeffnen'] === 'higher') {
+        $sofortOeffnen = true;
+        $higher = true;
+    } elseif ($_POST['sofort_oeffnen'] === 'lower') {
+        $sofortOeffnen = true;
+        $lower = true;
+    }
+    
     // Turnierblock
     $block = $_POST['block'];
     if ($art === 'I') {
@@ -63,7 +74,9 @@ if (isset($_POST['create_turnier'])) {
         ->setPhase('warte')
         ->setCanceled(false)
         ->setErstelltAm(new DateTime())
-        ->setSofortOeffnen($sofotOeffnen);
+        ->setSofortOeffnen($sofortOeffnen)
+        ->setBlockErweitertRunter($lower)
+        ->setBlockErweitertHoch($higher);
 
     $details = new TurnierDetails();
     $details

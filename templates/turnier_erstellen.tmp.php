@@ -1,20 +1,6 @@
 <?php
 
-use App\Repository\Turnier\TurnierRepository;
 use App\Service\Turnier\BlockService;
-
-$last_turnier = TurnierRepository::get()->last_turnier($ausrichter_team_id);
-if ($last_turnier) {
-    $last_startgebuehr = e($last_turnier->getDetails()->getStartgebuehr());
-    $last_plaetze = e($last_turnier->getDetails()->getPlaetze());
-    $last_min_teams = e($last_turnier->getDetails()->getMinTeams());
-    $last_hinweis = e($last_turnier->getDetails()->getHinweis());
-} else {
-    $last_startgebuehr = '';
-    $last_plaetze = '';
-    $last_hinweis = '';
-    $last_min_teams = null;
-}
 
 ?>
 <form method="post">
@@ -25,14 +11,21 @@ if ($last_turnier) {
     <!-- Allgemein -->
     <div class="w3-panel w3-card-4">
         <h3 id="result">Turnierdaten</h3>
+        <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
+            <p>
+                Ligaturniere müssen spätestens vier Wochen vor dem Spieltag eingetragen werden und dürfen nur an einem Samstag, Sonntag oder bundeseinheitlichen Feiertag stattfinden.
+                Sie können frühstens um 9:00&nbsp;Uhr beginnen und müssen spätestens um 20:00&nbsp;Uhr (nach Spielplan) enden.
+            </p>
+        </div>
+
         <p>
             <label class="w3-text-primary" for="datum">Datum</label>
             <input required type="date" value="<?= $_POST['datum'] ?? date("Y-m-d", (time() + 4 * 7 * 24 * 60 * 60))?>" class="w3-input w3-border w3-border-primary" style="max-width: 320px" id="datum" name="datum">
-            <i class="w3-text-grey"> Ligaturniere müssen spätestens vier Wochen vor dem Spieltag eingetragen werden<br>nur Samstage, Sonntage und bundesweite Feiertage<br>Saison: <?=Config::SAISON_ANFANG;?> - <?=Config::SAISON_ENDE;?></i>
         </p>
+        
         <?php if (Helper::$ligacenter): ?>
             <p>
-                <label class="w3-text-primary" for="datum_bis">Bis-Datum (optional)</label>
+                <label class="w3-text-primary" for="datum_bis">Bis-Datum <i>(optional)</i></label>
                 <input type="date"
                        value="<?= $_POST['datum_bis'] ?? "" ?>"
                        class="w3-input w3-border w3-border-primary" style="max-width: 320px" id="datum_bis" name="datum_bis">
@@ -42,7 +35,6 @@ if ($last_turnier) {
         <p>
             <label class="w3-text-primary" for="startzeit">Startzeit</label>
             <input required type="time" class="w3-input w3-border w3-border-primary" value="<?=$_POST['startzeit'] ?? '10:00'?>" style="max-width: 320px" id="startzeit" name="startzeit">
-            <i class="w3-text-grey">Ligaturniere müssen zwischen 9:00&nbsp;Uhr und 20:00&nbsp;Uhr stattfinden</i>
         </p>
         <p>
             <input class="w3-check" type="checkbox" id="besprechung" name="besprechung" <?php if (($_POST['besprechung'] ?? '') == "Ja") {?>checked<?php }//endif?> value="Ja">
@@ -53,33 +45,63 @@ if ($last_turnier) {
     <!-- Modusspezifisch -->
     <div class="w3-panel w3-card-4">
         <h3 id="result">Liga</h3>
+        <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
+            <p>
+                Ein Turnier kann automatisch um einen Block nach oben oder unten erweitert werden. 
+                Das erfolgt beim Übergang in die Setzphase, wobei Teams mit passender Blockzugehörigkeit zuerst gesetzt werden. 
+                Wird einmal eine automatische Öffnung festgelegt, so ist dies später <b>nicht mehr zu ändern!</b>
+            </p>
+        </div>
+
+        <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
+            <p>
+                Eine automatische Öffnung des Turniers auf ABCDEF ist nicht mehr möglich. 
+                Dies kann nach Übergang in die Setzphase selbst umgesetzt werden. 
+                Somit ist es möglich, das Turnier zuerst um einen Block höher oder niedriger zu erweitern und im Anschluss 
+                händisch für alle Blöcke zu öffnen.
+            </p>
+        </div>
+
         <div>
             <p>
                 <label class="w3-text-primary" for="art">Turnierart</label>
                 <select required class="w3-select w3-border w3-border-primary" id="art" name="art" onchange="onchange_show_block(this)">
+                    <option value="" disabled selected>Wähle eine Option</option>
                     <option <?php if (($_POST['art'] ?? '') == 'I') {?> selected <?php } ?> value="I">I: Blockeigenes Turnier <?= BlockService::toString($ausrichter_block)?></option>
                     <option <?php if (($_POST['art'] ?? '') == 'II') {?> selected <?php } ?> value="II">II: Blockhöheres Turnier <?=$block_higher_str?></option>
-                    <option <?php if (($_POST['art'] ?? '') == 'spass') {?> selected <?php } ?> value="spass">Spaßturnier (außerhalb der Liga, Anmeldung beim Ausrichter, Datum und Uhrzeit beliebig)</option>
+                    <option <?php if (($_POST['art'] ?? '') == 'spass') {?> selected <?php } ?> value="spass">Spaßturnier</option>
                     <?php if (Helper::$ligacenter): ?>
-                        <option <?php if (($_POST['art'] ?? '') == 'final') {?> selected <?php } ?> value='final'>Abschlussturnier</option>
-                        <option <?php if (($_POST['art'] ?? '') == 'fixed') {?> selected <?php } ?> value='fixed'>Fixierter Turnierblock (<?=implode(", ", Config::BLOCK)?>)</option>
+                        <option value='final'>Abschlussturnier</option>
+                        <option value='fixed'>Fixierter Turnierblock (<?=implode(", ", Config::BLOCK)?>)</option>
                     <?php endif; ?>
                 </select>
             </p>
         </div>
-        
+
         <div id="block_higher_div" style="display: none">
-            <p><label class="w3-text-primary" for="block">Höheren Turnierblock wählen</label>
+            <p><label class="w3-text-primary" for="block">Auswahl eines höheren Turnierblocks</label>
             <select required class="w3-select w3-border w3-border-primary" id="block" name="block">
-                <?php foreach ($block_higher as $block) {?>
+                <?php foreach ($block_higher as $block): ?>
                     <option
                         <?php if (($_POST['block'] ?? '') === $block): ?>
                             selected
                         <?php endif; ?>
                             value='<?=$block?>'> <?=$block?>
                     </option>
-                <?php } //end foreach?>
+                <?php endforeach; ?>
             </select>
+        </div>
+
+        <div id="immediately_open_div">
+            <p>
+                <label class="w3-text-primary" for="sofort_oeffnen">Automtische Erweiterung des Turniers</label>
+                <select required class="w3-select w3-border w3-border-primary" id="sofort_oeffnen" name="sofort_oeffnen" onchange="onchange_show_block(this)">
+                    <option value="" disabled selected>Wähle eine Option</option>
+                    <option <?php if (($_POST['sofort_oeffnen'] ?? '') == 'higher') {?> selected <?php } ?> value="higher">Automatisch einen Block nach oben erweitern</option>
+                    <option <?php if (($_POST['sofort_oeffnen'] ?? '') == 'lower') {?> selected <?php } ?> value="lower">Automatisch einen Block nach unten erweitern</option>
+                    <option <?php if (($_POST['sofort_oeffnen'] ?? '') == 'none') {?> selected <?php } ?> value="none">Keine automatische Erweiterung vornehmen</option>
+                </select>
+            </p>
         </div>
 
         <?php if (Helper::$ligacenter) {?>
@@ -95,31 +117,33 @@ if ($last_turnier) {
             </div>
         <?php } //endif?>
 
-        <div id="number_of_teams_div" style="display: none">
+        <div id="min_number_of_teams_div">
             <p>
-                <label class="w3-text-primary" for="plaetze">Plätze</label>
-                <select required class="w3-select w3-border w3-border-primary" id="plaetze" name="plaetze">
-                    <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '4') {?> selected <?php } //endif?> value="4">4 Teams</option>
-                    <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '5') {?> selected <?php } //endif?> value="5">5 Teams</option>
-                    <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '6') {?> selected <?php } //endif?> value="6">6 Teams</option>
-                    <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '7') {?> selected <?php } //endif?> value="7">7 Teams</option>
-                    <option <?php if (($_POST['plaetze'] ?? $last_plaetze) == '8') {?> selected <?php } //endif?> value="8">8 Teams</option>
-                    <?php if (Helper::$ligacenter): ?>
-                        <option <?php if (($_POST['plaetze'] ?? '') == '9') {?> selected <?php } //endif?> value="9">9 Teams</option>
-                        <option <?php if (($_POST['plaetze'] ?? '') == '10') {?> selected <?php } //endif?> value="10">10 Teams</option>
-                        <option <?php if (($_POST['plaetze'] ?? '') == '11') {?> selected <?php } //endif?> value="11">11 Teams</option>
-                        <option <?php if (($_POST['plaetze'] ?? '') == '12') {?> selected <?php } //endif?> value="12">12 Teams</option>
-                    <?php endif; ?>
+                <label class="w3-text-primary" for="min_teams"><b>Minimale Anzahl</b> an Teams</label>
+                <select required class="w3-select w3-border w3-border-primary" id="min_teams" name="min_teams">
+                    <option value="" disabled selected>Wähle eine Option</option>
+                    <option <?php if (($_POST['min_teams'] ?? '') == '4') {?> selected <?php } ?> value="4">4 Teams</option>
+                    <option <?php if (($_POST['min_teams'] ?? '') == '5') {?> selected <?php } ?> value="5">5 Teams</option>
                 </select>
             </p>
         </div>
-        
-        <div id="min_number_of_teams_div" style="display: none">
+
+        <div id="number_of_teams_div">
             <p>
-                <label class="w3-text-primary" for="min_teams">Mindestanzahl an Teams damit das Turnier stattfindet</label>
-                <select required class="w3-select w3-border w3-border-primary" id="min_teams" name="min_teams">
-                    <option <?php if (($_POST['min_teams'] ?? $last_min_teams) == '5') {?> selected <?php } //endif?> value="5">5 Teams</option>
-                    <option <?php if (($_POST['min_teams'] ?? $last_min_teams) == '4') {?> selected <?php } //endif?> value="4">4 Teams</option>
+                <label class="w3-text-primary" for="plaetze"><b>Maximale Anzahl</b> an Teams</label>
+                <select required class="w3-select w3-border w3-border-primary" id="plaetze" name="plaetze">
+                    <option value="" disabled selected>Wähle eine Option</option>
+                    <option <?php if (($_POST['plaetze'] ?? '') == '4') {?> selected <?php } ?> value="4">4 Teams</option>
+                    <option <?php if (($_POST['plaetze'] ?? '') == '5') {?> selected <?php } ?> value="5">5 Teams</option>
+                    <option <?php if (($_POST['plaetze'] ?? '') == '6') {?> selected <?php } ?> value="6">6 Teams</option>
+                    <option <?php if (($_POST['plaetze'] ?? '') == '7') {?> selected <?php } ?> value="7">7 Teams</option>
+                    <option <?php if (($_POST['plaetze'] ?? '') == '8') {?> selected <?php } ?> value="8">8 Teams</option>
+                    <?php if (Helper::$ligacenter): ?>
+                        <option <?php if (($_POST['plaetze'] ?? '') == '9') {?> selected <?php } ?> value="9">9 Teams</option>
+                        <option <?php if (($_POST['plaetze'] ?? '') == '10') {?> selected <?php } ?> value="10">10 Teams</option>
+                        <option <?php if (($_POST['plaetze'] ?? '') == '11') {?> selected <?php } ?> value="11">11 Teams</option>
+                        <option <?php if (($_POST['plaetze'] ?? '') == '12') {?> selected <?php } ?> value="12">12 Teams</option>
+                    <?php endif; ?>
                 </select>
             </p>
         </div>
@@ -166,7 +190,6 @@ if ($last_turnier) {
             <input type="text" class="w3-input w3-border w3-border-primary" value="<?=$_POST['haltestellen'] ?? ''?>"
                    id="haltestellen" name="haltestellen" list="list_haltestellen">
             <?=Html::datalist_turnier("haltestellen")?>
-            <i class="w3-text-grey">Für die Anfahrt mit öffentlichen Verkehrsmitteln</i>
         </div>
     </div>
 
@@ -174,11 +197,10 @@ if ($last_turnier) {
     <div class="w3-panel w3-card-4">
         <h3>Turnierdetails</h3>
         <p>
-            <label class="w3-text-primary" for="text">Hinweistext (optional)</label>
+            <label class="w3-text-primary" for="text">Hinweistext <i>(optional)</i></label>
             <textarea class="w3-input w3-border w3-border-primary" onkeyup="woerter_zaehlen(1500);" maxlength="1500"
                       rows="4" id="text" name="hinweis"
-                      ><?=stripcslashes($_POST['hinweis'] ?? $last_hinweis)?></textarea>
-            <?= $last_hinweis ? '<i class="w3-text-grey">Der Hinweis des letzten Turniers wurde übernommen.</i>' : '' ?>
+                      ><?=stripcslashes($_POST['hinweis'] ?? '')?></textarea>
         <p id="counter"><p>
         </p>
         <p>
@@ -188,22 +210,23 @@ if ($last_turnier) {
         <p>
             <label class="w3-text-primary" for="startgebuehr">Startgebühr</label>
             <?php if (Helper::$ligacenter) {?>
-                <input type="text" value="<?=$last_startgebuehr?>" class="w3-input w3-border w3-border-primary"
+                <input type="text" class="w3-input w3-border w3-border-primary"
                        placeholder="z. B. 5 Euro" id="startgebuehr" name="startgebuehr">
             <?php } else { ?>
                 <select class="w3-input w3-border w3-border-primary" id="startgebuehr" name="startgebuehr">
-                    <option <?php if (($_POST['startgebuehr'] ?? $last_startgebuehr) == 'keine') {?>selected<?php }?> value="keine">keine</option>
-                    <option <?php if (($_POST['startgebuehr'] ?? $last_startgebuehr) == '5 Euro') {?>selected<?php }?> value="5 Euro">5 Euro</option>
-                    <option <?php if (($_POST['startgebuehr'] ?? $last_startgebuehr) == '6 Euro') {?>selected<?php }?> value="6 Euro">6 Euro</option>
-                    <option <?php if (($_POST['startgebuehr'] ?? $last_startgebuehr) == '7 Euro') {?>selected<?php }?> value="7 Euro">7 Euro</option>
-                    <option <?php if (($_POST['startgebuehr'] ?? $last_startgebuehr) == '8 Euro') {?>selected<?php }?> value="8 Euro">8 Euro</option>
-                    <option <?php if (($_POST['startgebuehr'] ?? $last_startgebuehr) == '9 Euro') {?>selected<?php }?> value="9 Euro">9 Euro</option>
-                    <option <?php if (($_POST['startgebuehr'] ?? $last_startgebuehr) == '10 Euro') {?>selected<?php }?> value="10 Euro">10 Euro</option>
-                    <option <?php if (($_POST['startgebuehr'] ?? $last_startgebuehr) == '11 Euro') {?>selected<?php }?> value="11 Euro">11 Euro</option>
-                    <option <?php if (($_POST['startgebuehr'] ?? $last_startgebuehr) == '12 Euro') {?>selected<?php }?> value="12 Euro">12 Euro</option>
-                    <option <?php if (($_POST['startgebuehr'] ?? $last_startgebuehr) == '13 Euro') {?>selected<?php }?> value="13 Euro">13 Euro</option>
-                    <option <?php if (($_POST['startgebuehr'] ?? $last_startgebuehr) == '14 Euro') {?>selected<?php }?> value="14 Euro">14 Euro</option>
-                    <option <?php if (($_POST['startgebuehr'] ?? $last_startgebuehr) == '15 Euro') {?>selected<?php }?> value="15 Euro">15 Euro</option>
+                    <option value="" disabled selected>Wähle eine Option</option>
+                    <option <?php if (($_POST['startgebuehr'] ?? '') == 'keine') {?>selected<?php }?> value="keine">keine</option>
+                    <option <?php if (($_POST['startgebuehr'] ?? '') == '5 Euro') {?>selected<?php }?> value="5 Euro">5 Euro</option>
+                    <option <?php if (($_POST['startgebuehr'] ?? '') == '6 Euro') {?>selected<?php }?> value="6 Euro">6 Euro</option>
+                    <option <?php if (($_POST['startgebuehr'] ?? '') == '7 Euro') {?>selected<?php }?> value="7 Euro">7 Euro</option>
+                    <option <?php if (($_POST['startgebuehr'] ?? '') == '8 Euro') {?>selected<?php }?> value="8 Euro">8 Euro</option>
+                    <option <?php if (($_POST['startgebuehr'] ?? '') == '9 Euro') {?>selected<?php }?> value="9 Euro">9 Euro</option>
+                    <option <?php if (($_POST['startgebuehr'] ?? '') == '10 Euro') {?>selected<?php }?> value="10 Euro">10 Euro</option>
+                    <option <?php if (($_POST['startgebuehr'] ?? '') == '11 Euro') {?>selected<?php }?> value="11 Euro">11 Euro</option>
+                    <option <?php if (($_POST['startgebuehr'] ?? '') == '12 Euro') {?>selected<?php }?> value="12 Euro">12 Euro</option>
+                    <option <?php if (($_POST['startgebuehr'] ?? '') == '13 Euro') {?>selected<?php }?> value="13 Euro">13 Euro</option>
+                    <option <?php if (($_POST['startgebuehr'] ?? '') == '14 Euro') {?>selected<?php }?> value="14 Euro">14 Euro</option>
+                    <option <?php if (($_POST['startgebuehr'] ?? '') == '15 Euro') {?>selected<?php }?> value="15 Euro">15 Euro</option>
                 </select>
             <?php } //end if?>
         </p>
@@ -225,8 +248,10 @@ if ($last_turnier) {
                    class="w3-input w3-border w3-border-primary" id="handy"
                    name="handy" list="list_handy">
             <?=Html::datalist_turnier_ausrichter("handy", $ausrichter_team_id)?>
-            <i class="w3-text-grey">Das Handy muss während des Turniertages erreichbar sein</i>
         </p>
+        <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
+            <p>Das Handy muss während des Turniertages erreichbar sein.</p>
+        </div>
     </div>
 
     <!-- Submit -->
@@ -263,30 +288,14 @@ function onchange_show_block(selectObject) {
     <?php endif; ?>
 
     document.getElementById("block_higher_div").style.display = "none";
-    document.getElementById("immediately_open_div").style.display = "none";
-    document.getElementById("number_of_teams_div").style.display = "none";
-    document.getElementById("min_number_of_teams_div").style.display = "none";
-    
-    /* Einblenden der Optionen der Turnierart I */
-    if (selectObject.value === "I") {
-        document.getElementById("immediately_open_div").style.display = "block";
-        document.getElementById("number_of_teams_div").style.display = "block";
-        document.getElementById("min_number_of_teams_div").style.display = "block";
-    }
-    
+    document.getElementById("block").required = false;
+        
     /* Einblenden der Optionen der Turnierart II */  
     if (selectObject.value === "II") {
         document.getElementById("block_higher_div").style.display = "block";
-        document.getElementById("immediately_open_div").style.display = "block";
-        document.getElementById("number_of_teams_div").style.display = "block";
-        document.getElementById("min_number_of_teams_div").style.display = "block";
+        document.getElementById("block").required = true;
     }
 
-    /* Einblenden der Optionen der Turnierart spass */
-    if (selectObject.value === "spass") {
-        document.getElementById("number_of_teams_div").style.display = "block";
-        document.getElementById("min_number_of_teams_div").style.display = "block";
-    }
 }
 
 onchange_show_block(document.getElementById("art"))

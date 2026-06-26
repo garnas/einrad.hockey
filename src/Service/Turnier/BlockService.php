@@ -17,7 +17,7 @@ class BlockService
         $chosen = array_search($block, Config::BLOCK);
 
         foreach (Config::BLOCK as $blockVgl) {
-            if (array_search($blockVgl, Config::BLOCK) <= $chosen) {
+            if (array_search($blockVgl, Config::BLOCK) < $chosen) {
                 $block_higher[] = $blockVgl;
             }
         }
@@ -62,7 +62,7 @@ class BlockService
         }
 
         if (\is_array($blockContext)) {
-            return "(" . implode(",", $blockContext) . ")";
+            return "(" . implode(", ", $blockContext) . ")";
         }
 
         return "";
