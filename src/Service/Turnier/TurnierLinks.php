@@ -29,9 +29,11 @@ class TurnierLinks
                 Html::link("../liga/turnier_details.php?turnier_id=$turnierId", 'Details', icon: 'info'),
                 Html::link("lc_turnier_log.php?turnier_id=$turnierId", ' Log einsehen', icon: 'info_outline'),
                 Html::link("lc_team_anmelden.php?turnier_id=$turnierId", ' Teams an/abmelden', icon: 'how_to_reg'),
-                Html::link("lc_turnier_bearbeiten.php?turnier_id=$turnierId", ' Turnier bearbeiten/löschen', icon: 'create'),
+                Html::link("lc_turnier_bearbeiten.php?turnier_id=$turnierId", ' Turnierdetails bearbeiten', icon: 'create'),
+                Html::link("lc_turnier_bearbeiten_block.php?turnier_id=$turnierId", "Turnierblock bearbeiten", icon: "list_alt"),
                 Html::link("lc_spielplan_verwalten.php?turnier_id=$turnierId", ' Spielplan/Ergebnis verwalten', icon: 'playlist_play'),
                 Html::link("../ligacenter/lc_turnier_report.php?turnier_id=$turnierId", 'Turnierreport bearbeiten', icon: 'article'),
+                Html::link("lc_turnier_loeschen.php?turnier_id=$turnierId", ' Turnier absagen/löschen', icon: 'block'),
             ];
         if ($turnier->isSpielplanPhase()) {
             $links[] = Html::link(self::spielplan($turnier), 'Spielergebnis eintragen', icon: 'reorder');
@@ -54,7 +56,7 @@ class TurnierLinks
 
         $links[] = Html::link(
             "tc_turnier_bearbeiten.php?turnier_id=$turnierId",
-            "Turnier bearbeiten",
+            "Turnierdaten bearbeiten",
             icon: "create",
         );
 
@@ -63,6 +65,12 @@ class TurnierLinks
                 "../teamcenter/tc_nl_team_anmelden.php?turnier_id=$turnierId",
                 "Nichtligateam anmelden",
                 icon: "how_to_reg",
+            );
+
+            $links[] = Html::link(
+                "../teamcenter/tc_turnier_bearbeiten_block.php?turnier_id=$turnierId",
+                "Turnierblock bearbeiten",
+                icon: "list_alt",
             );
         }
 

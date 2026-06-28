@@ -42,10 +42,21 @@ class BlockService
 
             if ($blockContext->isSofortOeffnen() && $blockContext->isWartePhase()) {
                 $blockToHighlight = $blockContext->getBlock();
+
+                $base = Config::BLOCK_ALL[0];
+
+                if ($blockContext->isBlockErweitertHoch()) {
+                    $base = self::hoehererTurnierBlock($blockContext);
+                }
+
+                if ($blockContext->isBlockErweitertRunter()) {
+                    $base = self::niedrigererTurnierBlock($blockContext);
+                }
+
                 $string = str_replace(
                     $blockToHighlight,
                     "<span class='w3-text-black' style='font-style: normal'>$blockToHighlight</span>",
-                    Config::BLOCK_ALL[0],
+                    $base,
                 );
                 return "(<span class='w3-text-gray' style='font-style: italic'>" . $string . "</span>)";
             }

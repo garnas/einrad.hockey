@@ -1,62 +1,12 @@
 <?php
 
-use App\Service\Turnier\BlockService;
-use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierValidatorService;
 
 ?>
+
 <!-- Formular -->
 <form method="post">
     <div class="w3-panel w3-card-4">
-        <h3>Turnier erweitern</h3>
-        <?php if (TurnierValidatorService::isErweiterbarBlockhoch($turnier)): ?>
-            <p>
-                <button type="submit" class="w3-button w3-block w3-tertiary" name="block_erweitern_hoch">
-                    Turnierblock erweitern auf <?= BlockService::hoehererTurnierBlock($turnier)?>
-                </button>
-            </p>
-        <?php endif; ?>
-        <?php if (TurnierValidatorService::isErweiterbarBlockfrei($turnier)): ?>
-            <p>
-                <button type="submit" class="w3-button w3-block w3-tertiary" name="block_frei">
-                    Turnierblock erweitern auf ABCDEF
-                </button>
-            </p>
-        <?php endif; ?>
-        <?php if (TurnierValidatorService::isErweiterbarBlockrunter($turnier)): ?>
-            <p>
-                <button type="submit" class="w3-button w3-block w3-tertiary" name="block_erweitern_runter">
-                    Turnierblock erweitern auf <?= BlockService::niedrigererTurnierBlock($turnier)?>
-                </button>
-            </p>
-        <?php endif; ?>
-        <?php if (!TurnierValidatorService::isErweiterbarBlockfrei($turnier)
-            && !TurnierValidatorService::isErweiterbarBlockrunter($turnier)
-            && !TurnierValidatorService::isErweiterbarBlockhoch($turnier)): ?>
-            <p>
-                Turnierblock kann nicht auf den nächsten höheren/niedrigeren Block oder auf ABCDEF erweitert werden.
-            </p>
-            <?php if ($turnier->isWartePhase()):?>
-                <p>
-                    <i class="w3-text-grey">
-                        Turniere können ab der Setzphase (ab <?= TurnierService::getLosDatum($turnier) ?>) erweitert werden. Dies geschieht automatisch, wenn weiter unten das entsprechende Häkchen gesetzt wird.
-                    </i>
-                </p>
-            <?php endif; ?>
-        <?php endif; ?>
-    </div>
-</form>
-<form method="post">
-    <div class="w3-panel w3-card-4">
-        <?php if ($turnier->isWartePhase()): ?>
-            <h3>Block</h3>
-            <p>
-                <input class="w3-check" type="checkbox" id="sofort_oeffnen" name="sofort_oeffnen" <?= $turnier->isSofortOeffnen() ? "checked" : "" ?> value="Ja">
-                <label for="sofort_oeffnen" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer">Das Turnier soll beim Übergang von Wartephase auf Setzphase sofort auf ABCDEF geöffnet werden.</label>
-                <br>
-                <span class="w3-text-grey">Entspricht dem früheren blockfreien Turnier und wird auf der Webseite auch so angezeigt.</span>
-            </p>
-        <?php endif; ?>
         <h3>Startzeit</h3>
         <p>
             <label class="w3-text-primary" for="startzeit">Startzeit</label>

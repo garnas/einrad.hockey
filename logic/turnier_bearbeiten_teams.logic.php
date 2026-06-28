@@ -5,50 +5,6 @@ use App\Repository\Turnier\TurnierRepository;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierValidatorService;
 
-// Block erweitern
-
-// Um den nächsten höheren Buchstaben erweitern
-if (isset($_POST['block_erweitern_hoch'])) {
-    if (TurnierValidatorService::isErweiterbarBlockhoch($turnier)) {
-        TurnierService::erweitereBlockHoch($turnier);
-        TurnierService::setzListeAuffuellen($turnier);
-        TurnierService::neueWartelistePositionen($turnier);
-        TurnierRepository::get()->speichern($turnier);
-        Html::info("Das Turnier wurde auf den nächst höheren Block geöffnet.");
-        Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
-    } else {
-        Html::error("Das Turnier kann nicht um den nächsthöheren Block erweitert werden.");
-    }
-}
-
-// Um den nächsten niedrigeren Buchstaben erweitern
-if (isset($_POST['block_erweitern_runter'])) {
-    if (TurnierValidatorService::isErweiterbarBlockrunter($turnier)) {
-        TurnierService::erweitereBlockRunter($turnier);
-        TurnierService::setzListeAuffuellen($turnier);
-        TurnierService::neueWartelistePositionen($turnier);
-        TurnierRepository::get()->speichern($turnier);
-        Html::info("Das Turnier wurde auf den nächst höheren Block geöffnet.");
-        Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
-    } else {
-        Html::error("Das Turnier kann nicht um den nächsthöheren Block erweitert werden.");
-    }
-}
-
-// Auf ABCDEF erweitern
-if (isset($_POST['block_frei'])) {
-    if (TurnierValidatorService::isErweiterbarBlockfrei($turnier)) {
-        TurnierService::blockOeffnen($turnier);
-        TurnierService::setzListeAuffuellen($turnier);
-        TurnierService::neueWartelistePositionen($turnier);
-        TurnierRepository::get()->speichern($turnier);
-        Html::info("Das Turnier wurde auf alle Blöcke geöffnet.");
-        Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
-    } else {
-        Html::error("Das Turnier kann nicht auf ABCDEF erweitert werden.");
-    }
-}
-
 if (isset($_POST['change_turnier'])) {
 
     $hallenname = $_POST['hallenname'];
@@ -116,4 +72,66 @@ if (isset($_POST['change_turnier'])) {
     } else {
         Html::error("Es ist ein Fehler aufgetreten. Turnier wurde nicht geändert - alle Änderungen bitte neu eingeben.");
     }
+}
+
+// Block erweitern
+// Um den nächsten höheren Buchstaben erweitern
+if (isset($_POST['block_erweitern_hoch'])) {
+    if (TurnierValidatorService::isErweiterbarBlockhoch($turnier)) {
+        TurnierService::erweitereBlockHoch($turnier);
+        TurnierService::setzListeAuffuellen($turnier);
+        TurnierService::neueWartelistePositionen($turnier);
+        TurnierRepository::get()->speichern($turnier);
+        Html::info("Das Turnier wurde auf den nächst höheren Block geöffnet.");
+        Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
+    } else {
+        Html::error("Das Turnier kann nicht um den nächsthöheren Block erweitert werden.");
+    }
+}
+
+// Um den nächsten niedrigeren Buchstaben erweitern
+if (isset($_POST['block_erweitern_runter'])) {
+    if (TurnierValidatorService::isErweiterbarBlockrunter($turnier)) {
+        TurnierService::erweitereBlockRunter($turnier);
+        TurnierService::setzListeAuffuellen($turnier);
+        TurnierService::neueWartelistePositionen($turnier);
+        TurnierRepository::get()->speichern($turnier);
+        Html::info("Das Turnier wurde auf den nächst höheren Block geöffnet.");
+        Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
+    } else {
+        Html::error("Das Turnier kann nicht um den nächsthöheren Block erweitert werden.");
+    }
+}
+
+// Auf ABCDEF erweitern
+if (isset($_POST['block_frei'])) {
+    if (TurnierValidatorService::isErweiterbarBlockfrei($turnier)) {
+        TurnierService::blockOeffnen($turnier);
+        TurnierService::setzListeAuffuellen($turnier);
+        TurnierService::neueWartelistePositionen($turnier);
+        TurnierRepository::get()->speichern($turnier);
+        Html::info("Das Turnier wurde auf alle Blöcke geöffnet.");
+        Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
+    } else {
+        Html::error("Das Turnier kann nicht auf ABCDEF erweitert werden.");
+    }
+}
+
+// Automatische Öffnung anpassen
+if (isset($_POST["automatisch"])) {
+    if ($_POST["sofort_oeffnen"] === 'higher') {
+        $turnier->setSofortOeffnen(true)->setBlockErweitertHoch(true)->setBlockErweitertRunter(false);
+    }
+
+    if ($_POST["sofort_oeffnen"] === 'lower') {
+        $turnier->setSofortOeffnen(true)->setBlockErweitertRunter(true)->setBlockErweitertHoch(false);
+    }
+
+    if ($_POST["sofort_oeffnen"] === 'none') {
+        $turnier->setSofortOeffnen(false)->setBlockErweitertRunter(false)->setBlockErweitertHoch(false);
+    }
+
+    TurnierRepository::get()->speichern($turnier);
+    Html::info("Das Turnier wurde erfolgreich angepasst.");
+    Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
 }

@@ -166,7 +166,8 @@ include '../../templates/header.tmp.php';
                                 <p><?= Html::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier->id(), 'Zum Turnierreport', icon: 'lock') ?></p>
                             <?php } //endif?>
                             <?php if (($_SESSION['logins']['team']['id'] ?? 0) === $turnier->getAusrichter()->id()) { ?>
-                                <p><?= Html::link('../teamcenter/tc_turnier_bearbeiten.php?turnier_id=' . $turnier->id(), 'Turnier als Ausrichter bearbeiten', icon: 'create') ?></p>
+                                <p><?= Html::link('../teamcenter/tc_turnier_bearbeiten.php?turnier_id=' . $turnier->id(), 'Turnierdetails als Ausrichter bearbeiten', icon: 'create') ?></p>
+                                <p><?= Html::link('../teamcenter/tc_turnier_bearbeiten_block.php?turnier_id=' . $turnier->id(), 'Turnierblock als Ausrichter bearbeiten', icon: 'create') ?></p>
                             <?php } //endif?>
                             <?php if (isset($_SESSION['logins']['la'])) { ?>
                                 <p><?= Html::link('../ligacenter/lc_turnier_bearbeiten.php?turnier_id=' . $turnier->id(), 'Turnier bearbeiten (Ligaausschuss)') ?></p>

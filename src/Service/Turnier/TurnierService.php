@@ -264,6 +264,11 @@ class TurnierService
         $turnier->setBlock(Config::BLOCK_ALL[0]);
     }
 
+    public static function isBlockfrei(Turnier $turnier): bool
+    {
+        return $turnier->getBlock() === Config::BLOCK_ALL[0];
+    }
+
     public static function getFreieSetzPlaetze(Turnier $turnier)
     {
         $plaetze = $turnier->getDetails()->getPlaetze();

@@ -20,12 +20,12 @@ include '../../templates/header.tmp.php';
 ?>
 
     <h2 class="w3-text-primary">
-        <span class="w3-text-grey">Turnierdaten ändern</span>
+        <span class="w3-text-grey">Turnierblock ändern</span>
         <br>
         <?= TurnierSnippets::nameBrTitel($turnier) ?>
     </h2>
 
 <?php
 
-include '../../templates/turnier_bearbeiten_teams.tmp.php';
+include '../../templates/turnier_bearbeiten_block_teams.tmp.php';
 include '../../templates/footer.tmp.php';

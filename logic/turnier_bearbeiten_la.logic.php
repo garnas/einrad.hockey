@@ -2,10 +2,10 @@
 
 // Formularauswertung Turnier löschen
 use App\Event\Turnier\TurnierEventMailBot;
-use App\Repository\Team\TeamRepository;
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierValidatorService;
+use App\Repository\Team\TeamRepository;
 
 if (isset($_POST['delete_turnier'])) {
     TurnierRepository::get()->delete($turnier);

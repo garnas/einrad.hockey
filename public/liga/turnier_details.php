@@ -4,6 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Team\TeamSnippets;
+use App\Service\Turnier\BlockService;
 use App\Service\Turnier\TurnierLinks;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierSnippets;
@@ -130,9 +131,11 @@ include '../../templates/header.tmp.php';
             <td class="w3-primary" style="vertical-align: middle">Turnierblock</td>
             <td>
                 <?= $turnier->getBlock() ?>
-                <?php if ($turnier->isSofortOeffnen() && $turnier->isWartePhase()): ?>
-                    <br>
-                    <span class="w3-text-grey">Das Turnier wird direkt nach dem Phasenwechsel auf ABCDEF geöffnet</span>
+                <?php if ($turnier->isSofortOeffnen() && $turnier->isWartePhase() && $turnier->isBlockErweitertHoch()): ?>
+                    <span class="w3-text-grey">(Das Turnier wird direkt nach dem Phasenwechsel auf <?= BlockService::hoehererTurnierBlock($turnier) ?> geöffnet)</span>
+                <?php endif; ?>
+                <?php if ($turnier->isSofortOeffnen() && $turnier->isWartePhase() && $turnier->isBlockErweitertRunter()): ?>
+                    <span class="w3-text-grey">(Das Turnier wird direkt nach dem Phasenwechsel auf <?= BlockService::niedrigererTurnierBlock($turnier) ?> geöffnet)</span>
                 <?php endif; ?>
             </td>
         </tr>
@@ -144,8 +147,8 @@ include '../../templates/header.tmp.php';
             <td class="w3-primary" style="vertical-align: middle">Min. Teams</td>
             <td>
                 <?php if ($turnier->getDetails()->getMinTeams()): ?>
-                <?= e($turnier->getDetails()->getMinTeams()) ?>
-                <span class="w3-text-grey">(Das Turnier findet ab dieser Anzahl an Teams auf der Setzliste statt.)</span>
+                    <?= e($turnier->getDetails()->getMinTeams()) ?>
+                    <span class="w3-text-grey">(Das Turnier findet ab dieser Anzahl an Teams auf der Setzliste statt.)</span>
                 <?php endif; ?>
             </td>
         </tr>
@@ -171,7 +174,8 @@ include '../../templates/header.tmp.php';
 <?php } //endif?>
 
 <?php if (TurnierService::isAusrichter($turnier, $_SESSION['logins']['team']['id'] ?? 0)) {?>
-    <p><?=Html::link('../teamcenter/tc_turnier_bearbeiten.php?turnier_id=' . $turnier_id, 'Turnier als Ausrichter bearbeiten', icon: "create")?></p>
+    <p><?=Html::link('../teamcenter/tc_turnier_bearbeiten.php?turnier_id=' . $turnier_id, 'Turnierdetails als Ausrichter bearbeiten', icon: "create")?></p>
+    <p><?=Html::link('../teamcenter/tc_turnier_bearbeiten_block.php?turnier_id=' . $turnier_id, 'Turnierblock als Ausrichter bearbeiten', icon: "create")?></p>
 <?php } //endif?>
 
 <?php if (isset($_SESSION['logins']['la'])) {?>
