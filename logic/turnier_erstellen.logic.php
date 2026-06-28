@@ -27,7 +27,6 @@ if (isset($_POST['create_turnier'])) {
     $startgebuehr = (string) $_POST['startgebuehr'];
     $organisator = (string) $_POST['organisator'];
     $handy = (string) $_POST['handy'];
-    $art = (string) $_POST['art'];
     $startzeit = DateTime::createFromFormat("H:i", ((string) ($_POST['startzeit'] ?? '')));
     $plaetze = (string) ($_POST['plaetze'] ?? '');
     $min_teams = (int) ($_POST['min_teams'] ?? '');
@@ -44,15 +43,19 @@ if (isset($_POST['create_turnier'])) {
         $lower = true;
     }
     
-    // Turnierblock
-    $block = $_POST['block'];
-    if ($art === 'I') {
-        $block = $ausrichter_block;
-    }
-    if ($art === 'spass') {
+    // Turnierblock und -art
+    if (!str_contains($_POST['block'], "_")) {
+        $art = $_POST['block'];
         $block = null;
+    } else {
+        list($art, $block) = explode("_", $_POST['block']);
     }
 
+    $fixed = "Nein";
+    if ($art === 'fixed') {
+        $fixed = "Ja";
+    }
+    
     // Besprechung
     if (($_POST['besprechung'] ?? '') === 'Ja') {
         $besprechung = 'Ja';
@@ -76,7 +79,8 @@ if (isset($_POST['create_turnier'])) {
         ->setErstelltAm(new DateTime())
         ->setSofortOeffnen($sofortOeffnen)
         ->setBlockErweitertRunter($lower)
-        ->setBlockErweitertHoch($higher);
+        ->setBlockErweitertHoch($higher)
+        ->setBlockFixed($fixed);
 
     $details = new TurnierDetails();
     $details

@@ -19,27 +19,27 @@ use App\Service\Turnier\BlockService;
         </div>
 
         <p>
-            <label class="w3-text-primary" for="datum">Datum</label>
+            <label class="w3-text-primary" for="datum">Datum<span class="w3-text-secondary">*</span></label>
             <input required type="date" value="<?= $_POST['datum'] ?? date("Y-m-d", (time() + 4 * 7 * 24 * 60 * 60))?>" class="w3-input w3-border w3-border-primary" style="max-width: 320px" id="datum" name="datum">
         </p>
         
         <?php if (Helper::$ligacenter): ?>
             <p>
-                <label class="w3-text-primary" for="datum_bis">Bis-Datum <i>(optional)</i></label>
+                <label class="w3-text-primary" for="datum_bis">Bis-Datum</label>
                 <input type="date"
                        value="<?= $_POST['datum_bis'] ?? "" ?>"
                        class="w3-input w3-border w3-border-primary" style="max-width: 320px" id="datum_bis" name="datum_bis">
-                <i class="w3-text-grey">Bis zu welchem Datum soll das Turnier gehen?</i>
             </p>
         <?php endif; ?>
         <p>
-            <label class="w3-text-primary" for="startzeit">Startzeit</label>
+            <label class="w3-text-primary" for="startzeit">Startzeit<span class="w3-text-secondary">*</span></label>
             <input required type="time" class="w3-input w3-border w3-border-primary" value="<?=$_POST['startzeit'] ?? '10:00'?>" style="max-width: 320px" id="startzeit" name="startzeit">
         </p>
         <p>
-            <input class="w3-check" type="checkbox" id="besprechung" name="besprechung" <?php if (($_POST['besprechung'] ?? '') == "Ja") {?>checked<?php }//endif?> value="Ja">
-            <label for="besprechung" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer"> Gemeinsame Besprechung aller Teams 15 min vor Turnierbeginn</label>
+            <input class="w3-check" type="checkbox" id="besprechung" name="besprechung" <?php if (($_POST['besprechung'] ?? '') == "Ja") {?>checked<?php } ?> value="Ja">
+            <label for="besprechung" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer">Gemeinsame Besprechung aller Teams 15 min vor Turnierbeginn</label>
         </p>
+        <p><span class="w3-text-secondary">*</span>&nbsp;Pflichtfeld</p>
     </div>
 
     <!-- Modusspezifisch -->
@@ -47,55 +47,47 @@ use App\Service\Turnier\BlockService;
         <h3 id="result">Liga</h3>
         <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
             <p>
-                Ein Turnier kann automatisch um einen Block nach oben oder unten erweitert werden. 
-                Das erfolgt beim Übergang in die Setzphase, wobei Teams mit passender Blockzugehörigkeit zuerst gesetzt werden. 
-                Wird einmal eine automatische Öffnung festgelegt, so ist dies später <b>nicht mehr zu ändern!</b>
+                Ein Turnier kann automatisch um einen Block nach oben oder unten erweitert werden. Beim Übergang in die Setzphase wird zuerst die passende Blockzugehörigkeit 
+                getestet und im Anschluss das Turnier erweitert. Danach erfolgt eine weitere Prüfung. Eine automatische Erweiterung auf ein 
+                ABCDEF Turnier ist nicht möglich. Diese muss manuell in den eigenen Turnieren unter "Turnier bearbeiten" erfolgen.
             </p>
         </div>
 
         <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
             <p>
-                Eine automatische Öffnung des Turniers auf ABCDEF ist nicht mehr möglich. 
-                Dies kann nach Übergang in die Setzphase selbst umgesetzt werden. 
-                Somit ist es möglich, das Turnier zuerst um einen Block höher oder niedriger zu erweitern und im Anschluss 
-                händisch für alle Blöcke zu öffnen.
+                Die Anzahl der Teams kann nur in der Wartephase bearbeitet werden.
             </p>
         </div>
 
         <div>
             <p>
-                <label class="w3-text-primary" for="art">Turnierart</label>
-                <select required class="w3-select w3-border w3-border-primary" id="art" name="art" onchange="onchange_show_block(this)">
-                    <option value="" disabled selected>Wähle eine Option</option>
-                    <option <?php if (($_POST['art'] ?? '') == 'I') {?> selected <?php } ?> value="I">I: Blockeigenes Turnier <?= BlockService::toString($ausrichter_block)?></option>
-                    <option <?php if (($_POST['art'] ?? '') == 'II') {?> selected <?php } ?> value="II">II: Blockhöheres Turnier <?=$block_higher_str?></option>
-                    <option <?php if (($_POST['art'] ?? '') == 'spass') {?> selected <?php } ?> value="spass">Spaßturnier</option>
+                <label class="w3-text-primary" for="art">Turnierblock<span class="w3-text-secondary">*</span></label>
+                <select required class="w3-select w3-border w3-border-primary w3-padding w3-white" id="block" name="block">
+                    <option value="" disabled selected>Wähle einen Turnierblock</option>
+                    <!-- Blockhöhere Turniere -->
+                    <?php foreach ($block_higher as $block): ?>
+                        <option <?php if (($_POST['block'] ?? '') === $block): ?> selected <?php endif; ?> value='II_<?=$block?>'><?=$block?>: Blockhöheres Turnier (II)</option>
+                    <?php endforeach; ?>
+                    <!-- Blockeigenes Turnier -->
+                    <option <?php if (($_POST['block'] ?? '') === $ausrichter_block ) {?> selected <?php } ?> value=I_<?= $ausrichter_block ?>><?= $ausrichter_block?>: Blockeigenes Turnier (I)</option>
                     <?php if (Helper::$ligacenter): ?>
+                        <!-- LA: Turnier mit fixiertem Block -->
+                        <?php foreach (Config::BLOCK as $block): ?>
+                            <option <?php if (($_POST['block'] ?? '') === $block): ?> selected <?php endif; ?> value='fixed_<?=$block?>'><?=$block?>: Fixierter Turnierblock</option>
+                        <?php endforeach; ?>
+                        <!-- LA: Abschlussturnier -->
                         <option value='final'>Abschlussturnier</option>
-                        <option value='fixed'>Fixierter Turnierblock (<?=implode(", ", Config::BLOCK)?>)</option>
                     <?php endif; ?>
+                    <!-- Spaßturnier -->
+                    <option <?php if (($_POST['block'] ?? '') == 'spass') {?> selected <?php } ?> value="spass">Spaßturnier</option>
                 </select>
             </p>
         </div>
 
-        <div id="block_higher_div" style="display: none">
-            <p><label class="w3-text-primary" for="block">Auswahl eines höheren Turnierblocks</label>
-            <select required class="w3-select w3-border w3-border-primary" id="block" name="block">
-                <?php foreach ($block_higher as $block): ?>
-                    <option
-                        <?php if (($_POST['block'] ?? '') === $block): ?>
-                            selected
-                        <?php endif; ?>
-                            value='<?=$block?>'> <?=$block?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-
         <div id="immediately_open_div">
             <p>
-                <label class="w3-text-primary" for="sofort_oeffnen">Automtische Erweiterung des Turniers</label>
-                <select required class="w3-select w3-border w3-border-primary" id="sofort_oeffnen" name="sofort_oeffnen" onchange="onchange_show_block(this)">
+                <label class="w3-text-primary" for="sofort_oeffnen">Automatische Erweiterung des Turniers<span class="w3-text-secondary">*</span></label>
+                <select required class="w3-select w3-border w3-border-primary w3-padding w3-white" id="sofort_oeffnen" name="sofort_oeffnen">
                     <option value="" disabled selected>Wähle eine Option</option>
                     <option <?php if (($_POST['sofort_oeffnen'] ?? '') == 'higher') {?> selected <?php } ?> value="higher">Automatisch einen Block nach oben erweitern</option>
                     <option <?php if (($_POST['sofort_oeffnen'] ?? '') == 'lower') {?> selected <?php } ?> value="lower">Automatisch einen Block nach unten erweitern</option>
@@ -104,24 +96,11 @@ use App\Service\Turnier\BlockService;
             </p>
         </div>
 
-        <?php if (Helper::$ligacenter) {?>
-            <div id="block_fixed_div" style="display: none">
-                <p>
-                <label class="w3-text-primary" for="block_fixed">Fixierter Turnierblock</label>
-                <select class="w3-input w3-border w3-border-primary" id="block_fixed" name="block">
-                    <?php foreach (Config::BLOCK as $block_fixed) {?>
-                    <option <?php if (($_POST['block'] ?? '') == $block_fixed) {?> selected <?php } //endif?> value='<?=$block_fixed?>'><?=$block_fixed?></option>
-                    <?php } //end foreach?>
-                </select><i class="w3-small w3-text-grey">Fixierte Turnierblöcke verändern sich nicht mehr</i>
-                </p>
-            </div>
-        <?php } //endif?>
-
         <div id="min_number_of_teams_div">
             <p>
-                <label class="w3-text-primary" for="min_teams"><b>Minimale Anzahl</b> an Teams</label>
-                <select required class="w3-select w3-border w3-border-primary" id="min_teams" name="min_teams">
-                    <option value="" disabled selected>Wähle eine Option</option>
+                <label class="w3-text-primary" for="min_teams"><b>Minimale Anzahl</b> an Teams<span class="w3-text-secondary">*</span></label>
+                <select required class="w3-select w3-border w3-border-primary w3-padding w3-white" id="min_teams" name="min_teams">
+                    <option value="" disabled selected>Wähle eine Minimalanzahl</option>
                     <option <?php if (($_POST['min_teams'] ?? '') == '4') {?> selected <?php } ?> value="4">4 Teams</option>
                     <option <?php if (($_POST['min_teams'] ?? '') == '5') {?> selected <?php } ?> value="5">5 Teams</option>
                 </select>
@@ -130,9 +109,9 @@ use App\Service\Turnier\BlockService;
 
         <div id="number_of_teams_div">
             <p>
-                <label class="w3-text-primary" for="plaetze"><b>Maximale Anzahl</b> an Teams</label>
-                <select required class="w3-select w3-border w3-border-primary" id="plaetze" name="plaetze">
-                    <option value="" disabled selected>Wähle eine Option</option>
+                <label class="w3-text-primary" for="plaetze"><b>Maximale Anzahl</b> an Teams<span class="w3-text-secondary">*</span></label>
+                <select required class="w3-select w3-border w3-border-primary w3-padding w3-white" id="plaetze" name="plaetze">
+                    <option value="" disabled selected>Wähle eine Maximalanzahl</option>
                     <option <?php if (($_POST['plaetze'] ?? '') == '4') {?> selected <?php } ?> value="4">4 Teams</option>
                     <option <?php if (($_POST['plaetze'] ?? '') == '5') {?> selected <?php } ?> value="5">5 Teams</option>
                     <option <?php if (($_POST['plaetze'] ?? '') == '6') {?> selected <?php } ?> value="6">6 Teams</option>
@@ -147,13 +126,15 @@ use App\Service\Turnier\BlockService;
                 </select>
             </p>
         </div>
+
+        <p><span class="w3-text-secondary">*</span>&nbsp;Pflichtfeld</p>
     </div>
 
     <!-- Anfahrt -->
     <div class="w3-card-4 w3-panel">
         <h3>Adresse</h3>
         <div class="w3-section">
-            <label class="w3-text-primary" for="hallenname">Hallenname</label>
+            <label class="w3-text-primary" for="hallenname">Hallenname<span class="w3-text-secondary">*</span></label>
             <input required
                    type="text" class="w3-input w3-border w3-border-primary"
                    value="<?=$_POST['hallenname'] ?? ''?>"
@@ -166,7 +147,7 @@ use App\Service\Turnier\BlockService;
             <i class="w3-text-grey">Die Adresse wird automatisch ausgefüllt, falls der Hallenname bereits verwendet wurde.</i>
         </div>
         <div class="w3-section">
-            <label class="w3-text-primary" for="strasse">Straße und Hausnummer</label>
+            <label class="w3-text-primary" for="strasse">Straße und Hausnummer<span class="w3-text-secondary">*</span></label>
             <input required type="text"
                    class="w3-input w3-border w3-border-primary"
                    value="<?=$_POST['strasse'] ?? ''?>" id="strasse"
@@ -174,46 +155,47 @@ use App\Service\Turnier\BlockService;
             <?=Html::datalist_turnier("strasse")?>
         </div>
         <div class="w3-section">
-            <label class="w3-text-primary" for="plz">PLZ</label>
+            <label class="w3-text-primary" for="plz">PLZ<span class="w3-text-secondary">*</span></label>
             <input required type="text" maxlength="5" class="w3-input w3-border w3-border-primary"
                    value="<?=$_POST['plz'] ?? ''?>" id="plz" name="plz" list="list_plz">
             <?=Html::datalist_turnier("plz")?>
         </div>
         <div class="w3-section">
-            <label class="w3-text-primary" for="ort">Ort</label>
+            <label class="w3-text-primary" for="ort">Ort<span class="w3-text-secondary">*</span></label>
             <input required type="text" class="w3-input w3-border w3-border-primary"
                    value="<?=$_POST['ort'] ?? ''?>" id="ort" name="ort" list="list_ort">
             <?=Html::datalist_turnier("ort")?>
         </div>
         <div class="w3-section">
-            <label class="w3-text-primary" for="haltestellen">Haltestellen <i>(optional)</i></label>
+            <label class="w3-text-primary" for="haltestellen">Haltestellen</label>
             <input type="text" class="w3-input w3-border w3-border-primary" value="<?=$_POST['haltestellen'] ?? ''?>"
                    id="haltestellen" name="haltestellen" list="list_haltestellen">
             <?=Html::datalist_turnier("haltestellen")?>
         </div>
+        <p><span class="w3-text-secondary">*</span>&nbsp;Pflichtfeld</p>
     </div>
 
     <!-- Turnierdetails -->
     <div class="w3-panel w3-card-4">
         <h3>Turnierdetails</h3>
         <p>
-            <label class="w3-text-primary" for="text">Hinweistext <i>(optional)</i></label>
+            <label class="w3-text-primary" for="text">Weitere Informationen</label>
             <textarea class="w3-input w3-border w3-border-primary" onkeyup="woerter_zaehlen(1500);" maxlength="1500"
                       rows="4" id="text" name="hinweis"
                       ><?=stripcslashes($_POST['hinweis'] ?? '')?></textarea>
         <p id="counter"><p>
         </p>
         <p>
-            <label class="w3-text-primary" for="tname">Turniername <i>(optional)</i></label>
+            <label class="w3-text-primary" for="tname">Turniername</label>
             <input type="text" maxlength="60" value="<?=$_POST['tname'] ?? ''?>" class="w3-input w3-border w3-border-primary" id="tname" name="tname">
         </p>
         <p>
-            <label class="w3-text-primary" for="startgebuehr">Startgebühr</label>
+            <label class="w3-text-primary" for="startgebuehr">Startgebühr<span class="w3-text-secondary">*</span></label>
             <?php if (Helper::$ligacenter) {?>
                 <input type="text" class="w3-input w3-border w3-border-primary"
                        placeholder="z. B. 5 Euro" id="startgebuehr" name="startgebuehr">
             <?php } else { ?>
-                <select class="w3-input w3-border w3-border-primary" id="startgebuehr" name="startgebuehr">
+                <select class="w3-input w3-border w3-border-primary w3-padding w3-white" id="startgebuehr" name="startgebuehr">
                     <option value="" disabled selected>Wähle eine Option</option>
                     <option <?php if (($_POST['startgebuehr'] ?? '') == 'keine') {?>selected<?php }?> value="keine">keine</option>
                     <option <?php if (($_POST['startgebuehr'] ?? '') == '5 Euro') {?>selected<?php }?> value="5 Euro">5 Euro</option>
@@ -230,20 +212,21 @@ use App\Service\Turnier\BlockService;
                 </select>
             <?php } //end if?>
         </p>
+        <p><span class="w3-text-secondary">*</span>&nbsp;Pflichtfeld</p>
     </div>
 
     <!-- Organisator -->
     <div class="w3-panel w3-card-4">
         <h3>Organisator</h3>
         <p>
-            <label class="w3-text-primary" for="organisator">Name</label>
+            <label class="w3-text-primary" for="organisator">Name<span class="w3-text-secondary">*</span></label>
             <input required value="<?=$_POST['organisator'] ?? ''?>" type="text"
                    class="w3-input w3-border w3-border-primary" id="organisator"
                    name="organisator" list="list_organisator" onchange="onchange_fill_handy(this)">
             <?=Html::datalist_turnier_ausrichter("organisator", $ausrichter_team_id)?>
         </p>
         <p>
-            <label class="w3-text-primary" for="handy">Handynummer</label>
+            <label class="w3-text-primary" for="handy">Handynummer<span class="w3-text-secondary">*</span></label>
             <input required value="<?=$_POST['handy'] ?? ''?>" type="text"
                    class="w3-input w3-border w3-border-primary" id="handy"
                    name="handy" list="list_handy">
@@ -252,6 +235,7 @@ use App\Service\Turnier\BlockService;
         <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
             <p>Das Handy muss während des Turniertages erreichbar sein.</p>
         </div>
+        <p><span class="w3-text-secondary">*</span>&nbsp;Pflichtfeld</p>
     </div>
 
     <!-- Submit -->
@@ -268,37 +252,6 @@ use App\Service\Turnier\BlockService;
     Skript zum ein- und ausblenden von zusätzlichen Optionen je nach gewählter Turnierart.
     Bei übermittlung des fixierten Blockes ist eine zusätzliche Überprüfung notwendig, ob man als Ligaausschuss eingeloggt ist
 */
-
-function onchange_show_block(selectObject) {
-    
-    <?php if (Helper::$ligacenter): ?>
-        /* Einblenden der Optionen des fixierten Turnierblocks */
-        if (selectObject.value ===  "fixed") {
-            document.getElementById("block_fixed_div").style.display = "block";
-        } else {
-            document.getElementById("block_fixed_div").style.display = "none";
-        }
-
-        /* Einblenden der Optionen des final Turnierblocks */
-        if (selectObject.value ===  "final") {
-            document.getElementById("block_final_div").style.display = "block";
-        } else {
-            document.getElementById("block_final_div").style.display = "none";
-        }
-    <?php endif; ?>
-
-    document.getElementById("block_higher_div").style.display = "none";
-    document.getElementById("block").required = false;
-        
-    /* Einblenden der Optionen der Turnierart II */  
-    if (selectObject.value === "II") {
-        document.getElementById("block_higher_div").style.display = "block";
-        document.getElementById("block").required = true;
-    }
-
-}
-
-onchange_show_block(document.getElementById("art"))
 
 // Automatisches Ausfüllen der Adresse bei Auswahl der Halle
 const turnier_array = <?= Html::turnier_adressen_javascript_array() ?>;

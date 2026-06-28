@@ -44,6 +44,9 @@ class Turnier
     #[ORM\Column(name: "tblock", type: "string", length: 255, nullable: true)]
     private ?string $block;
 
+    #[ORM\Column(name: "tblock_fixed", type: "string", length: 255, nullable: true)]
+    private ?string $fixed = "Nein";
+
     #[ORM\Column(name: "datum", type: "date")]
     private ?DateTime $datum;
 
@@ -341,6 +344,17 @@ class Turnier
     {
         $this->logService->autoLog("Block", $this->block ?? null, $block);
         $this->block = $block;
+        return $this;
+    }
+
+    public function getBlockFixed(): ?string
+    {
+        return $this->fixed;
+    }
+
+    public function setBlockFixed(?string $fixed): self
+    {
+        $this->fixed = $fixed;
         return $this;
     }
 
