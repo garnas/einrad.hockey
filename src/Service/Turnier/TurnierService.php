@@ -235,6 +235,11 @@ class TurnierService
         return $emails;
     }
 
+    public static function getAnzahlGesetzteFreilose(Turnier $turnier): int
+    {
+        return $turnier->getGesetzteFreilose()->count();
+    }
+
     public static function getAnzahlGesetzteTeams(Turnier $turnier): int
     {
         return self::getSetzListe($turnier)->count();
