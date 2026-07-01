@@ -131,10 +131,10 @@ include '../../templates/header.tmp.php';
             <td class="w3-primary" style="vertical-align: middle">Turnierblock</td>
             <td>
                 <?= $turnier->getBlock() ?>
-                <?php if ($turnier->isSofortOeffnen() && $turnier->isWartePhase() && $turnier->isBlockErweitertHoch()): ?>
+                <?php if ($turnier->isWartePhase() && $turnier->isSofortOeffnenHoch()): ?>
                     <span class="w3-text-grey">(Das Turnier wird direkt nach dem Phasenwechsel auf <?= BlockService::hoehererTurnierBlock($turnier) ?> geöffnet)</span>
                 <?php endif; ?>
-                <?php if ($turnier->isSofortOeffnen() && $turnier->isWartePhase() && $turnier->isBlockErweitertRunter()): ?>
+                <?php if ($turnier->isWartePhase() && $turnier->isSofortOeffnenRunter()): ?>
                     <span class="w3-text-grey">(Das Turnier wird direkt nach dem Phasenwechsel auf <?= BlockService::niedrigererTurnierBlock($turnier) ?> geöffnet)</span>
                 <?php endif; ?>
             </td>
@@ -174,8 +174,7 @@ include '../../templates/header.tmp.php';
 <?php } //endif?>
 
 <?php if (TurnierService::isAusrichter($turnier, $_SESSION['logins']['team']['id'] ?? 0)) {?>
-    <p><?=Html::link('../teamcenter/tc_turnier_bearbeiten.php?turnier_id=' . $turnier_id, 'Turnierdetails als Ausrichter bearbeiten', icon: "create")?></p>
-    <p><?=Html::link('../teamcenter/tc_turnier_bearbeiten_block.php?turnier_id=' . $turnier_id, 'Turnierblock als Ausrichter bearbeiten', icon: "create")?></p>
+    <p><?=Html::link('../teamcenter/tc_turnier_bearbeiten.php?turnier_id=' . $turnier_id, 'Turnier als Ausrichter bearbeiten', icon: "create")?></p>
 <?php } //endif?>
 
 <?php if (isset($_SESSION['logins']['la'])) {?>

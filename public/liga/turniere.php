@@ -136,9 +136,17 @@ include '../../templates/header.tmp.php';
                                         <td class="w3-text-primary" style=""><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), 'Phasenwechsel', icon: "event") ?></td>
                                         <td>
                                             <?= TurnierService::getLosDatum($turnier)?> (Loszeitpunkt)
-                                            <?php if ($turnier->isSofortOeffnen() && $turnier->isWartePhase()): ?>
+                                            <?php if ($turnier->isSofortOeffnenFrei() && $turnier->isWartePhase()): ?>
                                                 <br>
                                                 <span class="w3-text-grey">Das Turnier wird direkt nach dem Phasenwechsel auf ABCDEF geöffnet</span>
+                                            <?php endif; ?>
+                                            <?php if ($turnier->isSofortOeffnenRunter() && $turnier->isWartePhase()): ?>
+                                                <br>
+                                                <span class="w3-text-grey">Das Turnier wird direkt nach dem Phasenwechsel auf <?= BlockService::niedrigererTurnierBlock($turnier) ?> geöffnet</span>
+                                            <?php endif; ?>
+                                            <?php if ($turnier->isSofortOeffnenHoch() && $turnier->isWartePhase()): ?>
+                                                <br>
+                                                <span class="w3-text-grey">Das Turnier wird direkt nach dem Phasenwechsel auf <?= BlockService::hoehererTurnierBlock($turnier) ?> geöffnet</span>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
@@ -166,8 +174,7 @@ include '../../templates/header.tmp.php';
                                 <p><?= Html::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier->id(), 'Zum Turnierreport', icon: 'lock') ?></p>
                             <?php } //endif?>
                             <?php if (($_SESSION['logins']['team']['id'] ?? 0) === $turnier->getAusrichter()->id()) { ?>
-                                <p><?= Html::link('../teamcenter/tc_turnier_bearbeiten.php?turnier_id=' . $turnier->id(), 'Turnierdetails als Ausrichter bearbeiten', icon: 'create') ?></p>
-                                <p><?= Html::link('../teamcenter/tc_turnier_bearbeiten_block.php?turnier_id=' . $turnier->id(), 'Turnierblock als Ausrichter bearbeiten', icon: 'create') ?></p>
+                                <p><?= Html::link('../teamcenter/tc_turnier_bearbeiten.php?turnier_id=' . $turnier->id(), 'Turnier als Ausrichter bearbeiten', icon: 'create') ?></p>
                             <?php } //endif?>
                             <?php if (isset($_SESSION['logins']['la'])) { ?>
                                 <p><?= Html::link('../ligacenter/lc_turnier_bearbeiten.php?turnier_id=' . $turnier->id(), 'Turnier bearbeiten (Ligaausschuss)') ?></p>

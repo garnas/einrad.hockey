@@ -1,54 +1,58 @@
 <?php
 
 use App\Entity\Turnier\TurnierDetails;
+use App\Entity\Turnier\Turnier;
 use App\Event\Turnier\nLigaBot;
 use App\Event\Turnier\TurnierEventMailBot;
+use App\Repository\Team\TeamRepository;
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Turnier\BlockService;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierValidatorService;
 
+$turnier = null;
+
+$ausrichter_team_id = $_SESSION['logins']['team']['id'];
+$ausrichter_name = $_SESSION['logins']['team']['name'];
+$ausrichter_block = $_SESSION['logins']['team']['block'];
+$ausrichter = TeamRepository::get()->team($ausrichter_team_id);
+
 $block_higher = BlockService::getHigherBlocks($ausrichter_block);
-$block_higher_str = BlockService::toString($block_higher);
 
 // Formularauswertung
 if (isset($_POST['create_turnier'])) {
 
-    $datum = new DateTime($_POST['datum']);
-    $datum_bis = (!isset($_POST['datum_bis']) || $_POST['datum_bis'] === '') ? null : new DateTime($_POST['datum_bis']);
+    // Formular fuellen sollte es abbrechen
+    $turnier_datum = new DateTime($_POST['datum']);
+    $turnier_datum_bis = (!isset($_POST['datum_bis']) || $_POST['datum_bis'] === '') ? null : new DateTime($_POST['datum_bis']);
 
-    $name = (string) $_POST['tname'];
-    $hallenname = (string) $_POST['hallenname'];
-    $strasse = (string) $_POST['strasse'];
-    $plz = (string) $_POST['plz'];
-    $ort = (string) $_POST['ort'];
-    $haltestellen = (string) $_POST['haltestellen'];
-    $hinweis = (string) $_POST['hinweis'];
-    $startgebuehr = (string) $_POST['startgebuehr'];
-    $organisator = (string) $_POST['organisator'];
-    $handy = (string) $_POST['handy'];
-    $startzeit = DateTime::createFromFormat("H:i", ((string) ($_POST['startzeit'] ?? '')));
+    $turnier_name = (string) $_POST['tname'];
+    $adresse_hallenname = (string) $_POST['hallenname'];
+    $adresse_strasse = $strasse = (string) $_POST['strasse'];
+    $adresse_plz = (string) $_POST['plz'];
+    $adresse_ort = (string) $_POST['ort'];
+    $adresse_haltestellen = (string) $_POST['haltestellen'];
+    $turnier_hinweis = (string) $_POST['hinweis'];
+    $turnier_startgebuehr = (string) $_POST['startgebuehr'];
+    $turnier_organisator = (string) $_POST['organisator'];
+    $turnier_handy = (string) $_POST['handy'];
+    $turnier_startzeit = (string) $_POST['startzeit'];
     $plaetze = (string) ($_POST['plaetze'] ?? '');
     $min_teams = (int) ($_POST['min_teams'] ?? '');
 
     // Sofort oeffnen
-    $sofortOeffnen = false;
-    $higher = false;
-    $lower = false;
-    if ($_POST['sofort_oeffnen'] === 'higher') {
-        $sofortOeffnen = true;
-        $higher = true;
-    } elseif ($_POST['sofort_oeffnen'] === 'lower') {
-        $sofortOeffnen = true;
-        $lower = true;
-    }
-    
+    $sofort_oeffnen = (string) ($_POST['sofort_oeffnen'] ?? '');
+    $sofort_oeffnen_frei = ($sofort_oeffnen === 'free');
+    $sofort_oeffnen_runter = ($sofort_oeffnen === 'lower');
+    $sofort_oeffnen_hoch = ($sofort_oeffnen === 'higher');
+
     // Turnierblock und -art
-    if (!str_contains($_POST['block'], "_")) {
-        $art = $_POST['block'];
+    $turnier_art_block = $_POST['art_block'];
+    if (!str_contains($turnier_art_block , "_")) {
+        $art = $turnier_art_block ;
         $block = null;
     } else {
-        list($art, $block) = explode("_", $_POST['block']);
+        list($art, $block) = explode("_", $turnier_art_block);
     }
 
     $fixed = "Nein";
@@ -63,13 +67,12 @@ if (isset($_POST['create_turnier'])) {
         $besprechung = 'Nein';
     }
 
-    // Eintragen des Turnieres
     // Turnier erstellen
-    $turnier = new App\Entity\Turnier\Turnier();
+    $turnier = new Turnier();
     $turnier
-        ->setDatum($datum)
-        ->setDatumBis($datum_bis)
-        ->setName($name)
+        ->setDatum($turnier_datum)
+        ->setDatumBis($turnier_datum_bis)
+        ->setName($turnier_name)
         ->setArt($art)
         ->setAusrichter($ausrichter)
         ->setBlock($block)
@@ -77,31 +80,35 @@ if (isset($_POST['create_turnier'])) {
         ->setPhase('warte')
         ->setCanceled(false)
         ->setErstelltAm(new DateTime())
-        ->setSofortOeffnen($sofortOeffnen)
-        ->setBlockErweitertRunter($lower)
-        ->setBlockErweitertHoch($higher)
+        ->setSofortOeffnenFrei($sofort_oeffnen_frei)
+        ->setSofortOeffnenHoch($sofort_oeffnen_hoch)
+        ->setSofortOeffnenRunter($sofort_oeffnen_runter)
+        ->setBlockErweitertFrei(false)
+        ->setBlockErweitertHoch(false)
+        ->setBlockErweitertRunter(false)
         ->setBlockFixed($fixed);
-
+    
     $details = new TurnierDetails();
     $details
         ->setTurnier($turnier)
         ->setBesprechung($besprechung)
-        ->setHallenname($hallenname)
-        ->setHaltestellen($haltestellen)
-        ->setHandy($handy)
-        ->setOrganisator($organisator)
-        ->setHinweis($hinweis)
-        ->setPlz($plz)
-        ->setOrt($ort)
+        ->setHallenname($adresse_hallenname)
+        ->setHaltestellen($adresse_haltestellen)
+        ->setHandy($turnier_handy)
+        ->setOrganisator($turnier_organisator)
+        ->setHinweis($turnier_hinweis)
+        ->setPlz($adresse_plz)
+        ->setOrt($adresse_ort)
         ->setStrasse($strasse)
-        ->setStartgebuehr($startgebuehr)
-        ->setStartzeit($startzeit)
+        ->setStartgebuehr($turnier_startgebuehr)
+        ->setStartzeit(DateTime::createFromFormat("H:i", $turnier_startzeit))
         ->setPlaetze($plaetze)
         ->setMinTeams($min_teams);
+    
     $turnier->setDetails($details);
 
 
-
+    // Anlegen des neuen Turniers, wenn alle Eintragungen valide sind
     if (TurnierValidatorService::onCreate($turnier)) {
 
         TurnierService::addToSetzListe($turnier, $ausrichter);

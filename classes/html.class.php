@@ -1,5 +1,9 @@
 <?php
 
+use App\Entity\Turnier\Turnier;
+use App\Repository\Turnier\TurnierRepository;
+use App\Service\Turnier\TurnierSnippets;
+
 /**
  * Class Form
  *
@@ -160,6 +164,24 @@ class Html
             </a>";
     }
 
+    /**
+     * Erstellt eine HTML-Datalist aller Ligaturniere.
+     *
+     * @return string
+     */
+    public static function datalist_turniere(): string
+    {
+        $return = "<datalist id='turniere'>";
+        $liste = TurnierRepository::get()->getKommendeTurniere();
+        foreach ($liste as $turnier) {
+            $value = $turnier->id();
+            $text = $turnier->id() . " | " . TurnierSnippets::datumOrtBlock($turnier);
+            $return .= "<option value='$value'>$text</option>";
+        }
+        $return .= "</datalist>";
+        return $return;
+    }
+    
     /**
      * Erstellt eine HTML-Datalist aller Ligateams.
      *

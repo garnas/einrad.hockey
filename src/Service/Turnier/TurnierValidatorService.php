@@ -66,6 +66,12 @@ class TurnierValidatorService
             && $validator->hasValidMinTeams();
     }
 
+    public static function onErweiterung(Turnier $turnier): bool
+    {
+        $validator = new self($turnier);
+
+        return $validator->hasValidErweiterung();
+    }
 
     public static function mayChangePlaetze(Turnier $turnier, int $plaetze_before): bool
     {
@@ -97,6 +103,17 @@ class TurnierValidatorService
     }
 
 
+    public function hasValidErweiterung(): bool
+    {
+        if ($this->turnier->isBlockErweitertHoch() && $this->turnier->isBlockErweitertRunter()) {
+            Html::error("Das Turnier kann nicht hoch und runter erweitert werden.");
+            return false;
+        }
+
+        return true;
+    }
+    
+    
     public function hasValidArt(): bool
     {
 
@@ -290,7 +307,7 @@ class TurnierValidatorService
     }
 
     /**
-     * Ermittelt, ob ein Turnier nach oben erweiterbar ist
+     * Ermittelt, ob ein Turnier nach oben erweiterbar ist.
      *
      * @param Turnier $turnier
      * @return bool
@@ -299,7 +316,8 @@ class TurnierValidatorService
     {
         return $turnier->getPhase() === 'setz'
             && !$turnier->isBlockErweitertHoch()
-            && \strlen($turnier->getBlock()) < 3
+            && !$turnier->isBlockErweitertRunter()
+            && !$turnier->isBlockErweitertFrei()
             && $turnier->getBlock() !== 'AB'
             && $turnier->getBlock() !== 'A'
             && $turnier->isLigaTurnier();
@@ -315,7 +333,8 @@ class TurnierValidatorService
     {
         return $turnier->getPhase() === 'setz'
             && !$turnier->isBlockErweitertRunter()
-            && \strlen($turnier->getBlock()) < 3
+            && !$turnier->isBlockErweitertHoch()
+            && !$turnier->isBlockErweitertFrei()
             && $turnier->getBlock() !== 'EF'
             && $turnier->getBlock() !== 'F'
             && $turnier->isLigaTurnier();
@@ -331,8 +350,7 @@ class TurnierValidatorService
     {
         return $turnier->getPhase() === 'setz'
             && $turnier->isLigaturnier()
-            && !$turnier->isBlockErweitertHoch()
-            && !$turnier->isBlockErweitertRunter()
+            && !$turnier->isBlockErweitertFrei()
             && $turnier->getBlock() != Config::BLOCK_ALL[0];
     }
 

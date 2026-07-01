@@ -9,6 +9,7 @@ use App\Repository\DoctrineWrapper;
 use App\Service\Team\TeamService;
 use App\Service\Turnier\BlockService;
 use App\Service\Turnier\TurnierService;
+use App\Service\Turnier\TurnierValidatorService;
 use Config;
 use db;
 use Doctrine\ORM\Exception\ORMException;
@@ -171,10 +172,7 @@ class nLigaBot
 
         // Übergang in die Setzphase
         foreach ($turniere as $turnier) {
-            if (
-                $turnier->isWartePhase()
-                && TurnierService::warteToSetzUnix($turnier) <= time()
-            ) {
+            if ($turnier->isWartePhase() && TurnierService::warteToSetzUnix($turnier) <= time()) {
                 $turnier->setPhase('setz');
 
                 // Losen setzt alle Teams in richtiger Reihenfolge auf die Warteliste.
@@ -183,19 +181,29 @@ class nLigaBot
 
                 // Info-Mails versenden.
                 TurnierEventMailBot::mailGelost($turnier);
-                if (TurnierService::hasFreieSetzPlaetze($turnier)) {
-                    TurnierEventMailBot::mailPlaetzeFrei($turnier);
-                }
             }
         }
 
-        // Nachdem die Turniere in der Setzphase sind, können sie auf ABCDEF geöffnet werden.
+        // Automatische Erweiterung
         foreach (self::$gelosteTurniere as $turnier) {
-            if ($turnier->isSofortOeffnen()) {
-                TurnierService::blockOeffnen($turnier);
+            // Pruefe, ob das Turnier automatisch um einen Block nach oben erweitert werden soll und dies ueberhaupt moeglich ist
+            if (TurnierValidatorService::isErweiterbarBlockhoch($turnier) && $turnier->isSofortOeffnenHoch()) {
+                TurnierService::erweitereBlockHoch($turnier);
                 TurnierService::setzListeAuffuellen($turnier);
             }
+
+            // Pruefe, ob das Turnier automatisch um einen Block nach unten erweitert werden soll und dies ueberhaupt moeglich ist
+            if (TurnierValidatorService::isErweiterbarBlockrunter($turnier) && $turnier->isSofortOeffnenRunter()) {
+                TurnierService::erweitereBlockRunter($turnier);
+                TurnierService::setzListeAuffuellen($turnier);
+            }
+            
+            // Versenden der Mails fuer freie Pletze, nachdem das Turnier erweitert wurde
+            if (TurnierService::hasFreieSetzPlaetze($turnier)) {
+                TurnierEventMailBot::mailPlaetzeFrei($turnier);
+            }
         }
+
 
         // Abschließend die Änderungen in der DB persistieren.
         foreach (self::$gelosteTurniere as $turnier) {
