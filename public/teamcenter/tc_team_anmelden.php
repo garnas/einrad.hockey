@@ -114,12 +114,13 @@ include '../../templates/header.tmp.php';
 
 <!-- Anzeigen der angemeldeten Teams und gleichzeitig Abmeldeformular -->
 <div class="w3-card w3-container">
-    <form method='post'>
-        <h3 class="w3-text-primary">Listen</h3>
+    <h3 class="w3-text-primary">Listen</h3>
 
-        <?= TurnierSnippets::getListen($turnier) ?>
-        <p class="w3-small w3-text-primary">Phase: <?= TurnierSnippets::translate($turnier->getPhase()) ?></p>
-    </form>
+    <?= TurnierSnippets::getListen($turnier) ?>
+    <hr>
+    <p class="w3-text-primary">Gesetzte Freilose: <?= TurnierService::getAnzahlGesetzteFreilose($turnier) ?></p>
+    <p class="w3-text-primary">Phase: <?= TurnierSnippets::translate($turnier->getPhase()) ?></p>
+    <hr>
 
     <!-- An- und Abmeldung -->
     <?php if ($turnier->isFinalTurnier()) {?>
@@ -149,6 +150,7 @@ include '../../templates/header.tmp.php';
                     <?php if (TeamService::isAufSetzliste($teamEntity, $turnier)
                                 || !TurnierService::isSpielBerechtigtFreilos($turnier, $teamEntity)
                                 || $teamEntity->getAnzahlOffenerFreilose() == 0
+                                || TurnierService::getAnzahlGesetzteFreilose($turnier) >= 2
                     ): ?> w3-opacity<?php endif; ?>'
                     name='freilos' value='Freilos setzen (<?=$teamEntity->getAnzahlOffenerFreilose()?> vorhanden)'>
             </p>
