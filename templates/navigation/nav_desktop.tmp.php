@@ -12,9 +12,9 @@
         <!--Logo (nur large) -->
         <div class="w3-hide-medium">
             <a href="<?= Env::BASE_URL ?>/liga/neues.php">
-                <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz_small.png" 
+                <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz.png" 
                      alt="kurzes Logo" class="w3-image w3-left w3-bar-item" 
-                     style="margin-top: 30px; max-width: 200px;">
+                     style="margin-top: 30px; max-width: 230px;">
             </a>
         </div>
     </div>
@@ -24,7 +24,7 @@
         <!--Logo (nur medium) -->
         <div class="w3-hide-large">
             <a href="<?= Env::BASE_URL ?>/liga/neues.php">
-                <img src="<?= Env::BASE_URL ?>/bilder/logo_lang_small.png" 
+                <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz.png" 
                      class="w3-image w3-left w3-bar-item" 
                      alt="langes Logo" 
                      style="max-width: 70%;">
