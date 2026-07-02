@@ -1,5 +1,5 @@
 <!--Navigation für Desktop und Tablet -->
-<div class="w3-display-container w3-hide-small">
+<div class="w3-display-container">
     
     <!-- Hintergrundbild -->
     <img src="<?= Html::get_hintergrund_bild() ?>"
@@ -10,24 +10,11 @@
     <!-- oben links -->
     <div class="w3-display-topleft w3-margin w3-padding-large">
         <!--Logo (nur large) -->
-        <div class="w3-hide-medium">
+        <div>
             <a href="<?= Env::BASE_URL ?>/liga/neues.php">
                 <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz.png" 
                      alt="kurzes Logo" class="w3-image w3-left w3-bar-item" 
                      style="margin-top: 30px; max-width: 230px;">
-            </a>
-        </div>
-    </div>
-
-    <!-- unten links -->
-    <div class="w3-display-bottomleft w3-margin w3-padding-large">
-        <!--Logo (nur medium) -->
-        <div class="w3-hide-large">
-            <a href="<?= Env::BASE_URL ?>/liga/neues.php">
-                <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz.png" 
-                     class="w3-image w3-left w3-bar-item" 
-                     alt="langes Logo" 
-                     style="max-width: 70%;">
             </a>
         </div>
     </div>
@@ -88,7 +75,7 @@
         </div>
 
         <!-- Info -->
-        <div class="w3-dropdown-hover w3-right w3-text-primary" style="">
+        <div class="w3-dropdown-hover w3-right w3-text-primary">
             <a class=" w3-button w3-hover-primary">
                 <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">info</i>
                 <span style="font-size: 22px">INFO</span>
