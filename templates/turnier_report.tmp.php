@@ -126,7 +126,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                     <select required
                             name="ausleihe_team_auf"
                             id="ausleihe_team_auf"
-                            class="w3-select w3-input w3-border w3-border-primary"
+                            class="w3-select w3-input w3-border w3-border-primary w3-padding"
                     >
                         <option selected disabled>--</option>
                         <?php foreach ($teams as $team): ?>
@@ -220,7 +220,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                 </p>
                 <p>
                     <label for="zeitstrafe_dauer">Dauer</label>
-                    <select name="zeitstrafe_dauer" id="zeitstrafe_dauer" class="w3-select w3-input w3-border w3-border-primary">
+                    <select name="zeitstrafe_dauer" id="zeitstrafe_dauer" class="w3-select w3-input w3-border w3-border-primary w3-padding">
                         <option>2 min</option>
                         <option>5 min</option>
                         <option>Gesamtes Spiel</option>
@@ -230,7 +230,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                     <label for="zeitstrafe_team_a">Spielpaarung</label>
                     <select id="zeitstrafe_team_a"
                             name="zeitstrafe_team_a"
-                            class="w3-select w3-input w3-border w3-border-primary"
+                            class="w3-select w3-input w3-border w3-border-primary w3-padding"
                             required
                     >
                         <option disabled selected value="">--</option>
@@ -241,7 +241,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                     <label for="zeitstrafe_team_b" class="w3-text-grey">versus</label>
                     <select id="zeitstrafe_team_b"
                             name="zeitstrafe_team_b"
-                            class="w3-select w3-input w3-border w3-border-primary"
+                            class="w3-select w3-input w3-border w3-border-primary w3-padding"
                             required
                     >
                         <option disabled selected value="">--</option>
