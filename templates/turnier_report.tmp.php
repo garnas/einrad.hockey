@@ -17,7 +17,7 @@ use App\Service\Turnier\TurnierSnippets;
 if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
     <!-- Kader -->
     <div class="w3-card-4 w3-panel w3-padding-24">
-        <h2 class="w3-text-secondary">Kader und Schiedsrichter</h2>
+        <h3 class="w3-text-secondary">Kader und Schiedsrichter</h3>
         <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
             <p>
                 Klicke auf die Teamnamen, um den Kader anzeigen zu lassen. Nur eingetragenen Spielerinnen und Spieler sind für das Team spielberechtigt.
@@ -57,7 +57,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
 
 <!-- Spielerausleihe -->
 <div class="w3-card-4 w3-panel w3-padding-24">
-    <h2 class="w3-text-secondary">Ausleihe</h2>
+    <h3 class="w3-text-secondary">Ausleihe</h3>
     <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
         <p>
             Ausleihen von Spielerinnen und Spielern sind vor dem Turnierbeginn zu prüfen und von dem leihenden Team anzumelden (Ligmaodus&nbsp;2.2.5). Passiert dies verspätet, sollte es unter den besonderen Vorkommnissen aufgenommen werden.
@@ -95,7 +95,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
             </table>
         </div>
     <?php else: ?>
-        <p><span class="w3-text-grey">Es sind keine Spielerausleihen eingetragen.</span></p>
+        <p class="w3-text-grey">Es sind keine Spielerausleihen eingetragen.</p>
     <?php endif; ?>
 
     <!-- Spielerausleihe hinzufügen -->
@@ -147,7 +147,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
 
 <!-- Zeitstrafen -->
 <div class="w3-card-4 w3-panel w3-padding-24">
-    <h2 class="w3-text-secondary">Zeitstrafen</h2>
+    <h3 class="w3-text-secondary">Zeitstrafen</h3>
     <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
         <p>
             Es sind alle Zeitstrafen aufzuführen, die auf dem Turnier ausgesprochen wurden. Im Turnierbericht können diese weiter ausgeführt werden. Mit den entsprechenden Schiedsrichterinnen und Schiedsrichtern sollte zusätzlich gesprochen werden.
@@ -191,7 +191,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
             </table>
         </div>
     <?php else: ?>
-        <p><span class=""> Es sind keine Zeitstrafen eingetragen.</span></p>
+        <p class="w3-text-grey">Es sind keine Zeitstrafen eingetragen.</p>
     <?php endif; ?>
 
     <!-- Zeitstrafe hinzufügen -->
@@ -261,7 +261,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
 
 <!-- Turnierbericht -->
 <div class="w3-card-4 w3-panel w3-padding-24"> 
-    <h2 class="w3-text-secondary">Turnierbericht</h2>
+    <h3 class="w3-text-secondary">Turnierbericht</h3>
     <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
         <p>
             Ligamodus 4.16 benennt eine Auswahl an besonderen Vorkommnissen, die hier aufgeführt werden sollten. Beispielsweise eine falsche Spielerausleihe oder verspätete Anreise eines Teams. Nutz das Feld darüber hinaus für eine kurze Zusammenfassung des Turniers. Auffällige Situationen oder zerstrittene Spiele sollten auch immer dem Ligaausschuss gemeldet werden.
@@ -281,7 +281,6 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                 <label for="kader_check" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer;"> Es wurde auf richtige Teamkader geachet.</label>
             </p>
             <p>
-                <label for="turnierbericht">Turnierbericht / besondere Vorkommnisse</label>
                 <textarea class="w3-input w3-border w3-border-primary"
                         onkeyup="woerter_zaehlen(1500, 'turnierbericht', 'turnierbericht_counter');"
                         maxlength="1500"
