@@ -18,10 +18,7 @@ $team = TeamRepository::get()->team($team_id);
 
 // Berechtigung zum Verändern des Reports
 $change_tbericht = (TurnierService::isAusrichter($turnier, $team_id) || Helper::$ligacenter);
-$read_tbericht
-    = Helper::$ligacenter
-    || $team && TeamService::isAufSetzliste(team: $team, turnier: $turnier)
-    || TurnierService::isAusrichter($turnier, $team_id);
+$read_tbericht = Helper::$ligacenter || Helper::$teamcenter;
 
 // Berechtigung zum Verändern des Reports widerrufen für Ausrichter, wenn das Turnier mehr als drei Tage zurückliegt.
 $turnier_datum = DateTimeImmutable::createFromMutable($turnier->getDatum());
