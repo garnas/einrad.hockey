@@ -121,15 +121,21 @@ if ($change_tbericht) {
         Helper::reload(get: "?turnier_id=" . $turnier->id());
     }
 
-    //Turnierbericht
+    // Kadercheck hinzufügen
+    if (isset($_POST['set_kader_check'])) {
+        $kader_check = $_POST['kader_check'] ?? false;
+        $tbericht->set_kader_ueberprueft($kader_check);
+        Html::info("Turnierbericht wurde aktualisiert");
+        Helper::reload(get: "?turnier_id=" . $turnier->id());
+    }
+    
+    // Turnierbericht
     if (
         isset($_POST['set_turnierbericht'])
-        || isset($_POST['kader_check'])
         || isset($_POST['turnierbericht'])
     ) {
         $bericht = $_POST['turnierbericht'];
-        $kader_check = $_POST['kader_check'];
-        $tbericht->set_turnier_bericht($bericht, $kader_check);
+        $tbericht->set_turnier_bericht($bericht);
         Html::info("Turnierbericht wurde aktualisiert");
         Helper::reload(get: "?turnier_id=" . $turnier->id());
     }

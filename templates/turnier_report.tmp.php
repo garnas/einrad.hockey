@@ -52,6 +52,21 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                 </div>
             <?php endif; ?>
         <?php endforeach; ?>
+        <form method="post">
+            <p>
+                <input <?= $tbericht->kader_check() ? 'checked' : '' ?>
+                    class="w3-check"
+                    value="kader_checked"
+                    type="checkbox"
+                    name="kader_check"
+                    id="kader_check"
+                >
+                <label for="kader_check" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer;"> Es wurde auf richtige Teamkader geachet.</label>
+            </p>
+            <p>
+                <input type="submit" value="Bestätigen" name="set_kader_check" class="w3-button w3-tertiary">
+            </p>
+        </form>
     </div>
 <?php endif; ?>
 
@@ -252,7 +267,15 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                 </p>
                 <div>
                     <label for="zeitstrafe_bericht">Grund <i>(kurz)</i></label>
-                    <textarea class="w3-input w3-border w3-border-primary" onkeyup="woerter_zaehlen(300, 'zeitstrafe_bericht','zeitstrafe_counter');" maxlength="300" rows="3" id="zeitstrafe_bericht" name="zeitstrafe_bericht" required><?=stripcslashes($_POST['text'] ?? '')?></textarea>
+                    <textarea 
+                            class="w3-input w3-border w3-border-primary" 
+                            onkeyup="woerter_zaehlen(300, 'zeitstrafe_bericht','zeitstrafe_counter');" 
+                            maxlength="300" 
+                            rows="3" 
+                            id="zeitstrafe_bericht" 
+                            name="zeitstrafe_bericht" 
+                            required
+                    ><?=stripcslashes($_POST['text'] ?? '')?></textarea>
                     <p id="zeitstrafe_counter"></p>
                 </div>
                 <p>
@@ -273,17 +296,6 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
     </div>
     <?php if ($change_tbericht): ?>
         <form method="post">
-            <p>
-                <input <?= $tbericht->kader_check() ? 'checked' : '' ?>
-                    class="w3-check"
-                    value="kader_checked"
-                    type="checkbox"
-                    name="kader_check"
-                    id="kader_check"
-                    onchange="this.form.submit()"
-                >
-                <label for="kader_check" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer;"> Es wurde auf richtige Teamkader geachet.</label>
-            </p>
             <p>
                 <textarea class="w3-input w3-border w3-border-primary"
                         onkeyup="woerter_zaehlen(1500, 'turnierbericht', 'turnierbericht_counter');"

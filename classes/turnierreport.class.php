@@ -144,33 +144,69 @@ class TurnierReport
     }
 
     /**
-     * Turnierbericht in die Datenbank schreiben
+     * Kadercheck in die Datenbank schreiben
      *
-     * @param string $bericht
      * @param bool $kader_check
      */
-    public function set_turnier_bericht(string $bericht, ?string $kader_check)
-    {
-        $kader_check = ($kader_check) ? 'Ja' : 'Nein';
+    public function set_kader_ueberprueft(bool $kader_check) {
 
+        $kader_check = ($kader_check) ? 'Ja' : 'Nein';
+        
         // Existiert bereits ein Turnierbericht?
         $sql = "
                 SELECT * FROM turniere_berichte 
                 WHERE turnier_id = $this->turnier_id
                 ";
-        if (db::$db->query($sql)->num_rows() === 0) {
+        
+        $rows = db::$db->query($sql)->num_rows();
+        if ($rows === 0) {
             $sql = "
                     INSERT INTO turniere_berichte (turnier_id, bericht, kader_ueberprueft)
                     VALUES ($this->turnier_id, ?, ?)
                     ";
-        } else {
+            $params = ['', $kader_check];
+            db::$db->query($sql, $params)->log();
+        } 
+        
+        $sql = "
+                UPDATE turniere_berichte
+                SET kader_ueberprueft = ?
+                WHERE turnier_id = $this->turnier_id
+                ";
+        $params = [$kader_check];
+        db::$db->query($sql, $params)->log();
+    }
+    
+    /**
+     * Turnierbericht in die Datenbank schreiben
+     *
+     * @param string $bericht
+     */
+    public function set_turnier_bericht(string $bericht)
+    {
+        
+        // Existiert bereits ein Turnierbericht?
+        $sql = "
+                SELECT * FROM turniere_berichte 
+                WHERE turnier_id = $this->turnier_id
+                ";
+        
+        $rows = db::$db->query($sql)->num_rows();
+        if ($rows === 0) {
             $sql = "
-                    UPDATE turniere_berichte 
-                    SET bericht = ?, kader_ueberprueft = ? 
-                    WHERE turnier_id = $this->turnier_id
+                    INSERT INTO turniere_berichte (turnier_id, bericht, kader_ueberprueft)
+                    VALUES ($this->turnier_id, ?, ?)
                     ";
-        }
-        $params = [$bericht, $kader_check];
+            $params = [$bericht, 'Nein'];
+            db::$db->query($sql, $params)->log();
+        } 
+        
+        $sql = "
+                UPDATE turniere_berichte 
+                SET bericht = ?
+                WHERE turnier_id = $this->turnier_id
+                ";
+        $params = [$bericht];
         db::$db->query($sql, $params)->log();
     }
 }
