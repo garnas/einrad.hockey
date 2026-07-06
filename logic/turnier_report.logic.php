@@ -17,18 +17,30 @@ $team = TeamRepository::get()->team($team_id);
 
 
 // Berechtigung zum Verändern des Reports
-$change_tbericht = (TurnierService::isAusrichter($turnier, $team_id) || Helper::$ligacenter);
+$change_tbericht = TurnierService::isAusrichter($turnier, $team_id) || Helper::$ligacenter;
 $read_tbericht = Helper::$ligacenter || Helper::$teamcenter;
 
 // Berechtigung zum Verändern des Reports widerrufen für Ausrichter, wenn das Turnier mehr als drei Tage zurückliegt.
-$turnier_datum = DateTimeImmutable::createFromMutable($turnier->getDatum());
-if (
-    !Helper::$ligacenter
-    && $turnier_datum->modify('-2 days') > (new DateTime())
-) {
-    $change_tbericht = false;
-    if (TurnierService::isAusrichter($turnier, $team_id)) {
-        Html::notice("Das Turnier liegt bereits in der Vergangenheit. Bearbeiten des Turnierreports nur noch via den Ligaausschuss möglich.");
+if (!Helper::$ligacenter && TurnierService::isAusrichter($turnier, $team_id)) {
+
+    $turnier_datum = DateTimeImmutable::createFromMutable($turnier->getDatum());
+
+    // Dienstag nach dem Turnier, 23:59:59 Uhr
+    $bearbeitungsfrist = $turnier_datum
+        ->modify('next tuesday')
+        ->setTime(23, 59, 59);
+
+    // Liegt das Turnier an einem Dienstag, soll derselbe Dienstag gelten.
+    if ($turnier_datum->format('N') == 2) {
+        $bearbeitungsfrist = $turnier_datum->setTime(23, 59, 59);
+    }
+
+    if (new DateTimeImmutable() > $bearbeitungsfrist) {
+        $change_tbericht = false;
+
+        Html::notice(
+            "Die Bearbeitungsfrist für den Turnierreport ist abgelaufen. Änderungen sind nur noch über den Ligaausschuss möglich."
+        );
     }
 }
 
