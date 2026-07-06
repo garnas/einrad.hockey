@@ -18,6 +18,11 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
     <!-- Kader -->
     <div class="w3-card-4 w3-panel w3-padding-24">
         <h2 class="w3-text-secondary">Kader und Schiedsrichter</h2>
+        <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
+            <p>
+                Klicke auf die Teamnamen, um den Kader anzeigen zu lassen. Nur eingetragenen Spielerinnen und Spieler sind für das Team spielberechtigt.
+            </p>
+        </div>
         <ul class='w3-ul w3-margin-left w3-leftbar w3-border-primary'>
             <?php foreach ($kader_array as $team_id => $kader): ?>
                 <li class="w3-hover-primary" style="cursor: pointer;" onclick="openTab('<?=$team_id?>')">
@@ -67,6 +72,11 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
 <!-- Spielerausleihe -->
 <div class="w3-card-4 w3-panel w3-padding-24">
     <h2 class="w3-text-secondary">Ausleihe</h2>
+    <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
+        <p>
+            Ausleihen von Spielerinnen und Spielern sind vor dem Turnierbeginn zu prüfen und von dem leihenden Team anzumelden (Ligmaodus&nbsp;2.2.5). Passiert dies verspätet, sollte es unter den besonderen Vorkommnissen aufgenommen werden.
+        </p>
+    </div>
     <?php if (!empty($spieler_ausleihen)): ?>
         <div class="w3-responsive w3-card">
             <table class="w3-table w3-striped w3-centered">
@@ -152,10 +162,11 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
 <!-- Zeitstrafen -->
 <div class="w3-card-4 w3-panel w3-padding-24">
     <h2 class="w3-text-secondary">Zeitstrafen</h2>
-    <span class="w3-text-grey">
-        Auffällige Situationen oder zerstrittene Spiele sollten auch immer dem Ligaausschuss gemeldet werden. Dieser kann
-        mit den Teams reden und dafür sorgen, dass zukünftig ausgewählte Schiedsrichter die Begegnung pfeifen.
-    </span>
+    <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
+        <p>
+            Es sind alle Zeitstrafen aufzuführen, die auf dem Turnier ausgesprochen wurden. Im Turnierbericht können diese weiter ausgeführt werden. Mit den entsprechenden Schiedsrichterinnen und Schiedsrichtern sollte zusätzlich gesprochen werden.
+        </p>
+    </div>
     <?php if (!empty($zeitstrafen)): ?>
         <div class="w3-responsive w3-card">
             <table class="w3-table w3-striped w3-centered">
@@ -265,6 +276,11 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
 <!-- Turnierbericht -->
 <div class="w3-card-4 w3-panel w3-padding-24"> 
     <h2 class="w3-text-secondary">Turnierbericht</h2>
+    <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
+        <p>
+            Ligamodus 4.16 benennt eine Auswahl an besonderen Vorkommnissen, die hier aufgeführt werden sollten. Beispielsweise eine falsche Spielerausleihe oder verspätete Anreise eines Teams. Nutz das Feld darüber hinaus für eine kurze Zusammenfassung des Turniers. Auffällige Situationen oder zerstrittene Spiele sollten auch immer dem Ligaausschuss gemeldet werden.
+        </p>
+    </div>
     <?php if ($change_tbericht): ?>
         <form method="post">
             <p>
@@ -283,7 +299,6 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                 <textarea class="w3-input w3-border w3-border-primary"
                         onkeyup="woerter_zaehlen(1500, 'turnierbericht', 'turnierbericht_counter');"
                         maxlength="1500"
-                        placeholder="Wie war das Turnier? Besondere Vorkomnisse werden hier vermerkt."
                         rows="12"
                         id="turnierbericht"
                         name="turnierbericht"
