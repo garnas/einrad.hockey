@@ -100,9 +100,11 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
 
     <!-- Spielerausleihe hinzufügen -->
     <?php if ($change_tbericht): ?> 
-        <button onclick="document.getElementById('modal_ausleihe').style.display='block'"
-                class="w3-section w3-button w3-tertiary">
-            <?= Html::icon("save_alt") ?> Spielerausleihe hinzufügen
+        <button 
+            onclick="document.getElementById('modal_ausleihe').style.display='block'"
+            class="w3-section w3-button w3-tertiary"
+        >
+            Spielerausleihe hinzufügen
         </button>
         <div id="modal_ausleihe" class="w3-modal">
             <form method="post" class="w3-card-4 w3-panel w3-round w3-container w3-modal-content">
@@ -196,9 +198,11 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
 
     <!-- Zeitstrafe hinzufügen -->
     <?php if ($change_tbericht): ?>
-        <button onclick="document.getElementById('modal_zeitstrafe').style.display='block'"
-                class="w3-section w3-button w3-tertiary">
-            <?= Html::icon("save_alt") ?> Zeitstrafe hinzufügen
+        <button 
+            onclick="document.getElementById('modal_zeitstrafe').style.display='block'"
+            class="w3-section w3-button w3-tertiary"
+        >
+            Zeitstrafe hinzufügen
         </button>
         <div id="modal_zeitstrafe" class="w3-modal">
             <form method="post" class="w3-card-4 w3-panel w3-round w3-container w3-modal-content">
