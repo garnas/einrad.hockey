@@ -23,48 +23,34 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                 Klicke auf die Teamnamen, um den Kader anzeigen zu lassen. Nur eingetragenen Spielerinnen und Spieler sind für das Team spielberechtigt.
             </p>
         </div>
-        <ul class='w3-ul w3-margin-left w3-leftbar w3-border-primary'>
-            <?php foreach ($kader_array as $team_id => $kader): ?>
-                <li class="w3-hover-primary" style="cursor: pointer;" onclick="openTab('<?=$team_id?>')">
-                    <?= Html::icon('launch', class: 'w3-text-tertiary') ?> <?=Team::id_to_name($team_id)?>
-                </li>
-            <?php endforeach; ?>
-        </ul>
         <?php foreach ($kader_array as $team_id => $kader): ?>
-            <div id="<?=$team_id?>" class="tab" style="display:none; max-width: 600px">
-                <?php if (!empty($kader)): ?>
-                    <h3><?=Team::id_to_name($team_id)?></h3>
-                    <div class="w3-responsive w3-card">
-                        <table class="w3-table w3-striped">
-                            <tr class="w3-primary">
-                                <th><?= Html::icon("tag") ?> ID</th>
-                                <th><?= Html::icon("account_circle") ?> Spieler</th>
-                                <th><?= Html::icon("sports") ?> Schiri<sup>*</sup></th>
-                            </tr>
-                            <?php foreach ($kader as $spieler): ?>
-                                <?php /** @var Spieler $spieler */ ?>
-                                <tr class="<?php SpielerService::isSchiri($spieler) ? "w3-pale-green" : ""; ?>">
-                                    <td><?=$spieler->getSpielerId()?></td>
-                                    <td>
-                                        <?= $spieler->getName(fullName: false) ?>
-                                    </td>
-                                    <td>
-                                        <?= TeamSnippets::schiritag($spieler) ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </table>
-                    </div>
-                    <span class="w3-text-grey w3-small">
-                        <sup>*</sup>Schirilizenz ist gültig bis inkl. der angezeigten Saison
-                    </span>
-                <?php endif; ?>
-                <?php if (!Team::is_ligateam($team_id)): ?>
-                    <p class="w3-text-grey">
-                        Nichtligateams haben keinen zugewiesenen Kader.
-                    </p>
-                <?php endif; ?>
-            </div>
+            <button 
+                onclick="open_kader(<?=  $team_id ?>)" 
+                class="w3-button w3-block w3-left-align w3-primary w3-border-bottom w3-border-white"
+            >
+                <?=Team::id_to_name($team_id)?>
+            </button>
+            
+            <?php if (!empty($kader)): ?>
+                <?php $schiri = false ?>
+                <div id="kader_<?= $team_id ?>" class="w3-hide">
+                    <ul style="column-count: 2">
+                        <?php foreach ($kader as $spieler): ?>
+                            <li>
+                                <?= $spieler->getName(fullName: false) ?><?= SpielerService::isSchiri($spieler) ? "*" : "" ?>
+                            </li>
+                            <?php $schiri = $schiri || SpielerService::isSchiri($spieler) ?>
+                        <?php endforeach; ?>
+                    </ul>
+                    <?php if ($schiri): ?>
+                        <p class="w3-center">* Gültige Schirilizenz vorhanden.</p>
+                    <?php endif; ?>
+                </div>
+            <?php elseif (!Team::is_ligateam($team_id)): ?>
+                <div>
+                    Nichtligateams haben keinen zugewiesenen Kader.
+                </div>
+            <?php endif; ?>
         <?php endforeach; ?>
     </div>
 <?php endif; ?>
@@ -324,5 +310,16 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
         if (event.target == modal2) {
             modal2.style.display = "none";
         }
+    }
+
+    function open_kader(id) {
+        var x = document.getElementById("kader_" + id);
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+            x.previousElementSibling.className += " w3-secondary";
+        } else {
+            x.className = x.className.replace("w3-show", "");
+            x.previousElementSibling.className = x.previousElementSibling.className.replace("w3-secondary", "");
+        } 
     }
 </script>
