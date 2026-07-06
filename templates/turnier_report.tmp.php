@@ -6,12 +6,12 @@ use App\Service\Team\TeamSnippets;
 use App\Service\Turnier\TurnierSnippets;
 
 ?>
+
+<h2 class="w3-text-grey">Turnierreport</h2>
 <h1 class="w3-text-primary">
-    <?= TurnierSnippets::ortDatumBlock($turnier) ?>
+    <?= TurnierSnippets::nameBrTitel($turnier) ?>
 </h1>
-<h2 class="w3-text-grey">
-    <?= Html::icon('article', tag: 'h2') ?> Turnier-Report
-</h2>
+<p class="w3-border-top w3-border-grey w3-text-grey">Saison <?=Html::get_saison_string($turnier->getSaison())?></p>
 
 <?php $turnier_datum = DateTimeImmutable::createFromMutable($turnier->getDatum());
 if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
