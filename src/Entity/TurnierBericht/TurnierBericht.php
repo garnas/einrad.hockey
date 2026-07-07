@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Entity\Turnier;
+namespace App\Entity\TurnierBericht;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Turnier\Turnier;
 
 #[ORM\Entity]
 #[ORM\Table(
@@ -13,24 +14,32 @@ use Doctrine\ORM\Mapping as ORM;
 )]
 class TurnierBericht
 {
+    #[ORM\Id]
+    #[ORM\GeneratedValue('AUTO')]
+    #[ORM\Column(name: "bericht_id", type: "integer")]
+    private int $berichtId;
+
     #[ORM\OneToOne(targetEntity: Turnier::class)]
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
     private Turnier $turnier;
 
-    #[ORM\Column(name: "turnier_id", type: "integer")]
-    private int $turnierId;
-
-    #[ORM\Column(name: "bericht_id", type: "integer")]
-    #[ORM\Id]
-    private int $berichtId;
-
     #[ORM\Column(name: "bericht", type: "string", length: 1900, nullable: false)]
-    private string $bericht;
+    private string $bericht = '';
 
-    #[ORM\Column(name: "kader_ueberprueft", type: "string", length: 0, nullable: false)]
-    private string $kaderUeberprueft;
+    #[ORM\Column(name: "kader_ueberprueft", type: "string", length: 10, nullable: false)]
+    private string $kaderUeberprueft = 'Nein';
 
-    public function getBericht(): ?string
+    public function __construct(Turnier $turnier)
+    {
+        $this->turnier = $turnier;
+    }
+
+    public function getId(): int
+    {
+        return $this->berichtId;
+    }
+        
+    public function getBericht(): string
     {
         return $this->bericht;
     }
@@ -42,7 +51,7 @@ class TurnierBericht
         return $this;
     }
 
-    public function getKaderUeberprueft(): ?string
+    public function getKaderUeberprueft(): string
     {
         return $this->kaderUeberprueft;
     }

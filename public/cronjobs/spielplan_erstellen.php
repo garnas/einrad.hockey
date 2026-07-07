@@ -1,7 +1,9 @@
 <?php
 
 use App\Event\Turnier\TurnierEventMailBot;
+use App\Repository\TurnierBericht\TurnierBerichtRepository;
 use App\Repository\Turnier\TurnierRepository;
+use App\Entity\TurnierBericht\TurnierBericht;
 use App\Service\Turnier\TurnierService;
 
 require_once '../../init.php';
@@ -57,6 +59,8 @@ foreach ($turniere as $turnier) {
             TurnierEventMailBot::mailCanceled($turnier_new);
             Html::info("Abgesagt: " . $turnier->get_turnier_id());
         } elseif (Spielplan::spielplan_erstellen($turnier)) { # Weitere Checks für den LA in dieser Funktion
+            $turnierbericht = new TurnierBericht($turnier_new);
+            TurnierBerichtRepository::get()->speichern($turnierbericht);
             Html::info("Spielplan für " . $turnier->get_turnier_id() . " erstellt");
         } else {
             Html::error("Keinen Spielplan für " . $turnier->get_turnier_id() . " erstellt");

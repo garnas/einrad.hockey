@@ -3,9 +3,13 @@
 use App\Event\Turnier\nLigaBot;
 use App\Repository\DoctrineWrapper;
 use App\Repository\Turnier\TurnierRepository;
+use App\Repository\TurnierBericht\TurnierBerichtRepository;
+
 use App\Service\Team\FreilosService;
+use App\Service\TurnierBericht\TurnierBerichtService;
 
 $turnierEntity = TurnierRepository::get()->turnier($turnier_id);
+$turnier_bericht = TurnierBerichtRepository::get()->bericht($turnier_id);
 
 // Besteht die Berechtigung das Turnier zu bearbeiten?
 if (!Helper::$ligacenter) { // Ligacenter darf alles.
@@ -91,7 +95,7 @@ if (isset($_POST["turnierergebnis_speichern"])) {
 }
 
 // Hinweis Kaderkontrolle und Turnierreport
-if (!(new TurnierReport($turnier_id))->kader_check()) {
+if (TurnierBerichtService::isKaderChecked($turnier_bericht)) {
     Html::info("Bitte kontrolliert die Teamkader und setzt im "
             . Html::link('../teamcenter/tc_turnier_report.php?turnier_id='
             . $turnier_id, 'Turnierreport') . " das entsprechende Häkchen.", esc: false);

@@ -1,8 +1,6 @@
 <?php
 
-use App\Entity\Team\Spieler;
 use App\Service\Team\SpielerService;
-use App\Service\Team\TeamSnippets;
 use App\Service\Turnier\TurnierSnippets;
 
 ?>
@@ -13,93 +11,100 @@ use App\Service\Turnier\TurnierSnippets;
 </h1>
 <p class="w3-border-top w3-border-grey w3-text-grey">Saison <?=Html::get_saison_string($turnier->getSaison())?></p>
 
-<?php $turnier_datum = DateTimeImmutable::createFromMutable($turnier->getDatum());
-if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
-    <!-- Kader -->
-    <div class="w3-card-4 w3-panel w3-padding-24">
-        <h3 class="w3-text-secondary">Kader und Schiedsrichter</h3>
-        <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
-            <p>
-                Klicke auf die Teamnamen, um den Kader anzeigen zu lassen. Nur eingetragenen Spielerinnen und Spieler sind für das Team spielberechtigt.
-            </p>
-        </div>
-        <?php foreach ($kader_array as $team_id => $kader): ?>
-            <button 
-                onclick="open_kader(<?=  $team_id ?>)" 
-                class="w3-button w3-block w3-left-align w3-primary w3-border-bottom w3-border-white"
+<!-- Kader -->
+<div class="w3-card-4 w3-panel w3-padding-24">
+    <h3 class="w3-text-secondary">Kader und Schiedsrichter</h3>
+    <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
+        <p>
+            Klicke auf die Teamnamen, um den Kader anzeigen zu lassen. Nur eingetragenen Spielerinnen und Spieler sind für das Team spielberechtigt.
+        </p>
+    </div>
+    <?php foreach ($setzliste as $element): ?>
+        <button 
+            onclick="open_kader(<?=  $element->getTeam()->id() ?>)" 
+            class="w3-button w3-block w3-left-align w3-primary w3-border-bottom w3-border-white"
+        >
+            <?=$element->getTeam()->getName()?>
+        </button>
+        
+        <?php if (!empty($element->getTeam()->getKader())): ?>
+            <?php $schiri = false ?>
+            <div id="kader_<?= $element->getTeam()->id() ?>" class="w3-hide">
+                <ul style="column-count: 2">
+                    <?php foreach ($element->getTeam()->getKader() as $spieler): ?>
+                        <li>
+                            <?= $spieler->getName(fullName: false) ?><?= SpielerService::isSchiri($spieler) ? "*" : "" ?>
+                        </li>
+                        <?php $schiri = $schiri || SpielerService::isSchiri($spieler) ?>
+                    <?php endforeach; ?>
+                </ul>
+                <?php if ($schiri): ?>
+                    <p class="w3-center">* Gültige Schirilizenz vorhanden.</p>
+                <?php endif; ?>
+            </div>
+        <?php elseif (!$element->getTeam()->isLigaTeam()): ?>
+            <div>
+                Nichtligateams haben keinen zugewiesenen Kader.
+            </div>
+        <?php endif; ?>
+    <?php endforeach; ?>
+    <form method="post">
+        <p>
+            <input <?= $turnier_bericht->getKaderUeberprueft() == 'Ja' ? 'checked' : '' ?>
+                class="w3-check"
+                value="kader_checked"
+                type="checkbox"
+                name="kader_check"
+                id="kader_check"
+                <?= $allow_edit ? '' : 'disabled' ?>
             >
-                <?=Team::id_to_name($team_id)?>
-            </button>
-            
-            <?php if (!empty($kader)): ?>
-                <?php $schiri = false ?>
-                <div id="kader_<?= $team_id ?>" class="w3-hide">
-                    <ul style="column-count: 2">
-                        <?php foreach ($kader as $spieler): ?>
-                            <li>
-                                <?= $spieler->getName(fullName: false) ?><?= SpielerService::isSchiri($spieler) ? "*" : "" ?>
-                            </li>
-                            <?php $schiri = $schiri || SpielerService::isSchiri($spieler) ?>
-                        <?php endforeach; ?>
-                    </ul>
-                    <?php if ($schiri): ?>
-                        <p class="w3-center">* Gültige Schirilizenz vorhanden.</p>
-                    <?php endif; ?>
-                </div>
-            <?php elseif (!Team::is_ligateam($team_id)): ?>
-                <div>
-                    Nichtligateams haben keinen zugewiesenen Kader.
-                </div>
-            <?php endif; ?>
-        <?php endforeach; ?>
-        <form method="post">
-            <p>
-                <input <?= $tbericht->kader_check() ? 'checked' : '' ?>
-                    class="w3-check"
-                    value="kader_checked"
-                    type="checkbox"
-                    name="kader_check"
-                    id="kader_check"
-                >
-                <label for="kader_check" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer;"> Es wurde auf richtige Teamkader geachet.</label>
-            </p>
+            <label for="kader_check" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer;"> Es wurde auf richtige Teamkader geachet.</label>
+        </p>
+        <?php if ($allow_edit): ?>
             <p>
                 <input type="submit" value="Bestätigen" name="set_kader_check" class="w3-button w3-tertiary">
             </p>
-        </form>
-    </div>
-<?php endif; ?>
+        <?php endif; ?>
+    </form>
+</div>
 
 <!-- Spielerausleihe -->
 <div class="w3-card-4 w3-panel w3-padding-24">
     <h3 class="w3-text-secondary">Ausleihe</h3>
+    <!-- Hinweis -->
     <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
         <p>
             Ausleihen von Spielerinnen und Spielern sind vor dem Turnierbeginn zu prüfen und von dem leihenden Team anzumelden (Ligmaodus&nbsp;2.2.5). Passiert dies verspätet, sollte es unter den besonderen Vorkommnissen aufgenommen werden.
         </p>
     </div>
-    <?php if (!empty($spieler_ausleihen)): ?>
+    
+    <!-- Tabelle mit den Ausleihen -->
+    <?php if ($spieler_ausleihen->count() == 0): ?>
+        <p class="w3-text-grey">
+            Es sind keine Spielerausleihen eingetragen.
+        </p>
+    <?php else: ?>
         <div class="w3-responsive w3-card">
             <table class="w3-table w3-striped w3-centered">
                 <tr class="w3-primary">
                     <th><?= Html::icon("account_circle") ?> Spieler</th>
                     <th><?= Html::icon("add") ?> Aufnehmendes Team</th>
                     <th><?= Html::icon("remove") ?> Abgebendes Team</th>
-                    <?php if ($change_tbericht): ?>
+                    <?php if ($allow_edit): ?>
                         <th>Löschen</th>
                     <?php endif; ?>
                 </tr>
-                <?php foreach ($spieler_ausleihen as $ausleihe): ?>
+                <?php foreach ($spieler_ausleihen as $ausleihe_id => $ausleihe): ?>
                     <tr>
-                        <td><?=$ausleihe['spieler']?></td>
-                        <td><?=$ausleihe['team_auf']?></td>
-                        <td><?=$ausleihe['team_ab']?></td>
-                        <?php if ($change_tbericht): ?>
+                        <td><?=$ausleihe->getSpieler()?></td>
+                        <td><?=$ausleihe->getTeamAuf()?></td>
+                        <td><?=$ausleihe->getTeamAb()?></td>
+                        <?php if ($allow_edit): ?>
                             <td>
                                 <form method="post">
                                     <button type="submit"
                                         class="w3-button w3-text-secondary"
-                                        name="del_ausleihe_<?=$ausleihe['ausleihe_id']?>">
+                                        name="del_ausleihe_<?=$ausleihe_id?>">
                                         <?= Html::icon("delete") ?>
                                     </button>
                                 </form>
@@ -109,18 +114,19 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                 <?php endforeach; ?>
             </table>
         </div>
-    <?php else: ?>
-        <p class="w3-text-grey">Es sind keine Spielerausleihen eingetragen.</p>
     <?php endif; ?>
 
     <!-- Spielerausleihe hinzufügen -->
-    <?php if ($change_tbericht): ?> 
+    <?php if ($allow_edit): ?>
+        <!-- Button zum öffnen des Modals der Spielerausleihe -->
         <button 
             onclick="document.getElementById('modal_ausleihe').style.display='block'"
             class="w3-section w3-button w3-tertiary"
         >
             Spielerausleihe hinzufügen
         </button>
+        
+        <!-- Modal für die Spielerausleihe -->
         <div id="modal_ausleihe" class="w3-modal">
             <form method="post" class="w3-card-4 w3-panel w3-round w3-container w3-modal-content">
                 <span onclick="document.getElementById('modal_ausleihe').style.display='none'"
@@ -144,8 +150,8 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                             class="w3-select w3-input w3-border w3-border-primary w3-padding"
                     >
                         <option selected disabled>--</option>
-                        <?php foreach ($teams as $team): ?>
-                            <option><?=$team->getName()?></option>
+                        <?php foreach ($setzliste as $element): ?>
+                            <option><?=$element->getTeam()->getName()?></option>
                         <?php endforeach; ?>
                     </select>
                 </p>
@@ -165,33 +171,40 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
 <!-- Zeitstrafen -->
 <div class="w3-card-4 w3-panel w3-padding-24">
     <h3 class="w3-text-secondary">Zeitstrafen</h3>
+    <!-- Hinweis -->
     <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
         <p>
             Es sind alle Zeitstrafen aufzuführen, die auf dem Turnier ausgesprochen wurden. Im Turnierbericht können diese weiter ausgeführt werden. Mit den entsprechenden Schiedsrichterinnen und Schiedsrichtern sollte zusätzlich gesprochen werden.
         </p>
     </div>
-    <?php if (!empty($zeitstrafen)): ?>
-        <div class="w3-responsive w3-card">
+
+    <!-- Tabelle der Zeistrafen -->
+    <?php if ($spieler_zeitstrafen->count() == 0): ?>
+        <p class="w3-text-grey">
+            Es sind keine Zeitstrafen eingetragen.
+        </p>
+    <?php else: ?>
+        <div class="w3-responsive w3-card"> 
             <table class="w3-table w3-striped w3-centered">
                 <tr class="w3-primary">
                     <th><?= Html::icon("account_circle") ?> Spieler</th>
                     <th><?= Html::icon("schedule") ?> Dauer</th>
                     <th><?= Html::icon("sports_hockey") ?> Spielpaarung</th>
-                    <?php if ($change_tbericht): ?>
+                    <?php if ($allow_edit): ?>
                         <th>Löschen</th>
                     <?php endif; ?>
                 </tr>
-                <?php foreach ($zeitstrafen as $zeitstrafe): ?>
+                <?php foreach ($spieler_zeitstrafen as $zeitstrafe_id => $zeitstrafe): ?>
                     <tr>
-                        <td><?=$zeitstrafe['spieler']?></td>
-                        <td><?=$zeitstrafe['dauer']?></td>
-                        <td><?=$zeitstrafe['team_a']?> : <?=$zeitstrafe['team_b']?></td>
-                        <?php if ($change_tbericht): ?>
+                        <td><?=$zeitstrafe->getSpieler()?></td>
+                        <td><?=$zeitstrafe->getDauer()?></td>
+                        <td><?=$zeitstrafe->getTeamA()?> : <?=$zeitstrafe->getTeamB()?></td>
+                        <?php if ($allow_edit): ?>
                             <td>
                                 <form method="post">
                                     <button type="submit"
                                         class="w3-button w3-text-secondary"
-                                        name="del_zeitstrafe_<?=$zeitstrafe['zeitstrafe_id']?>"
+                                        name="del_zeitstrafe_<?=$zeitstrafe_id?>"
                                     >
                                         <?= Html::icon("delete") ?>
                                     </button>
@@ -202,17 +215,15 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                     <tr>
                         <td colspan="5" class="w3-left-align">
                             <span class="w3-text-secondary">Grund: </span>
-                            <?= nl2br($zeitstrafe['grund'])?></td>
+                            <?= nl2br($zeitstrafe->getGrund())?></td>
                     </tr>
                 <?php endforeach; ?>
             </table>
         </div>
-    <?php else: ?>
-        <p class="w3-text-grey">Es sind keine Zeitstrafen eingetragen.</p>
     <?php endif; ?>
 
     <!-- Zeitstrafe hinzufügen -->
-    <?php if ($change_tbericht): ?>
+    <?php if ($allow_edit): ?>
         <button 
             onclick="document.getElementById('modal_zeitstrafe').style.display='block'"
             class="w3-section w3-button w3-tertiary"
@@ -227,9 +238,10 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                     <label for="zeitstrafe_spieler">Spieler</label>
                     <input type="text" placeholder="Name eingeben" class="w3-input w3-border w3-border-primary" list="spielerliste" id="zeitstrafe_spieler" name="zeitstrafe_spieler">
                         <datalist id="spielerliste">
-                            <?php
-                            foreach ($spieler_liste as $spieler): ?>
-                                <option value='<?= $spieler->getName(fullName: false) ?> | <?= $spieler->getTeam()->getName() ?>'>
+                            <?php foreach ($setzliste as $element): ?>
+                                <?php foreach ($element->getTeam()->getKader() as $spieler): ?>
+                                    <option value='<?= $spieler->getName(fullName: false) ?> | <?= $spieler->getTeam()->getName() ?>'>
+                                <?php endforeach; ?>
                             <?php endforeach; ?>
                         </datalist>
                 </p>
@@ -249,8 +261,8 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                             required
                     >
                         <option disabled selected value="">--</option>
-                        <?php foreach ($teams as $team): ?>
-                            <option><?= $team->getName() ?></option>
+                        <?php foreach ($setzliste as $element): ?>
+                            <option><?= $element->getTeam()->getName() ?></option>
                         <?php endforeach; ?>
                     </select>
                     <label for="zeitstrafe_team_b" class="w3-text-grey">versus</label>
@@ -260,8 +272,8 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                             required
                     >
                         <option disabled selected value="">--</option>
-                        <?php foreach ($teams as $team): ?>
-                            <option><?= $team->getName() ?></option>
+                        <?php foreach ($setzliste as $element): ?>
+                            <option><?= $element->getTeam()->getName() ?></option>
                         <?php endforeach; ?>
                     </select>
                 </p>
@@ -269,8 +281,8 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                     <label for="zeitstrafe_bericht">Grund <i>(kurz)</i></label>
                     <textarea 
                             class="w3-input w3-border w3-border-primary" 
-                            onkeyup="woerter_zaehlen(300, 'zeitstrafe_bericht','zeitstrafe_counter');" 
-                            maxlength="300" 
+                            onkeyup="woerter_zaehlen(255, 'zeitstrafe_bericht','zeitstrafe_counter');" 
+                            maxlength="255" 
                             rows="3" 
                             id="zeitstrafe_bericht" 
                             name="zeitstrafe_bericht" 
@@ -294,7 +306,7 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
             Ligamodus 4.16 benennt eine Auswahl an besonderen Vorkommnissen, die hier aufgeführt werden sollten. Beispielsweise eine falsche Spielerausleihe oder verspätete Anreise eines Teams. Nutz das Feld darüber hinaus für eine kurze Zusammenfassung des Turniers. Auffällige Situationen oder zerstrittene Spiele sollten auch immer dem Ligaausschuss gemeldet werden.
         </p>
     </div>
-    <?php if ($change_tbericht): ?>
+    <?php if ($allow_edit): ?>
         <form method="post">
             <p>
                 <textarea class="w3-input w3-border w3-border-primary"
@@ -303,13 +315,13 @@ if ($turnier_datum->modify("-8 days") < new DateTime()): ?>
                         rows="12"
                         id="turnierbericht"
                         name="turnierbericht"
-                ><?=$_POST['text'] ?? ''?><?=$tbericht->get_turnier_bericht()?></textarea>
+                ><?=$_POST['text'] ?? ''?><?=$turnier_bericht->getBericht()?></textarea>
                 <p id="turnierbericht_counter"><p>
             </p>
             <input type="submit" value="Speichern" name="set_turnierbericht" class="w3-button w3-tertiary">
         </form>
     <?php else: ?>
-        <p><?=$tbericht->get_turnier_bericht() ?: '<p class="w3-text-grey">Es ist kein Turnierbericht vorhanden.</p>'?></p>
+        <p><?=$turnier_bericht->getBericht() ?: '<p class="w3-text-grey">Es ist kein Turnierbericht vorhanden.</p>'?></p>
     <?php endif; ?>
 </div>
 

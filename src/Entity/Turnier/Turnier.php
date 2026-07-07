@@ -12,6 +12,8 @@ use Discord;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\TurnierBericht\SpielerZeitstrafe;
+use App\Entity\TurnierBericht\SpielerAusleihe;
 
 /**
  * Turnier
@@ -109,6 +111,12 @@ class Turnier
     #[ORM\Column(name: "block_erweitert_hoch", type: "boolean")]
     private ?bool $blockErweitertHoch;
 
+    #[ORM\OneToMany(mappedBy: 'turnier', targetEntity: SpielerZeitstrafe::class)]
+    private Collection $zeitstrafen;
+
+    #[ORM\OneToMany(mappedBy: 'turnier', targetEntity: SpielerAusleihe::class)]
+    private Collection $leihen;
+
     public function isSofortOeffnen(): bool
     {
         return $this->sofortOeffnen;
@@ -133,6 +141,8 @@ class Turnier
         $this->logs = new ArrayCollection();
         $this->gesetzteFreilose = new ArrayCollection();
         $this->logService = new TurnierLogService($this);
+        $this->zeitstrafen = new ArrayCollection();
+        $this->leihen = new ArrayCollection();
     }
 
     #[ORM\PreFlush]
@@ -215,7 +225,24 @@ class Turnier
     {
         return $this->art;
     }
+    
+    
+    /**
+     * @return Collection<int, SpielerZeitstrafe>
+     */
+    public function getZeitstrafen(): Collection
+    {
+        return $this->zeitstrafen;
+    }
 
+    /**
+     * @return Collection<int, SpielerAusleihe>
+     */
+    public function getLeihen(): Collection
+    {
+        return $this->leihen;
+    }
+    
     public function setArt(?string $art): self
     {
         $this->logService->autoLog("Art", $this->art ?? '', $art);

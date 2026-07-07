@@ -3,7 +3,7 @@
 namespace App\Repository\Turnier;
 
 use App\Entity\Turnier\Turnier;
-use App\Entity\Turnier\TurnierBericht;
+use App\Entity\TurnierBericht\TurnierBericht;
 use App\Entity\Turnier\TurniereListe;
 use App\Repository\DoctrineWrapper;
 use App\Repository\TraitSingletonRepository;
