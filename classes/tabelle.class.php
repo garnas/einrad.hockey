@@ -215,14 +215,8 @@ class Tabelle
     public static function get_meisterschafts_tabelle_templates(int $saison = Config::SAISON): array
     {
         return [
-            'desktop' => [
-                'tabelle' => 'templates/tabellen/desktop_mt_komplett.tmp.php',
-                'meister' => 'templates/tabellen/desktop_mt_meister.tmp.php',
-            ],
-            'mobil' => [
-                'tabelle' => 'templates/tabellen/mobil_mt_komplett.tmp.php',
-                'meister' => 'templates/tabellen/mobil_mt_meister.tmp.php',
-            ],
+            'desktop' => 'templates/tabellen/desktop_meisterschaftstabelle.tmp.php',
+            'mobil' => 'templates/tabellen/mobil_meisterschaftstabelle.tmp.php',
         ];
     }
 
