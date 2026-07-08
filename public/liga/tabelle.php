@@ -24,10 +24,11 @@ if (Tabelle::check_spieltag_live($akt_spieltag)) {
 $gew_spieltag = isset($_GET['spieltag']) ? (int) $_GET['spieltag'] : $akt_spieltag;
 
 // Daten der Meisterschaftstabelle, um sie an das Layout zu uebergeben
-if ($saison >= Config::SAISON) {
-    $meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag, $saison);
-    $meisterschafts_tabelle_templates = Tabelle::get_meisterschafts_tabelle_templates($saison);
-} else {
+$meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag, $saison);
+$meisterschafts_tabelle_templates = Tabelle::get_meisterschafts_tabelle_templates($saison);
+
+if ($saison <= 30) {
+    // Vor der Saison 31 galt eine 'andere' Meisterschaftstabelle
     $meisterschafts_tabelle = Archiv_Tabelle::get_meisterschafts_tabelle($gew_spieltag, $saison);
     $meisterschafts_tabelle_templates = Archiv_Tabelle::get_meisterschafts_tabelle_templates($saison);
 }
