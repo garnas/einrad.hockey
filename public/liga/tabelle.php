@@ -51,11 +51,8 @@ foreach ($strafen as $strafe) {
 foreach (range(1, 10) as $i) {
     $platz_color[$i] = "ehl-text-pink";
 }
-foreach (range(11, 16) as $i) {
+foreach (range(11, 20) as $i) {
     $platz_color[$i] = "ehl-text-orange";
-}
-foreach (range(17, 22) as $i) {
-    $platz_color[$i] = "ehl-text-blue";
 }
 
 $block_color = [
