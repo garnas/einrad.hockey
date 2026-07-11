@@ -39,7 +39,7 @@ $mpdf->shrink_tables_to_fit = 4; // Tabellen können um den Faktor 4 verkleinert
 
 // PDF beschreiben
 $mpdf->SetTitle('Spielplan ' . $spielplan->turnier->get_ort());
-$mpdf->SetHTMLHeader('<img src="../bilder/logo_kurz.png" style="margin-top:18px; width: 35mm; float: right;">');
+$mpdf->SetHTMLHeader('<img src="../bilder/logo_lang.png" style="margin-top:18px; width: 70mm; float: right;">');
 $mpdf->SetHTMLFooter(
     '<table style="width: 100%">
         <tr>
