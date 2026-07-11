@@ -17,7 +17,9 @@ if ($turnier === null) {
 }
 
 if (isset($_POST['nl_anmelden'])) {
-    FormLogicTeam::nlTeamAnmelden($turnier);
+    $liste = $_POST['nl_liste'];
+    $name = $_POST['nl_teamname'];
+    FormLogicTeam::nlTeamAnmelden($turnier, $liste, $name);
 }
 
 

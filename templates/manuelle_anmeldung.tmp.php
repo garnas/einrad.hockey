@@ -76,6 +76,73 @@ use App\Service\Turnier\TurnierSnippets;
 </div>
 
 <div class="w3-panel w3-card-4">
+    <form method="post">
+        <h3>Team gegen Ligateam austauschen</h3>
+        <p>
+            <label for="team_liste" class='w3-text-primary'>Team wählen</label><br>
+            <select required class='w3-select w3-border w3-border-primary' name="team_liste" id="team_liste">
+                <option selected disabled value=''>--</option>
+                <?php foreach ($turnier->getListe() as $anmeldung): ?>
+                    <option value='<?= $anmeldung->getTeam()->id(); ?>'><?= $anmeldung->getTeam()->getName() ?></option>
+                <?php endforeach; ?>
+            </select>
+        </p>
+        <p>
+            <label for="teamname" class='w3-text-primary'>Team wählen:</label><br>
+            <input required type="text" style="max-width:400px" placeholder="Ligateam eingeben" class="w3-input w3-border w3-border-primary" list="teams" id="teamname" name="teamname">
+            <?= Html::datalist_teams() ?>
+        </p>
+        <p>
+            <input 
+                type='checkbox' 
+                class='w3-check' 
+                id="update_schedule" 
+                name='update_schedule' 
+                value='update_schedule'
+                <?php if ($turnier->getPhase() == 'spielplan'): ?>checked<?php endif; ?>
+            >
+            <label class="w3-hover-text-secondary w3-text-primary" for="update_schedule">Spielplan aktualisieren</label>
+        </p>
+        <p>
+            <input type='submit' class='w3-button w3-margin-bottom w3-tertiary' name='swap_to_liga' value='Austauschen'>
+        </p>
+    </form>
+</div>
+
+<div class="w3-panel w3-card-4">
+    <form method="post">
+        <h3>Team gegen Nichtligateam austauschen</h3>
+        <p>
+            <label for="team_liste" class='w3-text-primary'>Team wählen</label><br>
+            <select required class='w3-select w3-border w3-border-primary' name="team_liste" id="team_liste">
+                <option selected disabled value=''>--</option>
+                <?php foreach ($turnier->getListe() as $anmeldung): ?>
+                    <option value='<?= $anmeldung->getTeam()->id(); ?>'><?= $anmeldung->getTeam()->getName() ?></option>
+                <?php endforeach; ?>
+            </select>
+        </p>
+        <p>
+            <label for="nl_teamname" class='w3-text-primary'>Teamname</label><br>
+            <input required type="text" style="max-width:400px" class="w3-input w3-border w3-border-primary" placeholder="Nichtligateam eingeben" id="nl_teamname" name="nl_teamname">
+        </p>
+        <p>
+            <input 
+                type='checkbox' 
+                class='w3-check' 
+                id="update_schedule" 
+                name='update_schedule' 
+                value='update_schedule' 
+                <?php if ($turnier->getPhase() == 'spielplan'): ?>checked<?php endif; ?>
+            >
+            <label class="w3-hover-text-secondary w3-text-primary" for="update_schedule">Spielplan aktualisieren</label>
+        </p>
+        <p>
+            <input type='submit' class='w3-button w3-margin-bottom w3-tertiary' name='swap_to_nl' value='Austauschen'>
+        </p>
+    </form>
+</div>
+
+<div class="w3-panel w3-card-4">
     <form method='post'>
         <h3>Teams abmelden</h3>
         <?php foreach ($turnier->getListe() as $anmeldung): ?>

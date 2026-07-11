@@ -5,6 +5,7 @@ use App\Repository\Turnier\TurnierRepository;
 use App\Service\Form\FormLogicTeam;
 use App\Service\Team\TeamService;
 use App\Service\Turnier\TurnierService;
+use App\Service\Team\NLTeamService;
 
 $turnierId = (int) @$_GET['turnier_id'];
 $turnier = TurnierRepository::get()->turnier($turnierId);
@@ -20,7 +21,14 @@ if (Helper::$teamcenter && ($turnier->getAusrichter()->id() != $_SESSION['logins
     Helper::reload('/liga/turniere.php');
 }
 
-// Team als Ligaausschuss abmelden
+// Nichtligateam anmelden
+if (isset($_POST['nl_anmelden'])) {
+    $liste = $_POST['nl_liste'];
+    $name = $_POST['nl_teamname'];
+    FormLogicTeam::nlTeamAnmelden($turnier, $liste, $name);
+}
+
+// Ligaausschuss: Team abmelden
 if (isset($_POST['abmelden'])) {
     foreach ($turnier->getListe() as $anmeldung) {
         $team = $anmeldung->getTeam();
@@ -33,7 +41,7 @@ if (isset($_POST['abmelden'])) {
     Helper::reload(get: '?turnier_id=' . $turnier->id());
 }
 
-// Ligateam als Ligaausschuss anmelden
+// Ligaauschuss: Ligateam anmelden
 if (isset($_POST['team_anmelden'])) {
     $liste = $_POST['liste'];
     $team = TeamRepository::get()->findByName($_POST['teamname']);
@@ -65,12 +73,73 @@ if (isset($_POST['team_anmelden'])) {
     }
 }
 
-// Nichtligateam anmelden
-if (isset($_POST['nl_anmelden'])) {
-    FormLogicTeam::nlTeamAnmelden($turnier);
+// Ligaausschuss: Team durch ein NL-Team ersetzen
+if (isset($_POST['swap_to_nl'])) {
+
+    $team = TeamRepository::get()->team($_POST['team_liste']);
+    foreach ($turnier->getListe() as $anmeldung) {
+        if ($anmeldung->getTeam()->id() === $team->id()) {
+            
+            // Das Team wird abgemeldet
+            TeamService::abmelden($anmeldung->getTeam(), $turnier);
+            Html::info($anmeldung->getTeam()->getName() . " wurde abgemeldet");
+            $liste = $anmeldung->getListe();
+            
+            // Das NL-Team wird angemeldet
+            $nlTeam = NLTeamService::findOrCreate($_POST['nl_teamname']);
+            TurnierService::nlAnmelden($turnier, $nlTeam, $liste);
+            
+            TurnierRepository::get()->speichern($turnier);
+            Html::info("Der Tausch war erfolgreich.");
+        }
+    }
+
+    // Aktualisiere den Spielplan falls angefordert
+    if (isset($_POST['update_schedule']) && $turnier->getPhase() == 'spielplan') {
+        $nlTeam = NLTeamService::findOrCreate($_POST['nl_teamname']);
+        $nturnier = nTurnier::get($turnier->id());
+        Spielplan::replace_team($nturnier, $team, $nlTeam);
+    }
+    
+    Helper::reload(get: '?turnier_id=' . $turnier->id());
 }
 
-// Warteliste neu Durchnummerieren
+// Ligaausschuss: Team durch ein NL-Team ersetzen
+if (isset($_POST['swap_to_liga'])) {
+
+    $team_to_replace = TeamRepository::get()->team($_POST['team_liste']);
+    $team_replacing = TeamRepository::get()->findByName($_POST['teamname']);
+    
+    foreach ($turnier->getListe() as $anmeldung) {
+        if ($anmeldung->getTeam()->id() === $team_to_replace->id()) {
+            
+            // Das Team wird abgemeldet
+            TeamService::abmelden($anmeldung->getTeam(), $turnier);
+            Html::info($anmeldung->getTeam()->getName() . " wurde abgemeldet");
+            $liste = $anmeldung->getListe();
+            
+            // Das Ligateam wird angemeldet
+            if ($liste === 'warteliste') {
+                TurnierService::addToWarteListe($turnier, $team_replacing);
+            } elseif ($liste === 'setzliste') {
+                TurnierService::addToSetzListe($turnier, $team_replacing);
+            }
+            
+            TurnierRepository::get()->speichern($turnier);
+            Html::info("Der Tausch war erfolgreich.");
+        }
+    }
+
+    // Aktualisiere den Spielplan falls angefordert
+    if (isset($_POST['update_schedule']) && $turnier->getPhase() == 'spielplan') {
+        $nturnier = nTurnier::get($turnier->id());
+        Spielplan::replace_team($nturnier, $team_to_replace, $team_replacing);
+    }
+    
+    Helper::reload(get: '?turnier_id=' . $turnier->id());
+}
+
+// Ligaauschuss: Warteliste neu Durchnummerieren
 if (isset($_POST['warteliste_aktualisieren'])) {
     TurnierService::neueWartelistePositionen($turnier);
     TurnierRepository::get()->speichern($turnier);
@@ -78,7 +147,7 @@ if (isset($_POST['warteliste_aktualisieren'])) {
     Helper::reload(get: '?turnier_id=' . $turnier->id());
 }
 
-// Setzliste von der Warteliste neu auffuellen
+// Ligaauschuss: Setzliste von der Warteliste neu auffuellen
 if (isset($_POST['setzliste_auffuellen'])) {
     TurnierService::setzListeAuffuellen($turnier);
     TurnierRepository::get()->speichern($turnier);

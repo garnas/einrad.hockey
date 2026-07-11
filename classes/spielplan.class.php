@@ -2,6 +2,8 @@
 
 /** @noinspection IssetArgumentExistenceInspection */
 
+use App\Entity\Team\nTeam;
+
 /**
  * Class Spielplan
  *
@@ -190,6 +192,25 @@ class Spielplan
         $turnier->set_spielplan_vorlage($vorlage);
 
         return true;
+    }
+
+    public static function replace_team(nTurnier $turnier, nTeam $team_to_replace, nTeam $team_replacing)
+    {
+        $turnier_id = $turnier->get_turnier_id();
+
+        $sqls = [
+            "UPDATE spiele SET team_id_a = ? WHERE turnier_id = ? AND team_id_a = ?;",
+            "UPDATE spiele SET team_id_b = ? WHERE turnier_id = ? AND team_id_b = ?;",
+            "UPDATE spiele SET schiri_team_id_a = ? WHERE turnier_id = ? AND schiri_team_id_a = ?;",
+            "UPDATE spiele SET schiri_team_id_b = ? WHERE turnier_id = ? AND schiri_team_id_b = ?;"
+        ];
+
+        foreach ($sqls as $sql) {
+            $params = [$team_replacing->id(), $turnier_id, $team_to_replace->id()];
+            db::$db->query($sql, $params)->log();
+        }
+
+        $turnier->set_log("Teams ausgetauscht: " . $team_replacing->getName() . " ersetzt " . $team_to_replace->getName() . ".");
     }
 
     /**

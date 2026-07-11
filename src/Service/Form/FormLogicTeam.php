@@ -12,10 +12,8 @@ use Html;
 
 class FormLogicTeam
 {
-    public static function nlTeamAnmelden(Turnier $turnier): void
+    public static function nlTeamAnmelden(Turnier $turnier, string $liste, string $teamname): void
     {
-        $liste = $_POST['nl_liste'];
-        $teamname = $_POST['nl_teamname'];
         $nlTeam = NLTeamService::findOrCreate($teamname);
         if (NLTeamValidator::isValidNLAnmeldung($nlTeam, $turnier, $liste)) {
             TurnierService::nlAnmelden($turnier, $nlTeam, $liste);
