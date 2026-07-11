@@ -611,17 +611,20 @@ class Spielplan
             }
 
         } else {
-            // Erhalte die Wertigkeit des erstplatzierten Teams
-            $wertung = 0;
+            // Erhalte den Gesamtwert des Turniers
+            $gesamtwertung = 0;
             foreach ($reverse_tabelle as $team_id => $eintrag) {
-                $wertung = $this->platzierungstabelle[$team_id]['wertigkeit'];
+                $gesamtwertung += $this->platzierungstabelle[$team_id]['wertigkeit'];
             }
+            
+            // Die Wertung wird um 1,5 angehoben
+            $gesamtwertung = $gesamtwertung * 1.5;
 
             // Berechne die Punkte für jedes Team anhand der Wertigkeit des ersten Teams
             $counter = 3;
-            $faktoren = [1.5, 0.75, 0.5];
+            $faktoren = [1.0, 0.75, 0.5];
             foreach ($reverse_tabelle as $team_id => $eintrag) {
-                $this->platzierungstabelle[$team_id]['ligapunkte'] = round($wertung * $faktoren[$counter - 1]);
+                $this->platzierungstabelle[$team_id]['ligapunkte'] = round($gesamtwertung * $faktoren[$counter - 1]);
                 $counter--;
             }
         }
