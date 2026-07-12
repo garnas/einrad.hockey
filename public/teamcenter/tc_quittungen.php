@@ -82,7 +82,7 @@ foreach ($teams as $team_fuer_liste) {
         <div style="padding-top: 24px">
             <b>Zweck</b>
             <br>
-            Startgebühr Ligaturnier <?= ($turnier->getName() ? '"' . e($turnier->getName()) . '" ': '') . e($turnier->getDetails()->getOrt()). ' am '. e($turnier->getDatum()->format('d.m.Y')) ?>
+            Startgebühr Ligaturnier <?= ($turnier->getName() ? '"' . e($turnier->getName()) . '" ' : '') . e($turnier->getDetails()->getOrt()) . ' am ' . e($turnier->getDatum()->format('d.m.Y')) ?>
         </div>
         <div style="padding-top: 64px">
             <b>Ort & Datum</b>
