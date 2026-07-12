@@ -5,6 +5,9 @@
 require_once '../../init.php';
 $saison = (isset($_GET['saison'])) ? (int) $_GET['saison'] : Config::SAISON;
 
+$captcha = Captcha::load();
+$_SESSION['captcha'] = $captcha->getPhrase();
+
 // Formularauswertung
 $error = false;
 $send = false; // Email wurde abgesendet
@@ -14,9 +17,18 @@ if (isset($_POST['absenden'])) {
     $name = $_POST['name'];
     $betrag = $_POST['betrag'];
     $text = $_POST['text'];
+    $user_captcha = $_POST['captcha'];
     if (empty($absender) || empty($bereich) || empty($text)) {
         Html::error("Bitte Formular ausfüllen");
         $error = true;
+    }
+
+    // Captcha validieren
+    if (!$captcha->testPhrase($user_captcha)) {
+        Html::error("Falsches Captcha, bitte versuche es erneut.");
+        $error = true;
+        // Logdatei erstellen/beschreiben
+        Helper::log(Config::LOG_KONTAKTFORMULAR, "Falsches Captcha: " . $_SESSION['captcha'] . "\n" . print_r($_POST, true));
     }
 
     if (!$error) {
@@ -104,6 +116,32 @@ include '../../templates/header.tmp.php';
                         required
             ><?= $_POST['text'] ?? '' ?></textarea>
         </p>
+        <p>
+            <label class="w3-text-grey" for="captcha">
+                <img class="w3-card w3-image" alt='captcha' src="<?= $captcha->inline() ?>">
+            </label>
+            <!-- nicht Submit, da sonst bei Enter das Captcha neu geladen wird und nicht die Mail versendet wird -->
+            <button class="w3-button w3-text-primary"
+                    type="button"
+                    onclick="this.form.submit()"
+                    name="reload_captcha"
+                    formnovalidate
+            >
+                <?= Html::icon('refresh') ?>
+            </button>
+            <input class="w3-input"
+                    type="text"
+                    id="captcha"
+                    name="captcha"
+                    placeholder="Captcha eingeben"
+                    style="width: 200px;"
+                    value="<?= $_POST['captcha'] ?? '' ?>"
+                    required
+            >
+        </p>
+        <?php if (isset($_POST) && !isset($_POST['absenden'])): ?>
+            <script>document.getElementById('captcha').scrollIntoView(true);</script>
+        <?php endif; ?>
         <p>
             <button type="submit"
                     name="absenden"
