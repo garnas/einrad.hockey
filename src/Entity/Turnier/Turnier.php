@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\TurnierBericht\SpielerZeitstrafe;
 use App\Entity\TurnierBericht\SpielerAusleihe;
+use App\Entity\TurnierBericht\TurnierBericht;
 
 /**
  * Turnier
@@ -110,6 +111,9 @@ class Turnier
 
     #[ORM\Column(name: "block_erweitert_hoch", type: "boolean")]
     private ?bool $blockErweitertHoch;
+
+    #[ORM\OneToOne(mappedBy: 'turnier', targetEntity: TurnierBericht::class)]
+    private ?TurnierBericht $bericht = null;
 
     #[ORM\OneToMany(mappedBy: 'turnier', targetEntity: SpielerZeitstrafe::class)]
     private Collection $zeitstrafen;
@@ -521,6 +525,11 @@ class Turnier
     {
         $this->blockErweitertHoch = $blockErweitertHoch;
         return $this;
+    }
+
+    public function getBericht(): ?TurnierBericht
+    {
+        return $this->bericht;
     }
 
 }
