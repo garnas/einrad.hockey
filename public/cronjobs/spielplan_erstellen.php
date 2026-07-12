@@ -18,12 +18,12 @@ foreach ($turniere as $turnier) {
     $aktuelles_datum = time();
     $absage_grund = "";
     $erstellen = true;
-    
+
     # Sollte heute Dienstag sein, dann schieben das Datum einmal nach vorne
     if (date("N", $aktuelles_datum) == 2) {
         $aktuelles_datum = strtotime("+1 day", $aktuelles_datum);
     }
-    
+
     # Prüfe, ob noch zwei Dienstage zwischen dem Turnier und dem Ausgangstag liegen
     $dienstag_counter = 0;
     while ($aktuelles_datum < $datum_turnier) {
