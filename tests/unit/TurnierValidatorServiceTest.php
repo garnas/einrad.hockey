@@ -629,7 +629,6 @@ class TurnierValidatorServiceTest extends TestCase
             ->setBlock($block)
             ->setArt($art)
             ->setPhase($phase)
-            ->setBlockErweitertFrei(false)
             ->setBlockErweitertHoch($isErweitertBlockhoch)
             ->setBlockErweitertRunter($isErweitertBlockrunter);
 
