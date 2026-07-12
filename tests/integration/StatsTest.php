@@ -76,7 +76,7 @@ class StatsTest extends TestCase
             actual: $spieleranzahl["number"],
         );
         # Sechs Monate in die Zukunft
-        $spieleranzahl = Stats::get_aktuelle_spieler_anzahl(time() + 6 * 30 * 24 * 3600);
+        $spieleranzahl = Stats::get_aktuelle_spieler_anzahl(time() + 8 * 30 * 24 * 3600);
         $this->assertTrue(
             condition: \is_string($spieleranzahl["cutoff"]),
         );
