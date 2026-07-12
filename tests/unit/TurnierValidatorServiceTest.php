@@ -505,6 +505,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
+                "isErweitertBlockfrei" => true,
                 "isErweiterbar" => false,
             ],
             [
@@ -513,6 +514,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "spielplan",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
+                "isErweitertBlockfrei" => false,
                 "isErweiterbar" => false,
             ],
             [
@@ -521,6 +523,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
+                "isErweitertBlockfrei" => false,
                 "isErweiterbar" => true,
             ],
             [
@@ -529,6 +532,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "warte",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
+                "isErweitertBlockfrei" => false,
                 "isErweiterbar" => false,
             ],
             [
@@ -537,6 +541,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "spielplan",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
+                "isErweitertBlockfrei" => false,
                 "isErweiterbar" => false,
             ],
             [
@@ -545,6 +550,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "ergebnis",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
+                "isErweitertBlockfrei" => false,
                 "isErweiterbar" => false,
             ],
             [
@@ -553,6 +559,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
+                "isErweitertBlockfrei" => false,
                 "isErweiterbar" => true,
             ],
             [
@@ -561,6 +568,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
+                "isErweitertBlockfrei" => false,
                 "isErweiterbar" => true,
             ],
             [
@@ -569,7 +577,8 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => true,
-                "isErweiterbar" => false,
+                "isErweitertBlockfrei" => false,
+                "isErweiterbar" => true,
             ],
             [
                 "block" => "EF",
@@ -577,7 +586,8 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => true,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => false,
+                "isErweitertBlockfrei" => false,
+                "isErweiterbar" => true,
             ],
             [
                 "block" => "CD",
@@ -585,6 +595,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
+                "isErweitertBlockfrei" => false,
                 "isErweiterbar" => false,
             ],
             [
@@ -593,6 +604,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
+                "isErweitertBlockfrei" => false,
                 "isErweiterbar" => false,
             ],
             [
@@ -601,6 +613,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
+                "isErweitertBlockfrei" => false,
                 "isErweiterbar" => true,
             ],
             [
@@ -609,7 +622,8 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => true,
                 "isErweitertBlockrunter" => false,
-                "isErweiterbar" => false,
+                "isErweitertBlockfrei" => false,
+                "isErweiterbar" => true,
             ],
             [
                 "block" => "BCD",
@@ -617,20 +631,22 @@ class TurnierValidatorServiceTest extends TestCase
                 "phase" => "setz",
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => true,
-                "isErweiterbar" => false,
+                "isErweitertBlockfrei" => false,
+                "isErweiterbar" => true,
             ],
         ];
     }
 
     #[DataProvider("provideIsErweiterbarBlockfrei")]
-    public function testIsErweiterbarBlockfrei($block, $art, $phase, $isErweitertBlockhoch, $isErweitertBlockrunter, $isErweiterbar): void
+    public function testIsErweiterbarBlockfrei($block, $art, $phase, $isErweitertBlockhoch, $isErweitertBlockrunter, $isErweitertBlockfrei, $isErweiterbar): void
     {
         $turnier = (new Turnier())
             ->setBlock($block)
             ->setArt($art)
             ->setPhase($phase)
             ->setBlockErweitertHoch($isErweitertBlockhoch)
-            ->setBlockErweitertRunter($isErweitertBlockrunter);
+            ->setBlockErweitertRunter($isErweitertBlockrunter)
+            ->setBlockErweitertFrei($isErweitertBlockfrei);
 
         $this->assertEquals(
             expected: $isErweiterbar,

@@ -104,22 +104,22 @@ class Turnier
     private bool $canceled;
 
     #[ORM\Column(name: "block_erweitert_frei", type: "boolean", options: ["default" => false])]
-    private bool $blockErweitertFrei;
+    private bool $blockErweitertFrei = false;
 
     #[ORM\Column(name: "sofort_oeffnen_frei", type: "boolean", options: ["default" => false])]
-    private bool $sofortOeffnenFrei;
+    private bool $sofortOeffnenFrei = false;
 
     #[ORM\Column(name: "block_erweitert_runter", type: "boolean", options: ["default" => false])]
-    private bool $blockErweitertRunter;
+    private bool $blockErweitertRunter = false;
 
     #[ORM\Column(name: "sofort_oeffnen_runter", type: "boolean", options: ["default" => false])]
-    private bool $sofortOeffnenRunter;
+    private bool $sofortOeffnenRunter = false;
 
     #[ORM\Column(name: "block_erweitert_hoch", type: "boolean", options: ["default" => false])]
-    private bool $blockErweitertHoch;
+    private bool $blockErweitertHoch = false;
 
     #[ORM\Column(name: "sofort_oeffnen_hoch", type: "boolean", options: ["default" => false])]
-    private bool $sofortOeffnenHoch;
+    private bool $sofortOeffnenHoch = false;
 
     public function __construct()
     {
