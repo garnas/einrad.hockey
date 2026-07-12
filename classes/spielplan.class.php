@@ -616,7 +616,7 @@ class Spielplan
             foreach ($reverse_tabelle as $team_id => $eintrag) {
                 $gesamtwertung += $this->platzierungstabelle[$team_id]['wertigkeit'];
             }
-            
+
             // Die Wertung wird um 1,5 angehoben
             $gesamtwertung = $gesamtwertung * 1.5;
 
