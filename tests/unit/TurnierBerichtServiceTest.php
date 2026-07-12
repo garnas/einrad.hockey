@@ -29,18 +29,18 @@ class TurnierBerichtServiceTest extends TestCase
     {
         $turnierdatum = DateTime::createFromFormat('Y-m-d', $turnierdatum);
         $fristdatum = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $fristdatum);
-    
+
         $turnier = $this->createStub(Turnier::class);
         $turnier->method('getDatum')->willReturn($turnierdatum);
         $this->assertEquals(
-            expected: $fristdatum, 
+            expected: $fristdatum,
             actual: TurnierBerichtService::getBearbeitungFrist($turnier)
         );
     }
 
     public static function providBoolDates(): array
     {
-        return [  
+        return [
             ['2026-07-13', '2026-07-13 15:48:33', true],
             ['2026-07-21', '2026-07-21 09:58:52', true],
             ['2026-07-29', '2026-08-04 23:36:51', true],
@@ -63,14 +63,14 @@ class TurnierBerichtServiceTest extends TestCase
             ['2026-08-22', '2026-08-28 22:23:56', false],
             ['2026-08-30', '2026-09-04 02:49:21', false],
         ];
-            
-    }    
+
+    }
     #[DataProvider("providBoolDates")]
     public function testInBearbeitungFrist(string $turnierdatum, string $bearbeitungdatum, bool $value)
     {
         $turnierdatum = DateTime::createFromFormat('Y-m-d', $turnierdatum);
         $bearbeitungdatum = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $bearbeitungdatum);
-    
+
         $turnier = $this->createStub(Turnier::class);
         $turnier->method('getDatum')->willReturn($turnierdatum);
         $this->assertEquals(

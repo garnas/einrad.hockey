@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace App\Service\TurnierBericht;
 
@@ -13,7 +13,7 @@ class PermissionService
     {
         $turnier = $bericht->getTurnier();
         $team_id = $_SESSION['logins']['team']['id'] ?? null;
-        
+
         // Der Ligaausschuss darf immer bearbeiten
         if (Helper::$ligacenter) {
             Html::notice("Der Ligaausschuss hat dauerhaft die Berechtigung, den Turnierreport anzupassen.");
@@ -37,7 +37,7 @@ class PermissionService
         return true;
     }
 
-    public static function canRead(): bool 
+    public static function canRead(): bool
     {
         if (Helper::$ligacenter || Helper::$teamcenter) {
             return true;

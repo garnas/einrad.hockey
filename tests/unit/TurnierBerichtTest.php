@@ -8,10 +8,10 @@ use PHPUnit\Framework\TestCase;
 
 class TurnierBerichtTest extends TestCase
 {
-    public function testDefaults(): void 
+    public function testDefaults(): void
     {
         $turnier_stub = $this->createStub(Turnier::class);
-        
+
         $bericht = new TurnierBericht($turnier_stub);
         $this->assertEquals(expected: 'Nein', actual: $bericht->getKaderUeberprueft());
         $this->assertEquals(expected: '', actual: $bericht->getBericht());

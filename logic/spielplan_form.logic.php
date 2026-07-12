@@ -4,7 +4,6 @@ use App\Event\Turnier\nLigaBot;
 use App\Repository\DoctrineWrapper;
 use App\Repository\Turnier\TurnierRepository;
 use App\Repository\TurnierBericht\TurnierBerichtRepository;
-
 use App\Service\Team\FreilosService;
 use App\Service\TurnierBericht\TurnierBerichtService;
 

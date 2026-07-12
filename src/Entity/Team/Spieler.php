@@ -46,7 +46,7 @@ class Spieler
     {
         return $this->spielerId;
     }
-    
+
     public function getName(bool $fullName = true): ?string
     {
         if ($fullName) {

@@ -68,12 +68,12 @@ if ($allow_edit) {
             Html::error("Das aufnehmende Team wurde nicht gefunden.");
             Helper::reload(get: "?turnier_id=" . $turnier->id());
         }
-            
+
         if (!TurnierBerichtValidatorService::validTeam($team_ab)) {
             Html::error("Das abgebende Team wurde nicht gefunden.");
             Helper::reload(get: "?turnier_id=" . $turnier->id());
         }
-        
+
         $ausleihe = new SpielerAusleihe($turnier);
         $ausleihe
             ->setSpieler($name)
@@ -101,17 +101,17 @@ if ($allow_edit) {
         $team_a = $_POST['zeitstrafe_team_a'];
         $team_b = $_POST['zeitstrafe_team_b'];
         $bericht = $_POST['zeitstrafe_bericht'];
-        
+
         if (!TurnierBerichtValidatorService::validTeam($team_a)) {
             Html::error("Das erstgenannte Team in der Spielpaarung wurde nicht gefunden.");
-            Helper::reload(get: "?turnier_id=" . $turnier->id());            
+            Helper::reload(get: "?turnier_id=" . $turnier->id());
         }
-        
+
         if (!TurnierBerichtValidatorService::validTeam($team_b)) {
             Html::error("Das zweitgenannte Team in der Spielpaarung wurde nicht gefunden.");
-            Helper::reload(get: "?turnier_id=" . $turnier->id());            
+            Helper::reload(get: "?turnier_id=" . $turnier->id());
         }
-        
+
         $strafe = new SpielerZeitstrafe($turnier);
         $strafe
             ->setTeamA($team_a)
@@ -119,7 +119,7 @@ if ($allow_edit) {
             ->setSpieler($name)
             ->setGrund($bericht)
             ->setDauer($dauer);
-        
+
         SpielerZeitstrafeRepository::get()->speichern($strafe);
         Html::info("Zeitstrafe wurde hinzugefügt.");
         Helper::reload(get: "?turnier_id=" . $turnier->id());
@@ -132,15 +132,15 @@ if ($allow_edit) {
 
         if (!TurnierBerichtValidatorService::validKaderCheck($kader_check)) {
             Html::error("Der Kader-Check konnte nicht aktualisiert werden.");
-            Helper::reload(get: "?turnier_id=" . $turnier->id());                    
+            Helper::reload(get: "?turnier_id=" . $turnier->id());
         }
-        
+
         $turnier_bericht->setKaderUeberprueft($kader_check);
         TurnierBerichtRepository::get()->speichern($turnier_bericht);
         Html::info("Turnierbericht wurde aktualisiert");
         Helper::reload(get: "?turnier_id=" . $turnier->id());
     }
-    
+
     // Turnierbericht
     if (isset($_POST['set_turnierbericht']) || isset($_POST['turnierbericht'])) {
         $bericht = $_POST['turnierbericht'];

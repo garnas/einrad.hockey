@@ -225,8 +225,8 @@ class Turnier
     {
         return $this->art;
     }
-    
-    
+
+
     /**
      * @return Collection<int, SpielerZeitstrafe>
      */
@@ -242,7 +242,7 @@ class Turnier
     {
         return $this->leihen;
     }
-    
+
     public function setArt(?string $art): self
     {
         $this->logService->autoLog("Art", $this->art ?? '', $art);

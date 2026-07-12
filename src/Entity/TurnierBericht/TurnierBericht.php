@@ -38,7 +38,7 @@ class TurnierBericht
     {
         return $this->berichtId;
     }
-        
+
     public function getBericht(): string
     {
         return $this->bericht;

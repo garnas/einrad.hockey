@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Service\TurnierBericht;
+
 use Team;
 
 class TurnierBerichtValidatorService

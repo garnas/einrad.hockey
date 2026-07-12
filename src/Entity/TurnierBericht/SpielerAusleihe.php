@@ -33,7 +33,7 @@ class SpielerAusleihe
     #[ORM\Column(name: "team_ab", type: "string", length: 255, nullable: false)]
     private string $team_ab;
 
-    
+
     public function __construct(Turnier $turnier)
     {
         $this->turnier = $turnier;
@@ -71,7 +71,7 @@ class SpielerAusleihe
         return $this->team_auf;
     }
 
-    public function setTeamAuf(string $team_auf): self 
+    public function setTeamAuf(string $team_auf): self
     {
         $this->team_auf = $team_auf;
         return $this;

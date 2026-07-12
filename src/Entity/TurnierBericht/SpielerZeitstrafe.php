@@ -37,7 +37,7 @@ class SpielerZeitstrafe
 
     #[ORM\Column(name: "grund", type: "string", length: 255, nullable: false)]
     private string $grund;
-    
+
     public function __construct(Turnier $turnier)
     {
         $this->turnier = $turnier;
