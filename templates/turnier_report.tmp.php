@@ -24,7 +24,7 @@ use App\Service\Turnier\TurnierSnippets;
             onclick="open_kader(<?=  $element->getTeam()->id() ?>)" 
             class="w3-button w3-block w3-left-align w3-primary w3-border-bottom w3-border-white"
         >
-            <?=$element->getTeam()->getName()?>
+            <?=e($element->getTeam()->getName())?>
         </button>
         
         <?php if (!empty($element->getTeam()->getKader())): ?>
@@ -33,7 +33,7 @@ use App\Service\Turnier\TurnierSnippets;
                 <ul style="column-count: 2">
                     <?php foreach ($element->getTeam()->getKader() as $spieler): ?>
                         <li>
-                            <?= $spieler->getName(fullName: false) ?><?= SpielerService::isSchiri($spieler) ? "*" : "" ?>
+                            <?= e($spieler->getName(fullName: false)) ?><?= SpielerService::isSchiri($spieler) ? "*" : "" ?>
                         </li>
                         <?php $schiri = $schiri || SpielerService::isSchiri($spieler) ?>
                     <?php endforeach; ?>
@@ -96,9 +96,9 @@ use App\Service\Turnier\TurnierSnippets;
                 </tr>
                 <?php foreach ($spieler_ausleihen as $ausleihe_id => $ausleihe): ?>
                     <tr>
-                        <td><?=$ausleihe->getSpieler()?></td>
-                        <td><?=$ausleihe->getTeamAuf()?></td>
-                        <td><?=$ausleihe->getTeamAb()?></td>
+                        <td><?=e($ausleihe->getSpieler())?></td>
+                        <td><?=e($ausleihe->getTeamAuf())?></td>
+                        <td><?=e($ausleihe->getTeamAb())?></td>
                         <?php if ($allow_edit): ?>
                             <td>
                                 <form method="post">
@@ -151,7 +151,7 @@ use App\Service\Turnier\TurnierSnippets;
                     >
                         <option selected disabled>--</option>
                         <?php foreach ($setzliste as $element): ?>
-                            <option><?=$element->getTeam()->getName()?></option>
+                            <option><?=e($element->getTeam()->getName())?></option>
                         <?php endforeach; ?>
                     </select>
                 </p>
@@ -196,9 +196,9 @@ use App\Service\Turnier\TurnierSnippets;
                 </tr>
                 <?php foreach ($spieler_zeitstrafen as $zeitstrafe_id => $zeitstrafe): ?>
                     <tr>
-                        <td><?=$zeitstrafe->getSpieler()?></td>
+                        <td><?=e($zeitstrafe->getSpieler())?></td>
                         <td><?=$zeitstrafe->getDauer()?></td>
-                        <td><?=$zeitstrafe->getTeamA()?> : <?=$zeitstrafe->getTeamB()?></td>
+                        <td><?=e($zeitstrafe->getTeamA())?> : <?=e($zeitstrafe->getTeamB())?></td>
                         <?php if ($allow_edit): ?>
                             <td>
                                 <form method="post">
@@ -240,7 +240,7 @@ use App\Service\Turnier\TurnierSnippets;
                         <datalist id="spielerliste">
                             <?php foreach ($setzliste as $element): ?>
                                 <?php foreach ($element->getTeam()->getKader() as $spieler): ?>
-                                    <option value='<?= $spieler->getName(fullName: false) ?> | <?= $spieler->getTeam()->getName() ?>'>
+                                    <option value='<?= e($spieler->getName(fullName: false)) ?> | <?= e($spieler->getTeam()->getName()) ?>'>
                                 <?php endforeach; ?>
                             <?php endforeach; ?>
                         </datalist>
@@ -262,7 +262,7 @@ use App\Service\Turnier\TurnierSnippets;
                     >
                         <option disabled selected value="">--</option>
                         <?php foreach ($setzliste as $element): ?>
-                            <option><?= $element->getTeam()->getName() ?></option>
+                            <option><?= e($element->getTeam()->getName()) ?></option>
                         <?php endforeach; ?>
                     </select>
                     <label for="zeitstrafe_team_b" class="w3-text-grey">versus</label>
@@ -273,7 +273,7 @@ use App\Service\Turnier\TurnierSnippets;
                     >
                         <option disabled selected value="">--</option>
                         <?php foreach ($setzliste as $element): ?>
-                            <option><?= $element->getTeam()->getName() ?></option>
+                            <option><?= e($element->getTeam()->getName()) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </p>
@@ -315,13 +315,13 @@ use App\Service\Turnier\TurnierSnippets;
                         rows="12"
                         id="turnierbericht"
                         name="turnierbericht"
-                ><?=$_POST['text'] ?? ''?><?=$turnier_bericht->getBericht()?></textarea>
+                ><?=$_POST['text'] ?? ''?><?=e($turnier_bericht->getBericht())?></textarea>
                 <p id="turnierbericht_counter"><p>
             </p>
             <input type="submit" value="Speichern" name="set_turnierbericht" class="w3-button w3-tertiary">
         </form>
     <?php else: ?>
-        <p><?=$turnier_bericht->getBericht() ?: '<p class="w3-text-grey">Es ist kein Turnierbericht vorhanden.</p>'?></p>
+        <p><?=e($turnier_bericht->getBericht()) ?: '<p class="w3-text-grey">Es ist kein Turnierbericht vorhanden.</p>'?></p>
     <?php endif; ?>
 </div>
 
