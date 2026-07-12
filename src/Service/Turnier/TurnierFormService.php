@@ -5,7 +5,8 @@ namespace App\Service\Turnier;
 use Helper;
 use App\Entity\Turnier\Turnier;
 
-class TurnierFormService {
+class TurnierFormService
+{
     public static function isEditable(string $field, ?Turnier $turnier): bool
     {
         if (Helper::$ligacenter) {
@@ -25,7 +26,7 @@ class TurnierFormService {
             if ($field == 'besprechung' && in_array($turnier->getPhase(), ['ergebnis', 'spielplan'])) {
                 return false;
             }
-                
+
             if ($field == 'startgebuehr' && in_array($turnier->getPhase(), ['setz', 'ergebnis', 'spielplan'])) {
                 return false;
             }
@@ -45,7 +46,7 @@ class TurnierFormService {
             if ($field == 'min_teams' && in_array($turnier->getPhase(), ['setz', 'ergebnis', 'spielplan'])) {
                 return false;
             }
-            
+
             if ($field == 'single_higher' && (!TurnierValidatorService::isErweiterbarBlockhoch($turnier) || TurnierService::isErweitertBlock($turnier))) {
                 return false;
             }
@@ -70,7 +71,8 @@ class TurnierFormService {
         return true;
     }
 
-    public static function isSelected(string $field, Turnier $turnier) {
+    public static function isSelected(string $field, Turnier $turnier)
+    {
 
         if ($field == 'single_higher' && $turnier->isBlockErweitertHoch()) {
             return true;

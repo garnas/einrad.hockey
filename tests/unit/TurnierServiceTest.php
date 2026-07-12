@@ -11,12 +11,12 @@ class TurnierServiceTest extends TestCase
     public function testBlockFrei(): void
     {
         $turnier = new Turnier();
-        
+
         $turnier->setBlock("A");
         TurnierService::erweitereBlockFrei($turnier);
         $this->assertEquals(expected: "ABCDEF", actual: $turnier->getBlock());
         $this->assertEquals(expected: true, actual: $turnier->isBlockErweitertFrei());
-        
+
         $turnier->setBlock("AB");
         TurnierService::erweitereBlockFrei($turnier);
         $this->assertEquals(expected: "ABCDEF", actual: $turnier->getBlock());
@@ -36,7 +36,7 @@ class TurnierServiceTest extends TestCase
         TurnierService::erweitereBlockFrei($turnier);
         $this->assertEquals(expected: "ABCDEF", actual: $turnier->getBlock());
         $this->assertEquals(expected: true, actual: $turnier->isBlockErweitertFrei());
-        
+
         $turnier->setBlock("EF");
         TurnierService::erweitereBlockFrei($turnier);
         $this->assertEquals(expected: "ABCDEF", actual: $turnier->getBlock());
@@ -52,12 +52,12 @@ class TurnierServiceTest extends TestCase
     public function testBlockErweiternHoch(): void
     {
         $turnier = new Turnier();
-        
+
         $turnier->setBlock("A");
         TurnierService::erweitereBlockHoch($turnier);
         $this->assertEquals(expected: "A", actual: $turnier->getBlock());
         $this->assertEquals(expected: true, actual: $turnier->isBlockErweitertHoch());
-        
+
         $turnier->setBlock("AB");
         TurnierService::erweitereBlockHoch($turnier);
         $this->assertEquals(expected: "AB", actual: $turnier->getBlock());
@@ -77,7 +77,7 @@ class TurnierServiceTest extends TestCase
         TurnierService::erweitereBlockHoch($turnier);
         $this->assertEquals(expected: "CDE", actual: $turnier->getBlock());
         $this->assertEquals(expected: true, actual: $turnier->isBlockErweitertHoch());
-        
+
         $turnier->setBlock("EF");
         TurnierService::erweitereBlockHoch($turnier);
         $this->assertEquals(expected: "DEF", actual: $turnier->getBlock());
@@ -93,12 +93,12 @@ class TurnierServiceTest extends TestCase
     public function testBlockErweiternRunter(): void
     {
         $turnier = new Turnier();
-        
+
         $turnier->setBlock("A");
         TurnierService::erweitereBlockRunter($turnier);
         $this->assertEquals(expected: "AB", actual: $turnier->getBlock());
         $this->assertEquals(expected: true, actual: $turnier->isBlockErweitertRunter());
-        
+
         $turnier->setBlock("AB");
         TurnierService::erweitereBlockRunter($turnier);
         $this->assertEquals(expected: "ABC", actual: $turnier->getBlock());
@@ -118,7 +118,7 @@ class TurnierServiceTest extends TestCase
         TurnierService::erweitereBlockRunter($turnier);
         $this->assertEquals(expected: "DEF", actual: $turnier->getBlock());
         $this->assertEquals(expected: true, actual: $turnier->isBlockErweitertRunter());
-        
+
         $turnier->setBlock("EF");
         TurnierService::erweitereBlockRunter($turnier);
         $this->assertEquals(expected: "EF", actual: $turnier->getBlock());

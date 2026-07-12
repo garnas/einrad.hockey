@@ -67,7 +67,7 @@ if (isset($_POST['change_turnier'])) {
     $plaetze = (int) ($_POST['plaetze'] ?? $plaetze);
     $min_teams = (int) ($_POST['min_teams'] ?? $min_teams);
     $turnier_name = $_POST['tname'];
-    
+
     // Sofort oeffnen
     $sofort_oeffnen = (string) ($_POST['sofort_oeffnen'] ?? '');
     $sofort_oeffnen_frei = ($sofort_oeffnen === 'free');
@@ -97,7 +97,7 @@ if (isset($_POST['change_turnier'])) {
         ->setSofortOeffnenHoch($sofort_oeffnen_hoch)
         ->setSofortOeffnenRunter($sofort_oeffnen_runter)
         ->setPhase($phase);
-    
+
     $turnier->getDetails()
         ->setStartzeit(DateTime::createFromFormat("H:i", $turnier_startzeit))
         ->setBesprechung($besprechung)

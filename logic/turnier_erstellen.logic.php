@@ -48,18 +48,18 @@ if (isset($_POST['create_turnier'])) {
 
     // Turnierblock und -art
     $turnier_art_block = $_POST['art_block'];
-    if (!str_contains($turnier_art_block , "_")) {
+    if (!str_contains($turnier_art_block, "_")) {
         $art = $turnier_art_block ;
         $block = null;
     } else {
-        list($art, $block) = explode("_", $turnier_art_block);
+        [$art, $block] = explode("_", $turnier_art_block);
     }
 
     $fixed = "Nein";
     if ($art === 'fixed') {
         $fixed = "Ja";
     }
-    
+
     // Besprechung
     if (($_POST['besprechung'] ?? '') === 'Ja') {
         $besprechung = 'Ja';
@@ -87,7 +87,7 @@ if (isset($_POST['create_turnier'])) {
         ->setBlockErweitertHoch(false)
         ->setBlockErweitertRunter(false)
         ->setBlockFixed($fixed);
-    
+
     $details = new TurnierDetails();
     $details
         ->setTurnier($turnier)
@@ -104,7 +104,7 @@ if (isset($_POST['create_turnier'])) {
         ->setStartzeit(DateTime::createFromFormat("H:i", $turnier_startzeit))
         ->setPlaetze($plaetze)
         ->setMinTeams($min_teams);
-    
+
     $turnier->setDetails($details);
 
 

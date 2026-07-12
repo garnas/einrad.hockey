@@ -82,9 +82,9 @@ class BlockService
     /**
      * @param $turnier Turnier
      * @return string
-     * 
+     *
      * Gibt die vorherigen Turnierblöcke ergänzt um den höheren Turnierblock zurück. Wichtig: Es wird nicht geprüft, ob dies überhaupt möglich ist!
-     * 
+     *
      */
     public static function hoehererTurnierBlock(Turnier $turnier): string
     {
@@ -108,9 +108,9 @@ class BlockService
     /**
      * @param $turnier Turnier
      * @return string
-     * 
+     *
      * Gibt die vorherigen Turnierblöcke ergänzt um den niedrigeren Turnierblock zurück. Wichtig: Es wird nicht geprüft, ob dies überhaupt möglich ist!
-     * 
+     *
      */
     public static function niedrigererTurnierBlock(Turnier $turnier): string
     {

@@ -1,4 +1,6 @@
-<?php use App\Service\Turnier\TurnierFormService; ?>
+<?php use App\Service\Turnier\TurnierFormService;
+
+?>
 
 <div class="w3-panel w3-card-4">
     <h3 id="result" class="w3-text-secondary">Turnierblock</h3>
@@ -27,7 +29,7 @@
                     <option <?php if (($turnier_block ?? '') === $block): ?> selected <?php endif; ?> value='II_<?=$block?>'><?=$block?>: Blockhöheres Turnier (II)</option>
                 <?php endforeach; ?>
                 <!-- Blockeigenes Turnier -->
-                <option <?php if (($turnier_block ?? '') === $ausrichter_block ) {?> selected <?php } ?> value=I_<?= $ausrichter_block ?>><?= $ausrichter_block?>: Blockeigenes Turnier (I)</option>
+                <option <?php if (($turnier_block ?? '') === $ausrichter_block) {?> selected <?php } ?> value=I_<?= $ausrichter_block ?>><?= $ausrichter_block?>: Blockeigenes Turnier (I)</option>
                 <?php if (Helper::$ligacenter): ?>
                     <!-- LA: Turnier mit fixiertem Block -->
                     <?php foreach (Config::BLOCK as $block): ?>

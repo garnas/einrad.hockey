@@ -257,8 +257,8 @@ class TurnierService
 
     /**
      * @param $turnier Turnier
-     * 
-     * Nimmt die notwendigen Änderungen am Entity für eine Erweiterung des Turniers einen Block nach oben vor. 
+     *
+     * Nimmt die notwendigen Änderungen am Entity für eine Erweiterung des Turniers einen Block nach oben vor.
      * Wichtig: Das Enitry wird nicht persistiert.
      * Wichtig: Es findet keine Überprüfung statt, ob das Turnier überhaupt geöffnet werden kann.
      */
@@ -271,8 +271,8 @@ class TurnierService
 
     /**
      * @param $turnier Turnier
-     * 
-     * Nimmt die notwendigen Änderungen am Entity für eine Erweiterung des Turniers einen Block nach unten vor. 
+     *
+     * Nimmt die notwendigen Änderungen am Entity für eine Erweiterung des Turniers einen Block nach unten vor.
      * Wichtig: Das Enitry wird nicht persistiert.
      * Wichtig: Es findet keine Überprüfung statt, ob das Turnier überhaupt geöffnet werden kann.
      */
@@ -285,8 +285,8 @@ class TurnierService
 
     /**
      * @param $turnier Turnier
-     * 
-     * Nimmt die notwendigen Änderungen am Entity für eine Erweiterung des Turniers um alle Blöcke vor. 
+     *
+     * Nimmt die notwendigen Änderungen am Entity für eine Erweiterung des Turniers um alle Blöcke vor.
      * Wichtig: Das Enitry wird nicht persistiert.
      * Wichtig: Es findet keine Überprüfung statt, ob das Turnier überhaupt geöffnet werden kann.
      */

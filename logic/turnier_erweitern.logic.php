@@ -9,7 +9,7 @@ if (isset($_POST['erweitern_turnier'])) {
     $higher = ($_POST['single'] ?? '') === 'higher';
     $lower = ($_POST['single'] ?? '') === 'lower';
     $single = ($_POST['single'] ?? '') === 'none';
-    
+
     $free = ($_POST['multiple'] ?? '') === 'free';
     $multiple = ($_POST['multiple'] ?? '') === 'none';
 
@@ -40,7 +40,7 @@ if (isset($_POST['erweitern_turnier'])) {
             $error = true;
             Html::error("Es konnte keine einzele Blockerweiterung vorgenommen werden. ");
         }
-        
+
         if ($free) {
             TurnierService::erweitereBlockFrei($turnier);
             TurnierService::setzListeAuffuellen($turnier);
@@ -61,6 +61,3 @@ if (isset($_POST['erweitern_turnier'])) {
     }
 
 }
-
-
-

@@ -197,7 +197,7 @@ class nLigaBot
                 TurnierService::erweitereBlockRunter($turnier);
                 TurnierService::setzListeAuffuellen($turnier);
             }
-            
+
             // Versenden der Mails fuer freie Pletze, nachdem das Turnier erweitert wurde
             if (TurnierService::hasFreieSetzPlaetze($turnier)) {
                 TurnierEventMailBot::mailPlaetzeFrei($turnier);

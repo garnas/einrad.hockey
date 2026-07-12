@@ -1,4 +1,6 @@
-<?php use App\Service\Turnier\TurnierFormService; ?>
+<?php use App\Service\Turnier\TurnierFormService;
+
+?>
 
 <div class="w3-panel w3-card-4">
     <h3 class="w3-text-secondary">Turnierdetails</h3>

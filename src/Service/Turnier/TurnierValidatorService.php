@@ -112,8 +112,8 @@ class TurnierValidatorService
 
         return true;
     }
-    
-    
+
+
     public function hasValidArt(): bool
     {
 

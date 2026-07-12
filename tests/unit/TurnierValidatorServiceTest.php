@@ -236,7 +236,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockfrei" => false,
                 "isErweiterbar" => false,
-            ]
+            ],
         ];
     }
 
@@ -475,7 +475,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockfrei" => false,
                 "isErweiterbar" => false,
-            ]
+            ],
         ];
     }
 

@@ -181,7 +181,7 @@ class Html
         $return .= "</datalist>";
         return $return;
     }
-    
+
     /**
      * Erstellt eine HTML-Datalist aller Ligateams.
      *

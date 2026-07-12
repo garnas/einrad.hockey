@@ -480,12 +480,12 @@ class Turnier
         return $this->gesetzteFreilose;
     }
 
-    
+
     /**
      * @param $flag bool
      * @return Turnier
-     * 
-     * Flag setzen, ob das Turnier um einen Block nach unten erweitert wurde. 
+     *
+     * Flag setzen, ob das Turnier um einen Block nach unten erweitert wurde.
      */
     public function setBlockErweitertRunter(bool $flag): self
     {
@@ -496,7 +496,7 @@ class Turnier
     /**
      * @param $flag bool
      * @return Turnier
-     * 
+     *
      * Flag setzen, ob das Turnier um einen Block nach oben erweitert wurde.
      */
     public function setBlockErweitertHoch(bool $flag): self
@@ -508,7 +508,7 @@ class Turnier
     /**
      * @param $flag bool
      * @return Turnier
-     * 
+     *
      * Flag setzen, ob das Turnier um alle Blöcke erweitert wurde.
      */
     public function setBlockErweitertFrei(bool $flag): self
@@ -519,7 +519,7 @@ class Turnier
 
     /**
      * @return bool
-     * 
+     *
      * Flag erhalten, ob das Turnier um einen Block nach unten erweitert wurde.
      */
     public function isBlockErweitertRunter(): bool
@@ -529,7 +529,7 @@ class Turnier
 
     /**
      * @return bool
-     * 
+     *
      * Flag erhalten, ob das Turnier um einen Block nach oben erweitert wurde.
      */
     public function isBlockErweitertHoch(): bool
@@ -539,7 +539,7 @@ class Turnier
 
     /**
      * @return bool
-     * 
+     *
      * Flag erhalten, ob das Turnier um alle Blöcke erweitert wurde.
      */
     public function isBlockErweitertFrei(): bool
@@ -550,7 +550,7 @@ class Turnier
     /**
      * @param $flag bool
      * @return Turnier
-     * 
+     *
      * Flag setzen, ob das Turnier bei Übergang sofort um einen Block nach oben erweitert werden soll.
      */
     public function setSofortOeffnenHoch(bool $flag): self
@@ -562,7 +562,7 @@ class Turnier
     /**
      * @param $flag bool
      * @return Turnier
-     * 
+     *
      * Flag setzen, ob das Turnier bei Übergang sofort um einen Block nach unten erweitert werden soll.
      */
     public function setSofortOeffnenRunter(bool $flag): self
@@ -570,11 +570,11 @@ class Turnier
         $this->sofortOeffnenRunter = $flag;
         return $this;
     }
-    
+
     /**
      * @param $flag bool
      * @return Turnier
-     * 
+     *
      * Flag setzen, ob das Turnier bei Übergang sofort um alle Blöcke erweitert werden soll.
      */
     public function setSofortOeffnenFrei(bool $flag): self
@@ -585,9 +585,9 @@ class Turnier
 
     /**
      * @return bool
-     * 
+     *
      * Flag erhalten, ob das Turnier bei Übergang sofort um einen Block nach unten erweitert werden soll.
-     */   
+     */
     public function isSofortOeffnenRunter(): bool
     {
         return $this->sofortOeffnenRunter;
@@ -595,9 +595,9 @@ class Turnier
 
     /**
      * @return bool
-     * 
+     *
      * Flag erhalten, ob das Turnier bei Übergang sofort um einen Block nach oben erweitert werden soll.
-     */   
+     */
     public function isSofortOeffnenHoch(): bool
     {
         return $this->sofortOeffnenHoch;
@@ -605,9 +605,9 @@ class Turnier
 
     /**
      * @return bool
-     * 
+     *
      * Flag erhalten, ob das Turnier bei Übergang sofort um alle Blöcke erweitert werden soll.
-     */   
+     */
     public function isSofortOeffnenFrei(): bool
     {
         return $this->sofortOeffnenFrei;
