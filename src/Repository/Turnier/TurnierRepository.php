@@ -128,7 +128,7 @@ class TurnierRepository
 
     /**
      * Erhalte die Turniere bei denen das Team teilnimmt und für die ein Turnierreport existiert.
-     * 
+     *
      * @return Turnier[]|Collection
      */
     public static function getTurnierreportTurniere(int $team_id): array|Collection
