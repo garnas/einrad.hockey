@@ -551,8 +551,8 @@ class TurnierValidatorServiceTest extends TestCase
                 "block" => "F",
                 "art" => "II",
                 "phase" => "setz",
-                "isErweitertBlockhoch" => null,
-                "isErweitertBlockrunter" => null,
+                "isErweitertBlockhoch" => false,
+                "isErweitertBlockrunter" => false,
                 "isErweiterbar" => true,
             ],
             [
@@ -567,7 +567,7 @@ class TurnierValidatorServiceTest extends TestCase
                 "block" => "AB",
                 "art" => "II",
                 "phase" => "setz",
-                "isErweitertBlockhoch" => null,
+                "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => true,
                 "isErweiterbar" => false,
             ],
@@ -594,14 +594,6 @@ class TurnierValidatorServiceTest extends TestCase
                 "isErweitertBlockhoch" => false,
                 "isErweitertBlockrunter" => false,
                 "isErweiterbar" => false,
-            ],
-            [
-                "block" => "BC",
-                "art" => "II",
-                "phase" => "setz",
-                "isErweitertBlockhoch" => null,
-                "isErweitertBlockrunter" => false,
-                "isErweiterbar" => true,
             ],
             [
                 "block" => "BC",
@@ -637,6 +629,7 @@ class TurnierValidatorServiceTest extends TestCase
             ->setBlock($block)
             ->setArt($art)
             ->setPhase($phase)
+            ->setBlockErweitertFrei(false)
             ->setBlockErweitertHoch($isErweitertBlockhoch)
             ->setBlockErweitertRunter($isErweitertBlockrunter);
 
