@@ -13,7 +13,7 @@ $ausrichter_team_id = $turnier->getAusrichter()->id();
 
 $block_higher = BlockService::getHigherBlocks($ausrichter_block);
 
-$turnier_datum = $turnier->getDatum()->format("Y-m-d");
+$turnier_datum = $turnier->getDatum();
 $turnier_datum_bis = $turnier->getDatumBis();
 $turnier_datum_bis = $turnier_datum_bis ? $turnier_datum_bis->format("Y-m-d") : "";
 
@@ -51,9 +51,11 @@ $turnier_handy = $turnier->getDetails()->getHandy();
 
 $phase = $turnier->getPhase();
 
-
+// Unterscheidung im HTML, wenn das Turnier vom $_POST Request kommt ($turnier_from_form = true):
+// So sollen manche Felder weiterhin änderbar sein, wenn diese einen Fehler bei der Turnierstellung verursacht haben.
+$turnier_from_form = false;
 if (isset($_POST['change_turnier'])) {
-
+    $turnier_from_form = true;
     $adresse_hallenname = $_POST['hallenname'];
     $adresse_strasse = $_POST['strasse'];
     $adresse_plz = $_POST['plz'];

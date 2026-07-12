@@ -22,7 +22,7 @@
     <div>
         <p>
             <label class="w3-text-primary" for="art">Turnierblock<span class="w3-text-secondary">*</span></label>
-            <select required <?php if (!TurnierFormService::isEditable('art_block', $turnier)): ?> disabled <?php endif; ?> class="w3-select w3-border w3-border-primary w3-padding" id="art_block" name="art_block">
+            <select required <?php if (!$turnier_from_form && !TurnierFormService::isEditable('art_block', $turnier)): ?> disabled <?php endif; ?> class="w3-select w3-border w3-border-primary w3-padding" id="art_block" name="art_block">
                 <option value="" disabled selected>Wähle einen Turnierblock</option>
                 <!-- Blockhöhere Turniere -->
                 <?php foreach ($block_higher as $block): ?>

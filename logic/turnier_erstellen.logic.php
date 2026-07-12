@@ -20,9 +20,12 @@ $ausrichter = TeamRepository::get()->team($ausrichter_team_id);
 $block_higher = BlockService::getHigherBlocks($ausrichter_block);
 
 // Formularauswertung
+// Unterscheidung im HTML, wenn das Turnier vom $_POST Request kommt ($turnier_from_form = true):
+// So sollen manche Felder weiterhin änderbar sein, wenn diese einen Fehler bei der Turnierstellung verursacht haben.
+$turnier_from_form = false;
 if (isset($_POST['create_turnier'])) {
-
     // Formular fuellen sollte es abbrechen
+    $turnier_from_form = true;
     $turnier_datum = new DateTime($_POST['datum']);
     $turnier_datum_bis = (!isset($_POST['datum_bis']) || $_POST['datum_bis'] === '') ? null : new DateTime($_POST['datum_bis']);
 

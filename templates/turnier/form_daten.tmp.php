@@ -13,7 +13,7 @@
 
     <p>
         <label class="w3-text-primary" for="datum">Datum<span class="w3-text-secondary">*</span></label>
-        <input required <?php if (!TurnierFormService::isEditable('datum', $turnier)): ?> disabled <?php endif; ?> type="date" value="<?= $turnier_datum ?? date("Y-m-d", (time() + 4 * 7 * 24 * 60 * 60))?>" class="w3-input w3-border w3-border-primary" style="max-width: 320px" id="datum" name="datum">
+        <input required <?php if (!$turnier_from_form && !TurnierFormService::isEditable('datum', $turnier)): ?> disabled <?php endif; ?> type="date" value="<?= $turnier_datum?->format("Y-m-d") ?? date("Y-m-d", (time() + 4 * 7 * 24 * 60 * 60))?>" class="w3-input w3-border w3-border-primary" style="max-width: 320px" id="datum" name="datum">
     </p>
     
     <?php if (Helper::$ligacenter): ?>
