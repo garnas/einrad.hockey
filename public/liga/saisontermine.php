@@ -27,7 +27,7 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
             <td>15. August 2026 - 17. Mai 2027</td>
         </tr>
         <tr>
-            <td class="w3-primary-3">B/C-Finalwochenende</td>
+            <td class="w3-primary-3">B-Finalwochenende</td>
             <td>12. Juni 2027 + 13. Juni 2027</td>
         </tr>
         <tr>
@@ -37,19 +37,39 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
     </table>
 </div>
 
+<div class="w3-responsive w3-section">
+    <table class="w3-table w3-bordered">
+        <tr>
+            <td class="w3-primary" colspan="2"><b>Saison 2027/2028</b></td>
+        </tr>
+        <tr>
+            <td class="w3-primary-3">Reguläre Spielzeit</td>
+            <td>Termine folgen</td>
+        </tr>
+        <tr>
+            <td class="w3-primary-3">B-Finalwochenende</td>
+            <td>Termine folgen</td>
+        </tr>
+        <tr>
+            <td class="w3-primary-3">Deutsche Meisterschaft</td>
+            <td>Termine folgen</td>
+        </tr>
+    </table>
+</div>
+
 <h1 class="w3-text-primary w3-margin-top" id='lawahlen'>Ligaausschusswahlen</h1>
 <div class="w3-responsive w3-section">
     <table class="w3-table w3-bordered">
         <tr>
-            <td class="w3-primary" colspan="2"><b>Saison 2025/2026</b></td>
+            <td class="w3-primary" colspan="2"><b>Saison 2027/2028</b></td>
         </tr>
         <tr>
             <td class="w3-primary-3">Bewerbungsfrist</td>
-            <td>01. Februar 2026</td>
+            <td>Termine folgen</td>
         </tr>
         <tr>
             <td class="w3-primary-3">Ligaausschusswahlen</td>
-            <td>15. Februar 2026 - 01. März 2026</td>
+            <td>Termine folgen</td>
         </tr>
     </table>
 </div>
