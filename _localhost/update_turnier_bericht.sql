@@ -1,0 +1,2 @@
+ALTER TABLE `turniere_berichte` CHANGE `kader_ueberprueft` `kader_ueberprueft` ENUM('Ja','Nein') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Nein';
+ALTER TABLE `turniere_berichte` CHANGE `bericht` `bericht` VARCHAR(1900) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '';

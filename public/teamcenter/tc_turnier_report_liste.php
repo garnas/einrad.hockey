@@ -11,7 +11,7 @@ require_once '../../logic/session_team.logic.php'; //Auth
 
 
 $team_id = $_SESSION['logins']['team']['id'];
-$turniere = TurnierRepository::getSetzlisteTurniere($team_id);
+$turniere = TurnierRepository::getTurnierreportTurniere($team_id);
 $saison = Config::SAISON;
 
 /////////////////////////////////////////////////////////////////////////////
