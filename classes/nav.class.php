@@ -89,7 +89,6 @@ class Nav
             [Env::BASE_URL . "/teamcenter/tc_kontaktcenter.php", "Kontaktcenter", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_teamdaten.php", "Teamdaten", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_kader.php", "Kader", $class_text_color],
-            [Env::BASE_URL . "/teamcenter/tc_antrag.php", "Fördermittel", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_pw_aendern.php", "Passwort ändern", $class_text_color],
         ];
         if (isset($_SESSION['logins']['team'])) {
@@ -193,6 +192,22 @@ class Nav
     }
 
     /**
+     * Links für die Startseite des Teamcenters
+     *
+     * @return string[][]
+     */
+    public static function get_oc_start(): array
+    {
+        return [
+            [Env::BASE_URL . "/oefficenter/oc_kontaktcenter.php", "Kontaktcenter", "w3-tertiary"],
+            [Env::BASE_URL . "/oefficenter/oc_neuigkeit_eintragen.php", "Neuigkeit eintragen", "w3-tertiary"],
+            [Env::BASE_URL . "/liga/neues.php", "Neuigkeit bearbeiten", "w3-tertiary"],
+            [Env::BASE_URL . "/oefficenter/oc_pw_aendern.php", "Passwort ändern", "w3-grey"],
+            [Env::BASE_URL . "/oefficenter/oc_logout.php", "Logout", "w3-grey"],
+        ];
+    }
+
+    /**
      *  Ligalinks
      */
     public const LINK_TERMINPLANER = 'https://team.einrad.hockey';
@@ -233,14 +248,4 @@ class Nav
     public const LINK_IUF = 'https://unicycling.org/';
     public const LINK_SWISS = 'https://www.swiss-iuc.ch/Wettkaempfe/Einradhockey';
 
-    public static function get_oc_start(): array
-    {
-        return [
-            [Env::BASE_URL . "/oefficenter/oc_kontaktcenter.php", "Kontaktcenter", "w3-tertiary"],
-            [Env::BASE_URL . "/oefficenter/oc_neuigkeit_eintragen.php", "Neuigkeit eintragen", "w3-tertiary"],
-            [Env::BASE_URL . "/liga/neues.php", "Neuigkeit bearbeiten", "w3-tertiary"],
-            [Env::BASE_URL . "/oefficenter/oc_pw_aendern.php", "Passwort ändern", "w3-grey"],
-            [Env::BASE_URL . "/oefficenter/oc_logout.php", "Logout", "w3-grey"],
-        ];
-    }
 }
