@@ -142,7 +142,7 @@ class TeamValidator
             $valid = false;
         }
 
-        if (TurnierService::getAnzahlGesetzteFreilose($turnier) >= 2) {
+        if (TurnierService::isMaximaleAnzahlFreiloseAufSetzliste($turnier)) {
             $error[] = "Es kann kein Freilos mehr für dieses Turnier gesetzt werden.";
             $valid = false;
         }

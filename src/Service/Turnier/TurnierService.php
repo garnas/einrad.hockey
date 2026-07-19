@@ -240,6 +240,18 @@ class TurnierService
         return $turnier->getGesetzteFreilose()->count();
     }
 
+    public static function isMaximaleAnzahlFreiloseAufSetzliste(Turnier $turnier): bool
+    {
+        $setzliste = self::getSetzListe($turnier);
+        $anzahlFreilose = 0;
+        foreach ($setzliste as $anmeldung) {
+            if ($anmeldung->hasFreilosGesetzt()) {
+                $anzahlFreilose++;
+            }
+        }
+        return ($anzahlFreilose >= 2);
+    }
+
     public static function getAnzahlGesetzteTeams(Turnier $turnier): int
     {
         return self::getSetzListe($turnier)->count();
