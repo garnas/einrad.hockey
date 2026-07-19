@@ -8,6 +8,7 @@ use Config;
 use Feiertage;
 use Helper;
 use Html;
+use Env;
 
 class TurnierValidatorService
 {
@@ -38,7 +39,8 @@ class TurnierValidatorService
             && $validator->hasValidDatum()
             && $validator->hasValidPlaetze()
             && $validator->hasValidMinTeams()
-            && $validator->hasValidUhrzeit();
+            && $validator->hasValidUhrzeit()
+            && $validator->hasValidStartgebuehr();
     }
 
     public static function onChange(Turnier $turnier): bool
@@ -49,7 +51,7 @@ class TurnierValidatorService
             && !self::hasLaRights($turnier)
         ) {
             Html::error("Turniere können in der Ergebnisphase nicht mehr geändert werden. Bitte wende dich unter "
-                . Env::LAMAIL . " an den Ligaaussschuss.");
+                . Html::mailto(Env::LAMAIL) . " an den Ligaaussschuss.");
             return false;
         }
 
@@ -64,6 +66,12 @@ class TurnierValidatorService
             && $validator->hasValidMinTeams();
     }
 
+    public static function onErweiterung(Turnier $turnier): bool
+    {
+        $validator = new self($turnier);
+
+        return $validator->hasValidErweiterung();
+    }
 
     public static function mayChangePlaetze(Turnier $turnier, int $plaetze_before): bool
     {
@@ -91,6 +99,17 @@ class TurnierValidatorService
             Html::error("Ungültige Phase");
             return false;
         }
+        return true;
+    }
+
+
+    public function hasValidErweiterung(): bool
+    {
+        if ($this->turnier->isBlockErweitertHoch() && $this->turnier->isBlockErweitertRunter()) {
+            Html::error("Das Turnier kann nicht hoch und runter erweitert werden.");
+            return false;
+        }
+
         return true;
     }
 
@@ -150,6 +169,7 @@ class TurnierValidatorService
     {
 
         $plaetze = $this->turnier->getDetails()->getPlaetze();
+        $min_plaetze = $this->turnier->getDetails()->getMinTeams();
 
         if (TurnierService::getAnzahlGesetzteTeams($this->turnier) > $plaetze) {
             Html::error("Es sind mehr Teams angemeldet als Plätze vorhanden.");
@@ -162,6 +182,14 @@ class TurnierValidatorService
             && $plaetze >= 4
         ) {
             return true;
+        }
+
+        if (
+            (Helper::$teamcenter && !self::hasLaRights($this->turnier))
+            && $plaetze < $min_plaetze
+        ) {
+            Html::error("Die Anzahl der maximalen Plätze ist kleiner als die der minimalen Plätze.");
+            return false;
         }
 
         if (
@@ -184,6 +212,8 @@ class TurnierValidatorService
             return true;
         }
 
+        $error = false;
+        $error_text = "";
         $unixTime = $this->turnier->getDatum()->getTimestamp();
         if ($this->turnier->isLigaturnier()) {
             if (
@@ -192,19 +222,24 @@ class TurnierValidatorService
                     $unixTime > strtotime(Config::SAISON_ENDE)
                 )
             ) {
-                Html::error("Das Datum liegt außerhalb der Saison.");
-                return false;
+                $error_text .= "Das Datum liegt außerhalb der Saison. ";
+                $error = true;
             }
 
             $feiertage = Feiertage::finden(date("Y", $unixTime));
             if ((Helper::$teamcenter && !self::hasLaRights($this->turnier))
                 && !\in_array($unixTime, $feiertage) && date('N', $unixTime) < 6) {
-                Html::error("Das Datum liegt nicht am Wochende und ist kein bundesweiter Feiertag.");
-                return false;
+                $error_text .= "Das Datum liegt nicht am Wochende und ist kein bundesweiter Feiertag. ";
+                $error = true;
             }
 
             if (time() > TurnierService::getTurnierEintrageFristUnix($this->turnier)) {
-                Html::error("Turniere können nur vier Wochen vor dem Spieltag eingetragen werden");
+                $error_text .= "Turniere können nur vier Wochen vor dem Spieltag eingetragen werden. ";
+                $error = true;
+            }
+
+            if ($error) {
+                Html::error($error_text);
                 return false;
             }
         }
@@ -233,6 +268,20 @@ class TurnierValidatorService
 
     }
 
+    public function hasValidStartgebuehr(): bool
+    {
+        if (self::hasLaRights($this->turnier)) {
+            return true;
+        }
+
+        if ($this->turnier->getDetails()->getStartgebuehr() === "") {
+            Html::error("Es wurde keine Startgebühr angegeben.");
+            return false;
+        }
+
+        return true;
+    }
+
     public function hasValidAusrichter(): bool
     {
         $ausrichter = $this->turnier->getAusrichter();
@@ -258,7 +307,7 @@ class TurnierValidatorService
     }
 
     /**
-     * Ermittelt, ob ein Turnier nach oben erweiterbar ist
+     * Ermittelt, ob ein Turnier nach oben erweiterbar ist.
      *
      * @param Turnier $turnier
      * @return bool
@@ -267,7 +316,8 @@ class TurnierValidatorService
     {
         return $turnier->getPhase() === 'setz'
             && !$turnier->isBlockErweitertHoch()
-            && \strlen($turnier->getBlock()) < 3
+            && !$turnier->isBlockErweitertRunter()
+            && !$turnier->isBlockErweitertFrei()
             && $turnier->getBlock() !== 'AB'
             && $turnier->getBlock() !== 'A'
             && $turnier->isLigaTurnier();
@@ -283,7 +333,8 @@ class TurnierValidatorService
     {
         return $turnier->getPhase() === 'setz'
             && !$turnier->isBlockErweitertRunter()
-            && \strlen($turnier->getBlock()) < 3
+            && !$turnier->isBlockErweitertHoch()
+            && !$turnier->isBlockErweitertFrei()
             && $turnier->getBlock() !== 'EF'
             && $turnier->getBlock() !== 'F'
             && $turnier->isLigaTurnier();
@@ -299,8 +350,7 @@ class TurnierValidatorService
     {
         return $turnier->getPhase() === 'setz'
             && $turnier->isLigaturnier()
-            && !$turnier->isBlockErweitertHoch()
-            && !$turnier->isBlockErweitertRunter()
+            && !$turnier->isBlockErweitertFrei()
             && $turnier->getBlock() != Config::BLOCK_ALL[0];
     }
 

@@ -47,6 +47,9 @@ class Turnier
     #[ORM\Column(name: "tblock", type: "string", length: 255, nullable: true)]
     private ?string $block;
 
+    #[ORM\Column(name: "tblock_fixed", type: "string", length: 255, nullable: true)]
+    private ?string $fixed = "Nein";
+
     #[ORM\Column(name: "datum", type: "date")]
     private ?DateTime $datum;
 
@@ -103,14 +106,23 @@ class Turnier
     #[ORM\Column(name: "canceled", type: "boolean")]
     private bool $canceled;
 
-    #[ORM\Column(name: "sofort_oeffnen", type: "boolean")]
-    private bool $sofortOeffnen;
+    #[ORM\Column(name: "block_erweitert_frei", type: "boolean", options: ["default" => false])]
+    private bool $blockErweitertFrei = false;
 
-    #[ORM\Column(name: "block_erweitert_runter", type: "boolean")]
-    private ?bool $blockErweitertRunter;
+    #[ORM\Column(name: "sofort_oeffnen_frei", type: "boolean", options: ["default" => false])]
+    private bool $sofortOeffnenFrei = false;
 
-    #[ORM\Column(name: "block_erweitert_hoch", type: "boolean")]
-    private ?bool $blockErweitertHoch;
+    #[ORM\Column(name: "block_erweitert_runter", type: "boolean", options: ["default" => false])]
+    private bool $blockErweitertRunter = false;
+
+    #[ORM\Column(name: "sofort_oeffnen_runter", type: "boolean", options: ["default" => false])]
+    private bool $sofortOeffnenRunter = false;
+
+    #[ORM\Column(name: "block_erweitert_hoch", type: "boolean", options: ["default" => false])]
+    private bool $blockErweitertHoch = false;
+
+    #[ORM\Column(name: "sofort_oeffnen_hoch", type: "boolean", options: ["default" => false])]
+    private bool $sofortOeffnenHoch = false;
 
     #[ORM\OneToOne(mappedBy: 'turnier', targetEntity: TurnierBericht::class)]
     private ?TurnierBericht $bericht = null;
@@ -120,23 +132,6 @@ class Turnier
 
     #[ORM\OneToMany(mappedBy: 'turnier', targetEntity: SpielerAusleihe::class)]
     private Collection $leihen;
-
-    public function isSofortOeffnen(): bool
-    {
-        return $this->sofortOeffnen;
-    }
-
-    public function setSofortOeffnen(bool $sofortOeffnen): self
-    {
-        $this->logService->autoLog(
-            "Sofort öffnen nach dem Phasenwechsel",
-            $this->sofortOeffnen ?? false,
-            $sofortOeffnen,
-        );
-        $this->sofortOeffnen = $sofortOeffnen;
-        return $this;
-    }
-
 
     public function __construct()
     {
@@ -298,7 +293,7 @@ class Turnier
     /**
      * @return TurniereListe[]|ArrayCollection
      */
-    public function getSetzliste(): ArrayCollection|array
+    public function getSetzliste(): Collection|array
     {
         $filter = static function (TurniereListe $f) {
             return $f->isSetzliste();
@@ -310,7 +305,7 @@ class Turnier
     /**
      * @return TurniereListe[]|ArrayCollection
      */
-    public function getWarteliste(): ArrayCollection|array
+    public function getWarteliste(): Collection|array
     {
         $filter = static function (TurniereListe $f) {
             return $f->isWarteliste();
@@ -372,6 +367,17 @@ class Turnier
     {
         $this->logService->autoLog("Block", $this->block ?? null, $block);
         $this->block = $block;
+        return $this;
+    }
+
+    public function getBlockFixed(): ?string
+    {
+        return $this->fixed;
+    }
+
+    public function setBlockFixed(?string $fixed): self
+    {
+        $this->fixed = $fixed;
         return $this;
     }
 
@@ -505,26 +511,142 @@ class Turnier
         return $this->gesetzteFreilose;
     }
 
-    public function setBlockErweitertRunter(?bool $blockErweitertRunter): self
+
+    /**
+     * @param $flag bool
+     * @return Turnier
+     *
+     * Flag setzen, ob das Turnier um einen Block nach unten erweitert wurde.
+     */
+    public function setBlockErweitertRunter(bool $flag): self
     {
-        $this->blockErweitertRunter = $blockErweitertRunter;
+        $this->blockErweitertRunter = $flag;
         return $this;
     }
 
+    /**
+     * @param $flag bool
+     * @return Turnier
+     *
+     * Flag setzen, ob das Turnier um einen Block nach oben erweitert wurde.
+     */
+    public function setBlockErweitertHoch(bool $flag): self
+    {
+        $this->blockErweitertHoch = $flag;
+        return $this;
+    }
+
+    /**
+     * @param $flag bool
+     * @return Turnier
+     *
+     * Flag setzen, ob das Turnier um alle Blöcke erweitert wurde.
+     */
+    public function setBlockErweitertFrei(bool $flag): self
+    {
+        $this->blockErweitertFrei = $flag;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     *
+     * Flag erhalten, ob das Turnier um einen Block nach unten erweitert wurde.
+     */
     public function isBlockErweitertRunter(): bool
     {
-        return $this->blockErweitertRunter ?? false;
+        return $this->blockErweitertRunter;
     }
 
+    /**
+     * @return bool
+     *
+     * Flag erhalten, ob das Turnier um einen Block nach oben erweitert wurde.
+     */
     public function isBlockErweitertHoch(): bool
     {
-        return $this->blockErweitertHoch ?? false;
+        return $this->blockErweitertHoch;
     }
 
-    public function setBlockErweitertHoch(?bool $blockErweitertHoch): self
+    /**
+     * @return bool
+     *
+     * Flag erhalten, ob das Turnier um alle Blöcke erweitert wurde.
+     */
+    public function isBlockErweitertFrei(): bool
     {
-        $this->blockErweitertHoch = $blockErweitertHoch;
+        return $this->blockErweitertFrei;
+    }
+
+    /**
+     * @param $flag bool
+     * @return Turnier
+     *
+     * Flag setzen, ob das Turnier bei Übergang sofort um einen Block nach oben erweitert werden soll.
+     */
+    public function setSofortOeffnenHoch(bool $flag): self
+    {
+        $this->sofortOeffnenHoch = $flag;
         return $this;
+    }
+
+    /**
+     * @param $flag bool
+     * @return Turnier
+     *
+     * Flag setzen, ob das Turnier bei Übergang sofort um einen Block nach unten erweitert werden soll.
+     */
+    public function setSofortOeffnenRunter(bool $flag): self
+    {
+        $this->sofortOeffnenRunter = $flag;
+        return $this;
+    }
+
+    public function isSofortOeffnen(): bool
+    {
+        return $this->sofortOeffnen;
+    }
+
+    /**
+     * @param $flag bool
+     * @return Turnier
+     *
+     * Flag setzen, ob das Turnier bei Übergang sofort um alle Blöcke erweitert werden soll.
+     */
+    public function setSofortOeffnenFrei(bool $flag): self
+    {
+        $this->sofortOeffnenFrei = $flag;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     *
+     * Flag erhalten, ob das Turnier bei Übergang sofort um einen Block nach unten erweitert werden soll.
+     */
+    public function isSofortOeffnenRunter(): bool
+    {
+        return $this->sofortOeffnenRunter;
+    }
+
+    /**
+     * @return bool
+     *
+     * Flag erhalten, ob das Turnier bei Übergang sofort um einen Block nach oben erweitert werden soll.
+     */
+    public function isSofortOeffnenHoch(): bool
+    {
+        return $this->sofortOeffnenHoch;
+    }
+
+    /**
+     * @return bool
+     *
+     * Flag erhalten, ob das Turnier bei Übergang sofort um alle Blöcke erweitert werden soll.
+     */
+    public function isSofortOeffnenFrei(): bool
+    {
+        return $this->sofortOeffnenFrei;
     }
 
     public function getBericht(): ?TurnierBericht

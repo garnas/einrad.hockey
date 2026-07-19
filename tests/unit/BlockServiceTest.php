@@ -76,12 +76,13 @@ class BlockServiceTest extends TestCase
     #[DataProvider("provideIsBlockPassend")]
     public function testIsBlockPassend(string $turnierblock, string $teamblock, bool $passend)
     {
-        $turnier = (new Turnier())->setBlock($turnierblock);
-        $teamMock = $this->createMock(nTeam::class);
-        $teamMock->method('getBlock')->willReturn($teamblock);
+        $turnier = new Turnier();
+        $turnier = $turnier->setBlock($turnierblock);
+        $teamStub = $this->createStub(nTeam::class);
+        $teamStub->method('getBlock')->willReturn($teamblock);
         $this->assertEquals(
             expected: $passend,
-            actual: BlockService::isBlockPassend($turnier, $teamMock),
+            actual: BlockService::isBlockPassend($turnier, $teamStub),
         );
     }
 
@@ -106,13 +107,13 @@ class BlockServiceTest extends TestCase
     #[DataProvider("provideIsTurnierblockHoeher")]
     public function testIsTurnierBlockHigher(string $turnierblock, string $teamblock, bool $hoeher)
     {
-        $turnier = (new Turnier())->setBlock($turnierblock);
-        $teamMock = $this
-            ->createMock(nTeam::class);
-        $teamMock->method('getBlock')->willReturn($teamblock);
+        $turnier = new Turnier();
+        $turnier = $turnier->setBlock($turnierblock);
+        $teamStub = $this->createStub(nTeam::class);
+        $teamStub->method('getBlock')->willReturn($teamblock);
         $this->assertEquals(
             expected: $hoeher,
-            actual: BlockService::isTurnierBlockHigher($turnier, $teamMock),
+            actual: BlockService::isTurnierBlockHigher($turnier, $teamStub),
         );
     }
 }

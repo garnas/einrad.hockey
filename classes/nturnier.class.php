@@ -64,6 +64,10 @@ class nTurnier
     public ?string $block_erweitert_hoch;
     public ?string $block_erweitert_runter;
     public ?string $teamname;
+    public ?string $sofort_oeffnen_frei;
+    public ?string $sofort_oeffnen_hoch;
+    public ?string $sofort_oeffnen_runter;
+    public ?string $block_erweitert_frei;
 
     /**
      * Turnier constructor.

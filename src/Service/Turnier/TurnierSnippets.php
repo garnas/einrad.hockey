@@ -186,7 +186,7 @@ class TurnierSnippets
 
     public static function getHandy(Turnier $turnier): string
     {
-        $handy = e($turnier->getDetails()->getHandy());
+        $handy = e($turnier->getDetails()->getHandy() ?? "");
         $handyNumbers = preg_replace('/[^0-9.]+/', '', $handy);
         return Html::link(
             'tel:' . str_replace(' ', '', $handyNumbers),
