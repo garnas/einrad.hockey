@@ -114,15 +114,16 @@ include '../../templates/header.tmp.php';
 
 <!-- Anzeigen der angemeldeten Teams und gleichzeitig Abmeldeformular -->
 <div class="w3-card w3-container">
-    <form method='post'>
-        <h3 class="w3-text-primary">Listen</h3>
+    <h3 class="w3-text-primary">Listen</h3>
 
-        <?= TurnierSnippets::getListen($turnier) ?>
-        <p class="w3-small w3-text-primary">Phase: <?= TurnierSnippets::translate($turnier->getPhase()) ?></p>
-    </form>
+    <?= TurnierSnippets::getListen($turnier) ?>
+    <hr>
+    <p class="w3-text-primary">Gesetzte Freilose: <?= TurnierService::getAnzahlGesetzteFreilose($turnier) ?></p>
+    <p class="w3-text-primary">Phase: <?= TurnierSnippets::translate($turnier->getPhase()) ?></p>
+    <hr>
 
     <!-- An- und Abmeldung -->
-    <?php if ($turnier->isFinalTurnier()) {?>
+    <?php if ($turnier->isFinalTurnier()): ?>
         <form class="" method="post">
             <p>
                 <input type='submit'
@@ -134,7 +135,7 @@ include '../../templates/header.tmp.php';
                 <span class="w3-text-grey"><i class="material-icons">info</i>Wir wollen auf dem Abschlussturnier spielen bzw. wir wären bereit nachzurücken.</span>
             </p>
         </form>
-    <?php } elseif ($turnier->isLigaturnier()) { ?>
+    <?php elseif ($turnier->isLigaturnier()):  ?>
         <form class="" method="post">
             <p>
                 <input type='submit' class='<?= (TeamService::isAngemeldet($teamEntity, $turnier)) ? "w3-opacity" : "" ?> w3-button w3-margin-bottom w3-block w3-tertiary w3-right'
@@ -144,18 +145,25 @@ include '../../templates/header.tmp.php';
         </form>
         <form method="post">
             <p>
-                <input type='submit'
+                <?php if (TurnierService::isMaximaleAnzahlFreiloseAufSetzliste($turnier)): ?>
+                    <span class="w3-text-grey">Da bereits zwei Freilose für das Turnier gesetzt worden sind, können keine weiteren Freilose gesetzt werden.</span>
+                <?php endif; ?>
+                <?php if (!TurnierService::isSpielBerechtigtFreilos($turnier, $teamEntity)): ?>
+                    <span class="w3-text-grey">Dein Team kann kein Freilos setzen, da der Turnierblock höher ist als dein Teamblock.</span>
+                <?php endif; ?>
+            <input type='submit'
                     class='w3-button w3-margin-bottom w3-block w3-tertiary
                     <?php if (TeamService::isAufSetzliste($teamEntity, $turnier)
                                 || !TurnierService::isSpielBerechtigtFreilos($turnier, $teamEntity)
                                 || $teamEntity->getAnzahlOffenerFreilose() == 0
+                                || TurnierService::isMaximaleAnzahlFreiloseAufSetzliste($turnier)
                     ): ?> w3-opacity<?php endif; ?>'
                     name='freilos' value='Freilos setzen (<?=$teamEntity->getAnzahlOffenerFreilose()?> vorhanden)'>
             </p>
             <span><?= Html::link(Env::BASE_URL . "/teamcenter/tc_teamdaten.php#freilose", "Übersicht der Freilose", extern: true, icon: "launch")?></span>
             <span class="w3-text-grey">Freilose setzen dein Team in der Wartephase direkt auf die Setzliste. Ein Team kann auch für blockhöhere Turniere ein Freilos einsetzen, nicht jedoch für blockniedrigere Turniere.</span>
         </form>
-    <?php } //endif?>
+    <?php endif; ?>
         <form method="post" onsubmit="return confirm('Dein Team wird vom Turnier abgemeldet werden.');">
             <p><input type='submit' class='<?php if (!TeamService::isAngemeldet($teamEntity, $turnier)): ?>w3-opacity<?php endif;?> w3-button w3-margin-bottom w3-block w3-tertiary w3-right' name='abmelden' value='Abmelden'></p>
             <?php if ($turnier->isLigaturnier()): ?>
