@@ -20,12 +20,12 @@
     </div>
 
     <!-- Info -->
-    <a href="<?= Env::BASE_URL ?>/liga/ueber_uns.php" class="no">
+    <a href="<?= Env::BASE_URL ?>/liga/neues.php" class="no">
         <h3 class="w3-margin-left w3-text-primary"><i style="vertical-align: -16%" class="material-icons">info</i> INFO</h3>
     </a>
-    <?php foreach (Nav::get_info() as Nav::$link) { ?>
+    <?php foreach (Nav::get_info() as Nav::$link): ?>
         <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
-    <?php } //end for?>
+    <?php endforeach; ?>
 
     <!-- Liga -->
     <div class="w3-text-black">
@@ -33,34 +33,25 @@
             <?= Html::icon("emoji_events", tag: "h3") ?> LIGA
         </h3>
     </div>
-    <?php foreach (Nav::get_liga() as Nav::$link) { ?>
+    <?php foreach (Nav::get_liga() as Nav::$link): ?>
         <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
-    <?php } //end for?>
+    <?php endforeach; ?>
 
     <!-- Modus -->
     <div class="w3-text-primary">
         <h3 class="w3-margin-left"><i style="vertical-align: -16%" class="material-icons">settings</i> MODUS</h3>
     </div>
-    <?php foreach (Nav::get_modus() as Nav::$link) { ?>
+    <?php foreach (Nav::get_modus() as Nav::$link): ?>
         <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
-    <?php } //end for?>
+    <?php endforeach; ?>
 
     <!-- Berichte -->
     <div class="w3-text-primary">
         <h3 class="w3-margin-left"><i style="vertical-align: -16%" class="material-icons">article</i> BERICHTE</h3>
     </div>
-    <?php foreach (Nav::get_berichte() as Nav::$link) { ?>
-        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button <?= Nav::$link[2] ?>"><?= Nav::$link[1] ?></a>
-    <?php } //end for?>
-
-    <!-- Sonstiges -->
-    <div class="w3-text-primary">
-        <h3 class="w3-margin-left"><i style="vertical-align: -16%" class="material-icons w3-xlarge">format_list_bulleted</i> SONSTIGES</h3>
-    </div>
-    <?php foreach (Nav::get_berichte() as Nav::$link) { ?>
-        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button <?= Nav::$link[2] ?? '' ?>"><?= Nav::$link[1] ?></a>
-    <?php } //end for?>
-    <a href="#" class="w3-bar-item w3-button"></a>
+    <?php foreach (Nav::get_berichte() as Nav::$link): ?>
+        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
+    <?php endforeach; ?>
     
     <!-- Organisation -->
     <div class="w3-text-primary">
@@ -68,9 +59,9 @@
             <h3 class="w3-margin-left"><i style="vertical-align: -20%" class="material-icons">group</i> ORGA</h3>
         </a>
     </div>
-    <?php foreach(Nav::get_organisation() as Nav::$link){ ?>
-        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button<?= Nav::$link[1] ?></a>
-    <?php } //end for ?>
+    <?php foreach(Nav::get_organisation() as Nav::$link): ?>
+        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
+    <?php endforeach; ?>
 
 </div>
 
@@ -95,10 +86,10 @@
 
     <!-- Logout Button -->
     <div class="w3-display-bottomright w3-text-primary w3-large">
-        <?php if (isset($_SESSION['logins']['team'])) {?>
+        <?php if (isset($_SESSION['logins']['team'])): ?>
             <a href='<?= Env::BASE_URL ?>/teamcenter/tc_logout.php' class="w3-button w3-hover-primary"><i class="material-icons w3-xlarge">block</i> Logout</a>
-        <?php } elseif (isset($_SESSION['logins']['la'])) {?>
+        <?php elseif (isset($_SESSION['logins']['la'])): ?>
             <a href='<?= Env::BASE_URL ?>/ligacenter/lc_logout.php' class="w3-button w3-hover-primary"><i class="material-icons w3-xlarge">block</i> Logout</a>
-        <?php }?>
+        <?php endif; ?>
     </div>
 </div>

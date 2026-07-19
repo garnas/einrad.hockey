@@ -105,7 +105,7 @@ class Nav
     }
 
     /**
-     * Sonstige Links
+     * Berichte
      *
      * @return string[][]
      */
