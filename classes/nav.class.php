@@ -57,7 +57,7 @@ class Nav
 
     /**
      * Organisation-Links für die Navigation
-     * 
+     *
      * @return string[][]
      */
     public static function get_organisation(): array
@@ -65,10 +65,10 @@ class Nav
         return [
             [Env::BASE_URL . "/liga/foerdermittel_antrag.php", "Fördermittelantrag"],
             [Env::BASE_URL . "/teamcenter/tc_login.php", "Teamcenter"],
-            [Env::BASE_URL . "/login.php", "Ausschusslogin"]
+            [Env::BASE_URL . "/login.php", "Ausschusslogin"],
         ];
     }
-    
+
     /**
      * Teamcenterlinks für die Navigation
      *

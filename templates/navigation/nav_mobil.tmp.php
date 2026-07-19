@@ -59,7 +59,7 @@
             <h3 class="w3-margin-left"><i style="vertical-align: -20%" class="material-icons">group</i> ORGA</h3>
         </a>
     </div>
-    <?php foreach(Nav::get_organisation() as Nav::$link): ?>
+    <?php foreach (Nav::get_organisation() as Nav::$link): ?>
         <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
     <?php endforeach; ?>
 
