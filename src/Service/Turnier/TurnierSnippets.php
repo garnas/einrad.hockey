@@ -199,6 +199,12 @@ class TurnierSnippets
     {
         $warteliste = TurnierService::getWarteliste($turnier);
         $setzliste = TurnierService::getSetzListe($turnier);
+        $ausrichter = $turnier->getAusrichter()->getName();
+
+        $freilose = [];
+        foreach ($turnier->getGesetzteFreilose() as $freilos) {
+            $freilose[] = $freilos->getTeam()->getName();
+        }
 
         $html = '<p class="w3-text-grey w3-border-bottom w3-border-grey">Setzliste</p>';
         $html .= '<p>';
@@ -211,6 +217,12 @@ class TurnierSnippets
                     $html .= "<span class='w3-text-green'><b>$teamname</b></span>";
                 } else {
                     $html .= $teamname;
+                }
+                if ($teamname === $ausrichter) {
+                    $html .= ' (Ausrichter)';
+                }
+                if (in_array($teamname, $freilose, true)) {
+                    $html .= ' (Freilos)';
                 }
                 $html .= ' <span class="w3-text-primary">' . $block . '</span>';
                 $html .= '<br>';
@@ -233,6 +245,9 @@ class TurnierSnippets
                     $html .= "<span class='w3-text-yellow'><b>" . $warteplatz . " " . $teamname . "</b></span>";
                 } else {
                     $html .= $warteplatz . " " . $teamname;
+                }
+                if ($teamname === $ausrichter) {
+                    $html .= ' (Ausrichter)';
                 }
                 $html .= ' <span class="w3-text-primary">' . $block . '</span>';
                 $html .= '<br>';

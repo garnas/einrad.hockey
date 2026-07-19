@@ -12,6 +12,9 @@ use Discord;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\TurnierBericht\SpielerZeitstrafe;
+use App\Entity\TurnierBericht\SpielerAusleihe;
+use App\Entity\TurnierBericht\TurnierBericht;
 
 /**
  * Turnier
@@ -121,6 +124,15 @@ class Turnier
     #[ORM\Column(name: "sofort_oeffnen_hoch", type: "boolean", options: ["default" => false])]
     private bool $sofortOeffnenHoch = false;
 
+    #[ORM\OneToOne(mappedBy: 'turnier', targetEntity: TurnierBericht::class)]
+    private ?TurnierBericht $bericht = null;
+
+    #[ORM\OneToMany(mappedBy: 'turnier', targetEntity: SpielerZeitstrafe::class)]
+    private Collection $zeitstrafen;
+
+    #[ORM\OneToMany(mappedBy: 'turnier', targetEntity: SpielerAusleihe::class)]
+    private Collection $leihen;
+
     public function __construct()
     {
         $this->ergebnis = new ArrayCollection();
@@ -128,6 +140,8 @@ class Turnier
         $this->logs = new ArrayCollection();
         $this->gesetzteFreilose = new ArrayCollection();
         $this->logService = new TurnierLogService($this);
+        $this->zeitstrafen = new ArrayCollection();
+        $this->leihen = new ArrayCollection();
     }
 
     #[ORM\PreFlush]
@@ -209,6 +223,23 @@ class Turnier
     public function getArt(): ?string
     {
         return $this->art;
+    }
+
+
+    /**
+     * @return Collection<int, SpielerZeitstrafe>
+     */
+    public function getZeitstrafen(): Collection
+    {
+        return $this->zeitstrafen;
+    }
+
+    /**
+     * @return Collection<int, SpielerAusleihe>
+     */
+    public function getLeihen(): Collection
+    {
+        return $this->leihen;
     }
 
     public function setArt(?string $art): self
@@ -571,6 +602,11 @@ class Turnier
         return $this;
     }
 
+    public function isSofortOeffnen(): bool
+    {
+        return $this->sofortOeffnen;
+    }
+
     /**
      * @param $flag bool
      * @return Turnier
@@ -611,6 +647,11 @@ class Turnier
     public function isSofortOeffnenFrei(): bool
     {
         return $this->sofortOeffnenFrei;
+    }
+
+    public function getBericht(): ?TurnierBericht
+    {
+        return $this->bericht;
     }
 
 }

@@ -32,7 +32,7 @@ $css_style = ob_get_clean();
 $mpdf = MPDF::load_mpdf(); // Erstellt ein MPDF-Objekt aus dem Framework
 $mpdf->shrink_tables_to_fit = 4;
 $mpdf->SetTitle('Quittungen ' . e($turnier->getDetails()->getOrt()));
-$mpdf->SetHTMLHeader('<img src="../bilder/logo_lang_small.png" style="margin-top:18px; width: 70mm; float: right;">');
+$mpdf->SetHTMLHeader('<img src="../bilder/logo_kurz.png" style="margin-top:18px; width: 30mm; float: right;">');
 $mpdf->WriteHTML($css_style, HTMLParserMode::HEADER_CSS);
 
 $today = new DateTime("today");
@@ -51,7 +51,7 @@ foreach ($teams as $team_fuer_liste) {
     $html = ob_start();
     ?>
     <div style="color: #3a3a3a; font-size: 16px">
-        <h1 class="w3-center" style="padding-top: 64px">Quittung: <?= e($team_fuer->getName()) ?></h1>
+        <h1 class="w3-left" style="padding-top: 64px">Quittung: <?= e($team_fuer->getName()) ?></h1>
         <div>
             <p>
                 <b>Betrag</b>
@@ -82,7 +82,7 @@ foreach ($teams as $team_fuer_liste) {
         <div style="padding-top: 24px">
             <b>Zweck</b>
             <br>
-            Startgebühr Ligaturnier <?= (e($turnier->getName() ?? ' ')) . e($turnier->getDetails()->getOrt()) . " am " . e($turnier->getDatum()->format("d.m.Y")) ?>
+            Startgebühr Ligaturnier <?= ($turnier->getName() ? '"' . e($turnier->getName()) . '" ' : '') . e($turnier->getDetails()->getOrt()) . ' am ' . e($turnier->getDatum()->format('d.m.Y')) ?>
         </div>
         <div style="padding-top: 64px">
             <b>Ort & Datum</b>

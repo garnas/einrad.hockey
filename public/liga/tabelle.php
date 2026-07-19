@@ -24,27 +24,13 @@ if (Tabelle::check_spieltag_live($akt_spieltag)) {
 $gew_spieltag = isset($_GET['spieltag']) ? (int) $_GET['spieltag'] : $akt_spieltag;
 
 // Daten der Meisterschaftstabelle, um sie an das Layout zu uebergeben
-if ($saison >= Config::SAISON) {
-    $meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag, $saison);
-    $meisterschafts_tabelle_templates = Tabelle::get_meisterschafts_tabelle_templates($saison);
-    $show_filter = true;
-    $filter = (isset($_GET['filter'])) ? $_GET['filter'] : 'tabelle';
-} else {
+$meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag, $saison);
+$meisterschafts_tabelle_templates = Tabelle::get_meisterschafts_tabelle_templates($saison);
+
+if ($saison <= 30) {
+    // Vor der Saison 31 galt eine 'andere' Meisterschaftstabelle
     $meisterschafts_tabelle = Archiv_Tabelle::get_meisterschafts_tabelle($gew_spieltag, $saison);
     $meisterschafts_tabelle_templates = Archiv_Tabelle::get_meisterschafts_tabelle_templates($saison);
-    $show_filter = false;
-    $filter = 'tabelle';
-}
-
-$meisterschafts_tabelle_meister = [];
-foreach ($meisterschafts_tabelle as $row) {
-    // Prüfe, ob Einzelergebnisse vorhanden sind
-    if (count($row['details']) < 4) {
-        continue;
-    }
-
-    // Füge die Zeile zur gefilterten Tabelle hinzu
-    $meisterschafts_tabelle_meister[] = $row;
 }
 
 // Daten der Rangtabelle, um sie an das Layout zu uebergeben
@@ -65,11 +51,8 @@ foreach ($strafen as $strafe) {
 foreach (range(1, 10) as $i) {
     $platz_color[$i] = "ehl-text-pink";
 }
-foreach (range(11, 16) as $i) {
+foreach (range(11, 20) as $i) {
     $platz_color[$i] = "ehl-text-orange";
-}
-foreach (range(17, 22) as $i) {
-    $platz_color[$i] = "ehl-text-blue";
 }
 
 $block_color = [
@@ -94,22 +77,17 @@ include '../../templates/header.tmp.php';?>
 
 <h2 class="w3-text-secondary w3-xlarge">Spieltag <?=$gew_spieltag?></h2>
 
-<!-- Filter fuer die unterschiedlichen Darstellungen -->
-<?php if ($show_filter): ?>
-    <?php include '../../templates/tabellen/mt_filterauswahl.tmp.php'; ?>
-<?php endif; ?>
-
 <!-- Auswahl des Spieltages ueber der Meisterschaftstabelle -->
 <?php include '../../templates/tabellen/spieltagsauswahl.tmp.php'; ?>
 
 <!-- Meisterschaftstabelle fuer large + medium -->
 <div class="w3-responsive w3-card w3-hide-small">
-    <?php include '../../' . $meisterschafts_tabelle_templates['desktop'][$filter]; ?>
+    <?php include '../../' . $meisterschafts_tabelle_templates['desktop']; ?>
 </div>
 
 <!-- Meisterschaftstabelle fuer small -->
 <div class="w3-responsive w3-card w3-hide-large w3-hide-medium">
-    <?php include '../../' . $meisterschafts_tabelle_templates['mobil'][$filter]; ?>
+    <?php include '../../' . $meisterschafts_tabelle_templates['mobil']; ?>
 </div>
 
 <!-- Auswahl des Spieltages unter der Meisterschaftstabelle -->    

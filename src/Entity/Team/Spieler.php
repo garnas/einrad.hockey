@@ -46,12 +46,17 @@ class Spieler
     {
         return $this->spielerId;
     }
+
     public function getName(bool $fullName = true): ?string
     {
         if ($fullName) {
             return $this->vorname . " " . $this->nachname;
         }
-        return $this->vorname . " " . mb_substr($this->nachname, 0, 1, "utf-8") . '.';
+
+        $nachname = explode(' ', trim($this->nachname));
+        $kurzNachname = end($nachname);
+
+        return $this->vorname . " " . mb_substr($kurzNachname, 0, 1, "utf-8") . '.';
     }
 
     public function getVorname(): ?string
