@@ -215,14 +215,8 @@ class Tabelle
     public static function get_meisterschafts_tabelle_templates(int $saison = Config::SAISON): array
     {
         return [
-            'desktop' => [
-                'tabelle' => 'templates/tabellen/desktop_mt_komplett.tmp.php',
-                'meister' => 'templates/tabellen/desktop_mt_meister.tmp.php',
-            ],
-            'mobil' => [
-                'tabelle' => 'templates/tabellen/mobil_mt_komplett.tmp.php',
-                'meister' => 'templates/tabellen/mobil_mt_meister.tmp.php',
-            ],
+            'desktop' => 'templates/tabellen/desktop_meisterschaftstabelle.tmp.php',
+            'mobil' => 'templates/tabellen/mobil_meisterschaftstabelle.tmp.php',
         ];
     }
 
@@ -287,7 +281,7 @@ class Tabelle
                 FROM tournaments t
                 JOIN num_of_teams n ON n.turnier_id = t.turnier_id
                 WHERE rn <= 4
-                ORDER BY team_id, ergebnis DESC;
+                ORDER BY team_id, ergebnis DESC, datum DESC;
          ";
         $result = db::$db->query($sql, $saison, $spieltag)->esc()->fetch();
         $return = [];
@@ -312,7 +306,6 @@ class Tabelle
         // In vergangenen Saisons werden nur Teams mit Ergebnissen gelistet
         if ($saison == Config::SAISON) {
             $list_of_teamids = Team::get_liste_ids();
-            shuffle($list_of_teamids);
             foreach ($list_of_teamids as $team_id) {
                 if (!array_key_exists($team_id, $return)) {
                     $return[$team_id] = [];
@@ -510,13 +503,19 @@ class Tabelle
      */
     public static function sortieren_summe(array $value1, array $value2): int
     {
-        if ($value1['summe'] < $value2['summe']) {
-            return 1;
+        if ($value1['summe'] !== $value2['summe']) {
+            return $value2['summe'] <=> $value1['summe'];
         }
-        if ($value1['summe'] > $value2['summe']) {
-            return -1;
+
+        $max1 = max($value1['einzel_ergebnisse'] ?? [0]);
+        $max2 = max($value2['einzel_ergebnisse'] ?? [0]);
+
+        if ($max1 !== $max2) {
+            return $max2 <=> $max1;
         }
-        return max($value2['einzel_ergebnisse']) <=> max($value1['einzel_ergebnisse']);
+
+        // Nur für stabile Reihenfolge, beeinflusst nicht die Platzvergabe
+        return $value1['team_id'] <=> $value2['team_id'];
     }
 
     /**

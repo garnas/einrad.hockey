@@ -1,5 +1,5 @@
 <!--Navigation für Desktop und Tablet -->
-<div class="w3-display-container w3-hide-small">
+<div class="w3-display-container">
     
     <!-- Hintergrundbild -->
     <img src="<?= Html::get_hintergrund_bild() ?>"
@@ -10,24 +10,11 @@
     <!-- oben links -->
     <div class="w3-display-topleft w3-margin w3-padding-large">
         <!--Logo (nur large) -->
-        <div class="w3-hide-medium">
+        <div>
             <a href="<?= Env::BASE_URL ?>/liga/neues.php">
-                <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz_small.png" 
+                <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz.png"
                      alt="kurzes Logo" class="w3-image w3-left w3-bar-item" 
-                     style="margin-top: 30px; max-width: 200px;">
-            </a>
-        </div>
-    </div>
-
-    <!-- unten links -->
-    <div class="w3-display-bottomleft w3-margin w3-padding-large">
-        <!--Logo (nur medium) -->
-        <div class="w3-hide-large">
-            <a href="<?= Env::BASE_URL ?>/liga/neues.php">
-                <img src="<?= Env::BASE_URL ?>/bilder/logo_lang_small.png" 
-                     class="w3-image w3-left w3-bar-item" 
-                     alt="langes Logo" 
-                     style="max-width: 70%;">
+                     style="margin-top: 30px; max-width: 230px;">
             </a>
         </div>
     </div>

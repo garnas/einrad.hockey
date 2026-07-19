@@ -136,9 +136,17 @@ include '../../templates/header.tmp.php';
                                         <td class="w3-text-primary" style=""><?= Html::link('../liga/turnier_details.php?turnier_id=' . $turnier->id(), 'Phasenwechsel', icon: "event") ?></td>
                                         <td>
                                             <?= TurnierService::getLosDatum($turnier)?> (Loszeitpunkt)
-                                            <?php if ($turnier->isSofortOeffnen() && $turnier->isWartePhase()): ?>
+                                            <?php if ($turnier->isSofortOeffnenFrei() && $turnier->isWartePhase()): ?>
                                                 <br>
                                                 <span class="w3-text-grey">Das Turnier wird direkt nach dem Phasenwechsel auf ABCDEF geöffnet</span>
+                                            <?php endif; ?>
+                                            <?php if ($turnier->isSofortOeffnenRunter() && $turnier->isWartePhase()): ?>
+                                                <br>
+                                                <span class="w3-text-grey">Das Turnier wird direkt nach dem Phasenwechsel auf <?= BlockService::niedrigererTurnierBlock($turnier) ?> geöffnet</span>
+                                            <?php endif; ?>
+                                            <?php if ($turnier->isSofortOeffnenHoch() && $turnier->isWartePhase()): ?>
+                                                <br>
+                                                <span class="w3-text-grey">Das Turnier wird direkt nach dem Phasenwechsel auf <?= BlockService::hoehererTurnierBlock($turnier) ?> geöffnet</span>
                                             <?php endif; ?>
                                         </td>
                                     </tr>

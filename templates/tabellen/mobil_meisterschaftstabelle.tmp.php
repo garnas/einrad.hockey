@@ -16,7 +16,7 @@
         
         <!-- Kopfzeile fuer das Team -->
         <div onclick="show_small_results('meister', <?=$key?>)" style="cursor: pointer" id="small-meister-head-<?=$key?>" class="w3-row <?=$nthcolor?> w3-border-bottom w3-border-grey w3-hover-text-secondary">
-            <div class="w3-col w3-left w3-padding-8 w3-right-align?>" style="width: 36px;"><!-- Platzierung --></div>
+            <div class="w3-col w3-left w3-padding-8 w3-right-align <?=$platz_color[$zeile['platz']] ?? ''?>" style="width: 36px;"><?= $zeile['platz'] ?></div>
             <div class="w3-col w3-right w3-padding-8 w3-center" style="width: 42px;">
                 <span>
                     <span id="small-meister-icon-show-<?=$key?>" class="material-icons w3-text-primary" style="display:block">arrow_drop_down</span>

@@ -10,7 +10,7 @@ class Discord
             return json_encode([
                 "content" => $message,
                 "username" => "DieFlotteSpeiche",
-                "avatar_url" => "https://einrad.hockey/bilder/logo_kurz_small.png",
+                "avatar_url" => "https://einrad.hockey/bilder/logo_kurz.jpg",
             ], \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
         } catch (JsonException $exception) {
             Helper::log("discord.log", $exception->getMessage() . "/r/n" . $exception->getTraceAsString());

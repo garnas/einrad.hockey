@@ -2,8 +2,10 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Entity\TurnierBericht\TurnierBericht;
 use App\Event\Turnier\nLigaBot;
 use App\Repository\Turnier\TurnierRepository;
+use App\Repository\TurnierBericht\TurnierBerichtRepository;
 use App\Service\Team\FreilosService;
 use App\Service\Neuigkeit\FileService;
 
@@ -65,6 +67,11 @@ if (isset($_POST['ergebnis_eintragen'])) {
 // Spielplan automatisch erstellen
 if (isset($_POST['auto_spielplan_erstellen'])) {
     if (Spielplan::spielplan_erstellen($turnier)) {
+        if (TurnierBerichtRepository::get()->bericht($turnier_id) === null) {
+            $turnierEntity = TurnierRepository::get()->turnier($turnier_id);
+            $turnierbericht = new TurnierBericht($turnierEntity);
+            TurnierBerichtRepository::get()->speichern($turnierbericht);
+        }
         Html::info("Das Turnier wurde in die Spielplan-Phase versetzt. Der Spielplan wird jetzt angezeigt.");
         Helper::reload('/liga/spielplan.php?turnier_id=' . $turnier->get_turnier_id());
     } else {
@@ -96,6 +103,11 @@ if (isset($_POST['spielplan_hochladen'])) {
             } else {
                 $turnier->upload_spielplan($target_file_pdf, 'spielplan');
                 Html::info("Manueller Spielplan hochgeladen. Das Turnier wurde in die Spielplan-Phase versetzt.");
+            }
+            if (TurnierBerichtRepository::get()->bericht($turnier_id) === null) {
+                $turnierEntity = TurnierRepository::get()->turnier($turnier_id);
+                $turnierbericht = new TurnierBericht($turnierEntity);
+                TurnierBerichtRepository::get()->speichern($turnierbericht);
             }
             Helper::reload(get: "?turnier_id=" . $turnier->get_turnier_id());
         }
