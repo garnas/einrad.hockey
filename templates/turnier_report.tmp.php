@@ -215,7 +215,7 @@ use App\Service\Turnier\TurnierSnippets;
                     <tr>
                         <td colspan="5" class="w3-left-align">
                             <span class="w3-text-secondary">Grund: </span>
-                            <?= nl2br($zeitstrafe->getGrund())?></td>
+                            <?= nl2br(e($zeitstrafe->getGrund()))?></td>
                     </tr>
                 <?php endforeach; ?>
             </table>
@@ -287,7 +287,7 @@ use App\Service\Turnier\TurnierSnippets;
                             id="zeitstrafe_bericht" 
                             name="zeitstrafe_bericht" 
                             required
-                    ><?=stripcslashes($_POST['text'] ?? '')?></textarea>
+                    ><?=stripcslashes(e($_POST['text'] ?? ''))?></textarea>
                     <p id="zeitstrafe_counter"></p>
                 </div>
                 <p>
@@ -300,7 +300,7 @@ use App\Service\Turnier\TurnierSnippets;
 
 <!-- Turnierbericht -->
 <div class="w3-card-4 w3-panel w3-padding-24"> 
-    <h3 class="w3-text-secondary">Turnierbericht</h3>
+    <h3 class="w3-text-secondary"><label for="turnierbericht">Turnierbericht</label></h3>
     <div class="w3-panel w3-leftbar w3-border-grey w3-light-grey">
         <p>
             Ligamodus 4.16 benennt eine Auswahl an besonderen Vorkommnissen, die hier aufgeführt werden sollten. Beispielsweise eine falsche Spielerausleihe oder verspätete Anreise eines Teams. Nutz das Feld darüber hinaus für eine kurze Zusammenfassung des Turniers. Auffällige Situationen oder zerstrittene Spiele sollten auch immer dem Ligaausschuss gemeldet werden.
@@ -315,7 +315,7 @@ use App\Service\Turnier\TurnierSnippets;
                         rows="12"
                         id="turnierbericht"
                         name="turnierbericht"
-                ><?=$_POST['text'] ?? ''?><?=e($turnier_bericht->getBericht())?></textarea>
+                ><?=e($_POST['text'] ?? '')?><?=e($turnier_bericht->getBericht())?></textarea>
                 <p id="turnierbericht_counter"><p>
             </p>
             <input type="submit" value="Speichern" name="set_turnierbericht" class="w3-button w3-tertiary">
