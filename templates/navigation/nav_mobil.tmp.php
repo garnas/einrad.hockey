@@ -8,16 +8,6 @@
                  style="max-width: 140px">
         </a>
     </div>
-    <!-- Searchbox -->
-    <div class="w3-panel">
-        <div class="w3-margin-left w3-margin-right">
-            <div role="search" data-ss360="true">
-                <label for="suche_mobil"></label>
-                <input class="searchbox" id="suche_mobil" type="search" placeholder="Suche" />
-                <button class="searchbutton"></button>
-            </div>
-        </div>
-    </div>
 
     <!-- Info -->
     <a href="<?= Env::BASE_URL ?>/liga/ueber_uns.php" class="no">
