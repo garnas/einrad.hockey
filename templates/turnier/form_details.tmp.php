@@ -8,12 +8,12 @@
         <label class="w3-text-primary" for="text">Weitere Informationen</label>
         <textarea class="w3-input w3-border w3-border-primary" onkeyup="woerter_zaehlen(1500);" maxlength="1500"
                     rows="4" id="text" name="hinweis"
-                    ><?=stripcslashes($turnier_hinweis ?? '')?></textarea>
+                    ><?=stripcslashes(e($turnier_hinweis ?? ''))?></textarea>
     <p id="counter"><p>
     </p>
     <p>
         <label class="w3-text-primary" for="tname">Turniername</label>
-        <input type="text" maxlength="60" value="<?=$turnier_name ?? ''?>" class="w3-input w3-border w3-border-primary" id="tname" name="tname">
+        <input type="text" maxlength="60" value="<?= e($turnier_name ?? '') ?>" class="w3-input w3-border w3-border-primary" id="tname" name="tname">
     </p>
     <p>
         <label class="w3-text-primary" for="startgebuehr">Startgebühr<span class="w3-text-secondary">*</span></label>
