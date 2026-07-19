@@ -13,22 +13,28 @@ echo "Spieltag: " . $aktueller_spieltag . "<br>";
 $turniere = nTurnier::get_turniere_spieltag($aktueller_spieltag);
 
 foreach ($turniere as $turnier) {
-    # Check if dienstag vor dem Datum
     $datum_string = $turnier->get_datum();
     $datum_turnier = strtotime($datum_string);
     $aktuelles_datum = time();
     $absage_grund = "";
     $erstellen = true;
-    # Wenn heute Dienstag ist, dann einen Tag weiter gehen
+
+    # Sollte heute Dienstag sein, dann schieben das Datum einmal nach vorne
     if (date("N", $aktuelles_datum) == 2) {
         $aktuelles_datum = strtotime("+1 day", $aktuelles_datum);
     }
-    # Check Dienstag zwischen morgen und dem Datum des Turnieres
+
+    # Prüfe, ob noch zwei Dienstage zwischen dem Turnier und dem Ausgangstag liegen
+    $dienstag_counter = 0;
     while ($aktuelles_datum < $datum_turnier) {
         # Dienstag = 2. Wochentag
         if (date("N", $aktuelles_datum) == 2) {
-            $erstellen = false;
-            break;
+            $dienstag_counter++;
+
+            if ($dienstag_counter > 1) {
+                $erstellen = false;
+                break;
+            }
         }
         $aktuelles_datum = strtotime("+1 day", $aktuelles_datum);
     }
