@@ -438,7 +438,7 @@ class Html
 
     public static function value_from_post(string $betrag): string
     {
-        $value = $_POST[$betrag] ?? null;
+        $value = e($_POST[$betrag] ?? null);
         return $value ? "value='$value'" : "";
     }
 

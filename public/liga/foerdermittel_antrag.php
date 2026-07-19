@@ -18,7 +18,7 @@ if (isset($_POST['absenden'])) {
     $betrag = $_POST['betrag'];
     $text = $_POST['text'];
     $user_captcha = $_POST['captcha'];
-    if (empty($absender) || empty($bereich) || empty($text)) {
+    if (empty($absender) || empty($betrag) || empty($text)) {
         Html::error("Bitte Formular ausfüllen");
         $error = true;
     }
@@ -88,7 +88,7 @@ include '../../templates/header.tmp.php';
                     type="text"
                     id="name"
                     name="name"
-                    value="<?= $_POST['name'] ?? '' ?>"
+                    value="<?= e($_POST['name'] ?? '') ?>"
                     required
             >
         </p>
@@ -98,12 +98,12 @@ include '../../templates/header.tmp.php';
                     type="email"
                     id="absender"
                     name="absender"
-                    value="<?= $_POST['absender'] ?? '' ?>"
+                    value="<?= e($_POST['absender'] ?? '') ?>"
                     required
             >
         </p>
         <p>
-            <label class="w3-text-grey" for="betrag">Gewünschter Förderbetrag</label>
+            <label class="w3-text-grey" for="betrag">Gewünschter Förderbetrag in Euro</label>
             <input class="w3-input w3-border w3-border-primary" <?= Html::value_from_post("betrag") ?> type="number"
                     step="1" min="1" name="betrag" id="betrag">
         </p>
@@ -114,7 +114,7 @@ include '../../templates/header.tmp.php';
                         id="text"
                         name="text"
                         required
-            ><?= $_POST['text'] ?? '' ?></textarea>
+            ><?= e($_POST['text'] ?? '') ?></textarea>
         </p>
         <p>
             <label class="w3-text-grey" for="captcha">
@@ -135,7 +135,7 @@ include '../../templates/header.tmp.php';
                     name="captcha"
                     placeholder="Captcha eingeben"
                     style="width: 200px;"
-                    value="<?= $_POST['captcha'] ?? '' ?>"
+                    value="<?= e($_POST['captcha'] ?? '') ?>"
                     required
             >
         </p>
