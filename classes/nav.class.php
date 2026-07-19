@@ -38,7 +38,6 @@ class Nav
             [Env::BASE_URL . "/liga/saisontermine.php", "Saisontermine"],
             [Env::BASE_URL . "/liga/ligaleitung.php", "Ligaleitung"],
             [Env::BASE_URL . "/liga/ligakarte.php", "Ligakarte"],
-            [Env::BASE_URL . "/liga/kader.php", "Nationalkader"],
             [Env::LINK_DISCORD, "Discord"],
         ];
     }
@@ -64,6 +63,7 @@ class Nav
     public static function get_organisation(): array
     {
         return [
+            [Env::BASE_URL . "/liga/foerdermittel_antrag.php", "Fördermittelantrag"],
             [Env::BASE_URL . "/teamcenter/tc_login.php", "Teamcenter"],
             [Env::BASE_URL . "/login.php", "Ausschusslogin"]
         ];
@@ -114,7 +114,7 @@ class Nav
         return [
             [Env::BASE_URL . "/liga/ueber_uns.php", "Über uns"],
             [Env::BASE_URL . "/liga/foerdermittel.php", "Fördermittel"],
-            [Env::BASE_URL . "/liga/foerdermittel_antrag.php", "Fördermittelantrag"],
+            [Env::BASE_URL . "/liga/kader.php", "Nationalkader"],
             [Env::BASE_URL . "/liga/content/25jubilaeum.php", "25 Jahre Liga"],
             [Env::BASE_URL . "/liga/content/30jubilaeum.php", "30 Jahre Liga"],
             [Env::BASE_URL . "/liga/content/dm2005.php", "DM 2005"],

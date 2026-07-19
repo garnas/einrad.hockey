@@ -42,7 +42,7 @@
                 <span style="font-size: 22px">ORGA</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach (Nav::get_sonstiges() as Nav::$link) { ?>
+                <?php foreach (Nav::get_organisation() as Nav::$link) { ?>
                     <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
                 <?php } //end for?>
             </div>
@@ -55,8 +55,8 @@
                 <span style="font-size: 22px">BERICHTE</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach (Nav::get_teamcenter() as Nav::$link) { ?>
-                    <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button <?= Nav::$link[2] ?>"><?= Nav::$link[1] ?></a>
+                <?php foreach (Nav::get_berichte() as Nav::$link) { ?>
+                    <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
                 <?php } //end for?>
             </div>
         </div>
@@ -88,7 +88,7 @@
         </div>
 
         <!-- Info -->
-        <div class="w3-dropdown-hover w3-right w3-text-primary" style="">
+        <div class="w3-dropdown-hover w3-right w3-text-primary">
             <a class=" w3-button w3-hover-primary">
                 <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">info</i>
                 <span style="font-size: 22px">INFO</span>
