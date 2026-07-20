@@ -21,15 +21,15 @@ class TurniereListe
     #[ORM\Column(name: "liste_id", type: "integer", nullable: false)]
     private $listeId;
 
-    #[ORM\Column(name: "freilos_gesetzt_am", type: "datetime", nullable: false, options: ["default" => "CURRENT_TIMESTAMP"])]
-    private DateTime $freilosGesetztAm;
+    #[ORM\Column(name: "freilos_gesetzt_am", type: "datetime", nullable: true)]
+    private ?DateTime $freilosGesetztAm;
 
-    public function getFreilosGesetztAm(): DateTime
+    public function getFreilosGesetztAm(): ?DateTime
     {
         return $this->freilosGesetztAm;
     }
 
-    public function setFreilosGesetztAm(DateTime $freilosGesetztAm): self
+    public function setFreilosGesetztAm(?DateTime $freilosGesetztAm): self
     {
         $this->freilosGesetztAm = $freilosGesetztAm;
         return $this;
