@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class SpielplanDetails
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "IDENTITY")]
+    #[ORM\GeneratedValue(strategy: "NONE")]
     #[ORM\Column(name: "spielplan", type: "string", length: 30, nullable: false)]
     private string $spielplan;
 
@@ -27,16 +27,16 @@ class SpielplanDetails
     private string $spielplanPaarung;
 
     #[ORM\Column(name: "plaetze", type: "smallint", nullable: true)]
-    private int $plaetze;
+    private ?int $plaetze;
 
     #[ORM\Column(name: "anzahl_halbzeiten", type: "smallint", nullable: true)]
-    private int $anzahlHalbzeiten;
+    private ?int $anzahlHalbzeiten;
 
     #[ORM\Column(name: "halbzeit_laenge", type: "smallint", nullable: true)]
-    private int $halbzeitLaenge;
+    private ?int $halbzeitLaenge;
 
     #[ORM\Column(name: "puffer", type: "smallint", nullable: true)]
-    private int $puffer;
+    private ?int $puffer;
 
     #[ORM\Column(
         name: "pausen",
@@ -47,56 +47,56 @@ class SpielplanDetails
     )]
     private string $pausen;
 
-    #[ORM\Column(name: "faktor", type: "integer", nullable: false, options: ["comment" => "Nur Nenner"])]
-    private int $faktor;
+    #[ORM\Column(name: "faktor", type: "decimal", precision: 3, scale: 2, nullable: true)]
+    private ?string $faktor;
 
     public function getSpielplan(): ?string
     {
         return $this->spielplan;
     }
 
-    public function isPlaetze(): ?bool
+    public function getPlaetze(): ?int
     {
         return $this->plaetze;
     }
 
-    public function setPlaetze(?bool $plaetze): self
+    public function setPlaetze(?int $plaetze): self
     {
         $this->plaetze = $plaetze;
 
         return $this;
     }
 
-    public function isAnzahlHalbzeiten(): ?bool
+    public function getAnzahlHalbzeiten(): ?int
     {
         return $this->anzahlHalbzeiten;
     }
 
-    public function setAnzahlHalbzeiten(?bool $anzahlHalbzeiten): self
+    public function setAnzahlHalbzeiten(?int $anzahlHalbzeiten): self
     {
         $this->anzahlHalbzeiten = $anzahlHalbzeiten;
 
         return $this;
     }
 
-    public function isHalbzeitLaenge(): ?bool
+    public function getHalbzeitLaenge(): ?int
     {
         return $this->halbzeitLaenge;
     }
 
-    public function setHalbzeitLaenge(?bool $halbzeitLaenge): self
+    public function setHalbzeitLaenge(?int $halbzeitLaenge): self
     {
         $this->halbzeitLaenge = $halbzeitLaenge;
 
         return $this;
     }
 
-    public function isPuffer(): ?bool
+    public function getPuffer(): ?int
     {
         return $this->puffer;
     }
 
-    public function setPuffer(?bool $puffer): self
+    public function setPuffer(?int $puffer): self
     {
         $this->puffer = $puffer;
 
@@ -115,12 +115,12 @@ class SpielplanDetails
         return $this;
     }
 
-    public function isFaktor(): ?bool
+    public function getFaktor(): ?string
     {
         return $this->faktor;
     }
 
-    public function setFaktor(bool $faktor): self
+    public function setFaktor(?string $faktor): self
     {
         $this->faktor = $faktor;
 

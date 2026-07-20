@@ -19,7 +19,7 @@ class TurnierBericht
     #[ORM\Column(name: "bericht_id", type: "integer")]
     private int $berichtId;
 
-    #[ORM\OneToOne(targetEntity: Turnier::class, inversedBy: 'bericht')]
+    #[ORM\OneToOne(targetEntity: Turnier::class)]
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
     private Turnier $turnier;
 

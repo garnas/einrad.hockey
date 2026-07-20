@@ -15,9 +15,6 @@ class TurniereLog
     #[ORM\Column(name: "turnier_log_id", type: "integer", nullable: false)]
     private int $id;
 
-    #[ORM\Column(name: "turnier_id", type: "integer", nullable: false)]
-    private $turnierId;
-
     #[ORM\Column(name: "log_text", type: "string", length: 9000, nullable: false)]
     private $logText;
 
@@ -45,18 +42,6 @@ class TurniereLog
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getTurnierId(): ?int
-    {
-        return $this->turnierId;
-    }
-
-    public function setTurnierId(int $turnierId): self
-    {
-        $this->turnierId = $turnierId;
-
-        return $this;
     }
 
     public function getLogText(): ?string
