@@ -51,7 +51,7 @@ class StrafeTest extends TestCase
 
     public function testStrafeMitTurnier(): void
     {
-        $turnier = TurnierRepository::getErgebnisTurniere(Config::SAISON - 1)->first();
+        $turnier = TurnierRepository::get()->getErgebnisTurniere(Config::SAISON - 1)->first();
         $team = self::provideTeam();
         $this->assertEquals(expected: 0, actual: $team->getStrafen()->count());
         $strafe = new Strafe();

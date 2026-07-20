@@ -4,26 +4,10 @@ namespace App\Repository;
 
 trait TraitSingletonRepository
 {
-    private static self $instance;
-    private static bool $isSetup = false;
-
-    public static function isSetup(): bool
-    {
-        return self::$isSetup;
-    }
-
-    public static function setup(): void
-    {
-        self::$instance = new self();
-        self::$isSetup = true;
-    }
+    private static ?self $instance = null;
 
     public static function get(): self
     {
-        if (!self::isSetup()) {
-            self::setup();
-        }
-        return self::$instance;
+        return self::$instance ??= new self();
     }
-
 }

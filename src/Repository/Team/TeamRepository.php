@@ -41,7 +41,7 @@ class TeamRepository
      * @param nTeam $team
      * @return Collection|Turnier[]
      */
-    public static function getAusrichterTurniere(nTeam $team): Collection|array
+    public function getAusrichterTurniere(nTeam $team): Collection|array
     {
         $query = DoctrineWrapper::manager()
             ->createQueryBuilder()

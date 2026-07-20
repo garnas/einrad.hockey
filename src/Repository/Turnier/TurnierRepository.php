@@ -16,9 +16,9 @@ class TurnierRepository
 {
     use TraitSingletonRepository;
 
-    public EntityRepository $liste;
-    public EntityRepository $turnier;
-    public EntityRepository $bericht;
+    private EntityRepository $liste;
+    private EntityRepository $turnier;
+    private EntityRepository $bericht;
 
     private function __construct()
     {
@@ -61,7 +61,7 @@ class TurnierRepository
     /**
      * @return Turnier[]|Collection
      */
-    public static function getKommendeTurniere(): array|Collection
+    public function getKommendeTurniere(): array|Collection
     {
         $query = DoctrineWrapper::manager()
             ->createQueryBuilder()
@@ -85,7 +85,7 @@ class TurnierRepository
     /**
      * @return Turnier[]|Collection
      */
-    public static function getAlleTurniere(): array|Collection
+    public function getAlleTurniere(): array|Collection
     {
         $query = DoctrineWrapper::manager()
             ->createQueryBuilder()
@@ -106,7 +106,7 @@ class TurnierRepository
     /**
      * @return Turnier[]|Collection
      */
-    public static function getErgebnisTurniere(int $saison = Config::SAISON, bool $desc = true): array|Collection
+    public function getErgebnisTurniere(int $saison = Config::SAISON, bool $desc = true): array|Collection
     {
         $query = DoctrineWrapper::manager()
             ->createQueryBuilder()
@@ -131,7 +131,7 @@ class TurnierRepository
      *
      * @return Turnier[]|Collection
      */
-    public static function getTurnierreportTurniere(int $team_id): array|Collection
+    public function getTurnierreportTurniere(int $team_id): array|Collection
     {
         $query = DoctrineWrapper::manager()
             ->createQueryBuilder()

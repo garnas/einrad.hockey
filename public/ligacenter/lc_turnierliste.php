@@ -10,7 +10,7 @@ use App\Service\Turnier\TurnierSnippets;
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
-$turniere = TurnierRepository::getAlleTurniere();
+$turniere = TurnierRepository::get()->getAlleTurniere();
 
 
 $turniere_abgesagt = $turniere->filter(static function (Turnier $t) {

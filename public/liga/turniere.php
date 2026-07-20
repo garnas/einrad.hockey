@@ -11,7 +11,7 @@ use App\Service\Turnier\TurnierSnippets;
 
 require_once '../../init.php';
 
-$turniere = TurnierRepository::getKommendeTurniere();
+$turniere = TurnierRepository::get()->getKommendeTurniere();
 
 if ($turniere->isEmpty()) {
     Html::info("Es stehen zurzeit keine Turniere aus.");

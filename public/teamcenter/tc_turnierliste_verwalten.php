@@ -10,7 +10,7 @@ require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth
 
 // Relevante Turniere finden
-$turniere = TeamRepository::getAusrichterTurniere($teamEntity);
+$turniere = TeamRepository::get()->getAusrichterTurniere($teamEntity);
 
 if ($turniere->isEmpty()) {
     // Wenn keine eigenen Turniere eingetragen sind, wird auf die TC-Startseite umgeleitet
