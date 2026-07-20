@@ -88,8 +88,11 @@ if (isset($_POST['change_turnier'])) {
         $unixTime = strtotime($_POST['datum']);
         $datum = new DateTime($_POST['datum']);
         $datum_bis = (!isset($_POST['datum_bis']) || $_POST['datum_bis'] === '') ? null : new DateTime($_POST['datum_bis']);
+        $turnier->setDatum($datum);
+        $turnier->setDatumBis($datum_bis);
 
         $phase = (!isset($_POST['phase']) || $_POST['phase'] === '') ? $turnier->getPhase() : $_POST['phase'];
+        $turnier->setPhase($phase);
     }
 
     $plaetze_before = $turnier->getDetails()->getPlaetze();

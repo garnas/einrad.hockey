@@ -36,17 +36,24 @@ include '../../templates/header.tmp.php';?>
 <h1 class="w3-text-primary">Turnier erstellen (Ligaausschuss)</h1>
 <p class="w3-border-top w3-border-grey w3-text-grey">Saison <?=Html::get_saison_string($saison)?></p>
 
-<?php
-include '../../templates/la_team_waehlen.tmp.php';
+<?php include '../../templates/la_team_waehlen.tmp.php'; ?>
 
-if ($show_form) {
-    include "../../templates/turnier/form_ausrichter.tmp.php";
-    include "../../templates/turnier/form_daten.tmp.php";
-    include "../../templates/turnier/form_block.tmp.php";
-    include "../../templates/turnier/form_plaetze.tmp.php";
-    include "../../templates/turnier/form_anfahrt.tmp.php";
-    include "../../templates/turnier/form_details.tmp.php";
-    include "../../templates/turnier/form_orga.tmp.php";
-}
 
-include '../../templates/footer.tmp.php';
+<?php if ($show_form): ?>
+
+    <form method="post">
+        <?php include "../../templates/turnier/form_ausrichter.tmp.php"; ?>
+        <?php include "../../templates/turnier/form_daten.tmp.php"; ?>
+        <?php include "../../templates/turnier/form_block.tmp.php"; ?>
+        <?php include "../../templates/turnier/form_plaetze.tmp.php"; ?>
+        <?php include "../../templates/turnier/form_anfahrt.tmp.php"; ?>
+        <?php include "../../templates/turnier/form_details.tmp.php"; ?>
+        <?php include "../../templates/turnier/form_orga.tmp.php"; ?>
+        <div class="w3-panel w3-card-4">
+            <p>
+                <input type="submit" value="Turnier eintragen" name="create_turnier" class="w3-tertiary w3-button w3-block">
+            </p>
+        </div>
+    <?php endif; ?>
+
+<?php include '../../templates/footer.tmp.php';

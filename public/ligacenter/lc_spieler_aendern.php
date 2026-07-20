@@ -29,7 +29,7 @@ if (isset($_POST['spieler_aendern'])) {
         Helper::reload(get: "?spieler_id=" . $spieler->getSpielerId());
 
     }
-    if ($team->id() != $spieler?->getTeam()->id()) {
+    if ($team->id() != $spieler?->getTeam()?->id()) {
         $spieler->setTeam($team);
         $spieler->setTimestamp(new DateTime());
     }
@@ -147,7 +147,7 @@ include '../../templates/header.tmp.php'; ?>
             <label class="w3-text-primary" for="teamname">Team ändern</label>
             <input type="text"
                    class="w3-input w3-border w3-border-primary"
-                   value="<?= $spieler->getTeam()->getName() ?>"
+                   value="<?= $spieler->getTeam()?->getName() ?>"
                    list="teams"
                    id="teamname"
                    name="teamname">

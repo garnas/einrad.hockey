@@ -38,9 +38,9 @@ class Spieler
     #[ORM\Column(name: "timestamp", type: "datetime", nullable: true)]
     private ?DateTime $timestamp;
 
-    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
+    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id", nullable: true)]
     #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "kader")]
-    private nTeam $team;
+    private ?nTeam $team = null;
 
     public function getSpielerId(): ?int
     {

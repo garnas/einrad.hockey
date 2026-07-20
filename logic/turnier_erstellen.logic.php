@@ -4,18 +4,12 @@ use App\Entity\Turnier\TurnierDetails;
 use App\Entity\Turnier\Turnier;
 use App\Event\Turnier\nLigaBot;
 use App\Event\Turnier\TurnierEventMailBot;
-use App\Repository\Team\TeamRepository;
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Turnier\BlockService;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierValidatorService;
 
 $turnier = null;
-
-$ausrichter_team_id = $_SESSION['logins']['team']['id'];
-$ausrichter_name = $_SESSION['logins']['team']['name'];
-$ausrichter_block = $_SESSION['logins']['team']['block'];
-$ausrichter = TeamRepository::get()->team($ausrichter_team_id);
 
 $block_higher = BlockService::getHigherBlocks($ausrichter_block);
 
