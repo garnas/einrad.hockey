@@ -23,6 +23,7 @@ class Nav
             [Env::BASE_URL . "/liga/tabelle.php#meister", "Meisterschaftstabelle"],
             [Env::BASE_URL . "/liga/tabelle.php#rang", "Rangtabelle"],
             [Env::BASE_URL . "/liga/statistik.php", "Statistik"],
+            [Env::BASE_URL . "/liga/archiv.php", "Saisonarchiv"],
         ];
     }
 
@@ -39,6 +40,7 @@ class Nav
             [Env::BASE_URL . "/liga/ligaleitung.php", "Ligaleitung"],
             [Env::BASE_URL . "/liga/ligakarte.php", "Ligakarte"],
             [Env::LINK_DISCORD, "Discord"],
+            [Env::BASE_URL . "/liga/kontakt.php", "Kontakt"],
         ];
     }
 
