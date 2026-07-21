@@ -1,4 +1,4 @@
-<!--Navigation für Desktop und Tablet -->
+<!--Navigation für Desktop -->
 <div class="w3-display-container">
     
     <!-- Hintergrundbild -->
@@ -9,11 +9,10 @@
     
     <!-- oben links -->
     <div class="w3-display-topleft w3-margin w3-padding-large">
-        <!--Logo (nur large) -->
         <div>
             <a href="<?= Env::BASE_URL ?>/liga/neues.php">
                 <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz.png"
-                     alt="kurzes Logo" class="w3-image w3-left w3-bar-item" 
+                     alt="Logo der Deutschen Einradhockeyliga" class="w3-image w3-left w3-bar-item" 
                      style="margin-top: 30px; max-width: 230px;">
             </a>
         </div>

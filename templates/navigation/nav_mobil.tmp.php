@@ -2,10 +2,10 @@
 <div class="w3-sidebar w3-white w3-bar-block" style="opacity: 0.9; display:none;z-index:5; width: 75%; max-width: 360px" id="mySidebar">
     <div class="w3-center w3-text-primary">
         <a href='<?= Env::BASE_URL ?>/liga/neues.php' class='no'>
-            <img src="<?= Env::BASE_URL ?>/bilder/logo_lang.png"
+            <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz.png"
                  class="w3-image w3-margin-top"
-                 alt="langes Logo"
-                 style="max-width: 280px">
+                 alt="Logo der Deutschen Einradhockeyliga"
+                 style="max-width: 200px">
         </a>
     </div>
 
@@ -63,7 +63,11 @@
     <!-- Hintergrundbild -->
     <img src="<?= Html::get_hintergrund_bild() ?>" class="<?php if (!isset($_SESSION['logins']['la']) && !isset($_SESSION['logins']['team'])) {?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.4;">
     <div class="w3-display-left w3-margin-left">
-        <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz.png" onclick="open_sidebar()" class="w3-image" alt="kurzes Logo" style="max-width: 30%; vertical-align: 22%; cursor: pointer">
+        <img src="<?= Env::BASE_URL ?>/bilder/logo_lang.png" 
+            onclick="open_sidebar()" 
+            class="w3-image" 
+            alt="Logo der Deutschen Einradhockeyliga mit Schriftzug" 
+            style="max-width: 50%; vertical-align: 22%; cursor: pointer">
     </div>
 
     <!-- Burger Menü -->
