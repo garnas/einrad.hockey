@@ -104,16 +104,5 @@
                 <?= Html::icon("logout", tag: "h3") ?> Logout
             </a>
         <?php endif; ?>
-
-        <!-- Suchfeld -->
-        <div style="margin-bottom: 6px;">
-            <div class="w3-margin-left w3-margin-right">
-                <div role="search" data-ss360="true">
-                    <label for="suche_desktop"></label>
-                    <input class="searchbox" id="suche_desktop" type="search" placeholder="Suche" />
-                    <button class="searchbutton"></button>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
