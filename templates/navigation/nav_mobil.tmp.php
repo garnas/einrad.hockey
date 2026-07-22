@@ -27,6 +27,18 @@
         <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
     <?php endforeach; ?>
 
+    <!-- Teamcenter -->
+    <?php if (isset($_SESSION['logins']['team'])): ?>
+        <div class="w3-text-primary">
+            <a style="text-decoration: none" href="<?= Env::BASE_URL ?>/teamcenter/tc_login.php">
+                <h3 class="w3-margin-left"><i style="vertical-align: -20%" class="material-icons">group</i> TEAMCENTER</h3>
+            </a>
+        </div>
+        <?php foreach (Nav::get_teamcenter() as Nav::$link): ?>
+            <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
+        <?php endforeach; ?>
+    <?php endif; ?>
+
     <!-- Modus -->
     <div class="w3-text-primary">
         <h3 class="w3-margin-left"><i style="vertical-align: -16%" class="material-icons">settings</i> MODUS</h3>

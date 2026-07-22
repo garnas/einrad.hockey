@@ -22,17 +22,34 @@
     <div class="w3-display-topright w3-margin w3-padding-large w3-large">
 
         <!-- Organisation -->
-        <div class="w3-dropdown-hover w3-right w3-text-primary" style="background-color: transparent;">
-            <a class="w3-button w3-hover-primary">
-                <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">group</i>
-                <span style="font-size: 22px">ORGA</span>
-            </a>
-            <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach (Nav::get_organisation() as Nav::$link): ?>
-                    <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
-                <?php endforeach; ?>
+        <?php if (!isset($_SESSION['logins']['team'])): ?>
+            <div class="w3-dropdown-hover w3-right w3-text-primary" style="background-color: transparent;">
+                <a class="w3-button w3-hover-primary">
+                    <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">group</i>
+                    <span style="font-size: 22px">ORGA</span>
+                </a>
+                <div class="w3-dropdown-content w3-bar-block w3-border">
+                    <?php foreach (Nav::get_organisation() as Nav::$link): ?>
+                        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
+                    <?php endforeach; ?>
+                </div>
             </div>
-        </div>
+        <?php endif; ?>
+
+        <!-- Teamcenter -->
+        <?php if (isset($_SESSION['logins']['team'])): ?>
+            <div class="w3-dropdown-hover w3-right w3-text-primary" style="background-color: transparent;">
+                <a class="w3-button w3-hover-primary">
+                    <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">group</i>
+                    <span style="font-size: 22px">TEAM</span>
+                </a>
+                <div class="w3-dropdown-content w3-bar-block w3-border">
+                    <?php foreach (Nav::get_teamcenter() as Nav::$link): ?>
+                        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
 
         <!-- Berichte -->
         <div class="w3-dropdown-hover w3-right w3-text-primary" style="background-color: transparent;">

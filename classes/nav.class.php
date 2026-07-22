@@ -37,6 +37,7 @@ class Nav
         return [
             [Env::BASE_URL . "/liga/neuigkeiten.php", "Neuigkeiten"],
             [Env::BASE_URL . "/liga/saisontermine.php", "Saisontermine"],
+            [Env::BASE_URL . "/liga/foerdermittel_antrag.php", "Fördermittelantrag"],
             [Env::BASE_URL . "/liga/ligaleitung.php", "Ligaleitung"],
             [Env::BASE_URL . "/liga/ligakarte.php", "Ligakarte"],
             [Env::LINK_DISCORD, "Discord"],
@@ -65,7 +66,6 @@ class Nav
     public static function get_organisation(): array
     {
         return [
-            [Env::BASE_URL . "/liga/foerdermittel_antrag.php", "Fördermittelantrag"],
             [Env::BASE_URL . "/teamcenter/tc_login.php", "Teamcenter"],
             [Env::BASE_URL . "/login.php", "Ausschusslogin"],
         ];
