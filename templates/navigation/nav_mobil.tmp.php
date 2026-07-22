@@ -2,26 +2,16 @@
 <div class="w3-sidebar w3-white w3-bar-block" style="opacity: 0.9; display:none;z-index:5; width: 75%; max-width: 360px" id="mySidebar">
     <div class="w3-center w3-text-primary">
         <a href='<?= Env::BASE_URL ?>/liga/neues.php' class='no'>
-            <img src="<?= Env::BASE_URL ?>/bilder/logo_lang.png"
+            <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz.png"
                  class="w3-image w3-margin-top"
-                 alt="langes Logo"
-                 style="max-width: 280px">
+                 alt="Logo der Deutschen Einradhockeyliga"
+                 style="max-width: 200px">
         </a>
-    </div>
-    <!-- Searchbox -->
-    <div class="w3-panel">
-        <div class="w3-margin-left w3-margin-right">
-            <div role="search" data-ss360="true">
-                <label for="suche_mobil"></label>
-                <input class="searchbox" id="suche_mobil" type="search" placeholder="Suche" />
-                <button class="searchbutton"></button>
-            </div>
-        </div>
     </div>
 
     <!-- Info -->
-    <a href="<?= Env::BASE_URL ?>/liga/ueber_uns.php" class="no">
-        <h3 class="w3-margin-left w3-text-primary"><i style="vertical-align: -16%" class="material-icons w3-xlarge">info</i> INFO</h3>
+    <a href="<?= Env::BASE_URL ?>/liga/neues.php" class="no">
+        <h3 class="w3-margin-left w3-text-primary"><i style="vertical-align: -16%" class="material-icons">info</i> INFO</h3>
     </a>
     <?php foreach (Nav::get_info() as Nav::$link): ?>
         <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
@@ -37,6 +27,18 @@
         <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
     <?php endforeach; ?>
 
+    <!-- Teamcenter -->
+    <?php if (isset($_SESSION['logins']['team'])): ?>
+        <div class="w3-text-primary">
+            <a style="text-decoration: none" href="<?= Env::BASE_URL ?>/teamcenter/tc_login.php">
+                <h3 class="w3-margin-left"><i style="vertical-align: -20%" class="material-icons">group</i> TEAMCENTER</h3>
+            </a>
+        </div>
+        <?php foreach (Nav::get_teamcenter() as Nav::$link): ?>
+            <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
+        <?php endforeach; ?>
+    <?php endif; ?>
+
     <!-- Modus -->
     <div class="w3-text-primary">
         <h3 class="w3-margin-left"><i style="vertical-align: -16%" class="material-icons">settings</i> MODUS</h3>
@@ -45,24 +47,24 @@
         <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
     <?php endforeach; ?>
 
-    <!-- Teamcenter -->
+    <!-- Berichte -->
     <div class="w3-text-primary">
-        <a style="text-decoration: none" href="<?= Env::BASE_URL ?>/teamcenter/tc_start.php">
-            <h3 class="w3-margin-left"><i style="vertical-align: -20%" class="material-icons w3-xlarge">group</i> TEAMCENTER</h3>
-        </a>
+        <h3 class="w3-margin-left"><i style="vertical-align: -16%" class="material-icons">article</i> BERICHTE</h3>
     </div>
-    <?php foreach (Nav::get_teamcenter() as Nav::$link): ?>
-        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button <?= Nav::$link[2] ?>"><?= Nav::$link[1] ?></a>
+    <?php foreach (Nav::get_berichte() as Nav::$link): ?>
+        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
     <?php endforeach; ?>
 
-    <!-- Sonstiges -->
+    <!-- Organisation -->
     <div class="w3-text-primary">
-        <h3 class="w3-margin-left"><i style="vertical-align: -16%" class="material-icons w3-xlarge">format_list_bulleted</i> SONSTIGES</h3>
+        <a style="text-decoration: none" href="<?= Env::BASE_URL ?>/teamcenter/tc_login.php">
+            <h3 class="w3-margin-left"><i style="vertical-align: -20%" class="material-icons">group</i> ORGA</h3>
+        </a>
     </div>
-    <?php foreach (Nav::get_sonstiges() as Nav::$link): ?>
-        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button <?= Nav::$link[2] ?? '' ?>"><?= Nav::$link[1] ?></a>
+    <?php foreach (Nav::get_organisation() as Nav::$link): ?>
+        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
     <?php endforeach; ?>
-    <a href="#" class="w3-bar-item w3-button"></a>
+
 </div>
 
 <!-- Sidebar Overlay -->
@@ -73,7 +75,11 @@
     <!-- Hintergrundbild -->
     <img src="<?= Html::get_hintergrund_bild() ?>" class="<?php if (!isset($_SESSION['logins']['la']) && !isset($_SESSION['logins']['team'])) {?>w3-card-4<?php } ?>" alt="Hintergrundbild" style="width:100%; opacity: 0.4;">
     <div class="w3-display-left w3-margin-left">
-        <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz.png" onclick="open_sidebar()" class="w3-image" alt="kurzes Logo" style="max-width: 30%; vertical-align: 22%; cursor: pointer">
+        <img src="<?= Env::BASE_URL ?>/bilder/logo_lang.png" 
+            onclick="open_sidebar()" 
+            class="w3-image" 
+            alt="Logo der Deutschen Einradhockeyliga mit Schriftzug" 
+            style="max-width: 50%; vertical-align: 22%; cursor: pointer">
     </div>
 
     <!-- Burger Menü -->

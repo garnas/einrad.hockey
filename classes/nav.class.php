@@ -17,13 +17,13 @@ class Nav
     public static function get_liga(): array
     {
         return [
-            [Env::BASE_URL . "/liga/saisontermine.php", "Saisontermine"],
             [Env::BASE_URL . "/liga/turniere.php", "Turniere"],
             [Env::BASE_URL . "/liga/ergebnisse.php", "Ergebnisse"],
             [Env::BASE_URL . "/liga/teams.php", "Teams"],
             [Env::BASE_URL . "/liga/tabelle.php#meister", "Meisterschaftstabelle"],
             [Env::BASE_URL . "/liga/tabelle.php#rang", "Rangtabelle"],
             [Env::BASE_URL . "/liga/statistik.php", "Statistik"],
+            [Env::BASE_URL . "/liga/archiv.php", "Saisonarchiv"],
         ];
     }
 
@@ -36,11 +36,12 @@ class Nav
     {
         return [
             [Env::BASE_URL . "/liga/neuigkeiten.php", "Neuigkeiten"],
-            [Env::BASE_URL . "/liga/ueber_uns.php", "Interesse?"],
+            [Env::BASE_URL . "/liga/saisontermine.php", "Saisontermine"],
+            [Env::BASE_URL . "/liga/foerdermittel_antrag.php", "Fördermittelantrag"],
             [Env::BASE_URL . "/liga/ligaleitung.php", "Ligaleitung"],
             [Env::BASE_URL . "/liga/ligakarte.php", "Ligakarte"],
-            [Env::BASE_URL . "/liga/kader.php", "Nationalkader"],
             [Env::LINK_DISCORD, "Discord"],
+            [Env::BASE_URL . "/liga/kontakt.php", "Kontakt"],
         ];
     }
 
@@ -57,6 +58,18 @@ class Nav
         ];
     }
 
+    /**
+     * Organisation-Links für die Navigation
+     *
+     * @return string[][]
+     */
+    public static function get_organisation(): array
+    {
+        return [
+            [Env::BASE_URL . "/teamcenter/tc_login.php", "Teamcenter"],
+            [Env::BASE_URL . "/login.php", "Ausschusslogin"],
+        ];
+    }
 
     /**
      * Teamcenterlinks für die Navigation
@@ -78,7 +91,6 @@ class Nav
             [Env::BASE_URL . "/teamcenter/tc_kontaktcenter.php", "Kontaktcenter", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_teamdaten.php", "Teamdaten", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_kader.php", "Kader", $class_text_color],
-            [Env::BASE_URL . "/teamcenter/tc_antrag.php", "Fördermittel", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_pw_aendern.php", "Passwort ändern", $class_text_color],
         ];
         if (isset($_SESSION['logins']['team'])) {
@@ -94,26 +106,21 @@ class Nav
     }
 
     /**
-     * Sonstige Links
+     * Berichte
      *
      * @return string[][]
      */
-    public static function get_sonstiges(): array
+    public static function get_berichte(): array
     {
         return [
             [Env::BASE_URL . "/liga/ueber_uns.php", "Über uns"],
             [Env::BASE_URL . "/liga/foerdermittel.php", "Fördermittel"],
-            [Env::BASE_URL . "/liga/foerdermittel_antrag.php", "Fördermittelantrag"],
+            [Env::BASE_URL . "/liga/kader.php", "Nationalkader"],
             [Env::BASE_URL . "/liga/content/25jubilaeum.php", "25 Jahre Liga"],
             [Env::BASE_URL . "/liga/content/30jubilaeum.php", "30 Jahre Liga"],
             [Env::BASE_URL . "/liga/content/dm2005.php", "DM 2005"],
             [Env::BASE_URL . "/liga/content/dm2019.php", "DM 2019"],
-            [Env::BASE_URL . "/liga/content/ausland.php", "Im Ausland"],
-            [Env::BASE_URL . "/liga/archiv.php", "Archiv"],
-            [Env::BASE_URL . "/login.php", "Ausschusslogin"],
-            [Env::BASE_URL . "/liga/kontakt.php", "Kontakt"],
-            [Env::BASE_URL . "/liga/datenschutz.php", "Datenschutz"],
-            [Env::BASE_URL . "/liga/impressum.php", "Impressum"],
+            [Env::BASE_URL . "/liga/content/ausland.php", "Einradhockey im Ausland"],
         ];
     }
 
@@ -187,6 +194,22 @@ class Nav
     }
 
     /**
+     * Links für die Startseite des Teamcenters
+     *
+     * @return string[][]
+     */
+    public static function get_oc_start(): array
+    {
+        return [
+            [Env::BASE_URL . "/oefficenter/oc_kontaktcenter.php", "Kontaktcenter", "w3-tertiary"],
+            [Env::BASE_URL . "/oefficenter/oc_neuigkeit_eintragen.php", "Neuigkeit eintragen", "w3-tertiary"],
+            [Env::BASE_URL . "/liga/neues.php", "Neuigkeit bearbeiten", "w3-tertiary"],
+            [Env::BASE_URL . "/oefficenter/oc_pw_aendern.php", "Passwort ändern", "w3-grey"],
+            [Env::BASE_URL . "/oefficenter/oc_logout.php", "Logout", "w3-grey"],
+        ];
+    }
+
+    /**
      *  Ligalinks
      */
     public const LINK_TERMINPLANER = 'https://team.einrad.hockey';
@@ -227,14 +250,4 @@ class Nav
     public const LINK_IUF = 'https://unicycling.org/';
     public const LINK_SWISS = 'https://www.swiss-iuc.ch/Wettkaempfe/Einradhockey';
 
-    public static function get_oc_start(): array
-    {
-        return [
-            [Env::BASE_URL . "/oefficenter/oc_kontaktcenter.php", "Kontaktcenter", "w3-tertiary"],
-            [Env::BASE_URL . "/oefficenter/oc_neuigkeit_eintragen.php", "Neuigkeit eintragen", "w3-tertiary"],
-            [Env::BASE_URL . "/liga/neues.php", "Neuigkeit bearbeiten", "w3-tertiary"],
-            [Env::BASE_URL . "/oefficenter/oc_pw_aendern.php", "Passwort ändern", "w3-grey"],
-            [Env::BASE_URL . "/oefficenter/oc_logout.php", "Logout", "w3-grey"],
-        ];
-    }
 }

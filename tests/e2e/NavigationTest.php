@@ -19,11 +19,16 @@ class NavigationTest extends TestCase
     public static function provideUrls(): array
     {
         $pages = array_merge(
-            Nav::get_info(),
             Nav::get_liga(),
+            Nav::get_info(),
             Nav::get_modus(),
+            Nav::get_organisation(),
+            Nav::get_teamcenter(),
+            Nav::get_berichte(),
+            Nav::get_lc_start(),
+            Nav::get_lc_downloads(),
+            Nav::get_tc_start(),
             Nav::get_oc_start(),
-            Nav::get_sonstiges(),
         );
 
         # Only start

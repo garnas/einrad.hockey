@@ -1,4 +1,4 @@
-<!--Navigation für Desktop und Tablet -->
+<!--Navigation für Desktop -->
 <div class="w3-display-container">
     
     <!-- Hintergrundbild -->
@@ -9,11 +9,10 @@
     
     <!-- oben links -->
     <div class="w3-display-topleft w3-margin w3-padding-large">
-        <!--Logo (nur large) -->
         <div>
             <a href="<?= Env::BASE_URL ?>/liga/neues.php">
-                <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz.png" 
-                     alt="kurzes Logo" class="w3-image w3-left w3-bar-item" 
+                <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz.png"
+                     alt="Logo der Deutschen Einradhockeyliga" class="w3-image w3-left w3-bar-item" 
                      style="margin-top: 30px; max-width: 230px;">
             </a>
         </div>
@@ -22,28 +21,45 @@
     <!-- oben rechts -->
     <div class="w3-display-topright w3-margin w3-padding-large w3-large">
 
-        <!-- Sonstiges -->
-        <div class="w3-dropdown-hover w3-right w3-text-primary" style="background-color: transparent;">
-            <a class="w3-button w3-hover-primary">
-                <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">format_list_bulleted</i>
-                <span style="font-size: 22px">SONSTIGES</span>
-            </a>
-            <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach (Nav::get_sonstiges() as Nav::$link): ?>
-                    <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
-                <?php endforeach; ?>
+        <!-- Organisation -->
+        <?php if (!isset($_SESSION['logins']['team'])): ?>
+            <div class="w3-dropdown-hover w3-right w3-text-primary" style="background-color: transparent;">
+                <a class="w3-button w3-hover-primary">
+                    <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">group</i>
+                    <span style="font-size: 22px">ORGA</span>
+                </a>
+                <div class="w3-dropdown-content w3-bar-block w3-border">
+                    <?php foreach (Nav::get_organisation() as Nav::$link): ?>
+                        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
+                    <?php endforeach; ?>
+                </div>
             </div>
-        </div>
+        <?php endif; ?>
 
         <!-- Teamcenter -->
-        <div class="w3-dropdown-hover w3-right w3-text-primary">
+        <?php if (isset($_SESSION['logins']['team'])): ?>
+            <div class="w3-dropdown-hover w3-right w3-text-primary" style="background-color: transparent;">
+                <a class="w3-button w3-hover-primary">
+                    <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">group</i>
+                    <span style="font-size: 22px">TEAM</span>
+                </a>
+                <div class="w3-dropdown-content w3-bar-block w3-border">
+                    <?php foreach (Nav::get_teamcenter() as Nav::$link): ?>
+                        <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <!-- Berichte -->
+        <div class="w3-dropdown-hover w3-right w3-text-primary" style="background-color: transparent;">
             <a class="w3-button w3-hover-primary">
-                <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">group</i>
-                <span style="font-size: 22px">TEAMCENTER</span>
+                <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">article</i>
+                <span style="font-size: 22px">BERICHTE</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach (Nav::get_teamcenter() as Nav::$link): ?>
-                    <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button <?= Nav::$link[2] ?>"><?= Nav::$link[1] ?></a>
+                <?php foreach (Nav::get_berichte() as Nav::$link): ?>
+                    <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
                 <?php endforeach; ?>
             </div>
         </div>
@@ -65,7 +81,7 @@
         <div class="w3-dropdown-hover w3-right w3-text-primary">
             <a class=" w3-button w3-hover-primary">
                 <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">emoji_events</i>
-                <span style="font-size: 22px">LIGA</span>
+                <span style="font-size: 22px">SAISON <?=Html::get_saison_string()?></span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
                 <?php foreach (Nav::get_liga() as Nav::$link): ?>
@@ -104,16 +120,5 @@
                 <?= Html::icon("logout", tag: "h3") ?> Logout
             </a>
         <?php endif; ?>
-
-        <!-- Suchfeld -->
-        <div style="margin-bottom: 6px;">
-            <div class="w3-margin-left w3-margin-right">
-                <div role="search" data-ss360="true">
-                    <label for="suche_desktop"></label>
-                    <input class="searchbox" id="suche_desktop" type="search" placeholder="Suche" />
-                    <button class="searchbutton"></button>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
