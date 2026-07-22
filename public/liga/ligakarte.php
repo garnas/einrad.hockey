@@ -67,7 +67,14 @@ include '../../templates/header.tmp.php';
   
 <p><i>If your team resides outside of Germany, please contact <?=Html::mailto(Env::TECHNIKMAIL)?> to be included in the map.</i></p>
 
-<div class='w3-card-4' style='height: 70vh; width: 100%; max-height: 800px; margin: auto;' id="map">
+<div class='w3-card-4' style='height: 70vh; width: 100%; max-height: 800px; margin: auto; position: relative;' id="map_container">
+  <div id="map" style="width: 100%; height: 100%;"></div>
+  <div id="map_consent" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; background-color: #eee;">
+    <div style="max-width: 500px; padding: 1em;">
+      <p>Zur Anzeige der Karte wird eine Verbindung zu Google Maps hergestellt und deine IP-Adresse an Google übertragen. Mehr Informationen findest du in unserer <?=Html::link("datenschutz.php", "Datenschutzerklärung")?>.</p>
+      <button onclick="ladeGoogleMaps()" class="w3-button w3-tertiary">Karte laden und Google Maps zustimmen</button>
+    </div>
+  </div>
 </div>
 
 <h2 class='w3-border-bottom w3-text-primary'>Mitspieler suchen</h2>
@@ -101,10 +108,21 @@ include '../../templates/header.tmp.php';
   </form>
 </div>
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwgrtZFHGafGYgopQSVoxGrBOBxVdcaUE&callback=initMap">
-</script>
-
 <script>
+function ladeGoogleMaps() {
+  localStorage.setItem('google_maps_consent', 'true');
+  document.getElementById('map_consent').style.display = 'none';
+  var script = document.createElement('script');
+  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAwgrtZFHGafGYgopQSVoxGrBOBxVdcaUE&callback=initMap';
+  script.async = true;
+  script.defer = true;
+  document.body.appendChild(script);
+}
+
+if (localStorage.getItem('google_maps_consent') === 'true') {
+  ladeGoogleMaps();
+}
+
 function initMap() {
   var mitte = {lat: 51.23, lng: 10.47};
   var map = new google.maps.Map(document.getElementById('map'), {
