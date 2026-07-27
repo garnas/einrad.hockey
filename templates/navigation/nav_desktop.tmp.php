@@ -12,7 +12,7 @@
         <!--Logo (nur large) -->
         <div>
             <a href="<?= Env::BASE_URL ?>/liga/neues.php">
-                <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz.png" 
+                <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz.png"
                      alt="kurzes Logo" class="w3-image w3-left w3-bar-item" 
                      style="margin-top: 30px; max-width: 230px;">
             </a>
@@ -104,16 +104,5 @@
                 <?= Html::icon("logout", tag: "h3") ?> Logout
             </a>
         <?php endif; ?>
-
-        <!-- Suchfeld -->
-        <div style="margin-bottom: 6px;">
-            <div class="w3-margin-left w3-margin-right">
-                <div role="search" data-ss360="true">
-                    <label for="suche_desktop"></label>
-                    <input class="searchbox" id="suche_desktop" type="search" placeholder="Suche" />
-                    <button class="searchbutton"></button>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
