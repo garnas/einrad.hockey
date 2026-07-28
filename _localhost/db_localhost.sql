@@ -13284,7 +13284,7 @@ CREATE TABLE `spieler` (
 --
 
 INSERT INTO `spieler` (`spieler_id`, `team_id`, `vorname`, `nachname`, `jahrgang`, `geschlecht`, `schiri`, `junior`, `letzte_saison`, `timestamp`) VALUES
-(1, 20, 'Vorname', 'Nachname', 2000, 'w', NULL, NULL, 31, NULL),
+(1, 20, 'Vorname', 'Nachname', 2000, 'w', NULL, NULL, 32, NULL),
 (2, 20, 'Vorname', 'Nachname', 2000, 'w', NULL, NULL, 31, NULL),
 (3, NULL, 'Vorname', 'Entwickler', 1234, 'd', NULL, NULL, 30, '2025-12-01 21:54:15'),
 (5, 87, 'Vorname', 'Nachname', 2000, 'w', NULL, NULL, 31, NULL),
