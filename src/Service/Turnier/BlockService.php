@@ -2,13 +2,13 @@
 
 namespace App\Service\Turnier;
 
+use Config;
 use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
-use Config;
 
 class BlockService
 {
-    public static function getHigherBlocks($block): array
+    public static function getHigherBlocks(string $block): array
     {
         //  Höhere mögliche Turnierblöcke Blöcke werden gesucht und an sollen an turner_erstellen.tmp.php übergeben werden
         $block_higher = []; //  Array der möglichen höheren Turnierblöcke
@@ -17,7 +17,7 @@ class BlockService
         $chosen = array_search($block, Config::BLOCK);
 
         foreach (Config::BLOCK as $blockVgl) {
-            if (array_search($blockVgl, Config::BLOCK) <= $chosen) {
+            if (array_search($blockVgl, Config::BLOCK) < $chosen) {
                 $block_higher[] = $blockVgl;
             }
         }
@@ -40,12 +40,23 @@ class BlockService
                 return "(NL)";
             }
 
-            if ($blockContext->isSofortOeffnen() && $blockContext->isWartePhase()) {
+            if (TurnierService::isSofortOeffnen($blockContext) && $blockContext->isWartePhase()) {
                 $blockToHighlight = $blockContext->getBlock();
+
+                $base = Config::BLOCK_ALL[0];
+
+                if ($blockContext->isSofortOeffnenHoch()) {
+                    $base = self::hoehererTurnierBlock($blockContext);
+                }
+
+                if ($blockContext->isSofortOeffnenRunter()) {
+                    $base = self::niedrigererTurnierBlock($blockContext);
+                }
+
                 $string = str_replace(
                     $blockToHighlight,
                     "<span class='w3-text-black' style='font-style: normal'>$blockToHighlight</span>",
-                    Config::BLOCK_ALL[0],
+                    $base,
                 );
                 return "(<span class='w3-text-gray' style='font-style: italic'>" . $string . "</span>)";
             }
@@ -62,16 +73,27 @@ class BlockService
         }
 
         if (\is_array($blockContext)) {
-            return "(" . implode(",", $blockContext) . ")";
+            return "(" . implode(", ", $blockContext) . ")";
         }
 
         return "";
     }
 
+    /**
+     * @param $turnier Turnier
+     * @return string
+     *
+     * Gibt die vorherigen Turnierblöcke ergänzt um den höheren Turnierblock zurück. Wichtig: Es wird nicht geprüft, ob dies überhaupt möglich ist!
+     *
+     */
     public static function hoehererTurnierBlock(Turnier $turnier): string
     {
         // Nimm den ersten Buchstaben
-        $firstChar = substr($turnier->getBlock(), 0);
+        $firstChar = substr($turnier->getBlock(), 0, 1);
+
+        if ($firstChar === 'A') {
+            return $turnier->getBlock();
+        }
 
         // Berechne den vorhergehenden Buchstaben im Alphabet
         $ascii = \ord(strtoupper($firstChar));
@@ -83,11 +105,21 @@ class BlockService
         return $prevChar . $turnier->getBlock();
     }
 
+    /**
+     * @param $turnier Turnier
+     * @return string
+     *
+     * Gibt die vorherigen Turnierblöcke ergänzt um den niedrigeren Turnierblock zurück. Wichtig: Es wird nicht geprüft, ob dies überhaupt möglich ist!
+     *
+     */
     public static function niedrigererTurnierBlock(Turnier $turnier): string
     {
-
         // Letzten Buchstaben holen
         $lastChar = substr($turnier->getBlock(), -1);
+
+        if ($lastChar === 'F') {
+            return $turnier->getBlock();
+        }
 
         // ASCII-Wert ermitteln
         $ascii = \ord(strtoupper($lastChar));

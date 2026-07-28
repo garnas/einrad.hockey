@@ -1,5 +1,5 @@
 <!--Navigation für Desktop und Tablet -->
-<div class="w3-display-container w3-hide-small">
+<div class="w3-display-container">
     
     <!-- Hintergrundbild -->
     <img src="<?= Html::get_hintergrund_bild() ?>"
@@ -10,24 +10,11 @@
     <!-- oben links -->
     <div class="w3-display-topleft w3-margin w3-padding-large">
         <!--Logo (nur large) -->
-        <div class="w3-hide-medium">
+        <div>
             <a href="<?= Env::BASE_URL ?>/liga/neues.php">
-                <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz_small.png" 
+                <img src="<?= Env::BASE_URL ?>/bilder/logo_kurz.png"
                      alt="kurzes Logo" class="w3-image w3-left w3-bar-item" 
-                     style="margin-top: 30px; max-width: 200px;">
-            </a>
-        </div>
-    </div>
-
-    <!-- unten links -->
-    <div class="w3-display-bottomleft w3-margin w3-padding-large">
-        <!--Logo (nur medium) -->
-        <div class="w3-hide-large">
-            <a href="<?= Env::BASE_URL ?>/liga/neues.php">
-                <img src="<?= Env::BASE_URL ?>/bilder/logo_lang_small.png" 
-                     class="w3-image w3-left w3-bar-item" 
-                     alt="langes Logo" 
-                     style="max-width: 70%;">
+                     style="margin-top: 30px; max-width: 230px;">
             </a>
         </div>
     </div>
@@ -42,9 +29,9 @@
                 <span style="font-size: 22px">SONSTIGES</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach (Nav::get_sonstiges() as Nav::$link) { ?>
+                <?php foreach (Nav::get_sonstiges() as Nav::$link): ?>
                     <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
-                <?php } //end for?>
+                <?php endforeach; ?>
             </div>
         </div>
 
@@ -55,9 +42,9 @@
                 <span style="font-size: 22px">TEAMCENTER</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach (Nav::get_teamcenter() as Nav::$link) { ?>
+                <?php foreach (Nav::get_teamcenter() as Nav::$link): ?>
                     <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button <?= Nav::$link[2] ?>"><?= Nav::$link[1] ?></a>
-                <?php } //end for?>
+                <?php endforeach; ?>
             </div>
         </div>
 
@@ -68,9 +55,9 @@
                 <span style="font-size: 22px">MODUS</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach (Nav::get_modus() as Nav::$link) { ?>
+                <?php foreach (Nav::get_modus() as Nav::$link): ?>
                     <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
-                <?php } //end for?>
+                <?php endforeach; ?>
             </div>
         </div>
 
@@ -81,22 +68,22 @@
                 <span style="font-size: 22px">LIGA</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach (Nav::get_liga() as Nav::$link) { ?>
+                <?php foreach (Nav::get_liga() as Nav::$link): ?>
                     <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
-                <?php } //end for?>
+                <?php endforeach; ?>
             </div>
         </div>
 
         <!-- Info -->
-        <div class="w3-dropdown-hover w3-right w3-text-primary" style="">
+        <div class="w3-dropdown-hover w3-right w3-text-primary">
             <a class=" w3-button w3-hover-primary">
                 <i style="vertical-align: -18.5%" class="material-icons w3-xlarge">info</i>
                 <span style="font-size: 22px">INFO</span>
             </a>
             <div class="w3-dropdown-content w3-bar-block w3-border">
-                <?php foreach (Nav::get_info() as Nav::$link) { ?>
+                <?php foreach (Nav::get_info() as Nav::$link): ?>
                     <a href="<?= Nav::$link[0] ?>" class="w3-bar-item w3-button"><?= Nav::$link[1] ?></a>
-                <?php } //end for?>
+                <?php endforeach; ?>
             </div>
         </div>
     </div>
@@ -104,18 +91,18 @@
     <!-- unten rechts -->
     <div class="w3-display-bottomright w3-text-primary w3-margin w3-padding-large w3-large">
         <!-- Logout -->
-        <?php if (isset($_SESSION['logins']['team'])) {?>
+        <?php if (isset($_SESSION['logins']['team'])): ?>
             <a href='<?= Env::BASE_URL ?>/teamcenter/tc_logout.php' class="w3-button w3-right w3-hover-primary">
                 <?= Html::icon("logout", 24, 26) ?> Logout
             </a>
-        <?php } elseif (LigaLeitung::is_logged_in("team_social_media")) {?>
+        <?php elseif (LigaLeitung::is_logged_in("team_social_media")): ?>
             <a href='<?= Env::BASE_URL ?>/oefficenter/oc_logout.php' class="w3-button w3-right w3-hover-primary">
                 <?= Html::icon("logout", tag: "h3") ?> Logout
             </a>
-        <?php } elseif (LigaLeitung::is_logged_in("ligaausschuss")) {?>
+        <?php elseif (LigaLeitung::is_logged_in("ligaausschuss")): ?>
             <a href='<?= Env::BASE_URL ?>/ligacenter/lc_logout.php' class="w3-button w3-right w3-hover-primary">
                 <?= Html::icon("logout", tag: "h3") ?> Logout
             </a>
-        <?php } //end if?>
+        <?php endif; ?>
     </div>
 </div>

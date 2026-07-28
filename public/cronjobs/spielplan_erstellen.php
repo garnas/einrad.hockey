@@ -1,7 +1,9 @@
 <?php
 
 use App\Event\Turnier\TurnierEventMailBot;
+use App\Repository\TurnierBericht\TurnierBerichtRepository;
 use App\Repository\Turnier\TurnierRepository;
+use App\Entity\TurnierBericht\TurnierBericht;
 use App\Service\Turnier\TurnierService;
 
 require_once '../../init.php';
@@ -13,22 +15,28 @@ echo "Spieltag: " . $aktueller_spieltag . "<br>";
 $turniere = nTurnier::get_turniere_spieltag($aktueller_spieltag);
 
 foreach ($turniere as $turnier) {
-    # Check if dienstag vor dem Datum
     $datum_string = $turnier->get_datum();
     $datum_turnier = strtotime($datum_string);
     $aktuelles_datum = time();
     $absage_grund = "";
     $erstellen = true;
-    # Wenn heute Dienstag ist, dann einen Tag weiter gehen
+
+    # Sollte heute Dienstag sein, dann schieben das Datum einmal nach vorne
     if (date("N", $aktuelles_datum) == 2) {
         $aktuelles_datum = strtotime("+1 day", $aktuelles_datum);
     }
-    # Check Dienstag zwischen morgen und dem Datum des Turnieres
+
+    # Prüfe, ob noch zwei Dienstage zwischen dem Turnier und dem Ausgangstag liegen
+    $dienstag_counter = 0;
     while ($aktuelles_datum < $datum_turnier) {
         # Dienstag = 2. Wochentag
         if (date("N", $aktuelles_datum) == 2) {
-            $erstellen = false;
-            break;
+            $dienstag_counter++;
+
+            if ($dienstag_counter > 1) {
+                $erstellen = false;
+                break;
+            }
         }
         $aktuelles_datum = strtotime("+1 day", $aktuelles_datum);
     }
@@ -57,6 +65,8 @@ foreach ($turniere as $turnier) {
             TurnierEventMailBot::mailCanceled($turnier_new);
             Html::info("Abgesagt: " . $turnier->get_turnier_id());
         } elseif (Spielplan::spielplan_erstellen($turnier)) { # Weitere Checks für den LA in dieser Funktion
+            $turnierbericht = new TurnierBericht($turnier_new);
+            TurnierBerichtRepository::get()->speichern($turnierbericht);
             Html::info("Spielplan für " . $turnier->get_turnier_id() . " erstellt");
         } else {
             Html::error("Keinen Spielplan für " . $turnier->get_turnier_id() . " erstellt");

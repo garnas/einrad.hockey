@@ -9,6 +9,8 @@ require_once '../../logic/la_team_waehlen.logic.php';
 
 use App\Repository\Team\TeamRepository;
 
+$saison = (isset($_GET['saison'])) ? (int) $_GET['saison'] : Config::SAISON;
+
 $show_form = false;
 if (isset($_GET['team_id'])) {
 
@@ -31,13 +33,20 @@ if (isset($_GET['team_id'])) {
 /////////////////////////////////////////////////////////////////////////////
 include '../../templates/header.tmp.php';?>
 
-<h2>Turnier erstellen (Ligaausschuss)</h2>
+<h1 class="w3-text-primary">Turnier erstellen (Ligaausschuss)</h1>
+<p class="w3-border-top w3-border-grey w3-text-grey">Saison <?=Html::get_saison_string($saison)?></p>
 
 <?php
 include '../../templates/la_team_waehlen.tmp.php';
 
 if ($show_form) {
-    include '../../templates/turnier_erstellen.tmp.php';
+    include "../../templates/turnier/form_ausrichter.tmp.php";
+    include "../../templates/turnier/form_daten.tmp.php";
+    include "../../templates/turnier/form_block.tmp.php";
+    include "../../templates/turnier/form_plaetze.tmp.php";
+    include "../../templates/turnier/form_anfahrt.tmp.php";
+    include "../../templates/turnier/form_details.tmp.php";
+    include "../../templates/turnier/form_orga.tmp.php";
 }
 
 include '../../templates/footer.tmp.php';

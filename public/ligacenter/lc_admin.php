@@ -4,6 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 use App\Event\Turnier\nLigaBot;
 use App\Repository\Team\TeamRepository;
+use App\Repository\Turnier\TurnierRepository;
 use App\Service\Team\TeamService;
 
 require_once '../../init.php';
@@ -27,6 +28,16 @@ if (isset($_POST['anmelden'])) {
         Helper::reload('/teamcenter/tc_start.php');
     }
     Html::error("Anmeldung als Team nicht möglich, da der Teamname keinem Ligateam zugeordnet werden konnte.");
+}
+
+// Turnier löschen
+if (isset($_POST['delete_turnier'])) {
+    $turnier_id = (int) $_POST['turnier_id'];
+    $turnier = TurnierRepository::get()->turnier($turnier_id);
+    TurnierRepository::get()->delete($turnier);
+    Html::info("Turnier wurde gelöscht.");
+    header('Location: ../ligacenter/lc_admin.php');
+    die();
 }
 
 // Ligateam deativieren
@@ -148,6 +159,21 @@ include '../../templates/header.tmp.php';?>
         <?= Html::datalist_teams() ?>
     <p>
         <input type='submit' name='anmelden' value='Als Ligateam anmelden' class="w3-button w3-secondary">
+    </p>
+</form>
+
+<h4 class="w3-bottombar w3-text-primary">Turnier löschen</h4>
+<form method='post' onsubmit="return confirm('Soll das ausgewählte Turnier wirklich gelöscht werden?')">
+    <label class="w3-text-primary" for="teamname">Turnier wählen</label>
+    <input type="text"
+           class="w3-input w3-border w3-border-primary"
+           placeholder="Turnier-ID eingeben"
+           list="turniere"
+           id="turnier_id"
+           name="turnier_id">
+        <?= Html::datalist_turniere() ?>
+    <p>
+        <input type='submit' name='delete_turnier' value='Turnier löschen' class="w3-button w3-secondary">
     </p>
 </form>
 

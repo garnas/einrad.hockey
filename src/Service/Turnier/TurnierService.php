@@ -235,6 +235,23 @@ class TurnierService
         return $emails;
     }
 
+    public static function getAnzahlGesetzteFreilose(Turnier $turnier): int
+    {
+        return $turnier->getGesetzteFreilose()->count();
+    }
+
+    public static function isMaximaleAnzahlFreiloseAufSetzliste(Turnier $turnier): bool
+    {
+        $setzliste = self::getSetzListe($turnier);
+        $anzahlFreilose = 0;
+        foreach ($setzliste as $anmeldung) {
+            if ($anmeldung->hasFreilosGesetzt()) {
+                $anzahlFreilose++;
+            }
+        }
+        return ($anzahlFreilose >= 2);
+    }
+
     public static function getAnzahlGesetzteTeams(Turnier $turnier): int
     {
         return self::getSetzListe($turnier)->count();
@@ -245,23 +262,61 @@ class TurnierService
         return \count(self::getWarteliste($turnier));
     }
 
+    public static function isSofortOeffnen(Turnier $turnier): bool
+    {
+        return $turnier->isSofortOeffnenFrei() || $turnier->isSofortOeffnenHoch() || $turnier->isSofortOeffnenRunter();
+    }
+
+    public static function isErweitertBlock(Turnier $turnier): bool
+    {
+        return $turnier->isBlockErweitertHoch() || $turnier->isBlockErweitertRunter();
+    }
+
+    /**
+     * @param $turnier Turnier
+     *
+     * Nimmt die notwendigen Änderungen am Entity für eine Erweiterung des Turniers einen Block nach oben vor.
+     * Wichtig: Das Enitry wird nicht persistiert.
+     * Wichtig: Es findet keine Überprüfung statt, ob das Turnier überhaupt geöffnet werden kann.
+     */
     public static function erweitereBlockHoch(Turnier $turnier): void
     {
         $hoehererBlock = BlockService::hoehererTurnierBlock($turnier);
-        $turnier
-            ->setBlockErweitertHoch(true)
-            ->setBlock($hoehererBlock);
+        $turnier->setBlockErweitertHoch(true);
+        $turnier->setBlock($hoehererBlock);
     }
 
+    /**
+     * @param $turnier Turnier
+     *
+     * Nimmt die notwendigen Änderungen am Entity für eine Erweiterung des Turniers einen Block nach unten vor.
+     * Wichtig: Das Enitry wird nicht persistiert.
+     * Wichtig: Es findet keine Überprüfung statt, ob das Turnier überhaupt geöffnet werden kann.
+     */
     public static function erweitereBlockRunter(Turnier $turnier): void
     {
+        $niedrigererBlock = BlockService::niedrigererTurnierBlock($turnier);
         $turnier->setBlockErweitertRunter(true);
-        $turnier->setBlock(BlockService::niedrigererTurnierBlock($turnier));
+        $turnier->setBlock($niedrigererBlock);
     }
 
-    public static function blockOeffnen(Turnier $turnier): void
+    /**
+     * @param $turnier Turnier
+     *
+     * Nimmt die notwendigen Änderungen am Entity für eine Erweiterung des Turniers um alle Blöcke vor.
+     * Wichtig: Das Enitry wird nicht persistiert.
+     * Wichtig: Es findet keine Überprüfung statt, ob das Turnier überhaupt geöffnet werden kann.
+     */
+    public static function erweitereBlockFrei(Turnier $turnier): void
     {
-        $turnier->setBlock(Config::BLOCK_ALL[0]);
+        $blockfrei = Config::BLOCK_ALL[0];
+        $turnier->setBlockErweitertFrei(true);
+        $turnier->setBlock($blockfrei);
+    }
+
+    public static function isBlockfrei(Turnier $turnier): bool
+    {
+        return $turnier->getBlock() === Config::BLOCK_ALL[0];
     }
 
     public static function getFreieSetzPlaetze(Turnier $turnier)

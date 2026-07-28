@@ -3,7 +3,7 @@
 namespace App\Repository\Turnier;
 
 use App\Entity\Turnier\Turnier;
-use App\Entity\Turnier\TurnierBericht;
+use App\Entity\TurnierBericht\TurnierBericht;
 use App\Entity\Turnier\TurniereListe;
 use App\Repository\DoctrineWrapper;
 use App\Repository\TraitSingletonRepository;
@@ -127,23 +127,28 @@ class TurnierRepository
     }
 
     /**
+     * Erhalte die Turniere bei denen das Team teilnimmt und für die ein Turnierreport existiert.
+     *
      * @return Turnier[]|Collection
      */
-    public static function getSetzlisteTurniere(int $team_id): array|Collection
+    public static function getTurnierreportTurniere(int $team_id): array|Collection
     {
         $query = DoctrineWrapper::manager()
             ->createQueryBuilder()
             ->select('t')
             ->from(Turnier::class, 't')
             ->leftJoin('t.liste', 'l')
+            ->innerJoin('t.bericht', 'b')
             ->where('t.saison = :saison')
             ->andWhere('t.canceled = false')
             ->andWhere('l.team = :team_id')
             ->andWhere('l.liste = :liste')
+            ->andWhere('t.phase IN (:phasen)')
             ->orderBy('t.datum', 'ASC')
             ->setParameter('saison', Config::SAISON)
             ->setParameter('team_id', $team_id)
             ->setParameter('liste', 'setzliste')
+            ->setParameter('phasen', ['spielplan', 'ergebnis'])
         ;
 
         return new ArrayCollection($query->getQuery()->execute());

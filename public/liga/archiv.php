@@ -13,6 +13,9 @@ include '../../templates/header.tmp.php';
 ?>
 
 <h1 class="w3-text-primary">Saison-Archiv der Deutschen Einradhockeyliga</h1>
+    <p><?= Html::link('ergebnisse.php?saison=31', 'Turniere der Saison 2025/2026') ?></p>
+    <p><?= HTML::link('tabelle.php?saison=31', 'Tabelle der Saison 2025/2026') ?></p>
+    <hr>
     <p><?= Html::link('ergebnisse.php?saison=30', 'Turniere der Saison 2024/2025') ?></p>
     <p><?= HTML::link('tabelle.php?saison=30', 'Tabelle der Saison 2024/2025') ?></p>
     <hr>

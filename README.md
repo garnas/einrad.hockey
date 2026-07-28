@@ -1,6 +1,6 @@
 # einrad.hockey
 
-![Logo der Einradhockeyliga](https://einrad.hockey/bilder/logo_lang_small.png)
+![Logo der Einradhockeyliga](https://einrad.hockey/bilder/logo_kurz.png)
 
 Dies ist der Code der Website [einrad.hockey](https://einrad.hockey) der Deutschen Einradhockeyliga.
 
