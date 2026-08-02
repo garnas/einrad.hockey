@@ -63,6 +63,11 @@ class StatsTest extends TestCase
         );
     }
 
+    /**
+     * Wenn dieser Test nach der Saisonumstellung fehlschlägt: In db_localhost muss mindestens
+     * ein Spieler der aktuellen Saison zugeordnet sein, damit der Testfall funktioniert.
+     *
+     */
     public function testPersistSpielerstatistik(): void
     {
         self::deleteSpielerstatistik();
