@@ -105,8 +105,12 @@ class TurnierValidatorService
 
     public function hasValidErweiterung(): bool
     {
+        if (!$this->turnier->isSetzPhase()) {
+            Html::error("Der Turnierblock kann nur in der Setzphase erweitert werden.");
+            return false;
+        }
         if ($this->turnier->isBlockErweitertHoch() && $this->turnier->isBlockErweitertRunter()) {
-            Html::error("Das Turnier kann nicht hoch und runter erweitert werden.");
+            Html::error("Der Turnierblock kann nicht nach oben oder unten erweitert werden.");
             return false;
         }
 
