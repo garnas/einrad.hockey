@@ -12,10 +12,10 @@ use App\Service\Turnier\TurnierValidatorService;
 
 $turnier = null;
 
-$ausrichter_team_id = $_SESSION['logins']['team']['id'];
-$ausrichter_name = $_SESSION['logins']['team']['name'];
-$ausrichter_block = $_SESSION['logins']['team']['block'];
 $ausrichter = TeamRepository::get()->team($ausrichter_team_id);
+$ausrichter_block = $ausrichter->getBlock();
+$ausrichter_name = $ausrichter->getName();
+$ausrichter->getBlock();
 
 $block_higher = BlockService::getHigherBlocks($ausrichter_block);
 

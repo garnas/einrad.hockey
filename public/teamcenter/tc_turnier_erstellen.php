@@ -16,10 +16,9 @@ if (count(nSpieler::get_kader($_SESSION['logins']['team']['id'])) < 5) {
 }
 
 $ausrichter_team_id = $_SESSION['logins']['team']['id'];
-$ausrichter_name = $_SESSION['logins']['team']['name'];
-$ausrichter_block = $_SESSION['logins']['team']['block'];
-
 $ausrichter = TeamRepository::get()->team($ausrichter_team_id);
+$ausrichter_name = $ausrichter->getName();
+$ausrichter_block = $ausrichter->getBlock();
 
 $saison = (isset($_GET['saison'])) ? (int) $_GET['saison'] : Config::SAISON;
 
