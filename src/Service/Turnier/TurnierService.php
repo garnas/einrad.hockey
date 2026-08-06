@@ -269,7 +269,7 @@ class TurnierService
 
     public static function isErweitertBlock(Turnier $turnier): bool
     {
-        return $turnier->isBlockErweitertHoch() || $turnier->isBlockErweitertRunter();
+        return $turnier->isBlockErweitertHoch() || $turnier->isBlockErweitertRunter() || $turnier->isBlockErweitertFrei();
     }
 
     /**

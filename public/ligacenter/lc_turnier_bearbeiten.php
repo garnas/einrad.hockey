@@ -34,14 +34,14 @@ include '../../templates/header.tmp.php';
 <form method="post">   
     <?php
         include "../../templates/turnier/form_ausrichter.tmp.php";
-        include "../../templates/turnier/form_daten.tmp.php";
-        include "../../templates/turnier/form_block.tmp.php";
-        include "../../templates/turnier/form_phase.tmp.php";
-        include "../../templates/turnier/form_plaetze.tmp.php";
-        include "../../templates/turnier/form_anfahrt.tmp.php";
-        include "../../templates/turnier/form_details.tmp.php";
-        include "../../templates/turnier/form_orga.tmp.php";
-    ?>
+include "../../templates/turnier/form_daten.tmp.php";
+include "../../templates/turnier/form_block.tmp.php";
+include "../../templates/turnier/form_phase.tmp.php";
+include "../../templates/turnier/form_plaetze.tmp.php";
+include "../../templates/turnier/form_anfahrt.tmp.php";
+include "../../templates/turnier/form_details.tmp.php";
+include "../../templates/turnier/form_orga.tmp.php";
+?>
 
     <div class="w3-panel w3-card-4">
         <p>

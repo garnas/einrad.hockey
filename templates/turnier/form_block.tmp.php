@@ -11,7 +11,10 @@
         </p>
         <p>
             Danach erfolgt eine weitere Prüfung. Eine automatische Erweiterung auf ein ABCDEF Turnier ist nicht möglich. 
-            Diese muss manuell in den eigenen Turnieren unter "Turnier bearbeiten" erfolgen.
+            Diese muss manuell in den eigenen Turnieren unter "Turnier bearbeiten" erfolgen.</b>
+        </p>
+        <p>
+            <b><?= Html::link(link: "tc_turnier_erweitern.php?turnier_id=" . $turnier->id(), bezeichnung: "Turnierblock hier in der Setzphase erweitern.", icon: "launch") ?></b>
         </p>
         <p>
             Es gibt Fälle, in denen die automatische Erweiterung eingerichtet ist, aber nur durchgeführt wird. 
@@ -21,7 +24,7 @@
 
     <div>
         <p>
-            <label class="w3-text-primary" for="art">Turnierblock<span class="w3-text-secondary">*</span></label>
+            <label class="w3-text-primary" for="art_block">Turnierblock<span class="w3-text-secondary">*</span></label>
             <select required <?php if (!$turnier_from_form && !TurnierFormService::isEditable('art_block', $turnier)): ?> disabled <?php endif; ?> class="w3-select w3-border w3-border-primary w3-padding" id="art_block" name="art_block">
                 <option value="" disabled selected>Wähle einen Turnierblock</option>
                 <!-- Blockhöhere Turniere -->
