@@ -2,6 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Entity\Turnier\Turnier;
 use App\Service\Turnier\TurnierSnippets;
 
 require_once '../../init.php';
@@ -9,6 +10,7 @@ require_once '../../logic/session_la.logic.php'; //Auth
 require_once '../../logic/turnier_bearbeiten_first.logic.php'; //Turnier und $daten-Array erstellen + Sanitizing + Berechtigung Prüfen + Existiert das Turnier?
 require_once '../../logic/turnier_bearbeiten.logic.php'; //Formularauswertung für Turnierdetails
 
+/** @var Turnier $turnier */
 $ausrichter = $turnier->getAusrichter();
 $ausrichter_name = $ausrichter->getName();
 $ausrichter_team_id = $ausrichter->id();
@@ -32,14 +34,14 @@ include '../../templates/header.tmp.php';
 <form method="post">   
     <?php
         include "../../templates/turnier/form_ausrichter.tmp.php";
-include "../../templates/turnier/form_daten.tmp.php";
-include "../../templates/turnier/form_block.tmp.php";
-include "../../templates/turnier/form_phase.tmp.php";
-include "../../templates/turnier/form_plaetze.tmp.php";
-include "../../templates/turnier/form_anfahrt.tmp.php";
-include "../../templates/turnier/form_details.tmp.php";
-include "../../templates/turnier/form_orga.tmp.php";
-?>
+        include "../../templates/turnier/form_daten.tmp.php";
+        include "../../templates/turnier/form_block.tmp.php";
+        include "../../templates/turnier/form_phase.tmp.php";
+        include "../../templates/turnier/form_plaetze.tmp.php";
+        include "../../templates/turnier/form_anfahrt.tmp.php";
+        include "../../templates/turnier/form_details.tmp.php";
+        include "../../templates/turnier/form_orga.tmp.php";
+    ?>
 
     <div class="w3-panel w3-card-4">
         <p>
@@ -50,7 +52,7 @@ include "../../templates/turnier/form_orga.tmp.php";
 
 <p>
     <a href='../liga/turnier_details.php?turnier_id=<?=$turnier->id()?>'><button class="w3-button w3-text-primary w3-border w3-border-primary no">Zu den Turnierdetails</button></a>
-    <a href='../ligacenter/lc_turnierliste.php?turnier_id=<?=$turnier->id()?>'><button style='display: inline;' class="w3-button w3-right w3-border w3-border-primary w3-text-primary no">Turniere verwalten (Liste)</button></a>
+    <a href='../ligacenter/lc_turnierliste.TYPE_NAMEphp?turnier_id=<?=$turnier->id()?>'><button style='display: inline;' class="w3-button w3-right w3-border w3-border-primary w3-text-primary no">Turniere verwalten (Liste)</button></a>
 </p>
 
 <?php
