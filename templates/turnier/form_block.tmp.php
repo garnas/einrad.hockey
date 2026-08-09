@@ -13,9 +13,11 @@
             Danach erfolgt eine weitere Prüfung. Eine automatische Erweiterung auf ein ABCDEF Turnier ist nicht möglich. 
             Diese muss manuell in den eigenen Turnieren unter "Turnier bearbeiten" erfolgen.
         </p>
+        <?php if (isset($turnier)): ?>
         <p>
             <b><?= Html::link(link: "tc_turnier_erweitern.php?turnier_id=" . $turnier->id(), bezeichnung: "Turnierblock hier in der Setzphase erweitern.", icon: "launch") ?></b>
         </p>
+        <?php endif; ?>
         <p>
             Es gibt Fälle, in denen die automatische Erweiterung eingerichtet ist, aber nur durchgeführt wird. 
             Beispiel: Handelt es sich beim Übergang in die Setzphase um ein A- oder AB-Turnier, dann ist eine Erweiterung um den nächsten höheren Block nicht möglich.
