@@ -4,6 +4,7 @@ use App\Entity\Turnier\TurnierDetails;
 use App\Entity\Turnier\Turnier;
 use App\Event\Turnier\nLigaBot;
 use App\Event\Turnier\TurnierEventMailBot;
+use App\Repository\Team\TeamRepository;
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Turnier\BlockService;
 use App\Service\Turnier\TurnierService;
