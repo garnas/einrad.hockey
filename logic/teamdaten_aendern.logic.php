@@ -109,7 +109,7 @@ if (isset($_POST['neue_email'])) {
 // Teamfoto hochladen
 if (isset($_POST['teamfoto']) && !empty($_FILES["jpgupload"]["tmp_name"])) {
     // Bild wird hochgeladen, target_file_jpg = false, falls fehlgeschlagen.
-    $target_file_jpg = FileService::uploadImage($_FILES["jpgupload"]);;
+    $target_file_jpg = FileService::uploadImage($_FILES["jpgupload"]);
 
     if ($target_file_jpg !== false) {
         $team->getDetails()->setTeamfoto($target_file_jpg);
