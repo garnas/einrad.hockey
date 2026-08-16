@@ -2,6 +2,7 @@
 
 // Inititalisierung
 use App\Repository\Team\TeamRepository;
+use App\Service\Neuigkeit\FileService;
 
 $team_id = (Helper::$teamcenter) ? $_SESSION['logins']['team']['id'] : (int) @$_GET['team_id'];
 if (Team::is_ligateam($team_id)) {
@@ -108,7 +109,7 @@ if (isset($_POST['neue_email'])) {
 // Teamfoto hochladen
 if (isset($_POST['teamfoto']) && !empty($_FILES["jpgupload"]["tmp_name"])) {
     // Bild wird hochgeladen, target_file_jpg = false, falls fehlgeschlagen.
-    $target_file_jpg = Neuigkeit::upload_bild($_FILES["jpgupload"]);
+    $target_file_jpg = FileService::uploadImage($_FILES["jpgupload"]);;
 
     if ($target_file_jpg !== false) {
         $team->getDetails()->setTeamfoto($target_file_jpg);
