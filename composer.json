@@ -24,7 +24,7 @@
         "symfony/cache": "v7.4.12",
         "jenssegers/date": "v4.0.0",
         "spatie/array-to-xml": "3.4.0",
-        "phpoffice/phpspreadsheet": "5.7.0"
+        "phpoffice/phpspreadsheet": "5.8.1"
     },
 
     "autoload": {
