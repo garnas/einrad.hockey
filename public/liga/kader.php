@@ -38,6 +38,7 @@ include '../../templates/header.tmp.php';
     <h3 class="w3-text-primary">Erfolge</h3>
     <div class="w3-section">
         <ul class="w3-ul w3-leftbar w3-border-tertiary">
+            <li><?= Html::icon("emoji_events", class: "w3-text-grey") ?> 2. Platz, A-Turnier, UNICON Steyr 2026</li>
             <li><?= Html::icon("emoji_events", class: "w3-text-grey") ?> 2. Platz, A-Turnier, UNICON Bemidji 2024</li>
             <li><?= Html::icon("emoji_events", class: "w3-text-brown") ?> 3. Platz, A-Turnier, EUHC Mörfelden 2023</li>
             <li><?= Html::icon("emoji_events", class: "w3-text-grey") ?> 2. Platz, A-Turnier, UNICON Grenoble 2022</li>
@@ -85,6 +86,7 @@ include '../../templates/header.tmp.php';
     <h3 class="w3-text-primary">Erfolge</h3>
     <div class="w3-section">
         <ul class="w3-ul w3-leftbar w3-border-tertiary">
+            <li><?= Html::icon("emoji_events", class: "w3-text-tertiary") ?> 2. Platz, B-Turnier, UNICON Steyr 2026</li>
             <li><?= Html::icon("emoji_events", class: "w3-text-tertiary") ?> 1. Platz, B-Turnier, EUHC Mörfelden 2023</li>
             <li><?= Html::icon("emoji_events", class: "w3-text-grey") ?> 2. Platz, B-Turnier, EUHC Mörfelden 2023</li>
             <li><?= Html::icon("emoji_events", class: "w3-text-brown") ?> 3. Platz, B-Turnier, EUHC Mörfelden 2023</li>
