@@ -12,8 +12,9 @@ ini_set('session.use_cookies', '1');
 ini_set('session.use_only_cookies', '1');
 ini_set('session.use_strict_mode', '1');
 ini_set('session.cookie_httponly', '1');
-ini_set('session.cookie_samesite ', '"Strict"');
+ini_set('session.cookie_samesite', 'Strict');
 ini_set('session.cookie_secure', '1');
+ini_set('session.gc_maxlifetime', '7200'); // Muss zu session.cookie_lifetime passen
 // https://www.php.net/manual/de/session.security.ini.php
 // https://www.php.net/manual/de/features.session.security.management.php
 
