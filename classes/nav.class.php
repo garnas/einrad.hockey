@@ -212,7 +212,7 @@ class Nav
     /**
      * Dokumente
      */
-    public const LINK_MODUS = Env::BASE_URL . '/dokumente/ligamodus.pdf?version=20260123';
+    public const LINK_MODUS = Env::BASE_URL . '/dokumente/ligamodus.pdf?version=20260812';
     public const LINK_SCHIRI_CHECKLIST = Env::BASE_URL . '/dokumente/schiri_checkliste.pdf?version=20230126';
     public const LINK_SCHIRI_LEITLINIE = Env::BASE_URL . '/dokumente/schiri_leitlinie.pdf?version=20260531';
     public const LINK_SCHIRI_ABLAUF_PRAKTISCHE_PRUEFUNG = Env::BASE_URL . '/dokumente/ablauf_praktische_schiripruefung.pdf';
