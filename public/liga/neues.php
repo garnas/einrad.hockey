@@ -11,7 +11,12 @@ require_once '../../init.php';
 $fortschritt = round(100 * (time() - strtotime(Config::SAISON_ANFANG)) / (strtotime(Config::SAISON_ENDE) - strtotime(Config::SAISON_ANFANG)));
 $tage = round((strtotime(Config::SAISON_ANFANG) - time()) / (24 * 60 * 60));
 
-$neuigkeiten = NeuigkeitRepository::get()->findActive();
+// Der LA darf auch unveröffentlichte Neuigkeiten zum Bearbeiten sehen.
+if (LigaLeitung::is_logged_in(funktion: "ligaausschuss")) {
+    $neuigkeiten = NeuigkeitRepository::get()->findActive();
+} else {
+    $neuigkeiten = NeuigkeitRepository::get()->findActiveBeforeNow();
+}
 
 $turniere = TurnierRepository::getKommendeTurniere()->toArray();
 $anz_next_turniere = count($turniere);
