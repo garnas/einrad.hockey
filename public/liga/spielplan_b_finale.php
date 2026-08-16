@@ -15,9 +15,9 @@ $turnier_id = (int) @$_GET['turnier_id'];
 // Spielplan laden
 $turnier = nTurnier::get($turnier_id);
 $datum
-    = strftime("%d.%m.", strtotime($turnier->get_datum()))
+    = date("d.m.", strtotime($turnier->get_datum()))
     . " & "
-    . strftime("%d.%m.", strtotime($turnier->get_datum()) + 24 * 60 * 60) ;
+    . date("d.m.", strtotime($turnier->get_datum()) + 24 * 60 * 60) ;
 $spielplan = (new spielplan_final($turnier))->get_spielplan_b();
 
 /////////////////////////////////////////////////////////////////////////////

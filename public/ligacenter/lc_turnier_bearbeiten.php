@@ -2,6 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Entity\Turnier\Turnier;
 use App\Service\Turnier\TurnierSnippets;
 
 require_once '../../init.php';
@@ -9,6 +10,7 @@ require_once '../../logic/session_la.logic.php'; //Auth
 require_once '../../logic/turnier_bearbeiten_first.logic.php'; //Turnier und $daten-Array erstellen + Sanitizing + Berechtigung Prüfen + Existiert das Turnier?
 require_once '../../logic/turnier_bearbeiten.logic.php'; //Formularauswertung für Turnierdetails
 
+/** @var Turnier $turnier */
 $ausrichter = $turnier->getAusrichter();
 $ausrichter_name = $ausrichter->getName();
 $ausrichter_team_id = $ausrichter->id();

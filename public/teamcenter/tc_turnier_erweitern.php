@@ -3,6 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
+use App\Entity\Turnier\Turnier;
 use App\Service\Turnier\TurnierFormService;
 use App\Service\Turnier\TurnierSnippets;
 
@@ -24,7 +25,8 @@ include '../../templates/header.tmp.php';
 <p class="w3-border-top w3-border-grey w3-text-grey">Saison <?=Html::get_saison_string($saison)?></p>
 
 <h2 class="w3-text-primary">
-    <?= TurnierSnippets::nameBrTitel($turnier) ?>
+    <?= /** @var Turnier $turnier */
+    TurnierSnippets::nameBrTitel($turnier) ?>
 </h2>
 
 <form method="post">
@@ -100,10 +102,14 @@ include '../../templates/header.tmp.php';
             <label for="multiple_none" style="cursor: pointer">Keine einzelne Blockerweiterung vornehmen</label>
         </p>
 
-        
+        <span class="w3-text-gray">Hinweis bei Mehrfachauswahl: Es wird zuerst die einfache Blockerweiterung durchgeführt, dann die Erweiterung auf ABCDEF</span>
         <p><input type="submit" value="Turnier erweitern" name="erweitern_turnier" class="w3-tertiary w3-button w3-block"></p>
     </div>
 </form>
+
+<p>
+    <?= Html::link(link: "tc_turnier_bearbeiten.php?turnier_id=" . $turnier->id(), bezeichnung: "Weitere Turnierdaten bearbeiten", icon: "launch") ?>
+</p>
 
 <?php
 include '../../templates/footer.tmp.php';

@@ -27,6 +27,7 @@
   </url>
   <url>
     <loc>https://einrad.hockey/liga/kader/</loc>
+    <lastmod>2026-08-16</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
@@ -60,29 +61,9 @@
     <priority>0.60</priority>
   </url>
   <url>
-    <loc>https://einrad.hockey/schiricenter/schiri_infos/</loc>
-    <lastmod>2025-08-17</lastmod>
-    <priority>0.40</priority>
-  </url>
-  <url>
     <loc>https://einrad.hockey/liga/dokumente/</loc>
     <lastmod>2025-08-17</lastmod>
     <priority>0.40</priority>
-  </url>
-  <url>
-    <loc>https://einrad.hockey/teamcenter/tc_login/</loc>
-    <lastmod>2025-08-17</lastmod>
-    <priority>0.40</priority>
-  </url>
-  <url>
-    <loc>https://einrad.hockey/liga/jubilaeum/</loc>
-    <lastmod>2025-08-17</lastmod>
-    <priority>0.10</priority>
-  </url>
-  <url>
-    <loc>https://einrad.hockey/liga/tippspiel/</loc>
-    <lastmod>2025-08-17</lastmod>
-    <priority>0.10</priority>
   </url>
   <url>
     <loc>https://einrad.hockey/liga/archiv/</loc>
@@ -90,9 +71,9 @@
     <priority>0.40</priority>
   </url>
   <url>
-    <loc>https://einrad.hockey/login/</loc>
+    <loc>https://einrad.hockey/teamcenter/tc_login/</loc>
     <lastmod>2025-08-17</lastmod>
-    <priority>0</priority>
+    <priority>0.40</priority>
   </url>
   <url>
     <loc>https://einrad.hockey/liga/kontakt/</loc>
@@ -103,5 +84,25 @@
     <loc>https://einrad.hockey/liga/datenschutz/</loc>
     <lastmod>2025-08-17</lastmod>
     <priority>0</priority>
+  </url>
+  <url>
+    <loc>https://einrad.hockey/liga/impressum/</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0</priority>
+  </url>
+  <url>
+    <loc>https://einrad.hockey/liga/foerdermittel/</loc>
+    <lastmod>2026-04-06</lastmod>
+    <priority>0.40</priority>
+  </url>
+  <url>
+    <loc>https://einrad.hockey/liga/b_meisterschaft/</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.40</priority>
+  </url>
+  <url>
+    <loc>https://einrad.hockey/liga/deutsche_meisterschaft/</loc>
+    <lastmod>2026-08-16</lastmod>
+    <priority>0.40</priority>
   </url>
 </urlset>

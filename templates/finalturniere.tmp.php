@@ -18,7 +18,7 @@
                     <td><?= Html::link('turnier_details.php?turnier_id=' . $finale['turnier_id'], "Finale der Deutschen Einradhockeyliga", false) ?></td>
                     <td class="w3-right-align"><?=$finale['ort']?></td>
                 <?php } else { ?>
-                    <td class="w3-right-align"><?=strftime("%d.", strtotime(Config::FINALE_EINS))?> / <?=strftime("%d.", strtotime(Config::FINALE_ZWEI))?> / <?=strftime("%d.", strtotime(Config::FINALE_DREI))?> / <?=strftime("%d.%m.%y", strtotime(Config::FINALE_VIER))?></td>
+                    <td class="w3-right-align"><?=date("d.", strtotime(Config::FINALE_EINS))?> / <?=date("d.", strtotime(Config::FINALE_ZWEI))?> / <?=date("d.", strtotime(Config::FINALE_DREI))?> / <?=date("d.m.y", strtotime(Config::FINALE_VIER))?></td>
                     <td>Finale der Deutschen Einradhockeyliga</td>
                     <td class="w3-right-align">Ausrichter gesucht</td>
                 <?php } ?>
@@ -30,7 +30,7 @@
                     <td><?= Html::link('turnier_details.php?turnier_id=' . $bfinale['turnier_id'], "B-Finale der Deutschen Einradhockeyliga", false) ?></td>
                     <td class="w3-right-align"><?=$bfinale['ort']?></td>
                 <?php } else { ?>
-                    <td class="w3-right-align"><?=strftime("%d.", strtotime(Config::FINALE_EINS))?> / <?=strftime("%d.", strtotime(Config::FINALE_ZWEI))?> / <?=strftime("%d.", strtotime(Config::FINALE_DREI))?> / <?=strftime("%d.%m.%y", strtotime(Config::FINALE_VIER))?></td>
+                    <td class="w3-right-align"><?=date("d.", strtotime(Config::FINALE_EINS))?> / <?=date("d.", strtotime(Config::FINALE_ZWEI))?> / <?=date("d.", strtotime(Config::FINALE_DREI))?> / <?=date("d.m.y", strtotime(Config::FINALE_VIER))?></td>
                     <td>B-Finale der Deutschen Einradhockeyliga</td>
                     <td class="w3-right-align">Ausrichter gesucht</td>
                 <?php } ?>
@@ -42,7 +42,7 @@
                     <td><?= Html::link('turnier_details.php?turnier_id=' . $cfinale['turnier_id'], "C-Finale der Deutschen Einradhockeyliga", false) ?></td>
                     <td class="w3-right-align"><?=$cfinale['ort']?></td>
                 <?php } else { ?>
-                    <td class="w3-right-align"><?=strftime("%d.", strtotime(Config::FINALE_EINS))?> / <?=strftime("%d.", strtotime(Config::FINALE_ZWEI))?> / <?=strftime("%d.", strtotime(Config::FINALE_DREI))?> / <?=strftime("%d.%m.%y", strtotime(Config::FINALE_VIER))?></td>
+                    <td class="w3-right-align"><?=date("d.", strtotime(Config::FINALE_EINS))?> / <?=date("d.", strtotime(Config::FINALE_ZWEI))?> / <?=date("d.", strtotime(Config::FINALE_DREI))?> / <?=date("d.m.y", strtotime(Config::FINALE_VIER))?></td>
                     <td>C-Finale der Deutschen Einradhockeyliga</td>
                     <td class="w3-right-align">Ausrichter gesucht</td>
                 <?php } ?>
@@ -54,7 +54,7 @@
                     <td><?= Html::link('turnier_details.php?turnier_id=' . $dfinale['turnier_id'], "Saisonschlussturnier", false) ?></td>
                     <td class="w3-right-align"><?=$dfinale['ort']?></td>
                 <?php } else { ?>
-                    <td class="w3-right-align"><?=strftime("%d.", strtotime(Config::FINALE_EINS))?> / <?=strftime("%d.", strtotime(Config::FINALE_ZWEI))?> / <?=strftime("%d.", strtotime(Config::FINALE_DREI))?> / <?=strftime("%d.%m.%y", strtotime(Config::FINALE_VIER))?></td>
+                    <td class="w3-right-align"><?=date("d.", strtotime(Config::FINALE_EINS))?> / <?=date("d.", strtotime(Config::FINALE_ZWEI))?> / <?=date("d.", strtotime(Config::FINALE_DREI))?> / <?=date("d.m.y", strtotime(Config::FINALE_VIER))?></td>
                     <td>Saisonschlussturnier</td>
                     <td class="w3-right-align">Ausrichter gesucht</td>
                 <?php } ?>

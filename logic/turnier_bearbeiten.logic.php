@@ -92,7 +92,8 @@ if (isset($_POST['change_turnier'])) {
         $turnier->setDatumBis($datum_bis);
 
         $phase = (!isset($_POST['phase']) || $_POST['phase'] === '') ? $turnier->getPhase() : $_POST['phase'];
-        $turnier->setPhase($phase);
+        $turnier->setDatum($datum);
+        $turnier->setDatumBis($datum_bis);
     }
 
     $plaetze_before = $turnier->getDetails()->getPlaetze();
