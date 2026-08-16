@@ -18,14 +18,8 @@ class Archiv_Tabelle extends Tabelle
     public static function get_meisterschafts_tabelle_templates(int $saison = Config::SAISON): array
     {
         return [
-            'desktop' => [
-                'tabelle' => "templates/archiv/tabellen/desktop_mt_komplett.tmp.php",
-                'meister' => "templates/archiv/tabellen/desktop_mt_komplett.tmp.php",
-            ],
-            'mobil' => [
-                'tabelle' => "templates/archiv/tabellen/mobil_mt_komplett.tmp.php",
-                'meister' => "templates/archiv/tabellen/mobil_mt_komplett.tmp.php",
-            ],
+            'desktop' => "templates/archiv/tabellen/desktop_mt_komplett.tmp.php",
+            'mobil' => "templates/archiv/tabellen/mobil_mt_komplett.tmp.php",
         ];
     }
 
