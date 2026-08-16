@@ -30,7 +30,7 @@
                     <td><?= Html::link('turnier_details.php?turnier_id=' . $dfinale['turnier_id'], "Saisonschlussturnier", false) ?></td>
                     <td class="w3-right-align"><?=$dfinale['ort']?></td>
                 <?php } else { ?>
-                    <td class="w3-right-align"><?=strftime("%d.", strtotime(Config::FINALE_EINS))?> / <?=strftime("%d.", strtotime(Config::FINALE_ZWEI))?> / <?=strftime("%d.", strtotime(Config::FINALE_DREI))?> / <?=strftime("%d.%m.%y", strtotime(Config::FINALE_VIER))?></td>
+                    <td class="w3-right-align"><?=date("d.", strtotime(Config::FINALE_EINS))?> / <?=date("d.", strtotime(Config::FINALE_ZWEI))?> / <?=date("d.", strtotime(Config::FINALE_DREI))?> / <?=date("d.m.y", strtotime(Config::FINALE_VIER))?></td>
                     <td>Saisonschlussturnier</td>
                     <td class="w3-right-align">Ausrichter gesucht</td>
                 <?php } ?>

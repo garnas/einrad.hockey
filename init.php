@@ -167,7 +167,7 @@ db::initialize(); // Neue DB-Verbindung mit Prepared-Statements
 
 
 /**
- * Sprache für Zeitformate in Deutsch --> strftime()
+ * Sprache für Zeitformate in Deutsch
  */
 setlocale(\LC_ALL, 'de_DE@euro', 'de_DE', 'de', 'ge');
 
