@@ -8,7 +8,13 @@ use App\Repository\Neuigkeit\NeuigkeitRepository;
 require_once '../../init.php';
 
 $saison = (isset($_GET['saison'])) ? (int) $_GET['saison'] : Config::SAISON;
-$neuigkeiten = NeuigkeitRepository::get()->findAll();
+
+// Der LA darf auch unveröffentlichte Neuigkeiten zum Bearbeiten sehen.
+if (LigaLeitung::is_logged_in(funktion: "ligaausschuss")) {
+    $neuigkeiten = NeuigkeitRepository::get()->findAll();
+} else {
+    $neuigkeiten = NeuigkeitRepository::get()->findAllBeforeNow();
+}
 
 $neuigkeiten_nach_jahr = [];
 

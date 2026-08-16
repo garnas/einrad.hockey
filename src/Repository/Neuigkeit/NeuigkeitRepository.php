@@ -6,6 +6,7 @@ use App\Entity\Sonstiges\Neuigkeit;
 use App\Enum\NeuigkeitArt;
 use App\Repository\DoctrineWrapper;
 use App\Repository\TraitSingletonRepository;
+use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\Collection;
 
@@ -48,6 +49,33 @@ class NeuigkeitRepository
             ->createQueryBuilder()
             ->select('n')
             ->from(Neuigkeit::class, 'n')
+            ->orderBy('n.zeit', 'DESC');
+
+        return $query->getQuery()->getResult();
+    }
+
+    public function findActiveBeforeNow(): array
+    {
+        $query = DoctrineWrapper::manager()
+            ->createQueryBuilder()
+            ->select('n')
+            ->from(Neuigkeit::class, 'n')
+            ->where('n.zeit <= :now')
+            ->andWhere('n.aktiv = :aktiv')
+            ->setParameter('aktiv', true)
+            ->setParameter('now', new DateTime())
+            ->orderBy('n.zeit', 'DESC');
+
+        return $query->getQuery()->getResult();
+    }
+    public function findAllBeforeNow(): array
+    {
+        $query = DoctrineWrapper::manager()
+            ->createQueryBuilder()
+            ->select('n')
+            ->from(Neuigkeit::class, 'n')
+            ->where('n.zeit <= :now')
+            ->setParameter('now', new DateTime())
             ->orderBy('n.zeit', 'DESC');
 
         return $query->getQuery()->getResult();

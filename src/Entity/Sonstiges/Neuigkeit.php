@@ -2,6 +2,7 @@
 
 namespace App\Entity\Sonstiges;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use App\Enum\NeuigkeitArt;
 
@@ -10,39 +11,39 @@ use App\Enum\NeuigkeitArt;
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: "integer")]
-    private ?int $neuigkeiten_id = null;
+    #[ORM\Column(name: "neuigkeiten_id", type: "integer")]
+    private ?int $neuigkeitenId = null;
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    #[ORM\Column(name: "titel", type: "string", length: 255, nullable: true)]
     private ?string $titel = null;
 
-    #[ORM\Column(type: "string", length: 1800)]
+    #[ORM\Column(name: "inhalt", type: "string", length: 1800)]
     private string $inhalt;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $link_pdf;
+    #[ORM\Column(name: "link_pdf", type: "string", length: 255)]
+    private string $linkPdf;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $link_jpg;
+    #[ORM\Column(name: "link_jpg", type: "string", length: 255)]
+    private string $linkJpg;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $bild_verlinken;
+    #[ORM\Column(name: "bild_verlinken", type: "string", length: 255)]
+    private string $bildVerlinken;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $eingetragen_von;
+    #[ORM\Column(name: "eingetragen_von", type: "string", length: 255)]
+    private string $eingetragenVon;
 
-    #[ORM\Column(type: "boolean", options: ["default" => 1])]
+    #[ORM\Column(name: "aktiv", type: "boolean", options: ["default" => 1])]
     private bool $aktiv = true;
 
-    #[ORM\Column(type: "string", enumType: NeuigkeitArt::class)]
+    #[ORM\Column(name: "art", type: "string", enumType: NeuigkeitArt::class)]
     private NeuigkeitArt $art = NeuigkeitArt::NEUIGKEIT;
 
-    #[ORM\Column(type: "datetime", options: ["default" => "CURRENT_TIMESTAMP"])]
-    private \DateTimeInterface $zeit;
+    #[ORM\Column(name: "zeit", type: "datetime", options: ["default" => "CURRENT_TIMESTAMP"])]
+    private DateTimeInterface $zeit;
 
     public function getNeuigkeitenId(): ?int
     {
-        return $this->neuigkeiten_id;
+        return $this->neuigkeitenId;
     }
 
     public function getTitel(): ?string
@@ -69,45 +70,45 @@ use App\Enum\NeuigkeitArt;
 
     public function getLinkPdf(): ?string
     {
-        return $this->link_pdf;
+        return $this->linkPdf;
     }
 
-    public function setLinkPdf(string $link_pdf): self
+    public function setLinkPdf(string $linkPdf): self
     {
-        $this->link_pdf = $link_pdf;
+        $this->linkPdf = $linkPdf;
         return $this;
     }
 
     public function getLinkJpg(): ?string
     {
-        return $this->link_jpg;
+        return $this->linkJpg;
     }
 
-    public function setLinkJpg(string $link_jpg): self
+    public function setLinkJpg(string $linkJpg): self
     {
-        $this->link_jpg = $link_jpg;
+        $this->linkJpg = $linkJpg;
         return $this;
     }
 
     public function getBildVerlinken(): ?string
     {
-        return $this->bild_verlinken;
+        return $this->bildVerlinken;
     }
 
-    public function setBildVerlinken(string $bild_verlinken): self
+    public function setBildVerlinken(string $bildVerlinken): self
     {
-        $this->bild_verlinken = $bild_verlinken;
+        $this->bildVerlinken = $bildVerlinken;
         return $this;
     }
 
     public function getEingetragenVon(): ?string
     {
-        return $this->eingetragen_von;
+        return $this->eingetragenVon;
     }
 
-    public function setEingetragenVon(string $eingetragen_von): self
+    public function setEingetragenVon(string $eingetragenVon): self
     {
-        $this->eingetragen_von = $eingetragen_von;
+        $this->eingetragenVon = $eingetragenVon;
         return $this;
     }
 
@@ -133,12 +134,12 @@ use App\Enum\NeuigkeitArt;
         return $this;
     }
 
-    public function getZeit(): ?\DateTimeInterface
+    public function getZeit(): ?DateTimeInterface
     {
         return $this->zeit;
     }
 
-    public function setZeit(\DateTimeInterface $zeit): self
+    public function setZeit(DateTimeInterface $zeit): self
     {
         $this->zeit = $zeit;
         return $this;
