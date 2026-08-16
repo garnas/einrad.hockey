@@ -41,13 +41,13 @@ if ($show_form): ?>
     <form method="post">
         <?php
         include "../../templates/turnier/form_ausrichter.tmp.php";
-        include "../../templates/turnier/form_daten.tmp.php";
-        include "../../templates/turnier/form_block.tmp.php";
-        include "../../templates/turnier/form_plaetze.tmp.php";
-        include "../../templates/turnier/form_anfahrt.tmp.php";
-        include "../../templates/turnier/form_details.tmp.php";
-        include "../../templates/turnier/form_orga.tmp.php";
-        ?>
+    include "../../templates/turnier/form_daten.tmp.php";
+    include "../../templates/turnier/form_block.tmp.php";
+    include "../../templates/turnier/form_plaetze.tmp.php";
+    include "../../templates/turnier/form_anfahrt.tmp.php";
+    include "../../templates/turnier/form_details.tmp.php";
+    include "../../templates/turnier/form_orga.tmp.php";
+    ?>
         <div class="w3-panel w3-card-4">
             <p>
                 <input type="submit" value="Turnier eintragen" name="create_turnier" class="w3-tertiary w3-button w3-block">
