@@ -82,14 +82,22 @@ php83 vendor/bin/phpunit tests/
 
 ### E2E-Tests (Playwright)
 
-**Voraussetzungen:** [Node.js](https://nodejs.org/), lokaler Dev-Server unter http://localhost erreichbar (siehe Dev-Container oben)
+Node.js und die Playwright-Browser sind im Dev-Container bereits vorinstalliert (siehe `setup.sh`). Führe die
+folgenden Befehle im Terminal des Dev-Containers aus:
+
+```shell
+npm run test:e2e            # headless
+npx playwright test --headed # mit sichtbarem Browser
+```
+
+Außerhalb des Dev-Containers (z. B. lokal unter Windows/macOS/Linux) benötigst du zusätzlich
+[Node.js](https://nodejs.org/) und einen erreichbaren Dev-Server unter http://localhost:
 
 ```shell
 npm install
 npx playwright install chromium
 
-npm run test:e2e            # headless
-npx playwright test --headed # mit sichtbarem Browser
+npm run test:e2e
 ```
 
 > Die Tests legen sich über `tests/e2e-playwright/global-setup.ts` ein eigenes Test-Team in der lokalen
