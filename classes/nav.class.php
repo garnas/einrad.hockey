@@ -220,7 +220,7 @@ class Nav
     public const LINK_SCHLAEGERTECHNIK = Env::BASE_URL . '/dokumente/schlaegertechnik_einradhockey.pdf?version=20251001';
     public const LINK_CHECK_XLSX = Env::BASE_URL . '/dokumente/checkliste_einradhockeyturnier_fuer_ausrichter.xlsx';
     public const LINK_CHECK_PDF = Env::BASE_URL . '/dokumente/checkliste_einradhockeyturnier_fuer_ausrichter.pdf';
-    public const LINK_DSGVO = Env::BASE_URL . '/dokumente/datenschutz-hinweise.pdf';
+    public const LINK_DSGVO = Env::BASE_URL . '/dokumente/datenschutz-hinweise.pdf?version=20260817';
     public const LINK_FRANCE = 'https://monocycle.info/ligue-de-monocycle-basket-remaniement-co/';
     public const LINK_SPIELPLAENE_ALT = Env::BASE_URL . '/dokumente/alte_spielplan_vorlagen.zip';
     public const LINK_EV_SH = 'https://www.einradverband-sh.de/';

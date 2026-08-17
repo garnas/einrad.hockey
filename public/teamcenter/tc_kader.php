@@ -3,6 +3,7 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Repository\Spieler\SpielerRepository;
 use App\Repository\Team\TeamRepository;
 
 require_once '../../init.php';
@@ -13,6 +14,7 @@ $team_id = $_SESSION['logins']['team']['id'];
 $teamEntity = TeamRepository::get()->team($team_id);
 $kader = $teamEntity->getKader();
 $kaderVorsaison = $teamEntity->getKaderVorsaison();
+$uebernehmbareSpieler = SpielerRepository::get()->findUebernehmbareSpieler($team_id);
 
 //Formularauswertung neuer Spieler
 require_once '../../logic/kader.logic.php';
