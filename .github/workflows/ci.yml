@@ -75,3 +75,80 @@ jobs:
 
       - name: Run PHPUnit
         run: vendor/bin/phpunit tests/
+
+  playwright:
+    name: Playwright E2E
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mariadb:12.2.2
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: db_localhost
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=2s
+          --health-timeout=2s
+          --health-retries=10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer
+          extensions: pdo_mysql
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Import database
+        run: mysql -h 127.0.0.1 -u root -proot db_localhost < _localhost/db_localhost.sql
+
+        # Für CI muss der DB-Host auf localhost zeigen.
+        # Daher wird der Host 'db' durch '127.0.0.1' ersetzt.
+      - name: Patch DB host for CI
+        run: sed -i "s/'db'/'127.0.0.1'/" _localhost/env.php
+
+        # Port 80 erfordert Root-Rechte; daher Port 8080 verwenden.
+      - name: Patch BASE_URL for CI
+        run: sed -i "s|'http://localhost'|'http://localhost:8080'|" _localhost/env.php
+
+      - name: Start PHP built-in server
+        run: php -S localhost:8080 -t public/ &
+
+      - name: Wait for PHP server
+        run: |
+          for i in {1..15}; do
+            curl -s http://localhost:8080 && break || sleep 1
+          done
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        run: npx playwright test
+        env:
+          PHP_BINARY: php
+          PLAYWRIGHT_BASE_URL: http://localhost:8080
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: test-results/
+          retention-days: 7

@@ -27,6 +27,12 @@ system/logs/
 # npm
 node_modules/
 
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
 # Docker Shell Scripts
 *.docker.sh
 
