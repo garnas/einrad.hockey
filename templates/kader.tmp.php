@@ -3,11 +3,11 @@
 use App\Service\Team\TeamSnippets;
 
 ?>
-<h1 class="w3-text-primary"><?= Html::icon("group", tag: "h1") ?> Teamkader der <?= e($teamEntity->getName()) ?></h1>
 
 <!-- Aktuelle Saison -->
 <div class="w3-panel">
-    <h2 class="w3-text-primary"><?= Html::icon("fact_check", tag: "h2") ?> Aktuelle Saison</h2>
+    <h1 class="w3-text-primary"><?= Html::icon("group", tag: "h1") ?> <?= e($teamEntity->getName()) ?></h1>
+    <h3>Saison <?= Html::get_saison_string() ?></h3>
     <div class="w3-responsive">
         <table class="w3-table w3-striped">
             <thead>
