@@ -5,6 +5,7 @@ namespace App\Repository\Spieler;
 use App\Entity\Team\Spieler;
 use App\Repository\DoctrineWrapper;
 use App\Repository\TraitSingletonRepository;
+use Config;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
 
@@ -24,24 +25,28 @@ class SpielerRepository
         return $this->spieler->find($id);
     }
 
-    public function findBySpieler(Spieler $spieler): ?Spieler
+    /**
+     * Spieler anderer Teams, die noch nicht in der aktuellen Saison gemeldet sind (für die Übernahme ins eigene Team)
+     * @return Collection|Spieler[]
+     */
+    public function findUebernehmbareSpieler(int $ausschlussTeamId): Collection|array
     {
         $query = DoctrineWrapper::manager()
             ->createQueryBuilder()
             ->select('s', 't')
             ->from(Spieler::class, 's')
             ->leftJoin('s.team', 't')
-            ->andWhere('s.vorname = :vorname')
-            ->andWhere('s.nachname = :nachname')
-            ->andWhere('s.jahrgang = :jahrgang')
-            ->andWhere('s.geschlecht = :geschlecht')
-            ->setParameter('vorname', $spieler->getVorname())
-            ->setParameter('nachname', $spieler->getNachname())
-            ->setParameter('jahrgang', $spieler->getJahrgang())
-            ->setParameter('geschlecht', $spieler->getGeschlecht())
+            ->andWhere('s.letzteSaison < :saison')
+            ->andWhere('s.letzteSaison >= (:saison - 2)')
+            ->andWhere('t.id IS NULL OR t.id != :teamId')
+            ->orderBy('s.nachname', 'ASC')
+            ->addOrderBy('s.vorname', 'ASC')
+            ->setParameter('saison', Config::SAISON)
+            ->setParameter('teamId', $ausschlussTeamId)
         ;
-        return $query->getQuery()->getOneOrNullResult();
+        return $query->getQuery()->getResult();
     }
+
     /**
      * @return Collection|Spieler[]
      */

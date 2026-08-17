@@ -14,11 +14,7 @@ if (isset($_POST['neuer_eintrag'])) {
 
     if (($_POST['dsgvo'] ?? '') !== 'zugestimmt') {
         $error = true;
-        Html::error("Den Datenschutz-Hiweisen muss zugestimmt werden, um in einem Ligateam spielen zu können.");
-    }
-    if (empty($vorname) || empty($nachname) || empty($jahrgang)) {
-        $error = true;
-        Html::error("Bitte Felder ausfüllen");
+        Html::error("Den Datenschutz-Hinweisen muss zugestimmt werden, um in einem Ligateam spielen zu können.");
     }
     if (empty($vorname) || empty($nachname) || empty($jahrgang)) {
         $error = true;
@@ -34,22 +30,43 @@ if (isset($_POST['neuer_eintrag'])) {
             ->setTeam($teamEntity)
             ->setTimestamp(new DateTime())
             ->setLetzteSaison(Config::SAISON);
-        $existingSpieler = SpielerRepository::get()->findBySpieler($spieler);
-        if ($existingSpieler === null) {
-            SpielerRepository::get()->speichern($spieler);
-            Html::info("Der Spieler wurde erfolgreich eingetragen.");
-            Helper::reload(get: '?team_id=' . $team_id);
-        } elseif ($existingSpieler->getLetzteSaison() < Config::SAISON) {
-            $vorherigesTeam = $existingSpieler->getTeam()->getName();
-            $existingSpieler->setTeam($teamEntity);
-            $existingSpieler->setLetzteSaison(Config::SAISON);
-            $existingSpieler->setTimestamp(new DateTime());
-            SpielerRepository::get()->speichern($existingSpieler);
-            Html::info("Der Spieler wurde erfolgreich vom vorherigen Team ($vorherigesTeam) übernommen.");
-            Helper::reload(get: '?team_id=' . $team_id);
-        } else {
-            $aktuellesTeam = $existingSpieler->getTeam()->getName();
+        SpielerRepository::get()->speichern($spieler);
+        Html::info("Der Spieler wurde erfolgreich eingetragen.");
+        Helper::reload(get: '?team_id=' . $team_id);
+    }
+}
+
+// Spieler eines anderen Teams übernehmen (Auswahl aus der Liste nicht mehr aktueller Spieler)
+if (isset($_POST['spieler_uebernahme'])) {
+    $error = false;
+    $spieler_id = $_POST['spieler_id'] ?? '';
+
+    if (($_POST['dsgvo'] ?? '') !== 'zugestimmt') {
+        $error = true;
+        Html::error("Den Datenschutz-Hinweisen muss zugestimmt werden, um in einem Ligateam spielen zu können.");
+    }
+    if (!ctype_digit((string) $spieler_id)) {
+        $error = true;
+        Html::error("Bitte einen Spieler aus der Liste auswählen.");
+    }
+
+    if (!$error) {
+        $spieler = SpielerRepository::get()->spieler((int) $spieler_id);
+        if ($spieler === null) {
+            Html::error("Bitte einen Spieler aus der Liste auswählen.");
+        } elseif ($spieler->getLetzteSaison() >= Config::SAISON) {
+            $aktuellesTeam = $spieler->getTeam()?->getName() ?? 'einem anderen Team';
             Html::error("Der Spieler ist für diese Saison bereits in einem anderen Team gemeldet ($aktuellesTeam).");
+        } else {
+            $vorherigesTeam = $spieler->getTeam()?->getName();
+            $spieler->setTeam($teamEntity);
+            $spieler->setLetzteSaison(Config::SAISON);
+            $spieler->setTimestamp(new DateTime());
+            SpielerRepository::get()->speichern($spieler);
+            Html::info($vorherigesTeam !== null
+                ? "Der Spieler wurde erfolgreich vom vorherigen Team ($vorherigesTeam) übernommen."
+                : "Der Spieler wurde erfolgreich übernommen.");
+            Helper::reload(get: '?team_id=' . $team_id);
         }
     }
 }
@@ -58,7 +75,7 @@ if (isset($_POST['neuer_eintrag'])) {
 if (isset($_POST['submit_takeover'])) {
     $changed = false;
     if (($_POST['dsgvo'] ?? '') !== 'zugestimmt') {
-        Html::error("Den Datenschutz-Hiweisen muss zugestimmt werden, um in einem Ligateam spielen zu können.");
+        Html::error("Den Datenschutz-Hinweisen muss zugestimmt werden, um in einem Ligateam spielen zu können.");
     } else {
         foreach (($_POST['takeover'] ?? []) as $spieler_id) {
             $spieler = SpielerRepository::get()->spieler($spieler_id);
