@@ -6,7 +6,7 @@ use App\Entity\Turnier\Turnier;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: "teams_strafen", uniqueConstraints: [new ORM\UniqueConstraint(name: "teamname", columns: ["teamname"])])]
+#[ORM\Table(name: "teams_strafen")]
 class Strafe
 {
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
@@ -14,14 +14,14 @@ class Strafe
     #[ORM\Column(name: "strafe_id", type: "integer", nullable: false)]
     private int $strafeId;
 
-    #[ORM\Column(name: "verwarnung", type: "string", length: 255, nullable: true)]
-    private ?string $verwarnung;
+    #[ORM\Column(name: "verwarnung", type: "string", length: 255, nullable: false)]
+    private string $verwarnung;
 
     #[ORM\Column(name: "grund", type: "string", length: 255, nullable: false)]
     private string $grund;
 
-    #[ORM\Column(name: "prozentsatz", type: "string", length: 255, nullable: true)]
-    private ?string $prozentsatz;
+    #[ORM\Column(name: "prozentsatz", type: "string", length: 255, nullable: false)]
+    private string $prozentsatz;
 
     #[ORM\Column(name: "saison", type: "integer", length: 255, nullable: false)]
     private int $saison;

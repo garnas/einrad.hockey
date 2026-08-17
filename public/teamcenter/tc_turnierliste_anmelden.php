@@ -13,7 +13,7 @@ require_once '../../logic/session_team.logic.php'; //Auth
 
 $team_id = $_SESSION['logins']['team']['id'];
 
-$turniere = TurnierRepository::getKommendeTurniere();
+$turniere = TurnierRepository::get()->getKommendeTurniere();
 
 if ($turniere->isEmpty()) {
     Html::notice(

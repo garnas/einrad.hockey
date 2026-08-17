@@ -18,11 +18,11 @@ if (LigaLeitung::is_logged_in(funktion: "ligaausschuss")) {
     $neuigkeiten = NeuigkeitRepository::get()->findActiveBeforeNow();
 }
 
-$turniere = TurnierRepository::getKommendeTurniere()->toArray();
+$turniere = TurnierRepository::get()->getKommendeTurniere()->toArray();
 $anz_next_turniere = count($turniere);
 $next_turniere = array_slice($turniere, 0, 4);
 
-$turniere = TurnierRepository::getErgebnisTurniere()->toArray();
+$turniere = TurnierRepository::get()->getErgebnisTurniere()->toArray();
 $anz_last_turniere = count($turniere);
 $last_turniere = array_slice($turniere, 0, 4);
 

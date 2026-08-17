@@ -12,7 +12,7 @@ class AbstimmungVote
     #[ORM\Column(type: 'string', length: 255)]
     private string $crypt;
 
-    #[ORM\Column(type: 'string', length: 511)]
+    #[ORM\Column(type: 'string', length: 4000)]
     private string $stimme;
 
     public function getCrypt(): string

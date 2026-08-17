@@ -11,7 +11,7 @@ class TurnierBerichtRepository
 {
     use TraitSingletonRepository;
 
-    public EntityRepository $bericht;
+    private EntityRepository $bericht;
 
     private function __construct()
     {

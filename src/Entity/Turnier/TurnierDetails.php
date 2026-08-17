@@ -42,7 +42,7 @@ class TurnierDetails
     private ?string $haltestellen;
 
     #[ORM\Column(name: "plaetze", type: "integer", nullable: true)]
-    private int $plaetze;
+    private ?int $plaetze;
 
     #[ORM\Column(name: "min_teams", type: "integer", nullable: true)]
     private ?int $minTeams;
@@ -57,7 +57,7 @@ class TurnierDetails
     private ?string $besprechung;
 
     #[ORM\Column(name: "hinweis", type: "string", length: 1700, nullable: true)]
-    private string $hinweis;
+    private ?string $hinweis;
 
     #[ORM\Column(name: "organisator", type: "string", length: 255, nullable: true)]
     private ?string $organisator;
@@ -128,12 +128,12 @@ class TurnierDetails
         return $this;
     }
 
-    public function getPlaetze(): int
+    public function getPlaetze(): ?int
     {
         return $this->plaetze;
     }
 
-    public function setPlaetze(int $plaetze): self
+    public function setPlaetze(?int $plaetze): self
     {
         $this->turnier->getLogService()->autoLog("Plätze", $this->plaetze ?? null, $plaetze);
         $this->plaetze = $plaetze;

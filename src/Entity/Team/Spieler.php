@@ -23,7 +23,7 @@ class Spieler
     #[ORM\Column(name: "jahrgang", type: "integer", nullable: false)]
     private int $jahrgang;
 
-    #[ORM\Column(name: "geschlecht", type: "string", length: 0, nullable: false)]
+    #[ORM\Column(name: "geschlecht", type: "string", length: 0, nullable: true)]
     private ?string $geschlecht;
 
     #[ORM\Column(name: "schiri", type: "integer", nullable: true)]
@@ -38,9 +38,9 @@ class Spieler
     #[ORM\Column(name: "timestamp", type: "datetime", nullable: true)]
     private ?DateTime $timestamp;
 
-    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
+    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id", nullable: true)]
     #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "kader")]
-    private nTeam $team;
+    private ?nTeam $team = null;
 
     public function getSpielerId(): ?int
     {

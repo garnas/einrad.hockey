@@ -8,7 +8,7 @@ use App\Repository\Turnier\TurnierRepository;
 require_once '../../init.php';
 
 $saison = (isset($_GET['saison'])) ? (int) $_GET['saison'] : Config::SAISON;
-$turniere = TurnierRepository::getErgebnisTurniere(saison: $saison);
+$turniere = TurnierRepository::get()->getErgebnisTurniere(saison: $saison);
 
 if (empty($turniere)) {
     Html::info("Es wurden keine Turnierergebnisse der Saison " . Html::get_saison_string($saison) . " eingetragen");

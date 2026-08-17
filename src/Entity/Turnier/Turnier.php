@@ -50,10 +50,10 @@ class Turnier
     #[ORM\Column(name: "tblock_fixed", type: "string", length: 255, nullable: true)]
     private ?string $fixed = "Nein";
 
-    #[ORM\Column(name: "datum", type: "date")]
+    #[ORM\Column(name: "datum", type: "date", nullable: true)]
     private ?DateTime $datum;
 
-    #[ORM\Column(name: "datum_bis", type: "date")]
+    #[ORM\Column(name: "datum_bis", type: "date", nullable: true)]
     private ?DateTime $datumBis;
     #[ORM\Column(name: "spieltag", type: "integer", nullable: true)]
     private ?int $spieltag = 0;

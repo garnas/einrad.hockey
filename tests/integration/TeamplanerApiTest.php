@@ -13,7 +13,7 @@ class TeamplanerApiTest extends TestCase
 {
     public function testTurnierelisteToXml(): void
     {
-        $turniere = TurnierRepository::getKommendeTurniere()->toArray();
+        $turniere = TurnierRepository::get()->getKommendeTurniere()->toArray();
         $xmlContent = xml::turniereToXml(turniere: $turniere);
         $this->assertStringContainsString(needle: "<turniere", haystack: $xmlContent);
     }

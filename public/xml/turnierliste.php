@@ -6,6 +6,6 @@ require_once '../../init.php';
 
 Helper::$log_user = false; // Keine User-Logs
 
-$turniere = TurnierRepository::getKommendeTurniere()->toArray();
+$turniere = TurnierRepository::get()->getKommendeTurniere()->toArray();
 header('Content-type: text/xml');
 echo xml::turniereToXml(turniere: $turniere);

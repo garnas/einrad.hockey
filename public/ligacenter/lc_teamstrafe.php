@@ -10,7 +10,7 @@ require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
 //Turnierdaten für Select
-$turniere = TurnierRepository::getAlleTurniere();
+$turniere = TurnierRepository::get()->getAlleTurniere();
 $strafen = TeamRepository::get()->getStrafenBySaison();
 
 //Formularauswertung

@@ -55,12 +55,12 @@ class SpielplanPaarungen
         return $this;
     }
 
-    public function isTeamA(): bool
+    public function getTeamA(): int
     {
         return $this->teamA;
     }
 
-    public function setTeamA(bool $teamA): self
+    public function setTeamA(int $teamA): self
     {
         $this->teamA = $teamA;
         return $this;
