@@ -2,7 +2,7 @@
 
 INSERT INTO db_localhost.teams_name_historic (saison, team_id, name)
 SELECT
-    30 AS saison,
+    31 AS saison,
     team_id,
     teamname AS name
 FROM
