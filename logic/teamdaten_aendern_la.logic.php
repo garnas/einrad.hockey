@@ -10,9 +10,9 @@ if (isset($_POST['change_la']) && Helper::$ligacenter) {
 
     if (
         $neuer_teamname != htmlspecialchars_decode($team->getName())
-        && TeamRepository::get()->findByName($neuer_teamname)
+        && TeamRepository::get()->findByNameAndIsAktiv($neuer_teamname)
     ) {
-        Html::error("Der Teamname existiert bereits.");
+        Html::error("Der Teamname existiert bereits bei einem aktiven Ligateam.");
         $error = true;
     }
 

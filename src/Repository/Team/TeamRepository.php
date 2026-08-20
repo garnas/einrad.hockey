@@ -162,6 +162,15 @@ class TeamRepository
         return $this->team->findOneBy(['name' => $name]);
     }
 
+    /**
+     * @param string $name
+     * @return nTeam|null
+     */
+    public function findByNameAndIsAktiv(string $name): ?nTeam
+    {
+        return $this->team->findOneBy(['name' => $name, 'aktiv' => 'Ja']);
+    }
+
     public function deleteFoto(nTeam $team): void
     {
         $teamfoto = $team->getDetails()->getTeamfoto();
