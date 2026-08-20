@@ -36,6 +36,9 @@ class nTeam
     #[ORM\OneToMany(targetEntity: Strafe::class, mappedBy: "team", cascade: ["all"], indexBy: "strafe_id")]
     private Collection $strafen;
 
+    #[ORM\OneToMany(targetEntity: TeamNameHistoric::class, mappedBy: "team", cascade: ["all"], indexBy: "saison")]
+    private Collection $historischeNamen;
+
     public function getAusgerichteteTurniere(): Collection|array
     {
         return $this->ausgerichteteTurniere;
@@ -91,6 +94,7 @@ class nTeam
         $this->emails = new ArrayCollection();
         $this->ergebnisse = new ArrayCollection();
         $this->strafen = new ArrayCollection();
+        $this->historischeNamen = new ArrayCollection();
     }
 
     #[ORM\OneToOne(targetEntity: TeamDetails::class, mappedBy: "team", cascade: ["all"])]
@@ -164,15 +168,31 @@ class nTeam
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(int $saison = Config::SAISON): ?string
     {
-        return $this->name;
+        if (Config::SAISON === $saison) {
+            return $this->name;
+        }
+
+        $historic = $this->historischeNamen->get($saison);
+        return $historic?->getName() ?? $this->name;
     }
 
     public function setName(string $name): self
     {
         $this->name = $name;
 
+        return $this;
+    }
+
+    public function getHistorischeNamen(): Collection
+    {
+        return $this->historischeNamen;
+    }
+
+    public function setHistorischeNamen(Collection $historischeNamen): self
+    {
+        $this->historischeNamen = $historischeNamen;
         return $this;
     }
 
