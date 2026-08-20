@@ -348,7 +348,7 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `ligaleitung` WRITE;
 /*!40000 ALTER TABLE `ligaleitung` DISABLE KEYS */;
 INSERT INTO `ligaleitung` VALUES
-(9,240,'admin','test@einrad.hockey','admin',NULL),
+(9,240,'admin','test@einrad.hockey','Ansgar',NULL),
 (14,874,'team_social_media','test@einrad.hockey','SocialMedia',NULL),
 (20,31,'schiriausbilder','test@einrad.hockey',NULL,NULL),
 (21,64,'schiriausbilder','test@einrad.hockey',NULL,NULL),
@@ -16130,7 +16130,8 @@ CREATE TABLE `teams_liga` (
   `zweites_freilos` date DEFAULT NULL COMMENT '2 Schiris 2 Freilose',
   `aktiv` enum('Ja','Nein') NOT NULL DEFAULT 'Ja',
   PRIMARY KEY (`team_id`),
-  UNIQUE KEY `teamname` (`teamname`)
+  UNIQUE KEY `teams_liga_pk` (`teamname`,`aktiv`),
+  KEY `teamname` (`teamname`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1172 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Teamdaten, welche nur vom LA geändert werden können';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -23987,4 +23988,4 @@ SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-08-21  0:19:08
+-- Dump completed on 2026-08-21  0:23:12
