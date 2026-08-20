@@ -15,9 +15,9 @@ class Logger implements LoggerInterface
             return false;
         }
         return preg_match(
-                '/\b(INSERT|UPDATE|DELETE|REPLACE|MERGE|CREATE|ALTER|DROP|TRUNCATE)\b/i',
-                $context["sql"]
-            ) === 1;
+            '/\b(INSERT|UPDATE|DELETE|REPLACE|MERGE|CREATE|ALTER|DROP|TRUNCATE)\b/i',
+            $context["sql"]
+        ) === 1;
     }
 
     private function isInsertTurniereLog(array $context): bool
