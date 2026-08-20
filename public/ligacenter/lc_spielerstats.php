@@ -2,6 +2,7 @@
 
 require_once '../../init.php';
 
+use App\Service\Turnier\TabelleService;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -42,9 +43,9 @@ foreach ($result as $row) {
         $row["schiri"],
         $row["junior"],
         $row["letzte_saison"],
-        Tabelle::get_team_meister_platz($row["team_id"]),
-        Tabelle::get_team_rang($row["team_id"]),
-        Tabelle::get_team_block($row["team_id"]),
+        TabelleService::getTeamMeisterPlatz($row["team_id"]),
+        TabelleService::getTeamRang($row["team_id"]),
+        TabelleService::getTeamBlock($row["team_id"]),
         $row["team_id"],
         $row["teamname"],
         $row["plz"],

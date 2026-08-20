@@ -8,9 +8,11 @@
 
 <!-- Zeilen der Rangtabelle -->
 <div>
-    <?php $counter = 0; ?>
+    <?php use App\Service\Turnier\TabelleService;
+
+    $counter = 0; ?>
     <?php foreach ($rang_tabelle as $key => $zeile): ?>
-        <?php $block = Tabelle::rang_to_block($zeile['rang']); ?>
+        <?php $block = TabelleService::rangToBlock($zeile['rang']); ?>
         <?php $nthcolor = $counter % 2 == 0 ? '' : 'w3-light-grey'; ?>
 
         <!-- Kopfzeile fuer das Team -->
@@ -30,7 +32,7 @@
         <!-- Wertigkeit des Ranges; Wird erst nach Klicken angezeigt -->
         <div id="small-rang-value-<?=$key?>" class="w3-row <?=$nthcolor?>" style="display: none;">
             <div class="w3-col w3-left" style="width: 84px;">&nbsp;</div>
-            <div class="w3-rest w3-small w3-text-primary">Wertigkeit: <?=Tabelle::rang_to_wertigkeit($zeile['rang'])?></div>
+            <div class="w3-rest w3-small w3-text-primary">Wertigkeit: <?= TabelleService::rangToWertigkeit($zeile['rang'])?></div>
         </div>
 
         <!-- Lade Turnierdetails nur, wenn es auch gespielte Turniere gibt -->

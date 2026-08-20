@@ -1,5 +1,7 @@
 <?php
 
+use App\Service\Turnier\TabelleService;
+
 /**
  * Class Team
  * Alle Funktionen zum Darstellen und Verwalten von Teamdaten
@@ -287,7 +289,7 @@ class Team
      */
     public function set_wertigkeit(int $spieltag, int $saison = Config::SAISON): void
     {
-        $this->wertigkeit = Tabelle::get_team_wertigkeit($this->id, $spieltag - 1, $saison);
+        $this->wertigkeit = TabelleService::getTeamWertigkeit($this->id, $spieltag - 1, $saison);
     }
 
     /**
@@ -297,7 +299,7 @@ class Team
      */
     public function set_tblock(int $spieltag): void
     {
-        $this->tblock = Tabelle::get_team_block($this->id, $spieltag - 1);
+        $this->tblock = TabelleService::getTeamBlock($this->id, $spieltag - 1);
     }
 
     /**

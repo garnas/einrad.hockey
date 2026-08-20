@@ -5,6 +5,7 @@ use App\Repository\DoctrineWrapper;
 use App\Repository\Turnier\TurnierRepository;
 use App\Repository\TurnierBericht\TurnierBerichtRepository;
 use App\Service\Team\FreilosService;
+use App\Service\Turnier\TabelleService;
 use App\Service\TurnierBericht\TurnierBerichtService;
 
 $turnierEntity = TurnierRepository::get()->turnier($turnier_id);
@@ -82,7 +83,7 @@ if (isset($_POST["turnierergebnis_speichern"])) {
         $spielplan->turnier->set_ergebnisse($spielplan->platzierungstabelle);
         Html::info("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
         $spieltag = $spielplan->turnier->get_spieltag();
-        if (Tabelle::is_spieltag_beendet($spieltag)) {
+        if (TabelleService::isSpieltagBeendet($spieltag)) {
             nLigaBot::blockWechsel();
         }
         DoctrineWrapper::manager()->refresh($turnierEntity); # Doctrine erkennt die Änderungen in set_ergebnisse nicht.

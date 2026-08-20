@@ -8,6 +8,7 @@ use App\Repository\Turnier\TurnierRepository;
 use App\Repository\TurnierBericht\TurnierBerichtRepository;
 use App\Service\Team\FreilosService;
 use App\Service\Neuigkeit\FileService;
+use App\Service\Turnier\TabelleService;
 
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
@@ -55,7 +56,7 @@ if (isset($_POST['ergebnis_eintragen'])) {
     $turnier->update_phase('ergebnis');
     Html::info("Ergebnisse wurden manuell eingetragen. Das Turnier wurde in die Ergebnisphase versetzt.");
     $spieltag = $turnier->get_spieltag();
-    if (Tabelle::is_spieltag_beendet($spieltag)) {
+    if (TabelleService::isSpieltagBeendet($spieltag)) {
         nLigaBot::blockWechsel();
     }
     $turnierEntity = TurnierRepository::get()->turnier($turnier_id);

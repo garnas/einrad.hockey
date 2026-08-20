@@ -3,10 +3,10 @@
 namespace integration;
 
 use App\Repository\Turnier\TurnierRepository;
+use App\Service\Turnier\TabelleService;
 use nTurnier;
 use PHPUnit\Framework\TestCase;
 use SimpleXMLElement;
-use Tabelle;
 use xml;
 
 class TeamplanerApiTest extends TestCase
@@ -20,7 +20,7 @@ class TeamplanerApiTest extends TestCase
 
     public function testRangtabelleToXml(): void
     {
-        $rangtabelle = Tabelle::get_rang_tabelle(Tabelle::get_aktuellen_spieltag() - 1);
+        $rangtabelle = TabelleService::getRangTabelle(TabelleService::getAktuellenSpieltag() - 1);
         $xml = new SimpleXMLElement('<rangtabelle/>');
         $xmlContent = xml::array_to_xml($rangtabelle, $xml, "platz");
         $this->assertStringContainsString(needle: "<rangtabelle", haystack: $xmlContent);

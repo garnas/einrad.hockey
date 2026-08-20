@@ -3,6 +3,7 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 use App\Repository\Team\TeamRepository;
+use App\Service\Turnier\TabelleService;
 
 require_once '../../init.php';
 
@@ -10,10 +11,10 @@ require_once '../../init.php';
 $saison = (int) ($_GET['saison'] ?? Config::SAISON);
 
 // Erhalte aktuellen Spieltag. Der aktuelle Spieltag ist der Spieltag, an dem das nächste Turnier eingetragen wird.
-$akt_spieltag = Tabelle::get_aktuellen_spieltag($saison);
+$akt_spieltag = TabelleService::getAktuellenSpieltag($saison);
 
 // Anpassungen, sollte der Spieltag gerade gespielt werden
-if (Tabelle::check_spieltag_live($akt_spieltag)) {
+if (TabelleService::checkSpieltagLive($akt_spieltag)) {
     $live_spieltag = $akt_spieltag;
 } else {
     $live_spieltag = -1;
@@ -25,8 +26,8 @@ $gew_spieltag = isset($_GET['spieltag']) ? (int) $_GET['spieltag'] : $akt_spielt
 
 // Daten der Meisterschaftstabelle, um sie an das Layout zu übergeben
 if ($saison > 30) {
-    $meisterschafts_tabelle = Tabelle::get_meisterschafts_tabelle($gew_spieltag, $saison);
-    $meisterschafts_tabelle_templates = Tabelle::get_meisterschafts_tabelle_templates($saison);
+    $meisterschafts_tabelle = TabelleService::getMeisterschaftsTabelle($gew_spieltag, $saison);
+    $meisterschafts_tabelle_templates = TabelleService::getMeisterschaftsTabelleTemplates($saison);
 } else {
     // Vor der Saison 31 galt eine 'andere' Meisterschaftstabelle
     $meisterschafts_tabelle = Archiv_Tabelle::get_meisterschafts_tabelle($gew_spieltag, $saison);
@@ -34,8 +35,8 @@ if ($saison > 30) {
 }
 
 // Daten der Rangtabelle, um sie an das Layout zu uebergeben
-$rang_tabelle = Tabelle::get_rang_tabelle($gew_spieltag, $saison);
-$rang_tabelle_templates = Tabelle::get_rang_tabelle_templates($saison);
+$rang_tabelle = TabelleService::getRangTabelle($gew_spieltag, $saison);
+$rang_tabelle_templates = TabelleService::getRangTabelleTemplates($saison);
 
 // Daten der Strafen, um sie an das Layout zu uebergeben
 $strafen = TeamRepository::get()->getStrafenBySaison($saison);

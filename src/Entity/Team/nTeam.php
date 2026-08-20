@@ -5,12 +5,12 @@ namespace App\Entity\Team;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Entity\Turnier\TurnierErgebnis;
+use App\Service\Turnier\TabelleService;
 use Config;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Helper;
-use Tabelle;
 
 #[ORM\Entity]
 #[ORM\Table(name: "teams_liga", uniqueConstraints: [new ORM\UniqueConstraint(name: "teamname", columns: ["teamname"])])]
@@ -269,7 +269,7 @@ class nTeam
         if (!$this->isLigaTeam()) {
             return null;
         }
-        return Tabelle::get_team_block($this->id(), $spieltag); // TODO Symfonyfy
+        return TabelleService::getTeamBlock($this->id(), $spieltag);
     }
 
     public function isLigaTeam(): bool

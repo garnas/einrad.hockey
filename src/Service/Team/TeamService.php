@@ -8,13 +8,13 @@ use App\Entity\Team\Spieler;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Repository\Team\TeamRepository;
+use App\Service\Turnier\TabelleService;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierSnippets;
 use Config;
 use Doctrine\Common\Collections\Collection;
 use Helper;
 use Html;
-use Tabelle;
 
 class TeamService
 {
@@ -135,7 +135,7 @@ class TeamService
     {
         $_SESSION['logins']['team']['id'] = $team->id();
         $_SESSION['logins']['team']['name'] = $team->getName();
-        $_SESSION['logins']['team']['block'] = Tabelle::get_team_block($team->id());
+        $_SESSION['logins']['team']['block'] = TabelleService::getTeamBlock($team->id());
     }
 
     /**

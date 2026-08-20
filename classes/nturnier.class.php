@@ -1,5 +1,7 @@
 <?php
 
+use App\Service\Turnier\TabelleService;
+
 /**
  * Class Turnier
  *
@@ -408,8 +410,8 @@ class nTurnier
         $liste['team_ids'] = $liste['teamnamen'] = $liste['spiele'] = $liste['melde'] = $liste['warte'] = [];
         foreach ($anmeldungen as $a) {
             $liste[$a['liste']][$a['team_id']] = $a;
-            $liste[$a['liste']][$a['team_id']]['tblock'] = Tabelle::get_team_block($a['team_id']);
-            $liste[$a['liste']][$a['team_id']]['wertigkeit'] = Tabelle::get_team_wertigkeit($a['team_id']);
+            $liste[$a['liste']][$a['team_id']]['tblock'] = TabelleService::getTeamBlock($a['team_id']);
+            $liste[$a['liste']][$a['team_id']]['wertigkeit'] = TabelleService::getTeamWertigkeit($a['team_id']);
         }
         return $liste;
     }
@@ -436,13 +438,13 @@ class nTurnier
         $anmeldungen = db::$db->query($sql, $saison)->esc()->fetch();
 
         // Erhalten den aktuellen Spieltag für die Ermittung des Teamblocks und der -wertigkeit
-        $spieltag = Tabelle::get_aktuellen_spieltag();
+        $spieltag = TabelleService::getAktuellenSpieltag();
 
         // Erstellung des Arrays mit der TurnierID, der -liste, Teamnamen, -blöcken und -wertigkeiten
         foreach ($anmeldungen as $a) {
             $turnier_listen[$a['turnier_id']][$a['liste']][$a['team_id']] = $a;
-            $turnier_listen[$a['turnier_id']][$a['liste']][$a['team_id']]['tblock'] = Tabelle::get_team_block($a['team_id'], $spieltag);
-            $turnier_listen[$a['turnier_id']][$a['liste']][$a['team_id']]['wertigkeit'] = Tabelle::get_team_wertigkeit($a['team_id'], $spieltag);
+            $turnier_listen[$a['turnier_id']][$a['liste']][$a['team_id']]['tblock'] = TabelleService::getTeamBlock($a['team_id'], $spieltag);
+            $turnier_listen[$a['turnier_id']][$a['liste']][$a['team_id']]['wertigkeit'] = TabelleService::getTeamWertigkeit($a['team_id'], $spieltag);
         }
         return $turnier_listen ?? [];
     }
@@ -485,11 +487,11 @@ class nTurnier
 
             // A-Finals werden nach Meisterschaftstabelle sortiert, rest nach Rangtabelle
             if ($this->get_art() === "final" && str_contains($this->get_tblock() ?? "", "A")) {
-                $spieltag = Tabelle::get_aktuellen_spieltag();
+                $spieltag = TabelleService::getAktuellenSpieltag();
                 uasort($spielenliste, static function ($team_a, $team_b) use ($spieltag) {
                     return (
-                        (int) Tabelle::get_team_meister_platz($team_a->id, $spieltag)
-                        <=> (int) Tabelle::get_team_meister_platz($team_b->id, $spieltag)
+                        (int) TabelleService::getTeamMeisterPlatz($team_a->id, $spieltag)
+                        <=> (int) TabelleService::getTeamMeisterPlatz($team_b->id, $spieltag)
                     );
                 });
             } else {
@@ -911,7 +913,7 @@ class nTurnier
      */
     public function is_spielberechtigt(int $team_id): bool
     {
-        $team_block = Tabelle::get_team_block($team_id);
+        $team_block = TabelleService::getTeamBlock($team_id);
         $turnier_block = $this->tblock;
         $turnier_art = $this->art;
 
@@ -984,7 +986,6 @@ class nTurnier
     {
         if (!in_array($this->art, ['I', 'II', 'III', 'final'])) {
             Html::error("Für diesen Turniertyp können keine Ergebnisse eingetragen werden.");
-            // TODO ist der Check hier an der besten Stelle?
             return false;
         }
         $sql = "

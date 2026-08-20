@@ -14,9 +14,11 @@
 
 <!-- Zeilen der Rangtabelle -->
 <div>
-    <?php $counter = 0; ?>
+    <?php use App\Service\Turnier\TabelleService;
+
+    $counter = 0; ?>
     <?php foreach ($rang_tabelle as $key => $zeile): ?>
-        <?php $block = Tabelle::rang_to_block($zeile['rang']); ?>
+        <?php $block = TabelleService::rangToBlock($zeile['rang']); ?>
         <?php $nthcolor = $counter % 2 == 0 ? '' : 'w3-light-grey'; ?>
         
         <!-- Kopfzeile fuer das Team -->
@@ -33,7 +35,7 @@
                 <div class="w3-row">
                     <div class="w3-col l1 m1 w3-padding-8 w3-right-align"><?=$zeile['rang']?></div>
                     <div class="w3-col l1 m1 w3-padding-8 <?=$block_color[substr($block, 0, 1)]?>"><?=$block?></div>
-                    <div class="w3-col l1 m1 w3-padding-8 w3-right-align"><?=Tabelle::rang_to_wertigkeit($zeile['rang'])?></div>
+                    <div class="w3-col l1 m1 w3-padding-8 w3-right-align"><?= TabelleService::rangToWertigkeit($zeile['rang'])?></div>
                     <div class="w3-col l7 m7 w3-padding-8"><?=$zeile['teamname']?></div>
                     <div class="w3-col l2 m2 w3-padding-8 w3-right-align"><?=number_format($zeile['avg'] ?: 0, 1, ",", ".")?></div>
                 </div>

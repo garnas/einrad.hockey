@@ -29,7 +29,7 @@ class Config
      * Ligablöcke
      *
      * Reihenfolge bei den Blöcken muss immer hoch -> niedrig sein
-     * Für die Block und Wertzuordnung in der Rangtabelle siehe Tabelle::rang_to_block und Tabelle::rang_to_wertigkeit
+     * Für die Block und Wertzuordnung in der Rangtabelle siehe TabelleService::rangToBlock und TabelleService::rangToWertigkeit
      *
      */
 

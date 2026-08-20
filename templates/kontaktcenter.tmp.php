@@ -61,7 +61,7 @@ if (empty($_SESSION[$list_id ?? '']['emails'])): ?>
             <?php foreach ($teams as $team):?>
                 <div class="w3-col s12 m6">
                     <input style="cursor: pointer;" class="w3-check" type="checkbox" id="email<?=$team['team_id']?>" name="team[]" value="<?=$team['team_id']?>">
-                    <label style="cursor: pointer; color: red;" class="w3-text-primary w3-hover-text-secondary" for="email<?=$team['team_id']?>"><?=e($team['teamname'])?> (<?=Tabelle::get_team_block($team['team_id'], $akt_spieltag - 1)?>)</label>
+                    <label style="cursor: pointer; color: red;" class="w3-text-primary w3-hover-text-secondary" for="email<?=$team['team_id']?>"><?=e($team['teamname'])?> (<?=\App\Service\Turnier\TabelleService::getTeamBlock($team['team_id'], $akt_spieltag - 1)?>)</label>
                 </div>
             <?php endforeach; ?>
         </div>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Entity\Turnier\Turnier;
+use App\Service\Turnier\TabelleService;
 
 /**
  * Class xml
@@ -60,7 +61,7 @@ class xml
                     }
                 }
                 if ($ebene1 == "platz") {
-                    $block = Tabelle::rang_to_block((int) $subnode1->rang);
+                    $block = TabelleService::rangToBlock((int) $subnode1->rang);
                     $subnode1->addChild("block", htmlspecialchars("$block"));
                 }
             } else {
