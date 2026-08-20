@@ -77,9 +77,19 @@ class TeamRepository
     /**
      * @return nTeam[]
      */
-    public function activeLigaTeams(): array //TODO 1+n query
+    public function activeLigaTeams(): array
     {
-        return $this->team->findBy(['aktiv' => 'Ja', 'ligateam' => 'Ja']);
+        return DoctrineWrapper::manager()
+            ->createQueryBuilder()
+            ->select('t', 'details')
+            ->from(nTeam::class, 't')
+            ->leftJoin('t.details', 'details')
+            ->andWhere('t.aktiv = :aktiv')
+            ->andWhere('t.ligateam = :ligateam')
+            ->setParameter('aktiv', 'Ja')
+            ->setParameter('ligateam', 'Ja')
+            ->getQuery()
+            ->getResult();
     }
 
     public function speichern(nTeam $team): void
