@@ -3,6 +3,7 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Repository\Spieler\SpielerRepository;
 use App\Repository\Team\TeamRepository;
 
 require_once '../../init.php';
@@ -15,6 +16,7 @@ if (isset($_GET['team_id'])) {
     if (Team::is_ligateam($team_id)) {
         $kader = $teamEntity->getKader();
         $kaderVorsaison = $teamEntity->getKaderVorsaison();
+        $uebernehmbareSpieler = SpielerRepository::get()->findUebernehmbareSpieler($team_id);
     } else {
         Html::error("Team wurde nicht gefunden");
     }
