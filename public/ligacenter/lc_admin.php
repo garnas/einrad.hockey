@@ -11,7 +11,7 @@ require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 Helper::ensure_no_request_logging();
 
-$deaktivierte_teams = Team::get_deactive();
+$deaktivierte_teams = TeamRepository::get()->deactivatedLigaTeams();
 
 //Formularauswertung
 
@@ -43,13 +43,13 @@ if (isset($_POST['delete_turnier'])) {
 // Ligateam deativieren
 if (isset($_POST['deaktivieren'])) {
     $teamname = $_POST['teamname'] ?? '';
-    $team_id = Team::name_to_id($teamname);
+    $team = TeamRepository::get()->findByName($teamname);
 
-    if (Team::is_ligateam($team_id)) {
-        Team::deactivate($team_id);
+    if ($team && $team->isLigaTeam()) {
+        $team->setAktiv('Nein');
+        TeamRepository::get()->speichern($team);
         Html::info("Das Team $teamname wurde deaktiviert.");
-        header('Location: ../ligacenter/lc_admin.php');
-        die();
+        Helper::reload("/ligacenter/lc_admin.php");
     }
     Html::error("Teamname wurde nicht gefunden. Team wurde nicht deaktiviert.");
 }
@@ -70,14 +70,14 @@ if (isset($_POST['ergebnisuebernahme_verhindern'])) {
 
 // Ligateam reaktivieren
 if (isset($_POST['reaktivieren'])) {
-    $team_id = $_POST['team_id'] ?? '';
-    $teamname = Team::id_to_name($team_id);
+    $team_id = (int) ($_POST['team_id'] ?? 0);
+    $team = TeamRepository::get()->team($team_id);
 
-    if (!empty($teamname)) {
-        Team::activate($team_id);
-        Html::info("Das Team $teamname wurde reaktiviert.");
-        header('Location: ../ligacenter/lc_admin.php');
-        die();
+    if ($team) {
+        $team->setAktiv('Ja');
+        TeamRepository::get()->speichern($team);
+        Html::info("Das Team " . $team->getName() . " wurde reaktiviert.");
+        Helper::reload(path: "/ligacenter/lc_admin.php");
     }
     Html::error("Teamname wurde nicht gefunden. Team wurde nicht deaktiviert.");
 }
@@ -199,7 +199,7 @@ include '../../templates/header.tmp.php';?>
     <select required class="w3-select w3-border w3-border-primary" id="team_id" name="team_id">
         <option disabled selected>Bitte deaktives Team wählen</option>
             <?php foreach ($deaktivierte_teams as $team) {?>
-                <option value=<?=$team['team_id']?>><?=$team['teamname']?></option>
+                <option value=<?=$team->id()?>><?=$team->getName()?></option>
             <?php } //end foreach?>
     </select>
     <p>

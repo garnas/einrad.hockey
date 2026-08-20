@@ -92,6 +92,24 @@ class TeamRepository
             ->getResult();
     }
 
+    /**
+     * @return nTeam[]
+     */
+    public function deactivatedLigaTeams(): array
+    {
+        return DoctrineWrapper::manager()
+            ->createQueryBuilder()
+            ->select('t')
+            ->from(nTeam::class, 't')
+            ->andWhere('t.aktiv = :aktiv')
+            ->andWhere('t.ligateam = :ligateam')
+            ->orderBy('t.name', 'asc')
+            ->setParameter('aktiv', 'Nein')
+            ->setParameter('ligateam', 'Ja')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function speichern(nTeam $team): void
     {
         DoctrineWrapper::manager()->persist($team);
