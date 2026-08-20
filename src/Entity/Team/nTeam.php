@@ -5,12 +5,12 @@ namespace App\Entity\Team;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
 use App\Entity\Turnier\TurnierErgebnis;
+use App\Service\Turnier\TabelleService;
 use Config;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Helper;
-use Tabelle;
 
 #[ORM\Entity]
 #[ORM\Table(name: "teams_liga", uniqueConstraints: [new ORM\UniqueConstraint(name: "teamname", columns: ["teamname"])])]
@@ -35,6 +35,9 @@ class nTeam
 
     #[ORM\OneToMany(targetEntity: Strafe::class, mappedBy: "team", cascade: ["all"], indexBy: "strafe_id")]
     private Collection $strafen;
+
+    #[ORM\OneToMany(targetEntity: TeamNameHistoric::class, mappedBy: "team", cascade: ["all"], indexBy: "saison")]
+    private Collection $historischeNamen;
 
     public function getAusgerichteteTurniere(): Collection|array
     {
@@ -91,6 +94,7 @@ class nTeam
         $this->emails = new ArrayCollection();
         $this->ergebnisse = new ArrayCollection();
         $this->strafen = new ArrayCollection();
+        $this->historischeNamen = new ArrayCollection();
     }
 
     #[ORM\OneToOne(targetEntity: TeamDetails::class, mappedBy: "team", cascade: ["all"])]
@@ -164,15 +168,31 @@ class nTeam
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(int $saison = Config::SAISON): ?string
     {
-        return $this->name;
+        if (Config::SAISON === $saison) {
+            return $this->name;
+        }
+
+        $historic = $this->historischeNamen->get($saison);
+        return $historic?->getName() ?? $this->name;
     }
 
     public function setName(string $name): self
     {
         $this->name = $name;
 
+        return $this;
+    }
+
+    public function getHistorischeNamen(): Collection
+    {
+        return $this->historischeNamen;
+    }
+
+    public function setHistorischeNamen(Collection $historischeNamen): self
+    {
+        $this->historischeNamen = $historischeNamen;
         return $this;
     }
 
@@ -249,7 +269,7 @@ class nTeam
         if (!$this->isLigaTeam()) {
             return null;
         }
-        return Tabelle::get_team_block($this->id(), $spieltag); // TODO Symfonyfy
+        return TabelleService::getTeamBlock($this->id(), $spieltag);
     }
 
     public function isLigaTeam(): bool

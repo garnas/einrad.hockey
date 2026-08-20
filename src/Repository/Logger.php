@@ -14,8 +14,10 @@ class Logger implements LoggerInterface
         if (!\array_key_exists("sql", $context)) {
             return false;
         }
-        $sql = strtolower($context["sql"]);
-        return stripos($sql, "select") !== 0;
+        return preg_match(
+            '/\b(INSERT|UPDATE|DELETE|REPLACE|MERGE|CREATE|ALTER|DROP|TRUNCATE)\b/i',
+            $context["sql"]
+        ) === 1;
     }
 
     private function isInsertTurniereLog(array $context): bool

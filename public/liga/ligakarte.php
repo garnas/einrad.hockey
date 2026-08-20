@@ -2,6 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Repository\Team\TeamRepository;
+
 require_once '../../init.php';
 
 $koordinaten = LigaKarte::get_all_team_koordinaten();
@@ -63,7 +65,7 @@ include '../../templates/header.tmp.php';
 ?>
 
 <h1 class='w3-border-bottom w3-text-primary'>Karte der Ligateams<span class="w3-right w3-hide-small"><?=Html::get_saison_string()?></span></h1>
-<p>Es spielen zurzeit <?=count(Team::get_liste())?> Teams in der Deutschen Einradhockeyliga. <?=Html::link("teams.php", "Hier")?>findest du eine Liste aller Teams mit ihrer hinterlegten E-Mail-Adresse.</p>
+<p>Es spielen zurzeit <?=count(TeamRepository::get()->activeLigaTeams())?> Teams in der Deutschen Einradhockeyliga. <?=Html::link("teams.php", "Hier")?>findest du eine Liste aller Teams mit ihrer hinterlegten E-Mail-Adresse.</p>
   
 <p><i>If your team resides outside of Germany, please contact <?=Html::mailto(Env::TECHNIKMAIL)?> to be included in the map.</i></p>
 
@@ -200,7 +202,7 @@ function initMap() {
     '<div id="content">'+
         '<div id="siteNotice">'+
         '</div>'+
-        '<h5 class="w3-text-primary"><?=Team::id_to_name(435)?></h5>'+
+        '<h5 class="w3-text-primary"><?=TeamRepository::get()->team(435)->getName()?></h5>'+
         '<div class="w3-bottombar"></div>'+
             '<p>412 01 Litoměřice, Tschechien</p>'+
             '<a href="teams.php#435" class="no w3-text-primary w3-hover-text-secondary" style="white-space: nowrap;" >Zur Kontaktliste </a>'+
@@ -224,7 +226,7 @@ function initMap() {
     '<div id="content">'+
         '<div id="siteNotice">'+
         '</div>'+
-        '<h5 class="w3-text-primary"><?=Team::id_to_name(262)?></h5>'+
+        '<h5 class="w3-text-primary"><?=TeamRepository::get()->team(262)->getName()?></h5>'+
         '<div class="w3-bottombar"></div>'+
             '<p>Prag, Tschechien</p>'+
             '<a href="teams.php#262" class="no w3-text-primary w3-hover-text-secondary" style="white-space: nowrap;" >Zur Kontaktliste </a>'+

@@ -68,7 +68,6 @@ class Nav
         $class_text_color = (isset($_SESSION['logins']['team'])) ? "" : "w3-text-grey";
         $links = [
             [Env::BASE_URL . "/teamcenter/tc_start.php", "Start", $class_text_color],
-            [Env::BASE_URL . "/teamcenter/tc_abstimmung_ergebnis.php", "LA-Wahl 2026", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_terminseite_erstellen.php", "Teamtermine", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_anmelden.php", "Turnieranmeldung", $class_text_color],
             [Env::BASE_URL . "/teamcenter/tc_turnier_erstellen.php", "Turnier erstellen", $class_text_color],
@@ -125,7 +124,6 @@ class Nav
     public static function get_lc_start(): array
     {
         return [
-            [Env::BASE_URL . "/ligacenter/lc_abstimmung.php", "LA-Wahl 2026", "w3-secondary"],
             [Env::BASE_URL . "/schiricenter/schiritest_erstellen.php", "Schiritest", "w3-secondary"],
             [Env::BASE_URL . "/ligacenter/lc_turnierliste.php", "Turniere verwalten", "w3-primary"],
             [Env::BASE_URL . "/ligacenter/lc_turnier_erstellen.php", "Turnier erstellen", "w3-primary"],
@@ -169,7 +167,6 @@ class Nav
     public static function get_tc_start(): array
     {
         $links = [
-            [Env::BASE_URL . "/teamcenter/tc_abstimmung_ergebnis.php", "LA-Wahl 2026", "w3-secondary"],
             [Env::BASE_URL . "/teamcenter/tc_terminseite_erstellen.php", "Teamtermine", "w3-green"],
             [Env::BASE_URL . "/teamcenter/tc_turnierliste_anmelden.php", "Turnieranmeldung", "w3-primary"],
             [Env::BASE_URL . "/teamcenter/tc_turnier_erstellen.php", "Turnier erstellen", "w3-primary"],

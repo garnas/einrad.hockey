@@ -1,5 +1,7 @@
 <?php
 
+use App\Service\Turnier\TabelleService;
+
 // BCC Grenze
 $grenze_bcc = Config::BCC_GRENZE;
 
@@ -7,8 +9,8 @@ $grenze_bcc = Config::BCC_GRENZE;
 $turniere = nTurnier::get_turniere();
 
 // Für Sortierung der Teams nach Blöcken
-$akt_spieltag = Tabelle::get_aktuellen_spieltag();
-$teams = Tabelle::get_rang_tabelle($akt_spieltag); // Sortierung nach Rangtabelle
+$akt_spieltag = TabelleService::getAktuellenSpieltag();
+$teams = TabelleService::getRangTabelle($akt_spieltag); // Sortierung nach Rangtabelle
 
 // Damit sich $_SESSION von team- und ligacenter nicht vermischen
 if (Helper::$ligacenter) {

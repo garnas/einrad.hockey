@@ -4,13 +4,14 @@ use App\Event\Turnier\TurnierEventMailBot;
 use App\Repository\TurnierBericht\TurnierBerichtRepository;
 use App\Repository\Turnier\TurnierRepository;
 use App\Entity\TurnierBericht\TurnierBericht;
+use App\Service\Turnier\TabelleService;
 use App\Service\Turnier\TurnierService;
 
 require_once '../../init.php';
 
 $_SESSION['logins']['cronjob'] = 'Cronjob';
 
-$aktueller_spieltag = Tabelle::get_aktuellen_spieltag();
+$aktueller_spieltag = TabelleService::getAktuellenSpieltag();
 echo "Spieltag: " . $aktueller_spieltag . "<br>";
 $turniere = nTurnier::get_turniere_spieltag($aktueller_spieltag);
 

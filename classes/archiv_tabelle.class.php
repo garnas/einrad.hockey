@@ -1,13 +1,14 @@
 <?php
 
 use App\Repository\Team\TeamRepository;
+use App\Service\Turnier\TabelleService;
 
 /**
- * Class Tabelle
+ * Class Archiv_Tabelle
  *
- * Alles zum Anzeigen der Tabelle
+ * Alles zum Anzeigen der archivierten Tabelle
  */
-class Archiv_Tabelle extends Tabelle
+class Archiv_Tabelle
 {
     /**
      * Gibt die Templates für die Meisterschaftstabelle zurück
@@ -108,8 +109,8 @@ class Archiv_Tabelle extends Tabelle
             }
         }
 
-        // Nach Summe der Ergebnisse sortieren mit der Funktion "sortieren_summe" die eine public static function in dieser Klasse Tabelle ist
-        uasort($return, ["Tabelle", "sortieren_summe"]);
+        // Nach Summe der Ergebnisse sortieren mit der Funktion "sortierenSumme" aus dem TabelleService
+        uasort($return, [TabelleService::class, "sortierenSumme"]);
 
         // Zuordnen der Plätze
         // Teams mit gleicher Summe und gleichem höchsten Einzelergebnis bekommen den selben Platz

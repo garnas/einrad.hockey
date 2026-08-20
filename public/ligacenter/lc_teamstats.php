@@ -3,6 +3,7 @@
 require_once '../../init.php';
 
 use App\Entity\Team\Spieler;
+use App\Service\Turnier\TabelleService;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -53,7 +54,7 @@ foreach ($result as $row) {
         $team_id,
         $row["teamname"],
         $anzahl_spieler($team_id),
-        Tabelle::get_team_block($row["team_id"]),
+        TabelleService::getTeamBlock($row["team_id"]),
         $anzahl_turniere($team_id),
     ];
 }

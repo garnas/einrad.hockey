@@ -1,51 +1,45 @@
 <?php
 
+namespace App\Service\Turnier;
+
 use App\Repository\Team\TeamRepository;
+use App\Repository\Turnier\TabelleRepository;
+use Config;
+use Team;
 
 /**
- * Class Tabelle
+ * Class TabelleService
  *
  * Alles zum Anzeigen der Tabelle
  */
-class Tabelle
+class TabelleService
 {
     /**
-     * Speichert die Erstellten Rangtabellen, damit diese nicht mehrfach erstellt werden müssen.
+     * Speichert die erstellten Rangtabellen, damit diese nicht mehrfach erstellt werden müssen.
      */
-    public static array $cache_rangtabellen = [];
-    public static array $cache_meisterschaftstabelle;
+    private static array $cacheRangtabellen = [];
+    private static array $cacheMeisterschaftstabelle;
 
     /**
      * Übergibt den Spieltag, der als naechstes gespielt wird
      *
-     *
      * @param int $saison
      * @return int
      */
-    public static function get_aktuellen_spieltag(int $saison = Config::SAISON): int
+    public static function getAktuellenSpieltag(int $saison = Config::SAISON): int
     {
-        $sql = "
-                SELECT max(spieltag) + 1 
-                FROM turniere_liga 
-                WHERE saison = ?
-                AND (art = 'I' OR art = 'II' OR art = 'III')
-                AND phase = 'ergebnis'
-                ";
-        return db::$db->query($sql, $saison)->fetch_one() ?? 1;
+        return TabelleRepository::get()->getMaxSpieltag($saison);
     }
-    public static function is_spieltag_beendet(int $spieltag): bool
+
+    /**
+     * Wenn alle Turniere in der Ergebnisphase sind, dann ist der Spieltag beendet.
+     * @param int $spieltag
+     * @return bool
+     */
+    public static function isSpieltagBeendet(int $spieltag): bool
     {
-        $sql = "
-                SELECT phase
-                FROM turniere_liga 
-                WHERE spieltag = ?
-                AND (art = 'I' OR art = 'II') 
-                AND saison = ?
-                AND canceled != 1
-                GROUP BY phase
-                ";
-        $result = db::$db->query($sql, $spieltag, Config::SAISON)->list("phase");
-        return $result == ["ergebnis"];
+        $phasen = TabelleRepository::get()->getPhasenBySpieltag($spieltag);
+        return $phasen == ["ergebnis"];
     }
 
     /**
@@ -55,21 +49,13 @@ class Tabelle
      * @param int $saison
      * @return bool
      */
-    public static function check_spieltag_live(int $spieltag, int $saison = Config::SAISON): bool
+    public static function checkSpieltagLive(int $spieltag, int $saison = Config::SAISON): bool
     {
-        $sql = "
-                SELECT phase, count(phase)
-                FROM turniere_liga 
-                WHERE spieltag = ?
-                AND (art = 'I' OR art = 'II' OR art = 'III') 
-                AND saison = ?
-                GROUP BY phase
-                ";
-        $result = db::$db->query($sql, $spieltag, $saison)->list('count(phase)', 'phase');
+        $phasen = TabelleRepository::get()->getPhasenBySpieltag($spieltag, $saison, );
         return (
-            isset($result['spielplan']) || isset($result['melde']) || isset($result['offen'])
+            in_array('spielplan', $phasen, true) || in_array('melde', $phasen, true) || in_array('offen', $phasen, true)
         )
-                && isset($result['ergebnis']);
+                && in_array('ergebnis', $phasen, true);
     }
 
     /**
@@ -80,17 +66,17 @@ class Tabelle
      * @param int $saison
      * @return int|null
      */
-    public static function get_team_rang(int $team_id, ?int $spieltag = null, int $saison = Config::SAISON): ?int
+    public static function getTeamRang(int $team_id, ?int $spieltag = null, int $saison = Config::SAISON): ?int
     {
         // Default: Aktueller Spieltag - 1 = Spieltag mit allen eingetragenen Ergebnissen
-        $spieltag ??= (self::get_aktuellen_spieltag($saison) - 1);
+        $spieltag ??= (self::getAktuellenSpieltag($saison) - 1);
 
         // Rangtabelle soll nicht jedes mal neu berechnet werden müssen
-        if (!isset(self::$cache_rangtabellen[$spieltag])) {
-            self::$cache_rangtabellen[$spieltag] = self::get_rang_tabelle($spieltag, $saison);
+        if (!isset(self::$cacheRangtabellen[$spieltag])) {
+            self::$cacheRangtabellen[$spieltag] = self::getRangTabelle($spieltag, $saison);
         }
         // Nichtligateam haben den Rang NULL
-        return self::$cache_rangtabellen[$spieltag][$team_id]['rang'] ?? null;
+        return self::$cacheRangtabellen[$spieltag][$team_id]['rang'] ?? null;
     }
 
     /**
@@ -100,15 +86,15 @@ class Tabelle
      * @param int|null $spieltag
      * @return int|null
      */
-    public static function get_team_meister_platz(int $team_id, ?int $spieltag = null): ?int
+    public static function getTeamMeisterPlatz(int $team_id, ?int $spieltag = null): ?int
     {
         // Default: Aktueller Spieltag - 1 = Spieltag mit allen eingetragenen Ergebnissen
-        $spieltag ??= (self::get_aktuellen_spieltag() - 1);
-        if (!isset(self::$cache_meisterschaftstabelle)) {
-            self::$cache_meisterschaftstabelle = self::get_meisterschafts_tabelle($spieltag);
+        $spieltag ??= (self::getAktuellenSpieltag() - 1);
+        if (!isset(self::$cacheMeisterschaftstabelle)) {
+            self::$cacheMeisterschaftstabelle = self::getMeisterschaftsTabelle($spieltag);
         }
         // Nichtligateam haben den Platz NULL
-        return self::$cache_meisterschaftstabelle[$team_id]['platz'] ?? null;
+        return self::$cacheMeisterschaftstabelle[$team_id]['platz'] ?? null;
     }
 
     /**
@@ -118,10 +104,10 @@ class Tabelle
      * @param int|null $spieltag
      * @return string|null
      */
-    public static function get_team_block(int $team_id, ?int $spieltag = null): ?string
+    public static function getTeamBlock(int $team_id, ?int $spieltag = null): ?string
     {
-        $rang = self::get_team_rang($team_id, $spieltag);
-        return self::rang_to_block($rang);
+        $rang = self::getTeamRang($team_id, $spieltag);
+        return self::rangToBlock($rang);
     }
 
     /**
@@ -131,10 +117,10 @@ class Tabelle
      * @param int|null $spieltag
      * @return int|null
      */
-    public static function get_team_wertigkeit(int $team_id, ?int $spieltag = null, int $saison = Config::SAISON): ?int
+    public static function getTeamWertigkeit(int $team_id, ?int $spieltag = null, int $saison = Config::SAISON): ?int
     {
-        $rang = self::get_team_rang($team_id, $spieltag, $saison);
-        return self::rang_to_wertigkeit($rang);
+        $rang = self::getTeamRang($team_id, $spieltag, $saison);
+        return self::rangToWertigkeit($rang);
     }
 
     /**
@@ -143,7 +129,7 @@ class Tabelle
      * @param int|null $rang
      * @return string|null
      */
-    public static function rang_to_block(?int $rang): ?string
+    public static function rangToBlock(?int $rang): ?string
     {
         // Nichtligateam
         if (null === $rang) {
@@ -165,7 +151,7 @@ class Tabelle
      * @param int|null $rang
      * @return int|null
      */
-    public static function rang_to_wertigkeit(?int $rang): ?int
+    public static function rangToWertigkeit(?int $rang): ?int
     {
         // Nichtligateam
         if (null === $rang) {
@@ -187,32 +173,31 @@ class Tabelle
      * @param int $saison
      * @return array
      */
-    public static function get_all_ergebnisse(int $saison = Config::SAISON): array
+    public static function getAllErgebnisse(int $saison = Config::SAISON): array
     {
-        $sql = "
-                SELECT turniere_ergebnisse.*, teams_liga.teamname , teams_liga.ligateam, teams_liga.team_id
-                FROM turniere_ergebnisse
-                LEFT JOIN teams_liga
-                ON teams_liga.team_id = turniere_ergebnisse.team_id
-                LEFT JOIN turniere_liga
-                ON turniere_liga.turnier_id = turniere_ergebnisse.turnier_id
-                WHERE turniere_liga.saison = $saison
-                AND phase = 'ergebnis'
-                ORDER BY turniere_liga.datum DESC, platz
-                ";
-        $result = db::$db->query($sql)->esc()->fetch();
-        if ($saison !== Config::SAISON) {
-            foreach ($result as $key => $ergebnis) {
-                $result[$key]['teamname'] = Team::id_to_name($ergebnis['team_id'], $saison);
-            }
+        $ergebnisse = TabelleRepository::get()->getErgebnisseBySaison($saison);
+
+        $return = [];
+        foreach ($ergebnisse as $ergebnis) {
+            $turnierId = $ergebnis->getTurnier()->id();
+            $team = $ergebnis->getTeam();
+
+            $return[$turnierId][] = [
+                'turnier_ergebnis_id' => $ergebnis->getTurnierErgebnisId(),
+                'ergebnis' => $ergebnis->getErgebnis(),
+                'platz' => $ergebnis->getPlatz(),
+                'saison_uebernahme_verhindern' => $ergebnis->isSaisonUebernahmeVerhindern(),
+                'turnier_id' => $turnierId,
+                'team_id' => $team->id(),
+                'teamname' => $team->getName($saison),
+                'ligateam' => $team->isLigaTeam() ? 'Ja' : 'Nein',
+            ];
         }
-        foreach ($result as $ergebnis) {
-            $return[$ergebnis['turnier_id']][] = $ergebnis;
-        }
-        return $return ?? [];
+
+        return $return;
     }
 
-    public static function get_meisterschafts_tabelle_templates(int $saison = Config::SAISON): array
+    public static function getMeisterschaftsTabelleTemplates(int $saison = Config::SAISON): array
     {
         return [
             'desktop' => 'templates/tabellen/desktop_meisterschaftstabelle.tmp.php',
@@ -220,7 +205,7 @@ class Tabelle
         ];
     }
 
-    public static function get_rang_tabelle_templates(int $saison = Config::SAISON): array
+    public static function getRangTabelleTemplates(int $saison = Config::SAISON): array
     {
         return [
             'desktop' => 'templates/tabellen/desktop_rangtabelle.tmp.php',
@@ -235,55 +220,10 @@ class Tabelle
      * @param int $saison
      * @return array
      */
-    public static function get_meisterschafts_tabelle(int $spieltag, int $saison = Config::SAISON): array
+    public static function getMeisterschaftsTabelle(int $spieltag, int $saison = Config::SAISON): array
     {
+        $result = TabelleRepository::get()->getMeisterschaftsRohdaten($spieltag, $saison);
 
-        $sql = "
-                WITH tournaments AS (
-                    SELECT 
-                        te.team_id,
-                        teams.teamname,
-                        te.turnier_id,
-                        tl.datum,
-                        te.ergebnis,
-                        td.ort,
-                        tl.tblock,
-                        te.platz,
-                        ROW_NUMBER() OVER (
-                            PARTITION BY te.team_id
-                            ORDER BY te.ergebnis DESC, tl.datum DESC, te.turnier_id DESC
-                        ) AS rn
-                    FROM turniere_ergebnisse te
-                    INNER JOIN turniere_liga tl ON tl.turnier_id = te.turnier_id
-                    INNER JOIN teams_liga teams ON teams.team_id = te.team_id
-                    INNER JOIN turniere_details td ON td.turnier_id = te.turnier_id
-                    WHERE teams.ligateam = 'Ja'
-                      AND tl.art != 'final'
-                      AND (tl.saison = ?)
-                      AND (tl.spieltag <= ?)
-                ),
-                num_of_teams AS (
-                    SELECT turnier_id, COUNT(*) AS teilnehmer
-                    FROM turniere_ergebnisse
-                    GROUP BY turnier_id
-                )
-                
-                SELECT 
-                    t.team_id,
-                    t.teamname,
-                    t.turnier_id,
-                    t.datum,
-                    t.ergebnis,
-                    t.ort,
-                    t.tblock,
-                    t.platz,
-                    teilnehmer
-                FROM tournaments t
-                JOIN num_of_teams n ON n.turnier_id = t.turnier_id
-                WHERE rn <= 4
-                ORDER BY team_id, ergebnis DESC, datum DESC;
-         ";
-        $result = db::$db->query($sql, $saison, $spieltag)->esc()->fetch();
         $return = [];
         foreach ($result as $eintrag) {
             $team_id = $eintrag['team_id'];
@@ -296,7 +236,6 @@ class Tabelle
                 $return[$team_id]['summe'] = 0;
                 $return[$team_id]['hat_strafe'] = false;
             }
-
             $return[$team_id]['summe'] += $eintrag['ergebnis'];
             $return[$team_id]['einzel_ergebnisse'][] = $eintrag['ergebnis'];
             $return[$team_id]['details'][] = $eintrag;
@@ -343,8 +282,8 @@ class Tabelle
             }
         }
 
-        // Nach Summe der Ergebnisse sortieren mit der Funktion "sortieren_summe" die eine public static function in dieser Klasse Tabelle ist
-        uasort($return, ["Tabelle", "sortieren_summe"]);
+        // Nach Summe der Ergebnisse sortieren mit der Funktion "sortierenSumme" die eine public static function in dieser Klasse TabelleService ist
+        uasort($return, [self::class, "sortierenSumme"]);
 
         // Zuordnen der Plätze
         // Teams mit gleicher Summe und gleichem höchsten Einzelergebnis bekommen den selben Platz
@@ -391,40 +330,9 @@ class Tabelle
      * @param int $saison
      * @return array
      */
-    public static function get_rang_tabelle(int $spieltag, int $saison = Config::SAISON): array
+    public static function getRangTabelle(int $spieltag, int $saison = Config::SAISON): array
     {
-
-        $ausnahme = match ($saison) {
-            26 => 'OR tl.saison = 24',
-            27 => 'OR tl.saison = 24 OR tl.saison = 25',
-            default => '',
-        };
-
-        $sql = "
-            WITH tournaments as (
-                SELECT te.team_id, teams.teamname, te.turnier_id, tl.saison, tl.datum, te.ergebnis, te.platz, tl.tblock, td.ort, row_number() over (PARTITION BY te.team_id order by tl.datum DESC) AS `turnier_rang`
-                FROM turniere_ergebnisse te
-                INNER JOIN turniere_liga tl ON tl.turnier_id = te.turnier_id
-                INNER JOIN teams_liga teams ON teams.team_id = te.team_id
-                INNER JOIN turniere_details td ON td.turnier_id = te.turnier_id
-                WHERE teams.ligateam = 'Ja'
-                AND teams.aktiv = 'Ja'
-                AND tl.art != 'final' 
-                AND ((tl.spieltag <= ? AND tl.saison = ?) OR tl.saison = ? - 1 $ausnahme)
-                AND not te.saison_uebernahme_verhindern
-            ), num_of_teams as (
-                SELECT turnier_id, count(*) as teilnehmer
-                FROM turniere_ergebnisse te
-                GROUP BY turnier_id
-            )
-
-            SELECT t.saison, t.turnier_id, t.datum, t.team_id, t.teamname, t.platz, t.ergebnis, t.ort, t.tblock, t.saison, n.teilnehmer
-            FROM tournaments t
-            LEFT JOIN num_of_teams n ON n.turnier_id = t.turnier_id
-            WHERE `turnier_rang` <= 5
-            ORDER BY t.datum DESC
-        ";
-        $result = db::$db->query($sql, $spieltag, $saison, $saison)->esc()->fetch();
+        $result = TabelleRepository::get()->getRangRohdaten($spieltag, $saison);
         $return = [];
 
         foreach ($result as $row) {
@@ -467,8 +375,8 @@ class Tabelle
             }
         }
 
-        // Nach Summe der Ergebnisse sortieren mit der Funktion "sortieren_avg"
-        uasort($return, ["Tabelle", "sortieren_avg"]); //Sortieren nach der static function sortieren_avg in der Klasse Tabelle...
+        // Nach Summe der Ergebnisse sortieren mit der Funktion "sortierenAvg"
+        uasort($return, [self::class, "sortierenAvg"]); //Sortieren nach der static function sortierenAvg in der Klasse TabelleService...
 
         // Zuordnen der Blöcke
         // Teams mit gleicher Summe und gleichem höchsten Einzelergebnis bekommen den selben Platz
@@ -501,7 +409,7 @@ class Tabelle
      * @param array $value2
      * @return int
      */
-    public static function sortieren_summe(array $value1, array $value2): int
+    public static function sortierenSumme(array $value1, array $value2): int
     {
         if ($value1['summe'] !== $value2['summe']) {
             return $value2['summe'] <=> $value1['summe'];
@@ -525,7 +433,7 @@ class Tabelle
      * @param array $value2
      * @return int
      */
-    public static function sortieren_avg(array $value1, array $value2): int
+    public static function sortierenAvg(array $value1, array $value2): int
     {
         if ($value1['avg'] < $value2['avg']) {
             return 1;

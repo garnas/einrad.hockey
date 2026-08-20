@@ -32,8 +32,8 @@ if (isset($_POST["team_erstellen"])) {
     }
 
     //Nichtligateams bekommen ein Stern hinter ihrem Namen, damit sie nicht Teamnamen für Ligateams wegnehmen.
-    if (!empty(Team::name_to_id($teamname))) {
-        Html::error("Der Teamname existiert bereits");
+    if (!empty(TeamRepository::get()->findByNameAndIsAktiv($teamname))) {
+        Html::error("Der Teamname existiert bereits bei einem aktiven Ligateam.");
         $error = true;
     }
 

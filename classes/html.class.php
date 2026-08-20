@@ -1,6 +1,6 @@
 <?php
 
-use App\Entity\Turnier\Turnier;
+use App\Repository\Team\TeamRepository;
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Turnier\TurnierSnippets;
 
@@ -190,9 +190,9 @@ class Html
     public static function datalist_teams(): string
     {
         $return = "<datalist id='teams'>";
-        $liste = Team::get_liste();
-        foreach ($liste as $teamname) {
-            $return .= "<option value='$teamname'>";
+        $liste = TeamRepository::get()->activeLigaTeams();
+        foreach ($liste as $team) {
+            $return .= "<option value='" . $team->getName() . "'>";
         }
         $return .= "</datalist>";
         return $return;
