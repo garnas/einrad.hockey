@@ -2,11 +2,11 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-use App\Service\Abstimmung\ValidatorService;
-use App\Service\Abstimmung\VotingService;
+use abstimmung_la_2026\Abstimmung\ConfigService;
+use abstimmung_la_2026\Abstimmung\ValidatorService;
+use abstimmung_la_2026\Abstimmung\VotingService;
 use App\Repository\Abstimmung\AbstimmungRepository;
 use App\Repository\Team\TeamRepository;
-use App\Service\Abstimmung\ConfigService;
 
 require_once '../../init.php';
 Helper::ensure_no_request_logging();

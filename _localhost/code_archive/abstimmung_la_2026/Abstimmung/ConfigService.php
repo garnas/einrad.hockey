@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Abstimmung;
+namespace abstimmung_la_2026\Abstimmung;
 
 class ConfigService
 {
