@@ -89,33 +89,6 @@ class FreilosService
         $turnier->getLogService()->addLog("Freilos: " . $team->getName() . " " . BlockService::toString($team->getBlock()));
     }
 
-    public static function update_bestehender_turnier_ausgerichtet_freilose(): void
-    {
-        $teams = TeamRepository::get()->activeLigaTeams();
-        foreach ($teams as $team) {
-            $filter = static function (Freilos $f) {
-                return ($f->getGrund() == FreilosGrund::TURNIER_AUSGERICHTET);
-            };
-            /** @var Freilos[] $erhalteneFreilose */
-            $erhalteneFreilose = $team->getFreiloseBySaison()->filter($filter);
-
-            foreach ($erhalteneFreilose as $f) {
-                $filter = static function (Turnier $t) {
-                    return ($t->isErgebnisPhase() && $t->getSaison() == Config::SAISON);
-                };
-                /** @var Turnier[] $erhalteneFreilose */
-                $turniere = $team->getAusgerichteteTurniere()->filter($filter);
-                foreach ($turniere as $turnier) {
-                    if (self::isAusrichterFreilosBerechtigt($turnier)) {
-                        $f->setTurnierAusgerichtet($turnier);
-                        Html::info("Freilos für turnier " . $turnier->id());
-                        TeamRepository::get()->speichern($team);
-                    }
-                }
-            }
-        }
-    }
-
     public static function hasZweiAusgerichteteTurnierFreilose(nTeam $team): bool
     {
         $filter = static function (Freilos $f) {
@@ -185,19 +158,6 @@ class FreilosService
             return true;
         }
         return false;
-    }
-
-    /**
-     * @param nTeam $team
-     * @return Collection|TurniereListe[]
-     */
-    public static function getGesetzteFreilose(nTeam $team): Collection|array
-    {
-        $filter = static function (TurniereListe $anmeldung) {
-            return ($anmeldung->getTurnier()->getSaison() == Config::SAISON
-                && $anmeldung->getFreilosGesetzt() === "Ja");
-        };
-        return $team->getGesetzteFreilose()->filter($filter);
     }
 
     private static function hasFreilosRecyclebarForTurnier(Freilos $freilos): bool
