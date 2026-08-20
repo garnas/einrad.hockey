@@ -2,7 +2,11 @@
 FROM php:8.3-apache
 
 # Debian: Install system dependencies
-RUN apt-get update && apt-get install -y git
+RUN apt-get update && apt-get install -y git curl
+
+# Node.js: Install for Playwright E2E tests (version matches .github/workflows/ci.yml)
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs
 
 # PHP: Install the extension installer script
 # See: https://hub.docker.com/_/php#php-core-extensions and https://github.com/mlocati/docker-php-extension-installer

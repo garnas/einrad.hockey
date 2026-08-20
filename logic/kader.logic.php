@@ -96,6 +96,6 @@ if (isset($_POST['submit_takeover'])) {
                 Html::info("Schirifreilos erhalten!");
             }
         }
-        Helper::reload();
+        Helper::reload(get: '?team_id=' . $team_id);
     }
 }

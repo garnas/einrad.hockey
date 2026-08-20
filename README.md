@@ -79,6 +79,30 @@ Nach dem Start öffnet VS Code automatisch http://localhost im Browser.
 ```shell
 php83 vendor/bin/phpunit tests/
 ```
+
+### E2E-Tests (Playwright)
+
+Node.js und die Playwright-Browser sind im Dev-Container bereits vorinstalliert (siehe `setup.sh`). Führe die
+folgenden Befehle im Terminal des Dev-Containers aus:
+
+```shell
+npm run test:e2e            # headless
+npx playwright test --headed # mit sichtbarem Browser
+```
+
+Außerhalb des Dev-Containers (z. B. lokal unter Windows/macOS/Linux) benötigst du zusätzlich
+[Node.js](https://nodejs.org/) und einen erreichbaren Dev-Server unter http://localhost:
+
+```shell
+npm install
+npx playwright install chromium
+
+npm run test:e2e
+```
+
+> Die Tests legen sich über `tests/e2e-playwright/global-setup.ts` ein eigenes Test-Team in der lokalen
+> Dev-Datenbank an (siehe `tests/e2e-playwright/fixtures/`) und räumen es bei jedem Lauf auf.
+
 ### Formatting
 
 ```shell

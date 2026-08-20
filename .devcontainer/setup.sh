@@ -17,4 +17,10 @@ php bin/doctrine orm:clear-cache:metadata || true
 php bin/doctrine orm:clear-cache:query || true
 php bin/doctrine orm:generate-proxies || true
 
+echo "Installing npm dependencies for Playwright E2E tests..."
+npm install
+
+echo "Installing Playwright browser (Chromium)..."
+npx playwright install --with-deps chromium
+
 echo "Setup finished successfully!"

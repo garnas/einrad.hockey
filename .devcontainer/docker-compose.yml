@@ -10,6 +10,7 @@ services:
     environment:
       PHP_POST_MAX_SIZE: 20M
       PHP_UPLOAD_MAX_FILESIZE: 20M
+      PHP_BINARY: php
     depends_on:
       db:
         condition: service_healthy
