@@ -1,5 +1,6 @@
 <?php
 
+use App\Repository\Team\TeamRepository;
 use App\Service\Turnier\TabelleService;
 
 // BCC Grenze
@@ -55,7 +56,11 @@ if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
 if (isset($_POST['rundmail'])) {
     unset($_SESSION[$list_id]);
     $_SESSION[$list_id]['type'] = 'Rundmail';
-    $_SESSION[$list_id]['empfaenger'] = Team::get_liste();
+    $empfaenger = [];
+    foreach (TeamRepository::get()->activeLigaTeams() as $ligateam) {
+        $empfaenger[$ligateam->id()] = $ligateam->getName();
+    }
+    $_SESSION[$list_id]['empfaenger'] = $empfaenger;
     $_SESSION[$list_id]['emails'] = Kontakt::get_emails_rundmail();
 
     array_unshift($_SESSION[$list_id]['emails'], Env::LAMAIL);
@@ -77,7 +82,7 @@ if (isset($_POST['teams_emails'])) {
                 $emails[] = $email;
             }
         }
-        $teamnamen[] = Team::id_to_name($team_id);
+        $teamnamen[] = TeamRepository::get()->team($team_id)?->getName();
     }
     $_SESSION[$list_id]['emails'] = $emails;
     $_SESSION[$list_id]['empfaenger'] = $teamnamen;

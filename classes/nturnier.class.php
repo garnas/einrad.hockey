@@ -1,5 +1,6 @@
 <?php
 
+use App\Repository\Team\TeamRepository;
 use App\Service\Turnier\TabelleService;
 
 /**
@@ -478,11 +479,19 @@ class nTurnier
             foreach ($liste as $team) {
                 $team_id = $team['team_id'];
 
-                $temp = new Team($team_id);
-                $temp->set_wertigkeit($this->spieltag, $this->saison);
-                $temp->set_tblock($this->spieltag);
-                $temp->set_freilos_gesetzt($team['freilos_gesetzt']);
-                $spielenliste[$team_id] = $temp;
+                $spielenliste[$team_id] = [
+                    'team_id' => $team_id,
+                    'teamname' => $team['teamname'],
+                    'wertigkeit' => TabelleService::getTeamWertigkeit($team_id, $this->spieltag - 1, $this->saison),
+                    'tblock' => TabelleService::getTeamBlock($team_id, $this->spieltag - 1),
+                    'freilos_gesetzt' => $team['freilos_gesetzt'],
+                    'details' => [
+                        'ligateam' => $team['ligateam'],
+                        'ligavertreter' => $team['ligavertreter'],
+                        'trikot_farbe_1' => $team['trikot_farbe_1'],
+                        'trikot_farbe_2' => $team['trikot_farbe_2'],
+                    ],
+                ];
             }
 
             // A-Finals werden nach Meisterschaftstabelle sortiert, rest nach Rangtabelle
@@ -490,18 +499,19 @@ class nTurnier
                 $spieltag = TabelleService::getAktuellenSpieltag();
                 uasort($spielenliste, static function ($team_a, $team_b) use ($spieltag) {
                     return (
-                        (int) TabelleService::getTeamMeisterPlatz($team_a->id, $spieltag)
-                        <=> (int) TabelleService::getTeamMeisterPlatz($team_b->id, $spieltag)
+                        (int) TabelleService::getTeamMeisterPlatz($team_a['team_id'], $spieltag)
+                        <=> (int) TabelleService::getTeamMeisterPlatz($team_b['team_id'], $spieltag)
                     );
                 });
             } else {
                 uasort($spielenliste, static function ($team_a, $team_b) {
-                    return ((int) $team_b->get_wertigkeit() <=> (int) $team_a->get_wertigkeit());
+                    return ((int) $team_b['wertigkeit'] <=> (int) $team_a['wertigkeit']);
                 });
             }
             if ($this->saison !== Config::SAISON) {
                 foreach ($spielenliste as $team_id => $team) {
-                    $spielenliste[$team_id]->teamname = Team::id_to_name($team_id, $this->saison);
+                    $spielenliste[$team_id]['teamname']
+                        = TeamRepository::get()->team($team_id)?->getName($this->saison) ?? $team['teamname'];
                 }
             }
         }
@@ -533,16 +543,9 @@ class nTurnier
         // Prüfen ob Warte-Liste gegeben
         if (!empty($liste)) {
 
-            // Blöcke und Wertungen hinzufügen
             $warteliste = [];
             foreach ($liste as $team) {
-                $team_id = $team['team_id'];
-
-                $temp = new Team($team_id);
-                $temp->set_wertigkeit($this->spieltag);
-                $temp->set_tblock($this->spieltag);
-                $temp->set_position_warteliste($team['position_warteliste']);
-                $warteliste[$team_id] = $temp;
+                $warteliste[$team['team_id']] = $team;
             }
         }
 
@@ -572,21 +575,10 @@ class nTurnier
         // Prüfen ob Melde-Liste gegeben
         if (!empty($liste)) {
 
-            // Blöcke und Wertungen hinzufügen
             $meldeliste = [];
             foreach ($liste as $team) {
-                $team_id = $team['team_id'];
-
-                $temp = new Team($team_id);
-                $temp->set_wertigkeit($this->spieltag);
-                $temp->set_tblock($this->spieltag);
-                $meldeliste[$team_id] = $temp;
+                $meldeliste[$team['team_id']] = $team;
             }
-
-            // Sortierung nach Wertigkeit
-            uasort($meldeliste, static function ($team_a, $team_b) {
-                return ((int) $team_b->get_wertigkeit() <=> (int) $team_a->get_wertigkeit());
-            });
         }
 
         return $meldeliste ?? [];
@@ -600,7 +592,7 @@ class nTurnier
     public function get_kader(): array
     {
         foreach ($this->spielenliste as $team) {
-            $return[$team->id] = nSpieler::get_kader($team->id);
+            $return[$team['team_id']] = nSpieler::get_kader($team['team_id']);
         }
 
         return $return ?? [];
@@ -608,7 +600,6 @@ class nTurnier
 
     /**
      * Get Turnierergebnis des Turnieres
-     * TODO: Umstellung zu einem Array mit nTeam?
      *
      * @return array
      */

@@ -1,6 +1,7 @@
 <?php
 
 use App\Entity\Team\nTeam;
+use App\Repository\Team\TeamRepository;
 
 /**
  * Class MailBot
@@ -187,7 +188,7 @@ class MailBot
     public static function mail_plaetze_frei(nTurnier $turnier): void
     {
         if ($turnier->get_freie_plaetze() > 0 && in_array($turnier->get_art(), Config::TURNIER_ARTEN)) {
-            $team_ids = Team::get_liste_ids();
+            $team_ids = TeamRepository::get()->activeLigaTeamIds();
             foreach ($team_ids as $team_id) {
                 // Noch Plätze frei
                 if (
@@ -235,7 +236,7 @@ class MailBot
     public static function mail_gelost(nTurnier $turnier): void
     {
         if (in_array($turnier->get_art(), Config::TURNIER_ARTEN)) {
-            $team_ids = Team::get_liste_ids();
+            $team_ids = TeamRepository::get()->activeLigaTeamIds();
             foreach ($team_ids as $team_id) {
                 // Team angemeldet?
                 if ($turnier->is_angemeldet($team_id)) {
@@ -269,7 +270,7 @@ class MailBot
     public static function mail_neues_turnier(nTurnier $turnier): void
     {
         if (in_array($turnier->get_art(), Config::TURNIER_ARTEN)) {
-            $team_ids = Team::get_liste_ids();
+            $team_ids = TeamRepository::get()->activeLigaTeamIds();
             foreach ($team_ids as $team_id) {
                 // Noch Plätze frei?
                 if ($turnier->is_spielberechtigt($team_id) && !$turnier->is_doppelmeldung($team_id)) {
@@ -307,23 +308,6 @@ class MailBot
         $emails = (new Kontakt($team_id))->get_emails('info');
 
         self::add_mail($betreff, $inhalt, $emails);
-    }
-
-    /**
-     * Erstellt eine Mail in der Datenbank an den Ligaausschuss, wenn ein Team Turnierdaten ändert.
-     *
-     * @param nTurnier $turnier
-     */
-    public static function mail_turnierdaten_geaendert(nTurnier $turnier): void
-    {
-        if ($turnier->get_art() === 'spass') {
-            return;
-        }
-        $betreff = "Turnierdaten geändert: " . $turnier->get_tblock() . "-Turnier in " . $turnier->get_ort();
-        ob_start();
-        include(Env::BASE_PATH . "/templates/mails/mail_turnierdaten_geaendert.tmp.php");
-        $inhalt = ob_get_clean();
-        self::add_mail($betreff, $inhalt, Env::LAMAIL);
     }
 
     /**

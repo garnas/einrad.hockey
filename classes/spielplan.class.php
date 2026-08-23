@@ -176,10 +176,10 @@ class Spielplan
             $params = [
                 $turnier->get_turnier_id(),
                 $spiel["spiel_id"],
-                $teamliste[$spiel["team_a"]]->id,
-                $teamliste[$spiel["team_b"]]->id,
-                $teamliste[$spiel["schiri_a"]]->id,
-                $teamliste[$spiel["schiri_b"]]->id,
+                $teamliste[$spiel["team_a"]]['team_id'],
+                $teamliste[$spiel["team_b"]]['team_id'],
+                $teamliste[$spiel["schiri_a"]]['team_id'],
+                $teamliste[$spiel["schiri_b"]]['team_id'],
             ];
             db::$db->query($sql, $params)->log();
         }
@@ -393,12 +393,12 @@ class Spielplan
 
         $farben = [
             $team_id_a => [
-                1 => $this->teamliste[$team_id_a]->details['trikot_farbe_1'] ?? null,
-                2 => $this->teamliste[$team_id_a]->details['trikot_farbe_2'] ?? null,
+                1 => $this->teamliste[$team_id_a]['details']['trikot_farbe_1'] ?? null,
+                2 => $this->teamliste[$team_id_a]['details']['trikot_farbe_2'] ?? null,
             ],
             $team_id_b => [
-                1 => $this->teamliste[$team_id_b]->details['trikot_farbe_1'] ?? null,
-                2 => $this->teamliste[$team_id_b]->details['trikot_farbe_2'] ?? null,
+                1 => $this->teamliste[$team_id_b]['details']['trikot_farbe_1'] ?? null,
+                2 => $this->teamliste[$team_id_b]['details']['trikot_farbe_2'] ?? null,
             ],
         ];
 
@@ -558,7 +558,7 @@ class Spielplan
         $this->platzierungstabelle[$team_id]
             = [
                 'platz' => count($this->platzierungstabelle) + 1,
-                'teamname' => $this->teamliste[$team_id]->teamname,
+                'teamname' => $this->teamliste[$team_id]['teamname'],
                 'ligapunkte' => 0,
                 'statistik' => $this->turnier_tabelle[$team_id],
             ];
@@ -573,20 +573,20 @@ class Spielplan
         $reverse_tabelle = array_reverse($this->platzierungstabelle, true);
         $last_ligateam = function () use ($reverse_tabelle) {
             foreach ($reverse_tabelle as $team_id => $eintrag) {
-                if ($this->teamliste[$team_id]->wertigkeit !== null) {
-                    return $this->teamliste[$team_id]->wertigkeit;
+                if ($this->teamliste[$team_id]['wertigkeit'] !== null) {
+                    return $this->teamliste[$team_id]['wertigkeit'];
                 }
             }
             return null;
         };
 
         foreach ($reverse_tabelle as $team_id => $eintrag) {
-            if (null === $this->teamliste[$team_id]->wertigkeit) {
+            if (null === $this->teamliste[$team_id]['wertigkeit']) {
                 // Es handelt sich um ein Nichtligateam // max($werte) + 1 wenn nicht Letzter.
                 $wert = max($bisherige_wertigkeiten ?? [round($last_ligateam() / 2 - 1), 14]) + 1;
             } else {
                 // Normales Ligateam
-                $wert = $this->teamliste[$team_id]->wertigkeit;
+                $wert = $this->teamliste[$team_id]['wertigkeit'];
             }
             $bisherige_wertigkeiten[] = $wert;
             $this->platzierungstabelle[$team_id]['wertigkeit'] = $wert;

@@ -1,7 +1,9 @@
 <?php
 
+use App\Repository\Team\TeamRepository;
+
 // Formularauswertung
-if (isset($_POST['create_team']) && !$akt_team->check_terminplaner()) {
+if (isset($_POST['create_team']) && $teamEntity->getTerminplaner() !== 'Ja') {
     $error = false;
     // Validierung alle Eingaben gemacht
     if ($_POST['gruppenname'] == false) {
@@ -30,7 +32,8 @@ if (isset($_POST['create_team']) && !$akt_team->check_terminplaner()) {
         Html::error("Es ist ein Fehler aufgetreten. Gruppe wurde nicht erstellt.");
     } else {
         Html::info("Du hast eine Email mit weiteren Instruktionen erhalten.");
-        $team->set_terminplaner();
+        $teamEntity->setTerminplaner('Ja');
+        TeamRepository::get()->speichern($teamEntity);
         Helper::reload();
     }
 }

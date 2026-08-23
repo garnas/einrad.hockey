@@ -67,25 +67,6 @@ class Archiv_Tabelle
             $return[$team_id]['details'][] = $eintrag;
         }
 
-        // Tabelle mit aktiven Teams ohne Ergebnis auffüllen
-        // In vergangenen Saisons werden nur Teams mit Ergebnissen gelistet
-        if ($saison == Config::SAISON) {
-            $list_of_teamids = Team::get_liste_ids();
-            shuffle($list_of_teamids);
-            foreach ($list_of_teamids as $team_id) {
-                if (!array_key_exists($team_id, $return)) {
-                    $return[$team_id] = [];
-                    $return[$team_id]['teamname'] = Team::id_to_name($team_id); //Ansonsten doppel dbi::escape --> fehler in der Darstellung
-                    $return[$team_id]['team_id'] = $team_id;
-                    $return[$team_id]['string'] = '';
-                    $return[$team_id]['summe'] = 0;
-                    $return[$team_id]['einzel_ergebnisse'] = [0];
-                    $return[$team_id]['details'] = [];
-                    $return[$team_id]['hat_strafe'] = false;
-                }
-            }
-        }
-
         // Hinzufügen der Strafen:
         $strafen = TeamRepository::get()->getStrafenBySaison($saison);
         foreach ($strafen as $strafe) {
@@ -136,7 +117,7 @@ class Archiv_Tabelle
 
         if ($saison !== Config::SAISON) {
             foreach ($return as $team_id => $team) {
-                $return[$team_id]['teamname'] = Team::id_to_name($team_id, $saison);
+                $return[$team_id]['teamname'] = TeamRepository::get()->team($team_id)?->getName($saison);
             }
         }
 

@@ -41,7 +41,7 @@ use App\Service\Team\TeamSnippets;
                     </td>
                     <?php if (Helper::$ligacenter): ?>
                         <td class="w3-center">
-                            <?= $spieler->getTimestamp()->format("d.m.y H:i:s") ?>
+                            <?= $spieler->getTimestamp()?->format("d.m.y H:i:s") ?>
                         </td>
                     <?php endif; ?>
                 </tr>

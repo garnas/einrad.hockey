@@ -2,6 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Repository\Team\TeamRepository;
+
 require_once '../../init.php';
 
 $spieler = Stats::get_aktuelle_spieler_anzahl();
@@ -26,7 +28,7 @@ include '../../templates/header.tmp.php';
 <h3 class="w3-text-grey">Ligadaten</h3>
 <div class="w3-container">
     <ul class="w3-ul w3-leftbar w3-border-tertiary">
-        <li><?=count(Team::get_liste())?> Teams</li>
+        <li><?=count(TeamRepository::get()->activeLigaTeams())?> Teams</li>
         <li><?=$spieler['number']?> Spieler (Stand: <?=$spieler['cutoff']?>)</li>
         <li><?=count(Config::BLOCK)?> Spielstärken (<?=implode(", ", Config::BLOCK)?>)</li>
         <li><?=Stats::get_schiris_anzahl()?> Schiedsrichter</li>

@@ -11,7 +11,7 @@ use App\Service\Turnier\TurnierSnippets;
 <h1 class="w3-text-primary"><?= Html::icon("group", tag: "h1") ?> <?= e($teamEntity->getName()) ?></h1>
     <p>
         <?= Html::link(
-            (Helper::$ligacenter) ? 'lc_teamdaten_aendern.php?team_id=' . $team->id : 'tc_teamdaten_aendern.php',
+            (Helper::$ligacenter) ? 'lc_teamdaten_aendern.php?team_id=' . $teamEntity->id() : 'tc_teamdaten_aendern.php',
             'Team- und Kontaktdaten ändern',
             icon: "create",
         ) ?>
@@ -38,7 +38,7 @@ use App\Service\Turnier\TurnierSnippets;
                 <p>
                     1. Trikotfarbe
                 </p>
-                    <span class="w3-card-4" style="height:70px;width:70px;background-color:<?= empty($team->details['trikot_farbe_1']) ? '#bbb' : $team->details['trikot_farbe_1']?>;border-radius:50%;display:inline-block;">
+                    <span class="w3-card-4" style="height:70px;width:70px;background-color:<?= empty($teamEntity->getDetails()->getTrikotFarbe1()) ? '#bbb' : $teamEntity->getDetails()->getTrikotFarbe1()?>;border-radius:50%;display:inline-block;">
                         <br><?= $teamEntity->getDetails()->getTrikotFarbe1() ? '' : Html::icon('not_interested')?>
                     </span>
         </div>
@@ -47,7 +47,7 @@ use App\Service\Turnier\TurnierSnippets;
                 <p>
                     2. Trikotfarbe
                 </p>
-                    <span class="w3-card-4" style="height:70px;width:70px; background-color:<?= empty($team->details['trikot_farbe_2']) ? '#bbb' : $team->details['trikot_farbe_2'] ?>;border-radius:50%;display:inline-block;">
+                    <span class="w3-card-4" style="height:70px;width:70px; background-color:<?= empty($teamEntity->getDetails()->getTrikotFarbe2()) ? '#bbb' : $teamEntity->getDetails()->getTrikotFarbe2() ?>;border-radius:50%;display:inline-block;">
                         <br><?= $teamEntity->getDetails()->getTrikotFarbe2() ? '' : Html::icon('not_interested')?>
                     </span>
         </div>

@@ -1,5 +1,7 @@
 <?php
 
+use App\Repository\Team\TeamRepository;
+
 class Stats
 {
     public static function persist_spieler_statistik(): void
@@ -244,7 +246,7 @@ class Stats
         $vorher_rang = 1;
         $vorher_anz = 0;
         foreach ($gew as $team_id => $siege) {
-            $teams[$team_id]['teamname'] = Team::id_to_name($team_id);
+            $teams[$team_id]['teamname'] = TeamRepository::get()->team($team_id)?->getName();
             $teams[$team_id]['siege'] = $siege;
 
             if ($teams[$team_id]['siege'] >= $vorher_anz) {

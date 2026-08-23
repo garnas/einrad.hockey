@@ -12,9 +12,9 @@
             <?php foreach ($spielplan->teamliste as $team_id => $team) { ?>
                 <tr>
                     <td><?= $team_id ?></td>
-                    <td><?= $team->teamname ?></td>
-                    <td><?= $team->tblock ?? "" ?></td>
-                    <td class="w3-hide-small"><?= $team->wertigkeit ?? "" ?></td>
+                    <td><?= $team['teamname'] ?></td>
+                    <td><?= $team['tblock'] ?? "" ?></td>
+                    <td class="w3-hide-small"><?= $team['wertigkeit'] ?? "" ?></td>
                 </tr>
             <?php }//end foreach?>
         </table>
@@ -49,18 +49,18 @@
                 <?php foreach ($spielplan->teamliste as $team_id => $team) { ?>
                     <tr>
                         <td><?= $team_id ?></td>
-                        <td><?= $team->teamname ?></td>
-                        <td><?= $team->tblock ?></td>
-                        <td><?= $team->wertigkeit ?></td>
+                        <td><?= $team['teamname'] ?></td>
+                        <td><?= $team['tblock'] ?></td>
+                        <td><?= $team['wertigkeit'] ?></td>
                         <?php if ($spielplan->turnier->get_phase() !== 'ergebnis') { ?>
                             <td>
                                 <span class="pdf-hide">
-                                    <?= Html::trikot_punkt($team->details['trikot_farbe_1'] ?? null, $team->details['trikot_farbe_2'] ?? null) ?>
+                                    <?= Html::trikot_punkt($team['details']['trikot_farbe_1'] ?? null, $team['details']['trikot_farbe_2'] ?? null) ?>
                                 </span>
                             </td>
                         <?php } // end if?>
                         <td>
-                            <span class="pdf-hide"><?= $team->details["ligavertreter"] ?? null?></span>
+                            <span class="pdf-hide"><?= $team['details']["ligavertreter"] ?? null?></span>
                         </td>
                         <td>
                             <span class="pdf-hide">
