@@ -31,7 +31,7 @@ include '../../templates/header.tmp.php';
     <p><?= HTML::link('tabelle.php?saison=26', 'Tabelle der Saison 2020/2021') ?></p>
     <p><?= Html::link('ergebnisse.php?saison=26', 'Turniere der Saison 2020/2021') ?></p>
     <hr>
-    <iframe src="<?= Nav::LINK_ARCHIV ?>" style="width:100%;height:800px;" class="archiv w3-border-0"
+    <iframe src="<?= Nav::LINK_ARCHIV . "/bis2021/archiv/index.html" ?>" style="width:100%;height:800px;" class="archiv w3-border-0"
             title="Archiv der Deutschen Einradhockeyliga"></iframe>
 
     <h1 class="w3-text-primary">Weitere archivierte Ergebnisse</h1>
