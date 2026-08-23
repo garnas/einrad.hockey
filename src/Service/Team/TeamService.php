@@ -191,6 +191,4 @@ class TeamService
             $ergebnis->setSaisonUebernahmeVerhindern($value);
         }
     }
-
-
 }

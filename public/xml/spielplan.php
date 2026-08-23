@@ -1,5 +1,6 @@
 <?php
 
+use App\Repository\Team\TeamRepository;
 use Spatie\ArrayToXml\ArrayToXml;
 
 require_once '../../init.php';
@@ -26,8 +27,8 @@ foreach ($spiele as $key => $spiel) {
     $spiele[$key]["puffer"] = $details["puffer"]; # Puffer für jedes Spiel in Minuten
     $spiele[$key]["farbe_a"] = $spielplan->get_trikot_colors($spiel, false)[$spiel['team_id_a']] ?? '';
     $spiele[$key]["farbe_b"] = $spielplan->get_trikot_colors($spiel, false)[$spiel['team_id_b']] ?? '';
-    $spiele[$key]["schiri_teamname_a"] = Team::id_to_name($spiel['schiri_team_id_a']);
-    $spiele[$key]["schiri_teamname_b"] = Team::id_to_name($spiel['schiri_team_id_b']);
+    $spiele[$key]["schiri_teamname_a"] = TeamRepository::get()->team($spiel['schiri_team_id_a'])?->getName();
+    $spiele[$key]["schiri_teamname_b"] = TeamRepository::get()->team($spiel['schiri_team_id_b'])?->getName();
 }
 
 // Values in String casten, für Xml-Erstellung

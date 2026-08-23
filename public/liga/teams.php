@@ -2,9 +2,11 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Repository\Team\TeamRepository;
+
 require_once '../../init.php';
 
-$alle_teamdaten = Team::get_teams();
+$alle_teamdaten = TeamRepository::get()->activeLigaTeams();
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -60,19 +62,19 @@ include '../../templates/header.tmp.php';
                 <th class="w3-center" style="white-space: nowrap;"><?= Html::icon('invert_colors')?> Farben</th>
             </tr>
             <?php foreach ($alle_teamdaten as $team) { ?>
-                <tr id='<?= $team['team_id'] ?>'>
+                <tr id='<?= $team->id() ?>'>
                     <!-- Icons -->
                     <td style='white-space: nowrap;' class="w3-right-align">
-                        <?= Html::Link($team['homepage'] ?? '', "", true, "home")?>
-                        <?= Html::Link($team['teamfoto'] ?? '', "", true, "group")?>
-                        <?= Html::mailto((new Kontakt($team['team_id']))->get_emails('public'), '')?>
+                        <?= Html::Link($team->getDetails()->getHomepage() ?? '', "", true, "home")?>
+                        <?= Html::Link($team->getDetails()->getTeamfoto() ?? '', "", true, "group")?>
+                        <?= Html::mailto((new Kontakt($team->id()))->get_emails('public'), '')?>
                     </td>
                     <!-- Text -->
-                    <td style='white-space: nowrap;'><?= $team['teamname'] ?></td>
-                    <td><?= $team['plz'] ?>&nbsp;<?= $team['ort'] ?></td>
-                    <td><?= $team['verein'] ?></td>
-                    <td><?= $team['ligavertreter'] ?></td>
-                    <td class="w3-center" style="white-space: nowrap;"><?= Html::trikot_punkt($team['trikot_farbe_1'], $team['trikot_farbe_2']) ?></td>
+                    <td style='white-space: nowrap;'><?= $team->getName() ?></td>
+                    <td><?= $team->getDetails()->getPlz() ?>&nbsp;<?= $team->getDetails()->getOrt() ?></td>
+                    <td><?= $team->getDetails()->getVerein() ?></td>
+                    <td><?= $team->getDetails()->getLigavertreter() ?></td>
+                    <td class="w3-center" style="white-space: nowrap;"><?= Html::trikot_punkt($team->getDetails()->getTrikotFarbe1(), $team->getDetails()->getTrikotFarbe2()) ?></td>
                 </tr>
             <?php } //Ende foreach?>
         </table>

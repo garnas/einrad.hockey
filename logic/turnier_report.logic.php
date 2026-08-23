@@ -61,8 +61,8 @@ if ($allow_edit) {
         $name = $_POST['ausleihe_name'];
         $team_ab = $_POST['ausleihe_team_ab'];
         $team_auf = $_POST['ausleihe_team_auf'];
-        $team_id_ab = Team::name_to_id($team_ab);
-        $team_id_auf = Team::name_to_id($team_auf);
+        $team_id_ab = TeamRepository::get()->findByName($team_ab)?->id();
+        $team_id_auf = TeamRepository::get()->findByName($team_auf)?->id();
 
         if (!TurnierBerichtValidatorService::validTeam($team_auf)) {
             Html::error("Das aufnehmende Team wurde nicht gefunden.");

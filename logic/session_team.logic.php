@@ -10,16 +10,15 @@ if (!isset($_SESSION['logins']['team'])) {
     die();
 }
 
-$team = new Team($_SESSION['logins']['team']['id']);
 $teamEntity = TeamRepository::get()->team($_SESSION['logins']['team']['id']);
 
-if (!Helper::$teamcenter_no_redirect && $team->details['passwort_geaendert'] === 'Nein') {
+if (!Helper::$teamcenter_no_redirect && $teamEntity->getPasswortGeaendert() === 'Nein') {
     Html::info("Bitte ändere zuerst das von uns vergebene Passwort.");
     header('Location: tc_pw_aendern.php');
     die();
 }
 
-if (!Helper::$teamcenter_no_redirect && empty($team->details['ligavertreter'])) {
+if (!Helper::$teamcenter_no_redirect && empty($teamEntity->getDetails()->getLigavertreter())) {
     Html::info("Bitte tragt vor der Nutzung des Teamcenters einen Ligavertreter ein, welcher unsere aktuellen "
         . Html::link(Nav::LINK_DSGVO, "Datenschutz-Hinweise", true, 'security')
         . " gelesen und akzeptiert hat. Beachtet bitte, dass jedes Team nur einen Ligavertreter haben kann.", esc: false);

@@ -49,15 +49,15 @@ foreach ($turniere as $turnier) {
     if ($erstellen) {
         $turnier_new = TurnierRepository::get()->turnier($turnier->get_turnier_id());
         Html::info("Handling Turnier " . $turnier->get_turnier_id());
-        $teams = $turnier->get_spielenliste();
-        $ligateams = array_filter($teams, static function ($team) {
-            return ($team->details["ligateam"] ?? "Nein") == "Ja";
+        $setzliste = $turnier_new->getSetzliste()->toArray();
+        $ligateams = array_filter($setzliste, static function ($listeneintrag) {
+            return ($listeneintrag->getTeam()->isLigaTeam());
         });
-        $min_ligateams = count($teams) === 4 ? 3 : 4;
+        $min_ligateams = count($setzliste) === 4 ? 3 : 4;
         if (count($ligateams) < $min_ligateams) {
             $absage_grund = "Zu wenige Ligateams";
         }
-        if ($turnier_new->getDetails()->getMinTeams() && count($teams) < $turnier_new->getDetails()->getMinTeams()) {
+        if ($turnier_new->getDetails()->getMinTeams() && (count($setzliste) < $turnier_new->getDetails()->getMinTeams())) {
             $absage_grund = "Minimale Anzahl an Teams nicht erreicht";
         }
         if ($absage_grund != "") {

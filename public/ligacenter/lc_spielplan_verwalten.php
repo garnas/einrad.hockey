@@ -161,10 +161,10 @@ include '../../templates/header.tmp.php';
             </thead>
             <?php foreach ($teamliste as $team) { ?>
                 <tr>
-                    <td><?= $team->id ?></td>
-                    <td><?= $team->teamname ?></td>
-                    <td class="w3-center"><?= $team->get_tblock() ?: 'NL' ?></td>
-                    <td class="w3-center"><?= $team->get_wertigkeit() ?: 'Siehe Modus' ?></td>
+                    <td><?= $team['team_id'] ?></td>
+                    <td><?= $team['teamname'] ?></td>
+                    <td class="w3-center"><?= $team['tblock'] ?: 'NL' ?></td>
+                    <td class="w3-center"><?= $team['wertigkeit'] ?: 'Siehe Modus' ?></td>
                 </tr>
             <?php } //end foreach?>
         </table>
@@ -262,10 +262,10 @@ include '../../templates/header.tmp.php';
                             </option>
                             <?php foreach ($teamliste as $team_id => $team) { ?>
                                 <option
-                                    <?php if (($turnier_ergebnis[$platz]['team_id'] ?? 0) == $team->id) { ?>
+                                    <?php if (($turnier_ergebnis[$platz]['team_id'] ?? 0) == $team['team_id']) { ?>
                                         selected
                                     <?php } //endif?>
-                                    value="<?= $team->id ?>"><?= $team->teamname ?>
+                                    value="<?= $team['team_id'] ?>"><?= $team['teamname'] ?>
                                 </option>
                             <?php } //end foreach?>
                         </select>

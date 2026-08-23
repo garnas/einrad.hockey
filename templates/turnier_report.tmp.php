@@ -57,13 +57,12 @@ use App\Service\Turnier\TurnierSnippets;
                 name="kader_check"
                 id="kader_check"
                 <?= $allow_edit ? '' : 'disabled' ?>
+                <?= $allow_edit ? 'onchange="this.form.submit()"' : '' ?>
             >
-            <label for="kader_check" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer;"> Es wurde auf richtige Teamkader geachet.</label>
+            <label for="kader_check" class="w3-hover-text-secondary w3-text-primary" style="cursor: pointer;"> Es wurde auf richtige Teamkader geachtet.</label>
         </p>
         <?php if ($allow_edit): ?>
-            <p>
-                <input type="submit" value="Bestätigen" name="set_kader_check" class="w3-button w3-tertiary">
-            </p>
+            <input type="hidden" name="set_kader_check" value="1">
         <?php endif; ?>
     </form>
 </div>

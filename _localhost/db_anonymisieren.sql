@@ -9,7 +9,6 @@ TRUNCATE TABLE abstimmung_ergebnisse;
 TRUNCATE TABLE abstimmung_teams;
 -- TRUNCATE TABLE oeffi_challenge;
 TRUNCATE TABLE spieler_ausleihen;
-TRUNCATE TABLE turniere_berichte;
 TRUNCATE TABLE turniere_geloescht;
 TRUNCATE `schiri_ergebnis`;
 TRUNCATE `schiri_test`;
@@ -26,6 +25,7 @@ INSERT INTO ligaleitung(funktion, login, passwort, spieler_id, email) VALUES ('t
 
 -- Turniere
 UPDATE turniere_details SET organisator='Vorname Nachname', handy='1234 56789', hinweis='Beispieltext';
+UPDATE turniere_berichte SET bericht='Lorem Ipsum', kader_ueberprueft='Nein';
 
 -- Teams
 UPDATE teams_liga SET passwort='$2y$10$PCOkOZQw6wut4uRCQyLWgup7nFn6Gv0zbqJ8ZhEds7wZ753Ba7wd6', freilose='1', zweites_freilos = NULL;

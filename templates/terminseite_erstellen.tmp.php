@@ -51,7 +51,7 @@
         </a>
     </div>
 
-    <?php if ($team->check_terminplaner()) { ?>
+    <?php if ($teamEntity->getTerminplaner() === 'Ja') { ?>
         <div class="w3-card-4 w3-panel">
             Für Dein Team wurde mit der Emailadresse bereits eine Gruppe angelegt.
             <br>
@@ -67,7 +67,7 @@
                 <input required
                        type="text"
                        class="w3-input w3-border w3-border-primary"
-                       value="<?= $team->details['verein'] ?>"
+                       value="<?= $teamEntity->getDetails()->getVerein() ?>"
                        id="gruppenname"
                        name="gruppenname">
             </div>
@@ -89,7 +89,7 @@
                 <input required
                        type="text"
                        class="w3-input w3-border w3-border-primary"
-                       value="<?= explode(' ', $team->details['ligavertreter'])[0] ?>"
+                       value="<?= explode(' ', $teamEntity->getDetails()->getLigavertreter())[0] ?>"
                        id="vorname"
                        name="vorname">
             </div>
@@ -98,7 +98,7 @@
                 <input required
                        type="text"
                        class="w3-input w3-border w3-border-primary"
-                       value="<?= explode(' ', $team->details['ligavertreter'])[1] ?>"
+                       value="<?= explode(' ', $teamEntity->getDetails()->getLigavertreter())[1] ?>"
                        id="nachname"
                        name="nachname">
             </div>

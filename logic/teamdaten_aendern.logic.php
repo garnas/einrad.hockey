@@ -3,10 +3,11 @@
 // Inititalisierung
 use App\Repository\Team\TeamRepository;
 use App\Service\Neuigkeit\FileService;
+use App\Service\Team\TeamService;
 
 $team_id = (Helper::$teamcenter) ? $_SESSION['logins']['team']['id'] : (int) @$_GET['team_id'];
-if (Team::is_ligateam($team_id)) {
-    $team = TeamRepository::get()->team($team_id);
+$team = TeamRepository::get()->team($team_id);
+if ($team?->isLigaTeam()) {
     $kontakte = new Kontakt($team_id);
     $emails = $kontakte->get_emails_with_details();
 }

@@ -138,15 +138,15 @@ class spielplan_final
 
         $spielplan->spiele = $spiele;
         $offset = ($this->topOrBottom == 'bottom') ? 3 : 0;
-        $spielplan->teamliste[$spiele[7]['team_id_a']]->tblock = (3 + $offset) . ". Gruppe A";
-        $spielplan->teamliste[$spiele[7]['team_id_b']]->tblock = (1 + $offset) . ". Gruppe B";
-        $spielplan->teamliste[$spiele[8]['team_id_a']]->tblock = (1 + $offset) . ". Gruppe A";
-        $spielplan->teamliste[$spiele[8]['team_id_b']]->tblock = (3 + $offset) . ". Gruppe B";
-        $spielplan->teamliste[$spiele[9]['team_id_a']]->tblock = (2 + $offset) . ". Gruppe A";
-        $spielplan->teamliste[$spiele[9]['team_id_b']]->tblock = (2 + $offset) . ". Gruppe B";
+        $spielplan->teamliste[$spiele[7]['team_id_a']]['tblock'] = (3 + $offset) . ". Gruppe A";
+        $spielplan->teamliste[$spiele[7]['team_id_b']]['tblock'] = (1 + $offset) . ". Gruppe B";
+        $spielplan->teamliste[$spiele[8]['team_id_a']]['tblock'] = (1 + $offset) . ". Gruppe A";
+        $spielplan->teamliste[$spiele[8]['team_id_b']]['tblock'] = (3 + $offset) . ". Gruppe B";
+        $spielplan->teamliste[$spiele[9]['team_id_a']]['tblock'] = (2 + $offset) . ". Gruppe A";
+        $spielplan->teamliste[$spiele[9]['team_id_b']]['tblock'] = (2 + $offset) . ". Gruppe B";
 
         uasort($spielplan->teamliste, static function ($team_a, $team_b) {
-            return ($team_a->tblock <=> $team_b->tblock);
+            return ($team_a['tblock'] <=> $team_b['tblock']);
         });
 
         if ($this->topOrBottom === "bottom") {

@@ -2,14 +2,15 @@
 
 namespace App\Service\TurnierBericht;
 
-use Team;
+use App\Repository\Team\TeamRepository;
+use App\Service\Team\TeamService;
 
 class TurnierBerichtValidatorService
 {
     public static function validTeam(string $teamname): bool
     {
-        $team_id = Team::name_to_id($teamname);
-        return Team::is_ligateam($team_id);
+        $team = TeamRepository::get()->findByName($teamname);
+        return (bool) $team?->isLigaTeam();
     }
 
     public static function validKaderCheck(string $check): bool
