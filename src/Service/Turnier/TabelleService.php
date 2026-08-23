@@ -5,7 +5,6 @@ namespace App\Service\Turnier;
 use App\Repository\Team\TeamRepository;
 use App\Repository\Turnier\TabelleRepository;
 use Config;
-use Team;
 
 /**
  * Class TabelleService
@@ -244,12 +243,12 @@ class TabelleService
         // Tabelle mit aktiven Teams ohne Ergebnis auffüllen
         // In vergangenen Saisons werden nur Teams mit Ergebnissen gelistet
         if ($saison == Config::SAISON) {
-            $list_of_teamids = Team::get_liste_ids();
-            foreach ($list_of_teamids as $team_id) {
-                if (!array_key_exists($team_id, $return)) {
+            $teamsActive = TeamRepository::get()->activeLigaTeams();
+            foreach ($teamsActive as $team) {
+                if (!array_key_exists($team->id(), $return)) {
                     $return[$team_id] = [];
-                    $return[$team_id]['teamname'] = Team::id_to_name($team_id);
-                    $return[$team_id]['team_id'] = $team_id;
+                    $return[$team_id]['teamname'] = $team->getName();
+                    $return[$team_id]['team_id'] = $team->id();
                     $return[$team_id]['string'] = '';
                     $return[$team_id]['summe'] = 0;
                     $return[$team_id]['einzel_ergebnisse'] = [0];
@@ -316,7 +315,7 @@ class TabelleService
 
         if ($saison !== Config::SAISON) {
             foreach ($return as $team_id => $team) {
-                $return[$team_id]['teamname'] = Team::id_to_name($team_id, $saison);
+                $return[$team_id]['teamname'] = TeamRepository::get()->team($team_id)?->getName($saison);
             }
         }
 
@@ -355,7 +354,10 @@ class TabelleService
         // Tabelle mit aktiven Teams ohne Ergebnis auffüllen
         // TODO ? In vergangenen Saisons werden nur Teams mit Ergebnissen gelistet, ist das gut so?
         if ($saison == Config::SAISON) {
-            $list_of_teamids = Team::get_liste();
+            $list_of_teamids = [];
+            foreach (TeamRepository::get()->activeLigaTeams() as $ligateam) {
+                $list_of_teamids[$ligateam->id()] = $ligateam->getName();
+            }
             foreach ($list_of_teamids as $team_id => $teamname) {
                 if (!array_key_exists($team_id, $return)) {
                     $return[$team_id] = [];
@@ -371,7 +373,7 @@ class TabelleService
         }
         if ($saison !== Config::SAISON) {
             foreach ($return as $team_id => $team) {
-                $return[$team_id]['teamname'] = Team::id_to_name($team_id, $saison);
+                $return[$team_id]['teamname'] = TeamRepository::get()->team($team_id)?->getName($saison);
             }
         }
 

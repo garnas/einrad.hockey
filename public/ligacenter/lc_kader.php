@@ -13,7 +13,7 @@ require_once '../../logic/la_team_waehlen.logic.php'; //Auswahlfeld für ein Tea
 if (isset($_GET['team_id'])) {
     $team_id = (int) $_GET['team_id'];
     $teamEntity = TeamRepository::get()->team($team_id);
-    if (Team::is_ligateam($team_id)) {
+    if ($teamEntity?->isLigaTeam()) {
         $kader = $teamEntity->getKader();
         $kaderVorsaison = $teamEntity->getKaderVorsaison();
         $uebernehmbareSpieler = SpielerRepository::get()->findUebernehmbareSpieler($team_id);

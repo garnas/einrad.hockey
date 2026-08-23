@@ -192,5 +192,13 @@ class TeamService
         }
     }
 
+    /**
+     * Prüft ob die TeamID zu einem aktiven Ligateam gehört
+     */
+    public static function isLigateam(?int $teamId): bool
+    {
+        $team = $teamId === null ? null : TeamRepository::get()->team($teamId);
+        return $team !== null && $team->isLigaTeam() && $team->isAktiv();
+    }
 
 }

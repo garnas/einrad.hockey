@@ -75,6 +75,24 @@ class TeamRepository
     }
 
     /**
+     * @return int[]
+     */
+    public function activeLigaTeamIds(): array
+    {
+        return DoctrineWrapper::manager()
+            ->createQueryBuilder()
+            ->select('t.id')
+            ->from(nTeam::class, 't')
+            ->andWhere('t.aktiv = :aktiv')
+            ->andWhere('t.ligateam = :ligateam')
+            ->orderBy('t.id', 'asc')
+            ->setParameter('aktiv', 'Ja')
+            ->setParameter('ligateam', 'Ja')
+            ->getQuery()
+            ->getSingleColumnResult();
+    }
+
+    /**
      * @return nTeam[]
      */
     public function activeLigaTeams(): array
@@ -86,6 +104,7 @@ class TeamRepository
             ->leftJoin('t.details', 'details')
             ->andWhere('t.aktiv = :aktiv')
             ->andWhere('t.ligateam = :ligateam')
+            ->orderBy('t.name', 'asc')
             ->setParameter('aktiv', 'Ja')
             ->setParameter('ligateam', 'Ja')
             ->getQuery()
