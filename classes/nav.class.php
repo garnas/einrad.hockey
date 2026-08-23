@@ -200,7 +200,7 @@ class Nav
      * Einradverbände
      */
     public const LINK_EV = 'https://www.einradverband.de/';
-    public const LINK_ARCHIV = 'https://archiv.einrad.hockey/archiv/index.html';
+    public const LINK_ARCHIV = 'https://archiv.einrad.hockey';
     public const LINK_INSTA = 'https://www.instagram.com/einradhockeyde/';
     public const LINK_EV_BY = 'http://einradverband-bayern.de/';
     public const LINK_REGELN_KURZ = Env::BASE_URL . '/dokumente/zusammenfassung_regeln.pdf';
