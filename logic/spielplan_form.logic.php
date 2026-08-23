@@ -1,27 +1,25 @@
 <?php
 
 use App\Event\Turnier\nLigaBot;
-use App\Repository\DoctrineWrapper;
 use App\Repository\Turnier\TurnierRepository;
 use App\Repository\TurnierBericht\TurnierBerichtRepository;
 use App\Service\Team\FreilosService;
 use App\Service\Turnier\TabelleService;
+use App\Service\Turnier\TurnierService;
+use App\Service\Turnier\TurnierValidatorService;
 use App\Service\TurnierBericht\TurnierBerichtService;
-
-$turnierEntity = TurnierRepository::get()->turnier($turnier_id);
-$turnier_bericht = TurnierBerichtRepository::get()->bericht($turnier_id);
 
 // Besteht die Berechtigung das Turnier zu bearbeiten?
 if (!Helper::$ligacenter) { // Ligacenter darf alles.
-    if ((Helper::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $spielplan->turnier->get_ausrichter())) {
+    if ((Helper::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $spielplan->turnier->getAusrichter()->id())) {
         Html::error("Nur der Ausrichter kann Spielergebnisse eintragen");
         Helper::reload("/liga/spielplan.php", '?turnier_id=' . $turnier_id);
     }
 
     // Wird das Turnierergebnis rechtzeitig eingetragen?
-    $N = date("N", strtotime($spielplan->turnier->get_datum())); // Numerischer Wochentag.
+    $N = (int) $spielplan->turnier->getDatum()->format("N"); // Numerischer Wochentag.
     $delta = (8 - $N) * 24 * 60 * 60 + 18 * 60 * 60; // Die Zeit bis zum nächsten Montag 18:00 Uhr von 0:00 Uhr aus gesehen.
-    $abgabe = strtotime($spielplan->turnier->get_datum()) + $delta;
+    $abgabe = $spielplan->turnier->getDatum()->getTimestamp() + $delta;
 
     if ($abgabe < time()) {
         Html::error("Bitte wende dich an den Ligaausschuss um Ergebnisse nachträglich zu verändern.");
@@ -68,7 +66,7 @@ if (isset($_POST["turnierergebnis_speichern"])) {
     }
 
     // Testen ob Turnier tabellentechnisch eingetragen werden darf.
-    if (!$turnier->is_ergebnis_eintragbar()) {
+    if (!TurnierValidatorService::isErgebnisEintragbar($spielplan->turnier)) {
         Html::error("Turnierergebnis kann nicht eingetragen werden. Kontaktiere bitte den Ligaausschuss.");
         $error = true;
     }
@@ -80,21 +78,22 @@ if (isset($_POST["turnierergebnis_speichern"])) {
     }
 
     if (!($error ?? false)) {
-        $spielplan->turnier->set_ergebnisse($spielplan->platzierungstabelle);
+        TurnierService::setErgebnisse($spielplan->turnier, $spielplan->platzierungstabelle);
+        TurnierRepository::get()->speichern($spielplan->turnier);
         Html::info("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
-        $spieltag = $spielplan->turnier->get_spieltag();
+        $spieltag = $spielplan->turnier->getSpieltag();
         if (TabelleService::isSpieltagBeendet($spieltag)) {
             nLigaBot::blockWechsel();
         }
-        DoctrineWrapper::manager()->refresh($turnierEntity); # Doctrine erkennt die Änderungen in set_ergebnisse nicht.
-        FreilosService::handleAusgerichtetesTurnierFreilos($turnierEntity);
-        FreilosService::handleFreilosRecycling($turnierEntity);
+        FreilosService::handleAusgerichtetesTurnierFreilos($spielplan->turnier);
+        FreilosService::handleFreilosRecycling($spielplan->turnier);
         Helper::reload(get: "?turnier_id=" . $turnier_id);
     }
 
 }
 
 // Hinweis Kaderkontrolle und Turnierreport
+$turnier_bericht = TurnierBerichtRepository::get()->bericht($turnier_id);
 if (TurnierBerichtService::isKaderChecked($turnier_bericht)) {
     Html::info("Bitte kontrolliert die Teamkader und setzt im "
             . Html::link('../teamcenter/tc_turnier_report.php?turnier_id='
@@ -107,16 +106,16 @@ if (!$spielplan->validate_penalty_ergebnisse()) {
 
 // Gibt es eine Diskrepanz zwischen Turnierergebnis und in der Datenbank hinterlegtem Turnierergebnis?
 $error = false;
-$vgl_data = $spielplan->turnier->get_ergebnis();
+$vgl_data = TurnierService::getErgebnisByPlatz($spielplan->turnier);
 if (!empty($vgl_data)) {
     if (
         !$spielplan->check_turnier_beendet()
         || count($vgl_data) != $spielplan->anzahl_teams
     ) {
         $error = true;
-    } elseif ($turnier->get_art() != 'final') {
+    } elseif ($spielplan->turnier->getArt() != 'final') {
         foreach ($spielplan->platzierungstabelle as $ergebnis) {
-            if ($vgl_data[$ergebnis['platz']]['ergebnis'] != $ergebnis['ligapunkte']) {
+            if (($vgl_data[$ergebnis['platz']] ?? null)?->getErgebnis() != $ergebnis['ligapunkte']) {
                 $error = true;
             }
         }
@@ -127,9 +126,9 @@ if (!empty($vgl_data)) {
 }
 
 if (
-    FreilosService::isAusrichterFreilosBerechtigt($turnierEntity)
+    FreilosService::isAusrichterFreilosBerechtigt($spielplan->turnier)
 ) {
-    if (FreilosService::hasAusrichterFreilosForAusgerichtetesTurnier($turnierEntity)) {
+    if (FreilosService::hasAusrichterFreilosForAusgerichtetesTurnier($spielplan->turnier)) {
         HTML::info("Für dieses Turnier habt ihr mit Ergebniseintragung ein Freilos erhalten.");
     } else {
         HTML::notice("Für dieses Turnier erhaltet ihr mit Ergebniseintragung ein Freilos.");

@@ -57,9 +57,9 @@
                 </th>
             <?php }//endif?>
         </tr>
-        <?php if ($spielplan->turnier->get_besprechung() === 'Ja') { ?>
+        <?php if ($spielplan->turnier->hasBesprechung()) { ?>
             <tr class="w3-primary-3">
-                <td><?= date('H:i', strtotime($spielplan->turnier->get_startzeit()) - 15 * 60) ?></td>
+                <td><?= date('H:i', $spielplan->turnier->getDetails()->getStartzeit()->getTimestamp() - 15 * 60) ?></td>
                 <td></td>
                 <td></td>
                 <td colspan="3">

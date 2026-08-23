@@ -1,5 +1,7 @@
 <?php
 
+use App\Entity\Turnier\Turnier;
+
 class Spielplan_JgJ extends Spielplan
 {
     /**
@@ -23,11 +25,11 @@ class Spielplan_JgJ extends Spielplan
 
     /**
      * DirekterVergleich constructor.
-     * @param nTurnier $turnier
+     * @param Turnier $turnier
      * @param bool $penaltys Penaltys werden ignoriert. Dies ist für eine zweite Instanz der Klasse, aus welcher die
      * gesamt zu spielenden Penaltys in Erfahrung gebracht werden.
      */
-    public function __construct(nTurnier $turnier, bool $penaltys = true, $skip_init = false)
+    public function __construct(Turnier $turnier, bool $penaltys = true, $skip_init = false)
     {
         parent::__construct($turnier);
 

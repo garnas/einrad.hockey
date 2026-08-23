@@ -13,11 +13,10 @@ $_SESSION['logins']['cronjob'] = 'Cronjob';
 
 $aktueller_spieltag = TabelleService::getAktuellenSpieltag();
 echo "Spieltag: " . $aktueller_spieltag . "<br>";
-$turniere = nTurnier::get_turniere_spieltag($aktueller_spieltag);
+$turniere = TurnierRepository::get()->getTurniereSpieltag($aktueller_spieltag);
 
 foreach ($turniere as $turnier) {
-    $datum_string = $turnier->get_datum();
-    $datum_turnier = strtotime($datum_string);
+    $datum_turnier = $turnier->getDatum()->getTimestamp();
     $aktuelles_datum = time();
     $absage_grund = "";
     $erstellen = true;
@@ -42,14 +41,13 @@ foreach ($turniere as $turnier) {
         $aktuelles_datum = strtotime("+1 day", $aktuelles_datum);
     }
 
-    if ($turnier->get_phase() != "setz") {
+    if ($turnier->getPhase() != "setz") {
         $erstellen = false;
     }
 
     if ($erstellen) {
-        $turnier_new = TurnierRepository::get()->turnier($turnier->get_turnier_id());
-        Html::info("Handling Turnier " . $turnier->get_turnier_id());
-        $setzliste = $turnier_new->getSetzliste()->toArray();
+        Html::info("Handling Turnier " . $turnier->id());
+        $setzliste = $turnier->getSetzliste()->toArray();
         $ligateams = array_filter($setzliste, static function ($listeneintrag) {
             return ($listeneintrag->getTeam()->isLigaTeam());
         });
@@ -57,20 +55,20 @@ foreach ($turniere as $turnier) {
         if (count($ligateams) < $min_ligateams) {
             $absage_grund = "Zu wenige Ligateams";
         }
-        if ($turnier_new->getDetails()->getMinTeams() && (count($setzliste) < $turnier_new->getDetails()->getMinTeams())) {
+        if ($turnier->getDetails()->getMinTeams() && (count($setzliste) < $turnier->getDetails()->getMinTeams())) {
             $absage_grund = "Minimale Anzahl an Teams nicht erreicht";
         }
         if ($absage_grund != "") {
-            TurnierService::cancel($turnier_new, $absage_grund);
-            TurnierRepository::get()->speichern($turnier_new);
-            TurnierEventMailBot::mailCanceled($turnier_new);
-            Html::info("Abgesagt: " . $turnier->get_turnier_id());
+            TurnierService::cancel($turnier, $absage_grund);
+            TurnierRepository::get()->speichern($turnier);
+            TurnierEventMailBot::mailCanceled($turnier);
+            Html::info("Abgesagt: " . $turnier->id());
         } elseif (Spielplan::spielplan_erstellen($turnier)) { # Weitere Checks für den LA in dieser Funktion
-            $turnierbericht = new TurnierBericht($turnier_new);
+            $turnierbericht = new TurnierBericht($turnier);
             TurnierBerichtRepository::get()->speichern($turnierbericht);
-            Html::info("Spielplan für " . $turnier->get_turnier_id() . " erstellt");
+            Html::info("Spielplan für " . $turnier->id() . " erstellt");
         } else {
-            Html::error("Keinen Spielplan für " . $turnier->get_turnier_id() . " erstellt");
+            Html::error("Keinen Spielplan für " . $turnier->id() . " erstellt");
         }
         Html::print_messages();
     }

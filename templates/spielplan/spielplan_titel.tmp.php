@@ -1,10 +1,13 @@
+<?php use App\Service\Turnier\TurnierLinks;
+
+?>
 <!-- Überschrift -->
 <h1 class="w3-text-grey"><?= $spielplan->details['plaetze'] ?>er-Spielplan</h1>
 <h2 class="w3-text-primary">
-    <?= $spielplan->turnier->get_ort() ?>
-    <i>(<?= $spielplan->turnier->get_tblock() ?>)</i>, <?= date("d.m.Y", strtotime($spielplan->turnier->get_datum())) ?>
+    <?= $spielplan->turnier->getDetails()->getOrt() ?>
+    <i>(<?= $spielplan->turnier->getBlock() ?>)</i>, <?= $spielplan->turnier->getDatum()->format("d.m.Y") ?>
 </h2>
-<h3><?= $spielplan->turnier->get_tname() ?></h3>
+<h3><?= $spielplan->turnier->getName() ?></h3>
 <?php if ($spielplan->out_of_scope) {
     Html::message(
         "notice",
@@ -15,22 +18,22 @@
 } // end if?>
 <!-- Links -->
 <div class="pdf-hide">
-    <?= Html::link("../liga/turnier_details.php?turnier_id=" . $spielplan->turnier->get_turnier_id(), "Alle Turnierdetails", true, 'launch') ?>
+    <?= Html::link("../liga/turnier_details.php?turnier_id=" . $spielplan->turnier->id(), "Alle Turnierdetails", true, 'launch') ?>
     <?php if (isset($_SESSION['logins']['team'])) { ?>
-        <?= Html::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $spielplan->turnier->get_turnier_id(), 'Zum Turnierreport', true, 'launch') ?>
+        <?= Html::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $spielplan->turnier->id(), 'Zum Turnierreport', true, 'launch') ?>
     <?php } else { ?>
-        <?= Html::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $spielplan->turnier->get_turnier_id(), 'Zum Turnierreport', true, 'launch') ?>
+        <?= Html::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $spielplan->turnier->id(), 'Zum Turnierreport', true, 'launch') ?>
     <?php } // endif?>
-    <?php if (($_SESSION['logins']['team']['id'] ?? 0) == $spielplan->turnier->get_ausrichter() && !(Helper::$teamcenter ?? false) && $spielplan->turnier->get_phase() == 'spielplan') { ?>
-        <?= Html::link($spielplan->turnier->get_spielplan_link('tc'), 'Ergebnisse eintragen', true, 'launch') ?>
+    <?php if (($_SESSION['logins']['team']['id'] ?? 0) == $spielplan->turnier->getAusrichter()->id() && !(Helper::$teamcenter ?? false) && $spielplan->turnier->getPhase() == 'spielplan') { ?>
+        <?= Html::link(TurnierLinks::spielplan($spielplan->turnier, 'tc'), 'Ergebnisse eintragen', true, 'launch') ?>
     <?php }// endif?>
     <?php if (isset($_SESSION['logins']['la']) && !(Helper::$ligacenter ?? false)) { ?>
-        <?= Html::link($spielplan->turnier->get_spielplan_link('lc'), 'Ergebnisse eintragen (Ligaausschuss)', true, 'launch') ?>
+        <?= Html::link(TurnierLinks::spielplan($spielplan->turnier, 'lc'), 'Ergebnisse eintragen (Ligaausschuss)', true, 'launch') ?>
     <?php }// endif?>
     <?php if (isset($_SESSION['logins']['la'])) { ?>
-        <?= Html::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $spielplan->turnier->get_turnier_id(), 'Turnierreport ausfüllen (Ligaausschuss)', true, 'launch') ?>
+        <?= Html::link('../ligacenter/lc_turnier_report.php?turnier_id=' . $spielplan->turnier->id(), 'Turnierreport ausfüllen (Ligaausschuss)', true, 'launch') ?>
     <?php }// endif?>
-    <?= Html::link("../liga/spielplan_pdf.php?turnier_id=" . $spielplan->turnier->get_turnier_id(), "PDF-Version", true, 'print') ?>
+    <?= Html::link("../liga/spielplan_pdf.php?turnier_id=" . $spielplan->turnier->id(), "PDF-Version", true, 'print') ?>
 </div>
 
 <!-- Penalty-Warnungen -->

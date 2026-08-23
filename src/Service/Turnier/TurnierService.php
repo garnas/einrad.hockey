@@ -6,7 +6,9 @@ use App\Entity\Team\Kontakt;
 use App\Entity\Team\nTeam;
 use App\Entity\Turnier\Turnier;
 use App\Entity\Turnier\TurniereListe;
+use App\Entity\Turnier\TurnierErgebnis;
 use App\Event\Turnier\TurnierEventMailBot;
+use App\Repository\Team\TeamRepository;
 use App\Service\Team\NLTeamValidator;
 use Config;
 use DateTimeImmutable;
@@ -358,6 +360,117 @@ class TurnierService
                 }
             }
         }
+    }
+
+    /**
+     * Liefert die Teams der Setzliste (nach Wertigkeit bzw. bei A-Block-Finalturnieren nach Meisterschaftstabelle
+     * sortiert) inklusive Wertigkeit, Teamblock und Trikotfarben — für die Spielplanerstellung.
+     *
+     * @param Turnier $turnier
+     * @return array
+     */
+    public static function getSpielenliste(Turnier $turnier): array
+    {
+        $spielenliste = [];
+        foreach (self::getSetzListe($turnier) as $anmeldung) {
+            $team = $anmeldung->getTeam();
+            $teamId = $team->id();
+
+            $spielenliste[$teamId] = [
+                'team_id' => $teamId,
+                'teamname' => $team->getName($turnier->getSaison()),
+                'wertigkeit' => TabelleService::getTeamWertigkeit($teamId, $turnier->getSpieltag() - 1, $turnier->getSaison()),
+                'tblock' => TabelleService::getTeamBlock($teamId, $turnier->getSpieltag() - 1),
+                'freilos_gesetzt' => $anmeldung->getFreilosGesetzt(),
+                'details' => [
+                    'ligateam' => $team->getLigateam(),
+                    'ligavertreter' => $team->getDetails()?->getLigavertreter(),
+                    'trikot_farbe_1' => $team->getDetails()?->getTrikotFarbe1(),
+                    'trikot_farbe_2' => $team->getDetails()?->getTrikotFarbe2(),
+                ],
+            ];
+        }
+
+        // Rangtabelle sortieren
+        uasort($spielenliste, static function ($teamA, $teamB) {
+            return ((int) $teamB['wertigkeit'] <=> (int) $teamA['wertigkeit']);
+        });
+
+        return $spielenliste;
+    }
+
+    /**
+     * Trägt ein Turnierergebnis ein. Setzt das Turnier in die Ergebnisphase.
+     * Persistiert nicht selbst, der Aufrufer muss speichern.
+     *
+     * @param Turnier $turnier
+     * @param array $platzierungstabelle team_id => ['ligapunkte' => int, 'platz' => int]
+     */
+    public static function setErgebnisse(Turnier $turnier, array $platzierungstabelle): void
+    {
+        self::deleteErgebnisse($turnier);
+
+        foreach ($platzierungstabelle as $teamId => $eintrag) {
+            $ergebnis = $turnier->isLigaturnier() ? $eintrag['ligapunkte'] : null;
+
+            $turnierErgebnis = (new TurnierErgebnis())
+                ->setTeam(TeamRepository::get()->team((int) $teamId))
+                ->setTurnier($turnier)
+                ->setErgebnis($ergebnis)
+                ->setPlatz($eintrag['platz'])
+                ->setSaisonUebernahmeVerhindern(false);
+
+            $turnier->getErgebnis()->add($turnierErgebnis);
+        }
+
+        $turnier->setPhase('ergebnis');
+        $turnier->getLogService()->addLog("Turnierergebnis wurde in die Datenbank eingetragen");
+    }
+
+    /**
+     * Löscht die eingetragenen Turnierergebnisse. Persistiert nicht selbst, der Aufrufer muss speichern.
+     *
+     * @param Turnier $turnier
+     */
+    public static function deleteErgebnisse(Turnier $turnier): void
+    {
+        if ($turnier->getErgebnis()->isEmpty()) {
+            return;
+        }
+        $turnier->getErgebnis()->clear();
+        $turnier->getLogService()->addLog("Turnierergebnisse wurden gelöscht.");
+    }
+
+    /**
+     * Liefert die Turnierergebnisse, keyed by Platz.
+     *
+     * @param Turnier $turnier
+     * @return TurnierErgebnis[]
+     */
+    public static function getErgebnisByPlatz(Turnier $turnier): array
+    {
+        $criteria = Criteria::create()->orderBy(['platz' => Criteria::ASC]);
+
+        $ergebnisse = [];
+        foreach ($turnier->getErgebnis()->matching($criteria) as $ergebnis) {
+            $ergebnisse[$ergebnis->getPlatz()] = $ergebnis;
+        }
+        return $ergebnisse;
+    }
+
+    /**
+     * Hinterlegt zu einem Turnier einen Link zu einem manuell hochgeladenen Spielplan bzw. Ergebnis.
+     * Persistiert nicht selbst, der Aufrufer muss speichern.
+     *
+     * @param Turnier $turnier
+     * @param string $link
+     * @param string $phase
+     */
+    public static function uploadSpielplan(Turnier $turnier, string $link, string $phase): void
+    {
+        $turnier->setSpielplanDatei($link);
+        $turnier->setPhase($phase);
+        $turnier->getLogService()->addLog("Manuelle Spielplan- oder Ergebnisdatei wurde hochgeladen.");
     }
 
 }

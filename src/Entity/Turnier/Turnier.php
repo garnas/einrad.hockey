@@ -74,8 +74,8 @@ class Turnier
     private ?int $saison;
 
     #[ORM\ManyToOne(targetEntity: SpielplanDetails::class)]
-    #[ORM\JoinColumn(name: "spielplan_vorlage", referencedColumnName: "spielplan")]
-    private SpielplanDetails $spielplanVorlage;
+    #[ORM\JoinColumn(name: "spielplan_vorlage", referencedColumnName: "spielplan", nullable: true)]
+    private ?SpielplanDetails $spielplanVorlage = null;
 
     #[ORM\JoinColumn(name: "ausrichter", referencedColumnName: "team_id")]
     #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "ausgerichteteTurniere")]
@@ -462,7 +462,7 @@ class Turnier
         return $this->spielplanVorlage ?? null;
     }
 
-    public function setSpielplanVorlage(SpielplanDetails $spielplanVorlage): self
+    public function setSpielplanVorlage(?SpielplanDetails $spielplanVorlage): self
     {
         $this->logService->autoLog("Spielplanvorlage", $this->spielplanVorlage ?? null, $spielplanVorlage);
         $this->spielplanVorlage = $spielplanVorlage;
