@@ -27,11 +27,10 @@ include '../../templates/header.tmp.php';
     <h3 class="w3-text-primary">Termine</h3>
     <div class="w3-section">
         <ul class="w3-ul w3-leftbar w3-border-tertiary">
-            <li>20. + 21. September 2025 (Remscheid)</li>
-            <li>06. + 07. Dezember 2025 (Mörfelden)</li>
-            <li>28. Februar + 01. März 2026 (Mörfelden)</li>
-            <li>25. + 26. April 2026 (Bottrop)</li>
-            <li>04. + 05. Juli 2026 (Augustdorf)</li>
+            <li>06. + 07. Februar 2027 (Mörfelden)</li>
+            <li>20. + 21. März 2027 (Mörfelden)</li>
+            <li><i>Weitere Termine folgen</i></li>
+
         </ul>
     </div>
 
@@ -39,6 +38,8 @@ include '../../templates/header.tmp.php';
     <div class="w3-section">
         <ul class="w3-ul w3-leftbar w3-border-tertiary">
             <li><?= Html::icon("emoji_events", class: "w3-text-grey") ?> 2. Platz, A-Turnier, UNICON Steyr 2026</li>
+            <li><?= Html::icon("emoji_events", class: "w3-text-primary") ?> 5. Platz, A-Turnier, UNICON Steyr 2026</li>
+            <li><?= Html::icon("emoji_events", class: "w3-text-primary") ?> 6. Platz, A-Turnier, UNICON Steyr 2026</li>
             <li><?= Html::icon("emoji_events", class: "w3-text-grey") ?> 2. Platz, A-Turnier, UNICON Bemidji 2024</li>
             <li><?= Html::icon("emoji_events", class: "w3-text-brown") ?> 3. Platz, A-Turnier, EUHC Mörfelden 2023</li>
             <li><?= Html::icon("emoji_events", class: "w3-text-grey") ?> 2. Platz, A-Turnier, UNICON Grenoble 2022</li>
@@ -73,20 +74,21 @@ include '../../templates/header.tmp.php';
     <h3 class="w3-text-primary">Termine</h3>
     <div class="w3-section">
         <ul class="w3-ul w3-leftbar w3-border-tertiary">
-            <li>13. + 14. September 2025 (Münster (Dieburg))</li>
-            <li>01. + 02. November 2025 (Winsen (Luhe))</li>
-            <li>13. + 14. Dezember 2025 (Augustdorf)</li>
-            <li>31. Januar + 01. Februar 2026 (Münster (Dieburg))</li>
-            <li>21. + 22. März 2026 (Mörfelden)</li>
-            <li>09. + 10. Mai 2026 (Mörfelden)</li>
-            <li>04. + 05. Juli 2026 (Augustdorf)</li>
+            <li>10. + 11. Oktober 2026 (Mörfelden)</li>
+            <li>07. + 08. November 2026</li>
+            <li>12. + 13. Dezember 2026</li>
+            <li>23. + 24. Januar 2027</li>
+            <li>06. + 07. März 2027</li>
+            <li>17. + 18. April 2027</li>
+            <li>22. + 23. Mai 2027 (Mörfelden)</li>
         </ul>
     </div>
 
     <h3 class="w3-text-primary">Erfolge</h3>
     <div class="w3-section">
         <ul class="w3-ul w3-leftbar w3-border-tertiary">
-            <li><?= Html::icon("emoji_events", class: "w3-text-tertiary") ?> 2. Platz, B-Turnier, UNICON Steyr 2026</li>
+            <li><?= Html::icon("emoji_events", class: "w3-text-grey") ?> 2. Platz, B-Turnier, UNICON Steyr 2026</li>
+            <li><?= Html::icon("emoji_events", class: "w3-text-primary") ?> 5. Platz, B-Turnier, UNICON Steyr 2026</li>
             <li><?= Html::icon("emoji_events", class: "w3-text-tertiary") ?> 1. Platz, B-Turnier, EUHC Mörfelden 2023</li>
             <li><?= Html::icon("emoji_events", class: "w3-text-grey") ?> 2. Platz, B-Turnier, EUHC Mörfelden 2023</li>
             <li><?= Html::icon("emoji_events", class: "w3-text-brown") ?> 3. Platz, B-Turnier, EUHC Mörfelden 2023</li>
