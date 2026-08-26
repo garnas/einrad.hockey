@@ -20,7 +20,7 @@ if (isset($_POST['spieler_aendern'])) {
     $geschlecht = $_POST['geschlecht'] === "" ? null : $_POST['geschlecht'];
     $teamname = $_POST['teamname'];
     $letzte_saison = (int) $_POST['letzte_saison'];
-    $schiri = (int) $_POST['schiri'];
+    $schiri = $_POST['schiri'] === "" ? null : (int) $_POST['schiri'];
     $junior = $_POST['junior'] ?? null;
     $team = TeamRepository::get()->findByName($teamname);
     if ($team === null) {
