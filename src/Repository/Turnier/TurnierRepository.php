@@ -161,4 +161,58 @@ class TurnierRepository
         return $this->turnier->findOneBy(['ausrichter' => $ausrichter_id], ['id' => 'DESC']);
     }
 
+    /**
+     * Existiert ein früheres, noch nicht abgeschlossenes Turnier derselben Saison und Turnierart?
+     *
+     * @param Turnier $turnier
+     * @param array $arten
+     * @return bool
+     */
+    public function hatFruehesOffenesTurnier(Turnier $turnier, array $arten): bool
+    {
+        $query = DoctrineWrapper::manager()
+            ->createQueryBuilder()
+            ->select('COUNT(t.id)')
+            ->from(Turnier::class, 't')
+            ->where('t.spieltag < :spieltag')
+            ->andWhere('t.spieltag != 0')
+            ->andWhere('t.art IN (:arten)')
+            ->andWhere('t.saison = :saison')
+            ->andWhere('t.canceled = false')
+            ->andWhere('t.phase != :phase')
+            ->setParameter('spieltag', $turnier->getSpieltag())
+            ->setParameter('arten', $arten)
+            ->setParameter('saison', $turnier->getSaison())
+            ->setParameter('phase', 'ergebnis')
+        ;
+
+        return (int) $query->getQuery()->getSingleScalarResult() > 0;
+    }
+
+    /**
+     * @return Turnier[]|Collection
+     */
+    public function getTurniereSpieltag(int $spieltag, int $saison = Config::SAISON): array|Collection
+    {
+        $query = DoctrineWrapper::manager()
+            ->createQueryBuilder()
+            ->select('t', 'details', 'l', 'ausrichter', 'team')
+            ->from(Turnier::class, 't')
+            ->innerJoin('t.details', 'details')
+            ->leftJoin('t.ausrichter', 'ausrichter')
+            ->leftJoin('t.liste', 'l')
+            ->leftJoin('l.team', 'team')
+            ->where('t.spieltag = :spieltag')
+            ->andWhere('t.saison = :saison')
+            ->andWhere('t.canceled = false')
+            ->andWhere('t.art IN (:arten)')
+            ->orderBy('t.datum', 'asc')
+            ->setParameter('spieltag', $spieltag)
+            ->setParameter('saison', $saison)
+            ->setParameter('arten', Config::TURNIER_ARTEN)
+        ;
+
+        return new ArrayCollection($query->getQuery()->execute());
+    }
+
 }

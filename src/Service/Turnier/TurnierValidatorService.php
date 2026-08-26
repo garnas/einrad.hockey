@@ -3,6 +3,7 @@
 namespace App\Service\Turnier;
 
 use App\Entity\Turnier\Turnier;
+use App\Repository\Turnier\TurnierRepository;
 use App\Service\Team\TeamValidator;
 use Config;
 use Feiertage;
@@ -86,6 +87,24 @@ class TurnierValidatorService
             return false;
         }
         return true;
+    }
+
+    /**
+     * True, wenn das Turnierergebnis eingetragen werden darf. Also jedes vorherige Turnier in der Ergebnisphase ist.
+     *
+     * @param Turnier $turnier
+     * @return bool
+     */
+    public static function isErgebnisEintragbar(Turnier $turnier): bool
+    {
+        $arten = ['I', 'II', 'III', 'final'];
+
+        if (!\in_array($turnier->getArt(), $arten, true)) {
+            Html::error("Für diesen Turniertyp können keine Ergebnisse eingetragen werden.");
+            return false;
+        }
+
+        return !TurnierRepository::get()->hatFruehesOffenesTurnier($turnier, $arten);
     }
 
     public function mayChange(): bool

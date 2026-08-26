@@ -1,6 +1,7 @@
 <?php
 
 use App\Repository\Team\TeamRepository;
+use App\Repository\Turnier\TurnierRepository;
 use Spatie\ArrayToXml\ArrayToXml;
 
 require_once '../../init.php';
@@ -15,7 +16,7 @@ if (!Spielplan::check_exist($turnier_id)) {
 }
 
 // Spielbegegnungen laden
-$turnier = nTurnier::get($turnier_id);
+$turnier = TurnierRepository::get()->turnier($turnier_id);
 $spielplan = new Spielplan_JgJ($turnier);
 $spiele = $spielplan->get_spiele();
 

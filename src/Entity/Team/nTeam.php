@@ -98,9 +98,9 @@ class nTeam
     }
 
     #[ORM\OneToOne(targetEntity: TeamDetails::class, mappedBy: "team", cascade: ["all"])]
-    private TeamDetails $details;
+    private ?TeamDetails $details;
 
-    public function getDetails(): TeamDetails
+    public function getDetails(): ?TeamDetails
     {
         return $this->details;
     }
