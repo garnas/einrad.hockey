@@ -32,6 +32,8 @@ class Helper
     {
         if ($path === null) {
             $url = db::escape($_SERVER['PHP_SELF'] . $get);
+        } elseif (str_starts_with($path, "https://")) {
+            $url = $path . $get;
         } else {
             if ($path[0] != "/") {
                 $path = "/" . $path;
