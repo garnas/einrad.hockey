@@ -246,14 +246,14 @@ class TabelleService
             $teamsActive = TeamRepository::get()->activeLigaTeams();
             foreach ($teamsActive as $team) {
                 if (!array_key_exists($team->id(), $return)) {
-                    $return[$team_id] = [];
-                    $return[$team_id]['teamname'] = $team->getName();
-                    $return[$team_id]['team_id'] = $team->id();
-                    $return[$team_id]['string'] = '';
-                    $return[$team_id]['summe'] = 0;
-                    $return[$team_id]['einzel_ergebnisse'] = [0];
-                    $return[$team_id]['details'] = [];
-                    $return[$team_id]['hat_strafe'] = false;
+                    $return[$team->id()] = [];
+                    $return[$team->id()]['teamname'] = $team->getName();
+                    $return[$team->id()]['team_id'] = $team->id();
+                    $return[$team->id()]['string'] = '';
+                    $return[$team->id()]['summe'] = 0;
+                    $return[$team->id()]['einzel_ergebnisse'] = [0];
+                    $return[$team->id()]['details'] = [];
+                    $return[$team->id()]['hat_strafe'] = false;
                 }
             }
         }
