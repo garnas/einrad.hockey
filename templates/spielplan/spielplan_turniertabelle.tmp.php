@@ -1,4 +1,10 @@
 <!-- ABSCHLUSSTABELLE -->
+<?php Html::message(
+    "notice",
+    "Turniertabellen werden noch nach dem alten Modus von Saison 2025/2026 berechnet.",
+    "Achtung",
+); ?>
+
 <h2 class="w3-text-secondary w3-margin-top">Tabelle</h2>
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-centered w3-striped">

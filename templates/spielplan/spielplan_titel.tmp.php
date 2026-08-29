@@ -42,11 +42,3 @@
         <?php Html::message('notice', $spielplan->get_penalty_warnung(), 'Penalty', false) ?>
     </div>
 <?php } // endif?>
-
-<?php
-Html::message(
-    "notice",
-    "Turniertabelle wird noch nach dem alten Modus von Saison 2025/2026 berechnet.",
-    "Achtung",
-);
-?>
