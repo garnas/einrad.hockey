@@ -554,15 +554,24 @@ class Spielplan
      *
      * @param int $team_id Team-ID des Teams, welches platziert werden soll
      */
-    protected function set_platzierung(int $team_id): void
+    protected function set_platzierung(int $team_id, int $platz_offset = 0): void
     {
+        $plaetze = array_column($this->platzierungstabelle, 'platz');
+        $platz = 1;
+        while (in_array($platz, $plaetze, true)) {
+            $platz++;
+        }
         $this->platzierungstabelle[$team_id]
             = [
-                'platz' => count($this->platzierungstabelle) + 1,
+                'platz' => $platz + $platz_offset,
                 'teamname' => $this->teamliste[$team_id]['teamname'],
                 'ligapunkte' => 0,
                 'statistik' => $this->turnier_tabelle[$team_id],
             ];
+        uasort(
+            $this->platzierungstabelle,
+            fn($a, $b) => $a['platz'] <=> $b['platz'],
+        );
     }
 
     /**

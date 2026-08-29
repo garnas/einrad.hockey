@@ -64,7 +64,7 @@
                 </tr>
                 <?php foreach ($direkter_vergleich as $team_id => $ergebnis) { ?>
                     <tr>
-                        <td><?= $spielplan->platzierungstabelle[$team_id]['platz'] ?></td>
+                        <td><?= $spielplan->get_platzierung_direkter_vergleich($team_id) ?></td>
                         <td style="white-space: nowrap"><?= $spielplan->teamliste[$team_id]['teamname']?></td>
                         <td><?= $ergebnis['spiele'] ?></td>
                         <td><?= $ergebnis['punkte'] ?></td>
@@ -122,7 +122,7 @@
                 </tr>
                 <?php foreach ($penalty as $team_id => $ergebnis): ?>
                     <tr>
-                        <td><?=$spielplan->platzierungstabelle[$team_id]['platz']?></td>
+                        <td><?=$spielplan->get_platzierung_penalty_vergleich($team_id)?></td>
                         <td style="white-space: nowrap"><?=$spielplan->teamliste[$team_id]['teamname']?></td>
                         <td><?=$ergebnis['penalty_spiele']?></td>
                         <td>
