@@ -1,3 +1,11 @@
+<?php
+
+use App\Repository\Team\TeamRepository;
+
+/** @var \App\Model\Spielplan\Spielplan $spielplan */
+$schiri_name = static fn(int $team_id): ?string => ($spielplan->getPlatzierungstabelle()[$team_id] ?? null)?->teamname
+    ?? TeamRepository::get()->team($team_id)?->getName();
+?>
 <h3 class="w3-text-secondary w3-margin-top">Tore eintragen</h3>
 <form method="post">
     <!-- Tore zwischenspeichern -->
@@ -39,45 +47,45 @@
                     Penalty
                 </th>
             </tr>
-            <?php foreach ($spielplan->spiele as $spiel_id => $spiel) { ?>
-                <tr <?php if (null !== $spiel["tore_a"]
-                        && null !== $spiel["tore_b"]
-                        && !$spielplan->check_penalty_spiel($spiel_id, true)) { ?>
+            <?php foreach ($spielplan->getSpiele() as $spiel_id => $spiel) { ?>
+                <tr <?php if (null !== $spiel->getToreA()
+                        && null !== $spiel->getToreB()
+                        && !$spielplan->hatPenaltySpiel($spiel_id, true)) { ?>
                         class="w3-pale-green"
                     <?php } //endif?>
                 >
-                    <td><?= $spiel["zeit"] ?></td>
+                    <td><?= $spiel->getZeit() ?></td>
                     <!-- Schiris -->
                     <td class="w3-center   w3-text-primary">
                         <span class="w3-tooltip">
-                            <i><?= $spiel["schiri_team_id_b"] ?></i>
+                            <i><?= $spiel->getSchiriIdB() ?></i>
                             <span style="white-space: nowrap; position:absolute;left:0;bottom:15px"
                                   class="w3-text w3-small w3-primary w3-tag">
                                 <i class="material-icons" style="vertical-align: -30%">keyboard_arrow_down</i>
-                                <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_b"]]['teamname'] ?>
+                                <?= $schiri_name($spiel->getSchiriIdB()) ?>
                             </span>
                         </span>
                         <br>
                         <span class="w3-tooltip">
-                            <i><?= $spiel["schiri_team_id_a"] ?></i>
+                            <i><?= $spiel->getSchiriIdA() ?></i>
                             <span style="white-space: nowrap; position:absolute;left:0;top:15px"
                                   class="w3-text w3-small w3-primary w3-tag">
                                 <i class="material-icons" style="vertical-align: -30%">keyboard_arrow_up</i>
-                                <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_a"]]['teamname'] ?>
+                                <?= $schiri_name($spiel->getSchiriIdA()) ?>
                             </span>
                         </span>
                     </td>
                     <!-- Teams -->
                     <td class="w3-center" style="white-space: nowrap;">
-                        <span><?= $spiel["teamname_a"] ?></span>
+                        <span><?= $spiel->getTeamnameA() ?></span>
                         <br>
-                        <span><?= $spiel["teamname_b"] ?></span>
+                        <span><?= $spiel->getTeamnameB() ?></span>
                     </td>
                     <!-- Tore Mobil -->
                     <td class="w3-center">
                         <input id="tore_a[<?= $spiel_id ?>]"
                                name="tore_a[<?= $spiel_id ?>]"
-                               value='<?= $spiel["tore_a"] ?>'
+                               value='<?= $spiel->getToreA() ?>'
                                class='w3-input w3-border w3-round w3-center'
                                style='padding: 2px; width: 65px; display: inline-block;'
                                type='number'
@@ -88,7 +96,7 @@
                         <br>
                         <input id="tore_b[<?= $spiel_id ?>]"
                                name="tore_b[<?= $spiel_id ?>]"
-                               value='<?= $spiel["tore_b"] ?>'
+                               value='<?= $spiel->getToreB() ?>'
                                class='w3-input w3-border w3-round w3-center'
                                style='padding: 2px; width: 65px; display: inline-block;'
                                type='number'
@@ -98,14 +106,14 @@
                         >
                     </td>
                     <!-- Penalty -->
-                    <td class="w3-center <?= (!$spielplan->validate_penalty_spiel($spiel)) ?: 'w3-secondary' ?>">
+                    <td class="w3-center <?= (!$spielplan->validatePenaltySpiel($spiel)) ?: 'w3-secondary' ?>">
                         <input id="penalty_a[<?= $spiel_id ?>]"
                                name="penalty_a[<?= $spiel_id ?>]"
-                               value='<?= $spiel["penalty_a"] ?>'
+                               value='<?= $spiel->getPenaltyA() ?>'
                                class='w3-input w3-border w3-round w3-center w3-text-secondary'
                                style='padding: 2px; width: 65px; display: inline-block;'
-                               <?= !($spielplan->check_penalty_spiel($spiel_id)
-                                   || $spielplan->validate_penalty_spiel($spiel)) ? 'disabled placeholder = "/"' : '' ?>
+                               <?= !($spielplan->hatPenaltySpiel($spiel_id)
+                                   || $spielplan->validatePenaltySpiel($spiel)) ? 'disabled placeholder = "/"' : '' ?>
                                type='number'
                                autocomplete='off'
                                min='0'
@@ -114,11 +122,11 @@
                         <br>
                         <input id="penalty_b[<?= $spiel_id ?>]"
                                name="penalty_b[<?= $spiel_id ?>]"
-                               value='<?= $spiel["penalty_b"] ?>'
+                               value='<?= $spiel->getPenaltyB() ?>'
                                class='w3-input w3-border w3-round w3-center w3-text-secondary'
                                style='padding: 2px; width: 65px; display: inline-block;'
-                                <?= !($spielplan->check_penalty_spiel($spiel_id)
-                                    || $spielplan->validate_penalty_spiel($spiel)) ? 'disabled placeholder = "/"' : '' ?>
+                                <?= !($spielplan->hatPenaltySpiel($spiel_id)
+                                    || $spielplan->validatePenaltySpiel($spiel)) ? 'disabled placeholder = "/"' : '' ?>
                                type='number'
                                autocomplete='off'
                                min='0'
@@ -126,18 +134,18 @@
                         >
                     </td>
                 </tr>
-                <?php if ($spielplan->get_pause($spiel_id) > 0) { ?>
+                <?php if ($spielplan->getPause($spiel_id) > 0) { ?>
                     <!-- Spielpause -->
                     <tr>
                         <td>
                             <?= date("H:i",
-                                strtotime($spielplan->spiele[$spiel_id + 1]['zeit'])
-                                - $spielplan->get_pause($spiel_id) * 60) ?>
+                                strtotime(($spielplan->getSpiele()[$spiel_id + 1] ?? null)?->getZeit() ?? '')
+                                - $spielplan->getPause($spiel_id) * 60) ?>
                         </td>
                         <td></td>
                         <td class="w3-center">
                             <i class="material-icons">schedule</i>
-                            <i><?= $spielplan->get_pause($spiel_id) ?>&nbsp; min Pause</i>
+                            <i><?= $spielplan->getPause($spiel_id) ?>&nbsp; min Pause</i>
                             <i class="material-icons">schedule</i>
                         </td>
                         <td colspan="2"></td>
