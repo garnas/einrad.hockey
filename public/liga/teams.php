@@ -17,13 +17,13 @@ include '../../templates/header.tmp.php';
 ?>
 
     <script src="<?= Env::BASE_URL ?>/javascript/jquery.min.js?v=20250825"></script>
+    
     <script>
-        //Turnierergebnisse filtern
         $(document).ready(function () {
             $("#myInput").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
-                $("#myDIV tr").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                $("#myDIV > div").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
                 });
             });
         });
@@ -51,33 +51,38 @@ include '../../templates/header.tmp.php';
     </div>
 
     <!-- Teams Tabelle -->
-    <div id="myDIV" class="w3-responsive w3-card">
-        <table class="w3-table w3-striped">
-            <tr class="w3-primary">
-                <th></th>
-                <th style="white-space: nowrap;"><?= Html::icon('groups')?> Teamname</th>
-                <th style="white-space: nowrap;"><?= Html::icon('room')?> Ort</th>
-                <th style="white-space: nowrap;"><?= Html::icon('outlined_flag')?> Verein</th>
-                <th style="white-space: nowrap;"><?= Html::icon('account_circle')?> Ligavertreter</th>
-                <th class="w3-center" style="white-space: nowrap;"><?= Html::icon('invert_colors')?> Farben</th>
-            </tr>
-            <?php foreach ($alle_teamdaten as $team) { ?>
-                <tr id='<?= $team->id() ?>'>
-                    <!-- Icons -->
-                    <td style='white-space: nowrap;' class="w3-right-align">
-                        <?= Html::Link($team->getDetails()->getHomepage() ?? '', "", true, "home")?>
-                        <?= Html::Link($team->getDetails()->getTeamfoto() ?? '', "", true, "group")?>
-                        <?= Html::mailto((new Kontakt($team->id()))->get_emails('public'), '')?>
-                    </td>
-                    <!-- Text -->
-                    <td style='white-space: nowrap;'><?= $team->getName() ?></td>
-                    <td><?= $team->getDetails()->getPlz() ?>&nbsp;<?= $team->getDetails()->getOrt() ?></td>
-                    <td><?= $team->getDetails()->getVerein() ?></td>
-                    <td><?= $team->getDetails()->getLigavertreter() ?></td>
-                    <td class="w3-center" style="white-space: nowrap;"><?= Html::trikot_punkt($team->getDetails()->getTrikotFarbe1(), $team->getDetails()->getTrikotFarbe2()) ?></td>
-                </tr>
-            <?php } //Ende foreach?>
-        </table>
-    </div>
+<div id="myDIV">
+
+    <?php foreach ($alle_teamdaten as $team): ?>
+        <div id="<?= $team->id() ?>" class="w3-card-4 w3-margin-bottom">
+            
+            <!-- Teamname -->
+            <div class="w3-container w3-primary w3-padding w3-large">
+                <?= $team->getName() ?>
+            </div>
+
+            <!-- Infos -->
+            <div class="w3-container w3-padding">
+                <div><?= $team->getDetails()->getLigavertreter() ?></div>
+                <div><?= $team->getDetails()->getVerein() ?></div>
+                <div><?= $team->getDetails()->getPlz() ?> <?= $team->getDetails()->getOrt() ?></div>
+            </div>
+
+            <!-- Links -->
+            <div class="w3-bar w3-light-grey">
+                <?php if ($team->getDetails()->getHomepage()): ?>
+                    <div class="w3-bar-item"><?= Html::Link($team->getDetails()->getHomepage(), "", true, "home") ?></div>
+                <?php endif; ?>
+                <?php if ($team->getDetails()->getTeamfoto()): ?>
+                    <div class="w3-bar-item"><?= Html::Link($team->getDetails()->getTeamfoto(), "", true, "group") ?></div>
+                <?php endif; ?>
+                <?php if ((new Kontakt($team->id()))->get_emails('public')): ?>
+                    <div class="w3-bar-item"><?= Html::mailto((new Kontakt($team->id()))->get_emails('public'), '')?></div>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
+
+</div>
 
 <?php include '../../templates/footer.tmp.php';
