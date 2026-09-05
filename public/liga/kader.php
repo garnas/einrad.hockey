@@ -27,6 +27,7 @@ include '../../templates/header.tmp.php';
     <h3 class="w3-text-primary">Termine</h3>
     <div class="w3-section">
         <ul class="w3-ul w3-leftbar w3-border-tertiary">
+            <li>07. + 08. November 2026 (Remscheid)</li>
             <li>06. + 07. Februar 2027 (Mörfelden)</li>
             <li>20. + 21. März 2027 (Mörfelden)</li>
             <li><i>Weitere Termine folgen</i></li>
@@ -75,7 +76,7 @@ include '../../templates/header.tmp.php';
     <div class="w3-section">
         <ul class="w3-ul w3-leftbar w3-border-tertiary">
             <li>10. + 11. Oktober 2026 (Mörfelden)</li>
-            <li>07. + 08. November 2026</li>
+            <li>14. + 15. November 2026</li>
             <li>12. + 13. Dezember 2026</li>
             <li>23. + 24. Januar 2027</li>
             <li>06. + 07. März 2027</li>
