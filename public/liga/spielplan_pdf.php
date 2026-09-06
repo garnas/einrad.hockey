@@ -5,11 +5,11 @@ require_once '../../logic/spielplan.logic.php'; // Erstellt Spielplanobjekt nach
 
 // Legt die Schriftgrößen fest je nach Teamanzahl
 $font_size_array = ['4' => 15, '5' => 15, '6' => 14, '7' => 14]; // in px
-$font_size = $font_size_array[$spielplan->anzahl_teams] ?? '12';
+$font_size = $font_size_array[$spielplan->getAnzahlTeams()] ?? '12';
 
 // Legt das Padding der table <td>s fest je nach Teamanzahl
 $padding_array = ['4' => 11, '5' => 11, '6' => 8, '7' => 4];  // in px
-$padding = $padding_array[$spielplan->anzahl_teams] ?? 3;
+$padding = $padding_array[$spielplan->getAnzahlTeams()] ?? 3;
 
 // Css-Code als String
 ob_start();
@@ -38,7 +38,7 @@ $mpdf = MPDF::load_mpdf(); // Erstellt ein MPDF-Objekt aus dem Framework
 $mpdf->shrink_tables_to_fit = 4; // Tabellen können um den Faktor 4 verkleinert werden, um noch auf eine Seite zu passen.
 
 // PDF beschreiben
-$mpdf->SetTitle('Spielplan ' . $spielplan->turnier->getDetails()->getOrt());
+$mpdf->SetTitle('Spielplan ' . $spielplan->getTurnier()->getDetails()->getOrt());
 $mpdf->SetHTMLHeader('<img src="../bilder/logo_lang.png" style="margin-top:18px; width: 70mm; float: right;">');
 $mpdf->SetHTMLFooter(
     '<table style="width: 100%">
@@ -52,4 +52,4 @@ $mpdf->WriteHTML($css_style, \Mpdf\HTMLParserMode::HEADER_CSS);
 $mpdf->WriteHTML($html, \Mpdf\HTMLParserMode::HTML_BODY);
 
 // Output - Otpion 'D' für Download, 'I' für im Browser anzeigen
-$mpdf->Output('Spielplan ' . $spielplan->turnier->getDetails()->getOrt() . '.pdf', 'I');
+$mpdf->Output('Spielplan ' . $spielplan->getTurnier()->getDetails()->getOrt() . '.pdf', 'I');

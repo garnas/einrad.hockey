@@ -17,3 +17,7 @@ export const TEAMDATEN_EMAIL_DELETABLE = 'team-b@playwright-test.de';
 // Muss zu provision-teamdaten-team.php passen
 export const TEAMDATEN_SOLO_TEAM_NAME = `${TEAMDATEN_TEAM_NAME} Solo`;
 export const TEAMDATEN_SOLO_EMAIL = 'solo@playwright-test.de';
+
+// Muss zu provision-spielplan.php passen
+export const LIGAAUSSCHUSS_LOGIN = 'playwright-la';
+export const LIGAAUSSCHUSS_PASSWORT = 'PwTest!2026';

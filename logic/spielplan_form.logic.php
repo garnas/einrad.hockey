@@ -3,23 +3,26 @@
 use App\Event\Turnier\nLigaBot;
 use App\Repository\Turnier\TurnierRepository;
 use App\Repository\TurnierBericht\TurnierBerichtRepository;
+use App\Service\Spielplan\SpielplanService;
 use App\Service\Team\FreilosService;
 use App\Service\Turnier\TabelleService;
 use App\Service\Turnier\TurnierService;
 use App\Service\Turnier\TurnierValidatorService;
 use App\Service\TurnierBericht\TurnierBerichtService;
 
+$turnier = $spielplan->getTurnier();
+
 // Besteht die Berechtigung das Turnier zu bearbeiten?
 if (!Helper::$ligacenter) { // Ligacenter darf alles.
-    if ((Helper::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $spielplan->turnier->getAusrichter()->id())) {
+    if ((Helper::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $turnier->getAusrichter()->id())) {
         Html::error("Nur der Ausrichter kann Spielergebnisse eintragen");
         Helper::reload("/liga/spielplan.php", '?turnier_id=' . $turnier_id);
     }
 
     // Wird das Turnierergebnis rechtzeitig eingetragen?
-    $N = (int) $spielplan->turnier->getDatum()->format("N"); // Numerischer Wochentag.
+    $N = (int) $turnier->getDatum()->format("N"); // Numerischer Wochentag.
     $delta = (8 - $N) * 24 * 60 * 60 + 18 * 60 * 60; // Die Zeit bis zum nächsten Montag 18:00 Uhr von 0:00 Uhr aus gesehen.
-    $abgabe = $spielplan->turnier->getDatum()->getTimestamp() + $delta;
+    $abgabe = $turnier->getDatum()->getTimestamp() + $delta;
 
     if ($abgabe < time()) {
         Html::error("Bitte wende dich an den Ligaausschuss um Ergebnisse nachträglich zu verändern.");
@@ -27,29 +30,35 @@ if (!Helper::$ligacenter) { // Ligacenter darf alles.
     }
 }
 
+$to_int = static fn($wert) => is_numeric($wert) ? (int) $wert : null;
+
 if (isset($_POST["tore_speichern"])) {
     // Neu eingetragene Tore speichern
-    foreach ($spielplan->spiele as $spiel_id => $spiel) {
+    foreach ($spielplan->getSpiele() as $spiel_id => $spiel) {
         if (
-            (string) $spiel['tore_a'] === ($_POST["tore_a"][$spiel_id] ?? '')
-            && (string) $spiel['tore_b'] === ($_POST["tore_b"][$spiel_id] ?? '')
-            && (string) $spiel['penalty_a'] === ($_POST["penalty_a"][$spiel_id] ?? '')
-            && (string) $spiel['penalty_b'] === ($_POST["penalty_b"][$spiel_id] ?? '')
+            (string) $spiel->getToreA() === ($_POST["tore_a"][$spiel_id] ?? '')
+            && (string) $spiel->getToreB() === ($_POST["tore_b"][$spiel_id] ?? '')
+            && (string) $spiel->getPenaltyA() === ($_POST["penalty_a"][$spiel_id] ?? '')
+            && (string) $spiel->getPenaltyB() === ($_POST["penalty_b"][$spiel_id] ?? '')
         ) {
             continue;
         }
-        $spielplan->set_tore(
-            $spiel['spiel_id'],
-            $_POST["tore_a"][$spiel_id] ?? '',
-            $_POST["tore_b"][$spiel_id] ?? '',
-            $_POST["penalty_a"][$spiel_id] ?? '',
-            $_POST["penalty_b"][$spiel_id] ?? '',
+        SpielplanService::speichereTore(
+            $turnier,
+            $spiel_id,
+            $to_int($_POST["tore_a"][$spiel_id] ?? ''),
+            $to_int($_POST["tore_b"][$spiel_id] ?? ''),
+            $to_int($_POST["penalty_a"][$spiel_id] ?? ''),
+            $to_int($_POST["penalty_b"][$spiel_id] ?? ''),
         );
-        $spiel['tore_a'] = $_POST["tore_a"][$spiel_id]  ?? '';
-        $spiel['tore_b'] = $_POST["tore_b"][$spiel_id]  ?? '';
-        $spiel['penalty_a'] = $_POST["penalty_a"][$spiel_id]  ?? '';
-        $spiel['penalty_b'] = $_POST["penalty_b"][$spiel_id]  ?? '';
-        Discord::tickerUpdate($spiel);
+        Discord::tickerUpdate([
+            'teamname_a' => $spiel->getTeamnameA(),
+            'teamname_b' => $spiel->getTeamnameB(),
+            'tore_a' => $_POST["tore_a"][$spiel_id] ?? '',
+            'tore_b' => $_POST["tore_b"][$spiel_id] ?? '',
+            'penalty_a' => $_POST["penalty_a"][$spiel_id] ?? '',
+            'penalty_b' => $_POST["penalty_b"][$spiel_id] ?? '',
+        ]);
     }
 
     Html::info("Spielergebnisse wurden gespeichert.");
@@ -60,33 +69,33 @@ if (isset($_POST["tore_speichern"])) {
 if (isset($_POST["turnierergebnis_speichern"])) {
 
     // Sind alle Spiele gespielt und kein Penalty offen?
-    if (!$spielplan->check_turnier_beendet()) {
+    if (!$spielplan->istTurnierBeendet()) {
         Html::error("Es sind noch Spiel- oder Penaltyergebnisse offen. Turnierergebnisse wurden nicht übermittelt.");
         $error = true;
     }
 
     // Testen ob Turnier tabellentechnisch eingetragen werden darf.
-    if (!TurnierValidatorService::isErgebnisEintragbar($spielplan->turnier)) {
+    if (!TurnierValidatorService::isErgebnisEintragbar($turnier)) {
         Html::error("Turnierergebnis kann nicht eingetragen werden. Kontaktiere bitte den Ligaausschuss.");
         $error = true;
     }
 
     // Testen ob Zweite Runde Penaltys gespielt werden müssen
-    if ($spielplan->out_of_scope) {
+    if ($spielplan->isOutOfScope()) {
         Html::error("Es muss noch eine zweite Runde Penaltys gespielt werden.");
         $error = true;
     }
 
     if (!($error ?? false)) {
-        TurnierService::setErgebnisse($spielplan->turnier, $spielplan->platzierungstabelle);
-        TurnierRepository::get()->speichern($spielplan->turnier);
+        TurnierService::setErgebnisse($turnier, $spielplan->toErgebnisTabelle());
+        TurnierRepository::get()->speichern($turnier);
         Html::info("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
-        $spieltag = $spielplan->turnier->getSpieltag();
+        $spieltag = $turnier->getSpieltag();
         if (TabelleService::isSpieltagBeendet($spieltag)) {
             nLigaBot::blockWechsel();
         }
-        FreilosService::handleAusgerichtetesTurnierFreilos($spielplan->turnier);
-        FreilosService::handleFreilosRecycling($spielplan->turnier);
+        FreilosService::handleAusgerichtetesTurnierFreilos($turnier);
+        FreilosService::handleFreilosRecycling($turnier);
         Helper::reload(get: "?turnier_id=" . $turnier_id);
     }
 
@@ -100,22 +109,22 @@ if (TurnierBerichtService::isKaderChecked($turnier_bericht)) {
             . $turnier_id, 'Turnierreport') . " das entsprechende Häkchen.", esc: false);
 }
 
-if (!$spielplan->validate_penalty_ergebnisse()) {
+if (!$spielplan->validatePenaltyErgebnisse()) {
     Html::error("Achtung: Es liegen falsch eingetragene Penaltyergebnisse vor.");
 }
 
 // Gibt es eine Diskrepanz zwischen Turnierergebnis und in der Datenbank hinterlegtem Turnierergebnis?
 $error = false;
-$vgl_data = TurnierService::getErgebnisByPlatz($spielplan->turnier);
+$vgl_data = TurnierService::getErgebnisByPlatz($turnier);
 if (!empty($vgl_data)) {
     if (
-        !$spielplan->check_turnier_beendet()
-        || count($vgl_data) != $spielplan->anzahl_teams
+        !$spielplan->istTurnierBeendet()
+        || count($vgl_data) != $spielplan->getAnzahlTeams()
     ) {
         $error = true;
-    } elseif ($spielplan->turnier->getArt() != 'final') {
-        foreach ($spielplan->platzierungstabelle as $ergebnis) {
-            if (($vgl_data[$ergebnis['platz']] ?? null)?->getErgebnis() != $ergebnis['ligapunkte']) {
+    } elseif ($turnier->getArt() != 'final') {
+        foreach ($spielplan->getPlatzierungstabelle() as $ergebnis) {
+            if (($vgl_data[$ergebnis->platz] ?? null)?->getErgebnis() != $ergebnis->ligapunkte) {
                 $error = true;
             }
         }
@@ -126,9 +135,9 @@ if (!empty($vgl_data)) {
 }
 
 if (
-    FreilosService::isAusrichterFreilosBerechtigt($spielplan->turnier)
+    FreilosService::isAusrichterFreilosBerechtigt($turnier)
 ) {
-    if (FreilosService::hasAusrichterFreilosForAusgerichtetesTurnier($spielplan->turnier)) {
+    if (FreilosService::hasAusrichterFreilosForAusgerichtetesTurnier($turnier)) {
         HTML::info("Für dieses Turnier habt ihr mit Ergebniseintragung ein Freilos erhalten.");
     } else {
         HTML::notice("Für dieses Turnier erhaltet ihr mit Ergebniseintragung ein Freilos.");

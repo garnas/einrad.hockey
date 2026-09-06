@@ -4,6 +4,7 @@ use App\Event\Turnier\TurnierEventMailBot;
 use App\Repository\TurnierBericht\TurnierBerichtRepository;
 use App\Repository\Turnier\TurnierRepository;
 use App\Entity\TurnierBericht\TurnierBericht;
+use App\Service\Spielplan\SpielplanService;
 use App\Service\Turnier\TabelleService;
 use App\Service\Turnier\TurnierService;
 
@@ -63,7 +64,7 @@ foreach ($turniere as $turnier) {
             TurnierRepository::get()->speichern($turnier);
             TurnierEventMailBot::mailCanceled($turnier);
             Html::info("Abgesagt: " . $turnier->id());
-        } elseif (Spielplan::spielplan_erstellen($turnier)) { # Weitere Checks für den LA in dieser Funktion
+        } elseif (SpielplanService::erstellen($turnier)) { # Weitere Checks für den LA in dieser Funktion
             $turnierbericht = new TurnierBericht($turnier);
             TurnierBerichtRepository::get()->speichern($turnierbericht);
             Html::info("Spielplan für " . $turnier->id() . " erstellt");
