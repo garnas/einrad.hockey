@@ -58,7 +58,7 @@ include '../../templates/header.tmp.php';
             
             <!-- Teamname -->
             <div class="w3-container w3-primary w3-padding w3-large">
-                <?= $team->getName() ?>
+                <?= e($team->getName()) ?>
             </div>
 
             <!-- Infos -->
