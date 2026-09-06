@@ -63,9 +63,9 @@ include '../../templates/header.tmp.php';
 
             <!-- Infos -->
             <div class="w3-container w3-padding">
-                <div><?= $team->getDetails()->getLigavertreter() ?></div>
-                <div><?= $team->getDetails()->getVerein() ?></div>
-                <div><?= $team->getDetails()->getPlz() ?> <?= $team->getDetails()->getOrt() ?></div>
+                <div><?= e($team->getDetails()->getLigavertreter()) ?></div>
+                <div><?= e($team->getDetails()->getVerein()) ?></div>
+                <div><?= e($team->getDetails()->getPlz()) ?> <?= e($team->getDetails()->getOrt()) ?></div>
             </div>
 
             <!-- Links -->
