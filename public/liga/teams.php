@@ -68,7 +68,7 @@ include '../../templates/header.tmp.php';
                 <div><?= e($team->getDetails()->getPlz()) ?> <?= e($team->getDetails()->getOrt()) ?></div>
             </div>
 
-            <!-- Links -->
+            <!-- Links & Farben -->
             <div class="w3-bar w3-light-grey">
                 <?php if ($team->getDetails()->getHomepage()): ?>
                     <div class="w3-bar-item"><?= Html::Link($team->getDetails()->getHomepage(), "", true, "home") ?></div>
@@ -79,6 +79,9 @@ include '../../templates/header.tmp.php';
                 <?php if ((new Kontakt($team->id()))->get_emails('public')): ?>
                     <div class="w3-bar-item"><?= Html::mailto((new Kontakt($team->id()))->get_emails('public'), '')?></div>
                 <?php endif; ?>
+                <div class="w3-bar-item w3-right">
+                    <?= Html::trikot_punkt($team->getDetails()->getTrikotFarbe1(), $team->getDetails()->getTrikotFarbe2()) ?>
+                </div>
             </div>
         </div>
     <?php endforeach; ?>
