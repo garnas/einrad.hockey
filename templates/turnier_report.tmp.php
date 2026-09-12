@@ -27,11 +27,11 @@ use App\Service\Turnier\TurnierSnippets;
             <?=e($element->getTeam()->getName())?>
         </button>
         
-        <?php if (!empty($element->getTeam()->getKader())): ?>
+        <?php if (!empty($element->getTeam()->getKaderAktuell())): ?>
             <?php $schiri = false ?>
             <div id="kader_<?= $element->getTeam()->id() ?>" class="w3-hide">
                 <ul style="column-count: 2">
-                    <?php foreach ($element->getTeam()->getKader() as $spieler): ?>
+                    <?php foreach ($element->getTeam()->getKaderAktuell() as $spieler): ?>
                         <li>
                             <?= e($spieler->getName(fullName: false)) ?><?= SpielerService::isSchiri($spieler) ? "*" : "" ?>
                         </li>
@@ -238,7 +238,7 @@ use App\Service\Turnier\TurnierSnippets;
                     <input type="text" placeholder="Name eingeben" class="w3-input w3-border w3-border-primary" list="spielerliste" id="zeitstrafe_spieler" name="zeitstrafe_spieler">
                         <datalist id="spielerliste">
                             <?php foreach ($setzliste as $element): ?>
-                                <?php foreach ($element->getTeam()->getKader() as $spieler): ?>
+                                <?php foreach ($element->getTeam()->getKaderAktuell() as $spieler): ?>
                                     <option value='<?= e($spieler->getName(fullName: false)) ?> | <?= e($spieler->getTeam()->getName()) ?>'>
                                 <?php endforeach; ?>
                             <?php endforeach; ?>
