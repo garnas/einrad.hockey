@@ -6,6 +6,7 @@ use App\Entity\TurnierBericht\TurnierBericht;
 use App\Event\Turnier\nLigaBot;
 use App\Repository\Turnier\TurnierRepository;
 use App\Repository\TurnierBericht\TurnierBerichtRepository;
+use App\Service\Spielplan\SpielplanService;
 use App\Service\Team\FreilosService;
 use App\Service\Neuigkeit\FileService;
 use App\Service\Turnier\TabelleService;
@@ -73,7 +74,7 @@ if (isset($_POST['ergebnis_eintragen'])) {
 
 // Spielplan automatisch erstellen
 if (isset($_POST['auto_spielplan_erstellen'])) {
-    if (Spielplan::spielplan_erstellen($turnier)) {
+    if (SpielplanService::erstellen($turnier)) {
         if (TurnierBerichtRepository::get()->bericht($turnier_id) === null) {
             $turnierbericht = new TurnierBericht($turnier);
             TurnierBerichtRepository::get()->speichern($turnierbericht);
@@ -87,14 +88,14 @@ if (isset($_POST['auto_spielplan_erstellen'])) {
 
 //Spielplan löschen
 if (isset($_POST['auto_spielplan_loeschen'])) {
-    Spielplan::delete($turnier);
+    SpielplanService::loeschen($turnier);
     Html::info("Der dynamisch erstellte Spielplan wurde gelöscht. Das Turnier wurde in die Setzphase versetzt!");
     Helper::reload(get: "?turnier_id=" . $turnier->id());
 }
 
 // Spielplan oder Ergebnis manuell hochladen
 if (isset($_POST['spielplan_hochladen'])) {
-    if (Spielplan::check_exist($turnier->id())) {
+    if (SpielplanService::hatSpielplan($turnier->id())) {
         $error = true;
         Html::error("Hochladen nicht möglich. Es existiert bereits ein dynamisch erstellter Spielplan.");
     }
@@ -180,7 +181,7 @@ include '../../templates/header.tmp.php';
     <h2 class="w3-text-primary w3-bottombar">JgJ-Spielplan erstellen</h2>
 <?php if (empty($turnier->getSpielplanDatei())) { ?>
     <form method="post">
-        <?php if (Spielplan::check_exist($turnier->id())) { ?>
+        <?php if (SpielplanService::hatSpielplan($turnier->id())) { ?>
             <p>
                 <input type="submit"
                        name="auto_spielplan_loeschen"
@@ -205,7 +206,7 @@ include '../../templates/header.tmp.php';
 
     <form method="post" enctype="multipart/form-data">
 
-        <?php if (Spielplan::check_exist($turnier->id())) { ?>
+        <?php if (SpielplanService::hatSpielplan($turnier->id())) { ?>
             <p>Bitte zuerst den dynamischen Spielplan löschen.</p>
         <?php } else { ?>
 

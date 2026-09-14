@@ -45,7 +45,7 @@ class SpielplanDetails
         nullable: true,
         options: ["comment" => "nach Spiel,Minuten#next"],
     )]
-    private string $pausen;
+    private ?string $pausen = null;
 
     #[ORM\Column(name: "faktor", type: "decimal", precision: 3, scale: 2, nullable: true)]
     private ?string $faktor;
@@ -106,6 +106,25 @@ class SpielplanDetails
     public function getPausen(): ?string
     {
         return $this->pausen;
+    }
+
+    /**
+     * Parst die in der DB als "SpielId,Minuten#SpielId,Minuten" hinterlegten Pausen.
+     *
+     * @return array<int, int> Spiel-ID => Minuten Pause nach diesem Spiel
+     */
+    public function getPausenMap(): array
+    {
+        if (empty($this->pausen)) {
+            return [];
+        }
+
+        $map = [];
+        foreach (explode('#', $this->pausen) as $pause) {
+            [$spielId, $minuten] = explode(',', $pause);
+            $map[(int) $spielId] = (int) $minuten;
+        }
+        return $map;
     }
 
     public function setPausen(?string $pausen): self

@@ -9,7 +9,7 @@
                 <th><?= Html::icon("reorder") ?><br>Block</th>
                 <th class="w3-hide-small"><?= Html::icon("arrow_circle_up") ?><br>Wertung</th>
             </tr>
-            <?php foreach ($spielplan->teamliste as $team_id => $team) { ?>
+            <?php foreach ($spielplan->getTeamliste() as $team_id => $team) { ?>
                 <tr>
                     <td><?= $team_id ?></td>
                     <td><?= $team['teamname'] ?></td>
@@ -19,7 +19,7 @@
             <?php }//end foreach?>
         </table>
     </div>
-    <?php if (in_array(null, array_column($spielplan->teamliste, 'tblock'), true)) { ?>
+    <?php if (in_array(null, array_column($spielplan->getTeamliste(), 'tblock'), true)) { ?>
         <span class="w3-text-grey">* Nichtligateam</span>
     <?php } //endif?>
     <!-- Modal-Button -->
@@ -40,19 +40,19 @@
                     <th><?= Html::icon("group") ?><br>Team</th>
                     <th><?= Html::icon("reorder") ?><br>Block</th>
                     <th><?= Html::icon("arrow_circle_up") ?><br>Wertung</th>
-                    <?php if ($spielplan->turnier->getPhase() !== 'ergebnis') { ?>
+                    <?php if ($spielplan->getTurnier()->getPhase() !== 'ergebnis') { ?>
                         <th><span class="pdf-hide"><?= Html::icon("invert_colors") ?><br>Trikots</span></th>
                     <?php } //endif?>
                     <th><span class="pdf-hide"><?= Html::icon("account_circle") ?><br>Ligavertreter</span></th>
                     <th><span class="pdf-hide"><?= Html::icon("help_outline") ?><br>Kontakt</span></th>
                 </tr>
-                <?php foreach ($spielplan->teamliste as $team_id => $team) { ?>
+                <?php foreach ($spielplan->getTeamliste() as $team_id => $team) { ?>
                     <tr>
                         <td><?= $team_id ?></td>
                         <td><?= $team['teamname'] ?></td>
                         <td><?= $team['tblock'] ?></td>
                         <td><?= $team['wertigkeit'] ?></td>
-                        <?php if ($spielplan->turnier->getPhase() !== 'ergebnis') { ?>
+                        <?php if ($spielplan->getTurnier()->getPhase() !== 'ergebnis') { ?>
                             <td>
                                 <span class="pdf-hide">
                                     <?= Html::trikot_punkt($team['details']['trikot_farbe_1'] ?? null, $team['details']['trikot_farbe_2'] ?? null) ?>

@@ -1,8 +1,16 @@
+<?php
+
+use App\Repository\Team\TeamRepository;
+
+/** @var \App\Model\Spielplan\Spielplan $spielplan */
+$schiri_name = static fn(int $team_id): ?string => ($spielplan->getPlatzierungstabelle()[$team_id] ?? null)?->teamname
+    ?? TeamRepository::get()->team($team_id)?->getName();
+?>
 <!-- Spielzeiten -->
 <h1 class="w3-text-secondary">Spiele</h1>
 <span class="w3-text-grey w3-margin-top">
-    Spielzeit: <?= $spielplan->details['anzahl_halbzeiten'] ?> x <?= $spielplan->details['halbzeit_laenge'] ?>&nbsp;min
-    | Puffer: <?= $spielplan->details['puffer'] ?>&nbsp;min
+    Spielzeit: <?= $spielplan->getDetails()->getAnzahlHalbzeiten() ?> x <?= $spielplan->getDetails()->getHalbzeitLaenge() ?>&nbsp;min
+    | Puffer: <?= $spielplan->getDetails()->getPuffer() ?>&nbsp;min
 </span>
 <div class="w3-responsive w3-card">
     <table class="w3-table w3-centered w3-striped">
@@ -49,7 +57,7 @@
                 <br>
                 Tore
             </th>
-            <?php if ($spielplan->check_penalty_anzeigen()) { ?>
+            <?php if ($spielplan->zeigePenaltySpalte()) { ?>
                 <th>
                     <?= Html::icon("priority_high") ?>
                     <br>
@@ -57,9 +65,9 @@
                 </th>
             <?php }//endif?>
         </tr>
-        <?php if ($spielplan->turnier->hasBesprechung()) { ?>
+        <?php if ($spielplan->getTurnier()->hasBesprechung()) { ?>
             <tr class="w3-primary-3">
-                <td><?= date('H:i', $spielplan->turnier->getDetails()->getStartzeit()->getTimestamp() - 15 * 60) ?></td>
+                <td><?= date('H:i', $spielplan->getTurnier()->getDetails()->getStartzeit()->getTimestamp() - 15 * 60) ?></td>
                 <td></td>
                 <td></td>
                 <td colspan="3">
@@ -67,15 +75,16 @@
                 </td>
                 <td></td>
                 <td class="w3-hide-small"></td>
-                <?php if ($spielplan->check_penalty_anzeigen()) { ?>
+                <?php if ($spielplan->zeigePenaltySpalte()) { ?>
                     <td></td>
                 <?php } //endif?>
             </tr>
         <?php }//endif?>
-        <?php foreach ($spielplan->spiele as $spiel_id => $spiel) { ?>
+        <?php foreach ($spielplan->getSpiele() as $spiel_id => $spiel) { ?>
+            <?php $farben = $spielplan->getTrikotColors($spiel); ?>
             <tr>
                 <!-- Uhrzeit -->
-                <td><?= $spiel["zeit"] ?></td>
+                <td><?= $spiel->getZeit() ?></td>
                 <!-- Schiri -->
                 <td>
                     <div class="w3-tooltip" style="cursor: help;">
@@ -83,11 +92,11 @@
                         <table class="w3-table w3-centered w3-hide-small" style="width: auto; margin: auto;">
                             <tr>
                                 <td style="width: 30px; padding:0;">
-                                    <i class="w3-text-primary"><?= $spiel["schiri_team_id_b"] ?></i>
+                                    <i class="w3-text-primary"><?= $spiel->getSchiriIdB() ?></i>
                                 </td>
                                 <td style="width: 30px; padding:0;">|</td>
                                 <td style="width: 30px; padding:0;">
-                                    <i class="w3-text-primary"><?= $spiel["schiri_team_id_a"] ?></i>
+                                    <i class="w3-text-primary"><?= $spiel->getSchiriIdA() ?></i>
                                 </td>
                             </tr>
                         </table>
@@ -98,110 +107,110 @@
                             <span class="w3-hide-large w3-hide-medium">
                                <?= Html::icon("keyboard_arrow_left") ?>
                             </span>
-                            <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_a"]]['teamname'] ?? \App\Repository\Team\TeamRepository::get()->team($spiel["schiri_team_id_a"])?->getName() ?>
+                            <?= $schiri_name($spiel->getSchiriIdA()) ?>
                             |
-                            <?= $spielplan->platzierungstabelle[$spiel["schiri_team_id_b"]]['teamname'] ?? \App\Repository\Team\TeamRepository::get()->team($spiel["schiri_team_id_a"])?->getName() ?>
+                            <?= $schiri_name($spiel->getSchiriIdB()) ?>
                         </span>
                         <!-- Mobil -->
                         <span class="pdf-hide w3-hide-medium w3-hide-large w3-text-primary w3-hover-text-secondary">
-                            <i><?= $spiel["schiri_team_id_b"] ?></i>
+                            <i><?= $spiel->getSchiriIdB() ?></i>
                             <br class="pdf-hide">
-                            <i><?= $spiel["schiri_team_id_a"] ?></i>
+                            <i><?= $spiel->getSchiriIdA() ?></i>
                         </span>
                     </div>
                 </td>
                 <!-- Teams Desktop -->
                 <td class="w3-hide-small">
-                    <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_a']] ?? '' ?>
+                    <?= $farben[$spiel->getTeamIdA()] ?? '' ?>
                 </td>
                 <td style="white-space: nowrap;" class="w3-hide-small">
-                    <?= $spiel["teamname_a"] ?>
+                    <?= $spiel->getTeamnameA() ?>
                 </td>
                 <td class="w3-hide-small">-</td>
                 <td style="white-space: nowrap;" class="w3-hide-small">
-                    <?= $spiel["teamname_b"] ?>
+                    <?= $spiel->getTeamnameB() ?>
                 </td>
                 <td class="w3-hide-small">
-                    <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_b']] ?? '' ?>
+                    <?= $farben[$spiel->getTeamIdB()] ?? '' ?>
                 </td>
                 <!-- Teams Mobil -->
                 <td class="w3-center w3-hide-large w3-hide-medium">
-                    <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_a']]  ?? "<span style='height:14px;width:14px;border-radius:50%;display:inline-block;'></span>" ?>
-                    <?= $spielplan->get_trikot_colors($spiel)[$spiel['team_id_b']]  ?? "<span style='height:14px;width:14px;border-radius:50%;display:inline-block;'></span>"?>
+                    <?= $farben[$spiel->getTeamIdA()] ?? "<span style='height:14px;width:14px;border-radius:50%;display:inline-block;'></span>" ?>
+                    <?= $farben[$spiel->getTeamIdB()] ?? "<span style='height:14px;width:14px;border-radius:50%;display:inline-block;'></span>" ?>
                 </td>
                 <td colspan="3" class="w3-hide-large w3-hide-medium" style="white-space: nowrap;">
-                    <span class="pdf-hide"><?= $spiel["teamname_a"] ?></span>
+                    <span class="pdf-hide"><?= $spiel->getTeamnameA() ?></span>
                     <br class="pdf-hide">
-                    <span class="pdf-hide"><?= $spiel["teamname_b"] ?></span>
+                    <span class="pdf-hide"><?= $spiel->getTeamnameB() ?></span>
                 </td>
                 <td>
                     <!-- Tore Desktop -->
                     <table class="w3-table w3-centered w3-hide-small" style="width: auto; margin: auto;">
                         <tr>
                             <td style="width: 30px; padding:0;">
-                                <?= $spiel["tore_a"] ?>
+                                <?= $spiel->getToreA() ?>
                             </td>
                             <td style="width: 30px; padding:0;">:</td>
                             <td style="width: 30px; padding:0;">
-                                <?= $spiel["tore_b"] ?>
+                                <?= $spiel->getToreB() ?>
                             </td>
                         </tr>
                     </table>
                     <!-- Tore Mobil -->
                     <span class="w3-center w3-hide-large w3-hide-medium">
                         <span class="pdf-hide">
-                                <?= $spiel["tore_a"] ?>
+                                <?= $spiel->getToreA() ?>
                         </span>
                         <br class="pdf-hide">
                         <span class="pdf-hide">
-                                <?= $spiel["tore_b"] ?>
+                                <?= $spiel->getToreB() ?>
                         </span>
                     </span>
                 </td>
-                <?php if ($spielplan->check_penalty_anzeigen()) { ?>
+                <?php if ($spielplan->zeigePenaltySpalte()) { ?>
                     <!-- Pen Desktop -->
                     <td>
                         <table class="w3-table w3-centered w3-hide-small w3-text-secondary" style="width: auto; margin: auto;">
                             <tr>
                                 <td style="width: 30px; padding:0;">
-                                    <?= $spiel["penalty_a"] ?>
+                                    <?= $spiel->getPenaltyA() ?>
                                 </td>
                                 <td style="width: 30px; padding:0;" class="w3-text-black">:</td>
                                 <td style="width: 30px; padding:0;">
-                                   <?= $spiel["penalty_b"] ?>
+                                   <?= $spiel->getPenaltyB() ?>
                                 </td>
                             </tr>
                         </table>
                         <!-- Tore Mobil -->
                         <span class="w3-hide-large w3-hide-medium w3-text-secondary">
                             <span class="pdf-hide">
-                                <?= $spiel["penalty_a"] ?>
+                                <?= $spiel->getPenaltyA() ?>
                             </span>
                             <br class="pdf-hide">
                             <span class="pdf-hide">
-                                <?= $spiel["penalty_b"] ?>
+                                <?= $spiel->getPenaltyB() ?>
                             </span>
                         </span>
                     </td>
                 <?php } //endif?>
             </tr>
-            <?php if ($spielplan->get_pause($spiel_id) > 0) { ?>
+            <?php if ($spielplan->getPause($spiel_id) > 0) { ?>
                 <tr>
                     <td>
                         <?= date("H:i",
-                            strtotime($spielplan->spiele[$spiel_id + 1]['zeit'])
-                                        - $spielplan->get_pause($spiel_id) * 60) ?>
+                            strtotime(($spielplan->getSpiele()[$spiel_id + 1] ?? null)?->getZeit() ?? '')
+                                        - $spielplan->getPause($spiel_id) * 60) ?>
                     </td>
                     <td></td>
                     <td></td>
                     <td style="white-space: nowrap;" colspan="3">
                         <?= Html::icon("schedule") ?>
-                        <i><?= $spielplan->get_pause($spiel_id) ?>&nbsp; min Pause</i>
+                        <i><?= $spielplan->getPause($spiel_id) ?>&nbsp; min Pause</i>
                         <?= Html::icon("schedule") ?>
                     </td>
                     <td></td>
                     <td class="w3-hide-small"></td>
-                    <?php if ($spielplan->check_penalty_anzeigen()) { ?>
+                    <?php if ($spielplan->zeigePenaltySpalte()) { ?>
                         <td></td>
                     <?php } //endif?>
                 </tr>

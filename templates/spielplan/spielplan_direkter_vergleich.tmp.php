@@ -1,4 +1,5 @@
-<?php if (!empty($spielplan->direkter_vergleich_tabellen)) { ?>
+<?php /** @var \App\Model\Spielplan\Spielplan $spielplan */ ?>
+<?php if (!empty($spielplan->getDirekterVergleichTabellen())) { ?>
     <!-- Buttons zum Ein/Ausblenden der Vergleiche -->
     <div class="w3-section w3-margin-top">
         <div id='button_da'>
@@ -23,7 +24,7 @@
 <div id="vergleichs_tabellen" style="display: none">
     <!-- Tabellen für den direkten Vergleich -->
     <h3 class="w3-text-secondary">Direkter Vergleich</h3>
-    <?php foreach ($spielplan->direkter_vergleich_tabellen as $direkter_vergleich) { ?>
+    <?php foreach ($spielplan->getDirekterVergleichTabellen() as $direkter_vergleich) { ?>
         <div class="w3-card-4 w3-responsive w3-section">
             <table class="w3-table w3-centered">
                 <tr class="w3-primary">
@@ -64,23 +65,23 @@
                 </tr>
                 <?php foreach ($direkter_vergleich as $team_id => $ergebnis) { ?>
                     <tr>
-                        <td><?= $spielplan->platzierungstabelle[$team_id]['platz'] ?></td>
-                        <td style="white-space: nowrap"><?= $spielplan->teamliste[$team_id]['teamname']?></td>
-                        <td><?= $ergebnis['spiele'] ?></td>
-                        <td><?= $ergebnis['punkte'] ?></td>
-                        <td><?= $ergebnis['tordifferenz'] ?></td>
-                        <td><?= $ergebnis['tore'] ?></td>
-                        <td><?= $ergebnis['gegentore'] ?></td>
+                        <td><?= $spielplan->getPlatzierungstabelle()[$team_id]->platz ?></td>
+                        <td style="white-space: nowrap"><?= $spielplan->getTeamliste()[$team_id]['teamname'] ?></td>
+                        <td><?= $ergebnis->spiele ?></td>
+                        <td><?= $ergebnis->punkte ?></td>
+                        <td><?= $ergebnis->tordifferenz ?></td>
+                        <td><?= $ergebnis->tore ?></td>
+                        <td><?= $ergebnis->gegentore ?></td>
                     </tr>
                 <?php } // end foreach?>
             </table>
         </div>
     <?php }//end foreach?>
     <!-- Tabellen für den direkten Vergleich -->
-    <?php if (!empty($spielplan->penalty_tabellen)) { ?>
+    <?php if (!empty($spielplan->getPenaltyTabellen())) { ?>
         <h3 class="w3-text-secondary">Penalty Vergleich</h3>
     <?php }//end if?>
-    <?php foreach ($spielplan->penalty_tabellen as $penalty) { ?>
+    <?php foreach ($spielplan->getPenaltyTabellen() as $penalty) { ?>
         <div class="w3-card-4 w3-responsive w3-section">
             <table class="w3-table w3-centered">
                 <tr class="w3-primary">
@@ -122,19 +123,19 @@
                 </tr>
                 <?php foreach ($penalty as $team_id => $ergebnis): ?>
                     <tr>
-                        <td><?=$spielplan->platzierungstabelle[$team_id]['platz']?></td>
-                        <td style="white-space: nowrap"><?=$spielplan->teamliste[$team_id]['teamname']?></td>
-                        <td><?=$ergebnis['penalty_spiele']?></td>
+                        <td><?= $spielplan->getPlatzierungstabelle()[$team_id]->platz ?></td>
+                        <td style="white-space: nowrap"><?= $spielplan->getTeamliste()[$team_id]['teamname'] ?></td>
+                        <td><?= $ergebnis->penaltySpiele ?></td>
                         <td>
-                            <?=$ergebnis['penalty_punkte'] ?? "--"?>
+                            <?= $ergebnis->penaltyPunkte ?? "--" ?>
                         </td>
                         <td>
-                            <?=$ergebnis['penalty_diff'] ?? "--"?></td>
+                            <?= $ergebnis->penaltyDiff ?? "--" ?></td>
                         <td>
-                            <?=$ergebnis['penalty_tore'] ?? "--"?>
+                            <?= $ergebnis->penaltyTore ?? "--" ?>
                         </td>
                         <td>
-                            <?=$ergebnis['penalty_gegentore'] ?? "--"?>
+                            <?= $ergebnis->penaltyGegentore ?? "--" ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
