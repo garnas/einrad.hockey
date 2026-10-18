@@ -47,7 +47,7 @@ include '../../templates/header.tmp.php';
         <td>1. Lilienthaler 24 Stunden Einradhockeyturnier</td>
         <td><a class='no w3-text-primary w3-hover-text-secondary' target="_blank" href='/dokumente/spielplaene/2023-Lilienthal-24h-Turnier.pdf'>Ergebnisse</a></td>
     </tr>
-    <tr>
+    <tr id="euhc-ergebnisse">
         <td>04. - 06.08.2023</td>
         <td>European Unicycle Hockey Championship 2023 (A-Tournament)</td>
         <td><a class='no w3-text-primary w3-hover-text-secondary' target="_blank" href='/dokumente/spielplaene/2023-EUHC-A-results.pdf'>Ergebnisse</a></td>
