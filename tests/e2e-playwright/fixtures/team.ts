@@ -21,3 +21,13 @@ export const TEAMDATEN_SOLO_EMAIL = 'solo@playwright-test.de';
 // Muss zu provision-spielplan.php passen
 export const LIGAAUSSCHUSS_LOGIN = 'playwright-la';
 export const LIGAAUSSCHUSS_PASSWORT = 'PwTest!2026';
+
+// Muss zu provision-ligaleitung-logins.php passen
+export const LIGALEITUNG_PASSWORT = 'PwTest!2026';
+export const LA_LOGIN = 'playwright-la-login';
+export const LA_PW_LOGIN = 'playwright-la-pw';
+export const LA_VORNAME = 'Lara';
+export const OA_LOGIN = 'playwright-oa-login';
+export const OA_PW_LOGIN = 'playwright-oa-pw';
+export const OA_VORNAME = 'Olga';
+export const SCHIRIAUSBILDER_LOGIN = 'playwright-schiriausbilder';

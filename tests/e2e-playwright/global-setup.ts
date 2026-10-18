@@ -9,11 +9,12 @@ import {
     TEAMDATEN_TEAM_PASSWORT,
     LIGAAUSSCHUSS_LOGIN,
     LIGAAUSSCHUSS_PASSWORT,
+    LIGALEITUNG_PASSWORT,
 } from './fixtures/team';
 
 /**
  * Legt vor dem Testlauf die Fixture-Teams für tc_kader.php, tc_turnier_erstellen.php,
- * tc_teamdaten_aendern.php sowie die Spielplan-Tests im Ligacenter an
+ * tc_teamdaten_aendern.php, die Spielplan-Tests im Ligacenter sowie die Logins der Ligaleitung an
  * (siehe fixtures/provision-*.php).
  * Läuft direkt gegen die lokale Dev-Datenbank, genau wie die PHPUnit-Integrationstests.
  */
@@ -24,4 +25,5 @@ export default function globalSetup(): void {
     execFileSync(phpBinary, [path.join(__dirname, 'fixtures', 'provision-turnier-team.php'), TURNIER_TEAM_NAME, TURNIER_TEAM_PASSWORT], { stdio: 'inherit' });
     execFileSync(phpBinary, [path.join(__dirname, 'fixtures', 'provision-teamdaten-team.php'), TEAMDATEN_TEAM_NAME, TEAMDATEN_TEAM_PASSWORT], { stdio: 'inherit' });
     execFileSync(phpBinary, [path.join(__dirname, 'fixtures', 'provision-spielplan.php'), LIGAAUSSCHUSS_LOGIN, LIGAAUSSCHUSS_PASSWORT], { stdio: 'inherit' });
+    execFileSync(phpBinary, [path.join(__dirname, 'fixtures', 'provision-ligaleitung-logins.php'), LIGALEITUNG_PASSWORT], { stdio: 'inherit' });
 }
