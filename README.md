@@ -82,6 +82,8 @@ php83 vendor/bin/phpunit tests/
 
 ### E2E-Tests (Playwright)
 
+> Hinweis: Im Dev Container lassen sich die Playwright Tests nur Headless starten.
+
 Node.js und die Playwright-Browser sind im Dev-Container bereits vorinstalliert (siehe `setup.sh`). Führe die
 folgenden Befehle im Terminal des Dev-Containers aus (Playwright-Konfiguration und `package.json` liegen in
 `tests/e2e-playwright/`):
