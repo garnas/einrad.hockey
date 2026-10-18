@@ -30,4 +30,6 @@ export const LA_VORNAME = 'Lara';
 export const OA_LOGIN = 'playwright-oa-login';
 export const OA_PW_LOGIN = 'playwright-oa-pw';
 export const OA_VORNAME = 'Olga';
+export const SA_LOGIN = 'playwright-sa-login';
+export const SA_PW_LOGIN = 'playwright-sa-pw';
 export const SCHIRIAUSBILDER_LOGIN = 'playwright-schiriausbilder';

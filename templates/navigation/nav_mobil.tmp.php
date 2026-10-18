@@ -80,6 +80,8 @@
             <a href='<?= Env::BASE_URL ?>/teamcenter/tc_logout.php' class="w3-button w3-hover-primary"><i class="material-icons w3-xlarge">block</i> Logout</a>
         <?php elseif (isset($_SESSION['logins']['la'])): ?>
             <a href='<?= Env::BASE_URL ?>/ligacenter/lc_logout.php' class="w3-button w3-hover-primary"><i class="material-icons w3-xlarge">block</i> Logout</a>
+        <?php elseif (isset($_SESSION['logins']['sa'])): ?>
+            <a href='<?= Env::BASE_URL ?>/schiricenter/sc_logout.php' class="w3-button w3-hover-primary"><i class="material-icons w3-xlarge">block</i> Logout</a>
         <?php endif; ?>
     </div>
 </div>

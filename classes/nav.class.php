@@ -234,4 +234,15 @@ class Nav
             [Env::BASE_URL . "/oefficenter/oc_logout.php", "Logout", "w3-grey"],
         ];
     }
+
+    public static function get_sc_start(): array
+    {
+        return [
+            [Env::BASE_URL . "/schiricenter/schiritest_erstellen.php", "Schiritest erstellen", "w3-secondary"],
+            [Env::BASE_URL . "/schiricenter/dashboard.php", "Schiri-Dashboard", "w3-secondary"],
+            [Env::BASE_URL . "/schiricenter/schiritest_stats.php", "schiritest.xlsx", "w3-light-grey"],
+            [Env::BASE_URL . "/schiricenter/sc_pw_aendern.php", "Passwort ändern", "w3-grey"],
+            [Env::BASE_URL . "/schiricenter/sc_logout.php", "Logout", "w3-grey"],
+        ];
+    }
 }

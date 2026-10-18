@@ -7,6 +7,8 @@ import {
     OA_LOGIN,
     OA_PW_LOGIN,
     OA_VORNAME,
+    SA_LOGIN,
+    SA_PW_LOGIN,
     SCHIRIAUSBILDER_LOGIN,
 } from './fixtures/team';
 
@@ -39,6 +41,13 @@ test.describe('Login Ligaleitung (login.php)', () => {
 
         await expect(page).toHaveURL(/oefficenter\/oc_start\.php/);
         await expect(page.getByRole('heading', { name: `Hallo ${OA_VORNAME}!` })).toBeVisible();
+    });
+
+    test('Schiriausschuss kann sich einloggen und wird begrüßt', async ({ page }) => {
+        await loginAbschicken(page, SA_LOGIN, LIGALEITUNG_PASSWORT);
+
+        await expect(page).toHaveURL(/schiricenter\/sc_start\.php/);
+        await expect(page.getByRole('heading', { name: 'Hallo Schiriausschuss!' })).toBeVisible();
     });
 
     test('falsches Passwort wird abgelehnt', async ({ page }) => {
@@ -97,6 +106,50 @@ test.describe('Login Ligaleitung (login.php)', () => {
         await expect(page).not.toHaveURL(/ligacenter\//);
     });
 
+    test('Schiriausschuss hat Zugriff auf die Schiritest-Verwaltung, aber nicht auf das Ligacenter', async ({ page }) => {
+        await loginAbschicken(page, SA_LOGIN, LIGALEITUNG_PASSWORT);
+        await expect(page).toHaveURL(/sc_start\.php/);
+
+        await page.goto('/schiricenter/schiritest_erstellen.php');
+        await expect(page).toHaveURL(/schiricenter\/schiritest_erstellen\.php/);
+        await expect(page.getByRole('heading', { name: 'Schiritest erstellen' })).toBeVisible();
+
+        await page.goto('/schiricenter/dashboard.php');
+        await expect(page).toHaveURL(/schiricenter\/dashboard\.php/);
+        await expect(page.getByRole('heading', { name: 'Schiri Dashboard' })).toBeVisible();
+
+        await page.goto('/ligacenter/lc_start.php');
+        await expect(page).not.toHaveURL(/ligacenter\//);
+    });
+
+    test('Ligaausschuss hat weiterhin Zugriff auf die Schiritest-Verwaltung', async ({ page }) => {
+        await loginAbschicken(page, LA_LOGIN, LIGALEITUNG_PASSWORT);
+        await expect(page).toHaveURL(/lc_start\.php/);
+
+        await page.goto('/schiricenter/schiritest_erstellen.php');
+        await expect(page).toHaveURL(/schiricenter\/schiritest_erstellen\.php/);
+        await expect(page.getByRole('heading', { name: 'Schiritest erstellen' })).toBeVisible();
+    });
+
+    test('Öffentlichkeitsausschuss hat keinen Zugriff auf die Schiritest-Verwaltung', async ({ page }) => {
+        await loginAbschicken(page, OA_LOGIN, LIGALEITUNG_PASSWORT);
+        await expect(page).toHaveURL(/oc_start\.php/);
+
+        await page.goto('/schiricenter/schiritest_erstellen.php');
+        await expect(page).not.toHaveURL(/schiritest_erstellen\.php/);
+    });
+
+    test('nach dem Login wird auf die ursprünglich aufgerufene Schiricenter-Seite weitergeleitet', async ({ page }) => {
+        await page.goto('/schiricenter/dashboard.php');
+        await expect(page).toHaveURL(/\/login\.php\?redirect/);
+
+        await page.locator('#login').fill(SA_LOGIN);
+        await page.locator('#passwort').fill(LIGALEITUNG_PASSWORT);
+        await page.locator('button[name="login"]').click();
+
+        await expect(page).toHaveURL(/schiricenter\/dashboard\.php/);
+    });
+
     test('Ligaausschuss kann sich ausloggen', async ({ page }) => {
         await loginAbschicken(page, LA_LOGIN, LIGALEITUNG_PASSWORT);
         await expect(page).toHaveURL(/lc_start\.php/);
@@ -120,6 +173,18 @@ test.describe('Login Ligaleitung (login.php)', () => {
         await page.goto('/oefficenter/oc_start.php');
         await expect(page).toHaveURL(/\/login\.php\?redirect/);
     });
+
+    test('Schiriausschuss kann sich ausloggen', async ({ page }) => {
+        await loginAbschicken(page, SA_LOGIN, LIGALEITUNG_PASSWORT);
+        await expect(page).toHaveURL(/sc_start\.php/);
+
+        await page.goto('/schiricenter/sc_logout.php');
+        await expect(page).toHaveURL(/liga\/neues\.php/);
+        await expect(page.getByText('Logout erfolgreich')).toBeVisible();
+
+        await page.goto('/schiricenter/sc_start.php');
+        await expect(page).toHaveURL(/\/login\.php\?redirect/);
+    });
 });
 
 const PASSWORT_BEREICHE = [
@@ -136,6 +201,13 @@ const PASSWORT_BEREICHE = [
         url: '/oefficenter/oc_pw_aendern.php',
         start: /oefficenter\/oc_start\.php/,
         logout: '/oefficenter/oc_logout.php',
+    },
+    {
+        name: 'Schiricenter (sc_pw_aendern.php)',
+        login: SA_PW_LOGIN,
+        url: '/schiricenter/sc_pw_aendern.php',
+        start: /schiricenter\/sc_start\.php/,
+        logout: '/schiricenter/sc_logout.php',
     },
 ];
 
