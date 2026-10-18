@@ -15,7 +15,7 @@ if (!$turnier) {
 }
 
 // im Teamcenter testen, ob es sich um den Ausrichter handelt
-if (Helper::$teamcenter && ($turnier->getAusrichter()->id() != $_SESSION['logins']['team']['id'] || !$turnier->isSpassTurnier())) {
+if (Helper::$teamcenter && ($turnier->getAusrichter()->id() != $_SESSION['logins']['team']['id'] || !$turnier->isSpassturnier())) {
     Html::error("Fehlende Berechtigung Teams zu diesem Turnier anzumelden");
     Helper::reload('/liga/turniere.php');
 }

@@ -14,22 +14,22 @@ $turniere = TurnierRepository::get()->getAlleTurniere();
 
 
 $turniere_abgesagt = $turniere->filter(static function (Turnier $t) {
-    return $t->isCanceled() & !$t->isSpassTurnier();
+    return $t->isCanceled() & !$t->isSpassturnier();
 });
 $turniere_spass = $turniere->filter(static function (Turnier $t) {
-    return $t->isSpassTurnier() & !$t->isCanceled();
+    return $t->isSpassturnier() & !$t->isCanceled();
 });
 $turniere_ergebnis = $turniere->filter(static function (Turnier $t) {
-    return $t->isErgebnisPhase() & !$t->isCanceled() & !$t->isSpassTurnier();
+    return $t->isErgebnisPhase() & !$t->isCanceled() & !$t->isSpassturnier();
 });
 $turniere_spielplan = $turniere->filter(static function (Turnier $t) {
-    return $t->isSpielplanPhase() & !$t->isCanceled() & !$t->isSpassTurnier();
+    return $t->isSpielplanPhase() & !$t->isCanceled() & !$t->isSpassturnier();
 });
 $turniere_setz = $turniere->filter(static function (Turnier $t) {
-    return $t->isSetzPhase() & !$t->isCanceled() & !$t->isSpassTurnier();
+    return $t->isSetzPhase() & !$t->isCanceled() & !$t->isSpassturnier();
 });
 $turniere_warte = $turniere->filter(static function (Turnier $t) {
-    return $t->isWartePhase() & !$t->isCanceled() & !$t->isSpassTurnier();
+    return $t->isWartePhase() & !$t->isCanceled() & !$t->isSpassturnier();
 });
 
 $turniere = $turniere_spielplan->toArray()

@@ -36,7 +36,7 @@ class BlockService
     public static function toString(mixed $blockContext): string
     {
         if (is_a($blockContext, Turnier::class)) {
-            if ($blockContext->isSpassTurnier()) {
+            if ($blockContext->isSpassturnier()) {
                 return "(NL)";
             }
 
@@ -133,6 +133,9 @@ class BlockService
 
     public static function isBlockPassend(Turnier $turnier, Team $team): bool
     {
+        if (!$turnier->isLigaturnier()) {
+            return true;
+        }
         $blockTurnier = $turnier->getBlock();
         $blockTeam = $team->getBlock();
 

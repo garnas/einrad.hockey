@@ -31,7 +31,7 @@ if (!$team && !Helper::$ligacenter) {
     Helper::not_found("Team wurde nicht gefunden.");
 }
 
-if ($turnier->isSpassTurnier()) {
+if ($turnier->isSpassturnier()) {
     Html::notice("Spaßturniere erfordern keinen Turnierreport.");
     Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
 }

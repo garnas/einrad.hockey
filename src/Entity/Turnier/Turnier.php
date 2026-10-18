@@ -182,7 +182,7 @@ class Turnier
         return $this->phase === 'ergebnis';
     }
 
-    public function isSpassTurnier(): bool
+    public function isSpassturnier(): bool
     {
         return $this->art === "spass";
     }

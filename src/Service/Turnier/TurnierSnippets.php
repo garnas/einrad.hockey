@@ -22,7 +22,7 @@ class TurnierSnippets
         if ($turnier->isSpielplanPhase()) {
             return '<span class="w3-text-gray">geschlossen</span>';
         }
-        if ($turnier->isSpassTurnier()) {
+        if ($turnier->isSpassturnier()) {
             return '<span class="w3-text-grey">Nichtligaturnier</span>';
         }
         if (TurnierService::isLosen($turnier)) {
@@ -80,7 +80,7 @@ class TurnierSnippets
             return 'Warten auf Spielplan';
         }
 
-        if ($turnier->isSpassTurnier()) {
+        if ($turnier->isSpassturnier()) {
             return 'Nichtligaturnier';
         }
 
@@ -265,7 +265,7 @@ class TurnierSnippets
         }
         $html .= "<p>Freie Plätze: $freiePlaetze von $pleatze</p>";
 
-        if ($turnier->isSpassTurnier()) {
+        if ($turnier->isSpassturnier()) {
             $html .= '<p class="w3-text-green">Anmeldung erfolgt beim Ausrichter</p>';
         }
 

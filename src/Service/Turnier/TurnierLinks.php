@@ -76,7 +76,7 @@ class TurnierLinks
             );
         }
 
-        if ($turnier->isSpassTurnier()) {
+        if ($turnier->isSpassturnier()) {
             $links[] = Html::link(
                 "../teamcenter/tc_spassturnier_anmeldung.php?turnier_id=$turnierId",
                 "Teams manuell anmelden",

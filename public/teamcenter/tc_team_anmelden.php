@@ -32,7 +32,7 @@ if (null === $turnier) {
     Helper::not_found("Turnier wurde nicht gefunden.");
 }
 
-if ($turnier->isSpassTurnier()) {
+if ($turnier->isSpassturnier()) {
     $kontakt = new Kontakt($turnier->getAusrichter()->id());
     $email = $kontakt->get_emails();
     Html::notice(

@@ -102,7 +102,7 @@ include '../../templates/header.tmp.php';?>
                 <td><?= e($turnier->getDetails()->getOrt()) ?></td>
                 <td><?= TurnierSnippets::blockColor($turnier, $teamEntity) ?></td>
                 <td><?= TurnierSnippets::phase($turnier) ?></td>
-                <td><?= e($turnier->getAusrichter()->getName()) ?></i></td>
+                <td><i><?= e($turnier->getAusrichter()->getName()) ?></i></td>
             </tr>
             <tr>
                 <td colspan="4" style="white-space:normal;" class="w3-left-align">

@@ -21,7 +21,7 @@ class TurnierValidator
                 $turnier->isFinalTurnier()
                 && TurnierService::isAusrichter($turnier, $_SESSION['logins']['team']['id'])
             )
-            || $turnier->isSpassTurnier();
+            || $turnier->isSpassturnier();
     }
 
     private Turnier $turnier;
