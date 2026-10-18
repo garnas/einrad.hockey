@@ -77,7 +77,7 @@ class BlockServiceTest extends TestCase
     public function testIsBlockPassend(string $turnierblock, string $teamblock, bool $passend)
     {
         $turnier = new Turnier();
-        $turnier = $turnier->setBlock($turnierblock);
+        $turnier = $turnier->setBlock($turnierblock)->setArt("I");
         $teamStub = $this->createStub(Team::class);
         $teamStub->method('getBlock')->willReturn($teamblock);
         $this->assertEquals(

@@ -41,6 +41,7 @@ class TurnieranmeldungTest extends TestCase
         $turnier = new Turnier();
         $turnier
             ->setBlock($block)
+            ->setArt("II")
             ->setPhase($phase)
             ->setDatum(DateTime::createFromFormat('Y-m-d', '2020-01-01'));
         $turnier->setDetails((new Turnierdetails())->setTurnier($turnier));

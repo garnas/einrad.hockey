@@ -215,4 +215,27 @@ class TurnierRepository
         return new ArrayCollection($query->getQuery()->execute());
     }
 
+    /**
+     * Anmeldungen aller noch nicht abgeschlossenen Turniere der Saison
+     *
+     * @return Turnieranmeldung[]
+     */
+    public function getAnmeldungenOffeneTurniere(int $saison = Config::SAISON): array
+    {
+        $query = DoctrineWrapper::manager()
+            ->createQueryBuilder()
+            ->select('l', 't', 'team')
+            ->from(Turnieranmeldung::class, 'l')
+            ->innerJoin('l.turnier', 't')
+            ->leftJoin('l.team', 'team')
+            ->where('t.saison = :saison')
+            ->andWhere('t.phase != :phase')
+            ->orderBy('l.positionWarteliste', 'asc')
+            ->setParameter('saison', $saison)
+            ->setParameter('phase', 'ergebnis')
+        ;
+
+        return $query->getQuery()->execute();
+    }
+
 }

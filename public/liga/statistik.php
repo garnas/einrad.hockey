@@ -4,13 +4,17 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
+use App\Repository\Turnier\TurnierRepository;
+
 $max_turniere = Stats::get_turniere_team();
 $max_gew = Stats::get_gew_spiele_team();
 $max_ausrichter = Stats::get_max_ausrichter();
 $max_turnierorte = Stats::get_max_turnierorte();
 
-$gespielte_turniere = count(nTurnier::get_turniere_ergebnis($asc = false));
-$anstehende_turniere = count(nTurnier::get_turniere_kommend());
+$gespielte_turniere = TurnierRepository::get()->getErgebnisTurniere()
+    ->filter(static fn($turnier) => in_array($turnier->getArt(), ['I', 'II', 'III', 'final']))
+    ->count();
+$anstehende_turniere = TurnierRepository::get()->getKommendeTurniere()->count();
 $spiele = Stats::get_spiele_anzahl();
 $tore = Stats::get_tore_anzahl();
 

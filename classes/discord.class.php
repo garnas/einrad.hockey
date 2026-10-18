@@ -67,17 +67,4 @@ class Discord
 
     }
 
-    public static function send_with_turnier(string $message, nTurnier $turnier): void
-    {
-        $message = "**"
-            . $turnier->get_datum()
-            . " " . $turnier->get_ort()
-            . " (" . $turnier->get_tblock() . ")"
-            . "**"
-            . " - *" . Helper::get_akteur() . "*"
-            . "\r\n"
-            . $message;
-        // self::send($message);
-    }
-
 }
