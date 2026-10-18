@@ -27,15 +27,6 @@ class TurnierRepository
         $this->bericht = DoctrineWrapper::manager()->getRepository(Turnierbericht::class);
     }
 
-    /**
-     * @param Turnier $turnier
-     * @return Turnieranmeldung[]
-     */
-    public function getWarteListe(Turnier $turnier): array
-    {
-        return $this->liste->findBy(['turnier' => $turnier, 'liste' => 'warteliste'], ['positionWarteliste' => 'ASC']);
-    }
-
     public function turnier(int $turnier_id = 1005): ?Turnier
     {
         return $this->turnier->find($turnier_id);
@@ -51,11 +42,6 @@ class TurnierRepository
     {
         DoctrineWrapper::manager()->remove($turnier);
         DoctrineWrapper::manager()->flush();
-    }
-
-    public function getBericht(int $turnier_id): ?Turnierbericht
-    {
-        return $this->bericht->findOneBy(['turnierId' => $turnier_id]);
     }
 
     /**
@@ -154,13 +140,6 @@ class TurnierRepository
         return new ArrayCollection($query->getQuery()->execute());
     }
 
-
-
-    public function last_turnier(int $ausrichter_id): ?Turnier
-    {
-        return $this->turnier->findOneBy(['ausrichter' => $ausrichter_id], ['id' => 'DESC']);
-    }
-
     /**
      * Existiert ein früheres, noch nicht abgeschlossenes Turnier derselben Saison und Turnierart?
      *
@@ -190,9 +169,11 @@ class TurnierRepository
     }
 
     /**
+     * Alle nicht abgesagten Turniere der Saison, die sich in der Setzphase befinden.
+     *
      * @return Turnier[]|Collection
      */
-    public function getTurniereSpieltag(int $spieltag, int $saison = Config::SAISON): array|Collection
+    public function getSetzphaseTurniere(int $saison = Config::SAISON): array|Collection
     {
         $query = DoctrineWrapper::manager()
             ->createQueryBuilder()
@@ -202,12 +183,12 @@ class TurnierRepository
             ->leftJoin('t.ausrichter', 'ausrichter')
             ->leftJoin('t.liste', 'l')
             ->leftJoin('l.team', 'team')
-            ->where('t.spieltag = :spieltag')
+            ->where('t.phase = :phase')
             ->andWhere('t.saison = :saison')
             ->andWhere('t.canceled = false')
             ->andWhere('t.art IN (:arten)')
             ->orderBy('t.datum', 'asc')
-            ->setParameter('spieltag', $spieltag)
+            ->setParameter('phase', 'setz')
             ->setParameter('saison', $saison)
             ->setParameter('arten', Config::TURNIER_ARTEN)
         ;

@@ -105,13 +105,15 @@ class LigaBot
     }
 
     /**
+     * Achtung: Bei Anpassung der Vergabe der Spieltage unter der Woche auch den Cronjob für die Spielplanerstellung
+     * beachten.
      * @return void
      * @throws ORMException
      * @throws MappingException
      */
     public static function setSpieltage(): void
     {
-        /** @var Turniere[] $turniere */
+        /** @var Turnier[] $turniere */
         $turniere = DoctrineWrapper::manager()->createQueryBuilder()
             ->select('t')
             ->from(Turnier::class, 't')
