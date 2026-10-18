@@ -2,12 +2,12 @@
 
 namespace unit;
 
-use App\Entity\Team\Team;
-use App\Entity\Turnier\Turnier;
-use App\Entity\Turnier\Turnierdetails;
-use App\Entity\Turnier\Turnieranmeldung;
-use App\Event\Turnier\nLigaBot;
-use App\Service\Turnier\TurnierService;
+use App\Team\Entity\Team;
+use App\Turnier\Entity\Turnier;
+use App\Turnier\Entity\Turnierdetails;
+use App\Turnier\Entity\Turnieranmeldung;
+use App\Turnier\Bot\LigaBot;
+use App\Turnier\Service\TurnierService;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 
@@ -65,7 +65,7 @@ class TurnieranmeldungTest extends TestCase
         $this->provideTeamAnmeldungMock(turnier: $turnier, name: "teamNL_2", ligateam: false, block: null, liste: "warteliste");
 
         // Testdurchführung
-        nLigaBot::losen($turnier);
+        LigaBot::losen($turnier);
 
         // Validiere Setzliste
         $teamnamenSetzliste = [];

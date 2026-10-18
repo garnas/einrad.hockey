@@ -3,10 +3,10 @@
 require '../../init.php';
 require'../../logic/session_team.logic.php';
 
-use App\Repository\Turnier\TurnierRepository;
-use App\Service\Form\FormLogicTeam;
-use App\Service\Team\NLTeamValidator;
-use App\Service\Turnier\TurnierSnippets;
+use App\Turnier\Repository\TurnierRepository;
+use App\Team\Service\FormLogicTeam;
+use App\Team\Service\NLTeamValidator;
+use App\Turnier\Service\TurnierSnippets;
 
 $turnierId = (int) @$_GET['turnier_id'];
 $turnier = TurnierRepository::get()->turnier($turnierId);

@@ -1,10 +1,10 @@
 <?php
 
 // Formularauswertung
-use App\Repository\Turnier\TurnierRepository;
-use App\Service\Turnier\TurnierService;
-use App\Service\Turnier\TurnierValidator;
-use App\Service\Turnier\BlockService;
+use App\Turnier\Repository\TurnierRepository;
+use App\Turnier\Service\TurnierService;
+use App\Turnier\Service\TurnierValidator;
+use App\Turnier\Service\BlockService;
 
 // Formular fuellen
 $ausrichter_name = $turnier->getAusrichter()->getName();

@@ -2,11 +2,11 @@
 
 namespace integration;
 
-use App\Entity\Team\Team;
-use App\Entity\Team\Strafe;
-use App\Entity\Team\Teamdetails;
-use App\Repository\Team\TeamRepository;
-use App\Repository\Turnier\TurnierRepository;
+use App\Team\Entity\Team;
+use App\Team\Entity\Strafe;
+use App\Team\Entity\Teamdetails;
+use App\Team\Repository\TeamRepository;
+use App\Turnier\Repository\TurnierRepository;
 use Config;
 use PHPUnit\Framework\TestCase;
 

@@ -14,7 +14,7 @@
 
 <!-- Zeilen der Rangtabelle -->
 <div>
-    <?php use App\Service\Turnier\TabelleService;
+    <?php use App\Tabelle\Service\TabelleService;
 
     $counter = 0; ?>
     <?php foreach ($rang_tabelle as $key => $zeile): ?>

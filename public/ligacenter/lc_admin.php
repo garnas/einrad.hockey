@@ -2,11 +2,11 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-use App\Event\Turnier\nLigaBot;
-use App\Repository\Team\TeamRepository;
-use App\Repository\Turnier\TurnierRepository;
-use App\Service\Ligaleitung\LigaleitungService;
-use App\Service\Team\TeamService;
+use App\Turnier\Bot\LigaBot;
+use App\Team\Repository\TeamRepository;
+use App\Turnier\Repository\TurnierRepository;
+use App\Ligaleitung\Service\LigaleitungService;
+use App\Team\Service\TeamService;
 
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
@@ -129,7 +129,7 @@ if (isset($_POST['gitstatus'])) {
 
 //Ligabot ausführen
 if (isset($_POST['ligabot'])) {
-    nLigaBot::ligaBot();
+    LigaBot::ligaBot();
 }
 
 //Datenbank sichern

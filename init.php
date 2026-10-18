@@ -193,4 +193,4 @@ function e(mixed $value)
     return db::escape($value);
 }
 
-App\Repository\DoctrineWrapper::setup();
+App\Shared\DoctrineWrapper::setup();

@@ -1,8 +1,8 @@
 <?php
 
 // Turnier und $daten-Array erstellen
-use App\Repository\Turnier\TurnierRepository;
-use App\Service\Turnier\TurnierService;
+use App\Turnier\Repository\TurnierRepository;
+use App\Turnier\Service\TurnierService;
 
 $teamId = $_SESSION['logins']['team']['id'] ?? 0;
 $turnierId = (int) @$_GET['turnier_id'];

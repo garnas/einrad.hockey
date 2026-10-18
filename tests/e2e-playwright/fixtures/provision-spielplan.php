@@ -15,21 +15,21 @@
  * damit der Test sie ohne Umweg über die Turnierliste ansteuern kann.
  */
 
-use App\Entity\Ligaleitung\Ligaleitung;
-use App\Entity\Team\Team;
-use App\Entity\Team\Spieler;
-use App\Entity\Team\Teamdetails;
-use App\Entity\Turnier\Turnier;
-use App\Entity\Turnier\Turnierdetails;
-use App\Repository\DoctrineWrapper;
-use App\Repository\Spielplan\SpielplanRepository;
-use App\Repository\Team\SpielerRepository;
-use App\Repository\Team\TeamRepository;
-use App\Repository\Turnier\TurnierRepository;
-use App\Entity\Turnierbericht\Turnierbericht;
-use App\Repository\TurnierBericht\TurnierberichtRepository;
-use App\Service\Spielplan\SpielplanService;
-use App\Service\Turnier\TurnierService;
+use App\Ligaleitung\Entity\Ligaleitung;
+use App\Shared\DoctrineWrapper;
+use App\Spieler\Entity\Spieler;
+use App\Spieler\Repository\SpielerRepository;
+use App\Spielplan\Repository\SpielplanRepository;
+use App\Spielplan\Service\SpielplanService;
+use App\Team\Entity\Team;
+use App\Team\Entity\Teamdetails;
+use App\Team\Repository\TeamRepository;
+use App\Turnier\Entity\Turnier;
+use App\Turnier\Entity\Turnierdetails;
+use App\Turnier\Repository\TurnierRepository;
+use App\Turnier\Service\TurnierService;
+use App\Turnierbericht\Entity\Turnierbericht;
+use App\Turnierbericht\Repository\TurnierberichtRepository;
 
 require_once __DIR__ . '/../../../init.php';
 

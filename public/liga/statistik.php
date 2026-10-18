@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
-use App\Repository\Turnier\TurnierRepository;
+use App\Turnier\Repository\TurnierRepository;
 
 $max_turniere = Stats::get_turniere_team();
 $max_gew = Stats::get_gew_spiele_team();

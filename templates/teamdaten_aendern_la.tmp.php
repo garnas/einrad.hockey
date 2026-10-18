@@ -1,8 +1,8 @@
 <?php
 
-use App\Entity\Team\Freilos;
-use App\Entity\Team\Freilosgrund;
-use App\Service\Team\TeamSnippets;
+use App\Team\Entity\Freilos;
+use App\Team\Entity\Freilosgrund;
+use App\Team\Service\TeamSnippets;
 
 ?>
 <div class="w3-card-4 w3-responsive w3-panel">

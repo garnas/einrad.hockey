@@ -1,8 +1,8 @@
 <?php
 
-use App\Repository\Team\TeamRepository;
+use App\Team\Repository\TeamRepository;
 
-/** @var \App\Model\Spielplan\Spielplan $spielplan */
+/** @var \App\Spielplan\Model\Spielplan $spielplan */
 $schiri_name = static fn(int $team_id): ?string => ($spielplan->getPlatzierungstabelle()[$team_id] ?? null)?->teamname
     ?? TeamRepository::get()->team($team_id)?->getName();
 ?>

@@ -2,16 +2,16 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-use App\Entity\Turnierbericht\Turnierbericht;
-use App\Event\Turnier\nLigaBot;
-use App\Repository\Turnier\TurnierRepository;
-use App\Repository\TurnierBericht\TurnierberichtRepository;
-use App\Service\Spielplan\SpielplanService;
-use App\Service\Team\FreilosService;
-use App\Service\Neuigkeit\FileService;
-use App\Service\Turnier\TabelleService;
-use App\Service\Turnier\TurnierService;
-use App\Service\Turnier\TurnierValidator;
+use App\Turnierbericht\Entity\Turnierbericht;
+use App\Turnier\Bot\LigaBot;
+use App\Turnier\Repository\TurnierRepository;
+use App\Turnierbericht\Repository\TurnierberichtRepository;
+use App\Spielplan\Service\SpielplanService;
+use App\Team\Service\FreilosService;
+use App\Neuigkeit\Service\FileService;
+use App\Tabelle\Service\TabelleService;
+use App\Turnier\Service\TurnierService;
+use App\Turnier\Service\TurnierValidator;
 
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
@@ -65,7 +65,7 @@ if (isset($_POST['ergebnis_eintragen'])) {
     Html::info("Ergebnisse wurden manuell eingetragen. Das Turnier wurde in die Ergebnisphase versetzt.");
     $spieltag = $turnier->getSpieltag();
     if (TabelleService::isSpieltagBeendet($spieltag)) {
-        nLigaBot::blockWechsel();
+        LigaBot::blockWechsel();
     }
     FreilosService::handleAusgerichtetesTurnierFreilos($turnier);
     FreilosService::handleFreilosRecycling($turnier);

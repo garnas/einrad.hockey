@@ -1,6 +1,6 @@
 <?php
 
-use App\Entity\Team\Team;
+use App\Team\Entity\Team;
 
 /**
  * Class MailBot
@@ -90,8 +90,9 @@ class MailBot
             foreach ($mail_addresses as $mail_address) {
                 if ($anz_mail_addresses > 15) {
                     $mailer->addBCC($mail_address);
+                } else {
+                    $mailer->addAddress($mail_address);
                 }
-                $mailer->addAddress($mail_address); // Empfängeradresse
             }
             $mailer->Subject = $mail['betreff']; // Betreff der Email
             $mailer->Body = $mail['inhalt']; // Inhalt der Email

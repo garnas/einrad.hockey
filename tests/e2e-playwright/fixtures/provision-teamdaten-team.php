@@ -9,9 +9,9 @@
  *   E-Mail-Adresse eines Teams nicht gelöscht werden kann
  */
 
-use App\Entity\Team\Team;
-use App\Entity\Team\Teamdetails;
-use App\Repository\Team\TeamRepository;
+use App\Team\Entity\Team;
+use App\Team\Entity\Teamdetails;
+use App\Team\Repository\TeamRepository;
 
 require_once __DIR__ . '/../../../init.php';
 

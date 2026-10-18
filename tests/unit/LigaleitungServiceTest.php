@@ -2,11 +2,11 @@
 
 namespace unit;
 
-use App\Entity\Ligaleitung\Ligaleitung;
-use App\Entity\Team\Team;
-use App\Entity\Team\Spieler;
-use App\Repository\Ligaleitung\LigaleitungRepository;
-use App\Service\Ligaleitung\LigaleitungService;
+use App\Ligaleitung\Entity\Ligaleitung;
+use App\Team\Entity\Team;
+use App\Spieler\Entity\Spieler;
+use App\Ligaleitung\Repository\LigaleitungRepository;
+use App\Ligaleitung\Service\LigaleitungService;
 use Helper;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;

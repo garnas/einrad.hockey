@@ -1,9 +1,9 @@
 <?php
 
-use App\Entity\Team\Spieler;
-use App\Repository\Team\SpielerRepository;
-use App\Repository\Team\TeamRepository;
-use App\Service\Team\FreilosService;
+use App\Spieler\Entity\Spieler;
+use App\Spieler\Repository\SpielerRepository;
+use App\Team\Repository\TeamRepository;
+use App\Team\Service\FreilosService;
 
 if (isset($_POST['neuer_eintrag'])) {
     $error = false;

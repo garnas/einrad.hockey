@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Turnier\Service;
+
+use App\Turnier\Entity\Turnier;
+use App\Turnier\Entity\Turnierlog;
+use DateTime;
+use Helper;
+
+class TurnierLogService
+{
+    private array $logTexts;
+    private Turnier $turnier;
+
+    public function __construct(Turnier $turnier)
+    {
+        $this->logTexts = [];
+        $this->turnier = $turnier;
+    }
+
+    /**
+     * Schreibt in den Turnierlog.
+     *
+     * Turnierlogs werden bei Zerstörung des Objektes in die DB geschrieben.
+     *
+     * @param string $log_text
+     */
+    public function addLog(string $log_text): void
+    {
+        $this->logTexts[] = $log_text;
+    }
+
+    public function getLogAsString(): string
+    {
+        return implode("\r\n", $this->logTexts);
+    }
+
+    public function autoLog(string $name, mixed $alt, mixed $neu): void
+    {
+        if ($neu === false && $alt != $neu) {
+            $this->addLog($name . ": Nein");
+            return;
+        }
+
+        if ($neu === true && $alt != $neu) {
+            $this->addLog($name . ": Ja");
+            return;
+        }
+
+        if ($alt instanceof DateTime) {
+            $alt = $alt->format("d.m.Y");
+        }
+
+        if ($neu instanceof DateTime) {
+            $neu = $neu->format("d.m.Y");
+        }
+
+        if ($alt !== $neu) {
+            $this->addLog($name . ": " . $alt . " -> " . $neu);
+        }
+    }
+
+    public function addAllLogs(): void
+    {
+        if (!empty($this->logTexts)) {
+            $log = new Turnierlog();
+            $log->setAutor(Helper::get_akteur());
+            $log->setTurnier($this->turnier);
+            $logText = $this->getLogAsString();
+            $log->setLogText($logText);
+            $this->turnier->getLogs()->add($log);
+        }
+    }
+
+}

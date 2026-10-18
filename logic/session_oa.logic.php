@@ -1,6 +1,6 @@
 <?php
 
-use App\Service\Ligaleitung\LigaleitungService;
+use App\Ligaleitung\Service\LigaleitungService;
 
 // Dies hier muss in jeder geschützten Seite direkt nach init.php eingefügt werden!
 if (!LigaleitungService::isLoggedIn("team_social_media")) {

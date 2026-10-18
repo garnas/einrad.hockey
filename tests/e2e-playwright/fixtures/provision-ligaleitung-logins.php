@@ -13,14 +13,14 @@
  * - einen Login mit einer Funktion ohne eigenen Login-Bereich (schiriausbilder)
  */
 
-use App\Entity\Ligaleitung\Ligaleitung;
-use App\Entity\Team\Team;
-use App\Entity\Team\Spieler;
-use App\Entity\Team\Teamdetails;
-use App\Repository\DoctrineWrapper;
-use App\Repository\Ligaleitung\LigaleitungRepository;
-use App\Repository\Team\SpielerRepository;
-use App\Repository\Team\TeamRepository;
+use App\Ligaleitung\Entity\Ligaleitung;
+use App\Ligaleitung\Repository\LigaleitungRepository;
+use App\Shared\DoctrineWrapper;
+use App\Spieler\Entity\Spieler;
+use App\Spieler\Repository\SpielerRepository;
+use App\Team\Entity\Team;
+use App\Team\Entity\Teamdetails;
+use App\Team\Repository\TeamRepository;
 
 require_once __DIR__ . '/../../../init.php';
 

@@ -1,4 +1,4 @@
-<?php /** @var \App\Model\Spielplan\Spielplan $spielplan */ ?>
+<?php /** @var \App\Spielplan\Model\Spielplan $spielplan */ ?>
 <!-- ABSCHLUSSTABELLE -->
 <h2 class="w3-text-secondary w3-margin-top">Tabelle</h2>
 <div class="w3-responsive w3-card">

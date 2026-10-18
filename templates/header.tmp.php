@@ -1,6 +1,6 @@
 <?php
 
-use App\Service\Ligaleitung\LigaleitungService;
+use App\Ligaleitung\Service\LigaleitungService;
 
 ?>
     <!DOCTYPE html>

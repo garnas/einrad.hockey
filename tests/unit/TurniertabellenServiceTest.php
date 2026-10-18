@@ -2,9 +2,9 @@
 
 namespace unit;
 
-use App\Model\Spielplan\Turniertabellenzeile;
-use App\Service\Spielplan\Turniertabellensortierung;
-use App\Service\Spielplan\TurniertabellenService;
+use App\Spielplan\Model\Turniertabellenzeile;
+use App\Spielplan\Service\Turniertabellensortierung;
+use App\Spielplan\Service\TurniertabellenService;
 use PHPUnit\Framework\TestCase;
 
 class TurniertabellenServiceTest extends TestCase

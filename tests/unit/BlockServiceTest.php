@@ -2,9 +2,9 @@
 
 namespace unit;
 
-use App\Entity\Team\Team;
-use App\Entity\Turnier\Turnier;
-use App\Service\Turnier\BlockService;
+use App\Team\Entity\Team;
+use App\Turnier\Entity\Turnier;
+use App\Turnier\Service\BlockService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

@@ -1,9 +1,9 @@
 <?php
 
-use App\Entity\Turnier\Turnier;
-use App\Service\Turnier\TurnierService;
-use App\Service\Turnier\TurnierValidator;
-use App\Repository\Turnier\TurnierRepository;
+use App\Turnier\Entity\Turnier;
+use App\Turnier\Service\TurnierService;
+use App\Turnier\Service\TurnierValidator;
+use App\Turnier\Repository\TurnierRepository;
 
 if (isset($_POST['erweitern_turnier'])) {
     /** @var Turnier $turnier */

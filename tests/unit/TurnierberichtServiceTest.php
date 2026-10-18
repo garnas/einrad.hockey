@@ -6,8 +6,8 @@ use DateTime;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
-use App\Entity\Turnier\Turnier;
-use App\Service\Turnierbericht\TurnierberichtService;
+use App\Turnier\Entity\Turnier;
+use App\Turnierbericht\Service\TurnierberichtService;
 
 class TurnierberichtServiceTest extends TestCase
 {

@@ -1,8 +1,8 @@
 <?php
 
-use App\Repository\Turnier\TurnierRepository;
-use App\Service\Spielplan\SpielplanFactory;
-use App\Service\Spielplan\SpielplanService;
+use App\Turnier\Repository\TurnierRepository;
+use App\Spielplan\Service\SpielplanFactory;
+use App\Spielplan\Service\SpielplanService;
 use Spatie\ArrayToXml\ArrayToXml;
 
 require_once '../../init.php';

@@ -2,8 +2,8 @@
 
 namespace unit;
 
-use App\Entity\Turnier\Turnier;
-use App\Service\Turnier\TurnierService;
+use App\Turnier\Entity\Turnier;
+use App\Turnier\Service\TurnierService;
 use PHPUnit\Framework\TestCase;
 
 class TurnierServiceTest extends TestCase

@@ -1,8 +1,8 @@
 <?php
 
-use App\Repository\Team\TeamRepository;
-use App\Repository\Turnier\TurnierRepository;
-use App\Service\Turnier\TurnierSnippets;
+use App\Team\Repository\TeamRepository;
+use App\Turnier\Repository\TurnierRepository;
+use App\Turnier\Service\TurnierSnippets;
 
 /**
  * Class Form

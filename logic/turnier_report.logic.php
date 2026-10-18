@@ -1,16 +1,16 @@
 <?php
 
 // Turnierobjekt erstellen
-use App\Entity\Turnierbericht\Spielerausleihe;
-use App\Entity\Turnierbericht\Zeitstrafe;
-use App\Repository\Team\TeamRepository;
-use App\Repository\Turnier\TurnierRepository;
-use App\Repository\TurnierBericht\TurnierberichtRepository;
-use App\Service\Turnier\TurnierService;
-use App\Service\Turnierbericht\PermissionService;
-use App\Repository\TurnierBericht\SpielerausleiheRepository;
-use App\Repository\TurnierBericht\ZeitstrafeRepository;
-use App\Service\Turnierbericht\TurnierberichtValidator;
+use App\Turnierbericht\Entity\Spielerausleihe;
+use App\Turnierbericht\Entity\Zeitstrafe;
+use App\Team\Repository\TeamRepository;
+use App\Turnier\Repository\TurnierRepository;
+use App\Turnierbericht\Repository\TurnierberichtRepository;
+use App\Turnier\Service\TurnierService;
+use App\Turnierbericht\Service\TurnierberichtPermission;
+use App\Turnierbericht\Repository\SpielerausleiheRepository;
+use App\Turnierbericht\Repository\ZeitstrafeRepository;
+use App\Turnierbericht\Service\TurnierberichtValidator;
 
 $turnier_id = (int) @$_GET['turnier_id'];
 $turnier = TurnierRepository::get()->turnier($turnier_id);
@@ -36,7 +36,7 @@ if ($turnier->isSpassturnier()) {
     Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
 }
 
-if (!PermissionService::canRead()) {
+if (!TurnierberichtPermission::canRead()) {
     Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
 }
 
@@ -44,7 +44,7 @@ $setzliste = TurnierService::getSetzListe($turnier);
 $spieler_ausleihen = $turnier->getLeihen();
 $spieler_zeitstrafen = $turnier->getZeitstrafen();
 
-$allow_edit = PermissionService::canEdit($turnier_bericht);
+$allow_edit = TurnierberichtPermission::canEdit($turnier_bericht);
 if ($allow_edit) {
 
     // Spielerausleihe löschen

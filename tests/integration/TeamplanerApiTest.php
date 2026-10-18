@@ -2,8 +2,8 @@
 
 namespace integration;
 
-use App\Repository\Turnier\TurnierRepository;
-use App\Service\Turnier\TabelleService;
+use App\Turnier\Repository\TurnierRepository;
+use App\Tabelle\Service\TabelleService;
 use PHPUnit\Framework\TestCase;
 use SimpleXMLElement;
 use xml;

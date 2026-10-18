@@ -1,8 +1,8 @@
 <?php
 
-use App\Service\Ligaleitung\LigaleitungService;
-use App\Service\Neuigkeit\ColorService;
-use App\Service\Neuigkeit\FormatService;
+use App\Ligaleitung\Service\LigaleitungService;
+use App\Neuigkeit\Service\ColorService;
+use App\Neuigkeit\Service\FormatService;
 
 ?>
 

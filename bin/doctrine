@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use App\Repository\DoctrineWrapper;
+use App\Shared\DoctrineWrapper;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 

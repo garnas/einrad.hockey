@@ -2,9 +2,9 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-use App\Repository\Neuigkeit\NeuigkeitRepository;
-use App\Repository\Turnier\TurnierRepository;
-use App\Service\Ligaleitung\LigaleitungService;
+use App\Neuigkeit\Repository\NeuigkeitRepository;
+use App\Turnier\Repository\TurnierRepository;
+use App\Ligaleitung\Service\LigaleitungService;
 
 require_once '../../init.php';
 
@@ -98,7 +98,7 @@ include '../../templates/header.tmp.php'; ?>
                 <?php } //end if?>
                 <?php foreach ($next_turniere as $turnier): ?>
                     <p class="w3-text-dark-gray">
-                        <?= /** @var \App\Entity\Turnier\Turnier $turnier */
+                        <?= /** @var \App\Turnier\Entity\Turnier $turnier */
                         $turnier->getDatum()->format("d.m") ?>
                         <?= Html::link(
                             'turnier_details.php?turnier_id=' . $turnier->id(),

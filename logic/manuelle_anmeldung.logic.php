@@ -1,10 +1,10 @@
 <?php
 
-use App\Repository\Team\TeamRepository;
-use App\Repository\Turnier\TurnierRepository;
-use App\Service\Form\FormLogicTeam;
-use App\Service\Team\TeamService;
-use App\Service\Turnier\TurnierService;
+use App\Team\Repository\TeamRepository;
+use App\Turnier\Repository\TurnierRepository;
+use App\Team\Service\FormLogicTeam;
+use App\Team\Service\TeamService;
+use App\Turnier\Service\TurnierService;
 
 $turnierId = (int) @$_GET['turnier_id'];
 $turnier = TurnierRepository::get()->turnier($turnierId);

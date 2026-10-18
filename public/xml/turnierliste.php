@@ -1,6 +1,6 @@
 <?php
 
-use App\Repository\Turnier\TurnierRepository;
+use App\Turnier\Repository\TurnierRepository;
 
 require_once '../../init.php';
 

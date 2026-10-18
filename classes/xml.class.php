@@ -1,8 +1,8 @@
 <?php
 
-use App\Entity\Turnier\Turnier;
-use App\Entity\Turnier\Turnieranmeldung;
-use App\Service\Turnier\TabelleService;
+use App\Turnier\Entity\Turnier;
+use App\Turnier\Entity\Turnieranmeldung;
+use App\Tabelle\Service\TabelleService;
 
 /**
  * Class xml

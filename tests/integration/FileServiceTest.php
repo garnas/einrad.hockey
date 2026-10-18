@@ -3,7 +3,7 @@
 // Override move_uploaded_file in the FileService namespace so tests can simulate
 // successful uploads without an actual HTTP upload context.
 
-namespace App\Service\Neuigkeit {
+namespace App\Neuigkeit\Service {
     function move_uploaded_file(string $from, string $to): bool
     {
         return \copy($from, $to);
@@ -12,7 +12,7 @@ namespace App\Service\Neuigkeit {
 
 namespace integration {
 
-    use App\Service\Neuigkeit\FileService;
+    use App\Neuigkeit\Service\FileService;
     use PHPUnit\Framework\TestCase;
 
     class FileServiceTest extends TestCase

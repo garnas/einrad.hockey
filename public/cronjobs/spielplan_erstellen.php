@@ -1,12 +1,12 @@
 <?php
 
-use App\Event\Turnier\TurnierEventMailBot;
-use App\Repository\TurnierBericht\TurnierberichtRepository;
-use App\Repository\Turnier\TurnierRepository;
-use App\Entity\Turnierbericht\Turnierbericht;
-use App\Service\Spielplan\SpielplanService;
-use App\Service\Turnier\TabelleService;
-use App\Service\Turnier\TurnierService;
+use App\Spielplan\Service\SpielplanService;
+use App\Tabelle\Service\TabelleService;
+use App\Turnier\Mail\TurnierMails;
+use App\Turnier\Repository\TurnierRepository;
+use App\Turnier\Service\TurnierService;
+use App\Turnierbericht\Entity\Turnierbericht;
+use App\Turnierbericht\Repository\TurnierberichtRepository;
 
 require_once '../../init.php';
 
@@ -62,7 +62,7 @@ foreach ($turniere as $turnier) {
         if ($absage_grund != "") {
             TurnierService::cancel($turnier, $absage_grund);
             TurnierRepository::get()->speichern($turnier);
-            TurnierEventMailBot::mailCanceled($turnier);
+            TurnierMails::mailCanceled($turnier);
             Html::info("Abgesagt: " . $turnier->id());
         } elseif (SpielplanService::erstellen($turnier)) { # Weitere Checks für den LA in dieser Funktion
             $turnierbericht = new Turnierbericht($turnier);

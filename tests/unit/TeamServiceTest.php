@@ -2,9 +2,9 @@
 
 namespace unit;
 
-use App\Entity\Team\Team;
-use App\Entity\Team\Spieler;
-use App\Service\Team\TeamService;
+use App\Team\Entity\Team;
+use App\Spieler\Entity\Spieler;
+use App\Team\Service\TeamService;
 use Config;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\Attributes\DataProvider;

@@ -3,8 +3,8 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-use App\Repository\Neuigkeit\NeuigkeitRepository;
-use App\Service\Ligaleitung\LigaleitungService;
+use App\Neuigkeit\Repository\NeuigkeitRepository;
+use App\Ligaleitung\Service\LigaleitungService;
 
 require_once '../../init.php';
 

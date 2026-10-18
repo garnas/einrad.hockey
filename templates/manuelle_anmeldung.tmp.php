@@ -1,6 +1,6 @@
 <?php
 
-use App\Service\Turnier\TurnierSnippets;
+use App\Turnier\Service\TurnierSnippets;
 
 ?>
 <h1 class="w3-text-primary">Manuelle Teamanmeldung</h1>

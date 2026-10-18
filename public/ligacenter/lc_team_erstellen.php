@@ -2,11 +2,11 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-use App\Entity\Team\Freilosgrund;
-use App\Entity\Team\Kontakt;
-use App\Entity\Team\Team;
-use App\Entity\Team\Teamdetails;
-use App\Repository\Team\TeamRepository;
+use App\Team\Entity\Freilosgrund;
+use App\Team\Entity\Kontakt;
+use App\Team\Entity\Team;
+use App\Team\Entity\Teamdetails;
+use App\Team\Repository\TeamRepository;
 
 require_once "../../init.php";
 require_once "../../logic/session_la.logic.php";

@@ -5,7 +5,7 @@
     <div class="w3-col w3-padding-8 l3 m3 w3-left-align"><b>Datum (Ort)</b></div>
 </div>
 <!-- Zeilen der Verwarnungen -->
-<?php use App\Entity\Team\Strafe;
+<?php use App\Team\Entity\Strafe;
 
 $counter = 0;
 

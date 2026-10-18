@@ -3,8 +3,8 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-use App\Repository\Neuigkeit\NeuigkeitRepository;
-use App\Enum\NeuigkeitArt;
+use App\Neuigkeit\Repository\NeuigkeitRepository;
+use App\Neuigkeit\Enum\NeuigkeitArt;
 
 require_once '../../init.php';
 

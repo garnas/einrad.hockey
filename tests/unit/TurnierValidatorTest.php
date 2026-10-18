@@ -2,8 +2,8 @@
 
 namespace unit;
 
-use App\Entity\Turnier\Turnier;
-use App\Service\Turnier\TurnierValidator;
+use App\Turnier\Entity\Turnier;
+use App\Turnier\Service\TurnierValidator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

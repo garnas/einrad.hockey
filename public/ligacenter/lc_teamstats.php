@@ -2,7 +2,7 @@
 
 require_once '../../init.php';
 
-use App\Service\Turnier\TabelleService;
+use App\Tabelle\Service\TabelleService;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 

@@ -1,8 +1,8 @@
 <?php
 
-use App\Enum\NeuigkeitArt;
-use App\Service\Neuigkeit\FormatService;
-use App\Service\Neuigkeit\PermissionService;
+use App\Neuigkeit\Enum\NeuigkeitArt;
+use App\Neuigkeit\Service\FormatService;
+use App\Neuigkeit\Service\NeuigkeitPermission;
 
 ?>
 
@@ -21,7 +21,7 @@ use App\Service\Neuigkeit\PermissionService;
             <label for="art">Art der Neuigkeit</label>
             <select class="w3-input" name="art" id="art">
                 <?php foreach (NeuigkeitArt::cases() as $case): ?>
-                    <?php if (PermissionService::canSetArt($case)): ?>
+                    <?php if (NeuigkeitPermission::canSetArt($case)): ?>
                         <option value="<?=$case->value?>" <?=$case === $neuigkeit->getArt() ? 'selected' : ''?>><?=FormatService::getArtString($case)?></option>
                     <?php endif; ?>
                 <?php endforeach; ?>
@@ -44,7 +44,7 @@ use App\Service\Neuigkeit\PermissionService;
             <p><i>Es können nur Bilder im <b>.jpg, .jpeg, .gif, .png</b> Format mit bis zu 11,9 Megabyte hochgeladen werden. Bilder werden webtauglich verarbeitet - exif-Daten der Bilder werden gelöscht.</i></p>
             <hr>
             
-            <?php if (PermissionService::canEmbedLink()):?>
+            <?php if (NeuigkeitPermission::canEmbedLink()):?>
                 <label for="bild_verlinken">Bild verlinken (Optional)</label><br>
                 <input class="w3-input w3-border w3-border-grey" placeholder="Link angeben" type="url" id="bild_verlinken" name="bild_verlinken" value="<?=$neuigkeit->getBildVerlinken() ?: ''?>" >
                 <hr>
@@ -72,7 +72,7 @@ use App\Service\Neuigkeit\PermissionService;
         </div>
     </div>
 
-    <?php if (PermissionService::canSetTime()): ?>
+    <?php if (NeuigkeitPermission::canSetTime()): ?>
         <div class="w3-section">
             <div class="w3-border w3-border-primary" style="padding: 16px;">
                 <label for="zeitpunkt">Angezeigter Veröffentlichungszeitpunkt</label><br>

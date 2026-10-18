@@ -8,14 +8,14 @@
  * sonst zu tc_kader.php umleitet (siehe Zeile 12 der geprüften Datei).
  */
 
-use App\Entity\Team\Team;
-use App\Entity\Team\Spieler;
-use App\Entity\Team\Teamdetails;
-use App\Entity\Turnier\Turnier;
-use App\Repository\DoctrineWrapper;
-use App\Repository\Team\SpielerRepository;
-use App\Repository\Team\TeamRepository;
-use App\Repository\Turnier\TurnierRepository;
+use App\Shared\DoctrineWrapper;
+use App\Spieler\Entity\Spieler;
+use App\Spieler\Repository\SpielerRepository;
+use App\Team\Entity\Team;
+use App\Team\Entity\Teamdetails;
+use App\Team\Repository\TeamRepository;
+use App\Turnier\Entity\Turnier;
+use App\Turnier\Repository\TurnierRepository;
 
 require_once __DIR__ . '/../../../init.php';
 

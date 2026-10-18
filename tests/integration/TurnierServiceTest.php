@@ -2,10 +2,10 @@
 
 namespace integration;
 
-use App\Entity\Team\Team;
-use App\Entity\Team\Teamdetails;
-use App\Repository\Team\TeamRepository;
-use App\Service\Team\TeamService;
+use App\Team\Entity\Team;
+use App\Team\Entity\Teamdetails;
+use App\Team\Repository\TeamRepository;
+use App\Team\Service\TeamService;
 use PHPUnit\Framework\TestCase;
 
 class TurnierServiceTest extends TestCase

@@ -2,9 +2,9 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-use App\Repository\Team\SpielerRepository;
-use App\Repository\Team\TeamRepository;
-use App\Service\Team\FreilosService;
+use App\Spieler\Repository\SpielerRepository;
+use App\Team\Repository\TeamRepository;
+use App\Team\Service\FreilosService;
 
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth

@@ -2,11 +2,11 @@
 
 namespace integration;
 
-use App\Entity\Neuigkeit\Neuigkeit;
-use App\Enum\NeuigkeitArt;
-use App\Repository\DoctrineWrapper;
-use App\Repository\Neuigkeit\NeuigkeitRepository;
-use App\Service\Neuigkeit\PermissionService;
+use App\Neuigkeit\Entity\Neuigkeit;
+use App\Neuigkeit\Enum\NeuigkeitArt;
+use App\Shared\DoctrineWrapper;
+use App\Neuigkeit\Repository\NeuigkeitRepository;
+use App\Neuigkeit\Service\NeuigkeitPermission;
 use DateTime;
 use Helper;
 use PHPUnit\Framework\TestCase;
@@ -122,8 +122,8 @@ class NeuigkeitServiceTest extends TestCase
         Helper::$ligacenter = true;
         Helper::$team_social_media = false;
 
-        $this->assertTrue(PermissionService::canEdit('Irgendein Team'));
-        $this->assertTrue(PermissionService::canEdit('Ligaausschuss'));
+        $this->assertTrue(NeuigkeitPermission::canEdit('Irgendein Team'));
+        $this->assertTrue(NeuigkeitPermission::canEdit('Ligaausschuss'));
     }
 
     public function testCanEditAllowsOeffentlichkeitsausschussExceptOwnLigaausschussEintraege(): void
@@ -131,8 +131,8 @@ class NeuigkeitServiceTest extends TestCase
         Helper::$ligacenter = false;
         Helper::$team_social_media = true;
 
-        $this->assertTrue(PermissionService::canEdit('Irgendein Team'));
-        $this->assertFalse(PermissionService::canEdit('Ligaausschuss'));
+        $this->assertTrue(NeuigkeitPermission::canEdit('Irgendein Team'));
+        $this->assertFalse(NeuigkeitPermission::canEdit('Ligaausschuss'));
     }
 
     public function testCanEditAllowsOnlyOwningTeam(): void
@@ -141,8 +141,8 @@ class NeuigkeitServiceTest extends TestCase
         Helper::$team_social_media = false;
         $_SESSION['logins']['team']['name'] = 'Eigenes Team';
 
-        $this->assertTrue(PermissionService::canEdit('Eigenes Team'));
-        $this->assertFalse(PermissionService::canEdit('Fremdes Team'));
+        $this->assertTrue(NeuigkeitPermission::canEdit('Eigenes Team'));
+        $this->assertFalse(NeuigkeitPermission::canEdit('Fremdes Team'));
     }
 
     public function testCanEditDeniesWhenNoRoleMatches(): void
@@ -151,23 +151,23 @@ class NeuigkeitServiceTest extends TestCase
         Helper::$team_social_media = false;
         unset($_SESSION['logins']['team']);
 
-        $this->assertFalse(PermissionService::canEdit('Irgendein Team'));
+        $this->assertFalse(NeuigkeitPermission::canEdit('Irgendein Team'));
     }
 
     public function testCanSetTimeAndEmbedLinkOnlyForLigacenterOrSocialMedia(): void
     {
         Helper::$ligacenter = false;
         Helper::$team_social_media = false;
-        $this->assertFalse(PermissionService::canSetTime());
-        $this->assertFalse(PermissionService::canEmbedLink());
+        $this->assertFalse(NeuigkeitPermission::canSetTime());
+        $this->assertFalse(NeuigkeitPermission::canEmbedLink());
 
         Helper::$ligacenter = true;
-        $this->assertTrue(PermissionService::canSetTime());
-        $this->assertTrue(PermissionService::canEmbedLink());
+        $this->assertTrue(NeuigkeitPermission::canSetTime());
+        $this->assertTrue(NeuigkeitPermission::canEmbedLink());
 
         Helper::$ligacenter = false;
         Helper::$team_social_media = true;
-        $this->assertTrue(PermissionService::canSetTime());
-        $this->assertTrue(PermissionService::canEmbedLink());
+        $this->assertTrue(NeuigkeitPermission::canSetTime());
+        $this->assertTrue(NeuigkeitPermission::canEmbedLink());
     }
 }

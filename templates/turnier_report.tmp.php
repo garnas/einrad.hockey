@@ -1,7 +1,7 @@
 <?php
 
-use App\Service\Team\SpielerService;
-use App\Service\Turnier\TurnierSnippets;
+use App\Spieler\Service\SpielerService;
+use App\Turnier\Service\TurnierSnippets;
 
 ?>
 
@@ -33,9 +33,9 @@ use App\Service\Turnier\TurnierSnippets;
                 <ul style="column-count: 2">
                     <?php foreach ($element->getTeam()->getKaderAktuell() as $spieler): ?>
                         <li>
-                            <?= e($spieler->getName(fullName: false)) ?><?= SpielerService::isSchiri($spieler) ? "*" : "" ?>
+                            <?= e($spieler->getName(fullName: false)) ?><?= $spieler->isSchiri() ? "*" : "" ?>
                         </li>
-                        <?php $schiri = $schiri || SpielerService::isSchiri($spieler) ?>
+                        <?php $schiri = ($schiri || $spieler->isSchiri()) ?>
                     <?php endforeach; ?>
                 </ul>
                 <?php if ($schiri): ?>

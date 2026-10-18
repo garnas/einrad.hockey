@@ -1,6 +1,6 @@
 <?php
 
-use App\Repository\Team\TeamRepository;
+use App\Team\Repository\TeamRepository;
 
 // Formularauswertung
 if (isset($_POST['create_team']) && $teamEntity->getTerminplaner() !== 'Ja') {

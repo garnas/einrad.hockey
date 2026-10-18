@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
-use App\Repository\Turnier\TurnierRepository;
+use App\Turnier\Repository\TurnierRepository;
 
 Helper::$log_user = false; // Keine User-Logs
 

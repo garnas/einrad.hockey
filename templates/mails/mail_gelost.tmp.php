@@ -1,6 +1,6 @@
 <?php
 
-use App\Service\Turnier\TurnierSnippets;
+use App\Turnier\Service\TurnierSnippets;
 
 ?>
 <p>Hallo <?= $anmeldung->getTeam()->getName() ?>,</p>

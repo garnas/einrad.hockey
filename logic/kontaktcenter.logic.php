@@ -1,10 +1,10 @@
 <?php
 
-use App\Repository\Ligaleitung\LigaleitungRepository;
-use App\Repository\Team\TeamRepository;
-use App\Repository\Turnier\TurnierRepository;
-use App\Service\Ligaleitung\LigaleitungService;
-use App\Service\Turnier\TabelleService;
+use App\Ligaleitung\Repository\LigaleitungRepository;
+use App\Team\Repository\TeamRepository;
+use App\Turnier\Repository\TurnierRepository;
+use App\Ligaleitung\Service\LigaleitungService;
+use App\Tabelle\Service\TabelleService;
 
 // BCC Grenze
 $grenze_bcc = Config::BCC_GRENZE;

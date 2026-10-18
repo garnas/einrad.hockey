@@ -1,7 +1,7 @@
 <?php
 
-use App\Entity\Team\Freilosgrund;
-use App\Repository\Team\TeamRepository;
+use App\Team\Entity\Freilosgrund;
+use App\Team\Repository\TeamRepository;
 
 if (isset($_POST['change_la']) && Helper::$ligacenter) {
     $error = false;
