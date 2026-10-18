@@ -94,9 +94,9 @@ class FileService
         // Bild skalieren // hohe Belastung für das PHP memory_limit
         if (max($width, $height) > $max_pix) {
             if ($ratio <= 1) {
-                $image = imagescale($image, $max_pix * $ratio, $max_pix);
+                $image = imagescale($image, (int) round($max_pix * $ratio), $max_pix);
             } else {
-                $image = imagescale($image, $max_pix, $max_pix / $ratio);
+                $image = imagescale($image, $max_pix, (int) round($max_pix / $ratio));
             }
         }
 
