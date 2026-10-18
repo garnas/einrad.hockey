@@ -1,7 +1,6 @@
 <?php
 
 use App\Spielplan\Service\SpielplanService;
-use App\Tabelle\Service\TabelleService;
 use App\Turnier\Mail\TurnierMails;
 use App\Turnier\Repository\TurnierRepository;
 use App\Turnier\Service\TurnierService;
@@ -12,9 +11,10 @@ require_once '../../init.php';
 
 $_SESSION['logins']['cronjob'] = 'Cronjob';
 
-$aktueller_spieltag = TabelleService::getAktuellenSpieltag();
-echo "Spieltag: " . $aktueller_spieltag . "<br>";
-$turniere = TurnierRepository::get()->getTurniereSpieltag($aktueller_spieltag);
+# Achtung: Die Spielplanerstellung geht davon aus, dass Turniere (an Bundeseinheitlichen Feiertagen)
+# bis Dienstag dem vorherigen Spieltag zugeordnet werden. Ab Mittwoch werden sie dem folgenden Spieltag
+# zugeordnet.
+$turniere = TurnierRepository::get()->getSetzphaseTurniere();
 
 foreach ($turniere as $turnier) {
     $datum_turnier = $turnier->getDatum()->getTimestamp();
@@ -40,10 +40,6 @@ foreach ($turniere as $turnier) {
             }
         }
         $aktuelles_datum = strtotime("+1 day", $aktuelles_datum);
-    }
-
-    if ($turnier->getPhase() != "setz") {
-        $erstellen = false;
     }
 
     if ($erstellen) {

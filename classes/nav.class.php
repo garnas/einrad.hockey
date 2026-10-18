@@ -138,7 +138,7 @@ class Nav
             [Env::BASE_URL . "/ligacenter/lc_spieler_aendern.php", "Spieler verwalten", "w3-green"],
             [Env::BASE_URL . "/ligacenter/lc_pw_aendern.php", "Passwort ändern", "w3-grey"],
             [Env::BASE_URL . "/ligacenter/lc_admin.php", "Admin", "w3-grey"],
-            [Env::BASE_URL . "/ligacenter/lc_checkmail.php", "Mail-Bot", "w3-blue"],
+            [Env::BASE_URL . "/ligacenter/lc_checkmail.php", "E-Mails vom Mailbot", "w3-blue"],
             [Env::BASE_URL . "/ligacenter/lc_logout.php", "Logout", "w3-grey"],
         ];
     }
