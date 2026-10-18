@@ -18,9 +18,9 @@ php bin/doctrine orm:clear-cache:query || true
 php bin/doctrine orm:generate-proxies || true
 
 echo "Installing npm dependencies for Playwright E2E tests..."
-npm install
+npm install --prefix tests/e2e-playwright
 
 echo "Installing Playwright browsers (Chromium + Chrome) and system dependencies..."
-npx playwright install --with-deps chromium chrome
+npm exec --prefix tests/e2e-playwright -- playwright install --with-deps chromium chrome
 
 echo "Setup finished successfully!"
