@@ -2,9 +2,8 @@
 
 namespace integration;
 
-use App\Repository\Turnier\TurnierRepository;
-use App\Service\Turnier\TabelleService;
-use nTurnier;
+use App\Turnier\Repository\TurnierRepository;
+use App\Tabelle\Service\TabelleService;
 use PHPUnit\Framework\TestCase;
 use SimpleXMLElement;
 use xml;
@@ -29,9 +28,8 @@ class TeamplanerApiTest extends TestCase
 
     public function testTurnieranmeldungenToXml(): void
     {
-        $turnieranmeldungen = nTurnier::get_all_anmeldungen();
-        $xml = new SimpleXMLElement('<turnieranmeldungen/>');
-        $xmlContent = xml::array_to_xml($turnieranmeldungen, $xml, "meldungen", "team");
+        $turnieranmeldungen = TurnierRepository::get()->getAnmeldungenOffeneTurniere();
+        $xmlContent = xml::turnieranmeldungenToXml($turnieranmeldungen);
         $this->assertStringContainsString(needle: "<turnieranmeldungen", haystack: $xmlContent);
     }
 

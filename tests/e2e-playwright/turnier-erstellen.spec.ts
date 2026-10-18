@@ -17,7 +17,7 @@ function futureDatum(weeksAhead: number): string {
 }
 
 // Ligaturniere dürfen nur an einem Samstag, Sonntag oder bundeseinheitlichen Feiertag stattfinden
-// und müssen spätestens vier Wochen vor dem Spieltag eingetragen werden (siehe TurnierValidatorService::hasValidDatum).
+// und müssen spätestens vier Wochen vor dem Spieltag eingetragen werden (siehe TurnierValidator::hasValidDatum).
 function naechsterSamstag(minWeeksAhead: number): string {
     const datum = new Date();
     datum.setDate(datum.getDate() + minWeeksAhead * 7);

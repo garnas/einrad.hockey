@@ -1,7 +1,7 @@
 <?php
 
-use App\Repository\Team\TeamRepository;
-use App\Service\Team\TeamService;
+use App\Team\Repository\TeamRepository;
+use App\Team\Service\TeamService;
 
 if (isset($_POST['la_team_waehlen'])) {
     $teamname = $_POST['la_team_waehlen'];

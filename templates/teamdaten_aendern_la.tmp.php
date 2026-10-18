@@ -1,8 +1,8 @@
 <?php
 
-use App\Entity\Team\Freilos;
-use App\Entity\Team\FreilosGrund;
-use App\Service\Team\TeamSnippets;
+use App\Team\Entity\Freilos;
+use App\Team\Entity\Freilosgrund;
+use App\Team\Service\TeamSnippets;
 
 ?>
 <div class="w3-card-4 w3-responsive w3-panel">
@@ -38,10 +38,10 @@ use App\Service\Team\TeamSnippets;
                             name='freilos_grund' id="freilos_grund"
                     >
                         <option value='NO_CHANGE'>Auswählen zum Hinzufügen</option>
-                        <?php foreach (FreilosGrund::cases() as $grund): ?>
+                        <?php foreach (Freilosgrund::cases() as $grund): ?>
                             <option
-                                <?= ($grund == FreilosGrund::TURNIER_AUSGERICHTET
-                                    || $grund == FreilosGrund::FREILOS_GESETZT)
+                                <?= ($grund == Freilosgrund::TURNIER_AUSGERICHTET
+                                    || $grund == Freilosgrund::FREILOS_GESETZT)
                                     ? "disabled" : ""
                             ?>
                                     value=<?= $grund->name ?>><?= $grund->value ?></option>

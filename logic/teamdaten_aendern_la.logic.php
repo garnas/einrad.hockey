@@ -1,7 +1,7 @@
 <?php
 
-use App\Entity\Team\FreilosGrund;
-use App\Repository\Team\TeamRepository;
+use App\Team\Entity\Freilosgrund;
+use App\Team\Repository\TeamRepository;
 
 if (isset($_POST['change_la']) && Helper::$ligacenter) {
     $error = false;
@@ -23,7 +23,7 @@ if (isset($_POST['change_la']) && Helper::$ligacenter) {
             Html::info("Der Teamname wurde geändert.");
         }
         if (!empty($_POST["freilos_grund"]) && $_POST["freilos_grund"] != "NO_CHANGE") {
-            $grund = FreilosGrund::fromName($_POST["freilos_grund"]);
+            $grund = Freilosgrund::fromName($_POST["freilos_grund"]);
             $saison = (int) $_POST["freilos_saison"];
             $team->addFreilos($grund, $saison);
             Html::info("Freilos wurde hinzugefügt.");

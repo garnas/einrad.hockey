@@ -2,14 +2,14 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-use App\Repository\Team\TeamRepository;
-use App\Repository\Turnier\TurnierRepository;
-use App\Service\Team\FreilosService;
-use App\Service\Team\TeamService;
-use App\Service\Team\TeamValidator;
-use App\Service\Turnier\BlockService;
-use App\Service\Turnier\TurnierService;
-use App\Service\Turnier\TurnierSnippets;
+use App\Team\Repository\TeamRepository;
+use App\Turnier\Repository\TurnierRepository;
+use App\Team\Service\FreilosService;
+use App\Team\Service\TeamService;
+use App\Team\Service\TeamValidator;
+use App\Turnier\Service\BlockService;
+use App\Turnier\Service\TurnierService;
+use App\Turnier\Service\TurnierSnippets;
 
 require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth
@@ -32,7 +32,7 @@ if (null === $turnier) {
     Helper::not_found("Turnier wurde nicht gefunden.");
 }
 
-if ($turnier->isSpassTurnier()) {
+if ($turnier->isSpassturnier()) {
     $kontakt = new Kontakt($turnier->getAusrichter()->id());
     $email = $kontakt->get_emails();
     Html::notice(

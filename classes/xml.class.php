@@ -1,7 +1,8 @@
 <?php
 
-use App\Entity\Turnier\Turnier;
-use App\Service\Turnier\TabelleService;
+use App\Turnier\Entity\Turnier;
+use App\Turnier\Entity\Turnieranmeldung;
+use App\Tabelle\Service\TabelleService;
 
 /**
  * Class xml
@@ -111,5 +112,38 @@ class xml
             $xml_child->addChild('teamname', e($turnier->getAusrichter()->getName()));
         }
         return $xml->asXML();
+    }
+
+    /**
+     * @param Turnieranmeldung[] $anmeldungen
+     * @return string|bool
+     */
+    public static function turnieranmeldungenToXml(array $anmeldungen): string|bool
+    {
+        // Erhalten den aktuellen Spieltag für die Ermittung des Teamblocks und der -wertigkeit
+        $spieltag = TabelleService::getAktuellenSpieltag();
+
+        // Erstellung des Arrays mit der TurnierID, der -liste, Teamnamen, -blöcken und -wertigkeiten
+        $turnier_listen = [];
+        foreach ($anmeldungen as $anmeldung) {
+            $turnier_id = $anmeldung->getTurnier()->id();
+            $team_id = $anmeldung->getTeam()->id();
+            $turnier_listen[$turnier_id][$anmeldung->getListe()][$team_id] = db::escape([
+                'liste_id' => $anmeldung->getListeId(),
+                'turnier_id' => $turnier_id,
+                'team_id' => $team_id,
+                'liste' => $anmeldung->getListe(),
+                'position_warteliste' => $anmeldung->getPositionWarteliste(),
+                'freilos_gesetzt' => $anmeldung->getFreilosGesetzt(),
+                'freilos_gesetzt_am' => $anmeldung->getFreilosGesetztAm()?->format('Y-m-d H:i:s'),
+                'teamname' => $anmeldung->getTeam()->getName(),
+                'ligateam' => $anmeldung->getTeam()->getLigateam(),
+                'tblock' => TabelleService::getTeamBlock($team_id, $spieltag),
+                'wertigkeit' => TabelleService::getTeamWertigkeit($team_id, $spieltag),
+            ]);
+        }
+
+        $xml = new SimpleXMLElement('<turnieranmeldungen/>');
+        return self::array_to_xml($turnier_listen, $xml, "meldungen", "team");
     }
 }

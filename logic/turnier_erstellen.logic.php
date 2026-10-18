@@ -1,14 +1,14 @@
 <?php
 
-use App\Entity\Turnier\TurnierDetails;
-use App\Entity\Turnier\Turnier;
-use App\Event\Turnier\nLigaBot;
-use App\Event\Turnier\TurnierEventMailBot;
-use App\Repository\Team\TeamRepository;
-use App\Repository\Turnier\TurnierRepository;
-use App\Service\Turnier\BlockService;
-use App\Service\Turnier\TurnierService;
-use App\Service\Turnier\TurnierValidatorService;
+use App\Team\Repository\TeamRepository;
+use App\Turnier\Entity\Turnier;
+use App\Turnier\Entity\Turnierdetails;
+use App\Turnier\Bot\LigaBot;
+use App\Turnier\Mail\TurnierMails;
+use App\Turnier\Repository\TurnierRepository;
+use App\Turnier\Service\BlockService;
+use App\Turnier\Service\TurnierService;
+use App\Turnier\Service\TurnierValidator;
 
 $turnier = null;
 
@@ -91,7 +91,7 @@ if (isset($_POST['create_turnier'])) {
         ->setBlockErweitertRunter(false)
         ->setBlockFixed($fixed);
 
-    $details = new TurnierDetails();
+    $details = new Turnierdetails();
     $details
         ->setTurnier($turnier)
         ->setBesprechung($besprechung)
@@ -112,15 +112,15 @@ if (isset($_POST['create_turnier'])) {
 
 
     // Anlegen des neuen Turniers, wenn alle Eintragungen valide sind
-    if (TurnierValidatorService::onCreate($turnier)) {
+    if (TurnierValidator::onCreate($turnier)) {
 
         TurnierService::addToSetzListe($turnier, $ausrichter);
 
         TurnierRepository::get()->speichern($turnier);
-        nLigaBot::setSpieltage();
+        LigaBot::setSpieltage();
 
         if (Helper::$teamcenter) {
-            TurnierEventMailBot::mailNeuesTurnier($turnier);
+            TurnierMails::mailNeuesTurnier($turnier);
         }
 
         Html::info("Euer Turnier wurde erfolgreich eingetragen.");

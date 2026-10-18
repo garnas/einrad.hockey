@@ -1,7 +1,7 @@
 <?php
 
 // Dies hier muss in jeder geschützten Seite direkt nach init.php eingefügt werden!
-use App\Repository\Team\TeamRepository;
+use App\Team\Repository\TeamRepository;
 
 if (!isset($_SESSION['logins']['team'])) {
     $_SESSION['tc_redirect'] = db::escape($_SERVER['REQUEST_URI']); //Damit man nach dem Login direkt auf die gewünschte Seite geführt wird

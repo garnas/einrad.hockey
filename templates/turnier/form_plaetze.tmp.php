@@ -1,4 +1,4 @@
-<?php use App\Service\Turnier\TurnierFormService;
+<?php use App\Turnier\Service\TurnierFormService;
 
 ?>
 

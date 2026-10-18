@@ -2,17 +2,17 @@
 
 namespace unit;
 
-use App\Entity\Team\nTeam;
-use App\Entity\Turnier\Spiel;
-use App\Service\Spielplan\PlatzierungService;
+use App\Team\Entity\Team;
+use App\Turnier\Entity\Spiel;
+use App\Spielplan\Service\PlatzierungService;
 use PHPUnit\Framework\TestCase;
 
 class PlatzierungServiceTest extends TestCase
 {
-    private function team(int $id): nTeam
+    private function team(int $id): Team
     {
-        $team = new nTeam();
-        (new \ReflectionProperty(nTeam::class, 'id'))->setValue($team, $id);
+        $team = new Team();
+        (new \ReflectionProperty(Team::class, 'id'))->setValue($team, $id);
         return $team;
     }
 

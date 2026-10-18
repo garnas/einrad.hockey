@@ -15,21 +15,21 @@
  * damit der Test sie ohne Umweg über die Turnierliste ansteuern kann.
  */
 
-use App\Entity\Team\Ligaleitung;
-use App\Entity\Team\nTeam;
-use App\Entity\Team\Spieler;
-use App\Entity\Team\TeamDetails;
-use App\Entity\Turnier\Turnier;
-use App\Entity\Turnier\TurnierDetails;
-use App\Repository\DoctrineWrapper;
-use App\Repository\Spielplan\SpielplanRepository;
-use App\Repository\Spieler\SpielerRepository;
-use App\Repository\Team\TeamRepository;
-use App\Repository\Turnier\TurnierRepository;
-use App\Entity\TurnierBericht\TurnierBericht;
-use App\Repository\TurnierBericht\TurnierBerichtRepository;
-use App\Service\Spielplan\SpielplanService;
-use App\Service\Turnier\TurnierService;
+use App\Ligaleitung\Entity\Ligaleitung;
+use App\Shared\DoctrineWrapper;
+use App\Spieler\Entity\Spieler;
+use App\Spieler\Repository\SpielerRepository;
+use App\Spielplan\Repository\SpielplanRepository;
+use App\Spielplan\Service\SpielplanService;
+use App\Team\Entity\Team;
+use App\Team\Entity\Teamdetails;
+use App\Team\Repository\TeamRepository;
+use App\Turnier\Entity\Turnier;
+use App\Turnier\Entity\Turnierdetails;
+use App\Turnier\Repository\TurnierRepository;
+use App\Turnier\Service\TurnierService;
+use App\Turnierbericht\Entity\Turnierbericht;
+use App\Turnierbericht\Repository\TurnierberichtRepository;
 
 require_once __DIR__ . '/../../../init.php';
 
@@ -50,9 +50,9 @@ $manager = DoctrineWrapper::manager();
 foreach ([$turnierNameSetz, $turnierNameErgebnis] as $turnierName) {
     foreach ($manager->getRepository(Turnier::class)->findBy(['name' => $turnierName]) as $turnier) {
         SpielplanRepository::get()->loescheSpiele($turnier);
-        $bericht = TurnierBerichtRepository::get()->bericht($turnier->id());
+        $bericht = TurnierberichtRepository::get()->bericht($turnier->id());
         if ($bericht !== null) {
-            TurnierBerichtRepository::get()->delete($bericht);
+            TurnierberichtRepository::get()->delete($bericht);
         }
         TurnierRepository::get()->delete($turnier);
     }
@@ -77,14 +77,14 @@ foreach ([...$turnierTeamNamen, $laTeamName] as $teamName) {
 // -------------------------------------------------------------------------
 //  Ligaausschuss-Login
 // -------------------------------------------------------------------------
-$laTeam = (new nTeam())
+$laTeam = (new Team())
     ->setName($laTeamName)
     ->setLigateam('Ja')
     ->setAktiv('Ja')
     ->setPasswort('nicht-eingeloggt')
     ->setPasswortGeaendert('Ja');
 $laTeam->setDetails(
-    (new TeamDetails())
+    (new Teamdetails())
         ->setTeam($laTeam)
         ->setLigavertreter('Playwright Bot')
         ->setTeamfoto(null)
@@ -117,14 +117,14 @@ $manager->flush();
 // -------------------------------------------------------------------------
 $teams = [];
 foreach ($turnierTeamNamen as $teamName) {
-    $team = (new nTeam())
+    $team = (new Team())
         ->setName($teamName)
         ->setLigateam('Ja')
         ->setAktiv('Ja')
         ->setPasswort('nicht-eingeloggt')
         ->setPasswortGeaendert('Ja');
     $team->setDetails(
-        (new TeamDetails())
+        (new Teamdetails())
             ->setTeam($team)
             ->setLigavertreter('Playwright Bot')
             ->setTeamfoto(null)
@@ -162,7 +162,7 @@ $macheTurnier = static function (string $name) use ($teams): Turnier {
         ->setBlockErweitertHoch(false)
         ->setBlockErweitertRunter(false);
 
-    $details = (new TurnierDetails())
+    $details = (new Turnierdetails())
         ->setTurnier($turnier)
         ->setBesprechung('Nein')
         ->setHallenname('Playwright Sporthalle')
@@ -202,8 +202,8 @@ if (!SpielplanService::erstellen($turnierErgebnis)) {
 
 // Turnierbericht anlegen (im echten Ablauf passiert das beim Erstellen des Spielplans über
 // lc_spielplan_verwalten.php). spielplan_form.logic.php erwartet einen vorhandenen Bericht.
-if (TurnierBerichtRepository::get()->bericht($turnierIdErgebnis) === null) {
-    TurnierBerichtRepository::get()->speichern(new TurnierBericht($turnierErgebnis));
+if (TurnierberichtRepository::get()->bericht($turnierIdErgebnis) === null) {
+    TurnierberichtRepository::get()->speichern(new Turnierbericht($turnierErgebnis));
 }
 
 // -------------------------------------------------------------------------

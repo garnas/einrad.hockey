@@ -1,7 +1,6 @@
 <?php
 
-use App\Entity\Team\nTeam;
-use App\Repository\Team\TeamRepository;
+use App\Team\Entity\Team;
 
 /**
  * Class MailBot
@@ -91,8 +90,9 @@ class MailBot
             foreach ($mail_addresses as $mail_address) {
                 if ($anz_mail_addresses > 15) {
                     $mailer->addBCC($mail_address);
+                } else {
+                    $mailer->addAddress($mail_address);
                 }
-                $mailer->addAddress($mail_address); // Empfängeradresse
             }
             $mailer->Subject = $mail['betreff']; // Betreff der Email
             $mailer->Body = $mail['inhalt']; // Inhalt der Email
@@ -180,142 +180,11 @@ class MailBot
     }
 
     /**
-     * Schreibt eine Mail in die Datenbank an alle spielberechtigten Teams, wenn es (zum Übergang zur Meldephase) noch
-     * freie Plätze gibt.
-     *
-     * @param nTurnier $turnier
-     */
-    public static function mail_plaetze_frei(nTurnier $turnier): void
-    {
-        if ($turnier->get_freie_plaetze() > 0 && in_array($turnier->get_art(), Config::TURNIER_ARTEN)) {
-            $team_ids = TeamRepository::get()->activeLigaTeamIds();
-            foreach ($team_ids as $team_id) {
-                // Noch Plätze frei
-                if (
-                    !$turnier->is_angemeldet($team_id)
-                    && $turnier->is_spielberechtigt($team_id)
-                    && !$turnier->is_doppelmeldung($team_id)
-                ) {
-                    $betreff = "Freie Plätze: " . $turnier->get_tblock() . "-Turnier in " . $turnier->get_ort();
-                    ob_start();
-                    include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
-                    include(Env::BASE_PATH . "/templates/mails/mail_plaetze_frei.tmp.php");
-                    include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
-                    $inhalt = ob_get_clean();
-                    $emails = (new Kontakt($team_id))->get_emails('info');
-                    self::add_mail($betreff, $inhalt, $emails);
-                }
-            }
-        }
-    }
-
-    /**
-     * Erstellt eine Mail in der Datenbank an Teams, welche in von der Warteliste aufgerückt sind
-     *
-     * @param nTurnier $turnier
-     * @param int $team_id
-     */
-    public static function mail_warte_zu_spiele(nTurnier $turnier, int $team_id): void
-    {
-        $betreff = "Spielen-Liste: " . $turnier->get_tblock() . "-Turnier in " . $turnier->get_ort();
-        ob_start();
-        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
-        include(Env::BASE_PATH . "/templates/mails/mail_warte_zu_spiele.tmp.php");
-        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
-        $inhalt = ob_get_clean();
-        $akt_kontakt = new Kontakt($team_id);
-        $emails = $akt_kontakt->get_emails('info');
-        self::add_mail($betreff, $inhalt, $emails, send_instantly: true);
-    }
-
-    /**
-     * Erstellt eine Mail in der Datenbank an alle vom Losen betroffenen Teams
-     *
-     * @param nTurnier $turnier
-     */
-    public static function mail_gelost(nTurnier $turnier): void
-    {
-        if (in_array($turnier->get_art(), Config::TURNIER_ARTEN)) {
-            $team_ids = TeamRepository::get()->activeLigaTeamIds();
-            foreach ($team_ids as $team_id) {
-                // Team angemeldet?
-                if ($turnier->is_angemeldet($team_id)) {
-                    // Auf Warteliste gelandet
-                    if ($turnier->get_liste($team_id) == 'warte') {
-                        $liste = "Warteliste";
-                        // Auf Spielen-Liste gelandet
-                    } elseif ($turnier->get_liste($team_id) == 'spiele') {
-                        $liste = "Spielen-Liste";
-                    } else {
-                        return;
-                    }
-                    $betreff = "$liste: " . $turnier->get_tblock() . "-Turnier in " . $turnier->get_ort();
-                    ob_start();
-                    include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
-                    include(Env::BASE_PATH . "/templates/mails/mail_gelost.tmp.php");
-                    include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
-                    $inhalt = ob_get_clean();
-                    $emails = (new Kontakt($team_id))->get_emails('info');
-                    self::add_mail($betreff, $inhalt, $emails);
-                }
-            }
-        }
-    }
-
-    /**
-     * Erstellt eine Mail in der Datenbank an alle spielberechtigten Teams, wenn ein neues Turnier eingetragen wird
-     *
-     * @param nTurnier $turnier
-     */
-    public static function mail_neues_turnier(nTurnier $turnier): void
-    {
-        if (in_array($turnier->get_art(), Config::TURNIER_ARTEN)) {
-            $team_ids = TeamRepository::get()->activeLigaTeamIds();
-            foreach ($team_ids as $team_id) {
-                // Noch Plätze frei?
-                if ($turnier->is_spielberechtigt($team_id) && !$turnier->is_doppelmeldung($team_id)) {
-                    $betreff = "Neues " . $turnier->get_tblock() . "-Turnier in " . $turnier->get_ort();
-                    ob_start();
-                    include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
-                    include(Env::BASE_PATH . "/templates/mails/mail_neues_turnier.tmp.php");
-                    include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
-                    $inhalt = ob_get_clean();
-                    $emails = (new Kontakt($team_id))->get_emails('info');
-                    self::add_mail($betreff, $inhalt, $emails);
-                }
-            }
-        }
-    }
-
-    /**
-     * Erstellt eine Mail in der Datenbank, wenn ein Team trotz Freilos beim übergang in die Datenbank abgemeldet wird.
-     *
-     * @param nTurnier $turnier
-     * @param int $team_id
-     */
-    public static function mail_freilos_abmeldung(nTurnier $turnier, int $team_id): void
-    {
-        if (!in_array($turnier->get_art(), Config::TURNIER_ARTEN)) {
-            return;
-        }
-
-        $betreff = "Falscher Freilosblock: " . $turnier->get_tblock() . "-Turnier in " . $turnier->get_ort();
-        ob_start();
-        include(Env::BASE_PATH . "/templates/mails/mail_anfang.tmp.php");
-        include(Env::BASE_PATH . "/templates/mails/mail_freilos_abmeldung.tmp.php");
-        include(Env::BASE_PATH . "/templates/mails/mail_ende.tmp.php");
-        $inhalt = ob_get_clean();
-        $emails = (new Kontakt($team_id))->get_emails('info');
-
-        self::add_mail($betreff, $inhalt, $emails);
-    }
-
-    /**
      * Erstellt eine Mail in der Datenbank, dass ein Team ein Freilos für zwei Schiris erhalten hat.
      *
-     * @param nTeam $team
+     * @param Team $team
      */
-    public static function mail_schiri_freilos(nTeam $team): void
+    public static function mail_schiri_freilos(Team $team): void
     {
         $betreff = "Freilos für zwei Schiris erhalten";
         ob_start();
@@ -327,7 +196,7 @@ class MailBot
         self::add_mail($betreff, $inhalt, $emails, send_instantly: true);
     }
 
-    public static function mail_ausrichter_freilos(nTeam $team): void
+    public static function mail_ausrichter_freilos(Team $team): void
     {
         $betreff = "Freilos für euer Turnier erhalten";
         ob_start();
@@ -339,7 +208,7 @@ class MailBot
         self::add_mail($betreff, $inhalt, $emails, send_instantly: true);
     }
 
-    public static function mail_freilos_recycle(nTeam $team): void
+    public static function mail_freilos_recycle(Team $team): void
     {
         $betreff = "Freilos für frühzeitig gesetztes Freilos";
         ob_start();

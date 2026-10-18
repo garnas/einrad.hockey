@@ -1,13 +1,16 @@
 <?php
 
-use App\Repository\Team\TeamRepository;
-use App\Service\Turnier\TabelleService;
+use App\Ligaleitung\Repository\LigaleitungRepository;
+use App\Team\Repository\TeamRepository;
+use App\Turnier\Repository\TurnierRepository;
+use App\Ligaleitung\Service\LigaleitungService;
+use App\Tabelle\Service\TabelleService;
 
 // BCC Grenze
 $grenze_bcc = Config::BCC_GRENZE;
 
 // Für die Turnierauswahl
-$turniere = nTurnier::get_turniere();
+$turniere = TurnierRepository::get()->getAlleTurniere();
 
 // Für Sortierung der Teams nach Blöcken
 $akt_spieltag = TabelleService::getAktuellenSpieltag();
@@ -33,14 +36,14 @@ if (isset($_POST['reset'])) {
 //Turnier wurde ausgewählt
 if (isset($_POST['turnier_id']) && is_numeric($_POST['turnier_id'])) {
     unset($_SESSION[$list_id]);
-    $turnier = nTurnier::get((int) $_POST['turnier_id']);
-    if (empty($turnier->get_turnier_id())) {
+    $turnier = TurnierRepository::get()->turnier((int) $_POST['turnier_id']);
+    if ($turnier === null) {
         Html::error("Turnier wurde nicht gefunden");
         header('Location: ' . db::escape($_SERVER['PHP_SELF']));
         die();
     }
     $array = Kontakt::get_emails_turnier($_POST['turnier_id']);
-    $_SESSION[$list_id]['type'] = 'Turnier in ' . $turnier->get_ort() . ' (' . date("d.m.Y", strtotime($turnier->get_datum())) . ', ' . $turnier->get_tblock() . ')';
+    $_SESSION[$list_id]['type'] = 'Turnier in ' . $turnier->getDetails()->getOrt() . ' (' . $turnier->getDatum()->format("d.m.Y") . ', ' . $turnier->getBlock() . ')';
     $_SESSION[$list_id]['emails'] = $array['emails'];
     $_SESSION[$list_id]['empfaenger'] = $array['teamnamen'];
 
@@ -175,11 +178,10 @@ if (isset($_SESSION[$list_id])) {
 }
 
 if (Helper::$ligacenter) {
-    $las = Ligaleitung::get_all('ligaausschuss');
+    $las = LigaleitungRepository::get()->findByFunktion('ligaausschuss');
     $signatur = "\r\n\r\n\r\nDein Ligaausschuss\r\n--\r\n";
     foreach ($las as $la) {
-        $signatur .= $la['vorname'] . ' ' . $la['nachname']
-            . (!empty($la['teamname']) ? ' (' . $la['teamname'] . ')' : '') . "\r\n";
+        $signatur .= LigaleitungService::getNameMitTeam($la) . "\r\n";
     }
 }
 

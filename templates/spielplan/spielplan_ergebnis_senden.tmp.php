@@ -1,4 +1,4 @@
-<?php /** @var \App\Model\Spielplan\Spielplan $spielplan */ ?>
+<?php /** @var \App\Spielplan\Model\Spielplan $spielplan */ ?>
 <form method="post">
     <p>
         <button type="submit"

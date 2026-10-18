@@ -3,8 +3,8 @@
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-use App\Service\Turnier\TurnierFormService;
-use App\Service\Turnier\TurnierSnippets;
+use App\Turnier\Service\TurnierFormService;
+use App\Turnier\Service\TurnierSnippets;
 
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth

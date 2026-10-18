@@ -1,6 +1,6 @@
 # einrad.hockey
 
-![Logo der Einradhockeyliga](https://einrad.hockey/bilder/logo_kurz.png)
+<img src="public/bilder/logo_kurz.svg" alt="Logo der Einradhockeyliga" width="360">
 
 Dies ist der Code der Website [einrad.hockey](https://einrad.hockey) der Deutschen Einradhockeyliga.
 
@@ -83,9 +83,11 @@ php83 vendor/bin/phpunit tests/
 ### E2E-Tests (Playwright)
 
 Node.js und die Playwright-Browser sind im Dev-Container bereits vorinstalliert (siehe `setup.sh`). Führe die
-folgenden Befehle im Terminal des Dev-Containers aus:
+folgenden Befehle im Terminal des Dev-Containers aus (Playwright-Konfiguration und `package.json` liegen in
+`tests/e2e-playwright/`):
 
 ```shell
+cd tests/e2e-playwright
 npm run test:e2e            # headless
 npx playwright test --headed # mit sichtbarem Browser
 ```
@@ -94,6 +96,7 @@ Außerhalb des Dev-Containers (z. B. lokal unter Windows/macOS/Linux) benötigst
 [Node.js](https://nodejs.org/) und einen erreichbaren Dev-Server unter http://localhost:
 
 ```shell
+cd tests/e2e-playwright
 npm install
 npx playwright install chromium
 

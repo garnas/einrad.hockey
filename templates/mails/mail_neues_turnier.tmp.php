@@ -1,7 +1,7 @@
 <?php
 
-use App\Service\Turnier\TurnierLinks;
-use App\Service\Turnier\TurnierSnippets;
+use App\Turnier\Service\TurnierLinks;
+use App\Turnier\Service\TurnierSnippets;
 
 ?>
 <p>Hallo <?= $team->getName() ?>,</p>

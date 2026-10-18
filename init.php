@@ -15,6 +15,7 @@ ini_set('session.cookie_httponly', '1');
 ini_set('session.cookie_samesite', 'Strict');
 ini_set('session.cookie_secure', '1');
 ini_set('session.gc_maxlifetime', '7200'); // Muss zu session.cookie_lifetime passen
+ini_set('request_order', 'GP'); // $_REQUEST enthält keine Cookies (PHPSESSID)
 // https://www.php.net/manual/de/session.security.ini.php
 // https://www.php.net/manual/de/features.session.security.management.php
 
@@ -192,4 +193,4 @@ function e(mixed $value)
     return db::escape($value);
 }
 
-App\Repository\DoctrineWrapper::setup();
+App\Shared\DoctrineWrapper::setup();

@@ -1,6 +1,6 @@
 <?php
 
-use App\Service\Team\TeamSnippets;
+use App\Team\Service\TeamSnippets;
 
 ?>
 

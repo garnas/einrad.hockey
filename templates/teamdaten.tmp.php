@@ -1,10 +1,10 @@
 <?php
 
-use App\Service\Team\FreilosService;
-use App\Service\Team\TeamService;
-use App\Service\Team\TeamSnippets;
-use App\Service\Team\TeamValidator;
-use App\Service\Turnier\TurnierSnippets;
+use App\Team\Service\FreilosService;
+use App\Team\Service\TeamService;
+use App\Team\Service\TeamSnippets;
+use App\Team\Service\TeamValidator;
+use App\Turnier\Service\TurnierSnippets;
 
 ?>
 <!-- Link Teamdaten ändern -->

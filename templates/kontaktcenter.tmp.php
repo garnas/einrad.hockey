@@ -40,8 +40,8 @@ if (empty($_SESSION[$list_id ?? '']['emails'])): ?>
             <select required class="w3-select w3-border w3-border-primary" name="turnier_id" id="turnier" onchange="this.form.submit()">
                 <option disabled <?php if (empty($_GET['turnier_id'])) {?>selected<?php }?>></option>
                 <?php foreach ($turniere as $turnier):?>
-                    <option <?php if ($turnier->get_turnier_id() === (int) @$_GET['turnier_id']) {?>selected<?php }?> value="<?=$turnier->get_turnier_id()?>">
-                    <?=date('d.m.Y', strtotime($turnier->get_datum())) . ' ' . e($turnier->get_ort()) . ' ' . e($turnier->get_tname()) . ' (' . $turnier->get_tblock() . ')'?>
+                    <option <?php if ($turnier->id() === (int) @$_GET['turnier_id']) {?>selected<?php }?> value="<?=$turnier->id()?>">
+                    <?=$turnier->getDatum()->format('d.m.Y') . ' ' . e($turnier->getDetails()->getOrt()) . ' ' . e($turnier->getName()) . ' (' . $turnier->getBlock() . ')'?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -61,7 +61,7 @@ if (empty($_SESSION[$list_id ?? '']['emails'])): ?>
             <?php foreach ($teams as $team):?>
                 <div class="w3-col s12 m6">
                     <input style="cursor: pointer;" class="w3-check" type="checkbox" id="email<?=$team['team_id']?>" name="team[]" value="<?=$team['team_id']?>">
-                    <label style="cursor: pointer; color: red;" class="w3-text-primary w3-hover-text-secondary" for="email<?=$team['team_id']?>"><?=e($team['teamname'])?> (<?=\App\Service\Turnier\TabelleService::getTeamBlock($team['team_id'], $akt_spieltag - 1)?>)</label>
+                    <label style="cursor: pointer; color: red;" class="w3-text-primary w3-hover-text-secondary" for="email<?=$team['team_id']?>"><?=e($team['teamname'])?> (<?=\App\Tabelle\Service\TabelleService::getTeamBlock($team['team_id'], $akt_spieltag - 1)?>)</label>
                 </div>
             <?php endforeach; ?>
         </div>

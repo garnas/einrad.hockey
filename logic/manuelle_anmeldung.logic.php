@@ -1,10 +1,10 @@
 <?php
 
-use App\Repository\Team\TeamRepository;
-use App\Repository\Turnier\TurnierRepository;
-use App\Service\Form\FormLogicTeam;
-use App\Service\Team\TeamService;
-use App\Service\Turnier\TurnierService;
+use App\Team\Repository\TeamRepository;
+use App\Turnier\Repository\TurnierRepository;
+use App\Team\Service\FormLogicTeam;
+use App\Team\Service\TeamService;
+use App\Turnier\Service\TurnierService;
 
 $turnierId = (int) @$_GET['turnier_id'];
 $turnier = TurnierRepository::get()->turnier($turnierId);
@@ -15,7 +15,7 @@ if (!$turnier) {
 }
 
 // im Teamcenter testen, ob es sich um den Ausrichter handelt
-if (Helper::$teamcenter && ($turnier->getAusrichter()->id() != $_SESSION['logins']['team']['id'] || !$turnier->isSpassTurnier())) {
+if (Helper::$teamcenter && ($turnier->getAusrichter()->id() != $_SESSION['logins']['team']['id'] || !$turnier->isSpassturnier())) {
     Html::error("Fehlende Berechtigung Teams zu diesem Turnier anzumelden");
     Helper::reload('/liga/turniere.php');
 }

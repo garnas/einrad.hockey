@@ -5,10 +5,10 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
-use App\Event\Turnier\nLigaBot;
+use App\Turnier\Bot\LigaBot;
 
 $_SESSION['logins']['cronjob'] = 'Cronjob';
 
-nLigaBot::ligaBot();
+LigaBot::ligaBot();
 
 session_destroy();

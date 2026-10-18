@@ -7,8 +7,8 @@ require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 require_once '../../logic/la_team_waehlen.logic.php';
 
-use App\Repository\Team\TeamRepository;
-use App\Service\Team\TeamService;
+use App\Team\Repository\TeamRepository;
+use App\Team\Service\TeamService;
 
 $saison = (isset($_GET['saison'])) ? (int) $_GET['saison'] : Config::SAISON;
 

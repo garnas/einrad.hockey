@@ -2,7 +2,7 @@
 
 namespace integration;
 
-use App\Event\Turnier\nLigaBot;
+use App\Turnier\Bot\LigaBot;
 use PHPUnit\Framework\TestCase;
 
 class LigaBotTest extends TestCase
@@ -13,7 +13,6 @@ class LigaBotTest extends TestCase
     public function testLigabot(): void
     {
         $this->expectNotToPerformAssertions();
-        nLigaBot::ligaBot();
-
+        LigaBot::ligaBot();
     }
 }

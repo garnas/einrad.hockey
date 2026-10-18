@@ -1,4 +1,4 @@
-<?php /** @var \App\Model\Spielplan\Spielplan $spielplan */ ?>
+<?php /** @var \App\Spielplan\Model\Spielplan $spielplan */ ?>
 <?php if (!empty($spielplan->getDirekterVergleichTabellen())) { ?>
     <!-- Buttons zum Ein/Ausblenden der Vergleiche -->
     <div class="w3-section w3-margin-top">

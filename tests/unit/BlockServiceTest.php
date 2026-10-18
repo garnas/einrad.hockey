@@ -2,9 +2,9 @@
 
 namespace unit;
 
-use App\Entity\Team\nTeam;
-use App\Entity\Turnier\Turnier;
-use App\Service\Turnier\BlockService;
+use App\Team\Entity\Team;
+use App\Turnier\Entity\Turnier;
+use App\Turnier\Service\BlockService;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -77,8 +77,8 @@ class BlockServiceTest extends TestCase
     public function testIsBlockPassend(string $turnierblock, string $teamblock, bool $passend)
     {
         $turnier = new Turnier();
-        $turnier = $turnier->setBlock($turnierblock);
-        $teamStub = $this->createStub(nTeam::class);
+        $turnier = $turnier->setBlock($turnierblock)->setArt("I");
+        $teamStub = $this->createStub(Team::class);
         $teamStub->method('getBlock')->willReturn($teamblock);
         $this->assertEquals(
             expected: $passend,
@@ -109,7 +109,7 @@ class BlockServiceTest extends TestCase
     {
         $turnier = new Turnier();
         $turnier = $turnier->setBlock($turnierblock);
-        $teamStub = $this->createStub(nTeam::class);
+        $teamStub = $this->createStub(Team::class);
         $teamStub->method('getBlock')->willReturn($teamblock);
         $this->assertEquals(
             expected: $hoeher,

@@ -1,6 +1,6 @@
-<?php use App\Service\Turnier\TurnierLinks;
+<?php use App\Turnier\Service\TurnierLinks;
 
-/** @var \App\Model\Spielplan\Spielplan $spielplan */
+/** @var \App\Spielplan\Model\Spielplan $spielplan */
 $turnier = $spielplan->getTurnier();
 ?>
 <!-- Überschrift -->

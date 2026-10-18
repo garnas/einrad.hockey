@@ -2,6 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Ligaleitung\Repository\LigaleitungRepository;
+
 require_once '../../init.php';
 
 /////////////////////////////////////////////////////////////////////////////
@@ -32,13 +34,13 @@ include '../../templates/header.tmp.php'; ?>
 </div>
 
 <div class="w3-section">
-    <?php foreach (LigaLeitung::get_all('ligaausschuss') as $la): ?>
+    <?php foreach (LigaleitungRepository::get()->findByFunktion('ligaausschuss') as $la): ?>
         <div class="w3-row">
             <div class="w3-quarter">
-                <?= $la ['vorname'] . ' ' . $la['nachname'] ?>
+                <?= e($la->getSpieler()->getVorname() . ' ' . $la->getSpieler()->getNachname()) ?>
             </div>
             <div class="w3-quarter w3-text-grey">
-                <span class="w3-padding-small"><?= $la['teamname'] ?></span>
+                <span class="w3-padding-small"><?= e($la->getSpieler()->getTeam()?->getName()) ?></span>
             </div>
         </div>
     <?php endforeach; ?>
@@ -64,13 +66,13 @@ include '../../templates/header.tmp.php'; ?>
 </div>
 
 <div class="w3-section">
-    <?php foreach (LigaLeitung::get_all('team_technik') as $tk): ?>
+    <?php foreach (LigaleitungRepository::get()->findByFunktion('team_technik') as $tk): ?>
         <div class="w3-row">
             <div class="w3-quarter">
-                <?=$tk['vorname'] . ' ' . $tk['nachname'] ?>
+                <?= e($tk->getSpieler()->getVorname() . ' ' . $tk->getSpieler()->getNachname()) ?>
             </div>
             <div class="w3-threequarter w3-text-grey">
-                <span class="w3-padding-small"><?= $tk['teamname'] ?></span>
+                <span class="w3-padding-small"><?= e($tk->getSpieler()->getTeam()?->getName()) ?></span>
             </div>
         </div>
     <?php endforeach; ?>
@@ -95,13 +97,13 @@ include '../../templates/header.tmp.php'; ?>
 </div>
 
 <div class="w3-section">
-    <?php foreach (LigaLeitung::get_all('team_social_media') as $oa): ?>
+    <?php foreach (LigaleitungRepository::get()->findByFunktion('team_social_media') as $oa): ?>
         <div class="w3-row">
             <div class="w3-quarter">
-                <?= $oa['vorname'] . ' ' . $oa['nachname'] ?>
+                <?= e($oa->getSpieler()->getVorname() . ' ' . $oa->getSpieler()->getNachname()) ?>
             </div>
             <div class="w3-threequarter w3-text-grey">
-                <span class="w3-padding-small"><?= $oa['teamname'] ?></span>
+                <span class="w3-padding-small"><?= e($oa->getSpieler()->getTeam()?->getName()) ?></span>
             </div>
         </div>
     <?php endforeach; ?>
@@ -127,13 +129,13 @@ include '../../templates/header.tmp.php'; ?>
 </div>
 
 <div class="w3-section">
-    <?php foreach (LigaLeitung::get_all('team_schiripruefer') as $sp): ?>
+    <?php foreach (LigaleitungRepository::get()->findByFunktion('team_schiripruefer') as $sp): ?>
         <div class="w3-row">
             <div class="w3-quarter">
-                <?= $sp['vorname'] . ' ' . $sp['nachname'] ?>
+                <?= e($sp->getSpieler()->getVorname() . ' ' . $sp->getSpieler()->getNachname()) ?>
             </div>
             <div class="w3-threequarter w3-text-grey">
-                <span class="w3-padding-small"><?= $sp['teamname'] ?></span>
+                <span class="w3-padding-small"><?= e($sp->getSpieler()->getTeam()?->getName()) ?></span>
             </div>
         </div>
     <?php endforeach; ?>
@@ -159,13 +161,13 @@ include '../../templates/header.tmp.php'; ?>
 </div>
 
 <div class="w3-section">
-    <?php foreach (LigaLeitung::get_all('team_schirileitfaden') as $sp): ?>
+    <?php foreach (LigaleitungRepository::get()->findByFunktion('team_schirileitfaden') as $sp): ?>
         <div class="w3-row">
             <div class="w3-quarter">
-                <?= $sp['vorname'] . ' ' . $sp['nachname'] ?>
+                <?= e($sp->getSpieler()->getVorname() . ' ' . $sp->getSpieler()->getNachname()) ?>
             </div>
             <div class="w3-threequarter w3-text-grey">
-                <span class="w3-padding-small"><?= $sp['teamname'] ?></span>
+                <span class="w3-padding-small"><?= e($sp->getSpieler()->getTeam()?->getName()) ?></span>
             </div>
         </div>
     <?php endforeach; ?>
@@ -190,13 +192,13 @@ include '../../templates/header.tmp.php'; ?>
 </div>
 
 <div class="w3-section">
-    <?php foreach (LigaLeitung::get_all('team_jugendarbeit') as $sp): ?>
+    <?php foreach (LigaleitungRepository::get()->findByFunktion('team_jugendarbeit') as $sp): ?>
         <div class="w3-row">
             <div class="w3-quarter">
-                <?= $sp['vorname'] . ' ' . $sp['nachname'] ?>
+                <?= e($sp->getSpieler()->getVorname() . ' ' . $sp->getSpieler()->getNachname()) ?>
             </div>
             <div class="w3-threequarter w3-text-grey">
-                <span class="w3-padding-small"><?= $sp['teamname'] ?></span>
+                <span class="w3-padding-small"><?= e($sp->getSpieler()->getTeam()?->getName()) ?></span>
             </div>
         </div>
     <?php endforeach; ?>
@@ -221,13 +223,13 @@ include '../../templates/header.tmp.php'; ?>
 </div>
 
 <div class="w3-section">
-    <?php foreach (LigaLeitung::get_all('team_branding_merch') as $sp): ?>
+    <?php foreach (LigaleitungRepository::get()->findByFunktion('team_branding_merch') as $sp): ?>
         <div class="w3-row">
             <div class="w3-quarter">
-                <?= $sp['vorname'] . ' ' . $sp['nachname'] ?>
+                <?= e($sp->getSpieler()->getVorname() . ' ' . $sp->getSpieler()->getNachname()) ?>
             </div>
             <div class="w3-threequarter w3-text-grey">
-                <span class="w3-padding-small"><?= $sp['teamname'] ?></span>
+                <span class="w3-padding-small"><?= e($sp->getSpieler()->getTeam()?->getName()) ?></span>
             </div>
         </div>
     <?php endforeach; ?>

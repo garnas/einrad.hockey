@@ -2,10 +2,10 @@
 
 namespace integration;
 
-use App\Entity\Team\nTeam;
-use App\Entity\Team\TeamDetails;
-use App\Repository\Team\TeamRepository;
-use App\Service\Team\TeamService;
+use App\Team\Entity\Team;
+use App\Team\Entity\Teamdetails;
+use App\Team\Repository\TeamRepository;
+use App\Team\Service\TeamService;
 use PHPUnit\Framework\TestCase;
 
 class TurnierServiceTest extends TestCase
@@ -16,13 +16,13 @@ class TurnierServiceTest extends TestCase
         if ($team) {
             TeamRepository::get()->delete($team);
         }
-        $team = (new nTeam())
+        $team = (new Team())
             ->setName($teamname)
             ->setLigateam($ligateam)
             ->setPasswort($password)
             ->setAktiv($aktiv);
         $team->setDetails(
-            (new TeamDetails())
+            (new Teamdetails())
                 ->setTeam($team)
                 ->setTeamfoto(null)->setTrikotFarbe1(null)->setTrikotFarbe2(null),
         );

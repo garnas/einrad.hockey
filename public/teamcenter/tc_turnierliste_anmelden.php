@@ -2,11 +2,11 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-use App\Entity\Turnier\Turnier;
-use App\Repository\Turnier\TurnierRepository;
-use App\Service\Team\TeamService;
-use App\Service\Turnier\TurnierLinks;
-use App\Service\Turnier\TurnierSnippets;
+use App\Turnier\Entity\Turnier;
+use App\Turnier\Repository\TurnierRepository;
+use App\Team\Service\TeamService;
+use App\Turnier\Service\TurnierLinks;
+use App\Turnier\Service\TurnierSnippets;
 
 require_once '../../init.php';
 require_once '../../logic/session_team.logic.php'; //Auth
@@ -102,7 +102,7 @@ include '../../templates/header.tmp.php';?>
                 <td><?= e($turnier->getDetails()->getOrt()) ?></td>
                 <td><?= TurnierSnippets::blockColor($turnier, $teamEntity) ?></td>
                 <td><?= TurnierSnippets::phase($turnier) ?></td>
-                <td><?= e($turnier->getAusrichter()->getName()) ?></i></td>
+                <td><i><?= e($turnier->getAusrichter()->getName()) ?></i></td>
             </tr>
             <tr>
                 <td colspan="4" style="white-space:normal;" class="w3-left-align">

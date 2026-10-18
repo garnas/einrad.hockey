@@ -2,16 +2,16 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-use App\Entity\TurnierBericht\TurnierBericht;
-use App\Event\Turnier\nLigaBot;
-use App\Repository\Turnier\TurnierRepository;
-use App\Repository\TurnierBericht\TurnierBerichtRepository;
-use App\Service\Spielplan\SpielplanService;
-use App\Service\Team\FreilosService;
-use App\Service\Neuigkeit\FileService;
-use App\Service\Turnier\TabelleService;
-use App\Service\Turnier\TurnierService;
-use App\Service\Turnier\TurnierValidatorService;
+use App\Turnierbericht\Entity\Turnierbericht;
+use App\Turnier\Bot\LigaBot;
+use App\Turnier\Repository\TurnierRepository;
+use App\Turnierbericht\Repository\TurnierberichtRepository;
+use App\Spielplan\Service\SpielplanService;
+use App\Team\Service\FreilosService;
+use App\Neuigkeit\Service\FileService;
+use App\Tabelle\Service\TabelleService;
+use App\Turnier\Service\TurnierService;
+use App\Turnier\Service\TurnierValidator;
 
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
@@ -41,7 +41,7 @@ if (isset($_POST['ergebnis_loeschen'])) {
 
 //Ergebnis eintragen
 if (isset($_POST['ergebnis_eintragen'])) {
-    if (!TurnierValidatorService::isErgebnisEintragbar($turnier)) {
+    if (!TurnierValidator::isErgebnisEintragbar($turnier)) {
         Html::error("Turnierergebnis wurde nicht eingetragen");
         $error = true;
     }
@@ -65,7 +65,7 @@ if (isset($_POST['ergebnis_eintragen'])) {
     Html::info("Ergebnisse wurden manuell eingetragen. Das Turnier wurde in die Ergebnisphase versetzt.");
     $spieltag = $turnier->getSpieltag();
     if (TabelleService::isSpieltagBeendet($spieltag)) {
-        nLigaBot::blockWechsel();
+        LigaBot::blockWechsel();
     }
     FreilosService::handleAusgerichtetesTurnierFreilos($turnier);
     FreilosService::handleFreilosRecycling($turnier);
@@ -75,9 +75,9 @@ if (isset($_POST['ergebnis_eintragen'])) {
 // Spielplan automatisch erstellen
 if (isset($_POST['auto_spielplan_erstellen'])) {
     if (SpielplanService::erstellen($turnier)) {
-        if (TurnierBerichtRepository::get()->bericht($turnier_id) === null) {
-            $turnierbericht = new TurnierBericht($turnier);
-            TurnierBerichtRepository::get()->speichern($turnierbericht);
+        if (TurnierberichtRepository::get()->bericht($turnier_id) === null) {
+            $turnierbericht = new Turnierbericht($turnier);
+            TurnierberichtRepository::get()->speichern($turnierbericht);
         }
         Html::info("Das Turnier wurde in die Spielplan-Phase versetzt. Der Spielplan wird jetzt angezeigt.");
         Helper::reload('/liga/spielplan.php?turnier_id=' . $turnier->id());
@@ -112,9 +112,9 @@ if (isset($_POST['spielplan_hochladen'])) {
                 Html::info("Manueller Spielplan hochgeladen. Das Turnier wurde in die Spielplan-Phase versetzt.");
             }
             TurnierRepository::get()->speichern($turnier);
-            if (TurnierBerichtRepository::get()->bericht($turnier_id) === null) {
-                $turnierbericht = new TurnierBericht($turnier);
-                TurnierBerichtRepository::get()->speichern($turnierbericht);
+            if (TurnierberichtRepository::get()->bericht($turnier_id) === null) {
+                $turnierbericht = new Turnierbericht($turnier);
+                TurnierberichtRepository::get()->speichern($turnierbericht);
             }
             Helper::reload(get: "?turnier_id=" . $turnier->id());
         }

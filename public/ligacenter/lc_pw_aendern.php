@@ -2,6 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Ligaleitung\Service\LigaleitungService;
+
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
 
@@ -10,7 +12,7 @@ if (isset($_POST['change'])) {
     $passwort_alt = $_POST['passwort_alt'];
     $passwort_neu = $_POST['passwort_neu'];
     if (strlen($passwort_neu) >= 8) {
-        if (LigaLeitung::set_passwort($_SESSION['logins']['la']['login'], $passwort_neu, $passwort_alt)) {
+        if (LigaleitungService::setPasswort($_SESSION['logins']['la']['login'], $passwort_neu, $passwort_alt)) {
             Html::info("Dein Passwort wurde geändert");
             Helper::reload("/ligacenter/lc_start.php");
         }

@@ -1,9 +1,9 @@
 <?php
 
 // Inititalisierung
-use App\Repository\Team\TeamRepository;
-use App\Service\Neuigkeit\FileService;
-use App\Service\Team\TeamService;
+use App\Team\Repository\TeamRepository;
+use App\Neuigkeit\Service\FileService;
+use App\Team\Service\TeamService;
 
 $team_id = (Helper::$teamcenter) ? $_SESSION['logins']['team']['id'] : (int) @$_GET['team_id'];
 $team = TeamRepository::get()->team($team_id);

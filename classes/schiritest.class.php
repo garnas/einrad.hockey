@@ -1,6 +1,6 @@
 <?php # -*- php -*-
 
-use App\Entity\Team\Spieler;
+use App\Spieler\Entity\Spieler;
 
 class SchiriTest
 {

@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+<?php
+
+use App\Ligaleitung\Service\LigaleitungService;
+
+?>
+    <!DOCTYPE html>
 
 <html id="myHtml" class="w3-light-grey" style="overflow-y: scroll;" lang="de">
 <head>
@@ -32,16 +37,16 @@
 
     <?php
     // Hiermit wird die Leiste angezeigt, wenn man eingeloggt ist
-    if (LigaLeitung::is_logged_in("ligaausschuss")) {
+    if (LigaleitungService::isLoggedIn("ligaausschuss")) {
         include 'navigation/nav_ligacenter.tmp.php';
     }
-    if (LigaLeitung::is_logged_in("team_social_media")) {
-        include 'navigation/nav_oefficenter.tmp.php';
-    }
-    if (isset($_SESSION['logins']['team'])) {
-        include 'navigation/nav_teamcenter.tmp.php';
-    }
-    ?>
+if (LigaleitungService::isLoggedIn("team_social_media")) {
+    include 'navigation/nav_oefficenter.tmp.php';
+}
+if (isset($_SESSION['logins']['team'])) {
+    include 'navigation/nav_teamcenter.tmp.php';
+}
+?>
     <!-- Zentrierung der Webseite und Breite mit welcher diese dargestellt werden soll -->
     <div class="w3-content" style="max-width:<?= Html::$page_width ?>;">
         <div class="w3-container">

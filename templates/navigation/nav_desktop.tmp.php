@@ -1,3 +1,8 @@
+<?php
+
+use App\Ligaleitung\Service\LigaleitungService;
+
+?>
 <!--Navigation für Desktop und Tablet -->
 <div class="w3-display-container">
     
@@ -95,11 +100,11 @@
             <a href='<?= Env::BASE_URL ?>/teamcenter/tc_logout.php' class="w3-button w3-right w3-hover-primary">
                 <?= Html::icon("logout", 24, 26) ?> Logout
             </a>
-        <?php elseif (LigaLeitung::is_logged_in("team_social_media")): ?>
+        <?php elseif (LigaleitungService::isLoggedIn("team_social_media")): ?>
             <a href='<?= Env::BASE_URL ?>/oefficenter/oc_logout.php' class="w3-button w3-right w3-hover-primary">
                 <?= Html::icon("logout", tag: "h3") ?> Logout
             </a>
-        <?php elseif (LigaLeitung::is_logged_in("ligaausschuss")): ?>
+        <?php elseif (LigaleitungService::isLoggedIn("ligaausschuss")): ?>
             <a href='<?= Env::BASE_URL ?>/ligacenter/lc_logout.php' class="w3-button w3-right w3-hover-primary">
                 <?= Html::icon("logout", tag: "h3") ?> Logout
             </a>

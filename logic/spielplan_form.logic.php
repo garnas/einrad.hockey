@@ -1,14 +1,14 @@
 <?php
 
-use App\Event\Turnier\nLigaBot;
-use App\Repository\Turnier\TurnierRepository;
-use App\Repository\TurnierBericht\TurnierBerichtRepository;
-use App\Service\Spielplan\SpielplanService;
-use App\Service\Team\FreilosService;
-use App\Service\Turnier\TabelleService;
-use App\Service\Turnier\TurnierService;
-use App\Service\Turnier\TurnierValidatorService;
-use App\Service\TurnierBericht\TurnierBerichtService;
+use App\Turnier\Bot\LigaBot;
+use App\Turnier\Repository\TurnierRepository;
+use App\Turnierbericht\Repository\TurnierberichtRepository;
+use App\Spielplan\Service\SpielplanService;
+use App\Team\Service\FreilosService;
+use App\Tabelle\Service\TabelleService;
+use App\Turnier\Service\TurnierService;
+use App\Turnier\Service\TurnierValidator;
+use App\Turnierbericht\Service\TurnierberichtService;
 
 $turnier = $spielplan->getTurnier();
 
@@ -75,7 +75,7 @@ if (isset($_POST["turnierergebnis_speichern"])) {
     }
 
     // Testen ob Turnier tabellentechnisch eingetragen werden darf.
-    if (!TurnierValidatorService::isErgebnisEintragbar($turnier)) {
+    if (!TurnierValidator::isErgebnisEintragbar($turnier)) {
         Html::error("Turnierergebnis kann nicht eingetragen werden. Kontaktiere bitte den Ligaausschuss.");
         $error = true;
     }
@@ -92,7 +92,7 @@ if (isset($_POST["turnierergebnis_speichern"])) {
         Html::info("Das Turnierergebnis wurde dem Ligaausschuss übermittelt und wird jetzt in den Ligatabellen angezeigt.");
         $spieltag = $turnier->getSpieltag();
         if (TabelleService::isSpieltagBeendet($spieltag)) {
-            nLigaBot::blockWechsel();
+            LigaBot::blockWechsel();
         }
         FreilosService::handleAusgerichtetesTurnierFreilos($turnier);
         FreilosService::handleFreilosRecycling($turnier);
@@ -102,8 +102,8 @@ if (isset($_POST["turnierergebnis_speichern"])) {
 }
 
 // Hinweis Kaderkontrolle und Turnierreport
-$turnier_bericht = TurnierBerichtRepository::get()->bericht($turnier_id);
-if (TurnierBerichtService::isKaderChecked($turnier_bericht)) {
+$turnier_bericht = TurnierberichtRepository::get()->bericht($turnier_id);
+if (TurnierberichtService::isKaderChecked($turnier_bericht)) {
     Html::info("Bitte kontrolliert die Teamkader und setzt im "
             . Html::link('../teamcenter/tc_turnier_report.php?turnier_id='
             . $turnier_id, 'Turnierreport') . " das entsprechende Häkchen.", esc: false);

@@ -1,0 +1,99 @@
+<?php
+
+namespace App\Turnier\Entity;
+
+use App\Team\Entity\Team;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: "turniere_ergebnisse", indexes: [new ORM\Index(columns: ["team_id"], name: "team_id"), new ORM\Index(columns: ["turnier_id"], name: "turniere_ergebnisse_ibfk_2")])]
+class Turnierergebnis
+{
+    #[ORM\GeneratedValue(strategy: "IDENTITY")]
+    #[ORM\Id]
+    #[ORM\Column(name: "turnier_ergebnis_id", type: "integer", nullable: false)]
+    private $turnierErgebnisId;
+
+    #[ORM\Column(name: "ergebnis", type: "integer", nullable: true)]
+    private ?int $ergebnis;
+
+    #[ORM\Column(name: "platz", type: "integer", nullable: false)]
+    private int $platz;
+
+    #[ORM\Column(name: "saison_uebernahme_verhindern", type: "boolean", nullable: false)]
+    private bool $saisonUebernahmeVerhindern;
+
+    #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: "ergebnisse")]
+    private Team $team;
+
+    #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
+    #[ORM\ManyToOne(targetEntity: Turnier::class, inversedBy: "ergebnis")]
+    private Turnier $turnier;
+
+    public function getTurnierErgebnisId(): ?int
+    {
+        return $this->turnierErgebnisId;
+    }
+
+    public function getErgebnis(): ?int
+    {
+        return $this->ergebnis;
+    }
+
+    public function setErgebnis(?int $ergebnis): self
+    {
+        $this->ergebnis = $ergebnis;
+
+        return $this;
+    }
+
+    public function getPlatz(): ?int
+    {
+        return $this->platz;
+    }
+
+    public function setPlatz(int $platz): self
+    {
+        $this->platz = $platz;
+
+        return $this;
+    }
+
+    public function getTurnier(): ?Turnier
+    {
+        return $this->turnier;
+    }
+
+    public function setTurnier(?Turnier $turnier): self
+    {
+        $this->turnier = $turnier;
+
+        return $this;
+    }
+
+    public function getTeam(): Team
+    {
+        return $this->team;
+    }
+
+    public function setTeam(Team $team): self
+    {
+        $this->team = $team;
+
+        return $this;
+    }
+
+    public function isSaisonUebernahmeVerhindern(): bool
+    {
+        return $this->saisonUebernahmeVerhindern;
+    }
+
+    public function setSaisonUebernahmeVerhindern(bool $saisonUebernahmeVerhindern): self
+    {
+        $this->saisonUebernahmeVerhindern = $saisonUebernahmeVerhindern;
+        return $this;
+    }
+
+
+}

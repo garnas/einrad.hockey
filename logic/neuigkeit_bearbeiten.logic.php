@@ -1,9 +1,9 @@
 <?php
 
-use App\Repository\Neuigkeit\NeuigkeitRepository;
-use App\Enum\NeuigkeitArt;
-use App\Service\Neuigkeit\PermissionService;
-use App\Service\Neuigkeit\FileService;
+use App\Neuigkeit\Repository\NeuigkeitRepository;
+use App\Neuigkeit\Enum\NeuigkeitArt;
+use App\Neuigkeit\Service\NeuigkeitPermission;
+use App\Neuigkeit\Service\FileService;
 
 $neuigkeiten_id = (int) @$_GET['neuigkeiten_id'];
 $neuigkeit = NeuigkeitRepository::get()->findById($neuigkeiten_id);
@@ -12,7 +12,7 @@ if (empty($neuigkeit)) {
     Helper::not_found("Neuigkeiteneintrag konnte nicht gefunden werden.");
 }
 
-if (!PermissionService::canEdit($neuigkeit->getEingetragenVon())) {
+if (!NeuigkeitPermission::canEdit($neuigkeit->getEingetragenVon())) {
     Html::error("Neuigkeit darf nicht bearbeitet werden.");
     Helper::reload("/liga/neues.php");
 }
@@ -32,7 +32,7 @@ if (isset($_POST['change_neuigkeit'])) {
     $text = $_POST['text']; // ist required, daher kein isset nötig
 
     // Bild
-    $bild_verlinken = PermissionService::canEmbedLink() ? $_POST['bild_verlinken'] : '';
+    $bild_verlinken = NeuigkeitPermission::canEmbedLink() ? $_POST['bild_verlinken'] : '';
     if (!empty($_FILES["jpgupload"]["tmp_name"])) {
         $target_file_jpg = FileService::uploadImage($_FILES["jpgupload"]);
         if (!$target_file_jpg) {
@@ -52,7 +52,7 @@ if (isset($_POST['change_neuigkeit'])) {
         $target_file_pdf = $neuigkeit->getLinkPdf();
     }
 
-    $zeitpunkt = PermissionService::canSetTime() ? new Datetime($_POST['zeitpunkt']) : new DateTime('now');
+    $zeitpunkt = NeuigkeitPermission::canSetTime() ? new Datetime($_POST['zeitpunkt']) : new DateTime('now');
 
     if ($error) {
         Html::error("Es wurden keine Änderungen vorgenommen. Fehler beim Hochladen der Dateien.");

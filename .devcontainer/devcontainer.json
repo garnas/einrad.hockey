@@ -3,7 +3,11 @@
   "dockerComposeFile": "docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/workspace",
-  
+
+  "containerEnv": {
+    "PLAYWRIGHT_BROWSERS_PATH": "/root/.cache/ms-playwright"
+  },
+
   "postCreateCommand": "bash .devcontainer/setup.sh",
   "postStartCommand": "apache2ctl start",
   

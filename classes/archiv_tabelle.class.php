@@ -1,7 +1,7 @@
 <?php
 
-use App\Repository\Team\TeamRepository;
-use App\Service\Turnier\TabelleService;
+use App\Team\Repository\TeamRepository;
+use App\Tabelle\Service\TabelleService;
 
 /**
  * Class Archiv_Tabelle

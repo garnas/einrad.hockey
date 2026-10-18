@@ -2,8 +2,7 @@
 
 require_once '../../init.php';
 
-use App\Entity\Team\Spieler;
-use App\Service\Turnier\TabelleService;
+use App\Tabelle\Service\TabelleService;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -37,16 +36,10 @@ $header = [
         "teamname",
         "anzahl spieler",
         "block",
-        "anzahl_gespielter_turniere_aktuelle_saison",
+        "anzahl_setzliste_turniere_aktuelle_saison",
     ],
 ];
 
-$filter = static function (Spieler $spieler) {
-    return $spieler->getLetzteSaison() < Config::SAISON;
-};
-$filter2 = static function (\App\Entity\Turnier\TurniereListe $liste) {
-    return $liste->getTurnier()->getSaison() != Config::SAISON;
-};
 $auswertung = $header;
 foreach ($result as $row) {
     $team_id = $row["team_id"];

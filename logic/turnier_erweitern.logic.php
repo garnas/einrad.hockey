@@ -1,9 +1,9 @@
 <?php
 
-use App\Entity\Turnier\Turnier;
-use App\Service\Turnier\TurnierService;
-use App\Service\Turnier\TurnierValidatorService;
-use App\Repository\Turnier\TurnierRepository;
+use App\Turnier\Entity\Turnier;
+use App\Turnier\Service\TurnierService;
+use App\Turnier\Service\TurnierValidator;
+use App\Turnier\Repository\TurnierRepository;
 
 if (isset($_POST['erweitern_turnier'])) {
     /** @var Turnier $turnier */
@@ -11,7 +11,7 @@ if (isset($_POST['erweitern_turnier'])) {
     $einBlockRunter = ($_POST['single'] ?? '') === 'lower';
     $blockfrei = ($_POST['multiple'] ?? '')  === 'free';
 
-    if (TurnierValidatorService::onErweiterung($turnier)) {
+    if (TurnierValidator::onErweiterung($turnier)) {
         if ($einBlockHoch) {
             TurnierService::erweitereBlockHoch($turnier);
             TurnierService::setzListeAuffuellen($turnier);

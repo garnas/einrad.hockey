@@ -9,11 +9,11 @@
  * - ein zweites Team mit einem übernehmbaren Spieler (für "Von anderem Team übernehmen")
  */
 
-use App\Entity\Team\nTeam;
-use App\Entity\Team\Spieler;
-use App\Entity\Team\TeamDetails;
-use App\Repository\Spieler\SpielerRepository;
-use App\Repository\Team\TeamRepository;
+use App\Spieler\Entity\Spieler;
+use App\Spieler\Repository\SpielerRepository;
+use App\Team\Entity\Team;
+use App\Team\Entity\Teamdetails;
+use App\Team\Repository\TeamRepository;
 
 require_once __DIR__ . '/../../../init.php';
 
@@ -37,28 +37,28 @@ foreach ([$teamName, $geberTeamName] as $existingTeamName) {
     }
 }
 
-$team = (new nTeam())
+$team = (new Team())
     ->setName($teamName)
     ->setLigateam('Ja')
     ->setAktiv('Ja')
     ->setPasswort($teamPasswort)
     ->setPasswortGeaendert('Ja'); // Sonst Redirect zu tc_pw_aendern.php
 $team->setDetails(
-    (new TeamDetails())
+    (new Teamdetails())
         ->setTeam($team)
         ->setLigavertreter('Playwright Bot'), // Sonst Redirect zu tc_teamdaten_aendern.php
 );
 
 TeamRepository::get()->speichern($team);
 
-$geberTeam = (new nTeam())
+$geberTeam = (new Team())
     ->setName($geberTeamName)
     ->setLigateam('Ja')
     ->setAktiv('Ja')
     ->setPasswort('nicht-eingeloggt')
     ->setPasswortGeaendert('Ja');
 $geberTeam->setDetails(
-    (new TeamDetails())
+    (new Teamdetails())
         ->setTeam($geberTeam)
         ->setLigavertreter('Playwright Bot'),
 );

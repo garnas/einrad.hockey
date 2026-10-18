@@ -2,7 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-use App\Repository\Team\TeamRepository;
+use App\Spieler\Repository\SpielerRepository;
+use App\Team\Repository\TeamRepository;
 
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth
@@ -16,8 +17,8 @@ $max_schiris = $max_spieler = $teams_mit_zwei_schiris = $teams_zweites_freilos_e
 $stats = [];
 foreach ($teams as $team_id => $team) {
     $genug_schiris = false;
-    $kader = nSpieler::get_kader($team_id, Config::SAISON);
-    $kader_alt = nSpieler::get_kader($team_id, Config::SAISON - 1) + nSpieler::get_kader($team_id, Config::SAISON - 2);
+    $kader = SpielerRepository::get()->kader($team_id, Config::SAISON);
+    $kader_alt = SpielerRepository::get()->kader($team_id, Config::SAISON - 1) + SpielerRepository::get()->kader($team_id, Config::SAISON - 2);
 
 
     $stats[$team_id]['kader'] = count($kader);
@@ -27,7 +28,7 @@ foreach ($teams as $team_id => $team) {
 
     //Schiris zählen:
     foreach ($kader as $spieler) {
-        if ($spieler->schiri >= Config::SAISON) {
+        if ($spieler->getSchiri() >= Config::SAISON) {
             $stats[$team_id]['schiris']++;
             if ($stats[$team_id]['schiris'] >= 2) {
                 $genug_schiris = true;
@@ -35,7 +36,7 @@ foreach ($teams as $team_id => $team) {
         }
     }
     foreach ($kader_alt as $spieler) {
-        if ($spieler->schiri >= Config::SAISON) {
+        if ($spieler->getSchiri() >= Config::SAISON) {
             $stats[$team_id]['schiris_alt']++;
         }
     }

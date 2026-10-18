@@ -5,13 +5,14 @@
 /////////////////////////////////////////////////////////////////////////////
 require_once '../../init.php';
 
+use App\Turnier\Repository\TurnierRepository;
+
 Helper::$log_user = false; // Keine User-Logs
 
-// Assoziatives Array aller Turnieranmeldungen der Aktuellen Saison
-$turnieranmeldungen = nTurnier::get_all_anmeldungen();
+// Alle Turnieranmeldungen der Aktuellen Saison
+$turnieranmeldungen = TurnierRepository::get()->getAnmeldungenOffeneTurniere();
 
-$xml = new SimpleXMLElement('<turnieranmeldungen/>');
-$xml_content = xml::array_to_xml($turnieranmeldungen, $xml, "meldungen", "team");
+$xml_content = xml::turnieranmeldungenToXml($turnieranmeldungen);
 
 header('Content-type: text/xml');
 echo $xml_content;

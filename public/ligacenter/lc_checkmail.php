@@ -1,7 +1,7 @@
 <?php
 
-use App\Entity\Sonstiges\nMailbot;
-use App\Repository\Mailbot\MailbotRepository;
+use App\Mailbot\Entity\nMailbot;
+use App\Mailbot\Repository\MailbotRepository;
 
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //Auth

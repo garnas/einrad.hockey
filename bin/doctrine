@@ -1,14 +1,14 @@
 #!/usr/bin/env php
 <?php
 
-use App\Repository\DoctrineWrapper;
+use App\Shared\DoctrineWrapper;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 
 require_once 'init.php';
 
 # Die doctrine Konsole soll auch im Wartungsmodus verfügbar sein!
-$_SESSION['wartungsmodus'] = False;
+$_SESSION['wartungsmodus'] = false;
 
 DoctrineWrapper::setup();
 $entityManager = DoctrineWrapper::manager();

@@ -2,6 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Ligaleitung\Service\LigaleitungService;
+
 require_once '../../init.php';
 require_once '../../logic/session_la.logic.php'; //auth
 
@@ -13,7 +15,7 @@ $downloads = Nav::get_lc_downloads();
 /////////////////////////////////////////////////////////////////////////////
 include '../../templates/header.tmp.php'; ?>
 
-<h1 class='w3-center w3-text-primary'>Hallo <?= LigaLeitung::get_details($_SESSION['logins']['la']['login'])['vorname'] ?>!</h1>
+<h1 class='w3-center w3-text-primary'>Hallo <?= e(LigaleitungService::getLoggedInLigaleitungByFunktion("ligaausschuss")?->getSpieler()->getVorname()) ?>!</h1>
 <div class="flex-container">
     <?php foreach ($panels as $panel): ?>
         <a class="no flex-item <?= $panel[2] ?> w3-round-xlarge w3-hover-opacity" href="<?= $panel[0] ?>">

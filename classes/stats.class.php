@@ -1,6 +1,6 @@
 <?php
 
-use App\Repository\Team\TeamRepository;
+use App\Team\Repository\TeamRepository;
 
 class Stats
 {

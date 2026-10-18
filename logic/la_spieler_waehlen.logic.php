@@ -1,6 +1,6 @@
 <?php
 
-use App\Repository\Spieler\SpielerRepository;
+use App\Spieler\Repository\SpielerRepository;
 
 $spielerAlle = SpielerRepository::get()->getSpielerAndTeam();
 
