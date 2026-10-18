@@ -20,7 +20,7 @@ php bin/doctrine orm:generate-proxies || true
 echo "Installing npm dependencies for Playwright E2E tests..."
 npm install
 
-echo "Installing Playwright browser (Chromium)..."
-npx playwright install --with-deps chromium
+echo "Installing Playwright browsers (Chromium + Chrome) and system dependencies..."
+npx playwright install --with-deps chromium chrome
 
 echo "Setup finished successfully!"
