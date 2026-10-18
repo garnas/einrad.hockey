@@ -2,26 +2,26 @@
 
 namespace unit;
 
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use App\Entity\Turnier\Turnier;
-use App\Entity\Turnier\TurnierDetails;
-use App\Entity\Turnier\TurniereListe;
+use App\Entity\Turnier\Turnierdetails;
+use App\Entity\Turnier\Turnieranmeldung;
 use App\Event\Turnier\nLigaBot;
 use App\Service\Turnier\TurnierService;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 
-class TurniereListeTest extends TestCase
+class TurnieranmeldungTest extends TestCase
 {
     protected function provideTeamAnmeldungMock(Turnier $turnier, string $name, bool $ligateam, ?string $block, string $liste, ?int $positionWarteliste = null): int
     {
-        $teamMock = $this->createMock(nTeam::class);
+        $teamMock = $this->createMock(Team::class);
         $teamMock->method('getBlock')->willReturn($block);
         $teamMock->method('isLigaTeam')->willReturn($ligateam);
         $teamMock->method('getName')->willReturn($name);
 
 
-        $anmeldung = new TurniereListe();
+        $anmeldung = new Turnieranmeldung();
         $anmeldung
             ->setTeam($teamMock)
             ->setListe($liste)
@@ -43,7 +43,7 @@ class TurniereListeTest extends TestCase
             ->setBlock($block)
             ->setPhase($phase)
             ->setDatum(DateTime::createFromFormat('Y-m-d', '2020-01-01'));
-        $turnier->setDetails((new TurnierDetails())->setTurnier($turnier));
+        $turnier->setDetails((new Turnierdetails())->setTurnier($turnier));
         $turnier->getDetails()
             ->setPlaetze($plaetze);
         return $turnier;

@@ -7,9 +7,9 @@ use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use App\Entity\Turnier\Turnier;
-use App\Service\TurnierBericht\TurnierBerichtService;
+use App\Service\Turnierbericht\TurnierberichtService;
 
-class TurnierBerichtServiceTest extends TestCase
+class TurnierberichtServiceTest extends TestCase
 {
     public static function provideDates(): array
     {
@@ -34,7 +34,7 @@ class TurnierBerichtServiceTest extends TestCase
         $turnier->method('getDatum')->willReturn($turnierdatum);
         $this->assertEquals(
             expected: $fristdatum,
-            actual: TurnierBerichtService::getBearbeitungFrist($turnier)
+            actual: TurnierberichtService::getBearbeitungFrist($turnier)
         );
     }
 
@@ -75,7 +75,7 @@ class TurnierBerichtServiceTest extends TestCase
         $turnier->method('getDatum')->willReturn($turnierdatum);
         $this->assertEquals(
             expected: $value,
-            actual: TurnierBerichtService::isInBearbeitungFrist($turnier, $bearbeitungdatum)
+            actual: TurnierberichtService::isInBearbeitungFrist($turnier, $bearbeitungdatum)
         );
     }
 }

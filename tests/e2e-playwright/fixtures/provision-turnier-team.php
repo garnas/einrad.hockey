@@ -8,12 +8,12 @@
  * sonst zu tc_kader.php umleitet (siehe Zeile 12 der geprüften Datei).
  */
 
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use App\Entity\Team\Spieler;
-use App\Entity\Team\TeamDetails;
+use App\Entity\Team\Teamdetails;
 use App\Entity\Turnier\Turnier;
 use App\Repository\DoctrineWrapper;
-use App\Repository\Spieler\SpielerRepository;
+use App\Repository\Team\SpielerRepository;
 use App\Repository\Team\TeamRepository;
 use App\Repository\Turnier\TurnierRepository;
 
@@ -36,14 +36,14 @@ if ($existingTeam) {
     TeamRepository::get()->delete($existingTeam);
 }
 
-$team = (new nTeam())
+$team = (new Team())
     ->setName($teamName)
     ->setLigateam('Ja')
     ->setAktiv('Ja')
     ->setPasswort($teamPasswort)
     ->setPasswortGeaendert('Ja'); // Sonst Redirect zu tc_pw_aendern.php
 $team->setDetails(
-    (new TeamDetails())
+    (new Teamdetails())
         ->setTeam($team)
         ->setLigavertreter('Playwright Bot'), // Sonst Redirect zu tc_teamdaten_aendern.php
 );

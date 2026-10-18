@@ -2,7 +2,7 @@
 
 namespace unit;
 
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use App\Entity\Turnier\Turnier;
 use App\Service\Turnier\BlockService;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -78,7 +78,7 @@ class BlockServiceTest extends TestCase
     {
         $turnier = new Turnier();
         $turnier = $turnier->setBlock($turnierblock);
-        $teamStub = $this->createStub(nTeam::class);
+        $teamStub = $this->createStub(Team::class);
         $teamStub->method('getBlock')->willReturn($teamblock);
         $this->assertEquals(
             expected: $passend,
@@ -109,7 +109,7 @@ class BlockServiceTest extends TestCase
     {
         $turnier = new Turnier();
         $turnier = $turnier->setBlock($turnierblock);
-        $teamStub = $this->createStub(nTeam::class);
+        $teamStub = $this->createStub(Team::class);
         $teamStub->method('getBlock')->willReturn($teamblock);
         $this->assertEquals(
             expected: $hoeher,

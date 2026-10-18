@@ -9,8 +9,8 @@
  *   E-Mail-Adresse eines Teams nicht gelöscht werden kann
  */
 
-use App\Entity\Team\nTeam;
-use App\Entity\Team\TeamDetails;
+use App\Entity\Team\Team;
+use App\Entity\Team\Teamdetails;
 use App\Repository\Team\TeamRepository;
 
 require_once __DIR__ . '/../../../init.php';
@@ -28,14 +28,14 @@ foreach ([$teamName, $soloTeamName] as $existingTeamName) {
     }
 }
 
-$team = (new nTeam())
+$team = (new Team())
     ->setName($teamName)
     ->setLigateam('Ja')
     ->setAktiv('Ja')
     ->setPasswort($teamPasswort)
     ->setPasswortGeaendert('Ja'); // Sonst Redirect zu tc_pw_aendern.php
 $team->setDetails(
-    (new TeamDetails())
+    (new Teamdetails())
         ->setTeam($team)
         ->setLigavertreter('Playwright Bot'), // Sonst Redirect zu tc_teamdaten_aendern.php
 );
@@ -47,14 +47,14 @@ $kontakte = new Kontakt($team->id());
 $kontakte->set_email('team-a@playwright-test.de', 'Ja', 'Ja');
 $kontakte->set_email('team-b@playwright-test.de', 'Nein', 'Nein');
 
-$soloTeam = (new nTeam())
+$soloTeam = (new Team())
     ->setName($soloTeamName)
     ->setLigateam('Ja')
     ->setAktiv('Ja')
     ->setPasswort($teamPasswort)
     ->setPasswortGeaendert('Ja');
 $soloTeam->setDetails(
-    (new TeamDetails())
+    (new Teamdetails())
         ->setTeam($soloTeam)
         ->setLigavertreter('Playwright Bot'),
 );

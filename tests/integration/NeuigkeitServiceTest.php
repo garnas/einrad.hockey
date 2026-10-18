@@ -2,7 +2,7 @@
 
 namespace integration;
 
-use App\Entity\Sonstiges\Neuigkeit;
+use App\Entity\Neuigkeit\Neuigkeit;
 use App\Enum\NeuigkeitArt;
 use App\Repository\DoctrineWrapper;
 use App\Repository\Neuigkeit\NeuigkeitRepository;

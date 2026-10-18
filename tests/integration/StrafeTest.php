@@ -2,9 +2,9 @@
 
 namespace integration;
 
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use App\Entity\Team\Strafe;
-use App\Entity\Team\TeamDetails;
+use App\Entity\Team\Teamdetails;
 use App\Repository\Team\TeamRepository;
 use App\Repository\Turnier\TurnierRepository;
 use Config;
@@ -12,18 +12,18 @@ use PHPUnit\Framework\TestCase;
 
 class StrafeTest extends TestCase
 {
-    protected function provideTeam(): nTeam
+    protected function provideTeam(): Team
     {
         $team = TeamRepository::get()->findByName("ABC Testteam");
         if ($team) {
             TeamRepository::get()->delete($team);
         }
-        $team = (new nTeam())
+        $team = (new Team())
             ->setName("ABC Testteam")
             ->setLigateam("Ja")
             ->setAktiv("Ja");
         $team->setDetails(
-            (new TeamDetails())
+            (new Teamdetails())
                 ->setTeam($team),
         );
         TeamRepository::get()->speichern($team);
