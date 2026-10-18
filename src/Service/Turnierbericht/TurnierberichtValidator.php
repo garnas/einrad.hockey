@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Service\TurnierBericht;
+namespace App\Service\Turnierbericht;
 
 use App\Repository\Team\TeamRepository;
-use App\Service\Team\TeamService;
 
-class TurnierBerichtValidatorService
+class TurnierberichtValidator
 {
     public static function validTeam(string $teamname): bool
     {

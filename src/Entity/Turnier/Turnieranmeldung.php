@@ -2,7 +2,7 @@
 
 namespace App\Entity\Turnier;
 
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
         new ORM\Index(name: "turniere_liste_ibfk_1", columns: ["team_id"]),
     ],
 )]
-class TurniereListe
+class Turnieranmeldung
 {
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Id]
@@ -39,15 +39,15 @@ class TurniereListe
     private string $liste = 'setz';
 
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
-    #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "turniereListe")]
-    private nTeam $team;
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: "turniereListe")]
+    private Team $team;
 
-    public function getTeam(): nTeam
+    public function getTeam(): Team
     {
         return $this->team;
     }
 
-    public function setTeam(nTeam $team): self
+    public function setTeam(Team $team): self
     {
         $this->team = $team;
         return $this;

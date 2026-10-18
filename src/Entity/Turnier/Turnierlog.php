@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: "turniere_log", indexes: [new ORM\Index(name: "turnier_id", columns: ["turnier_id"])])]
-class TurniereLog
+class Turnierlog
 {
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Id]

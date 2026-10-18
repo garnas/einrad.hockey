@@ -2,13 +2,13 @@
 
 use App\Event\Turnier\nLigaBot;
 use App\Repository\Turnier\TurnierRepository;
-use App\Repository\TurnierBericht\TurnierBerichtRepository;
+use App\Repository\TurnierBericht\TurnierberichtRepository;
 use App\Service\Spielplan\SpielplanService;
 use App\Service\Team\FreilosService;
 use App\Service\Turnier\TabelleService;
 use App\Service\Turnier\TurnierService;
-use App\Service\Turnier\TurnierValidatorService;
-use App\Service\TurnierBericht\TurnierBerichtService;
+use App\Service\Turnier\TurnierValidator;
+use App\Service\Turnierbericht\TurnierberichtService;
 
 $turnier = $spielplan->getTurnier();
 
@@ -75,7 +75,7 @@ if (isset($_POST["turnierergebnis_speichern"])) {
     }
 
     // Testen ob Turnier tabellentechnisch eingetragen werden darf.
-    if (!TurnierValidatorService::isErgebnisEintragbar($turnier)) {
+    if (!TurnierValidator::isErgebnisEintragbar($turnier)) {
         Html::error("Turnierergebnis kann nicht eingetragen werden. Kontaktiere bitte den Ligaausschuss.");
         $error = true;
     }
@@ -102,8 +102,8 @@ if (isset($_POST["turnierergebnis_speichern"])) {
 }
 
 // Hinweis Kaderkontrolle und Turnierreport
-$turnier_bericht = TurnierBerichtRepository::get()->bericht($turnier_id);
-if (TurnierBerichtService::isKaderChecked($turnier_bericht)) {
+$turnier_bericht = TurnierberichtRepository::get()->bericht($turnier_id);
+if (TurnierberichtService::isKaderChecked($turnier_bericht)) {
     Html::info("Bitte kontrolliert die Teamkader und setzt im "
             . Html::link('../teamcenter/tc_turnier_report.php?turnier_id='
             . $turnier_id, 'Turnierreport') . " das entsprechende Häkchen.", esc: false);

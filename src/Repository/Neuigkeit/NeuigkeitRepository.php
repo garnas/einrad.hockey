@@ -2,17 +2,17 @@
 
 namespace App\Repository\Neuigkeit;
 
-use App\Entity\Sonstiges\Neuigkeit;
+use App\Entity\Neuigkeit\Neuigkeit;
 use App\Enum\NeuigkeitArt;
 use App\Repository\DoctrineWrapper;
-use App\Repository\TraitSingletonRepository;
+use App\Repository\SingletonRepositoryTrait;
 use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Collections\Collection;
 
 class NeuigkeitRepository
 {
-    use TraitSingletonRepository;
+    use SingletonRepositoryTrait;
 
     private EntityRepository $neuigkeit;
 

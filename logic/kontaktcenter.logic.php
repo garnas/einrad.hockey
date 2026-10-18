@@ -1,6 +1,8 @@
 <?php
 
+use App\Repository\Ligaleitung\LigaleitungRepository;
 use App\Repository\Team\TeamRepository;
+use App\Service\Ligaleitung\LigaleitungService;
 use App\Service\Turnier\TabelleService;
 
 // BCC Grenze
@@ -175,11 +177,10 @@ if (isset($_SESSION[$list_id])) {
 }
 
 if (Helper::$ligacenter) {
-    $las = Ligaleitung::get_all('ligaausschuss');
+    $las = LigaleitungRepository::get()->findByFunktion('ligaausschuss');
     $signatur = "\r\n\r\n\r\nDein Ligaausschuss\r\n--\r\n";
     foreach ($las as $la) {
-        $signatur .= $la['vorname'] . ' ' . $la['nachname']
-            . (!empty($la['teamname']) ? ' (' . $la['teamname'] . ')' : '') . "\r\n";
+        $signatur .= LigaleitungService::getNameMitTeam($la) . "\r\n";
     }
 }
 

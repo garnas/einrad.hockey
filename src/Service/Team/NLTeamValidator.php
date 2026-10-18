@@ -2,7 +2,7 @@
 
 namespace App\Service\Team;
 
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use App\Entity\Turnier\Turnier;
 use App\Service\Turnier\TurnierService;
 use Helper;
@@ -15,7 +15,7 @@ class NLTeamValidator
         return \in_array($liste, NLTeamService::getPossibleAnmeldungListe($turnier), true);
     }
 
-    public static function isValidNLAnmeldung(nTeam $team, Turnier $turnier, string $liste): bool
+    public static function isValidNLAnmeldung(Team $team, Turnier $turnier, string $liste): bool
     {
         if ($turnier->isSpielplanPhase() || $turnier->isErgebnisPhase()) {
             Html::notice("Anmeldung ist schon geschlossen.");

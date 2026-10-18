@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-trait TraitSingletonRepository
+trait SingletonRepositoryTrait
 {
     private static ?self $instance = null;
 

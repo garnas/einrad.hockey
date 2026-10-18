@@ -3,7 +3,7 @@
 namespace App\Service\Turnier;
 
 use Config;
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use App\Entity\Turnier\Turnier;
 
 class BlockService
@@ -25,7 +25,7 @@ class BlockService
         return $block_higher ?? [];
     }
 
-    public static function isTurnierBlockHigher(Turnier $turnier, nteam $team): bool
+    public static function isTurnierBlockHigher(Turnier $turnier, Team $team): bool
     {
         $rangTurnierBock = array_search($turnier->getBlock(), Config::BLOCK_ALL, true);
         $rangTeamBlock = array_search($team->getBlock(), Config::BLOCK_ALL, true);
@@ -64,7 +64,7 @@ class BlockService
             return "(" . $blockContext->getBlock() . ")";
         }
 
-        if (is_a($blockContext, nTeam::class)) {
+        if (is_a($blockContext, Team::class)) {
             return $blockContext->isLigaTeam() ? "(" . $blockContext->getBlock() . ")" : "";
         }
 
@@ -131,7 +131,7 @@ class BlockService
         return $turnier->getBlock() . $nextChar;
     }
 
-    public static function isBlockPassend(Turnier $turnier, nTeam $team): bool
+    public static function isBlockPassend(Turnier $turnier, Team $team): bool
     {
         $blockTurnier = $turnier->getBlock();
         $blockTeam = $team->getBlock();

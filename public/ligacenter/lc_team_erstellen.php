@@ -2,10 +2,10 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-use App\Entity\Team\FreilosGrund;
+use App\Entity\Team\Freilosgrund;
 use App\Entity\Team\Kontakt;
-use App\Entity\Team\nTeam;
-use App\Entity\Team\TeamDetails;
+use App\Entity\Team\Team;
+use App\Entity\Team\Teamdetails;
 use App\Repository\Team\TeamRepository;
 
 require_once "../../init.php";
@@ -39,7 +39,7 @@ if (isset($_POST["team_erstellen"])) {
 
     //Team wird erstellt
     if (!$error) {
-        $team = (new nTeam())
+        $team = (new Team())
             ->setName($teamname)
             ->setLigateam("Ja")
             ->setPasswort($passwort);
@@ -49,9 +49,9 @@ if (isset($_POST["team_erstellen"])) {
             ->setPublic("Nein")
             ->setGetInfoMail("Nein");
         $team->addEmail($kontakt);
-        $team->setDetails((new TeamDetails())->setTeam($team));
+        $team->setDetails((new Teamdetails())->setTeam($team));
         if ($mitFreilos === "Ja") {
-            $team->addFreilos(grund: FreilosGrund::NEUES_LIGATEAM);
+            $team->addFreilos(grund: Freilosgrund::NEUES_LIGATEAM);
         }
         TeamRepository::get()->speichern($team);
 

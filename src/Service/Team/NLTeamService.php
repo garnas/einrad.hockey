@@ -2,29 +2,29 @@
 
 namespace App\Service\Team;
 
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use App\Entity\Turnier\Turnier;
-use App\Entity\Turnier\TurniereListe;
+use App\Entity\Turnier\Turnieranmeldung;
 use App\Repository\DoctrineWrapper;
 use App\Repository\Team\TeamRepository;
 use App\Service\Turnier\TurnierService;
 
 class NLTeamService
 {
-    public static function findByName(string $name): ?nTeam
+    public static function findByName(string $name): ?Team
     {
         return TeamRepository::get()->findByName($name . "*");
     }
 
-    public static function create(string $name): nTeam
+    public static function create(string $name): Team
     {
-        $nlTeam = new nTeam();
+        $nlTeam = new Team();
         $nlTeam->setName($name . '*')->setLigateam("Nein");
         DoctrineWrapper::manager()->persist($nlTeam);
         return $nlTeam;
     }
 
-    public static function findOrCreate($teamname): nTeam
+    public static function findOrCreate($teamname): Team
     {
         return self::findByName($teamname) ?? self::create($teamname);
     }
@@ -49,7 +49,7 @@ class NLTeamService
 
     public static function countNLTeams(Turnier $turnier): int
     {
-        $filter = static function (TurniereListe $anmeldung) {
+        $filter = static function (Turnieranmeldung $anmeldung) {
             return !$anmeldung->getTeam()->isLigaTeam();
         };
         return $turnier->getListe()->filter($filter)->count();

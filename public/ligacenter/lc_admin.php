@@ -5,6 +5,7 @@
 use App\Event\Turnier\nLigaBot;
 use App\Repository\Team\TeamRepository;
 use App\Repository\Turnier\TurnierRepository;
+use App\Service\Ligaleitung\LigaleitungService;
 use App\Service\Team\TeamService;
 
 require_once '../../init.php';
@@ -90,10 +91,9 @@ if (isset($_POST['gitpull'])) {
 
     } else {
 
-        $hash = LigaLeitung::get_details($_SESSION['logins']['la']['login'])['passwort'];
         $password = $_POST['password'];
 
-        if (password_verify($password, $hash)) {
+        if (LigaleitungService::checkPasswort($_SESSION['logins']['la']['login'], $password)) {
             $output = shell_exec("sh " . Env::BASE_PATH . "/system/shell/gitpull.sh");
 
             Helper::log("git.log", $output ?? 'EMPTY OUTPUT');

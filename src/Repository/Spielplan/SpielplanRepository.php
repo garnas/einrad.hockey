@@ -7,7 +7,7 @@ use App\Entity\Spielplan\SpielplanPaarungen;
 use App\Entity\Turnier\Spiel;
 use App\Entity\Turnier\Turnier;
 use App\Repository\DoctrineWrapper;
-use App\Repository\TraitSingletonRepository;
+use App\Repository\SingletonRepositoryTrait;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -16,7 +16,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class SpielplanRepository
 {
-    use TraitSingletonRepository;
+    use SingletonRepositoryTrait;
 
     private EntityRepository $spiele;
     private EntityRepository $details;

@@ -2,6 +2,8 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Service\Ligaleitung\LigaleitungService;
+
 require_once '../../init.php';
 require_once '../../logic/session_oa.logic.php'; //auth
 
@@ -12,7 +14,7 @@ $panels = Nav::get_oc_start();
 /////////////////////////////////////////////////////////////////////////////
 include '../../templates/header.tmp.php'; ?>
 
-<h1 class='w3-center w3-text-primary'>Hallo <?= LigaLeitung::get_details($_SESSION['logins']['oa']['login'])['vorname'] ?>!</h1>
+<h1 class='w3-center w3-text-primary'>Hallo <?= e(LigaleitungService::getLoggedInLigaleitungByFunktion("team_social_media")?->getSpieler()->getVorname()) ?>!</h1>
 <div class="flex-container">
     <?php foreach ($panels as $panel): ?>
         <a class="no flex-item <?= $panel[2] ?> w3-round-xlarge w3-hover-opacity" href="<?= $panel[0] ?>">

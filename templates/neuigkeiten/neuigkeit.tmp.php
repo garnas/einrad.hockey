@@ -1,5 +1,6 @@
 <?php
 
+use App\Service\Ligaleitung\LigaleitungService;
 use App\Service\Neuigkeit\ColorService;
 use App\Service\Neuigkeit\FormatService;
 
@@ -58,7 +59,7 @@ use App\Service\Neuigkeit\FormatService;
         </div>
     <?php endif; ?>
     
-    <?php if (LigaLeitung::is_logged_in("ligaausschuss")): ?>
+    <?php if (LigaleitungService::isLoggedIn("ligaausschuss")): ?>
         <!-- Darstellungen des Ligaausschusses; Die Berechtigung wird nicht geprüft -->
         <hr>
         <div class="w3-section">
@@ -73,7 +74,7 @@ use App\Service\Neuigkeit\FormatService;
         </div>
     <?php endif; ?>
     
-    <?php if (LigaLeitung::is_logged_in("team_social_media")): ?>
+    <?php if (LigaleitungService::isLoggedIn("team_social_media")): ?>
         <!-- Darstellungen des Öffentlichkeitsausschusses; Die Berechtigung wird nicht geprüft -->
         <hr>
         <div class="w3-section">

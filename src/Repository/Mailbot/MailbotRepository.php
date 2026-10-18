@@ -2,14 +2,14 @@
 
 namespace App\Repository\Mailbot;
 
-use App\Entity\Sonstiges\nMailbot;
+use App\Entity\Mailbot\nMailbot;
 use App\Repository\DoctrineWrapper;
-use App\Repository\TraitSingletonRepository;
+use App\Repository\SingletonRepositoryTrait;
 use Doctrine\ORM\EntityRepository;
 
 class MailbotRepository
 {
-    use TraitSingletonRepository;
+    use SingletonRepositoryTrait;
 
     private EntityRepository $mailBot;
 

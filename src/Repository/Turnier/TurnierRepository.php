@@ -3,10 +3,10 @@
 namespace App\Repository\Turnier;
 
 use App\Entity\Turnier\Turnier;
-use App\Entity\TurnierBericht\TurnierBericht;
-use App\Entity\Turnier\TurniereListe;
+use App\Entity\Turnierbericht\Turnierbericht;
+use App\Entity\Turnier\Turnieranmeldung;
 use App\Repository\DoctrineWrapper;
-use App\Repository\TraitSingletonRepository;
+use App\Repository\SingletonRepositoryTrait;
 use Config;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,7 +14,7 @@ use Doctrine\ORM\EntityRepository;
 
 class TurnierRepository
 {
-    use TraitSingletonRepository;
+    use SingletonRepositoryTrait;
 
     private EntityRepository $liste;
     private EntityRepository $turnier;
@@ -23,13 +23,13 @@ class TurnierRepository
     private function __construct()
     {
         $this->turnier = DoctrineWrapper::manager()->getRepository(Turnier::class);
-        $this->liste = DoctrineWrapper::manager()->getRepository(TurniereListe::class);
-        $this->bericht = DoctrineWrapper::manager()->getRepository(TurnierBericht::class);
+        $this->liste = DoctrineWrapper::manager()->getRepository(Turnieranmeldung::class);
+        $this->bericht = DoctrineWrapper::manager()->getRepository(Turnierbericht::class);
     }
 
     /**
      * @param Turnier $turnier
-     * @return TurniereListe[]
+     * @return Turnieranmeldung[]
      */
     public function getWarteListe(Turnier $turnier): array
     {
@@ -53,7 +53,7 @@ class TurnierRepository
         DoctrineWrapper::manager()->flush();
     }
 
-    public function getBericht(int $turnier_id): ?TurnierBericht
+    public function getBericht(int $turnier_id): ?Turnierbericht
     {
         return $this->bericht->findOneBy(['turnierId' => $turnier_id]);
     }

@@ -4,7 +4,7 @@
 // Dadurch weiß man, ob vom Teamcenter oder vom Ligacenter auf dieses Skript zugegriffen wird
 // Dies ermöglicht den gleichzeitgen Login von Ligaausschuss und Ligateams in einem Browser
 
-use App\Entity\Sonstiges\Neuigkeit;
+use App\Entity\Neuigkeit\Neuigkeit;
 use App\Repository\Neuigkeit\NeuigkeitRepository;
 use App\Enum\NeuigkeitArt;
 use App\Service\Neuigkeit\PermissionService;

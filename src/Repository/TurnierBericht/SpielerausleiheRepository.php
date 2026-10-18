@@ -4,22 +4,22 @@ namespace App\Repository\TurnierBericht;
 
 use Doctrine\ORM\EntityRepository;
 use App\Repository\DoctrineWrapper;
-use App\Repository\TraitSingletonRepository;
-use App\Entity\TurnierBericht\SpielerAusleihe;
+use App\Repository\SingletonRepositoryTrait;
+use App\Entity\Turnierbericht\Spielerausleihe;
 
-class SpielerAusleiheRepository
+class SpielerausleiheRepository
 {
-    use TraitSingletonRepository;
+    use SingletonRepositoryTrait;
 
     public EntityRepository $bericht;
 
-    public function speichern(SpielerAusleihe $leihe): void
+    public function speichern(Spielerausleihe $leihe): void
     {
         DoctrineWrapper::manager()->persist($leihe);
         DoctrineWrapper::manager()->flush();
     }
 
-    public function delete(SpielerAusleihe $leihe): void
+    public function delete(Spielerausleihe $leihe): void
     {
         DoctrineWrapper::manager()->remove($leihe);
         DoctrineWrapper::manager()->flush();

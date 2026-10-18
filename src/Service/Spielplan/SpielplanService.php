@@ -3,7 +3,7 @@
 namespace App\Service\Spielplan;
 
 use App\Entity\Spielplan\SpielplanDetails;
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use App\Entity\Turnier\Spiel;
 use App\Entity\Turnier\Turnier;
 use App\Repository\DoctrineWrapper;
@@ -149,8 +149,8 @@ final class SpielplanService
         }
 
         $manager = DoctrineWrapper::manager();
-        $team = static fn(int $position): nTeam => $manager->getReference(
-            nTeam::class,
+        $team = static fn(int $position): Team => $manager->getReference(
+            Team::class,
             $teamliste[$position]['team_id'],
         );
 

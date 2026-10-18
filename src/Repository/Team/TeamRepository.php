@@ -3,12 +3,12 @@
 namespace App\Repository\Team;
 
 use App\Entity\Team\Freilos;
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use App\Entity\Team\Spieler;
 use App\Entity\Team\Strafe;
 use App\Entity\Turnier\Turnier;
 use App\Repository\DoctrineWrapper;
-use App\Repository\TraitSingletonRepository;
+use App\Repository\SingletonRepositoryTrait;
 use Config;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -16,7 +16,7 @@ use Doctrine\ORM\EntityRepository;
 
 class TeamRepository
 {
-    use TraitSingletonRepository;
+    use SingletonRepositoryTrait;
 
     private EntityRepository $team;
     private EntityRepository $freilos;
@@ -26,22 +26,22 @@ class TeamRepository
 
     private function __construct()
     {
-        $this->team = DoctrineWrapper::manager()->getRepository(nTeam::class);
+        $this->team = DoctrineWrapper::manager()->getRepository(Team::class);
         $this->freilos = DoctrineWrapper::manager()->getRepository(Freilos::class);
         $this->spieler = DoctrineWrapper::manager()->getRepository(Spieler::class);
         $this->strafen = DoctrineWrapper::manager()->getRepository(Strafe::class);
     }
 
-    public function team(int $id): ?nTeam
+    public function team(int $id): ?Team
     {
         return $this->team->find($id);
     }
 
     /**
-     * @param nTeam $team
+     * @param Team $team
      * @return Collection|Turnier[]
      */
-    public function getAusrichterTurniere(nTeam $team): Collection|array
+    public function getAusrichterTurniere(Team $team): Collection|array
     {
         $query = DoctrineWrapper::manager()
             ->createQueryBuilder()
@@ -82,7 +82,7 @@ class TeamRepository
         return DoctrineWrapper::manager()
             ->createQueryBuilder()
             ->select('t.id')
-            ->from(nTeam::class, 't')
+            ->from(Team::class, 't')
             ->andWhere('t.aktiv = :aktiv')
             ->andWhere('t.ligateam = :ligateam')
             ->orderBy('t.id', 'asc')
@@ -93,14 +93,14 @@ class TeamRepository
     }
 
     /**
-     * @return nTeam[]
+     * @return Team[]
      */
     public function activeLigaTeams(): array
     {
         return DoctrineWrapper::manager()
             ->createQueryBuilder()
             ->select('t', 'details')
-            ->from(nTeam::class, 't')
+            ->from(Team::class, 't')
             ->leftJoin('t.details', 'details')
             ->andWhere('t.aktiv = :aktiv')
             ->andWhere('t.ligateam = :ligateam')
@@ -112,14 +112,14 @@ class TeamRepository
     }
 
     /**
-     * @return nTeam[]
+     * @return Team[]
      */
     public function deactivatedLigaTeams(): array
     {
         return DoctrineWrapper::manager()
             ->createQueryBuilder()
             ->select('t')
-            ->from(nTeam::class, 't')
+            ->from(Team::class, 't')
             ->andWhere('t.aktiv = :aktiv')
             ->andWhere('t.ligateam = :ligateam')
             ->orderBy('t.name', 'asc')
@@ -129,19 +129,19 @@ class TeamRepository
             ->getResult();
     }
 
-    public function speichern(nTeam $team): void
+    public function speichern(Team $team): void
     {
         DoctrineWrapper::manager()->persist($team);
         DoctrineWrapper::manager()->flush();
     }
 
-    public function delete(nTeam $team): void
+    public function delete(Team $team): void
     {
         DoctrineWrapper::manager()->remove($team);
         DoctrineWrapper::manager()->flush();
     }
 
-    public function deleteFreilos(int $id, nTeam $team): void
+    public function deleteFreilos(int $id, Team $team): void
     {
         $freilos = $this->freilos->find($id);
         if ($freilos->getTeam()->id() != $team->id()) {
@@ -174,23 +174,23 @@ class TeamRepository
 
     /**
      * @param string $name
-     * @return nTeam|null
+     * @return Team|null
      */
-    public function findByName(string $name): ?nTeam
+    public function findByName(string $name): ?Team
     {
         return $this->team->findOneBy(['name' => $name]);
     }
 
     /**
      * @param string $name
-     * @return nTeam|null
+     * @return Team|null
      */
-    public function findByNameAndIsAktiv(string $name): ?nTeam
+    public function findByNameAndIsAktiv(string $name): ?Team
     {
         return $this->team->findOneBy(['name' => $name, 'aktiv' => 'Ja']);
     }
 
-    public function deleteFoto(nTeam $team): void
+    public function deleteFoto(Team $team): void
     {
         $teamfoto = $team->getDetails()->getTeamfoto();
         $team->getDetails()->setTeamfoto(null);

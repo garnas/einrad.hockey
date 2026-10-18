@@ -3,9 +3,9 @@
 namespace App\Repository\Turnier;
 
 use App\Entity\Turnier\Turnier;
-use App\Entity\Turnier\TurnierErgebnis;
+use App\Entity\Turnier\Turnierergebnis;
 use App\Repository\DoctrineWrapper;
-use App\Repository\TraitSingletonRepository;
+use App\Repository\SingletonRepositoryTrait;
 use Config;
 use Doctrine\DBAL\Exception;
 
@@ -14,7 +14,7 @@ use Doctrine\DBAL\Exception;
  */
 class TabelleRepository
 {
-    use TraitSingletonRepository;
+    use SingletonRepositoryTrait;
 
     private function __construct() {}
 
@@ -60,14 +60,14 @@ class TabelleRepository
     }
 
     /**
-     * @return TurnierErgebnis[]
+     * @return Turnierergebnis[]
      */
     public function getErgebnisseBySaison(int $saison): array
     {
         return DoctrineWrapper::manager()
             ->createQueryBuilder()
             ->select('e', 'team', 't')
-            ->from(TurnierErgebnis::class, 'e')
+            ->from(Turnierergebnis::class, 'e')
             ->innerJoin('e.team', 'team')
             ->innerJoin('e.turnier', 't')
             ->andWhere('t.saison = :saison')

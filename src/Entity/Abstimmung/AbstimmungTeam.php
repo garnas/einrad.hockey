@@ -2,7 +2,7 @@
 
 namespace App\Entity\Abstimmung;
 
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -10,19 +10,19 @@ use Doctrine\ORM\Mapping as ORM;
 class AbstimmungTeam
 {
     #[ORM\Id]
-    #[ORM\OneToOne(targetEntity: nTeam::class)]
+    #[ORM\OneToOne(targetEntity: Team::class)]
     #[ORM\JoinColumn(name: 'team_id', referencedColumnName: 'team_id', nullable: false)]
-    private nTeam $team;
+    private Team $team;
 
     #[ORM\Column(type: 'integer')]
     private int $aenderungen;
 
-    public function getTeam(): nTeam
+    public function getTeam(): Team
     {
         return $this->team;
     }
 
-    public function setTeam(nTeam $team): self
+    public function setTeam(Team $team): self
     {
         $this->team = $team;
         return $this;

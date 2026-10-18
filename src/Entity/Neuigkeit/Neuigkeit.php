@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\Sonstiges;
+namespace App\Entity\Neuigkeit;
 
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\TurnierBericht;
+namespace App\Entity\Turnierbericht;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Turnier\Turnier;
@@ -12,7 +12,7 @@ use App\Entity\Turnier\Turnier;
         new ORM\Index(name: "turnier_id", columns: ["turnier_id"]),
     ],
 )]
-class SpielerZeitstrafe
+class Zeitstrafe
 {
     #[ORM\Id]
     #[ORM\GeneratedValue('AUTO')]

@@ -39,8 +39,8 @@ class Spieler
     private ?DateTime $timestamp;
 
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id", nullable: true)]
-    #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "kader")]
-    private ?nTeam $team = null;
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: "kader")]
+    private ?Team $team = null;
 
     public function getSpielerId(): ?int
     {
@@ -155,12 +155,12 @@ class Spieler
         return $this;
     }
 
-    public function getTeam(): ?nTeam
+    public function getTeam(): ?Team
     {
         return $this->team;
     }
 
-    public function setTeam(?nTeam $team): self
+    public function setTeam(?Team $team): self
     {
         $this->team = $team;
 

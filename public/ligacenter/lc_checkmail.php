@@ -1,6 +1,6 @@
 <?php
 
-use App\Entity\Sonstiges\nMailbot;
+use App\Entity\Mailbot\nMailbot;
 use App\Repository\Mailbot\MailbotRepository;
 
 require_once '../../init.php';

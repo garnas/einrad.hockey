@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: "teams_name_historic", indexes: [new ORM\Index(name: "team_id", columns: ["team_id"])])]
-class TeamNameHistoric
+class TeamnameHistoric
 {
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "NONE")]
@@ -14,9 +14,9 @@ class TeamNameHistoric
     private int $saison;
 
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: nTeam::class)]
+    #[ORM\ManyToOne(targetEntity: Team::class)]
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id", nullable: false)]
-    private nTeam $team;
+    private Team $team;
 
     #[ORM\Column(name: "name", type: "string", length: 50, nullable: true)]
     private ?string $name;
@@ -32,12 +32,12 @@ class TeamNameHistoric
         return $this;
     }
 
-    public function getTeam(): nTeam
+    public function getTeam(): Team
     {
         return $this->team;
     }
 
-    public function setTeam(nTeam $team): self
+    public function setTeam(Team $team): self
     {
         $this->team = $team;
         return $this;

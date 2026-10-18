@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Entity\TurnierBericht;
+namespace App\Entity\Turnierbericht;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Turnier\Turnier;
-use App\Entity\Team\nTeam;
 
 #[ORM\Entity]
 #[ORM\Table(
@@ -13,7 +12,7 @@ use App\Entity\Team\nTeam;
         new ORM\Index(name: "turnier_id", columns: ["turnier_id"]),
     ],
 )]
-class SpielerAusleihe
+class Spielerausleihe
 {
     #[ORM\Id]
     #[ORM\GeneratedValue('AUTO')]

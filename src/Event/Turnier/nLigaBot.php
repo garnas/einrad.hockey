@@ -2,14 +2,14 @@
 
 namespace App\Event\Turnier;
 
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use App\Entity\Turnier\Turnier;
-use App\Entity\Turnier\TurniereListe;
+use App\Entity\Turnier\Turnieranmeldung;
 use App\Repository\DoctrineWrapper;
 use App\Service\Team\TeamService;
 use App\Service\Turnier\BlockService;
 use App\Service\Turnier\TurnierService;
-use App\Service\Turnier\TurnierValidatorService;
+use App\Service\Turnier\TurnierValidator;
 use Config;
 use db;
 use Doctrine\ORM\Exception\ORMException;
@@ -187,13 +187,13 @@ class nLigaBot
         // Automatische Erweiterung
         foreach (self::$gelosteTurniere as $turnier) {
             // Pruefe, ob das Turnier automatisch um einen Block nach oben erweitert werden soll und dies ueberhaupt moeglich ist
-            if (TurnierValidatorService::isErweiterbarBlockhoch($turnier) && $turnier->isSofortOeffnenHoch()) {
+            if (TurnierValidator::isErweiterbarBlockhoch($turnier) && $turnier->isSofortOeffnenHoch()) {
                 TurnierService::erweitereBlockHoch($turnier);
                 TurnierService::setzListeAuffuellen($turnier);
             }
 
             // Pruefe, ob das Turnier automatisch um einen Block nach unten erweitert werden soll und dies ueberhaupt moeglich ist
-            if (TurnierValidatorService::isErweiterbarBlockrunter($turnier) && $turnier->isSofortOeffnenRunter()) {
+            if (TurnierValidator::isErweiterbarBlockrunter($turnier) && $turnier->isSofortOeffnenRunter()) {
                 TurnierService::erweitereBlockRunter($turnier);
                 TurnierService::setzListeAuffuellen($turnier);
             }
@@ -261,7 +261,7 @@ class nLigaBot
         shuffle($lostopNLTeams);
 
         // Zusammenstellen der neuen Warteliste
-        /* @var $reihenfolgeAnmeldungen TurniereListe[] */
+        /* @var $reihenfolgeAnmeldungen Turnieranmeldung[] */
         $reihenfolgeAnmeldungen = array_merge($losttopRichtigerBlock, $lostopNLTeams, $lostopfFalscherBlock);
 
         $turnier->getLogService()->addLog("Geloste Reihenfolge:");
@@ -298,7 +298,7 @@ class nLigaBot
         }
     }
 
-    public static function isBereitsAufSetzlisteGelostAmGleichenKalendertag(Turnier $turnier, nTeam $team): bool
+    public static function isBereitsAufSetzlisteGelostAmGleichenKalendertag(Turnier $turnier, Team $team): bool
     {
         foreach (self::$gelosteTurniere as $vglTurnier) {
             if (

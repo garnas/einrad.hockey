@@ -3,10 +3,10 @@
 namespace App\Service\Turnier;
 
 use App\Entity\Team\Kontakt;
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use App\Entity\Turnier\Turnier;
-use App\Entity\Turnier\TurniereListe;
-use App\Entity\Turnier\TurnierErgebnis;
+use App\Entity\Turnier\Turnieranmeldung;
+use App\Entity\Turnier\Turnierergebnis;
 use App\Event\Turnier\TurnierEventMailBot;
 use App\Repository\Team\TeamRepository;
 use App\Service\Team\NLTeamValidator;
@@ -54,7 +54,7 @@ class TurnierService
 
     /**
      * @param Turnier $turnier
-     * @return Collection|TurniereListe[]
+     * @return Collection|Turnieranmeldung[]
      */
     public static function getSetzListe(Turnier $turnier): Collection|array
     {
@@ -66,7 +66,7 @@ class TurnierService
 
     /**
      * @param Turnier $turnier
-     * @return Collection|TurniereListe[]
+     * @return Collection|Turnieranmeldung[]
      */
     public static function getWarteliste(Turnier $turnier): Collection|array
     {
@@ -120,7 +120,7 @@ class TurnierService
         return Date::createFromTimestamp($unixTime)->format("l, d.m.Y - H:i") . " Uhr";
     }
 
-    public static function isSetzBerechtigt(Turnier $turnier, nTeam $team): bool
+    public static function isSetzBerechtigt(Turnier $turnier, Team $team): bool
     {
         if (!$team->isLigaTeam() && NLTeamValidator::isValidNLAnmeldungListe($turnier, "setzliste")) {
             return true;
@@ -131,10 +131,10 @@ class TurnierService
     /**
      * Ermittelt, ob ein Team bei diesem Turnier ein Freilos setzten könnte
      * @param Turnier $turnier
-     * @param nTeam $team
+     * @param Team $team
      * @return bool
      */
-    public static function isSpielBerechtigtFreilos(Turnier $turnier, nTeam $team): bool
+    public static function isSpielBerechtigtFreilos(Turnier $turnier, Team $team): bool
     {
         if (self::isSetzBerechtigt($turnier, $team)) {
             return true;
@@ -143,9 +143,9 @@ class TurnierService
         return BlockService::isTurnierBlockHigher($turnier, $team);
     }
 
-    public static function addToSetzListe(Turnier $turnier, nTeam $team): void
+    public static function addToSetzListe(Turnier $turnier, Team $team): void
     {
-        $anmeldung = new TurniereListe();
+        $anmeldung = new Turnieranmeldung();
         $anmeldung->setTeam($team)
             ->setListe('setzliste')
             ->setTurnier($turnier)
@@ -154,7 +154,7 @@ class TurnierService
         $turnier->getLogService()->addLog("Auf Setzliste: " . $team->getName() . " " . BlockService::toString($team));
     }
 
-    public static function nlAnmelden(Turnier $turnier, nTeam $nlTeam, string $liste): void
+    public static function nlAnmelden(Turnier $turnier, Team $nlTeam, string $liste): void
     {
         if ($nlTeam->isLigaTeam()) {
             trigger_error("Ligateam soll als NL-Team angemeldet werden", \E_USER_ERROR);
@@ -168,11 +168,11 @@ class TurnierService
         }
     }
 
-    public static function addToWarteListe(Turnier $turnier, nTeam $team): void
+    public static function addToWarteListe(Turnier $turnier, Team $team): void
     {
         $positionWarteliste = $turnier->isWartePhase() ? null : self::getAnzahlWartelisteTeams($turnier) + 1;
 
-        $anmeldung = new TurniereListe();
+        $anmeldung = new Turnieranmeldung();
         $anmeldung->setTeam($team)
             ->setListe('warteliste')
             ->setTurnier($turnier)
@@ -208,7 +208,7 @@ class TurnierService
 
     /**
      * @param Turnier $turnier
-     * @return nTeam[]
+     * @return Team[]
      */
     public static function getTeams(Turnier $turnier): array
     {
@@ -413,7 +413,7 @@ class TurnierService
         foreach ($platzierungstabelle as $teamId => $eintrag) {
             $ergebnis = $turnier->isLigaturnier() ? $eintrag['ligapunkte'] : null;
 
-            $turnierErgebnis = (new TurnierErgebnis())
+            $turnierErgebnis = (new Turnierergebnis())
                 ->setTeam(TeamRepository::get()->team((int) $teamId))
                 ->setTurnier($turnier)
                 ->setErgebnis($ergebnis)
@@ -445,7 +445,7 @@ class TurnierService
      * Liefert die Turnierergebnisse, keyed by Platz.
      *
      * @param Turnier $turnier
-     * @return TurnierErgebnis[]
+     * @return Turnierergebnis[]
      */
     public static function getErgebnisByPlatz(Turnier $turnier): array
     {

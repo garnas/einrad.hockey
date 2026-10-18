@@ -2,7 +2,7 @@
 
 namespace App\Entity\Team;
 
-enum FreilosGrund: string
+enum Freilosgrund: string
 {
     case SCHIRI = "Freilos für Schiris";
     case TURNIER_AUSGERICHTET = "Freilos für Turnierausrichtung";
@@ -10,7 +10,7 @@ enum FreilosGrund: string
     case SONSTIGES = "Freilos";
     case NEUES_LIGATEAM = "Neues Ligateam";
 
-    public static function fromName(string $name): FreilosGrund
+    public static function fromName(string $name): Freilosgrund
     {
         foreach (self::cases() as $status) {
             if ($name === $status->name) {

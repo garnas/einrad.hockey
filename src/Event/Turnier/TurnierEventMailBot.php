@@ -2,7 +2,7 @@
 
 namespace App\Event\Turnier;
 
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use App\Entity\Turnier\Turnier;
 use App\Repository\Team\TeamRepository;
 use App\Service\Team\TeamService;
@@ -66,9 +66,9 @@ class TurnierEventMailBot
      * Erstellt eine Mail in der Datenbank an Teams, welche in von der Warteliste aufgerückt sind
      *
      * @param Turnier $turnier
-     * @param nTeam $team
+     * @param Team $team
      */
-    public static function mailWarteZuSetzliste(Turnier $turnier, nTeam $team): void
+    public static function mailWarteZuSetzliste(Turnier $turnier, Team $team): void
     {
         $betreff = "Setzliste: " . TurnierSnippets::ortDatumBlock($turnier, false);
         ob_start();
@@ -81,7 +81,7 @@ class TurnierEventMailBot
         MailBot::add_mail($betreff, $inhalt, $emails, send_instantly: true);
     }
 
-    public static function mailDoppelAnmeldung(Turnier $turnier, nTeam $team): void
+    public static function mailDoppelAnmeldung(Turnier $turnier, Team $team): void
     {
         $betreff = "Abgemeldet: " . TurnierSnippets::ortDatumBlock($turnier, false);
         ob_start();

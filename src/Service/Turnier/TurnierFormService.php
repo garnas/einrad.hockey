@@ -47,11 +47,11 @@ class TurnierFormService
                 return false;
             }
 
-            if ($field == 'single_higher' && (!TurnierValidatorService::isErweiterbarBlockhoch($turnier) || TurnierService::isErweitertBlock($turnier))) {
+            if ($field == 'single_higher' && (!TurnierValidator::isErweiterbarBlockhoch($turnier) || TurnierService::isErweitertBlock($turnier))) {
                 return false;
             }
 
-            if ($field == 'single_lower' && (!TurnierValidatorService::isErweiterbarBlockrunter($turnier) || TurnierService::isErweitertBlock($turnier))) {
+            if ($field == 'single_lower' && (!TurnierValidator::isErweiterbarBlockrunter($turnier) || TurnierService::isErweitertBlock($turnier))) {
                 return false;
             }
 
@@ -59,7 +59,7 @@ class TurnierFormService
                 return false;
             }
 
-            if ($field == 'multiple_free' && (!TurnierValidatorService::isErweiterbarBlockfrei($turnier) || TurnierService::isBlockfrei($turnier))) {
+            if ($field == 'multiple_free' && (!TurnierValidator::isErweiterbarBlockfrei($turnier) || TurnierService::isBlockfrei($turnier))) {
                 return false;
             }
 

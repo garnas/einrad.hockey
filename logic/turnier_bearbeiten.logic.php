@@ -3,7 +3,7 @@
 // Formularauswertung
 use App\Repository\Turnier\TurnierRepository;
 use App\Service\Turnier\TurnierService;
-use App\Service\Turnier\TurnierValidatorService;
+use App\Service\Turnier\TurnierValidator;
 use App\Service\Turnier\BlockService;
 
 // Formular fuellen
@@ -119,8 +119,8 @@ if (isset($_POST['change_turnier'])) {
     ;
 
     if (
-        TurnierValidatorService::onChange($turnier)
-        && TurnierValidatorService::mayChangePlaetze($turnier, $plaetze_before)
+        TurnierValidator::onChange($turnier)
+        && TurnierValidator::mayChangePlaetze($turnier, $plaetze_before)
     ) {
         if ($turnier->isSetzPhase()) {
             TurnierService::setzListeAuffuellen($turnier);

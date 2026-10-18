@@ -6,12 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: "teams_details", uniqueConstraints: [new ORM\UniqueConstraint(name: "team_id", columns: ["team_id"])])]
-class TeamDetails
+class Teamdetails
 {
     #[ORM\Id]
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id", nullable: false)]
-    #[ORM\OneToOne(targetEntity: "nTeam", inversedBy: "details", cascade: ["all"])]
-    private nTeam $team;
+    #[ORM\OneToOne(targetEntity: "Team", inversedBy: "details", cascade: ["all"])]
+    private Team $team;
 
     #[ORM\Column(name: "plz", type: "string", length: 255, nullable: true)]
     private ?string $plz;
@@ -133,13 +133,13 @@ class TeamDetails
         return $this;
     }
 
-    public function setTeam(nTeam $team): self
+    public function setTeam(Team $team): self
     {
         $this->team = $team;
         return $this;
     }
 
-    public function getTeam(): nTeam
+    public function getTeam(): Team
     {
         return $this->team;
     }

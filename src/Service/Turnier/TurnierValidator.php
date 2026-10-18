@@ -11,7 +11,7 @@ use Helper;
 use Html;
 use Env;
 
-class TurnierValidatorService
+class TurnierValidator
 {
     public static function hasLaRights(Turnier $turnier): bool
     {

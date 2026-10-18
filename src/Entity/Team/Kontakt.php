@@ -22,9 +22,9 @@ class Kontakt
     #[ORM\Column(name: "get_info_mail", type: "string", length: 255, nullable: false, options: ["default" => "Ja"])]
     private string $getInfoMail = 'Ja';
 
-    #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "emails")]
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: "emails")]
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
-    private nTeam $team;
+    private Team $team;
 
     public function getId(): ?int
     {
@@ -67,12 +67,12 @@ class Kontakt
         return $this;
     }
 
-    public function getTeam(): nTeam
+    public function getTeam(): Team
     {
         return $this->team;
     }
 
-    public function setTeam(nTeam $team): self
+    public function setTeam(Team $team): self
     {
         $this->team = $team;
 

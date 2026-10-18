@@ -55,16 +55,16 @@ class Freilos
     #[ORM\Column(name: "saison", type: "integer", nullable: false)]
     private int $saison = Config::SAISON;
 
-    #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "freilose")]
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: "freilose")]
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
-    private nTeam $team;
+    private Team $team;
 
-    public function getTeam(): nTeam
+    public function getTeam(): Team
     {
         return $this->team;
     }
 
-    public function setTeam(nTeam $team): self
+    public function setTeam(Team $team): self
     {
         $this->team = $team;
         return $this;
@@ -115,15 +115,15 @@ class Freilos
         $this->setGesetztAm();
     }
 
-    public function setGrund(FreilosGrund $grund): self
+    public function setGrund(Freilosgrund $grund): self
     {
         $this->grund = $grund->name;
         return $this;
     }
 
-    public function getGrund(): FreilosGrund
+    public function getGrund(): Freilosgrund
     {
-        return FreilosGrund::fromName($this->grund);
+        return Freilosgrund::fromName($this->grund);
     }
 
     public function setSaison(int $saison): self

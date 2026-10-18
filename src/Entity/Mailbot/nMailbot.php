@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\Sonstiges;
+namespace App\Entity\Mailbot;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;

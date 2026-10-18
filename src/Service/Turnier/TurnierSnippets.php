@@ -2,7 +2,7 @@
 
 namespace App\Service\Turnier;
 
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use App\Entity\Turnier\Turnier;
 use App\Service\Team\NLTeamService;
 use App\Service\Team\TeamValidator;
@@ -55,7 +55,7 @@ class TurnierSnippets
     }
 
 
-    public static function blockColor(Turnier $turnier, nTeam $team): string
+    public static function blockColor(Turnier $turnier, Team $team): string
     {
         if (
             TeamValidator::isValidRegularAnmeldung($team, $turnier, false)

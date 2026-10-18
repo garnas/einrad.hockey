@@ -27,8 +27,8 @@ class Strafe
     private int $saison;
 
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
-    #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "strafen")]
-    private nTeam $team;
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: "strafen")]
+    private Team $team;
 
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id", nullable: true)]
     #[ORM\ManyToOne(targetEntity: Turnier::class)]
@@ -138,18 +138,18 @@ class Strafe
     }
 
     /**
-     * @return nTeam
+     * @return Team
      */
-    public function getTeam(): nTeam
+    public function getTeam(): Team
     {
         return $this->team;
     }
 
     /**
-     * @param nTeam $team
+     * @param Team $team
      * @return Strafe
      */
-    public function setTeam(nTeam $team): self
+    public function setTeam(Team $team): self
     {
         $this->team = $team;
         return $this;

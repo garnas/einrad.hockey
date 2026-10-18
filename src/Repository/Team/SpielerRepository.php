@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Repository\Spieler;
+namespace App\Repository\Team;
 
 use App\Entity\Team\Spieler;
 use App\Repository\DoctrineWrapper;
-use App\Repository\TraitSingletonRepository;
+use App\Repository\SingletonRepositoryTrait;
 use Config;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
 
 class SpielerRepository
 {
-    use TraitSingletonRepository;
+    use SingletonRepositoryTrait;
 
     private EntityRepository $spieler;
 
@@ -23,6 +23,24 @@ class SpielerRepository
     public function spieler(int $id): ?Spieler
     {
         return $this->spieler->find($id);
+    }
+
+    /**
+     * Kader eines Teams in einer Saison, indiziert nach Spieler-ID
+     * @return Spieler[]
+     */
+    public function kader(int $teamId, int $saison = Config::SAISON): array
+    {
+        return DoctrineWrapper::manager()
+            ->createQueryBuilder()
+            ->select('s')
+            ->from(Spieler::class, 's', 's.spielerId')
+            ->andWhere('IDENTITY(s.team) = :teamId')
+            ->andWhere('s.letzteSaison = :saison')
+            ->setParameter('teamId', $teamId)
+            ->setParameter('saison', $saison)
+            ->getQuery()
+            ->getResult();
     }
 
     /**

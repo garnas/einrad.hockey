@@ -3,7 +3,7 @@
 namespace App\Service\Turnier;
 
 use App\Entity\Turnier\Turnier;
-use App\Entity\Turnier\TurniereLog;
+use App\Entity\Turnier\Turnierlog;
 use DateTime;
 use Helper;
 
@@ -63,7 +63,7 @@ class TurnierLogService
     public function addAllLogs(): void
     {
         if (!empty($this->logTexts)) {
-            $log = new TurniereLog();
+            $log = new Turnierlog();
             $log->setAutor(Helper::get_akteur());
             $log->setTurnier($this->turnier);
             $logText = $this->getLogAsString();

@@ -2,7 +2,7 @@
 
 namespace App\Entity\Turnier;
 
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -27,21 +27,21 @@ class Spiel
     #[ORM\Column(name: "spiel_id", type: "integer", nullable: false)]
     private int $spielId;
 
-    #[ORM\ManyToOne(targetEntity: nTeam::class)]
+    #[ORM\ManyToOne(targetEntity: Team::class)]
     #[ORM\JoinColumn(name: "team_id_a", referencedColumnName: "team_id", nullable: false)]
-    private nTeam $teamA;
+    private Team $teamA;
 
-    #[ORM\ManyToOne(targetEntity: nTeam::class)]
+    #[ORM\ManyToOne(targetEntity: Team::class)]
     #[ORM\JoinColumn(name: "team_id_b", referencedColumnName: "team_id", nullable: false)]
-    private nTeam $teamB;
+    private Team $teamB;
 
-    #[ORM\ManyToOne(targetEntity: nTeam::class)]
+    #[ORM\ManyToOne(targetEntity: Team::class)]
     #[ORM\JoinColumn(name: "schiri_team_id_a", referencedColumnName: "team_id", nullable: false)]
-    private nTeam $schiriTeamA;
+    private Team $schiriTeamA;
 
-    #[ORM\ManyToOne(targetEntity: nTeam::class)]
+    #[ORM\ManyToOne(targetEntity: Team::class)]
     #[ORM\JoinColumn(name: "schiri_team_id_b", referencedColumnName: "team_id", nullable: false)]
-    private nTeam $schiriTeamB;
+    private Team $schiriTeamB;
 
     #[ORM\Column(name: "tore_a", type: "integer", nullable: true)]
     private ?int $toreA;
@@ -77,45 +77,45 @@ class Spiel
         return $this;
     }
 
-    public function getTeamA(): nTeam
+    public function getTeamA(): Team
     {
         return $this->teamA;
     }
 
-    public function setTeamA(nTeam $teamA): self
+    public function setTeamA(Team $teamA): self
     {
         $this->teamA = $teamA;
         return $this;
     }
 
-    public function getTeamB(): nTeam
+    public function getTeamB(): Team
     {
         return $this->teamB;
     }
 
-    public function setTeamB(nTeam $teamB): self
+    public function setTeamB(Team $teamB): self
     {
         $this->teamB = $teamB;
         return $this;
     }
 
-    public function getSchiriTeamA(): nTeam
+    public function getSchiriTeamA(): Team
     {
         return $this->schiriTeamA;
     }
 
-    public function setSchiriTeamA(nTeam $schiriTeamA): self
+    public function setSchiriTeamA(Team $schiriTeamA): self
     {
         $this->schiriTeamA = $schiriTeamA;
         return $this;
     }
 
-    public function getSchiriTeamB(): nTeam
+    public function getSchiriTeamB(): Team
     {
         return $this->schiriTeamB;
     }
 
-    public function setSchiriTeamB(nTeam $schiriTeamB): self
+    public function setSchiriTeamB(Team $schiriTeamB): self
     {
         $this->schiriTeamB = $schiriTeamB;
         return $this;

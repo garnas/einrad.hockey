@@ -3,8 +3,8 @@
 namespace App\Entity\Team;
 
 use App\Entity\Turnier\Turnier;
-use App\Entity\Turnier\TurniereListe;
-use App\Entity\Turnier\TurnierErgebnis;
+use App\Entity\Turnier\Turnieranmeldung;
+use App\Entity\Turnier\Turnierergebnis;
 use App\Service\Turnier\TabelleService;
 use Config;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,7 +14,7 @@ use Helper;
 
 #[ORM\Entity]
 #[ORM\Table(name: "teams_liga", uniqueConstraints: [new ORM\UniqueConstraint(name: "teamname", columns: ["teamname"])])]
-class nTeam
+class Team
 {
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Id]
@@ -24,19 +24,19 @@ class nTeam
     #[ORM\Column(name: "teamname", type: "string", length: 255, nullable: false)]
     private string $name;
 
-    #[ORM\OneToMany(targetEntity: TurniereListe::class, mappedBy: "team", cascade: ["all"], indexBy: "turnier_id")]
+    #[ORM\OneToMany(targetEntity: Turnieranmeldung::class, mappedBy: "team", cascade: ["all"], indexBy: "turnier_id")]
     private Collection $turniereListe;
 
     #[ORM\OneToMany(targetEntity: Turnier::class, mappedBy: "ausrichter", cascade: ["all"], indexBy: "turnier_id")]
     private Collection $ausgerichteteTurniere;
 
-    #[ORM\OneToMany(targetEntity: TurnierErgebnis::class, mappedBy: "team", cascade: ["all"], indexBy: "turnier_id")]
+    #[ORM\OneToMany(targetEntity: Turnierergebnis::class, mappedBy: "team", cascade: ["all"], indexBy: "turnier_id")]
     private Collection $ergebnisse;
 
     #[ORM\OneToMany(targetEntity: Strafe::class, mappedBy: "team", cascade: ["all"], indexBy: "strafe_id")]
     private Collection $strafen;
 
-    #[ORM\OneToMany(targetEntity: TeamNameHistoric::class, mappedBy: "team", cascade: ["all"], indexBy: "saison")]
+    #[ORM\OneToMany(targetEntity: TeamnameHistoric::class, mappedBy: "team", cascade: ["all"], indexBy: "saison")]
     private Collection $historischeNamen;
 
     public function getAusgerichteteTurniere(): Collection|array
@@ -97,15 +97,15 @@ class nTeam
         $this->historischeNamen = new ArrayCollection();
     }
 
-    #[ORM\OneToOne(targetEntity: TeamDetails::class, mappedBy: "team", cascade: ["all"])]
-    private ?TeamDetails $details;
+    #[ORM\OneToOne(targetEntity: Teamdetails::class, mappedBy: "team", cascade: ["all"])]
+    private ?Teamdetails $details;
 
-    public function getDetails(): ?TeamDetails
+    public function getDetails(): ?Teamdetails
     {
         return $this->details;
     }
 
-    public function setDetails(TeamDetails $details): self
+    public function setDetails(Teamdetails $details): self
     {
         $this->details = $details;
         return $this;
@@ -283,10 +283,10 @@ class nTeam
     }
 
     public function addFreilos(
-        FreilosGrund $grund,
-        int $saison = Config::SAISON,
-        ?Turnier $turnierAusgerichtet = null,
-        ?Freilos $vorherigesFreilos = null,
+        Freilosgrund $grund,
+        int          $saison = Config::SAISON,
+        ?Turnier     $turnierAusgerichtet = null,
+        ?Freilos     $vorherigesFreilos = null,
     ): self {
         $freilos = (new Freilos())
             ->setTeam($this)
@@ -373,7 +373,7 @@ class nTeam
     }
 
     /**
-     * @return Collection|TurnierErgebnis[]
+     * @return Collection|Turnierergebnis[]
      */
     public function getErgebnisse(): Collection|array
     {
@@ -381,12 +381,12 @@ class nTeam
     }
 
     /**
-     * @return Collection|TurnierErgebnis[]
+     * @return Collection|Turnierergebnis[]
      */
     public function getErgebnisseVorsaison(): Collection|array
     {
         return $this->ergebnisse->filter(
-            static fn(TurnierErgebnis $e) => $e->getTurnier()->getSaison() === (Config::SAISON - 1),
+            static fn(Turnierergebnis $e) => $e->getTurnier()->getSaison() === (Config::SAISON - 1),
         );
     }
 

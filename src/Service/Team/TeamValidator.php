@@ -2,10 +2,10 @@
 
 namespace App\Service\Team;
 
-use App\Entity\Team\FreilosGrund;
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Freilosgrund;
+use App\Entity\Team\Team;
 use App\Entity\Turnier\Turnier;
-use App\Entity\Turnier\TurniereListe;
+use App\Entity\Turnier\Turnieranmeldung;
 use App\Repository\DoctrineWrapper;
 use App\Service\Turnier\TurnierService;
 use Env;
@@ -13,16 +13,16 @@ use Html;
 
 class TeamValidator
 {
-    public static function hasGenugSpieler(nTeam $team): bool
+    public static function hasGenugSpieler(Team $team): bool
     {
         return TeamService::getAnzahlAktiveSpieler($team) >= 5;
     }
 
-    public static function hasSchiriFreilosErhalten(nTeam $team): bool
+    public static function hasSchiriFreilosErhalten(Team $team): bool
     {
         $freilose = $team->getFreiloseBySaison();
         foreach ($freilose as $freilos) {
-            if ($freilos->getGrund() == FreilosGrund::SCHIRI) {
+            if ($freilos->getGrund() == Freilosgrund::SCHIRI) {
                 return true;
             }
         }
@@ -33,15 +33,15 @@ class TeamValidator
      * Ermittelt, ob das Team an gleichen Kalendertag auf einem anderen Turnier angemeldet ist
      *
      * @param Turnier $turnier
-     * @param nTeam $team
+     * @param Team $team
      * @return bool
      */
-    public static function isAmKalenderTagAufSetzliste(Turnier $turnier, nTeam $team): bool //TODO ins repo
+    public static function isAmKalenderTagAufSetzliste(Turnier $turnier, Team $team): bool //TODO ins repo
     {
         $query = DoctrineWrapper::manager()
             ->createQueryBuilder()
             ->select('l.listeId')
-            ->from(TurniereListe::class, 'l')
+            ->from(Turnieranmeldung::class, 'l')
             ->innerJoin('l.turnier', 't')
             ->where('l.team = :team')
             ->andWhere('t.datum = :datum')
@@ -62,7 +62,7 @@ class TeamValidator
         return \count($query->getQuery()->getResult()) > 0;
     }
 
-    public static function isValidTurnierForAnmeldung(nTeam $team, Turnier $turnier, $showError = true): bool
+    public static function isValidTurnierForAnmeldung(Team $team, Turnier $turnier, $showError = true): bool
     {
         $valid = true;
         $name = $team->getName();
@@ -91,7 +91,7 @@ class TeamValidator
         return $valid;
     }
 
-    public static function isValidRegularAnmeldung(nTeam $team, Turnier $turnier, $showError = true): bool
+    public static function isValidRegularAnmeldung(Team $team, Turnier $turnier, $showError = true): bool
     {
         $valid = self::isValidTurnierForAnmeldung($team, $turnier, $showError);
 
@@ -105,7 +105,7 @@ class TeamValidator
         return $valid;
     }
 
-    public static function isValidAbmeldung(nTeam $team, Turnier $turnier): bool
+    public static function isValidAbmeldung(Team $team, Turnier $turnier): bool
     {
         $valid = true;
 
@@ -130,7 +130,7 @@ class TeamValidator
         return $valid;
     }
 
-    public static function isValidFreilos(nTeam $team, Turnier $turnier, $showError = true): bool
+    public static function isValidFreilos(Team $team, Turnier $turnier, $showError = true): bool
     {
         $valid = self::isValidTurnierForAnmeldung($team, $turnier, $showError);
 
@@ -164,7 +164,7 @@ class TeamValidator
         return $valid;
     }
 
-    public static function isValidFinalMeldung(nTeam $teamEntity, Turnier $turnier): bool
+    public static function isValidFinalMeldung(Team $teamEntity, Turnier $turnier): bool
     {
         if (!$turnier->isFinalTurnier()) {
             Html::error("Anmeldung fehlgeschlagen.");

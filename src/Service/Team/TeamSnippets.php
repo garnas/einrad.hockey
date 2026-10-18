@@ -3,24 +3,24 @@
 namespace App\Service\Team;
 
 use App\Entity\Team\Freilos;
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use App\Entity\Team\Spieler;
 use App\Service\Turnier\TurnierSnippets;
 use Html;
 
 class TeamSnippets
 {
-    public static function getEmailLink(nTeam $team): string
+    public static function getEmailLink(Team $team): string
     {
         $emailsString = TeamService::getPublicEmailsAsString($team);
         return Html::mailto($emailsString, $team->getName());
     }
 
     /**
-     * @param nTeam $team
+     * @param Team $team
      * @return string
      */
-    public static function freilose(nTeam $team): string
+    public static function freilose(Team $team): string
     {
         $freilose = $team->getGueltigeFreilose()->toArray();
         usort($freilose, static function (Freilos $a, Freilos $b) {
@@ -82,6 +82,4 @@ class TeamSnippets
             return "<span class='w3-text-grey'><s>$icon $saison_text $junior</s></span>";
         }
     }
-
-
 }

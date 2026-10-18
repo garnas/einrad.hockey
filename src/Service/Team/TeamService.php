@@ -3,10 +3,10 @@
 namespace App\Service\Team;
 
 use App\Entity\Team\Kontakt;
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use App\Entity\Team\Spieler;
 use App\Entity\Turnier\Turnier;
-use App\Entity\Turnier\TurniereListe;
+use App\Entity\Turnier\Turnieranmeldung;
 use App\Repository\Team\TeamRepository;
 use App\Service\Turnier\TabelleService;
 use App\Service\Turnier\TurnierService;
@@ -18,7 +18,12 @@ use Html;
 
 class TeamService
 {
-    public static function getPublicEmailsAsString(nTeam $team): string
+    public static function checkKaderForTurniererstellung(Team $team): bool
+    {
+        return $team->getKaderAktuell()->count() >= 5;
+    }
+
+    public static function getPublicEmailsAsString(Team $team): string
     {
         $filter = static function (Kontakt $kontakt) {
             return $kontakt->getPublic() === "Ja";
@@ -35,10 +40,10 @@ class TeamService
     }
 
     /**
-     * @param nTeam $team
+     * @param Team $team
      * @return Spieler[]|Collection
      */
-    public static function getAktiveSpieler(nTeam $team): Collection|array
+    public static function getAktiveSpieler(Team $team): Collection|array
     {
         $filter = static function (Spieler $spieler) {
             return $spieler->getLetzteSaison() === Config::SAISON;
@@ -46,12 +51,12 @@ class TeamService
         return $team->getKader()->filter($filter);
     }
 
-    public static function getAnzahlAktiveSpieler(nTeam $team): int
+    public static function getAnzahlAktiveSpieler(Team $team): int
     {
         return self::getAktiveSpieler($team)->count();
     }
 
-    public static function anmelden(nTeam $team, Turnier $turnier): void
+    public static function anmelden(Team $team, Turnier $turnier): void
     {
         if (
             $turnier->isSetzPhase()
@@ -64,7 +69,7 @@ class TeamService
         }
     }
 
-    public static function abmelden(nTeam $team, Turnier $turnier): void
+    public static function abmelden(Team $team, Turnier $turnier): void
     {
         foreach ($turnier->getListe() as $anmeldung) {
             if ($anmeldung->getTeam()->id() === $team->id()) {
@@ -81,35 +86,35 @@ class TeamService
 
     }
 
-    public static function isAufWarteliste(nTeam $team, Turnier $turnier): bool
+    public static function isAufWarteliste(Team $team, Turnier $turnier): bool
     {
-        $predicate = static function (int $key, TurniereListe $anmeldung) use ($team) {
+        $predicate = static function (int $key, Turnieranmeldung $anmeldung) use ($team) {
             return $anmeldung->getTeam() === $team;
         };
         return TurnierService::getWarteliste($turnier)->exists($predicate);
     }
 
-    public static function isAufSetzliste(nTeam $team, Turnier $turnier): bool
+    public static function isAufSetzliste(Team $team, Turnier $turnier): bool
     {
-        $predicate = static function (int $key, TurniereListe $anmeldung) use ($team) {
+        $predicate = static function (int $key, Turnieranmeldung $anmeldung) use ($team) {
             return $anmeldung->getTeam() === $team;
         };
         return TurnierService::getSetzListe($turnier)->exists($predicate);
     }
 
-    public static function isAngemeldet(nTeam $team, Turnier $turnier): bool
+    public static function isAngemeldet(Team $team, Turnier $turnier): bool
     {
-        $predicate = static function (int $key, TurniereListe $anmeldung) use ($turnier) {
+        $predicate = static function (int $key, Turnieranmeldung $anmeldung) use ($turnier) {
             return $anmeldung->getTurnier() === $turnier;
         };
         return $team->getTurniereListe()->exists($predicate);
     }
 
     /**
-     * @param nTeam $team
-     * @return Collection|TurniereListe[]
+     * @param Team $team
+     * @return Collection|Turnieranmeldung[]
      */
-    public static function getEingetrageneTurniere(nTeam $team): Collection|array
+    public static function getEingetrageneTurniere(Team $team): Collection|array
     {
         $filter = static function (Turnier $turnier) {
             return ($turnier->getSaison() === Config::SAISON);
@@ -128,10 +133,10 @@ class TeamService
 
     /**
      * Erstellt eine Session für das Team nach einem Login
-     * @param nTeam $team
+     * @param Team $team
      * @return void
      */
-    public static function createTeamSession(nTeam $team): void
+    public static function createTeamSession(Team $team): void
     {
         $_SESSION['logins']['team']['id'] = $team->id();
         $_SESSION['logins']['team']['name'] = $team->getName();
@@ -184,7 +189,7 @@ class TeamService
         return false;
     }
 
-    public static function verhindereTurnierergebnisSaisonuebernahme(nTeam $team, bool $value = true): void
+    public static function verhindereTurnierergebnisSaisonuebernahme(Team $team, bool $value = true): void
     {
         $ergebnisse = $team->getErgebnisseVorsaison();
         foreach ($ergebnisse as $ergebnis) {

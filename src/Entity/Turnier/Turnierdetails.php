@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: "turniere_details")]
 #[ORM\Entity]
-class TurnierDetails
+class Turnierdetails
 {
     #[ORM\Id]
     #[ORM\OneToOne(targetEntity: Turnier::class, inversedBy: "details", cascade: ["all"])]

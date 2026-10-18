@@ -2,12 +2,12 @@
 
 namespace App\Entity\Turnier;
 
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: "turniere_ergebnisse", indexes: [new ORM\Index(columns: ["team_id"], name: "team_id"), new ORM\Index(columns: ["turnier_id"], name: "turniere_ergebnisse_ibfk_2")])]
-class TurnierErgebnis
+class Turnierergebnis
 {
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Id]
@@ -24,8 +24,8 @@ class TurnierErgebnis
     private bool $saisonUebernahmeVerhindern;
 
     #[ORM\JoinColumn(name: "team_id", referencedColumnName: "team_id")]
-    #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "ergebnisse")]
-    private nTeam $team;
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: "ergebnisse")]
+    private Team $team;
 
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
     #[ORM\ManyToOne(targetEntity: Turnier::class, inversedBy: "ergebnis")]
@@ -72,12 +72,12 @@ class TurnierErgebnis
         return $this;
     }
 
-    public function getTeam(): nTeam
+    public function getTeam(): Team
     {
         return $this->team;
     }
 
-    public function setTeam(nTeam $team): self
+    public function setTeam(Team $team): self
     {
         $this->team = $team;
 

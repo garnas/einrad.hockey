@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Service\TurnierBericht;
+namespace App\Service\Turnierbericht;
 
 use App\Entity\Turnier\Turnier;
-use App\Entity\TurnierBericht\TurnierBericht;
+use App\Entity\Turnierbericht\Turnierbericht;
 use DateTimeImmutable;
 
-class TurnierBerichtService
+class TurnierberichtService
 {
     public static function getBearbeitungFrist(Turnier $turnier): DateTimeImmutable
     {
@@ -29,7 +29,7 @@ class TurnierBerichtService
         return $now <= self::getBearbeitungFrist($turnier);
     }
 
-    public static function isKaderChecked(TurnierBericht $bericht): bool
+    public static function isKaderChecked(Turnierbericht $bericht): bool
     {
         return $bericht->getKaderUeberprueft() == 'Ja';
     }

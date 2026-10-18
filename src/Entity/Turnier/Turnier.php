@@ -4,7 +4,7 @@ namespace App\Entity\Turnier;
 
 use App\Entity\Spielplan\SpielplanDetails;
 use App\Entity\Team\Freilos;
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use App\Service\Turnier\TurnierLogService;
 use App\Service\Turnier\TurnierSnippets;
 use DateTime;
@@ -12,9 +12,9 @@ use Discord;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\TurnierBericht\SpielerZeitstrafe;
-use App\Entity\TurnierBericht\SpielerAusleihe;
-use App\Entity\TurnierBericht\TurnierBericht;
+use App\Entity\Turnierbericht\Zeitstrafe;
+use App\Entity\Turnierbericht\Spielerausleihe;
+use App\Entity\Turnierbericht\Turnierbericht;
 
 /**
  * Turnier
@@ -78,14 +78,14 @@ class Turnier
     private ?SpielplanDetails $spielplanVorlage = null;
 
     #[ORM\JoinColumn(name: "ausrichter", referencedColumnName: "team_id")]
-    #[ORM\ManyToOne(targetEntity: nTeam::class, inversedBy: "ausgerichteteTurniere")]
-    private nTeam $ausrichter;
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: "ausgerichteteTurniere")]
+    private Team $ausrichter;
 
-    #[ORM\OneToOne(targetEntity: TurnierDetails::class, mappedBy: "turnier", cascade: ["all"])]
-    private TurnierDetails $details;
+    #[ORM\OneToOne(targetEntity: Turnierdetails::class, mappedBy: "turnier", cascade: ["all"])]
+    private Turnierdetails $details;
 
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
-    #[ORM\OneToMany(targetEntity: TurniereLog::class, mappedBy: "turnier", cascade: ["all"])]
+    #[ORM\OneToMany(targetEntity: Turnierlog::class, mappedBy: "turnier", cascade: ["all"])]
     private Collection $logs;
 
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
@@ -96,10 +96,10 @@ class Turnier
     private DateTime $erstelltAm;
 
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
-    #[ORM\OneToMany(targetEntity: TurnierErgebnis::class, mappedBy: "turnier", cascade: ["all"], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Turnierergebnis::class, mappedBy: "turnier", cascade: ["all"], orphanRemoval: true)]
     private Collection $ergebnis;
 
-    #[ORM\OneToMany(targetEntity: TurniereListe::class, mappedBy: "turnier", cascade: ["all"], orphanRemoval: true, indexBy: "team_id")]
+    #[ORM\OneToMany(targetEntity: Turnieranmeldung::class, mappedBy: "turnier", cascade: ["all"], orphanRemoval: true, indexBy: "team_id")]
     #[ORM\JoinColumn(name: "turnier_id", referencedColumnName: "turnier_id")]
     private Collection $liste;
 
@@ -124,13 +124,13 @@ class Turnier
     #[ORM\Column(name: "sofort_oeffnen_hoch", type: "boolean", options: ["default" => false])]
     private bool $sofortOeffnenHoch = false;
 
-    #[ORM\OneToOne(mappedBy: 'turnier', targetEntity: TurnierBericht::class)]
-    private ?TurnierBericht $bericht = null;
+    #[ORM\OneToOne(mappedBy: 'turnier', targetEntity: Turnierbericht::class)]
+    private ?Turnierbericht $bericht = null;
 
-    #[ORM\OneToMany(mappedBy: 'turnier', targetEntity: SpielerZeitstrafe::class)]
+    #[ORM\OneToMany(mappedBy: 'turnier', targetEntity: Zeitstrafe::class)]
     private Collection $zeitstrafen;
 
-    #[ORM\OneToMany(mappedBy: 'turnier', targetEntity: SpielerAusleihe::class)]
+    #[ORM\OneToMany(mappedBy: 'turnier', targetEntity: Spielerausleihe::class)]
     private Collection $leihen;
 
     public function __construct()
@@ -198,18 +198,18 @@ class Turnier
     }
 
     /**
-     * @return TurnierDetails
+     * @return Turnierdetails
      */
-    public function getDetails(): TurnierDetails
+    public function getDetails(): Turnierdetails
     {
         return $this->details;
     }
 
     /**
-     * @param TurnierDetails $details
+     * @param Turnierdetails $details
      * @return Turnier
      */
-    public function setDetails(TurnierDetails $details): self
+    public function setDetails(Turnierdetails $details): self
     {
         $this->details = $details;
         return $this;
@@ -227,7 +227,7 @@ class Turnier
 
 
     /**
-     * @return Collection<int, SpielerZeitstrafe>
+     * @return Collection<int, Zeitstrafe>
      */
     public function getZeitstrafen(): Collection
     {
@@ -235,7 +235,7 @@ class Turnier
     }
 
     /**
-     * @return Collection<int, SpielerAusleihe>
+     * @return Collection<int, Spielerausleihe>
      */
     public function getLeihen(): Collection
     {
@@ -283,7 +283,7 @@ class Turnier
     }
 
     /**
-     * @return TurniereListe[]|ArrayCollection
+     * @return Turnieranmeldung[]|ArrayCollection
      */
     public function getListe(): Collection|array
     {
@@ -291,11 +291,11 @@ class Turnier
     }
 
     /**
-     * @return TurniereListe[]|ArrayCollection
+     * @return Turnieranmeldung[]|ArrayCollection
      */
     public function getSetzliste(): Collection|array
     {
-        $filter = static function (TurniereListe $f) {
+        $filter = static function (Turnieranmeldung $f) {
             return $f->isSetzliste();
         };
 
@@ -303,11 +303,11 @@ class Turnier
     }
 
     /**
-     * @return TurniereListe[]|ArrayCollection
+     * @return Turnieranmeldung[]|ArrayCollection
      */
     public function getWarteliste(): Collection|array
     {
-        $filter = static function (TurniereListe $f) {
+        $filter = static function (Turnieranmeldung $f) {
             return $f->isWarteliste();
         };
 
@@ -322,7 +322,7 @@ class Turnier
 
 
     /**
-     * @return Collection|TurnierErgebnis[]
+     * @return Collection|Turnierergebnis[]
      */
     public function getErgebnis(): Collection|array
     {
@@ -469,12 +469,12 @@ class Turnier
         return $this;
     }
 
-    public function getAusrichter(): nTeam
+    public function getAusrichter(): Team
     {
         return $this->ausrichter;
     }
 
-    public function setAusrichter(nTeam $ausrichter): self
+    public function setAusrichter(Team $ausrichter): self
     {
         $ausrichterText = isset($this->ausrichter) ? $this->ausrichter->getName() : null;
         $this->logService->autoLog("Ausrichter", $ausrichterText, $ausrichter->getName());
@@ -649,7 +649,7 @@ class Turnier
         return $this->sofortOeffnenFrei;
     }
 
-    public function getBericht(): ?TurnierBericht
+    public function getBericht(): ?Turnierbericht
     {
         return $this->bericht;
     }

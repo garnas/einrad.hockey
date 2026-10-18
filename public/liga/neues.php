@@ -2,8 +2,9 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
-use App\Repository\Turnier\TurnierRepository;
 use App\Repository\Neuigkeit\NeuigkeitRepository;
+use App\Repository\Turnier\TurnierRepository;
+use App\Service\Ligaleitung\LigaleitungService;
 
 require_once '../../init.php';
 
@@ -12,7 +13,7 @@ $fortschritt = round(100 * (time() - strtotime(Config::SAISON_ANFANG)) / (strtot
 $tage = round((strtotime(Config::SAISON_ANFANG) - time()) / (24 * 60 * 60));
 
 // Der LA darf auch unveröffentlichte Neuigkeiten zum Bearbeiten sehen.
-if (LigaLeitung::is_logged_in(funktion: "ligaausschuss")) {
+if (LigaleitungService::isLoggedIn("ligaausschuss")) {
     $neuigkeiten = NeuigkeitRepository::get()->findActive();
 } else {
     $neuigkeiten = NeuigkeitRepository::get()->findActiveBeforeNow();

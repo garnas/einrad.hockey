@@ -3,11 +3,11 @@
 namespace App\Service\Team;
 
 use App\Entity\Team\Freilos;
-use App\Entity\Team\FreilosGrund;
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Freilosgrund;
+use App\Entity\Team\Team;
 use App\Entity\Team\Spieler;
 use App\Entity\Turnier\Turnier;
-use App\Entity\Turnier\TurniereListe;
+use App\Entity\Turnier\Turnieranmeldung;
 use App\Repository\Team\TeamRepository;
 use App\Service\Turnier\BlockService;
 use Config;
@@ -45,7 +45,7 @@ class FreilosService
             && self::validateAusgerichtetesTurnierFreilos($turnier)
         ) {
             $team->addFreilos(
-                grund: FreilosGrund::TURNIER_AUSGERICHTET,
+                grund: Freilosgrund::TURNIER_AUSGERICHTET,
                 turnierAusgerichtet: $turnier,
             );
             Html::info("Das Team " . $team->getName() . " hat ein Freilos für ihr frühzeitig ausgeschriebenes Turnier erhalten.");
@@ -71,12 +71,12 @@ class FreilosService
             && ($datumAmUnix - $erstelltAmUnix) >= 8 * 7 * 24 * 60 * 60;
     }
 
-    public static function freilos(nTeam $team, Turnier $turnier): void
+    public static function freilos(Team $team, Turnier $turnier): void
     {
         if (TeamService::isAufWarteliste($team, $turnier)) {
             $anmeldung = $team->getTurniereListe()->get($turnier->id());
         } else {
-            $anmeldung = new TurniereListe();
+            $anmeldung = new Turnieranmeldung();
             $anmeldung->setTeam($team)->setTurnier($turnier);
         }
 
@@ -89,10 +89,10 @@ class FreilosService
         $turnier->getLogService()->addLog("Freilos: " . $team->getName() . " " . BlockService::toString($team->getBlock()));
     }
 
-    public static function hasZweiAusgerichteteTurnierFreilose(nTeam $team): bool
+    public static function hasZweiAusgerichteteTurnierFreilose(Team $team): bool
     {
         $filter = static function (Freilos $f) {
-            return ($f->getGrund() == FreilosGrund::TURNIER_AUSGERICHTET);
+            return ($f->getGrund() == Freilosgrund::TURNIER_AUSGERICHTET);
         };
         $erhalteneFreilose = $team->getFreiloseBySaison()->filter($filter);
         return $erhalteneFreilose->count() >= 2;
@@ -132,7 +132,7 @@ class FreilosService
                     return $f->getTurnier() && $f->getTurnier()->id() === $turnier_id;
                 };
                 $vorherigesFreilos = $team->getGueltigeFreilose()->filter($filter)->first() ?: null;
-                $team->addFreilos(FreilosGrund::FREILOS_GESETZT, vorherigesFreilos: $vorherigesFreilos);
+                $team->addFreilos(Freilosgrund::FREILOS_GESETZT, vorherigesFreilos: $vorherigesFreilos);
                 TeamRepository::get()->speichern($team);
                 Html::info("Das Team " . $team->getName() . " hat ein neues Freilos erhalten für ihr frühzeitig gesetztes Freilos.");
                 if ($sendMail) {
@@ -143,7 +143,7 @@ class FreilosService
 
     }
 
-    public static function handleSchiriFreilos(nTeam $team, bool $sendMail = true): bool
+    public static function handleSchiriFreilos(Team $team, bool $sendMail = true): bool
     {
         $filter = static function (Spieler $s) {
             return ($s->getLetzteSaison() == Config::SAISON && $s->getSchiri() >= Config::SAISON);
@@ -151,7 +151,7 @@ class FreilosService
         $aktiveSchiris = $team->getKader()->filter($filter);
 
         if (!TeamValidator::hasSchiriFreilosErhalten($team) && $aktiveSchiris->count() >= 2) {
-            $team->addFreilos(FreilosGrund::SCHIRI);
+            $team->addFreilos(Freilosgrund::SCHIRI);
             if ($sendMail) {
                 Mailbot::mail_schiri_freilos($team);
             }

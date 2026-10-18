@@ -1,6 +1,6 @@
 <?php
 
-use App\Entity\Team\nTeam;
+use App\Entity\Team\Team;
 use App\Repository\Team\TeamRepository;
 
 /**
@@ -313,9 +313,9 @@ class MailBot
     /**
      * Erstellt eine Mail in der Datenbank, dass ein Team ein Freilos für zwei Schiris erhalten hat.
      *
-     * @param nTeam $team
+     * @param Team $team
      */
-    public static function mail_schiri_freilos(nTeam $team): void
+    public static function mail_schiri_freilos(Team $team): void
     {
         $betreff = "Freilos für zwei Schiris erhalten";
         ob_start();
@@ -327,7 +327,7 @@ class MailBot
         self::add_mail($betreff, $inhalt, $emails, send_instantly: true);
     }
 
-    public static function mail_ausrichter_freilos(nTeam $team): void
+    public static function mail_ausrichter_freilos(Team $team): void
     {
         $betreff = "Freilos für euer Turnier erhalten";
         ob_start();
@@ -339,7 +339,7 @@ class MailBot
         self::add_mail($betreff, $inhalt, $emails, send_instantly: true);
     }
 
-    public static function mail_freilos_recycle(nTeam $team): void
+    public static function mail_freilos_recycle(Team $team): void
     {
         $betreff = "Freilos für frühzeitig gesetztes Freilos";
         ob_start();

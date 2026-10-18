@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Entity\Team;
+namespace App\Entity\Ligaleitung;
 
+use App\Entity\Team\Spieler;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]

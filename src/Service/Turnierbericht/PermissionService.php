@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Service\TurnierBericht;
+namespace App\Service\Turnierbericht;
 
 use Helper;
 use Html;
 use App\Service\Turnier\TurnierService;
-use App\Entity\TurnierBericht\TurnierBericht;
+use App\Entity\Turnierbericht\Turnierbericht;
 
 class PermissionService
 {
-    public static function canEdit(TurnierBericht $bericht): bool
+    public static function canEdit(Turnierbericht $bericht): bool
     {
         $turnier = $bericht->getTurnier();
         $team_id = $_SESSION['logins']['team']['id'] ?? null;
@@ -27,12 +27,12 @@ class PermissionService
         }
 
         // Der Ausrichter darf nur innerhalb der Bearbeitungsfrist bearbeiten
-        if (!TurnierBerichtService::isInBearbeitungFrist($turnier)) {
+        if (!TurnierberichtService::isInBearbeitungFrist($turnier)) {
             Html::notice("Die Bearbeitungsfrist für den Turnierreport ist abgelaufen. Änderungen sind nur noch über den Ligaausschuss möglich.");
             return false;
         }
 
-        $frist = TurnierBerichtService::getBearbeitungFrist($turnier);
+        $frist = TurnierberichtService::getBearbeitungFrist($turnier);
         Html::notice("Der Turnierreport kann noch bis zum " . $frist->format('d.m.Y H:i') . " bearbeitet werden.");
         return true;
     }

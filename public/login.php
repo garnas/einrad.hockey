@@ -2,13 +2,15 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Service\Ligaleitung\LigaleitungService;
+
 require_once '../init.php';
 Helper::ensure_no_request_logging();
 
-if (LigaLeitung::is_logged_in("ligaausschuss") || LigaLeitung::is_logged_in("admin")) {
+if (LigaleitungService::isLoggedIn("ligaausschuss") || LigaleitungService::isLoggedIn("admin")) {
     Helper::reload("/ligacenter/lc_start.php");
 }
-if (LigaLeitung::is_logged_in("team_social_media")) {
+if (LigaleitungService::isLoggedIn("team_social_media")) {
     Helper::reload("/oefficenter/oc_start.php");
 }
 
@@ -24,7 +26,7 @@ if (isset($_POST['login'])) {
     }
 
     // Login Check
-    if (!$error && LigaLeitung::login($login, $passwort, 'ligaausschuss')) {
+    if (!$error && LigaleitungService::login($login, $passwort, 'ligaausschuss')) {
         if (isset($_SESSION['lc_redirect'], $_GET['redirect'])) {
             $redirect = $_SESSION['lc_redirect'];
             unset($_SESSION['lc_redirect']);
@@ -34,7 +36,7 @@ if (isset($_POST['login'])) {
         Helper::reload($redirect);
     }
 
-    if (!$error && LigaLeitung::login($login, $passwort, 'team_social_media')) {
+    if (!$error && LigaleitungService::login($login, $passwort, 'team_social_media')) {
         if (isset($_SESSION['oc_redirect'], $_GET['redirect'])) {
             $redirect = $_SESSION['oc_redirect'];
             unset($_SESSION['oc_redirect']);
