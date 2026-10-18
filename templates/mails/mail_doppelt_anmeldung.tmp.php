@@ -1,5 +1,6 @@
 <?php
 use App\Service\Turnier\TurnierSnippets;
+
 ?>
 
 <p>Hallo <?= $team->getName() ?></p>
