@@ -5,6 +5,7 @@
 
 use App\Neuigkeit\Repository\NeuigkeitRepository;
 use App\Ligaleitung\Service\LigaleitungService;
+use App\Shared\GermanDateFormatter;
 
 require_once '../../init.php';
 
@@ -20,10 +21,9 @@ if (LigaleitungService::isLoggedIn("ligaausschuss")) {
 $neuigkeiten_nach_jahr = [];
 
 // gruppiere die neuigkeiten nach jahr und monaten
-$formatter = new IntlDateFormatter('de_DE', pattern: 'MMMM');
 foreach ($neuigkeiten as $neuigkeit) {
     $jahr = $neuigkeit->getZeit()->format('Y');
-    $monat = $formatter->format($neuigkeit->getZeit());
+    $monat = GermanDateFormatter::month($neuigkeit->getZeit());
     $neuigkeiten_nach_jahr[$jahr][$monat][] = $neuigkeit;
 }
 

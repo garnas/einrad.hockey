@@ -2,9 +2,12 @@
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LOGIK////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
+use App\Shared\GermanDateFormatter;
+
 require_once '../../init.php';
 
-$saison = (isset($_GET['saison'])) ? (int) $_GET['saison'] : Config::SAISON;
+$saison_start = GermanDateFormatter::formatString(Config::SAISON_ANFANG, "d. MMMM Y");
+$saison_ende = GermanDateFormatter::formatString(Config::SAISON_ENDE, "d. MMMM Y");
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////LAYOUT///////////////////////////////////
@@ -14,7 +17,7 @@ Html::$content = "Die wichtigsten Termine der Deutschen Einradhockeyliga.";
 include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
 
 <h1 class="w3-text-primary">Termine</h1>
-<p class="w3-border-top w3-border-grey w3-text-grey">Saison <?=Html::get_saison_string($saison)?></p>
+<p class="w3-border-top w3-border-grey w3-text-grey">Saison <?=Html::get_saison_string()?></p>
 
 <h1 class="w3-text-primary w3-margin-top" id='saisontermine'>Saisontermine</h1>
 <div class="w3-responsive w3-section">
@@ -24,7 +27,7 @@ include Env::BASE_PATH . '/templates/header.tmp.php'; ?>
         </tr>
         <tr>
             <td class="w3-primary-3">Reguläre Spielzeit</td>
-            <td>15. August 2026 - 17. Mai 2027</td>
+            <td><?=$saison_start . ' - ' . $saison_ende?></td>
         </tr>
         <tr>
             <td class="w3-primary-3">B-Finalwochenende</td>

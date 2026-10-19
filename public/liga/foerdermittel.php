@@ -5,6 +5,7 @@
 
 use App\Neuigkeit\Repository\NeuigkeitRepository;
 use App\Neuigkeit\Enum\NeuigkeitArt;
+use App\Shared\GermanDateFormatter;
 
 require_once '../../init.php';
 
@@ -14,10 +15,9 @@ $foerdermittel = NeuigkeitRepository::get()->findByType(NeuigkeitArt::FOERDERMIT
 $foerdermittel_nach_jahr = [];
 
 // gruppiere die foerdermittel nach jahr und monaten
-$formatter = new IntlDateFormatter('de_DE', pattern: 'MMMM');
 foreach ($foerdermittel as $mittel) {
     $jahr = $mittel->getZeit()->format('Y');
-    $monat = $formatter->format($mittel->getZeit());
+    $monat = GermanDateFormatter::month($mittel->getZeit());
     $foerdermittel_nach_jahr[$jahr][$monat][] = $mittel;
 }
 
