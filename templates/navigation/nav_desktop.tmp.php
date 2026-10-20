@@ -104,6 +104,10 @@ use App\Ligaleitung\Service\LigaleitungService;
             <a href='<?= Env::BASE_URL ?>/oefficenter/oc_logout.php' class="w3-button w3-right w3-hover-primary">
                 <?= Html::icon("logout", tag: "h3") ?> Logout
             </a>
+        <?php elseif (LigaleitungService::isLoggedIn("schiriausschuss")): ?>
+            <a href='<?= Env::BASE_URL ?>/schiricenter/sc_logout.php' class="w3-button w3-right w3-hover-primary">
+                <?= Html::icon("logout", tag: "h3") ?> Logout
+            </a>
         <?php elseif (LigaleitungService::isLoggedIn("ligaausschuss")): ?>
             <a href='<?= Env::BASE_URL ?>/ligacenter/lc_logout.php' class="w3-button w3-right w3-hover-primary">
                 <?= Html::icon("logout", tag: "h3") ?> Logout

@@ -39,7 +39,7 @@ class LigaleitungService
     /**
      * Login der Ligaleitung
      *
-     * @param string $funktion 'ligaausschuss', 'team_social_media'
+     * @param string $funktion 'ligaausschuss', 'team_social_media', 'schiriausschuss'
      */
     public static function login(string $login, string $passwort, string $funktion): bool
     {
@@ -107,6 +107,7 @@ class LigaleitungService
         return match ($funktion) {
             "admin", "ligaausschuss" => "la",
             "team_social_media" => "oa",
+            "schiriausschuss" => "sa",
             default => null,
         };
     }

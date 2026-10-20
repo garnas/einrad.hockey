@@ -1,12 +1,10 @@
 <?php
 
 require_once '../../init.php';
-require_once '../../logic/session_la.logic.php'; //Auth
+require_once '../../logic/session_sa.logic.php'; //Auth
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-
-//require_once '../../logic/session_la.logic.php'; //Auth
 
 $sql = "
             SELECT schiri_test_id,

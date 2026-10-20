@@ -2,13 +2,13 @@
 
 /**
  * Legt (bzw. erneuert) die Fixtures für die Login- und Passwort-Tests der Ligaleitung an
- * (login.php, lc_pw_aendern.php, oc_pw_aendern.php).
+ * (login.php, lc_pw_aendern.php, oc_pw_aendern.php, sc_pw_aendern.php).
  * Wird vor dem Testlauf per CLI ausgeführt (siehe global-setup.ts).
  *
  * Legt an:
- * - ein Team mit drei Spielern, denen die Ligaleitungs-Logins zugeordnet sind
- * - je einen Ligaausschuss- und Öffentlichkeitsausschuss-Login für die Login-Tests
- * - je einen Ligaausschuss- und Öffentlichkeitsausschuss-Login für die Passwort-Änderung,
+ * - ein Team mit vier Spielern, denen die Ligaleitungs-Logins zugeordnet sind
+ * - je einen Ligaausschuss-, Öffentlichkeitsausschuss- und Schiriausschuss-Login für die Login-Tests
+ * - je einen Ligaausschuss-, Öffentlichkeitsausschuss- und Schiriausschuss-Login für die Passwort-Änderung,
  *   damit ein geändertes Passwort die übrigen Tests nicht beeinflusst
  * - einen Login mit einer Funktion ohne eigenen Login-Bereich (schiriausbilder)
  */
@@ -34,6 +34,8 @@ $logins = [
     'playwright-la-pw' => ['ligaausschuss', 'Lara'],
     'playwright-oa-login' => ['team_social_media', 'Olga'],
     'playwright-oa-pw' => ['team_social_media', 'Olga'],
+    'playwright-sa-login' => ['schiriausschuss', 'Sabine'],
+    'playwright-sa-pw' => ['schiriausschuss', 'Sabine'],
     'playwright-schiriausbilder' => ['schiriausbilder', 'Sven'],
 ];
 

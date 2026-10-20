@@ -82,6 +82,7 @@ class LigaleitungServiceTest extends TestCase
             'Ligaausschuss' => ['ligaausschuss', 'ligaausschuss', 'la'],
             'Admin im Ligacenter' => ['admin', 'ligaausschuss', 'la'],
             'Öffentlichkeitsausschuss' => ['team_social_media', 'team_social_media', 'oa'],
+            'Schiriausschuss' => ['schiriausschuss', 'schiriausschuss', 'sa'],
         ];
     }
 
@@ -126,13 +127,16 @@ class LigaleitungServiceTest extends TestCase
         return [
             'Öffentlichkeitsausschuss im Ligacenter' => ['team_social_media', 'ligaausschuss'],
             'Ligaausschuss im Öffentlichkeitscenter' => ['ligaausschuss', 'team_social_media'],
+            'Schiriausschuss im Ligacenter' => ['schiriausschuss', 'ligaausschuss'],
+            'Ligaausschuss im Schiricenter' => ['ligaausschuss', 'schiriausschuss'],
+            'Schiriausbilder im Schiricenter' => ['schiriausbilder', 'schiriausschuss'],
             'Funktion ohne Login-Bereich' => ['schiriausbilder', 'ligaausschuss'],
             'unbekannter Login-Bereich' => ['ligaausschuss', 'schiriausbilder'],
         ];
     }
 
     /**
-     * login.php probiert nacheinander beide Bereiche durch, daher darf ein Login im falschen Bereich
+     * login.php probiert nacheinander alle Bereiche durch, daher darf ein Login im falschen Bereich
      * keine Fehlermeldung erzeugen.
      */
     #[DataProvider('provideFremdeKontexte')]
@@ -156,6 +160,7 @@ class LigaleitungServiceTest extends TestCase
         $this->assertTrue(LigaleitungService::isLoggedIn('ligaausschuss'));
         $this->assertTrue(LigaleitungService::isLoggedIn('admin'));
         $this->assertFalse(LigaleitungService::isLoggedIn('team_social_media'));
+        $this->assertFalse(LigaleitungService::isLoggedIn('schiriausschuss'));
         $this->assertFalse(LigaleitungService::isLoggedIn('schiriausbilder'));
     }
 

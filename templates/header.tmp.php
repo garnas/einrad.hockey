@@ -43,6 +43,9 @@ use App\Ligaleitung\Service\LigaleitungService;
 if (LigaleitungService::isLoggedIn("team_social_media")) {
     include 'navigation/nav_oefficenter.tmp.php';
 }
+if (LigaleitungService::isLoggedIn("schiriausschuss")) {
+    include 'navigation/nav_schiricenter.tmp.php';
+}
 if (isset($_SESSION['logins']['team'])) {
     include 'navigation/nav_teamcenter.tmp.php';
 }

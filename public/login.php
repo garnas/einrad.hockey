@@ -13,6 +13,9 @@ if (LigaleitungService::isLoggedIn("ligaausschuss") || LigaleitungService::isLog
 if (LigaleitungService::isLoggedIn("team_social_media")) {
     Helper::reload("/oefficenter/oc_start.php");
 }
+if (LigaleitungService::isLoggedIn("schiriausschuss")) {
+    Helper::reload("/schiricenter/sc_start.php");
+}
 
 // Formularauswertung
 if (isset($_POST['login'])) {
@@ -42,6 +45,16 @@ if (isset($_POST['login'])) {
             unset($_SESSION['oc_redirect']);
         } else {
             $redirect = '/oefficenter/oc_start.php';
+        }
+        Helper::reload($redirect);
+    }
+
+    if (!$error && LigaleitungService::login($login, $passwort, 'schiriausschuss')) {
+        if (isset($_SESSION['sc_redirect'], $_GET['redirect'])) {
+            $redirect = $_SESSION['sc_redirect'];
+            unset($_SESSION['sc_redirect']);
+        } else {
+            $redirect = '/schiricenter/sc_start.php';
         }
         Helper::reload($redirect);
     }
