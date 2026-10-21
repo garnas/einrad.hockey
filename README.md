@@ -77,7 +77,7 @@ Nach dem Start öffnet VS Code automatisch http://localhost im Browser.
 ### Tests
 
 ```shell
-php83 vendor/bin/phpunit tests/
+php vendor/bin/phpunit tests/
 ```
 
 ### E2E-Tests (Playwright)
