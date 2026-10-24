@@ -24,7 +24,7 @@ class env
      * Webadresse für Verlinkungen, unabhängig der Ordnerstruktur.
      * Auf dem Server ist der public-Ordner mit der Domain verknüpft.
      */
-    public const BASE_URL = 'http://217.160.50.83';
+    public const BASE_URL = 'http://49.12.216.72';
 
     /**
      * Basispfad für includes, requires
