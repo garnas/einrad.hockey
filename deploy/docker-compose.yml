@@ -1,0 +1,32 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    ports:
+      - '80:80'
+    environment:
+      PHP_BINARY: php
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: mariadb:12.2.2
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: db_localhost
+    volumes:
+      - db-data:/var/lib/mysql
+      - ../_localhost/db_localhost.sql:/docker-entrypoint-initdb.d/db_localhost.sql:ro
+    # Kein Port-Mapping: Die Datenbank ist nur für den app-Container erreichbar.
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+volumes:
+  db-data:

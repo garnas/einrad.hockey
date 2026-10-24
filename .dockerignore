@@ -1,0 +1,14 @@
+.git
+.github
+.idea
+.claude
+.phpunit.cache
+vendor
+node_modules
+tests
+docs
+cache
+system/logs
+system/backups
+*.sql
+env.php
