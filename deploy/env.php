@@ -24,7 +24,7 @@ class env
      * Webadresse für Verlinkungen, unabhängig der Ordnerstruktur.
      * Auf dem Server ist der public-Ordner mit der Domain verknüpft.
      */
-    public const BASE_URL = 'http://49.12.216.72';
+    public const BASE_URL = 'https://agent.einrad.hockey';
 
     /**
      * Basispfad für includes, requires

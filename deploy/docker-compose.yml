@@ -3,14 +3,29 @@ services:
     build:
       context: ..
       dockerfile: deploy/Dockerfile
-    ports:
-      - '80:80'
+    # Nur über Caddy erreichbar (kein Host-Port).
+    expose:
+      - '80'
     environment:
       PHP_BINARY: php
     depends_on:
       db:
         condition: service_healthy
     restart: unless-stopped
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data # Zertifikate, Volume behalten
+      - caddy-config:/config
+    depends_on:
+      - app
 
   db:
     image: mariadb:12.2.2
@@ -30,3 +45,5 @@ services:
 
 volumes:
   db-data:
+  caddy-data:
+  caddy-config:
