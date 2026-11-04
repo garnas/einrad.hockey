@@ -72,6 +72,11 @@ include '../../templates/header.tmp.php';
         <td>3. Lilienthaler 24 Stunden Einradhockeyturnier</td>
         <td><a class='no w3-text-primary w3-hover-text-secondary' target="_blank" href='/dokumente/spielplaene/2026_Lilienthal-24h-Turnier.pdf'>Ergebnisse</a></td>
     </tr>
+    <tr>
+        <td>31.10.2026</td>
+        <td>1. FLINTA Einradhockeyturnier Mörfelden</td>
+        <td><a class='no w3-text-primary w3-hover-text-secondary' target="_blank" href='/dokumente/spielplaene/2026_FLINTA-Mörfelden.pdf'>Ergebnisse</a></td>
+    </tr>
 </table>
 
 <?php include '../../templates/footer.tmp.php';
