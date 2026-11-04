@@ -104,9 +104,11 @@ class TurnierRepository
             ->leftJoin('l.team', 'team')
             ->where('t.saison = :saison')
             ->andWhere('t.phase = :phase')
+            ->andWhere('t.art NOT LIKE :art')
             ->orderBy('t.datum', ($desc ? 'desc' : 'asc'))
             ->setParameter('saison', $saison)
             ->setParameter('phase', "ergebnis")
+            ->setParameter('art', '%spass%')
         ;
 
         return new ArrayCollection($query->getQuery()->execute());
