@@ -18,6 +18,17 @@ class TabelleRepository
 
     private function __construct() {}
 
+    /**
+     * LEFT JOIN auf den historischen Teamnamen der Saison (Alias h).
+     *
+     * In der laufenden Saison greift der Join nie, dort gilt wie in Team::getName() der aktuelle Name.
+     * Verwendung im SELECT: COALESCE(h.name, teams.teamname)
+     */
+    public static function historischerTeamnameJoin(int $saison): string
+    {
+        return "LEFT JOIN teams_name_historic h ON h.team_id = te.team_id AND h.saison = $saison AND $saison <> " . Config::SAISON;
+    }
+
     public function getMaxSpieltag(int $saison = Config::SAISON): int
     {
         $result = DoctrineWrapper::manager()
@@ -93,11 +104,12 @@ class TabelleRepository
      */
     public function getMeisterschaftsRohdaten(int $spieltag, int $saison): array
     {
+        $historischerTeamnameJoin = self::historischerTeamnameJoin($saison);
         $sql = "
                 WITH tournaments AS (
                     SELECT
                         te.team_id,
-                        teams.teamname,
+                        COALESCE(h.name, teams.teamname) AS teamname,
                         te.turnier_id,
                         tl.datum,
                         te.ergebnis,
@@ -112,6 +124,7 @@ class TabelleRepository
                     INNER JOIN turniere_liga tl ON tl.turnier_id = te.turnier_id
                     INNER JOIN teams_liga teams ON teams.team_id = te.team_id
                     INNER JOIN turniere_details td ON td.turnier_id = te.turnier_id
+                    $historischerTeamnameJoin
                     WHERE teams.ligateam = 'Ja'
                       AND tl.art != 'final'
                       AND (tl.saison = ?)
@@ -163,13 +176,15 @@ class TabelleRepository
             default => '',
         };
 
+        $historischerTeamnameJoin = self::historischerTeamnameJoin($saison);
         $sql = "
             WITH tournaments as (
-                SELECT te.team_id, teams.teamname, te.turnier_id, tl.saison, tl.datum, te.ergebnis, te.platz, tl.tblock, td.ort, row_number() over (PARTITION BY te.team_id order by tl.datum DESC) AS `turnier_rang`
+                SELECT te.team_id, COALESCE(h.name, teams.teamname) AS teamname, te.turnier_id, tl.saison, tl.datum, te.ergebnis, te.platz, tl.tblock, td.ort, row_number() over (PARTITION BY te.team_id order by tl.datum DESC) AS `turnier_rang`
                 FROM turniere_ergebnisse te
                 INNER JOIN turniere_liga tl ON tl.turnier_id = te.turnier_id
                 INNER JOIN teams_liga teams ON teams.team_id = te.team_id
                 INNER JOIN turniere_details td ON td.turnier_id = te.turnier_id
+                $historischerTeamnameJoin
                 WHERE teams.ligateam = 'Ja'
                 AND teams.aktiv = 'Ja'
                 AND tl.art != 'final'

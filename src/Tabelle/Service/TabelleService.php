@@ -313,11 +313,6 @@ class TabelleService
 
         }
 
-        if ($saison !== Config::SAISON) {
-            foreach ($return as $team_id => $team) {
-                $return[$team_id]['teamname'] = TeamRepository::get()->team($team_id)?->getName($saison);
-            }
-        }
 
         return $return;
     }
@@ -369,11 +364,6 @@ class TabelleService
                     $return[$team_id]['ergebnisse'] = [0];
                     $return[$team_id]['details'] = [];
                 }
-            }
-        }
-        if ($saison !== Config::SAISON) {
-            foreach ($return as $team_id => $team) {
-                $return[$team_id]['teamname'] = TeamRepository::get()->team($team_id)?->getName($saison);
             }
         }
 

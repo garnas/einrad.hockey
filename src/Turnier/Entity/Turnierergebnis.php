@@ -77,6 +77,14 @@ class Turnierergebnis
         return $this->team;
     }
 
+    /**
+     * Teamname in der Saison des Turniers.
+     */
+    public function getTeamname(): ?string
+    {
+        return $this->turnier->getTeamname($this->team);
+    }
+
     public function setTeam(Team $team): self
     {
         $this->team = $team;

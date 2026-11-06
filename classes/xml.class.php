@@ -109,7 +109,7 @@ class xml
             $xml_child->addChild('organisator', e($turnier->getDetails()->getOrganisator()));
             $xml_child->addChild('handy', e($turnier->getDetails()->getHandy()));
             $xml_child->addChild('startgebuehr', e($turnier->getDetails()->getStartgebuehr()));
-            $xml_child->addChild('teamname', e($turnier->getAusrichter()->getName()));
+            $xml_child->addChild('teamname', e($turnier->getAusrichterName()));
         }
         return $xml->asXML();
     }
@@ -136,7 +136,7 @@ class xml
                 'position_warteliste' => $anmeldung->getPositionWarteliste(),
                 'freilos_gesetzt' => $anmeldung->getFreilosGesetzt(),
                 'freilos_gesetzt_am' => $anmeldung->getFreilosGesetztAm()?->format('Y-m-d H:i:s'),
-                'teamname' => $anmeldung->getTeam()->getName(),
+                'teamname' => $anmeldung->getTeamname(),
                 'ligateam' => $anmeldung->getTeam()->getLigateam(),
                 'tblock' => TabelleService::getTeamBlock($team_id, $spieltag),
                 'wertigkeit' => TabelleService::getTeamWertigkeit($team_id, $spieltag),

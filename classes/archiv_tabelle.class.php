@@ -1,5 +1,6 @@
 <?php
 
+use App\Tabelle\Repository\TabelleRepository;
 use App\Team\Repository\TeamRepository;
 use App\Tabelle\Service\TabelleService;
 
@@ -26,13 +27,15 @@ class Archiv_Tabelle
 
     public static function get_meisterschafts_tabelle(int $spieltag, int $saison = Config::SAISON): array
     {
+        $historischerTeamnameJoin = TabelleRepository::historischerTeamnameJoin($saison);
         $sql = "
             WITH tournaments as (
-                SELECT te.team_id, teams.teamname, te.turnier_id, tl.datum, te.ergebnis, td.ort, tl.tblock, te.platz, dense_rank() over (PARTITION BY te.team_id order by te.ergebnis DESC) AS `rank`
+                SELECT te.team_id, COALESCE(h.name, teams.teamname) AS teamname, te.turnier_id, tl.datum, te.ergebnis, td.ort, tl.tblock, te.platz, dense_rank() over (PARTITION BY te.team_id order by te.ergebnis DESC) AS `rank`
                 FROM turniere_ergebnisse te
                 INNER JOIN turniere_liga tl ON tl.turnier_id = te.turnier_id
                 INNER JOIN teams_liga teams ON teams.team_id = te.team_id
                 INNER JOIN turniere_details td ON td.turnier_id = te.turnier_id
+                $historischerTeamnameJoin
                 WHERE teams.ligateam = 'Ja'
                 AND tl.art != 'final' 
                 AND (tl.saison = ?) 
@@ -115,11 +118,6 @@ class Archiv_Tabelle
             $platz++;
         }
 
-        if ($saison !== Config::SAISON) {
-            foreach ($return as $team_id => $team) {
-                $return[$team_id]['teamname'] = TeamRepository::get()->team($team_id)?->getName($saison);
-            }
-        }
 
         return $return;
     }

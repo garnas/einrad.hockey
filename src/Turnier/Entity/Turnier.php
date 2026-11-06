@@ -7,6 +7,7 @@ use App\Team\Entity\Freilos;
 use App\Team\Entity\Team;
 use App\Turnier\Service\TurnierLogService;
 use App\Turnier\Service\TurnierSnippets;
+use Config;
 use DateTime;
 use Discord;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -448,6 +449,22 @@ class Turnier
     public function getSaison(): ?int
     {
         return $this->saison;
+    }
+
+    /**
+     * Teamname, den das Team in der Saison dieses Turniers getragen hat.
+     */
+    public function getTeamname(Team $team): ?string
+    {
+        return $team->getName($this->saison ?? Config::SAISON);
+    }
+
+    /**
+     * Name des Ausrichters in der Saison dieses Turniers.
+     */
+    public function getAusrichterName(): ?string
+    {
+        return $this->getTeamname($this->getAusrichter());
     }
 
     public function setSaison(?int $saison): self

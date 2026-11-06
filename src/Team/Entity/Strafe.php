@@ -146,6 +146,14 @@ class Strafe
     }
 
     /**
+     * Teamname in der Saison der Strafe.
+     */
+    public function getTeamname(): ?string
+    {
+        return $this->team->getName($this->saison);
+    }
+
+    /**
      * @param Team $team
      * @return Strafe
      */
