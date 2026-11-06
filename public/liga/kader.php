@@ -28,10 +28,10 @@ include '../../templates/header.tmp.php';
     <div class="w3-section">
         <ul class="w3-ul w3-leftbar w3-border-tertiary">
             <li>07. + 08. November 2026 (Remscheid)</li>
+            <li>09. + 10. Januar 2027 (Bottrop)</li>
             <li>06. + 07. Februar 2027 (Mörfelden)</li>
             <li>20. + 21. März 2027 (Mörfelden)</li>
-            <li><i>Weitere Termine folgen</i></li>
-
+            <li>15. + 16. Mai 2027 (Augustdorf)</li>
         </ul>
     </div>
 
@@ -76,11 +76,11 @@ include '../../templates/header.tmp.php';
     <div class="w3-section">
         <ul class="w3-ul w3-leftbar w3-border-tertiary">
             <li>10. + 11. Oktober 2026 (Mörfelden)</li>
-            <li>14. + 15. November 2026</li>
-            <li>12. + 13. Dezember 2026</li>
+            <li>14. + 15. November 2026 (Winsen (Luhe))</li>
+            <li>12. + 13. Dezember 2026 (Borken)</li>
             <li>23. + 24. Januar 2027</li>
             <li>06. + 07. März 2027</li>
-            <li>17. + 18. April 2027</li>
+            <li>17. + 18. April 2027 (Münster (bei Dieburg))</li>
             <li>22. + 23. Mai 2027 (Mörfelden)</li>
         </ul>
     </div>
