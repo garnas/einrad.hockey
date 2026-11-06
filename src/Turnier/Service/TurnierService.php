@@ -95,6 +95,19 @@ class TurnierService
         return Date::createFromTimestamp($unixTime)->format("l, d.m.Y - H:i") . " Uhr";
     }
 
+    /**
+     * Ab diesem Tag gilt ein Spaßturnier als beendet und wird in die Ergebnisphase gesetzt.
+     * Mit Enddatum: der Tag nach dem Enddatum. Ohne Enddatum: der nächste Dienstag nach dem Turnier.
+     */
+    public static function spassturnierBeendetAb(Turnier $turnier): DateTimeImmutable
+    {
+        if ($turnier->getDatumBis() !== null) {
+            return DateTimeImmutable::createFromMutable($turnier->getDatumBis())->setTime(0, 0)->modify('+1 day');
+        }
+
+        return DateTimeImmutable::createFromMutable($turnier->getDatum())->setTime(0, 0)->modify('next tuesday');
+    }
+
     public static function warteToSetzUnix(Turnier $turnier): int
     {
         $turnier_datum = DateTimeImmutable::createFromMutable($turnier->getDatum());

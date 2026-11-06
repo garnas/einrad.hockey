@@ -104,12 +104,38 @@ class TurnierRepository
             ->leftJoin('l.team', 'team')
             ->where('t.saison = :saison')
             ->andWhere('t.phase = :phase')
+            ->andWhere('t.art NOT LIKE :art')
             ->orderBy('t.datum', ($desc ? 'desc' : 'asc'))
             ->setParameter('saison', $saison)
             ->setParameter('phase', "ergebnis")
+            ->setParameter('art', '%spass%')
         ;
 
         return new ArrayCollection($query->getQuery()->execute());
+    }
+
+    /**
+     * Spaßturniere der Saison, die vor dem Stichtag begonnen haben und noch nicht in der Ergebnisphase sind.
+     *
+     * @return Turnier[]
+     */
+    public function getVergangeneOffeneSpassturniere(\DateTimeInterface $stichtag, int $saison = Config::SAISON): array
+    {
+        return DoctrineWrapper::manager()
+            ->createQueryBuilder()
+            ->select('t')
+            ->from(Turnier::class, 't')
+            ->where('t.art = :art')
+            ->andWhere('t.phase != :phase')
+            ->andWhere('t.canceled = false')
+            ->andWhere('t.saison = :saison')
+            ->andWhere('t.datum < :stichtag')
+            ->setParameter('art', 'spass')
+            ->setParameter('phase', 'ergebnis')
+            ->setParameter('saison', $saison)
+            ->setParameter('stichtag', $stichtag)
+            ->getQuery()
+            ->execute();
     }
 
     /**
