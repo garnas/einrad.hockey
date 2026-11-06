@@ -77,6 +77,7 @@ if (isset($_POST['reaktivieren'])) {
     if ($team) {
         $team->setAktiv('Ja');
         TeamRepository::get()->speichern($team);
+        TeamRepository::get()->saisonzugehoerigkeitAbgleichen();
         Html::info("Das Team " . $team->getName() . " wurde reaktiviert.");
         Helper::reload(path: "/ligacenter/lc_admin.php");
     }
