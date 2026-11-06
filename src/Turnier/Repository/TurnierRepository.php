@@ -115,6 +115,30 @@ class TurnierRepository
     }
 
     /**
+     * Spaßturniere der Saison, die vor dem Stichtag begonnen haben und noch nicht in der Ergebnisphase sind.
+     *
+     * @return Turnier[]
+     */
+    public function getVergangeneOffeneSpassturniere(\DateTimeInterface $stichtag, int $saison = Config::SAISON): array
+    {
+        return DoctrineWrapper::manager()
+            ->createQueryBuilder()
+            ->select('t')
+            ->from(Turnier::class, 't')
+            ->where('t.art = :art')
+            ->andWhere('t.phase != :phase')
+            ->andWhere('t.canceled = false')
+            ->andWhere('t.saison = :saison')
+            ->andWhere('t.datum < :stichtag')
+            ->setParameter('art', 'spass')
+            ->setParameter('phase', 'ergebnis')
+            ->setParameter('saison', $saison)
+            ->setParameter('stichtag', $stichtag)
+            ->getQuery()
+            ->execute();
+    }
+
+    /**
      * Erhalte die Turniere bei denen das Team teilnimmt und für die ein Turnierreport existiert.
      *
      * @return Turnier[]|Collection
