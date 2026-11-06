@@ -1,4 +1,5 @@
 <?php use App\Turnier\Service\TurnierFormService;
+use App\Turnier\Service\TurnierPermission;
 
 ?>
 
@@ -35,16 +36,20 @@
                 <?php endforeach; ?>
                 <!-- Blockeigenes Turnier -->
                 <option <?php if (($turnier_block ?? '') === $ausrichter_block) {?> selected <?php } ?> value=I_<?= $ausrichter_block ?>><?= $ausrichter_block?>: Blockeigenes Turnier (I)</option>
-                <?php if (Helper::$ligacenter): ?>
-                    <!-- LA: Turnier mit fixiertem Block -->
+                <?php if (TurnierPermission::canCreateArt('fixed')): ?>
+                    <!-- Turnier mit fixiertem Block -->
                     <?php foreach (Config::BLOCK as $block): ?>
                         <option <?php if (($turnier_art_block ?? '') === $block): ?> selected <?php endif; ?> value='fixed_<?=$block?>'><?=$block?>: Fixierter Turnierblock</option>
                     <?php endforeach; ?>
-                    <!-- LA: Abschlussturnier -->
+                <?php endif; ?>
+                <?php if (TurnierPermission::canCreateArt('final')): ?>
+                    <!-- Abschlussturnier -->
                     <option value='final'>Abschlussturnier</option>
                 <?php endif; ?>
-                <!-- Spaßturnier -->
-                <option <?php if (($turnier_block ?? '') == 'spass') {?> selected <?php } ?> value="spass">Spaßturnier</option>
+                <?php if (TurnierPermission::canCreateArt('spass')): ?>
+                    <!-- Spaßturnier -->
+                    <option <?php if (($turnier_block ?? '') == 'spass') {?> selected <?php } ?> value="spass">Spaßturnier</option>
+                <?php endif; ?>
             </select>
         </p>
     </div>

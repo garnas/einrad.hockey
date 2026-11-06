@@ -59,7 +59,6 @@ class TurnierValidator
         $validator = new self($turnier);
 
         return $validator->mayChange()
-            && $validator->hasValidArt()
             && $validator->hasValidAusrichter()
             && $validator->hasValidPhase()
             && $validator->hasValidUhrzeit()
@@ -139,18 +138,7 @@ class TurnierValidator
 
     public function hasValidArt(): bool
     {
-
-        if (
-            (Helper::$teamcenter && !self::hasLaRights($this->turnier))
-            && \in_array($this->turnier->getArt(), ['I', 'II', 'spass'], true)
-        ) {
-            return true;
-        }
-
-        if (
-            self::hasLaRights($this->turnier)
-            && \in_array($this->turnier->getArt(), ['I', 'II', 'spass', 'final', 'fixed'], true)
-        ) {
+        if (TurnierPermission::canCreateArt($this->turnier->getArt())) {
             return true;
         }
 
