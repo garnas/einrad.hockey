@@ -64,13 +64,13 @@ if ($allow_edit) {
         $team_id_ab = TeamRepository::get()->findByName($team_ab)?->id();
         $team_id_auf = TeamRepository::get()->findByName($team_auf)?->id();
 
-        if (!TurnierberichtValidator::validTeam($team_auf)) {
-            Html::error("Das aufnehmende Team wurde nicht gefunden.");
+        if (!TurnierberichtValidator::validTeam($team_auf, $turnier)) {
+            Html::error("Das aufnehmende Team wurde nicht gefunden oder nimmt nicht am Turnier teil.");
             Helper::reload(get: "?turnier_id=" . $turnier->id());
         }
 
-        if (!TurnierberichtValidator::validTeam($team_ab)) {
-            Html::error("Das abgebende Team wurde nicht gefunden.");
+        if (!TurnierberichtValidator::validTeam($team_ab, $turnier)) {
+            Html::error("Das abgebende Team wurde nicht gefunden oder nimmt nicht am Turnier teil.");
             Helper::reload(get: "?turnier_id=" . $turnier->id());
         }
 
@@ -102,13 +102,13 @@ if ($allow_edit) {
         $team_b = $_POST['zeitstrafe_team_b'];
         $bericht = $_POST['zeitstrafe_bericht'];
 
-        if (!TurnierberichtValidator::validTeam($team_a)) {
-            Html::error("Das erstgenannte Team in der Spielpaarung wurde nicht gefunden.");
+        if (!TurnierberichtValidator::validTeam($team_a, $turnier)) {
+            Html::error("Das erstgenannte Team in der Spielpaarung wurde nicht gefunden oder nimmt nicht am Turnier teil.");
             Helper::reload(get: "?turnier_id=" . $turnier->id());
         }
 
-        if (!TurnierberichtValidator::validTeam($team_b)) {
-            Html::error("Das zweitgenannte Team in der Spielpaarung wurde nicht gefunden.");
+        if (!TurnierberichtValidator::validTeam($team_b, $turnier)) {
+            Html::error("Das zweitgenannte Team in der Spielpaarung wurde nicht gefunden oder nimmt nicht am Turnier teil.");
             Helper::reload(get: "?turnier_id=" . $turnier->id());
         }
 
