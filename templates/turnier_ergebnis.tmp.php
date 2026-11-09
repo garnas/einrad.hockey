@@ -33,7 +33,7 @@ use App\Turnier\Service\TurnierSnippets;
         <div class="w3-row w3-border-bottom w3-border-grey <?= $key % 2 == 0 ? '' : 'w3-light-grey' ?>">
             <div class="w3-col w3-left w3-padding-8 w3-right-align" style="width: 36px"><?= $ergebnis->getPlatz() ?></div>
             <div class="w3-col w3-right w3-padding-8 w3-right-align" style="width: 80px;"><?= $ergebnis->getErgebnis() ? number_format($ergebnis->getErgebnis() ?: 0, 0, ",", ".") : '-' ?></div>
-            <div class="w3-rest w3-padding-8"><?= e($ergebnis->getTeam()->getName()) ?></div>
+            <div class="w3-rest w3-padding-8"><?= e($ergebnis->getTeamname()) ?></div>
         </div>                   
     <?php endforeach; ?>
 

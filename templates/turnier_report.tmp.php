@@ -24,7 +24,7 @@ use App\Turnier\Service\TurnierSnippets;
             onclick="open_kader(<?=  $element->getTeam()->id() ?>)" 
             class="w3-button w3-block w3-left-align w3-primary w3-border-bottom w3-border-white"
         >
-            <?=e($element->getTeam()->getName())?>
+            <?=e($element->getTeamname())?>
         </button>
         
         <?php if (!empty($element->getTeam()->getKaderAktuell())): ?>
@@ -150,7 +150,7 @@ use App\Turnier\Service\TurnierSnippets;
                     >
                         <option selected disabled>--</option>
                         <?php foreach ($setzliste as $element): ?>
-                            <option><?=e($element->getTeam()->getName())?></option>
+                            <option><?=e($element->getTeamname())?></option>
                         <?php endforeach; ?>
                     </select>
                 </p>
@@ -261,7 +261,7 @@ use App\Turnier\Service\TurnierSnippets;
                     >
                         <option disabled selected value="">--</option>
                         <?php foreach ($setzliste as $element): ?>
-                            <option><?= e($element->getTeam()->getName()) ?></option>
+                            <option><?= e($element->getTeamname()) ?></option>
                         <?php endforeach; ?>
                     </select>
                     <label for="zeitstrafe_team_b" class="w3-text-grey">versus</label>
@@ -272,7 +272,7 @@ use App\Turnier\Service\TurnierSnippets;
                     >
                         <option disabled selected value="">--</option>
                         <?php foreach ($setzliste as $element): ?>
-                            <option><?= e($element->getTeam()->getName()) ?></option>
+                            <option><?= e($element->getTeamname()) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </p>

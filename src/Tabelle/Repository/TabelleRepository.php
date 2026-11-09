@@ -18,6 +18,54 @@ class TabelleRepository
 
     private function __construct() {}
 
+    /**
+     * SQL-Bausteine für die Teams einer Saison (Aliase: te = turniere_ergebnisse, teams = teams_liga).
+     *
+     * Laufende Saison: Ligateams aus teams_liga mit aktuellem Namen, optional nur aktive Teams.
+     * Vergangene Saison: Saisonzugehörigkeit aus teams_saison mit dem damaligen Namen. Teams, die die Liga
+     * inzwischen verlassen haben, sind damit weiterhin enthalten.
+     *
+     * @return array{join: string, name: string, filter: string}
+     */
+    public static function saisonTeamsSql(int $saison, bool $nurAktive = false): array
+    {
+        if ($saison === Config::SAISON) {
+            return [
+                'join' => '',
+                'name' => 'teams.teamname',
+                'filter' => "teams.ligateam = 'Ja'" . ($nurAktive ? " AND teams.aktiv = 'Ja'" : ''),
+            ];
+        }
+
+        return [
+            'join' => "INNER JOIN teams_saison ts ON ts.team_id = te.team_id AND ts.saison = $saison",
+            'name' => 'ts.name',
+            'filter' => 'TRUE',
+        ];
+    }
+
+    /**
+     * Alle Ligateams einer Saison, auch ohne Ergebnisse.
+     *
+     * Laufende Saison: aktive Ligateams mit aktuellem Namen. Vergangene Saison: Einträge aus teams_saison.
+     *
+     * @return array<int, string> team_id => Teamname
+     */
+    public function getTeamsDerSaison(int $saison): array
+    {
+        $connection = DoctrineWrapper::manager()->getConnection();
+
+        if ($saison === Config::SAISON) {
+            return $connection
+                ->executeQuery("SELECT team_id, teamname FROM teams_liga WHERE aktiv = 'Ja' AND ligateam = 'Ja'")
+                ->fetchAllKeyValue();
+        }
+
+        return $connection
+            ->executeQuery("SELECT team_id, name FROM teams_saison WHERE saison = ?", [$saison])
+            ->fetchAllKeyValue();
+    }
+
     public function getMaxSpieltag(int $saison = Config::SAISON): int
     {
         $result = DoctrineWrapper::manager()
@@ -93,11 +141,12 @@ class TabelleRepository
      */
     public function getMeisterschaftsRohdaten(int $spieltag, int $saison): array
     {
+        $saisonTeams = self::saisonTeamsSql($saison);
         $sql = "
                 WITH tournaments AS (
                     SELECT
                         te.team_id,
-                        teams.teamname,
+                        {$saisonTeams['name']} AS teamname,
                         te.turnier_id,
                         tl.datum,
                         te.ergebnis,
@@ -112,7 +161,8 @@ class TabelleRepository
                     INNER JOIN turniere_liga tl ON tl.turnier_id = te.turnier_id
                     INNER JOIN teams_liga teams ON teams.team_id = te.team_id
                     INNER JOIN turniere_details td ON td.turnier_id = te.turnier_id
-                    WHERE teams.ligateam = 'Ja'
+                    {$saisonTeams['join']}
+                    WHERE {$saisonTeams['filter']}
                       AND tl.art != 'final'
                       AND (tl.saison = ?)
                       AND (tl.spieltag <= ?)
@@ -163,15 +213,16 @@ class TabelleRepository
             default => '',
         };
 
+        $saisonTeams = self::saisonTeamsSql($saison, nurAktive: true);
         $sql = "
             WITH tournaments as (
-                SELECT te.team_id, teams.teamname, te.turnier_id, tl.saison, tl.datum, te.ergebnis, te.platz, tl.tblock, td.ort, row_number() over (PARTITION BY te.team_id order by tl.datum DESC) AS `turnier_rang`
+                SELECT te.team_id, {$saisonTeams['name']} AS teamname, te.turnier_id, tl.saison, tl.datum, te.ergebnis, te.platz, tl.tblock, td.ort, row_number() over (PARTITION BY te.team_id order by tl.datum DESC) AS `turnier_rang`
                 FROM turniere_ergebnisse te
                 INNER JOIN turniere_liga tl ON tl.turnier_id = te.turnier_id
                 INNER JOIN teams_liga teams ON teams.team_id = te.team_id
                 INNER JOIN turniere_details td ON td.turnier_id = te.turnier_id
-                WHERE teams.ligateam = 'Ja'
-                AND teams.aktiv = 'Ja'
+                {$saisonTeams['join']}
+                WHERE {$saisonTeams['filter']}
                 AND tl.art != 'final'
                 AND ((tl.spieltag <= ? AND tl.saison = ?) OR tl.saison = ? - 1 $ausnahme)
                 AND not te.saison_uebernahme_verhindern

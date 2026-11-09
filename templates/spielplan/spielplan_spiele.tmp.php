@@ -4,7 +4,7 @@ use App\Team\Repository\TeamRepository;
 
 /** @var \App\Spielplan\Model\Spielplan $spielplan */
 $schiri_name = static fn(int $team_id): ?string => ($spielplan->getPlatzierungstabelle()[$team_id] ?? null)?->teamname
-    ?? TeamRepository::get()->team($team_id)?->getName();
+    ?? (($team = TeamRepository::get()->team($team_id)) ? $spielplan->getTurnier()->getTeamname($team) : null);
 ?>
 <!-- Spielzeiten -->
 <h1 class="w3-text-secondary">Spiele</h1>

@@ -44,12 +44,12 @@ final class SpielAnsicht
 
     public function getTeamnameA(): ?string
     {
-        return $this->spiel->getTeamA()->getName();
+        return $this->spiel->getTurnier()->getTeamname($this->spiel->getTeamA());
     }
 
     public function getTeamnameB(): ?string
     {
-        return $this->spiel->getTeamB()->getName();
+        return $this->spiel->getTurnier()->getTeamname($this->spiel->getTeamB());
     }
 
     public function getSchiriIdA(): int
@@ -64,12 +64,12 @@ final class SpielAnsicht
 
     public function getSchiriNameA(): ?string
     {
-        return $this->spiel->getSchiriTeamA()->getName();
+        return $this->spiel->getTurnier()->getTeamname($this->spiel->getSchiriTeamA());
     }
 
     public function getSchiriNameB(): ?string
     {
-        return $this->spiel->getSchiriTeamB()->getName();
+        return $this->spiel->getTurnier()->getTeamname($this->spiel->getSchiriTeamB());
     }
 
     public function getToreA(): ?int

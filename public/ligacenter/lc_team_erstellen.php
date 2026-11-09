@@ -54,6 +54,7 @@ if (isset($_POST["team_erstellen"])) {
             $team->addFreilos(grund: Freilosgrund::NEUES_LIGATEAM);
         }
         TeamRepository::get()->speichern($team);
+        TeamRepository::get()->saisonzugehoerigkeitAbgleichen();
 
         Html::info("Das Team \"" . e($teamname) . "\" wurde erfolgreich erstellt. Email: " . e($email) . " Passwort: " . e($passwort));
         Helper::reload("/liga/teams.php");
