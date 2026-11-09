@@ -11,6 +11,8 @@ use App\Turnierbericht\Service\TurnierberichtPermission;
 use App\Turnierbericht\Repository\SpielerausleiheRepository;
 use App\Turnierbericht\Repository\ZeitstrafeRepository;
 use App\Turnierbericht\Service\TurnierberichtValidator;
+use App\Turnierbericht\Service\SpielerausleiheService;
+use App\Spieler\Repository\SpielerRepository;
 
 $turnier_id = (int) @$_GET['turnier_id'];
 $turnier = TurnierRepository::get()->turnier($turnier_id);
@@ -43,6 +45,7 @@ if (!TurnierberichtPermission::canRead()) {
 $setzliste = TurnierService::getSetzListe($turnier);
 $spieler_ausleihen = $turnier->getLeihen();
 $spieler_zeitstrafen = $turnier->getZeitstrafen();
+$leihbare_spieler = SpielerausleiheService::getLeihbareSpielerNachTeam($turnier);
 
 $allow_edit = TurnierberichtPermission::canEdit($turnier_bericht);
 if ($allow_edit) {
@@ -58,27 +61,44 @@ if ($allow_edit) {
 
     // Spielerausleihe hinzufügen
     if (isset($_POST['new_ausleihe'])) {
-        $name = $_POST['ausleihe_name'];
-        $team_ab = $_POST['ausleihe_team_ab'];
-        $team_auf = $_POST['ausleihe_team_auf'];
-        $team_id_ab = TeamRepository::get()->findByName($team_ab)?->id();
-        $team_id_auf = TeamRepository::get()->findByName($team_auf)?->id();
+        $team_auf = TeamRepository::get()->team((int) ($_POST['ausleihe_team_auf'] ?? 0));
+        $spieler_auswahl = $_POST['ausleihe_spieler'] ?? '';
 
-        if (!TurnierberichtValidator::validTeam($team_auf)) {
+        if ($team_auf === null) {
             Html::error("Das aufnehmende Team wurde nicht gefunden.");
             Helper::reload(get: "?turnier_id=" . $turnier->id());
         }
 
-        if (!TurnierberichtValidator::validTeam($team_ab)) {
-            Html::error("Das abgebende Team wurde nicht gefunden.");
+        if (!ctype_digit((string) $spieler_auswahl)) {
+            // Kein Treffer in der Liste: nicht gemeldete Person, nur für Nichtligateams
+            if ($team_auf->isLigaTeam()) {
+                Html::error("Bitte eine Spieler:in aus der Liste auswählen.");
+                Helper::reload(get: "?turnier_id=" . $turnier->id());
+            }
+            $name = trim($_POST['ausleihe_name'] ?? '');
+            $fehler = SpielerausleiheService::pruefeFreieAusleihe($turnier, $team_auf, $name);
+            $team_ab_name = $team_auf->getName();
+        } else {
+            $spieler = SpielerRepository::get()->spieler((int) $spieler_auswahl);
+            if ($spieler === null) {
+                Html::error("Die Spieler:in wurde nicht gefunden.");
+                Helper::reload(get: "?turnier_id=" . $turnier->id());
+            }
+            $fehler = SpielerausleiheService::pruefeAusleihe($turnier, $team_auf, $spieler);
+            $name = $spieler->getName(fullName: false);
+            $team_ab_name = $spieler->getTeam()?->getName() ?? '';
+        }
+
+        if ($fehler !== null) {
+            Html::error($fehler);
             Helper::reload(get: "?turnier_id=" . $turnier->id());
         }
 
         $ausleihe = new Spielerausleihe($turnier);
         $ausleihe
             ->setSpieler($name)
-            ->setTeamAuf($team_auf)
-            ->setTeamAb($team_ab);
+            ->setTeamAuf($team_auf->getName())
+            ->setTeamAb($team_ab_name);
 
         SpielerausleiheRepository::get()->speichern($ausleihe);
         Html::info("Spielerausleihe wurde hinzugefügt.");
