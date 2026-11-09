@@ -9,7 +9,7 @@ class TurnierberichtValidator
     public static function validTeam(string $teamname): bool
     {
         $team = TeamRepository::get()->findByName($teamname);
-        return (bool) $team?->isLigaTeam();
+        return $team !== null;
     }
 
     public static function validKaderCheck(string $check): bool
