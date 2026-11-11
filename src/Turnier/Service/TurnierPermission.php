@@ -109,6 +109,14 @@ class TurnierPermission
     }
 
     /**
+     * Turnier absagen: der Ligaausschuss, bei Spaßturnieren auch der Ausrichter.
+     */
+    public static function canCancel(Turnier $turnier): bool
+    {
+        return Helper::$ligacenter || self::isSpassturnierVerwalter($turnier);
+    }
+
+    /**
      * Darf ein Formularfeld des Turniers geändert werden?
      * Ohne Turnier (Neuanlage) sind alle Felder änderbar.
      * Der Ausrichter eines Spaßturniers darf alle Felder außer der Turnierart ändern.

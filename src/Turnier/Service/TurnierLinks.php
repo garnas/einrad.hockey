@@ -83,6 +83,13 @@ class TurnierLinks
                 icon: "how_to_reg",
             );
         }
+        if ($turnier->isSpassturnier()) {
+            $links[] = Html::link(
+                "../teamcenter/tc_turnier_absagen.php?turnier_id=$turnierId",
+                "Turnier absagen",
+                icon: "block",
+            );
+        }
         if ($turnier->isSpielplanPhase()) {
             $links[] = "<b>"
                 . Html::link(

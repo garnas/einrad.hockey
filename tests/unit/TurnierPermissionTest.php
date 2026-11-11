@@ -512,4 +512,18 @@ class TurnierPermissionTest extends TestCase
 
         $this->assertFalse(TurnierPermission::canManageSpielplan($this->turnier(TurnierPhase::SETZ)));
     }
+
+    public function testAbsagenNurLaUndAusrichterVonSpassturnieren(): void
+    {
+        $this->alsAusrichter();
+        $this->assertTrue(TurnierPermission::canCancel($this->turnier(TurnierPhase::WARTE, 'spass')));
+        $this->assertFalse(TurnierPermission::canCancel($this->turnier(TurnierPhase::WARTE)), "Ligaturnier");
+
+        $this->alsAnderesTeam();
+        $this->assertFalse(TurnierPermission::canCancel($this->turnier(TurnierPhase::WARTE, 'spass')));
+
+        Helper::$teamcenter = false;
+        Helper::$ligacenter = true;
+        $this->assertTrue(TurnierPermission::canCancel($this->turnier(TurnierPhase::ERGEBNIS)));
+    }
 }
