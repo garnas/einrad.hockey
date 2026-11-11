@@ -9,10 +9,12 @@ use App\Team\Service\TeamService;
 use App\Turnier\Entity\Turnier;
 use App\Turnier\Entity\Turnieranmeldung;
 use App\Turnier\Mail\TurnierMails;
+use App\Turnier\Repository\TurnierRepository;
 use App\Turnier\Service\BlockService;
 use App\Turnier\Service\TurnierService;
 use App\Turnier\Service\TurnierValidator;
 use Config;
+use DateTimeImmutable;
 use db;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -41,6 +43,7 @@ class LigaBot
         self::setSpieltage();
         //        self::blockWechsel(); # Der Blockwechsel wird Moduskonform 23/24 nur noch mit Ende eines Spieltages vollzogen
         self::phasenWechsel();
+        self::spassturniereAbschliessen();
         self::archiveNeuigkeiten();
         DoctrineWrapper::manager()->flush();
 
@@ -218,6 +221,25 @@ class LigaBot
         }
         DoctrineWrapper::manager()->flush();
         DoctrineWrapper::manager()->clear();
+    }
+
+    /**
+     * Setzt Spaßturniere in die Ergebnisphase, sobald sie beendet sind.
+     *
+     * @see TurnierService::spassturnierBeendetAb()
+     */
+    public static function spassturniereAbschliessen(): void
+    {
+        $heute = new DateTimeImmutable('today');
+
+        foreach (TurnierRepository::get()->getVergangeneOffeneSpassturniere($heute) as $turnier) {
+            if (TurnierService::spassturnierBeendetAb($turnier) > $heute) {
+                continue;
+            }
+            $turnier->setPhase('ergebnis');
+            DoctrineWrapper::manager()->persist($turnier);
+        }
+        DoctrineWrapper::manager()->flush();
     }
 
     /**
