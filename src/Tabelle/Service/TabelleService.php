@@ -4,6 +4,7 @@ namespace App\Tabelle\Service;
 
 use App\Team\Repository\TeamRepository;
 use App\Tabelle\Repository\TabelleRepository;
+use App\Turnier\Enum\TurnierPhase;
 use Config;
 
 /**
@@ -38,7 +39,7 @@ class TabelleService
     public static function isSpieltagBeendet(int $spieltag): bool
     {
         $phasen = TabelleRepository::get()->getPhasenBySpieltag($spieltag);
-        return $phasen == ["ergebnis"];
+        return $phasen === [TurnierPhase::ERGEBNIS];
     }
 
     /**
@@ -51,10 +52,8 @@ class TabelleService
     public static function checkSpieltagLive(int $spieltag, int $saison = Config::SAISON): bool
     {
         $phasen = TabelleRepository::get()->getPhasenBySpieltag($spieltag, $saison, );
-        return (
-            in_array('spielplan', $phasen, true) || in_array('melde', $phasen, true) || in_array('offen', $phasen, true)
-        )
-                && in_array('ergebnis', $phasen, true);
+        return in_array(TurnierPhase::SPIELPLAN, $phasen, true)
+            && in_array(TurnierPhase::ERGEBNIS, $phasen, true);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Turnier\Entity;
 use App\Spielplan\Entity\SpielplanDetails;
 use App\Team\Entity\Freilos;
 use App\Team\Entity\Team;
+use App\Turnier\Enum\TurnierPhase;
 use App\Turnier\Service\TurnierLogService;
 use App\Turnier\Service\TurnierSnippets;
 use Config;
@@ -59,8 +60,8 @@ class Turnier
     #[ORM\Column(name: "spieltag", type: "integer", nullable: true)]
     private ?int $spieltag = 0;
 
-    #[ORM\Column(name: "phase", type: "string", nullable: true)]
-    private ?string $phase;
+    #[ORM\Column(name: "phase", type: "string", nullable: true, enumType: TurnierPhase::class)]
+    private ?TurnierPhase $phase;
 
     #[ORM\Column(name: "canceled_grund", type: "string", nullable: true)]
     private ?string $canceledGrund;
@@ -170,17 +171,17 @@ class Turnier
 
     public function isSetzPhase(): bool
     {
-        return $this->phase === "setz";
+        return $this->phase === TurnierPhase::SETZ;
     }
 
     public function isSpielplanPhase(): bool
     {
-        return $this->phase === 'spielplan';
+        return $this->phase === TurnierPhase::SPIELPLAN;
     }
 
     public function isErgebnisPhase(): bool
     {
-        return $this->phase === 'ergebnis';
+        return $this->phase === TurnierPhase::ERGEBNIS;
     }
 
     public function isSpassturnier(): bool
@@ -190,7 +191,7 @@ class Turnier
 
     public function isWartePhase(): bool
     {
-        return $this->phase === "warte";
+        return $this->phase === TurnierPhase::WARTE;
     }
 
     public function hasBesprechung(): bool
@@ -422,14 +423,15 @@ class Turnier
         return $this;
     }
 
-    public function getPhase(): ?string
+    public function getPhase(): ?TurnierPhase
     {
         return $this->phase;
     }
 
-    public function setPhase(?string $phase): self
+    public function setPhase(?TurnierPhase $phase): self
     {
-        $this->logService->autoLog("Phase", $this->phase ?? null, $phase);
+        // "?? null": $phase ist bei neuen Turnieren noch nicht initialisiert
+        $this->logService->autoLog("Phase", ($this->phase ?? null)?->value, $phase?->value);
         $this->phase = $phase;
         return $this;
     }

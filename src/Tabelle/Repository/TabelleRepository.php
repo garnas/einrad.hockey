@@ -4,6 +4,7 @@ namespace App\Tabelle\Repository;
 
 use App\Turnier\Entity\Turnier;
 use App\Turnier\Entity\Turnierergebnis;
+use App\Turnier\Enum\TurnierPhase;
 use App\Shared\DoctrineWrapper;
 use App\Shared\SingletonRepositoryTrait;
 use Config;
@@ -77,7 +78,7 @@ class TabelleRepository
             ->andWhere('t.phase = :phase')
             ->setParameter('saison', $saison)
             ->setParameter('arten', ['I', 'II', 'III'])
-            ->setParameter('phase', 'ergebnis')
+            ->setParameter('phase', TurnierPhase::ERGEBNIS)
             ->getQuery()
             ->getSingleScalarResult();
 
@@ -87,8 +88,7 @@ class TabelleRepository
     /**
      * Gibt die an einem Spieltag vorkommenden Phasen zurück.
      *
-     * @param string[] $arten
-     * @return string[]
+     * @return TurnierPhase[]
      */
     public function getPhasenBySpieltag(int $spieltag, int $saison = Config::SAISON): array
     {
@@ -104,7 +104,10 @@ class TabelleRepository
             ->setParameter('arten', ['I', 'II', 'III'])
             ->setParameter('saison', $saison)
             ->getQuery()->getArrayResult();
-        return array_column($query, 'phase');
+        return array_map(
+            static fn(TurnierPhase|string $phase): TurnierPhase => $phase instanceof TurnierPhase ? $phase : TurnierPhase::from($phase),
+            array_column($query, 'phase'),
+        );
     }
 
     /**
@@ -123,7 +126,7 @@ class TabelleRepository
             ->orderBy('t.datum', 'DESC')
             ->addOrderBy('e.platz', 'ASC')
             ->setParameter('saison', $saison)
-            ->setParameter('phase', 'ergebnis')
+            ->setParameter('phase', TurnierPhase::ERGEBNIS)
             ->getQuery()
             ->getResult();
     }

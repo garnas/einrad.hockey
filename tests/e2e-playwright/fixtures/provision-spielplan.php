@@ -26,6 +26,7 @@ use App\Team\Entity\Teamdetails;
 use App\Team\Repository\TeamRepository;
 use App\Turnier\Entity\Turnier;
 use App\Turnier\Entity\Turnierdetails;
+use App\Turnier\Enum\TurnierPhase;
 use App\Turnier\Repository\TurnierRepository;
 use App\Turnier\Service\TurnierService;
 use App\Turnierbericht\Entity\Turnierbericht;
@@ -152,7 +153,7 @@ $macheTurnier = static function (string $name) use ($teams): Turnier {
         ->setDatumBis(null)
         ->setSpieltag(1)
         ->setSaison(Config::SAISON)
-        ->setPhase('setz')
+        ->setPhase(TurnierPhase::SETZ)
         ->setCanceled(false)
         ->setErstelltAm(new DateTime())
         ->setSofortOeffnenFrei(false)

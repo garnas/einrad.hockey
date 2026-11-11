@@ -3,6 +3,7 @@
 use App\Team\Repository\TeamRepository;
 use App\Turnier\Entity\Turnier;
 use App\Turnier\Entity\Turnierdetails;
+use App\Turnier\Enum\TurnierPhase;
 use App\Turnier\Bot\LigaBot;
 use App\Turnier\Mail\TurnierMails;
 use App\Turnier\Repository\TurnierRepository;
@@ -80,7 +81,7 @@ if (isset($_POST['create_turnier'])) {
         ->setAusrichter($ausrichter)
         ->setBlock($block)
         ->setSaison(Config::SAISON)
-        ->setPhase('warte')
+        ->setPhase(TurnierPhase::WARTE)
         ->setCanceled(false)
         ->setErstelltAm(new DateTime())
         ->setSofortOeffnenFrei($sofort_oeffnen_frei)

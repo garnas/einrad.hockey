@@ -7,7 +7,7 @@ use App\Turnier\Service\TurnierSnippets;
 <h3>
     <?= TurnierSnippets::nameBrTitel($turnier) ?>
     <br>
-    <span class="w3-text-secondary"><?= TurnierSnippets::translate($turnier->getPhase()) ?></span>
+    <span class="w3-text-secondary"><?= $turnier->getPhase()?->label() ?></span>
 </h3>
 
 <!-- Links -->

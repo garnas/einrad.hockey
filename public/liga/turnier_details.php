@@ -108,7 +108,7 @@ include '../../templates/header.tmp.php';
         </tr>
         <tr>
             <td class="w3-primary" style="vertical-align: middle">Phase</td>
-            <td><?= TurnierSnippets::translate($turnier->getPhase()) ?></td>
+            <td><?= $turnier->getPhase()?->label() ?></td>
         </tr>
         <tr>
             <td class="w3-primary" style="vertical-align: middle">Losung</td>

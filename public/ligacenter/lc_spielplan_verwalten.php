@@ -4,6 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 use App\Turnierbericht\Entity\Turnierbericht;
 use App\Turnier\Bot\LigaBot;
+use App\Turnier\Enum\TurnierPhase;
 use App\Turnier\Repository\TurnierRepository;
 use App\Turnierbericht\Repository\TurnierberichtRepository;
 use App\Spielplan\Service\SpielplanService;
@@ -33,7 +34,7 @@ $turnier_ergebnis = TurnierService::getErgebnisByPlatz($turnier);
 //Ergebnis löschen
 if (isset($_POST['ergebnis_loeschen'])) {
     TurnierService::deleteErgebnisse($turnier);
-    $turnier->setPhase('spielplan');
+    $turnier->setPhase(TurnierPhase::SPIELPLAN);
     TurnierRepository::get()->speichern($turnier);
     Html::info("Ergebnis wurde gelöscht. Das Turnier wurde in die Spielplanphase versetzt.");
     Helper::reload(get: "?turnier_id=" . $turnier->id());
@@ -105,10 +106,10 @@ if (isset($_POST['spielplan_hochladen'])) {
         $target_file_pdf = FileService::uploadPDF($_FILES["spielplan_file"], $target_dir);
         if ($target_file_pdf !== false) {
             if ($_POST['sp_or_erg'] === 'ergebnis') {
-                TurnierService::uploadSpielplan($turnier, $target_file_pdf, 'ergebnis');
+                TurnierService::uploadSpielplan($turnier, $target_file_pdf, TurnierPhase::ERGEBNIS);
                 Html::info("Manueller Spielplan hochgeladen. Das Turnier wurde in die Ergebnis-Phase versetzt.");
             } else {
-                TurnierService::uploadSpielplan($turnier, $target_file_pdf, 'spielplan');
+                TurnierService::uploadSpielplan($turnier, $target_file_pdf, TurnierPhase::SPIELPLAN);
                 Html::info("Manueller Spielplan hochgeladen. Das Turnier wurde in die Spielplan-Phase versetzt.");
             }
             TurnierRepository::get()->speichern($turnier);
@@ -127,7 +128,7 @@ if (isset($_POST['spielplan_hochladen'])) {
 // Spielplan löschen
 if (isset($_POST['spielplan_delete'])) {
     unlink($turnier->getSpielplanDatei());
-    TurnierService::uploadSpielplan($turnier, '', 'setz');
+    TurnierService::uploadSpielplan($turnier, '', TurnierPhase::SETZ);
     TurnierRepository::get()->speichern($turnier);
     Html::info("Spielplan- / Ergebnisdatei wurde gelöscht. Turnier wurde in die Setzphase versetzt.");
     Helper::reload(get: "?turnier_id=" . $turnier->id());
@@ -264,7 +265,7 @@ include '../../templates/header.tmp.php';
                     <td><?= $platz ?></td>
                     <td>
                         <select required class="w3-select w3-border w3-border-primary" name="team_id[<?= $platz ?>]">
-                            <option disabled <?= ($turnier->getPhase() == "ergebnis") ?: 'selected' ?>>
+                            <option disabled <?= $turnier->isErgebnisPhase() ?: 'selected' ?>>
                                 Bitte wählen
                             </option>
                             <?php foreach ($teamliste as $team_id => $team) { ?>

@@ -8,6 +8,7 @@ use App\Team\Repository\TeamRepository;
 use App\Team\Service\TeamService;
 use App\Turnier\Entity\Turnier;
 use App\Turnier\Entity\Turnieranmeldung;
+use App\Turnier\Enum\TurnierPhase;
 use App\Turnier\Mail\TurnierMails;
 use App\Turnier\Repository\TurnierRepository;
 use App\Turnier\Service\BlockService;
@@ -70,8 +71,9 @@ class LigaBot
             ->join('t.ausrichter', 'ausrichter')
             ->where('t.canceled = 0')
             ->andWhere("t.art = 'I' OR t.art = 'II'")
-            ->andWhere("t.phase = 'warte'")
+            ->andWhere("t.phase = :phase")
             ->andWhere("t.saison = :saison")
+            ->setParameter("phase", TurnierPhase::WARTE)
             ->setParameter("saison", Config::SAISON)
             ->getQuery()
             ->execute()
@@ -171,8 +173,9 @@ class LigaBot
             ->leftJoin('team.emails', 'teamEmails')
             ->where('t.canceled = 0')
             ->andWhere("t.art = 'I' OR t.art = 'II'")
-            ->andWhere("t.phase = 'warte'")
+            ->andWhere("t.phase = :phase")
             ->andWhere("t.saison = :saison")
+            ->setParameter("phase", TurnierPhase::WARTE)
             ->setParameter("saison", Config::SAISON)
             ->getQuery()
             ->execute()
@@ -183,7 +186,7 @@ class LigaBot
         // Übergang in die Setzphase
         foreach ($turniere as $turnier) {
             if ($turnier->isWartePhase() && TurnierService::warteToSetzUnix($turnier) <= time()) {
-                $turnier->setPhase('setz');
+                $turnier->setPhase(TurnierPhase::SETZ);
 
                 // Losen setzt alle Teams in richtiger Reihenfolge auf die Warteliste.
                 self::losen($turnier);
@@ -236,7 +239,7 @@ class LigaBot
             if (TurnierService::spassturnierBeendetAb($turnier) > $heute) {
                 continue;
             }
-            $turnier->setPhase('ergebnis');
+            $turnier->setPhase(TurnierPhase::ERGEBNIS);
             DoctrineWrapper::manager()->persist($turnier);
         }
         DoctrineWrapper::manager()->flush();

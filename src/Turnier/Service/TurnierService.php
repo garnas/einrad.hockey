@@ -10,6 +10,7 @@ use App\Team\Service\NLTeamValidator;
 use App\Turnier\Entity\Turnier;
 use App\Turnier\Entity\Turnieranmeldung;
 use App\Turnier\Entity\Turnierergebnis;
+use App\Turnier\Enum\TurnierPhase;
 use App\Turnier\Mail\TurnierMails;
 use Config;
 use DateTimeImmutable;
@@ -437,7 +438,7 @@ class TurnierService
             $turnier->getErgebnis()->add($turnierErgebnis);
         }
 
-        $turnier->setPhase('ergebnis');
+        $turnier->setPhase(TurnierPhase::ERGEBNIS);
         $turnier->getLogService()->addLog("Turnierergebnis wurde in die Datenbank eingetragen");
     }
 
@@ -478,9 +479,9 @@ class TurnierService
      *
      * @param Turnier $turnier
      * @param string $link
-     * @param string $phase
+     * @param TurnierPhase $phase
      */
-    public static function uploadSpielplan(Turnier $turnier, string $link, string $phase): void
+    public static function uploadSpielplan(Turnier $turnier, string $link, TurnierPhase $phase): void
     {
         $turnier->setSpielplanDatei($link);
         $turnier->setPhase($phase);

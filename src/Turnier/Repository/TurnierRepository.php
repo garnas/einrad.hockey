@@ -5,6 +5,7 @@ namespace App\Turnier\Repository;
 use App\Turnier\Entity\Turnier;
 use App\Turnierbericht\Entity\Turnierbericht;
 use App\Turnier\Entity\Turnieranmeldung;
+use App\Turnier\Enum\TurnierPhase;
 use App\Shared\DoctrineWrapper;
 use App\Shared\SingletonRepositoryTrait;
 use Config;
@@ -61,7 +62,7 @@ class TurnierRepository
             ->andWhere('t.canceled = 0')
             ->andWhere('t.saison = :saison')
             ->orderBy('t.datum', 'asc')
-            ->setParameter('phase', 'ergebnis')
+            ->setParameter('phase', TurnierPhase::ERGEBNIS)
             ->setParameter('saison', Config::SAISON)
         ;
 
@@ -107,7 +108,7 @@ class TurnierRepository
             ->andWhere('t.art NOT LIKE :art')
             ->orderBy('t.datum', ($desc ? 'desc' : 'asc'))
             ->setParameter('saison', $saison)
-            ->setParameter('phase', "ergebnis")
+            ->setParameter('phase', TurnierPhase::ERGEBNIS)
             ->setParameter('art', '%spass%')
         ;
 
@@ -131,7 +132,7 @@ class TurnierRepository
             ->andWhere('t.saison = :saison')
             ->andWhere('t.datum < :stichtag')
             ->setParameter('art', 'spass')
-            ->setParameter('phase', 'ergebnis')
+            ->setParameter('phase', TurnierPhase::ERGEBNIS)
             ->setParameter('saison', $saison)
             ->setParameter('stichtag', $stichtag)
             ->getQuery()
@@ -160,7 +161,7 @@ class TurnierRepository
             ->setParameter('saison', Config::SAISON)
             ->setParameter('team_id', $team_id)
             ->setParameter('liste', 'setzliste')
-            ->setParameter('phasen', ['spielplan', 'ergebnis'])
+            ->setParameter('phasen', [TurnierPhase::SPIELPLAN, TurnierPhase::ERGEBNIS])
         ;
 
         return new ArrayCollection($query->getQuery()->execute());
@@ -188,7 +189,7 @@ class TurnierRepository
             ->setParameter('spieltag', $turnier->getSpieltag())
             ->setParameter('arten', $arten)
             ->setParameter('saison', $turnier->getSaison())
-            ->setParameter('phase', 'ergebnis')
+            ->setParameter('phase', TurnierPhase::ERGEBNIS)
         ;
 
         return (int) $query->getQuery()->getSingleScalarResult() > 0;
@@ -214,7 +215,7 @@ class TurnierRepository
             ->andWhere('t.canceled = false')
             ->andWhere('t.art IN (:arten)')
             ->orderBy('t.datum', 'asc')
-            ->setParameter('phase', 'setz')
+            ->setParameter('phase', TurnierPhase::SETZ)
             ->setParameter('saison', $saison)
             ->setParameter('arten', Config::TURNIER_ARTEN)
         ;
@@ -239,7 +240,7 @@ class TurnierRepository
             ->andWhere('t.phase != :phase')
             ->orderBy('l.positionWarteliste', 'asc')
             ->setParameter('saison', $saison)
-            ->setParameter('phase', 'ergebnis')
+            ->setParameter('phase', TurnierPhase::ERGEBNIS)
         ;
 
         return $query->getQuery()->execute();

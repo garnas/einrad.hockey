@@ -119,7 +119,7 @@ include '../../templates/header.tmp.php';
     <?= TurnierSnippets::getListen($turnier) ?>
     <hr>
     <p class="w3-text-primary">Gesetzte Freilose: <?= TurnierService::getAnzahlGesetzteFreilose($turnier) ?></p>
-    <p class="w3-text-primary">Phase: <?= TurnierSnippets::translate($turnier->getPhase()) ?></p>
+    <p class="w3-text-primary">Phase: <?= $turnier->getPhase()?->label() ?></p>
     <hr>
 
     <!-- An- und Abmeldung -->

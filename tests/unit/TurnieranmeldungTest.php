@@ -6,6 +6,7 @@ use App\Team\Entity\Team;
 use App\Turnier\Entity\Turnier;
 use App\Turnier\Entity\Turnierdetails;
 use App\Turnier\Entity\Turnieranmeldung;
+use App\Turnier\Enum\TurnierPhase;
 use App\Turnier\Bot\LigaBot;
 use App\Turnier\Service\TurnierService;
 use DateTime;
@@ -42,7 +43,7 @@ class TurnieranmeldungTest extends TestCase
         $turnier
             ->setBlock($block)
             ->setArt("II")
-            ->setPhase($phase)
+            ->setPhase(TurnierPhase::from($phase))
             ->setDatum(DateTime::createFromFormat('Y-m-d', '2020-01-01'));
         $turnier->setDetails((new Turnierdetails())->setTurnier($turnier));
         $turnier->getDetails()

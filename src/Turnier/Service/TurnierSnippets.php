@@ -72,7 +72,7 @@ class TurnierSnippets
     {
         if ($turnier->isSpielplanPhase()) {
             $link = TurnierLinks::spielplan($turnier);
-            $phase = self::translate($turnier->getPhase());
+            $phase = $turnier->getPhase()?->label() ?? '';
             Html::link($link, $phase, true);
         }
 
@@ -88,7 +88,7 @@ class TurnierSnippets
             return 'Finalturnier';
         }
 
-        return (self::translate($turnier->getPhase()));
+        return $turnier->getPhase()?->label() ?? '';
     }
 
     public static function plaetze(Turnier $turnier): string

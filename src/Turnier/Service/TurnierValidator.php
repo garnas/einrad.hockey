@@ -48,7 +48,7 @@ class TurnierValidator
     {
         // Keine Änderungen in der Ergebnisphase
         if (
-            $turnier->getPhase() === 'ergebnis'
+            $turnier->isErgebnisPhase()
             && !self::hasLaRights($turnier)
         ) {
             Html::error("Turniere können in der Ergebnisphase nicht mehr geändert werden. Bitte wende dich unter "
@@ -108,12 +108,13 @@ class TurnierValidator
 
     public function mayChange(): bool
     {
-        return $this->turnier->getPhase() != 'ergebnis' || self::hasLaRights($this->turnier);
+        return !$this->turnier->isErgebnisPhase() || self::hasLaRights($this->turnier);
     }
 
     public function hasValidPhase(): bool
     {
-        if (!\in_array($this->turnier->getPhase(), ['warte', 'setz', 'spielplan', 'ergebnis'], true)) {
+        // Ungültige Eingaben im Formular werden als null gesetzt (TurnierPhase::tryFrom)
+        if ($this->turnier->getPhase() === null) {
             Html::error("Ungültige Phase");
             return false;
         }
@@ -325,7 +326,7 @@ class TurnierValidator
      */
     public static function isErweiterbarBlockhoch(Turnier $turnier): bool
     {
-        return $turnier->getPhase() === 'setz'
+        return $turnier->isSetzPhase()
             && !$turnier->isBlockErweitertHoch()
             && !$turnier->isBlockErweitertRunter()
             && !$turnier->isBlockErweitertFrei()
@@ -342,7 +343,7 @@ class TurnierValidator
      */
     public static function isErweiterbarBlockrunter(Turnier $turnier): bool
     {
-        return $turnier->getPhase() === 'setz'
+        return $turnier->isSetzPhase()
             && !$turnier->isBlockErweitertRunter()
             && !$turnier->isBlockErweitertHoch()
             && !$turnier->isBlockErweitertFrei()
@@ -359,7 +360,7 @@ class TurnierValidator
      */
     public static function isErweiterbarBlockfrei(Turnier $turnier): bool
     {
-        return $turnier->getPhase() === 'setz'
+        return $turnier->isSetzPhase()
             && $turnier->isLigaturnier()
             && !$turnier->isBlockErweitertFrei()
             && $turnier->getBlock() != Config::BLOCK_ALL[0];

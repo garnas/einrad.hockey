@@ -3,6 +3,7 @@
 namespace unit;
 
 use App\Turnier\Entity\Turnier;
+use App\Turnier\Enum\TurnierPhase;
 use App\Turnier\Service\TurnierValidator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -246,7 +247,7 @@ class TurnierValidatorTest extends TestCase
         $turnier = (new Turnier())
             ->setBlock($block)
             ->setArt($art)
-            ->setPhase($phase)
+            ->setPhase(TurnierPhase::from($phase))
             ->setBlockErweitertRunter($isErweitertBlockrunter)
             ->setBlockErweitertHoch($isErweitertBlockhoch)
             ->setBlockErweitertFrei($isErweitertBlockfrei);
@@ -485,7 +486,7 @@ class TurnierValidatorTest extends TestCase
         $turnier = (new Turnier())
             ->setBlock($block)
             ->setArt($art)
-            ->setPhase($phase)
+            ->setPhase(TurnierPhase::from($phase))
             ->setBlockErweitertHoch($isErweitertBlockhoch)
             ->setBlockErweitertRunter($isErweitertBlockrunter)
             ->setBlockErweitertFrei($isErweitertBlockfrei);
@@ -643,7 +644,7 @@ class TurnierValidatorTest extends TestCase
         $turnier = (new Turnier())
             ->setBlock($block)
             ->setArt($art)
-            ->setPhase($phase)
+            ->setPhase(TurnierPhase::from($phase))
             ->setBlockErweitertHoch($isErweitertBlockhoch)
             ->setBlockErweitertRunter($isErweitertBlockrunter)
             ->setBlockErweitertFrei($isErweitertBlockfrei);

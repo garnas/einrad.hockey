@@ -6,6 +6,7 @@ use App\Spielplan\Entity\SpielplanDetails;
 use App\Team\Entity\Team;
 use App\Turnier\Entity\Spiel;
 use App\Turnier\Entity\Turnier;
+use App\Turnier\Enum\TurnierPhase;
 use App\Shared\DoctrineWrapper;
 use App\Spielplan\Repository\SpielplanRepository;
 use App\Turnier\Repository\TurnierRepository;
@@ -67,7 +68,7 @@ final class SpielplanService
         $anzahlTeams = count(TurnierService::getSpielenliste($turnier));
         $fehler = false;
 
-        if ($turnier->isLigaturnier() && $turnier->getPhase() !== 'setz') {
+        if ($turnier->isLigaturnier() && !$turnier->isSetzPhase()) {
             Html::error("Das Turnier muss in der Setzphase sein.");
             $fehler = true;
         }
@@ -99,7 +100,7 @@ final class SpielplanService
 
         SpielplanRepository::get()->loescheSpiele($turnier);
         $turnier->getLogService()->addLog("Automatischer JgJ-Spielplan gelöscht.");
-        $turnier->setPhase('setz');
+        $turnier->setPhase(TurnierPhase::SETZ);
         TurnierRepository::get()->speichern($turnier);
     }
 
@@ -171,7 +172,7 @@ final class SpielplanService
         SpielplanRepository::get()->speichereSpiele($spiele);
 
         $turnier->getLogService()->addLog("Automatischer Jgj-Spielplan erstellt.");
-        $turnier->setPhase('spielplan');
+        $turnier->setPhase(TurnierPhase::SPIELPLAN);
         $turnier->setSpielplanVorlage($manager->getReference(SpielplanDetails::class, $vorlage->getSpielplan()));
         TurnierRepository::get()->speichern($turnier);
 

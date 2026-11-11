@@ -26,7 +26,7 @@ $turnier = $spielplan->getTurnier();
     <?php } else { ?>
         <?= Html::link('../teamcenter/tc_turnier_report.php?turnier_id=' . $turnier->id(), 'Zum Turnierreport', true, 'launch') ?>
     <?php } // endif?>
-    <?php if (($_SESSION['logins']['team']['id'] ?? 0) == $turnier->getAusrichter()->id() && !(Helper::$teamcenter ?? false) && $turnier->getPhase() == 'spielplan') { ?>
+    <?php if (($_SESSION['logins']['team']['id'] ?? 0) == $turnier->getAusrichter()->id() && !(Helper::$teamcenter ?? false) && $turnier->isSpielplanPhase()) { ?>
         <?= Html::link(TurnierLinks::spielplan($turnier, 'tc'), 'Ergebnisse eintragen', true, 'launch') ?>
     <?php }// endif?>
     <?php if (isset($_SESSION['logins']['la']) && !(Helper::$ligacenter ?? false)) { ?>

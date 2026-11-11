@@ -1,6 +1,7 @@
 <?php
 
 // Formularauswertung
+use App\Turnier\Enum\TurnierPhase;
 use App\Turnier\Repository\TurnierRepository;
 use App\Turnier\Service\TurnierService;
 use App\Turnier\Service\TurnierValidator;
@@ -89,7 +90,10 @@ if (isset($_POST['change_turnier'])) {
         $datum = new DateTime($_POST['datum']);
         $datum_bis = (!isset($_POST['datum_bis']) || $_POST['datum_bis'] === '') ? null : new DateTime($_POST['datum_bis']);
 
-        $phase = (!isset($_POST['phase']) || $_POST['phase'] === '') ? $turnier->getPhase() : $_POST['phase'];
+        // Ungültige Werte werden zu null und von TurnierValidator::hasValidPhase() abgelehnt
+        $phase = (!isset($_POST['phase']) || $_POST['phase'] === '')
+            ? $turnier->getPhase()
+            : TurnierPhase::tryFrom($_POST['phase']);
         $turnier->setDatum($datum);
         $turnier->setDatumBis($datum_bis);
     }

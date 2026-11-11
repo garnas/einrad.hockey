@@ -4,6 +4,7 @@ namespace App\Turnier\Service;
 
 use Helper;
 use App\Turnier\Entity\Turnier;
+use App\Turnier\Enum\TurnierPhase;
 
 class TurnierFormService
 {
@@ -15,35 +16,35 @@ class TurnierFormService
 
         if (is_a($turnier, Turnier::class)) {
 
-            if ($field == 'datum' && in_array($turnier->getPhase(), ['warte', 'setz', 'ergebnis', 'spielplan'])) {
+            if ($field == 'datum' && in_array($turnier->getPhase(), [TurnierPhase::WARTE, TurnierPhase::SETZ, TurnierPhase::ERGEBNIS, TurnierPhase::SPIELPLAN], true)) {
                 return false;
             }
 
-            if ($field == 'startzeit' && in_array($turnier->getPhase(), ['ergebnis', 'spielplan'])) {
+            if ($field == 'startzeit' && in_array($turnier->getPhase(), [TurnierPhase::ERGEBNIS, TurnierPhase::SPIELPLAN], true)) {
                 return false;
             }
 
-            if ($field == 'besprechung' && in_array($turnier->getPhase(), ['ergebnis', 'spielplan'])) {
+            if ($field == 'besprechung' && in_array($turnier->getPhase(), [TurnierPhase::ERGEBNIS, TurnierPhase::SPIELPLAN], true)) {
                 return false;
             }
 
-            if ($field == 'startgebuehr' && in_array($turnier->getPhase(), ['setz', 'ergebnis', 'spielplan'])) {
+            if ($field == 'startgebuehr' && in_array($turnier->getPhase(), [TurnierPhase::SETZ, TurnierPhase::ERGEBNIS, TurnierPhase::SPIELPLAN], true)) {
                 return false;
             }
 
-            if ($field == 'sofort_oeffnen' && in_array($turnier->getPhase(), ['setz', 'ergebnis', 'spielplan'])) {
+            if ($field == 'sofort_oeffnen' && in_array($turnier->getPhase(), [TurnierPhase::SETZ, TurnierPhase::ERGEBNIS, TurnierPhase::SPIELPLAN], true)) {
                 return false;
             }
 
-            if ($field == 'art_block' && in_array($turnier->getPhase(), ['warte', 'setz', 'ergebnis', 'spielplan'])) {
+            if ($field == 'art_block' && in_array($turnier->getPhase(), [TurnierPhase::WARTE, TurnierPhase::SETZ, TurnierPhase::ERGEBNIS, TurnierPhase::SPIELPLAN], true)) {
                 return false;
             }
 
-            if ($field == 'plaetze' && in_array($turnier->getPhase(), ['setz', 'ergebnis', 'spielplan'])) {
+            if ($field == 'plaetze' && in_array($turnier->getPhase(), [TurnierPhase::SETZ, TurnierPhase::ERGEBNIS, TurnierPhase::SPIELPLAN], true)) {
                 return false;
             }
 
-            if ($field == 'min_teams' && in_array($turnier->getPhase(), ['setz', 'ergebnis', 'spielplan'])) {
+            if ($field == 'min_teams' && in_array($turnier->getPhase(), [TurnierPhase::SETZ, TurnierPhase::ERGEBNIS, TurnierPhase::SPIELPLAN], true)) {
                 return false;
             }
 
