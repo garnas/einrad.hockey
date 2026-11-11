@@ -2,6 +2,7 @@
 
 // Turnier und $daten-Array erstellen
 use App\Turnier\Repository\TurnierRepository;
+use App\Turnier\Service\TurnierPermission;
 use App\Turnier\Service\TurnierService;
 
 $teamId = $_SESSION['logins']['team']['id'] ?? 0;
@@ -25,8 +26,8 @@ if (Helper::$teamcenter && $turnier->isCanceled()) {
     Helper::reload('/teamcenter/tc_turnierliste_verwalten.php');
 }
 
-// Turniere in der Vergangenheit können von Teams nicht mehr verändert werden
-if (Helper::$teamcenter && $turnier->getDatum()->getTimestamp() < (time() - 2 * 24 * 60 * 60)) {
-    Html::error("Das Turnier liegt bereits in der Vergangenheit und kann nicht bearbeitet werden");
+// In der Ergebnisphase können Teams das Turnier nicht mehr verändert werden (nur noch den Turnierreport)
+if (Helper::$teamcenter && !TurnierPermission::canChange($turnier)) {
+    Html::error("Das Turnier ist bereits in der Ergebnisphase und kann nicht mehr bearbeitet werden");
     Helper::reload('/teamcenter/tc_turnierliste_verwalten.php');
 }

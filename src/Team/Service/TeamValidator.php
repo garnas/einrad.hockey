@@ -110,15 +110,14 @@ class TeamValidator
     {
         $valid = true;
 
-        if (
-            TeamService::isAufSetzliste($team, $turnier)
-            && TurnierService::getAbmeldeFristUnix($turnier) < time()
-        ) {
+        $aufSetzliste = TeamService::isAufSetzliste($team, $turnier);
+        if (!TurnierPermission::canDeregisterTeam($turnier, $aufSetzliste)) {
             $valid = false;
+            $grund = $turnier->isSetzPhase()
+                ? "Abmeldungen von der Spielen-Liste sind nur bis Freitag 23:59 zwei Wochen vor dem Spieltag möglich. "
+                : "Abmeldungen von der Spielen-Liste sind nur in der Setzphase möglich. ";
             Html::error(
-                "Abmeldungen von der Spielen-Liste sind nur bis Freitag 23:59 zwei Wochen vor dem 
-                Turnier möglich. Bitte nehmt via Email Kontakt mit dem Ligaausschuss auf: "
-                . Html::mailto(Env::LAMAIL) . "",
+                $grund . "Bitte nehmt via Email Kontakt mit dem Ligaausschuss auf: " . Html::mailto(Env::LAMAIL),
                 esc: false,
             );
         }

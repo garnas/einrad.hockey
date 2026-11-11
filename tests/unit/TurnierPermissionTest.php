@@ -8,6 +8,7 @@ use App\Turnier\Entity\Turnierdetails;
 use App\Turnier\Enum\TurnierPhase;
 use App\Turnier\Service\TurnierPermission;
 use DateTime;
+use DateTimeImmutable;
 use Helper;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -262,8 +263,125 @@ class TurnierPermissionTest extends TestCase
     }
 
     // ------------------------------------------------------------------
+    // Abmelden, Nichtligateams, Teams ersetzen
+    // ------------------------------------------------------------------
+
+    #[DataProvider("providePhasen")]
+    public function testVonDerWartelisteJederzeitAbmelden(TurnierPhase $phase): void
+    {
+        $this->assertTrue(TurnierPermission::canDeregisterTeam($this->turnier($phase), aufSetzliste: false));
+    }
+
+    #[DataProvider("providePhasen")]
+    public function testVonDerSetzlisteNurInDerSetzphaseAbmelden(TurnierPhase $phase): void
+    {
+        // Vor der Abmeldefrist (Fr, 17.04.2026 23:59 für das Turnier am 02.05.2026)
+        $this->assertSame(
+            expected: $phase === TurnierPhase::SETZ,
+            actual: TurnierPermission::canDeregisterTeam(
+                $this->turnier($phase),
+                aufSetzliste: true,
+                jetzt: new DateTimeImmutable('2026-04-10 12:00'),
+            ),
+        );
+    }
+
+    public static function provideAbmeldeFrist(): array
+    {
+        return [
+            "Freitag 23:59" => ['2026-04-17 23:59:00', true],
+            "Samstag 00:00" => ['2026-04-18 00:00:00', false],
+        ];
+    }
+
+    #[DataProvider("provideAbmeldeFrist")]
+    public function testVonDerSetzlisteBisZurAbmeldefristAbmelden(string $jetzt, bool $erlaubt): void
+    {
+        $this->assertSame(
+            expected: $erlaubt,
+            actual: TurnierPermission::canDeregisterTeam(
+                $this->turnier(TurnierPhase::SETZ),
+                aufSetzliste: true,
+                jetzt: new DateTimeImmutable($jetzt),
+            ),
+        );
+    }
+
+    #[DataProvider("providePhasen")]
+    public function testManuellAbmeldenBisZurSpielplanphase(TurnierPhase $phase): void
+    {
+        $this->assertSame(
+            expected: $phase !== TurnierPhase::ERGEBNIS,
+            actual: TurnierPermission::canDeregisterTeamManually($this->turnier($phase)),
+        );
+    }
+
+    public function testTeamsManuellVerwaltenNurLaUndAusrichterVonSpassturnieren(): void
+    {
+        Helper::$teamcenter = true;
+        $_SESSION['logins']['team']['id'] = self::AUSRICHTER_ID;
+        $this->assertTrue(TurnierPermission::canManageTeams($this->turnier(TurnierPhase::SETZ, 'spass')));
+        $this->assertFalse(TurnierPermission::canManageTeams($this->turnier(TurnierPhase::SETZ, 'II')));
+
+        $_SESSION['logins']['team']['id'] = self::AUSRICHTER_ID + 1;
+        $this->assertFalse(TurnierPermission::canManageTeams($this->turnier(TurnierPhase::SETZ, 'spass')));
+
+        Helper::$teamcenter = false;
+        Helper::$ligacenter = true;
+        $this->assertTrue(TurnierPermission::canManageTeams($this->turnier(TurnierPhase::SETZ, 'II')));
+    }
+
+    public function testNichtligateamsMeldenNurLaUndAusrichterAn(): void
+    {
+        Helper::$teamcenter = true;
+        $turnier = $this->turnier(TurnierPhase::SETZ);
+
+        $_SESSION['logins']['team']['id'] = self::AUSRICHTER_ID;
+        $this->assertTrue(TurnierPermission::canRegisterNlTeam($turnier));
+
+        $_SESSION['logins']['team']['id'] = self::AUSRICHTER_ID + 1;
+        $this->assertFalse(TurnierPermission::canRegisterNlTeam($turnier));
+
+        Helper::$teamcenter = false;
+        Helper::$ligacenter = true;
+        $this->assertTrue(TurnierPermission::canRegisterNlTeam($turnier));
+    }
+
+    #[DataProvider("providePhasen")]
+    public function testNurDerLaErsetztTeamsInJederPhase(TurnierPhase $phase): void
+    {
+        Helper::$teamcenter = true;
+        $_SESSION['logins']['team']['id'] = self::AUSRICHTER_ID;
+        $this->assertFalse(TurnierPermission::canReplaceTeam($this->turnier($phase)));
+
+        Helper::$teamcenter = false;
+        Helper::$ligacenter = true;
+        $this->assertTrue(TurnierPermission::canReplaceTeam($this->turnier($phase)));
+    }
+
+    // ------------------------------------------------------------------
     // Ergebnisse eintragen
     // ------------------------------------------------------------------
+
+    #[DataProvider("providePhasen")]
+    public function testAusrichterTraegtErgebnisseNurInDerSpielplanphaseEin(TurnierPhase $phase): void
+    {
+        Helper::$teamcenter = true;
+        $_SESSION['logins']['team']['id'] = self::AUSRICHTER_ID;
+
+        $this->assertSame(
+            expected: $phase === TurnierPhase::SPIELPLAN,
+            actual: TurnierPermission::canEnterErgebnisse($this->turnier($phase)),
+        );
+    }
+
+    #[DataProvider("providePhasen")]
+    public function testLaTraegtErgebnisseInJederPhaseEin(TurnierPhase $phase): void
+    {
+        Helper::$ligacenter = true;
+
+        $this->assertTrue(TurnierPermission::canEnterErgebnisse($this->turnier($phase)));
+    }
 
     public function testImTeamcenterDarfNurDerAusrichterErgebnisseEintragen(): void
     {
@@ -288,22 +406,21 @@ class TurnierPermissionTest extends TestCase
 
     public static function provideErgebnisFrist(): array
     {
-        // Turnier am Samstag, 02.05.2026 -> Frist Montag, 04.05.2026, 18:00 Uhr
+        // Turnier am Samstag, 02.05.2026 -> Frist Dienstag, 05.05.2026, 23:59 Uhr
         return [
             "Turniertag" => ['2026-05-02 16:00', true],
-            "Montag 17:59" => ['2026-05-04 17:59', true],
-            "Montag 18:00" => ['2026-05-04 18:00', true],
-            "Montag 18:01" => ['2026-05-04 18:01', false],
-            "Dienstag" => ['2026-05-05 10:00', false],
+            "Montag 18:01" => ['2026-05-04 18:01', true],
+            "Dienstag 23:59" => ['2026-05-05 23:59:59', true],
+            "Mittwoch 00:00" => ['2026-05-06 00:00:00', false],
         ];
     }
 
     #[DataProvider("provideErgebnisFrist")]
-    public function testErgebnisFristBisMontagAbend(string $jetzt, bool $offen): void
+    public function testErgebnisFristBisDienstagAbend(string $jetzt, bool $offen): void
     {
         $this->assertSame(
             expected: $offen,
-            actual: TurnierPermission::isErgebnisFristOffen($this->turnier(TurnierPhase::SPIELPLAN), strtotime($jetzt)),
+            actual: TurnierPermission::isErgebnisFristOffen($this->turnier(TurnierPhase::SPIELPLAN), new DateTimeImmutable($jetzt)),
         );
     }
 
@@ -312,7 +429,7 @@ class TurnierPermissionTest extends TestCase
         Helper::$ligacenter = true;
 
         $this->assertTrue(
-            TurnierPermission::isErgebnisFristOffen($this->turnier(TurnierPhase::ERGEBNIS), strtotime('2027-01-01')),
+            TurnierPermission::isErgebnisFristOffen($this->turnier(TurnierPhase::ERGEBNIS), new DateTimeImmutable('2027-01-01')),
         );
     }
 }

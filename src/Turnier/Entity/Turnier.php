@@ -56,7 +56,7 @@ class Turnier
     private ?DateTime $datum;
 
     #[ORM\Column(name: "datum_bis", type: "date", nullable: true)]
-    private ?DateTime $datumBis;
+    private ?DateTime $datumBis = null;
     #[ORM\Column(name: "spieltag", type: "integer", nullable: true)]
     private ?int $spieltag = 0;
 

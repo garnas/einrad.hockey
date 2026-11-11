@@ -13,7 +13,6 @@ use App\Turnier\Entity\Turnierergebnis;
 use App\Turnier\Enum\TurnierPhase;
 use App\Turnier\Mail\TurnierMails;
 use Config;
-use DateTimeImmutable;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Jenssegers\Date\Date;
@@ -78,59 +77,22 @@ class TurnierService
         return $turnier->getListe()->matching($criteria);
     }
 
-    public static function getTurnierEintrageFristUnix(Turnier $turnier): int
-    {
-        return self::warteToSetzUnix($turnier);
-    }
-
-    public static function getAbmeldeFristUnix(Turnier $turnier): int
-    {
-        $warte_zu_setz = new DateTimeImmutable('@' . ((string) self::warteToSetzUnix($turnier)));
-        return (int) $warte_zu_setz->modify("+2 weeks")->format('U');
-    }
-
+    /**
+     * Abmeldefrist für die Setzliste, z. B. "Freitag, 17.04.2026 - 23:59 Uhr".
+     */
     public static function getAbmeldeFrist(Turnier $turnier): string
     {
-        $unixTime = self::getAbmeldeFristUnix($turnier) - 1;
         Date::setLocale('de');
-        return Date::createFromTimestamp($unixTime)->format("l, d.m.Y - H:i") . " Uhr";
+        return Date::createFromTimestamp(TurnierFristenService::abmeldeFrist($turnier)->getTimestamp())
+            ->format("l, d.m.Y - H:i") . " Uhr";
     }
 
     /**
-     * Ab diesem Tag gilt ein Spaßturnier als beendet und wird in die Ergebnisphase gesetzt.
-     * Mit Enddatum: der Tag nach dem Enddatum. Ohne Enddatum: der nächste Dienstag nach dem Turnier.
+     * Loszeitpunkt (Ende der Wartephase), z. B. "Freitag, 03.04.2026 - 23:59 Uhr".
      */
-    public static function spassturnierBeendetAb(Turnier $turnier): DateTimeImmutable
-    {
-        if ($turnier->getDatumBis() !== null) {
-            return DateTimeImmutable::createFromMutable($turnier->getDatumBis())->setTime(0, 0)->modify('+1 day');
-        }
-
-        return DateTimeImmutable::createFromMutable($turnier->getDatum())->setTime(0, 0)->modify('next tuesday');
-    }
-
-    public static function warteToSetzUnix(Turnier $turnier): int
-    {
-        $turnier_datum = DateTimeImmutable::createFromMutable($turnier->getDatum());
-
-        $datum_warte_zu_setzphase = $turnier_datum->modify('-4 weeks');
-        $tag = (int) $datum_warte_zu_setzphase->format('N'); // Numerische Zahl des Wochentages 1-7
-
-        # Findet das Turnier am Mittwoch oder später statt, wird es dem nächsten Wochenende zugeordnet
-        # Mi == 3 -> hochrechnen auf nächsten Samstag also +(6-3) Tage
-        if ($tag >= 3) {
-            $delta = (string) (6 - $tag);
-            return (int) $datum_warte_zu_setzphase->modify("+$delta days")->format("U");
-        }
-        # Findet das Turnier am Montag oder Dienstag statt, wird es dem vorherigen Wochenende zugeordnet
-        # Di == 2 -> herunterrechnen auf letzten Samstag also -(2+1) Tage
-        $delta = (string) (1 + $tag);
-        return (int) $datum_warte_zu_setzphase->modify("-$delta days")->format("U");
-    }
-
     public static function getLosDatum(Turnier $turnier): string
     {
-        $unixTime = self::warteToSetzUnix($turnier) - 1;
+        $unixTime = TurnierFristenService::setzphaseAb($turnier)->getTimestamp() - 1;
         Date::setLocale('de');
         return Date::createFromTimestamp($unixTime)->format("l, d.m.Y - H:i") . " Uhr";
     }

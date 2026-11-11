@@ -3,6 +3,7 @@
 use App\Spielplan\Service\SpielplanService;
 use App\Turnier\Mail\TurnierMails;
 use App\Turnier\Repository\TurnierRepository;
+use App\Turnier\Service\TurnierFristenService;
 use App\Turnier\Service\TurnierService;
 use App\Turnierbericht\Entity\Turnierbericht;
 use App\Turnierbericht\Repository\TurnierberichtRepository;
@@ -11,38 +12,14 @@ require_once '../../init.php';
 
 $_SESSION['logins']['cronjob'] = 'Cronjob';
 
-# Achtung: Die Spielplanerstellung geht davon aus, dass Turniere (an Bundeseinheitlichen Feiertagen)
-# bis Dienstag dem vorherigen Spieltag zugeordnet werden. Ab Mittwoch werden sie dem folgenden Spieltag
-# zugeordnet.
+# Die Spielplanphase beginnt Dienstag 23:59 in der Woche vor dem Spieltag (siehe TurnierFristenService).
 $turniere = TurnierRepository::get()->getSetzphaseTurniere();
+$jetzt = new DateTimeImmutable();
 
 foreach ($turniere as $turnier) {
-    $datum_turnier = $turnier->getDatum()->getTimestamp();
-    $aktuelles_datum = time();
     $absage_grund = "";
-    $erstellen = true;
 
-    # Sollte heute Dienstag sein, dann schieben das Datum einmal nach vorne
-    if (date("N", $aktuelles_datum) == 2) {
-        $aktuelles_datum = strtotime("+1 day", $aktuelles_datum);
-    }
-
-    # Prüfe, ob noch zwei Dienstage zwischen dem Turnier und dem Ausgangstag liegen
-    $dienstag_counter = 0;
-    while ($aktuelles_datum < $datum_turnier) {
-        # Dienstag = 2. Wochentag
-        if (date("N", $aktuelles_datum) == 2) {
-            $dienstag_counter++;
-
-            if ($dienstag_counter > 1) {
-                $erstellen = false;
-                break;
-            }
-        }
-        $aktuelles_datum = strtotime("+1 day", $aktuelles_datum);
-    }
-
-    if ($erstellen) {
+    if ($jetzt >= TurnierFristenService::spielplanphaseAb($turnier)) {
         Html::info("Handling Turnier " . $turnier->id());
         $setzliste = $turnier->getSetzliste()->toArray();
         $ligateams = array_filter($setzliste, static function ($listeneintrag) {

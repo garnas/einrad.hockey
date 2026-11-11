@@ -5,6 +5,7 @@ namespace App\Turnier\Service;
 use App\Turnier\Entity\Turnier;
 use App\Turnier\Enum\TurnierPhase;
 use Config;
+use DateTimeInterface;
 use Helper;
 
 /**
@@ -49,6 +50,14 @@ class TurnierPermission
      * Rechte wie der Ligaausschuss: im Ligacenter, als Ausrichter eines Finalturniers
      * oder bei Spaßturnieren.
      */
+    /**
+     * Ist das angemeldete Team der Ausrichter des Turniers?
+     */
+    public static function isAngemeldeterAusrichter(Turnier $turnier): bool
+    {
+        return ($_SESSION['logins']['team']['id'] ?? 0) == $turnier->getAusrichter()->id();
+    }
+
     public static function hasLaRights(Turnier $turnier): bool
     {
         return
@@ -136,6 +145,56 @@ class TurnierPermission
         return !$turnier->isSpielplanPhase() && !$turnier->isErgebnisPhase();
     }
 
+    /**
+     * Nichtligateams melden nur der Ligaausschuss und der Ausrichter an.
+     * Die Phase prüft zusätzlich {@see canRegisterTeam()}.
+     */
+    public static function canRegisterNlTeam(Turnier $turnier): bool
+    {
+        return Helper::$ligacenter || self::isAngemeldeterAusrichter($turnier);
+    }
+
+    /**
+     * Ein Team meldet sich selbst ab: von der Warteliste jederzeit,
+     * von der Setzliste nur in der Setzphase bis zur Abmeldefrist
+     * ({@see TurnierFristenService::abmeldeFrist()}).
+     */
+    public static function canDeregisterTeam(Turnier $turnier, bool $aufSetzliste, ?DateTimeInterface $jetzt = null): bool
+    {
+        return !$aufSetzliste
+            || (
+                $turnier->isSetzPhase()
+                && TurnierFristenService::isOffen(TurnierFristenService::abmeldeFrist($turnier), $jetzt)
+            );
+    }
+
+    /**
+     * Teams manuell an- und abmelden: Ligaausschuss, bei Spaßturnieren auch der Ausrichter.
+     */
+    public static function canManageTeams(Turnier $turnier): bool
+    {
+        return Helper::$ligacenter
+            || !Helper::$teamcenter
+            || (self::isAngemeldeterAusrichter($turnier) && $turnier->isSpassturnier());
+    }
+
+    /**
+     * Teams manuell abmelden (Ligaausschuss / Ausrichter von Spaßturnieren):
+     * bis einschließlich Spielplanphase, in der Ergebnisphase nicht mehr.
+     */
+    public static function canDeregisterTeamManually(Turnier $turnier): bool
+    {
+        return !$turnier->isErgebnisPhase();
+    }
+
+    /**
+     * Ein Team durch ein anderes Liga- oder Nichtligateam ersetzen: nur der Ligaausschuss, jederzeit.
+     */
+    public static function canReplaceTeam(Turnier $turnier): bool
+    {
+        return Helper::$ligacenter;
+    }
+
     // ------------------------------------------------------------------
     // Turnierblock erweitern
     // ------------------------------------------------------------------
@@ -200,29 +259,22 @@ class TurnierPermission
     }
 
     /**
-     * Im Teamcenter darf nur der Ausrichter Spielergebnisse eintragen.
+     * Spielergebnisse eintragen: der Ligaausschuss jederzeit,
+     * der Ausrichter nur in der Spielplanphase (Frist: {@see isErgebnisFristOffen()}).
      */
     public static function canEnterErgebnisse(Turnier $turnier): bool
     {
         return Helper::$ligacenter
-            || !Helper::$teamcenter
-            || ($_SESSION['logins']['team']['id'] ?? 0) == $turnier->getAusrichter()->id();
+            || (self::isAngemeldeterAusrichter($turnier) && $turnier->isSpielplanPhase());
     }
 
     /**
-     * Ergebnisse können bis Montag, 18:00 Uhr nach dem Turnier eingetragen werden.
-     * Danach nur noch durch den Ligaausschuss.
+     * Ergebnisse können bis Dienstag 23:59 nach dem (letzten) Turniertag eingetragen werden
+     * ({@see TurnierFristenService::ergebnisFrist()}). Danach nur noch durch den Ligaausschuss.
      */
-    public static function isErgebnisFristOffen(Turnier $turnier, ?int $jetzt = null): bool
+    public static function isErgebnisFristOffen(Turnier $turnier, ?DateTimeInterface $jetzt = null): bool
     {
-        if (Helper::$ligacenter) {
-            return true;
-        }
-        $wochentag = (int) $turnier->getDatum()->format("N");
-        // Zeit bis zum nächsten Montag 18:00 Uhr, von 0:00 Uhr des Turniertags aus gesehen
-        $delta = (8 - $wochentag) * 24 * 60 * 60 + 18 * 60 * 60;
-        $abgabe = $turnier->getDatum()->getTimestamp() + $delta;
-
-        return $abgabe >= ($jetzt ?? time());
+        return Helper::$ligacenter
+            || TurnierFristenService::isOffen(TurnierFristenService::ergebnisFrist($turnier), $jetzt);
     }
 }

@@ -10,6 +10,7 @@ use App\Turnier\Entity\Turnier;
 use App\Turnier\Entity\Turnieranmeldung;
 use App\Team\Repository\TeamRepository;
 use App\Turnier\Service\BlockService;
+use App\Turnier\Service\TurnierFristenService;
 use Config;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
@@ -64,11 +65,10 @@ class FreilosService
      */
     public static function isAusrichterFreilosBerechtigt(Turnier $turnier): bool
     {
-        $erstelltAmUnix = $turnier->getErstelltAm()->getTimestamp();
-        $datumAmUnix = $turnier->getDatum()->getTimestamp();
+        // Das Turnier muss bis zur Freilosfrist (8 Wochen vor dem Spieltag) erstellt worden sein
         return !$turnier->isCanceled()
             && ($turnier->isFinalTurnier() || $turnier->isLigaturnier())
-            && ($datumAmUnix - $erstelltAmUnix) >= 8 * 7 * 24 * 60 * 60;
+            && TurnierFristenService::isOffen(TurnierFristenService::freilosFrist($turnier), $turnier->getErstelltAm());
     }
 
     public static function freilos(Team $team, Turnier $turnier): void
@@ -103,9 +103,11 @@ class FreilosService
         if (!$freilos->getGesetztAm()) {
             return false;
         }
-        $freilosGesetztUnix = $freilos->getGesetztAm()->getTimestamp();
-        $turnierDatumUnix = $freilos->getTurnier()->getDatum()->getTimestamp();
-        return $turnierDatumUnix - $freilosGesetztUnix >= 8 * 7 * 24 * 60 * 60;
+        // Das Freilos muss bis zur Freilosfrist (8 Wochen vor dem Spieltag) gesetzt worden sein
+        return TurnierFristenService::isOffen(
+            TurnierFristenService::freilosFrist($freilos->getTurnier()),
+            $freilos->getGesetztAm(),
+        );
     }
 
     public static function validateFreilosRecycling(Freilos $freilos): bool

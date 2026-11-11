@@ -4,6 +4,7 @@ use App\Team\Repository\TeamRepository;
 use App\Turnier\Repository\TurnierRepository;
 use App\Team\Service\FormLogicTeam;
 use App\Team\Service\TeamService;
+use App\Turnier\Service\TurnierPermission;
 use App\Turnier\Service\TurnierService;
 
 $turnierId = (int) @$_GET['turnier_id'];
@@ -14,14 +15,18 @@ if (!$turnier) {
     Helper::not_found("Turnier wurde nicht gefunden.");
 }
 
-// im Teamcenter testen, ob es sich um den Ausrichter handelt
-if (Helper::$teamcenter && ($turnier->getAusrichter()->id() != $_SESSION['logins']['team']['id'] || !$turnier->isSpassturnier())) {
+// im Teamcenter testen, ob es sich um den Ausrichter eines Spaßturniers handelt
+if (!TurnierPermission::canManageTeams($turnier)) {
     Html::error("Fehlende Berechtigung Teams zu diesem Turnier anzumelden");
     Helper::reload('/liga/turniere.php');
 }
 
 // Team als Ligaausschuss abmelden
 if (isset($_POST['abmelden'])) {
+    if (!TurnierPermission::canDeregisterTeamManually($turnier)) {
+        Html::error("In der Ergebnisphase können keine Teams mehr abgemeldet werden.");
+        Helper::reload(get: '?turnier_id=' . $turnier->id());
+    }
     foreach ($turnier->getListe() as $anmeldung) {
         $team = $anmeldung->getTeam();
         if (isset($_POST['team_abmelden'][$team->id()])) {

@@ -225,7 +225,7 @@ class TurnierValidator
                 $error = true;
             }
 
-            if (time() > TurnierService::getTurnierEintrageFristUnix($this->turnier)) {
+            if (!TurnierFristenService::isOffen(TurnierFristenService::setzphaseAb($this->turnier))) {
                 $error_text .= "Turniere können nur vier Wochen vor dem Spieltag eingetragen werden. ";
                 $error = true;
             }

@@ -6,6 +6,7 @@ require'../../logic/session_team.logic.php';
 use App\Turnier\Repository\TurnierRepository;
 use App\Team\Service\FormLogicTeam;
 use App\Team\Service\NLTeamValidator;
+use App\Turnier\Service\TurnierPermission;
 use App\Turnier\Service\TurnierSnippets;
 
 $turnierId = (int) @$_GET['turnier_id'];
@@ -14,6 +15,12 @@ $turnier = TurnierRepository::get()->turnier($turnierId);
 //Existiert das Turnier?
 if ($turnier === null) {
     Helper::not_found("Das Turnier konnte nicht gefunden werden.");
+}
+
+// Nichtligateams melden nur der Ligaausschuss und der Ausrichter an
+if (!TurnierPermission::canRegisterNlTeam($turnier)) {
+    Html::error("Nur der Ausrichter kann Nichtligateams anmelden.");
+    Helper::reload('/liga/turnier_details.php', '?turnier_id=' . $turnier->id());
 }
 
 if (isset($_POST['nl_anmelden'])) {

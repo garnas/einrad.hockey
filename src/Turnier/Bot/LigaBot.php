@@ -12,6 +12,7 @@ use App\Turnier\Enum\TurnierPhase;
 use App\Turnier\Mail\TurnierMails;
 use App\Turnier\Repository\TurnierRepository;
 use App\Turnier\Service\BlockService;
+use App\Turnier\Service\TurnierFristenService;
 use App\Turnier\Service\TurnierService;
 use App\Turnier\Service\TurnierPermission;
 use Config;
@@ -134,23 +135,17 @@ class LigaBot
             ->getQuery()
             ->execute();
 
-        // Initierung
-        $spieltag = 0;
-        $kw_vgl = 0; // Kalenderwoche als Hilfsmittel um Spieltage zu bestimmen
+        // Spieltage nach Spieltagsbeginn (Samstag) durchnummerieren, siehe TurnierFristenService
+        $spieltage = array_map(
+            static fn(Turnier $turnier): string => TurnierFristenService::spieltagBeginn($turnier)->format('Y-m-d'),
+            $turniere,
+        );
+        $spieltage = array_values(array_unique($spieltage));
+        sort($spieltage);
 
-        foreach ($turniere as $turnier) { // Schleife durch alle Turniere
-            $wochentag = $turnier->getDatum()->format('N'); // Wochentage nummeriert 1 - 7
-            $kw = $turnier->getDatum()->format('W'); // Kalenderwoche nummeriert
-            // Man muss auch Turniere berücksichtigen, welche nicht am Wochende sind:
-            if ($kw_vgl != $kw) {
-                ++$spieltag;
-            }
-            // Turniere die Mo oder Di stattfinden werden dem vorherigen Spieltag zugeordnet
-            if (($wochentag < 3) && $kw - $kw_vgl <= 1) {
-                $spieltag = ($spieltag === 0) ? 1 : $spieltag - 1; // Ansonsten würde Spieltag 0 vergeben, wenn das erste Turnier nicht an einem WE stattfindet
-            }
-            $turnier->setSpieltag($spieltag);
-            $kw_vgl = $kw; // Kalenderwoche übernehmen für die nächste Iteration
+        foreach ($turniere as $turnier) {
+            $spieltagBeginn = TurnierFristenService::spieltagBeginn($turnier)->format('Y-m-d');
+            $turnier->setSpieltag(array_search($spieltagBeginn, $spieltage, true) + 1);
             DoctrineWrapper::manager()->persist($turnier);
         }
         DoctrineWrapper::manager()->flush();
@@ -185,7 +180,7 @@ class LigaBot
 
         // Übergang in die Setzphase
         foreach ($turniere as $turnier) {
-            if ($turnier->isWartePhase() && TurnierService::warteToSetzUnix($turnier) <= time()) {
+            if ($turnier->isWartePhase() && TurnierFristenService::setzphaseAb($turnier) <= new DateTimeImmutable()) {
                 $turnier->setPhase(TurnierPhase::SETZ);
 
                 // Losen setzt alle Teams in richtiger Reihenfolge auf die Warteliste.
@@ -227,16 +222,16 @@ class LigaBot
     }
 
     /**
-     * Setzt Spaßturniere in die Ergebnisphase, sobald sie beendet sind.
+     * Setzt Spaßturniere in die Ergebnisphase, sobald ihre Ergebnisfrist abgelaufen ist.
      *
-     * @see TurnierService::spassturnierBeendetAb()
+     * @see TurnierFristenService::ergebnisFrist()
      */
     public static function spassturniereAbschliessen(): void
     {
         $heute = new DateTimeImmutable('today');
 
         foreach (TurnierRepository::get()->getVergangeneOffeneSpassturniere($heute) as $turnier) {
-            if (TurnierService::spassturnierBeendetAb($turnier) > $heute) {
+            if (TurnierFristenService::isOffen(TurnierFristenService::ergebnisFrist($turnier))) {
                 continue;
             }
             $turnier->setPhase(TurnierPhase::ERGEBNIS);

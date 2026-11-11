@@ -4,6 +4,7 @@ namespace App\Turnierbericht\Service;
 
 use Helper;
 use Html;
+use App\Turnier\Service\TurnierFristenService;
 use App\Turnier\Service\TurnierService;
 use App\Turnierbericht\Entity\Turnierbericht;
 
@@ -27,12 +28,12 @@ class TurnierberichtPermission
         }
 
         // Der Ausrichter darf nur innerhalb der Bearbeitungsfrist bearbeiten
-        if (!TurnierberichtService::isInBearbeitungFrist($turnier)) {
+        if (!TurnierFristenService::isOffen(TurnierFristenService::berichtFrist($turnier))) {
             Html::notice("Die Bearbeitungsfrist für den Turnierreport ist abgelaufen. Änderungen sind nur noch über den Ligaausschuss möglich.");
             return false;
         }
 
-        $frist = TurnierberichtService::getBearbeitungFrist($turnier);
+        $frist = TurnierFristenService::berichtFrist($turnier);
         Html::notice("Der Turnierreport kann noch bis zum " . $frist->format('d.m.Y H:i') . " bearbeitet werden.");
         return true;
     }
