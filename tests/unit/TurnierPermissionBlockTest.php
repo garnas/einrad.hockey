@@ -4,11 +4,11 @@ namespace unit;
 
 use App\Turnier\Entity\Turnier;
 use App\Turnier\Enum\TurnierPhase;
-use App\Turnier\Service\TurnierValidator;
+use App\Turnier\Service\TurnierPermission;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class TurnierValidatorTest extends TestCase
+class TurnierPermissionBlockTest extends TestCase
 {
     public static function provideIsErweiterbarBlockrunter(): array
     {
@@ -254,7 +254,7 @@ class TurnierValidatorTest extends TestCase
 
         $this->assertEquals(
             expected: $isErweiterbar,
-            actual: TurnierValidator::isErweiterbarBlockrunter($turnier),
+            actual: TurnierPermission::canExtendBlockRunter($turnier),
         );
     }
 
@@ -493,7 +493,7 @@ class TurnierValidatorTest extends TestCase
 
         $this->assertEquals(
             expected: $isErweiterbar,
-            actual: TurnierValidator::isErweiterbarBlockhoch($turnier),
+            actual: TurnierPermission::canExtendBlockHoch($turnier),
         );
     }
 
@@ -651,7 +651,7 @@ class TurnierValidatorTest extends TestCase
 
         $this->assertEquals(
             expected: $isErweiterbar,
-            actual: TurnierValidator::isErweiterbarBlockfrei($turnier),
+            actual: TurnierPermission::canExtendBlockFrei($turnier),
         );
     }
 

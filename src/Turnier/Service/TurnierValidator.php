@@ -13,17 +13,6 @@ use Env;
 
 class TurnierValidator
 {
-    public static function hasLaRights(Turnier $turnier): bool
-    {
-        return
-            Helper::$ligacenter
-            || (
-                $turnier->isFinalTurnier()
-                && TurnierService::isAusrichter($turnier, $_SESSION['logins']['team']['id'])
-            )
-            || $turnier->isSpassturnier();
-    }
-
     private Turnier $turnier;
 
     public function __construct(Turnier $turnier)
@@ -47,10 +36,7 @@ class TurnierValidator
     public static function onChange(Turnier $turnier): bool
     {
         // Keine Änderungen in der Ergebnisphase
-        if (
-            $turnier->isErgebnisPhase()
-            && !self::hasLaRights($turnier)
-        ) {
+        if (!TurnierPermission::canChange($turnier)) {
             Html::error("Turniere können in der Ergebnisphase nicht mehr geändert werden. Bitte wende dich unter "
                 . Html::mailto(Env::LAMAIL) . " an den Ligaaussschuss.");
             return false;
@@ -75,13 +61,7 @@ class TurnierValidator
 
     public static function mayChangePlaetze(Turnier $turnier, int $plaetze_before): bool
     {
-        if (self::hasLaRights($turnier)) {
-            return true;
-        }
-        if ($turnier->isWartePhase()) {
-            return true;
-        }
-        if ($turnier->isSetzPhase() && $plaetze_before < $turnier->getDetails()->getPlaetze()) {
+        if (!TurnierPermission::canChangePlaetze($turnier, $plaetze_before)) {
             Html::error("Turnierplätze können ab der Setzphase nicht mehr erweitert werden.");
             return false;
         }
@@ -108,7 +88,7 @@ class TurnierValidator
 
     public function mayChange(): bool
     {
-        return !$this->turnier->isErgebnisPhase() || self::hasLaRights($this->turnier);
+        return TurnierPermission::canChange($this->turnier);
     }
 
     public function hasValidPhase(): bool
@@ -124,7 +104,7 @@ class TurnierValidator
 
     public function hasValidErweiterung(): bool
     {
-        if (!$this->turnier->isSetzPhase()) {
+        if (!TurnierPermission::canExtendBlock($this->turnier)) {
             Html::error("Der Turnierblock kann nur in der Setzphase erweitert werden.");
             return false;
         }
@@ -189,7 +169,7 @@ class TurnierValidator
         }
 
         if (
-            (Helper::$teamcenter && !self::hasLaRights($this->turnier))
+            (Helper::$teamcenter && !TurnierPermission::hasLaRights($this->turnier))
             && $plaetze <= 8
             && $plaetze >= 4
         ) {
@@ -197,7 +177,7 @@ class TurnierValidator
         }
 
         if (
-            (Helper::$teamcenter && !self::hasLaRights($this->turnier))
+            (Helper::$teamcenter && !TurnierPermission::hasLaRights($this->turnier))
             && $plaetze < $min_plaetze
         ) {
             Html::error("Die Anzahl der maximalen Plätze ist kleiner als die der minimalen Plätze.");
@@ -205,7 +185,7 @@ class TurnierValidator
         }
 
         if (
-            self::hasLaRights($this->turnier)
+            TurnierPermission::hasLaRights($this->turnier)
             && $plaetze >= 0
             && $plaetze <= 14
         ) {
@@ -219,7 +199,7 @@ class TurnierValidator
 
     public function hasValidDatum(): bool
     {
-        if (self::hasLaRights($this->turnier)
+        if (TurnierPermission::hasLaRights($this->turnier)
         ) {
             return true;
         }
@@ -239,7 +219,7 @@ class TurnierValidator
             }
 
             $feiertage = Feiertage::finden(date("Y", $unixTime));
-            if ((Helper::$teamcenter && !self::hasLaRights($this->turnier))
+            if ((Helper::$teamcenter && !TurnierPermission::hasLaRights($this->turnier))
                 && !\in_array($unixTime, $feiertage) && date('N', $unixTime) < 6) {
                 $error_text .= "Das Datum liegt nicht am Wochende und ist kein bundesweiter Feiertag. ";
                 $error = true;
@@ -262,7 +242,7 @@ class TurnierValidator
     public function hasValidUhrzeit(): bool
     {
 
-        if (self::hasLaRights($this->turnier)) {
+        if (TurnierPermission::hasLaRights($this->turnier)) {
             return true;
         }
 
@@ -282,7 +262,7 @@ class TurnierValidator
 
     public function hasValidStartgebuehr(): bool
     {
-        if (self::hasLaRights($this->turnier)) {
+        if (TurnierPermission::hasLaRights($this->turnier)) {
             return true;
         }
 
@@ -299,8 +279,8 @@ class TurnierValidator
         $ausrichter = $this->turnier->getAusrichter();
 
         if (
-            ((Helper::$teamcenter && !self::hasLaRights($this->turnier))
-                && !self::hasLaRights($this->turnier))
+            ((Helper::$teamcenter && !TurnierPermission::hasLaRights($this->turnier))
+                && !TurnierPermission::hasLaRights($this->turnier))
             && TeamValidator::isAmKalenderTagAufSetzliste($this->turnier, $ausrichter)
         ) {
             Html::error("Ihr befindet euch am Turniertag bereits auf einer Setzliste");
@@ -316,54 +296,6 @@ class TurnierValidator
         }
 
         return true;
-    }
-
-    /**
-     * Ermittelt, ob ein Turnier nach oben erweiterbar ist.
-     *
-     * @param Turnier $turnier
-     * @return bool
-     */
-    public static function isErweiterbarBlockhoch(Turnier $turnier): bool
-    {
-        return $turnier->isSetzPhase()
-            && !$turnier->isBlockErweitertHoch()
-            && !$turnier->isBlockErweitertRunter()
-            && !$turnier->isBlockErweitertFrei()
-            && $turnier->getBlock() !== 'AB'
-            && $turnier->getBlock() !== 'A'
-            && $turnier->isLigaTurnier();
-    }
-
-    /**
-     * Ermittelt, ob ein Turnier nach unten erweiterbar ist
-     *
-     * @param Turnier $turnier
-     * @return bool
-     */
-    public static function isErweiterbarBlockrunter(Turnier $turnier): bool
-    {
-        return $turnier->isSetzPhase()
-            && !$turnier->isBlockErweitertRunter()
-            && !$turnier->isBlockErweitertHoch()
-            && !$turnier->isBlockErweitertFrei()
-            && $turnier->getBlock() !== 'EF'
-            && $turnier->getBlock() !== 'F'
-            && $turnier->isLigaTurnier();
-    }
-
-    /**
-     * Ermittelt, ob ein Turnier blockfrei erweiterbar ist
-     *
-     * @param Turnier $turnier
-     * @return bool
-     */
-    public static function isErweiterbarBlockfrei(Turnier $turnier): bool
-    {
-        return $turnier->isSetzPhase()
-            && $turnier->isLigaturnier()
-            && !$turnier->isBlockErweitertFrei()
-            && $turnier->getBlock() != Config::BLOCK_ALL[0];
     }
 
     public function hasValidMinTeams(): bool

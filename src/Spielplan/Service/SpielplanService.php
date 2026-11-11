@@ -10,6 +10,7 @@ use App\Turnier\Enum\TurnierPhase;
 use App\Shared\DoctrineWrapper;
 use App\Spielplan\Repository\SpielplanRepository;
 use App\Turnier\Repository\TurnierRepository;
+use App\Turnier\Service\TurnierPermission;
 use App\Turnier\Service\TurnierService;
 use Html;
 
@@ -68,7 +69,7 @@ final class SpielplanService
         $anzahlTeams = count(TurnierService::getSpielenliste($turnier));
         $fehler = false;
 
-        if ($turnier->isLigaturnier() && !$turnier->isSetzPhase()) {
+        if (!TurnierPermission::canCreateSpielplan($turnier)) {
             Html::error("Das Turnier muss in der Setzphase sein.");
             $fehler = true;
         }

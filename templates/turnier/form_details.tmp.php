@@ -1,4 +1,4 @@
-<?php use App\Turnier\Service\TurnierFormService;
+<?php use App\Turnier\Service\TurnierPermission;
 
 ?>
 
@@ -17,7 +17,7 @@
     </p>
     <p>
         <label class="w3-text-primary" for="startgebuehr">Startgebühr<span class="w3-text-secondary">*</span></label>
-        <select class="w3-input w3-border w3-border-primary w3-padding" <?php if (!TurnierFormService::isEditable('startgebuehr', $turnier)): ?> disabled <?php endif; ?> id="startgebuehr" name="startgebuehr" required>
+        <select class="w3-input w3-border w3-border-primary w3-padding" <?php if (!TurnierPermission::canEditField('startgebuehr', $turnier)): ?> disabled <?php endif; ?> id="startgebuehr" name="startgebuehr" required>
             <option value="" disabled selected>Wähle eine Option</option>
             <option <?php if (($turnier_startgebuehr ?? '') == 'keine') {?>selected<?php }?> value="keine">keine</option>
             <option <?php if (($turnier_startgebuehr ?? '') == '5 Euro') {?>selected<?php }?> value="5 Euro">5 Euro</option>

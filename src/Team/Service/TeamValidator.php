@@ -7,6 +7,7 @@ use App\Team\Entity\Team;
 use App\Turnier\Entity\Turnier;
 use App\Turnier\Entity\Turnieranmeldung;
 use App\Shared\DoctrineWrapper;
+use App\Turnier\Service\TurnierPermission;
 use App\Turnier\Service\TurnierService;
 use Env;
 use Html;
@@ -74,7 +75,7 @@ class TeamValidator
             $valid = false;
         }
 
-        if ($turnier->isSpielplanPhase() || $turnier->isErgebnisPhase()) {
+        if (!TurnierPermission::canRegisterTeam($turnier)) {
             $error[] = "Eine Anmeldung ist nicht mehr möglich, da der Spielplan schon erstellt wurde.";
             $valid = false;
         }

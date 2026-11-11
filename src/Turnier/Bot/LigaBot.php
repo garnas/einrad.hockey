@@ -13,7 +13,7 @@ use App\Turnier\Mail\TurnierMails;
 use App\Turnier\Repository\TurnierRepository;
 use App\Turnier\Service\BlockService;
 use App\Turnier\Service\TurnierService;
-use App\Turnier\Service\TurnierValidator;
+use App\Turnier\Service\TurnierPermission;
 use Config;
 use DateTimeImmutable;
 use db;
@@ -200,13 +200,13 @@ class LigaBot
         // Automatische Erweiterung
         foreach (self::$gelosteTurniere as $turnier) {
             // Pruefe, ob das Turnier automatisch um einen Block nach oben erweitert werden soll und dies ueberhaupt moeglich ist
-            if (TurnierValidator::isErweiterbarBlockhoch($turnier) && $turnier->isSofortOeffnenHoch()) {
+            if (TurnierPermission::canExtendBlockHoch($turnier) && $turnier->isSofortOeffnenHoch()) {
                 TurnierService::erweitereBlockHoch($turnier);
                 TurnierService::setzListeAuffuellen($turnier);
             }
 
             // Pruefe, ob das Turnier automatisch um einen Block nach unten erweitert werden soll und dies ueberhaupt moeglich ist
-            if (TurnierValidator::isErweiterbarBlockrunter($turnier) && $turnier->isSofortOeffnenRunter()) {
+            if (TurnierPermission::canExtendBlockRunter($turnier) && $turnier->isSofortOeffnenRunter()) {
                 TurnierService::erweitereBlockRunter($turnier);
                 TurnierService::setzListeAuffuellen($turnier);
             }

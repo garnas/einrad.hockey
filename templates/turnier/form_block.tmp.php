@@ -1,5 +1,4 @@
-<?php use App\Turnier\Service\TurnierFormService;
-use App\Turnier\Service\TurnierPermission;
+<?php use App\Turnier\Service\TurnierPermission;
 
 ?>
 
@@ -28,7 +27,7 @@ use App\Turnier\Service\TurnierPermission;
     <div>
         <p>
             <label class="w3-text-primary" for="art_block">Turnierblock<span class="w3-text-secondary">*</span></label>
-            <select required <?php if (!$turnier_from_form && !TurnierFormService::isEditable('art_block', $turnier)): ?> disabled <?php endif; ?> class="w3-select w3-border w3-border-primary w3-padding" id="art_block" name="art_block">
+            <select required <?php if (!$turnier_from_form && !TurnierPermission::canEditField('art_block', $turnier)): ?> disabled <?php endif; ?> class="w3-select w3-border w3-border-primary w3-padding" id="art_block" name="art_block">
                 <option value="" disabled selected>Wähle einen Turnierblock</option>
                 <!-- Blockhöhere Turniere -->
                 <?php foreach ($block_higher as $block): ?>
@@ -57,7 +56,7 @@ use App\Turnier\Service\TurnierPermission;
     <div id="immediately_open_div">
         <p>
             <label class="w3-text-primary" for="sofort_oeffnen">Automatische Erweiterung des Turniers<span class="w3-text-secondary">*</span></label>
-            <select required <?php if (!TurnierFormService::isEditable('sofort_oeffnen', $turnier)): ?> disabled <?php endif; ?> class="w3-select w3-border w3-border-primary w3-padding" id="sofort_oeffnen" name="sofort_oeffnen">
+            <select required <?php if (!TurnierPermission::canEditField('sofort_oeffnen', $turnier)): ?> disabled <?php endif; ?> class="w3-select w3-border w3-border-primary w3-padding" id="sofort_oeffnen" name="sofort_oeffnen">
                 <option value="" disabled selected>Wähle eine Option</option>
                 <option <?php if (($sofort_oeffnen ?? '') == 'higher') {?> selected <?php } ?> value="higher">Automatisch einen Block nach oben erweitern</option>
                 <option <?php if (($sofort_oeffnen ?? '') == 'lower') {?> selected <?php } ?> value="lower">Automatisch einen Block nach unten erweitern</option>

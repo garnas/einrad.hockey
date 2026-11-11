@@ -5,6 +5,7 @@
 
 use App\Turnier\Entity\Turnier;
 use App\Turnier\Service\TurnierFormService;
+use App\Turnier\Service\TurnierPermission;
 use App\Turnier\Service\TurnierSnippets;
 
 require_once '../../init.php';
@@ -43,7 +44,7 @@ include '../../templates/header.tmp.php';
                 id="higher" 
                 value="higher" 
                 <?php if (TurnierFormService::isSelected('single_higher', $turnier)): ?> checked <?php endif; ?>
-                <?php if (!TurnierFormService::isEditable('single_higher', $turnier)): ?> disabled <?php endif; ?>
+                <?php if (!TurnierPermission::canEditField('single_higher', $turnier)): ?> disabled <?php endif; ?>
             >
             <label for="higher" style="cursor: pointer">Turnier um einen Block <b>nach oben</b> erweitern</label>
         </p>
@@ -56,7 +57,7 @@ include '../../templates/header.tmp.php';
                 id="lower" 
                 value="lower" 
                 <?php if (TurnierFormService::isSelected('single_lower', $turnier)): ?> checked <?php endif; ?>
-                <?php if (!TurnierFormService::isEditable('single_lower', $turnier)): ?> disabled <?php endif; ?>
+                <?php if (!TurnierPermission::canEditField('single_lower', $turnier)): ?> disabled <?php endif; ?>
             >
             <label for="lower" style="cursor: pointer">Turnier um einen Block <b>nach unten</b> erweitern</label>
         </p>
@@ -69,7 +70,7 @@ include '../../templates/header.tmp.php';
                 id="single_none" 
                 value="none"
                 <?php if (TurnierFormService::isSelected('single_none', $turnier)): ?> checked <?php endif; ?>
-                <?php if (!TurnierFormService::isEditable('single_none', $turnier)): ?> disabled <?php endif; ?>
+                <?php if (!TurnierPermission::canEditField('single_none', $turnier)): ?> disabled <?php endif; ?>
             >
             <label for="single_none" style="cursor: pointer">Keine einzelne Blockerweiterung vornehmen</label>
         </p>
@@ -84,7 +85,7 @@ include '../../templates/header.tmp.php';
                 id="free" 
                 value="free"
                 <?php if (TurnierFormService::isSelected('multiple_free', $turnier)): ?> checked <?php endif; ?>
-                <?php if (!TurnierFormService::isEditable('multiple_free', $turnier)): ?> disabled <?php endif; ?>
+                <?php if (!TurnierPermission::canEditField('multiple_free', $turnier)): ?> disabled <?php endif; ?>
             >
             <label for="free" style="cursor: pointer">Turnier für <b>alle</b> Blöcke erweitern</label>
         </p>
@@ -97,7 +98,7 @@ include '../../templates/header.tmp.php';
                 id="multiple_none" 
                 value="none"
                 <?php if (TurnierFormService::isSelected('multiple_none', $turnier)): ?> checked <?php endif; ?>
-                <?php if (!TurnierFormService::isEditable('multiple_none', $turnier)): ?> disabled <?php endif; ?>
+                <?php if (!TurnierPermission::canEditField('multiple_none', $turnier)): ?> disabled <?php endif; ?>
             >
             <label for="multiple_none" style="cursor: pointer">Keine einzelne Blockerweiterung vornehmen</label>
         </p>

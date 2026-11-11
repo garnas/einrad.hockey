@@ -6,28 +6,23 @@ use App\Turnierbericht\Repository\TurnierberichtRepository;
 use App\Spielplan\Service\SpielplanService;
 use App\Team\Service\FreilosService;
 use App\Tabelle\Service\TabelleService;
+use App\Turnier\Service\TurnierPermission;
 use App\Turnier\Service\TurnierService;
 use App\Turnier\Service\TurnierValidator;
 use App\Turnierbericht\Service\TurnierberichtService;
 
 $turnier = $spielplan->getTurnier();
 
-// Besteht die Berechtigung das Turnier zu bearbeiten?
-if (!Helper::$ligacenter) { // Ligacenter darf alles.
-    if ((Helper::$teamcenter && ($_SESSION['logins']['team']['id'] ?? 0) != $turnier->getAusrichter()->id())) {
-        Html::error("Nur der Ausrichter kann Spielergebnisse eintragen");
-        Helper::reload("/liga/spielplan.php", '?turnier_id=' . $turnier_id);
-    }
+// Besteht die Berechtigung das Turnier zu bearbeiten? (Ligacenter darf alles)
+if (!TurnierPermission::canEnterErgebnisse($turnier)) {
+    Html::error("Nur der Ausrichter kann Spielergebnisse eintragen");
+    Helper::reload("/liga/spielplan.php", '?turnier_id=' . $turnier_id);
+}
 
-    // Wird das Turnierergebnis rechtzeitig eingetragen?
-    $N = (int) $turnier->getDatum()->format("N"); // Numerischer Wochentag.
-    $delta = (8 - $N) * 24 * 60 * 60 + 18 * 60 * 60; // Die Zeit bis zum nächsten Montag 18:00 Uhr von 0:00 Uhr aus gesehen.
-    $abgabe = $turnier->getDatum()->getTimestamp() + $delta;
-
-    if ($abgabe < time()) {
-        Html::error("Bitte wende dich an den Ligaausschuss um Ergebnisse nachträglich zu verändern.");
-        Helper::reload("/liga/spielplan.php", '?turnier_id=' . $turnier_id);
-    }
+// Wird das Turnierergebnis rechtzeitig eingetragen?
+if (!TurnierPermission::isErgebnisFristOffen($turnier)) {
+    Html::error("Bitte wende dich an den Ligaausschuss um Ergebnisse nachträglich zu verändern.");
+    Helper::reload("/liga/spielplan.php", '?turnier_id=' . $turnier_id);
 }
 
 $to_int = static fn($wert) => is_numeric($wert) ? (int) $wert : null;
