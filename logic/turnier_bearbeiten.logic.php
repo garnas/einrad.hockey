@@ -87,7 +87,8 @@ if (isset($_POST['change_turnier'])) {
     $turnier_name = $_POST['tname'];
 
     // Sofort oeffnen
-    $sofort_oeffnen = (string) ($_POST['sofort_oeffnen'] ?? '');
+    // Gesperrte Felder werden vom Browser nicht gesendet: dann bleibt der bisherige Wert
+    $sofort_oeffnen = (string) ($_POST['sofort_oeffnen'] ?? $sofort_oeffnen);
     $sofort_oeffnen_frei = ($sofort_oeffnen === 'free');
     $sofort_oeffnen_runter = ($sofort_oeffnen === 'lower');
     $sofort_oeffnen_hoch = ($sofort_oeffnen === 'higher');
