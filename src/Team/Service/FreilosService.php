@@ -145,6 +145,60 @@ class FreilosService
 
     }
 
+    /**
+     * Freilose, die bei einer Turnierabsage zurückgegeben werden: alle für das Turnier gesetzten
+     * Freilose von Teams, die noch angemeldet sind und noch kein Ersatzfreilos erhalten haben.
+     * Teams, die sich abgemeldet haben, erhalten ihr Freilos nicht zurück.
+     *
+     * @return Freilos[]
+     */
+    public static function getRueckgabeFreilose(Turnier $turnier): array
+    {
+        $rueckgabe = [];
+        foreach ($turnier->getGesetzteFreilose() as $freilos) {
+            if (
+                TeamService::isAngemeldet($freilos->getTeam(), $turnier)
+                && !self::hasErsatzfreilos($freilos)
+            ) {
+                $rueckgabe[] = $freilos;
+            }
+        }
+        return $rueckgabe;
+    }
+
+    /**
+     * Wurde für dieses Freilos bereits ein neues ausgegeben (Recycling oder Turnierabsage)?
+     */
+    public static function hasErsatzfreilos(Freilos $freilos): bool
+    {
+        foreach ($freilos->getTeam()->getFreilose() as $f) {
+            if ($f->getVorherigesFreilos() === $freilos) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Gibt bei einer Turnierabsage die gesetzten Freilose zurück.
+     *
+     * Das gesetzte Freilos bleibt als verbraucht bestehen; das Team erhält ein neues Freilos
+     * derselben Saison, das auf das verbrauchte verweist. Gespeichert wird mit dem Turnier.
+     */
+    public static function handleTurnierAbsage(Turnier $turnier): void
+    {
+        foreach (self::getRueckgabeFreilose($turnier) as $freilos) {
+            $team = $freilos->getTeam();
+            $team->addFreilos(
+                Freilosgrund::TURNIER_ABGESAGT,
+                saison: $freilos->getSaison(),
+                vorherigesFreilos: $freilos,
+            );
+            $turnier->getLogService()->addLog("Freilos zurückgegeben: " . $team->getName());
+            Html::info("Das Team " . $team->getName() . " hat sein Freilos für das abgesagte Turnier zurückerhalten.");
+        }
+    }
+
     public static function handleSchiriFreilos(Team $team, bool $sendMail = true): bool
     {
         $filter = static function (Spieler $s) {

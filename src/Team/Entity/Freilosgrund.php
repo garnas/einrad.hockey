@@ -7,6 +7,7 @@ enum Freilosgrund: string
     case SCHIRI = "Freilos für Schiris";
     case TURNIER_AUSGERICHTET = "Freilos für Turnierausrichtung";
     case FREILOS_GESETZT = "Freilos für frühzeitig gesetztes Freilos";
+    case TURNIER_ABGESAGT = "Freilos für abgesagtes Turnier";
     case SONSTIGES = "Freilos";
     case NEUES_LIGATEAM = "Neues Ligateam";
 

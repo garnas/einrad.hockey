@@ -301,6 +301,16 @@ class Team
     }
 
     /**
+     * Alle Freilose des Teams, auch verbrauchte und abgelaufene.
+     *
+     * @return Collection|array|Freilos[]
+     */
+    public function getFreilose(): Collection|array
+    {
+        return $this->freilose;
+    }
+
+    /**
      * @return Collection|array|Freilos[]
      */
     public function getGueltigeFreilose(): Collection|array

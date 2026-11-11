@@ -41,7 +41,8 @@ use App\Team\Service\TeamSnippets;
                         <?php foreach (Freilosgrund::cases() as $grund): ?>
                             <option
                                 <?= ($grund == Freilosgrund::TURNIER_AUSGERICHTET
-                                    || $grund == Freilosgrund::FREILOS_GESETZT)
+                                    || $grund == Freilosgrund::FREILOS_GESETZT
+                                    || $grund == Freilosgrund::TURNIER_ABGESAGT)
                                     ? "disabled" : ""
                             ?>
                                     value=<?= $grund->name ?>><?= $grund->value ?></option>

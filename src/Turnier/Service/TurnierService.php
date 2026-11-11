@@ -6,6 +6,7 @@ use App\Tabelle\Service\TabelleService;
 use App\Team\Entity\Kontakt;
 use App\Team\Entity\Team;
 use App\Team\Repository\TeamRepository;
+use App\Team\Service\FreilosService;
 use App\Team\Service\NLTeamValidator;
 use App\Turnier\Entity\Turnier;
 use App\Turnier\Entity\Turnieranmeldung;
@@ -181,6 +182,9 @@ class TurnierService
         $turnier->setCanceledGrund($grund);
         $turnier->setCanceled(true);
         $turnier->getLogService()->addLog("Turnier wurde abgesagt: $grund");
+
+        // Angemeldete Teams erhalten ihr gesetztes Freilos zurück (als neues Freilos)
+        FreilosService::handleTurnierAbsage($turnier);
     }
 
     /**

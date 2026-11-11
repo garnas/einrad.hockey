@@ -81,7 +81,7 @@ CREATE TABLE `freilose` (
   `erstellt_am` datetime NOT NULL,
   `team_id` int(11) NOT NULL,
   `turnier_id` int(11) DEFAULT NULL,
-  `grund` enum('SCHIRI','TURNIER_AUSGERICHTET','FREILOS_GESETZT','NEUES_LIGATEAM','SONSTIGES') NOT NULL,
+  `grund` enum('SCHIRI','TURNIER_AUSGERICHTET','FREILOS_GESETZT','NEUES_LIGATEAM','SONSTIGES','TURNIER_ABGESAGT') NOT NULL,
   `saison` int(11) NOT NULL,
   `ausgerichtete_turnier_id` int(16) DEFAULT NULL,
   `vorheriges_freilos` int(16) DEFAULT NULL,
