@@ -47,6 +47,15 @@ class TurnierPermission
     // ------------------------------------------------------------------
 
     /**
+     * Ist der Nutzer als Ligaausschuss im Ligacenter angemeldet?
+     * Die einzige Stelle, an der die Berechtigungen den Bereich auswerten.
+     */
+    public static function isLigaausschuss(): bool
+    {
+        return Helper::$ligacenter;
+    }
+
+    /**
      * Ist das angemeldete Team der Ausrichter des Turniers?
      */
     public static function isAngemeldeterAusrichter(Turnier $turnier): bool
@@ -55,21 +64,29 @@ class TurnierPermission
     }
 
     /**
-     * Spaßturniere gehören nicht zum Ligabetrieb: Der Ligaausschuss und der Ausrichter haben
-     * volle Rechte, unabhängig von Phasen und Fristen.
+     * Ist das angemeldete Team der Ausrichter dieses Spaßturniers?
      */
-    public static function isSpassturnierVerwalter(Turnier $turnier): bool
+    public static function isSpassturnierAusrichter(Turnier $turnier): bool
     {
-        return $turnier->isSpassturnier()
-            && (Helper::$ligacenter || self::isAngemeldeterAusrichter($turnier));
+        return $turnier->isSpassturnier() && self::isAngemeldeterAusrichter($turnier);
     }
 
     /**
-     * Rechte wie der Ligaausschuss: im Ligacenter oder als Ausrichter eines Spaßturniers.
+     * Volle Rechte unabhängig von Phase und Fristen: der Ligaausschuss bei allen Turnieren,
+     * der Ausrichter nur bei seinem Spaßturnier.
      */
-    public static function hasLaRights(Turnier $turnier): bool
+    public static function hasVolleRechte(Turnier $turnier): bool
     {
-        return Helper::$ligacenter || self::isSpassturnierVerwalter($turnier);
+        return self::isLigaausschuss() || self::isSpassturnierAusrichter($turnier);
+    }
+
+    /**
+     * Gelten die Vorgaben für Ligaturniere (Datum, Startzeit, Plätze, Startgebühr, Ausrichter)?
+     * Nicht für den Ligaausschuss und nicht für Spaßturniere.
+     */
+    public static function isVonLigavorgabenBefreit(Turnier $turnier): bool
+    {
+        return self::isLigaausschuss() || $turnier->isSpassturnier();
     }
 
     /**
@@ -78,7 +95,7 @@ class TurnierPermission
      */
     public static function isNurHinweisAenderbar(Turnier $turnier): bool
     {
-        return $turnier->isFinalTurnier() && !Helper::$ligacenter;
+        return $turnier->isFinalTurnier() && !self::isLigaausschuss();
     }
 
     // ------------------------------------------------------------------
@@ -90,7 +107,7 @@ class TurnierPermission
      */
     public static function getErstellbareArten(): array
     {
-        return Helper::$ligacenter ? self::LA_ARTEN : self::TEAM_ARTEN;
+        return self::isLigaausschuss() ? self::LA_ARTEN : self::TEAM_ARTEN;
     }
 
     public static function canCreateArt(?string $art): bool
@@ -103,11 +120,11 @@ class TurnierPermission
     // ------------------------------------------------------------------
 
     /**
-     * Turniere in der Ergebnisphase darf nur der Ligaausschuss ändern.
+     * Turniere in der Ergebnisphase ändern nur der Ligaausschuss und der Ausrichter eines Spaßturniers.
      */
     public static function canChange(Turnier $turnier): bool
     {
-        return !$turnier->isErgebnisPhase() || self::hasLaRights($turnier);
+        return !$turnier->isErgebnisPhase() || self::hasVolleRechte($turnier);
     }
 
     /**
@@ -115,7 +132,7 @@ class TurnierPermission
      */
     public static function canCancel(Turnier $turnier): bool
     {
-        return Helper::$ligacenter || self::isSpassturnierVerwalter($turnier);
+        return self::hasVolleRechte($turnier);
     }
 
     /**
@@ -125,7 +142,7 @@ class TurnierPermission
      */
     public static function canEditField(string $field, ?Turnier $turnier): bool
     {
-        if (Helper::$ligacenter || $turnier === null) {
+        if (self::isLigaausschuss() || $turnier === null) {
             return true;
         }
 
@@ -133,7 +150,7 @@ class TurnierPermission
             return $field === 'hinweis';
         }
 
-        if ($field !== 'art_block' && self::isSpassturnierVerwalter($turnier)) {
+        if ($field !== 'art_block' && self::isSpassturnierAusrichter($turnier)) {
             return true;
         }
 
@@ -152,11 +169,12 @@ class TurnierPermission
     }
 
     /**
-     * Plätze dürfen ab der Setzphase nicht mehr erhöht werden (außer vom Ligaausschuss).
+     * Plätze dürfen ab der Setzphase nicht mehr erhöht werden
+     * (außer vom Ligaausschuss und vom Ausrichter eines Spaßturniers).
      */
     public static function canChangePlaetze(Turnier $turnier, int $plaetzeVorher): bool
     {
-        if (self::hasLaRights($turnier) || $turnier->isWartePhase()) {
+        if (self::hasVolleRechte($turnier) || $turnier->isWartePhase()) {
             return true;
         }
         return !($turnier->isSetzPhase() && $plaetzeVorher < $turnier->getDetails()->getPlaetze());
@@ -172,7 +190,7 @@ class TurnierPermission
      */
     public static function canRegisterTeam(Turnier $turnier): bool
     {
-        return self::isSpassturnierVerwalter($turnier)
+        return ($turnier->isSpassturnier() && self::hasVolleRechte($turnier))
             || (!$turnier->isSpielplanPhase() && !$turnier->isErgebnisPhase());
     }
 
@@ -182,7 +200,7 @@ class TurnierPermission
      */
     public static function canRegisterNlTeam(Turnier $turnier): bool
     {
-        return Helper::$ligacenter
+        return self::isLigaausschuss()
             || (self::isAngemeldeterAusrichter($turnier) && !$turnier->isFinalTurnier());
     }
 
@@ -214,9 +232,7 @@ class TurnierPermission
      */
     public static function canManageTeams(Turnier $turnier): bool
     {
-        return Helper::$ligacenter
-            || !Helper::$teamcenter
-            || (self::isAngemeldeterAusrichter($turnier) && $turnier->isSpassturnier());
+        return self::hasVolleRechte($turnier);
     }
 
     /**
@@ -226,7 +242,7 @@ class TurnierPermission
      */
     public static function canDeregisterTeamManually(Turnier $turnier): bool
     {
-        return !$turnier->isErgebnisPhase() || self::isSpassturnierVerwalter($turnier);
+        return !$turnier->isErgebnisPhase() || ($turnier->isSpassturnier() && self::hasVolleRechte($turnier));
     }
 
     /**
@@ -234,7 +250,7 @@ class TurnierPermission
      */
     public static function canReplaceTeam(Turnier $turnier): bool
     {
-        return Helper::$ligacenter;
+        return self::isLigaausschuss();
     }
 
     // ------------------------------------------------------------------
@@ -307,7 +323,7 @@ class TurnierPermission
      */
     public static function canManageSpielplan(Turnier $turnier): bool
     {
-        return Helper::$ligacenter || self::isSpassturnierVerwalter($turnier);
+        return self::hasVolleRechte($turnier);
     }
 
     /**
@@ -317,8 +333,7 @@ class TurnierPermission
      */
     public static function canEnterErgebnisse(Turnier $turnier): bool
     {
-        return Helper::$ligacenter
-            || self::isSpassturnierVerwalter($turnier)
+        return self::hasVolleRechte($turnier)
             || (
                 self::isAngemeldeterAusrichter($turnier)
                 && $turnier->isSpielplanPhase()
@@ -333,8 +348,7 @@ class TurnierPermission
      */
     public static function isErgebnisFristOffen(Turnier $turnier, ?DateTimeInterface $jetzt = null): bool
     {
-        return Helper::$ligacenter
-            || self::isSpassturnierVerwalter($turnier)
+        return self::hasVolleRechte($turnier)
             || TurnierFristenService::isOffen(TurnierFristenService::ergebnisFrist($turnier), $jetzt);
     }
 }

@@ -7,7 +7,6 @@ use App\Turnier\Repository\TurnierRepository;
 use App\Team\Service\TeamValidator;
 use Config;
 use Feiertage;
-use Helper;
 use Html;
 use Env;
 
@@ -168,28 +167,21 @@ class TurnierValidator
             return false;
         }
 
-        if (
-            (Helper::$teamcenter && !TurnierPermission::hasLaRights($this->turnier))
-            && $plaetze <= 8
-            && $plaetze >= 4
-        ) {
-            return true;
-        }
-
-        if (
-            (Helper::$teamcenter && !TurnierPermission::hasLaRights($this->turnier))
-            && $plaetze < $min_plaetze
-        ) {
-            Html::error("Die Anzahl der maximalen Plätze ist kleiner als die der minimalen Plätze.");
+        if (TurnierPermission::isVonLigavorgabenBefreit($this->turnier)) {
+            if ($plaetze >= 0 && $plaetze <= 14) {
+                return true;
+            }
+            Html::error("Ungültige Anzahl an Plätzen ($plaetze Plätze)");
             return false;
         }
 
-        if (
-            TurnierPermission::hasLaRights($this->turnier)
-            && $plaetze >= 0
-            && $plaetze <= 14
-        ) {
+        if ($plaetze >= 4 && $plaetze <= 8) {
             return true;
+        }
+
+        if ($plaetze < $min_plaetze) {
+            Html::error("Die Anzahl der maximalen Plätze ist kleiner als die der minimalen Plätze.");
+            return false;
         }
 
         Html::error("Ungültige Anzahl an Plätzen ($plaetze Plätze)");
@@ -199,8 +191,7 @@ class TurnierValidator
 
     public function hasValidDatum(): bool
     {
-        if (TurnierPermission::hasLaRights($this->turnier)
-        ) {
+        if (TurnierPermission::isVonLigavorgabenBefreit($this->turnier)) {
             return true;
         }
 
@@ -219,8 +210,7 @@ class TurnierValidator
             }
 
             $feiertage = Feiertage::finden(date("Y", $unixTime));
-            if ((Helper::$teamcenter && !TurnierPermission::hasLaRights($this->turnier))
-                && !\in_array($unixTime, $feiertage) && date('N', $unixTime) < 6) {
+            if (!\in_array($unixTime, $feiertage) && date('N', $unixTime) < 6) {
                 $error_text .= "Das Datum liegt nicht am Wochende und ist kein bundesweiter Feiertag. ";
                 $error = true;
             }
@@ -242,7 +232,7 @@ class TurnierValidator
     public function hasValidUhrzeit(): bool
     {
 
-        if (TurnierPermission::hasLaRights($this->turnier)) {
+        if (TurnierPermission::isVonLigavorgabenBefreit($this->turnier)) {
             return true;
         }
 
@@ -262,7 +252,7 @@ class TurnierValidator
 
     public function hasValidStartgebuehr(): bool
     {
-        if (TurnierPermission::hasLaRights($this->turnier)) {
+        if (TurnierPermission::isVonLigavorgabenBefreit($this->turnier)) {
             return true;
         }
 
@@ -279,8 +269,7 @@ class TurnierValidator
         $ausrichter = $this->turnier->getAusrichter();
 
         if (
-            ((Helper::$teamcenter && !TurnierPermission::hasLaRights($this->turnier))
-                && !TurnierPermission::hasLaRights($this->turnier))
+            !TurnierPermission::isVonLigavorgabenBefreit($this->turnier)
             && TeamValidator::isAmKalenderTagAufSetzliste($this->turnier, $ausrichter)
         ) {
             Html::error("Ihr befindet euch am Turniertag bereits auf einer Setzliste");

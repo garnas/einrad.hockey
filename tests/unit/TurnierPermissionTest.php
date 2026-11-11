@@ -94,34 +94,34 @@ class TurnierPermissionTest extends TestCase
     // Rollen
     // ------------------------------------------------------------------
 
-    public function testLaRechteImLigacenter(): void
+    public function testVolleRechteImLigacenter(): void
     {
         Helper::$ligacenter = true;
 
-        $this->assertTrue(TurnierPermission::hasLaRights($this->turnier(TurnierPhase::SETZ)));
+        $this->assertTrue(TurnierPermission::hasVolleRechte($this->turnier(TurnierPhase::SETZ)));
     }
 
-    public function testLaRechteBeiSpassturnierenNurFuerAusrichter(): void
+    public function testVolleRechteBeiSpassturnierenNurFuerAusrichter(): void
     {
         Helper::$teamcenter = true;
         $_SESSION['logins']['team']['id'] = self::AUSRICHTER_ID;
-        $this->assertTrue(TurnierPermission::hasLaRights($this->turnier(TurnierPhase::WARTE, 'spass')));
+        $this->assertTrue(TurnierPermission::hasVolleRechte($this->turnier(TurnierPhase::WARTE, 'spass')));
 
         $_SESSION['logins']['team']['id'] = self::AUSRICHTER_ID + 1;
-        $this->assertFalse(TurnierPermission::hasLaRights($this->turnier(TurnierPhase::WARTE, 'spass')));
+        $this->assertFalse(TurnierPermission::hasVolleRechte($this->turnier(TurnierPhase::WARTE, 'spass')));
     }
 
-    public function testKeineLaRechteFuerAusrichterEinesFinalturniers(): void
+    public function testKeineVolleRechteFuerAusrichterEinesFinalturniers(): void
     {
         $_SESSION['logins']['team']['id'] = self::AUSRICHTER_ID;
-        $this->assertFalse(TurnierPermission::hasLaRights($this->turnier(TurnierPhase::SETZ, 'final')));
+        $this->assertFalse(TurnierPermission::hasVolleRechte($this->turnier(TurnierPhase::SETZ, 'final')));
     }
 
-    public function testKeineLaRechteFuerTeamsBeiLigaturnieren(): void
+    public function testKeineVolleRechteFuerTeamsBeiLigaturnieren(): void
     {
         $_SESSION['logins']['team']['id'] = self::AUSRICHTER_ID;
 
-        $this->assertFalse(TurnierPermission::hasLaRights($this->turnier(TurnierPhase::SETZ, 'II')));
+        $this->assertFalse(TurnierPermission::hasVolleRechte($this->turnier(TurnierPhase::SETZ, 'II')));
     }
 
     // ------------------------------------------------------------------
@@ -486,7 +486,7 @@ class TurnierPermissionTest extends TestCase
         $this->alsAnderesTeam();
         $turnier = $this->turnier(TurnierPhase::WARTE, 'spass');
 
-        $this->assertFalse(TurnierPermission::hasLaRights($turnier));
+        $this->assertFalse(TurnierPermission::hasVolleRechte($turnier));
         $this->assertFalse(TurnierPermission::canManageTeams($turnier));
         $this->assertFalse(TurnierPermission::canRegisterNlTeam($turnier));
         $this->assertFalse(TurnierPermission::canManageSpielplan($turnier));
@@ -579,5 +579,35 @@ class TurnierPermissionTest extends TestCase
     {
         $this->assertSame($erlaubt, TurnierPermission::canApplyForFinal($this->turnier($phase, 'final')));
         $this->assertFalse(TurnierPermission::canApplyForFinal($this->turnier($phase)), "Nur Abschlussturniere");
+    }
+
+    // ------------------------------------------------------------------
+    // Ligavorgaben (Datum, Startzeit, Plätze, Startgebühr, Ausrichter)
+    // ------------------------------------------------------------------
+
+    public static function provideLigavorgaben(): array
+    {
+        return [
+            "Ligaturnier I" => ['I', false],
+            "Ligaturnier II" => ['II', false],
+            "Abschlussturnier" => ['final', false],
+            "Spaßturnier" => ['spass', true],
+        ];
+    }
+
+    #[DataProvider("provideLigavorgaben")]
+    public function testTeamsSindNurBeiSpassturnierenVonLigavorgabenBefreit(string $art, bool $befreit): void
+    {
+        $this->alsAusrichter();
+
+        $this->assertSame($befreit, TurnierPermission::isVonLigavorgabenBefreit($this->turnier(TurnierPhase::WARTE, $art)));
+    }
+
+    #[DataProvider("provideLigavorgaben")]
+    public function testLaIstImmerVonLigavorgabenBefreit(string $art, bool $befreitAlsTeam): void
+    {
+        Helper::$ligacenter = true;
+
+        $this->assertTrue(TurnierPermission::isVonLigavorgabenBefreit($this->turnier(TurnierPhase::WARTE, $art)));
     }
 }
