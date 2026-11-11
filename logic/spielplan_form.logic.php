@@ -15,11 +15,11 @@ $turnier = $spielplan->getTurnier();
 
 // Besteht die Berechtigung das Turnier zu bearbeiten? (Ligacenter darf alles)
 if (!TurnierPermission::canEnterErgebnisse($turnier)) {
-    Html::error(
-        TurnierPermission::isAngemeldeterAusrichter($turnier)
-            ? "Das Turnier ist bereits in der Ergebnisphase. Bitte wende dich an den Ligaausschuss um Ergebnisse nachträglich zu verändern."
-            : "Nur der Ausrichter kann Spielergebnisse eintragen",
-    );
+    Html::error(match (true) {
+        $turnier->isFinalTurnier() => "Die Ergebnisse von Abschlussturnieren trägt der Ligaausschuss ein.",
+        TurnierPermission::isAngemeldeterAusrichter($turnier) => "Das Turnier ist bereits in der Ergebnisphase. Bitte wende dich an den Ligaausschuss um Ergebnisse nachträglich zu verändern.",
+        default => "Nur der Ausrichter kann Spielergebnisse eintragen",
+    });
     Helper::reload("/liga/spielplan.php", '?turnier_id=' . $turnier_id);
 }
 

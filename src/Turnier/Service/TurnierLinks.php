@@ -54,6 +54,28 @@ class TurnierLinks
             return $links;
         }
 
+        // Abschlussturniere organisiert der Ligaausschuss, der Ausrichter pflegt die Hinweise und den Turnierreport
+        if ($turnier->isFinalTurnier()) {
+            $links[] = Html::link(
+                "tc_turnier_bearbeiten.php?turnier_id=$turnierId",
+                "Hinweise bearbeiten",
+                icon: "create",
+            );
+            if ($turnier->isSpielplanPhase() || $turnier->isErgebnisPhase()) {
+                $links[] = Html::link(
+                    "../teamcenter/tc_turnier_report.php?turnier_id=$turnierId",
+                    "Turnierreport eintragen",
+                    icon: "article",
+                );
+            }
+            $links[] = Html::link(
+                "../teamcenter/tc_quittungen.php?turnier_id=$turnierId",
+                "Quittungsvorlagen erstellen",
+                icon: "euro",
+            );
+            return $links;
+        }
+
         $links[] = Html::link(
             "tc_turnier_bearbeiten.php?turnier_id=$turnierId",
             "Turnierdaten bearbeiten",

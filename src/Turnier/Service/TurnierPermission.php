@@ -65,18 +65,20 @@ class TurnierPermission
     }
 
     /**
-     * Rechte wie der Ligaausschuss: im Ligacenter, als Ausrichter eines Finalturniers
-     * oder als Ausrichter eines Spaßturniers.
+     * Rechte wie der Ligaausschuss: im Ligacenter oder als Ausrichter eines Spaßturniers.
      */
     public static function hasLaRights(Turnier $turnier): bool
     {
-        return
-            Helper::$ligacenter
-            || (
-                $turnier->isFinalTurnier()
-                && self::isAngemeldeterAusrichter($turnier)
-            )
-            || self::isSpassturnierVerwalter($turnier);
+        return Helper::$ligacenter || self::isSpassturnierVerwalter($turnier);
+    }
+
+    /**
+     * Abschlussturniere organisiert der Ligaausschuss vollständig.
+     * Der eingetragene Ausrichter darf nur die Hinweise ändern.
+     */
+    public static function isNurHinweisAenderbar(Turnier $turnier): bool
+    {
+        return $turnier->isFinalTurnier() && !Helper::$ligacenter;
     }
 
     // ------------------------------------------------------------------
@@ -125,6 +127,10 @@ class TurnierPermission
     {
         if (Helper::$ligacenter || $turnier === null) {
             return true;
+        }
+
+        if (self::isNurHinweisAenderbar($turnier)) {
+            return $field === 'hinweis';
         }
 
         if ($field !== 'art_block' && self::isSpassturnierVerwalter($turnier)) {
@@ -176,7 +182,17 @@ class TurnierPermission
      */
     public static function canRegisterNlTeam(Turnier $turnier): bool
     {
-        return Helper::$ligacenter || self::isAngemeldeterAusrichter($turnier);
+        return Helper::$ligacenter
+            || (self::isAngemeldeterAusrichter($turnier) && !$turnier->isFinalTurnier());
+    }
+
+    /**
+     * Für ein Abschlussturnier können sich Teams nur in der Wartephase melden.
+     * Mit der Setzphase stellt der Ligaausschuss das Teilnehmerfeld zusammen.
+     */
+    public static function canApplyForFinal(Turnier $turnier): bool
+    {
+        return $turnier->isFinalTurnier() && $turnier->isWartePhase();
     }
 
     /**
@@ -297,13 +313,17 @@ class TurnierPermission
     /**
      * Spielergebnisse eintragen: der Ligaausschuss jederzeit,
      * der Ausrichter nur in der Spielplanphase (Frist: {@see isErgebnisFristOffen()}),
-     * der Ausrichter eines Spaßturniers jederzeit.
+     * der Ausrichter eines Spaßturniers jederzeit. Abschlussturniere trägt nur der Ligaausschuss ein.
      */
     public static function canEnterErgebnisse(Turnier $turnier): bool
     {
         return Helper::$ligacenter
             || self::isSpassturnierVerwalter($turnier)
-            || (self::isAngemeldeterAusrichter($turnier) && $turnier->isSpielplanPhase());
+            || (
+                self::isAngemeldeterAusrichter($turnier)
+                && $turnier->isSpielplanPhase()
+                && !$turnier->isFinalTurnier()
+            );
     }
 
     /**

@@ -3,6 +3,7 @@
 // Formularauswertung
 use App\Turnier\Enum\TurnierPhase;
 use App\Turnier\Repository\TurnierRepository;
+use App\Turnier\Service\TurnierPermission;
 use App\Turnier\Service\TurnierService;
 use App\Turnier\Service\TurnierValidator;
 use App\Turnier\Service\BlockService;
@@ -55,6 +56,20 @@ $phase = $turnier->getPhase();
 // Unterscheidung im HTML, wenn das Turnier vom $_POST Request kommt ($turnier_from_form = true):
 // So sollen manche Felder weiterhin änderbar sein, wenn diese einen Fehler bei der Turnierstellung verursacht haben.
 $turnier_from_form = false;
+
+// Abschlussturniere: Der Ausrichter darf nur die Hinweise ändern
+if (isset($_POST['change_hinweis']) && TurnierPermission::canEditField('hinweis', $turnier)) {
+    $turnier->getDetails()->setHinweis((string) ($_POST['hinweis'] ?? ''));
+    TurnierRepository::get()->speichern($turnier);
+    Html::info("Hinweise wurden geändert");
+    Helper::reload('/liga/turnier_details.php?turnier_id=' . $turnier->id());
+}
+
+if (isset($_POST['change_turnier']) && TurnierPermission::isNurHinweisAenderbar($turnier)) {
+    Html::error("Abschlussturniere werden vom Ligaausschuss organisiert. Ihr könnt nur die Hinweise ändern.");
+    Helper::reload(get: '?turnier_id=' . $turnier->id());
+}
+
 if (isset($_POST['change_turnier'])) {
     $turnier_from_form = true;
     $adresse_hallenname = $_POST['hallenname'];

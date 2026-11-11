@@ -8,6 +8,7 @@ use App\Team\Service\FreilosService;
 use App\Team\Service\TeamService;
 use App\Team\Service\TeamValidator;
 use App\Turnier\Service\BlockService;
+use App\Turnier\Service\TurnierPermission;
 use App\Turnier\Service\TurnierService;
 use App\Turnier\Service\TurnierSnippets;
 
@@ -128,11 +129,14 @@ include '../../templates/header.tmp.php';
             <p>
                 <input type='submit'
                        class='w3-button w3-margin-bottom w3-block
-                                w3-tertiary <?= (TeamService::isAngemeldet($teamEntity, $turnier)) ? "w3-opacity" : "" ?>'
+                                w3-tertiary <?= (TeamService::isAngemeldet($teamEntity, $turnier) || !TurnierPermission::canApplyForFinal($turnier)) ? "w3-opacity" : "" ?>'
                        name='bewerben'
                        value='Melden für Abschlussturnier'
                 >
                 <span class="w3-text-grey"><i class="material-icons">info</i>Wir wollen auf dem Abschlussturnier spielen bzw. wir wären bereit nachzurücken.</span>
+                <?php if (!TurnierPermission::canApplyForFinal($turnier)): ?>
+                    <br><span class="w3-text-grey">Meldungen sind nur bis zur Setzphase möglich. Das Teilnehmerfeld stellt der Ligaausschuss zusammen.</span>
+                <?php endif; ?>
             </p>
         </form>
     <?php elseif ($turnier->isLigaturnier()):  ?>

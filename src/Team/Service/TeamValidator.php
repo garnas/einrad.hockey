@@ -170,6 +170,10 @@ class TeamValidator
             Html::error("Anmeldung fehlgeschlagen.");
             return false;
         }
+        if (!TurnierPermission::canApplyForFinal($turnier)) {
+            Html::error("Meldungen für das Abschlussturnier sind nur bis zur Setzphase möglich.");
+            return false;
+        }
         if (TeamService::isAngemeldet($teamEntity, $turnier)) {
             Html::error("Dein Team ist schon angemeldet.");
             return false;

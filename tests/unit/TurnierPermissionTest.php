@@ -111,12 +111,9 @@ class TurnierPermissionTest extends TestCase
         $this->assertFalse(TurnierPermission::hasLaRights($this->turnier(TurnierPhase::WARTE, 'spass')));
     }
 
-    public function testLaRechteFuerAusrichterEinesFinalturniers(): void
+    public function testKeineLaRechteFuerAusrichterEinesFinalturniers(): void
     {
         $_SESSION['logins']['team']['id'] = self::AUSRICHTER_ID;
-        $this->assertTrue(TurnierPermission::hasLaRights($this->turnier(TurnierPhase::SETZ, 'final')));
-
-        $_SESSION['logins']['team']['id'] = self::AUSRICHTER_ID + 1;
         $this->assertFalse(TurnierPermission::hasLaRights($this->turnier(TurnierPhase::SETZ, 'final')));
     }
 
@@ -525,5 +522,62 @@ class TurnierPermissionTest extends TestCase
         Helper::$teamcenter = false;
         Helper::$ligacenter = true;
         $this->assertTrue(TurnierPermission::canCancel($this->turnier(TurnierPhase::ERGEBNIS)));
+    }
+
+    // ------------------------------------------------------------------
+    // Abschlussturniere: vollständig beim Ligaausschuss
+    // ------------------------------------------------------------------
+
+    #[DataProvider("providePhasen")]
+    public function testAusrichterEinesFinalturniersAendertNurHinweise(TurnierPhase $phase): void
+    {
+        $this->alsAusrichter();
+        $turnier = $this->turnier($phase, 'final');
+
+        $this->assertTrue(TurnierPermission::isNurHinweisAenderbar($turnier));
+        $this->assertTrue(TurnierPermission::canEditField('hinweis', $turnier));
+        foreach (['datum', 'startzeit', 'besprechung', 'startgebuehr', 'art_block', 'plaetze', 'min_teams', 'tname'] as $feld) {
+            $this->assertFalse(TurnierPermission::canEditField($feld, $turnier), $feld);
+        }
+        $this->assertFalse(TurnierPermission::canRegisterNlTeam($turnier));
+        $this->assertFalse(TurnierPermission::canManageTeams($turnier));
+        $this->assertFalse(TurnierPermission::canEnterErgebnisse($turnier));
+        $this->assertFalse(TurnierPermission::canManageSpielplan($turnier));
+        $this->assertFalse(TurnierPermission::canCancel($turnier));
+    }
+
+    public function testAusrichterEinesFinalturniersAendertNichtsInDerErgebnisphase(): void
+    {
+        $this->alsAusrichter();
+
+        $this->assertFalse(TurnierPermission::canChange($this->turnier(TurnierPhase::ERGEBNIS, 'final')));
+    }
+
+    public function testLaVerwaltetFinalturniereVollstaendig(): void
+    {
+        Helper::$ligacenter = true;
+        $turnier = $this->turnier(TurnierPhase::SPIELPLAN, 'final');
+
+        $this->assertFalse(TurnierPermission::isNurHinweisAenderbar($turnier));
+        $this->assertTrue(TurnierPermission::canEditField('datum', $turnier));
+        $this->assertTrue(TurnierPermission::canEnterErgebnisse($turnier));
+        $this->assertTrue(TurnierPermission::canRegisterNlTeam($turnier));
+    }
+
+    public static function provideFinalMeldung(): array
+    {
+        return [
+            "warte" => [TurnierPhase::WARTE, true],
+            "setz" => [TurnierPhase::SETZ, false],
+            "spielplan" => [TurnierPhase::SPIELPLAN, false],
+            "ergebnis" => [TurnierPhase::ERGEBNIS, false],
+        ];
+    }
+
+    #[DataProvider("provideFinalMeldung")]
+    public function testMeldungZumFinalturnierNurInDerWartephase(TurnierPhase $phase, bool $erlaubt): void
+    {
+        $this->assertSame($erlaubt, TurnierPermission::canApplyForFinal($this->turnier($phase, 'final')));
+        $this->assertFalse(TurnierPermission::canApplyForFinal($this->turnier($phase)), "Nur Abschlussturniere");
     }
 }

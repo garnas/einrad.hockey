@@ -65,9 +65,10 @@ class FreilosService
      */
     public static function isAusrichterFreilosBerechtigt(Turnier $turnier): bool
     {
-        // Das Turnier muss bis zur Freilosfrist (8 Wochen vor dem Spieltag) erstellt worden sein
+        // Nur Ligaturniere (keine Abschluss- oder Spaßturniere), die bis zur Freilosfrist
+        // (8 Wochen vor dem Spieltag) erstellt worden sind
         return !$turnier->isCanceled()
-            && ($turnier->isFinalTurnier() || $turnier->isLigaturnier())
+            && $turnier->isLigaturnier()
             && TurnierFristenService::isOffen(TurnierFristenService::freilosFrist($turnier), $turnier->getErstelltAm());
     }
 

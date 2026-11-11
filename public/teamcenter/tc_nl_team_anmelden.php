@@ -19,7 +19,9 @@ if ($turnier === null) {
 
 // Nichtligateams melden nur der Ligaausschuss und der Ausrichter an
 if (!TurnierPermission::canRegisterNlTeam($turnier)) {
-    Html::error("Nur der Ausrichter kann Nichtligateams anmelden.");
+    Html::error($turnier->isFinalTurnier()
+        ? "Die Teams von Abschlussturnieren meldet der Ligaausschuss an."
+        : "Nur der Ausrichter kann Nichtligateams anmelden.");
     Helper::reload('/liga/turnier_details.php', '?turnier_id=' . $turnier->id());
 }
 
