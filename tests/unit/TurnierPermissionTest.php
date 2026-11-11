@@ -101,9 +101,14 @@ class TurnierPermissionTest extends TestCase
         $this->assertTrue(TurnierPermission::hasLaRights($this->turnier(TurnierPhase::SETZ)));
     }
 
-    public function testLaRechteBeiSpassturnieren(): void
+    public function testLaRechteBeiSpassturnierenNurFuerAusrichter(): void
     {
-        $this->assertTrue(TurnierPermission::hasLaRights($this->turnier(TurnierPhase::SETZ, 'spass')));
+        Helper::$teamcenter = true;
+        $_SESSION['logins']['team']['id'] = self::AUSRICHTER_ID;
+        $this->assertTrue(TurnierPermission::hasLaRights($this->turnier(TurnierPhase::WARTE, 'spass')));
+
+        $_SESSION['logins']['team']['id'] = self::AUSRICHTER_ID + 1;
+        $this->assertFalse(TurnierPermission::hasLaRights($this->turnier(TurnierPhase::WARTE, 'spass')));
     }
 
     public function testLaRechteFuerAusrichterEinesFinalturniers(): void
@@ -431,5 +436,80 @@ class TurnierPermissionTest extends TestCase
         $this->assertTrue(
             TurnierPermission::isErgebnisFristOffen($this->turnier(TurnierPhase::ERGEBNIS), new DateTimeImmutable('2027-01-01')),
         );
+    }
+
+    // ------------------------------------------------------------------
+    // Spaßturniere: volle Rechte für Ausrichter und Ligaausschuss
+    // ------------------------------------------------------------------
+
+    private function alsAusrichter(): void
+    {
+        Helper::$teamcenter = true;
+        $_SESSION['logins']['team']['id'] = self::AUSRICHTER_ID;
+    }
+
+    private function alsAnderesTeam(): void
+    {
+        Helper::$teamcenter = true;
+        $_SESSION['logins']['team']['id'] = self::AUSRICHTER_ID + 1;
+    }
+
+    #[DataProvider("providePhasen")]
+    public function testAusrichterVerwaltetSpassturnierInJederPhase(TurnierPhase $phase): void
+    {
+        $this->alsAusrichter();
+        $turnier = $this->turnier($phase, 'spass');
+
+        $this->assertTrue(TurnierPermission::canChange($turnier));
+        $this->assertTrue(TurnierPermission::canManageTeams($turnier));
+        $this->assertTrue(TurnierPermission::canRegisterTeam($turnier));
+        $this->assertTrue(TurnierPermission::canRegisterNlTeam($turnier));
+        $this->assertTrue(TurnierPermission::canDeregisterTeamManually($turnier));
+        $this->assertTrue(TurnierPermission::canManageSpielplan($turnier));
+        $this->assertTrue(TurnierPermission::canCreateSpielplan($turnier));
+        $this->assertTrue(TurnierPermission::canEnterErgebnisse($turnier));
+        $this->assertTrue(TurnierPermission::isErgebnisFristOffen($turnier, new DateTimeImmutable('2027-01-01')));
+        $this->assertTrue(TurnierPermission::canChangePlaetze($turnier, 4));
+    }
+
+    #[DataProvider("providePhasen")]
+    public function testAusrichterBearbeitetAlleFelderAusserDerArt(TurnierPhase $phase): void
+    {
+        $this->alsAusrichter();
+        $turnier = $this->turnier($phase, 'spass');
+
+        foreach (['datum', 'startzeit', 'besprechung', 'startgebuehr', 'plaetze', 'min_teams'] as $feld) {
+            $this->assertTrue(TurnierPermission::canEditField($feld, $turnier), $feld);
+        }
+        $this->assertFalse(TurnierPermission::canEditField('art_block', $turnier), "Die Turnierart bleibt für Teams gesperrt");
+    }
+
+    public function testAndereTeamsVerwaltenKeineSpassturniere(): void
+    {
+        $this->alsAnderesTeam();
+        $turnier = $this->turnier(TurnierPhase::WARTE, 'spass');
+
+        $this->assertFalse(TurnierPermission::hasLaRights($turnier));
+        $this->assertFalse(TurnierPermission::canManageTeams($turnier));
+        $this->assertFalse(TurnierPermission::canRegisterNlTeam($turnier));
+        $this->assertFalse(TurnierPermission::canManageSpielplan($turnier));
+        $this->assertFalse(TurnierPermission::canEnterErgebnisse($turnier));
+    }
+
+    public function testLaVerwaltetSpassturnierInDerErgebnisphase(): void
+    {
+        Helper::$ligacenter = true;
+        $turnier = $this->turnier(TurnierPhase::ERGEBNIS, 'spass');
+
+        $this->assertTrue(TurnierPermission::canDeregisterTeamManually($turnier));
+        $this->assertTrue(TurnierPermission::canRegisterTeam($turnier));
+        $this->assertTrue(TurnierPermission::canManageSpielplan($turnier));
+    }
+
+    public function testAusrichterEinesLigaturniersVerwaltetKeinenSpielplan(): void
+    {
+        $this->alsAusrichter();
+
+        $this->assertFalse(TurnierPermission::canManageSpielplan($this->turnier(TurnierPhase::SETZ)));
     }
 }

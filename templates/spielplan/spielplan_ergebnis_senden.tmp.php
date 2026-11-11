@@ -2,7 +2,7 @@
 <form method="post">
     <p>
         <button type="submit"
-               <?= $spielplan->getTurnier()->isFinalTurnier() ? "disabled" : "" ?>
+               <?= $spielplan->getTurnier()->isFinalTurnier() || $spielplan->getTurnier()->isSpassturnier() ? "disabled" : "" ?>
                name="turnierergebnis_speichern"
                class="w3-block w3-button w3-tertiary <?= $spielplan->istTurnierBeendet() ?: 'w3-opacity' ?>"
         >

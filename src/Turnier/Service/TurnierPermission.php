@@ -47,10 +47,6 @@ class TurnierPermission
     // ------------------------------------------------------------------
 
     /**
-     * Rechte wie der Ligaausschuss: im Ligacenter, als Ausrichter eines Finalturniers
-     * oder bei Spaßturnieren.
-     */
-    /**
      * Ist das angemeldete Team der Ausrichter des Turniers?
      */
     public static function isAngemeldeterAusrichter(Turnier $turnier): bool
@@ -58,15 +54,29 @@ class TurnierPermission
         return ($_SESSION['logins']['team']['id'] ?? 0) == $turnier->getAusrichter()->id();
     }
 
+    /**
+     * Spaßturniere gehören nicht zum Ligabetrieb: Der Ligaausschuss und der Ausrichter haben
+     * volle Rechte, unabhängig von Phasen und Fristen.
+     */
+    public static function isSpassturnierVerwalter(Turnier $turnier): bool
+    {
+        return $turnier->isSpassturnier()
+            && (Helper::$ligacenter || self::isAngemeldeterAusrichter($turnier));
+    }
+
+    /**
+     * Rechte wie der Ligaausschuss: im Ligacenter, als Ausrichter eines Finalturniers
+     * oder als Ausrichter eines Spaßturniers.
+     */
     public static function hasLaRights(Turnier $turnier): bool
     {
         return
             Helper::$ligacenter
             || (
                 $turnier->isFinalTurnier()
-                && TurnierService::isAusrichter($turnier, $_SESSION['logins']['team']['id'])
+                && self::isAngemeldeterAusrichter($turnier)
             )
-            || $turnier->isSpassturnier();
+            || self::isSpassturnierVerwalter($turnier);
     }
 
     // ------------------------------------------------------------------
@@ -101,10 +111,15 @@ class TurnierPermission
     /**
      * Darf ein Formularfeld des Turniers geändert werden?
      * Ohne Turnier (Neuanlage) sind alle Felder änderbar.
+     * Der Ausrichter eines Spaßturniers darf alle Felder außer der Turnierart ändern.
      */
     public static function canEditField(string $field, ?Turnier $turnier): bool
     {
         if (Helper::$ligacenter || $turnier === null) {
+            return true;
+        }
+
+        if ($field !== 'art_block' && self::isSpassturnierVerwalter($turnier)) {
             return true;
         }
 
@@ -139,10 +154,12 @@ class TurnierPermission
 
     /**
      * Anmeldungen sind nur bis zur Setzphase möglich, also solange es keinen Spielplan gibt.
+     * Bei Spaßturnieren melden Ligaausschuss und Ausrichter jederzeit an.
      */
     public static function canRegisterTeam(Turnier $turnier): bool
     {
-        return !$turnier->isSpielplanPhase() && !$turnier->isErgebnisPhase();
+        return self::isSpassturnierVerwalter($turnier)
+            || (!$turnier->isSpielplanPhase() && !$turnier->isErgebnisPhase());
     }
 
     /**
@@ -181,10 +198,11 @@ class TurnierPermission
     /**
      * Teams manuell abmelden (Ligaausschuss / Ausrichter von Spaßturnieren):
      * bis einschließlich Spielplanphase, in der Ergebnisphase nicht mehr.
+     * Spaßturniere haben keine Phasen: dort jederzeit.
      */
     public static function canDeregisterTeamManually(Turnier $turnier): bool
     {
-        return !$turnier->isErgebnisPhase();
+        return !$turnier->isErgebnisPhase() || self::isSpassturnierVerwalter($turnier);
     }
 
     /**
@@ -259,22 +277,36 @@ class TurnierPermission
     }
 
     /**
+     * Spielplan erstellen, hochladen oder löschen: der Ligaausschuss,
+     * bei Spaßturnieren auch der Ausrichter. Ob ein Spielplan erstellt werden kann,
+     * prüft zusätzlich {@see canCreateSpielplan()}.
+     */
+    public static function canManageSpielplan(Turnier $turnier): bool
+    {
+        return Helper::$ligacenter || self::isSpassturnierVerwalter($turnier);
+    }
+
+    /**
      * Spielergebnisse eintragen: der Ligaausschuss jederzeit,
-     * der Ausrichter nur in der Spielplanphase (Frist: {@see isErgebnisFristOffen()}).
+     * der Ausrichter nur in der Spielplanphase (Frist: {@see isErgebnisFristOffen()}),
+     * der Ausrichter eines Spaßturniers jederzeit.
      */
     public static function canEnterErgebnisse(Turnier $turnier): bool
     {
         return Helper::$ligacenter
+            || self::isSpassturnierVerwalter($turnier)
             || (self::isAngemeldeterAusrichter($turnier) && $turnier->isSpielplanPhase());
     }
 
     /**
      * Ergebnisse können bis Dienstag 23:59 nach dem (letzten) Turniertag eingetragen werden
      * ({@see TurnierFristenService::ergebnisFrist()}). Danach nur noch durch den Ligaausschuss.
+     * Für Spaßturniere gilt keine Frist.
      */
     public static function isErgebnisFristOffen(Turnier $turnier, ?DateTimeInterface $jetzt = null): bool
     {
         return Helper::$ligacenter
+            || self::isSpassturnierVerwalter($turnier)
             || TurnierFristenService::isOffen(TurnierFristenService::ergebnisFrist($turnier), $jetzt);
     }
 }
