@@ -44,6 +44,29 @@ class SpielerRepository
     }
 
     /**
+     * Alle Spieler, die in einer Saison für ein aktives Ligateam gemeldet sind, sortiert nach Team und Name
+     * @return Spieler[]
+     */
+    public function findGemeldeteLigaSpieler(int $saison = Config::SAISON): array
+    {
+        return DoctrineWrapper::manager()
+            ->createQueryBuilder()
+            ->select('s', 't')
+            ->from(Spieler::class, 's')
+            ->innerJoin('s.team', 't')
+            ->andWhere('s.letzteSaison = :saison')
+            ->andWhere('t.aktiv = :ja')
+            ->andWhere('t.ligateam = :ja')
+            ->orderBy('t.name', 'ASC')
+            ->addOrderBy('s.vorname', 'ASC')
+            ->addOrderBy('s.nachname', 'ASC')
+            ->setParameter('saison', $saison)
+            ->setParameter('ja', 'Ja')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Spieler anderer Teams, die noch nicht in der aktuellen Saison gemeldet sind (für die Übernahme ins eigene Team)
      * @return Collection|Spieler[]
      */

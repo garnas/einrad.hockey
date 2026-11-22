@@ -2,6 +2,7 @@
 
 use App\Spieler\Service\SpielerService;
 use App\Turnier\Service\TurnierSnippets;
+use App\Turnierbericht\Service\SpielerausleiheService;
 
 ?>
 
@@ -134,30 +135,46 @@ use App\Turnier\Service\TurnierSnippets;
                 </span>
                 <h2 class="w3-text-primary">Spielerausleihe hinzufügen</h2>
                 <p>
-                    <label for="ausleihe_name">Spieler</label>
-                    <input required
-                        class="w3-input w3-border w3-border-primary"
-                        type="text"
-                        name="ausleihe_name"
-                        id="ausleihe_name">
-                </p>
-                <p>
                     <label for="ausleihe_team_auf">Aufnehmendes Team</label>
                     <select required
                             name="ausleihe_team_auf"
                             id="ausleihe_team_auf"
+                            onchange="ausleihe_filter()"
                             class="w3-select w3-input w3-border w3-border-primary w3-padding"
                     >
-                        <option selected disabled>--</option>
+                        <option value="" selected disabled>--</option>
                         <?php foreach ($setzliste as $element): ?>
-                            <option><?=e($element->getTeam()->getName())?></option>
+                            <?php $team_auf = $element->getTeam(); ?>
+                            <option value="<?=$team_auf->id()?>"
+                                    data-rang="<?=SpielerausleiheService::getRang($team_auf, $turnier) ?? ''?>"
+                                    data-nl="<?=$team_auf->isLigaTeam() ? '0' : '1'?>">
+                                <?=e($team_auf->getName())?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
                 </p>
                 <p>
-                    <label for="ausleihe_team_ab">Abgebendes Team</label>
-                    <input class="w3-input w3-border w3-border-primary" placeholder="Team eingeben" type="text" list="teams" id="ausleihe_team_ab" name="ausleihe_team_ab" required>
-                    <?=Html::datalist_teams()?>
+                    <label for="ausleihe_spieler_suche">Spieler:in</label>
+                    <input class="w3-input w3-border w3-border-primary"
+                           type="text"
+                           list="ausleihe_spieler_liste"
+                           id="ausleihe_spieler_suche"
+                           name="ausleihe_name"
+                           autocomplete="off"
+                           placeholder="Name eingeben..."
+                           required>
+                    <datalist id="ausleihe_spieler_liste">
+                        <?php foreach ($leihbare_spieler as $team_ab_id => $gruppe): ?>
+                            <?php $rang_ab = SpielerausleiheService::getRang($gruppe['team'], $turnier); ?>
+                            <?php foreach ($gruppe['spieler'] as $spieler): ?>
+                                <option data-id="<?=$spieler->getSpielerId()?>"
+                                        data-team-id="<?=$team_ab_id?>"
+                                        data-rang="<?=$rang_ab ?? ''?>"
+                                        value="<?=e($spieler->getName(fullName: false))?> (<?=e($gruppe['team']->getName())?>)">
+                            <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    </datalist>
+                    <input type="hidden" name="ausleihe_spieler" id="ausleihe_spieler_id">
                 </p>
                 <p>
                     <input type="submit" value="Hinzufügen" name="new_ausleihe" class="w3-button w3-tertiary">
@@ -336,6 +353,46 @@ use App\Turnier\Service\TurnierSnippets;
         if (event.target == modal2) {
             modal2.style.display = "none";
         }
+    }
+
+    // Spielerausleihe: nur erlaubte Spieler:innen auswählbar machen (wird serverseitig erneut geprüft)
+    const AUSLEIHE_MIN_RANG_ABSTAND = <?=SpielerausleiheService::MIN_RANG_ABSTAND?>;
+
+    const ausleihe_suche = document.getElementById('ausleihe_spieler_suche');
+    const ausleihe_liste = document.getElementById('ausleihe_spieler_liste');
+    const ausleihe_spieler_id = document.getElementById('ausleihe_spieler_id');
+
+    // Nur Spieler:innen vorschlagen, die an das aufnehmende Team verliehen werden dürfen
+    function ausleihe_filter() {
+        const team_select = document.getElementById('ausleihe_team_auf');
+        const team = team_select.options[team_select.selectedIndex];
+        const ist_nl = team.dataset.nl === '1';
+        const rang_auf = parseInt(team.dataset.rang, 10);
+
+        for (const option of ausleihe_liste.options) {
+            const rang_ab = parseInt(option.dataset.rang, 10);
+            const gleiches_team = option.dataset.teamId === team.value;
+            const abstand_ok = !isNaN(rang_auf) && !isNaN(rang_ab)
+                && rang_ab - rang_auf >= AUSLEIHE_MIN_RANG_ABSTAND;
+            option.disabled = gleiches_team || !(ist_nl || abstand_ok);
+        }
+        ausleihe_auswahl();
+    }
+
+    // Spieler-Auswahl aus der Datalist auf die versteckte Spieler-ID abbilden.
+    // Ohne Treffer bleibt die ID leer; das ist nur für Nichtligateams erlaubt (freier Name).
+    function ausleihe_auswahl() {
+        ausleihe_spieler_id.value = '';
+        for (const option of ausleihe_liste.options) {
+            if (!option.disabled && option.value === ausleihe_suche.value) {
+                ausleihe_spieler_id.value = option.dataset.id;
+                break;
+            }
+        }
+    }
+    // Das Formular gibt es nur mit Bearbeitungsrechten
+    if (ausleihe_suche) {
+        ausleihe_suche.addEventListener('input', ausleihe_auswahl);
     }
 
     function open_kader(id) {
