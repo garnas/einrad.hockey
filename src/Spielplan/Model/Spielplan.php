@@ -231,7 +231,7 @@ final class Spielplan
      */
     public function getTrikotColors(SpielAnsicht $spiel, bool $html = true): array
     {
-        if ($this->turnier->isSpielplanPhase()) {
+        if (!$this->turnier->isSpielplanPhase()) {
             return [];
         }
         return TrikotfarbenService::ermittle($spiel->getSpiel(), $html);
