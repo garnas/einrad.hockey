@@ -4,6 +4,7 @@ namespace App\Turnier\Bot;
 
 use App\Shared\DoctrineWrapper;
 use App\Team\Entity\Team;
+use App\Team\Repository\TeamRepository;
 use App\Team\Service\TeamService;
 use App\Turnier\Entity\Turnier;
 use App\Turnier\Entity\Turnieranmeldung;
@@ -42,6 +43,9 @@ class LigaBot
         self::phasenWechsel();
         self::archiveNeuigkeiten();
         DoctrineWrapper::manager()->flush();
+
+        // Saisonzugehörigkeit der Teams (teams_saison) für die laufende Saison aktuell halten
+        TeamRepository::get()->saisonzugehoerigkeitAbgleichen();
 
         // Spielerstatistik befüllen
         Stats::persist_spieler_statistik();

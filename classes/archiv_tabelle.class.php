@@ -24,19 +24,22 @@ class Archiv_Tabelle
         ];
     }
 
-    public static function get_meisterschafts_tabelle(int $spieltag, int $saison = Config::SAISON): array
+    /**
+     * Meisterschaftstabelle der Saisons bis 30 (alter Modus). Wird nur für vergangene Saisons verwendet,
+     * daher kommen Teams und Namen direkt aus der Saisonzugehörigkeit (teams_saison).
+     */
+    public static function get_meisterschafts_tabelle(int $spieltag, int $saison): array
     {
         $sql = "
             WITH tournaments as (
-                SELECT te.team_id, teams.teamname, te.turnier_id, tl.datum, te.ergebnis, td.ort, tl.tblock, te.platz, dense_rank() over (PARTITION BY te.team_id order by te.ergebnis DESC) AS `rank`
+                SELECT te.team_id, ts.name AS teamname, te.turnier_id, tl.datum, te.ergebnis, td.ort, tl.tblock, te.platz, dense_rank() over (PARTITION BY te.team_id order by te.ergebnis DESC) AS `rank`
                 FROM turniere_ergebnisse te
                 INNER JOIN turniere_liga tl ON tl.turnier_id = te.turnier_id
-                INNER JOIN teams_liga teams ON teams.team_id = te.team_id
+                INNER JOIN teams_saison ts ON ts.team_id = te.team_id AND ts.saison = tl.saison
                 INNER JOIN turniere_details td ON td.turnier_id = te.turnier_id
-                WHERE teams.ligateam = 'Ja'
-                AND tl.art != 'final' 
-                AND (tl.saison = ?) 
-                AND (tl.spieltag <= ?)
+                WHERE tl.art != 'final'
+                AND tl.saison = ?
+                AND tl.spieltag <= ?
             ), num_of_teams as (
                 SELECT turnier_id, count(*) as teilnehmer
                 FROM turniere_ergebnisse te
@@ -115,11 +118,6 @@ class Archiv_Tabelle
             $platz++;
         }
 
-        if ($saison !== Config::SAISON) {
-            foreach ($return as $team_id => $team) {
-                $return[$team_id]['teamname'] = TeamRepository::get()->team($team_id)?->getName($saison);
-            }
-        }
 
         return $return;
     }

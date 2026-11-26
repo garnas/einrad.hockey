@@ -13,9 +13,9 @@ UPDATE teams_details SET
 UPDATE teams_kontakt
    SET email = CONCAT('"><script>alert("XSSCANARY teams_kontakt.email #', teams_kontakt_id, '")</script>@example.com');
 
--- --- teams_name_historic (name varchar(50) -> kompakte Payload) ----------
-UPDATE teams_name_historic
-   SET name = '<svg onload=alert("XSSCANARY name_historic")>';
+-- --- teams_saison ---------------------------------------------------------
+UPDATE teams_saison
+   SET name = CONCAT('<svg onload=alert("XSSCANARY teams_saison.name #', team_id, '/', saison, '")>');
 
 -- --- spieler -----------------------------------------------------------
 UPDATE spieler SET

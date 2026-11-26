@@ -53,6 +53,14 @@ class Turnieranmeldung
         return $this;
     }
 
+    /**
+     * Teamname in der Saison des Turniers.
+     */
+    public function getTeamname(): ?string
+    {
+        return $this->turnier->getTeamname($this->team);
+    }
+
     #[ORM\Column(name: "position_warteliste", type: "integer", nullable: true)]
     private ?int $positionWarteliste;
 

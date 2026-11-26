@@ -37,8 +37,8 @@ class Team
     #[ORM\OneToMany(targetEntity: Strafe::class, mappedBy: "team", cascade: ["all"], indexBy: "strafe_id")]
     private Collection $strafen;
 
-    #[ORM\OneToMany(targetEntity: TeamnameHistoric::class, mappedBy: "team", cascade: ["all"], indexBy: "saison")]
-    private Collection $historischeNamen;
+    #[ORM\OneToMany(targetEntity: TeamSaison::class, mappedBy: "team", cascade: ["all"], indexBy: "saison")]
+    private Collection $saisons;
 
     public function getAusgerichteteTurniere(): Collection|array
     {
@@ -95,7 +95,7 @@ class Team
         $this->emails = new ArrayCollection();
         $this->ergebnisse = new ArrayCollection();
         $this->strafen = new ArrayCollection();
-        $this->historischeNamen = new ArrayCollection();
+        $this->saisons = new ArrayCollection();
     }
 
     #[ORM\OneToOne(targetEntity: Teamdetails::class, mappedBy: "team", cascade: ["all"])]
@@ -169,14 +169,17 @@ class Team
         return $this->id;
     }
 
+    /**
+     * Teamname in der angegebenen Saison. In der laufenden Saison gilt immer der aktuelle Name,
+     * für vergangene Saisons der Name aus teams_saison (Fallback: aktueller Name).
+     */
     public function getName(int $saison = Config::SAISON): ?string
     {
         if (Config::SAISON === $saison) {
             return $this->name;
         }
 
-        $historic = $this->historischeNamen->get($saison);
-        return $historic?->getName() ?? $this->name;
+        return $this->saisons->get($saison)?->getName() ?? $this->name;
     }
 
     public function setName(string $name): self
@@ -186,15 +189,12 @@ class Team
         return $this;
     }
 
-    public function getHistorischeNamen(): Collection
+    /**
+     * @return Collection<int, TeamSaison> Saisonzugehörigkeiten, indiziert nach Saison
+     */
+    public function getSaisons(): Collection
     {
-        return $this->historischeNamen;
-    }
-
-    public function setHistorischeNamen(Collection $historischeNamen): self
-    {
-        $this->historischeNamen = $historischeNamen;
-        return $this;
+        return $this->saisons;
     }
 
     public function getLigateam(): ?string

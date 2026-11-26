@@ -135,6 +135,30 @@ class TeamRepository
         DoctrineWrapper::manager()->flush();
     }
 
+    /**
+     * Hält die Saisonzugehörigkeit (teams_saison) der laufenden Saison aktuell:
+     * Jedes aktive Ligateam bekommt einen Eintrag, und die Namen werden auf den aktuellen Teamnamen gesetzt
+     * (eine Umbenennung gilt für die ganze Saison). Einträge von Teams, die die Liga verlassen, bleiben bestehen.
+     *
+     * Wiederholbar. Wird vom Ligabot und nach Anlegen, Reaktivieren und Umbenennen eines Teams aufgerufen.
+     */
+    public function saisonzugehoerigkeitAbgleichen(int $saison = Config::SAISON): void
+    {
+        $connection = DoctrineWrapper::manager()->getConnection();
+        $connection->executeStatement("
+            INSERT IGNORE INTO teams_saison (saison, team_id, name)
+            SELECT ?, team_id, teamname
+            FROM teams_liga
+            WHERE aktiv = 'Ja' AND ligateam = 'Ja'
+        ", [$saison]);
+        $connection->executeStatement("
+            UPDATE teams_saison ts
+            INNER JOIN teams_liga t ON t.team_id = ts.team_id
+            SET ts.name = t.teamname
+            WHERE ts.saison = ? AND ts.name <> t.teamname
+        ", [$saison]);
+    }
+
     public function delete(Team $team): void
     {
         DoctrineWrapper::manager()->remove($team);

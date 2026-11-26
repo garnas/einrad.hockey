@@ -199,11 +199,11 @@ class TurnierSnippets
     {
         $warteliste = TurnierService::getWarteliste($turnier);
         $setzliste = TurnierService::getSetzListe($turnier);
-        $ausrichter = $turnier->getAusrichter()->getName();
+        $ausrichter = e($turnier->getAusrichterName());
 
         $freilose = [];
         foreach ($turnier->getGesetzteFreilose() as $freilos) {
-            $freilose[] = $freilos->getTeam()->getName();
+            $freilose[] = e($turnier->getTeamname($freilos->getTeam()));
         }
 
         $html = '<p class="w3-text-grey w3-border-bottom w3-border-grey">Setzliste</p>';
@@ -211,7 +211,7 @@ class TurnierSnippets
         if (TurnierService::getAnzahlGesetzteTeams($turnier) > 0) {
             $html .= '<i>';
             foreach ($setzliste as $anmeldung) {
-                $teamname = e($anmeldung->getTeam()->getName());
+                $teamname = e($anmeldung->getTeamname());
                 $block = BlockService::toString($anmeldung->getTeam());
                 if ($anmeldung->getTeam()->id() === ($_SESSION['logins']['team']['id'] ?? 0)) {
                     $html .= "<span class='w3-text-green'><b>$teamname</b></span>";
@@ -239,7 +239,7 @@ class TurnierSnippets
             $html .= '<i>';
             foreach ($warteliste as $anmeldung) {
                 $warteplatz = ($turnier->isSetzPhase()) ? $anmeldung->getPositionWarteliste() . ". " : "";
-                $teamname = e($anmeldung->getTeam()->getName());
+                $teamname = e($anmeldung->getTeamname());
                 $block = BlockService::toString($anmeldung->getTeam());
                 if ($anmeldung->getTeam()->id() === ($_SESSION['logins']['team']['id'] ?? 0)) {
                     $html .= "<span class='w3-text-yellow'><b>" . $warteplatz . " " . $teamname . "</b></span>";

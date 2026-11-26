@@ -71,11 +71,11 @@ class TabelleService
         $spieltag ??= (self::getAktuellenSpieltag($saison) - 1);
 
         // Rangtabelle soll nicht jedes mal neu berechnet werden müssen
-        if (!isset(self::$cacheRangtabellen[$spieltag])) {
-            self::$cacheRangtabellen[$spieltag] = self::getRangTabelle($spieltag, $saison);
+        if (!isset(self::$cacheRangtabellen[$saison][$spieltag])) {
+            self::$cacheRangtabellen[$saison][$spieltag] = self::getRangTabelle($spieltag, $saison);
         }
         // Nichtligateam haben den Rang NULL
-        return self::$cacheRangtabellen[$spieltag][$team_id]['rang'] ?? null;
+        return self::$cacheRangtabellen[$saison][$spieltag][$team_id]['rang'] ?? null;
     }
 
     /**
@@ -313,11 +313,6 @@ class TabelleService
 
         }
 
-        if ($saison !== Config::SAISON) {
-            foreach ($return as $team_id => $team) {
-                $return[$team_id]['teamname'] = TeamRepository::get()->team($team_id)?->getName($saison);
-            }
-        }
 
         return $return;
     }
@@ -351,29 +346,18 @@ class TabelleService
             $return[$team_id]['avg'] = round($return[$team_id]['summe'] / count($return[$team_id]['ergebnisse']), 1);
         }
 
-        // Tabelle mit aktiven Teams ohne Ergebnis auffüllen
-        // TODO ? In vergangenen Saisons werden nur Teams mit Ergebnissen gelistet, ist das gut so?
-        if ($saison == Config::SAISON) {
-            $list_of_teamids = [];
-            foreach (TeamRepository::get()->activeLigaTeams() as $ligateam) {
-                $list_of_teamids[$ligateam->id()] = $ligateam->getName();
-            }
-            foreach ($list_of_teamids as $team_id => $teamname) {
-                if (!array_key_exists($team_id, $return)) {
-                    $return[$team_id] = [];
-                    $return[$team_id]['teamname'] = $teamname;
-                    $return[$team_id]['team_id'] = $team_id;
-                    $return[$team_id]['string'] = '';
-                    $return[$team_id]['summe'] = 0;
-                    $return[$team_id]['avg'] = 0;
-                    $return[$team_id]['ergebnisse'] = [0];
-                    $return[$team_id]['details'] = [];
-                }
-            }
-        }
-        if ($saison !== Config::SAISON) {
-            foreach ($return as $team_id => $team) {
-                $return[$team_id]['teamname'] = TeamRepository::get()->team($team_id)?->getName($saison);
+        // Tabelle mit Teams der Saison ohne Ergebnis auffüllen. Auch sie haben einen Rang und damit Block und Wertigkeit.
+        // Vergangene Saisons: Teams aus teams_saison, laufende Saison: aktive Ligateams.
+        foreach (TabelleRepository::get()->getTeamsDerSaison($saison) as $team_id => $teamname) {
+            if (!array_key_exists($team_id, $return)) {
+                $return[$team_id] = [];
+                $return[$team_id]['teamname'] = $teamname;
+                $return[$team_id]['team_id'] = $team_id;
+                $return[$team_id]['string'] = '';
+                $return[$team_id]['summe'] = 0;
+                $return[$team_id]['avg'] = 0;
+                $return[$team_id]['ergebnisse'] = [0];
+                $return[$team_id]['details'] = [];
             }
         }
 

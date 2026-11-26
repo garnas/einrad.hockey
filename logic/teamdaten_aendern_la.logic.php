@@ -38,6 +38,7 @@ if (isset($_POST['change_la']) && Helper::$ligacenter) {
             Html::info("Passwort wurde geändert.");
         }
         TeamRepository::get()->speichern($team);
+        TeamRepository::get()->saisonzugehoerigkeitAbgleichen();
     }
     Helper::reload("ligacenter/lc_teamdaten_aendern.php?team_id=" . $team->id());
 
